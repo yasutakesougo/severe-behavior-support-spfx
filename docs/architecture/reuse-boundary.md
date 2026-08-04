@@ -7,7 +7,9 @@
 | 参照元 | `yasutakesougo/audit-management-system-mvp` |
 | 基準SHA | `61de858fc30fff1d4eff0052082b54b591a344c3` |
 | 一次棚卸し文書 | `docs/architecture/new-app-resource-reuse-inventory.md` |
-| 棚卸し文書の確定コミット | `PENDING` |
+| PR | `#2548` |
+| 確定参照SHA | `1c8f4505ca27cb538aa722b1117c1eafcdf58880` |
+| P0対象 | `未確認/HOLD` |
 | 判定日 | 2026-08-04 |
 
 棚卸し文書の確定コミットを記録するまで、参照元コードの再構成を開始しません。
