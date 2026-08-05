@@ -1,0 +1,17 @@
+{
+  "name": "severe-behavior-support-spfx",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.23.1"
+  },
+  "scripts": {
+    "test": "tsx --test tests/**/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}
