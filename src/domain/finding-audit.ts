@@ -95,8 +95,51 @@ export const FINDING_STATUSES = [
 
 export type FindingStatus = (typeof FINDING_STATUSES)[number];
 
+/**
+ * Allowed FindingStatus edges for lifecycle transition (Issue #24).
+ * Technical contract: docs/architecture/finding-lifecycle-transition.md
+ */
+export const FINDING_STATUS_ALLOWED_TRANSITIONS = [
+  ["Open", "Confirmed"],
+  ["Confirmed", "InProgress"],
+  ["InProgress", "Resolved"],
+] as const satisfies ReadonlyArray<readonly [FindingStatus, FindingStatus]>;
+
+export type FindingStatusTransitionResult =
+  | Readonly<{
+      ok: true;
+      status: FindingStatus;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "MALFORMED_INPUT" | "INVALID_TRANSITION";
+    }>;
+
 export function isFindingStatus(value: unknown): value is FindingStatus {
   return typeof value === "string" && FINDING_STATUSES.includes(value as FindingStatus);
+}
+
+/**
+ * Transition FindingStatus along the approved lifecycle graph only.
+ * Fail-closed: no exceptions. Roles / persistence are out of scope.
+ */
+export function transitionFindingStatus(
+  currentStatus: unknown,
+  targetStatus: unknown
+): FindingStatusTransitionResult {
+  if (!isFindingStatus(currentStatus) || !isFindingStatus(targetStatus)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const allowed = FINDING_STATUS_ALLOWED_TRANSITIONS.some(
+    ([from, to]) => from === currentStatus && to === targetStatus
+  );
+
+  if (!allowed) {
+    return { ok: false, code: "INVALID_TRANSITION" };
+  }
+
+  return { ok: true, status: targetStatus };
 }
 
 export function validateFindingIdentity(value: unknown): value is FindingIdentity {
