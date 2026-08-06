@@ -5,12 +5,13 @@
 ## 基準
 
 ```text
-main: 1c97fe78b5dc653217fca4fec83f0666351f7f0e
+main: 7513b21cf0bcac855a25a24f90668881df04b46a
 entry criteria: Issue #25 CONDITIONAL GO
 assessment contract: Issue #20 (MERGED)
 ABC / Observation contract: Issue #25
 Decision Ledger: Issue #8
 finding / audit ownership: `docs/architecture/finding-audit-ownership.md`
+assessment snapshot result design: `docs/architecture/assessment-snapshot-result-design.md`
 ```
 
 本実装は、行動関連点数の検証、点数帯分類、条件結果の集約、評価実行状態とFindingの分離、ならびにABC記録・観察記録・連携失敗記録の型契約と状態遷移純粋関数だけを扱う。
@@ -145,9 +146,16 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | `AuditEvent`のstrict allowlist | Issue #27 | 実装済み |
 | 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary | adapter・書込境界までHOLD |
 
-AssessmentSnapshotは、Result enum・変換責任・保存可能結果を扱う技術設計と、
-保存タイミング・確定者・訂正承認・handoff連携を扱う法人運用決定を分離する。
-前者はdocs-onlyで先行可能とし、後者は`DEC-009`と`GOV-AUD`の回答までHOLDする。
+AssessmentSnapshotのResult技術設計は
+[`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md)を正本とする。
+
+- 永続Resultは`EvaluationDecision`と別型にする。
+- 永続可能Resultは`NO_FINDINGS`・`FINDINGS_PRESENT`・`NOT_APPLICABLE`に限定する。
+- `INDETERMINATE`と`SOURCE_UNAVAILABLE`はSnapshotへ保存しない。
+- `NOT_APPLICABLE`には1件以上の`reasonCodes`を必須とする。
+- `demo`・`retrieval_failed`は正式Resultへ含めない。
+- Result変換はdomain純粋関数、保存タイミングは`DEC-009`、保存・訂正ロールは`GOV-AUD`へ分離する。
+- TypeScript型、validator、fixture、保存実装は後続Entry CriteriaまでHOLDする。
 
 FindingSeverityは正本Decisionが未採番である。
 Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして固定するかを先に選択し、
@@ -170,7 +178,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 | SAFE-005 | 複数有効資料の矛盾検出 | `selectAssessmentScoreSource`, `CONFLICT` tests |
 | PLAN-001〜010 | 支援計画・版管理・承認状態契約 | `SupportPlan`, `SupportPlanState`, `validateSupportPlan`, `support-plan-contract.test.ts` |
 | REV-001〜002 | 版本文分離・履歴参照ポート | `SupportPlanVersion`, `ISupportPlanVersionRepository`, `validateSupportPlanVersion` |
-| AUD-001〜014 | Issue #27のcontract-only部分実装。型・validator・allowlistは実装済み。完全なFinding、Severity、AssessmentSnapshot、状態遷移、ID生成、再発、削除権限、保存期間は所有Issue・Decisionに従いHOLD | `FindingIdentity`, `FindingStatus`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, [`finding-audit-ownership.md`](./finding-audit-ownership.md) |
+| AUD-001〜014 | Issue #27のcontract-only部分実装。型・validator・allowlistは実装済み。AssessmentSnapshot Result技術設計はdocs-onlyで固定。完全なFinding、Severity、AssessmentSnapshot型・保存運用、状態遷移、ID生成、再発、削除権限、保存期間は所有Issue・Decisionに従いHOLD | `FindingIdentity`, `FindingStatus`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, [`finding-audit-ownership.md`](./finding-audit-ownership.md), [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md) |
 | SAFE-006〜009 | 監査イベントの禁止フィールド名・未知キー排除。許可フィールド値のサニタイズはIssue #22またはaudit-write-boundaryのHOLD | `validateAuditEvent` strict allowlist / forbidden key checks |
 | NFR-SEC-008 | 重要操作監査ログ構造 | `AuditEvent`, `AUDIT_EVENT_RESULTS`, `validateAuditEvent` |
 | NFR-MNT-001 | DomainをSharePoint APIから分離 | `src/domain/*` |
@@ -195,11 +203,11 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 要件正本（暫定案B）の基準SHA: `bb46c6a0caac862d9a9fbb2ce31399092400aa10`
 将来の要件正本移行先: `docs/requirements/`
 
-
 ## 継続HOLD
 
 - FindingSeverityのDecision方式と値一覧、完全なFinding契約
-- AssessmentSnapshot Result技術設計、および`DEC-009`・`GOV-AUD`に依存する保存・確定・訂正・handoff運用
+- AssessmentSnapshotのTypeScript型・validator・Result変換関数・fixture・contract tests
+- `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Finding lifecycle transitionの所有Issue
 - Handoff状態遷移関数の所有Issueと、`GOV-AUD-02`に依存する実行ロール
 - Issue #24が所有する安定ID生成・再発判定・Snapshot候補生成
