@@ -16,12 +16,24 @@ export const SYNTHETIC_CRITERIA_FAIL: readonly CriterionResult[] = Object.freeze
 
 export const SYNTHETIC_CRITERIA_UNKNOWN: readonly CriterionResult[] = Object.freeze([
   { criterionId: "synthetic-criterion-001", status: "PASS" },
-  { criterionId: "synthetic-criterion-002", status: "UNKNOWN" },
+  {
+    criterionId: "synthetic-criterion-002",
+    status: "UNKNOWN",
+    reasonCode: "synthetic-unknown-reason",
+  },
 ]);
 
 export const SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE: readonly CriterionResult[] = Object.freeze([
-  { criterionId: "synthetic-criterion-001", status: "NOT_APPLICABLE" },
-  { criterionId: "synthetic-criterion-002", status: "NOT_APPLICABLE" },
+  {
+    criterionId: "synthetic-criterion-001",
+    status: "NOT_APPLICABLE",
+    reasonCode: "synthetic-not-applicable-reason-001",
+  },
+  {
+    criterionId: "synthetic-criterion-002",
+    status: "NOT_APPLICABLE",
+    reasonCode: "synthetic-not-applicable-reason-002",
+  },
 ]);
 
 export const SYNTHETIC_FINDINGS_ONE: readonly Finding[] = Object.freeze([
