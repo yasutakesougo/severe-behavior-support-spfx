@@ -30,7 +30,7 @@ Issue #17 ownership comment: 5204771950
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない | 所有指定までHOLD |
 | Finding lifecycle transition | 未確定 | Issue #24・#27・新規子Issueの候補 | 所有指定までHOLD |
 | finding生成条件 | Issue #24 | 本文で所有を明示 | 依存Decisionに従う |
-| finding安定ID生成 | Issue #24 | `FindingIdentity`確定済み | CONDITIONAL GO候補 |
+| finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C実装中 |
 | finding再発判定 | Issue #24 | 追加境界が未決定 | HOLD |
 | AssessmentSnapshot候補生成 | Issue #24 | 本文で所有を明示 | 完全契約までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
@@ -164,7 +164,7 @@ PR-B:
 AssessmentSnapshot Result技術設計（docs-only）
 
 PR-C:
-Issue #24 Finding安定ID（CONDITIONAL GO後）
+Issue #24 Finding安定ID（`docs/architecture/finding-stable-id.md`）
 
 PR-D以降:
 Finding lifecycle、Handoff transition、Severity、完全Finding、

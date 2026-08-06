@@ -12,6 +12,7 @@ ABC / Observation contract: Issue #25
 Decision Ledger: Issue #8
 finding / audit ownership: `docs/architecture/finding-audit-ownership.md`
 assessment snapshot result design: `docs/architecture/assessment-snapshot-result-design.md`
+finding stable id: `docs/architecture/finding-stable-id.md`
 ```
 
 本実装は、行動関連点数の検証、点数帯分類、条件結果の集約、評価実行状態とFindingの分離、ならびにABC記録・観察記録・連携失敗記録の型契約と状態遷移純粋関数だけを扱う。
@@ -139,7 +140,7 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり。実行ロールは未決定 |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない |
 | Finding lifecycle transition | 未確定 | Issue #24・#27・新規子Issueのいずれかを正式指定するまでHOLD |
-| finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定IDはCONDITIONAL GO候補。再発は追加決定待ち |
+| finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定IDは`finding-stable-id.md`（CONDITIONAL GO）。再発は追加決定待ち |
 | 訂正・削除・監査ログ・復旧の設計 | Issue #17 | 業務決定はIssue #19へ集約 |
 | `GOV-AUD-01〜10`の回答 | Issue #19 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-009`・`DEC-011`・`DEC-012`・`DEC-015`はDeferred |
@@ -178,7 +179,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 | SAFE-005 | 複数有効資料の矛盾検出 | `selectAssessmentScoreSource`, `CONFLICT` tests |
 | PLAN-001〜010 | 支援計画・版管理・承認状態契約 | `SupportPlan`, `SupportPlanState`, `validateSupportPlan`, `support-plan-contract.test.ts` |
 | REV-001〜002 | 版本文分離・履歴参照ポート | `SupportPlanVersion`, `ISupportPlanVersionRepository`, `validateSupportPlanVersion` |
-| AUD-001〜014 | Issue #27のcontract-only部分実装。型・validator・allowlistは実装済み。AssessmentSnapshot Result技術設計はdocs-onlyで固定。完全なFinding、Severity、AssessmentSnapshot型・保存運用、状態遷移、ID生成、再発、削除権限、保存期間は所有Issue・Decisionに従いHOLD | `FindingIdentity`, `FindingStatus`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, [`finding-audit-ownership.md`](./finding-audit-ownership.md), [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md) |
+| AUD-001〜014 | Issue #27のcontract-only部分実装。型・validator・allowlistは実装済み。AssessmentSnapshot Result技術設計はdocs-onlyで固定。Finding安定IDはIssue #24 CONDITIONAL GOで技術契約化。完全なFinding、Severity、AssessmentSnapshot型・保存運用、状態遷移、再発、削除権限、保存期間は所有Issue・Decisionに従いHOLD | `FindingIdentity`, `FindingStatus`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, `deriveStableFindingId`, [`finding-audit-ownership.md`](./finding-audit-ownership.md), [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md), [`finding-stable-id.md`](./finding-stable-id.md) |
 | SAFE-006〜009 | 監査イベントの禁止フィールド名・未知キー排除。許可フィールド値のサニタイズはIssue #22またはaudit-write-boundaryのHOLD | `validateAuditEvent` strict allowlist / forbidden key checks |
 | NFR-SEC-008 | 重要操作監査ログ構造 | `AuditEvent`, `AUDIT_EVENT_RESULTS`, `validateAuditEvent` |
 | NFR-MNT-001 | DomainをSharePoint APIから分離 | `src/domain/*` |
@@ -210,7 +211,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Finding lifecycle transitionの所有Issue
 - Handoff状態遷移関数の所有Issueと、`GOV-AUD-02`に依存する実行ロール
-- Issue #24が所有する安定ID生成・再発判定・Snapshot候補生成
+- Issue #24が所有する再発判定・Snapshot候補生成（安定IDは`finding-stable-id.md`で技術契約化。実装完了後も再発はHOLD）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
 - `AuditEvent.actionCode`最終enum、AuditLog保存期間
