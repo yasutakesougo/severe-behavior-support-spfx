@@ -183,6 +183,37 @@ const readMarkdownDirectories = async () => {
     .sort();
 };
 
+const listMarkdownBasenames = async (relativeDir, { exclude = [] } = {}) => {
+  const absoluteDir = path.join(root, relativeDir);
+  if (!(await exists(absoluteDir))) {
+    return [];
+  }
+  const excluded = new Set(exclude);
+  const entries = await readdir(absoluteDir, { withFileTypes: true });
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md") && !excluded.has(entry.name))
+    .map((entry) => entry.name.replace(/\.md$/, ""))
+    .sort();
+};
+
+const assertExactSet = (label, actualValues, expectedValues) => {
+  const actual = [...new Set(actualValues)].sort();
+  const expected = [...new Set(expectedValues)].sort();
+  const actualSet = new Set(actual);
+  const expectedSet = new Set(expected);
+
+  for (const value of expected) {
+    if (!actualSet.has(value)) {
+      failures.push(`${label}: missing expected entry "${value}"`);
+    }
+  }
+  for (const value of actual) {
+    if (!expectedSet.has(value)) {
+      failures.push(`${label}: unexpected extra entry "${value}"`);
+    }
+  }
+};
+
 const extractMarkdownLinks = (content) =>
   [...content.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)]
     .map((match) => match[1].trim())
@@ -273,11 +304,23 @@ for (const relativePath of requiredProcessFiles) {
 const skillDirectories = await readMarkdownDirectories();
 const skillNames = new Map();
 
-for (const expectedSkill of expectedInstalledSkills) {
-  if (!skillDirectories.includes(expectedSkill)) {
-    failures.push(`Missing required installed skill directory: .agents/skills/${expectedSkill}/`);
-  }
-}
+assertExactSet(
+  "Installed skill directories (.agents/skills, excluding _shared)",
+  skillDirectories,
+  expectedInstalledSkills,
+);
+
+const actualAgents = await listMarkdownBasenames(".agents/agents");
+assertExactSet("Agents (.agents/agents)", actualAgents, expectedAgents);
+
+const actualLogicalCommands = await listMarkdownBasenames(".agents/commands", {
+  exclude: ["adapter-matrix.md"],
+});
+assertExactSet(
+  "Logical Commands (.agents/commands, excluding adapter-matrix.md)",
+  actualLogicalCommands,
+  expectedLogicalCommands,
+);
 
 for (const directoryName of skillDirectories) {
   const skillFileRelativePath = path.join(".agents", "skills", directoryName, "SKILL.md");
@@ -360,13 +403,13 @@ if (await exists(catalogAbsolutePath)) {
   }
 
   catalogInstalledSkills = parseCatalogInstalledSkills(catalogContent);
-  const catalogInstalledNames = new Set(catalogInstalledSkills.map((entry) => entry.name));
+  const catalogInstalledNames = catalogInstalledSkills.map((entry) => entry.name);
 
-  for (const expectedSkill of expectedInstalledSkills) {
-    if (!catalogInstalledNames.has(expectedSkill)) {
-      failures.push(`Skill catalog does not mark required skill as 導入済み: ${expectedSkill}`);
-    }
-  }
+  assertExactSet(
+    "Skill catalog 導入済み set",
+    catalogInstalledNames,
+    expectedInstalledSkills,
+  );
 
   for (const entry of catalogInstalledSkills) {
     const skillPath = path.join(root, ".agents", "skills", entry.name, "SKILL.md");

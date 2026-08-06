@@ -149,10 +149,11 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 
 `verify:skills`（AI-ORG-IMPL-5）は少なくとも次を構造検査する。
 
-- 5 Agents / 4 Logical Commands / Adapter Matrix
-- 導入済み 4 Skills / Skill Catalog / Skill Migration Ledger
+- 5 Agents / 4 Logical Commands / Adapter Matrix（実体集合と期待集合の**完全一致**）
+- 導入済み 4 Skills / Skill Catalog / Skill Migration Ledger（directory・カタログ「導入済み」も**完全一致**）
 - MCP Permission Matrix
 - 必須ファイル欠落、旧 `skills/` への新規実行参照、存在しない Skill の「導入済み」扱い
+- 許可集合外の extra Agent / Logical Command / 導入済み Skill
 - `handoff-builder` の Audit 所属、正本参照切れ
 - credential / secret 実値混入、未承認 merge / deploy を許可する構造
 
