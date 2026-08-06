@@ -80,10 +80,16 @@ export type CriterionStatus =
   | "UNKNOWN"
   | "NOT_APPLICABLE";
 
-export type CriterionResult = Readonly<{
-  criterionId: string;
-  status: CriterionStatus;
-}>;
+export type CriterionResult =
+  | Readonly<{
+      criterionId: string;
+      status: "PASS" | "FAIL";
+    }>
+  | Readonly<{
+      criterionId: string;
+      status: "UNKNOWN" | "NOT_APPLICABLE";
+      reasonCode: string;
+    }>;
 
 export type CriterionAggregateDecision =
   | "ELIGIBLE"
