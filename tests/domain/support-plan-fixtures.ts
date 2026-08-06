@@ -1,9 +1,25 @@
-import type { SupportPlan, SupportPlanVersion } from "../../src/domain";
+import type {
+  SupportPlan,
+  SupportPlanDto,
+  SupportPlanVersion,
+  SupportPlanVersionDto,
+} from "../../src/domain";
+import {
+  toSupportPlanDto,
+  toSupportPlanVersionDto,
+} from "../../src/domain/support-plan";
 
 export const SYNTHETIC_PLAN_ORG_ID = "synthetic-org-001";
 export const SYNTHETIC_PLAN_SITE_ID = "synthetic-site-001";
 export const SYNTHETIC_PLAN_USER_ID = "synthetic-user-001";
 export const SYNTHETIC_PLAN_ID = "synthetic-plan-001";
+
+export const wrapSupportPlanDto = (data: SupportPlan): SupportPlanDto =>
+  toSupportPlanDto(data);
+
+export const wrapSupportPlanVersionDto = (
+  data: SupportPlanVersion,
+): SupportPlanVersionDto => toSupportPlanVersionDto(data);
 
 /**
  * PLAN-FX-001: 正常なDraft

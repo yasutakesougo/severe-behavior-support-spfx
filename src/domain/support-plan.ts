@@ -19,7 +19,24 @@ export const SUPPORT_PLAN_STATUSES = [
 export type SupportPlanStatus = (typeof SUPPORT_PLAN_STATUSES)[number];
 
 /**
- * Base Identity & Immutable Header fields for SupportPlan
+ * Schema identity for SupportPlan contract (DEC-1 Accepted, Issue #42).
+ * Not identical to SharePoint list/column names, TypeScript type names, or repo names.
+ */
+export const SUPPORT_PLAN_SCHEMA_ID =
+  "severe-behavior-support.support-plan.plan" as const;
+export const SUPPORT_PLAN_SCHEMA_VERSION = "1.0.0" as const;
+
+/**
+ * Schema identity for SupportPlanVersion contract (DEC-1 Accepted, Issue #42).
+ */
+export const SUPPORT_PLAN_VERSION_SCHEMA_ID =
+  "severe-behavior-support.support-plan.plan-version" as const;
+export const SUPPORT_PLAN_VERSION_SCHEMA_VERSION = "1.0.0" as const;
+
+/**
+ * Base Identity & Immutable Header fields for SupportPlan.
+ * Plan identity field is `PlanId` (PascalCase). SupportPlanVersion uses `planId`.
+ * Unification is deferred to a future MAJOR candidate (Issue #42).
  */
 export type SupportPlanBase = Readonly<{
   PlanId: string;
@@ -158,7 +175,8 @@ export type SupportPlanState =
 export type SupportPlan = SupportPlanState;
 
 /**
- * SupportPlanVersion Content Contract
+ * SupportPlanVersion Content Contract.
+ * Plan identity field is `planId` (camelCase), distinct from SupportPlan.`PlanId`.
  */
 export type SupportPlanVersion = Readonly<{
   planId: string;
@@ -173,6 +191,44 @@ export type SupportPlanVersion = Readonly<{
   versionCreatedBy: string;
   versionCreatedAt: string;
 }>;
+
+/**
+ * DTO envelope for SupportPlan.
+ * dtoVersion equals schemaVersion (DEC-1).
+ */
+export type SupportPlanDto = Readonly<{
+  schemaId: typeof SUPPORT_PLAN_SCHEMA_ID;
+  schemaVersion: typeof SUPPORT_PLAN_SCHEMA_VERSION;
+  dtoVersion: typeof SUPPORT_PLAN_SCHEMA_VERSION;
+  data: SupportPlan;
+}>;
+
+/**
+ * DTO envelope for SupportPlanVersion.
+ * dtoVersion equals schemaVersion (DEC-1).
+ */
+export type SupportPlanVersionDto = Readonly<{
+  schemaId: typeof SUPPORT_PLAN_VERSION_SCHEMA_ID;
+  schemaVersion: typeof SUPPORT_PLAN_VERSION_SCHEMA_VERSION;
+  dtoVersion: typeof SUPPORT_PLAN_VERSION_SCHEMA_VERSION;
+  data: SupportPlanVersion;
+}>;
+
+export const toSupportPlanDto = (data: SupportPlan): SupportPlanDto => ({
+  schemaId: SUPPORT_PLAN_SCHEMA_ID,
+  schemaVersion: SUPPORT_PLAN_SCHEMA_VERSION,
+  dtoVersion: SUPPORT_PLAN_SCHEMA_VERSION,
+  data,
+});
+
+export const toSupportPlanVersionDto = (
+  data: SupportPlanVersion,
+): SupportPlanVersionDto => ({
+  schemaId: SUPPORT_PLAN_VERSION_SCHEMA_ID,
+  schemaVersion: SUPPORT_PLAN_VERSION_SCHEMA_VERSION,
+  dtoVersion: SUPPORT_PLAN_VERSION_SCHEMA_VERSION,
+  data,
+});
 
 // ==========================================
 // Runtime Validators
@@ -396,4 +452,45 @@ export function validateSupportPlanVersion(value: unknown): value is SupportPlan
   }
 
   return true;
+}
+
+/**
+ * Validates SupportPlan DTO envelope: schemaId/version/dtoVersion must match
+ * the canonical constants, and data must satisfy SupportPlan invariants.
+ */
+export function validateSupportPlanDto(value: unknown): value is SupportPlanDto {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  if (
+    value.schemaId !== SUPPORT_PLAN_SCHEMA_ID ||
+    value.schemaVersion !== SUPPORT_PLAN_SCHEMA_VERSION ||
+    value.dtoVersion !== SUPPORT_PLAN_SCHEMA_VERSION
+  ) {
+    return false;
+  }
+
+  return validateSupportPlan(value.data);
+}
+
+/**
+ * Validates SupportPlanVersion DTO envelope against canonical schema constants.
+ */
+export function validateSupportPlanVersionDto(
+  value: unknown,
+): value is SupportPlanVersionDto {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  if (
+    value.schemaId !== SUPPORT_PLAN_VERSION_SCHEMA_ID ||
+    value.schemaVersion !== SUPPORT_PLAN_VERSION_SCHEMA_VERSION ||
+    value.dtoVersion !== SUPPORT_PLAN_VERSION_SCHEMA_VERSION
+  ) {
+    return false;
+  }
+
+  return validateSupportPlanVersion(value.data);
 }
