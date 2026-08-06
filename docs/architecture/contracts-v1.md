@@ -89,6 +89,37 @@ Node.jsは`22.23.1`に固定する。
 
 依存パッケージは再現性を維持するため完全固定する。
 
+```text
+@types/node: 22.20.1
+tsx: 4.20.3
+typescript: 5.9.2
+```
+
 SPFx生成時は、SPFx 1.23.2が要求するTypeScript、React、Heft、Webpackの構成を正本とし、この暫定構成を統合または置換する。
 
 contractsの型とテストを、SPFx固有の依存関係へ直接依存させない。
+
+## contracts専用CI
+
+`.github/workflows/contracts-ci.yml`は、contractsに関係するPRと`main`へのpushで次を実行する。
+
+```text
+npm ci
+npm run typecheck
+npm test
+npm run check:contracts-boundaries
+git diff --check
+```
+
+workflow権限は`contents: read`だけとする。
+
+Secrets、deploy、publish、SharePoint接続、Entra ID変更、Microsoft 365書込みは行わない。
+
+`scripts/ci/check-contracts-boundaries.mjs`は、`src/contracts`と`tests/contracts`について次を拒否する。
+
+- React、SPFx、PnPjs、SharePoint REST、ブラウザglobalへの依存
+- `process.env`によるsecret参照
+- Token、Bearer credential、client secretの疑いがある文字列
+- メールアドレス、電話番号、郵便番号の疑いがある値
+- Deprecated事業所識別子
+- `synthetic-`接頭辞を持たないfixture識別子
