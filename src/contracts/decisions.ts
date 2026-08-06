@@ -38,12 +38,14 @@ export const evaluateAccess = (input: {
   if (input.identity.status === "FETCH_FAILED") return { decision: "DENY", reason: "AUTH_FETCH_FAILED" };
 
   const identity: unknown = input.identity.value;
+  if (!isRecord(identity)) return { decision: "DENY", reason: "INVALID_IDENTITY" };
+
+  const identityRoles = identity.Roles;
   if (
-    !isRecord(identity) ||
     !isNonEmptyString(identity.Subject) ||
     !isNonEmptyString(identity.OrganizationId) ||
     !isNonEmptyString(identity.SiteId) ||
-    !Array.isArray(identity.Roles)
+    !Array.isArray(identityRoles)
   ) {
     return { decision: "DENY", reason: "INVALID_IDENTITY" };
   }
@@ -54,10 +56,10 @@ export const evaluateAccess = (input: {
   if (!Array.isArray(input.requiredRoles) || input.requiredRoles.length === 0) {
     return { decision: "DENY", reason: "NO_REQUIRED_ROLE" };
   }
-  if (!identity.Roles.every(isRole) || !input.requiredRoles.every(isRole)) {
+  if (!identityRoles.every(isRole) || !input.requiredRoles.every(isRole)) {
     return { decision: "DENY", reason: "UNKNOWN_ROLE" };
   }
-  if (!input.requiredRoles.some((role) => identity.Roles.includes(role))) {
+  if (!input.requiredRoles.some((role) => identityRoles.includes(role))) {
     return { decision: "DENY", reason: "ROLE_NOT_ALLOWED" };
   }
   return { decision: "ALLOW", reason: "ROLE_ALLOWED" };
