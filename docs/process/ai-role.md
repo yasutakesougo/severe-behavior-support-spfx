@@ -20,6 +20,7 @@ Severe Behavior Support SPFx（`severe-behavior-support-spfx`）
 - 支援員
 
 本節は利用者分類の概要であり、認可ロールの正本ではない。具体的な業務ロール・操作権限は、認証・認可契約および DEC を参照する。
+
 ## Target
 
 - SharePoint Online
