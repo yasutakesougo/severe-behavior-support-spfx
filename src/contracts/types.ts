@@ -3,7 +3,14 @@ export const ASIA_TOKYO_TIME_ZONE = "Asia/Tokyo" as const;
 
 export type LocalDate = string & { readonly __brand: "LocalDate" };
 
-export type Role = "SUPPORTER" | "SUPERVISOR" | "REVIEWER" | "ADMIN";
+export type Role =
+  | "SUPPORTER"
+  | "PLANNER"
+  | "SERVICE_MANAGER"
+  | "SITE_ADMIN"
+  | "ORG_ADMIN"
+  | "SYSTEM_ADMIN"
+  | "VIEWER";
 
 export type DeploymentContext = Readonly<{
   OrganizationId: string;
@@ -27,6 +34,7 @@ export type ApprovedProcedureReference = Readonly<{
 export type ExecutionRecord = Readonly<{
   OrganizationId: string;
   SiteId: string;
+  UserId: string;
   TimeZone: typeof ASIA_TOKYO_TIME_ZONE;
   RecordId: string;
   IdempotencyKey: string;
@@ -40,6 +48,11 @@ export type LookupResult<T> =
   | Readonly<{ status: "EMPTY" }>
   | Readonly<{ status: "UNKNOWN"; reason: "NOT_AUTHENTICATED" | "NOT_AUTHORIZED" | "INDETERMINATE" }>
   | Readonly<{ status: "FETCH_FAILED"; code: string }>;
+
+export type ExecutionRecordLookupResults = Readonly<{
+  byRecordId: LookupResult<ExecutionRecord>;
+  byIdempotencyKey: LookupResult<ExecutionRecord>;
+}>;
 
 export type ValidationError = Readonly<{
   code:
@@ -80,9 +93,17 @@ export type SubmissionDecision =
   | Readonly<{
       decision: "REJECT_DUPLICATE_CONFLICT";
       RecordId: string;
-      reason: "RECORD_ID_REUSED" | "IDEMPOTENCY_KEY_REUSED" | "PAYLOAD_MISMATCH";
+      reason:
+        | "RECORD_ID_REUSED"
+        | "IDEMPOTENCY_KEY_REUSED"
+        | "PAYLOAD_MISMATCH"
+        | "RECORD_CONTEXT_MISMATCH"
+        | "LOOKUP_RESULTS_DIVERGED";
     }>
-  | Readonly<{ decision: "REJECT_LOOKUP_UNAVAILABLE"; reason: "UNKNOWN" | "FETCH_FAILED" }>;
+  | Readonly<{
+      decision: "REJECT_LOOKUP_UNAVAILABLE";
+      reason: "UNKNOWN" | "FETCH_FAILED" | "INVALID_LOOKUP_RESULT";
+    }>;
 
 export type WriteResult =
   | Readonly<{ status: "CREATED"; RecordId: string }>

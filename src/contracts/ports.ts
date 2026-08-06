@@ -33,6 +33,10 @@ export interface ApprovedProcedureProvider {
 }
 
 export interface ExecutionRecordProvider {
+  findByRecordId(
+    context: DeploymentContext,
+    recordId: string,
+  ): Promise<LookupResult<ExecutionRecord>>;
   findByIdempotencyKey(
     context: DeploymentContext,
     idempotencyKey: string,
