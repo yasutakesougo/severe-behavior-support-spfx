@@ -2,7 +2,12 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
-const targetDirectories = ["src/contracts", "tests/contracts"];
+const targetDirectories = [
+  "src/contracts",
+  "tests/contracts",
+  "src/domain",
+  "tests/domain",
+];
 const supportedExtensions = new Set([".ts", ".tsx", ".js", ".mjs", ".cjs", ".json"]);
 
 const forbiddenPatterns = [
@@ -25,7 +30,7 @@ const forbiddenPatterns = [
 ];
 
 const syntheticIdentifierPattern =
-  /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint)\s*:\s*["']((?!synthetic-)[^"']+)["']/g;
+  /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint|criterionId|findingCode|reasonCode)\s*:\s*["']((?!synthetic-)[^"']+)["']/g;
 
 const listFiles = async (directory) => {
   const absoluteDirectory = path.join(root, directory);
@@ -67,11 +72,11 @@ for (const directory of targetDirectories) {
 }
 
 if (findings.length > 0) {
-  console.error("Contracts boundary inspection failed:");
+  console.error("Contracts/domain boundary inspection failed:");
   for (const finding of findings) {
     console.error(`- ${finding.file}: ${finding.label}: ${finding.value}`);
   }
   process.exitCode = 1;
 } else {
-  console.log("Contracts boundary inspection passed.");
+  console.log("Contracts/domain boundary inspection passed.");
 }
