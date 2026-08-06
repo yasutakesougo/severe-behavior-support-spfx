@@ -1,50 +1,56 @@
 import type {
   CriterionAggregateDecision,
   CriterionResult,
+  CriterionStatus,
 } from "./types";
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isCriterionStatus(value: unknown): value is CriterionStatus {
+  return (
+    value === "PASS" ||
+    value === "FAIL" ||
+    value === "UNKNOWN" ||
+    value === "NOT_APPLICABLE"
+  );
+}
+
+function isCriterionResult(value: unknown): value is CriterionResult {
+  return (
+    isRecord(value) &&
+    typeof value.criterionId === "string" &&
+    value.criterionId.trim().length > 0 &&
+    isCriterionStatus(value.status)
+  );
+}
 
 export function aggregateCriterionResults(
   criteria: readonly CriterionResult[],
 ): CriterionAggregateDecision {
-  if (criteria.length === 0) {
+  const candidate: unknown = criteria;
+  if (!Array.isArray(candidate) || candidate.length === 0) {
     return "INDETERMINATE";
   }
 
-  let hasPass = false;
-  let hasUnknown = false;
-  let allNotApplicable = true;
-
-  for (const criterion of criteria) {
-    if (!criterion.criterionId || criterion.criterionId.trim() === "") {
-      return "INDETERMINATE";
-    }
-
-    if (criterion.status === "FAIL") {
-      return "INELIGIBLE";
-    }
-
-    if (criterion.status === "UNKNOWN") {
-      hasUnknown = true;
-    }
-
-    if (criterion.status === "PASS") {
-      hasPass = true;
-    }
-
-    if (criterion.status !== "NOT_APPLICABLE") {
-      allNotApplicable = false;
-    }
-  }
-
-  if (hasUnknown) {
+  if (!candidate.every(isCriterionResult)) {
     return "INDETERMINATE";
   }
 
-  if (allNotApplicable) {
+  if (candidate.some((criterion) => criterion.status === "FAIL")) {
+    return "INELIGIBLE";
+  }
+
+  if (candidate.some((criterion) => criterion.status === "UNKNOWN")) {
+    return "INDETERMINATE";
+  }
+
+  if (candidate.every((criterion) => criterion.status === "NOT_APPLICABLE")) {
     return "NOT_APPLICABLE";
   }
 
-  if (hasPass) {
+  if (candidate.some((criterion) => criterion.status === "PASS")) {
     return "ELIGIBLE";
   }
 
