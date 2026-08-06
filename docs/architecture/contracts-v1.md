@@ -13,7 +13,8 @@
 - 既存記録は`RecordId`と`IdempotencyKey`を独立して照会する。
 - いずれかの照会が`UNKNOWN`または`FETCH_FAILED`なら、新規保存を許可しない。
 - 両照会が`EMPTY`の場合だけ新規保存を許可する。
-- 両照会が同一記録を返し、`RecordId`・`IdempotencyKey`・fingerprintが完全一致した場合だけ再送として扱う。
+- 両照会が同一記録を返し、incomingと組織・事業所・利用者・手順版・暦日・RecordId・IdempotencyKey・fingerprintがすべて一致した場合だけ再送として扱う。
+- RecordId・IdempotencyKey・fingerprintが一致しても、利用者、事業所、手順版、暦日等の不変コンテキストが異なる場合は`RECORD_CONTEXT_MISMATCH`として拒否する。
 - 同じ`RecordId`・異なるキー、異なる`RecordId`・同じキー、同じキー・異なるpayload、二つの照会が異なる記録を返す状態はすべて競合として拒否する。
 
 ## 正式な業務ロール
