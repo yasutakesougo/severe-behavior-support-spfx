@@ -15,6 +15,26 @@ export type BehaviorScoreValidationResult =
       reason: BehaviorScoreInvalidReason;
     }>;
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isBehaviorScoreInvalidReason(
+  value: unknown,
+): value is BehaviorScoreInvalidReason {
+  return (
+    value === "TYPE" ||
+    value === "NOT_FINITE" ||
+    value === "NOT_INTEGER" ||
+    value === "OUT_OF_RANGE"
+  );
+}
+
+const malformedState = (): BehaviorScoreDecision => ({
+  decision: "REJECTED_INVALID_INPUT",
+  reason: "MALFORMED_STATE",
+});
+
 export function parseBehaviorRelatedScore(
   value: unknown,
 ): BehaviorScoreValidationResult {
@@ -40,9 +60,14 @@ export function parseBehaviorRelatedScore(
 export function classifyBehaviorScore(
   input: BehaviorScoreInput,
 ): BehaviorScoreDecision {
-  switch (input.status) {
+  const candidate: unknown = input;
+  if (!isRecord(candidate) || typeof candidate.status !== "string") {
+    return malformedState();
+  }
+
+  switch (candidate.status) {
     case "VALUE": {
-      const validation = parseBehaviorRelatedScore(input.value);
+      const validation = parseBehaviorRelatedScore(candidate.value);
       if (!validation.success) {
         return {
           decision: "REJECTED_INVALID_INPUT",
@@ -62,22 +87,28 @@ export function classifyBehaviorScore(
     case "EMPTY":
       return { decision: "REJECTED_INCOMPLETE_INPUT" };
     case "INVALID":
-      return {
-        decision: "REJECTED_INVALID_INPUT",
-        reason: input.reason,
-      };
+      return isBehaviorScoreInvalidReason(candidate.reason)
+        ? {
+            decision: "REJECTED_INVALID_INPUT",
+            reason: candidate.reason,
+          }
+        : malformedState();
     case "UNKNOWN":
-      return {
-        decision: "INDETERMINATE",
-        reasonCode: input.reasonCode,
-      };
+      return typeof candidate.reasonCode === "string" &&
+        candidate.reasonCode.trim().length > 0
+        ? {
+            decision: "INDETERMINATE",
+            reasonCode: candidate.reasonCode,
+          }
+        : malformedState();
     case "FETCH_FAILED":
-      return {
-        decision: "REJECTED_SOURCE_UNAVAILABLE",
-        code: input.code,
-      };
+      return typeof candidate.code === "string" && candidate.code.trim().length > 0
+        ? {
+            decision: "REJECTED_SOURCE_UNAVAILABLE",
+            code: candidate.code,
+          }
+        : malformedState();
+    default:
+      return malformedState();
   }
-
-  const unreachable: never = input;
-  return unreachable;
 }
