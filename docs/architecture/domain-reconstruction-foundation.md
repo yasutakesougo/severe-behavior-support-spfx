@@ -143,8 +143,8 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | SAFE-005 | 複数有効資料の矛盾検出 | `selectAssessmentScoreSource`, `CONFLICT` tests |
 | PLAN-001〜010 | 支援計画・版管理・承認状態契約 | `SupportPlan`, `SupportPlanState`, `validateSupportPlan`, `support-plan-contract.test.ts` |
 | REV-001〜002 | 版本文分離・履歴参照ポート | `SupportPlanVersion`, `ISupportPlanVersionRepository`, `validateSupportPlanVersion` |
-| AUD-001〜014 | Handoff状態・スナップショット訂正・監査ログ契約 | `FindingIdentity`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, `validateAuditEvent` |
-| SAFE-006〜009 | 監査ログの個人情報・支援本文排除 allowlist | `validateAuditEvent` strict allowlist checks |
+| AUD-001〜014 | contract-only設計証跡・部分実装（FindingIdentity / FindingStatus型正本 / HandoffState構造 / SnapshotCorrection構造 / AuditEvent構造 / strict allowlist）。HOLD: 完全なFinding・FindingSeverity・AssessmentSnapshot・状態遷移・ID生成・再発判定・削除権限・保存期間 | `FindingIdentity`, `FindingStatus`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, validators |
+| SAFE-006〜009 | 監査イベントの禁止フィールド名・未知キー排除。許可フィールド内の値のサニタイズは後続adapterまたは監査ログ書込境界のHOLD | `validateAuditEvent` strict allowlist / forbidden key checks |
 | NFR-SEC-008 | 重要操作監査ログ構造 | `AuditEvent`, `AUDIT_EVENT_RESULTS`, `validateAuditEvent` |
 | NFR-MNT-001 | DomainをSharePoint APIから分離 | `src/domain/*` |
 | NFR-MNT-003 | 純粋関数としてテスト可能にする | domain functions and tests |
@@ -171,8 +171,12 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 
 ## 継続HOLD
 
+- 完全なFinding契約、FindingSeverity、AssessmentSnapshot / AssessmentSnapshotResult
+- Finding・Handoff状態遷移、安定ID生成・再発判定
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
+- AuditEvent.actionCode最終enum、AuditLog保存期間
+- 許可フィールド内の値のサニタイズ（支援本文・個人情報の内容排除は後続adapterまたは監査ログ書込境界）
 - サービス別`NOT_APPLICABLE`・`UNKNOWN` reasonCode enum
 - 施設割合、職員研修割合
 - 最終加算・請求判定

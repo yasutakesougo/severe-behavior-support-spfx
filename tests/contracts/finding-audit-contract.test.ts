@@ -238,6 +238,42 @@ describe("AuditEvent Contract & Strict Allowlist Validation", () => {
       false
     );
   });
+
+  it("任意許可フィールドの空文字を拒否する", () => {
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ SiteId: "" })),
+      false
+    );
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ actorStaffId: "" })),
+      false
+    );
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ targetRecordId: "" })),
+      false
+    );
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ appVersion: "" })),
+      false
+    );
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ ruleSetVersion: "" })),
+      false
+    );
+  });
+
+  it("任意許可フィールドの実フィールド欠損は受理する", () => {
+    const base = createSyntheticAuditEventSuccess();
+    const {
+      SiteId: _siteId,
+      actorStaffId: _actorStaffId,
+      targetRecordId: _targetRecordId,
+      appVersion: _appVersion,
+      ruleSetVersion: _ruleSetVersion,
+      ...minimal
+    } = base;
+    assert.equal(validateAuditEvent(minimal), true);
+  });
 });
 
 describe("SnapshotCorrection Contract Validation", () => {
@@ -290,6 +326,49 @@ describe("SnapshotCorrection Contract Validation", () => {
       deletedAt: "2026-08-06T13:00:00.000Z",
     };
     assert.equal(validateSnapshotCorrection(deletedCorrection), false);
+  });
+
+  it("correctedAtの不正日時を拒否する", () => {
+    assert.equal(
+      validateSnapshotCorrection(
+        createSyntheticSnapshotCorrection({ correctedAt: "invalid-date" })
+      ),
+      false
+    );
+    assert.equal(
+      validateSnapshotCorrection(
+        createSyntheticSnapshotCorrection({ correctedAt: "2026-08-06" })
+      ),
+      false
+    );
+  });
+
+  it("correctedByの欠損・空文字を拒否する", () => {
+    assert.equal(
+      validateSnapshotCorrection(
+        createSyntheticSnapshotCorrection({ correctedBy: "" })
+      ),
+      false
+    );
+    assert.equal(
+      validateSnapshotCorrection(
+        createSyntheticSnapshotCorrection({ correctedBy: "   " })
+      ),
+      false
+    );
+
+    const { correctedBy: _correctedBy, ...missingCorrectedBy } =
+      createSyntheticSnapshotCorrection();
+    assert.equal(validateSnapshotCorrection(missingCorrectedBy), false);
+
+    assert.equal(
+      validateSnapshotCorrection(
+        createSyntheticSnapshotCorrection({
+          correctedBy: undefined as unknown as string,
+        })
+      ),
+      false
+    );
   });
 });
 
@@ -376,6 +455,79 @@ describe("HandoffState Discriminated Union & Contract Validation", () => {
       acknowledgedAt: "2026-08-06T11:00:00.000Z", // Earlier than includedAt
     });
     assert.equal(validateHandoffState(reversedDates), false);
+  });
+
+  it("includedAt < requestedAt を拒否する", () => {
+    assert.equal(
+      validateHandoffState(
+        createSyntheticHandoffIncluded({
+          requestedAt: "2026-08-06T12:00:00.000Z",
+          includedAt: "2026-08-06T11:00:00.000Z",
+        })
+      ),
+      false
+    );
+  });
+
+  it("closedAt < acknowledgedAt を拒否する", () => {
+    assert.equal(
+      validateHandoffState(
+        createSyntheticHandoffClosed({
+          acknowledgedAt: "2026-08-06T13:00:00.000Z",
+          closedAt: "2026-08-06T12:30:00.000Z",
+        })
+      ),
+      false
+    );
+  });
+
+  it("not_requiredへrequestedAtが混入したら拒否する", () => {
+    assert.equal(
+      validateHandoffState({
+        ...createSyntheticHandoffNotRequired(),
+        requestedAt: "2026-08-06T10:00:00.000Z",
+      }),
+      false
+    );
+  });
+
+  it("includedAt / acknowledgedAt / closedAt の実フィールド欠損を拒否する", () => {
+    const { includedAt: _includedAt, ...missingIncludedAt } =
+      createSyntheticHandoffIncluded();
+    assert.equal(validateHandoffState(missingIncludedAt), false);
+
+    const { acknowledgedAt: _acknowledgedAt, ...missingAcknowledgedAt } =
+      createSyntheticHandoffAcknowledged();
+    assert.equal(validateHandoffState(missingAcknowledgedAt), false);
+
+    const { closedAt: _closedAt, ...missingClosedAt } =
+      createSyntheticHandoffClosed();
+    assert.equal(validateHandoffState(missingClosedAt), false);
+
+    assert.equal(
+      validateHandoffState(
+        createSyntheticHandoffIncluded({
+          includedAt: undefined as unknown as string,
+        })
+      ),
+      false
+    );
+    assert.equal(
+      validateHandoffState(
+        createSyntheticHandoffAcknowledged({
+          acknowledgedAt: undefined as unknown as string,
+        })
+      ),
+      false
+    );
+    assert.equal(
+      validateHandoffState(
+        createSyntheticHandoffClosed({
+          closedAt: undefined as unknown as string,
+        })
+      ),
+      false
+    );
   });
 
   it("未知statusおよび余分なキーを拒否する", () => {
