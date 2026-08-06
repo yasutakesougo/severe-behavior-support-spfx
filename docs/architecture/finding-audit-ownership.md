@@ -31,6 +31,7 @@ Issue #17 ownership comment: 5204771950
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | Implementation Start GO（承認範囲のみ） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | Implementation Start GO（承認範囲のみ） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了 |
+| FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | Implementation Start GO（承認範囲のみ） |
 | finding再発判定 | Issue #24 | 追加境界が未決定 | HOLD |
 | AssessmentSnapshot候補生成 | Issue #24 | 本文で所有を明示 | 完全契約までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
@@ -174,9 +175,12 @@ Issue #24 Finding lifecycle transition（`docs/architecture/finding-lifecycle-tr
 PR-E:
 Issue #24 finding 生成条件（`docs/architecture/finding-generation-conditions.md`）
 
-PR-F以降:
+PR-F:
+Issue #24 FindingCode写像・Identity組立（狭域）（`docs/architecture/finding-identity-assembly.md`）
+
+PR-G以降:
 Handoff transition、Severity、完全Finding、
-AssessmentSnapshot契約、FindingCode写像・Identity組立、audit write boundary
+AssessmentSnapshot契約、audit write boundary
 ```
 
 PR-BはPR-Aマージ後を推奨する。
