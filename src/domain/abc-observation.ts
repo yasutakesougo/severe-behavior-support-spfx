@@ -217,7 +217,7 @@ export function isValidIsoDateTime(value: unknown): value is string {
 export function isReasonCode(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    (/^[A-Z][A-Z0-9_]{1,63}$/.test(value) || /^synthetic-[a-z0-9-]+$/.test(value))
+    /^[A-Z][A-Z0-9_]{1,63}$/.test(value)
   );
 }
 

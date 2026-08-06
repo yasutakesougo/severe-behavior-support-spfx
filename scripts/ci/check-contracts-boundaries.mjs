@@ -30,7 +30,10 @@ const forbiddenPatterns = [
 ];
 
 const syntheticIdentifierPattern =
-  /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint|criterionId|findingCode|reasonCode)\s*:\s*["']((?!synthetic-)[^"']+)["']/g;
+  /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint|criterionId|findingCode)\s*:\s*["']((?!synthetic-)[^"']+)["']/g;
+
+const syntheticReasonCodePattern =
+  /\breasonCode\s*:\s*["']((?!(?:synthetic-|SYNTHETIC_))[^"']+)["']/g;
 
 const listFiles = async (directory) => {
   const absoluteDirectory = path.join(root, directory);
@@ -66,6 +69,11 @@ for (const directory of targetDirectories) {
       syntheticIdentifierPattern.lastIndex = 0;
       for (const match of content.matchAll(syntheticIdentifierPattern)) {
         findings.push({ file, label: "non-synthetic fixture identifier", value: match[1] });
+      }
+
+      syntheticReasonCodePattern.lastIndex = 0;
+      for (const match of content.matchAll(syntheticReasonCodePattern)) {
+        findings.push({ file, label: "non-synthetic fixture reason code", value: match[1] });
       }
     }
   }

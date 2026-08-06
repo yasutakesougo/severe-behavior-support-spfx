@@ -299,6 +299,8 @@ describe("ABC and Observation Contract Validation", () => {
     it("validates isReasonCode strictly for UPPERCASE_CODE format", () => {
       assert.equal(isReasonCode("LINK_TARGET_NOT_FOUND"), true);
       assert.equal(isReasonCode("LINK_VERSION_CONFLICT"), true);
+      assert.equal(isReasonCode("SYNTHETIC_REASON_CODE_001"), true);
+      assert.equal(isReasonCode("synthetic-reason-code-001"), false);
       assert.equal(isReasonCode("利用者○○さんの支援記録を保存できなかった"), false);
       assert.equal(isReasonCode("LINK TARGET NOT FOUND"), false); // spaces
       assert.equal(isReasonCode("invalid-reason-code-lowercase"), false);

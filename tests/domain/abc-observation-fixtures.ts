@@ -106,7 +106,7 @@ export function createSyntheticLinkFailure(
       ...base,
       status: "Abandoned",
       abandonedAt: "2026-08-06T12:10:00.000Z",
-      reasonCode: "synthetic-reason-code-001",
+      reasonCode: "SYNTHETIC_REASON_CODE_001",
       ...overrides,
     } as LinkFailure;
   }
