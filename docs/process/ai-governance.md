@@ -1,0 +1,95 @@
+# AI Governance
+
+- 文書: `docs/process/ai-governance.md`
+- 位置づけ: AI開発組織構成の Governance（開発原則・品質入口）入口
+- 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`（承認済み）
+- 実装単位: AI-ORG-IMPL-1
+- 方針: 既存正本の内容を移動・複製せず、単一入口から参照する
+
+## 開発原則
+
+1. DEC 優先 — 未決 DEC が実装をブロックする場合は `HOLD`
+2. ADR 必須 — 主要判断は `docs/decisions/` に記録する
+3. Contracts First — Domain / Contracts / SharePoint の境界を崩さない
+4. Evidence First — 証跡がない事項を推測で補完しない
+5. Fail Closed — 権限マトリクス未記載の操作は禁止扱い（`docs/decisions/DEC-AI-ORG-003.md`）
+6. Read Only 工程では変更禁止 — 読取・監査工程で変更手順を実行しない
+7. レビュー PASS なし Merge 禁止 — 同一 head SHA の Review PASS と人の事前承認が必須
+
+## 判定語と重大度
+
+正本:
+
+- `docs/process/development-process.md`
+- `.agents/skills/_shared/judgement-rules.md`
+
+判定語: `PASS` / `READY` / `HOLD` / `FAIL` / `NOT APPLICABLE`
+
+重大度: `P0` / `P1` / `P2`
+
+`HOLD` は通過ではない。`P0` が残る場合は `FAIL` とする。
+
+## Gate
+
+正本:
+
+- `docs/process/gate-definitions.md`
+- `docs/development/quality-gates.md`
+
+主要 Gate:
+
+- Architecture Gate
+- Implementation Gate
+- Merge Gate
+- Release Gate
+
+## 権限境界
+
+正本: `docs/decisions/DEC-AI-ORG-003.md`
+
+区分:
+
+| 区分 | 意味 |
+|---|---|
+| AI単独 | AI が証跡付きで実施してよい |
+| 人の事前承認 | 投稿・反映・実行の前に人の明示承認が必要 |
+| 禁止 | この基盤の手順としては実施しない |
+
+追加規則:
+
+- 区分重複時は `禁止` > `人の事前承認` > `AI単独`
+- 人の承認は対象・操作・範囲・版に拘束する
+- head SHA / artifact / 環境 / 変更範囲が変わった場合、承認と Review PASS は失効する
+
+この基盤の手順として禁止する代表例:
+
+- 本番環境への deploy
+- SharePoint App Catalog への登録・更新
+- SharePoint 本番変更
+- Entra ID 変更
+- Microsoft 365 権限・テナント設定変更
+- 本番データ変更・物理削除
+- Notion 本番ページ更新
+- main / 保護ブランチへの直接 push / force-push
+
+権限境界に関して既存正本と矛盾する場合、`DEC-AI-ORG-3` を優先し、後続 Issue で既存正本を整合更新する。
+
+## 既存正本への参照（移動しない）
+
+| 主題 | 正本 |
+|---|---|
+| Skill 実行順・AI/人の責務 | `docs/process/development-process.md` |
+| Gate 通過条件 | `docs/process/gate-definitions.md` |
+| 品質ゲート詳細 | `docs/development/quality-gates.md` |
+| Skill カタログ | `docs/process/skill-catalog.md` |
+| 共通判定 | `.agents/skills/_shared/judgement-rules.md` |
+| 出力形式 | `.agents/skills/_shared/output-format.md` |
+| 権限マトリクス | `docs/decisions/DEC-AI-ORG-003.md` |
+
+## 本入口が承認しないこと
+
+- 既存正本の移動
+- `.agents/agents/` / `.agents/commands/` / `.agents/mcp/` の作成
+- MCP 接続・認証設定
+- Ready 化・マージそのもの（人の事前承認が別途必要）
+- SharePoint / Entra ID / Microsoft 365 / 本番データの変更
