@@ -6,70 +6,71 @@
 - 実装単位: AI-ORG-IMPL-1
 - 工程詳細の正本: `docs/process/development-process.md`
 
-## 標準フロー
+## 実行可能な順序（正本）
+
+実行可能な Skill / 工程の順序正本は、次のみとする。
+
+- `docs/process/development-process.md`
+
+本文書は入口であり、独自の実行順を定義しない。順序が衝突する場合は `development-process.md` を優先する。
+
+標準の実行順（正本からの引用）:
 
 ```text
-Requirements
+/project-audit
   ↓
-DEC
+/requirements-review
   ↓
-Architecture
+/decision-review
   ↓
-ADR
+/domain-design
   ↓
-Implementation Plan
+/sharepoint-design
   ↓
-Issue
+/schema-design
   ↓
-Implementation
+/architecture-review
   ↓
-Review
+/implementation-plan
   ↓
-Contracts
+/implementation-review
   ↓
-Security
+実装
   ↓
-Audit
+/contracts-review
   ↓
-Human Approval
+/test-review
   ↓
-Merge
+/merge-audit
   ↓
-Release
+人による merge 承認
+  ↓
+/release-review
+  ↓
+/handoff-builder
 ```
 
 Human Approval と Merge は人の事前承認が必須である。Review PASS なしの Merge は禁止する。
 
-## Skill 実行順との対応
+## 概念レイヤー対応表（非正本）
 
-工程詳細と Skill 名の正本は `docs/process/development-process.md` とする。
+次の図は Role / Governance 理解用の概念レイヤー対応であり、**実行順序の正本ではない**。
 
 ```text
 Requirements / DEC
-  → /project-audit（後続）
-  → /requirements-review（後続）
-  → /decision-review（後続）
+  ↔ requirements-review, decision-review 等
 Architecture / ADR
-  → /domain-design（後続）
-  → /sharepoint-design（後続）
-  → /schema-design（後続）
-  → /architecture-review（後続）
-Implementation Plan / Issue
-  → /implementation-plan（導入済み）
-  → /implementation-review（導入済み）
-Implementation
-  → 承認済み Issue 範囲の実装
+  ↔ domain-design, sharepoint-design, schema-design, architecture-review 等
+Implementation Plan / Issue / Implementation
+  ↔ implementation-plan, implementation-review, 実装
 Review / Contracts / Security / Audit
-  → /contracts-review（後続）
-  → /test-review（後続）
-  → /merge-audit（導入済み）
-Human Approval → Merge
-  → 人による merge 承認（同一 head の Review PASS 必須）
-Release
-  → /release-review（後続）
-  → /handoff-builder（導入済み）
+  ↔ contracts-review, test-review, merge-audit 等
+  （Security は独立工程ではなく、品質・監査確認の概念要素）
+Human Approval / Merge / Release
+  ↔ 人による merge 承認, release-review, handoff-builder
 ```
 
+実行時は、上記対応表ではなく「実行可能な順序（正本）」に従う。
 ## 最小実用セット（現行）
 
 導入済み Skill（`.agents/skills/`）:
