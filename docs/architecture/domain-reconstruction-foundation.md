@@ -147,7 +147,23 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | NFR-MNT-003 | 純粋関数としてテスト可能にする | domain functions and tests |
 | NFR-MNT-006 | ルール変更時に文書とテストを更新する | 本文書と`tests/domain/*`, `tests/contracts/*` |
 
+### SupportPlan Schema（Issue #42 / DEC-1）
+
+| Contract | Schema ID | Schema Version | DTO |
+|---|---|---|---|
+| SupportPlan | `severe-behavior-support.support-plan.plan` | `1.0.0` | `SupportPlanDto`（dtoVersion=schemaVersion） |
+| SupportPlanVersion | `severe-behavior-support.support-plan.plan-version` | `1.0.0` | `SupportPlanVersionDto`（dtoVersion=schemaVersion） |
+| Repository結果型 | Schema ID対象外（結果契約） | — | `RepositoryLookupResult` / `RepositoryListResult` / `SaveResult` |
+
+- Schema IDはSharePoint List/列、TypeScript型名、リポジトリ名と同一視しない
+- `PlanId`（SupportPlan）と `planId`（SupportPlanVersion）は既存表記を維持し、Mappingで明示する（統一は後続MAJOR候補）
+- Contracts最小Mapping（Contract側）: `docs/architecture/sharepoint-contract-mapping.md`
+- SharePoint列変換（DEC-6）はHOLD。Adapter Entry Criteria
+
 この対応は設計トレーサビリティであり、要件を`Implemented`または`Verified`へ自動昇格させない。
+
+要件正本（暫定案B）の基準SHA: `bb46c6a0caac862d9a9fbb2ce31399092400aa10`
+将来の要件正本移行先: `docs/requirements/`
 
 
 ## 継続HOLD

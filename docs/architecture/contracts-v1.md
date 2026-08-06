@@ -45,6 +45,21 @@ SharePoint adapterは、外部の列名とcontractsのプロパティ名を明�
 
 アプリケーションRoleは、Entra IDグループまたはSharePointグループからadapter層で変換する。
 
+`CONTRACT_VERSION`（例: `contracts-v1`）は共通Contract基盤の世代名である。
+
+個別契約の安定識別子は Schema ID、互換性版は Schema Version（SemVer）とする（DEC-1）。
+
+DTO Versionは Schema Versionと同一値とする。Schema IDはSharePoint List名やTypeScript型名と同一視しない。
+
+SupportPlan系の正式値（Issue #42）:
+
+```text
+severe-behavior-support.support-plan.plan @ 1.0.0
+severe-behavior-support.support-plan.plan-version @ 1.0.0
+```
+
+対応表のContract側正本: `docs/architecture/sharepoint-contract-mapping.md`
+
 ## 日付検証
 
 `LocalDate`はTypeScript上のブランド付き文字列である。
