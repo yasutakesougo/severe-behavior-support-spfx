@@ -2,9 +2,9 @@
 
 - ID: DEC-AI-ORG-1
 - ファイル: `docs/decisions/DEC-AI-ORG-001.md`
-- 状態: 承認待ち
+- 状態: 承認
 - 作成日: 2026-08-06
-- 決定日: 未定
+- 決定日: 2026-08-06
 - 正本参照: `docs/process/ai-org-onboarding-implementation-plan.md`
 - 前提: PR #45（merge `996cd4719bcdbb457675dbac55f303eb092d0855`）は HOLD 付き実装計画の正本であり、実装開始承認を含まない
 
@@ -40,6 +40,7 @@
 - Skill / Agent / Command / MCP の実装着手
 - SharePoint / Microsoft 365 / Entra ID / 本番変更
 - HOLD の解除
+- DEC-AI-ORG-2 以降の内容
 
 ## 背景
 
@@ -64,11 +65,11 @@ Role / Governance / Skills / Agents / Commands / Workflows / MCP の論理分離
 
 現行の `docs/process/` + `.agents/skills/` 構成を維持し、AI開発組織構成という追加レイヤは導入しない。
 
-## 決定（提案）
+## 決定
 
-**選択肢 A を採用する。**
+**選択肢 A を承認する。**
 
-AI開発組織構成（Role / Governance / Skills / Agents / Commands / Workflows / MCP の論理分離）を採用する。
+Role / Governance / Skills / Agents / Commands / Workflows / MCP の論理分離構成を採用する。
 
 理由:
 
@@ -77,12 +78,24 @@ AI開発組織構成（Role / Governance / Skills / Agents / Commands / Workflow
 - 特定ツール（Codex / Cursor / Claude Code 等）に依存しない論理モデルを先に固定できる
 - PR #45 でレビュー済みの計画と整合する
 
+## 承認記録
+
+- 承認内容: 選択肢 A（論理分離構成の採用）
+- 承認日: 2026-08-06
+- 承認範囲の上限:
+  - HOLD は維持する
+  - 実装開始は承認しない
+  - ディレクトリ新設は承認しない
+  - 既存正本移動は承認しない
+  - DEC-AI-ORG-2 以降の内容は承認しない
+
 ## 本決定の効力と非効力
 
 ### 効力
 
-- 以降の Decision Units（DEC-AI-ORG-2 / ADR-AI-ORG-1 / DEC-AI-ORG-3）を、この論理構成を前提に個別作成してよい
+- AI開発組織構成の論理分離を採用済みとして扱う
 - 計画正本 `docs/process/ai-org-onboarding-implementation-plan.md` の「採用」判断単位を閉じる
+- 以降の Decision Units（DEC-AI-ORG-2 / ADR-AI-ORG-1 / DEC-AI-ORG-3）を、この論理構成を前提に**個別作成**してよい（各文書の内容承認は別途）
 
 ### 非効力
 
@@ -90,19 +103,11 @@ AI開発組織構成（Role / Governance / Skills / Agents / Commands / Workflow
 - 実装開始承認にはならない
 - ディレクトリ新設は引き続き禁止する
 - 既存正本移動は引き続き禁止する
-- DEC-AI-ORG-2 / ADR-AI-ORG-1 / DEC-AI-ORG-3 の内容を先取りしない
-
-## 承認条件
-
-次を満たしたとき、状態を `承認` に更新し、決定日を記録する。
-
-- 人による明示承認がある
-- 本 DEC の対象が「採用可否のみ」であることが確認されている
-- 対象外（再利用範囲・物理配置・権限境界・ディレクトリ新設）が混在していない
+- DEC-AI-ORG-2 / ADR-AI-ORG-1 / DEC-AI-ORG-3 の内容を先取り・承認しない
 
 ## 次工程
 
-本 DEC が `承認` になった後に限り、次を個別に作成する。
+本 DEC は `承認` 済みである。次を個別に作成・承認する。
 
 ```text
 DEC-AI-ORG-2
@@ -110,4 +115,4 @@ DEC-AI-ORG-2
 → DEC-AI-ORG-3
 ```
 
-DEC-AI-ORG-1 が `承認待ち` の間は、後続 Decision Units の作成に進まない。
+後続文書の作成は本 DEC の論理採用を前提とするが、各文書の決定内容は個別承認が必要である。
