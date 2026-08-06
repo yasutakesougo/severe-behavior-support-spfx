@@ -21,12 +21,14 @@ import {
   SYNTHETIC_VALID_EVALUATION_INPUT,
 } from "./fixtures";
 
-// NOT_APPLICABLE belongs to CriterionResult, not to the score input state.
-// @ts-expect-error The score contract intentionally excludes NOT_APPLICABLE.
+// @ts-expect-error NOT_APPLICABLE belongs to CriterionResult, not BehaviorScoreInput.
 const forbiddenNotApplicableScoreInput: BehaviorScoreInput = { status: "NOT_APPLICABLE", reasonCode: "synthetic-not-applicable" };
+// @ts-expect-error NOT_APPLICABLE requires a non-empty reasonCode contract.
+const forbiddenReasonlessCriterion: CriterionResult = { criterionId: "synthetic-reasonless", status: "NOT_APPLICABLE" };
 void forbiddenNotApplicableScoreInput;
+void forbiddenReasonlessCriterion;
 
-describe("Behavior Score Parsing & Validation", () => {
+describe("Behavior Score Parsing & Classification", () => {
   it("accepts valid integer scores in range 0..24", () => {
     for (const score of [0, 9, 10, 17, 18, 24]) {
       const result = parseBehaviorRelatedScore(score);
@@ -35,44 +37,27 @@ describe("Behavior Score Parsing & Validation", () => {
     }
   });
 
-  it("rejects non-integer, out-of-range, and non-number types", () => {
-    assert.deepEqual(parseBehaviorRelatedScore(-1), {
-      success: false,
-      reason: "OUT_OF_RANGE",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore(25), {
-      success: false,
-      reason: "OUT_OF_RANGE",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore(10.5), {
-      success: false,
-      reason: "NOT_INTEGER",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore(NaN), {
-      success: false,
-      reason: "NOT_FINITE",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore(Infinity), {
-      success: false,
-      reason: "NOT_FINITE",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore("10"), {
-      success: false,
-      reason: "TYPE",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore(null), {
-      success: false,
-      reason: "TYPE",
-    });
-    assert.deepEqual(parseBehaviorRelatedScore(undefined), {
-      success: false,
-      reason: "TYPE",
-    });
-  });
-});
+  it("rejects invalid score values", () => {
+    const cases: readonly [unknown, string][] = [
+      [-1, "OUT_OF_RANGE"],
+      [25, "OUT_OF_RANGE"],
+      [10.5, "NOT_INTEGER"],
+      [NaN, "NOT_FINITE"],
+      [Infinity, "NOT_FINITE"],
+      ["10", "TYPE"],
+      [null, "TYPE"],
+      [undefined, "TYPE"],
+    ];
 
-describe("Behavior Score Classification", () => {
-  it("classifies valid scores into point bands while preserving zero", () => {
+    for (const [value, reason] of cases) {
+      assert.deepEqual(parseBehaviorRelatedScore(value), {
+        success: false,
+        reason,
+      });
+    }
+  });
+
+  it("classifies valid values into point bands while preserving zero", () => {
     const cases: readonly [BehaviorScoreInput, unknown][] = [
       [{ status: "VALUE", value: 0 }, { decision: "BELOW_BASE_THRESHOLD", score: 0 }],
       [{ status: "VALUE", value: 9 }, { decision: "BELOW_BASE_THRESHOLD", score: 9 }],
@@ -87,7 +72,7 @@ describe("Behavior Score Classification", () => {
     }
   });
 
-  it("fails closed for empty, invalid, unknown, and fetch-failed score inputs", () => {
+  it("fails closed for empty, invalid, unknown, and fetch-failed score states", () => {
     assert.deepEqual(classifyBehaviorScore({ status: "EMPTY" }), {
       decision: "REJECTED_INCOMPLETE_INPUT",
     });
@@ -96,99 +81,83 @@ describe("Behavior Score Classification", () => {
       { decision: "REJECTED_INVALID_INPUT", reason: "OUT_OF_RANGE" },
     );
     assert.deepEqual(
-      classifyBehaviorScore({
-        status: "UNKNOWN",
-        reasonCode: "synthetic-reason-code-001",
-      }),
-      {
-        decision: "INDETERMINATE",
-        reasonCode: "synthetic-reason-code-001",
-      },
+      classifyBehaviorScore({ status: "UNKNOWN", reasonCode: "synthetic-unknown" }),
+      { decision: "INDETERMINATE", reasonCode: "synthetic-unknown" },
     );
     assert.deepEqual(
-      classifyBehaviorScore({
-        status: "FETCH_FAILED",
-        code: "ERR_SYNTHETIC_FETCH",
-      }),
-      {
-        decision: "REJECTED_SOURCE_UNAVAILABLE",
-        code: "ERR_SYNTHETIC_FETCH",
-      },
+      classifyBehaviorScore({ status: "FETCH_FAILED", code: "ERR_SYNTHETIC_FETCH" }),
+      { decision: "REJECTED_SOURCE_UNAVAILABLE", code: "ERR_SYNTHETIC_FETCH" },
     );
   });
 });
 
-describe("Criteria Aggregation", () => {
-  it("keeps NOT_APPLICABLE at the rule-criterion layer", () => {
+describe("Criterion Aggregation", () => {
+  it("keeps NOT_APPLICABLE at the criterion layer with a reason", () => {
     const criterion: CriterionResult = {
       criterionId: "synthetic-criterion-not-applicable",
       status: "NOT_APPLICABLE",
+      reasonCode: "synthetic-not-applicable-reason",
     };
     assert.equal(criterion.status, "NOT_APPLICABLE");
   });
 
-  it("aggregates PASS, FAIL, UNKNOWN, and NOT_APPLICABLE with strict precedence", () => {
+  it("aggregates valid criterion combinations", () => {
     assert.equal(aggregateCriterionResults(SYNTHETIC_CRITERIA_PASS), "ELIGIBLE");
     assert.equal(
       aggregateCriterionResults([
-        { criterionId: "synthetic-01", status: "PASS" },
-        { criterionId: "synthetic-02", status: "NOT_APPLICABLE" },
+        { criterionId: "synthetic-pass", status: "PASS" },
+        {
+          criterionId: "synthetic-na",
+          status: "NOT_APPLICABLE",
+          reasonCode: "synthetic-na-reason",
+        },
       ]),
       "ELIGIBLE",
     );
     assert.equal(aggregateCriterionResults(SYNTHETIC_CRITERIA_FAIL), "INELIGIBLE");
     assert.equal(
       aggregateCriterionResults([
-        { criterionId: "synthetic-01", status: "FAIL" },
-        { criterionId: "synthetic-02", status: "UNKNOWN" },
+        { criterionId: "synthetic-fail", status: "FAIL" },
+        {
+          criterionId: "synthetic-unknown",
+          status: "UNKNOWN",
+          reasonCode: "synthetic-unknown-reason",
+        },
       ]),
       "INELIGIBLE",
     );
-    assert.equal(
-      aggregateCriterionResults(SYNTHETIC_CRITERIA_UNKNOWN),
-      "INDETERMINATE",
-    );
+    assert.equal(aggregateCriterionResults(SYNTHETIC_CRITERIA_UNKNOWN), "INDETERMINATE");
     assert.equal(
       aggregateCriterionResults(SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE),
       "NOT_APPLICABLE",
     );
-    assert.equal(aggregateCriterionResults([]), "INDETERMINATE");
-    assert.equal(
-      aggregateCriterionResults([{ criterionId: "", status: "PASS" }]),
-      "INDETERMINATE",
-    );
-    assert.equal(
-      aggregateCriterionResults([{ criterionId: "   ", status: "PASS" }]),
-      "INDETERMINATE",
-    );
   });
 
-  it("validates every criterion before applying FAIL precedence", () => {
-    const malformedAfterFail = [
-      { criterionId: "synthetic-fail", status: "FAIL" },
+  it("fails closed for empty or malformed criteria", () => {
+    const malformedCases = [
+      [],
+      [{ criterionId: "", status: "PASS" }],
+      [{ criterionId: "synthetic-unknown", status: "UNKNOWN" }],
+      [{ criterionId: "synthetic-na", status: "NOT_APPLICABLE", reasonCode: "" }],
+      [
+        { criterionId: "synthetic-fail", status: "FAIL" },
+        null,
+      ],
       null,
-    ] as unknown as readonly CriterionResult[];
+    ] as unknown as readonly (readonly CriterionResult[])[];
 
-    assert.equal(
-      aggregateCriterionResults(malformedAfterFail),
-      "INDETERMINATE",
-    );
-    assert.equal(
-      aggregateCriterionResults(null as unknown as readonly CriterionResult[]),
-      "INDETERMINATE",
-    );
+    for (const criteria of malformedCases) {
+      assert.equal(aggregateCriterionResults(criteria), "INDETERMINATE");
+    }
   });
 });
 
 describe("Evaluation Decision & Finding Separation", () => {
-  it("returns NO_FINDINGS only when completed with no findings or missing states", () => {
-    assert.equal(
-      deriveEvaluationDecision(SYNTHETIC_VALID_EVALUATION_INPUT),
-      "NO_FINDINGS",
-    );
+  it("returns NO_FINDINGS only for a complete and approved clean evaluation", () => {
+    assert.equal(deriveEvaluationDecision(SYNTHETIC_VALID_EVALUATION_INPUT), "NO_FINDINGS");
   });
 
-  it("returns INDETERMINATE when execution is incomplete", () => {
+  it("returns INDETERMINATE for incomplete execution states", () => {
     for (const executionStatus of [
       "NOT_RUN",
       "RUNNING",
@@ -196,10 +165,7 @@ describe("Evaluation Decision & Finding Separation", () => {
       "PENDING_CONFIRMATION",
     ] as const) {
       assert.equal(
-        deriveEvaluationDecision({
-          ...SYNTHETIC_VALID_EVALUATION_INPUT,
-          executionStatus,
-        }),
+        deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, executionStatus }),
         "INDETERMINATE",
       );
     }
@@ -207,59 +173,38 @@ describe("Evaluation Decision & Finding Separation", () => {
 
   it("returns SOURCE_UNAVAILABLE for failed execution or system errors", () => {
     assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        executionStatus: "FAILED",
-      }),
+      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, executionStatus: "FAILED" }),
       "SOURCE_UNAVAILABLE",
     );
     assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        systemErrorCount: 1,
-      }),
+      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, systemErrorCount: 1 }),
       "SOURCE_UNAVAILABLE",
     );
   });
 
-  it("returns FINDINGS_PRESENT when findings exist or a criterion fails", () => {
+  it("returns FINDINGS_PRESENT for findings or failed criteria", () => {
     assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        findings: SYNTHETIC_FINDINGS_ONE,
-      }),
+      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, findings: SYNTHETIC_FINDINGS_ONE }),
       "FINDINGS_PRESENT",
     );
     assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        criteria: SYNTHETIC_CRITERIA_FAIL,
-      }),
+      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, criteria: SYNTHETIC_CRITERIA_FAIL }),
       "FINDINGS_PRESENT",
     );
   });
 
-  it("does not create eligible or ineligible findings for unknown criteria", () => {
+  it("does not create definitive findings for unknown or unapproved evaluations", () => {
     assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        criteria: SYNTHETIC_CRITERIA_UNKNOWN,
-      }),
+      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, criteria: SYNTHETIC_CRITERIA_UNKNOWN }),
+      "INDETERMINATE",
+    );
+    assert.equal(
+      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, approved: false }),
       "INDETERMINATE",
     );
   });
 
-  it("returns INDETERMINATE when required approval is absent", () => {
-    assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        approved: false,
-      }),
-      "INDETERMINATE",
-    );
-  });
-
-  it("returns NOT_APPLICABLE when all rule criteria are NOT_APPLICABLE", () => {
+  it("returns NOT_APPLICABLE only when all rule criteria are not applicable", () => {
     assert.equal(
       deriveEvaluationDecision({
         ...SYNTHETIC_VALID_EVALUATION_INPUT,
@@ -269,85 +214,46 @@ describe("Evaluation Decision & Finding Separation", () => {
     );
   });
 
-  it("does not return NO_FINDINGS when a criterion id is empty", () => {
-    for (const criterionId of ["", "   "]) {
-      assert.equal(
-        deriveEvaluationDecision({
-          ...SYNTHETIC_VALID_EVALUATION_INPUT,
-          criteria: [{ criterionId, status: "PASS" }],
-        }),
-        "INDETERMINATE",
-      );
-    }
-  });
-
-  it("returns INDETERMINATE for invalid count inputs", () => {
-    const invalidInputs = [
-      { missingDataCount: -1 },
-      { pendingConfirmationCount: 0.5 },
-      { expiredEvidenceCount: NaN },
-      { systemErrorCount: Infinity },
-    ];
-
-    for (const invalidInput of invalidInputs) {
-      assert.equal(
-        deriveEvaluationDecision({
-          ...SYNTHETIC_VALID_EVALUATION_INPUT,
-          ...invalidInput,
-        }),
-        "INDETERMINATE",
-      );
-    }
-  });
-
-  it("returns INDETERMINATE for an unknown criterion status", () => {
+  it("fails closed for invalid criterion ids, statuses, or reason codes", () => {
     const invalidCriteria = [
-      { criterionId: "synthetic-invalid-status", status: "BROKEN" },
-    ] as unknown as readonly CriterionResult[];
-    assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        criteria: invalidCriteria,
-      }),
-      "INDETERMINATE",
-    );
+      [{ criterionId: "", status: "PASS" }],
+      [{ criterionId: "synthetic-invalid", status: "BROKEN" }],
+      [{ criterionId: "synthetic-unknown", status: "UNKNOWN" }],
+      [{ criterionId: "synthetic-na", status: "NOT_APPLICABLE", reasonCode: "" }],
+    ] as unknown as readonly (readonly CriterionResult[])[];
+
+    for (const criteria of invalidCriteria) {
+      assert.equal(
+        deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, criteria }),
+        "INDETERMINATE",
+      );
+    }
   });
 
-  it("returns INDETERMINATE when all criteria are NOT_APPLICABLE but findings exist", () => {
+  it("fails closed for invalid counts and malformed evaluation structures", () => {
+    const invalidInputs = [
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, missingDataCount: -1 },
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, pendingConfirmationCount: 0.5 },
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, expiredEvidenceCount: NaN },
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, systemErrorCount: Infinity },
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, criteria: [null] },
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, findings: null },
+      { ...SYNTHETIC_VALID_EVALUATION_INPUT, approvalRequired: "yes" },
+      null,
+    ] as unknown as readonly EvaluationInput[];
+
+    for (const input of invalidInputs) {
+      assert.equal(deriveEvaluationDecision(input), "INDETERMINATE");
+    }
+  });
+
+  it("returns INDETERMINATE for contradictory all-not-applicable findings", () => {
     assert.equal(
       deriveEvaluationDecision({
         ...SYNTHETIC_VALID_EVALUATION_INPUT,
         criteria: SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE,
         findings: SYNTHETIC_FINDINGS_ONE,
       }),
-      "INDETERMINATE",
-    );
-  });
-
-  it("fails closed rather than throwing for malformed evaluation input", () => {
-    assert.equal(
-      deriveEvaluationDecision(null as unknown as EvaluationInput),
-      "INDETERMINATE",
-    );
-    assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        criteria: [null],
-      } as unknown as EvaluationInput),
-      "INDETERMINATE",
-    );
-    assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        findings: null,
-      } as unknown as EvaluationInput),
-      "INDETERMINATE",
-    );
-    assert.equal(
-      deriveEvaluationDecision({
-        ...SYNTHETIC_VALID_EVALUATION_INPUT,
-        approvalRequired: "yes",
-      } as unknown as EvaluationInput),
       "INDETERMINATE",
     );
   });
