@@ -253,13 +253,19 @@ GO / NO-GO
 
 ## 11. 初期導入範囲
 
-最初の段階では、次だけを導入します。
+最初の段階では、共通規約と最小実用セットを導入します。
 
-- 品質ゲート文書
-- 要件レビューSkill
-- 設計レビューSkill
-- PRテンプレート
+- `docs/process/development-process.md`
+- `docs/process/gate-definitions.md`
+- `docs/process/skill-catalog.md`
+- `.agents/skills/_shared/judgement-rules.md`
+- `.agents/skills/_shared/output-format.md`
+- `/implementation-plan`
+- `/implementation-review`
+- `/merge-audit`
+- `/handoff-builder`
+- `scripts/verify-skills.mjs`
 
-SPFx画面、SharePoint接続、Playwrightは、この文書追加のPRには含めません。
+要件レビュー、設計レビュー、追加 Skill は後続段階で拡張します。
 
-現在のPhase 0Bが未完了であるため、本番環境や実データを前提としたテストも開始しません。
+SPFx画面、SharePoint接続、Playwright、本番環境、実データは、この段階の対象に含めません。
