@@ -29,7 +29,7 @@ Issue #17 ownership comment: 5204771950
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり | 正式化までHOLD |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない | 所有指定までHOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | Implementation Start GO（承認範囲のみ） |
-| finding生成条件 | Issue #24 | 本文で所有を明示 | 依存Decisionに従う |
+| finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | Implementation Start GO（承認範囲のみ） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了 |
 | finding再発判定 | Issue #24 | 追加境界が未決定 | HOLD |
 | AssessmentSnapshot候補生成 | Issue #24 | 本文で所有を明示 | 完全契約までHOLD |
@@ -171,9 +171,12 @@ Issue #24 Finding安定ID（`docs/architecture/finding-stable-id.md`）
 PR-D:
 Issue #24 Finding lifecycle transition（`docs/architecture/finding-lifecycle-transition.md`）
 
-PR-E以降:
+PR-E:
+Issue #24 finding 生成条件（`docs/architecture/finding-generation-conditions.md`）
+
+PR-F以降:
 Handoff transition、Severity、完全Finding、
-AssessmentSnapshot契約、audit write boundary
+AssessmentSnapshot契約、FindingCode写像・Identity組立、audit write boundary
 ```
 
 PR-BはPR-Aマージ後を推奨する。

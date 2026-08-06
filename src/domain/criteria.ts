@@ -23,7 +23,7 @@ function hasNonEmptyReasonCode(value: Record<string, unknown>): boolean {
   );
 }
 
-function isCriterionResult(value: unknown): value is CriterionResult {
+export function isCriterionResult(value: unknown): value is CriterionResult {
   if (
     !isRecord(value) ||
     typeof value.criterionId !== "string" ||

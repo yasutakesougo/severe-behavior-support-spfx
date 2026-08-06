@@ -13,6 +13,7 @@ import {
   validateHandoffState,
   deriveStableFindingId,
   transitionFindingStatus,
+  decideFindingGeneration,
   sha256Hex,
   STABLE_FINDING_ID_FIELD_ORDER,
   FINDING_STATUS_ALLOWED_TRANSITIONS,
@@ -35,6 +36,9 @@ import {
 } from "../domain/finding-audit-fixtures";
 import {
   SYNTHETIC_CRITERIA_PASS,
+  SYNTHETIC_CRITERIA_FAIL,
+  SYNTHETIC_CRITERIA_UNKNOWN,
+  SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE,
   SYNTHETIC_FINDINGS_ONE,
 } from "../domain/fixtures";
 
@@ -393,6 +397,122 @@ describe("Finding Lifecycle Transition Contract", () => {
         }
       }
     }
+  });
+});
+
+describe("Finding Generation Conditions Contract", () => {
+  it("FAILがありUNKNOWNがなければGENERATE_REQUIREDを返す", () => {
+    assert.deepEqual(
+      decideFindingGeneration({ criteria: SYNTHETIC_CRITERIA_FAIL }),
+      { ok: true, decision: "GENERATE_REQUIRED" }
+    );
+  });
+
+  it("空criteriaをEMPTY_CRITERIAとしてDO_NOT_GENERATEする", () => {
+    assert.deepEqual(decideFindingGeneration({ criteria: [] }), {
+      ok: true,
+      decision: "DO_NOT_GENERATE",
+      reason: "EMPTY_CRITERIA",
+    });
+  });
+
+  it("全件NOT_APPLICABLEをALL_NOT_APPLICABLEとしてDO_NOT_GENERATEする", () => {
+    assert.deepEqual(
+      decideFindingGeneration({ criteria: SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE }),
+      {
+        ok: true,
+        decision: "DO_NOT_GENERATE",
+        reason: "ALL_NOT_APPLICABLE",
+      }
+    );
+  });
+
+  it("UNKNOWNがある場合はFAIL併存でもHAS_UNKNOWNを優先する", () => {
+    assert.deepEqual(
+      decideFindingGeneration({ criteria: SYNTHETIC_CRITERIA_UNKNOWN }),
+      {
+        ok: true,
+        decision: "DO_NOT_GENERATE",
+        reason: "HAS_UNKNOWN",
+      }
+    );
+    assert.deepEqual(
+      decideFindingGeneration({
+        criteria: [
+          { criterionId: "synthetic-criterion-001", status: "FAIL" },
+          {
+            criterionId: "synthetic-criterion-002",
+            status: "UNKNOWN",
+            reasonCode: "synthetic-unknown-reason",
+          },
+        ],
+      }),
+      {
+        ok: true,
+        decision: "DO_NOT_GENERATE",
+        reason: "HAS_UNKNOWN",
+      }
+    );
+  });
+
+  it("FAILがなくUNKNOWNもなければNO_FAILING_CRITERIAとする", () => {
+    assert.deepEqual(
+      decideFindingGeneration({ criteria: SYNTHETIC_CRITERIA_PASS }),
+      {
+        ok: true,
+        decision: "DO_NOT_GENERATE",
+        reason: "NO_FAILING_CRITERIA",
+      }
+    );
+    assert.deepEqual(
+      decideFindingGeneration({
+        criteria: [
+          { criterionId: "synthetic-criterion-001", status: "PASS" },
+          {
+            criterionId: "synthetic-criterion-002",
+            status: "NOT_APPLICABLE",
+            reasonCode: "synthetic-not-applicable-reason",
+          },
+        ],
+      }),
+      {
+        ok: true,
+        decision: "DO_NOT_GENERATE",
+        reason: "NO_FAILING_CRITERIA",
+      }
+    );
+  });
+
+  it("不正入力をMALFORMED_INPUTとして拒否する", () => {
+    assert.deepEqual(decideFindingGeneration(null), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(decideFindingGeneration({}), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(decideFindingGeneration({ criteria: "not-array" }), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(
+      decideFindingGeneration({
+        criteria: [{ criterionId: "synthetic-criterion-001", status: "FAIL" }, null],
+      }),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      decideFindingGeneration({
+        criteria: [
+          {
+            criterionId: "synthetic-criterion-001",
+            status: "UNKNOWN",
+          },
+        ],
+      }),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
   });
 });
 
