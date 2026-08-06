@@ -62,8 +62,9 @@
 - 区分が重複する場合は、`禁止` > `人の事前承認` > `AI単独` の順に厳しい区分を優先する
 - 「案作成（AI単独）」と「投稿・反映（人の事前承認）」を同一区分にしない
 - Review PASS なしの Merge は認めない（人の事前承認区分）
+- Review PASS は review 対象 head SHA に拘束する。merge 対象 expected head SHA と一致必須
 - 人の承認は、対象・操作・範囲・版に拘束する
-- 対象 SHA、artifact、環境、変更範囲のいずれかが変わった場合、既存承認は失効し `HOLD` へ戻す
+- 対象 SHA、artifact、環境、変更範囲のいずれかが変わった場合、既存承認および Review PASS は失効し `HOLD` へ戻す
 - 現在の HOLD（実装未開始）と、本 DEC の恒久的な権限区分を混同しない
 - 本 DEC と既存正本が矛盾する場合、本 DEC を優先し、後続で既存正本を整合更新する
 
@@ -91,14 +92,26 @@
 
 | 操作 | 承認が拘束する対象 |
 |---|---|
-| PR マージ | repository、PR 番号、expected head SHA |
+| PR マージ | repository、PR 番号、expected head SHA。同一 head SHA に対する Review PASS が存在すること。unresolved P0 = 0、unresolved P1 = 0 |
+| Review PASS | repository、PR 番号、review 対象 head SHA |
+| force-push（非保護の自 feature branch） | repository、branch 名、expected remote head SHA、force-push 理由 |
 | 承認済み検証環境への deploy | 対象環境、artifact 名、version または SHA |
 | Issue・PR・レビュー投稿 | repository、対象番号、投稿内容の範囲 |
 | 設定変更（別プロセスで扱う場合） | 対象リソース、変更項目、before / after |
 
+### Review PASS の有効条件
+
+- repository、PR 番号、review 対象 head SHA を記録する
+- Review PASS の head SHA は、merge 対象 expected head SHA と一致必須
+- head SHA が変化した場合、Review PASS は失効する
+- 失効後は再レビュー完了まで `HOLD` とする
+- unresolved P0 / P1 が 0 件であることを必須とする
+
 失効規則:
 
 - head SHA、artifact、対象環境、変更範囲のいずれかが承認時と異なる場合、既存承認は無効
+- Review PASS の head SHA が merge 対象 expected head SHA と一致しない場合、Review PASS およびマージ承認は無効
+- force-push により open PR の head が変わった場合、当該 PR の merge 承認および Review PASS は失効し、再レビューへ戻す
 - 無効化した操作は `HOLD` とし、再承認なしに進行しない
 
 ## 選択肢
@@ -133,12 +146,12 @@ Fail Closed と矛盾しやすく、本 DEC では採用しない。
 | PR レビューコメント案 | AI単独 | — |
 | PR レビュー投稿 | 人の事前承認 | repository、PR 番号、投稿内容の範囲を拘束 |
 | ラベル更新 | 人の事前承認 | repository、対象番号、ラベル範囲を拘束 |
-| PR マージ | 人の事前承認 | repository、PR 番号、expected head SHA を拘束。Review PASS 必須 |
+| PR マージ | 人の事前承認 | repository、PR 番号、expected head SHA を拘束。同一 head SHA に対する Review PASS が存在。unresolved P0 = 0、unresolved P1 = 0 |
 | ローカルのコード・文書変更 | AI単独 | **実装開始承認済み**、かつ承認済み Issue の範囲内 |
 | ローカル検証（typecheck / test / build / diff 確認） | AI単独 | — |
 | git commit | AI単独 | 承認済み Issue の範囲内。保護ブランチへの直接 commit は禁止 |
-| branch push（非保護の feature branch） | AI単独 | 対象 branch が非保護であること |
-| force-push（非保護の自 feature branch） | AI単独 | 対象 branch が非保護の自 branch に限る |
+| branch push（非保護の feature branch） | AI単独 | 対象 branch が非保護であること。通常の fast-forward / 非破壊 push に限る |
+| force-push（非保護の自 feature branch） | 人の事前承認 | 安全性優先。repository、branch 名、expected remote head SHA、理由を拘束。実施後は当該 open PR の Review PASS / merge 承認を失効させ再レビューへ戻す |
 | force-push（main / 保護ブランチ） | 禁止 | — |
 | 保護ブランチ / main への直接 push | 禁止 | — |
 | ローカル package 生成 | AI単独 | 配布・登録を含まない |
@@ -160,9 +173,13 @@ AI 許可操作と人の承認境界は、操作単位の権限マトリクス�
 
 上記初期マトリクスを、権限境界の初期正本とする。
 
-`git commit` および非保護 feature branch への `branch push` / 自 branch への `force-push` は、実装開始承認後かつ承認済み Issue 範囲内で **AI単独** とする。
+`git commit` および非保護 feature branch への通常の `branch push` は、実装開始承認後かつ承認済み Issue 範囲内で **AI単独** とする。
+
+非保護の自 feature branch への `force-push` は、安全性優先のため **人の事前承認** とする。
 
 `main` / 保護ブランチへの直接 push および force-push、本番 deploy、SharePoint App Catalog 登録・更新、SharePoint / Entra ID / Microsoft 365 変更、本番データ変更、Notion 本番ページ更新は **禁止** とする。
+
+PR マージは、同一 head SHA に対する Review PASS（unresolved P0 / P1 = 0）と、expected head SHA 拘束の人の事前承認を必須とする。
 
 本決定は、MCP 接続実装、認証設定、`.agents/mcp/` の作成、実装開始そのもの、ディレクトリ新設、既存正本移動を承認しない。
 
@@ -171,7 +188,8 @@ AI 許可操作と人の承認境界は、操作単位の権限マトリクス�
 - 計画正本および PR #45 / PR #50 レビューの権限マトリクス方針と整合する
 - 現行プロセスが認めるローカル変更・検証を、Fail Closed 下でも実施可能にする
 - deploy を環境・成果物単位に分割し、SharePoint 配備との区分衝突を避ける
-- 承認を対象・版に拘束し、head 差し替え後の流用を防ぐ
+- force-push を人の事前承認とし、他者 commit 上書きリスクを避ける
+- Review PASS と merge 承認を同一 head SHA に拘束し、古いレビュー結果の流用を防ぐ
 - 選択肢 B / C は Fail Closed または実運用と合わない
 
 ## 本決定の効力と非効力（承認後）
@@ -203,6 +221,8 @@ AI 許可操作と人の承認境界は、操作単位の権限マトリクス�
 - 本 DEC の対象が「AI許可操作と人の承認境界のみ」であることが確認されている
 - 物理配置・再利用範囲・MCP 接続実装・ディレクトリ新設が決定内容に混在していない
 - ローカル変更 / 検証 / commit / push がマトリクスに記載されている
+- force-push（非保護の自 feature branch）が人の事前承認であること
+- Review PASS が review 対象 head SHA に拘束され、merge の expected head SHA と一致必須であること
 - deploy が検証環境と本番 / App Catalog に分割されている
 - 人の事前承認の拘束条件と失効規則が定義されている
 - Notion 操作名に承認状態（例: 無断）を含んでいない
@@ -222,7 +242,9 @@ Decision Units（DEC-AI-ORG-1 / 2 / ADR-AI-ORG-1 / DEC-AI-ORG-3）が揃った�
 
 | 指摘 | 反映 |
 |---|---|
-| P1-1 コード変更・commit・push 未記載 | ローカル変更 / 検証 / commit / branch push / force-push を追加。commit・非保護 push は AI単独、main/保護への force-push は禁止 |
+| P1-1 コード変更・commit・push 未記載 | ローカル変更 / 検証 / commit / branch push / force-push を追加。commit・非保護通常 push は AI単独、main/保護への force-push は禁止 |
 | P1-2 deploy と SharePoint の区分衝突 | package 生成 / 検証環境 deploy / 本番 deploy / App Catalog に分割。重複時は厳しい区分を優先。既存正本より禁止へ強化する優先順位を明記 |
 | P1-3 人の事前承認の有効条件未定義 | 証跡必須項目、操作別拘束、版変更時の失効規則を追加 |
 | P2-1 Notion 操作名に状態が混在 | `Notion 本番ページ更新` に改名し、区分を禁止に固定。行は 1 区分形式へ統一 |
+| 再レビュー P1-1 force-push 安全条件不足 | 非保護自 feature branch の force-push を **人の事前承認**（案A）へ変更 |
+| 再レビュー P1-2 Review PASS が head 非拘束 | Review PASS 有効条件を追加。PR マージは同一 head SHA の Review PASS + P0/P1 = 0 を必須化 |
