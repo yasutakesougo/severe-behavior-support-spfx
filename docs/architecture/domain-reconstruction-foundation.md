@@ -5,15 +5,16 @@
 ## 基準
 
 ```text
-main: 33a2064e037d56361c5bb93bddabd928ad756c3b
-entry criteria: Issue #34 CONDITIONAL GO
-assessment contract: Issue #20
+main: d5369d1a944a3f8b9f926c54bbc138863109b877
+entry criteria: Issue #25 CONDITIONAL GO
+assessment contract: Issue #20 (MERGED)
+ABC / Observation contract: Issue #25
 Decision Ledger: Issue #8
 ```
 
-本実装は、行動関連点数の検証、点数帯分類、条件結果の集約、評価実行状態とFindingの分離だけを扱う。
+本実装は、行動関連点数の検証、点数帯分類、条件結果の集約、評価実行状態とFindingの分離、ならびにABC記録・観察記録・連携失敗記録の型契約と状態遷移純粋関数だけを扱う。
 
-加算・請求・サービス適格性の最終判定は行わない。
+加算・請求・サービス適格性の最終判定および具体ロール権限判定は行わない。
 
 ## 許可範囲
 
@@ -23,7 +24,9 @@ Decision Ledger: Issue #8
 4. 条件結果`PASS`・`FAIL`・`UNKNOWN`・`NOT_APPLICABLE`の集約
 5. 評価実行状態・評価結果・Findingの分離
 6. `FacilityType`の基礎型
-7. 完全合成fixtureと単体テスト
+7. ABC記録 (`AbcRecord`)、観察記録 (`Observation`)、連携失敗記録 (`LinkFailure`) の契約とバリデータ
+8. 保存状態 (`SaveState`)、連携状態 (`LinkState`)、連携失敗状態 (`LinkFailureStatus`) の状態遷移純粋関数
+9. 完全合成fixtureと単体テスト
 
 ## 3層の責務分離
 
@@ -57,6 +60,17 @@ FETCH_FAILED
 - `FETCH_FAILED` を `MISSING`、`UNKNOWN`、0点へ変換しない。
 - 3年固定をハードコードしない（有効期間は `validFrom` / `validTo` に従う）。
 - 更新後の点数は新しい `validFrom` から適用される。
+
+### ABC・観察・連携失敗契約 (Issue #25)
+
+`src/domain/abc-observation.ts` で定義し、共通ID (`OrganizationId`, `SiteId`, `UserId`, `RecordId`, `IdempotencyKey`, `PayloadFingerprint`) は `src/contracts/types.ts` から再利用する。
+
+- `SaveState` は `Saved` と `Deleted` の discriminated union とし、`Deleted` 時は `deletedBy`, `deletedAt`, `deletionReason` を必須とする。
+- `LinkState` は `NotRequired` (sourceContext なし) と `Pending` / `Linked` / `Failed` (sourceContext 必須) の union とし、不正な組合せを型およびバリデータで拒否する。
+- `Saved` と `Failed` を同時に表現可能とする。
+- `Observation` の訂正情報は `correctionOf` と `correctionReason` の両方が揃っている場合のみ受理する。
+- `LinkFailure` はプロパティの allowlist 検査を行い、個人情報（氏名等）、支援本文、ABC本文、Secrets/Token の混入を失敗クローズして拒否する。
+- 状態遷移純粋関数 (`transitionSaveState`, `transitionLinkState`, `transitionLinkFailureStatus`) は例外を投げず、判別可能な `TransitionResult<T>` を返す。具体ロール判定は含めず、ID一致・version一致・不変条件・必須理由の検証を行う。
 
 ### サービス・規則の適用可否
 
@@ -119,6 +133,9 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | USR-005 | 点数0と未入力の区別 | `BehaviorScoreInput`, `AssessmentScoreSourceRecord`, score tests |
 | USR-006 | 点数状態と規則適用可否の分離 | `BehaviorScoreInput`, `CriterionResult`, `AssessmentSourceDecision` |
 | CALC-001〜009 | 有効範囲、不正値、点数帯 | `parseBehaviorRelatedScore`, classification tests |
+| ABC-001〜015 | ABC記録契約・保存/連携状態・状態遷移 | `AbcRecord`, `SaveState`, `LinkState`, `transitionSaveState`, `transitionLinkState` |
+| OBS-001〜003, 007 | 観察記録契約・訂正履歴 | `Observation`, `validateObservation` |
+| NFR-AVL-003, 004 | 連携失敗記録・個人情報排除 | `LinkFailure`, `validateLinkFailure`, `transitionLinkFailureStatus` |
 | SAFE-001 | 必要データ不足時に確定成功へ倒さない | `deriveEvaluationDecision`, `selectAssessmentScoreSource` |
 | SAFE-002 | 有効期間判定と不正範囲拒否 | `selectAssessmentScoreSource`, `validFrom > validTo` tests |
 | SAFE-003 | 取得失敗を適合・対象外へ倒さない | `FETCH_FAILED`, `SOURCE_UNAVAILABLE`, contract tests |
@@ -133,9 +150,9 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 
 ## 継続HOLD
 
-- 点数根拠資料の保存・履歴contract
+- 削除を実行できる具体的業務ロール
+- 再連携を実行できる具体的業務ロール
 - サービス別`NOT_APPLICABLE`・`UNKNOWN` reasonCode enum
-- 登録・確認ロール
 - 施設割合、職員研修割合
 - 最終加算・請求判定
 - 遡及請求・過誤申立て
