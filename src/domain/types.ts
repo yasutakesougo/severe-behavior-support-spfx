@@ -112,7 +112,7 @@ export type EvaluationDecision =
   | "NOT_APPLICABLE"
   | "SOURCE_UNAVAILABLE";
 
-export type Finding = Readonly<{
+export type EvaluationFindingReference = Readonly<{
   findingCode: string;
   criterionId?: string;
 }>;
@@ -120,7 +120,7 @@ export type Finding = Readonly<{
 export type EvaluationInput = Readonly<{
   executionStatus: EvaluationExecutionStatus;
   criteria: readonly CriterionResult[];
-  findings: readonly Finding[];
+  findings: readonly EvaluationFindingReference[];
   missingDataCount: number;
   pendingConfirmationCount: number;
   expiredEvidenceCount: number;

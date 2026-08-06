@@ -2,7 +2,7 @@ import type {
   AssessmentScoreSourceRecord,
   CriterionResult,
   EvaluationInput,
-  Finding,
+  EvaluationFindingReference,
 } from "../../src/domain/types";
 
 export const SYNTHETIC_CRITERIA_PASS: readonly CriterionResult[] = Object.freeze([
@@ -37,7 +37,7 @@ export const SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE: readonly CriterionResult[] =
   },
 ]);
 
-export const SYNTHETIC_FINDINGS_ONE: readonly Finding[] = Object.freeze([
+export const SYNTHETIC_FINDINGS_ONE: readonly EvaluationFindingReference[] = Object.freeze([
   {
     findingCode: "synthetic-finding-code-101",
     criterionId: "synthetic-criterion-002",

@@ -4,12 +4,9 @@ import type {
   EvaluationDecision,
   EvaluationExecutionStatus,
   EvaluationInput,
-  Finding,
+  EvaluationFindingReference,
 } from "./types";
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+import { isRecord } from "./validation";
 
 function isValidNonNegativeInteger(value: unknown): value is number {
   return (
@@ -52,7 +49,9 @@ function isCriterionResult(value: unknown): value is CriterionResult {
   return true;
 }
 
-function isFinding(value: unknown): value is Finding {
+function isEvaluationFindingReference(
+  value: unknown
+): value is EvaluationFindingReference {
   return (
     isRecord(value) &&
     typeof value.findingCode === "string" &&
@@ -86,7 +85,7 @@ export function deriveEvaluationDecision(
     !Array.isArray(candidate.criteria) ||
     !Array.isArray(candidate.findings) ||
     !candidate.criteria.every(isCriterionResult) ||
-    !candidate.findings.every(isFinding) ||
+    !candidate.findings.every(isEvaluationFindingReference) ||
     !isValidNonNegativeInteger(candidate.missingDataCount) ||
     !isValidNonNegativeInteger(candidate.pendingConfirmationCount) ||
     !isValidNonNegativeInteger(candidate.expiredEvidenceCount) ||
