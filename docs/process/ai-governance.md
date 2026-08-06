@@ -3,7 +3,7 @@
 - 文書: `docs/process/ai-governance.md`
 - 位置づけ: AI開発組織構成の Governance（開発原則・品質入口）入口
 - 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`（承認済み）
-- 実装単位: AI-ORG-IMPL-1
+- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-4（MCP 権限参照整合）
 - 方針: 既存正本の内容を移動・複製せず、単一入口から参照する
 
 ## 開発原則
@@ -45,7 +45,9 @@
 
 ## 権限境界
 
-正本: `docs/decisions/DEC-AI-ORG-003.md`
+上位正本: `docs/decisions/DEC-AI-ORG-003.md`
+
+実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
 
@@ -60,6 +62,7 @@
 - 区分重複時は `禁止` > `人の事前承認` > `AI単独`
 - 人の承認は対象・操作・範囲・版に拘束する
 - head SHA / artifact / 環境 / 変更範囲が変わった場合、承認と Review PASS は失効する
+- 実行参照が上位正本と矛盾する場合は DEC-AI-ORG-3 を優先する
 
 この基盤の手順として禁止する代表例:
 
@@ -84,12 +87,14 @@
 | Skill カタログ | `docs/process/skill-catalog.md` |
 | 共通判定 | `.agents/skills/_shared/judgement-rules.md` |
 | 出力形式 | `.agents/skills/_shared/output-format.md` |
-| 権限マトリクス | `docs/decisions/DEC-AI-ORG-003.md` |
+| 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
+| MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
 
 - 既存正本の移動
-- `.agents/agents/` / `.agents/commands/` / `.agents/mcp/` の作成
-- MCP 接続・認証設定
+- MCP 接続・認証・OAuth・コネクタ設定
+- token / secret / credential 等の記録
 - Ready 化・マージそのもの（人の事前承認が別途必要）
 - SharePoint / Entra ID / Microsoft 365 / 本番データの変更
+- DEC-AI-ORG-3 にない新権限の追加、禁止操作の緩和

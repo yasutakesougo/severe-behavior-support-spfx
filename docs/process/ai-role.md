@@ -3,7 +3,7 @@
 - 文書: `docs/process/ai-role.md`
 - 位置づけ: AI開発組織構成の Role（プロジェクト使命）入口
 - 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`（承認済み）
-- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-2（Agents / Commands 整合）
+- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-2（Agents / Commands 整合） / AI-ORG-IMPL-4（MCP 権限参照整合）
 
 ## Project
 
@@ -59,7 +59,7 @@ DEC-AI-ORG-1 により、次の論理分離を採用する。
 - Agents（`.agents/agents/` — Requirements / Architecture / Implementation / Review / Audit）
 - Commands（`.agents/commands/` — Logical Command 正本 + Adapter 対応表）
 - Workflows（`docs/process/ai-workflow.md`）
-- MCP（権限原則は `docs/decisions/DEC-AI-ORG-003.md`。実体未作成）
+- MCP（上位正本: `docs/decisions/DEC-AI-ORG-003.md`。実行参照: `.agents/mcp/permission-matrix.md`。接続・認証は未実施）
 
 ## 再利用方針
 
@@ -77,5 +77,6 @@ DEC-AI-ORG-2 により、本論理モデルは法人内の他アプリでも再�
 | 再利用範囲 DEC | `docs/decisions/DEC-AI-ORG-002.md` |
 | 配置 ADR | `docs/decisions/ADR-AI-ORG-001.md` |
 | 権限境界 DEC | `docs/decisions/DEC-AI-ORG-003.md` |
+| MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 | Agents | `.agents/agents/` |
 | Logical Commands | `.agents/commands/` |
