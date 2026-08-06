@@ -1,10 +1,17 @@
 import type {
+  CriterionResult,
   CriterionStatus,
   EvaluationDecision,
+  EvaluationExecutionStatus,
   EvaluationInput,
+  Finding,
 } from "./types";
 
-function isValidNonNegativeInteger(value: number): boolean {
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isValidNonNegativeInteger(value: unknown): value is number {
   return (
     typeof value === "number" &&
     Number.isFinite(value) &&
@@ -22,74 +29,99 @@ function isCriterionStatus(value: unknown): value is CriterionStatus {
   );
 }
 
+function isCriterionResult(value: unknown): value is CriterionResult {
+  return (
+    isRecord(value) &&
+    typeof value.criterionId === "string" &&
+    value.criterionId.trim().length > 0 &&
+    isCriterionStatus(value.status)
+  );
+}
+
+function isFinding(value: unknown): value is Finding {
+  return (
+    isRecord(value) &&
+    typeof value.findingCode === "string" &&
+    value.findingCode.trim().length > 0 &&
+    (value.criterionId === undefined ||
+      (typeof value.criterionId === "string" && value.criterionId.trim().length > 0))
+  );
+}
+
+function isExecutionStatus(value: unknown): value is EvaluationExecutionStatus {
+  return (
+    value === "NOT_RUN" ||
+    value === "RUNNING" ||
+    value === "COMPLETED" ||
+    value === "COMPLETED_WITH_MISSING_DATA" ||
+    value === "PENDING_CONFIRMATION" ||
+    value === "FAILED"
+  );
+}
+
 export function deriveEvaluationDecision(
   input: EvaluationInput,
 ): EvaluationDecision {
-  if (
-    !isValidNonNegativeInteger(input.missingDataCount) ||
-    !isValidNonNegativeInteger(input.pendingConfirmationCount) ||
-    !isValidNonNegativeInteger(input.expiredEvidenceCount) ||
-    !isValidNonNegativeInteger(input.systemErrorCount)
-  ) {
+  const candidate: unknown = input;
+  if (!isRecord(candidate)) {
     return "INDETERMINATE";
   }
 
   if (
-    input.executionStatus === "FAILED" ||
-    input.systemErrorCount >= 1
+    !isExecutionStatus(candidate.executionStatus) ||
+    !Array.isArray(candidate.criteria) ||
+    !Array.isArray(candidate.findings) ||
+    !candidate.criteria.every(isCriterionResult) ||
+    !candidate.findings.every(isFinding) ||
+    !isValidNonNegativeInteger(candidate.missingDataCount) ||
+    !isValidNonNegativeInteger(candidate.pendingConfirmationCount) ||
+    !isValidNonNegativeInteger(candidate.expiredEvidenceCount) ||
+    !isValidNonNegativeInteger(candidate.systemErrorCount) ||
+    typeof candidate.approvalRequired !== "boolean" ||
+    typeof candidate.approved !== "boolean"
   ) {
+    return "INDETERMINATE";
+  }
+
+  const executionStatus = candidate.executionStatus;
+  const criteria = candidate.criteria;
+  const findings = candidate.findings;
+  const missingDataCount = candidate.missingDataCount;
+  const pendingConfirmationCount = candidate.pendingConfirmationCount;
+  const expiredEvidenceCount = candidate.expiredEvidenceCount;
+  const systemErrorCount = candidate.systemErrorCount;
+  const approvalRequired = candidate.approvalRequired;
+  const approved = candidate.approved;
+
+  if (executionStatus === "FAILED" || systemErrorCount >= 1) {
     return "SOURCE_UNAVAILABLE";
   }
 
   if (
-    input.executionStatus === "NOT_RUN" ||
-    input.executionStatus === "RUNNING" ||
-    input.executionStatus === "COMPLETED_WITH_MISSING_DATA" ||
-    input.executionStatus === "PENDING_CONFIRMATION"
+    executionStatus === "NOT_RUN" ||
+    executionStatus === "RUNNING" ||
+    executionStatus === "COMPLETED_WITH_MISSING_DATA" ||
+    executionStatus === "PENDING_CONFIRMATION"
   ) {
     return "INDETERMINATE";
   }
 
   if (
-    input.missingDataCount >= 1 ||
-    input.pendingConfirmationCount >= 1 ||
-    input.expiredEvidenceCount >= 1
+    missingDataCount >= 1 ||
+    pendingConfirmationCount >= 1 ||
+    expiredEvidenceCount >= 1 ||
+    criteria.length === 0
   ) {
     return "INDETERMINATE";
   }
 
-  if (input.criteria.length === 0) {
-    return "INDETERMINATE";
-  }
+  const hasFail = criteria.some((criterion) => criterion.status === "FAIL");
+  const hasUnknown = criteria.some((criterion) => criterion.status === "UNKNOWN");
+  const allNotApplicable = criteria.every(
+    (criterion) => criterion.status === "NOT_APPLICABLE",
+  );
 
-  if (
-    input.criteria.some(
-      (criterion) =>
-        typeof criterion.criterionId !== "string" ||
-        criterion.criterionId.trim().length === 0 ||
-        !isCriterionStatus(criterion.status),
-    )
-  ) {
-    return "INDETERMINATE";
-  }
-
-  let hasFail = false;
-  let hasUnknown = false;
-  let allNotApplicable = true;
-
-  for (const criterion of input.criteria) {
-    if (criterion.status === "FAIL") {
-      hasFail = true;
-    }
-    if (criterion.status === "UNKNOWN") {
-      hasUnknown = true;
-    }
-    if (criterion.status !== "NOT_APPLICABLE") {
-      allNotApplicable = false;
-    }
-  }
-
-  if (allNotApplicable && input.findings.length >= 1) {
+  if (allNotApplicable && findings.length >= 1) {
     return "INDETERMINATE";
   }
 
@@ -97,26 +129,22 @@ export function deriveEvaluationDecision(
     return "NOT_APPLICABLE";
   }
 
-  if (input.findings.length >= 1 || hasFail) {
+  if (findings.length >= 1 || hasFail) {
     return "FINDINGS_PRESENT";
   }
 
-  if (hasUnknown) {
-    return "INDETERMINATE";
-  }
-
-  if (input.approvalRequired && !input.approved) {
+  if (hasUnknown || (approvalRequired && !approved)) {
     return "INDETERMINATE";
   }
 
   if (
-    input.executionStatus === "COMPLETED" &&
-    input.findings.length === 0 &&
-    input.missingDataCount === 0 &&
-    input.pendingConfirmationCount === 0 &&
-    input.expiredEvidenceCount === 0 &&
-    input.systemErrorCount === 0 &&
-    (!input.approvalRequired || input.approved)
+    executionStatus === "COMPLETED" &&
+    findings.length === 0 &&
+    missingDataCount === 0 &&
+    pendingConfirmationCount === 0 &&
+    expiredEvidenceCount === 0 &&
+    systemErrorCount === 0 &&
+    (!approvalRequired || approved)
   ) {
     return "NO_FINDINGS";
   }
