@@ -100,7 +100,10 @@ export type SubmissionDecision =
         | "RECORD_CONTEXT_MISMATCH"
         | "LOOKUP_RESULTS_DIVERGED";
     }>
-  | Readonly<{ decision: "REJECT_LOOKUP_UNAVAILABLE"; reason: "UNKNOWN" | "FETCH_FAILED" }>;
+  | Readonly<{
+      decision: "REJECT_LOOKUP_UNAVAILABLE";
+      reason: "UNKNOWN" | "FETCH_FAILED" | "INVALID_LOOKUP_RESULT";
+    }>;
 
 export type WriteResult =
   | Readonly<{ status: "CREATED"; RecordId: string }>
