@@ -28,6 +28,7 @@ export const syntheticProcedure: ApprovedProcedureReference = {
 export const syntheticRecord: ExecutionRecord = {
   OrganizationId: syntheticContext.OrganizationId,
   SiteId: syntheticContext.SiteId,
+  UserId: "synthetic-user-001",
   TimeZone: "Asia/Tokyo",
   RecordId: "synthetic-record-001",
   IdempotencyKey: "synthetic-idempotency-001",
