@@ -17,13 +17,27 @@ function isCriterionStatus(value: unknown): value is CriterionStatus {
   );
 }
 
-function isCriterionResult(value: unknown): value is CriterionResult {
+function hasNonEmptyReasonCode(value: Record<string, unknown>): boolean {
   return (
-    isRecord(value) &&
-    typeof value.criterionId === "string" &&
-    value.criterionId.trim().length > 0 &&
-    isCriterionStatus(value.status)
+    typeof value.reasonCode === "string" && value.reasonCode.trim().length > 0
   );
+}
+
+function isCriterionResult(value: unknown): value is CriterionResult {
+  if (
+    !isRecord(value) ||
+    typeof value.criterionId !== "string" ||
+    value.criterionId.trim().length === 0 ||
+    !isCriterionStatus(value.status)
+  ) {
+    return false;
+  }
+
+  if (value.status === "UNKNOWN" || value.status === "NOT_APPLICABLE") {
+    return hasNonEmptyReasonCode(value);
+  }
+
+  return true;
 }
 
 export function aggregateCriterionResults(
