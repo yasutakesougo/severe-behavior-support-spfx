@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import {
   isRecord,
   isNonEmptyString,
@@ -19,6 +20,70 @@ export type FindingIdentity = Readonly<{
   periodStart: string;
   periodEnd: string;
 }>;
+
+export const STABLE_FINDING_ID_FIELD_ORDER = [
+  "OrganizationId",
+  "SiteId",
+  "UserId",
+  "FindingCode",
+  "ruleSetVersion",
+  "periodStart",
+  "periodEnd",
+] as const;
+
+export const STABLE_FINDING_ID_SEPARATOR = "\u001f";
+
+export type DeriveStableFindingIdResult =
+  | Readonly<{
+      ok: true;
+      findingId: string;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "INVALID_IDENTITY" | "UNSUPPORTED_IDENTITY_VALUE";
+    }>;
+
+function hasUnsupportedIdentityValue(identity: FindingIdentity): boolean {
+  for (const field of STABLE_FINDING_ID_FIELD_ORDER) {
+    const value = identity[field];
+    if (value !== value.trim()) {
+      return true;
+    }
+    if (
+      value.includes("\u0000") ||
+      value.includes(STABLE_FINDING_ID_SEPARATOR)
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Derive a deterministic stable finding ID from FindingIdentity.
+ * Technical contract: docs/architecture/finding-stable-id.md
+ */
+export function deriveStableFindingId(
+  input: unknown
+): DeriveStableFindingIdResult {
+  if (!validateFindingIdentity(input)) {
+    return { ok: false, code: "INVALID_IDENTITY" };
+  }
+
+  if (hasUnsupportedIdentityValue(input)) {
+    return { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" };
+  }
+
+  const material = STABLE_FINDING_ID_FIELD_ORDER.map(
+    (field) => input[field]
+  ).join(STABLE_FINDING_ID_SEPARATOR);
+
+  const digest = createHash("sha256").update(material, "utf8").digest("hex");
+  return {
+    ok: true,
+    findingId: `finding_${digest}`,
+  };
+}
 
 export const FINDING_STATUSES = [
   "Open",

@@ -11,6 +11,8 @@ import {
   validateAuditEvent,
   validateSnapshotCorrection,
   validateHandoffState,
+  deriveStableFindingId,
+  STABLE_FINDING_ID_FIELD_ORDER,
   FindingIdentity,
   AuditEvent,
   SnapshotCorrection,
@@ -129,6 +131,102 @@ describe("FindingIdentity Contract Validation", () => {
       severity: "high",
     };
     assert.equal(validateFindingIdentity(extraSeverityId), false);
+  });
+});
+
+describe("Finding Stable ID Contract", () => {
+  it("同一Identityから決定的な安定IDを返す", () => {
+    const identity = createSyntheticFindingIdentity();
+    const first = deriveStableFindingId(identity);
+    const second = deriveStableFindingId({ ...identity });
+
+    assert.equal(first.ok, true);
+    assert.equal(second.ok, true);
+    if (!first.ok || !second.ok) {
+      return;
+    }
+
+    assert.match(first.findingId, /^finding_[0-9a-f]{64}$/);
+    assert.equal(first.findingId, second.findingId);
+    assert.equal(
+      first.findingId,
+      "finding_50a23a97a173fdb265ab325320d39320fbf0062b6e919e7b7dc1cfd1d405a0e4"
+    );
+  });
+
+  it("フィールド順契約を固定する", () => {
+    assert.deepEqual([...STABLE_FINDING_ID_FIELD_ORDER], [
+      "OrganizationId",
+      "SiteId",
+      "UserId",
+      "FindingCode",
+      "ruleSetVersion",
+      "periodStart",
+      "periodEnd",
+    ]);
+  });
+
+  it("1フィールド差で異なる安定IDを返す", () => {
+    const base = deriveStableFindingId(createSyntheticFindingIdentity());
+    const changedUser = deriveStableFindingId(
+      createSyntheticFindingIdentity({ UserId: "synthetic-user-002" })
+    );
+    const changedPeriod = deriveStableFindingId(
+      createSyntheticFindingIdentity({ periodEnd: "2026-08-30" })
+    );
+
+    assert.equal(base.ok, true);
+    assert.equal(changedUser.ok, true);
+    assert.equal(changedPeriod.ok, true);
+    if (!base.ok || !changedUser.ok || !changedPeriod.ok) {
+      return;
+    }
+
+    assert.notEqual(base.findingId, changedUser.findingId);
+    assert.notEqual(base.findingId, changedPeriod.findingId);
+    assert.notEqual(changedUser.findingId, changedPeriod.findingId);
+  });
+
+  it("不正IdentityをINVALID_IDENTITYとして拒否する", () => {
+    assert.deepEqual(deriveStableFindingId(null), {
+      ok: false,
+      code: "INVALID_IDENTITY",
+    });
+    assert.deepEqual(
+      deriveStableFindingId(createSyntheticFindingIdentity({ OrganizationId: "" })),
+      { ok: false, code: "INVALID_IDENTITY" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({ periodEnd: "2026-07-01" })
+      ),
+      { ok: false, code: "INVALID_IDENTITY" }
+    );
+  });
+
+  it("未trim・制御文字・区切り文字混入をUNSUPPORTED_IDENTITY_VALUEとして拒否する", () => {
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({ UserId: "  synthetic-user-001  " })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({
+          SiteId: `synthetic-site${"\u001f"}001`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({
+          ruleSetVersion: `synthetic${"\u0000"}v1.0.0`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
   });
 });
 
