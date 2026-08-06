@@ -140,7 +140,7 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり。実行ロールは未決定 |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。許可3辺のみ。再オープン等はHOLD |
-| finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定IDは`finding-stable-id.md`（CONDITIONAL GO）。再発は追加決定待ち |
+| finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定ID・lifecycle・生成資格（`finding-generation-conditions.md`）は技術契約化。FindingCode写像・再発・Snapshot候補はHOLD |
 | 訂正・削除・監査ログ・復旧の設計 | Issue #17 | 業務決定はIssue #19へ集約 |
 | `GOV-AUD-01〜10`の回答 | Issue #19 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-009`・`DEC-011`・`DEC-012`・`DEC-015`はDeferred |

@@ -5,6 +5,7 @@ import {
   isValidIsoDateTime,
   isValidIsoDate,
 } from "./validation";
+import { isCriterionResult } from "./criteria";
 import { sha256Hex } from "./sha256";
 
 // ==========================================
@@ -140,6 +141,83 @@ export function transitionFindingStatus(
   }
 
   return { ok: true, status: targetStatus };
+}
+
+export type FindingGenerationDoNotGenerateReason =
+  | "EMPTY_CRITERIA"
+  | "NO_FAILING_CRITERIA"
+  | "ALL_NOT_APPLICABLE"
+  | "HAS_UNKNOWN";
+
+export type FindingGenerationDecisionResult =
+  | Readonly<{
+      ok: true;
+      decision: "GENERATE_REQUIRED";
+    }>
+  | Readonly<{
+      ok: true;
+      decision: "DO_NOT_GENERATE";
+      reason: FindingGenerationDoNotGenerateReason;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "MALFORMED_INPUT";
+    }>;
+
+/**
+ * Decide whether finding generation is required from criteria only.
+ * Does not build Finding / FindingCode / Identity. Technical contract:
+ * docs/architecture/finding-generation-conditions.md
+ */
+export function decideFindingGeneration(
+  input: unknown
+): FindingGenerationDecisionResult {
+  if (!isRecord(input) || !("criteria" in input)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const { criteria } = input;
+  if (!Array.isArray(criteria)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (!criteria.every(isCriterionResult)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (criteria.length === 0) {
+    return {
+      ok: true,
+      decision: "DO_NOT_GENERATE",
+      reason: "EMPTY_CRITERIA",
+    };
+  }
+
+  if (criteria.every((criterion) => criterion.status === "NOT_APPLICABLE")) {
+    return {
+      ok: true,
+      decision: "DO_NOT_GENERATE",
+      reason: "ALL_NOT_APPLICABLE",
+    };
+  }
+
+  if (criteria.some((criterion) => criterion.status === "UNKNOWN")) {
+    return {
+      ok: true,
+      decision: "DO_NOT_GENERATE",
+      reason: "HAS_UNKNOWN",
+    };
+  }
+
+  if (criteria.some((criterion) => criterion.status === "FAIL")) {
+    return { ok: true, decision: "GENERATE_REQUIRED" };
+  }
+
+  return {
+    ok: true,
+    decision: "DO_NOT_GENERATE",
+    reason: "NO_FAILING_CRITERIA",
+  };
 }
 
 export function validateFindingIdentity(value: unknown): value is FindingIdentity {
