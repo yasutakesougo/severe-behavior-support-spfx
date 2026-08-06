@@ -97,6 +97,7 @@ export type SubmissionDecision =
         | "RECORD_ID_REUSED"
         | "IDEMPOTENCY_KEY_REUSED"
         | "PAYLOAD_MISMATCH"
+        | "RECORD_CONTEXT_MISMATCH"
         | "LOOKUP_RESULTS_DIVERGED";
     }>
   | Readonly<{ decision: "REJECT_LOOKUP_UNAVAILABLE"; reason: "UNKNOWN" | "FETCH_FAILED" }>;
