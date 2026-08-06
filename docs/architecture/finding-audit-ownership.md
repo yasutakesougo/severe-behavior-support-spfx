@@ -28,9 +28,9 @@ Issue #17 ownership comment: 5204771950
 | `AuditEvent`構造・strict allowlist | Issue #27 | PR #41で確定 | 完了 |
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり | 正式化までHOLD |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない | 所有指定までHOLD |
-| Finding lifecycle transition | 未確定 | Issue #24・#27・新規子Issueの候補 | 所有指定までHOLD |
+| Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | Implementation Start GO（承認範囲のみ） |
 | finding生成条件 | Issue #24 | 本文で所有を明示 | 依存Decisionに従う |
-| finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C実装中 |
+| finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了 |
 | finding再発判定 | Issue #24 | 追加境界が未決定 | HOLD |
 | AssessmentSnapshot候補生成 | Issue #24 | 本文で所有を明示 | 完全契約までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
@@ -79,8 +79,10 @@ Resolved
 ```
 
 `FindingStatus`型はIssue #27で確定した。
-遷移純粋関数の所有者はIssue #24、Issue #27、新規子Issueのいずれかを正式指定する。
-指定前は実装しない。
+遷移純粋関数の所有者は **Issue #24**（C0 comment `5209785751`）。
+技術契約: [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。
+許可辺は Open→Confirmed→InProgress→Resolved の 3 辺のみ。Resolved 終端。
+再オープン、Severity、完全Finding、再発、Snapshot、Handoff は対象外。
 
 #### Handoff状態遷移関数
 
@@ -166,8 +168,11 @@ AssessmentSnapshot Result技術設計（docs-only）
 PR-C:
 Issue #24 Finding安定ID（`docs/architecture/finding-stable-id.md`）
 
-PR-D以降:
-Finding lifecycle、Handoff transition、Severity、完全Finding、
+PR-D:
+Issue #24 Finding lifecycle transition（`docs/architecture/finding-lifecycle-transition.md`）
+
+PR-E以降:
+Handoff transition、Severity、完全Finding、
 AssessmentSnapshot契約、audit write boundary
 ```
 
@@ -176,7 +181,6 @@ PR-C以降は、それぞれの所有Issue、Decision、Entry Criteriaを記録�
 
 ## 継続HOLD
 
-- Finding lifecycle transitionの所有Issue
 - Handoff状態遷移関数の所有Issue
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約

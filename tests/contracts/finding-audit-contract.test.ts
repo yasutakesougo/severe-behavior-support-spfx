@@ -12,8 +12,11 @@ import {
   validateSnapshotCorrection,
   validateHandoffState,
   deriveStableFindingId,
+  transitionFindingStatus,
   sha256Hex,
   STABLE_FINDING_ID_FIELD_ORDER,
+  FINDING_STATUS_ALLOWED_TRANSITIONS,
+  FINDING_STATUSES,
   FindingIdentity,
   AuditEvent,
   SnapshotCorrection,
@@ -285,6 +288,111 @@ describe("FindingStatus Contract Validation", () => {
   it("未知statusを拒否する", () => {
     assert.equal(isFindingStatus("UnknownStatus"), false);
     assert.equal(isFindingStatus("open"), false);
+  });
+});
+
+describe("Finding Lifecycle Transition Contract", () => {
+  it("許可遷移表を3辺に固定する", () => {
+    assert.deepEqual(
+      FINDING_STATUS_ALLOWED_TRANSITIONS.map(([from, to]) => [from, to]),
+      [
+        ["Open", "Confirmed"],
+        ["Confirmed", "InProgress"],
+        ["InProgress", "Resolved"],
+      ]
+    );
+  });
+
+  it("許可3辺を成功させ targetStatus を返す", () => {
+    assert.deepEqual(transitionFindingStatus("Open", "Confirmed"), {
+      ok: true,
+      status: "Confirmed",
+    });
+    assert.deepEqual(transitionFindingStatus("Confirmed", "InProgress"), {
+      ok: true,
+      status: "InProgress",
+    });
+    assert.deepEqual(transitionFindingStatus("InProgress", "Resolved"), {
+      ok: true,
+      status: "Resolved",
+    });
+  });
+
+  it("自己遷移・スキップ・逆行・Resolvedからの遷移をINVALID_TRANSITIONとして拒否する", () => {
+    assert.deepEqual(transitionFindingStatus("Open", "Open"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("Open", "InProgress"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("Open", "Resolved"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("Confirmed", "Resolved"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("Confirmed", "Open"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("InProgress", "Confirmed"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("Resolved", "Open"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(transitionFindingStatus("Resolved", "Resolved"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+  });
+
+  it("非FindingStatus入力をMALFORMED_INPUTとして拒否する", () => {
+    assert.deepEqual(transitionFindingStatus(null, "Confirmed"), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(transitionFindingStatus("Open", undefined), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(transitionFindingStatus("open", "Confirmed"), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(transitionFindingStatus("Open", "confirmed"), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(transitionFindingStatus("Unknown", "Confirmed"), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+  });
+
+  it("許可外表の組み合わせを網羅的に拒否する（許可3辺以外）", () => {
+    for (const from of FINDING_STATUSES) {
+      for (const to of FINDING_STATUSES) {
+        const allowed = FINDING_STATUS_ALLOWED_TRANSITIONS.some(
+          ([allowedFrom, allowedTo]) => allowedFrom === from && allowedTo === to
+        );
+        const result = transitionFindingStatus(from, to);
+        if (allowed) {
+          assert.deepEqual(result, { ok: true, status: to });
+        } else {
+          assert.deepEqual(result, {
+            ok: false,
+            code: "INVALID_TRANSITION",
+          });
+        }
+      }
+    }
   });
 });
 
