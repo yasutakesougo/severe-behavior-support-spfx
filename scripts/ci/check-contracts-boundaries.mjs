@@ -30,7 +30,7 @@ const forbiddenPatterns = [
 ];
 
 const syntheticIdentifierPattern =
-  /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint|criterionId|findingCode)\s*:\s*["']((?!synthetic-)[^"']+)["']/g;
+  /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint|criterionId|findingCode|PlanId|planId)\s*:\s*["']((?!synthetic-)[^"']+)["']/g;
 
 const syntheticReasonCodePattern =
   /\breasonCode\s*:\s*["']((?!(?:synthetic-|SYNTHETIC_))[^"']+)["']/g;
