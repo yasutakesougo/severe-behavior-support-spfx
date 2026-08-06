@@ -2,9 +2,9 @@
 
 - ID: DEC-AI-ORG-3
 - ファイル: `docs/decisions/DEC-AI-ORG-003.md`
-- 状態: 承認待ち
+- 状態: 承認
 - 作成日: 2026-08-06
-- 決定日: 未定
+- 決定日: 2026-08-06
 - 正本参照: `docs/process/ai-org-onboarding-implementation-plan.md`
 - 前提:
   - DEC-AI-ORG-1 は承認済み（論理分離構成を採用）
@@ -165,9 +165,11 @@ Fail Closed と矛盾しやすく、本 DEC では採用しない。
 | Notion 要件 / ADR / Meeting 参照 | AI単独 | 接続承認後に限る |
 | Notion 本番ページ更新 | 禁止 | 別の承認プロセスが必要 |
 
-## 決定（提案）
+## 決定
 
-**選択肢 A を採用する。**
+**選択肢 A を承認する。**
+
+操作単位の権限マトリクス、Fail Closed、区分重複時の厳格優先、承認の対象・範囲・版への拘束を採用する。
 
 AI 許可操作と人の承認境界は、操作単位の権限マトリクス原則（AI単独 / 人の事前承認 / 禁止）、Fail Closed、区分重複時の厳格優先、承認拘束条件で扱う。
 
@@ -192,12 +194,25 @@ PR マージは、同一 head SHA に対する Review PASS（unresolved P0 / P1 
 - Review PASS と merge 承認を同一 head SHA に拘束し、古いレビュー結果の流用を防ぐ
 - 選択肢 B / C は Fail Closed または実運用と合わない
 
-## 本決定の効力と非効力（承認後）
+## 承認記録
+
+- 承認内容: 選択肢 A（操作単位の権限マトリクス、Fail Closed、区分重複時の厳格優先、承認の対象・範囲・版への拘束）
+- 承認日: 2026-08-06
+- 承認範囲の上限:
+  - HOLD は維持する
+  - 実装開始は承認しない
+  - MCP 接続は承認しない
+  - 認証設定は承認しない
+  - ディレクトリ新設は承認しない
+  - 既存正本移動は承認しない
+
+## 本決定の効力と非効力
 
 ### 効力
 
 - 以降の Governance / Workflow / Agent / Command / MCP 文書は、本マトリクス原則と矛盾しない表現にする
 - 計画正本の「権限境界」判断単位を閉じる
+- Decision Units（DEC-AI-ORG-1 / 2 / ADR-AI-ORG-1 / DEC-AI-ORG-3）の判断記録は揃った
 - 将来 `.agents/mcp/` に置く権限マトリクス実体は、本初期マトリクスを起点としてよい（作成自体は別承認）
 - 既存正本の権限記述が本 DEC と矛盾する場合、本 DEC を優先し、後続 Issue で整合更新する
 
@@ -213,30 +228,13 @@ PR マージは、同一 head SHA に対する Review PASS（unresolved P0 / P1 
 - 本番 deploy / App Catalog / SharePoint / Entra / M365 / 本番データ変更 / Notion 本番更新を、この基盤の手順として許可しない
 - 他アプリへの適用・移植は承認しない
 
-## 承認条件
-
-次を満たしたとき、状態を `承認` に更新し、決定日を記録する。
-
-- 人による明示承認がある
-- 本 DEC の対象が「AI許可操作と人の承認境界のみ」であることが確認されている
-- 物理配置・再利用範囲・MCP 接続実装・ディレクトリ新設が決定内容に混在していない
-- ローカル変更 / 検証 / commit / push がマトリクスに記載されている
-- force-push（非保護の自 feature branch）が人の事前承認であること
-- Review PASS が review 対象 head SHA に拘束され、merge の expected head SHA と一致必須であること
-- deploy が検証環境と本番 / App Catalog に分割されている
-- 人の事前承認の拘束条件と失効規則が定義されている
-- Notion 操作名に承認状態（例: 無断）を含んでいない
-- SharePoint / Entra ID / Microsoft 365 変更 / 本番データ変更が禁止であること
-
 ## 次工程
 
-本 DEC が `承認` になった後も、HOLD・実装禁止・ディレクトリ新設禁止・既存正本移動禁止は維持する。
+本 DEC は `承認` 済みである。HOLD・実装禁止・ディレクトリ新設禁止・既存正本移動禁止は維持する。
 
-Decision Units（DEC-AI-ORG-1 / 2 / ADR-AI-ORG-1 / DEC-AI-ORG-3）が揃ったあとの実装着手は、別途「実装開始の人の明示承認」を必要とする。
+Decision Units が揃ったあとの実装着手は、別途「実装開始の人の明示承認」を必要とする。
 
-後続で、`docs/process/development-process.md` 等の既存正本を本マトリクスへ整合更新する。
-
-本 DEC が `承認待ち` の間は、権限境界を前提とした実装文書の追加に進まない。
+後続で、`docs/process/development-process.md` 等の既存正本を本マトリクスへ整合更新する（実装開始承認後の個別 Issue）。
 
 ## レビュー反映メモ（PR #50）
 
