@@ -3,7 +3,7 @@
 - 文書: `docs/process/ai-workflow.md`
 - 位置づけ: AI開発組織構成の Workflow（実行順）入口
 - 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`（承認済み）
-- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-2（Agents / Commands 整合） / AI-ORG-IMPL-3（Skill 対応表整合）
+- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-2（Agents / Commands 整合） / AI-ORG-IMPL-3（Skill 対応表整合） / AI-ORG-IMPL-4（MCP 権限参照整合）
 - 工程詳細の正本: `docs/process/development-process.md`
 
 ## 実行可能な順序（正本）
@@ -155,5 +155,6 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 | Agents | `.agents/agents/` |
 | Logical Commands | `.agents/commands/` |
 | Adapter 対応 | `.agents/commands/adapter-matrix.md` |
-| 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |
+| 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
+| MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 | 配置 | `docs/decisions/ADR-AI-ORG-001.md` |
