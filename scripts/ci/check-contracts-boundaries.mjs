@@ -29,6 +29,13 @@ const forbiddenPatterns = [
   { label: "Japanese phone number", pattern: /(?:^|\D)0\d{1,4}-\d{1,4}-\d{3,4}(?:\D|$)/g },
 ];
 
+const domainForbiddenPatterns = [
+  {
+    label: "Node builtin module import",
+    pattern:
+      /(?:from\s+["']node:|require\(\s*["']node:|import\(\s*["']node:)/g,
+  },
+];
 const syntheticIdentifierPattern =
   /\b(?:OrganizationId|SiteId|UserId|Subject|ProcedureId|ProcedureVersion|RecordId|IdempotencyKey|PayloadFingerprint|criterionId|findingCode|PlanId|planId|findingId|FindingCode|auditEventId|correctionId|originalSnapshotId|replacementSnapshotId|meetingId|actorStaffId|targetRecordId|correlationId|requestedBy|includedBy|acknowledgedBy|closedBy|correctedBy)\s*:\s*["']((?!(?:synthetic-|SYNTHETIC_))[^"']+)["']/g;
 
@@ -62,6 +69,15 @@ for (const directory of targetDirectories) {
       pattern.lastIndex = 0;
       for (const match of content.matchAll(pattern)) {
         findings.push({ file, label, value: match[0].trim() });
+      }
+    }
+
+    if (file.startsWith(`src${path.sep}domain${path.sep}`) || file.startsWith("src/domain/")) {
+      for (const { label, pattern } of domainForbiddenPatterns) {
+        pattern.lastIndex = 0;
+        for (const match of content.matchAll(pattern)) {
+          findings.push({ file, label, value: match[0].trim() });
+        }
       }
     }
 

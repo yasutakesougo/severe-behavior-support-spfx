@@ -31,11 +31,18 @@ deriveStableFindingId(input: unknown): DeriveStableFindingIdResult
 
 1. `validateFindingIdentity(input)` が `true` であること。
 2. 各フィールド値は、先頭・末尾空白を含んではならない（`value === value.trim()`）。
-3. 各フィールド値は、制御文字 `U+0000` および区切り文字 `U+001F` を含んではならない。
+3. 各フィールド値は、C0制御文字（`U+0000`〜`U+001F`）、DEL（`U+007F`）、C1制御文字（`U+0080`〜`U+009F`）を含んではならない。
+   これにはタブ・改行・復帰、および結合区切り `U+001F` を含む。
 4. Unicodeの互換正規化（NFKC等）や大小文字折りたたみは行わない。
 5. 暦日は `FindingIdentity` 契約どおり `YYYY-MM-DD` の検証済み文字列をそのまま用いる。
 
 上記を満たさない入力はID化せず fail-closed する。
+
+判定パターン（実装正本）:
+
+```text
+/[\u0000-\u001F\u007F-\u009F]/u
+```
 
 ### 2. ハッシュ入力のフィールド結合順序
 
@@ -63,8 +70,12 @@ OrganizationId + U+001F + SiteId + U+001F + UserId + U+001F
 ### 3. ハッシュ方式
 
 - アルゴリズム: SHA-256
-- 入力エンコーディング: UTF-8
-- 実装: Node.js `node:crypto.createHash("sha256")`
+- 入力エンコーディング: UTF-8（`TextEncoder`）
+- 実装: domain内の pure TypeScript 実装（`src/domain/sha256.ts`）
+- `node:crypto` および他の `node:` builtin は domain から使用しない
+- Node / ブラウザの双方で同期利用できること（SPFx bundle 前提の runtime 非依存）
+
+空文字列および `"abc"` の SHA-256 hex を契約テストの固定ベクトルとする。
 
 ### 4. 出力形式
 
@@ -98,7 +109,7 @@ ok: false -> code
 | code | 条件 |
 |---|---|
 | `INVALID_IDENTITY` | `validateFindingIdentity` 失敗 |
-| `UNSUPPORTED_IDENTITY_VALUE` | 検証は通るが、未trim・制御文字・禁止区切り文字を含む |
+| `UNSUPPORTED_IDENTITY_VALUE` | 検証は通るが、未trim、または C0/DEL/C1 制御文字を含む |
 
 例外throw、部分ID、空文字ID、フォールバックIDは禁止する。
 

@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import {
   isRecord,
   isNonEmptyString,
@@ -6,6 +5,7 @@ import {
   isValidIsoDateTime,
   isValidIsoDate,
 } from "./validation";
+import { sha256Hex } from "./sha256";
 
 // ==========================================
 // Finding & Identity Contracts
@@ -33,6 +33,10 @@ export const STABLE_FINDING_ID_FIELD_ORDER = [
 
 export const STABLE_FINDING_ID_SEPARATOR = "\u001f";
 
+/** C0 controls, DEL, and C1 controls. */
+export const STABLE_FINDING_ID_CONTROL_CHARACTER_PATTERN =
+  /[\u0000-\u001F\u007F-\u009F]/u;
+
 export type DeriveStableFindingIdResult =
   | Readonly<{
       ok: true;
@@ -49,10 +53,7 @@ function hasUnsupportedIdentityValue(identity: FindingIdentity): boolean {
     if (value !== value.trim()) {
       return true;
     }
-    if (
-      value.includes("\u0000") ||
-      value.includes(STABLE_FINDING_ID_SEPARATOR)
-    ) {
+    if (STABLE_FINDING_ID_CONTROL_CHARACTER_PATTERN.test(value)) {
       return true;
     }
   }
@@ -78,7 +79,7 @@ export function deriveStableFindingId(
     (field) => input[field]
   ).join(STABLE_FINDING_ID_SEPARATOR);
 
-  const digest = createHash("sha256").update(material, "utf8").digest("hex");
+  const digest = sha256Hex(material);
   return {
     ok: true,
     findingId: `finding_${digest}`,

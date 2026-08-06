@@ -1,5 +1,6 @@
 export * from "./types";
 export * from "./validation";
+export * from "./sha256";
 export * from "./behavior-score";
 export * from "./criteria";
 export * from "./evaluation";

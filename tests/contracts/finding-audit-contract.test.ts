@@ -12,6 +12,7 @@ import {
   validateSnapshotCorrection,
   validateHandoffState,
   deriveStableFindingId,
+  sha256Hex,
   STABLE_FINDING_ID_FIELD_ORDER,
   FindingIdentity,
   AuditEvent,
@@ -204,10 +205,34 @@ describe("Finding Stable ID Contract", () => {
     );
   });
 
-  it("未trim・制御文字・区切り文字混入をUNSUPPORTED_IDENTITY_VALUEとして拒否する", () => {
+  it("未trimおよびC0/DEL/C1制御文字をUNSUPPORTED_IDENTITY_VALUEとして拒否する", () => {
     assert.deepEqual(
       deriveStableFindingId(
         createSyntheticFindingIdentity({ UserId: "  synthetic-user-001  " })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({
+          UserId: `synthetic-user${"\t"}001`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({
+          UserId: `synthetic-user${"\n"}001`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({
+          OrganizationId: `synthetic-org${"\r"}001`,
+        })
       ),
       { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
     );
@@ -222,10 +247,29 @@ describe("Finding Stable ID Contract", () => {
     assert.deepEqual(
       deriveStableFindingId(
         createSyntheticFindingIdentity({
-          ruleSetVersion: `synthetic${"\u0000"}v1.0.0`,
+          ruleSetVersion: `synthetic${"\u007f"}v1.0.0`,
         })
       ),
       { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      deriveStableFindingId(
+        createSyntheticFindingIdentity({
+          ruleSetVersion: `synthetic${"\u0085"}v1.0.0`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+  });
+
+  it("pure SHA-256が固定ベクトルと一致する", () => {
+    assert.equal(
+      sha256Hex(""),
+      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    );
+    assert.equal(
+      sha256Hex("abc"),
+      "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
     );
   });
 });
