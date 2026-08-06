@@ -143,6 +143,9 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | SAFE-005 | 複数有効資料の矛盾検出 | `selectAssessmentScoreSource`, `CONFLICT` tests |
 | PLAN-001〜010 | 支援計画・版管理・承認状態契約 | `SupportPlan`, `SupportPlanState`, `validateSupportPlan`, `support-plan-contract.test.ts` |
 | REV-001〜002 | 版本文分離・履歴参照ポート | `SupportPlanVersion`, `ISupportPlanVersionRepository`, `validateSupportPlanVersion` |
+| AUD-001〜014 | Handoff状態・スナップショット訂正・監査ログ契約 | `FindingIdentity`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, `validateAuditEvent` |
+| SAFE-006〜009 | 監査ログの個人情報・支援本文排除 allowlist | `validateAuditEvent` strict allowlist checks |
+| NFR-SEC-008 | 重要操作監査ログ構造 | `AuditEvent`, `AUDIT_EVENT_RESULTS`, `validateAuditEvent` |
 | NFR-MNT-001 | DomainをSharePoint APIから分離 | `src/domain/*` |
 | NFR-MNT-003 | 純粋関数としてテスト可能にする | domain functions and tests |
 | NFR-MNT-006 | ルール変更時に文書とテストを更新する | 本文書と`tests/domain/*`, `tests/contracts/*` |

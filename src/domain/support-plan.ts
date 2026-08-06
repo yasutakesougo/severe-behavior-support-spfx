@@ -1,4 +1,9 @@
-import { isRecord, isValidIsoDateTime, isReasonCode } from "./abc-observation";
+import {
+  isRecord,
+  isValidIsoDateTime,
+  isReasonCode,
+  isNonEmptyString,
+} from "./validation";
 
 /**
  * SupportPlan status canonical enum and runtime array
@@ -209,8 +214,6 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
     return false;
   }
 
-  // Helper check for optional audit text fields
-  const isNonEmptyString = (val: unknown) => typeof val === "string" && val.trim() !== "";
 
   // Submission history group invariant (all or nothing)
   const hasSubBy = value.submittedBy !== undefined;
