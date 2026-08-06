@@ -3,7 +3,7 @@
 - 文書: `docs/process/ai-role.md`
 - 位置づけ: AI開発組織構成の Role（プロジェクト使命）入口
 - 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`（承認済み）
-- 実装単位: AI-ORG-IMPL-1
+- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-2（Agents / Commands 整合）
 
 ## Project
 
@@ -20,6 +20,7 @@ Severe Behavior Support SPFx（`severe-behavior-support-spfx`）
 - 支援員
 
 本節は利用者分類の概要であり、認可ロールの正本ではない。具体的な業務ロール・操作権限は、認証・認可契約および DEC を参照する。
+
 ## Target
 
 - SharePoint Online
@@ -55,8 +56,8 @@ DEC-AI-ORG-1 により、次の論理分離を採用する。
 - Role（本文書）
 - Governance（`docs/process/ai-governance.md`）
 - Skills（`.agents/skills/`）
-- Agents（将来。未作成）
-- Commands（将来。未作成）
+- Agents（`.agents/agents/` — Requirements / Architecture / Implementation / Review / Audit）
+- Commands（`.agents/commands/` — Logical Command 正本 + Adapter 対応表）
 - Workflows（`docs/process/ai-workflow.md`）
 - MCP（権限原則は `docs/decisions/DEC-AI-ORG-003.md`。実体未作成）
 
@@ -76,3 +77,5 @@ DEC-AI-ORG-2 により、本論理モデルは法人内の他アプリでも再�
 | 再利用範囲 DEC | `docs/decisions/DEC-AI-ORG-002.md` |
 | 配置 ADR | `docs/decisions/ADR-AI-ORG-001.md` |
 | 権限境界 DEC | `docs/decisions/DEC-AI-ORG-003.md` |
+| Agents | `.agents/agents/` |
+| Logical Commands | `.agents/commands/` |

@@ -3,7 +3,7 @@
 - 文書: `docs/process/ai-workflow.md`
 - 位置づけ: AI開発組織構成の Workflow（実行順）入口
 - 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`（承認済み）
-- 実装単位: AI-ORG-IMPL-1
+- 実装単位: AI-ORG-IMPL-1（入口作成） / AI-ORG-IMPL-2（Agents / Commands 整合）
 - 工程詳細の正本: `docs/process/development-process.md`
 
 ## 実行可能な順序（正本）
@@ -71,6 +71,7 @@ Human Approval / Merge / Release
 ```
 
 実行時は、上記対応表ではなく「実行可能な順序（正本）」に従う。
+
 ## 最小実用セット（現行）
 
 導入済み Skill（`.agents/skills/`）:
@@ -96,30 +97,38 @@ Human Approval / Merge / Release
 /handoff-builder
 ```
 
-## Logical Command（将来）
+## Logical Command
 
-正本は Logical Command。ツール別スラッシュコマンドは Adapter とする。実体（`.agents/commands/`）は未作成。
+正本は Logical Command。ツール別スラッシュコマンドは Adapter とする。
 
-| Logical Command | 起動内容 |
-|---|---|
-| `new-feature` | 要件整理開始 |
-| `review-pr` | PR レビュー開始 |
-| `audit` | 監査開始 |
-| `release-check` | リリース判定 |
+定義実体: `.agents/commands/`
 
-Adapter 未整備時の Fallback は、対応 Skill の直接実行とする。
+| Logical Command | 正本 | 起動 Agent | 起動内容 |
+|---|---|---|---|
+| `new-feature` | `.agents/commands/new-feature.md` | Requirements | 要件整理開始（そこまでで停止） |
+| `review-pr` | `.agents/commands/review-pr.md` | Review（→ Audit） | PR レビュー開始 |
+| `audit` | `.agents/commands/audit.md` | Audit | 監査開始 |
+| `release-check` | `.agents/commands/release-check.md` | Audit | リリース判定 |
 
-## Agents（将来）
+Adapter 対応表: `.agents/commands/adapter-matrix.md`
 
-`.agents/agents/` は未作成。担当の論理割り当てのみ示す。
+Adapter 未整備時の Fallback は、対応 Skill の直接実行とする。Skill 未導入なら `HOLD`。
 
-| Agent | 担当の目安 | 現行で使える Skill |
-|---|---|---|
-| Requirements | 要件整理・DEC・Requirement ID | 後続 Skill |
-| Architecture | Domain / DTO / Schema / SharePoint | 後続 Skill |
-| Implementation | 実装計画・Issue・PR | `implementation-plan` |
-| Review | コード / UI / Security | `implementation-review`、後続 review 系 |
-| Audit | Ledger / Approval / 最終監査 | `merge-audit`、`handoff-builder` |
+Logical Command は文書上の正本定義に限定する。GitHub 投稿、Ready 化、マージ、deploy 等を自動実行する実装は含めない。
+
+## Agents
+
+定義実体: `.agents/agents/`
+
+| Agent | 正本 | 担当 | 現行で使える Skill |
+|---|---|---|---|
+| Requirements | `.agents/agents/requirements.md` | 要件整理・DEC・Requirement ID | 後続 Skill（未導入時は HOLD） |
+| Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint | 後続 Skill（未導入時は HOLD） |
+| Implementation | `.agents/agents/implementation.md` | 実装計画・Issue・PR・承認後実装 | `implementation-plan` |
+| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認 | `implementation-review`、後続 review 系 |
+| Audit | `.agents/agents/audit.md` | マージ監査・引き継ぎ・リリース判定 | `merge-audit`、`handoff-builder`（`release-review` は後続） |
+
+`handoff-builder` の所属 Agent は **Audit** とする。
 
 ## 停止条件
 
@@ -131,6 +140,7 @@ Adapter 未整備時の Fallback は、対応 Skill の直接実行とする。
 - unresolved P0 / P1 が残っている
 - 承認証跡の対象・範囲・版が現操作と一致しない
 - SharePoint / Entra ID / Microsoft 365 / 本番変更が工程に含まれている
+- 呼び出し Skill が未導入で当該工程の完了を求められている
 
 ## 関連正本
 
@@ -141,5 +151,8 @@ Adapter 未整備時の Fallback は、対応 Skill の直接実行とする。
 | Skill 実行順詳細 | `docs/process/development-process.md` |
 | Gate | `docs/process/gate-definitions.md` |
 | Skill カタログ | `docs/process/skill-catalog.md` |
+| Agents | `.agents/agents/` |
+| Logical Commands | `.agents/commands/` |
+| Adapter 対応 | `.agents/commands/adapter-matrix.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |
 | 配置 | `docs/decisions/ADR-AI-ORG-001.md` |
