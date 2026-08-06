@@ -1,14 +1,17 @@
 import { isRecord, isValidIsoDateTime, isReasonCode } from "./abc-observation";
 
 /**
- * SupportPlan status canonical enum
+ * SupportPlan status canonical enum and runtime array
  */
-export type SupportPlanStatus =
-  | "Draft"
-  | "PendingReview"
-  | "Returned"
-  | "Active"
-  | "Closed";
+export const SUPPORT_PLAN_STATUSES = [
+  "Draft",
+  "PendingReview",
+  "Returned",
+  "Active",
+  "Closed",
+] as const;
+
+export type SupportPlanStatus = (typeof SUPPORT_PLAN_STATUSES)[number];
 
 /**
  * Base Identity & Immutable Header fields for SupportPlan
@@ -23,6 +26,35 @@ export type SupportPlanBase = Readonly<{
   createdAt: string;
   version: number;
   reviewDueDate?: string;
+}>;
+
+/**
+ * Audit trail sub-types for strict all-or-nothing group invariants
+ */
+type SubmissionHistory = Readonly<{
+  submittedBy: string;
+  submittedAt: string;
+}>;
+
+type ReturnHistory = Readonly<{
+  returnedBy: string;
+  returnedAt: string;
+  returnReasonCode: string;
+  returnReasonText?: string;
+}>;
+
+type ApprovalHistory = Readonly<{
+  approvedBy: string;
+  approvedAt: string;
+  effectiveFrom: string;
+}>;
+
+type CloseHistory = Readonly<{
+  effectiveTo: string;
+  closedBy: string;
+  closedAt: string;
+  closeReasonCode: string;
+  closeReasonText?: string;
 }>;
 
 /**
@@ -48,10 +80,9 @@ export type SupportPlanState =
         closeReasonText?: never;
       }>)
   | (SupportPlanBase &
+      SubmissionHistory &
       Readonly<{
         status: "PendingReview";
-        submittedBy: string;
-        submittedAt: string;
         returnedBy?: never;
         returnedAt?: never;
         returnReasonCode?: never;
@@ -66,14 +97,10 @@ export type SupportPlanState =
         closeReasonText?: never;
       }>)
   | (SupportPlanBase &
+      SubmissionHistory &
+      ReturnHistory &
       Readonly<{
         status: "Returned";
-        submittedBy: string;
-        submittedAt: string;
-        returnedBy: string;
-        returnedAt: string;
-        returnReasonCode: string;
-        returnReasonText?: string;
         approvedBy?: never;
         approvedAt?: never;
         effectiveFrom?: never;
@@ -84,17 +111,14 @@ export type SupportPlanState =
         closeReasonText?: never;
       }>)
   | (SupportPlanBase &
+      SubmissionHistory &
+      ApprovalHistory &
       Readonly<{
         status: "Active";
-        submittedBy?: string;
-        submittedAt?: string;
-        returnedBy?: string;
-        returnedAt?: string;
-        returnReasonCode?: string;
-        returnReasonText?: string;
-        approvedBy: string;
-        approvedAt: string;
-        effectiveFrom: string;
+        returnedBy?: never;
+        returnedAt?: never;
+        returnReasonCode?: never;
+        returnReasonText?: never;
         effectiveTo?: string;
         closedBy?: never;
         closedAt?: never;
@@ -102,22 +126,40 @@ export type SupportPlanState =
         closeReasonText?: never;
       }>)
   | (SupportPlanBase &
+      SubmissionHistory &
+      ApprovalHistory &
+      (
+        | Readonly<{
+            returnedBy?: never;
+            returnedAt?: never;
+            returnReasonCode?: never;
+            returnReasonText?: never;
+          }>
+        | ReturnHistory
+      ) &
+      CloseHistory &
       Readonly<{
         status: "Closed";
-        submittedBy?: string;
-        submittedAt?: string;
-        returnedBy?: string;
-        returnedAt?: string;
-        returnReasonCode?: string;
-        returnReasonText?: string;
-        approvedBy: string;
-        approvedAt: string;
-        effectiveFrom: string;
-        effectiveTo: string;
-        closedBy: string;
-        closedAt: string;
-        closeReasonCode: string;
-        closeReasonText?: string;
+      }>)
+  | (SupportPlanBase &
+      SubmissionHistory &
+      (
+        | Readonly<{
+            returnedBy?: never;
+            returnedAt?: never;
+            returnReasonCode?: never;
+            returnReasonText?: never;
+          }>
+        | ReturnHistory
+      ) &
+      ApprovalHistory &
+      Readonly<{
+        status: "Active";
+        effectiveTo?: string;
+        closedBy?: never;
+        closedAt?: never;
+        closeReasonCode?: never;
+        closeReasonText?: never;
       }>);
 
 /**
@@ -178,39 +220,55 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
   }
 
   const status = value.status;
-  if (!["Draft", "PendingReview", "Returned", "Active", "Closed"].includes(status as string)) {
+  if (!SUPPORT_PLAN_STATUSES.includes(status as SupportPlanStatus)) {
     return false;
   }
 
-  // Validate optional audit trails if present
-  if (value.submittedBy !== undefined && (typeof value.submittedBy !== "string" || value.submittedBy.trim() === "")) {
+  // Helper check for optional audit text fields
+  const isNonEmptyString = (val: unknown) => typeof val === "string" && val.trim() !== "";
+
+  // Submission history group invariant (all or nothing)
+  const hasSubBy = value.submittedBy !== undefined;
+  const hasSubAt = value.submittedAt !== undefined;
+  if (hasSubBy !== hasSubAt) {
     return false;
   }
-  if (value.submittedAt !== undefined && !isValidIsoDateTime(value.submittedAt)) {
+  if (hasSubBy) {
+    if (!isNonEmptyString(value.submittedBy) || !isValidIsoDateTime(value.submittedAt)) {
+      return false;
+    }
+  }
+
+  // Return history group invariant (all or nothing for returnedBy, returnedAt, returnReasonCode)
+  const hasRetBy = value.returnedBy !== undefined;
+  const hasRetAt = value.returnedAt !== undefined;
+  const hasRetCode = value.returnReasonCode !== undefined;
+  const hasRetText = value.returnReasonText !== undefined;
+
+  if (hasRetText && !(hasRetBy && hasRetAt && hasRetCode)) {
     return false;
   }
-  if (value.returnedBy !== undefined && (typeof value.returnedBy !== "string" || value.returnedBy.trim() === "")) {
-    return false;
-  }
-  if (value.returnedAt !== undefined && !isValidIsoDateTime(value.returnedAt)) {
-    return false;
-  }
-  if (value.returnReasonCode !== undefined && !isReasonCode(value.returnReasonCode)) {
-    return false;
-  }
-  if (value.returnReasonText !== undefined && typeof value.returnReasonText !== "string") {
-    return false;
+  if (hasRetBy || hasRetAt || hasRetCode) {
+    if (!(hasRetBy && hasRetAt && hasRetCode)) {
+      return false;
+    }
+    if (
+      !isNonEmptyString(value.returnedBy) ||
+      !isValidIsoDateTime(value.returnedAt) ||
+      !isReasonCode(value.returnReasonCode)
+    ) {
+      return false;
+    }
+    if (hasRetText && !isNonEmptyString(value.returnReasonText)) {
+      return false;
+    }
   }
 
   // State-specific invariant enforcement
   if (status === "Draft") {
     if (
-      value.submittedBy !== undefined ||
-      value.submittedAt !== undefined ||
-      value.returnedBy !== undefined ||
-      value.returnedAt !== undefined ||
-      value.returnReasonCode !== undefined ||
-      value.returnReasonText !== undefined ||
+      hasSubBy ||
+      hasRetBy ||
       value.approvedBy !== undefined ||
       value.approvedAt !== undefined ||
       value.effectiveFrom !== undefined ||
@@ -223,18 +281,11 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
       return false;
     }
   } else if (status === "PendingReview") {
-    if (
-      typeof value.submittedBy !== "string" ||
-      value.submittedBy.trim() === "" ||
-      !isValidIsoDateTime(value.submittedAt)
-    ) {
+    if (!hasSubBy) {
       return false;
     }
     if (
-      value.returnedBy !== undefined ||
-      value.returnedAt !== undefined ||
-      value.returnReasonCode !== undefined ||
-      value.returnReasonText !== undefined ||
+      hasRetBy ||
       value.approvedBy !== undefined ||
       value.approvedAt !== undefined ||
       value.effectiveFrom !== undefined ||
@@ -247,15 +298,7 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
       return false;
     }
   } else if (status === "Returned") {
-    if (
-      typeof value.submittedBy !== "string" ||
-      value.submittedBy.trim() === "" ||
-      !isValidIsoDateTime(value.submittedAt) ||
-      typeof value.returnedBy !== "string" ||
-      value.returnedBy.trim() === "" ||
-      !isValidIsoDateTime(value.returnedAt) ||
-      !isReasonCode(value.returnReasonCode)
-    ) {
+    if (!hasSubBy || !hasRetBy) {
       return false;
     }
     if (
@@ -271,9 +314,11 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
       return false;
     }
   } else if (status === "Active") {
+    if (!hasSubBy) {
+      return false;
+    }
     if (
-      typeof value.approvedBy !== "string" ||
-      value.approvedBy.trim() === "" ||
+      !isNonEmptyString(value.approvedBy) ||
       !isValidIsoDateTime(value.approvedAt) ||
       !isValidIsoDateTime(value.effectiveFrom)
     ) {
@@ -297,23 +342,24 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
       return false;
     }
   } else if (status === "Closed") {
+    if (!hasSubBy) {
+      return false;
+    }
     if (
-      typeof value.approvedBy !== "string" ||
-      value.approvedBy.trim() === "" ||
+      !isNonEmptyString(value.approvedBy) ||
       !isValidIsoDateTime(value.approvedAt) ||
       !isValidIsoDateTime(value.effectiveFrom) ||
       !isValidIsoDateTime(value.effectiveTo) ||
-      typeof value.closedBy !== "string" ||
-      value.closedBy.trim() === "" ||
+      !isNonEmptyString(value.closedBy) ||
       !isValidIsoDateTime(value.closedAt) ||
       !isReasonCode(value.closeReasonCode)
     ) {
       return false;
     }
-    if (new Date(value.effectiveTo as string).getTime() < new Date(value.effectiveFrom as string).getTime()) {
+    if (value.closeReasonText !== undefined && !isNonEmptyString(value.closeReasonText)) {
       return false;
     }
-    if (value.closeReasonText !== undefined && typeof value.closeReasonText !== "string") {
+    if (new Date(value.effectiveTo as string).getTime() < new Date(value.effectiveFrom as string).getTime()) {
       return false;
     }
   }

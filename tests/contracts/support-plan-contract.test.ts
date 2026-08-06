@@ -16,65 +16,207 @@ import {
 } from "../domain/support-plan-fixtures";
 
 describe("SupportPlan Contract & Fail-Closed Validation", () => {
-  it("Draftの最小構造を受理する", () => {
+  it("正常なDraftを受理する", () => {
     const draft = createSyntheticDraftPlan();
     assert.equal(validateSupportPlan(draft), true);
   });
 
-  it("PendingReviewでsubmittedByを必須とする", () => {
+  it("正常なPendingReviewを受理する", () => {
+    const pending = createSyntheticPendingReviewPlan();
+    assert.equal(validateSupportPlan(pending), true);
+  });
+
+  it("正常なReturnedを受理する", () => {
+    const returned = createSyntheticReturnedPlan();
+    assert.equal(validateSupportPlan(returned), true);
+  });
+
+  it("正常なActiveを受理する", () => {
+    const active = createSyntheticActivePlan();
+    assert.equal(validateSupportPlan(active), true);
+  });
+
+  it("正常なClosedを受理する", () => {
+    const closed = createSyntheticClosedPlan();
+    assert.equal(validateSupportPlan(closed), true);
+  });
+
+  it("PendingReviewでsubmittedBy欠損を拒否する", () => {
     const pendingNoSubmittedBy = createSyntheticPendingReviewPlan({
       submittedBy: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(pendingNoSubmittedBy), false);
   });
 
-  it("PendingReviewでsubmittedAtを必須とする", () => {
+  it("PendingReviewでsubmittedAt欠損を拒否する", () => {
     const pendingNoSubmittedAt = createSyntheticPendingReviewPlan({
       submittedAt: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(pendingNoSubmittedAt), false);
   });
 
-  it("ReturnedでreturnReasonCodeを必須とする", () => {
+  it("ReturnedのreturnedBy欠損を拒否する", () => {
+    const returnedNoRetBy = createSyntheticReturnedPlan({
+      returnedBy: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(returnedNoRetBy), false);
+  });
+
+  it("ReturnedのreturnedAt欠損を拒否する", () => {
+    const returnedNoRetAt = createSyntheticReturnedPlan({
+      returnedAt: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(returnedNoRetAt), false);
+  });
+
+  it("ReturnedでreturnReasonCode欠損を拒否する", () => {
     const returnedNoReason = createSyntheticReturnedPlan({
       returnReasonCode: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(returnedNoReason), false);
   });
 
-  it("ActiveでapprovedByを必須とする", () => {
+  it("ActiveでapprovedBy欠損を拒否する", () => {
     const activeNoApprovedBy = createSyntheticActivePlan({
       approvedBy: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(activeNoApprovedBy), false);
   });
 
-  it("ActiveでapprovedAtを必須とする", () => {
+  it("ActiveでapprovedAt欠損を拒否する", () => {
     const activeNoApprovedAt = createSyntheticActivePlan({
       approvedAt: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(activeNoApprovedAt), false);
   });
 
-  it("ActiveでeffectiveFromを必須とする", () => {
+  it("ActiveでeffectiveFrom欠損を拒否する", () => {
     const activeNoEffectiveFrom = createSyntheticActivePlan({
       effectiveFrom: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(activeNoEffectiveFrom), false);
   });
 
-  it("ClosedでclosedAtを必須とする", () => {
+  it("ActiveのsubmittedBy欠損を拒否する", () => {
+    const activeNoSubBy = createSyntheticActivePlan({
+      submittedBy: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(activeNoSubBy), false);
+  });
+
+  it("ActiveのsubmittedAt欠損を拒否する", () => {
+    const activeNoSubAt = createSyntheticActivePlan({
+      submittedAt: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(activeNoSubAt), false);
+  });
+
+  it("ActiveのsubmittedByだけを拒否する", () => {
+    const activeSubByOnly = createSyntheticActivePlan({
+      submittedBy: "synthetic-staff-001",
+      submittedAt: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(activeSubByOnly), false);
+  });
+
+  it("ActiveのsubmittedAtだけを拒否する", () => {
+    const activeSubAtOnly = createSyntheticActivePlan({
+      submittedBy: undefined as unknown as string,
+      submittedAt: "2026-08-06T11:00:00.000Z",
+    });
+    assert.equal(validateSupportPlan(activeSubAtOnly), false);
+  });
+
+  it("ActiveのreturnedByだけを拒否する", () => {
+    const activeRetByOnly = createSyntheticActivePlan({
+      returnedBy: "synthetic-manager-001",
+    } as unknown as Partial<SupportPlan>);
+    assert.equal(validateSupportPlan(activeRetByOnly), false);
+  });
+
+  it("ActiveのreturnedAtだけを拒否する", () => {
+    const activeRetAtOnly = createSyntheticActivePlan({
+      returnedAt: "2026-08-06T12:00:00.000Z",
+    } as unknown as Partial<SupportPlan>);
+    assert.equal(validateSupportPlan(activeRetAtOnly), false);
+  });
+
+  it("ActiveのreturnReasonCodeだけを拒否する", () => {
+    const activeRetCodeOnly = createSyntheticActivePlan({
+      returnReasonCode: "SYNTHETIC_REASON_REVISE_GOALS",
+    } as unknown as Partial<SupportPlan>);
+    assert.equal(validateSupportPlan(activeRetCodeOnly), false);
+  });
+
+  it("Closedのpartially presented submission historyを拒否する", () => {
+    const closedSubByOnly = createSyntheticClosedPlan({
+      submittedBy: "synthetic-staff-001",
+      submittedAt: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(closedSubByOnly), false);
+  });
+
+  it("Closedのpartially presented return historyを拒否する", () => {
+    const closedRetByOnly = createSyntheticClosedPlan({
+      returnedBy: "synthetic-manager-001",
+    } as unknown as Partial<SupportPlan>);
+    assert.equal(validateSupportPlan(closedRetByOnly), false);
+  });
+
+  it("ClosedでclosedBy欠損を拒否する", () => {
+    const closedNoClosedBy = createSyntheticClosedPlan({
+      closedBy: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(closedNoClosedBy), false);
+  });
+
+  it("ClosedでclosedAt欠損を拒否する", () => {
     const closedNoClosedAt = createSyntheticClosedPlan({
       closedAt: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(closedNoClosedAt), false);
   });
 
-  it("ClosedでcloseReasonCodeを必須とする", () => {
+  it("ClosedでeffectiveTo欠損を拒否する", () => {
+    const closedNoEffectiveTo = createSyntheticClosedPlan({
+      effectiveTo: undefined as unknown as string,
+    });
+    assert.equal(validateSupportPlan(closedNoEffectiveTo), false);
+  });
+
+  it("ClosedでcloseReasonCode欠損を拒否する", () => {
     const closedNoReason = createSyntheticClosedPlan({
       closeReasonCode: undefined as unknown as string,
     });
     assert.equal(validateSupportPlan(closedNoReason), false);
+  });
+
+  it("returnReasonTextの空文字を拒否する", () => {
+    const returnedEmptyText = createSyntheticReturnedPlan({
+      returnReasonText: "",
+    });
+    assert.equal(validateSupportPlan(returnedEmptyText), false);
+  });
+
+  it("returnReasonTextの空白だけを拒否する", () => {
+    const returnedWhitespaceText = createSyntheticReturnedPlan({
+      returnReasonText: "   ",
+    });
+    assert.equal(validateSupportPlan(returnedWhitespaceText), false);
+  });
+
+  it("closeReasonTextの空文字を拒否する", () => {
+    const closedEmptyText = createSyntheticClosedPlan({
+      closeReasonText: "",
+    });
+    assert.equal(validateSupportPlan(closedEmptyText), false);
+  });
+
+  it("closeReasonTextの空白だけを拒否する", () => {
+    const closedWhitespaceText = createSyntheticClosedPlan({
+      closeReasonText: "   ",
+    });
+    assert.equal(validateSupportPlan(closedWhitespaceText), false);
   });
 
   it("currentVersion 0を拒否する", () => {
@@ -159,6 +301,20 @@ describe("SupportPlanVersion Contract Validation", () => {
       version: 0,
     });
     assert.equal(validateSupportPlanVersion(versionZero), false);
+  });
+
+  it("SupportPlanVersion.versionの小数を拒否する", () => {
+    const versionFloat = createSyntheticPlanVersion1({
+      version: 1.2,
+    });
+    assert.equal(validateSupportPlanVersion(versionFloat), false);
+  });
+
+  it("SupportPlanVersion.versionの負数を拒否する", () => {
+    const versionNegative = createSyntheticPlanVersion1({
+      version: -1,
+    });
+    assert.equal(validateSupportPlanVersion(versionNegative), false);
   });
 
   it("同一planIdでも異なるversionを表現できる", () => {

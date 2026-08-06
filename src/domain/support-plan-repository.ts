@@ -5,8 +5,8 @@ import type { SupportPlan, SupportPlanVersion } from "./support-plan";
  */
 export type SaveResult<T> =
   | Readonly<{ status: "SUCCESS"; value: T }>
-  | Readonly<{ status: "CONFLICT"; reason: "VERSION_CONFLICT" | "ID_REUSED" }>
-  | Readonly<{ status: "ERROR"; message: string }>;
+  | Readonly<{ status: "CONFLICT"; reasonCode: string }>
+  | Readonly<{ status: "ERROR"; reasonCode: string }>;
 
 /**
  * Result for Repository Lookup operations
@@ -14,7 +14,14 @@ export type SaveResult<T> =
 export type RepositoryLookupResult<T> =
   | Readonly<{ status: "FOUND"; value: T }>
   | Readonly<{ status: "NOT_FOUND" }>
-  | Readonly<{ status: "ERROR"; message: string }>;
+  | Readonly<{ status: "ERROR"; reasonCode: string }>;
+
+/**
+ * Result for Repository List operations
+ */
+export type RepositoryListResult<T> =
+  | Readonly<{ status: "SUCCESS"; values: readonly T[] }>
+  | Readonly<{ status: "ERROR"; reasonCode: string }>;
 
 /**
  * SupportPlan Repository Port (Pure Interface, no SharePoint REST / PnPjs dependency)
@@ -25,7 +32,7 @@ export interface ISupportPlanRepository {
     organizationId: string,
     siteId: string,
     userId: string
-  ): Promise<readonly SupportPlan[]>;
+  ): Promise<RepositoryListResult<SupportPlan>>;
   findCurrentByUser(
     organizationId: string,
     siteId: string,
@@ -45,7 +52,7 @@ export interface ISupportPlanVersionRepository {
     planId: string,
     version: number
   ): Promise<RepositoryLookupResult<SupportPlanVersion>>;
-  listVersions(planId: string): Promise<readonly SupportPlanVersion[]>;
+  listVersions(planId: string): Promise<RepositoryListResult<SupportPlanVersion>>;
   saveVersion(
     versionRecord: SupportPlanVersion
   ): Promise<SaveResult<SupportPlanVersion>>;
