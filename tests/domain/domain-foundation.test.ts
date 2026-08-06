@@ -10,6 +10,7 @@ import {
 import type {
   BehaviorScoreInput,
   CriterionResult,
+  EvaluationInput,
 } from "../../src/domain";
 import {
   SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE,
@@ -161,6 +162,22 @@ describe("Criteria Aggregation", () => {
       "INDETERMINATE",
     );
   });
+
+  it("validates every criterion before applying FAIL precedence", () => {
+    const malformedAfterFail = [
+      { criterionId: "synthetic-fail", status: "FAIL" },
+      null,
+    ] as unknown as readonly CriterionResult[];
+
+    assert.equal(
+      aggregateCriterionResults(malformedAfterFail),
+      "INDETERMINATE",
+    );
+    assert.equal(
+      aggregateCriterionResults(null as unknown as readonly CriterionResult[]),
+      "INDETERMINATE",
+    );
+  });
 });
 
 describe("Evaluation Decision & Finding Separation", () => {
@@ -303,6 +320,34 @@ describe("Evaluation Decision & Finding Separation", () => {
         criteria: SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE,
         findings: SYNTHETIC_FINDINGS_ONE,
       }),
+      "INDETERMINATE",
+    );
+  });
+
+  it("fails closed rather than throwing for malformed evaluation input", () => {
+    assert.equal(
+      deriveEvaluationDecision(null as unknown as EvaluationInput),
+      "INDETERMINATE",
+    );
+    assert.equal(
+      deriveEvaluationDecision({
+        ...SYNTHETIC_VALID_EVALUATION_INPUT,
+        criteria: [null],
+      } as unknown as EvaluationInput),
+      "INDETERMINATE",
+    );
+    assert.equal(
+      deriveEvaluationDecision({
+        ...SYNTHETIC_VALID_EVALUATION_INPUT,
+        findings: null,
+      } as unknown as EvaluationInput),
+      "INDETERMINATE",
+    );
+    assert.equal(
+      deriveEvaluationDecision({
+        ...SYNTHETIC_VALID_EVALUATION_INPUT,
+        approvalRequired: "yes",
+      } as unknown as EvaluationInput),
       "INDETERMINATE",
     );
   });
