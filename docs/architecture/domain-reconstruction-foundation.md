@@ -46,9 +46,17 @@ FETCH_FAILED
 
 ### 点数根拠資料の有効性
 
-根拠資料、`validFrom`、`validTo`、確認日、取得失敗等の契約はIssue #20の後続assessment-contractsで実装する。
+`AssessmentScoreSourceRecord` (`sourceReferenceId`, `score`, `validFrom`, `validTo`, `confirmedAt`, `confirmedBy`) および純粋選択関数 `selectAssessmentScoreSource` をIssue #20で実装。
 
-本PRでは保存・履歴・有効期間選択を実装しない。
+- `score: 0` は正式な有効値として扱う。
+- `validFrom` / `validTo` 欠落および `validFrom > validTo` は `MALFORMED` として拒否する。
+- 判定日時点で有効な資料が0件の場合は確定判定せず `MISSING` / `UNCONFIRMED` / `EXPIRED` へ失敗クローズする。
+- 有効な資料が複数件ある場合は `CONFLICT` を返す。
+- `UNCONFIRMED` を `VALID` へ倒さない。
+- `EXPIRED` を `MISSING` へ倒さない。
+- `FETCH_FAILED` を `MISSING`、`UNKNOWN`、0点へ変換しない。
+- 3年固定をハードコードしない（有効期間は `validFrom` / `validTo` に従う）。
+- 更新後の点数は新しい `validFrom` から適用される。
 
 ### サービス・規則の適用可否
 
@@ -108,17 +116,20 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 
 | Requirement ID | 対応内容 | 主な実装・テスト |
 |---|---|---|
-| USR-005 | 点数0と未入力の区別 | `BehaviorScoreInput`, score tests |
-| USR-006 | 点数状態と規則適用可否の分離 | `BehaviorScoreInput`, `CriterionResult` |
+| USR-005 | 点数0と未入力の区別 | `BehaviorScoreInput`, `AssessmentScoreSourceRecord`, score tests |
+| USR-006 | 点数状態と規則適用可否の分離 | `BehaviorScoreInput`, `CriterionResult`, `AssessmentSourceDecision` |
 | CALC-001〜009 | 有効範囲、不正値、点数帯 | `parseBehaviorRelatedScore`, classification tests |
-| SAFE-001 | 必要データ不足時に確定成功へ倒さない | `deriveEvaluationDecision` |
-| SAFE-003 | 取得失敗を適合・対象外へ倒さない | `FETCH_FAILED`, `SOURCE_UNAVAILABLE` |
-| SAFE-004 | 算定不能時に適合・不適合findingを生成しない | `UNKNOWN`, evaluation tests |
+| SAFE-001 | 必要データ不足時に確定成功へ倒さない | `deriveEvaluationDecision`, `selectAssessmentScoreSource` |
+| SAFE-002 | 有効期間判定と不正範囲拒否 | `selectAssessmentScoreSource`, `validFrom > validTo` tests |
+| SAFE-003 | 取得失敗を適合・対象外へ倒さない | `FETCH_FAILED`, `SOURCE_UNAVAILABLE`, contract tests |
+| SAFE-004 | 算定不能・未確認時に確定判定しない | `UNKNOWN`, `UNCONFIRMED`, `EXPIRED`, evaluation tests |
+| SAFE-005 | 複数有効資料の矛盾検出 | `selectAssessmentScoreSource`, `CONFLICT` tests |
 | NFR-MNT-001 | DomainをSharePoint APIから分離 | `src/domain/*` |
 | NFR-MNT-003 | 純粋関数としてテスト可能にする | domain functions and tests |
-| NFR-MNT-006 | ルール変更時に文書とテストを更新する | 本文書と`tests/domain/*` |
+| NFR-MNT-006 | ルール変更時に文書とテストを更新する | 本文書と`tests/domain/*`, `tests/contracts/*` |
 
 この対応は設計トレーサビリティであり、要件を`Implemented`または`Verified`へ自動昇格させない。
+
 
 ## 継続HOLD
 
