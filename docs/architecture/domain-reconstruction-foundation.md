@@ -42,6 +42,7 @@ FETCH_FAILED
 - `VALUE: 0`は正式な有効値である。
 - 未入力、不正値、不明、取得失敗を0へ変換しない。
 - `NOT_APPLICABLE`を点数入力状態へ追加しない。
+- 不正status、理由欠損、空の取得失敗コードは`MALFORMED_STATE`として拒否する。
 
 ### 点数根拠資料の有効性
 
@@ -53,7 +54,9 @@ FETCH_FAILED
 
 `NOT_APPLICABLE`は`CriterionResult`等の条件結果だけで使用する。
 
-点数未確認、資料欠損、有効期間外、取得失敗を`NOT_APPLICABLE`へ変換しない。
+- 点数未確認、資料欠損、有効期間外、取得失敗を`NOT_APPLICABLE`へ変換しない。
+- `UNKNOWN`と`NOT_APPLICABLE`には非空の`reasonCode`を必須とする。
+- 正式なサービス別reasonCode enumは未決定のため、本PRでは文字列値を固定しない。
 
 ## 行動関連点数
 
@@ -72,11 +75,14 @@ FETCH_FAILED
 
 ## 条件集約
 
-1. `FAIL`が1件以上なら`INELIGIBLE`
-2. `FAIL`はないが`UNKNOWN`が1件以上なら`INDETERMINATE`
-3. すべて`NOT_APPLICABLE`なら`NOT_APPLICABLE`
-4. `PASS`が1件以上あり、残りが`PASS`または`NOT_APPLICABLE`なら`ELIGIBLE`
-5. criteriaが空、criterionIdが空、不正statusなら`INDETERMINATE`
+集約前にすべてのcriterionを検証する。不正criterionを、先行する`FAIL`等で隠さない。
+
+1. criterionId・status・必須reasonCodeに不備があれば`INDETERMINATE`
+2. `FAIL`が1件以上なら`INELIGIBLE`
+3. `FAIL`はないが`UNKNOWN`が1件以上なら`INDETERMINATE`
+4. すべて`NOT_APPLICABLE`なら`NOT_APPLICABLE`
+5. `PASS`が1件以上あり、残りが`PASS`または`NOT_APPLICABLE`なら`ELIGIBLE`
+6. criteriaが空なら`INDETERMINATE`
 
 ここでの`ELIGIBLE`は、入力された技術的条件が通過したことだけを意味する。
 
@@ -88,11 +94,13 @@ FETCH_FAILED
 
 - 実行状態が`COMPLETED`
 - criteriaが空でない
-- criteriaが有効なstatusだけを持つ
+- criteriaが有効なstatusと必須reasonCodeを持つ
 - `FAIL`・`UNKNOWN`がない
 - findingsが0件
 - 欠損・確認待ち・期限切れ・システムエラーが0件
 - 必要な承認が完了している
+
+null、不正配列、不正count、不正boolean等の壊れた入力は例外にせず`INDETERMINATE`へ倒す。
 
 すべての条件が`NOT_APPLICABLE`なのにFindingがある場合は矛盾として`INDETERMINATE`にする。
 
@@ -115,7 +123,7 @@ FETCH_FAILED
 ## 継続HOLD
 
 - 点数根拠資料の保存・履歴contract
-- サービス別`NOT_APPLICABLE`理由コード
+- サービス別`NOT_APPLICABLE`・`UNKNOWN` reasonCode enum
 - 登録・確認ロール
 - 施設割合、職員研修割合
 - 最終加算・請求判定
