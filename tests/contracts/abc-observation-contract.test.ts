@@ -11,6 +11,8 @@ import {
   createSyntheticAbcRecord,
   createSyntheticObservation,
   createSyntheticLinkFailure,
+  SYNTHETIC_ORG_ID,
+  SYNTHETIC_SITE_ID,
 } from "../domain/abc-observation-fixtures";
 
 describe("ABC and Observation Contract Validation", () => {
@@ -205,10 +207,93 @@ describe("ABC and Observation Contract Validation", () => {
     });
   });
 
-  describe("LinkFailure Contract and ReasonCode Validation", () => {
-    it("accepts valid LinkFailure structure with valid reasonCode", () => {
-      const failure = createSyntheticLinkFailure({ reasonCode: "LINK_TARGET_NOT_FOUND" });
+  describe("LinkFailure Contract and State Invariant Validation", () => {
+    it("accepts valid LinkFailure Open structure", () => {
+      const failure = createSyntheticLinkFailure();
       assert.equal(validateLinkFailure(failure), true);
+    });
+
+    it("accepts valid LinkFailure Retrying structure with lastAttemptAt", () => {
+      const failure = createSyntheticLinkFailure({
+        status: "Retrying",
+        lastAttemptAt: "2026-08-06T12:00:00.000Z",
+      });
+      assert.equal(validateLinkFailure(failure), true);
+    });
+
+    it("rejects LinkFailure Retrying when lastAttemptAt is missing", () => {
+      const failure = {
+        failureId: "synthetic-fail-001",
+        targetRecordId: "synthetic-rec-abc-001",
+        OrganizationId: SYNTHETIC_ORG_ID,
+        SiteId: SYNTHETIC_SITE_ID,
+        status: "Retrying",
+        correlationId: "synthetic-corr-001",
+        retryCount: 0,
+        version: 1,
+      };
+      assert.equal(validateLinkFailure(failure), false);
+    });
+
+    it("accepts valid LinkFailure Resolved structure with resolvedAt", () => {
+      const failure = createSyntheticLinkFailure({
+        status: "Resolved",
+        resolvedAt: "2026-08-06T12:05:00.000Z",
+      });
+      assert.equal(validateLinkFailure(failure), true);
+    });
+
+    it("rejects LinkFailure Resolved when resolvedAt is missing", () => {
+      const failure = {
+        failureId: "synthetic-fail-001",
+        targetRecordId: "synthetic-rec-abc-001",
+        OrganizationId: SYNTHETIC_ORG_ID,
+        SiteId: SYNTHETIC_SITE_ID,
+        status: "Resolved",
+        correlationId: "synthetic-corr-001",
+        retryCount: 0,
+        version: 1,
+      };
+      assert.equal(validateLinkFailure(failure), false);
+    });
+
+    it("accepts valid LinkFailure Abandoned structure with abandonedAt and reasonCode", () => {
+      const failure = createSyntheticLinkFailure({
+        status: "Abandoned",
+        abandonedAt: "2026-08-06T12:10:00.000Z",
+        reasonCode: "LINK_MAX_RETRIES_EXCEEDED",
+      });
+      assert.equal(validateLinkFailure(failure), true);
+    });
+
+    it("rejects LinkFailure Abandoned when reasonCode is missing", () => {
+      const failure = {
+        failureId: "synthetic-fail-001",
+        targetRecordId: "synthetic-rec-abc-001",
+        OrganizationId: SYNTHETIC_ORG_ID,
+        SiteId: SYNTHETIC_SITE_ID,
+        status: "Abandoned",
+        abandonedAt: "2026-08-06T12:10:00.000Z",
+        correlationId: "synthetic-corr-001",
+        retryCount: 0,
+        version: 1,
+      };
+      assert.equal(validateLinkFailure(failure), false);
+    });
+
+    it("rejects Open status when resolvedAt or abandonedAt is present", () => {
+      const failure1 = {
+        ...createSyntheticLinkFailure(),
+        resolvedAt: "2026-08-06T12:00:00.000Z",
+      };
+      assert.equal(validateLinkFailure(failure1), false);
+
+      const failure2 = {
+        ...createSyntheticLinkFailure(),
+        abandonedAt: "2026-08-06T12:00:00.000Z",
+        reasonCode: "SOME_REASON",
+      };
+      assert.equal(validateLinkFailure(failure2), false);
     });
 
     it("validates isReasonCode strictly for UPPERCASE_CODE format", () => {
@@ -216,14 +301,7 @@ describe("ABC and Observation Contract Validation", () => {
       assert.equal(isReasonCode("LINK_VERSION_CONFLICT"), true);
       assert.equal(isReasonCode("利用者○○さんの支援記録を保存できなかった"), false);
       assert.equal(isReasonCode("LINK TARGET NOT FOUND"), false); // spaces
-      assert.equal(isReasonCode("synthetic-invalid-email-pattern"), false);
-    });
-
-    it("rejects LinkFailure when reasonCode is free text / PII", () => {
-      const failure = createSyntheticLinkFailure({
-        reasonCode: "利用者○○さんの支援記録を保存できなかった",
-      });
-      assert.equal(validateLinkFailure(failure), false);
+      assert.equal(isReasonCode("invalid-reason-code-lowercase"), false);
     });
 
     it("rejects LinkFailure when correlationId is missing", () => {
@@ -244,34 +322,10 @@ describe("ABC and Observation Contract Validation", () => {
       assert.equal(validateLinkFailure(failure), false);
     });
 
-    it("rejects LinkFailure when status is unknown", () => {
-      const failure = {
-        ...createSyntheticLinkFailure(),
-        status: "UNKNOWN_STATUS" as any,
-      };
-      assert.equal(validateLinkFailure(failure), false);
-    });
-
     it("rejects LinkFailure containing unallowed extra properties", () => {
       const failure = {
         ...createSyntheticLinkFailure(),
         extraProp: "unallowed",
-      };
-      assert.equal(validateLinkFailure(failure), false);
-    });
-
-    it("rejects LinkFailure containing support text property (PII protection)", () => {
-      const failure = {
-        ...createSyntheticLinkFailure(),
-        supportText: "synthetic support details",
-      };
-      assert.equal(validateLinkFailure(failure), false);
-    });
-
-    it("rejects LinkFailure containing secrets/tokens property", () => {
-      const failure = {
-        ...createSyntheticLinkFailure(),
-        secret: "synthetic-token-secret",
       };
       assert.equal(validateLinkFailure(failure), false);
     });

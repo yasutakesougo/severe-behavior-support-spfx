@@ -73,15 +73,47 @@ export function createSyntheticObservation(
 export function createSyntheticLinkFailure(
   overrides?: Partial<LinkFailure>
 ): LinkFailure {
-  return {
+  const base = {
     failureId: "synthetic-fail-001",
     targetRecordId: "synthetic-rec-abc-001",
     OrganizationId: SYNTHETIC_ORG_ID,
     SiteId: SYNTHETIC_SITE_ID,
-    status: "Open",
     correlationId: "synthetic-corr-001",
     retryCount: 0,
     version: 1,
-    ...overrides,
   };
+
+  if (overrides?.status === "Retrying") {
+    return {
+      ...base,
+      status: "Retrying",
+      lastAttemptAt: "2026-08-06T12:00:00.000Z",
+      ...overrides,
+    } as LinkFailure;
+  }
+
+  if (overrides?.status === "Resolved") {
+    return {
+      ...base,
+      status: "Resolved",
+      resolvedAt: "2026-08-06T12:05:00.000Z",
+      ...overrides,
+    } as LinkFailure;
+  }
+
+  if (overrides?.status === "Abandoned") {
+    return {
+      ...base,
+      status: "Abandoned",
+      abandonedAt: "2026-08-06T12:10:00.000Z",
+      reasonCode: "synthetic-reason-code-001",
+      ...overrides,
+    } as LinkFailure;
+  }
+
+  return {
+    ...base,
+    status: "Open",
+    ...overrides,
+  } as LinkFailure;
 }

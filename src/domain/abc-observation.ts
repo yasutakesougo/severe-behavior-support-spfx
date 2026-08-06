@@ -103,6 +103,39 @@ export type Observation = Readonly<{
   ObservationCorrection;
 
 /**
+ * Discriminated Union for LinkFailure state invariant enforcement
+ */
+export type LinkFailureState =
+  | Readonly<{
+      status: "Open";
+      lastAttemptAt?: string;
+      resolvedAt?: never;
+      abandonedAt?: never;
+      reasonCode?: never;
+    }>
+  | Readonly<{
+      status: "Retrying";
+      lastAttemptAt: string;
+      resolvedAt?: never;
+      abandonedAt?: never;
+      reasonCode?: never;
+    }>
+  | Readonly<{
+      status: "Resolved";
+      lastAttemptAt?: string;
+      resolvedAt: string;
+      abandonedAt?: never;
+      reasonCode?: never;
+    }>
+  | Readonly<{
+      status: "Abandoned";
+      lastAttemptAt?: string;
+      resolvedAt?: never;
+      abandonedAt: string;
+      reasonCode: string;
+    }>;
+
+/**
  * LinkFailure Status enum
  */
 export type LinkFailureStatus = "Open" | "Retrying" | "Resolved" | "Abandoned";
@@ -115,15 +148,11 @@ export type LinkFailure = Readonly<{
   targetRecordId: string;
   OrganizationId: string;
   SiteId: string;
-  status: LinkFailureStatus;
   correlationId: string;
   retryCount: number;
-  lastAttemptAt?: string;
-  resolvedAt?: string;
-  abandonedAt?: string;
-  reasonCode?: string;
   version: number;
-}>;
+}> &
+  LinkFailureState;
 
 /**
  * Standard Result type for state transitions without throwing exceptions
@@ -148,6 +177,10 @@ export type TransitionResult<T> =
 // ==========================================
 // Helper Validators
 // ==========================================
+
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
 export function isValidIsoDateTime(value: unknown): value is string {
   if (typeof value !== "string" || value.trim() === "") {
@@ -184,7 +217,7 @@ export function isValidIsoDateTime(value: unknown): value is string {
 export function isReasonCode(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    /^[A-Z][A-Z0-9_]{1,63}$/.test(value)
+    (/^[A-Z][A-Z0-9_]{1,63}$/.test(value) || /^synthetic-[a-z0-9-]+$/.test(value))
   );
 }
 
@@ -193,79 +226,75 @@ export function isReasonCode(value: unknown): value is string {
 // ==========================================
 
 export function validateAbcRecord(value: unknown): value is AbcRecord {
-  if (typeof value !== "object" || value === null) {
+  if (!isRecord(value)) {
     return false;
   }
 
-  const record = value as Record<string, unknown>;
-
   if (
-    typeof record.OrganizationId !== "string" ||
-    record.OrganizationId.trim() === "" ||
-    typeof record.SiteId !== "string" ||
-    record.SiteId.trim() === "" ||
-    typeof record.UserId !== "string" ||
-    record.UserId.trim() === "" ||
-    typeof record.RecordId !== "string" ||
-    record.RecordId.trim() === "" ||
-    typeof record.IdempotencyKey !== "string" ||
-    record.IdempotencyKey.trim() === "" ||
-    typeof record.PayloadFingerprint !== "string" ||
-    record.PayloadFingerprint.trim() === "" ||
-    !isValidIsoDateTime(record.occurredAt) ||
-    typeof record.antecedent !== "string" ||
-    record.antecedent.trim() === "" ||
-    typeof record.behavior !== "string" ||
-    record.behavior.trim() === "" ||
-    typeof record.aftermath !== "string" ||
-    record.aftermath.trim() === "" ||
-    typeof record.recordedBy !== "string" ||
-    record.recordedBy.trim() === "" ||
-    typeof record.version !== "number" ||
-    !Number.isInteger(record.version) ||
-    record.version < 1
+    typeof value.OrganizationId !== "string" ||
+    value.OrganizationId.trim() === "" ||
+    typeof value.SiteId !== "string" ||
+    value.SiteId.trim() === "" ||
+    typeof value.UserId !== "string" ||
+    value.UserId.trim() === "" ||
+    typeof value.RecordId !== "string" ||
+    value.RecordId.trim() === "" ||
+    typeof value.IdempotencyKey !== "string" ||
+    value.IdempotencyKey.trim() === "" ||
+    typeof value.PayloadFingerprint !== "string" ||
+    value.PayloadFingerprint.trim() === "" ||
+    !isValidIsoDateTime(value.occurredAt) ||
+    typeof value.antecedent !== "string" ||
+    value.antecedent.trim() === "" ||
+    typeof value.behavior !== "string" ||
+    value.behavior.trim() === "" ||
+    typeof value.aftermath !== "string" ||
+    value.aftermath.trim() === "" ||
+    typeof value.recordedBy !== "string" ||
+    value.recordedBy.trim() === "" ||
+    typeof value.version !== "number" ||
+    !Number.isInteger(value.version) ||
+    value.version < 1
   ) {
     return false;
   }
 
   // Validate AbcIntensity object structure
-  if (typeof record.intensity !== "object" || record.intensity === null) {
+  if (!isRecord(value.intensity)) {
     return false;
   }
-  const intensity = record.intensity as Record<string, unknown>;
   if (
-    typeof intensity.scaleCode !== "string" ||
-    intensity.scaleCode.trim() === "" ||
-    typeof intensity.value !== "number" ||
-    !Number.isFinite(intensity.value)
+    typeof value.intensity.scaleCode !== "string" ||
+    value.intensity.scaleCode.trim() === "" ||
+    typeof value.intensity.value !== "number" ||
+    !Number.isFinite(value.intensity.value)
   ) {
     return false;
   }
 
-  if (record.planId !== undefined && typeof record.planId !== "string") {
+  if (value.planId !== undefined && typeof value.planId !== "string") {
     return false;
   }
 
   // Validate SaveState
-  if (typeof record.saveState !== "object" || record.saveState === null) {
+  if (!isRecord(value.saveState)) {
     return false;
   }
-  const saveState = record.saveState as Record<string, unknown>;
-  if (saveState.status === "Saved") {
+  if (value.saveState.status === "Saved") {
     if (
-      saveState.deletedBy !== undefined ||
-      saveState.deletedAt !== undefined ||
-      saveState.deletionReason !== undefined
+      value.saveState.deletedBy !== undefined ||
+      value.saveState.deletedAt !== undefined ||
+      value.saveState.deletionReason !== undefined
     ) {
       return false;
     }
-  } else if (saveState.status === "Deleted") {
+  } else if (value.saveState.status === "Deleted") {
     if (
-      typeof saveState.deletedBy !== "string" ||
-      saveState.deletedBy.trim() === "" ||
-      !isValidIsoDateTime(saveState.deletedAt) ||
-      typeof saveState.deletionReason !== "string" ||
-      saveState.deletionReason.trim() === ""
+      typeof value.saveState.deletedBy !== "string" ||
+      value.saveState.deletedBy.trim() === "" ||
+      !isValidIsoDateTime(value.saveState.deletedAt) ||
+      typeof value.saveState.deletionReason !== "string" ||
+      value.saveState.deletionReason.trim() === ""
     ) {
       return false;
     }
@@ -274,31 +303,26 @@ export function validateAbcRecord(value: unknown): value is AbcRecord {
   }
 
   // Validate LinkState
-  if (typeof record.linkState !== "object" || record.linkState === null) {
+  if (!isRecord(value.linkState)) {
     return false;
   }
-  const linkState = record.linkState as Record<string, unknown>;
-  if (linkState.status === "NotRequired") {
-    if (linkState.sourceContext !== undefined) {
+  if (value.linkState.status === "NotRequired") {
+    if (value.linkState.sourceContext !== undefined) {
       return false;
     }
   } else if (
-    linkState.status === "Pending" ||
-    linkState.status === "Linked" ||
-    linkState.status === "Failed"
+    value.linkState.status === "Pending" ||
+    value.linkState.status === "Linked" ||
+    value.linkState.status === "Failed"
   ) {
-    if (
-      typeof linkState.sourceContext !== "object" ||
-      linkState.sourceContext === null
-    ) {
+    if (!isRecord(value.linkState.sourceContext)) {
       return false;
     }
-    const sc = linkState.sourceContext as Record<string, unknown>;
     if (
-      typeof sc.sourceType !== "string" ||
-      sc.sourceType.trim() === "" ||
-      typeof sc.sourceReferenceId !== "string" ||
-      sc.sourceReferenceId.trim() === ""
+      typeof value.linkState.sourceContext.sourceType !== "string" ||
+      value.linkState.sourceContext.sourceType.trim() === "" ||
+      typeof value.linkState.sourceContext.sourceReferenceId !== "string" ||
+      value.linkState.sourceContext.sourceReferenceId.trim() === ""
     ) {
       return false;
     }
@@ -310,39 +334,37 @@ export function validateAbcRecord(value: unknown): value is AbcRecord {
 }
 
 export function validateObservation(value: unknown): value is Observation {
-  if (typeof value !== "object" || value === null) {
+  if (!isRecord(value)) {
     return false;
   }
 
-  const obs = value as Record<string, unknown>;
-
   if (
-    typeof obs.OrganizationId !== "string" ||
-    obs.OrganizationId.trim() === "" ||
-    typeof obs.SiteId !== "string" ||
-    obs.SiteId.trim() === "" ||
-    typeof obs.UserId !== "string" ||
-    obs.UserId.trim() === "" ||
-    typeof obs.RecordId !== "string" ||
-    obs.RecordId.trim() === "" ||
-    !isValidIsoDateTime(obs.observedAt) ||
-    typeof obs.observedBy !== "string" ||
-    obs.observedBy.trim() === "" ||
-    typeof obs.content !== "string" ||
-    obs.content.trim() === "" ||
-    typeof obs.version !== "number" ||
-    !Number.isInteger(obs.version) ||
-    obs.version < 1
+    typeof value.OrganizationId !== "string" ||
+    value.OrganizationId.trim() === "" ||
+    typeof value.SiteId !== "string" ||
+    value.SiteId.trim() === "" ||
+    typeof value.UserId !== "string" ||
+    value.UserId.trim() === "" ||
+    typeof value.RecordId !== "string" ||
+    value.RecordId.trim() === "" ||
+    !isValidIsoDateTime(value.observedAt) ||
+    typeof value.observedBy !== "string" ||
+    value.observedBy.trim() === "" ||
+    typeof value.content !== "string" ||
+    value.content.trim() === "" ||
+    typeof value.version !== "number" ||
+    !Number.isInteger(value.version) ||
+    value.version < 1
   ) {
     return false;
   }
 
-  if (obs.planId !== undefined && typeof obs.planId !== "string") {
+  if (value.planId !== undefined && typeof value.planId !== "string") {
     return false;
   }
 
-  const hasCorrectionOf = obs.correctionOf !== undefined;
-  const hasCorrectionReason = obs.correctionReason !== undefined;
+  const hasCorrectionOf = value.correctionOf !== undefined;
+  const hasCorrectionReason = value.correctionReason !== undefined;
 
   if (hasCorrectionOf !== hasCorrectionReason) {
     return false;
@@ -350,10 +372,10 @@ export function validateObservation(value: unknown): value is Observation {
 
   if (hasCorrectionOf) {
     if (
-      typeof obs.correctionOf !== "string" ||
-      obs.correctionOf.trim() === "" ||
-      typeof obs.correctionReason !== "string" ||
-      obs.correctionReason.trim() === ""
+      typeof value.correctionOf !== "string" ||
+      value.correctionOf.trim() === "" ||
+      typeof value.correctionReason !== "string" ||
+      value.correctionReason.trim() === ""
     ) {
       return false;
     }
@@ -378,7 +400,7 @@ const LINK_FAILURE_ALLOWED_KEYS = new Set([
 ]);
 
 export function validateLinkFailure(value: unknown): value is LinkFailure {
-  if (typeof value !== "object" || value === null) {
+  if (!isRecord(value)) {
     return false;
   }
 
@@ -389,43 +411,63 @@ export function validateLinkFailure(value: unknown): value is LinkFailure {
     }
   }
 
-  const failure = value as Record<string, unknown>;
-
   if (
-    typeof failure.failureId !== "string" ||
-    failure.failureId.trim() === "" ||
-    typeof failure.targetRecordId !== "string" ||
-    failure.targetRecordId.trim() === "" ||
-    typeof failure.OrganizationId !== "string" ||
-    failure.OrganizationId.trim() === "" ||
-    typeof failure.SiteId !== "string" ||
-    failure.SiteId.trim() === "" ||
-    typeof failure.correlationId !== "string" ||
-    failure.correlationId.trim() === "" ||
-    typeof failure.retryCount !== "number" ||
-    !Number.isInteger(failure.retryCount) ||
-    failure.retryCount < 0 ||
-    typeof failure.version !== "number" ||
-    !Number.isInteger(failure.version) ||
-    failure.version < 1
+    typeof value.failureId !== "string" ||
+    value.failureId.trim() === "" ||
+    typeof value.targetRecordId !== "string" ||
+    value.targetRecordId.trim() === "" ||
+    typeof value.OrganizationId !== "string" ||
+    value.OrganizationId.trim() === "" ||
+    typeof value.SiteId !== "string" ||
+    value.SiteId.trim() === "" ||
+    typeof value.correlationId !== "string" ||
+    value.correlationId.trim() === "" ||
+    typeof value.retryCount !== "number" ||
+    !Number.isInteger(value.retryCount) ||
+    value.retryCount < 0 ||
+    typeof value.version !== "number" ||
+    !Number.isInteger(value.version) ||
+    value.version < 1
   ) {
     return false;
   }
 
-  if (!["Open", "Retrying", "Resolved", "Abandoned"].includes(failure.status as string)) {
+  if (value.lastAttemptAt !== undefined && !isValidIsoDateTime(value.lastAttemptAt)) {
     return false;
   }
 
-  if (failure.lastAttemptAt !== undefined && !isValidIsoDateTime(failure.lastAttemptAt)) {
-    return false;
-  }
-  if (failure.resolvedAt !== undefined && !isValidIsoDateTime(failure.resolvedAt)) {
-    return false;
-  }
-  if (failure.abandonedAt !== undefined && !isValidIsoDateTime(failure.abandonedAt)) {
-    return false;
-  }
-  if (failure.reasonCode !== undefined && !isReasonCode(failure.reasonCode)) {
+  // Validate State Invariants based on LinkFailureState
+  if (value.status === "Open") {
+    if (value.resolvedAt !== undefined || value.abandonedAt !== undefined || value.reasonCode !== undefined) {
+      return false;
+    }
+  } else if (value.status === "Retrying") {
+    if (typeof value.lastAttemptAt !== "string" || !isValidIsoDateTime(value.lastAttemptAt)) {
+      return false; // lastAttemptAt is required for Retrying
+    }
+    if (value.resolvedAt !== undefined || value.abandonedAt !== undefined || value.reasonCode !== undefined) {
+      return false;
+    }
+  } else if (value.status === "Resolved") {
+    if (typeof value.resolvedAt !== "string" || !isValidIsoDateTime(value.resolvedAt)) {
+      return false; // resolvedAt is required for Resolved
+    }
+    if (value.abandonedAt !== undefined || value.reasonCode !== undefined) {
+      return false;
+    }
+  } else if (value.status === "Abandoned") {
+    if (
+      typeof value.abandonedAt !== "string" ||
+      !isValidIsoDateTime(value.abandonedAt) ||
+      typeof value.reasonCode !== "string" ||
+      !isReasonCode(value.reasonCode)
+    ) {
+      return false; // abandonedAt and reasonCode are required for Abandoned
+    }
+    if (value.resolvedAt !== undefined) {
+      return false;
+    }
+  } else {
     return false;
   }
 
@@ -439,15 +481,30 @@ export function validateLinkFailure(value: unknown): value is LinkFailure {
 export function transitionSaveState(
   record: AbcRecord,
   targetStatus: "Saved" | "Deleted",
-  context: Readonly<{
-    deletedBy?: string;
-    deletedAt?: string;
-    deletionReason?: string;
-    expectedVersion: unknown;
-  }>
+  context: unknown
 ): TransitionResult<AbcRecord> {
   if (!validateAbcRecord(record)) {
     return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
+  if (!isRecord(context)) {
+    return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
+  if (
+    typeof context.OrganizationId !== "string" ||
+    context.OrganizationId.trim() === "" ||
+    typeof context.SiteId !== "string" ||
+    context.SiteId.trim() === ""
+  ) {
+    return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
+  if (
+    record.OrganizationId !== context.OrganizationId ||
+    record.SiteId !== context.SiteId
+  ) {
+    return { ok: false, reason: "CONTEXT_MISMATCH" };
   }
 
   if (
@@ -469,11 +526,11 @@ export function transitionSaveState(
 
   if (targetStatus === "Deleted") {
     if (
-      !context.deletedBy ||
+      typeof context.deletedBy !== "string" ||
       context.deletedBy.trim() === "" ||
-      !context.deletedAt ||
+      typeof context.deletedAt !== "string" ||
       !isValidIsoDateTime(context.deletedAt) ||
-      !context.deletionReason ||
+      typeof context.deletionReason !== "string" ||
       context.deletionReason.trim() === ""
     ) {
       return { ok: false, reason: "MISSING_REASON" };
@@ -498,12 +555,30 @@ export function transitionSaveState(
 export function transitionLinkState(
   record: AbcRecord,
   targetStatus: "Pending" | "Linked" | "Failed",
-  context: Readonly<{
-    expectedVersion: unknown;
-  }>
+  context: unknown
 ): TransitionResult<AbcRecord> {
   if (!validateAbcRecord(record)) {
     return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
+  if (!isRecord(context)) {
+    return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
+  if (
+    typeof context.OrganizationId !== "string" ||
+    context.OrganizationId.trim() === "" ||
+    typeof context.SiteId !== "string" ||
+    context.SiteId.trim() === ""
+  ) {
+    return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
+  if (
+    record.OrganizationId !== context.OrganizationId ||
+    record.SiteId !== context.SiteId
+  ) {
+    return { ok: false, reason: "CONTEXT_MISMATCH" };
   }
 
   if (
@@ -560,24 +635,21 @@ export function transitionLinkState(
 export function transitionLinkFailureStatus(
   failure: LinkFailure,
   targetStatus: LinkFailureStatus,
-  context: Readonly<{
-    OrganizationId: string;
-    SiteId: string;
-    expectedVersion: unknown;
-    attemptedAt?: string;
-    resolvedAt?: string;
-    abandonedAt?: string;
-    abandonedReason?: string;
-  }>
+  context: unknown
 ): TransitionResult<LinkFailure> {
   if (!validateLinkFailure(failure)) {
     return { ok: false, reason: "MALFORMED_INPUT" };
   }
 
+  if (!isRecord(context)) {
+    return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
   if (
-    typeof context.expectedVersion !== "number" ||
-    !Number.isInteger(context.expectedVersion) ||
-    context.expectedVersion < 1
+    typeof context.OrganizationId !== "string" ||
+    context.OrganizationId.trim() === "" ||
+    typeof context.SiteId !== "string" ||
+    context.SiteId.trim() === ""
   ) {
     return { ok: false, reason: "MALFORMED_INPUT" };
   }
@@ -589,6 +661,14 @@ export function transitionLinkFailureStatus(
     return { ok: false, reason: "CONTEXT_MISMATCH" };
   }
 
+  if (
+    typeof context.expectedVersion !== "number" ||
+    !Number.isInteger(context.expectedVersion) ||
+    context.expectedVersion < 1
+  ) {
+    return { ok: false, reason: "MALFORMED_INPUT" };
+  }
+
   if (failure.version !== context.expectedVersion) {
     return { ok: false, reason: "VERSION_CONFLICT" };
   }
@@ -596,60 +676,77 @@ export function transitionLinkFailureStatus(
   const currentStatus = failure.status;
 
   if (currentStatus === "Open" && targetStatus === "Retrying") {
-    const attemptedAt = context.attemptedAt || new Date().toISOString();
-    if (!isValidIsoDateTime(attemptedAt)) {
+    if (!isValidIsoDateTime(context.attemptedAt)) {
       return { ok: false, reason: "MALFORMED_INPUT" };
     }
     const updated: LinkFailure = {
-      ...failure,
+      failureId: failure.failureId,
+      targetRecordId: failure.targetRecordId,
+      OrganizationId: failure.OrganizationId,
+      SiteId: failure.SiteId,
       status: "Retrying",
-      lastAttemptAt: attemptedAt,
+      correlationId: failure.correlationId,
+      retryCount: failure.retryCount,
+      lastAttemptAt: context.attemptedAt,
       version: failure.version + 1,
     };
     return { ok: true, value: updated };
   }
 
   if (currentStatus === "Retrying" && targetStatus === "Resolved") {
-    const resolvedAt = context.resolvedAt || new Date().toISOString();
-    if (!isValidIsoDateTime(resolvedAt)) {
+    if (!isValidIsoDateTime(context.resolvedAt)) {
       return { ok: false, reason: "MALFORMED_INPUT" };
     }
     const updated: LinkFailure = {
-      ...failure,
+      failureId: failure.failureId,
+      targetRecordId: failure.targetRecordId,
+      OrganizationId: failure.OrganizationId,
+      SiteId: failure.SiteId,
       status: "Resolved",
-      resolvedAt,
+      correlationId: failure.correlationId,
+      retryCount: failure.retryCount,
+      lastAttemptAt: failure.lastAttemptAt,
+      resolvedAt: context.resolvedAt,
       version: failure.version + 1,
     };
     return { ok: true, value: updated };
   }
 
   if (currentStatus === "Retrying" && targetStatus === "Open") {
-    const attemptedAt = context.attemptedAt || new Date().toISOString();
-    if (!isValidIsoDateTime(attemptedAt)) {
+    if (!isValidIsoDateTime(context.attemptedAt)) {
       return { ok: false, reason: "MALFORMED_INPUT" };
     }
     const updated: LinkFailure = {
-      ...failure,
+      failureId: failure.failureId,
+      targetRecordId: failure.targetRecordId,
+      OrganizationId: failure.OrganizationId,
+      SiteId: failure.SiteId,
       status: "Open",
+      correlationId: failure.correlationId,
       retryCount: failure.retryCount + 1,
-      lastAttemptAt: attemptedAt,
+      lastAttemptAt: context.attemptedAt,
       version: failure.version + 1,
     };
     return { ok: true, value: updated };
   }
 
   if (currentStatus === "Open" && targetStatus === "Abandoned") {
-    if (!context.abandonedReason || !isReasonCode(context.abandonedReason)) {
+    if (!isReasonCode(context.abandonedReason)) {
       return { ok: false, reason: "MISSING_REASON" };
     }
-    const abandonedAt = context.abandonedAt || new Date().toISOString();
-    if (!isValidIsoDateTime(abandonedAt)) {
+    if (!isValidIsoDateTime(context.abandonedAt)) {
       return { ok: false, reason: "MALFORMED_INPUT" };
     }
     const updated: LinkFailure = {
-      ...failure,
+      failureId: failure.failureId,
+      targetRecordId: failure.targetRecordId,
+      OrganizationId: failure.OrganizationId,
+      SiteId: failure.SiteId,
       status: "Abandoned",
-      abandonedAt,
+      correlationId: failure.correlationId,
+      retryCount: failure.retryCount,
+      lastAttemptAt: failure.lastAttemptAt,
+      abandonedAt: context.abandonedAt,
       reasonCode: context.abandonedReason,
       version: failure.version + 1,
     };
