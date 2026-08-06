@@ -8,6 +8,10 @@ export type BehaviorScoreInvalidReason =
   | "NOT_INTEGER"
   | "OUT_OF_RANGE";
 
+export type BehaviorScoreRejectionReason =
+  | BehaviorScoreInvalidReason
+  | "MALFORMED_STATE";
+
 /**
  * Input state for the official behavior-related score itself.
  *
@@ -57,7 +61,7 @@ export type BehaviorScoreDecision =
     }>
   | Readonly<{
       decision: "REJECTED_INVALID_INPUT";
-      reason: BehaviorScoreInvalidReason;
+      reason: BehaviorScoreRejectionReason;
     }>
   | Readonly<{
       decision: "REJECTED_SOURCE_UNAVAILABLE";
