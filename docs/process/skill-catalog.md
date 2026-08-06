@@ -147,6 +147,15 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 - 実行コマンド: `npm run verify:skills`
 - 移行 ledger: `docs/process/skill-migration-ledger.md`
 
+`verify:skills`（AI-ORG-IMPL-5）は少なくとも次を構造検査する。
+
+- 5 Agents / 4 Logical Commands / Adapter Matrix
+- 導入済み 4 Skills / Skill Catalog / Skill Migration Ledger
+- MCP Permission Matrix
+- 必須ファイル欠落、旧 `skills/` への新規実行参照、存在しない Skill の「導入済み」扱い
+- `handoff-builder` の Audit 所属、正本参照切れ
+- credential / secret 実値混入、未承認 merge / deploy を許可する構造
+
 ## 運用ルール
 
 - Skill はコードを直接変更するものとして定義しない
