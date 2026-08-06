@@ -117,6 +117,13 @@ export const classifyExecutionSubmission = (
     };
   }
 
+  // The branches above exhaust every non-FOUND combination. Keep an explicit
+  // fail-closed guard so TypeScript and future status additions cannot expose
+  // a lookup value without first proving both results are FOUND.
+  if (recordLookup.status !== "FOUND" || idempotencyLookup.status !== "FOUND") {
+    return { decision: "REJECT_LOOKUP_UNAVAILABLE", reason: "UNKNOWN" };
+  }
+
   const byRecordId = recordLookup.value;
   const byIdempotencyKey = idempotencyLookup.value;
 
