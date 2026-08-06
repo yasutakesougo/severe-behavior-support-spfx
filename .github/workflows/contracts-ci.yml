@@ -5,6 +5,9 @@ on:
     paths:
       - "src/contracts/**"
       - "tests/contracts/**"
+      - "src/domain/**"
+      - "tests/domain/**"
+      - "docs/architecture/domain-reconstruction-foundation.md"
       - "scripts/ci/check-contracts-boundaries.mjs"
       - "package.json"
       - "package-lock.json"
@@ -17,6 +20,9 @@ on:
     paths:
       - "src/contracts/**"
       - "tests/contracts/**"
+      - "src/domain/**"
+      - "tests/domain/**"
+      - "docs/architecture/domain-reconstruction-foundation.md"
       - "scripts/ci/check-contracts-boundaries.mjs"
       - "package.json"
       - "package-lock.json"
@@ -33,7 +39,7 @@ concurrency:
 
 jobs:
   verify-contracts:
-    name: Verify contracts
+    name: Verify contracts and domain
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -58,7 +64,7 @@ jobs:
       - name: Test
         run: npm test
 
-      - name: Inspect contracts boundaries
+      - name: Inspect contracts and domain boundaries
         run: npm run check:contracts-boundaries
 
       - name: Check changed lines
