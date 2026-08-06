@@ -97,6 +97,7 @@ export const validateExecutionRecord = (value: unknown): ValidationResult<Execut
     ...(!context.ok ? context.errors : []),
     ...(!procedure.ok ? procedure.errors : []),
     ...(!localDate.ok ? localDate.errors : []),
+    requiredString(value.UserId, "UserId"),
     requiredString(value.RecordId, "RecordId"),
     requiredString(value.IdempotencyKey, "IdempotencyKey"),
     requiredString(value.PayloadFingerprint, "PayloadFingerprint"),
@@ -108,6 +109,7 @@ export const validateExecutionRecord = (value: unknown): ValidationResult<Execut
     value: {
       OrganizationId: value.OrganizationId as string,
       SiteId: value.SiteId as string,
+      UserId: value.UserId as string,
       TimeZone: ASIA_TOKYO_TIME_ZONE,
       RecordId: value.RecordId as string,
       IdempotencyKey: value.IdempotencyKey as string,
