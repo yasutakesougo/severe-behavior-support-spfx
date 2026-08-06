@@ -1,4 +1,5 @@
 import type {
+  AssessmentScoreSourceRecord,
   CriterionResult,
   EvaluationInput,
   Finding,
@@ -53,4 +54,47 @@ export const SYNTHETIC_VALID_EVALUATION_INPUT: EvaluationInput = Object.freeze({
   systemErrorCount: 0,
   approvalRequired: true,
   approved: true,
+});
+
+export const SYNTHETIC_SCORE_SOURCE_VALID_SCORE_18: AssessmentScoreSourceRecord = Object.freeze({
+  sourceReferenceId: "synthetic-source-ref-001",
+  score: 18,
+  validFrom: "2026-01-01",
+  validTo: "2026-12-31",
+  confirmedAt: "2026-01-02T10:00:00Z",
+  confirmedBy: "synthetic-user-001",
+});
+
+export const SYNTHETIC_SCORE_SOURCE_VALID_SCORE_ZERO: AssessmentScoreSourceRecord = Object.freeze({
+  sourceReferenceId: "synthetic-source-ref-002",
+  score: 0,
+  validFrom: "2026-01-01",
+  validTo: "2026-12-31",
+  confirmedAt: "2026-01-02T10:00:00Z",
+  confirmedBy: "synthetic-user-002",
+});
+
+export const SYNTHETIC_SCORE_SOURCE_UNCONFIRMED: AssessmentScoreSourceRecord = Object.freeze({
+  sourceReferenceId: "synthetic-source-ref-003",
+  score: 12,
+  validFrom: "2026-01-01",
+  validTo: "2026-12-31",
+});
+
+export const SYNTHETIC_SCORE_SOURCE_EXPIRED: AssessmentScoreSourceRecord = Object.freeze({
+  sourceReferenceId: "synthetic-source-ref-004",
+  score: 15,
+  validFrom: "2024-01-01",
+  validTo: "2024-12-31",
+  confirmedAt: "2024-01-02T10:00:00Z",
+  confirmedBy: "synthetic-user-001",
+});
+
+export const SYNTHETIC_SCORE_SOURCE_INVALID_RANGE: AssessmentScoreSourceRecord = Object.freeze({
+  sourceReferenceId: "synthetic-source-ref-005",
+  score: 10,
+  validFrom: "2026-12-31",
+  validTo: "2026-01-01",
+  confirmedAt: "2026-01-02T10:00:00Z",
+  confirmedBy: "synthetic-user-001",
 });

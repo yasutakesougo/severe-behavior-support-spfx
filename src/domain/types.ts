@@ -128,3 +128,64 @@ export type EvaluationInput = Readonly<{
   approvalRequired: boolean;
   approved: boolean;
 }>;
+
+export type AssessmentScoreSourceRecord = Readonly<{
+  sourceReferenceId: string;
+  score: unknown;
+  validFrom: string;
+  validTo: string;
+  confirmedAt?: string;
+  confirmedBy?: string;
+}>;
+
+export type AssessmentSourceLookupResult =
+  | Readonly<{
+      status: "FOUND";
+      value: readonly AssessmentScoreSourceRecord[];
+    }>
+  | Readonly<{
+      status: "EMPTY";
+    }>
+  | Readonly<{
+      status: "FETCH_FAILED";
+      code: string;
+    }>;
+
+export type AssessmentSourceValidityStatus =
+  | "VALID"
+  | "MISSING"
+  | "UNCONFIRMED"
+  | "EXPIRED"
+  | "CONFLICT"
+  | "FETCH_FAILED"
+  | "MALFORMED";
+
+export type AssessmentSourceDecision =
+  | Readonly<{
+      decision: "VALID";
+      source: AssessmentScoreSourceRecord;
+      score: BehaviorRelatedScore;
+    }>
+  | Readonly<{
+      decision: "MISSING";
+    }>
+  | Readonly<{
+      decision: "UNCONFIRMED";
+      sources: readonly AssessmentScoreSourceRecord[];
+    }>
+  | Readonly<{
+      decision: "EXPIRED";
+      sources: readonly AssessmentScoreSourceRecord[];
+    }>
+  | Readonly<{
+      decision: "CONFLICT";
+      sources: readonly AssessmentScoreSourceRecord[];
+    }>
+  | Readonly<{
+      decision: "FETCH_FAILED";
+      code: string;
+    }>
+  | Readonly<{
+      decision: "MALFORMED";
+      reason: string;
+    }>;
