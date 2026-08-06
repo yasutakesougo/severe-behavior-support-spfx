@@ -66,8 +66,8 @@ SHA、Issue、PR、HOLD、禁止操作、検証結果を欠落させず、作業
 ## 判定基準
 
 - `PASS`: この Skill では原則使用しない。Gate 通過の意味ではなく、引き継ぎ完了の補助表現にも使わない
-- `READY`: 引き継ぎ文面だけで現状態を再現できる
-- `HOLD`: SHA、Issue、PR、HOLD、検証結果のいずれかが不足
+- `READY`: 引き継ぎ文書判定として、文面だけで現状態を再現できる
+- `HOLD`: 引き継ぎ文書判定では、SHA、Issue、PR、HOLD、検証結果のいずれかが不足している。プロジェクト進行判定では、承認待ちや未解決事項により次工程へ進めない
 - `FAIL`: 誤った SHA や誤った対象を引き継ぐ恐れが高い。P0 は誤対象への継続作業、P1 は重要な証跡欠落、P2 は補足不足として扱う
 - `NOT APPLICABLE`: 引き継ぎが不要な単発作業
 
@@ -77,6 +77,8 @@ SHA、Issue、PR、HOLD、禁止操作、検証結果を欠落させず、作業
 - 現在の main SHA
 - 対象 Issue
 - 対象 PR
+- 引き継ぎ文書判定
+- プロジェクト進行判定
 - 完了事項
 - 未完了事項
 - HOLD
@@ -100,7 +102,8 @@ SHA、Issue、PR、HOLD、禁止操作、検証結果を欠落させず、作業
 # handoff-builder
 
 ## Summary
-- 判定: READY / HOLD / FAIL / NOT APPLICABLE
+- 引き継ぎ文書判定: READY / HOLD / FAIL / NOT APPLICABLE
+- プロジェクト進行判定: READY / HOLD / FAIL / NOT APPLICABLE
 - 対象リポジトリ:
 - main SHA:
 - 作業ブランチ SHA:

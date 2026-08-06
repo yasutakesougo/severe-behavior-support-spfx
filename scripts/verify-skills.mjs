@@ -56,6 +56,12 @@ const readMarkdownDirectories = async () => {
     .sort();
 };
 
+const getSectionContent = (content, heading) => {
+  const escapedHeading = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const sectionPattern = new RegExp(`^${escapedHeading}\\n([\\s\\S]*?)(?=^##\\s|\\Z)`, "m");
+  return content.match(sectionPattern)?.[1] ?? "";
+};
+
 for (const relativePath of requiredProcessFiles) {
   if (!(await exists(path.join(root, relativePath)))) {
     failures.push(`Missing required process file: ${relativePath}`);
@@ -97,13 +103,17 @@ for (const directoryName of skillDirectories) {
     }
   }
 
-  const hasSeverityReference = requiredSeverities.some((severity) => content.includes(severity));
-  if (!hasSeverityReference) {
+  const hasAllSeverityReferences = requiredSeverities.every((severity) => content.includes(severity));
+  if (!hasAllSeverityReferences) {
     failures.push(`Missing severity reference (P0/P1/P2) in ${skillFileRelativePath}`);
   }
 
+  const forbiddenSection = getSectionContent(content, "## 禁止事項");
+  if (!forbiddenSection.trim()) {
+    failures.push(`Missing forbidden section content in ${skillFileRelativePath}`);
+  }
   for (const operation of forbiddenOperations) {
-    if (!content.includes(operation)) {
+    if (!forbiddenSection.includes(operation)) {
       failures.push(`Missing forbidden operation reference "${operation}" in ${skillFileRelativePath}`);
     }
   }

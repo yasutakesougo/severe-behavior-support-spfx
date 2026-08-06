@@ -42,8 +42,9 @@
 - P1: 既存工程文書との不整合
 - P2: 文言の改善余地
 
-## HOLD
-- 匿名化した試行 Issue の選定待ち
-
 ## Done Criteria
 - 完了条件: 4 Skill と verify:skills が repo に追加されている
+
+## Next Actions
+1. 匿名化した試行 Issue を選定する
+2. 次の実装 Issue で 4 Skill を運用試行する

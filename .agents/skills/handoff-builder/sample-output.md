@@ -1,7 +1,8 @@
 # handoff-builder sample
 
 ## Summary
-- 判定: READY
+- 引き継ぎ文書判定: READY
+- プロジェクト進行判定: HOLD
 - 対象リポジトリ: severe-behavior-support-spfx
 - main SHA: 1234567
 - 作業ブランチ SHA: abcdef1
