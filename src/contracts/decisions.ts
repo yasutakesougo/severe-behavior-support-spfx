@@ -55,12 +55,20 @@ export const evaluateAccess = (input: {
   return { decision: "ALLOW", reason: "ROLE_ALLOWED" };
 };
 
-const sameStoredRecord = (left: ExecutionRecord, right: ExecutionRecord): boolean =>
+const sameProcedure = (left: ExecutionRecord["Procedure"], right: ExecutionRecord["Procedure"]): boolean =>
+  left.ProcedureId === right.ProcedureId &&
+  left.ProcedureVersion === right.ProcedureVersion &&
+  left.ApprovalState === right.ApprovalState;
+
+const sameExecutionRecord = (left: ExecutionRecord, right: ExecutionRecord): boolean =>
   left.OrganizationId === right.OrganizationId &&
   left.SiteId === right.SiteId &&
   left.UserId === right.UserId &&
+  left.TimeZone === right.TimeZone &&
   left.RecordId === right.RecordId &&
   left.IdempotencyKey === right.IdempotencyKey &&
+  sameProcedure(left.Procedure, right.Procedure) &&
+  left.LocalDate === right.LocalDate &&
   left.PayloadFingerprint === right.PayloadFingerprint;
 
 export const classifyExecutionSubmission = (
@@ -117,9 +125,6 @@ export const classifyExecutionSubmission = (
     };
   }
 
-  // The branches above exhaust every non-FOUND combination. Keep an explicit
-  // fail-closed guard so TypeScript and future status additions cannot expose
-  // a lookup value without first proving both results are FOUND.
   if (recordLookup.status !== "FOUND" || idempotencyLookup.status !== "FOUND") {
     return { decision: "REJECT_LOOKUP_UNAVAILABLE", reason: "UNKNOWN" };
   }
@@ -127,7 +132,7 @@ export const classifyExecutionSubmission = (
   const byRecordId = recordLookup.value;
   const byIdempotencyKey = idempotencyLookup.value;
 
-  if (!sameStoredRecord(byRecordId, byIdempotencyKey)) {
+  if (!sameExecutionRecord(byRecordId, byIdempotencyKey)) {
     return {
       decision: "REJECT_DUPLICATE_CONFLICT",
       RecordId: byRecordId.RecordId,
@@ -139,7 +144,7 @@ export const classifyExecutionSubmission = (
   const sameIdempotencyKey = byRecordId.IdempotencyKey === incoming.IdempotencyKey;
   const samePayload = byRecordId.PayloadFingerprint === incoming.PayloadFingerprint;
 
-  if (sameRecordId && sameIdempotencyKey && samePayload) {
+  if (sameExecutionRecord(byRecordId, incoming)) {
     return { decision: "DUPLICATE_REPLAY", RecordId: byRecordId.RecordId };
   }
   if (sameRecordId && !sameIdempotencyKey) {
@@ -161,6 +166,13 @@ export const classifyExecutionSubmission = (
       decision: "REJECT_DUPLICATE_CONFLICT",
       RecordId: byRecordId.RecordId,
       reason: "PAYLOAD_MISMATCH",
+    };
+  }
+  if (sameRecordId && sameIdempotencyKey && samePayload) {
+    return {
+      decision: "REJECT_DUPLICATE_CONFLICT",
+      RecordId: byRecordId.RecordId,
+      reason: "RECORD_CONTEXT_MISMATCH",
     };
   }
 
