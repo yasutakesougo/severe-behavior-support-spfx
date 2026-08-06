@@ -36,6 +36,16 @@ describe("SupportPlan Contract & Fail-Closed Validation", () => {
     assert.equal(validateSupportPlan(active), true);
   });
 
+  it("完全な差戻し履歴を持つ正常なActiveを受理する", () => {
+    const activeWithReturnHistory = createSyntheticActivePlan({
+      returnedBy: "synthetic-manager-001",
+      returnedAt: "2026-08-06T12:00:00.000Z",
+      returnReasonCode: "SYNTHETIC_REASON_REVISE_GOALS",
+      returnReasonText: "synthetic return text detail",
+    } as unknown as Partial<SupportPlan>);
+    assert.equal(validateSupportPlan(activeWithReturnHistory), true);
+  });
+
   it("正常なClosedを受理する", () => {
     const closed = createSyntheticClosedPlan();
     assert.equal(validateSupportPlan(closed), true);

@@ -112,13 +112,18 @@ export type SupportPlanState =
       }>)
   | (SupportPlanBase &
       SubmissionHistory &
+      (
+        | Readonly<{
+            returnedBy?: never;
+            returnedAt?: never;
+            returnReasonCode?: never;
+            returnReasonText?: never;
+          }>
+        | ReturnHistory
+      ) &
       ApprovalHistory &
       Readonly<{
         status: "Active";
-        returnedBy?: never;
-        returnedAt?: never;
-        returnReasonCode?: never;
-        returnReasonText?: never;
         effectiveTo?: string;
         closedBy?: never;
         closedAt?: never;
@@ -140,26 +145,6 @@ export type SupportPlanState =
       CloseHistory &
       Readonly<{
         status: "Closed";
-      }>)
-  | (SupportPlanBase &
-      SubmissionHistory &
-      (
-        | Readonly<{
-            returnedBy?: never;
-            returnedAt?: never;
-            returnReasonCode?: never;
-            returnReasonText?: never;
-          }>
-        | ReturnHistory
-      ) &
-      ApprovalHistory &
-      Readonly<{
-        status: "Active";
-        effectiveTo?: string;
-        closedBy?: never;
-        closedAt?: never;
-        closeReasonCode?: never;
-        closeReasonText?: never;
       }>);
 
 /**
