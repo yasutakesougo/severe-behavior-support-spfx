@@ -21,6 +21,10 @@ const roles: readonly Role[] = [
 ];
 
 const isRole = (value: unknown): value is Role => roles.includes(value as Role);
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+const isNonEmptyString = (value: unknown): value is string =>
+  typeof value === "string" && value.trim().length > 0;
 
 export const evaluateAccess = (input: {
   context: DeploymentContext;
@@ -33,11 +37,13 @@ export const evaluateAccess = (input: {
   if (input.identity.status === "UNKNOWN") return { decision: "DENY", reason: "AUTH_UNKNOWN" };
   if (input.identity.status === "FETCH_FAILED") return { decision: "DENY", reason: "AUTH_FETCH_FAILED" };
 
-  const identity = input.identity.value;
+  const identity: unknown = input.identity.value;
   if (
-    identity.Subject.trim().length === 0 ||
-    identity.OrganizationId.trim().length === 0 ||
-    identity.SiteId.trim().length === 0
+    !isRecord(identity) ||
+    !isNonEmptyString(identity.Subject) ||
+    !isNonEmptyString(identity.OrganizationId) ||
+    !isNonEmptyString(identity.SiteId) ||
+    !Array.isArray(identity.Roles)
   ) {
     return { decision: "DENY", reason: "INVALID_IDENTITY" };
   }
@@ -45,7 +51,9 @@ export const evaluateAccess = (input: {
     return { decision: "DENY", reason: "ORGANIZATION_MISMATCH" };
   }
   if (identity.SiteId !== input.context.SiteId) return { decision: "DENY", reason: "SITE_MISMATCH" };
-  if (input.requiredRoles.length === 0) return { decision: "DENY", reason: "NO_REQUIRED_ROLE" };
+  if (!Array.isArray(input.requiredRoles) || input.requiredRoles.length === 0) {
+    return { decision: "DENY", reason: "NO_REQUIRED_ROLE" };
+  }
   if (!identity.Roles.every(isRole) || !input.requiredRoles.every(isRole)) {
     return { decision: "DENY", reason: "UNKNOWN_ROLE" };
   }
@@ -86,6 +94,12 @@ export const classifyExecutionSubmission = (
   }
   if (recordLookup.status === "UNKNOWN" || idempotencyLookup.status === "UNKNOWN") {
     return { decision: "REJECT_LOOKUP_UNAVAILABLE", reason: "UNKNOWN" };
+  }
+  if (
+    (recordLookup.status === "FOUND" && !validateExecutionRecord(recordLookup.value).ok) ||
+    (idempotencyLookup.status === "FOUND" && !validateExecutionRecord(idempotencyLookup.value).ok)
+  ) {
+    return { decision: "REJECT_LOOKUP_UNAVAILABLE", reason: "INVALID_LOOKUP_RESULT" };
   }
 
   if (recordLookup.status === "EMPTY" && idempotencyLookup.status === "EMPTY") {
