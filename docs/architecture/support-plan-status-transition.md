@@ -103,6 +103,43 @@ SupportPlanStatusTransitionResult =
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
 
+## レビュー・テスト・完了判定基準（正本）
+
+PR #74 および本技術契約のレビュー・テスト・完了判定は、次の境界だけを正本とする。
+
+### IN（実装対象）
+
+```text
+Draft -> PendingReview
+PendingReview -> Returned
+Returned -> Draft
+PendingReview -> Active
+Active -> Closed
+上記以外の fail-closed 拒否（INVALID_TRANSITION / MALFORMED_INPUT）
+技術契約
+domain 純関数
+unit / contract tests
+```
+
+### 混入禁止（差分に入った時点でスコープ逸脱）
+
+```text
+ロール判定
+Active 一意性
+観察期間
+見直し期限
+RuleSetVersion
+SharePoint
+repository 永続化
+SPFx / UI
+```
+
+判定規則:
+
+1. IN 以外の業務ロジック・永続化・UI・ロール判定が差分へ入ったら **スコープ逸脱** とする。
+2. テストは許可5辺と fail-closed 拒否（禁止辺・malformed）の充足だけで完了判定する。
+3. 混入禁止対象の未実装は欠陥ではなく、本単位の正常な OUT とする。
+
 ## 変更禁止境界
 
 ```text
