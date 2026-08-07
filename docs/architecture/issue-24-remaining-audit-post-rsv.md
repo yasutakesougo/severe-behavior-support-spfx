@@ -24,6 +24,7 @@ SharePoint / M365: 変更なし
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
 - 先行選定: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)
 - 直前完了契約: [`ruleset-version-selection.md`](./ruleset-version-selection.md)
+- 残 Decision 分類: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 ## 監査手順結果
 

@@ -7,7 +7,8 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 706b8f1004070b196249a48d1d996be1210295c3
+main: 18a765ca2df74683fcc1ad9e80b6abeb2b5f649f
+PR #85 / remaining audit post-RSV: MERGED
 PR #84 / RuleSetVersion selection: MERGED
 PR #72 / PR-H: MERGED
 PR #41: MERGED
@@ -16,6 +17,7 @@ Issue #24 ownership comment: 5204768249
 Issue #17 ownership comment: 5204771950
 Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining-audit-pr-i-selection.md
 Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-audit-post-rsv.md
+Issue #24 Decision backlog: docs/architecture/issue-24-decision-backlog.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -211,7 +213,9 @@ PR-I以降（未割当・HOLD）:
 Handoff transition、Severity、完全Finding、
 AssessmentSnapshot完全契約、audit write boundary、
 Finding 再オープン Decision、FindingCode 業務カタログ、
-Decision-OP-3 / Decision-RD-3
+Decision-OP-3 / Decision-RD-3。
+残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
+（Next pure unit: NONE / Implementation Start: HOLD）
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
