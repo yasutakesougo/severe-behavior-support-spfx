@@ -758,3 +758,49 @@ export function evaluateObservationPeriodMembership(
 
   return "OUTSIDE_PERIOD";
 }
+
+// ==========================================
+// Review due relative to asOf (Issue #24)
+// Technical contract: docs/architecture/review-due.md
+// Decision-RD-1: Accepted comment 5213210051
+// Decision-RD-2: Accepted comment 5213213260
+// ==========================================
+
+export type ReviewDueRelativeResult =
+  | "BEFORE_DUE"
+  | "DUE"
+  | "OVERDUE"
+  | "MALFORMED_INPUT";
+
+/**
+ * Evaluate caller-supplied reviewDueDate relative to asOf on Asia/Tokyo calendar days.
+ *
+ * - BEFORE_DUE: asOfDay < dueDay
+ * - DUE: asOfDay === dueDay
+ * - OVERDUE: asOfDay > dueDay
+ * - Fail-closed: invalid inputs → MALFORMED_INPUT
+ *
+ * Due-date calculation, institutional approaching-day policy (Decision-RD-3),
+ * RuleSetVersion selection, persistence, and UI are out of scope.
+ */
+export function evaluateReviewDueRelativeToAsOf(
+  reviewDueDate: unknown,
+  asOf: unknown,
+): ReviewDueRelativeResult {
+  const dueDay = toAsiaTokyoCalendarDay(reviewDueDate);
+  const asOfDay = toAsiaTokyoCalendarDay(asOf);
+
+  if (dueDay === null || asOfDay === null) {
+    return "MALFORMED_INPUT";
+  }
+
+  if (asOfDay < dueDay) {
+    return "BEFORE_DUE";
+  }
+
+  if (asOfDay === dueDay) {
+    return "DUE";
+  }
+
+  return "OVERDUE";
+}
