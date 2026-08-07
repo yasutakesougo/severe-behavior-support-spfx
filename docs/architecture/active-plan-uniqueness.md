@@ -37,17 +37,34 @@ Closed
 
 ## 対象期間
 
-Active期間は `effectiveFrom` から `effectiveTo` までの閉区間として扱う。
+Issue #26 の `SupportPlan` では `effectiveFrom` / `effectiveTo` は **ISO DateTime** である。
 
-`effectiveTo` が未設定の場合は開放終端として扱う。
+本一意性判定では、それらを瞬間値のまま比較しない。各境界を `Asia/Tokyo` の **暦日 `YYYY-MM-DD`** へ変換したうえで、Active期間を暦日の閉区間として扱う。
 
-同一判定単位に属する2件以上のActive計画について、期間が1日でも重複すれば競合とする。
+```text
+activeDayFrom = calendarDate(effectiveFrom, Asia/Tokyo)
+activeDayTo   = effectiveTo 未設定
+                ? +∞（開放終端）
+                : calendarDate(effectiveTo, Asia/Tokyo)
+Active期間    = [activeDayFrom, activeDayTo]   // 両端含む暦日閉区間
+```
+
+同一判定単位に属する2件以上のActive計画について、暦日閉区間が1日でも共有されれば競合とする。
 
 完全一致だけを競合条件にはしない。
 
+同日境界の例（いずれも CONFLICT）:
+
+```text
+A.effectiveTo の東京暦日 == B.effectiveFrom の東京暦日
+A と B の DateTime 瞬間が非重複でも、暦日が共有されれば CONFLICT
+```
+
+DateTime 瞬間の半開区間比較や、タイムゾーン未指定の文字列日付比較は用いない。
+
 ## 結果
 
-純関数は少なくとも次の判別可能な結果を返す。
+純関数は入力配列全体に対して、次のいずれか1つを返す。
 
 ```text
 UNIQUE
@@ -55,17 +72,41 @@ CONFLICT
 MALFORMED_INPUT
 ```
 
-`UNIQUE` は、入力が妥当であり、同一判定単位のActive計画間に期間重複が存在しない場合だけ返す。
+### 単一判定単位内の意味
 
-`CONFLICT` は、同一 `OrganizationId + SiteId + UserId` に属するActive計画の期間が重複する場合に返す。
+`UNIQUE` は、その判定単位の入力が妥当であり、Active計画間に暦日期間重複が存在しない場合に成立する。
 
-`MALFORMED_INPUT` は、判定に必要な入力が欠損・不正で安全に判定できない場合に返す。
+`CONFLICT` は、同一 `OrganizationId + SiteId + UserId` に属するActive計画の暦日期間が重複する場合に成立する。
+
+`MALFORMED_INPUT` は、判定に必要な入力が欠損・不正で安全に判定できない場合に成立する。
 
 不正入力を無視して `UNIQUE` へ倒さない。
+
+### 複数判定単位を含む配列の集約（必須）
+
+入力 `readonly SupportPlan[]` は複数の `OrganizationId + SiteId + UserId` を含んでよい。関数は内部で判定単位ごとにグループ化したうえで、配列全体へ単一結果を返す。
+
+集約の優先順位（上から適用）:
+
+1. 入力のいずれかの要素が判定不能（必須識別子欠損、不正status、Active の不正日付、`effectiveFrom` の暦日が `effectiveTo` の暦日より後、など）なら、配列全体を `MALFORMED_INPUT` とする。
+2. そうでなく、いずれかの判定単位で Active 期間競合があれば、配列全体を `CONFLICT` とする。
+3. すべての判定単位が妥当かつ非競合なら、配列全体を `UNIQUE` とする。
+
+空配列は判定単位が0件であり `UNIQUE` とする（Active 0件と同じ）。
+
+UserId が同じでも SiteId または OrganizationId が異なれば別判定単位とし、相互の Active 期間を競合させない。
 
 ## 純関数境界
 
 入力は Issue #26 の `SupportPlan` 契約を利用する `readonly SupportPlan[]` とする。
+
+推奨シグネチャ（名前は実装で固定してよいが、入出力の意味は変えない）:
+
+```ts
+evaluateActivePlanUniqueness(
+  plans: readonly SupportPlan[]
+): "UNIQUE" | "CONFLICT" | "MALFORMED_INPUT"
+```
 
 判定関数自身は次へ依存しない。
 
@@ -85,9 +126,11 @@ Microsoft 365
 ## IN
 
 - `OrganizationId + SiteId + UserId` 単位のグループ化
+- 複数判定単位を含む配列の単一結果集約（MALFORMED > CONFLICT > UNIQUE）
 - `Active` のみを対象とする判定
 - Active期間の重複判定
-- 閉区間境界の判定
+- ISO DateTime → `Asia/Tokyo` 暦日変換
+- 暦日閉区間境界の判定
 - `effectiveTo` 未設定の開放終端
 - `UNIQUE / CONFLICT / MALFORMED_INPUT`
 - fail-closed
@@ -110,19 +153,22 @@ Microsoft 365
 
 ## 必須テスト境界
 
-- Active 0件 → UNIQUE
+- Active 0件（空配列含む） → UNIQUE
 - Active 1件 → UNIQUE
-- 同一判定単位で非重複Active 2件 → UNIQUE
+- 同一判定単位で非重複Active 2件（東京暦日が隣接しない） → UNIQUE
 - 同一判定単位で完全一致Active 2件 → CONFLICT
 - 同一判定単位で部分重複Active 2件 → CONFLICT
-- 一方の終了日と他方の開始日が同日 → CONFLICT
-- `effectiveTo` 未設定Activeと後続Activeが重複 → CONFLICT
+- 一方の `effectiveTo` と他方の `effectiveFrom` の東京暦日が同日 → CONFLICT（DateTime瞬間が非重複でも可）
+- `effectiveTo` 未設定Activeと後続Activeが東京暦日で重複 → CONFLICT
+- 複数判定単位を含み、1単位だけ CONFLICT → 配列全体 CONFLICT
+- 複数判定単位を含み、全単位 UNIQUE、かつ不正なし → 配列全体 UNIQUE
+- 複数判定単位を含み、1件でも MALFORMED → 配列全体 MALFORMED_INPUT（CONFLICT より優先）
 - UserIdが同じでもSiteIdが異なる → 相互に競合させない
 - SiteIdが同じでもOrganizationIdが異なる → 相互に競合させない
 - Draft / PendingReview / Returned / Closed は競合数へ含めない
 - 必須識別子欠損 → MALFORMED_INPUT
 - 不正日付 → MALFORMED_INPUT
-- `effectiveFrom > effectiveTo` → MALFORMED_INPUT
+- `effectiveFrom` の東京暦日が `effectiveTo` の東京暦日より後 → MALFORMED_INPUT
 - 不正status等の壊れた入力をUNIQUEへ倒さない
 
 ## Entry Criteria
