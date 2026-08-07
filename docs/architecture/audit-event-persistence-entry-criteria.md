@@ -16,11 +16,14 @@ Decision-AUD-WR-1: Accepted (Issue #17 comment 5215846338)
 Decision-AUD-ALIGN-1: Accepted
 Decision-AUD-IDEM-1: Accepted
 Decision-AUD-SAN-VALUE-1: Accepted
-Decision-AUD-SAN-1: HOLD（validateAuditEvent hardening 未了）
+Decision-AUD-SAN-1: Accepted
+AuditEvent contract hardening: MERGED（PR #102）
 Handoff AuditEvent candidate: PR #96 MERGED
 AuditEvent persistence technical contract: MERGED
-Next: AuditEvent contract hardening
-AuditEvent persistence implementation: HOLD
+Technical Persistence Entry: PASS
+Canonical documentation: SYNCHRONIZED（this docs update）
+Next: Persistence Entry Review final rerun
+AuditEvent persistence implementation: HOLD pending final Entry Review PASS + human GO
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
 
@@ -52,16 +55,17 @@ SharePoint / Microsoft 365 / Deploy: NO-GO
 ```text
 Entry Criteria for persistence technical contract: MET
 AuditEvent persistence technical contract: MERGED（PR #99）
-ALIGN / IDEM / SAN-VALUE: Accepted
-Next: AuditEvent contract hardening（Decision-AUD-SAN-1 HOLD）
-AuditEvent persistence implementation: HOLD
+ALIGN / IDEM / SAN-VALUE / SAN-1: Accepted
+AuditEvent contract hardening: MERGED（PR #102）
+Next: Persistence Entry Review final rerun
+AuditEvent persistence implementation: HOLD pending final Entry Review PASS + human GO
 SharePoint adapter / M365 / Deploy: NO-GO
 ```
 
 ## 実装前に引き続き必要なこと
 
-- `validateAuditEvent` を Decision-AUD-SAN-VALUE-1 に適合させる contract hardening
-- Decision-AUD-SAN-1 クリア後の Persistence Entry Review 再実行
+- Persistence Entry Review final rerun（ENTRY-00〜12）
+- 明示的な human GO（Entry ALL PASS 後）
 - physical SharePoint mapping は #29 後
 
 正本:
@@ -71,8 +75,8 @@ SharePoint adapter / M365 / Deploy: NO-GO
 
 ## 禁止
 
-- docs-only 契約 MERGED / Decision Accepted を implementation GO と読み替えること
-- Decision-AUD-SAN-1 を Accepted と偽証すること
+- docs-only 契約 MERGED / Decision Accepted / hardening MERGED を implementation GO と読み替えること
+- Persistence Entry Review final rerun と human GO を省略すること
 - SharePoint List / 列作成
 - concrete adapter 実装
 - Microsoft 365 変更
@@ -87,5 +91,5 @@ Entra ID changes: NO-GO
 Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
-persistence code: HOLD until Decision-AUD-SAN-1 cleared
+persistence code: HOLD pending final Entry Review PASS + explicit human GO
 ```

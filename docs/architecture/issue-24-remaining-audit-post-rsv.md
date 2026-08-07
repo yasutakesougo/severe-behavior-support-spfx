@@ -92,7 +92,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE **Accepted**。次は contract hardening（Decision-AUD-SAN-1 HOLD）。正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)
+2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1 **Accepted**。hardening MERGED（PR #102）。次は Persistence Entry Review final rerun。正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
@@ -113,7 +113,7 @@ Implementation Start: HOLD
 - FindingCode カタログの暗黙採択
 - Decision-FLR-1 に反する再オープン辺の追加（Accepted: 不許可）
 - AuditLog 保存期間・書込先の推測採択
-- AuditEvent 実保存 / SharePoint adapter（Entry Criteria 未充足）
+- AuditEvent 実保存 / SharePoint adapter（Persistence Entry Review final rerun + human GO まで HOLD）
 - OP-3 / RD-3 の制度値埋め込み
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
@@ -134,10 +134,10 @@ Deploy: NO-GO
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
 - FindingSeverity / 完全 Finding が未了
-- AuditEvent 実保存実装（contract hardening / Decision-AUD-SAN-1 HOLD）が未了
+- AuditEvent 実保存実装（Persistence Entry Review final rerun + human GO 待ち）が未了
 
-Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / persistence technical contract（PR #99）は完了扱い。
-Close ブロッカーから外す。本当の次ブロッカーは AuditEvent contract hardening（実装前）。
+Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / persistence technical contract（PR #99）/ contract hardening（PR #102）は完了扱い。
+Close ブロッカーから外す。本当の次ブロッカーは Persistence Entry Review final rerun（実装前）。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 

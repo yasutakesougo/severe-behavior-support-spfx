@@ -78,7 +78,7 @@ CONFLICT
 
 - AuditEvent identity 写像の詳細 → [`decision-aud-idem-1-audit-event-idempotency.md`](./decision-aud-idem-1-audit-event-idempotency.md)
 - 値安全性 hardening → [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)
-- `validateAuditEvent` 実装 hardening（Decision-AUD-SAN-1 が HOLD の間は未了）
+- `validateAuditEvent` 実装 hardening → MERGED（PR #102）/ Decision-AUD-SAN-1 Accepted
 - TypeScript persistence port / repository 実装
 - SharePoint adapter（`#22B`）/ 物理構成（`#29`）
 - Microsoft 365 / deploy
@@ -90,9 +90,10 @@ Decision-AUD-ALIGN-1: Accepted
 Persistence technical contract: MERGED
 Decision-AUD-IDEM-1: Accepted（別正本）
 Decision-AUD-SAN-VALUE-1: Accepted（別正本）
-Decision-AUD-SAN-1: HOLD（contract hardening 未了）
-AuditEvent contract hardening: NEXT
-Persistence implementation: HOLD
+Decision-AUD-SAN-1: Accepted
+AuditEvent contract hardening: MERGED（PR #102）
+Next: Persistence Entry Review final rerun
+Persistence implementation: HOLD pending final Entry Review PASS + human GO
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```

@@ -6,13 +6,22 @@ Review focus:
 - `AUD-RET-1` / `AUD-WR-1` Accepted 証跡が一致すること
 - persistence technical contract が MERGED（PR #99）であること
 - `Decision-AUD-ALIGN-1` / `AUD-IDEM-1` / `AUD-SAN-VALUE-1` が Accepted であること
-- `Decision-AUD-SAN-1` が HOLD のままであること（hardening 未了）
-- Persistence implementation を READY としないこと
+- `Decision-AUD-SAN-1` が Accepted であること（AuditEvent contract hardening MERGED / PR #102）
+- Persistence implementation を READY / GO としないこと
 - `SAVE_OUTCOME_UNKNOWN` を成功へ変換しないこと
 - blind retry を許可しないこと
 - retention と physical deletion を混同しないこと
 - SharePoint / adapter / deploy を混入しないこと
-- 次工程が AuditEvent contract hardening であること
+- 次工程が Persistence Entry Review final rerun であること
+
+Current conclusion:
+
+```text
+SAN-1: Accepted
+hardening: MERGED（PR #102）
+Next: final Persistence Entry Review
+Persistence implementation: HOLD pending final Entry Review PASS + human GO
+```
 
 未充足時は implementation gate を開かない。
 

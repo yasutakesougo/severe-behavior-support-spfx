@@ -30,8 +30,9 @@ Decision-AUD-IDEM-1: Accepted
 Decision-AUD-SAN-VALUE-1: Accepted
   → decision-aud-san-value-1-audit-event-value-safety.md
 
-Decision-AUD-SAN-1: HOLD
-  （validateAuditEvent が SAN-VALUE 契約に未適合）
+Decision-AUD-SAN-1: Accepted
+  AuditEvent contract hardening: MERGED（PR #102）
+  validateAuditEvent: Decision-AUD-SAN-VALUE-1 compliant on main
 
 AuditEvent type / validator: Issue #27
 Physical SharePoint structure: Issue #29
@@ -118,8 +119,8 @@ correlationId MUST NOT be used as IdempotencyKey
 保存前に既存 `validateAuditEvent` を必須とする。
 
 値安全性の契約正本は Decision-AUD-SAN-VALUE-1（Accepted）。
-**現行 `validateAuditEvent` はその契約に未適合**であり、hardening 後に Decision-AUD-SAN-1 をクリアするまで
-persistence 実装は HOLD とする。
+現行 `validateAuditEvent` は Decision-AUD-SAN-VALUE-1 に適合する（PR #102 MERGED / Decision-AUD-SAN-1 Accepted）。
+Persistence implementation は、最終 Entry Review PASS と明示的な human GO まで HOLD とする。
 
 次は fail-closed で拒否する。
 
@@ -212,14 +213,17 @@ AUD-WR-1: Accepted
 AUD-ALIGN-1: Accepted
 AUD-IDEM-1: Accepted
 AUD-SAN-VALUE-1: Accepted
-AUD-SAN-1: HOLD（validateAuditEvent hardening 未了）
+AUD-SAN-1: Accepted
+AuditEvent contract hardening: MERGED（PR #102）
 Persistence technical contract: MERGED（PR #99）
-Next: AuditEvent contract hardening
-Persistence implementation: HOLD
+Technical Persistence Entry: PASS
+Canonical documentation: SYNCHRONIZED（this docs update）
+Next: Persistence Entry Review final rerun
+Persistence implementation: HOLD pending final Entry Review PASS + human GO
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
 ```
 
-本契約 MERGED および ALIGN/IDEM/SAN-VALUE Accepted だけでは implementation GO にしない。
-Decision-AUD-SAN-1 クリア（hardening）後に Entry Review を再実行する。
+本契約 MERGED、ALIGN/IDEM/SAN-VALUE/SAN-1 Accepted、hardening MERGED だけでは implementation GO にしない。
+Persistence Entry Review final rerun で ENTRY-00〜12 を確認し、明示的な human GO 後にのみ実装を開始する。
