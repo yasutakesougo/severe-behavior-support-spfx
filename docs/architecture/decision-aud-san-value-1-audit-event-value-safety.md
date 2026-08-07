@@ -12,7 +12,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 main before this decision-doc update: 29b6ed2872ea475590c3c5bb8f7c946fa76f3616
 Decision ID: Decision-AUD-SAN-VALUE-1
 Status: Accepted
-Related HOLD: Decision-AUD-SAN-1（validateAuditEvent hardening 未了）
+Related: Decision-AUD-SAN-1 Accepted（validateAuditEvent hardening MERGED / PR #102）
 ```
 
 上位入口:
@@ -202,30 +202,34 @@ Client Secret
 
 ```text
 Decision-AUD-SAN-VALUE-1: Accepted
-Current validateAuditEvent: NOT YET COMPLIANT
-AuditEvent contract hardening: REQUIRED / NEXT
-Decision-AUD-SAN-1: HOLD
-Persistence implementation: HOLD
+Current validateAuditEvent: COMPLIANT ON MAIN（PR #102）
+AuditEvent contract hardening: MERGED
+Decision-AUD-SAN-1: Accepted
+Next: Persistence Entry Review final rerun
+Persistence implementation: HOLD pending final Entry Review PASS + human GO
 ```
 
-値契約 Accepted ≠ validator 実装完了。
+値契約 Accepted ≠ Persistence implementation GO。
+hardening MERGED / SAN-1 Accepted だけでは実装開始しない。
 
 ## 決めないこと
 
-- `validateAuditEvent` のコード変更（後続 hardening Work Order）
 - targetType enum への新値追加（別 Accepted Decision）
 - SemVer 必須化
 - 未知の max length 発明
 - SharePoint / adapter sanitizer
 - Microsoft 365 / deploy
 
+（`validateAuditEvent` hardening は後続 Work Order / PR #102 で実施済み）
+
 ## Gate
 
 ```text
 Decision-AUD-SAN-VALUE-1: Accepted
-Decision-AUD-SAN-1: HOLD pending contract hardening
-AuditEvent contract hardening: NEXT
-Persistence implementation: HOLD
+Decision-AUD-SAN-1: Accepted
+AuditEvent contract hardening: MERGED（PR #102）
+Next: Persistence Entry Review final rerun
+Persistence implementation: HOLD pending final Entry Review PASS + human GO
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```
