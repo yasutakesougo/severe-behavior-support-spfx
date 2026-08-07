@@ -13,7 +13,7 @@
 
 | 拡張機能 | ID / 検索名 | 用途 |
 |---|---|---|
-| ESLint | `dbaeumer.vscode-eslint` | コード品質チェック。Cursor の AI が Lint エラーを自動修正しやすくなる |
+| ESLint | `dbaeumer.vscode-eslint` | コード品質チェック。Cursor の AI が Lint エラーを自動修正しやすくなる。設定正本は `eslint.config.mjs`、実行は `npm run lint` |
 | Prettier | `esbenp.prettier-vscode` | コード自動フォーマット |
 | GitLens | `eamodio.gitlens` | Git 履歴・Blame・比較の可視化 |
 | Error Lens | `usernamehw.errorlens` | エラー・警告を行内に直接表示 |
