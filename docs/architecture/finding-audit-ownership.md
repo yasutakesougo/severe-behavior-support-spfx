@@ -29,8 +29,12 @@ Decision-HO-1（Accepted #17）: docs/architecture/decision-ho-1-handoff-transit
 AuditEvent 実保存 Entry Criteria: docs/architecture/audit-event-persistence-entry-criteria.md
 Decision-AUD-RET-1（Accepted）: docs/architecture/decision-aud-ret-1-auditlog-retention.md
 Decision-AUD-WR-1（Accepted / #22A）: docs/architecture/decision-aud-wr-1-audit-write-ownership.md
+Decision-AUD-ALIGN-1（Accepted）: docs/architecture/decision-aud-align-1-audit-event-write-result-alignment.md
+Decision-AUD-IDEM-1（Accepted）: docs/architecture/decision-aud-idem-1-audit-event-idempotency.md
+Decision-AUD-SAN-VALUE-1（Accepted）: docs/architecture/decision-aud-san-value-1-audit-event-value-safety.md
+Decision-AUD-SAN-1（HOLD / hardening）: validateAuditEvent が SAN-VALUE 未適合
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
-Next gate（#22A alignment）: docs/architecture/audit-event-persistence-22a-alignment-gate.md
+Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-gate.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -50,7 +54,7 @@ Next gate（#22A alignment）: docs/architecture/audit-event-persistence-22a-ali
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
 | Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。実保存は HOLD |
-| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。正本 [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)。次: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md) | 整合レビュー Accepted まで実装 HOLD |
+| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE Accepted。次: contract hardening（SAN-1 HOLD） | hardening 完了まで実装 HOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -66,7 +70,7 @@ Next gate（#22A alignment）: docs/architecture/audit-event-persistence-22a-ali
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-001〜017` | Deferred項目はHOLD |
-| 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary | 所有候補 | adapter・書込境界までHOLD |
+| 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening 未了 | Decision-AUD-SAN-1 HOLD |
 
 ## Decision分類
 
