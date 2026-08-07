@@ -106,7 +106,7 @@ Password / Token / Secret
 ## 対象外
 
 ```text
-AuditLog保存期間
+AuditLog保存期間（GOV-AUD-06 / DEC-011）
 SharePoint列mapping
 adapter write
 retry
@@ -116,3 +116,6 @@ UI
 real data
 deploy
 ```
+
+実保存へ進む前の確認単位:
+[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)
