@@ -49,6 +49,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | Issue #27 ownership | 型契約 | `5204763504` |
 | Issue #17 ownership | 運用設計案 | `5204771950` |
 | Finding lifecycle C0 | #24 所有確定 | `5209785751` |
+| Decision-FLR-1 | Finding reopen policy Accepted（不許可・実装 NONE） | docs 正本（本 PR）。Issue comment ID は API 403 のため未取得 |
 | FindingIdentity 組立 | Accepted / Start | `5210065336` / `5210078985` |
 | finding 再発 | Accepted / Start | `5210206944` / `5210210553` |
 | Snapshot Result変換 | Selection / Decision / Start | `5210366943` / `5210389077` / `5210392317` |
@@ -65,6 +66,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | 単位 | 正本 | 状態 |
 |---|---|---|
 | Finding lifecycle 許可3辺 | `finding-lifecycle-transition.md` | DONE（PR #64）。`Resolved` 終端 |
+| Finding reopen policy（Decision-FLR-1） | `decision-flr-1-finding-reopen-policy.md` | **Accepted**。再オープン不許可。実装 NONE |
 | FindingCode Identity 組立（caller-supplied） | `finding-identity-assembly.md` | DONE（PR #66） |
 | AssessmentSnapshot Result変換（永続なし） | `assessment-snapshot-result-conversion.md` | DONE（PR #72） |
 | 観察期間メンバシップ | `observation-period.md` | DONE（PR #79/#80）。`evaluateObservationPeriodMembership` |
@@ -77,7 +79,7 @@ Issue 本文・コメント全文の再取得は未実施。
 
 | Decision | 対象 | 現状 | 所有候補 | 依存 | Accepted後に可能になる作業 |
 |---|---|---|---|---|---|
-| **Decision-FLR-1** | Finding reopen policy（`Resolved`→?、再オープン可否と遷移先） | HOLD。許可3辺外。`FindingStatus` に `Closed` は無い（#27）。推測禁止 | Issue #24（lifecycle 所有は C0 `5209785751`。再オープン辺は未 Accepted） | 既存3辺契約を変更しないこと。辺の業務採択 | 許可辺 Accepted 後のみ、lifecycle 技術契約追記 → 狭域純関数拡張の候補選定 |
+| **Decision-FLR-1** | Finding reopen policy（`Resolved`→?、再オープン可否と遷移先） | **Accepted**。再オープン不許可。`Resolved` 終端維持。`Resolved → *` 禁止。実装 impact **NONE**（既存 `transitionFindingStatus` UNCHANGED）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) | Issue #24（lifecycle 所有は C0 `5209785751`） | 既存3辺契約を変更しないこと | **実装作業なし**。lifecycle 契約へ Accepted 追記のみ。新問題は生成・再発契約で扱う |
 | **Decision-HO-1** | Handoff transition ownership | HOLD。状態型は #27、運用案は #17。遷移関数所有は **未確定** | **未確定**（#24 へ自動割当しない。候補は人の指定） | `GOV-AUD-02`（実行ロール）と分離。所有指定はロール回答と独立に可能 | 所有 Issue 確定後のみ、許可辺 Decision → 技術契約 → 純関数候補 |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | HOLD。`DEC-001〜017` に Severity 正本なし | A: Issue #8 新DEC / B: Issue #27 technical decision | 方式選択前に値一覧を採択しない | 方式 Accepted 後に **Decision-SEV-2** へ進める |
 | **Decision-SEV-2** | Severity assignment boundary（値・意味・判定主体） | HOLD。値一覧・domain算出/caller-supplied 未決 | SEV-1 の選択結果に従う | **SEV-1** | 完全 Finding 契約の Severity 欄定義候補（実装は別 Entry Criteria） |
@@ -106,16 +108,18 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 
 ## Phase 2 — 領域別評価
 
-### A. Finding lifecycle 再オープン（Decision-FLR-1）
+### A. Finding lifecycle 再オープン（Decision-FLR-1）— Accepted
 
-確認結果（正本のみ）:
+正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
 
 | 問い | 正本根拠 | 結論 |
 |---|---|---|
-| `Resolved` → ? | `finding-lifecycle-transition.md`: Resolved 終端。再オープンは別 Decision | **未決**。辺を推測しない |
+| `Resolved` → ? | Decision-FLR-1 Accepted / lifecycle 契約 | **許可しない**（終端維持） |
 | `Closed` → ? | `FindingStatus` = Open/Confirmed/InProgress/Resolved のみ（#27 / PR #41） | Finding に `Closed` は **存在しない**。SupportPlan/Handoff の Closed と混同しない |
-| 再オープン許可するか | 契約に許可辺なし | **Decision 待ち** |
-| 許可する場合の遷移先 | 根拠なし | **推測禁止** |
+| 再オープン許可するか | Decision-FLR-1 | **不許可** |
+| 許可する場合の遷移先 | 不許可のため無し | N/A |
+| 実装 | Decision-FLR-1: impact NONE | `transitionFindingStatus` **UNCHANGED** |
+| 新しい問題 | Decision-FLR-1 | 再オープンせず、生成・再発の既存契約に従う |
 
 既存3辺（Open→Confirmed→InProgress→Resolved）は変更しない。
 
@@ -162,7 +166,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 監査結果と矛盾しない推奨順（依存がある場合は依存を先）:
 
 ```text
-1. Decision-FLR-1   Finding reopen policy
+1. Decision-FLR-1   Finding reopen policy — Accepted（実装 NONE）
 2. Decision-HO-1    Handoff transition ownership
 3. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）
 4. Decision-SEV-2   Severity assignment boundary（SEV-1 後）
@@ -173,7 +177,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 9. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
-注: PR #85 の「人が進める候補」順と、本指示の Handoff 優先を反映した。
+注: Decision-FLR-1 は Accepted（再オープン不許可・実装なし）。残順は Handoff 優先を維持。
 SEV は SEV-1→SEV-2、FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 
@@ -186,10 +190,11 @@ Implementation Start: HOLD
 
 判定理由:
 
-1. 残候補はいずれも未 Accepted Decision、所有未確定、制度/Schema、または `DEC-009` / `GOV-AUD` 依存
-2. 既存正本だけで入力・出力・fail-closed・IN/OUT を完全定義できる新単位は無い
-3. 業務判断（再オープン辺、Severity 値、FindingCode 一覧、制度日数、保存タイミング）を1つでも推測する必要がある
-4. PR #85 の NONE 判定を維持する
+1. Decision-FLR-1 は Accepted だが実装 impact NONE（新純関数単位を開かない）
+2. 残候補はいずれも未 Accepted Decision、所有未確定、制度/Schema、または `DEC-009` / `GOV-AUD` 依存
+3. 既存正本だけで入力・出力・fail-closed・IN/OUT を完全定義できる新単位は無い
+4. 業務判断（Severity 値、FindingCode 一覧、制度日数、保存タイミング）を1つでも推測する必要がある
+5. PR #85 の NONE 判定を維持する
 
 ## OUT / 混ぜないもの
 

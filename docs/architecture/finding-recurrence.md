@@ -103,7 +103,7 @@ RECURRENCE  ⇒ 別安定ID（period 差があるため）
 ## 対象外 / HOLD
 
 - FindingCode 業務カタログ
-- FindingStatus / lifecycle 再定義（Resolved 再オープン含む）
+- FindingStatus / lifecycle 再定義（再オープンは Decision-FLR-1 Accepted: 不許可。本関数は再定義しない）
 - AssessmentSnapshot 候補生成
 - 完全 Finding / FindingSeverity
 - Handoff transition

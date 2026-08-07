@@ -95,7 +95,9 @@ Resolved
 遷移純粋関数の所有者は **Issue #24**（C0 comment `5209785751`）。
 技術契約: [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。
 許可辺は Open→Confirmed→InProgress→Resolved の 3 辺のみ。Resolved 終端。
-再オープン、Severity、完全Finding、再発、Snapshot、Handoff は対象外。
+再オープンは **Decision-FLR-1 Accepted**（不許可・実装 NONE）。
+正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
+Severity、完全Finding、再発、Snapshot、Handoff は対象外。
 
 #### Handoff状態遷移関数
 
@@ -212,8 +214,10 @@ RuleSetVersion選択（#83/#84）。再監査: [`issue-24-remaining-audit-post-r
 PR-I以降（未割当・HOLD）:
 Handoff transition、Severity、完全Finding、
 AssessmentSnapshot完全契約、audit write boundary、
-Finding 再オープン Decision、FindingCode 業務カタログ、
+FindingCode 業務カタログ、
 Decision-OP-3 / Decision-RD-3。
+Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
+正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 （Next pure unit: NONE / Implementation Start: HOLD）
 ```
@@ -230,7 +234,6 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - Handoff状態遷移関数の所有Issue
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約
-- Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
 - FindingCode 業務カタログ
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
 - finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）
@@ -241,6 +244,9 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - AuditLog保存期間
 - 許可フィールド値のサニタイズ
 - SharePoint、Entra ID、Microsoft 365、deploy
+
+Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
+HOLD から外す。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 
 ## 変更禁止境界
 
