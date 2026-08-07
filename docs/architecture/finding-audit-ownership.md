@@ -33,7 +33,8 @@ Issue #17 ownership comment: 5204771950
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了 |
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
-| AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | Implementation Start GO（承認範囲のみ） |
+| AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
+| SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺・allow/deny only | Implementation GO（承認範囲のみ・PR-I） |
 | AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
@@ -185,9 +186,15 @@ Issue #24 finding再発判定（`docs/architecture/finding-recurrence.md`）
 PR-H:
 Issue #24 AssessmentSnapshot Result変換（狭域・永続なし）（`docs/architecture/assessment-snapshot-result-conversion.md`）
 
+PR-I:
+Issue #24 SupportPlan status transition（狭域・ロールなし）（`docs/architecture/support-plan-status-transition.md`）
+Decision Accepted `5211039927`。許可5辺・allow/deny only。
+Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI / repository永続化は OUT OF SCOPE。
+
 PR-I以降:
 Handoff transition、Severity、完全Finding、
-AssessmentSnapshot完全契約、audit write boundary
+AssessmentSnapshot完全契約、audit write boundary、
+Active一意性、観察期間、見直し期限計算、RuleSetVersion選択
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
@@ -198,6 +205,7 @@ PR-C以降は、それぞれの所有Issue、Decision、Entry Criteriaを記録�
 
 ## 継続HOLD
 
+- Active計画一意性、観察期間、見直し期限計算、RuleSetVersion選択（PR-I OUT OF SCOPE）
 - Handoff状態遷移関数の所有Issue
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約
