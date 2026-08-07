@@ -37,8 +37,8 @@ Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
 | AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD（DEC-009 / GOV-AUD） |
-| SupportPlan status transition（狭域・ロールなし） | 所有未確定 | Issue #26 PR #39 Out of Scope。PR-I候補として選定済み（`issue-24-remaining-audit-pr-i-selection.md`）。Issue #24へ自動割当しない | 所有 Decision + 許可辺 Decision まで Implementation GO HOLD |
-| Active計画一意性 / 観察期間 / 見直し期限計算 / RuleSetVersion選択 | 所有未確定 | Issue #26 PR #39 Out of Scope。PR-Iへ混ぜない | 所有・制度値 Decision までHOLD |
+| SupportPlan status transition（狭域・ロールなし） | Issue #24（Recommended） | PR-I候補。許可5辺固定案あり（`issue-24-remaining-audit-pr-i-selection.md` / Decision コメント案 `issue-24-pr-i-decision-comment-draft.md`）。GitHub Accepted 未記録 | Implementation GO HOLD（Accepted 待ち） |
+| Active計画一意性 / 観察期間 / 見直し期限計算 / RuleSetVersion選択 | Issue #24（後続候補・Recommended境界） | Issue #26 は型・Schema。純粋ルールは #24 側。PR-Iへ混ぜない | 各単位の Decision までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-001〜017` | Deferred項目はHOLD |
@@ -189,10 +189,12 @@ Issue #24 finding再発判定（`docs/architecture/finding-recurrence.md`）
 PR-H:
 Issue #24 AssessmentSnapshot Result変換（狭域・永続なし）（`docs/architecture/assessment-snapshot-result-conversion.md`）— 完了（PR #72）
 
-PR-I候補（選定済み・Implementation GO HOLD）:
+PR-I候補（選定済み・Recommended Decision 反映・Implementation GO HOLD）:
 SupportPlan status transition（狭域・ロールなし）。
 正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)。
-所有 Issue と許可辺 Decision の後にのみ実装開始する。
+Decision コメント案: [`issue-24-pr-i-decision-comment-draft.md`](./issue-24-pr-i-decision-comment-draft.md)。
+Recommended ownership = Issue #24。許可辺 = 5 辺のみ。
+GitHub Accepted 記録後にのみ Implementation GO / 実装開始する。
 
 PR-I以降（未割当・HOLD）:
 Handoff transition、Severity、完全Finding、

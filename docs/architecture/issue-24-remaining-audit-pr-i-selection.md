@@ -79,19 +79,19 @@ Issue #24 Close
 | 見直し期限 | フィールド `reviewDueDate?` の形式検証のみ | MAP-PLAN-010 確定 / 計算は PR #39 Out of Scope | 期限接近窓が制度値なら **中** | `asOf` 比較の狭域判定は技術分離可能 |
 | RuleSetVersion 選択 | SupportPlan に非存在。Finding 側は呼び出し元入力文字列 | FindingIdentity / AuditEvent | 選択方針が制度・評価運用なら **中〜高** | 「選択」そのものは未契約 |
 
-重要:
+重要（監査時点）:
 
 ```text
 finding-audit-ownership.md の Issue #24 所有表に、
 支援計画状態遷移 / Active一意性 / 観察期間 / 見直し期限計算 / RuleSetVersion選択
-は現時点で割り当てられていない。
+は当初割り当てられていなかった。
 
 これらは Issue #26 PR #39 の Explicitly Out of Scope として記録され、
-所有を Issue #24 へ自動移転する記録はない。
+所有を Issue #24 へ自動移転する記録はなかった。
 ```
 
 Issue #24 本体コメント API は本環境から 403/NOT_FOUND で参照不能のため、
-所有コメント `5204768249` の全文再読は未実施。本監査は **main 上の docs / PR 本文** を正本とする。
+所有コメント `5204768249` の全文再読は未実施。本監査は **main / PR 上の docs** を正本とする。
 
 ### 3. Approval Dependency 照合
 
@@ -100,8 +100,73 @@ Issue #24 本体コメント API は本環境から 403/NOT_FOUND で参照不�
 | Issue #19 / `GOV-AUD-01〜10` | Handoff・Snapshot保存・削除・保存期間 | 次単位へ入れない |
 | `DEC-009` | Snapshot 保存タイミング | 次単位へ入れない |
 | `DEC-008` / `GOV-RULE-02〜12`（PR #39 言及） | 提出・差戻し・承認ロール、制度値 | ロール・制度値は次単位へ入れない |
-| 所有 Issue 未指定 | 支援計画系 5 候補全般 | **Implementation GO のブロッカー** |
-| 許可遷移辺 Decision | 支援計画状態遷移 | **Implementation GO のブロッカー**（Finding lifecycle の C0 相当が未固定） |
+| 所有 Issue | 支援計画状態遷移 | Recommended: Issue #24。**GitHub Accepted 待ち** |
+| 許可遷移辺 | 支援計画状態遷移 | Recommended: 下記 5 辺。**GitHub Accepted 待ち** |
+
+## Recommended Decision（設計推奨・GitHub Accepted 未記録）
+
+次の 2 点は設計上の推奨 Decision である。
+**GitHub Issue #24 上の Accepted Decision にはまだ変更していない。**
+Accepted 記録後にのみ Implementation GO へ進む。
+
+投稿案: [`issue-24-pr-i-decision-comment-draft.md`](./issue-24-pr-i-decision-comment-draft.md)
+
+### Decision 1: 所有
+
+```text
+PR-I ownership: Issue #24
+```
+
+境界分離:
+
+```text
+#26
+  SupportPlan / SupportPlanVersion
+  status enum
+  Schema / DTO
+  repository port
+        ↓
+#24
+  SupportPlan status transition
+  Active一意性（後続単位）
+  期限・期間等の純粋ルール（後続単位）
+```
+
+状態 enum 自体は #26、状態遷移関数は #24。
+
+### Decision 2: PR-I 許可辺（5 辺のみ）
+
+| from | to |
+|---|---|
+| Draft | PendingReview |
+| PendingReview | Returned |
+| Returned | Draft |
+| PendingReview | Active |
+| Active | Closed |
+
+それ以外は fail-closed で拒否する。特に次を許可しない:
+
+```text
+Draft → Active
+Closed → Active
+Active → Draft
+Active → PendingReview
+Returned → Active
+Closed → *
+自己遷移 / 上記以外のスキップ・逆行
+```
+
+### Decision 2 補足（PR-I OUT OF SCOPE）
+
+```text
+Role authorization: OUT OF SCOPE
+Active uniqueness: OUT OF SCOPE
+Observation / Review deadline: OUT OF SCOPE
+RuleSetVersion: OUT OF SCOPE
+```
+
+PR-I は「現在状態＋要求遷移 → 許可/拒否」だけを担当する純関数として閉じる。
+メタデータ付与の詳細契約は Implementation Start 後の技術契約で固定する（ロール判定は含めない）。
 
 ## 選定結果（1 件）
 
@@ -159,7 +224,7 @@ docs/architecture/support-plan-lifecycle-transition.md（新規・承認後）
 docs/architecture/finding-audit-ownership.md または foundation（所有記録更新）
 ```
 
-### 許可遷移表（未固定・Decision 必須）
+### 許可遷移表（Recommended・GitHub Accepted 待ち）
 
 現状の状態集合（再定義しない）:
 
@@ -172,15 +237,14 @@ Closed
 ```
 
 状態型・validator は Issue #26 / #42 で確定済み。
-**許可辺一覧は未 Decision** のため、本選定では辺を確定しない。
-Implementation Start 前に、Finding lifecycle の C0 相当として許可辺を固定する。
+許可辺は上記 Recommended Decision 2 の **5 辺のみ**（GitHub Accepted 待ち）。
 
 ### テスト計画（実装時）
 
-- 許可辺の成功とメタデータ付与
-- 自己遷移・スキップ・逆行・Closed からの遷移拒否
-- 不正 status / 必須メタデータ欠損の fail-closed
-- ロール判定・永続化・時刻生成を関数内で行わないこと
+- 許可 5 辺の成功
+- Draft→Active / Returned→Active / Active→Draft / Active→PendingReview / Closed→* / 自己遷移の拒否
+- 不正 status の fail-closed（`MALFORMED_INPUT`）
+- ロール判定・Active一意性・期限・RuleSetVersion・永続化・時刻生成を関数内で行わないこと
 - typecheck / tests / contracts-boundaries
 
 ## 判定
@@ -189,21 +253,19 @@ Implementation Start 前に、Finding lifecycle の C0 相当として許可辺�
 残責務再監査: READY
 Approval Dependency照合: READY
 PR-I 候補選定: READY（SupportPlan status transition・狭域）
-PR-I Scope固定: READY（上記）
+PR-I Scope固定: READY（上記 + Recommended 5辺）
+Recommended Decision 1（ownership=#24）: READY（設計推奨）
+Recommended Decision 2（allowed 5 edges）: READY（設計推奨）
+GitHub Accepted Decision: HOLD（未記録）
 Implementation GO: HOLD
 ```
 
-### Implementation GO が HOLD である理由（必須 Decision）
+### Implementation GO が HOLD である理由
 
-1. **所有 Decision**  
-   支援計画状態遷移を Issue #24 の次単位として吸収するか、Issue #26（または新規 Issue）所有のまま進めるかを明示する。  
-   所有表への自動割当は行わない（Handoff と同型の規律）。
-
-2. **許可遷移辺 Decision**  
-   Draft / PendingReview / Returned / Active / Closed の許可辺を 1 表に固定する。  
-   辺未固定のまま実装しない。
-
-上記 2 点が Accepted（または実装対象外として明示）された後にのみ、Implementation Start GO とする。
+1. Recommended Decision 1/2 は設計推奨として正本へ反映済み。
+2. **GitHub Issue #24 上の Accepted Decision が未記録**。
+3. Issue 投稿は人の事前承認操作であり、本環境から Issue #24 への自動投稿は行わない。
+4. Accepted 記録（コメント ID 付き）の後に、正本の Decision 状態を Accepted へ更新し、Implementation GO を再判定する。
 
 ## Issue #24 をどこまで安全に完了できるか
 
@@ -211,16 +273,22 @@ Implementation GO: HOLD
 安全に完了済み（純技術・#19非依存）:
   PR-C〜PR-H（Finding / Snapshot Result変換）
 
-Issue #24 所有表上で次に進める純技術単位:
-  なし（残は Decision / GOV-AUD / 所有指定待ち）
+PR-I（SupportPlan status transition）:
+  Recommended ownership=#24 / allowed 5 edges まで固定済み
+  GitHub Accepted → Implementation GO → 実装 の順
 
-Issue #24 を拡張せずに支援計画系へ進める場合:
-  所有 Decision が先（本選定の HOLD）
+後続（PR-Iに混ぜない）:
+  Active一意性、観察期間、見直し期限、RuleSetVersion選択、ロール
+```
 
-新しい大きな Issue へ移る前の整合的次手:
-  1) 本選定の所有 + 許可辺 Decision
-  2) Decision GO 後に PR-I 実装
-  3) その後 Active一意性を最小単位で分離
+## 次工程（Accepted 後）
+
+```text
+1. Issue #24 へ Decision コメントを Accepted として記録
+   （案: issue-24-pr-i-decision-comment-draft.md）
+2. 本正本と finding-audit-ownership.md を Accepted + comment ID 付きへ更新
+3. Implementation GO 判定
+4. GO 後にのみ src/** / tests/** / 技術契約実装へ着手
 ```
 
 ## 変更禁止境界
