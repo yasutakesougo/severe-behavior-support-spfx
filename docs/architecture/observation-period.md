@@ -209,6 +209,6 @@ Deploy: NO-GO
 
 - `src/domain/support-plan.ts` または隣接 domain モジュール — 純関数 / Result 型
 - `tests/contracts/*observation-period*contract.test.ts`
-- 必要なら `toAsiaTokyoCalendarDay` を共有利用
+- `toAsiaTokyoCalendarDay`（および同等の ISO DateTime 妥当性判定）を **MUST** 共有する
 
 本 docs-only PR では `src/**` / `tests/**` を変更しない。
