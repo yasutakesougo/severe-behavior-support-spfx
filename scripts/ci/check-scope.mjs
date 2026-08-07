@@ -142,7 +142,7 @@ for (const file of changed) {
 }
 
 for (const file of changed) {
-  let content = "";
+  let content;
   try {
     content = readFileSync(path.join(root, file), "utf8");
   } catch {

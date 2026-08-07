@@ -36,6 +36,8 @@ export const STABLE_FINDING_ID_SEPARATOR = "\u001f";
 
 /** C0 controls, DEL, and C1 controls. */
 export const STABLE_FINDING_ID_CONTROL_CHARACTER_PATTERN =
+  // Intentional: reject control characters in stable finding identity material.
+  // eslint-disable-next-line no-control-regex -- domain validation requires C0/C1 detection
   /[\u0000-\u001F\u007F-\u009F]/u;
 
 export type DeriveStableFindingIdResult =

@@ -66,7 +66,7 @@ const remote = git(["remote", "get-url", "origin"], { allowFail: true }).stdout 
 const repoMatch = remote.match(/github\.com[:/](.+?)(?:\.git)?$/i);
 const repo = repoMatch?.[1] ?? "UNKNOWN";
 
-let prState = "UNKNOWN";
+let prState;
 let prNumber = "NONE";
 let prUrl = "NONE";
 let prBody = "";
@@ -111,6 +111,7 @@ const readyApproved = process.env.HANDOFF_READY_APPROVED === "1";
 
 const verifications = [
   ["verify:skills", npmRun("verify:skills")],
+  ["lint", npmRun("lint")],
   ["typecheck", npmRun("typecheck")],
   ["test", npmRun("test")],
   ["check:contracts-boundaries", npmRun("check:contracts-boundaries")],

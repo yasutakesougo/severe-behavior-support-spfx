@@ -16,6 +16,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
+      - "eslint.config.mjs"
       - ".node-version"
       - ".github/workflows/contracts-ci.yml"
   push:
@@ -35,6 +36,7 @@ on:
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
+      - "eslint.config.mjs"
       - ".node-version"
       - ".github/workflows/contracts-ci.yml"
 
@@ -68,6 +70,9 @@ jobs:
 
       - name: Verify skills
         run: npm run verify:skills
+
+      - name: Lint
+        run: npm run lint
 
       - name: Typecheck
         run: npm run typecheck
