@@ -31,8 +31,8 @@ Issue #17 ownership comment: 5204771950
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | Implementation Start GO（承認範囲のみ） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | Implementation Start GO（承認範囲のみ） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了 |
-| FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | Implementation Start GO（承認範囲のみ） |
-| finding再発判定 | Issue #24 | 追加境界が未決定 | HOLD |
+| FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
+| finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / Implementation Start `5210210553` / 技術契約 `finding-recurrence.md` | Implementation Start GO（承認範囲のみ） |
 | AssessmentSnapshot候補生成 | Issue #24 | 本文で所有を明示 | 完全契約までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
@@ -178,10 +178,16 @@ Issue #24 finding 生成条件（`docs/architecture/finding-generation-condition
 PR-F:
 Issue #24 FindingCode写像・Identity組立（狭域）（`docs/architecture/finding-identity-assembly.md`）
 
-PR-G以降:
+PR-G:
+Issue #24 finding再発判定（`docs/architecture/finding-recurrence.md`）
+
+PR-H以降:
 Handoff transition、Severity、完全Finding、
 AssessmentSnapshot契約、audit write boundary
 ```
+
+注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の「PR-G」表記は、
+本所有表の PR 字母とずれる場合がある。AssessmentSnapshot 実装は別 Entry Criteria に従う。
 
 PR-BはPR-Aマージ後を推奨する。
 PR-C以降は、それぞれの所有Issue、Decision、Entry Criteriaを記録してから開始する。
@@ -192,7 +198,7 @@ PR-C以降は、それぞれの所有Issue、Decision、Entry Criteriaを記録�
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約
 - AssessmentSnapshot完全契約と保存運用
-- finding再発境界
+- finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）
 - handoff実行ロール
 - 訂正承認、論理削除、物理削除
 - `AuditEvent.actionCode`最終enum
