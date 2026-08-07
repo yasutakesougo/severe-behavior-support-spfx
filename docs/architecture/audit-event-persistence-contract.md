@@ -175,11 +175,14 @@ deploy
 ```text
 AUD-RET-1: Accepted
 AUD-WR-1: Accepted
-Persistence technical contract: Draft / review required
+Persistence technical contract: MERGED（PR #99）
+Next: #22A write-result / idempotency alignment
+  → audit-event-persistence-22a-alignment-gate.md
 Persistence implementation: HOLD
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
 ```
 
-実装開始には、本技術契約のレビュー・Accepted と、#22A の既存 write-result / idempotency 境界との整合確認が必要である。
+実装開始には、#22A の既存 write-result / idempotency 境界との整合確認
+（Decision-AUD-ALIGN-1）が必要である。本契約 MERGED だけでは implementation GO にしない。
