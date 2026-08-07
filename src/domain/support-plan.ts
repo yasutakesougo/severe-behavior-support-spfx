@@ -712,3 +712,49 @@ export function evaluateActivePlanUniquenessUnknown(
 
   return "UNIQUE";
 }
+
+// ==========================================
+// Observation period membership (Issue #24)
+// Technical contract: docs/architecture/observation-period.md
+// Decision-OP-1: Accepted comment 5212897564
+// Decision-OP-2: Accepted comment 5212898450
+// ==========================================
+
+export type ObservationPeriodMembershipResult =
+  | "IN_PERIOD"
+  | "OUTSIDE_PERIOD"
+  | "MALFORMED_INPUT";
+
+/**
+ * Evaluate whether caller-supplied `asOf` falls inside the observation period.
+ *
+ * - Inputs are ISO DateTime bounds converted via shared Asia/Tokyo calendar days
+ * - Closed interval [fromDay, toDay]; `periodTo` is required
+ * - Fail-closed: invalid bounds → MALFORMED_INPUT
+ *
+ * SupportPlan field adds, institutional day counts, Observation persistence,
+ * review due dates, and RuleSetVersion selection are out of scope.
+ */
+export function evaluateObservationPeriodMembership(
+  periodFrom: unknown,
+  periodTo: unknown,
+  asOf: unknown,
+): ObservationPeriodMembershipResult {
+  const fromDay = toAsiaTokyoCalendarDay(periodFrom);
+  const toDay = toAsiaTokyoCalendarDay(periodTo);
+  const asOfDay = toAsiaTokyoCalendarDay(asOf);
+
+  if (fromDay === null || toDay === null || asOfDay === null) {
+    return "MALFORMED_INPUT";
+  }
+
+  if (fromDay > toDay) {
+    return "MALFORMED_INPUT";
+  }
+
+  if (fromDay <= asOfDay && asOfDay <= toDay) {
+    return "IN_PERIOD";
+  }
+
+  return "OUTSIDE_PERIOD";
+}
