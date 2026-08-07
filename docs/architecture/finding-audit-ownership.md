@@ -7,13 +7,15 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 9232b8a8d549c306f88e4cbf1feae026b08e36e8
+main: 706b8f1004070b196249a48d1d996be1210295c3
+PR #84 / RuleSetVersion selection: MERGED
 PR #72 / PR-H: MERGED
 PR #41: MERGED
 Issue #27 ownership comment: 5204763504
 Issue #24 ownership comment: 5204768249
 Issue #17 ownership comment: 5204771950
 Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining-audit-pr-i-selection.md
+Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-audit-post-rsv.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -37,8 +39,11 @@ Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
 | AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD（DEC-009 / GOV-AUD） |
-| SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 選定正本 `issue-24-remaining-audit-pr-i-selection.md` / 技術契約 `support-plan-status-transition.md` / 許可5辺・allow/deny only | Implementation GO（承認範囲のみ・PR-I） |
-| Active計画一意性 / 観察期間 / 見直し期限計算 / RuleSetVersion選択 | Issue #24（後続候補） | #26=型/Schema、#24=純粋ルール境界。PR-Iへ混ぜない | 各単位の Decision までHOLD |
+| SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
+| Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
+| 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3フィールド追加はHOLD |
+| 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD |
+| RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-001〜017` | Deferred項目はHOLD |
@@ -198,10 +203,15 @@ Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI / re
 選定ゲート: PR #73（docs-only）。実装: PR #74（domain 純関数 + contract tests）。
 PR #73 を実装 PR へ変質させない。
 
+PR-I以降（支援計画系純粋ルール・完了）:
+Active一意性（#76/#78）、観察期間（#79/#80）、見直し期限（#81/#82）、
+RuleSetVersion選択（#83/#84）。再監査: [`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)。
+
 PR-I以降（未割当・HOLD）:
 Handoff transition、Severity、完全Finding、
 AssessmentSnapshot完全契約、audit write boundary、
-Active一意性、観察期間、見直し期限計算、RuleSetVersion選択
+Finding 再オープン Decision、FindingCode 業務カタログ、
+Decision-OP-3 / Decision-RD-3
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
@@ -213,12 +223,14 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 
 ## 継続HOLD
 
-- Active計画一意性、観察期間、見直し期限計算、RuleSetVersion選択（PR-I OUT OF SCOPE）
 - Handoff状態遷移関数の所有Issue
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約
+- Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
+- FindingCode 業務カタログ
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
 - finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）
+- Decision-OP-3（観察期間フィールド追加） / Decision-RD-3（接近窓ポリシー）
 - handoff実行ロール
 - 訂正承認、論理削除、物理削除
 - `AuditEvent.actionCode`最終enum
