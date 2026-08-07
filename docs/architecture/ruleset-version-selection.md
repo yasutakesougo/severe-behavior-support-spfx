@@ -95,7 +95,8 @@ Finding / AuditEvent: ruleSetVersion は呼び出し元入力の非空文字列�
 本 docs-only PR は **技術契約の固定**までとする。  
 Decision-RSV-1〜RSV-4 が Accepted になるまで **Implementation Start は HOLD** とする。
 
-技術契約案（RSV-3 / RSV-4）は既存 `selectAssessmentScoreSource` / Active uniqueness と同型の fail-closed を提案するだけであり、Accepted 前に実装へ埋め込まない。
+技術契約案（RSV-3 / RSV-4）は、複数適用を `CONFLICT`・該当なしを `NONE` とし、不正入力を成功へ倒さない fail-closed を提案するだけであり、Accepted 前に実装へ埋め込まない。
+（参考: Active uniqueness も集合全体を fail-closed 集約する。`selectAssessmentScoreSource` は一部不正レコードをスキップし得るため、本単位の「要素不正→集合全体 MALFORMED」とは同一実装ではない。）
 
 ## 技術境界
 
