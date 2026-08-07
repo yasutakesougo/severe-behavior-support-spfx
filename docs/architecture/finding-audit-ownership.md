@@ -16,6 +16,7 @@ Issue #24 ownership comment: 5204768249
 Issue #17 ownership comment: 5204771950
 Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining-audit-pr-i-selection.md
 Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-audit-post-rsv.md
+Issue #24 Decision-first 台帳: docs/architecture/issue-24-decision-first-backlog.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -212,6 +213,10 @@ Handoff transition、Severity、完全Finding、
 AssessmentSnapshot完全契約、audit write boundary、
 Finding 再オープン Decision、FindingCode 業務カタログ、
 Decision-OP-3 / Decision-RD-3
+
+Decision-first 整理台帳:
+[`issue-24-decision-first-backlog.md`](./issue-24-decision-first-backlog.md)
+（RO-1 / SV-1 / FC-1 / HO-1 / OP-3 / RD-3 / AS-EC。すべて Pending）
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、

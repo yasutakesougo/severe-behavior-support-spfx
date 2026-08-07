@@ -128,13 +128,13 @@ Deploy: NO-GO
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 
-## 本 PR（docs-only）の役割
+## 次工程
 
 ```text
-1. PR #84 完了後の残責務を正本へ再記録する
-2. 次の安全な純関数単位が無いことを固定する
-3. ownership / foundation の陳腐化した HOLD 表記を更新する
-4. src/** / tests/** は変更しない
+1. Decision-first 台帳: [`issue-24-decision-first-backlog.md`](./issue-24-decision-first-backlog.md)
+2. 人が Decision-RO-1 / SV-1 / FC-1 / HO-1 / OP-3 / RD-3 / AS-EC を1件ずつ記録
+3. Accepted 済み単位だけ技術契約 → 実装へ進める
+4. 次の安全な純関数単位が出るまで domain 実装 PR は起票しない
 ```
 
 ## 変更禁止境界
