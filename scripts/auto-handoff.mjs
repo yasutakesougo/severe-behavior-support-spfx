@@ -6,6 +6,14 @@
  * into a handoff-builder compatible Markdown document.
  *
  * Does not post to GitHub. Local output only.
+ *
+ * Judgement rules (aligned with handoff-builder):
+ * - Document READY only when SHA / Issue / PR / verification evidence are present and
+ *   there are no OPEN findings from checks or SHA mismatch.
+ * - Project READY only when document is READY, PR is not draft, checks passed, and
+ *   merge approval is explicitly attested (HANDOFF_MERGE_APPROVED=1).
+ * - Never maps failed checks or missing evidence to PASS.
+ * - Verification lines use PASS/FAIL for command results only; Skill/Gate PASS is not implied.
  */
 import { execFileSync } from "node:child_process";
 import { writeFile, mkdir } from "node:fs/promises";
@@ -61,19 +69,21 @@ const repo = repoMatch?.[1] ?? "UNKNOWN";
 let prState = "UNKNOWN";
 let prNumber = "NONE";
 let prUrl = "NONE";
+let prBody = "";
 const prView = run(
   "gh",
   [
     "pr",
     "view",
     "--json",
-    "number,url,state,isDraft,headRefOid,baseRefOid,title",
+    "number,url,state,isDraft,headRefOid,baseRefOid,title,body",
   ],
   { allowFail: true },
 );
 
 let prHeadOid = null;
 let prTitle = null;
+let isDraft = false;
 if (prView.ok && prView.stdout) {
   try {
     const pr = JSON.parse(prView.stdout);
@@ -81,13 +91,23 @@ if (prView.ok && prView.stdout) {
     prUrl = pr.url ?? "NONE";
     prTitle = pr.title ?? null;
     prHeadOid = pr.headRefOid ?? null;
-    prState = pr.isDraft ? `DRAFT/${pr.state}` : String(pr.state ?? "UNKNOWN");
+    prBody = pr.body ?? "";
+    isDraft = Boolean(pr.isDraft);
+    prState = isDraft ? `DRAFT/${pr.state}` : String(pr.state ?? "UNKNOWN");
   } catch {
     prState = "PARSE_ERROR";
   }
 } else {
   prState = "NO_PR_OR_GH_UNAVAILABLE";
 }
+
+const issueFromEnv = (process.env.HANDOFF_ISSUE || "").trim();
+const issueFromBody =
+  prBody.match(/\b(?:Closes|Close|Fixes|Fix|Resolves|Resolve)\s+#(\d+)\b/i)?.[1] ??
+  null;
+const issueRef = issueFromEnv || (issueFromBody ? `#${issueFromBody}` : "");
+const mergeApproved = process.env.HANDOFF_MERGE_APPROVED === "1";
+const readyApproved = process.env.HANDOFF_READY_APPROVED === "1";
 
 const verifications = [
   ["verify:skills", npmRun("verify:skills")],
@@ -126,21 +146,77 @@ for (const name of failedChecks) {
   });
 }
 
-const documentJudgement =
-  findings.length === 0 && headSha !== "UNKNOWN" ? "READY" : "HOLD";
-const projectJudgement =
-  failedChecks.length > 0 || prState.includes("NO_PR") ? "HOLD" : documentJudgement;
+const missingDocumentEvidence = [];
+if (headSha === "UNKNOWN") {
+  missingDocumentEvidence.push("作業ブランチ SHA 不明");
+}
+if (prNumber === "NONE" || prState.includes("NO_PR") || prState === "PARSE_ERROR") {
+  missingDocumentEvidence.push("PR 未特定");
+}
+if (!issueRef) {
+  missingDocumentEvidence.push("Issue 未特定");
+}
+for (const item of missingDocumentEvidence) {
+  findings.push({
+    id: `F-${String(findings.length + 1).padStart(3, "0")}`,
+    severity: "P1",
+    status: "OPEN",
+    content: item,
+    evidence: "handoff-builder READY 条件",
+    action: item.includes("Issue")
+      ? "HANDOFF_ISSUE を設定するか PR 本文に Closes #N を書く"
+      : "不足証跡を揃える",
+  });
+}
+
+const documentJudgement = findings.length === 0 ? "READY" : "HOLD";
+
+const projectHoldReasons = [];
+if (documentJudgement === "HOLD") {
+  projectHoldReasons.push("引き継ぎ文書判定が HOLD");
+}
+if (failedChecks.length > 0) {
+  projectHoldReasons.push(`検証失敗: ${failedChecks.join(", ")}`);
+}
+if (prState.includes("NO_PR") || prNumber === "NONE") {
+  projectHoldReasons.push("PR なし");
+}
+if (isDraft || prState.startsWith("DRAFT/")) {
+  projectHoldReasons.push("Draft 維持（Ready 化未承認）");
+}
+if (!readyApproved) {
+  projectHoldReasons.push("Ready 化承認未取得");
+}
+if (!mergeApproved) {
+  projectHoldReasons.push("merge 承認未取得");
+}
+
+const projectJudgement = projectHoldReasons.length === 0 ? "READY" : "HOLD";
 
 const nextActions = [];
 if (failedChecks.length > 0) {
   nextActions.push(`失敗チェックを修正する: ${failedChecks.join(", ")}`);
 }
+if (!issueRef) {
+  nextActions.push("Issue を特定する（HANDOFF_ISSUE または Closes #N）");
+}
 if (prNumber === "NONE") {
   nextActions.push("必要なら Draft PR を作成する（投稿は人の事前承認）");
+} else if (isDraft) {
+  nextActions.push("同一 head の独立レビュー後、Ready 化は人の事前承認で判断する");
 } else {
-  nextActions.push("merge-audit / release-review が必要か判断する（実行は承認後）");
+  nextActions.push("merge-audit 結果を確認し、merge は人の事前承認後のみ");
 }
 nextActions.push("merge / deploy / SharePoint変更は行わない");
+
+const holdLines = [];
+if (findings.length > 0) {
+  holdLines.push(...findings.map((finding) => finding.content));
+}
+if (projectHoldReasons.length > 0) {
+  holdLines.push(...projectHoldReasons);
+}
+const uniqueHoldLines = [...new Set(holdLines)];
 
 const findingsTable =
   findings.length === 0
@@ -163,7 +239,7 @@ const markdown = `# handoff-builder
 - 作業ブランチ: ${branch}
 
 ## References
-- Issue: （入力があれば追記）
+- Issue: ${issueRef || "未特定"}
 - PR: ${prNumber === "NONE" ? "なし" : `#${prNumber} (${prState}) ${prUrl}`}
 - PR title: ${prTitle ?? "なし"}
 - 正本リンク: docs/process/background-agent-contract.md
@@ -172,11 +248,16 @@ const markdown = `# handoff-builder
 - 完了事項: auto-handoff が PR状態 / head SHA / CI / findings / next action を収集
 
 ## Remaining
-- 未完了事項: ${failedChecks.length > 0 ? "検証失敗の解消" : "人によるレビュー・承認判断"}
+- 未完了事項: ${
+  failedChecks.length > 0
+    ? "検証失敗の解消"
+    : projectJudgement === "HOLD"
+      ? "人によるレビュー・Ready/Merge 承認判断"
+      : "なし"
+}
 
 ## HOLD
-- ${findings.length > 0 ? findings.map((f) => f.content).join(" / ") : "なし（文書判定）"}
-- merge 承認は未実施（自動実行しない）
+${uniqueHoldLines.length > 0 ? uniqueHoldLines.map((line) => `- ${line}`).join("\n") : "- なし"}
 
 ## Forbidden Actions
 - merge
@@ -191,6 +272,7 @@ const markdown = `# handoff-builder
 
 ## Verification
 ${verificationLines.join("\n")}
+- note: Verification の PASS/FAIL はコマンド成否のみ。Gate PASS / Ready 化 / Merge 承認を意味しない
 
 ## Findings
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |

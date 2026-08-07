@@ -59,6 +59,8 @@ PR を扱う場合は、自動 handoff（または同等）で次を出力する
 - findings
 - next action
 
+`handoff:auto` は検証コマンドの成否を PASS/FAIL で記録してよいが、未実施・失敗・承認待ち・Draft を Gate `PASS` やプロジェクト進行 `READY` へ変換してはならない。Issue / PR / SHA 不足は引き継ぎ文書判定 `HOLD` とする。
+
 ## Evidence
 
 Evidence は「実行したこと」と「見ていないこと」を区別して記録する。
