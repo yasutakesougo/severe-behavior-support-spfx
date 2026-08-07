@@ -41,8 +41,11 @@ AuditEvent persistence technical owner: Issue #22A
 ```text
 Decision-AUD-WR-1: Accepted
 ownership blocker for persistence contract: CLEARED
-AuditEvent persistence technical contract: GO (docs-only)
-AuditEvent persistence code: HOLD
+AuditEvent persistence technical contract: MERGED（PR #99）
+Logical persistence / Replay: MERGED（PR #104 / #106）
+Decision-AUD-REPO-1: Accepted
+Next: Issue #29 physical definition / mapping alignment
+Concrete repository / #22B: HOLD
 SharePoint adapter: NO-GO
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```

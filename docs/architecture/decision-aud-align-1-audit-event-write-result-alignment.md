@@ -94,9 +94,13 @@ Decision-AUD-SAN-1: Accepted
 Decision-AUD-REPLAY-1: Accepted（別正本）
 AuditEvent contract hardening: MERGED（PR #102）
 Logical AuditEvent persistence boundary: MERGED（PR #104）
-Next: Replay Implementation Entry Review
-Replay implementation: HOLD pending Entry PASS + separate human GO
+Decision-AUD-REPO-1: Accepted（別正本）
+Replay logical implementation: MERGED（PR #106）
+Technical Decision blocker: CLEARED
+Dependency blocker: Issue #29 physical definition / mapping alignment
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```

@@ -34,8 +34,19 @@ Decision-AUD-SAN-1: Accepted
   AuditEvent contract hardening: MERGED（PR #102）
   validateAuditEvent: Decision-AUD-SAN-VALUE-1 compliant on main
 
+Decision-AUD-REPLAY-1: Accepted
+  → decision-aud-replay-1-audit-event-safe-replay.md
+  Replay logical: MERGED（PR #106）
+
+Decision-AUD-REPO-1: Accepted
+  → decision-aud-repo-1-audit-event-repository-uniqueness.md
+  Candidate: 5219980098
+  Independent Review: 5220288044（PASS）
+  Human Acceptance: 5220303406
+
 AuditEvent type / validator: Issue #27
 Physical SharePoint structure: Issue #29
+  → audit-event-physical-mapping-29.md
 Concrete SharePoint adapter: Issue #22B
 ```
 
@@ -229,18 +240,26 @@ AUD-SAN-VALUE-1: Accepted
 AUD-SAN-1: Accepted
 AUD-REPLAY-1: Accepted
   → decision-aud-replay-1-audit-event-safe-replay.md
+AUD-REPO-1: Accepted
+  → decision-aud-repo-1-audit-event-repository-uniqueness.md
 AuditEvent contract hardening: MERGED（PR #102）
 Persistence technical contract: MERGED（PR #99）
 Persistence Entry Review: PASS（ENTRY-00〜12 ALL PASS）
 Human Persistence GO: Accepted / consumed by PR #104
 Logical AuditEvent persistence boundary: MERGED（PR #104）
-Next: Replay Implementation Entry Review
-Replay implementation: HOLD pending Entry PASS + separate human GO
+Replay Implementation Entry Review: PASS
+Human Replay GO: Accepted / consumed by PR #106
+Replay logical implementation: MERGED（PR #106）
+Technical Decision blocker: CLEARED
+Dependency blocker: Issue #29 physical definition / mapping alignment
+  → audit-event-physical-mapping-29.md
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
 ```
 
-Logical boundary MERGED / REPLAY-1 Accepted だけでは replay 実装 GO にしない。
-Replay Implementation Entry Review PASS と別の明示的 human GO 後にのみ replay 実装を開始する。
+REPO-1 Accepted / Replay MERGED だけでは concrete repository GO にしない。
+Issue `#29` 完了・Concrete Repository Entry Review PASS・別の明示的 human GO 後にのみ `#22B` を開始する。

@@ -7,7 +7,9 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main before this canonicalization: dd934f389411d23b882922dfc7933493cb1ae5f7
+main before this canonicalization: b28bfee5beea9d6eac3f239a88693c949b6e54a3
+PR #106 / AuditEvent replay logical: MERGED
+PR #104 / AuditEvent logical persistence: MERGED
 PR #97 / AuditEvent persistence Entry Criteria: MERGED
 PR #96 / Handoff AuditEvent candidate: MERGED
 PR #93 / Handoff state mutation: MERGED
@@ -34,10 +36,13 @@ Decision-AUD-IDEM-1（Accepted）: docs/architecture/decision-aud-idem-1-audit-e
 Decision-AUD-SAN-VALUE-1（Accepted）: docs/architecture/decision-aud-san-value-1-audit-event-value-safety.md
 Decision-AUD-SAN-1（Accepted）: AuditEvent contract hardening MERGED（PR #102）
 Decision-AUD-REPLAY-1（Accepted）: docs/architecture/decision-aud-replay-1-audit-event-safe-replay.md
+Decision-AUD-REPO-1（Accepted）: docs/architecture/decision-aud-repo-1-audit-event-repository-uniqueness.md
+Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
+Replay logical（PR #106 MERGED）: src/domain/audit-event-persistence.ts
 Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-gate.md
-Next: Replay Implementation Entry Review
+Next: Issue #29 physical definition / mapping alignment
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -56,8 +61,8 @@ Next: Replay Implementation Entry Review
 | Handoff状態遷移関数 | Issue #17 | Decision-HO-1 Accepted。PR #90 MERGED | 完了 |
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
-| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay HOLD / repository・SharePoint NO-GO |
-| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical boundary MERGED（PR #104）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1 Accepted。次: Replay Implementation Entry Review | Replay Entry PASS + separate human GO まで HOLD。concrete repository / SharePoint は NO-GO |
+| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay MERGED（PR #106）。REPO-1 Accepted。次: `#29` / repository HOLD |
+| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。次: Issue `#29` | `#29` 完了 + Concrete Entry PASS + 別 human GO まで HOLD。SharePoint / `#22B` は NO-GO |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -137,9 +142,11 @@ closed
 正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)。
 純粋遷移と`GOV-AUD-02`に依存する権限判定を分離する（ロールポリシー PR #91 MERGED）。
 AuditEvent 候補は PR #96 MERGED。実保存技術契約は PR #99 MERGED。
-logical persistence boundary は PR #104 MERGED。Decision-AUD-REPLAY-1 Accepted。
-次工程: Replay Implementation Entry Review
-（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
+logical persistence boundary は PR #104 MERGED。Replay logical は PR #106 MERGED。
+Decision-AUD-REPLAY-1 / Decision-AUD-REPO-1 Accepted。
+次工程: Issue `#29` physical definition / mapping alignment
+（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
+ [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
 ## FindingSeverity Decision
 
@@ -202,8 +209,12 @@ Persistence 境界の現状:
 - Persistence Entry Review: PASS
 - Logical persistence boundary: MERGED（PR #104）
 - Decision-AUD-REPLAY-1: Accepted
-- Replay implementation: HOLD pending Replay Entry PASS + separate human GO
+- Replay logical implementation: MERGED（PR #106）
+- Decision-AUD-REPO-1: Accepted
+- Issue #29 physical mapping: IN PROGRESS（docs-only）
+- Concrete Repository Entry Review: FAIL（#29未完了）
 - Concrete repository: HOLD
+- READY_FOR_HUMAN_GO: NO
 - SharePoint adapter: NO-GO
 
 なお完了扱いにしないもの:
@@ -260,8 +271,10 @@ PR-I以降（Handoff・完了）:
 Decision-HO-1 Accepted（#17）、遷移 PR #90、ロール PR #91、mutation PR #93、
 AuditEvent candidate PR #96（`HANDOFF_STATUS_CHANGED` / `5215557663`）。
 実保存技術契約 MERGED（PR #99）。logical persistence boundary MERGED（PR #104）。
-ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1 Accepted。次は Replay Implementation Entry Review
-（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
+Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。
+次は Issue `#29` physical definition / mapping alignment
+（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
+ [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
 PR-I以降（未割当・HOLD）:
 Severity、完全Finding、
@@ -269,9 +282,9 @@ AssessmentSnapshot完全契約、
 FindingCode 業務カタログ、
 Decision-OP-3 / Decision-RD-3。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
-AUD-RET-1 / AUD-WR-1 / value safety / hardening / REPLAY-1 Decision は Accepted（DONE）。
-Replay implementation は Entry PASS + separate human GO まで HOLD。
-concrete repository / SharePoint adapter は NO-GO。
+AUD-RET-1 / AUD-WR-1 / value safety / hardening / REPLAY-1 / REPO-1 Decision は Accepted（DONE）。
+Replay logical は MERGED（PR #106）。
+concrete repository / SharePoint adapter は `#29` + Entry PASS + 別 human GO まで HOLD / NO-GO。
 正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 （Issue #24 系 Next pure unit は別）
@@ -296,8 +309,8 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - 訂正承認、論理削除、物理削除
 - `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted）
 - AuditLog cleanup / 物理削除運用（Decision-AUD-RET-1 **Accepted**。cleanup は別）
-- Replay implementation（Decision-AUD-REPLAY-1 Accepted。HOLD pending Replay Entry PASS + separate human GO）
-- Concrete repository: HOLD
+- Issue `#29` physical definition / mapping alignment（docs-only。実変更 NO-GO）
+- Concrete repository: HOLD（`#29` + Entry PASS + 別 human GO 後）
 - SharePoint adapter / Entra ID / Microsoft 365 / deploy: NO-GO
 
 DONE（継続HOLDから外す）:
@@ -306,16 +319,19 @@ DONE（継続HOLDから外す）:
 - AuditEvent contract hardening（PR #102）
 - Persistence Entry Criteria / Persistence Entry Review
 - Logical AuditEvent persistence boundary（PR #104）
-- Decision-AUD-REPLAY-1（Decision Accepted。実装は上記 HOLD）
+- Decision-AUD-REPLAY-1 / Replay logical implementation（PR #106）
+- Decision-AUD-REPO-1（意味契約 Accepted。物理 `#29` / `#22B` は別）
 
 Decision-HO-1（Handoff 遷移所有）は Accepted（#17）。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
-Decision-AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 は Accepted。
+Decision-AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 は Accepted。
 正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)、
 [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)、
 [`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md)、
 [`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md)、
-[`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md)。
+[`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md)、
+[`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)、
+[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。
 
 ## 変更禁止境界
 

@@ -52,7 +52,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
-| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical persistence DONE（PR #104）。Replay HOLD / repository・SharePoint NO-GO |
+| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。REPO-1 Accepted。`#29` / `#22B` HOLD・NO-GO |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
@@ -63,8 +63,10 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | 開放終端（observation `periodTo` / RSV `effectiveTo`） | 新 Decision 要 | HOLD | **不可** | 現行契約は終端必須 |
 | Audit 値安全性 / hardening | #22 / SAN-VALUE-1 / SAN-1 | **DONE**（Accepted + PR #102） | **完了** | Issue #24 純関数単位ではない |
 | AuditEvent logical persistence boundary | #22A | **DONE**（PR #104） | **完了** | 6-value write result / port |
-| AuditEvent Replay implementation | #22A / REPLAY-1 | **HOLD**（Entry + separate GO） | **不可（今は）** | Decision Accepted。実装は未開始 |
-| AuditEvent concrete repository / SharePoint | #22B / #29 | **NO-GO** | **不可** | SharePoint adapter / M365 / Deploy 禁止 |
+| AuditEvent Replay implementation | #22A / REPLAY-1 | **DONE**（PR #106） | **完了** | Entry PASS + Human GO 消費済み |
+| Decision-AUD-REPO-1 | #22A | **Accepted** | **完了** | uniqueness / multi-match / race |
+| AuditEvent physical mapping | #29 | **IN PROGRESS** | **不可（今は #22B）** | docs-only。実変更 NO-GO |
+| AuditEvent concrete repository / SharePoint | #22B | **HOLD / NO-GO** | **不可** | `#29` + Entry PASS + 別 GO 後 |
 | 訂正・削除・復旧運用 | Issue #17 | HOLD（`GOV-AUD`） | **不可** | #19 回答待ち |
 
 ### 3. Approval Dependency
@@ -95,7 +97,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1 **Accepted**。logical boundary MERGED（PR #104）。次は Replay Implementation Entry Review。正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md)
+2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。次は Issue `#29` physical mapping。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
@@ -116,7 +118,7 @@ Implementation Start: HOLD
 - FindingCode カタログの暗黙採択
 - Decision-FLR-1 に反する再オープン辺の追加（Accepted: 不許可）
 - AuditLog 保存期間・書込先の推測採択
-- AuditEvent 実保存 / SharePoint adapter（Replay Entry PASS + separate human GO まで HOLD。concrete repository / SharePoint は NO-GO）
+- AuditEvent `#22B` / SharePoint adapter（`#29` 完了 + Concrete Entry PASS + 別 human GO まで HOLD。SharePoint 実変更は NO-GO）
 - OP-3 / RD-3 の制度値埋め込み
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
@@ -137,10 +139,10 @@ Deploy: NO-GO
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
 - FindingSeverity / 完全 Finding が未了
-- AuditEvent Replay / concrete repository 実装（Replay Implementation Entry Review + separate human GO 待ち）が未了
+- AuditEvent `#29` physical mapping / concrete repository（`#22B`）が未了
 
-Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / persistence technical contract（PR #99）/ contract hardening（PR #102）/ logical persistence boundary（PR #104）は完了扱い。
-Close ブロッカーから外す。本当の次ブロッカーは Replay Implementation Entry Review（実装前）。
+Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 / persistence technical contract（PR #99）/ contract hardening（PR #102）/ logical persistence（PR #104）/ replay logical（PR #106）は完了扱い。
+Close ブロッカーから外す。Audit 系の本当の次ブロッカーは Issue `#29` physical mapping。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 

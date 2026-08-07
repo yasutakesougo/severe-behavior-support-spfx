@@ -46,7 +46,9 @@ Issue #24 へ自動割当しない方針は維持したまま、#17 を明示 Ac
 | AuditLog 保存期間 | Decision-AUD-RET-1 Accepted（cleanup / 物理削除は別） |
 | Logical persistence boundary | MERGED（PR #104） |
 | Decision-AUD-REPLAY-1 | Accepted |
-| Replay implementation | HOLD pending Replay Entry PASS + separate human GO |
+| Replay logical implementation | MERGED（PR #106） |
+| Decision-AUD-REPO-1 | Accepted |
+| Issue #29 physical mapping | IN PROGRESS |
 | Concrete repository | HOLD |
 | SharePoint / M365 / Deploy | NO-GO |
 
@@ -57,7 +59,11 @@ Handoff transition / role / mutation / audit candidate: MERGED
 Persistence Entry Review: PASS
 Logical AuditEvent persistence boundary: MERGED（PR #104）
 Decision-AUD-REPLAY-1: Accepted
-Replay implementation: HOLD pending Replay Entry PASS + separate human GO
+Replay logical implementation: MERGED（PR #106）
+Decision-AUD-REPO-1: Accepted
+Next: Issue #29 physical definition / mapping alignment
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
