@@ -1,7 +1,7 @@
 # AuditEvent persistence design gate
 
 ```text
-main: 2751f421e1ced3bd28b4734eb964e49f1eff95c6
+main before this canonicalization: 2751f421e1ced3bd28b4734eb964e49f1eff95c6
 PR #99: MERGED
 PR #102: MERGED
 Decision-AUD-RET-1: Accepted

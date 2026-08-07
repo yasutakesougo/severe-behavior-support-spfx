@@ -7,7 +7,7 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 29b6ed2872ea475590c3c5bb8f7c946fa76f3616
+main before this canonicalization: 2751f421e1ced3bd28b4734eb964e49f1eff95c6
 PR #99 / persistence technical contract: MERGED
 PR #97 / Entry Criteria 初版: MERGED
 PR #98 / AUD-RET-1・AUD-WR-1 final candidates: MERGED

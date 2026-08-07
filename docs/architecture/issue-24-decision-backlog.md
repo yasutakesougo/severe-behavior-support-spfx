@@ -10,7 +10,7 @@ PR #85 の `Next pure unit: NONE` を上書きしない。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 199217ce2aaf2fec3d47cb7cb1f312c7e9c444d6
+main before this canonicalization: 2751f421e1ced3bd28b4734eb964e49f1eff95c6
 PR #99 / AuditEvent persistence technical contract: MERGED
 PR #97 / AuditEvent persistence Entry Criteria: MERGED
 PR #96 / Handoff AuditEvent candidate: MERGED

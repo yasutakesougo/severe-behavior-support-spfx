@@ -7,7 +7,7 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 706b8f1004070b196249a48d1d996be1210295c3
+main before this canonicalization: 2751f421e1ced3bd28b4734eb964e49f1eff95c6
 PR #84 / RuleSetVersion selection: MERGED
 merged head: 706b8f1004070b196249a48d1d996be1210295c3
 expected pre-squash head: 21355ab39b91dce7774bf478d6440b2b06230f3c
