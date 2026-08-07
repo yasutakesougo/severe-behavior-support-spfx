@@ -394,13 +394,17 @@ export const AUDIT_EVENT_RESULTS = ["success", "denied", "failed"] as const;
 
 export type AuditEventResult = (typeof AUDIT_EVENT_RESULTS)[number];
 
+export const AUDIT_EVENT_TARGET_TYPES = ["HandoffState"] as const;
+
+export type AuditEventTargetType = (typeof AUDIT_EVENT_TARGET_TYPES)[number];
+
 export type AuditEvent = Readonly<{
   auditEventId: string;
   OrganizationId: string;
   SiteId?: string;
   actorStaffId?: string;
   actionCode: string;
-  targetType: string;
+  targetType: AuditEventTargetType;
   targetRecordId?: string;
   result: AuditEventResult;
   occurredAt: string;
@@ -430,6 +434,19 @@ const FORBIDDEN_AUDIT_KEYS = new Set([
   "errormessage",
   "stack",
 ]);
+
+/**
+ * Decision-AUD-SAN-VALUE-1 IDENTIFIER / VERSION opaque-token boundary.
+ * Reuses STABLE_FINDING_ID_CONTROL_CHARACTER_PATTERN; does not invent a new regex.
+ * Reject-only: never trim / normalize / mutate to accept.
+ */
+function isSafeAuditEventToken(value: unknown): value is string {
+  return (
+    isNonEmptyString(value) &&
+    value === value.trim() &&
+    !STABLE_FINDING_ID_CONTROL_CHARACTER_PATTERN.test(value)
+  );
+}
 
 export function validateAuditEvent(value: unknown): value is AuditEvent {
   if (!isRecord(value)) {
@@ -464,33 +481,33 @@ export function validateAuditEvent(value: unknown): value is AuditEvent {
   }
 
   if (
-    !isNonEmptyString(value.auditEventId) ||
-    !isNonEmptyString(value.OrganizationId) ||
+    !isSafeAuditEventToken(value.auditEventId) ||
+    !isSafeAuditEventToken(value.OrganizationId) ||
     !isReasonCode(value.actionCode) ||
-    !isNonEmptyString(value.targetType) ||
+    !AUDIT_EVENT_TARGET_TYPES.includes(value.targetType as AuditEventTargetType) ||
     !AUDIT_EVENT_RESULTS.includes(value.result as AuditEventResult) ||
     !isValidIsoDateTime(value.occurredAt) ||
-    !isNonEmptyString(value.correlationId)
+    !isSafeAuditEventToken(value.correlationId)
   ) {
     return false;
   }
 
-  if (value.SiteId !== undefined && !isNonEmptyString(value.SiteId)) {
+  if (value.SiteId !== undefined && !isSafeAuditEventToken(value.SiteId)) {
     return false;
   }
-  if (value.actorStaffId !== undefined && !isNonEmptyString(value.actorStaffId)) {
+  if (value.actorStaffId !== undefined && !isSafeAuditEventToken(value.actorStaffId)) {
     return false;
   }
-  if (value.targetRecordId !== undefined && !isNonEmptyString(value.targetRecordId)) {
+  if (value.targetRecordId !== undefined && !isSafeAuditEventToken(value.targetRecordId)) {
     return false;
   }
   if (value.reasonCode !== undefined && !isReasonCode(value.reasonCode)) {
     return false;
   }
-  if (value.appVersion !== undefined && !isNonEmptyString(value.appVersion)) {
+  if (value.appVersion !== undefined && !isSafeAuditEventToken(value.appVersion)) {
     return false;
   }
-  if (value.ruleSetVersion !== undefined && !isNonEmptyString(value.ruleSetVersion)) {
+  if (value.ruleSetVersion !== undefined && !isSafeAuditEventToken(value.ruleSetVersion)) {
     return false;
   }
 

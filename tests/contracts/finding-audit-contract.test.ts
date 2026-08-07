@@ -942,6 +942,138 @@ describe("AuditEvent Contract & Strict Allowlist Validation", () => {
     } = base;
     assert.equal(validateAuditEvent(minimal), true);
   });
+
+  it("canonical targetType HandoffState を受理する", () => {
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ targetType: "HandoffState" })),
+      true,
+    );
+  });
+
+  it("未知 targetType を拒否する", () => {
+    assert.equal(
+      validateAuditEvent(
+        createSyntheticAuditEventSuccess({
+          targetType: "UnknownTarget" as unknown as "HandoffState",
+        }),
+      ),
+      false,
+    );
+    assert.equal(
+      validateAuditEvent(
+        createSyntheticAuditEventSuccess({
+          targetType: "synthetic-target-abc-record" as unknown as "HandoffState",
+        }),
+      ),
+      false,
+    );
+  });
+
+  it("IDENTIFIER 6フィールドの leading/trailing whitespace を拒否する", () => {
+    const identifierFields = [
+      "auditEventId",
+      "OrganizationId",
+      "SiteId",
+      "actorStaffId",
+      "targetRecordId",
+      "correlationId",
+    ] as const;
+
+    for (const field of identifierFields) {
+      assert.equal(
+        validateAuditEvent(
+          createSyntheticAuditEventSuccess({
+            [field]: ` ${createSyntheticAuditEventSuccess()[field]}`,
+          }),
+        ),
+        false,
+        `${field} leading whitespace must be rejected`,
+      );
+      assert.equal(
+        validateAuditEvent(
+          createSyntheticAuditEventSuccess({
+            [field]: `${createSyntheticAuditEventSuccess()[field]} `,
+          }),
+        ),
+        false,
+        `${field} trailing whitespace must be rejected`,
+      );
+    }
+  });
+
+  it("IDENTIFIER 6フィールドが safe-token validator を通る（C0/DEL/C1）", () => {
+    const identifierFields = [
+      "auditEventId",
+      "OrganizationId",
+      "SiteId",
+      "actorStaffId",
+      "targetRecordId",
+      "correlationId",
+    ] as const;
+    const controlCases: ReadonlyArray<{ label: string; inject: (base: string) => string }> = [
+      { label: "C0 tab", inject: (base) => `${base}\t` },
+      { label: "C0 newline", inject: (base) => `${base}\n` },
+      { label: "C0 unit separator", inject: (base) => `${base}\u001f` },
+      { label: "DEL", inject: (base) => `${base}\u007f` },
+      { label: "C1 NEL", inject: (base) => `${base}\u0085` },
+    ];
+
+    for (const field of identifierFields) {
+      const baseValue = createSyntheticAuditEventSuccess()[field] as string;
+      for (const controlCase of controlCases) {
+        assert.equal(
+          validateAuditEvent(
+            createSyntheticAuditEventSuccess({
+              [field]: controlCase.inject(baseValue),
+            }),
+          ),
+          false,
+          `${field} ${controlCase.label} must be rejected`,
+        );
+      }
+    }
+  });
+
+  it("VERSION の whitespace / control character を拒否し SemVer 以外の opaque token は受理する", () => {
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ appVersion: "synthetic-app-1.0" })),
+      true,
+    );
+    assert.equal(
+      validateAuditEvent(
+        createSyntheticAuditEventSuccess({ ruleSetVersion: "synthetic-rule-1.0" }),
+      ),
+      true,
+    );
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ appVersion: " synthetic-app-1.0" })),
+      false,
+    );
+    assert.equal(
+      validateAuditEvent(
+        createSyntheticAuditEventSuccess({ ruleSetVersion: "synthetic-rule-1.0 " }),
+      ),
+      false,
+    );
+    assert.equal(
+      validateAuditEvent(createSyntheticAuditEventSuccess({ appVersion: "synthetic-app-1.0\n" })),
+      false,
+    );
+    assert.equal(
+      validateAuditEvent(
+        createSyntheticAuditEventSuccess({ ruleSetVersion: "synthetic-rule-1.0\u007f" }),
+      ),
+      false,
+    );
+  });
+
+  it("whitespace 付き OrganizationId を trim 受理せず拒否する（no mutation）", () => {
+    const dirty = createSyntheticAuditEventSuccess({
+      OrganizationId: " synthetic-org-001",
+    });
+    assert.equal(validateAuditEvent(dirty), false);
+    assert.equal(dirty.OrganizationId, " synthetic-org-001");
+  });
 });
 
 describe("SnapshotCorrection Contract Validation", () => {
