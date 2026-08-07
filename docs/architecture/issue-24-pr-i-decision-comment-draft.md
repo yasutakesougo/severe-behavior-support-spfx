@@ -4,7 +4,7 @@
 
 状態: **Accepted（GitHub comment `5211039927`）**
 
-関連正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)  
+関連正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)
 関連 PR: #73
 
 ---
