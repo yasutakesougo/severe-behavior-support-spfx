@@ -10,7 +10,8 @@ PR #85 の `Next pure unit: NONE` を上書きしない。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 18a765ca2df74683fcc1ad9e80b6abeb2b5f649f
+main: a289128136591648c5f57525e7186b4985a2389c
+PR #88 / Decision-FLR-1: MERGED（Accepted・実装 NONE）
 PR #85 / remaining audit post-RSV: MERGED
 Issue #24: OPEN（Close しない）
 Next pure unit: NONE
@@ -32,9 +33,10 @@ SharePoint / M365: 変更なし
 
 | 項目 | 値 |
 |---|---|
-| 要求 main | `18a765ca2df74683fcc1ad9e80b6abeb2b5f649f` |
-| 実測 `origin/main` / `HEAD` | `18a765ca2df74683fcc1ad9e80b6abeb2b5f649f` |
+| 要求 main | `a289128136591648c5f57525e7186b4985a2389c` |
+| 実測 `origin/main` / `HEAD` | `a289128136591648c5f57525e7186b4985a2389c` |
 | 一致 | **YES** |
+| PR #88 | MERGED（Decision-FLR-1 Accepted） |
 
 ### Issue / Decision comment 参照
 
@@ -49,7 +51,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | Issue #27 ownership | 型契約 | `5204763504` |
 | Issue #17 ownership | 運用設計案 | `5204771950` |
 | Finding lifecycle C0 | #24 所有確定 | `5209785751` |
-| Decision-FLR-1 | Finding reopen policy Accepted（不許可・実装 NONE） | docs 正本（本 PR）。Issue comment ID は API 403 のため未取得 |
+| Decision-FLR-1 | Finding reopen policy Accepted（不許可・実装 NONE） | docs 正本（PR #88 MERGED）。Issue comment ID は API 403 のため未取得 |
+| Decision-HO-1 | Handoff transition ownership（Pending） | [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)。所有は人の指定待ち |
 | FindingIdentity 組立 | Accepted / Start | `5210065336` / `5210078985` |
 | finding 再発 | Accepted / Start | `5210206944` / `5210210553` |
 | Snapshot Result変換 | Selection / Decision / Start | `5210366943` / `5210389077` / `5210392317` |
@@ -80,7 +83,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | Decision | 対象 | 現状 | 所有候補 | 依存 | Accepted後に可能になる作業 |
 |---|---|---|---|---|---|
 | **Decision-FLR-1** | Finding reopen policy（`Resolved`→?、再オープン可否と遷移先） | **Accepted**。再オープン不許可。`Resolved` 終端維持。`Resolved → *` 禁止。実装 impact **NONE**（既存 `transitionFindingStatus` UNCHANGED）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) | Issue #24（lifecycle 所有は C0 `5209785751`） | 既存3辺契約を変更しないこと | **実装作業なし**。lifecycle 契約へ Accepted 追記のみ。新問題は生成・再発契約で扱う |
-| **Decision-HO-1** | Handoff transition ownership | HOLD。状態型は #27、運用案は #17。遷移関数所有は **未確定** | **未確定**（#24 へ自動割当しない。候補は人の指定） | `GOV-AUD-02`（実行ロール）と分離。所有指定はロール回答と独立に可能 | 所有 Issue 確定後のみ、許可辺 Decision → 技術契約 → 純関数候補 |
+| **Decision-HO-1** | Handoff transition ownership | **Pending**。状態型は #27、運用案は #17。遷移関数所有は **未確定**。判断単位正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md) | **未確定**（#24 へ自動割当しない。候補は人の指定） | `GOV-AUD-02`（実行ロール）と分離。所有指定はロール回答と独立に可能 | 所有 Issue 確定後のみ、許可辺 Decision → 技術契約 → 純関数候補 |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | HOLD。`DEC-001〜017` に Severity 正本なし | A: Issue #8 新DEC / B: Issue #27 technical decision | 方式選択前に値一覧を採択しない | 方式 Accepted 後に **Decision-SEV-2** へ進める |
 | **Decision-SEV-2** | Severity assignment boundary（値・意味・判定主体） | HOLD。値一覧・domain算出/caller-supplied 未決 | SEV-1 の選択結果に従う | **SEV-1** | 完全 Finding 契約の Severity 欄定義候補（実装は別 Entry Criteria） |
 | **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
@@ -140,14 +143,18 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | 追加・廃止の所有者 | #24 部分。カタログは別 Decision | **FC-1 待ち** |
 | domain 固定列挙 vs 外部 | 現行は caller-supplied | **FC-2 待ち**。現行組立を壊さない |
 
-### D. Handoff 所有（Decision-HO-1）
+### D. Handoff 所有（Decision-HO-1）— Pending
+
+正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)
 
 | 問い | 正本根拠 | 結論 |
 |---|---|---|
-| transition 所有 Issue | ownership: **未確定**。#24 自動割当禁止 | **HO-1 待ち** |
+| transition 所有 Issue | ownership: **未確定**。#24 自動割当禁止 | **HO-1 Pending**（人の指定待ち） |
 | #24 が所有する根拠 | 自動割当記録なし | **根拠不足 → 割当しない** |
 | `GOV-AUD-02` | 実行ロール。遷移所有と分離 | 所有指定はロール回答と独立に可能だが、実装はロール分離を維持 |
-| 実行ロールとの分離 | ownership 明示 | 権限判定を純関数へ混ぜない |
+| 実行ロールとの分離 | ownership 明示 / HO-1 正本 | 権限判定を純関数へ混ぜない |
+| 許可辺 | HO-1 対象外 | 所有 Accepted 後の **別 Decision** |
+| 実装 | HO-1 Pending | **開始しない**（Next pure unit: NONE） |
 
 ### E. OP-3 / RD-3
 
@@ -166,8 +173,8 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 監査結果と矛盾しない推奨順（依存がある場合は依存を先）:
 
 ```text
-1. Decision-FLR-1   Finding reopen policy — Accepted（実装 NONE）
-2. Decision-HO-1    Handoff transition ownership
+1. Decision-FLR-1   Finding reopen policy — Accepted（実装 NONE / PR #88 MERGED）
+2. Decision-HO-1    Handoff transition ownership — **次の判断**（Pending。正本: decision-ho-1-handoff-transition-ownership.md）
 3. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）
 4. Decision-SEV-2   Severity assignment boundary（SEV-1 後）
 5. Decision-FC-1    FindingCode catalog ownership
@@ -177,9 +184,10 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 9. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
-注: Decision-FLR-1 は Accepted（再オープン不許可・実装なし）。残順は Handoff 優先を維持。
+注: Decision-FLR-1 は Accepted（再オープン不許可・実装なし）。**次工程は HO-1**。
 SEV は SEV-1→SEV-2、FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
+HO-1 未 Accepted のまま Handoff 純関数実装を始めない。
 
 ## Phase 4 — 次の安全な純関数単位
 
@@ -191,10 +199,11 @@ Implementation Start: HOLD
 判定理由:
 
 1. Decision-FLR-1 は Accepted だが実装 impact NONE（新純関数単位を開かない）
-2. 残候補はいずれも未 Accepted Decision、所有未確定、制度/Schema、または `DEC-009` / `GOV-AUD` 依存
-3. 既存正本だけで入力・出力・fail-closed・IN/OUT を完全定義できる新単位は無い
-4. 業務判断（Severity 値、FindingCode 一覧、制度日数、保存タイミング）を1つでも推測する必要がある
-5. PR #85 の NONE 判定を維持する
+2. Decision-HO-1 は Pending（所有未指定。#24 自動割当禁止）
+3. 残候補はいずれも未 Accepted Decision、所有未確定、制度/Schema、または `DEC-009` / `GOV-AUD` 依存
+4. 既存正本だけで入力・出力・fail-closed・IN/OUT を完全定義できる新単位は無い
+5. 業務判断（所有 Issue、Severity 値、FindingCode 一覧、制度日数、保存タイミング）を1つでも推測する必要がある
+6. PR #85 / #88 の NONE 判定を維持する
 
 ## OUT / 混ぜないもの
 
@@ -227,7 +236,9 @@ Ready / Merge（本PR）: 人の事前承認待ち（エージェントは実行
 1. Issue #24 残 Decision を独立承認可能な Matrix として固定する
 2. 所有・依存・Accepted後作業を明示する
 3. Next pure unit = NONE / Implementation Start = HOLD を再確認する
-4. src/** / tests/** は変更しない
+4. Decision-HO-1 判断単位正本を置き、人が所有 Issue を指定できるようにする
+5. src/** / tests/** は変更しない
+6. 所有 Issue を推測採択しない
 ```
 
 ## 変更禁止境界

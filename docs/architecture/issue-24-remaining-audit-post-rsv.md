@@ -52,7 +52,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
-| Handoff 状態遷移純関数 | 未確定 | HOLD（所有未指定） | **不可** | Issue #24 へ自動割当しない。ロールは `GOV-AUD-02` |
+| Handoff 状態遷移純関数 | 未確定 | HOLD（Decision-HO-1 Pending） | **不可** | Issue #24 へ自動割当しない。ロールは `GOV-AUD-02`。正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md) |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
@@ -92,7 +92,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. Handoff 状態遷移の所有 Issue 指定（Decision-HO-1。ロールは `GOV-AUD-02` と分離。#24 自動割当禁止）
+2. Handoff 状態遷移の所有 Issue 指定（Decision-HO-1 Pending。ロールは `GOV-AUD-02` と分離。#24 自動割当禁止。正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)）
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）

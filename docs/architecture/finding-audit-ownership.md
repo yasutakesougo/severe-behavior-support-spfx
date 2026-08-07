@@ -7,7 +7,8 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 18a765ca2df74683fcc1ad9e80b6abeb2b5f649f
+main: a289128136591648c5f57525e7186b4985a2389c
+PR #88 / Decision-FLR-1: MERGED
 PR #85 / remaining audit post-RSV: MERGED
 PR #84 / RuleSetVersion selection: MERGED
 PR #72 / PR-H: MERGED
@@ -18,6 +19,7 @@ Issue #17 ownership comment: 5204771950
 Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining-audit-pr-i-selection.md
 Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-audit-post-rsv.md
 Issue #24 Decision backlog: docs/architecture/issue-24-decision-backlog.md
+Decision-HO-1（Pending）: docs/architecture/decision-ho-1-handoff-transition-ownership.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -33,7 +35,7 @@ Issue #24 Decision backlog: docs/architecture/issue-24-decision-backlog.md
 | `SnapshotCorrection`構造 | Issue #27 | PR #41で確定 | 完了 |
 | `AuditEvent`構造・strict allowlist | Issue #27 | PR #41で確定 | 完了 |
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり | 正式化までHOLD |
-| Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない | 所有指定までHOLD |
+| Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない。判断単位: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md) | 所有指定までHOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -112,6 +114,7 @@ closed
 状態型はIssue #27、運用設計と状態グラフ案はIssue #17にある。
 遷移関数をIssue #24へ自動割当しない。
 純粋遷移と`GOV-AUD-02`に依存する権限判定を分離する。
+所有指定の判断単位: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)（Pending）。
 
 ## FindingSeverity Decision
 
@@ -231,7 +234,7 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 
 ## 継続HOLD
 
-- Handoff状態遷移関数の所有Issue
+- Handoff状態遷移関数の所有Issue（Decision-HO-1 Pending / [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)）
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約
 - FindingCode 業務カタログ
