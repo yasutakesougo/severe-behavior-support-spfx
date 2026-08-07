@@ -211,7 +211,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - FindingSeverityのDecision方式と値一覧、完全なFinding契約
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
-- Handoff状態遷移〜 AuditEvent candidate は完了（#17）。実保存は `GOV-AUD-06` / `DEC-011` と書込先所有待ち（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）。実行ロールの法人最終確定は `GOV-AUD-02`
+- Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存は AUD-RET-1 / AUD-WR-1 人 Accepted 待ち（候補あり・Pending / [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）。実行ロールの法人最終確定は `GOV-AUD-02`
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
 - SupportPlan status transition / Active一意性 / 観察期間メンバシップ / 見直し期限 asOf 相対判定 / RuleSetVersion選択は完了。残る SupportPlan 系は OP-3・RD-3 等の制度・フィールド Decision（[`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)）
 - Finding 再オープンは Decision-FLR-1 Accepted（不許可・実装 NONE / [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)）
