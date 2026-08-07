@@ -98,7 +98,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
 6. AssessmentSnapshot 完全契約 Entry Criteria（Decision-AS-EC-1。`DEC-009` / `GOV-AUD` / Finding 境界）
 
-```
+```text
 Next pure unit: NONE（PR #85 判定維持。Decision backlog でも再確認）
 Implementation Start: HOLD
 ```
