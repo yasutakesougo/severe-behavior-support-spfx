@@ -211,7 +211,8 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移関数の所有Issueと、`GOV-AUD-02`に依存する実行ロール
-- Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定は技術契約化。FindingCode業務カタログ・Snapshot候補はHOLD）
+- Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
+- SupportPlan status transition の所有Issueと許可辺（PR-I候補 / [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)）。Active一意性・観察期間・見直し期限計算・RuleSetVersion選択は混ぜない
 - Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
