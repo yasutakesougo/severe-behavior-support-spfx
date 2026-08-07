@@ -7,7 +7,11 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: a289128136591648c5f57525e7186b4985a2389c
+main: 37369b9156631e10877932d210de0606b592798b
+PR #96 / Handoff AuditEvent candidate: MERGED
+PR #93 / Handoff state mutation: MERGED
+PR #91 / Handoff role policy: MERGED
+PR #90 / Handoff transition: MERGED
 PR #88 / Decision-FLR-1: MERGED
 PR #85 / remaining audit post-RSV: MERGED
 PR #84 / RuleSetVersion selection: MERGED
@@ -16,10 +20,12 @@ PR #41: MERGED
 Issue #27 ownership comment: 5204763504
 Issue #24 ownership comment: 5204768249
 Issue #17 ownership comment: 5204771950
+HANDOFF_STATUS_CHANGED Accepted comment: 5215557663
 Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining-audit-pr-i-selection.md
 Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-audit-post-rsv.md
 Issue #24 Decision backlog: docs/architecture/issue-24-decision-backlog.md
-Decision-HO-1（Pending）: docs/architecture/decision-ho-1-handoff-transition-ownership.md
+Decision-HO-1（Accepted #17）: docs/architecture/decision-ho-1-handoff-transition-ownership.md
+AuditEvent 実保存 Entry Criteria: docs/architecture/audit-event-persistence-entry-criteria.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -34,8 +40,12 @@ Decision-HO-1（Pending）: docs/architecture/decision-ho-1-handoff-transition-o
 | `HandoffState`型 | Issue #27 | PR #41で確定 | 完了 |
 | `SnapshotCorrection`構造 | Issue #27 | PR #41で確定 | 完了 |
 | `AuditEvent`構造・strict allowlist | Issue #27 | PR #41で確定 | 完了 |
-| handoff運用設計・状態グラフ案 | Issue #17 | 案あり | 正式化までHOLD |
-| Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない。判断単位: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md) | 所有指定までHOLD |
+| handoff運用設計・状態グラフ案 | Issue #17 | 案あり。遷移所有は Accepted | 運用正式化の残は HOLD |
+| Handoff状態遷移関数 | Issue #17 | Decision-HO-1 Accepted。PR #90 MERGED | 完了 |
+| Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
+| HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
+| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。実保存は HOLD |
+| AuditEvent 実保存 | 未確定（書込先所有 + `GOV-AUD-06`/`DEC-011`） | Entry Criteria: [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) | Criteria 充足まで HOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -111,10 +121,11 @@ acknowledged
 closed
 ```
 
-状態型はIssue #27、運用設計と状態グラフ案はIssue #17にある。
-遷移関数をIssue #24へ自動割当しない。
-純粋遷移と`GOV-AUD-02`に依存する権限判定を分離する。
-所有指定の判断単位: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)（Pending）。
+状態型はIssue #27、所有は **Issue #17**（Decision-HO-1 Accepted）。
+正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)。
+純粋遷移と`GOV-AUD-02`に依存する権限判定を分離する（ロールポリシー PR #91 MERGED）。
+AuditEvent 候補は PR #96 MERGED。実保存は
+[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) まで HOLD。
 
 ## FindingSeverity Decision
 
@@ -168,11 +179,12 @@ Issue #27で完了した範囲は次である。
 次は完了扱いにしない。
 
 - 許可済み文字列フィールドの値サニタイズ
-- `actionCode`最終enum
-- AuditLog保存期間
-- adapter・SharePointへの書込み
+- `actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Issue #17 / `5215557663` で Accepted。全体 enum は未了）
+- AuditLog保存期間（`GOV-AUD-06` / `DEC-011`）
+- adapter・SharePointへの書込み（実保存 Entry Criteria 未充足）
 
 値サニタイズはIssue #22または新規audit-write-boundaryで扱う。
+実保存前提: [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)。
 
 ## 後続PR境界
 
@@ -214,15 +226,20 @@ PR-I以降（支援計画系純粋ルール・完了）:
 Active一意性（#76/#78）、観察期間（#79/#80）、見直し期限（#81/#82）、
 RuleSetVersion選択（#83/#84）。再監査: [`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)。
 
+PR-I以降（Handoff・完了）:
+Decision-HO-1 Accepted（#17）、遷移 PR #90、ロール PR #91、mutation PR #93、
+AuditEvent candidate PR #96（`HANDOFF_STATUS_CHANGED` / `5215557663`）。
+実保存は [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) まで HOLD。
+
 PR-I以降（未割当・HOLD）:
-Handoff transition、Severity、完全Finding、
-AssessmentSnapshot完全契約、audit write boundary、
+Severity、完全Finding、
+AssessmentSnapshot完全契約、audit write boundary（保存期間・書込先所有）、
 FindingCode 業務カタログ、
 Decision-OP-3 / Decision-RD-3。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
 正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
-（Next pure unit: NONE / Implementation Start: HOLD）
+（Issue #24 系 Next pure unit は別。Audit 実保存は Entry Criteria HOLD）
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
@@ -234,22 +251,24 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 
 ## 継続HOLD
 
-- Handoff状態遷移関数の所有Issue（Decision-HO-1 Pending / [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)）
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約
 - FindingCode 業務カタログ
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
 - finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）
 - Decision-OP-3（観察期間フィールド追加） / Decision-RD-3（接近窓ポリシー）
-- handoff実行ロール
+- handoff実行ロールの法人最終確定（`GOV-AUD-02` / #19。ポリシー純関数は PR #91 MERGED）
 - 訂正承認、論理削除、物理削除
-- `AuditEvent.actionCode`最終enum
-- AuditLog保存期間
+- `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted）
+- AuditLog保存期間（`GOV-AUD-06` / `DEC-011`）
+- AuditEvent 実保存・書込先所有（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）
 - 許可フィールド値のサニタイズ
 - SharePoint、Entra ID、Microsoft 365、deploy
 
+Decision-HO-1（Handoff 遷移所有）は Accepted（#17）。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
-HOLD から外す。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
+正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)、
+[`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 
 ## 変更禁止境界
 

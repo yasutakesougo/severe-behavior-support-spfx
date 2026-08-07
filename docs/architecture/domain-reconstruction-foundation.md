@@ -138,7 +138,7 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 |---|---|---|
 | `FindingStatus`型・`FindingIdentity`・`HandoffState`型 | Issue #27 | PR #41でcontract-only実装済み |
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり。実行ロールは未決定 |
-| Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない。判断単位: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)（Pending） |
+| Handoff状態遷移関数 | Issue #17 | Decision-HO-1 Accepted。PR #90〜#96（transition / role / mutation / audit candidate）MERGED。実保存は [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) まで HOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。許可3辺のみ。`Resolved` 終端。再オープンは Decision-FLR-1 Accepted（不許可・実装 NONE / [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)） |
 | finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定ID・lifecycle・生成資格・Identity組立・再発判定・Snapshot Result変換（永続なし / `assessment-snapshot-result-conversion.md`）は技術契約化（PR-C〜H完了）。FindingCode業務カタログ・Snapshot完全契約・保存はHOLD。残責務再監査: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) |
 | SupportPlan状態遷移（狭域） | Issue #24 | Accepted `5211039927` / 許可5辺。選定: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) / 技術契約: [`support-plan-status-transition.md`](./support-plan-status-transition.md)。実装完了（PR #73 / #74） |
@@ -211,14 +211,15 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - FindingSeverityのDecision方式と値一覧、完全なFinding契約
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
-- Handoff状態遷移関数の所有Issue（Decision-HO-1 Pending）と、`GOV-AUD-02`に依存する実行ロール
+- Handoff状態遷移〜 AuditEvent candidate は完了（#17）。実保存は `GOV-AUD-06` / `DEC-011` と書込先所有待ち（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）。実行ロールの法人最終確定は `GOV-AUD-02`
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
 - SupportPlan status transition / Active一意性 / 観察期間メンバシップ / 見直し期限 asOf 相対判定 / RuleSetVersion選択は完了。残る SupportPlan 系は OP-3・RD-3 等の制度・フィールド Decision（[`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)）
 - Finding 再オープンは Decision-FLR-1 Accepted（不許可・実装 NONE / [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)）
 - Issue #24 残 Decision 分類: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)（Next pure unit: NONE）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
-- `AuditEvent.actionCode`最終enum、AuditLog保存期間
+- `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted `5215557663`）、AuditLog保存期間
+- AuditEvent 実保存・SharePoint adapter（Entry Criteria HOLD）
 - 許可フィールド値のサニタイズ（Issue #22 adapterまたは新規audit-write-boundary）
 - サービス別`NOT_APPLICABLE`・`UNKNOWN` reasonCode enum
 - 施設割合、職員研修割合

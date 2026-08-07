@@ -52,7 +52,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
-| Handoff 状態遷移純関数 | 未確定 | HOLD（Decision-HO-1 Pending） | **不可** | Issue #24 へ自動割当しない。ロールは `GOV-AUD-02`。正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md) |
+| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | 実保存は [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) HOLD |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
@@ -72,7 +72,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | `DEC-009` | Snapshot 保存タイミング | 次単位へ入れない |
 | FindingSeverity DEC 方式 A/B | 完全 Finding | 次単位へ入れない |
 | Finding 再オープン Decision | lifecycle（Decision-FLR-1 Accepted・実装 NONE） | 次単位へ入れない（変更不要） |
-| Handoff 所有指定 | transition 純関数 | 所有確定まで入れない |
+| Handoff 所有指定 | transition 純関数 | Decision-HO-1 Accepted（#17）。実保存は別 |
 | FindingCode カタログ Decision | 写像表・採番 | 次単位へ入れない |
 
 ## 選定結果
@@ -92,11 +92,13 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. Handoff 状態遷移の所有 Issue 指定（Decision-HO-1 Pending。ロールは `GOV-AUD-02` と分離。#24 自動割当禁止。正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)）
+2. AuditEvent 実保存前提（Decision-AUD-RET-1 / AUD-WR-1。`GOV-AUD-06` / `DEC-011` + 書込先所有。正本: [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
 6. AssessmentSnapshot 完全契約 Entry Criteria（Decision-AS-EC-1。`DEC-009` / `GOV-AUD` / Finding 境界）
+
+注: Decision-HO-1 / Handoff 候補生成（PR #96）は完了。実保存・SharePoint は NO-GO。
 
 ```text
 Next pure unit: NONE（PR #85 判定維持。Decision backlog でも再確認）
@@ -106,11 +108,12 @@ Implementation Start: HOLD
 ## OUT / 混ぜないもの
 
 - 次の domain 実装 PR を本監査から自動起票すること
-- Handoff の Issue #24 自動割当
 - Snapshot 保存・DTO・SharePoint 列
 - FindingSeverity 値の暗黙採択
 - FindingCode カタログの暗黙採択
 - Decision-FLR-1 に反する再オープン辺の追加（Accepted: 不許可）
+- AuditLog 保存期間・書込先の推測採択
+- AuditEvent 実保存 / SharePoint adapter（Entry Criteria 未充足）
 - OP-3 / RD-3 の制度値埋め込み
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
@@ -131,9 +134,9 @@ Deploy: NO-GO
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
 - FindingSeverity / 完全 Finding が未了
-- Handoff 状態遷移の所有が未確定
+- AuditEvent 実保存 Entry Criteria（`GOV-AUD-06` / `DEC-011` + 書込先所有）が未充足
 
-Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）のため、Close ブロッカーから外す。
+Decision-FLR-1 / Decision-HO-1 / Handoff 候補生成は完了扱い。Close ブロッカーから外す。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 
