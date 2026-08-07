@@ -7,11 +7,13 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 1c97fe78b5dc653217fca4fec83f0666351f7f0e
+main: 9232b8a8d549c306f88e4cbf1feae026b08e36e8
+PR #72 / PR-H: MERGED
 PR #41: MERGED
 Issue #27 ownership comment: 5204763504
 Issue #24 ownership comment: 5204768249
 Issue #17 ownership comment: 5204771950
+Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining-audit-pr-i-selection.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -28,13 +30,15 @@ Issue #17 ownership comment: 5204771950
 | `AuditEvent`構造・strict allowlist | Issue #27 | PR #41で確定 | 完了 |
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり | 正式化までHOLD |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない | 所有指定までHOLD |
-| Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | Implementation Start GO（承認範囲のみ） |
-| finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | Implementation Start GO（承認範囲のみ） |
-| finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了 |
+| Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
+| finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
+| finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
-| AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | Implementation Start GO（承認範囲のみ） |
-| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD |
+| AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
+| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD（DEC-009 / GOV-AUD） |
+| SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 正本 `issue-24-remaining-audit-pr-i-selection.md` / 許可5辺・allow/deny only | Implementation GO（承認範囲のみ・PR-I） |
+| Active計画一意性 / 観察期間 / 見直し期限計算 / RuleSetVersion選択 | Issue #24（後続候補） | #26=型/Schema、#24=純粋ルール境界。PR-Iへ混ぜない | 各単位の Decision までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-001〜017` | Deferred項目はHOLD |
@@ -183,11 +187,20 @@ PR-G:
 Issue #24 finding再発判定（`docs/architecture/finding-recurrence.md`）
 
 PR-H:
-Issue #24 AssessmentSnapshot Result変換（狭域・永続なし）（`docs/architecture/assessment-snapshot-result-conversion.md`）
+Issue #24 AssessmentSnapshot Result変換（狭域・永続なし）（`docs/architecture/assessment-snapshot-result-conversion.md`）— 完了（PR #72）
 
-PR-I以降:
+PR-I（選定・Decision Accepted・Implementation GO・docs-only 完了）:
+SupportPlan status transition（狭域・ロールなし・allow/deny only）。
+選定正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)。
+Decision: Accepted comment `5211039927`（ownership=#24 / 許可5辺）。
+Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI は OUT OF SCOPE。
+実装は **別ブランチ・別 PR**（技術契約 `support-plan-status-transition.md` + domain 純関数）。
+PR #73 を実装 PR へ変質させない。
+
+PR-I以降（未割当・HOLD）:
 Handoff transition、Severity、完全Finding、
-AssessmentSnapshot完全契約、audit write boundary
+AssessmentSnapshot完全契約、audit write boundary、
+Active一意性、観察期間、見直し期限計算、RuleSetVersion選択
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
@@ -195,9 +208,11 @@ AssessmentSnapshot完全契約、audit write boundary
 
 PR-BはPR-Aマージ後を推奨する。
 PR-C以降は、それぞれの所有Issue、Decision、Entry Criteriaを記録してから開始する。
+PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行わず Decision を待つ。
 
 ## 継続HOLD
 
+- Active計画一意性、観察期間、見直し期限計算、RuleSetVersion選択（PR-I OUT OF SCOPE）
 - Handoff状態遷移関数の所有Issue
 - FindingSeverityのDecision方式と値一覧
 - 完全なFinding契約

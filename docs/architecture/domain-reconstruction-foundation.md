@@ -140,7 +140,8 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり。実行ロールは未決定 |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。許可3辺のみ。再オープン等はHOLD |
-| finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定ID・lifecycle・生成資格・Identity組立・再発判定・Snapshot Result変換（永続なし / `assessment-snapshot-result-conversion.md`）は技術契約化。FindingCode業務カタログ・Snapshot完全契約・保存はHOLD |
+| finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定ID・lifecycle・生成資格・Identity組立・再発判定・Snapshot Result変換（永続なし / `assessment-snapshot-result-conversion.md`）は技術契約化（PR-C〜H完了）。FindingCode業務カタログ・Snapshot完全契約・保存はHOLD。残責務再監査: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) |
+| SupportPlan状態遷移（狭域） | Issue #24 | Accepted `5211039927` / 許可5辺・allow/deny only / Implementation GO。正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) |
 | 訂正・削除・監査ログ・復旧の設計 | Issue #17 | 業務決定はIssue #19へ集約 |
 | `GOV-AUD-01〜10`の回答 | Issue #19 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-009`・`DEC-011`・`DEC-012`・`DEC-015`はDeferred |
@@ -210,7 +211,8 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移関数の所有Issueと、`GOV-AUD-02`に依存する実行ロール
-- Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定は技術契約化。FindingCode業務カタログ・Snapshot候補はHOLD）
+- Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
+- SupportPlan status transition 実装（Accepted `5211039927` / Implementation GO。Active一意性・観察期間・見直し期限計算・RuleSetVersion選択・ロール・SharePoint・UIは混ぜない）
 - Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
