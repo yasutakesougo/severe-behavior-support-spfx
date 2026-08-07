@@ -74,28 +74,43 @@ Human Approval / Merge / Release
 
 ## 最小実用セット（現行）
 
-導入済み Skill（`.agents/skills/`）:
+導入済み Skill（`.agents/skills/`）はカタログ正本を参照する。標準実行順の主要 Skill は導入済みである。
 
-1. `implementation-plan`
-2. `implementation-review`
-3. `merge-audit`
-4. `handoff-builder`
-
-最初の適用順（現行試行）:
+最初の適用順（現行試行）に加え、要件・設計・品質・リリース Skill を Workflow 正本順で実行してよい。
 
 ```text
+/requirements-review
+  ↓
+/decision-review
+  ↓
+/domain-design
+  ↓
+/sharepoint-design
+  ↓
+/schema-design
+  ↓
+/architecture-review
+  ↓
 /implementation-plan
   ↓
 /implementation-review
   ↓
 実装
   ↓
+/contracts-review
+  ↓
+/test-review
+  ↓
 /merge-audit
   ↓
 人による merge 承認
   ↓
+/release-review
+  ↓
 /handoff-builder
 ```
+
+自動 handoff: `npm run handoff:auto`（PR 状態 / head SHA / CI / findings / next action）
 
 ## Logical Command
 
@@ -122,11 +137,11 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 
 | Agent | 正本 | 担当 | 現行で使える Skill |
 |---|---|---|---|
-| Requirements | `.agents/agents/requirements.md` | 要件整理・DEC・Requirement ID | 後続 Skill（未導入時は HOLD） |
-| Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint | 後続 Skill（未導入時は HOLD） |
+| Audit | `.agents/agents/audit.md` | マージ監査・引き継ぎ・リリース判定 | `merge-audit`, `release-review`, `handoff-builder` |
+| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認 | `implementation-review`, `contracts-review`, `test-review` |
+| Requirements | `.agents/agents/requirements.md` | 要件整理・DEC・Requirement ID | `requirements-review`, `decision-review` |
+| Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
 | Implementation | `.agents/agents/implementation.md` | 実装計画・Issue・PR・承認後実装 | `implementation-plan` |
-| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認 | `implementation-review`、後続 review 系 |
-| Audit | `.agents/agents/audit.md` | マージ監査・引き継ぎ・リリース判定 | `merge-audit`、`handoff-builder`（`release-review` は後続） |
 
 `handoff-builder` の所属 Agent は **Audit** とする。
 
@@ -155,6 +170,7 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 | Agents | `.agents/agents/` |
 | Logical Commands | `.agents/commands/` |
 | Adapter 対応 | `.agents/commands/adapter-matrix.md` |
+| Background Agent 契約 | `docs/process/background-agent-contract.md` |
 | 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 | 配置 | `docs/decisions/ADR-AI-ORG-001.md` |

@@ -40,11 +40,21 @@ const expectedAgents = [
 ];
 const expectedLogicalCommands = ["new-feature", "review-pr", "audit", "release-check"];
 const expectedInstalledSkills = [
+  "requirements-review",
+  "decision-review",
+  "domain-design",
+  "sharepoint-design",
+  "schema-design",
+  "architecture-review",
   "implementation-plan",
   "implementation-review",
+  "contracts-review",
+  "test-review",
   "merge-audit",
+  "release-review",
   "handoff-builder",
 ];
+const expectedToolAdapters = ["cursor-agent", "cursor-cli", "codex"];
 const handoffBuilderOwnerAgent = "audit";
 
 const requiredProcessFiles = [
@@ -55,12 +65,16 @@ const requiredProcessFiles = [
   "docs/process/ai-role.md",
   "docs/process/ai-governance.md",
   "docs/process/ai-workflow.md",
+  "docs/process/background-agent-contract.md",
   ".agents/skills/_shared/judgement-rules.md",
   ".agents/skills/_shared/output-format.md",
   ".agents/commands/adapter-matrix.md",
   ".agents/mcp/permission-matrix.md",
+  "scripts/ci/check-scope.mjs",
+  "scripts/auto-handoff.mjs",
   ...expectedAgents.map((name) => `.agents/agents/${name}.md`),
   ...expectedLogicalCommands.map((name) => `.agents/commands/${name}.md`),
+  ...expectedToolAdapters.map((name) => `.agents/commands/adapters/${name}.md`),
 ];
 
 /** Files allowed to mention legacy `skills/` paths for migration / history only. */
@@ -444,6 +458,7 @@ if (await exists(ledgerAbsolutePath)) {
   const ledgerContent = await readText(ledgerAbsolutePath);
   for (const requiredPhrase of [
     "参照専用",
+    "移行済み",
     "skills/requirements-review/",
     "skills/design-review/",
     "新規 Skill 作成は禁止",
@@ -511,9 +526,85 @@ if (await exists(adapterAbsolutePath)) {
       failures.push(`Adapter matrix missing command path for: ${commandName}`);
     }
   }
-  for (const phrase of ["Skill Fallback", "未整備可", "マージ", "deploy"]) {
+  for (const phrase of ["Skill Fallback", "マージ", "deploy", "Cursor Agent", "Cursor CLI", "Codex"]) {
     if (!adapterContent.includes(phrase)) {
       failures.push(`Adapter matrix missing required phrase: ${phrase}`);
+    }
+  }
+  for (const adapterName of expectedToolAdapters) {
+    if (!adapterContent.includes(`.agents/commands/adapters/${adapterName}.md`)) {
+      failures.push(`Adapter matrix missing tool adapter path: ${adapterName}`);
+    }
+  }
+}
+
+const actualToolAdapters = await listMarkdownBasenames(".agents/commands/adapters");
+assertExactSet(
+  "Tool Adapters (.agents/commands/adapters)",
+  actualToolAdapters,
+  expectedToolAdapters,
+);
+
+for (const adapterName of expectedToolAdapters) {
+  const relativePath = `.agents/commands/adapters/${adapterName}.md`;
+  const absolutePath = path.join(root, relativePath);
+  if (!(await exists(absolutePath))) {
+    continue;
+  }
+  const content = await readText(absolutePath);
+  for (const phrase of ["入力契約", "出力契約", "Evidence", "停止条件", "自動実行しないもの"]) {
+    if (!content.includes(phrase)) {
+      failures.push(`Tool adapter missing required section phrase "${phrase}" in ${relativePath}`);
+    }
+  }
+  hasUnsafeAutoMergeOrDeployLanguage(content, relativePath);
+}
+
+const backgroundContractRelativePath = "docs/process/background-agent-contract.md";
+const backgroundContractAbsolutePath = path.join(root, backgroundContractRelativePath);
+if (await exists(backgroundContractAbsolutePath)) {
+  const content = await readText(backgroundContractAbsolutePath);
+  for (const phrase of ["## 入力", "## 出力", "## Evidence", "## 停止条件", "PR 状態", "head SHA", "findings", "next action"]) {
+    if (!content.includes(phrase)) {
+      failures.push(`Background agent contract missing required phrase: ${phrase}`);
+    }
+  }
+  hasUnsafeAutoMergeOrDeployLanguage(content, backgroundContractRelativePath);
+}
+
+const packageJsonRelativePath = "package.json";
+const packageJsonAbsolutePath = path.join(root, packageJsonRelativePath);
+if (await exists(packageJsonAbsolutePath)) {
+  const packageJson = JSON.parse(await readText(packageJsonAbsolutePath));
+  const scripts = packageJson.scripts ?? {};
+  for (const scriptName of [
+    "verify:skills",
+    "typecheck",
+    "test",
+    "check:contracts-boundaries",
+    "check:scope",
+    "handoff:auto",
+    "verify:ci",
+  ]) {
+    if (!scripts[scriptName]) {
+      failures.push(`package.json missing script: ${scriptName}`);
+    }
+  }
+}
+
+const workflowRelativePath = ".github/workflows/contracts-ci.yml";
+const workflowAbsolutePath = path.join(root, workflowRelativePath);
+if (await exists(workflowAbsolutePath)) {
+  const workflowContent = await readText(workflowAbsolutePath);
+  for (const phrase of [
+    "npm run verify:skills",
+    "npm run typecheck",
+    "npm test",
+    "npm run check:contracts-boundaries",
+    "npm run check:scope",
+  ]) {
+    if (!workflowContent.includes(phrase)) {
+      failures.push(`CI workflow missing step command: ${phrase}`);
     }
   }
 }

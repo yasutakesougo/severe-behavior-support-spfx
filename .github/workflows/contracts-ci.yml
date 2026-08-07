@@ -1,4 +1,4 @@
-name: Contracts CI
+name: Contracts and Process CI
 
 on:
   pull_request:
@@ -8,7 +8,11 @@ on:
       - "src/domain/**"
       - "tests/domain/**"
       - "docs/architecture/domain-reconstruction-foundation.md"
-      - "scripts/ci/check-contracts-boundaries.mjs"
+      - "docs/process/**"
+      - "docs/decisions/DEC-AI-ORG-*.md"
+      - "docs/decisions/ADR-AI-ORG-*.md"
+      - ".agents/**"
+      - "scripts/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -23,7 +27,11 @@ on:
       - "src/domain/**"
       - "tests/domain/**"
       - "docs/architecture/domain-reconstruction-foundation.md"
-      - "scripts/ci/check-contracts-boundaries.mjs"
+      - "docs/process/**"
+      - "docs/decisions/DEC-AI-ORG-*.md"
+      - "docs/decisions/ADR-AI-ORG-*.md"
+      - ".agents/**"
+      - "scripts/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -39,9 +47,9 @@ concurrency:
 
 jobs:
   verify-contracts:
-    name: Verify contracts and domain
+    name: Verify contracts, skills, and scope
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -58,6 +66,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify skills
+        run: npm run verify:skills
+
       - name: Typecheck
         run: npm run typecheck
 
@@ -66,6 +77,25 @@ jobs:
 
       - name: Inspect contracts and domain boundaries
         run: npm run check:contracts-boundaries
+
+      - name: Scope check
+        shell: bash
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            export SCOPE_BASE="${{ github.event.pull_request.base.sha }}"
+            export SCOPE_HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            before="${{ github.event.before }}"
+            if [[ "$before" =~ ^0+$ ]]; then
+              before="$(git rev-list --max-parents=0 HEAD)"
+            fi
+            export SCOPE_BASE="$before"
+            export SCOPE_HEAD="${{ github.sha }}"
+          fi
+          npm run check:scope
 
       - name: Check changed lines
         shell: bash

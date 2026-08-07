@@ -16,7 +16,7 @@
 - PR のマージ可否を独立視点で監査する（`merge-audit`）
 - Review PASS と merge 承認が同一 head SHA に拘束されていることを確認する
 - 現在状態を次作業者へ引き継ぐ（`handoff-builder`）— **本 Agent 所属**
-- リリース判定（`release-review`）は後続 Skill。未導入時は HOLD
+- リリース判定（`release-review`）を行い、deploy は実行しない
 - 監査結果の案作成までとし、マージ実行は人の事前承認後
 
 ## 呼び出し Skill
@@ -25,7 +25,7 @@
 |---|---|---|
 | `merge-audit` | 導入済み | PR マージ可否の監査（Merge Gate） |
 | `handoff-builder` | 導入済み | 引き継ぎ文書の作成 |
-| `release-review` | 後続 | リリース可否判定 |
+| `release-review` | 導入済み | リリース可否判定（deploy は実行しない） |
 | `ledger-audit` | 提案 alias 候補。現行正本は `merge-audit` | 改名しない |
 | `dependency-audit` / `approval-audit` / `final-audit` | 後続（未カタログ） | 導入前は HOLD |
 
@@ -44,8 +44,8 @@
 ## 出力
 
 - 監査結果（P0 / P1 / P2 / HOLD、マージ可否の判定案）
+- リリース判定案（`release-review`）。deploy は含めない
 - handoff 文面（完了 / 未完了 / HOLD / 禁止操作 / 検証結果）
-- リリース判定案（`release-review` 導入後）。未導入時は HOLD
 
 ## 停止条件
 
@@ -53,7 +53,8 @@
 - Review PASS が merge 対象 expected head SHA と不一致
 - unresolved P0 / P1 が残っている
 - 承認証跡不足
-- `release-review` 未導入のままリリース完了を求められている
+- `release-review` の証跡不足のままリリース完了を求められている
+- 本番変更が工程に含まれる
 
 ## 禁止
 
@@ -75,6 +76,7 @@
 | 主題 | 正本 |
 |---|---|
 | Skill | `.agents/skills/merge-audit/SKILL.md` |
+| Skill | `.agents/skills/release-review/SKILL.md` |
 | Skill | `.agents/skills/handoff-builder/SKILL.md` |
 | Gate | `docs/process/gate-definitions.md`（Merge / Release Gate） |
 | Governance | `docs/process/ai-governance.md` |

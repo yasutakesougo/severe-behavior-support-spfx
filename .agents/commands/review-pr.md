@@ -13,7 +13,7 @@ PR レビューを開始する。Review Agent を起動し、必要に応じて 
 ## 起動内容
 
 1. Review Agent（`.agents/agents/review.md`）を参照する
-2. 導入済みなら `implementation-review`、実装後レビューなら後続 review 系 Skill を用いる
+2. 導入済みの `implementation-review`、実装後なら `contracts-review` / `test-review` を用いる
 3. レビューコメント案・Review PASS 記録案をローカル出力する
 4. マージ可否の監査が必要なら Audit Agent（`merge-audit`）へ引き渡す
 
@@ -30,7 +30,7 @@ PR レビューを開始する。Review Agent を起動し、必要に応じて 
 
 1. Review Agent 定義を読む
 2. `implementation-review` を直接実行する（着手判定）
-3. 実装後なら後続の `contracts-review` / `test-review`（未導入時は HOLD）
+3. 実装後なら `contracts-review` / `test-review` を直接実行する
 4. マージ監査が必要なら `merge-audit` を直接実行する（Audit Agent）
 
 ## 完了条件（本 Command）
@@ -45,7 +45,7 @@ PR レビューを開始する。Review Agent を起動し、必要に応じて 
 - head SHA 不明
 - unresolved P0 / P1 が残っている（PASS 不可）
 - Review PASS なしで Merge を求められている
-- 後続 Skill 未導入で当該観点の完了を求められている
+- 後続の未カタログ Skill（security/ui 等）の完了を求められている
 
 ## 自動実行しないもの
 

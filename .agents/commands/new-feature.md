@@ -30,8 +30,8 @@
 ## Fallback（Adapter 未整備時）
 
 1. Requirements Agent 定義を読む
-2. `requirements-review` / `decision-review` 等の Skill を直接実行する
-3. Skill が未導入の場合はカタログ上「後続」として `HOLD` を返す
+2. `requirements-review` / `decision-review` を直接実行する
+3. 未カタログ後続 Skill が必要な場合のみ HOLD
 
 ## 完了条件（本 Command）
 
@@ -42,8 +42,8 @@
 ## 停止条件
 
 - Out of Scope 操作が要求に含まれる
-- 対応 Skill 未導入
 - 証跡不足を推測で補完する必要がある
+- 未カタログ後続 Skill の完了を求められている
 
 ## 自動実行しないもの
 
