@@ -4,7 +4,7 @@
 - 位置づけ: Skill の運用カタログ（対応表）
 - Skill 実行正本: `.agents/skills/` 配下の `SKILL.md`
 - 旧パス区分正本: `docs/process/skill-migration-ledger.md`
-- 実装単位: AI-ORG-IMPL-3（対応表正本化）
+- 実装単位: AI-ORG-IMPL-6（後続 Skill 導入 + Adapter / CI / handoff）
 
 ## 目的
 
@@ -21,6 +21,7 @@
 - Agents: `.agents/agents/`
 - Logical Commands: `.agents/commands/`
 - Adapter 対応: `.agents/commands/adapter-matrix.md`
+- Background Agent 契約: `docs/process/background-agent-contract.md`
 - 旧 `skills/` 区分: `docs/process/skill-migration-ledger.md`
 
 ## 状態の定義
@@ -32,14 +33,23 @@
 | alias候補 | 提案名。現行正式名を正とし、改名しない |
 | 廃止 | 採用しない（本カタログでは使用しない） |
 
-## 導入済み（最小実用セット）
+## 導入済み
 
 | 正式Skill名 | 状態 | 所属Agent | 起動Command | Fallback | 移行判断 | HOLD条件 |
 |---|---|---|---|---|---|---|
+| [`requirements-review`](../../.agents/skills/requirements-review/SKILL.md) | 導入済み | Requirements | `new-feature` | Skill 直接実行 | 移行済み（旧 `skills/requirements-review/` は参照専用維持可） | 対象利用者・保存先・権限・失敗時・受入が未確定 |
+| [`decision-review`](../../.agents/skills/decision-review/SKILL.md) | 導入済み | Requirements | `new-feature` | Skill 直接実行 | 対象なし | 未決 DEC が設計・実装をブロック |
+| [`domain-design`](../../.agents/skills/domain-design/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 対象なし | 要件不足 / SharePoint 依存混入 |
+| [`sharepoint-design`](../../.agents/skills/sharepoint-design/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 対象なし | 権限・分離未定義。本番変更手順を含めない |
+| [`schema-design`](../../.agents/skills/schema-design/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 対象なし | 未入力表現・互換方針が未定義 |
+| [`architecture-review`](../../.agents/skills/architecture-review/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 参照専用（旧 `skills/design-review/`） | Architecture Gate 未充足 |
 | [`implementation-plan`](../../.agents/skills/implementation-plan/SKILL.md) | 導入済み | Implementation | なし（Workflow 工程） | Skill 直接実行 | 対象なし（旧パスなし） | 要件・DEC・設計・対象外が揃わない場合 |
 | [`implementation-review`](../../.agents/skills/implementation-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし（旧パスなし） | 計画・証跡不足、head SHA 不明 |
+| [`contracts-review`](../../.agents/skills/contracts-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし | 契約テスト / boundaries 証跡不足 |
+| [`test-review`](../../.agents/skills/test-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし | テスト結果不明、新規/既知失敗を区別不能 |
 | [`merge-audit`](../../.agents/skills/merge-audit/SKILL.md) | 導入済み | Audit | `audit`（`review-pr` からの引き渡し可） | Skill 直接実行 | 対象なし（旧パスなし） | CI/テスト/承認証跡不足、P0/P1 残存 |
-| [`handoff-builder`](../../.agents/skills/handoff-builder/SKILL.md) | 導入済み | **Audit** | `release-check` / `audit`（必要時） | Skill 直接実行 | 対象なし（旧パスなし） | SHA / Issue / PR / 検証結果が不明 |
+| [`release-review`](../../.agents/skills/release-review/SKILL.md) | 導入済み | Audit | `release-check` | Skill 直接実行 | 対象なし | SHA/artifact/承認/ロールバック不足。deploy は実行しない |
+| [`handoff-builder`](../../.agents/skills/handoff-builder/SKILL.md) | 導入済み | **Audit** | `release-check` / `audit`（必要時） | Skill 直接実行 / `handoff:auto` | 対象なし（旧パスなし） | SHA / Issue / PR / 検証結果が不明 |
 
 `handoff-builder` の所属 Agent は **Audit** とする（AI-ORG-IMPL-2 維持）。
 
@@ -47,25 +57,25 @@
 
 | Skill | 目的 | 主入力 | 主出力 | 実行タイミング |
 |---|---|---|---|---|
-| `implementation-plan` | 設計済み内容を Issue / PR / テストへ分割する | 要件、DEC、設計、制約 | 実装目的、Issue 分割、PR 分割、テスト計画、HOLD | 実装前 |
-| `implementation-review` | 着手可能かを判定する | 要件、DEC、設計、Contracts、計画 | Gate 判定、未着手条件、ブロッカー | 実装直前 |
-| `merge-audit` | PR のマージ可否を監査する | PR、差分、CI、テスト結果、レビュー状態 | 監査結果、P0/P1/P2/HOLD、マージ可否 | 実装後 |
-| `handoff-builder` | 現在状態を次作業者へ引き継ぐ | repo 状態、SHA、Issue、PR、検証結果 | handoff 文面、完了/未完了/HOLD | 節目ごと |
+| `requirements-review` | 要件不足・権限・検証可能性を検出 | 機能、利用者、入出力、権限、受入 | 要件判定、未確定、実装可能範囲 | 要件整理 |
+| `decision-review` | DEC/ADR の不足と衝突を検出 | 要件、DEC/ADR | 未決・ブロッカー一覧 | 要件後 |
+| `domain-design` | Domain 境界と業務ルールを整理 | 要件、DEC、既存 Domain | Domain 設計草稿 | 設計 |
+| `sharepoint-design` | List/権限設計（実変更なし） | Domain/Contracts、権限 | 対応表草稿、対象外 | 設計 |
+| `schema-design` | Schema/DTO/列挙/未入力を設計 | Domain、Contracts | Schema 設計草稿 | 設計 |
+| `architecture-review` | Architecture Gate 判定材料 | 設計一式、Gate 定義 | Gate 判定、Findings | 設計後 |
+| `implementation-plan` | Issue/PR/テストへ分割 | 要件、DEC、設計、制約 | 実装目的、分割、HOLD | 実装前 |
+| `implementation-review` | 着手可能かを判定 | 要件、DEC、設計、Contracts、計画 | Gate 判定、ブロッカー | 実装直前 |
+| `contracts-review` | 契約互換と境界を監査 | PR、差分、契約テスト | 互換判定、Findings | 実装後 |
+| `test-review` | テスト結果と網羅を監査 | PR、テスト結果 | 失敗分類、Findings | 実装後 |
+| `merge-audit` | PR のマージ可否を監査 | PR、差分、CI、レビュー状態 | 監査結果、マージ可否 | 実装後 |
+| `release-review` | リリース可否判定材料 | main SHA、artifact、承認 | Release Gate 判定 | リリース前 |
+| `handoff-builder` | 現在状態を次作業者へ引き継ぐ | repo 状態、SHA、Issue、PR、検証結果 | handoff 文面 | 節目ごと |
 
 ## 後続（カタログ掲載）
 
 | 正式Skill名 | 状態 | 所属Agent | 起動Command | Fallback | 移行判断 | HOLD条件 |
 |---|---|---|---|---|---|---|
 | `project-audit` | 後続 | Audit（候補） | なし | 未導入のため HOLD | 対象なし | Skill 未導入 |
-| `requirements-review` | 後続 | Requirements | `new-feature` | 未導入のため HOLD | 参照専用（旧 `skills/requirements-review/`） | Skill 未導入 |
-| `decision-review` | 後続 | Requirements | `new-feature` | 未導入のため HOLD | 対象なし | Skill 未導入 / 未決 DEC |
-| `domain-design` | 後続 | Architecture | なし | 未導入のため HOLD | 対象なし | Skill 未導入 |
-| `sharepoint-design` | 後続 | Architecture | なし | 未導入のため HOLD | 対象なし | Skill 未導入。本番変更手順を含めない |
-| `schema-design` | 後続 | Architecture | なし | 未導入のため HOLD | 対象なし | Skill 未導入 |
-| `architecture-review` | 後続 | Architecture | なし | 未導入のため HOLD | 対象なし | Skill 未導入 / Architecture Gate 未充足 |
-| `contracts-review` | 後続 | Review | `review-pr` | 未導入のため HOLD | 対象なし | Skill 未導入 |
-| `test-review` | 後続 | Review | `review-pr` | 未導入のため HOLD | 対象なし | Skill 未導入 |
-| `release-review` | 後続 | Audit | `release-check` | 未導入のため HOLD（`handoff-builder` は導入済み） | 対象なし | Skill 未導入 |
 | `finding-review` | 後続 | Requirements（候補） | なし | 未導入のため HOLD | 対象なし | Skill 未導入 |
 
 ## Agent 未カタログ後続（Agent 定義上の候補）
@@ -97,10 +107,10 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 
 | Logical Command | 起動 Agent | Skill Fallback（正） |
 |---|---|---|
-| `new-feature` | Requirements | `requirements-review` / `decision-review` 等。未導入なら HOLD |
-| `review-pr` | Review（→ Audit） | `implementation-review`。実装後は後続 review 系（未導入なら HOLD）。必要時 `merge-audit` |
+| `new-feature` | Requirements | `requirements-review` / `decision-review` |
+| `review-pr` | Review（→ Audit） | `implementation-review` / `contracts-review` / `test-review`。必要時 `merge-audit` |
 | `audit` | Audit | `merge-audit`（必要時 `handoff-builder`） |
-| `release-check` | Audit | `release-review`（未導入なら HOLD）+ `handoff-builder` |
+| `release-check` | Audit | `release-review` + `handoff-builder` |
 
 詳細: `.agents/commands/adapter-matrix.md`
 
@@ -108,22 +118,22 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 
 | Agent | 導入済み Skill |
 |---|---|
-| Requirements | （なし。後続のみ → HOLD） |
-| Architecture | （なし。後続のみ → HOLD） |
+| Requirements | `requirements-review`, `decision-review` |
+| Architecture | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
 | Implementation | `implementation-plan` |
-| Review | `implementation-review` |
-| Audit | `merge-audit`, `handoff-builder` |
+| Review | `implementation-review`, `contracts-review`, `test-review` |
+| Audit | `merge-audit`, `release-review`, `handoff-builder` |
 
 同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` は Audit のみ。
 
-## 旧 `skills/` 
+## 旧 `skills/`
 
 区分の正本は `docs/process/skill-migration-ledger.md` とする。
 
 | 旧パス | 移行判断 |
 |---|---|
-| `skills/requirements-review/` | 参照専用 |
-| `skills/design-review/` | 参照専用 |
+| `skills/requirements-review/` | 移行済み（実行正本は `.agents/skills/requirements-review/`。旧パスは参照専用として残置可） |
+| `skills/design-review/` | 参照専用（`architecture-review` 導入時の参考。実行正本にしない） |
 | 上記以外 | 対象 0 件。新規作成禁止 |
 
 旧パスは実行正本ではない。
@@ -137,29 +147,34 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 5. `handoff-builder`
 6. `requirements-review`
 7. `decision-review`
-8. 設計 Skill
-9. 品質確認 Skill
-10. リリース・運用 Skill
+8. 設計 Skill（`domain-design` / `sharepoint-design` / `schema-design` / `architecture-review`）
+9. 品質確認 Skill（`contracts-review` / `test-review`）
+10. リリース・運用 Skill（`release-review`）
 
 ## 関連ファイル
 
 - 検証スクリプト: `scripts/verify-skills.mjs`
 - 実行コマンド: `npm run verify:skills`
+- CI 一括: `npm run verify:ci`
 - 移行 ledger: `docs/process/skill-migration-ledger.md`
+- scope check: `npm run check:scope`
+- auto-handoff: `npm run handoff:auto`
 
-`verify:skills`（AI-ORG-IMPL-5）は少なくとも次を構造検査する。
+`verify:skills`（AI-ORG-IMPL-5/6）は少なくとも次を構造検査する。
 
-- 5 Agents / 4 Logical Commands / Adapter Matrix（実体集合と期待集合の**完全一致**）
-- 導入済み 4 Skills / Skill Catalog / Skill Migration Ledger（directory・カタログ「導入済み」も**完全一致**）
+- 5 Agents / 4 Logical Commands / Adapter Matrix / Tool Adapters（Cursor Agent / Cursor CLI / Codex）
+- 導入済み Skills / Skill Catalog / Skill Migration Ledger（directory・カタログ「導入済み」も**完全一致**）
 - MCP Permission Matrix
+- Background Agent 実行契約
+- CI（verify:skills / typecheck / tests / contracts-boundaries / scope check）
 - 必須ファイル欠落、旧 `skills/` への新規実行参照、存在しない Skill の「導入済み」扱い
-- 許可集合外の extra Agent / Logical Command / 導入済み Skill
+- 許可集合外の extra Agent / Logical Command / 導入済み Skill / Tool Adapter
 - `handoff-builder` の Audit 所属、正本参照切れ
 - credential / secret 実値混入、未承認 merge / deploy を許可する構造
 
 ## 運用ルール
 
-- Skill はコードを直接変更するものとして定義しない
+- Skill はコードを直接変更するものとして定義しない（実装 Agent の承認済み作業とは分離）
 - 出力は GitHub Issue、PR、設計文書、監査記録へ転記できる形式にする
 - 未確認事項を推測で補完しない
 - 証跡不足は `PASS` ではなく `HOLD`

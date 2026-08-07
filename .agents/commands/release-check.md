@@ -13,9 +13,9 @@
 ## 起動内容
 
 1. Audit Agent（`.agents/agents/audit.md`）を参照する
-2. `release-review` が導入済みなら実行する。未導入なら `HOLD`
-3. `handoff-builder` で現状・禁止操作・検証結果を引き継ぐ
-4. リリース判定案をローカル出力する（deploy は実行しない）
+2. `release-review` を実行する（deploy は実行しない）
+3. `handoff-builder` または `npm run handoff:auto` で現状・禁止操作・検証結果を引き継ぐ
+4. リリース判定案をローカル出力する
 
 ## 起動 Agent
 
@@ -29,18 +29,18 @@ Release Gate（`docs/process/gate-definitions.md`）を参照する。
 ## Fallback（Adapter 未整備時）
 
 1. Audit Agent 定義を読む
-2. `release-review` を直接実行する（未導入なら HOLD を明示）
-3. `handoff-builder` を直接実行する
+2. `release-review` を直接実行する
+3. `handoff-builder` を直接実行する（または `handoff:auto`）
 
 ## 完了条件（本 Command）
 
-- リリース判定案または HOLD（`release-review` 未導入）が出力されている
+- リリース判定案が出力されている
 - handoff に禁止操作（本番 deploy / SharePoint / Entra / M365 / 本番データ変更等）が含まれる
 - deploy を実行していない
 
 ## 停止条件
 
-- `release-review` 未導入のままリリース完了を求められている
+- `release-review` の証跡不足のままリリース完了を求められている
 - Merge 未完了または Review PASS 不整合
 - 本番変更が工程に含まれている
 

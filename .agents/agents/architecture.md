@@ -23,13 +23,13 @@ Domain / DTO / Schema / SharePoint 設計の整合、Architecture Gate に向け
 
 | Skill | 状態 | 用途 |
 |---|---|---|
-| `domain-design` | 後続 | 業務ルールを Domain として整理 |
-| `sharepoint-design` | 後続 | Lists / 権限 / 接続の設計 |
-| `schema-design` | 後続 | JSON Schema / DTO / 列挙値 |
-| `architecture-review` | 後続 | Domain / Contracts / SharePoint / UI / ADR 整合 |
+| `domain-design` | 導入済み | 業務ルールを Domain として整理 |
+| `sharepoint-design` | 導入済み | Lists / 権限 / 接続の設計（実変更なし） |
+| `schema-design` | 導入済み | JSON Schema / DTO / 列挙値 |
+| `architecture-review` | 導入済み | Domain / Contracts / SharePoint / UI / ADR 整合 |
 | `adr-builder` | 後続（未カタログ） | ADR 草案。導入前は HOLD |
 
-導入済み Skill はない。現行では本 Agent を起動しても、対応 Skill 未導入のため設計完了へ進めず `HOLD` とする。設計文書の読取りとギャップ列挙は可。
+導入済み Skill で設計確認まで進められる。`adr-builder` 未導入時は既存 `docs/decisions/` への手動記録を前提とし、完了を求められた場合のみ HOLD。
 
 ## 起動元 Logical Command
 
@@ -52,7 +52,7 @@ Domain / DTO / Schema / SharePoint 設計の整合、Architecture Gate に向け
 - 未決 DEC が実装をブロックしている
 - Domain に SharePoint 依存が混入している
 - データ境界または権限境界が説明できない
-- 呼び出し Skill が未導入で設計完了を求められている
+- 未カタログ後続 Skill の完了を求められている
 - 本番変更・未承認仕様確定が工程に含まれる
 
 ## 禁止
@@ -70,4 +70,8 @@ Domain / DTO / Schema / SharePoint 設計の整合、Architecture Gate に向け
 | Governance | `docs/process/ai-governance.md` |
 | Workflow | `docs/process/ai-workflow.md` |
 | Skill カタログ | `docs/process/skill-catalog.md` |
+| Skill | `.agents/skills/domain-design/SKILL.md` |
+| Skill | `.agents/skills/sharepoint-design/SKILL.md` |
+| Skill | `.agents/skills/schema-design/SKILL.md` |
+| Skill | `.agents/skills/architecture-review/SKILL.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |

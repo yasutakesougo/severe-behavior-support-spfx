@@ -22,12 +22,12 @@
 
 | Skill | 状態 | 用途 |
 |---|---|---|
-| `requirements-review` | 後続 | 要件の不足・矛盾・検証可能性 |
-| `decision-review` | 後続 | DEC 整理と未決定事項の特定 |
+| `requirements-review` | 導入済み | 要件の不足・矛盾・検証可能性 |
+| `decision-review` | 導入済み | DEC 整理と未決定事項の特定 |
 | `requirements-gap` | 後続（未カタログ） | ギャップ分析。導入前は HOLD |
 | `requirements-trace` | 後続（未カタログ） | 要件トレーサビリティ。導入前は HOLD |
 
-導入済み Skill はない。現行では本 Agent を起動しても、対応 Skill 未導入のため成果物作成へ進めず `HOLD` とする。
+導入済み Skill は `requirements-review` と `decision-review`。未カタログ後続が必要な場合のみ HOLD。
 
 ## 起動元 Logical Command
 
@@ -48,7 +48,7 @@
 ## 停止条件
 
 - 必要な DEC / ADR が未承認
-- 呼び出し Skill が未導入（後続）
+- 未カタログ後続 Skill の完了を求められている
 - Out of Scope（本番 SharePoint / Entra ID / Microsoft 365 / 本番データ変更等）が工程に含まれる
 - 証跡不足を推測で埋めようとしている
 
@@ -67,4 +67,6 @@
 | Governance | `docs/process/ai-governance.md` |
 | Workflow | `docs/process/ai-workflow.md` |
 | Skill カタログ | `docs/process/skill-catalog.md` |
+| Skill | `.agents/skills/requirements-review/SKILL.md` |
+| Skill | `.agents/skills/decision-review/SKILL.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |

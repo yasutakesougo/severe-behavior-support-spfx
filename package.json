@@ -9,8 +9,11 @@
     "test": "tsx --test tests/**/*.test.ts",
     "typecheck": "tsc --noEmit",
     "check:contracts-boundaries": "node scripts/ci/check-contracts-boundaries.mjs",
+    "check:scope": "node scripts/ci/check-scope.mjs",
     "verify:skills": "node scripts/verify-skills.mjs",
-    "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries"
+    "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries",
+    "verify:ci": "npm run verify:skills && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:scope",
+    "handoff:auto": "node scripts/auto-handoff.mjs"
   },
   "devDependencies": {
     "@types/node": "22.20.1",

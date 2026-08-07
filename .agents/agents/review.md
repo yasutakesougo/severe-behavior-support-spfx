@@ -24,8 +24,8 @@
 | Skill | 状態 | 用途 |
 |---|---|---|
 | `implementation-review` | 導入済み | 着手可能かの判定（Implementation Gate） |
-| `contracts-review` | 後続 | 契約変更の互換性監査 |
-| `test-review` | 後続 | テスト結果と網羅範囲 |
+| `contracts-review` | 導入済み | 契約変更の互換性監査 |
+| `test-review` | 導入済み | テスト結果と網羅範囲 |
 | `security-review` | 後続（未カタログ） | セキュリティ観点。導入前は HOLD |
 | `ui-review` | 後続（未カタログ） | UI 観点。導入前は HOLD |
 
@@ -54,7 +54,7 @@
 - 要件 / DEC / 設計不足で着手判定できない
 - unresolved P0 / P1 が残っている
 - 承認証跡の対象・範囲・版が現操作と一致しない
-- 後続 Skill が未導入で当該観点の完了を求められている
+- 後続の未カタログ Skill が必要な観点の完了を求められている
 
 ## 禁止
 
@@ -76,6 +76,8 @@
 | 主題 | 正本 |
 |---|---|
 | Skill | `.agents/skills/implementation-review/SKILL.md` |
+| Skill | `.agents/skills/contracts-review/SKILL.md` |
+| Skill | `.agents/skills/test-review/SKILL.md` |
 | Gate | `docs/process/gate-definitions.md` |
 | Governance | `docs/process/ai-governance.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |

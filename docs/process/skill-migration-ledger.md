@@ -2,7 +2,7 @@
 
 - 文書: `docs/process/skill-migration-ledger.md`
 - 位置づけ: 旧 `skills/` パスの移行・廃止・参照専用区分の正本
-- 実装単位: AI-ORG-IMPL-3
+- 実装単位: AI-ORG-IMPL-3 / AI-ORG-IMPL-6（requirements-review 移行）
 - 基準 main（着手時）: `9f58477feecf14cbace191c3d1a227f9adcde03a`
 - Skill 実行正本: `.agents/skills/`（旧 `skills/` は実行正本にしない）
 - 関連カタログ: `docs/process/skill-catalog.md`
@@ -14,7 +14,7 @@
   - 廃止
   - 参照専用
   - 対象なし
-- 本 ledger は区分記録のみ行う。Skill 本文の移動・改名・削除は行わない。
+- 本 ledger は区分記録のみ行う。旧パスの削除は別承認が必要である。
 - 旧パスを Workflow / Agent / Logical Command の実行先として指定しない。
 - 新規に旧 `skills/` パスへの有効な実行参照を追加しない。
 
@@ -24,8 +24,8 @@
 
 | 旧パス | 対応する正式 Skill 名（予定） | 移行判断 | 根拠 | 備考 |
 |---|---|---|---|---|
-| `skills/requirements-review/` | `requirements-review` | **参照専用** | `.agents/skills/` 未移行。カタログ上は後続 | 実行時は後続導入まで `HOLD`。旧パスを実行しない |
-| `skills/design-review/` | （カタログ未掲載。設計レビュー系後続と別判断） | **参照専用** | `.agents/skills/` 未移行。正式名未確定 | 実行正本にしない。後続 Skill 導入時に再区分してよい |
+| `skills/requirements-review/` | `requirements-review` | **移行済み** | 実行正本は `.agents/skills/requirements-review/SKILL.md` | 旧パスは参照比較用に残置可。実行してはならない |
+| `skills/design-review/` | `architecture-review`（関連） | **参照専用** | `.agents/skills/architecture-review/` を正式導入。旧名は採用しない | 実行正本にしない |
 
 ## 対象なし / 新規作成禁止
 
