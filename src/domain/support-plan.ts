@@ -552,3 +552,163 @@ export function transitionSupportPlanStatus(
 
   return { ok: true, status: targetStatus };
 }
+
+// ==========================================
+// Active plan uniqueness (Issue #24)
+// Technical contract: docs/architecture/active-plan-uniqueness.md
+// Decision: Accepted comment 5212085136
+// ==========================================
+
+export type ActivePlanUniquenessResult = "UNIQUE" | "CONFLICT" | "MALFORMED_INPUT";
+
+type ActiveDayInterval = Readonly<{
+  fromDay: string;
+  toDay: string | null;
+}>;
+
+type UniquenessGroupKey = string;
+
+const TOKYO_TIME_ZONE = "Asia/Tokyo";
+
+/**
+ * Convert an Issue #26 ISO DateTime bound to an Asia/Tokyo calendar day (YYYY-MM-DD).
+ * Returns null when the value is not a usable DateTime.
+ */
+export function toAsiaTokyoCalendarDay(isoDateTime: unknown): string | null {
+  if (!isValidIsoDateTime(isoDateTime)) {
+    return null;
+  }
+
+  const instant = new Date(isoDateTime);
+  if (Number.isNaN(instant.getTime())) {
+    return null;
+  }
+
+  const formatted = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TOKYO_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(instant);
+
+  return /^\d{4}-\d{2}-\d{2}$/.test(formatted) ? formatted : null;
+}
+
+function uniquenessGroupKey(
+  organizationId: string,
+  siteId: string,
+  userId: string,
+): UniquenessGroupKey {
+  return `${organizationId}\u0000${siteId}\u0000${userId}`;
+}
+
+function closedCalendarIntervalsOverlap(
+  left: ActiveDayInterval,
+  right: ActiveDayInterval,
+): boolean {
+  const leftEndsOnOrAfterRightStart =
+    left.toDay === null || left.toDay >= right.fromDay;
+  const rightEndsOnOrAfterLeftStart =
+    right.toDay === null || right.toDay >= left.fromDay;
+  return leftEndsOnOrAfterRightStart && rightEndsOnOrAfterLeftStart;
+}
+
+function groupHasActiveConflict(intervals: readonly ActiveDayInterval[]): boolean {
+  for (let i = 0; i < intervals.length; i += 1) {
+    for (let j = i + 1; j < intervals.length; j += 1) {
+      if (closedCalendarIntervalsOverlap(intervals[i], intervals[j])) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Evaluate Active plan uniqueness for a SupportPlan collection.
+ *
+ * - Groups by OrganizationId + SiteId + UserId
+ * - Active-only calendar-day closed intervals in Asia/Tokyo
+ * - Aggregates as MALFORMED_INPUT > CONFLICT > UNIQUE
+ *
+ * Persistence, authorization, status transition, observation windows,
+ * review due dates, and RuleSetVersion selection are out of scope.
+ */
+export function evaluateActivePlanUniqueness(
+  plans: readonly SupportPlan[],
+): ActivePlanUniquenessResult {
+  return evaluateActivePlanUniquenessUnknown(plans);
+}
+
+/**
+ * Runtime fail-closed entry for unknown array payloads used by contract tests.
+ */
+export function evaluateActivePlanUniquenessUnknown(
+  plans: unknown,
+): ActivePlanUniquenessResult {
+  if (!Array.isArray(plans)) {
+    return "MALFORMED_INPUT";
+  }
+
+  const activeByGroup = new Map<UniquenessGroupKey, ActiveDayInterval[]>();
+
+  for (const plan of plans) {
+    if (!isRecord(plan)) {
+      return "MALFORMED_INPUT";
+    }
+
+    if (
+      !isNonEmptyString(plan.PlanId) ||
+      !isNonEmptyString(plan.OrganizationId) ||
+      !isNonEmptyString(plan.SiteId) ||
+      !isNonEmptyString(plan.UserId)
+    ) {
+      return "MALFORMED_INPUT";
+    }
+
+    if (!isSupportPlanStatus(plan.status)) {
+      return "MALFORMED_INPUT";
+    }
+
+    if (plan.status !== "Active") {
+      continue;
+    }
+
+    const fromDay = toAsiaTokyoCalendarDay(plan.effectiveFrom);
+    if (fromDay === null) {
+      return "MALFORMED_INPUT";
+    }
+
+    let toDay: string | null = null;
+    if (plan.effectiveTo !== undefined) {
+      toDay = toAsiaTokyoCalendarDay(plan.effectiveTo);
+      if (toDay === null) {
+        return "MALFORMED_INPUT";
+      }
+      if (fromDay > toDay) {
+        return "MALFORMED_INPUT";
+      }
+    }
+
+    const key = uniquenessGroupKey(
+      plan.OrganizationId,
+      plan.SiteId,
+      plan.UserId,
+    );
+    const intervals = activeByGroup.get(key);
+    const next: ActiveDayInterval = { fromDay, toDay };
+    if (intervals) {
+      intervals.push(next);
+    } else {
+      activeByGroup.set(key, [next]);
+    }
+  }
+
+  for (const intervals of activeByGroup.values()) {
+    if (groupHasActiveConflict(intervals)) {
+      return "CONFLICT";
+    }
+  }
+
+  return "UNIQUE";
+}
