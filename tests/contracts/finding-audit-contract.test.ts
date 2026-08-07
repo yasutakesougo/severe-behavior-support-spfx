@@ -14,7 +14,9 @@ import {
   assembleFindingIdentity,
   deriveStableFindingId,
   transitionFindingStatus,
+  decideFindingRecurrence,
   decideFindingGeneration,
+  FINDING_RECURRENCE_MATCH_FIELDS,
   sha256Hex,
   STABLE_FINDING_ID_FIELD_ORDER,
   FINDING_STATUS_ALLOWED_TRANSITIONS,
@@ -544,6 +546,199 @@ describe("Finding Lifecycle Transition Contract", () => {
         }
       }
     }
+  });
+});
+
+describe("Finding Recurrence Decision Contract", () => {
+  const priorResolved = {
+    identity: createSyntheticFindingIdentity(),
+    status: "Resolved" as const,
+  };
+
+  it("再発マッチキー契約を固定する", () => {
+    assert.deepEqual([...FINDING_RECURRENCE_MATCH_FIELDS], [
+      "OrganizationId",
+      "SiteId",
+      "UserId",
+      "FindingCode",
+      "ruleSetVersion",
+    ]);
+  });
+
+  it("先行なしはNEWとする", () => {
+    const candidate = createSyntheticFindingIdentity();
+    assert.deepEqual(decideFindingRecurrence({ candidate }), {
+      ok: true,
+      decision: "NEW",
+    });
+    assert.deepEqual(decideFindingRecurrence({ candidate, prior: null }), {
+      ok: true,
+      decision: "NEW",
+    });
+  });
+
+  it("Identity完全一致はSAMEとする（Q4-A）", () => {
+    const identity = createSyntheticFindingIdentity();
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate: identity,
+        prior: { identity, status: "Open" },
+      }),
+      { ok: true, decision: "SAME" }
+    );
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate: { ...identity },
+        prior: { identity, status: "Resolved" },
+      }),
+      { ok: true, decision: "SAME" }
+    );
+  });
+
+  it("Resolved先行かつperiod差のみならRECURRENCEとする（Q1-C/Q3-A）", () => {
+    const priorIdentity = createSyntheticFindingIdentity({
+      periodStart: "2026-07-01",
+      periodEnd: "2026-07-31",
+    });
+    const candidate = createSyntheticFindingIdentity({
+      periodStart: "2026-08-01",
+      periodEnd: "2026-08-31",
+    });
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate,
+        prior: { identity: priorIdentity, status: "Resolved" },
+      }),
+      { ok: true, decision: "RECURRENCE" }
+    );
+  });
+
+  it("period差だけでは再発にせず未Resolved先行はCONFLICTする（Q1-C/Q3-A）", () => {
+    const priorIdentity = createSyntheticFindingIdentity({
+      periodStart: "2026-07-01",
+      periodEnd: "2026-07-31",
+    });
+    const candidate = createSyntheticFindingIdentity({
+      periodStart: "2026-08-01",
+      periodEnd: "2026-08-31",
+    });
+
+    for (const status of ["Open", "Confirmed", "InProgress"] as const) {
+      assert.deepEqual(
+        decideFindingRecurrence({
+          candidate,
+          prior: { identity: priorIdentity, status },
+        }),
+        { ok: false, code: "CONFLICT_OPEN_FINDING" }
+      );
+    }
+  });
+
+  it("ruleSetVersion差は再発にせずNEWとする（Q2-A）", () => {
+    const priorIdentity = createSyntheticFindingIdentity({
+      ruleSetVersion: "synthetic-v1.0.0",
+      periodStart: "2026-07-01",
+      periodEnd: "2026-07-31",
+    });
+    const candidate = createSyntheticFindingIdentity({
+      ruleSetVersion: "synthetic-v2.0.0",
+      periodStart: "2026-08-01",
+      periodEnd: "2026-08-31",
+    });
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate,
+        prior: { identity: priorIdentity, status: "Resolved" },
+      }),
+      { ok: true, decision: "NEW" }
+    );
+  });
+
+  it("安定IDが違うだけではRECURRENCEにしない", () => {
+    const priorIdentity = createSyntheticFindingIdentity();
+    const candidate = createSyntheticFindingIdentity({
+      UserId: "synthetic-user-002",
+      periodStart: "2026-09-01",
+      periodEnd: "2026-09-30",
+    });
+    const priorId = deriveStableFindingId(priorIdentity);
+    const candidateId = deriveStableFindingId(candidate);
+    assert.equal(priorId.ok, true);
+    assert.equal(candidateId.ok, true);
+    if (priorId.ok && candidateId.ok) {
+      assert.notEqual(priorId.findingId, candidateId.findingId);
+    }
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate,
+        prior: { identity: priorIdentity, status: "Resolved" },
+      }),
+      { ok: true, decision: "NEW" }
+    );
+  });
+
+  it("RECURRENCE時は候補と先行の安定IDが異なる", () => {
+    const priorIdentity = createSyntheticFindingIdentity({
+      periodStart: "2026-07-01",
+      periodEnd: "2026-07-31",
+    });
+    const candidate = createSyntheticFindingIdentity({
+      periodStart: "2026-08-01",
+      periodEnd: "2026-08-31",
+    });
+    const decision = decideFindingRecurrence({
+      candidate,
+      prior: { identity: priorIdentity, status: "Resolved" },
+    });
+    assert.deepEqual(decision, { ok: true, decision: "RECURRENCE" });
+    const priorId = deriveStableFindingId(priorIdentity);
+    const candidateId = deriveStableFindingId(candidate);
+    assert.equal(priorId.ok, true);
+    assert.equal(candidateId.ok, true);
+    if (priorId.ok && candidateId.ok) {
+      assert.notEqual(priorId.findingId, candidateId.findingId);
+    }
+  });
+
+  it("不正入力をMALFORMED_INPUTとして拒否する", () => {
+    assert.deepEqual(decideFindingRecurrence(null), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(decideFindingRecurrence({}), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate: createSyntheticFindingIdentity({ FindingCode: "bad" }),
+      }),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate: createSyntheticFindingIdentity(),
+        prior: { identity: createSyntheticFindingIdentity() },
+      }),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate: createSyntheticFindingIdentity(),
+        prior: {
+          identity: createSyntheticFindingIdentity(),
+          status: "Closed",
+        },
+      }),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      decideFindingRecurrence({
+        candidate: createSyntheticFindingIdentity(),
+        prior: priorResolved,
+      }),
+      { ok: true, decision: "SAME" }
+    );
   });
 });
 

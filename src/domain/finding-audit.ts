@@ -183,6 +183,125 @@ export function transitionFindingStatus(
   return { ok: true, status: targetStatus };
 }
 
+/**
+ * Fields that must match for a RECURRENCE candidate (Q2-A / Q4-A).
+ * periodStart/periodEnd are excluded; ruleSetVersion is included.
+ */
+export const FINDING_RECURRENCE_MATCH_FIELDS = [
+  "OrganizationId",
+  "SiteId",
+  "UserId",
+  "FindingCode",
+  "ruleSetVersion",
+] as const;
+
+export type FindingRecurrenceDecision =
+  | "SAME"
+  | "RECURRENCE"
+  | "NEW";
+
+export type FindingRecurrenceDecisionResult =
+  | Readonly<{
+      ok: true;
+      decision: FindingRecurrenceDecision;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "MALFORMED_INPUT" | "CONFLICT_OPEN_FINDING";
+    }>;
+
+function identitiesFullyEqual(
+  left: FindingIdentity,
+  right: FindingIdentity
+): boolean {
+  return STABLE_FINDING_ID_FIELD_ORDER.every(
+    (field) => left[field] === right[field]
+  );
+}
+
+function identitiesMatchForRecurrence(
+  left: FindingIdentity,
+  right: FindingIdentity
+): boolean {
+  return FINDING_RECURRENCE_MATCH_FIELDS.every(
+    (field) => left[field] === right[field]
+  );
+}
+
+function periodsDiffer(
+  left: FindingIdentity,
+  right: FindingIdentity
+): boolean {
+  return (
+    left.periodStart !== right.periodStart || left.periodEnd !== right.periodEnd
+  );
+}
+
+/**
+ * Decide SAME / RECURRENCE / NEW between candidate and optional prior finding.
+ * Accepted boundaries: Q1-C / Q2-A / Q3-A / Q4-A.
+ * Technical contract: docs/architecture/finding-recurrence.md
+ */
+export function decideFindingRecurrence(
+  input: unknown
+): FindingRecurrenceDecisionResult {
+  if (!isRecord(input) || !("candidate" in input)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const candidateResult = assembleFindingIdentity(input.candidate);
+  if (!candidateResult.ok) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (!("prior" in input) || input.prior === null || input.prior === undefined) {
+    return { ok: true, decision: "NEW" };
+  }
+
+  if (!isRecord(input.prior)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (!("identity" in input.prior) || !("status" in input.prior)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (!isFindingStatus(input.prior.status)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const priorResult = assembleFindingIdentity(input.prior.identity);
+  if (!priorResult.ok) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const candidate = candidateResult.identity;
+  const priorIdentity = priorResult.identity;
+  const priorStatus = input.prior.status;
+
+  // Q4-A: SAME = full FindingIdentity equality (same stable-id key)
+  if (identitiesFullyEqual(candidate, priorIdentity)) {
+    return { ok: true, decision: "SAME" };
+  }
+
+  // Q2-A: ruleSetVersion is part of match keys; mismatch => NEW (not recurrence)
+  if (!identitiesMatchForRecurrence(candidate, priorIdentity)) {
+    return { ok: true, decision: "NEW" };
+  }
+
+  // Q1-C: period difference is required for RECURRENCE (not sufficient alone)
+  if (!periodsDiffer(candidate, priorIdentity)) {
+    return { ok: true, decision: "NEW" };
+  }
+
+  // Q3-A: different-period candidate requires prior Resolved
+  if (priorStatus !== "Resolved") {
+    return { ok: false, code: "CONFLICT_OPEN_FINDING" };
+  }
+
+  return { ok: true, decision: "RECURRENCE" };
+}
+
 export type FindingGenerationDoNotGenerateReason =
   | "EMPTY_CRITERIA"
   | "NO_FAILING_CRITERIA"
