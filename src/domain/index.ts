@@ -11,5 +11,6 @@ export * from "./support-plan-repository";
 export * from "./finding-audit";
 export * from "./handoff-transition";
 export * from "./handoff-role-policy";
+export * from "./handoff-state-mutation";
 export * from "./assessment-snapshot";
 export * from "./ruleset-version";
