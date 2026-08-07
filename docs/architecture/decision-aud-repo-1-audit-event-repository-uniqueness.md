@@ -38,44 +38,57 @@ Replay logical implementation: MERGED（PR #106）
 
 ## Accepted 内容
 
+Human Acceptance（Issue #22 comment `5220303406`）は
+reviewed candidate boundary をそのまま Accepted とする。
+本正本はその境界を変更しない。
+
 ### RecordId uniqueness
 
 ```text
-RecordId = auditEvent.auditEventId
-MUST be unique within the AuditEvent persistence store
+RecordId identity
+  = (OrganizationId, auditEvent.auditEventId)
+
+MUST be unique within the OrganizationId uniqueness space
 ```
 
-scope = `AuditEventExistingResultPort` / `AuditEventPersistencePort` が指す
-単一の論理 store。
-
-採用しない:
-
-```text
-OrganizationId / SiteId 別 uniqueness 空間での RecordId 再利用
-```
+`auditEvent.auditEventId` 単独の store 全体一意ではない。
 
 ### IdempotencyKey uniqueness
 
 ```text
-IdempotencyKey MUST be unique within the same AuditEvent persistence store
+Idempotency identity
+  = (OrganizationId, idempotencyKey)
+
+MUST be unique within the same OrganizationId uniqueness space
 ```
 
-RecordId と同じ store scope。
-
-採用しない:
+### SiteId
 
 ```text
-OrganizationId / SiteId 別での IdempotencyKey 再利用
+SiteId:
+  uniqueness key には含めない
+```
+
+SiteId 別の uniqueness 空間を作らない。
+SiteId の有無・値は RecordId / Idempotency identity を変えない。
+
+### 採用しない
+
+```text
+store 全体一意（OrganizationId を無視した uniqueness）
+SiteId を uniqueness key に含めること
 correlationId を IdempotencyKey として使うこと
 ```
 
 ### Lookup match count
 
+lookup は OrganizationId uniqueness space 内で数える。
+
 | Count | Meaning |
 |---|---|
 | 0 | persisted evidence なし → `NOT_FOUND` |
 | 1 | 単一候補 → `PersistedAuditEventWrite` として利用可能なら `FOUND` |
-| ≥2 | store invariant 違反。1 行を選んではならない |
+| ≥2 | OrganizationId uniqueness space の invariant 違反。1 行を選んではならない |
 
 ### Multi-match fail-closed
 
@@ -103,11 +116,19 @@ dual `NOT_FOUND` 後の競合作成について:
 
 ```text
 1. dual NOT_FOUND は save 試行を許可するだけであり、一意成功を保証しない
-2. uniqueness violation を検出した writer は SAVED を返してはならない
-3. detected uniqueness violation -> CONFLICT
-4. post-send commit uncertainty -> SAVE_OUTCOME_UNKNOWN
-   （SAVE_FAILED / SAVED へ縮退しない）
+2. collision / uniqueness pressure を検出した writer は
+   save response だけで SAVED を返してはならない
+3. confirmed different logical write -> CONFLICT
+4. collision したが save response だけでは
+   winner が same replay か conflict か判定不能
+   -> SAVE_OUTCOME_UNKNOWN
+   -> dual verification（Decision-AUD-REPLAY-1）
+5. SAVE_OUTCOME_UNKNOWN を SAVE_FAILED / SAVED / CONFLICT へ縮退しない
 ```
+
+`detected uniqueness violation -> CONFLICT` とはしない。
+同一 replay が同時に先着保存されたが save response だけでは
+winner を分類できない場合は `SAVE_OUTCOME_UNKNOWN` → dual verification を維持する。
 
 ### Layer split（維持）
 

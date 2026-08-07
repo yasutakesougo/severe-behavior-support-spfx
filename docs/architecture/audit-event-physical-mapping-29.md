@@ -103,19 +103,40 @@ ruleSetVersion?
 
 ## Physical uniqueness requirements（Decision-AUD-REPO-1）
 
-| Logical key | Uniqueness | Lookup port | Multi-match |
+Accepted uniqueness scope（変更しない）:
+
+```text
+RecordId identity
+  = (OrganizationId, auditEvent.auditEventId)
+
+Idempotency identity
+  = (OrganizationId, idempotencyKey)
+
+SiteId:
+  uniqueness key には含めない
+```
+
+| Logical identity | Uniqueness | Lookup port | Multi-match |
 |---|---|---|---|
-| `auditEvent.auditEventId`（RecordId） | store 内一意 MUST | `findByRecordId` | ≥2 → `RETRIEVAL_FAILED`（選ばない） |
-| write-request `idempotencyKey` | 同一 store 内一意 MUST | `findByIdempotencyKey` | ≥2 → `RETRIEVAL_FAILED`（選ばない） |
+| `(OrganizationId, auditEvent.auditEventId)` | OrganizationId 空間内一意 MUST | `findByRecordId`（Org scope 内） | ≥2 → `RETRIEVAL_FAILED`（選ばない） |
+| `(OrganizationId, idempotencyKey)` | 同一 OrganizationId 空間内一意 MUST | `findByIdempotencyKey`（Org scope 内） | ≥2 → `RETRIEVAL_FAILED`（選ばない） |
 
 物理手段（unique column / indexed column / 別 List / conditional write）は
 **未確認**。手段を推測で確定しない。要件だけ固定する。
+store 全体一意や SiteId 込み uniqueness へ広げない。
 
-競合作成:
+競合作成（Decision-AUD-REPO-1 Accepted）:
 
 ```text
-dual NOT_FOUND 後の uniqueness violation → CONFLICT
-post-send commit uncertainty → SAVE_OUTCOME_UNKNOWN
+confirmed different logical write
+  -> CONFLICT
+
+collision したが save response だけでは
+winner が same replay か conflict か判定不能
+  -> SAVE_OUTCOME_UNKNOWN
+  -> dual verification
+
+detected uniqueness violation を直ちに CONFLICT としない
 ```
 
 ## Mapping Table（Contract → Physical）
@@ -125,12 +146,12 @@ Status 凡例: `確定` = 論理側確定 / `未確認` = 物理名未確認 / `
 | Mapping ID | Logical Field | Required | Logical Type | SP List | Display Name | Internal Name | Column Type | Indexed / Unique | Read Conversion | Write Conversion | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | MAP-AUD-STORE-001 | （store 自体） | 必須 | AuditEvent persistence store | 未確認 | 未確認 | 未確認 | List | — | — | — | 未確認 |
-| MAP-AUD-001 | auditEvent.auditEventId | 必須 | string（RecordId） | 未確認 | 未確認 | 未確認 | 未確認 | Unique MUST | 非空 string | 非空 string | 論理確定 / 物理未確認 |
-| MAP-AUD-002 | idempotencyKey | 必須 | string（write metadata） | 未確認 | 未確認 | 未確認 | 未確認 | Unique MUST | 非空 string | 非空 string | 論理確定 / 物理未確認 |
-| MAP-AUD-003 | OrganizationId | 必須 | string | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 非空 | 非空 | 論理確定 / 物理未確認 |
-| MAP-AUD-004 | SiteId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
+| MAP-AUD-001 | auditEvent.auditEventId | 必須 | string（RecordId component） | 未確認 | 未確認 | 未確認 | 未確認 | Unique with OrganizationId MUST | 非空 string | 非空 string | 論理確定 / 物理未確認 |
+| MAP-AUD-002 | idempotencyKey | 必須 | string（write metadata） | 未確認 | 未確認 | 未確認 | 未確認 | Unique with OrganizationId MUST | 非空 string | 非空 string | 論理確定 / 物理未確認 |
+| MAP-AUD-003 | OrganizationId | 必須 | string（uniqueness scope） | 未確認 | 未確認 | 未確認 | 未確認 | uniqueness key 構成要素 | 非空 | 非空 | 論理確定 / 物理未確認 |
+| MAP-AUD-004 | SiteId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | uniqueness key に含めない | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
 | MAP-AUD-005 | actorStaffId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
-| MAP-AUD-006 | actionCode | 必須 | reasonCode | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 非空 | 非空 | 論理確定 / 物理未確認 |
+| MAP-AUD-006 | actionCode | 必須 | string（actionCode） | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 非空 | 非空 | 論理確定 / 物理未確認 |
 | MAP-AUD-007 | targetType | 必須 | enum（初期: HandoffState） | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 許可値のみ | 許可値のみ | 論理確定 / 物理未確認 |
 | MAP-AUD-008 | targetRecordId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
 | MAP-AUD-009 | result | 必須 | success/denied/failed | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 許可値のみ | 許可値のみ | 論理確定 / 物理未確認 |
@@ -145,16 +166,21 @@ Status 凡例: `確定` = 論理側確定 / `未確認` = 物理名未確認 / `
 
 ## Physical query requirements
 
+lookup / unique enforcement は OrganizationId uniqueness space 内で行う。
+SiteId で絞って uniqueness を分けない。
+
 ```text
 findByRecordId(recordId):
-  filter: RecordId column == recordId
+  filter: OrganizationId == request.OrganizationId
+          AND RecordId column == recordId
   0 rows -> NOT_FOUND
   1 row  -> FOUND（PersistedAuditEventWrite へ変換可能なら）
            変換不能なら logical MALFORMED 経路
   >=2    -> RETRIEVAL_FAILED（1行を選ばない）
 
 findByIdempotencyKey(idempotencyKey):
-  filter: IdempotencyKey column == idempotencyKey
+  filter: OrganizationId == request.OrganizationId
+          AND IdempotencyKey column == idempotencyKey
   同上の count 規則
 ```
 
@@ -165,15 +191,15 @@ findByIdempotencyKey(idempotencyKey):
 
 | Physical situation | Logical result |
 |---|---|
-| 0 matches | `NOT_FOUND` |
+| 0 matches（OrganizationId scope 内） | `NOT_FOUND` |
 | 1 usable match | `FOUND` + `PersistedAuditEventWrite` |
 | 1 unusable / malformed row | lookup `FOUND` だが verification 側 `MALFORMED` |
-| ≥2 matches | `RETRIEVAL_FAILED` |
+| ≥2 matches（OrganizationId scope 内） | `RETRIEVAL_FAILED` |
 | permission denied | `FORBIDDEN` |
 | transport / timeout / unknown | `RETRIEVAL_FAILED` |
-| uniqueness violation on create | `CONFLICT`（SAVED にしない） |
+| confirmed different logical write | `CONFLICT`（SAVED にしない） |
+| collision したが winner が same replay / conflict か判定不能 | `SAVE_OUTCOME_UNKNOWN` → dual verification |
 | commit outcome uncertain | `SAVE_OUTCOME_UNKNOWN` |
-
 ## Permissions / 事業所分離（設計メモ）
 
 - 書込権限拒否は `FORBIDDEN`（success / not-found へ変換しない）
@@ -187,8 +213,8 @@ findByIdempotencyKey(idempotencyKey):
 
 1. AuditEvent persistence 用 SharePoint Site / List の識別（確定または明示 HOLD 理由）
 2. MAP-AUD-001〜014 の Internal Name / Column Type（確定）
-3. RecordId / IdempotencyKey の物理 unique enforcement 手段（確定）
-4. `findByRecordId` / `findByIdempotencyKey` の物理照会手段（確定）
+3. `(OrganizationId, RecordId)` / `(OrganizationId, IdempotencyKey)` の物理 unique enforcement 手段（確定）。SiteId を key に入れない
+4. OrganizationId scope 付き `findByRecordId` / `findByIdempotencyKey` の物理照会手段（確定）
 5. race / conditional write に ETag 等を使う場合の手段メモ（使うなら確定、使わないなら対象外明示）
 6. logical ↔ physical 変換で metadata を logical evidence へ漏らさないことの確認
 7. 本番変更手順を成果物に含めないことの確認
@@ -220,7 +246,7 @@ Deploy: NO-GO
 ## Next Actions
 
 1. 法人 / 運用側で AuditEvent store の Site / List / 列 Internal Name を確認し、本表の `未確認` を埋める
-2. RecordId / IdempotencyKey の物理 unique 手段を確定する
+2. OrganizationId-scoped RecordId / IdempotencyKey の物理 unique 手段を確定する（SiteId は key 外）
 3. `#29` 完了後に Concrete Repository Entry Review を再実行する
 4. Entry PASS + 別 Human GO 後にのみ `#22B` を開始する
 
