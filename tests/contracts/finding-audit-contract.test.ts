@@ -11,6 +11,7 @@ import {
   validateAuditEvent,
   validateSnapshotCorrection,
   validateHandoffState,
+  assembleFindingIdentity,
   deriveStableFindingId,
   transitionFindingStatus,
   decideFindingGeneration,
@@ -139,6 +140,152 @@ describe("FindingIdentity Contract Validation", () => {
       severity: "high",
     };
     assert.equal(validateFindingIdentity(extraSeverityId), false);
+  });
+});
+
+describe("Finding Identity Assembly Contract", () => {
+  it("正常入力をFindingIdentityへ組み立てる", () => {
+    const input = createSyntheticFindingIdentity();
+    const result = assembleFindingIdentity(input);
+
+    assert.equal(result.ok, true);
+    if (!result.ok) {
+      return;
+    }
+
+    assert.deepEqual(result.identity, input);
+    assert.equal(result.identity.FindingCode, "SYNTHETIC_FINDING_CODE_001");
+  });
+
+  it("成功時の各フィールド値は入力と同一文字列である", () => {
+    const input = createSyntheticFindingIdentity({
+      OrganizationId: "synthetic-org-exact",
+      FindingCode: "EXTERNAL_FINDING_CODE_99",
+      ruleSetVersion: "ruleset-1.2.3",
+    });
+    const result = assembleFindingIdentity(input);
+    assert.equal(result.ok, true);
+    if (!result.ok) {
+      return;
+    }
+
+    assert.equal(result.identity.OrganizationId, "synthetic-org-exact");
+    assert.equal(result.identity.FindingCode, "EXTERNAL_FINDING_CODE_99");
+    assert.equal(result.identity.ruleSetVersion, "ruleset-1.2.3");
+  });
+
+  it("assemble成功後はderiveStableFindingIdが必ず成功する", () => {
+    const cases = [
+      createSyntheticFindingIdentity(),
+      createSyntheticFindingIdentity({
+        periodStart: "2026-08-06",
+        periodEnd: "2026-08-06",
+      }),
+      createSyntheticFindingIdentity({
+        FindingCode: "CALLER_SUPPLIED_CODE",
+        UserId: "synthetic-user-002",
+      }),
+    ];
+
+    for (const input of cases) {
+      const assembled = assembleFindingIdentity(input);
+      assert.equal(assembled.ok, true);
+      if (!assembled.ok) {
+        return;
+      }
+
+      const derived = deriveStableFindingId(assembled.identity);
+      assert.equal(derived.ok, true);
+      if (!derived.ok) {
+        return;
+      }
+      assert.match(derived.findingId, /^finding_[0-9a-f]{64}$/);
+    }
+  });
+
+  it("不正入力をMALFORMED_INPUTとして拒否する", () => {
+    assert.deepEqual(assembleFindingIdentity(null), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({ OrganizationId: "" })
+      ),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({ FindingCode: "invalid_lowercase_code" })
+      ),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({ periodEnd: "2026-07-01" })
+      ),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+    assert.deepEqual(
+      assembleFindingIdentity({
+        ...createSyntheticFindingIdentity(),
+        severity: "high",
+      }),
+      { ok: false, code: "MALFORMED_INPUT" }
+    );
+  });
+
+  it("FindingCode欠落をMALFORMED_INPUTとして拒否する", () => {
+    const { FindingCode: _removed, ...withoutCode } =
+      createSyntheticFindingIdentity();
+    assert.deepEqual(assembleFindingIdentity(withoutCode), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+  });
+
+  it("未trimおよびC0/DEL/C1制御文字をUNSUPPORTED_IDENTITY_VALUEとして拒否する", () => {
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({ UserId: "  synthetic-user-001  " })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({
+          UserId: `synthetic-user${"\t"}001`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({
+          SiteId: `synthetic-site${"\u001f"}001`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+    assert.deepEqual(
+      assembleFindingIdentity(
+        createSyntheticFindingIdentity({
+          ruleSetVersion: `synthetic${"\u007f"}v1.0.0`,
+        })
+      ),
+      { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" }
+    );
+  });
+
+  it("値をtrimして受理しない（正規化しない）", () => {
+    const padded = createSyntheticFindingIdentity({
+      OrganizationId: " synthetic-org-001",
+    });
+    assert.equal(validateFindingIdentity(padded), true);
+    assert.deepEqual(assembleFindingIdentity(padded), {
+      ok: false,
+      code: "UNSUPPORTED_IDENTITY_VALUE",
+    });
   });
 });
 

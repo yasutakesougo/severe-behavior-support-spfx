@@ -61,6 +61,46 @@ function hasUnsupportedIdentityValue(identity: FindingIdentity): boolean {
   return false;
 }
 
+export type AssembleFindingIdentityResult =
+  | Readonly<{
+      ok: true;
+      identity: FindingIdentity;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "MALFORMED_INPUT" | "UNSUPPORTED_IDENTITY_VALUE";
+    }>;
+
+/**
+ * Assemble FindingIdentity from externally supplied parts (FindingCode required).
+ * Does not adopt a FindingCode catalog or redefine deriveStableFindingId.
+ * Technical contract: docs/architecture/finding-identity-assembly.md
+ */
+export function assembleFindingIdentity(
+  input: unknown
+): AssembleFindingIdentityResult {
+  if (!validateFindingIdentity(input)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (hasUnsupportedIdentityValue(input)) {
+    return { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" };
+  }
+
+  return {
+    ok: true,
+    identity: {
+      OrganizationId: input.OrganizationId,
+      SiteId: input.SiteId,
+      UserId: input.UserId,
+      FindingCode: input.FindingCode,
+      ruleSetVersion: input.ruleSetVersion,
+      periodStart: input.periodStart,
+      periodEnd: input.periodEnd,
+    },
+  };
+}
+
 /**
  * Derive a deterministic stable finding ID from FindingIdentity.
  * Technical contract: docs/architecture/finding-stable-id.md
