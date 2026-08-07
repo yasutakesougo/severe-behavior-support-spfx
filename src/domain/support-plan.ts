@@ -494,3 +494,61 @@ export function validateSupportPlanVersionDto(
 
   return validateSupportPlanVersion(value.data);
 }
+
+// ==========================================
+// Status Transition (Issue #24 / PR-I)
+// Technical contract: docs/architecture/support-plan-status-transition.md
+// Decision: Accepted comment 5211039927
+// ==========================================
+
+/**
+ * Allowed SupportPlanStatus edges for status transition (Issue #24 / PR-I).
+ * Technical contract: docs/architecture/support-plan-status-transition.md
+ */
+export const SUPPORT_PLAN_STATUS_ALLOWED_TRANSITIONS = [
+  ["Draft", "PendingReview"],
+  ["PendingReview", "Returned"],
+  ["Returned", "Draft"],
+  ["PendingReview", "Active"],
+  ["Active", "Closed"],
+] as const satisfies ReadonlyArray<readonly [SupportPlanStatus, SupportPlanStatus]>;
+
+export type SupportPlanStatusTransitionResult =
+  | Readonly<{
+      ok: true;
+      status: SupportPlanStatus;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "MALFORMED_INPUT" | "INVALID_TRANSITION";
+    }>;
+
+export function isSupportPlanStatus(value: unknown): value is SupportPlanStatus {
+  return (
+    typeof value === "string" &&
+    SUPPORT_PLAN_STATUSES.includes(value as SupportPlanStatus)
+  );
+}
+
+/**
+ * Transition SupportPlanStatus along the approved graph only.
+ * Fail-closed: no exceptions. Roles / persistence / uniqueness are out of scope.
+ */
+export function transitionSupportPlanStatus(
+  currentStatus: unknown,
+  targetStatus: unknown,
+): SupportPlanStatusTransitionResult {
+  if (!isSupportPlanStatus(currentStatus) || !isSupportPlanStatus(targetStatus)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const allowed = SUPPORT_PLAN_STATUS_ALLOWED_TRANSITIONS.some(
+    ([from, to]) => from === currentStatus && to === targetStatus,
+  );
+
+  if (!allowed) {
+    return { ok: false, code: "INVALID_TRANSITION" };
+  }
+
+  return { ok: true, status: targetStatus };
+}

@@ -37,7 +37,7 @@ Issue #24 残責務再監査 / PR-I 選定: docs/architecture/issue-24-remaining
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
 | AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD（DEC-009 / GOV-AUD） |
-| SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 正本 `issue-24-remaining-audit-pr-i-selection.md` / 許可5辺・allow/deny only | Implementation GO（承認範囲のみ・PR-I） |
+| SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 選定正本 `issue-24-remaining-audit-pr-i-selection.md` / 技術契約 `support-plan-status-transition.md` / 許可5辺・allow/deny only | Implementation GO（承認範囲のみ・PR-I） |
 | Active計画一意性 / 観察期間 / 見直し期限計算 / RuleSetVersion選択 | Issue #24（後続候補） | #26=型/Schema、#24=純粋ルール境界。PR-Iへ混ぜない | 各単位の Decision までHOLD |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
@@ -189,12 +189,13 @@ Issue #24 finding再発判定（`docs/architecture/finding-recurrence.md`）
 PR-H:
 Issue #24 AssessmentSnapshot Result変換（狭域・永続なし）（`docs/architecture/assessment-snapshot-result-conversion.md`）— 完了（PR #72）
 
-PR-I（選定・Decision Accepted・Implementation GO・docs-only 完了）:
+PR-I（選定・Decision Accepted・Implementation GO）:
 SupportPlan status transition（狭域・ロールなし・allow/deny only）。
 選定正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)。
 Decision: Accepted comment `5211039927`（ownership=#24 / 許可5辺）。
-Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI は OUT OF SCOPE。
-実装は **別ブランチ・別 PR**（技術契約 `support-plan-status-transition.md` + domain 純関数）。
+技術契約: [`support-plan-status-transition.md`](./support-plan-status-transition.md)。
+Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI / repository永続化 は OUT OF SCOPE。
+選定ゲート: PR #73（docs-only）。実装: PR #74（domain 純関数 + contract tests）。
 PR #73 を実装 PR へ変質させない。
 
 PR-I以降（未割当・HOLD）:

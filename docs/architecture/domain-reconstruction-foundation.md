@@ -141,7 +141,7 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。許可3辺のみ。再オープン等はHOLD |
 | finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定ID・lifecycle・生成資格・Identity組立・再発判定・Snapshot Result変換（永続なし / `assessment-snapshot-result-conversion.md`）は技術契約化（PR-C〜H完了）。FindingCode業務カタログ・Snapshot完全契約・保存はHOLD。残責務再監査: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) |
-| SupportPlan状態遷移（狭域） | Issue #24 | Accepted `5211039927` / 許可5辺・allow/deny only / Implementation GO。正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) |
+| SupportPlan状態遷移（狭域） | Issue #24 | Accepted `5211039927` / 許可5辺・allow/deny only / Implementation GO。選定: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) / 技術契約: [`support-plan-status-transition.md`](./support-plan-status-transition.md)。ロール・Active一意・期限・RuleSetVersionはHOLD |
 | 訂正・削除・監査ログ・復旧の設計 | Issue #17 | 業務決定はIssue #19へ集約 |
 | `GOV-AUD-01〜10`の回答 | Issue #19 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-009`・`DEC-011`・`DEC-012`・`DEC-015`はDeferred |
@@ -178,7 +178,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 | SAFE-003 | 取得失敗を適合・対象外へ倒さない | `FETCH_FAILED`, `SOURCE_UNAVAILABLE`, contract tests |
 | SAFE-004 | 算定不能・未確認時に確定判定しない | `UNKNOWN`, `UNCONFIRMED`, `EXPIRED`, evaluation tests |
 | SAFE-005 | 複数有効資料の矛盾検出 | `selectAssessmentScoreSource`, `CONFLICT` tests |
-| PLAN-001〜010 | 支援計画・版管理・承認状態契約 | `SupportPlan`, `SupportPlanState`, `validateSupportPlan`, `support-plan-contract.test.ts` |
+| PLAN-001〜010 | 支援計画・版管理・承認状態契約。status transition 純関数は Issue #24 / PR-I（許可5辺） | `SupportPlan`, `SupportPlanState`, `validateSupportPlan`, `transitionSupportPlanStatus`, `support-plan-contract.test.ts`, `support-plan-status-transition-contract.test.ts`, [`support-plan-status-transition.md`](./support-plan-status-transition.md) |
 | REV-001〜002 | 版本文分離・履歴参照ポート | `SupportPlanVersion`, `ISupportPlanVersionRepository`, `validateSupportPlanVersion` |
 | AUD-001〜014 | Issue #27のcontract-only部分実装。型・validator・allowlistは実装済み。AssessmentSnapshot Result技術設計と狭域Result変換はIssue #24で固定。Finding安定ID・Identity組立・再発判定も技術契約化。完全なFinding、Severity、AssessmentSnapshot保存運用、削除権限、保存期間は所有Issue・Decisionに従いHOLD | `FindingIdentity`, `FindingStatus`, `HandoffState`, `SnapshotCorrection`, `AuditEvent`, `deriveStableFindingId`, `assembleFindingIdentity`, `decideFindingRecurrence`, `toAssessmentSnapshotResultCandidate`, [`finding-audit-ownership.md`](./finding-audit-ownership.md), [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md), [`assessment-snapshot-result-conversion.md`](./assessment-snapshot-result-conversion.md), [`finding-stable-id.md`](./finding-stable-id.md), [`finding-identity-assembly.md`](./finding-identity-assembly.md), [`finding-recurrence.md`](./finding-recurrence.md) |
 | SAFE-006〜009 | 監査イベントの禁止フィールド名・未知キー排除。許可フィールド値のサニタイズはIssue #22またはaudit-write-boundaryのHOLD | `validateAuditEvent` strict allowlist / forbidden key checks |
@@ -212,7 +212,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移関数の所有Issueと、`GOV-AUD-02`に依存する実行ロール
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
-- SupportPlan status transition 実装（Accepted `5211039927` / Implementation GO。Active一意性・観察期間・見直し期限計算・RuleSetVersion選択・ロール・SharePoint・UIは混ぜない）
+- SupportPlan status transition 以外の純粋ルール（Active一意性・観察期間・見直し期限計算・RuleSetVersion選択）。遷移本体は [`support-plan-status-transition.md`](./support-plan-status-transition.md)
 - Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
