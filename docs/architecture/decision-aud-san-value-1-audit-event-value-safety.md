@@ -205,12 +205,14 @@ Decision-AUD-SAN-VALUE-1: Accepted
 Current validateAuditEvent: COMPLIANT ON MAIN（PR #102）
 AuditEvent contract hardening: MERGED
 Decision-AUD-SAN-1: Accepted
-Next: Persistence Entry Review final rerun
-Persistence implementation: HOLD pending final Entry Review PASS + human GO
+Decision-AUD-REPLAY-1: Accepted
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Next: Replay Implementation Entry Review
+Replay implementation: HOLD pending Entry PASS + separate human GO
 ```
 
-値契約 Accepted ≠ Persistence implementation GO。
-hardening MERGED / SAN-1 Accepted だけでは実装開始しない。
+値契約 Accepted ≠ Replay / repository implementation GO。
+hardening MERGED / SAN-1 Accepted / logical boundary MERGED だけでは replay 実装開始しない。
 
 ## 決めないこと
 
@@ -227,9 +229,11 @@ hardening MERGED / SAN-1 Accepted だけでは実装開始しない。
 ```text
 Decision-AUD-SAN-VALUE-1: Accepted
 Decision-AUD-SAN-1: Accepted
+Decision-AUD-REPLAY-1: Accepted
 AuditEvent contract hardening: MERGED（PR #102）
-Next: Persistence Entry Review final rerun
-Persistence implementation: HOLD pending final Entry Review PASS + human GO
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Next: Replay Implementation Entry Review
+Replay implementation: HOLD pending Entry PASS + separate human GO
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```

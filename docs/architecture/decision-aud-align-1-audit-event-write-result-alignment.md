@@ -91,9 +91,12 @@ Persistence technical contract: MERGED
 Decision-AUD-IDEM-1: Accepted（別正本）
 Decision-AUD-SAN-VALUE-1: Accepted（別正本）
 Decision-AUD-SAN-1: Accepted
+Decision-AUD-REPLAY-1: Accepted（別正本）
 AuditEvent contract hardening: MERGED（PR #102）
-Next: Persistence Entry Review final rerun
-Persistence implementation: HOLD pending final Entry Review PASS + human GO
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Next: Replay Implementation Entry Review
+Replay implementation: HOLD pending Entry PASS + separate human GO
+Concrete repository: HOLD
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```

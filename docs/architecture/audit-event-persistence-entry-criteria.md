@@ -7,23 +7,27 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main before this canonicalization: 2751f421e1ced3bd28b4734eb964e49f1eff95c6
+main before this canonicalization: dd934f389411d23b882922dfc7933493cb1ae5f7
 PR #99 / persistence technical contract: MERGED
 PR #97 / Entry Criteria 初版: MERGED
 PR #98 / AUD-RET-1・AUD-WR-1 final candidates: MERGED
+PR #104 / logical persistence boundary: MERGED
 Decision-AUD-RET-1: Accepted (Issue #19 comment 5215844603)
 Decision-AUD-WR-1: Accepted (Issue #17 comment 5215846338)
 Decision-AUD-ALIGN-1: Accepted
 Decision-AUD-IDEM-1: Accepted
 Decision-AUD-SAN-VALUE-1: Accepted
 Decision-AUD-SAN-1: Accepted
+Decision-AUD-REPLAY-1: Accepted
 AuditEvent contract hardening: MERGED（PR #102）
 Handoff AuditEvent candidate: PR #96 MERGED
 AuditEvent persistence technical contract: MERGED
-Technical Persistence Entry: PASS
-Canonical documentation: SYNCHRONIZED（this docs update）
-Next: Persistence Entry Review final rerun
-AuditEvent persistence implementation: HOLD pending final Entry Review PASS + human GO
+Persistence Entry Review: PASS（ENTRY-00〜12 ALL PASS）
+Human Persistence GO: Accepted / consumed by PR #104
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Next: Replay Implementation Entry Review
+Replay implementation: HOLD pending Entry PASS + separate human GO
+Concrete repository: HOLD
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
 
@@ -39,6 +43,9 @@ SharePoint / Microsoft 365 / Deploy: NO-GO
 | Decision-AUD-ALIGN-1 | Accepted |
 | Decision-AUD-IDEM-1 | Accepted |
 | Decision-AUD-SAN-VALUE-1 | Accepted |
+| Decision-AUD-SAN-1 | Accepted |
+| Decision-AUD-REPLAY-1 | Accepted |
+| Logical persistence boundary | MERGED（PR #104） |
 
 ## Entry Criteria 表
 
@@ -55,28 +62,34 @@ SharePoint / Microsoft 365 / Deploy: NO-GO
 ```text
 Entry Criteria for persistence technical contract: MET
 AuditEvent persistence technical contract: MERGED（PR #99）
-ALIGN / IDEM / SAN-VALUE / SAN-1: Accepted
+ALIGN / IDEM / SAN-VALUE / SAN-1 / REPLAY-1: Accepted
 AuditEvent contract hardening: MERGED（PR #102）
-Next: Persistence Entry Review final rerun
-AuditEvent persistence implementation: HOLD pending final Entry Review PASS + human GO
+Persistence Entry Review: PASS
+Human Persistence GO: Accepted / consumed by PR #104
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Next: Replay Implementation Entry Review
+Replay implementation: HOLD pending Entry PASS + separate human GO
+Concrete repository: HOLD
 SharePoint adapter / M365 / Deploy: NO-GO
 ```
 
 ## 実装前に引き続き必要なこと
 
-- Persistence Entry Review final rerun（ENTRY-00〜12）
-- 明示的な human GO（Entry ALL PASS 後）
+- Replay Implementation Entry Review
+- Replay 実装向けの別の明示的 human GO（PR #104 GO とは別）
 - physical SharePoint mapping は #29 後
 
 正本:
 
+- [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md)
 - [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)
 - [`audit-event-persistence-implementation-boundary.md`](./audit-event-persistence-implementation-boundary.md)
 
 ## 禁止
 
-- docs-only 契約 MERGED / Decision Accepted / hardening MERGED を implementation GO と読み替えること
-- Persistence Entry Review final rerun と human GO を省略すること
+- docs-only 契約 MERGED / Decision Accepted / hardening MERGED / logical boundary MERGED を replay または repository GO と読み替えること
+- PR #104 Human GO を Replay implementation GO として流用すること
+- Replay Implementation Entry Review と別 human GO を省略すること
 - SharePoint List / 列作成
 - concrete adapter 実装
 - Microsoft 365 変更
@@ -91,5 +104,6 @@ Entra ID changes: NO-GO
 Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
-persistence code: HOLD pending final Entry Review PASS + explicit human GO
+Replay implementation: HOLD pending Entry PASS + separate human GO
+Concrete repository: HOLD
 ```

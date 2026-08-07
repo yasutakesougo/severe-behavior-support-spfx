@@ -127,7 +127,9 @@ correlationId MUST NOT be used as IdempotencyKey
 
 値安全性の契約正本は Decision-AUD-SAN-VALUE-1（Accepted）。
 現行 `validateAuditEvent` は Decision-AUD-SAN-VALUE-1 に適合する（PR #102 MERGED / Decision-AUD-SAN-1 Accepted）。
-Persistence implementation は、最終 Entry Review PASS と明示的な human GO まで HOLD とする。
+Logical persistence boundary（`persistAuditEvent` / port / write request）は MERGED（PR #104）。
+Replay / existing-result verification 実装は Decision-AUD-REPLAY-1 Accepted 後も、
+Replay Implementation Entry Review PASS と別 human GO まで HOLD。
 
 次は fail-closed で拒否する。
 
@@ -184,8 +186,11 @@ identity / replay / conflict 境界は Decision-AUD-IDEM-1 Accepted に従う。
 
 ```text
 SAVE_OUTCOME_UNKNOWN
-  -> automatic blind retry: prohibited
-  -> existing-result verification: required before retry
+  -> automatic retry: prohibited
+  -> blind retry: prohibited
+  -> existing-result verification: required
+  -> retry eligibility / count / backoff: separate Decision
+     （verification 後も retry を許可しない）
 
 same auditEventId + same IdempotencyKey + same semantic payload
   -> existing result（重複新規作成しない）
@@ -194,7 +199,8 @@ same IdempotencyKey + different semantic payload
   -> CONFLICT
 ```
 
-`auditEventId` / `correlationId` の採番方式、PayloadFingerprint algorithm、retry 回数は後続とする。
+`auditEventId` / `correlationId` の採番方式、PayloadFingerprint algorithm、
+retry eligibility / count / backoff は別 Decision（本契約では決めない）。
 
 ## Out of scope
 
@@ -221,16 +227,20 @@ AUD-ALIGN-1: Accepted
 AUD-IDEM-1: Accepted
 AUD-SAN-VALUE-1: Accepted
 AUD-SAN-1: Accepted
+AUD-REPLAY-1: Accepted
+  → decision-aud-replay-1-audit-event-safe-replay.md
 AuditEvent contract hardening: MERGED（PR #102）
 Persistence technical contract: MERGED（PR #99）
-Technical Persistence Entry: PASS
-Canonical documentation: SYNCHRONIZED（this docs update）
-Next: Persistence Entry Review final rerun
-Persistence implementation: HOLD pending final Entry Review PASS + human GO
+Persistence Entry Review: PASS（ENTRY-00〜12 ALL PASS）
+Human Persistence GO: Accepted / consumed by PR #104
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Next: Replay Implementation Entry Review
+Replay implementation: HOLD pending Entry PASS + separate human GO
+Concrete repository: HOLD
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
 ```
 
-本契約 MERGED、ALIGN/IDEM/SAN-VALUE/SAN-1 Accepted、hardening MERGED だけでは implementation GO にしない。
-Persistence Entry Review final rerun で ENTRY-00〜12 を確認し、明示的な human GO 後にのみ実装を開始する。
+Logical boundary MERGED / REPLAY-1 Accepted だけでは replay 実装 GO にしない。
+Replay Implementation Entry Review PASS と別の明示的 human GO 後にのみ replay 実装を開始する。
