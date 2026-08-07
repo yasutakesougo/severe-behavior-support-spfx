@@ -119,3 +119,7 @@ deploy
 
 実保存へ進む前の確認単位:
 [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)
+
+Pending 候補:
+[`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md) /
+[`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md)

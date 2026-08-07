@@ -7,7 +7,8 @@
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-main: 37369b9156631e10877932d210de0606b592798b
+main: 89d868c734d30157f7141e929ec16662fa5d5bb3
+PR #97 / AuditEvent persistence Entry Criteria: MERGED
 PR #96 / Handoff AuditEvent candidate: MERGED
 PR #93 / Handoff state mutation: MERGED
 PR #91 / Handoff role policy: MERGED
@@ -26,6 +27,8 @@ Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-a
 Issue #24 Decision backlog: docs/architecture/issue-24-decision-backlog.md
 Decision-HO-1（Accepted #17）: docs/architecture/decision-ho-1-handoff-transition-ownership.md
 AuditEvent 実保存 Entry Criteria: docs/architecture/audit-event-persistence-entry-criteria.md
+Decision-AUD-RET-1（Pending・候補あり）: docs/architecture/decision-aud-ret-1-auditlog-retention.md
+Decision-AUD-WR-1（Pending・候補あり）: docs/architecture/decision-aud-wr-1-audit-write-ownership.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -45,7 +48,7 @@ AuditEvent 実保存 Entry Criteria: docs/architecture/audit-event-persistence-e
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
 | Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。実保存は HOLD |
-| AuditEvent 実保存 | 未確定（書込先所有 + `GOV-AUD-06`/`DEC-011`） | Entry Criteria: [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) | Criteria 充足まで HOLD |
+| AuditEvent 実保存 | Pending（AUD-RET-1 / AUD-WR-1 候補あり・未承認） | Entry Criteria: [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)。候補: [`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md) / [`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md) | 両 Accepted まで HOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -260,8 +263,8 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - handoff実行ロールの法人最終確定（`GOV-AUD-02` / #19。ポリシー純関数は PR #91 MERGED）
 - 訂正承認、論理削除、物理削除
 - `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted）
-- AuditLog保存期間（`GOV-AUD-06` / `DEC-011`）
-- AuditEvent 実保存・書込先所有（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）
+- AuditLog保存期間（`GOV-AUD-06` / `DEC-011` / Decision-AUD-RET-1 Pending・候補あり）
+- AuditEvent 実保存・書込先所有（Decision-AUD-WR-1 Pending・候補 `#22A` / [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）
 - 許可フィールド値のサニタイズ
 - SharePoint、Entra ID、Microsoft 365、deploy
 
