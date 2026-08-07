@@ -2,7 +2,8 @@
 
 ## 目的
 
-Issue #24 が所有する **観察期間メンバシップ判定** の技術境界を固定する。
+Issue #24 を候補所有者とする **観察期間メンバシップ判定** の技術境界を固定する
+（所有の確定は Decision-OP-1 Accepted まで待つ）。
 
 本単位は、呼び出し側が与える観察期間境界と基準時点 `asOf` について、
 `Asia/Tokyo` 暦日閉区間上の所属判定だけを純粋関数として契約化する。
@@ -85,7 +86,9 @@ asOfDay = calendarDate(asOf,       Asia/Tokyo)
 
 DateTime 瞬間の半開区間比較や、タイムゾーン未指定の文字列日付比較は用いない。
 
-Active plan uniqueness と同一の暦日変換方針を再利用してよい（実装時に共有ヘルパー利用可）。
+Active plan uniqueness / Issue #26 と同一の暦日変換を **MUST** 再利用する。
+実装時は `toAsiaTokyoCalendarDay`（および同等の ISO DateTime 妥当性判定）を共有し、
+別パーサで MALFORMED 境界が分岐しないようにする。
 
 ## 結果
 
