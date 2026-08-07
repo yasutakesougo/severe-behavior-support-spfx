@@ -227,7 +227,7 @@ Active 一意性は第 2 候補（別 PR）とする。遷移成功後の整合�
 src/domain/support-plan.ts
 tests/contracts/support-plan-*-contract.test.ts（または新規 transition contract）
 tests/domain/support-plan-fixtures.ts（必要時）
-docs/architecture/support-plan-lifecycle-transition.md（新規）
+docs/architecture/support-plan-status-transition.md（新規・実装PR）
 docs/architecture/finding-audit-ownership.md または foundation（所有記録更新）
 ```
 
@@ -292,12 +292,26 @@ PR-I（SupportPlan status transition）:
 ## 次工程
 
 ```text
-1. PR #73（本 docs）のレビュー / merge（人承認）
-2. Implementation Start 後に PR-I 実装 PR を切る
-   - docs/architecture/support-plan-lifecycle-transition.md
-   - src/domain/support-plan.ts 純関数
-   - contract tests
-3. Active一意性等は別単位
+PR #73（本 docs-only）の役割:
+  1. #24 Accepted Decision（5211039927）を参照
+  2. PR-I ownership・許可辺を正本へ反映
+  3. Implementation GO を再判定
+  → 本 PR では src/** / tests/** を変更しない
+
+PR-I 実装（別ブランチ・別 PR）:
+  1. 最新 main から実装ブランチを切る
+  2. docs/architecture/support-plan-status-transition.md
+  3. SupportPlanStatus transition 純関数
+  4. 許可5辺 / 禁止辺 / malformed / fail-closed tests
+```
+
+## PR #73 完了条件（docs-only）
+
+```text
+Accepted Decision 5211039927 反映: PASS
+ownership=#24 / 許可5辺 正本反映: PASS
+Implementation GO 再判定: GO（承認範囲のみ・PR-I）
+src/** / tests/** 変更: なし
 ```
 
 ## 変更禁止境界

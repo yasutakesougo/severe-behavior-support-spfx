@@ -189,12 +189,13 @@ Issue #24 finding再発判定（`docs/architecture/finding-recurrence.md`）
 PR-H:
 Issue #24 AssessmentSnapshot Result変換（狭域・永続なし）（`docs/architecture/assessment-snapshot-result-conversion.md`）— 完了（PR #72）
 
-PR-I（選定・Decision Accepted・Implementation GO）:
+PR-I（選定・Decision Accepted・Implementation GO・docs-only 完了）:
 SupportPlan status transition（狭域・ロールなし・allow/deny only）。
-正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)。
+選定正本: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md)。
 Decision: Accepted comment `5211039927`（ownership=#24 / 許可5辺）。
 Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI は OUT OF SCOPE。
-実装は別 PR（技術契約 + domain 純関数）。
+実装は **別ブランチ・別 PR**（技術契約 `support-plan-status-transition.md` + domain 純関数）。
+PR #73 を実装 PR へ変質させない。
 
 PR-I以降（未割当・HOLD）:
 Handoff transition、Severity、完全Finding、
