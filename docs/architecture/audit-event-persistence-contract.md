@@ -21,6 +21,18 @@ Decision-AUD-WR-1: Accepted
   evidence: Issue #17 comment 5215846338
   technical owner: Issue #22A
 
+Decision-AUD-ALIGN-1: Accepted
+  → decision-aud-align-1-audit-event-write-result-alignment.md
+
+Decision-AUD-IDEM-1: Accepted
+  → decision-aud-idem-1-audit-event-idempotency.md
+
+Decision-AUD-SAN-VALUE-1: Accepted
+  → decision-aud-san-value-1-audit-event-value-safety.md
+
+Decision-AUD-SAN-1: HOLD
+  （validateAuditEvent が SAN-VALUE 契約に未適合）
+
 AuditEvent type / validator: Issue #27
 Physical SharePoint structure: Issue #29
 Concrete SharePoint adapter: Issue #22B
@@ -91,11 +103,23 @@ SAVE_OUTCOME_UNKNOWN
 
 `SAVE_OUTCOME_UNKNOWN` で直ちに新規再送しない。
 
-既存結果照会・冪等契約は #22A の後続判断単位で固定する。
+既存結果照会・冪等 identity は Decision-AUD-IDEM-1 Accepted 正本に従う。
+
+```text
+RecordId = auditEvent.auditEventId
+IdempotencyKey = write request metadata（AuditEvent domain に追加しない）
+correlationId MUST NOT be used as IdempotencyKey
+```
+
+正本: [`decision-aud-idem-1-audit-event-idempotency.md`](./decision-aud-idem-1-audit-event-idempotency.md)
 
 ## Validation boundary
 
 保存前に既存 `validateAuditEvent` を必須とする。
+
+値安全性の契約正本は Decision-AUD-SAN-VALUE-1（Accepted）。
+**現行 `validateAuditEvent` はその契約に未適合**であり、hardening 後に Decision-AUD-SAN-1 をクリアするまで
+persistence 実装は HOLD とする。
 
 次は fail-closed で拒否する。
 
@@ -108,9 +132,13 @@ invalid occurredAt
 empty auditEventId
 empty OrganizationId
 empty correlationId
+IDENTIFIER / VERSION token 不正（SAN-VALUE-1）
+未知 targetType（初期許可: HandoffState のみ）
 ```
 
 Handoff 固有 candidate は既存 `buildHandoffStatusChangedAuditEventCandidate` の成功結果だけを渡す。
+
+正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)
 
 ## Retention boundary
 
@@ -142,17 +170,23 @@ Client Secret
 
 ## Idempotency / retry
 
-本契約では具体方式を未確定とする。
+identity / replay / conflict 境界は Decision-AUD-IDEM-1 Accepted に従う。
 
-最低境界だけ固定する。
+最低境界:
 
 ```text
 SAVE_OUTCOME_UNKNOWN
   -> automatic blind retry: prohibited
   -> existing-result verification: required before retry
+
+same auditEventId + same IdempotencyKey + same semantic payload
+  -> existing result（重複新規作成しない）
+
+same IdempotencyKey + different semantic payload
+  -> CONFLICT
 ```
 
-`auditEventId` / `correlationId` の採番方式、lookup key、retry 回数は後続 Decision とする。
+`auditEventId` / `correlationId` の採番方式、PayloadFingerprint algorithm、retry 回数は後続とする。
 
 ## Out of scope
 
@@ -175,14 +209,17 @@ deploy
 ```text
 AUD-RET-1: Accepted
 AUD-WR-1: Accepted
+AUD-ALIGN-1: Accepted
+AUD-IDEM-1: Accepted
+AUD-SAN-VALUE-1: Accepted
+AUD-SAN-1: HOLD（validateAuditEvent hardening 未了）
 Persistence technical contract: MERGED（PR #99）
-Next: #22A write-result / idempotency alignment
-  → audit-event-persistence-22a-alignment-gate.md
+Next: AuditEvent contract hardening
 Persistence implementation: HOLD
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
 ```
 
-実装開始には、#22A の既存 write-result / idempotency 境界との整合確認
-（Decision-AUD-ALIGN-1）が必要である。本契約 MERGED だけでは implementation GO にしない。
+本契約 MERGED および ALIGN/IDEM/SAN-VALUE Accepted だけでは implementation GO にしない。
+Decision-AUD-SAN-1 クリア（hardening）後に Entry Review を再実行する。

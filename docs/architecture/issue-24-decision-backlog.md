@@ -20,7 +20,11 @@ Issue #24: OPEN（Close しない）
 Decision-HO-1: Accepted（Owner #17）
 Decision-AUD-RET-1: Accepted（#19 / 5215844603）
 Decision-AUD-WR-1: Accepted（#17 / 5215846338 / owner #22A）
-Next audit gate: #22A write-result / idempotency alignment
+Decision-AUD-ALIGN-1: Accepted
+Decision-AUD-IDEM-1: Accepted
+Decision-AUD-SAN-VALUE-1: Accepted
+Decision-AUD-SAN-1: HOLD（validateAuditEvent hardening 未了）
+Next audit gate: AuditEvent contract hardening
 Persistence implementation: HOLD
 Issue #24 Close: NO-GO
 deploy: NO-GO
@@ -70,7 +74,10 @@ Issue 本文・コメント全文の再取得は未実施。
 | Decision-AUD-RET-1 | Accepted（最低5年 / occurredAt / 自動削除しない） | [`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md) / #19 `5215844603` |
 | Decision-AUD-WR-1 | Accepted（technical owner `#22A`） | [`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md) / #17 `5215846338` |
 | Persistence technical contract | MERGED（PR #99） | [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md) |
-| Decision-AUD-ALIGN-1 | Pending（#22A write-result / idempotency 整合） | [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md) |
+| Decision-AUD-ALIGN-1 | Accepted（#22A write-result / idempotency 整合） | [`decision-aud-align-1-audit-event-write-result-alignment.md`](./decision-aud-align-1-audit-event-write-result-alignment.md) |
+| Decision-AUD-IDEM-1 | Accepted（RecordId=auditEventId / Key=write metadata） | [`decision-aud-idem-1-audit-event-idempotency.md`](./decision-aud-idem-1-audit-event-idempotency.md) |
+| Decision-AUD-SAN-VALUE-1 | Accepted（validate+reject / FINITE_ENUM targetType） | [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md) |
+| Decision-AUD-SAN-1 | HOLD（hardening 未了） | validateAuditEvent が SAN-VALUE 未適合 |
 | FindingIdentity 組立 | Accepted / Start | `5210065336` / `5210078985` |
 | finding 再発 | Accepted / Start | `5210206944` / `5210210553` |
 | Snapshot Result変換 | Selection / Decision / Start | `5210366943` / `5210389077` / `5210392317` |
@@ -104,7 +111,9 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-HO-1** | Handoff transition ownership | **Accepted**（Owner **#17**）。遷移 / ロール / mutation / AuditEvent candidate まで MERGED。正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md) | Issue #17 | `GOV-AUD-02` と分離維持 | 実保存は別ゲート（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)） |
 | **Decision-AUD-RET-1** | AuditLog 保存期間（`GOV-AUD-06` / `DEC-011`） | **Accepted**。最低5年 / `occurredAt` / 5年経過だけでは自動削除しない。証跡 #19 `5215844603`。正本: [`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md) | Issue #19 / #8 | 書込先所有と分離 | Entry Criteria #4 充足済み |
 | **Decision-AUD-WR-1** | AuditEvent 書込先所有 | **Accepted**。technical owner = Issue `#22A`。証跡 #17 `5215846338`。正本: [`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md) | Issue `#22A` | 保存期間と分離 | 技術契約 MERGED（PR #99）。実装は ALIGN-1 後 |
-| **Decision-AUD-ALIGN-1** | #22A write-result / idempotency と persistence contract の整合 | **Pending**。正本: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md) | Issue `#22A` | PR #99 契約 MERGED 前提 | 整合 Accepted 後のみ persistence 実装 Gate を検討 |
+| **Decision-AUD-ALIGN-1** | #22A write-result / idempotency と persistence contract の整合 | **Accepted**。正本: [`decision-aud-align-1-audit-event-write-result-alignment.md`](./decision-aud-align-1-audit-event-write-result-alignment.md) | Issue `#22A` | PR #99 契約 MERGED 前提 | IDEM / SAN-VALUE 後も persistence 実装は SAN-1 HOLD |
+| **Decision-AUD-IDEM-1** | AuditEvent persistence identity / replay | **Accepted**。正本: [`decision-aud-idem-1-audit-event-idempotency.md`](./decision-aud-idem-1-audit-event-idempotency.md) | Issue `#22A` | ALIGN-1 | write envelope + FX-IDEM 表現 |
+| **Decision-AUD-SAN-VALUE-1** | AuditEvent value safety（validate+reject） | **Accepted**。正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md) | Issue `#22` / `#27` hardening | ALIGN-1 | contract hardening NEXT。SAN-1 は HOLD |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | HOLD。`DEC-001〜017` に Severity 正本なし | A: Issue #8 新DEC / B: Issue #27 technical decision | 方式選択前に値一覧を採択しない | 方式 Accepted 後に **Decision-SEV-2** へ進める |
 | **Decision-SEV-2** | Severity assignment boundary（値・意味・判定主体） | HOLD。値一覧・domain算出/caller-supplied 未決 | SEV-1 の選択結果に従う | **SEV-1** | 完全 Finding 契約の Severity 欄定義候補（実装は別 Entry Criteria） |
 | **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
@@ -195,38 +204,40 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 ```text
 1. Decision-FLR-1   Finding reopen policy — Accepted（実装 NONE / PR #88 MERGED）
 2. Decision-HO-1    Handoff transition ownership — Accepted（#17）。実装系列 MERGED
-3. Decision-AUD-ALIGN-1  #22A write-result / idempotency 整合 — **次の判断**（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
-4. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）
-5. Decision-SEV-2   Severity assignment boundary（SEV-1 後）
-6. Decision-FC-1    FindingCode catalog ownership
-7. Decision-FC-2    Catalog delivery boundary（FC-1 後）
-8. Decision-OP-3    Observation period Schema / 制度 / 開放終端
-9. Decision-RD-3    Review due 接近窓 / 算出 / 超過後
-10. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
+3. Decision-AUD-ALIGN-1  #22A write-result / idempotency 整合 — Accepted
+4. Decision-AUD-IDEM-1 / AUD-SAN-VALUE-1 — Accepted。次は contract hardening（SAN-1 HOLD）
+5. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）
+6. Decision-SEV-2   Severity assignment boundary（SEV-1 後）
+7. Decision-FC-1    FindingCode catalog ownership
+8. Decision-FC-2    Catalog delivery boundary（FC-1 後）
+9. Decision-OP-3    Observation period Schema / 制度 / 開放終端
+10. Decision-RD-3    Review due 接近窓 / 算出 / 超過後
+11. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
-注: Persistence technical contract は MERGED（PR #99）。**次工程は #22A 整合レビュー**。実保存コードではない。
+注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE は Accepted。
+**次工程は AuditEvent contract hardening**（Decision-AUD-SAN-1 HOLD）。実保存コードではない。
 SEV は SEV-1→SEV-2、FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
-ALIGN-1 未 Accepted のまま persistence 実装を始めない。
-
+SAN-1 未クリアのまま persistence 実装を始めない。
 ## Phase 4 — 次の安全な純関数単位
 
 ```text
 Next Handoff domain unit: NONE（候補まで MERGED）
 Persistence technical contract: MERGED（PR #99）
-Next gate: Decision-AUD-ALIGN-1（#22A 整合）
+Decision-AUD-ALIGN-1 / IDEM-1 / SAN-VALUE-1: Accepted
+Next gate: AuditEvent contract hardening（Decision-AUD-SAN-1 HOLD）
 Implementation Start (AuditEvent 実保存): HOLD
 ```
 
 判定理由:
 
-1. AUD-RET-1 / AUD-WR-1 Accepted。技術契約 PR #99 MERGED（CI SUCCESS 後）
-2. 実装前の本当の次工程は **#22A write-result / idempotency 整合レビュー**
-3. 契約 MERGED ≠ implementation GO
+1. AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 Accepted。技術契約 PR #99 MERGED
+2. 実装前の本当の次工程は **`validateAuditEvent` contract hardening**
+3. Decision Accepted ≠ implementation GO
 4. SharePoint / Microsoft 365 / deploy は NO-GO
 
-正本: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)
+正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)
 
 ## OUT / 混ぜないもの
 
@@ -248,7 +259,10 @@ Implementation Start (AuditEvent 実保存): HOLD
 Decision backlog 整理: READY（docs-only）
 PR #99: MERGED
 Persistence technical contract: MERGED
-Decision-AUD-ALIGN-1: Pending（#22A 整合）
+Decision-AUD-ALIGN-1: Accepted
+Decision-AUD-IDEM-1: Accepted
+Decision-AUD-SAN-VALUE-1: Accepted
+Decision-AUD-SAN-1: HOLD（hardening）
 Implementation Start (AuditEvent 実保存): HOLD
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
@@ -259,10 +273,11 @@ Ready / Merge（本PR）: 人の事前承認待ち（エージェントは実行
 ## 本 PR（docs-only）の役割
 
 ```text
-1. PR #99 MERGED 後状態を正本へ反映する
-2. 次工程を #22A write-result / idempotency 整合 Gate として固定する
+1. ALIGN / IDEM / SAN-VALUE Accepted を正本へ反映する
+2. 次工程を AuditEvent contract hardening として固定する
 3. 実保存コードへ進まない
-4. src/** / tests/** は変更しない
+4. Decision-AUD-SAN-1 を Accepted にしない
+5. src/** / tests/** は変更しない
 ```
 
 ## 変更禁止境界
