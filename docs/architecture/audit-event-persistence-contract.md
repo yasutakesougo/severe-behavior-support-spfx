@@ -48,22 +48,29 @@ candidate builder に保存 side effect を追加しない。
 ```text
 AuditEvent candidate
     ↓ validate
-AuditEventPersistencePort.save(event)
+AuditEventPersistencePort.save(request)
     ↓
 write result
 ```
 
 ## Proposed port
 
-将来の実装候補は次の論理契約とする。
+論理契約（Decision-AUD-IDEM-1 の write-request metadata 境界を含む）:
+
+```text
+AuditEventWriteRequest
+├─ auditEvent
+└─ idempotencyKey
+```
 
 ```ts
 interface AuditEventPersistencePort {
-  save(event: AuditEvent): Promise<AuditEventWriteResult>;
+  save(request: AuditEventWriteRequest): Promise<AuditEventWriteResult>;
 }
 ```
 
-本 PR では TypeScript interface を追加しない。
+実装正本: `src/domain/audit-event-persistence.ts`（logical boundary）。
+concrete repository / SharePoint adapter は含まない。
 
 ## Write result
 
