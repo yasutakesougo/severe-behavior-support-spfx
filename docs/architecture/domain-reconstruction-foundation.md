@@ -215,6 +215,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
 - SupportPlan status transition / Active一意性 / 観察期間メンバシップ / 見直し期限 asOf 相対判定 / RuleSetVersion選択は完了。残る SupportPlan 系は OP-3・RD-3 等の制度・フィールド Decision（[`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)）
 - Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
+- Issue #24 残 Decision 分類: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)（Next pure unit: NONE）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
 - `AuditEvent.actionCode`最終enum、AuditLog保存期間
