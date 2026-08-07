@@ -14,7 +14,7 @@ Issue #24 を候補所有者とする **見直し期限と基準時点の相対�
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Owner: Issue #24（候補・Decision 待ち）
+Owner: Issue #24（候補・Decision-RD-1 待ち）
 Related: Issue #26 SupportPlan 契約（再定義しない / MAP-PLAN-010 再利用）
 Prior units: Active plan uniqueness（#76 / #78）, Observation period（#79 / #80）
 base main（着手時）: 18fd03e3d2ffabe1c761bf6307861b15209fa43f
@@ -200,7 +200,7 @@ Decision-RD-3（接近窓ポリシー）は本純関数実装の前提にしな�
 ## Gate
 
 ```text
-Owner: Issue #24（Decision-RD-1 待ち）
+Owner: Issue #24（候補・Decision-RD-1 待ち）
 Technical contract (asOf relative due comparison): FIXED in docs-only gate
 Institutional approaching window: HOLD / Decision-RD-3
 reviewDueDate calculation: OUT
