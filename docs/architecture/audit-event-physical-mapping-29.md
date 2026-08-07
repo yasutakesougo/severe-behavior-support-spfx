@@ -170,17 +170,30 @@ lookup / unique enforcement は OrganizationId uniqueness space 内で行う。
 SiteId で絞って uniqueness を分けない。
 
 ```text
+AuditEventExistingResultPort / concrete repository instance:
+  target OrganizationId に bound される
+
+port signature: 変更しない
+  findByRecordId(recordId)
+  findByIdempotencyKey(idempotencyKey)
+```
+
+OrganizationId は port 引数へ追加しない。instance の `boundOrganizationId` で filter する。
+
+```text
 findByRecordId(recordId):
-  filter: OrganizationId == request.OrganizationId
-          AND RecordId column == recordId
+  filter:
+    OrganizationId == boundOrganizationId
+    AND RecordId == recordId
   0 rows -> NOT_FOUND
   1 row  -> FOUND（PersistedAuditEventWrite へ変換可能なら）
            変換不能なら logical MALFORMED 経路
   >=2    -> RETRIEVAL_FAILED（1行を選ばない）
 
 findByIdempotencyKey(idempotencyKey):
-  filter: OrganizationId == request.OrganizationId
-          AND IdempotencyKey column == idempotencyKey
+  filter:
+    OrganizationId == boundOrganizationId
+    AND IdempotencyKey == idempotencyKey
   同上の count 規則
 ```
 
@@ -200,6 +213,7 @@ findByIdempotencyKey(idempotencyKey):
 | confirmed different logical write | `CONFLICT`（SAVED にしない） |
 | collision したが winner が same replay / conflict か判定不能 | `SAVE_OUTCOME_UNKNOWN` → dual verification |
 | commit outcome uncertain | `SAVE_OUTCOME_UNKNOWN` |
+
 ## Permissions / 事業所分離（設計メモ）
 
 - 書込権限拒否は `FORBIDDEN`（success / not-found へ変換しない）
@@ -214,7 +228,7 @@ findByIdempotencyKey(idempotencyKey):
 1. AuditEvent persistence 用 SharePoint Site / List の識別（確定または明示 HOLD 理由）
 2. MAP-AUD-001〜014 の Internal Name / Column Type（確定）
 3. `(OrganizationId, RecordId)` / `(OrganizationId, IdempotencyKey)` の物理 unique enforcement 手段（確定）。SiteId を key に入れない
-4. OrganizationId scope 付き `findByRecordId` / `findByIdempotencyKey` の物理照会手段（確定）
+4. boundOrganizationId 付き `findByRecordId` / `findByIdempotencyKey` の物理照会手段（確定）。port signature は変更しない
 5. race / conditional write に ETag 等を使う場合の手段メモ（使うなら確定、使わないなら対象外明示）
 6. logical ↔ physical 変換で metadata を logical evidence へ漏らさないことの確認
 7. 本番変更手順を成果物に含めないことの確認

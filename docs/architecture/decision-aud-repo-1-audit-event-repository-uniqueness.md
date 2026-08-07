@@ -80,9 +80,40 @@ SiteId を uniqueness key に含めること
 correlationId を IdempotencyKey として使うこと
 ```
 
+### OrganizationId binding（port / concrete repository）
+
+```text
+AuditEventExistingResultPort / concrete repository instance:
+  target OrganizationId に bound される
+```
+
+lookup の OrganizationId scope は **boundOrganizationId** で実現する。
+port signature へ OrganizationId 引数を追加しない。
+
+```text
+port signature: 変更しない
+
+findByRecordId(recordId)
+findByIdempotencyKey(idempotencyKey)
+```
+
+物理 filter（Issue `#29` / `#22B`）:
+
+```text
+findByRecordId(recordId):
+  filter:
+    OrganizationId == boundOrganizationId
+    AND RecordId == recordId
+
+findByIdempotencyKey(idempotencyKey):
+  filter:
+    OrganizationId == boundOrganizationId
+    AND IdempotencyKey == idempotencyKey
+```
+
 ### Lookup match count
 
-lookup は OrganizationId uniqueness space 内で数える。
+lookup は bound OrganizationId uniqueness space 内で数える。
 
 | Count | Meaning |
 |---|---|
@@ -146,6 +177,8 @@ write-result vocabulary（6値）
 AuditEventExistingLookupResult kinds
   FOUND / NOT_FOUND / FORBIDDEN / RETRIEVAL_FAILED
 PersistedAuditEventWrite = { auditEvent, idempotencyKey }
+AuditEventExistingResultPort / AuditEventPersistencePort signature
+  （OrganizationId 引数を追加しない。instance bind で scope する）
 physical metadata を logical evidence に含めない
 automatic retry: prohibited
 blind retry: prohibited
