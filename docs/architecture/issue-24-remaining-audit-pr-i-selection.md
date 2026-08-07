@@ -11,6 +11,8 @@ main: 9232b8a8d549c306f88e4cbf1feae026b08e36e8
 PR #72 / PR-H: MERGED
 merged head: 6d30bc40148225a4c9784b3807fe59d4910a7c88
 Issue #24: OPEN
+PR-I Decision: Accepted comment 5211039927
+Implementation GO: GO（承認範囲のみ・PR-I）
 deploy: NO-GO
 SharePoint / M365: 変更なし
 verify:contracts: PASS（基準時点の固定状態）
@@ -100,16 +102,20 @@ Issue #24 本体コメント API は本環境から 403/NOT_FOUND で参照不�
 | Issue #19 / `GOV-AUD-01〜10` | Handoff・Snapshot保存・削除・保存期間 | 次単位へ入れない |
 | `DEC-009` | Snapshot 保存タイミング | 次単位へ入れない |
 | `DEC-008` / `GOV-RULE-02〜12`（PR #39 言及） | 提出・差戻し・承認ロール、制度値 | ロール・制度値は次単位へ入れない |
-| 所有 Issue | 支援計画状態遷移 | Recommended: Issue #24。**GitHub Accepted 待ち** |
-| 許可遷移辺 | 支援計画状態遷移 | Recommended: 下記 5 辺。**GitHub Accepted 待ち** |
+| 所有 Issue | 支援計画状態遷移 | **Accepted: Issue #24**（comment `5211039927`） |
+| 許可遷移辺 | 支援計画状態遷移 | **Accepted: 下記 5 辺**（comment `5211039927`） |
 
-## Recommended Decision（設計推奨・GitHub Accepted 未記録）
+## Accepted Decision（Issue #24 comment `5211039927`）
 
-次の 2 点は設計上の推奨 Decision である。
-**GitHub Issue #24 上の Accepted Decision にはまだ変更していない。**
-Accepted 記録後にのみ Implementation GO へ進む。
+GitHub Issue #24 に Accepted Decision を記録済み。
 
-投稿案: [`issue-24-pr-i-decision-comment-draft.md`](./issue-24-pr-i-decision-comment-draft.md)
+| 項目 | 値 |
+|---|---|
+| Status | Accepted |
+| Comment ID | `5211039927` |
+| PR | #73 |
+
+投稿案（記録前ドラフト）: [`issue-24-pr-i-decision-comment-draft.md`](./issue-24-pr-i-decision-comment-draft.md)
 
 ### Decision 1: 所有
 
@@ -156,17 +162,18 @@ Closed → *
 自己遷移 / 上記以外のスキップ・逆行
 ```
 
-### Decision 2 補足（PR-I OUT OF SCOPE）
+### Decision 2 補足（PR-I OUT OF SCOPE / HOLD）
 
 ```text
 Role authorization: OUT OF SCOPE
 Active uniqueness: OUT OF SCOPE
 Observation / Review deadline: OUT OF SCOPE
 RuleSetVersion: OUT OF SCOPE
+SharePoint / UI: OUT OF SCOPE
 ```
 
 PR-I は「現在状態＋要求遷移 → 許可/拒否」だけを担当する純関数として閉じる。
-メタデータ付与の詳細契約は Implementation Start 後の技術契約で固定する（ロール判定は含めない）。
+ロール判定・永続化・時刻生成は含めない。
 
 ## 選定結果（1 件）
 
@@ -190,15 +197,15 @@ Active 一意性は第 2 候補（別 PR）とする。遷移成功後の整合�
 
 ### 実装目的（1 文）
 
-`SupportPlanStatus` の許可遷移と、遷移後に必要な状態別メタデータ付与だけを、例外を投げない domain 純粋関数として契約化する。
+`SupportPlanStatus` の許可遷移（現在状態＋要求遷移 → 許可/拒否）だけを、例外を投げない domain 純粋関数として契約化する。
 
 ### 対象範囲
 
-- 許可遷移表（Decision で固定した辺のみ）
+- 許可遷移表（Accepted 5 辺のみ）
 - `transitionSupportPlanStatus`（名称は実装時に技術契約で確定）相当の純粋関数
-- fail-closed Result（例: `MALFORMED_INPUT` / `INVALID_TRANSITION` / 必須メタデータ不足）
+- fail-closed Result（例: `MALFORMED_INPUT` / `INVALID_TRANSITION`）
 - 合成 fixture / contract tests
-- 技術契約 docs（本選定承認後に新規作成）
+- 技術契約 docs（Implementation Start 後に新規作成）
 - ownership / foundation の状態更新
 
 ### 対象外
@@ -208,7 +215,7 @@ Active 一意性は第 2 候補（別 PR）とする。遷移成功後の整合�
 - 観察期間の定義・計算
 - 見直し期限の算出・接近/超過ポリシー（制度日数）
 - RuleSetVersion 選択
-- Repository / SharePoint 永続化
+- Repository / SharePoint 永続化 / UI
 - DEC-008 / GOV-RULE / GOV-AUD / DEC-009
 - Handoff / Finding / AssessmentSnapshot
 - SPFx UI / Entra ID / Microsoft 365 / deploy / 実データ
@@ -220,11 +227,11 @@ Active 一意性は第 2 候補（別 PR）とする。遷移成功後の整合�
 src/domain/support-plan.ts
 tests/contracts/support-plan-*-contract.test.ts（または新規 transition contract）
 tests/domain/support-plan-fixtures.ts（必要時）
-docs/architecture/support-plan-lifecycle-transition.md（新規・承認後）
+docs/architecture/support-plan-lifecycle-transition.md（新規）
 docs/architecture/finding-audit-ownership.md または foundation（所有記録更新）
 ```
 
-### 許可遷移表（Recommended・GitHub Accepted 待ち）
+### 許可遷移表（Accepted comment `5211039927`）
 
 現状の状態集合（再定義しない）:
 
@@ -237,7 +244,7 @@ Closed
 ```
 
 状態型・validator は Issue #26 / #42 で確定済み。
-許可辺は上記 Recommended Decision 2 の **5 辺のみ**（GitHub Accepted 待ち）。
+許可辺は Accepted Decision 2 の **5 辺のみ**。
 
 ### テスト計画（実装時）
 
@@ -253,19 +260,19 @@ Closed
 残責務再監査: READY
 Approval Dependency照合: READY
 PR-I 候補選定: READY（SupportPlan status transition・狭域）
-PR-I Scope固定: READY（上記 + Recommended 5辺）
-Recommended Decision 1（ownership=#24）: READY（設計推奨）
-Recommended Decision 2（allowed 5 edges）: READY（設計推奨）
-GitHub Accepted Decision: HOLD（未記録）
-Implementation GO: HOLD
+PR-I Scope固定: READY（Accepted 5辺・allow/deny only）
+Decision 1（ownership=#24）: Accepted（5211039927）
+Decision 2（allowed 5 edges）: Accepted（5211039927）
+GitHub Accepted Decision: PASS（5211039927）
+Implementation GO: GO（承認範囲のみ・PR-I）
 ```
 
-### Implementation GO が HOLD である理由
+### Implementation GO 判定理由
 
-1. Recommended Decision 1/2 は設計推奨として正本へ反映済み。
-2. **GitHub Issue #24 上の Accepted Decision が未記録**。
-3. Issue 投稿は人の事前承認操作であり、本環境から Issue #24 への自動投稿は行わない。
-4. Accepted 記録（コメント ID 付き）の後に、正本の Decision 状態を Accepted へ更新し、Implementation GO を再判定する。
+1. Issue #24 comment `5211039927` で Ownership=#24 と許可5辺が Accepted。
+2. Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI は OUT OF SCOPE のまま HOLD。
+3. Issue #19 未決定値を埋め込まない純技術境界として閉じられる。
+4. 本 PR #73 は docs-only の選定・ゲート固定。`src/**` 実装は別実装 PR（Implementation Start 後）。
 
 ## Issue #24 をどこまで安全に完了できるか
 
@@ -274,21 +281,23 @@ Implementation GO: HOLD
   PR-C〜PR-H（Finding / Snapshot Result変換）
 
 PR-I（SupportPlan status transition）:
-  Recommended ownership=#24 / allowed 5 edges まで固定済み
-  GitHub Accepted → Implementation GO → 実装 の順
+  Accepted ownership=#24 / allowed 5 edges
+  Implementation GO = GO（承認範囲のみ）
+  次: 技術契約 + domain 純関数実装 PR
 
 後続（PR-Iに混ぜない）:
-  Active一意性、観察期間、見直し期限、RuleSetVersion選択、ロール
+  Active一意性、観察期間、見直し期限、RuleSetVersion選択、ロール、SharePoint、UI
 ```
 
-## 次工程（Accepted 後）
+## 次工程
 
 ```text
-1. Issue #24 へ Decision コメントを Accepted として記録
-   （案: issue-24-pr-i-decision-comment-draft.md）
-2. 本正本と finding-audit-ownership.md を Accepted + comment ID 付きへ更新
-3. Implementation GO 判定
-4. GO 後にのみ src/** / tests/** / 技術契約実装へ着手
+1. PR #73（本 docs）のレビュー / merge（人承認）
+2. Implementation Start 後に PR-I 実装 PR を切る
+   - docs/architecture/support-plan-lifecycle-transition.md
+   - src/domain/support-plan.ts 純関数
+   - contract tests
+3. Active一意性等は別単位
 ```
 
 ## 変更禁止境界
@@ -299,5 +308,5 @@ Entra ID changes: NO-GO
 Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
-src/** 実装: Implementation GO まで禁止（本 PR は docs-only）
+src/** 実装: 本 PR（#73）では変更しない。実装は Implementation GO 後の別 PR
 ```
