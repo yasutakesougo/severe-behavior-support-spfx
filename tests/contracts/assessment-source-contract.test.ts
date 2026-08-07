@@ -1,10 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import {
-  selectAssessmentScoreSource,
-  validateAssessmentScoreSourceRecord,
-} from "../../src/domain";
+import { selectAssessmentScoreSource, validateAssessmentScoreSourceRecord } from "../../src/domain";
 import type { AssessmentSourceLookupResult } from "../../src/domain";
 import {
   SYNTHETIC_SCORE_SOURCE_EXPIRED,
@@ -20,7 +17,10 @@ test("contract: score 0 is accepted as a valid assessment score", () => {
     assert.equal(validation.score, 0);
   }
 
-  const decision = selectAssessmentScoreSource([SYNTHETIC_SCORE_SOURCE_VALID_SCORE_ZERO], "2026-06-01");
+  const decision = selectAssessmentScoreSource(
+    [SYNTHETIC_SCORE_SOURCE_VALID_SCORE_ZERO],
+    "2026-06-01",
+  );
   assert.equal(decision.decision, "VALID");
   if (decision.decision === "VALID") {
     assert.equal(decision.score, 0);

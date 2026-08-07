@@ -7,11 +7,7 @@ import {
   deriveEvaluationDecision,
   parseBehaviorRelatedScore,
 } from "../../src/domain";
-import type {
-  BehaviorScoreInput,
-  CriterionResult,
-  EvaluationInput,
-} from "../../src/domain";
+import type { BehaviorScoreInput, CriterionResult, EvaluationInput } from "../../src/domain";
 import {
   SYNTHETIC_CRITERIA_ALL_NOT_APPLICABLE,
   SYNTHETIC_CRITERIA_FAIL,
@@ -21,8 +17,10 @@ import {
   SYNTHETIC_VALID_EVALUATION_INPUT,
 } from "./fixtures";
 
+// prettier-ignore
 // @ts-expect-error NOT_APPLICABLE belongs to CriterionResult, not BehaviorScoreInput.
 const forbiddenNotApplicableScoreInput: BehaviorScoreInput = { status: "NOT_APPLICABLE", reasonCode: "synthetic-not-applicable" };
+// prettier-ignore
 // @ts-expect-error NOT_APPLICABLE requires a non-empty reasonCode contract.
 const forbiddenReasonlessCriterion: CriterionResult = { criterionId: "synthetic-reasonless", status: "NOT_APPLICABLE" };
 void forbiddenNotApplicableScoreInput;
@@ -59,12 +57,30 @@ describe("Behavior Score Parsing & Classification", () => {
 
   it("classifies valid values into point bands while preserving zero", () => {
     const cases: readonly [BehaviorScoreInput, unknown][] = [
-      [{ status: "VALUE", value: 0 }, { decision: "BELOW_BASE_THRESHOLD", score: 0 }],
-      [{ status: "VALUE", value: 9 }, { decision: "BELOW_BASE_THRESHOLD", score: 9 }],
-      [{ status: "VALUE", value: 10 }, { decision: "BASE_SUPPORT_TARGET", score: 10 }],
-      [{ status: "VALUE", value: 17 }, { decision: "BASE_SUPPORT_TARGET", score: 17 }],
-      [{ status: "VALUE", value: 18 }, { decision: "HIGH_INTENSITY_TARGET", score: 18 }],
-      [{ status: "VALUE", value: 24 }, { decision: "HIGH_INTENSITY_TARGET", score: 24 }],
+      [
+        { status: "VALUE", value: 0 },
+        { decision: "BELOW_BASE_THRESHOLD", score: 0 },
+      ],
+      [
+        { status: "VALUE", value: 9 },
+        { decision: "BELOW_BASE_THRESHOLD", score: 9 },
+      ],
+      [
+        { status: "VALUE", value: 10 },
+        { decision: "BASE_SUPPORT_TARGET", score: 10 },
+      ],
+      [
+        { status: "VALUE", value: 17 },
+        { decision: "BASE_SUPPORT_TARGET", score: 17 },
+      ],
+      [
+        { status: "VALUE", value: 18 },
+        { decision: "HIGH_INTENSITY_TARGET", score: 18 },
+      ],
+      [
+        { status: "VALUE", value: 24 },
+        { decision: "HIGH_INTENSITY_TARGET", score: 24 },
+      ],
     ];
 
     for (const [input, expected] of cases) {
@@ -76,10 +92,10 @@ describe("Behavior Score Parsing & Classification", () => {
     assert.deepEqual(classifyBehaviorScore({ status: "EMPTY" }), {
       decision: "REJECTED_INCOMPLETE_INPUT",
     });
-    assert.deepEqual(
-      classifyBehaviorScore({ status: "INVALID", reason: "OUT_OF_RANGE" }),
-      { decision: "REJECTED_INVALID_INPUT", reason: "OUT_OF_RANGE" },
-    );
+    assert.deepEqual(classifyBehaviorScore({ status: "INVALID", reason: "OUT_OF_RANGE" }), {
+      decision: "REJECTED_INVALID_INPUT",
+      reason: "OUT_OF_RANGE",
+    });
     assert.deepEqual(
       classifyBehaviorScore({ status: "UNKNOWN", reasonCode: "synthetic-unknown" }),
       { decision: "INDETERMINATE", reasonCode: "synthetic-unknown" },
@@ -139,10 +155,7 @@ describe("Criterion Aggregation", () => {
       [{ criterionId: "", status: "PASS" }],
       [{ criterionId: "synthetic-unknown", status: "UNKNOWN" }],
       [{ criterionId: "synthetic-na", status: "NOT_APPLICABLE", reasonCode: "" }],
-      [
-        { criterionId: "synthetic-fail", status: "FAIL" },
-        null,
-      ],
+      [{ criterionId: "synthetic-fail", status: "FAIL" }, null],
       null,
     ] as unknown as readonly (readonly CriterionResult[])[];
 
@@ -184,18 +197,27 @@ describe("Evaluation Decision & Finding Separation", () => {
 
   it("returns FINDINGS_PRESENT for findings or failed criteria", () => {
     assert.equal(
-      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, findings: SYNTHETIC_FINDINGS_ONE }),
+      deriveEvaluationDecision({
+        ...SYNTHETIC_VALID_EVALUATION_INPUT,
+        findings: SYNTHETIC_FINDINGS_ONE,
+      }),
       "FINDINGS_PRESENT",
     );
     assert.equal(
-      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, criteria: SYNTHETIC_CRITERIA_FAIL }),
+      deriveEvaluationDecision({
+        ...SYNTHETIC_VALID_EVALUATION_INPUT,
+        criteria: SYNTHETIC_CRITERIA_FAIL,
+      }),
       "FINDINGS_PRESENT",
     );
   });
 
   it("does not create definitive findings for unknown or unapproved evaluations", () => {
     assert.equal(
-      deriveEvaluationDecision({ ...SYNTHETIC_VALID_EVALUATION_INPUT, criteria: SYNTHETIC_CRITERIA_UNKNOWN }),
+      deriveEvaluationDecision({
+        ...SYNTHETIC_VALID_EVALUATION_INPUT,
+        criteria: SYNTHETIC_CRITERIA_UNKNOWN,
+      }),
       "INDETERMINATE",
     );
     assert.equal(

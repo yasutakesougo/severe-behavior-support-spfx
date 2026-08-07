@@ -19,9 +19,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function isBehaviorScoreInvalidReason(
-  value: unknown,
-): value is BehaviorScoreInvalidReason {
+function isBehaviorScoreInvalidReason(value: unknown): value is BehaviorScoreInvalidReason {
   return (
     value === "TYPE" ||
     value === "NOT_FINITE" ||
@@ -35,9 +33,7 @@ const malformedState = (): BehaviorScoreDecision => ({
   reason: "MALFORMED_STATE",
 });
 
-export function parseBehaviorRelatedScore(
-  value: unknown,
-): BehaviorScoreValidationResult {
+export function parseBehaviorRelatedScore(value: unknown): BehaviorScoreValidationResult {
   if (typeof value !== "number") {
     return { success: false, reason: "TYPE" };
   }
@@ -57,9 +53,7 @@ export function parseBehaviorRelatedScore(
   };
 }
 
-export function classifyBehaviorScore(
-  input: BehaviorScoreInput,
-): BehaviorScoreDecision {
+export function classifyBehaviorScore(input: BehaviorScoreInput): BehaviorScoreDecision {
   const candidate: unknown = input;
   if (!isRecord(candidate) || typeof candidate.status !== "string") {
     return malformedState();
@@ -94,8 +88,7 @@ export function classifyBehaviorScore(
           }
         : malformedState();
     case "UNKNOWN":
-      return typeof candidate.reasonCode === "string" &&
-        candidate.reasonCode.trim().length > 0
+      return typeof candidate.reasonCode === "string" && candidate.reasonCode.trim().length > 0
         ? {
             decision: "INDETERMINATE",
             reasonCode: candidate.reasonCode,

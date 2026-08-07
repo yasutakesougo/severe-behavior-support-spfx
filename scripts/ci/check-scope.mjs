@@ -85,7 +85,10 @@ const includeWorktree =
   (!process.env.GITHUB_ACTIONS && process.env.SCOPE_INCLUDE_WORKTREE !== "0");
 
 if (includeWorktree) {
-  for (const args of [["diff", "--name-only"], ["diff", "--name-only", "--cached"]]) {
+  for (const args of [
+    ["diff", "--name-only"],
+    ["diff", "--name-only", "--cached"],
+  ]) {
     for (const file of git(args)
       .split("\n")
       .map((line) => line.trim())
@@ -124,7 +127,10 @@ if (allowlist.length > 0) {
   for (const file of changed) {
     const posix = file.split(path.sep).join("/");
     const allowed = allowlist.some(
-      (prefix) => posix === prefix || posix.startsWith(prefix.endsWith("/") ? prefix : `${prefix}/`) || posix.startsWith(prefix),
+      (prefix) =>
+        posix === prefix ||
+        posix.startsWith(prefix.endsWith("/") ? prefix : `${prefix}/`) ||
+        posix.startsWith(prefix),
     );
     if (!allowed) {
       failures.push(`File outside SCOPE_ALLOWLIST: ${posix}`);

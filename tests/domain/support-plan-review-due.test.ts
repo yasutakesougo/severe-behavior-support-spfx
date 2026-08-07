@@ -3,10 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import {
-  evaluateReviewDueRelativeToAsOf,
-  toAsiaTokyoCalendarDay,
-} from "../../src/domain";
+import { evaluateReviewDueRelativeToAsOf, toAsiaTokyoCalendarDay } from "../../src/domain";
 
 describe("evaluateReviewDueRelativeToAsOf domain unit", () => {
   it("reuses shared Asia/Tokyo calendar helper for due and asOf", () => {
@@ -28,8 +25,7 @@ describe("evaluateReviewDueRelativeToAsOf domain unit", () => {
     assert.ok(start >= 0, "function declaration must be present");
     const afterStart = source.slice(start);
     const nextExport = afterStart.indexOf("\nexport ", marker.length);
-    const fnBody =
-      nextExport === -1 ? afterStart : afterStart.slice(0, nextExport);
+    const fnBody = nextExport === -1 ? afterStart : afterStart.slice(0, nextExport);
 
     assert.equal(fnBody.includes("Date.now"), false);
     assert.equal(/\bnew Date\(\s*\)/.test(fnBody), false);
@@ -37,6 +33,6 @@ describe("evaluateReviewDueRelativeToAsOf domain unit", () => {
     assert.equal(/\bOBSERVATION_DAYS\b/.test(fnBody), false);
     assert.equal(/\bINSTITUTIONAL\b/.test(fnBody), false);
     assert.equal(fnBody.includes("toAsiaTokyoCalendarDay"), true);
-    assert.equal(fnBody.includes("return \"OVERDUE\""), true);
+    assert.equal(fnBody.includes('return "OVERDUE"'), true);
   });
 });

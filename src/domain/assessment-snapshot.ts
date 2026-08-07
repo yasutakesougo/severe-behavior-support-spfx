@@ -7,8 +7,7 @@ export const ASSESSMENT_SNAPSHOT_RESULTS = [
   "NOT_APPLICABLE",
 ] as const;
 
-export type AssessmentSnapshotResult =
-  (typeof ASSESSMENT_SNAPSHOT_RESULTS)[number];
+export type AssessmentSnapshotResult = (typeof ASSESSMENT_SNAPSHOT_RESULTS)[number];
 
 export const EVALUATION_DECISIONS = [
   "NO_FINDINGS",
@@ -18,9 +17,7 @@ export const EVALUATION_DECISIONS = [
   "SOURCE_UNAVAILABLE",
 ] as const;
 
-export type AssessmentSnapshotNotPersistableReason =
-  | "INDETERMINATE"
-  | "SOURCE_UNAVAILABLE";
+export type AssessmentSnapshotNotPersistableReason = "INDETERMINATE" | "SOURCE_UNAVAILABLE";
 
 export type AssessmentSnapshotResultCandidateResult =
   | Readonly<{
@@ -40,17 +37,12 @@ export type AssessmentSnapshotResultCandidateResult =
     }>;
 
 function isEvaluationDecision(value: unknown): value is EvaluationDecision {
-  return (
-    typeof value === "string" &&
-    (EVALUATION_DECISIONS as readonly string[]).includes(value)
-  );
+  return typeof value === "string" && (EVALUATION_DECISIONS as readonly string[]).includes(value);
 }
 
 function normalizeReasonCodes(
-  value: unknown
-):
-  | { ok: true; reasonCodes: readonly string[] }
-  | { ok: false; code: "MALFORMED_INPUT" } {
+  value: unknown,
+): { ok: true; reasonCodes: readonly string[] } | { ok: false; code: "MALFORMED_INPUT" } {
   if (value === undefined) {
     return { ok: true, reasonCodes: [] };
   }
@@ -82,7 +74,7 @@ function normalizeReasonCodes(
  * Technical contract: docs/architecture/assessment-snapshot-result-conversion.md
  */
 export function toAssessmentSnapshotResultCandidate(
-  input: unknown
+  input: unknown,
 ): AssessmentSnapshotResultCandidateResult {
   if (!isRecord(input) || !("evaluationDecision" in input)) {
     return { ok: false, code: "MALFORMED_INPUT" };

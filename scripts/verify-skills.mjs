@@ -31,13 +31,7 @@ const forbiddenOperations = [
   "物理削除",
 ];
 
-const expectedAgents = [
-  "requirements",
-  "architecture",
-  "implementation",
-  "review",
-  "audit",
-];
+const expectedAgents = ["requirements", "architecture", "implementation", "review", "audit"];
 const expectedLogicalCommands = ["new-feature", "review-pr", "audit", "release-check"];
 const expectedInstalledSkills = [
   "requirements-review",
@@ -96,13 +90,7 @@ const legacyScanRoots = [
 ];
 
 const approvalBoundaryRequiredPhrases = {
-  ".agents/mcp/permission-matrix.md": [
-    "人の事前承認",
-    "禁止",
-    "Fail Closed",
-    "マージ",
-    "deploy",
-  ],
+  ".agents/mcp/permission-matrix.md": ["人の事前承認", "禁止", "Fail Closed", "マージ", "deploy"],
   "docs/process/ai-governance.md": ["レビュー PASS なし Merge 禁止", "人の事前承認"],
   ".agents/agents/audit.md": ["Review PASS なし Merge", "マージ"],
 };
@@ -256,8 +244,7 @@ const parseCatalogInstalledSkills = (catalogContent) => {
     const nameCell = cells[0];
     const agentCell = cells[statusIndex + 1] ?? "";
     const name =
-      nameCell.match(/\[`?([^\]`]+)`?\]/)?.[1]?.trim() ??
-      nameCell.replace(/`/g, "").trim();
+      nameCell.match(/\[`?([^\]`]+)`?\]/)?.[1]?.trim() ?? nameCell.replace(/`/g, "").trim();
     if (!name || name === "正式Skill名") {
       continue;
     }
@@ -376,7 +363,9 @@ for (const directoryName of skillDirectories) {
     }
   }
 
-  const hasAllSeverityReferences = requiredSeverities.every((severity) => content.includes(severity));
+  const hasAllSeverityReferences = requiredSeverities.every((severity) =>
+    content.includes(severity),
+  );
   if (!hasAllSeverityReferences) {
     failures.push(`Missing severity reference (P0/P1/P2) in ${skillFileRelativePath}`);
   }
@@ -387,7 +376,9 @@ for (const directoryName of skillDirectories) {
   }
   for (const operation of forbiddenOperations) {
     if (!forbiddenSection.includes(operation)) {
-      failures.push(`Missing forbidden operation reference "${operation}" in ${skillFileRelativePath}`);
+      failures.push(
+        `Missing forbidden operation reference "${operation}" in ${skillFileRelativePath}`,
+      );
     }
   }
 }
@@ -419,11 +410,7 @@ if (await exists(catalogAbsolutePath)) {
   catalogInstalledSkills = parseCatalogInstalledSkills(catalogContent);
   const catalogInstalledNames = catalogInstalledSkills.map((entry) => entry.name);
 
-  assertExactSet(
-    "Skill catalog 導入済み set",
-    catalogInstalledNames,
-    expectedInstalledSkills,
-  );
+  assertExactSet("Skill catalog 導入済み set", catalogInstalledNames, expectedInstalledSkills);
 
   for (const entry of catalogInstalledSkills) {
     const skillPath = path.join(root, ".agents", "skills", entry.name, "SKILL.md");
@@ -526,7 +513,14 @@ if (await exists(adapterAbsolutePath)) {
       failures.push(`Adapter matrix missing command path for: ${commandName}`);
     }
   }
-  for (const phrase of ["Skill Fallback", "マージ", "deploy", "Cursor Agent", "Cursor CLI", "Codex"]) {
+  for (const phrase of [
+    "Skill Fallback",
+    "マージ",
+    "deploy",
+    "Cursor Agent",
+    "Cursor CLI",
+    "Codex",
+  ]) {
     if (!adapterContent.includes(phrase)) {
       failures.push(`Adapter matrix missing required phrase: ${phrase}`);
     }
@@ -564,7 +558,16 @@ const backgroundContractRelativePath = "docs/process/background-agent-contract.m
 const backgroundContractAbsolutePath = path.join(root, backgroundContractRelativePath);
 if (await exists(backgroundContractAbsolutePath)) {
   const content = await readText(backgroundContractAbsolutePath);
-  for (const phrase of ["## 入力", "## 出力", "## Evidence", "## 停止条件", "PR 状態", "head SHA", "findings", "next action"]) {
+  for (const phrase of [
+    "## 入力",
+    "## 出力",
+    "## Evidence",
+    "## 停止条件",
+    "PR 状態",
+    "head SHA",
+    "findings",
+    "next action",
+  ]) {
     if (!content.includes(phrase)) {
       failures.push(`Background agent contract missing required phrase: ${phrase}`);
     }
@@ -746,12 +749,17 @@ for (const scanTarget of secretScanTargets) {
         if (
           name === "Assigned secret-like value" &&
           /(?:記録しない|含めない|記載しない|行わない|禁止|しない)/.test(
-            content.slice(Math.max(0, content.indexOf(match) - 80), content.indexOf(match) + match.length + 80),
+            content.slice(
+              Math.max(0, content.indexOf(match) - 80),
+              content.indexOf(match) + match.length + 80,
+            ),
           )
         ) {
           continue;
         }
-        failures.push(`Possible credential/secret literal in ${relativePath} (${name}): ${match.slice(0, 48)}`);
+        failures.push(
+          `Possible credential/secret literal in ${relativePath} (${name}): ${match.slice(0, 48)}`,
+        );
       }
     }
   }

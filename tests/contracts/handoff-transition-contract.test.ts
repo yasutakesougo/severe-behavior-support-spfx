@@ -8,15 +8,18 @@ import {
 
 describe("Handoff status transition contract", () => {
   it("fixes the accepted seven-edge allowlist", () => {
-    assert.deepEqual([...HANDOFF_STATUS_ALLOWED_TRANSITIONS], [
-      ["not_required", "pending"],
-      ["pending", "not_required"],
-      ["pending", "included"],
-      ["included", "pending"],
-      ["included", "acknowledged"],
-      ["acknowledged", "included"],
-      ["acknowledged", "closed"],
-    ]);
+    assert.deepEqual(
+      [...HANDOFF_STATUS_ALLOWED_TRANSITIONS],
+      [
+        ["not_required", "pending"],
+        ["pending", "not_required"],
+        ["pending", "included"],
+        ["included", "pending"],
+        ["included", "acknowledged"],
+        ["acknowledged", "included"],
+        ["acknowledged", "closed"],
+      ],
+    );
   });
 
   it("accepts every allowed edge", () => {
@@ -49,13 +52,7 @@ describe("Handoff status transition contract", () => {
   });
 
   it("treats closed as terminal", () => {
-    const targets = [
-      "not_required",
-      "pending",
-      "included",
-      "acknowledged",
-      "closed",
-    ] as const;
+    const targets = ["not_required", "pending", "included", "acknowledged", "closed"] as const;
 
     for (const target of targets) {
       assert.deepEqual(transitionHandoffStatus("closed", target), {
@@ -66,16 +63,7 @@ describe("Handoff status transition contract", () => {
   });
 
   it("rejects malformed status inputs without throwing", () => {
-    const invalidValues: unknown[] = [
-      null,
-      undefined,
-      0,
-      {},
-      [],
-      "unknown",
-      "Pending",
-      "CLOSED",
-    ];
+    const invalidValues: unknown[] = [null, undefined, 0, {}, [], "unknown", "Pending", "CLOSED"];
 
     for (const invalid of invalidValues) {
       assert.equal(isHandoffStatus(invalid), false);

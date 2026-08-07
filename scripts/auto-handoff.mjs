@@ -72,12 +72,7 @@ let prUrl = "NONE";
 let prBody = "";
 const prView = run(
   "gh",
-  [
-    "pr",
-    "view",
-    "--json",
-    "number,url,state,isDraft,headRefOid,baseRefOid,title,body",
-  ],
+  ["pr", "view", "--json", "number,url,state,isDraft,headRefOid,baseRefOid,title,body"],
   { allowFail: true },
 );
 
@@ -103,8 +98,7 @@ if (prView.ok && prView.stdout) {
 
 const issueFromEnv = (process.env.HANDOFF_ISSUE || "").trim();
 const issueFromBody =
-  prBody.match(/\b(?:Closes|Close|Fixes|Fix|Resolves|Resolve)\s+#(\d+)\b/i)?.[1] ??
-  null;
+  prBody.match(/\b(?:Closes|Close|Fixes|Fix|Resolves|Resolve)\s+#(\d+)\b/i)?.[1] ?? null;
 const issueRef = issueFromEnv || (issueFromBody ? `#${issueFromBody}` : "");
 const mergeApproved = process.env.HANDOFF_MERGE_APPROVED === "1";
 const readyApproved = process.env.HANDOFF_READY_APPROVED === "1";
@@ -112,6 +106,7 @@ const readyApproved = process.env.HANDOFF_READY_APPROVED === "1";
 const verifications = [
   ["verify:skills", npmRun("verify:skills")],
   ["lint", npmRun("lint")],
+  ["format:check", npmRun("format:check")],
   ["typecheck", npmRun("typecheck")],
   ["test", npmRun("test")],
   ["check:contracts-boundaries", npmRun("check:contracts-boundaries")],

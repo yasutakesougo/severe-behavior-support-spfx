@@ -1,9 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import {
-  evaluateObservationPeriodMembership,
-  toAsiaTokyoCalendarDay,
-} from "../../src/domain";
+import { evaluateObservationPeriodMembership, toAsiaTokyoCalendarDay } from "../../src/domain";
 
 describe("Observation period membership contract (Issue #24)", () => {
   it("同一東京暦日内（from=to=asOf）→ IN_PERIOD", () => {
@@ -98,10 +95,7 @@ describe("Observation period membership contract (Issue #24)", () => {
 
   it("UTC瞬間が前日でも Asia/Tokyo 暦日へ変換する", () => {
     // 2026-04-09T16:00:00.000Z == 2026-04-10T01:00:00+09:00
-    assert.equal(
-      toAsiaTokyoCalendarDay("2026-04-09T16:00:00.000Z"),
-      "2026-04-10",
-    );
+    assert.equal(toAsiaTokyoCalendarDay("2026-04-09T16:00:00.000Z"), "2026-04-10");
     assert.equal(
       evaluateObservationPeriodMembership(
         "2026-04-09T16:00:00.000Z",
@@ -132,13 +126,7 @@ describe("Observation period membership contract (Issue #24)", () => {
   });
 
   it("不正入力を IN_PERIOD / OUTSIDE_PERIOD へ倒さない", () => {
-    assert.equal(
-      evaluateObservationPeriodMembership("", "", ""),
-      "MALFORMED_INPUT",
-    );
-    assert.equal(
-      evaluateObservationPeriodMembership(42, 42, 42),
-      "MALFORMED_INPUT",
-    );
+    assert.equal(evaluateObservationPeriodMembership("", "", ""), "MALFORMED_INPUT");
+    assert.equal(evaluateObservationPeriodMembership(42, 42, 42), "MALFORMED_INPUT");
   });
 });

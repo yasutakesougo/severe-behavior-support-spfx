@@ -51,7 +51,10 @@ describe("Assessment Score Source Record Validation", () => {
 
 describe("Assessment Score Source Selection Pure Function", () => {
   it("selects a valid source and preserves score 0", () => {
-    const decision = selectAssessmentScoreSource([SYNTHETIC_SCORE_SOURCE_VALID_SCORE_ZERO], "2026-06-01");
+    const decision = selectAssessmentScoreSource(
+      [SYNTHETIC_SCORE_SOURCE_VALID_SCORE_ZERO],
+      "2026-06-01",
+    );
     assert.deepEqual(decision, {
       decision: "VALID",
       source: SYNTHETIC_SCORE_SOURCE_VALID_SCORE_ZERO,
@@ -80,7 +83,10 @@ describe("Assessment Score Source Selection Pure Function", () => {
   });
 
   it("returns UNCONFIRMED and does NOT collapse to VALID", () => {
-    const decision = selectAssessmentScoreSource([SYNTHETIC_SCORE_SOURCE_UNCONFIRMED], "2026-06-01");
+    const decision = selectAssessmentScoreSource(
+      [SYNTHETIC_SCORE_SOURCE_UNCONFIRMED],
+      "2026-06-01",
+    );
     assert.deepEqual(decision, {
       decision: "UNCONFIRMED",
       sources: [SYNTHETIC_SCORE_SOURCE_UNCONFIRMED],
@@ -175,28 +181,16 @@ describe("Assessment Score Source Selection Pure Function", () => {
       confirmedBy: "synthetic-user-001",
     };
 
-    const beforeValidFrom = selectAssessmentScoreSource(
-      [source],
-      "2026-03-31",
-    );
+    const beforeValidFrom = selectAssessmentScoreSource([source], "2026-03-31");
     assert.notEqual(beforeValidFrom.decision, "VALID");
 
-    const onValidFrom = selectAssessmentScoreSource(
-      [source],
-      "2026-04-01",
-    );
+    const onValidFrom = selectAssessmentScoreSource([source], "2026-04-01");
     assert.equal(onValidFrom.decision, "VALID");
 
-    const onValidTo = selectAssessmentScoreSource(
-      [source],
-      "2026-06-30",
-    );
+    const onValidTo = selectAssessmentScoreSource([source], "2026-06-30");
     assert.equal(onValidTo.decision, "VALID");
 
-    const afterValidTo = selectAssessmentScoreSource(
-      [source],
-      "2026-07-01",
-    );
+    const afterValidTo = selectAssessmentScoreSource([source], "2026-07-01");
     assert.equal(afterValidTo.decision, "EXPIRED");
   });
 
@@ -219,10 +213,7 @@ describe("Assessment Score Source Selection Pure Function", () => {
       confirmedBy: "synthetic-user-002",
     };
 
-    const decision = selectAssessmentScoreSource(
-      [firstSource, secondSource],
-      "2026-06-01",
-    );
+    const decision = selectAssessmentScoreSource([firstSource, secondSource], "2026-06-01");
 
     assert.equal(decision.decision, "CONFLICT");
     if (decision.decision === "CONFLICT") {

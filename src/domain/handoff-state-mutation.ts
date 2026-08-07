@@ -1,12 +1,5 @@
-import {
-  isNonEmptyString,
-  isValidIsoDateTime,
-} from "./validation";
-import {
-  validateHandoffState,
-  type HandoffState,
-  type HandoffStatus,
-} from "./finding-audit";
+import { isNonEmptyString, isValidIsoDateTime } from "./validation";
+import { validateHandoffState, type HandoffState, type HandoffStatus } from "./finding-audit";
 import { transitionHandoffStatus } from "./handoff-transition";
 
 export type HandoffStateMutationInput = Readonly<{
@@ -33,9 +26,7 @@ function isBefore(left: string, right: string): boolean {
   return new Date(left).getTime() < new Date(right).getTime();
 }
 
-export function mutateHandoffState(
-  input: HandoffStateMutationInput
-): HandoffStateMutationResult {
+export function mutateHandoffState(input: HandoffStateMutationInput): HandoffStateMutationResult {
   if (
     !validateHandoffState(input.currentState) ||
     !isValidIsoDateTime(input.occurredAt) ||
@@ -44,10 +35,7 @@ export function mutateHandoffState(
     return { ok: false, code: "MALFORMED_INPUT" };
   }
 
-  const transition = transitionHandoffStatus(
-    input.currentState.status,
-    input.targetStatus
-  );
+  const transition = transitionHandoffStatus(input.currentState.status, input.targetStatus);
   if (!transition.ok) {
     return transition;
   }

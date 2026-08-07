@@ -13,7 +13,7 @@ export const SYNTHETIC_FINDING_ID_USER = "synthetic-user-001";
  * FINDING-ID-FX-001: 正常なFindingIdentity
  */
 export function createSyntheticFindingIdentity(
-  overrides?: Partial<FindingIdentity>
+  overrides?: Partial<FindingIdentity>,
 ): FindingIdentity {
   return {
     OrganizationId: SYNTHETIC_FINDING_ID_ORG,
@@ -30,9 +30,7 @@ export function createSyntheticFindingIdentity(
 /**
  * AUDIT-FX-001: 正常なsuccess AuditEvent
  */
-export function createSyntheticAuditEventSuccess(
-  overrides?: Partial<AuditEvent>
-): AuditEvent {
+export function createSyntheticAuditEventSuccess(overrides?: Partial<AuditEvent>): AuditEvent {
   return {
     auditEventId: "synthetic-audit-event-001",
     OrganizationId: SYNTHETIC_FINDING_ID_ORG,
@@ -54,7 +52,7 @@ export function createSyntheticAuditEventSuccess(
  * CORRECTION-FX-001: 正常な訂正対応 SnapshotCorrection
  */
 export function createSyntheticSnapshotCorrection(
-  overrides?: Partial<SnapshotCorrection>
+  overrides?: Partial<SnapshotCorrection>,
 ): SnapshotCorrection {
   return {
     correctionId: "synthetic-correction-001",
@@ -77,9 +75,7 @@ export function createSyntheticHandoffNotRequired(): HandoffState {
   };
 }
 
-export function createSyntheticHandoffPending(
-  overrides?: Partial<HandoffState>
-): HandoffState {
+export function createSyntheticHandoffPending(overrides?: Partial<HandoffState>): HandoffState {
   return {
     status: "pending",
     requestedAt: "2026-08-06T10:00:00.000Z",
@@ -88,9 +84,7 @@ export function createSyntheticHandoffPending(
   } as HandoffState;
 }
 
-export function createSyntheticHandoffIncluded(
-  overrides?: Partial<HandoffState>
-): HandoffState {
+export function createSyntheticHandoffIncluded(overrides?: Partial<HandoffState>): HandoffState {
   return {
     status: "included",
     requestedAt: "2026-08-06T10:00:00.000Z",
@@ -103,7 +97,7 @@ export function createSyntheticHandoffIncluded(
 }
 
 export function createSyntheticHandoffAcknowledged(
-  overrides?: Partial<HandoffState>
+  overrides?: Partial<HandoffState>,
 ): HandoffState {
   return {
     status: "acknowledged",
@@ -118,9 +112,7 @@ export function createSyntheticHandoffAcknowledged(
   } as HandoffState;
 }
 
-export function createSyntheticHandoffClosed(
-  overrides?: Partial<HandoffState>
-): HandoffState {
+export function createSyntheticHandoffClosed(overrides?: Partial<HandoffState>): HandoffState {
   return {
     status: "closed",
     requestedAt: "2026-08-06T10:00:00.000Z",

@@ -1,7 +1,4 @@
-import {
-  HANDOFF_STATUSES,
-  type HandoffStatus,
-} from "./finding-audit";
+import { HANDOFF_STATUSES, type HandoffStatus } from "./finding-audit";
 
 export const HANDOFF_STATUS_ALLOWED_TRANSITIONS = [
   ["not_required", "pending"],
@@ -24,10 +21,7 @@ export type HandoffStatusTransitionResult =
     }>;
 
 export function isHandoffStatus(value: unknown): value is HandoffStatus {
-  return (
-    typeof value === "string" &&
-    HANDOFF_STATUSES.includes(value as HandoffStatus)
-  );
+  return typeof value === "string" && HANDOFF_STATUSES.includes(value as HandoffStatus);
 }
 
 /**
@@ -40,14 +34,14 @@ export function isHandoffStatus(value: unknown): value is HandoffStatus {
  */
 export function transitionHandoffStatus(
   currentStatus: unknown,
-  targetStatus: unknown
+  targetStatus: unknown,
 ): HandoffStatusTransitionResult {
   if (!isHandoffStatus(currentStatus) || !isHandoffStatus(targetStatus)) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
 
   const allowed = HANDOFF_STATUS_ALLOWED_TRANSITIONS.some(
-    ([from, to]) => from === currentStatus && to === targetStatus
+    ([from, to]) => from === currentStatus && to === targetStatus,
   );
 
   if (!allowed) {

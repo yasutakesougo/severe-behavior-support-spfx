@@ -42,9 +42,7 @@ describe("SupportPlan DTO Contract (Issue #42 PR-A2)", () => {
 
   it("accepts SupportPlanVersion envelopes via DTO validators", () => {
     assert.equal(
-      validateSupportPlanVersionDto(
-        wrapSupportPlanVersionDto(createSyntheticPlanVersion1()),
-      ),
+      validateSupportPlanVersionDto(wrapSupportPlanVersionDto(createSyntheticPlanVersion1())),
       true,
     );
   });

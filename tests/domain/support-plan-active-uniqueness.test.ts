@@ -1,9 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import {
-  evaluateActivePlanUniqueness,
-  toAsiaTokyoCalendarDay,
-} from "../../src/domain";
+import { evaluateActivePlanUniqueness, toAsiaTokyoCalendarDay } from "../../src/domain";
 import { createSyntheticActivePlan } from "./support-plan-fixtures";
 
 describe("evaluateActivePlanUniqueness domain unit", () => {
@@ -27,10 +24,7 @@ describe("evaluateActivePlanUniqueness domain unit", () => {
     } as Record<string, unknown>;
     delete broken.effectiveFrom;
 
-    assert.equal(
-      evaluateActivePlanUniqueness([broken as never]),
-      "MALFORMED_INPUT",
-    );
+    assert.equal(evaluateActivePlanUniqueness([broken as never]), "MALFORMED_INPUT");
   });
 
   it("formats Tokyo calendar days as YYYY-MM-DD", () => {
