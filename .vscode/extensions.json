@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "eamodio.gitlens",
+    "usernamehw.errorlens",
+    "MS-CEINTL.vscode-language-pack-ja",
+    "christian-kohler.path-intellisense",
+    "streetsidesoftware.code-spell-checker",
+    "gruntfuggly.todo-tree",
+    "mikestead.dotenv"
+  ],
+  "unwantedRecommendations": [
+    "GitHub.copilot",
+    "GitHub.copilot-chat"
+  ]
+}
