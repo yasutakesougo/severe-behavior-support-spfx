@@ -27,8 +27,10 @@ Issue #24 残責務再監査（RSV後）: docs/architecture/issue-24-remaining-a
 Issue #24 Decision backlog: docs/architecture/issue-24-decision-backlog.md
 Decision-HO-1（Accepted #17）: docs/architecture/decision-ho-1-handoff-transition-ownership.md
 AuditEvent 実保存 Entry Criteria: docs/architecture/audit-event-persistence-entry-criteria.md
-Decision-AUD-RET-1（Pending・候補あり）: docs/architecture/decision-aud-ret-1-auditlog-retention.md
-Decision-AUD-WR-1（Pending・候補あり）: docs/architecture/decision-aud-wr-1-audit-write-ownership.md
+Decision-AUD-RET-1（Accepted）: docs/architecture/decision-aud-ret-1-auditlog-retention.md
+Decision-AUD-WR-1（Accepted / #22A）: docs/architecture/decision-aud-wr-1-audit-write-ownership.md
+AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
+Next gate（#22A alignment）: docs/architecture/audit-event-persistence-22a-alignment-gate.md
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -48,7 +50,7 @@ Decision-AUD-WR-1（Pending・候補あり）: docs/architecture/decision-aud-wr
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
 | Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。実保存は HOLD |
-| AuditEvent 実保存 | Pending（AUD-RET-1 / AUD-WR-1 候補あり・未承認） | Entry Criteria: [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)。候補: [`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md) / [`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md) | 両 Accepted まで HOLD |
+| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。正本 [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)。次: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md) | 整合レビュー Accepted まで実装 HOLD |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -127,8 +129,8 @@ closed
 状態型はIssue #27、所有は **Issue #17**（Decision-HO-1 Accepted）。
 正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)。
 純粋遷移と`GOV-AUD-02`に依存する権限判定を分離する（ロールポリシー PR #91 MERGED）。
-AuditEvent 候補は PR #96 MERGED。実保存は
-[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) まで HOLD。
+AuditEvent 候補は PR #96 MERGED。実保存技術契約は PR #99 MERGED。
+実装前次工程: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)。
 
 ## FindingSeverity Decision
 
@@ -232,7 +234,8 @@ RuleSetVersion選択（#83/#84）。再監査: [`issue-24-remaining-audit-post-r
 PR-I以降（Handoff・完了）:
 Decision-HO-1 Accepted（#17）、遷移 PR #90、ロール PR #91、mutation PR #93、
 AuditEvent candidate PR #96（`HANDOFF_STATUS_CHANGED` / `5215557663`）。
-実保存は [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) まで HOLD。
+実保存は技術契約 MERGED（PR #99）。実装前は
+[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)。
 
 PR-I以降（未割当・HOLD）:
 Severity、完全Finding、
@@ -242,7 +245,7 @@ Decision-OP-3 / Decision-RD-3。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
 正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
-（Issue #24 系 Next pure unit は別。Audit 実保存は Entry Criteria HOLD）
+（Issue #24 系 Next pure unit は別。Audit 実保存実装は #22A 整合 Gate HOLD）
 ```
 
 注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
@@ -263,15 +266,18 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - handoff実行ロールの法人最終確定（`GOV-AUD-02` / #19。ポリシー純関数は PR #91 MERGED）
 - 訂正承認、論理削除、物理削除
 - `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted）
-- AuditLog保存期間（`GOV-AUD-06` / `DEC-011` / Decision-AUD-RET-1 Pending・候補あり）
-- AuditEvent 実保存・書込先所有（Decision-AUD-WR-1 Pending・候補 `#22A` / [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md)）
+- AuditLog保存期間（Decision-AUD-RET-1 **Accepted**。cleanup / 物理削除は別）
+- AuditEvent 実保存実装（契約 MERGED。次 Gate: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
 - 許可フィールド値のサニタイズ
 - SharePoint、Entra ID、Microsoft 365、deploy
 
 Decision-HO-1（Handoff 遷移所有）は Accepted（#17）。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
+Decision-AUD-RET-1 / AUD-WR-1 は Accepted。
 正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)、
-[`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
+[`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)、
+[`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md)、
+[`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md)。
 
 ## 変更禁止境界
 

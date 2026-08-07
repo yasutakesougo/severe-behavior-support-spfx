@@ -92,7 +92,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. AuditEvent 実保存前提（Decision-AUD-RET-1 / AUD-WR-1。**候補作成済み / 人 Accepted 待ち**。正本: [`decision-aud-ret-1-auditlog-retention.md`](./decision-aud-ret-1-auditlog-retention.md) / [`decision-aud-wr-1-audit-write-ownership.md`](./decision-aud-wr-1-audit-write-ownership.md)）
+2. AuditEvent 実保存の次工程（Decision-AUD-ALIGN-1。#22A write-result / idempotency 整合。正本: [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
@@ -134,10 +134,10 @@ Deploy: NO-GO
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
 - FindingSeverity / 完全 Finding が未了
-- AuditEvent 実保存 Entry Criteria（AUD-RET-1 / AUD-WR-1 人 Accepted）が未充足
+- AuditEvent 実保存実装（#22A 整合 Gate / Decision-AUD-ALIGN-1）が未了
 
-Decision-FLR-1 / Decision-HO-1 / Handoff 候補生成 / PR #97 Entry Criteria 初版は完了扱い。
-Close ブロッカーから外す。本当のブロッカーは AUD-RET-1 / AUD-WR-1 の人 Accepted。
+Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / persistence technical contract（PR #99）は完了扱い。
+Close ブロッカーから外す。本当の次ブロッカーは #22A 整合レビュー（実装前）。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 
