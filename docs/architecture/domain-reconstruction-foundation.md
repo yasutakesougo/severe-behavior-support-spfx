@@ -139,7 +139,7 @@ null、不正配列、不正count、不正boolean等の壊れた入力は例外�
 | `FindingStatus`型・`FindingIdentity`・`HandoffState`型 | Issue #27 | PR #41でcontract-only実装済み |
 | handoff運用設計・状態グラフ案 | Issue #17 | 案あり。実行ロールは未決定 |
 | Handoff状態遷移関数 | 未確定 | Issue #24へ自動割当しない |
-| Finding lifecycle transition | Issue #24 | C0 `5209785751` / [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。許可3辺のみ。再オープン等はHOLD |
+| Finding lifecycle transition | Issue #24 | C0 `5209785751` / [`finding-lifecycle-transition.md`](./finding-lifecycle-transition.md)。許可3辺のみ。`Resolved` 終端。再オープンは Decision-FLR-1 Accepted（不許可・実装 NONE / [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)） |
 | finding生成・安定ID・再発・Snapshot候補生成 | Issue #24 | 安定ID・lifecycle・生成資格・Identity組立・再発判定・Snapshot Result変換（永続なし / `assessment-snapshot-result-conversion.md`）は技術契約化（PR-C〜H完了）。FindingCode業務カタログ・Snapshot完全契約・保存はHOLD。残責務再監査: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) |
 | SupportPlan状態遷移（狭域） | Issue #24 | Accepted `5211039927` / 許可5辺。選定: [`issue-24-remaining-audit-pr-i-selection.md`](./issue-24-remaining-audit-pr-i-selection.md) / 技術契約: [`support-plan-status-transition.md`](./support-plan-status-transition.md)。実装完了（PR #73 / #74） |
 | Active一意性・観察期間・見直し期限・RuleSetVersion選択 | Issue #24 | 各技術契約・実装完了（#76〜#84）。再監査: [`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)。OP-3 / RD-3 / 開放終端はHOLD |
@@ -214,7 +214,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 - Handoff状態遷移関数の所有Issueと、`GOV-AUD-02`に依存する実行ロール
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode業務カタログ・Snapshot候補はHOLD）
 - SupportPlan status transition / Active一意性 / 観察期間メンバシップ / 見直し期限 asOf 相対判定 / RuleSetVersion選択は完了。残る SupportPlan 系は OP-3・RD-3 等の制度・フィールド Decision（[`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)）
-- Finding lifecycle の再オープン（Resolved からの遷移。別 Decision）
+- Finding 再オープンは Decision-FLR-1 Accepted（不許可・実装 NONE / [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)）
 - Issue #24 残 Decision 分類: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)（Next pure unit: NONE）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール

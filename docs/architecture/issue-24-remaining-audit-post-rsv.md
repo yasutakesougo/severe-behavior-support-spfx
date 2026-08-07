@@ -53,7 +53,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
 | Handoff 状態遷移純関数 | 未確定 | HOLD（所有未指定） | **不可** | Issue #24 へ自動割当しない。ロールは `GOV-AUD-02` |
-| Finding 再オープン（Resolved から） | Issue #24（lifecycle） | HOLD（Decision 未） | **不可** | PR-D 許可3辺外。辺の推測採択禁止 |
+| Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
 | AssessmentSnapshot 完全契約・保存・DTO・findingIds | Issue #24 | HOLD（`DEC-009` / `GOV-AUD`） | **不可** | Result変換のみ完了 |
@@ -71,7 +71,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | Issue #19 / `GOV-AUD-01〜10` | Handoff・Snapshot保存・削除・保存期間 | 次単位へ入れない |
 | `DEC-009` | Snapshot 保存タイミング | 次単位へ入れない |
 | FindingSeverity DEC 方式 A/B | 完全 Finding | 次単位へ入れない |
-| Finding 再オープン Decision | lifecycle 拡張 | 次単位へ入れない |
+| Finding 再オープン Decision | lifecycle（Decision-FLR-1 Accepted・実装 NONE） | 次単位へ入れない（変更不要） |
 | Handoff 所有指定 | transition 純関数 | 所有確定まで入れない |
 | FindingCode カタログ Decision | 写像表・採番 | 次単位へ入れない |
 
@@ -91,7 +91,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
-1. Finding 再オープン Decision（Decision-FLR-1。所有は既に #24。許可辺 Accepted 後に技術契約可）
+1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
 2. Handoff 状態遷移の所有 Issue 指定（Decision-HO-1。ロールは `GOV-AUD-02` と分離。#24 自動割当禁止）
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
@@ -110,7 +110,7 @@ Implementation Start: HOLD
 - Snapshot 保存・DTO・SharePoint 列
 - FindingSeverity 値の暗黙採択
 - FindingCode カタログの暗黙採択
-- 再オープン辺の推測
+- Decision-FLR-1 に反する再オープン辺の追加（Accepted: 不許可）
 - OP-3 / RD-3 の制度値埋め込み
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
@@ -131,8 +131,9 @@ Deploy: NO-GO
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
 - FindingSeverity / 完全 Finding が未了
-- Finding 再オープン Decision が未了
 - Handoff 状態遷移の所有が未確定
+
+Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）のため、Close ブロッカーから外す。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 
