@@ -43,13 +43,21 @@ Issue #24 へ自動割当しない方針は維持したまま、#17 を明示 Ac
 | 許可辺 | Decision-HO-EDGE-1 Accepted（#17） |
 | 実行ロール | `GOV-AUD-02` / Issue #19（本 Decision に混ぜない） |
 | AuditEvent 候補 | PR #96 MERGED（実保存は別） |
-| AuditLog 保存期間 | `GOV-AUD-06` / `DEC-011` HOLD |
-| 実保存・SharePoint | NO-GO / Entry Criteria 未充足 |
+| AuditLog 保存期間 | Decision-AUD-RET-1 Accepted（cleanup / 物理削除は別） |
+| Logical persistence boundary | MERGED（PR #104） |
+| Decision-AUD-REPLAY-1 | Accepted |
+| Replay implementation | HOLD pending Replay Entry PASS + separate human GO |
+| Concrete repository | HOLD |
+| SharePoint / M365 / Deploy | NO-GO |
 
 ## 実装ゲート
 
 ```text
 Handoff transition / role / mutation / audit candidate: MERGED
-AuditEvent 実保存: HOLD（audit-event-persistence-entry-criteria.md）
-SharePoint / Microsoft 365 / deploy: NO-GO
+Persistence Entry Review: PASS
+Logical AuditEvent persistence boundary: MERGED（PR #104）
+Decision-AUD-REPLAY-1: Accepted
+Replay implementation: HOLD pending Replay Entry PASS + separate human GO
+Concrete repository: HOLD
+SharePoint / Microsoft 365 / Deploy: NO-GO
 ```

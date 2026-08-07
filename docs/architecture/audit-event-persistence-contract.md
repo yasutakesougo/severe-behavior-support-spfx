@@ -186,8 +186,11 @@ identity / replay / conflict 境界は Decision-AUD-IDEM-1 Accepted に従う。
 
 ```text
 SAVE_OUTCOME_UNKNOWN
-  -> automatic blind retry: prohibited
-  -> existing-result verification: required before retry
+  -> automatic retry: prohibited
+  -> blind retry: prohibited
+  -> existing-result verification: required
+  -> retry eligibility / count / backoff: separate Decision
+     （verification 後も retry を許可しない）
 
 same auditEventId + same IdempotencyKey + same semantic payload
   -> existing result（重複新規作成しない）
@@ -196,7 +199,8 @@ same IdempotencyKey + different semantic payload
   -> CONFLICT
 ```
 
-`auditEventId` / `correlationId` の採番方式、PayloadFingerprint algorithm、retry 回数は後続とする。
+`auditEventId` / `correlationId` の採番方式、PayloadFingerprint algorithm、
+retry eligibility / count / backoff は別 Decision（本契約では決めない）。
 
 ## Out of scope
 
