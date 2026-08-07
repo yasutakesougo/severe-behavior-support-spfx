@@ -1,7 +1,4 @@
-import {
-  isNonEmptyString,
-  isValidIsoDateTime,
-} from "./validation";
+import { isNonEmptyString, isValidIsoDateTime } from "./validation";
 import {
   validateAuditEvent,
   type AuditEvent,
@@ -30,7 +27,10 @@ export type HandoffAuditEventCandidateResult =
   | Readonly<{ ok: true; event: AuditEvent }>
   | Readonly<{
       ok: false;
-      code: "MALFORMED_INPUT" | "INVALID_TRANSITION" | "AUDIT_EVENT_INVALID";
+      code:
+        | "MALFORMED_INPUT"
+        | "INVALID_TRANSITION"
+        | "AUDIT_EVENT_INVALID";
     }>;
 
 function statusToken(status: HandoffStatus): string {
@@ -39,7 +39,7 @@ function statusToken(status: HandoffStatus): string {
 
 export function toHandoffTransitionReasonCode(
   currentStatus: HandoffStatus,
-  targetStatus: HandoffStatus
+  targetStatus: HandoffStatus,
 ): string {
   return `HANDOFF_${statusToken(currentStatus)}_TO_${statusToken(targetStatus)}`;
 }
@@ -51,7 +51,7 @@ export function toHandoffTransitionReasonCode(
  * Persistence, audit write retries, retention, and SharePoint are out of scope.
  */
 export function buildHandoffStatusChangedAuditEventCandidate(
-  input: HandoffAuditEventCandidateInput
+  input: HandoffAuditEventCandidateInput,
 ): HandoffAuditEventCandidateResult {
   if (
     !isNonEmptyString(input.auditEventId) ||
@@ -62,14 +62,15 @@ export function buildHandoffStatusChangedAuditEventCandidate(
     !isValidIsoDateTime(input.occurredAt) ||
     !isNonEmptyString(input.correlationId) ||
     (input.appVersion !== undefined && !isNonEmptyString(input.appVersion)) ||
-    (input.ruleSetVersion !== undefined && !isNonEmptyString(input.ruleSetVersion))
+    (input.ruleSetVersion !== undefined &&
+      !isNonEmptyString(input.ruleSetVersion))
   ) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
 
   const transition = transitionHandoffStatus(
     input.currentStatus,
-    input.targetStatus
+    input.targetStatus,
   );
   if (!transition.ok) {
     return transition;
@@ -88,9 +89,11 @@ export function buildHandoffStatusChangedAuditEventCandidate(
     correlationId: input.correlationId,
     reasonCode: toHandoffTransitionReasonCode(
       input.currentStatus as HandoffStatus,
-      transition.status
+      transition.status,
     ),
-    ...(input.appVersion !== undefined ? { appVersion: input.appVersion } : {}),
+    ...(input.appVersion !== undefined
+      ? { appVersion: input.appVersion }
+      : {}),
     ...(input.ruleSetVersion !== undefined
       ? { ruleSetVersion: input.ruleSetVersion }
       : {}),
