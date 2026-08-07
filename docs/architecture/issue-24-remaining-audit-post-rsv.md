@@ -52,7 +52,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
-| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | 実保存は [`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) HOLD |
+| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical persistence DONE（PR #104）。Replay HOLD / repository・SharePoint NO-GO |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
@@ -61,7 +61,10 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | Decision-OP-3（観察期間フィールド追加） | 別 Decision | HOLD（制度/Schema） | **不可** | メンバシップ純関数は完了 |
 | Decision-RD-3（接近窓・超過後ポリシー） | 別 Decision | HOLD（制度日数） | **不可** | asOf 相対判定は完了 |
 | 開放終端（observation `periodTo` / RSV `effectiveTo`） | 新 Decision 要 | HOLD | **不可** | 現行契約は終端必須 |
-| Audit 値サニタイズ / write boundary | #22 または新規 | HOLD | **不可** | Issue #24 純関数単位ではない |
+| Audit 値安全性 / hardening | #22 / SAN-VALUE-1 / SAN-1 | **DONE**（Accepted + PR #102） | **完了** | Issue #24 純関数単位ではない |
+| AuditEvent logical persistence boundary | #22A | **DONE**（PR #104） | **完了** | 6-value write result / port |
+| AuditEvent Replay implementation | #22A / REPLAY-1 | **HOLD**（Entry + separate GO） | **不可（今は）** | Decision Accepted。実装は未開始 |
+| AuditEvent concrete repository / SharePoint | #22B / #29 | **NO-GO** | **不可** | SharePoint adapter / M365 / Deploy 禁止 |
 | 訂正・削除・復旧運用 | Issue #17 | HOLD（`GOV-AUD`） | **不可** | #19 回答待ち |
 
 ### 3. Approval Dependency

@@ -73,9 +73,10 @@ Write results:
   SAVE_OUTCOME_UNKNOWN
 
 SAVE_OUTCOME_UNKNOWN:
-  -> success扱いしない
-  -> blind retryしない
-  -> 既存結果を確認してから再試行
+  -> success 扱いしない
+  -> blind retry しない
+  -> existing-result verification を行う
+  -> retry 可否・回数・backoff は別 Decision（verification 後も自動 retry を許可しない）
 ```
 
 #22A write-result との 1:1 対応は
