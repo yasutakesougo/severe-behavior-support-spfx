@@ -37,7 +37,7 @@ export function createSyntheticAuditEventSuccess(overrides?: Partial<AuditEvent>
     SiteId: SYNTHETIC_FINDING_ID_SITE,
     actorStaffId: "synthetic-staff-001",
     actionCode: "SYNTHETIC_ACTION_RECORD_CREATED",
-    targetType: "synthetic-target-abc-record",
+    targetType: "HandoffState",
     targetRecordId: "synthetic-record-001",
     result: "success",
     occurredAt: "2026-08-06T10:00:00.000Z",
