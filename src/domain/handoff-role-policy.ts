@@ -2,7 +2,6 @@ import type { Role } from "../contracts";
 import {
   HANDOFF_STATUS_ALLOWED_TRANSITIONS,
   transitionHandoffStatus,
-  type HandoffStatusTransitionResult,
 } from "./handoff-transition";
 import type { HandoffStatus } from "./finding-audit";
 
@@ -13,10 +12,7 @@ export type HandoffTransitionRolePolicyResult =
     }>
   | Readonly<{
       ok: false;
-      code:
-        | HandoffStatusTransitionResult extends infer _T
-          ? "MALFORMED_INPUT" | "INVALID_TRANSITION" | "POLICY_MISSING"
-          : never;
+      code: "MALFORMED_INPUT" | "INVALID_TRANSITION" | "POLICY_MISSING";
     }>;
 
 const PLANNER_AND_SERVICE_MANAGER = [
@@ -71,7 +67,7 @@ export function getHandoffTransitionRequiredRoles(
 }
 
 /**
- * Compile-time/runtime drift helper used by contract tests.
+ * Drift helper used by contract tests.
  */
 export function hasRolePolicyForEveryAllowedHandoffEdge(): boolean {
   return HANDOFF_STATUS_ALLOWED_TRANSITIONS.every(([from, to]) =>
