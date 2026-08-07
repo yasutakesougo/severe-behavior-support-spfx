@@ -27,16 +27,19 @@ describe("evaluateObservationPeriodMembership domain unit", () => {
       "../../src/domain/support-plan.ts",
     );
     const source = readFileSync(sourcePath, "utf8");
-    const fnBodyMatch = source.match(
-      /export function evaluateObservationPeriodMembership\([\s\S]*?\n\}/,
-    );
-    assert.ok(fnBodyMatch, "function body must be present");
-    const fnBody = fnBodyMatch[0];
+    const marker = "export function evaluateObservationPeriodMembership(";
+    const start = source.indexOf(marker);
+    assert.ok(start >= 0, "function declaration must be present");
+    const afterStart = source.slice(start);
+    const nextExport = afterStart.indexOf("\nexport ", marker.length);
+    const fnBody =
+      nextExport === -1 ? afterStart : afterStart.slice(0, nextExport);
 
     assert.equal(fnBody.includes("Date.now"), false);
     assert.equal(/\bnew Date\(\s*\)/.test(fnBody), false);
     assert.equal(/\bOBSERVATION_DAYS\b/.test(fnBody), false);
     assert.equal(/\bINSTITUTIONAL\b/.test(fnBody), false);
     assert.equal(fnBody.includes("toAsiaTokyoCalendarDay"), true);
+    assert.equal(fnBody.includes("return \"OUTSIDE_PERIOD\""), true);
   });
 });
