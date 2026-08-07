@@ -31,21 +31,18 @@ describe("Handoff AuditEvent candidate contract", () => {
     assert.equal(validateAuditEvent(result.event), true);
   });
 
-  it(
-    "records a backward edge with the same actionCode and directional reasonCode",
-    () => {
-      const result = buildHandoffStatusChangedAuditEventCandidate({
-        ...baseInput,
-        currentStatus: "included",
-        targetStatus: "pending",
-      });
-      assert.equal(result.ok, true);
-      if (!result.ok) return;
+  it("records a backward edge with the same actionCode and directional reasonCode", () => {
+    const result = buildHandoffStatusChangedAuditEventCandidate({
+      ...baseInput,
+      currentStatus: "included",
+      targetStatus: "pending",
+    });
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
 
-      assert.equal(result.event.actionCode, "HANDOFF_STATUS_CHANGED");
-      assert.equal(result.event.reasonCode, "HANDOFF_INCLUDED_TO_PENDING");
-    },
-  );
+    assert.equal(result.event.actionCode, "HANDOFF_STATUS_CHANGED");
+    assert.equal(result.event.reasonCode, "HANDOFF_INCLUDED_TO_PENDING");
+  });
 
   it("rejects denied and malformed transitions", () => {
     assert.deepEqual(

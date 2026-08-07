@@ -1,13 +1,8 @@
 import { isNonEmptyString, isValidIsoDateTime } from "./validation";
-import {
-  validateAuditEvent,
-  type AuditEvent,
-  type HandoffStatus,
-} from "./finding-audit";
+import { validateAuditEvent, type AuditEvent, type HandoffStatus } from "./finding-audit";
 import { transitionHandoffStatus } from "./handoff-transition";
 
-export const HANDOFF_STATUS_CHANGED_ACTION_CODE =
-  "HANDOFF_STATUS_CHANGED" as const;
+export const HANDOFF_STATUS_CHANGED_ACTION_CODE = "HANDOFF_STATUS_CHANGED" as const;
 
 export type HandoffAuditEventCandidateInput = Readonly<{
   auditEventId: unknown;
@@ -27,10 +22,7 @@ export type HandoffAuditEventCandidateResult =
   | Readonly<{ ok: true; event: AuditEvent }>
   | Readonly<{
       ok: false;
-      code:
-        | "MALFORMED_INPUT"
-        | "INVALID_TRANSITION"
-        | "AUDIT_EVENT_INVALID";
+      code: "MALFORMED_INPUT" | "INVALID_TRANSITION" | "AUDIT_EVENT_INVALID";
     }>;
 
 function statusToken(status: HandoffStatus): string {
@@ -62,16 +54,12 @@ export function buildHandoffStatusChangedAuditEventCandidate(
     !isValidIsoDateTime(input.occurredAt) ||
     !isNonEmptyString(input.correlationId) ||
     (input.appVersion !== undefined && !isNonEmptyString(input.appVersion)) ||
-    (input.ruleSetVersion !== undefined &&
-      !isNonEmptyString(input.ruleSetVersion))
+    (input.ruleSetVersion !== undefined && !isNonEmptyString(input.ruleSetVersion))
   ) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
 
-  const transition = transitionHandoffStatus(
-    input.currentStatus,
-    input.targetStatus,
-  );
+  const transition = transitionHandoffStatus(input.currentStatus, input.targetStatus);
   if (!transition.ok) {
     return transition;
   }
@@ -91,12 +79,8 @@ export function buildHandoffStatusChangedAuditEventCandidate(
       input.currentStatus as HandoffStatus,
       transition.status,
     ),
-    ...(input.appVersion !== undefined
-      ? { appVersion: input.appVersion }
-      : {}),
-    ...(input.ruleSetVersion !== undefined
-      ? { ruleSetVersion: input.ruleSetVersion }
-      : {}),
+    ...(input.appVersion !== undefined ? { appVersion: input.appVersion } : {}),
+    ...(input.ruleSetVersion !== undefined ? { ruleSetVersion: input.ruleSetVersion } : {}),
   };
 
   if (!validateAuditEvent(event)) {
