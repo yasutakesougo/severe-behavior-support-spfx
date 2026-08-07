@@ -3,10 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import {
-  selectRuleSetVersion,
-  toAsiaTokyoCalendarDay,
-} from "../../src/domain";
+import { selectRuleSetVersion, toAsiaTokyoCalendarDay } from "../../src/domain";
 
 describe("selectRuleSetVersion domain unit", () => {
   it("reuses shared Asia/Tokyo calendar helper for asOf and bounds", () => {
@@ -42,8 +39,7 @@ describe("selectRuleSetVersion domain unit", () => {
     assert.ok(start >= 0, "function declaration must be present");
     const afterStart = source.slice(start);
     const nextExport = afterStart.indexOf("\nexport ", marker.length);
-    const fnBody =
-      nextExport === -1 ? afterStart : afterStart.slice(0, nextExport);
+    const fnBody = nextExport === -1 ? afterStart : afterStart.slice(0, nextExport);
 
     assert.equal(fnBody.includes("Date.now"), false);
     assert.equal(/\bnew Date\(\s*\)/.test(fnBody), false);

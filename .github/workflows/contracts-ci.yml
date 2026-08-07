@@ -17,6 +17,8 @@ on:
       - "package-lock.json"
       - "tsconfig.json"
       - "eslint.config.mjs"
+      - ".prettierrc.json"
+      - ".prettierignore"
       - ".node-version"
       - ".github/workflows/contracts-ci.yml"
   push:
@@ -37,6 +39,8 @@ on:
       - "package-lock.json"
       - "tsconfig.json"
       - "eslint.config.mjs"
+      - ".prettierrc.json"
+      - ".prettierignore"
       - ".node-version"
       - ".github/workflows/contracts-ci.yml"
 
@@ -73,6 +77,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
 
       - name: Typecheck
         run: npm run typecheck

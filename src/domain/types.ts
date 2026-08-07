@@ -2,15 +2,9 @@ export type BehaviorRelatedScore = number & {
   readonly __brand: "BehaviorRelatedScore";
 };
 
-export type BehaviorScoreInvalidReason =
-  | "TYPE"
-  | "NOT_FINITE"
-  | "NOT_INTEGER"
-  | "OUT_OF_RANGE";
+export type BehaviorScoreInvalidReason = "TYPE" | "NOT_FINITE" | "NOT_INTEGER" | "OUT_OF_RANGE";
 
-export type BehaviorScoreRejectionReason =
-  | BehaviorScoreInvalidReason
-  | "MALFORMED_STATE";
+export type BehaviorScoreRejectionReason = BehaviorScoreInvalidReason | "MALFORMED_STATE";
 
 /**
  * Input state for the official behavior-related score itself.
@@ -69,16 +63,9 @@ export type BehaviorScoreDecision =
     }>;
 
 export type FacilityType =
-  | "STANDALONE_DAY_ACTIVITY"
-  | "DISABILITY_SUPPORT_FACILITY"
-  | "COEXISTENCE_TYPE"
-  | "MULTI_UNIT";
+  "STANDALONE_DAY_ACTIVITY" | "DISABILITY_SUPPORT_FACILITY" | "COEXISTENCE_TYPE" | "MULTI_UNIT";
 
-export type CriterionStatus =
-  | "PASS"
-  | "FAIL"
-  | "UNKNOWN"
-  | "NOT_APPLICABLE";
+export type CriterionStatus = "PASS" | "FAIL" | "UNKNOWN" | "NOT_APPLICABLE";
 
 export type CriterionResult =
   | Readonly<{
@@ -92,10 +79,7 @@ export type CriterionResult =
     }>;
 
 export type CriterionAggregateDecision =
-  | "ELIGIBLE"
-  | "INELIGIBLE"
-  | "INDETERMINATE"
-  | "NOT_APPLICABLE";
+  "ELIGIBLE" | "INELIGIBLE" | "INDETERMINATE" | "NOT_APPLICABLE";
 
 export type EvaluationExecutionStatus =
   | "NOT_RUN"
@@ -106,11 +90,7 @@ export type EvaluationExecutionStatus =
   | "FAILED";
 
 export type EvaluationDecision =
-  | "NO_FINDINGS"
-  | "FINDINGS_PRESENT"
-  | "INDETERMINATE"
-  | "NOT_APPLICABLE"
-  | "SOURCE_UNAVAILABLE";
+  "NO_FINDINGS" | "FINDINGS_PRESENT" | "INDETERMINATE" | "NOT_APPLICABLE" | "SOURCE_UNAVAILABLE";
 
 export type EvaluationFindingReference = Readonly<{
   findingCode: string;
@@ -152,13 +132,7 @@ export type AssessmentSourceLookupResult =
     }>;
 
 export type AssessmentSourceValidityStatus =
-  | "VALID"
-  | "MISSING"
-  | "UNCONFIRMED"
-  | "EXPIRED"
-  | "CONFLICT"
-  | "FETCH_FAILED"
-  | "MALFORMED";
+  "VALID" | "MISSING" | "UNCONFIRMED" | "EXPIRED" | "CONFLICT" | "FETCH_FAILED" | "MALFORMED";
 
 export type AssessmentSourceDecision =
   | Readonly<{

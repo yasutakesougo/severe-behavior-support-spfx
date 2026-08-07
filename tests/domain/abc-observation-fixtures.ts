@@ -5,9 +5,7 @@ export const SYNTHETIC_SITE_ID = "synthetic-site-001";
 export const SYNTHETIC_USER_ID = "synthetic-user-001";
 export const SYNTHETIC_PLAN_ID = "synthetic-plan-001";
 
-export function createSyntheticAbcRecord(
-  overrides?: Partial<AbcRecord>
-): AbcRecord {
+export function createSyntheticAbcRecord(overrides?: Partial<AbcRecord>): AbcRecord {
   return {
     OrganizationId: SYNTHETIC_ORG_ID,
     SiteId: SYNTHETIC_SITE_ID,
@@ -40,9 +38,7 @@ export function createSyntheticAbcRecord(
   };
 }
 
-export function createSyntheticObservation(
-  overrides?: Partial<Observation>
-): Observation {
+export function createSyntheticObservation(overrides?: Partial<Observation>): Observation {
   const base = {
     OrganizationId: SYNTHETIC_ORG_ID,
     SiteId: SYNTHETIC_SITE_ID,
@@ -70,9 +66,7 @@ export function createSyntheticObservation(
   } as Observation;
 }
 
-export function createSyntheticLinkFailure(
-  overrides?: Partial<LinkFailure>
-): LinkFailure {
+export function createSyntheticLinkFailure(overrides?: Partial<LinkFailure>): LinkFailure {
   const base = {
     failureId: "synthetic-fail-001",
     targetRecordId: "synthetic-rec-abc-001",

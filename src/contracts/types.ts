@@ -46,7 +46,10 @@ export type ExecutionRecord = Readonly<{
 export type LookupResult<T> =
   | Readonly<{ status: "FOUND"; value: T }>
   | Readonly<{ status: "EMPTY" }>
-  | Readonly<{ status: "UNKNOWN"; reason: "NOT_AUTHENTICATED" | "NOT_AUTHORIZED" | "INDETERMINATE" }>
+  | Readonly<{
+      status: "UNKNOWN";
+      reason: "NOT_AUTHENTICATED" | "NOT_AUTHORIZED" | "INDETERMINATE";
+    }>
   | Readonly<{ status: "FETCH_FAILED"; code: string }>;
 
 export type ExecutionRecordLookupResults = Readonly<{
@@ -55,19 +58,12 @@ export type ExecutionRecordLookupResults = Readonly<{
 }>;
 
 export type ValidationError = Readonly<{
-  code:
-    | "REQUIRED"
-    | "TYPE"
-    | "EMPTY"
-    | "FORMAT"
-    | "VALUE"
-    | "APPROVAL_STATE";
+  code: "REQUIRED" | "TYPE" | "EMPTY" | "FORMAT" | "VALUE" | "APPROVAL_STATE";
   path: string;
 }>;
 
 export type ValidationResult<T> =
-  | Readonly<{ ok: true; value: T }>
-  | Readonly<{ ok: false; errors: readonly ValidationError[] }>;
+  Readonly<{ ok: true; value: T }> | Readonly<{ ok: false; errors: readonly ValidationError[] }>;
 
 export type AccessDecision =
   | Readonly<{ decision: "ALLOW"; reason: "ROLE_ALLOWED" }>
@@ -108,4 +104,7 @@ export type SubmissionDecision =
 export type WriteResult =
   | Readonly<{ status: "CREATED"; RecordId: string }>
   | Readonly<{ status: "DUPLICATE_REPLAY"; RecordId: string }>
-  | Readonly<{ status: "REJECTED"; reason: "CONFLICT" | "NOT_AUTHORIZED" | "UNKNOWN" | "FETCH_FAILED" }>;
+  | Readonly<{
+      status: "REJECTED";
+      reason: "CONFLICT" | "NOT_AUTHORIZED" | "UNKNOWN" | "FETCH_FAILED";
+    }>;

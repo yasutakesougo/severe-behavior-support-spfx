@@ -31,11 +31,13 @@ export const evaluateAccess = (input: {
   identity: LookupResult<AuthenticatedIdentity>;
   requiredRoles: readonly Role[];
 }): AccessDecision => {
-  if (!validateDeploymentContext(input.context).ok) return { decision: "DENY", reason: "INVALID_CONTEXT" };
+  if (!validateDeploymentContext(input.context).ok)
+    return { decision: "DENY", reason: "INVALID_CONTEXT" };
 
   if (input.identity.status === "EMPTY") return { decision: "DENY", reason: "AUTH_EMPTY" };
   if (input.identity.status === "UNKNOWN") return { decision: "DENY", reason: "AUTH_UNKNOWN" };
-  if (input.identity.status === "FETCH_FAILED") return { decision: "DENY", reason: "AUTH_FETCH_FAILED" };
+  if (input.identity.status === "FETCH_FAILED")
+    return { decision: "DENY", reason: "AUTH_FETCH_FAILED" };
 
   const identity: unknown = input.identity.value;
   if (!isRecord(identity)) return { decision: "DENY", reason: "INVALID_IDENTITY" };
@@ -52,7 +54,8 @@ export const evaluateAccess = (input: {
   if (identity.OrganizationId !== input.context.OrganizationId) {
     return { decision: "DENY", reason: "ORGANIZATION_MISMATCH" };
   }
-  if (identity.SiteId !== input.context.SiteId) return { decision: "DENY", reason: "SITE_MISMATCH" };
+  if (identity.SiteId !== input.context.SiteId)
+    return { decision: "DENY", reason: "SITE_MISMATCH" };
   if (!Array.isArray(input.requiredRoles) || input.requiredRoles.length === 0) {
     return { decision: "DENY", reason: "NO_REQUIRED_ROLE" };
   }
@@ -65,7 +68,10 @@ export const evaluateAccess = (input: {
   return { decision: "ALLOW", reason: "ROLE_ALLOWED" };
 };
 
-const sameProcedure = (left: ExecutionRecord["Procedure"], right: ExecutionRecord["Procedure"]): boolean =>
+const sameProcedure = (
+  left: ExecutionRecord["Procedure"],
+  right: ExecutionRecord["Procedure"],
+): boolean =>
   left.ProcedureId === right.ProcedureId &&
   left.ProcedureVersion === right.ProcedureVersion &&
   left.ApprovalState === right.ApprovalState;

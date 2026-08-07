@@ -4,29 +4,22 @@ import type {
   SupportPlanVersion,
   SupportPlanVersionDto,
 } from "../../src/domain";
-import {
-  toSupportPlanDto,
-  toSupportPlanVersionDto,
-} from "../../src/domain/support-plan";
+import { toSupportPlanDto, toSupportPlanVersionDto } from "../../src/domain/support-plan";
 
 export const SYNTHETIC_PLAN_ORG_ID = "synthetic-org-001";
 export const SYNTHETIC_PLAN_SITE_ID = "synthetic-site-001";
 export const SYNTHETIC_PLAN_USER_ID = "synthetic-user-001";
 export const SYNTHETIC_PLAN_ID = "synthetic-plan-001";
 
-export const wrapSupportPlanDto = (data: SupportPlan): SupportPlanDto =>
-  toSupportPlanDto(data);
+export const wrapSupportPlanDto = (data: SupportPlan): SupportPlanDto => toSupportPlanDto(data);
 
-export const wrapSupportPlanVersionDto = (
-  data: SupportPlanVersion,
-): SupportPlanVersionDto => toSupportPlanVersionDto(data);
+export const wrapSupportPlanVersionDto = (data: SupportPlanVersion): SupportPlanVersionDto =>
+  toSupportPlanVersionDto(data);
 
 /**
  * PLAN-FX-001: 正常なDraft
  */
-export function createSyntheticDraftPlan(
-  overrides?: Partial<SupportPlan>
-): SupportPlan {
+export function createSyntheticDraftPlan(overrides?: Partial<SupportPlan>): SupportPlan {
   return {
     PlanId: SYNTHETIC_PLAN_ID,
     OrganizationId: SYNTHETIC_PLAN_ORG_ID,
@@ -44,9 +37,7 @@ export function createSyntheticDraftPlan(
 /**
  * PLAN-FX-002: 正常なPendingReview
  */
-export function createSyntheticPendingReviewPlan(
-  overrides?: Partial<SupportPlan>
-): SupportPlan {
+export function createSyntheticPendingReviewPlan(overrides?: Partial<SupportPlan>): SupportPlan {
   return {
     PlanId: SYNTHETIC_PLAN_ID,
     OrganizationId: SYNTHETIC_PLAN_ORG_ID,
@@ -66,9 +57,7 @@ export function createSyntheticPendingReviewPlan(
 /**
  * PLAN-FX-003: 正常なReturned
  */
-export function createSyntheticReturnedPlan(
-  overrides?: Partial<SupportPlan>
-): SupportPlan {
+export function createSyntheticReturnedPlan(overrides?: Partial<SupportPlan>): SupportPlan {
   return {
     PlanId: SYNTHETIC_PLAN_ID,
     OrganizationId: SYNTHETIC_PLAN_ORG_ID,
@@ -92,9 +81,7 @@ export function createSyntheticReturnedPlan(
 /**
  * PLAN-FX-004: 正常なActive
  */
-export function createSyntheticActivePlan(
-  overrides?: Partial<SupportPlan>
-): SupportPlan {
+export function createSyntheticActivePlan(overrides?: Partial<SupportPlan>): SupportPlan {
   return {
     PlanId: SYNTHETIC_PLAN_ID,
     OrganizationId: SYNTHETIC_PLAN_ORG_ID,
@@ -117,9 +104,7 @@ export function createSyntheticActivePlan(
 /**
  * PLAN-FX-005: 正常なClosed
  */
-export function createSyntheticClosedPlan(
-  overrides?: Partial<SupportPlan>
-): SupportPlan {
+export function createSyntheticClosedPlan(overrides?: Partial<SupportPlan>): SupportPlan {
   return {
     PlanId: SYNTHETIC_PLAN_ID,
     OrganizationId: SYNTHETIC_PLAN_ORG_ID,
@@ -148,7 +133,7 @@ export function createSyntheticClosedPlan(
  * PLAN-VERSION-FX-001: 正常なversion 1
  */
 export function createSyntheticPlanVersion1(
-  overrides?: Partial<SupportPlanVersion>
+  overrides?: Partial<SupportPlanVersion>,
 ): SupportPlanVersion {
   return {
     planId: SYNTHETIC_PLAN_ID,
@@ -170,7 +155,7 @@ export function createSyntheticPlanVersion1(
  * PLAN-VERSION-FX-002: 同じplanIdのversion 2
  */
 export function createSyntheticPlanVersion2(
-  overrides?: Partial<SupportPlanVersion>
+  overrides?: Partial<SupportPlanVersion>,
 ): SupportPlanVersion {
   return {
     planId: SYNTHETIC_PLAN_ID,

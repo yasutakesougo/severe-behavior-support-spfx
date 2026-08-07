@@ -1,9 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import {
-  selectRuleSetVersion,
-  toAsiaTokyoCalendarDay,
-} from "../../src/domain";
+import { selectRuleSetVersion, toAsiaTokyoCalendarDay } from "../../src/domain";
 
 function candidate(
   ruleSetVersion: string,
@@ -20,11 +17,7 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
     const version = "synthetic-ruleset-v1.0.0";
     const result = selectRuleSetVersion(
       [
-        candidate(
-          version,
-          "2026-01-01T00:00:00.000Z",
-          "2026-12-31T00:00:00.000Z",
-        ),
+        candidate(version, "2026-01-01T00:00:00.000Z", "2026-12-31T00:00:00.000Z"),
         candidate(
           "synthetic-ruleset-v0.9.0",
           "2025-01-01T00:00:00.000Z",
@@ -66,16 +59,8 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
     assert.deepEqual(
       selectRuleSetVersion(
         [
-          candidate(
-            "synthetic-ruleset-a",
-            "2026-01-01T00:00:00.000Z",
-            "2026-12-31T00:00:00.000Z",
-          ),
-          candidate(
-            "synthetic-ruleset-b",
-            "2026-06-01T00:00:00.000Z",
-            "2026-06-30T00:00:00.000Z",
-          ),
+          candidate("synthetic-ruleset-a", "2026-01-01T00:00:00.000Z", "2026-12-31T00:00:00.000Z"),
+          candidate("synthetic-ruleset-b", "2026-06-01T00:00:00.000Z", "2026-06-30T00:00:00.000Z"),
         ],
         asOf,
       ),
@@ -85,23 +70,12 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
 
   it("候補配列の順序を入れ替えても同一結果", () => {
     const left = [
-      candidate(
-        "synthetic-ruleset-z",
-        "2026-01-01T00:00:00.000Z",
-        "2026-12-31T00:00:00.000Z",
-      ),
-      candidate(
-        "synthetic-ruleset-a",
-        "2025-01-01T00:00:00.000Z",
-        "2025-12-31T00:00:00.000Z",
-      ),
+      candidate("synthetic-ruleset-z", "2026-01-01T00:00:00.000Z", "2026-12-31T00:00:00.000Z"),
+      candidate("synthetic-ruleset-a", "2025-01-01T00:00:00.000Z", "2025-12-31T00:00:00.000Z"),
     ];
     const right = [...left].reverse();
 
-    assert.deepEqual(
-      selectRuleSetVersion(left, asOf),
-      selectRuleSetVersion(right, asOf),
-    );
+    assert.deepEqual(selectRuleSetVersion(left, asOf), selectRuleSetVersion(right, asOf));
   });
 
   it("version 文字列の辞書順・見かけの新旧で SELECTED へ倒さない", () => {
@@ -126,11 +100,7 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
 
   it("asOf / effectiveFrom / effectiveTo のいずれか不正 → MALFORMED_INPUT", () => {
     const valid = [
-      candidate(
-        "synthetic-ruleset-v1",
-        "2026-01-01T00:00:00.000Z",
-        "2026-12-31T00:00:00.000Z",
-      ),
+      candidate("synthetic-ruleset-v1", "2026-01-01T00:00:00.000Z", "2026-12-31T00:00:00.000Z"),
     ];
 
     assert.deepEqual(selectRuleSetVersion(valid, "not-a-date"), {
@@ -139,26 +109,14 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
     });
     assert.deepEqual(
       selectRuleSetVersion(
-        [
-          candidate(
-            "synthetic-ruleset-v1",
-            "bad-from",
-            "2026-12-31T00:00:00.000Z",
-          ),
-        ],
+        [candidate("synthetic-ruleset-v1", "bad-from", "2026-12-31T00:00:00.000Z")],
         asOf,
       ),
       { ok: false, code: "MALFORMED_INPUT" },
     );
     assert.deepEqual(
       selectRuleSetVersion(
-        [
-          candidate(
-            "synthetic-ruleset-v1",
-            "2026-01-01T00:00:00.000Z",
-            "bad-to",
-          ),
-        ],
+        [candidate("synthetic-ruleset-v1", "2026-01-01T00:00:00.000Z", "bad-to")],
         asOf,
       ),
       { ok: false, code: "MALFORMED_INPUT" },
@@ -215,7 +173,13 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
     );
     assert.deepEqual(
       selectRuleSetVersion(
-        [{ ruleSetVersion: " ", effectiveFrom: "2026-01-01T00:00:00.000Z", effectiveTo: "2026-12-31T00:00:00.000Z" }],
+        [
+          {
+            ruleSetVersion: " ",
+            effectiveFrom: "2026-01-01T00:00:00.000Z",
+            effectiveTo: "2026-12-31T00:00:00.000Z",
+          },
+        ],
         asOf,
       ),
       { ok: false, code: "MALFORMED_INPUT" },
@@ -245,10 +209,7 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
 
   it("UTC瞬間が前日でも Asia/Tokyo 暦日へ変換する", () => {
     // 2026-06-14T16:00:00.000Z == 2026-06-15T01:00:00+09:00
-    assert.equal(
-      toAsiaTokyoCalendarDay("2026-06-14T16:00:00.000Z"),
-      "2026-06-15",
-    );
+    assert.equal(toAsiaTokyoCalendarDay("2026-06-14T16:00:00.000Z"), "2026-06-15");
 
     const result = selectRuleSetVersion(
       [
@@ -291,25 +252,15 @@ describe("RuleSetVersion selection contract (Issue #24)", () => {
 
   it("暦日閉区間の両端を含む", () => {
     const bounds = [
-      candidate(
-        "synthetic-ruleset-bounds",
-        "2026-06-01T00:00:00.000Z",
-        "2026-06-30T00:00:00.000Z",
-      ),
+      candidate("synthetic-ruleset-bounds", "2026-06-01T00:00:00.000Z", "2026-06-30T00:00:00.000Z"),
     ];
 
-    assert.equal(
-      selectRuleSetVersion(bounds, "2026-06-01T00:00:00.000Z").ok,
-      true,
-    );
+    assert.equal(selectRuleSetVersion(bounds, "2026-06-01T00:00:00.000Z").ok, true);
     // 2026-06-30T14:00:00.000Z == 2026-06-30T23:00:00+09:00（終端暦日に含む）
-    assert.equal(
-      selectRuleSetVersion(bounds, "2026-06-30T14:00:00.000Z").ok,
-      true,
-    );
-    assert.deepEqual(
-      selectRuleSetVersion(bounds, "2026-05-31T00:00:00.000Z"),
-      { ok: false, code: "NONE" },
-    );
+    assert.equal(selectRuleSetVersion(bounds, "2026-06-30T14:00:00.000Z").ok, true);
+    assert.deepEqual(selectRuleSetVersion(bounds, "2026-05-31T00:00:00.000Z"), {
+      ok: false,
+      code: "NONE",
+    });
   });
 });

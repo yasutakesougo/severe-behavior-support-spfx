@@ -11,7 +11,12 @@ import {
   type LookupResult,
   type Role,
 } from "../../src/contracts";
-import { syntheticContext, syntheticIdentity, syntheticProcedure, syntheticRecord } from "./fixtures";
+import {
+  syntheticContext,
+  syntheticIdentity,
+  syntheticProcedure,
+  syntheticRecord,
+} from "./fixtures";
 
 const formalRoles: readonly Role[] = [
   "SUPPORTER",
@@ -23,7 +28,10 @@ const formalRoles: readonly Role[] = [
   "VIEWER",
 ];
 
-const found = (value: ExecutionRecord): LookupResult<ExecutionRecord> => ({ status: "FOUND", value });
+const found = (value: ExecutionRecord): LookupResult<ExecutionRecord> => ({
+  status: "FOUND",
+  value,
+});
 const empty = (): LookupResult<ExecutionRecord> => ({ status: "EMPTY" });
 
 test("accepts a complete DeploymentContext with required organization and site", () => {
@@ -34,7 +42,11 @@ test("accepts a complete DeploymentContext with required organization and site",
 test("rejects a DeploymentContext with missing organization or site", () => {
   const result = validateDeploymentContext({ OrganizationId: "", TimeZone: "Asia/Tokyo" });
   assert.equal(result.ok, false);
-  if (!result.ok) assert.deepEqual(result.errors.map((item) => item.path), ["OrganizationId", "SiteId"]);
+  if (!result.ok)
+    assert.deepEqual(
+      result.errors.map((item) => item.path),
+      ["OrganizationId", "SiteId"],
+    );
 });
 
 test("accepts only an ISO calendar date interpreted under Asia/Tokyo", () => {
@@ -68,7 +80,11 @@ test("recognizes all seven formal application roles", () => {
 
 test("fails closed for unavailable identity, invalid scope, empty subject, and invalid roles", () => {
   assert.equal(
-    evaluateAccess({ context: syntheticContext, identity: { status: "EMPTY" }, requiredRoles: ["SUPPORTER"] }).reason,
+    evaluateAccess({
+      context: syntheticContext,
+      identity: { status: "EMPTY" },
+      requiredRoles: ["SUPPORTER"],
+    }).reason,
     "AUTH_EMPTY",
   );
   assert.equal(
@@ -101,7 +117,10 @@ test("fails closed for unavailable identity, invalid scope, empty subject, and i
   assert.equal(
     evaluateAccess({
       context: syntheticContext,
-      identity: { status: "FOUND", value: { ...syntheticIdentity, SiteId: "synthetic-other-site" } },
+      identity: {
+        status: "FOUND",
+        value: { ...syntheticIdentity, SiteId: "synthetic-other-site" },
+      },
       requiredRoles: ["SUPPORTER"],
     }).reason,
     "SITE_MISMATCH",
@@ -148,7 +167,11 @@ test("requires a user id, approved procedure, valid time zone, and idempotency k
 
   const missingUser = validateExecutionRecord({ ...syntheticRecord, UserId: "" });
   assert.equal(missingUser.ok, false);
-  if (!missingUser.ok) assert.deepEqual(missingUser.errors.map((item) => item.path), ["UserId"]);
+  if (!missingUser.ok)
+    assert.deepEqual(
+      missingUser.errors.map((item) => item.path),
+      ["UserId"],
+    );
 
   assert.equal(validateExecutionRecord({ ...syntheticRecord, IdempotencyKey: "" }).ok, false);
   assert.equal(validateExecutionRecord({ ...syntheticRecord, TimeZone: "UTC" }).ok, false);

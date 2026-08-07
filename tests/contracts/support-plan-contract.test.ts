@@ -1,10 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import type { SupportPlan } from "../../src/domain";
-import {
-  validateSupportPlan,
-  validateSupportPlanVersion,
-} from "../../src/domain";
+import { validateSupportPlan, validateSupportPlanVersion } from "../../src/domain";
 import {
   createSyntheticDraftPlan,
   createSyntheticPendingReviewPlan,

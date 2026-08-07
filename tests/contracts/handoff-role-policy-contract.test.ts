@@ -20,7 +20,7 @@ const context = {
 } as const;
 
 function identityWithRoles(
-  roles: AuthenticatedIdentity["Roles"]
+  roles: AuthenticatedIdentity["Roles"],
 ): LookupResult<AuthenticatedIdentity> {
   return {
     status: "FOUND",
@@ -36,14 +36,11 @@ function identityWithRoles(
 describe("Handoff transition role policy", () => {
   it("covers every accepted Handoff edge exactly once", () => {
     assert.equal(hasRolePolicyForEveryAllowedHandoffEdge(), true);
-    assert.equal(
-      HANDOFF_TRANSITION_ROLE_POLICY.length,
-      HANDOFF_STATUS_ALLOWED_TRANSITIONS.length
-    );
+    assert.equal(HANDOFF_TRANSITION_ROLE_POLICY.length, HANDOFF_STATUS_ALLOWED_TRANSITIONS.length);
 
     for (const [from, to] of HANDOFF_STATUS_ALLOWED_TRANSITIONS) {
       const matches = HANDOFF_TRANSITION_ROLE_POLICY.filter(
-        ([policyFrom, policyTo]) => policyFrom === from && policyTo === to
+        ([policyFrom, policyTo]) => policyFrom === from && policyTo === to,
       );
       assert.equal(matches.length, 1);
     }
@@ -64,7 +61,7 @@ describe("Handoff transition role policy", () => {
         identity: identityWithRoles(["PLANNER"]),
         requiredRoles: result.requiredRoles,
       }),
-      { decision: "ALLOW", reason: "ROLE_ALLOWED" }
+      { decision: "ALLOW", reason: "ROLE_ALLOWED" },
     );
 
     assert.deepEqual(
@@ -73,15 +70,12 @@ describe("Handoff transition role policy", () => {
         identity: identityWithRoles(["SERVICE_MANAGER"]),
         requiredRoles: result.requiredRoles,
       }),
-      { decision: "ALLOW", reason: "ROLE_ALLOWED" }
+      { decision: "ALLOW", reason: "ROLE_ALLOWED" },
     );
   });
 
   it("requires SERVICE_MANAGER for acknowledged -> closed", () => {
-    const result = getHandoffTransitionRequiredRoles(
-      "acknowledged",
-      "closed"
-    );
+    const result = getHandoffTransitionRequiredRoles("acknowledged", "closed");
     assert.deepEqual(result, {
       ok: true,
       requiredRoles: ["SERVICE_MANAGER"],
@@ -95,7 +89,7 @@ describe("Handoff transition role policy", () => {
         identity: identityWithRoles(["PLANNER"]),
         requiredRoles: result.requiredRoles,
       }),
-      { decision: "DENY", reason: "ROLE_NOT_ALLOWED" }
+      { decision: "DENY", reason: "ROLE_NOT_ALLOWED" },
     );
 
     assert.deepEqual(
@@ -104,7 +98,7 @@ describe("Handoff transition role policy", () => {
         identity: identityWithRoles(["SERVICE_MANAGER"]),
         requiredRoles: result.requiredRoles,
       }),
-      { decision: "ALLOW", reason: "ROLE_ALLOWED" }
+      { decision: "ALLOW", reason: "ROLE_ALLOWED" },
     );
   });
 
@@ -120,23 +114,23 @@ describe("Handoff transition role policy", () => {
           identity: identityWithRoles([role]),
           requiredRoles: result.requiredRoles,
         }),
-        { decision: "DENY", reason: "ROLE_NOT_ALLOWED" }
+        { decision: "DENY", reason: "ROLE_NOT_ALLOWED" },
       );
     }
   });
 
   it("rejects denied and malformed edges before role evaluation", () => {
-    assert.deepEqual(
-      getHandoffTransitionRequiredRoles("pending", "closed"),
-      { ok: false, code: "INVALID_TRANSITION" }
-    );
-    assert.deepEqual(
-      getHandoffTransitionRequiredRoles("unknown", "pending"),
-      { ok: false, code: "MALFORMED_INPUT" }
-    );
-    assert.deepEqual(
-      getHandoffTransitionRequiredRoles(null, "pending"),
-      { ok: false, code: "MALFORMED_INPUT" }
-    );
+    assert.deepEqual(getHandoffTransitionRequiredRoles("pending", "closed"), {
+      ok: false,
+      code: "INVALID_TRANSITION",
+    });
+    assert.deepEqual(getHandoffTransitionRequiredRoles("unknown", "pending"), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
+    assert.deepEqual(getHandoffTransitionRequiredRoles(null, "pending"), {
+      ok: false,
+      code: "MALFORMED_INPUT",
+    });
   });
 });

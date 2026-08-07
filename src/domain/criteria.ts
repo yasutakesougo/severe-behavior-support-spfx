@@ -1,26 +1,15 @@
-import type {
-  CriterionAggregateDecision,
-  CriterionResult,
-  CriterionStatus,
-} from "./types";
+import type { CriterionAggregateDecision, CriterionResult, CriterionStatus } from "./types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 function isCriterionStatus(value: unknown): value is CriterionStatus {
-  return (
-    value === "PASS" ||
-    value === "FAIL" ||
-    value === "UNKNOWN" ||
-    value === "NOT_APPLICABLE"
-  );
+  return value === "PASS" || value === "FAIL" || value === "UNKNOWN" || value === "NOT_APPLICABLE";
 }
 
 function hasNonEmptyReasonCode(value: Record<string, unknown>): boolean {
-  return (
-    typeof value.reasonCode === "string" && value.reasonCode.trim().length > 0
-  );
+  return typeof value.reasonCode === "string" && value.reasonCode.trim().length > 0;
 }
 
 export function isCriterionResult(value: unknown): value is CriterionResult {

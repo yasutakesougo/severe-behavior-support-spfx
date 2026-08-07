@@ -10,26 +10,16 @@ import { isRecord } from "./validation";
 
 function isValidNonNegativeInteger(value: unknown): value is number {
   return (
-    typeof value === "number" &&
-    Number.isFinite(value) &&
-    Number.isInteger(value) &&
-    value >= 0
+    typeof value === "number" && Number.isFinite(value) && Number.isInteger(value) && value >= 0
   );
 }
 
 function isCriterionStatus(value: unknown): value is CriterionStatus {
-  return (
-    value === "PASS" ||
-    value === "FAIL" ||
-    value === "UNKNOWN" ||
-    value === "NOT_APPLICABLE"
-  );
+  return value === "PASS" || value === "FAIL" || value === "UNKNOWN" || value === "NOT_APPLICABLE";
 }
 
 function hasNonEmptyReasonCode(value: Record<string, unknown>): boolean {
-  return (
-    typeof value.reasonCode === "string" && value.reasonCode.trim().length > 0
-  );
+  return typeof value.reasonCode === "string" && value.reasonCode.trim().length > 0;
 }
 
 function isCriterionResult(value: unknown): value is CriterionResult {
@@ -49,9 +39,7 @@ function isCriterionResult(value: unknown): value is CriterionResult {
   return true;
 }
 
-function isEvaluationFindingReference(
-  value: unknown
-): value is EvaluationFindingReference {
+function isEvaluationFindingReference(value: unknown): value is EvaluationFindingReference {
   return (
     isRecord(value) &&
     typeof value.findingCode === "string" &&
@@ -72,9 +60,7 @@ function isExecutionStatus(value: unknown): value is EvaluationExecutionStatus {
   );
 }
 
-export function deriveEvaluationDecision(
-  input: EvaluationInput,
-): EvaluationDecision {
+export function deriveEvaluationDecision(input: EvaluationInput): EvaluationDecision {
   const candidate: unknown = input;
   if (!isRecord(candidate)) {
     return "INDETERMINATE";
@@ -130,9 +116,7 @@ export function deriveEvaluationDecision(
 
   const hasFail = criteria.some((criterion) => criterion.status === "FAIL");
   const hasUnknown = criteria.some((criterion) => criterion.status === "UNKNOWN");
-  const allNotApplicable = criteria.every(
-    (criterion) => criterion.status === "NOT_APPLICABLE",
-  );
+  const allNotApplicable = criteria.every((criterion) => criterion.status === "NOT_APPLICABLE");
 
   if (allNotApplicable && findings.length >= 1) {
     return "INDETERMINATE";

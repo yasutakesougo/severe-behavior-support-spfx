@@ -6,12 +6,7 @@ import { isRecord, isValidIsoDateTime, isReasonCode } from "./validation";
  */
 export type AbcRecordIdentity = Pick<
   ExecutionRecord,
-  | "OrganizationId"
-  | "SiteId"
-  | "UserId"
-  | "RecordId"
-  | "IdempotencyKey"
-  | "PayloadFingerprint"
+  "OrganizationId" | "SiteId" | "UserId" | "RecordId" | "IdempotencyKey" | "PayloadFingerprint"
 >;
 
 /**
@@ -175,11 +170,7 @@ export type TransitionResult<T> =
         | "ALREADY_LINKED";
     }>;
 
-export {
-  isRecord,
-  isValidIsoDateTime,
-  isReasonCode,
-} from "./validation";
+export { isRecord, isValidIsoDateTime, isReasonCode } from "./validation";
 
 // ==========================================
 // Runtime Validators
@@ -398,14 +389,22 @@ export function validateLinkFailure(value: unknown): value is LinkFailure {
 
   // Validate State Invariants based on LinkFailureState
   if (value.status === "Open") {
-    if (value.resolvedAt !== undefined || value.abandonedAt !== undefined || value.reasonCode !== undefined) {
+    if (
+      value.resolvedAt !== undefined ||
+      value.abandonedAt !== undefined ||
+      value.reasonCode !== undefined
+    ) {
       return false;
     }
   } else if (value.status === "Retrying") {
     if (typeof value.lastAttemptAt !== "string" || !isValidIsoDateTime(value.lastAttemptAt)) {
       return false; // lastAttemptAt is required for Retrying
     }
-    if (value.resolvedAt !== undefined || value.abandonedAt !== undefined || value.reasonCode !== undefined) {
+    if (
+      value.resolvedAt !== undefined ||
+      value.abandonedAt !== undefined ||
+      value.reasonCode !== undefined
+    ) {
       return false;
     }
   } else if (value.status === "Resolved") {
@@ -441,7 +440,7 @@ export function validateLinkFailure(value: unknown): value is LinkFailure {
 export function transitionSaveState(
   record: AbcRecord,
   targetStatus: "Saved" | "Deleted",
-  context: unknown
+  context: unknown,
 ): TransitionResult<AbcRecord> {
   if (!validateAbcRecord(record)) {
     return { ok: false, reason: "MALFORMED_INPUT" };
@@ -460,10 +459,7 @@ export function transitionSaveState(
     return { ok: false, reason: "MALFORMED_INPUT" };
   }
 
-  if (
-    record.OrganizationId !== context.OrganizationId ||
-    record.SiteId !== context.SiteId
-  ) {
+  if (record.OrganizationId !== context.OrganizationId || record.SiteId !== context.SiteId) {
     return { ok: false, reason: "CONTEXT_MISMATCH" };
   }
 
@@ -515,7 +511,7 @@ export function transitionSaveState(
 export function transitionLinkState(
   record: AbcRecord,
   targetStatus: "Pending" | "Linked" | "Failed",
-  context: unknown
+  context: unknown,
 ): TransitionResult<AbcRecord> {
   if (!validateAbcRecord(record)) {
     return { ok: false, reason: "MALFORMED_INPUT" };
@@ -534,10 +530,7 @@ export function transitionLinkState(
     return { ok: false, reason: "MALFORMED_INPUT" };
   }
 
-  if (
-    record.OrganizationId !== context.OrganizationId ||
-    record.SiteId !== context.SiteId
-  ) {
+  if (record.OrganizationId !== context.OrganizationId || record.SiteId !== context.SiteId) {
     return { ok: false, reason: "CONTEXT_MISMATCH" };
   }
 
@@ -595,7 +588,7 @@ export function transitionLinkState(
 export function transitionLinkFailureStatus(
   failure: LinkFailure,
   targetStatus: LinkFailureStatus,
-  context: unknown
+  context: unknown,
 ): TransitionResult<LinkFailure> {
   if (!validateLinkFailure(failure)) {
     return { ok: false, reason: "MALFORMED_INPUT" };
@@ -614,10 +607,7 @@ export function transitionLinkFailureStatus(
     return { ok: false, reason: "MALFORMED_INPUT" };
   }
 
-  if (
-    failure.OrganizationId !== context.OrganizationId ||
-    failure.SiteId !== context.SiteId
-  ) {
+  if (failure.OrganizationId !== context.OrganizationId || failure.SiteId !== context.SiteId) {
     return { ok: false, reason: "CONTEXT_MISMATCH" };
   }
 

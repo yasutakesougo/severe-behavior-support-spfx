@@ -2,12 +2,7 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 
 const root = process.cwd();
-const targetDirectories = [
-  "src/contracts",
-  "tests/contracts",
-  "src/domain",
-  "tests/domain",
-];
+const targetDirectories = ["src/contracts", "tests/contracts", "src/domain", "tests/domain"];
 const supportedExtensions = new Set([".ts", ".tsx", ".js", ".mjs", ".cjs", ".json"]);
 
 const forbiddenPatterns = [
@@ -32,8 +27,7 @@ const forbiddenPatterns = [
 const domainForbiddenPatterns = [
   {
     label: "Node builtin module import",
-    pattern:
-      /(?:from\s+["']node:|require\(\s*["']node:|import\(\s*["']node:)/g,
+    pattern: /(?:from\s+["']node:|require\(\s*["']node:|import\(\s*["']node:)/g,
   },
 ];
 const syntheticIdentifierPattern =
@@ -53,7 +47,8 @@ const listFiles = async (directory) => {
       files.push(...(await listFiles(relativePath)));
       continue;
     }
-    if (entry.isFile() && supportedExtensions.has(path.extname(entry.name))) files.push(relativePath);
+    if (entry.isFile() && supportedExtensions.has(path.extname(entry.name)))
+      files.push(relativePath);
   }
 
   return files;

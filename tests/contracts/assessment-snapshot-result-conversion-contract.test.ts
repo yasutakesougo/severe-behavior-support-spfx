@@ -9,21 +9,17 @@ import {
 
 describe("AssessmentSnapshot Result Conversion Contract", () => {
   it("永続Result候補の値集合を固定する", () => {
-    assert.deepEqual([...ASSESSMENT_SNAPSHOT_RESULTS], [
-      "NO_FINDINGS",
-      "FINDINGS_PRESENT",
-      "NOT_APPLICABLE",
-    ]);
+    assert.deepEqual(
+      [...ASSESSMENT_SNAPSHOT_RESULTS],
+      ["NO_FINDINGS", "FINDINGS_PRESENT", "NOT_APPLICABLE"],
+    );
   });
 
   it("EvaluationDecision入力値集合を再定義せず固定する", () => {
-    assert.deepEqual([...EVALUATION_DECISIONS], [
-      "NO_FINDINGS",
-      "FINDINGS_PRESENT",
-      "INDETERMINATE",
-      "NOT_APPLICABLE",
-      "SOURCE_UNAVAILABLE",
-    ]);
+    assert.deepEqual(
+      [...EVALUATION_DECISIONS],
+      ["NO_FINDINGS", "FINDINGS_PRESENT", "INDETERMINATE", "NOT_APPLICABLE", "SOURCE_UNAVAILABLE"],
+    );
   });
 
   it("NO_FINDINGS / FINDINGS_PRESENT をPERSISTABLEへ変換する", () => {
@@ -36,7 +32,7 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
         persistable: true,
         result: "NO_FINDINGS",
         reasonCodes: [],
-      }
+      },
     );
     assert.deepEqual(
       toAssessmentSnapshotResultCandidate({
@@ -48,7 +44,7 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
         persistable: true,
         result: "FINDINGS_PRESENT",
         reasonCodes: ["SYNTHETIC_REASON_OPTIONAL_001"],
-      }
+      },
     );
   });
 
@@ -63,7 +59,7 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
         persistable: true,
         result: "NOT_APPLICABLE",
         reasonCodes: ["SYNTHETIC_NOT_APPLICABLE_001"],
-      }
+      },
     );
   });
 
@@ -72,14 +68,14 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
       toAssessmentSnapshotResultCandidate({
         evaluationDecision: "NOT_APPLICABLE",
       }),
-      { ok: false, code: "MISSING_REASON_CODES" }
+      { ok: false, code: "MISSING_REASON_CODES" },
     );
     assert.deepEqual(
       toAssessmentSnapshotResultCandidate({
         evaluationDecision: "NOT_APPLICABLE",
         reasonCodes: [],
       }),
-      { ok: false, code: "MISSING_REASON_CODES" }
+      { ok: false, code: "MISSING_REASON_CODES" },
     );
   });
 
@@ -92,7 +88,7 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
         ok: true,
         persistable: false,
         reason: "INDETERMINATE",
-      }
+      },
     );
     assert.deepEqual(
       toAssessmentSnapshotResultCandidate({
@@ -102,7 +98,7 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
         ok: true,
         persistable: false,
         reason: "SOURCE_UNAVAILABLE",
-      }
+      },
     );
   });
 
@@ -121,17 +117,11 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
   });
 
   it("demo / retrieval_failed / 未知DecisionをMALFORMED_INPUTとして拒否する", () => {
-    for (const evaluationDecision of [
-      "demo",
-      "retrieval_failed",
-      "UNKNOWN_DECISION",
-      123,
-      null,
-    ]) {
-      assert.deepEqual(
-        toAssessmentSnapshotResultCandidate({ evaluationDecision }),
-        { ok: false, code: "MALFORMED_INPUT" }
-      );
+    for (const evaluationDecision of ["demo", "retrieval_failed", "UNKNOWN_DECISION", 123, null]) {
+      assert.deepEqual(toAssessmentSnapshotResultCandidate({ evaluationDecision }), {
+        ok: false,
+        code: "MALFORMED_INPUT",
+      });
     }
     assert.deepEqual(toAssessmentSnapshotResultCandidate(null), {
       ok: false,
@@ -149,14 +139,14 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
         evaluationDecision: "NO_FINDINGS",
         reasonCodes: "SYNTHETIC_REASON_001",
       }),
-      { ok: false, code: "MALFORMED_INPUT" }
+      { ok: false, code: "MALFORMED_INPUT" },
     );
     assert.deepEqual(
       toAssessmentSnapshotResultCandidate({
         evaluationDecision: "FINDINGS_PRESENT",
         reasonCodes: ["not-a-reason-code"],
       }),
-      { ok: false, code: "MALFORMED_INPUT" }
+      { ok: false, code: "MALFORMED_INPUT" },
     );
   });
 
@@ -164,18 +154,14 @@ describe("AssessmentSnapshot Result Conversion Contract", () => {
     assert.deepEqual(
       toAssessmentSnapshotResultCandidate({
         evaluationDecision: "NOT_APPLICABLE",
-        reasonCodes: [
-          "SYNTHETIC_REASON_A",
-          "SYNTHETIC_REASON_B",
-          "SYNTHETIC_REASON_A",
-        ],
+        reasonCodes: ["SYNTHETIC_REASON_A", "SYNTHETIC_REASON_B", "SYNTHETIC_REASON_A"],
       }),
       {
         ok: true,
         persistable: true,
         result: "NOT_APPLICABLE",
         reasonCodes: ["SYNTHETIC_REASON_A", "SYNTHETIC_REASON_B"],
-      }
+      },
     );
   });
 

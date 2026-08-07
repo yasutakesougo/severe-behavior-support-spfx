@@ -78,9 +78,7 @@ export type AssembleFindingIdentityResult =
  * Does not adopt a FindingCode catalog or redefine deriveStableFindingId.
  * Technical contract: docs/architecture/finding-identity-assembly.md
  */
-export function assembleFindingIdentity(
-  input: unknown
-): AssembleFindingIdentityResult {
+export function assembleFindingIdentity(input: unknown): AssembleFindingIdentityResult {
   if (!validateFindingIdentity(input)) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
@@ -107,9 +105,7 @@ export function assembleFindingIdentity(
  * Derive a deterministic stable finding ID from FindingIdentity.
  * Technical contract: docs/architecture/finding-stable-id.md
  */
-export function deriveStableFindingId(
-  input: unknown
-): DeriveStableFindingIdResult {
+export function deriveStableFindingId(input: unknown): DeriveStableFindingIdResult {
   if (!validateFindingIdentity(input)) {
     return { ok: false, code: "INVALID_IDENTITY" };
   }
@@ -118,9 +114,9 @@ export function deriveStableFindingId(
     return { ok: false, code: "UNSUPPORTED_IDENTITY_VALUE" };
   }
 
-  const material = STABLE_FINDING_ID_FIELD_ORDER.map(
-    (field) => input[field]
-  ).join(STABLE_FINDING_ID_SEPARATOR);
+  const material = STABLE_FINDING_ID_FIELD_ORDER.map((field) => input[field]).join(
+    STABLE_FINDING_ID_SEPARATOR,
+  );
 
   const digest = sha256Hex(material);
   return {
@@ -129,12 +125,7 @@ export function deriveStableFindingId(
   };
 }
 
-export const FINDING_STATUSES = [
-  "Open",
-  "Confirmed",
-  "InProgress",
-  "Resolved",
-] as const;
+export const FINDING_STATUSES = ["Open", "Confirmed", "InProgress", "Resolved"] as const;
 
 export type FindingStatus = (typeof FINDING_STATUSES)[number];
 
@@ -168,14 +159,14 @@ export function isFindingStatus(value: unknown): value is FindingStatus {
  */
 export function transitionFindingStatus(
   currentStatus: unknown,
-  targetStatus: unknown
+  targetStatus: unknown,
 ): FindingStatusTransitionResult {
   if (!isFindingStatus(currentStatus) || !isFindingStatus(targetStatus)) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
 
   const allowed = FINDING_STATUS_ALLOWED_TRANSITIONS.some(
-    ([from, to]) => from === currentStatus && to === targetStatus
+    ([from, to]) => from === currentStatus && to === targetStatus,
   );
 
   if (!allowed) {
@@ -197,10 +188,7 @@ export const FINDING_RECURRENCE_MATCH_FIELDS = [
   "ruleSetVersion",
 ] as const;
 
-export type FindingRecurrenceDecision =
-  | "SAME"
-  | "RECURRENCE"
-  | "NEW";
+export type FindingRecurrenceDecision = "SAME" | "RECURRENCE" | "NEW";
 
 export type FindingRecurrenceDecisionResult =
   | Readonly<{
@@ -212,31 +200,16 @@ export type FindingRecurrenceDecisionResult =
       code: "MALFORMED_INPUT" | "CONFLICT_OPEN_FINDING";
     }>;
 
-function identitiesFullyEqual(
-  left: FindingIdentity,
-  right: FindingIdentity
-): boolean {
-  return STABLE_FINDING_ID_FIELD_ORDER.every(
-    (field) => left[field] === right[field]
-  );
+function identitiesFullyEqual(left: FindingIdentity, right: FindingIdentity): boolean {
+  return STABLE_FINDING_ID_FIELD_ORDER.every((field) => left[field] === right[field]);
 }
 
-function identitiesMatchForRecurrence(
-  left: FindingIdentity,
-  right: FindingIdentity
-): boolean {
-  return FINDING_RECURRENCE_MATCH_FIELDS.every(
-    (field) => left[field] === right[field]
-  );
+function identitiesMatchForRecurrence(left: FindingIdentity, right: FindingIdentity): boolean {
+  return FINDING_RECURRENCE_MATCH_FIELDS.every((field) => left[field] === right[field]);
 }
 
-function periodsDiffer(
-  left: FindingIdentity,
-  right: FindingIdentity
-): boolean {
-  return (
-    left.periodStart !== right.periodStart || left.periodEnd !== right.periodEnd
-  );
+function periodsDiffer(left: FindingIdentity, right: FindingIdentity): boolean {
+  return left.periodStart !== right.periodStart || left.periodEnd !== right.periodEnd;
 }
 
 /**
@@ -244,9 +217,7 @@ function periodsDiffer(
  * Accepted boundaries: Q1-C / Q2-A / Q3-A / Q4-A.
  * Technical contract: docs/architecture/finding-recurrence.md
  */
-export function decideFindingRecurrence(
-  input: unknown
-): FindingRecurrenceDecisionResult {
+export function decideFindingRecurrence(input: unknown): FindingRecurrenceDecisionResult {
   if (!isRecord(input) || !("candidate" in input)) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
@@ -305,10 +276,7 @@ export function decideFindingRecurrence(
 }
 
 export type FindingGenerationDoNotGenerateReason =
-  | "EMPTY_CRITERIA"
-  | "NO_FAILING_CRITERIA"
-  | "ALL_NOT_APPLICABLE"
-  | "HAS_UNKNOWN";
+  "EMPTY_CRITERIA" | "NO_FAILING_CRITERIA" | "ALL_NOT_APPLICABLE" | "HAS_UNKNOWN";
 
 export type FindingGenerationDecisionResult =
   | Readonly<{
@@ -330,9 +298,7 @@ export type FindingGenerationDecisionResult =
  * Does not build Finding / FindingCode / Identity. Technical contract:
  * docs/architecture/finding-generation-conditions.md
  */
-export function decideFindingGeneration(
-  input: unknown
-): FindingGenerationDecisionResult {
+export function decideFindingGeneration(input: unknown): FindingGenerationDecisionResult {
   if (!isRecord(input) || !("criteria" in input)) {
     return { ok: false, code: "MALFORMED_INPUT" };
   }
@@ -424,11 +390,7 @@ export function validateFindingIdentity(value: unknown): value is FindingIdentit
 // AuditEvent Contracts & Strict Allowlist
 // ==========================================
 
-export const AUDIT_EVENT_RESULTS = [
-  "success",
-  "denied",
-  "failed",
-] as const;
+export const AUDIT_EVENT_RESULTS = ["success", "denied", "failed"] as const;
 
 export type AuditEventResult = (typeof AUDIT_EVENT_RESULTS)[number];
 
@@ -549,9 +511,7 @@ export type SnapshotCorrection = Readonly<{
   correctedBy: string;
 }>;
 
-export function validateSnapshotCorrection(
-  value: unknown
-): value is SnapshotCorrection {
+export function validateSnapshotCorrection(value: unknown): value is SnapshotCorrection {
   if (!isRecord(value)) {
     return false;
   }
@@ -675,10 +635,7 @@ export function validateHandoffState(value: unknown): value is HandoffState {
   }
 
   const status = value.status;
-  if (
-    typeof status !== "string" ||
-    !HANDOFF_STATUSES.includes(status as HandoffStatus)
-  ) {
+  if (typeof status !== "string" || !HANDOFF_STATUSES.includes(status as HandoffStatus)) {
     return false;
   }
 
@@ -752,7 +709,10 @@ export function validateHandoffState(value: unknown): value is HandoffState {
     ) {
       return false;
     }
-    if (new Date(value.includedAt as string).getTime() < new Date(value.requestedAt as string).getTime()) {
+    if (
+      new Date(value.includedAt as string).getTime() <
+      new Date(value.requestedAt as string).getTime()
+    ) {
       return false;
     }
   } else if (status === "acknowledged") {
@@ -770,8 +730,10 @@ export function validateHandoffState(value: unknown): value is HandoffState {
       return false;
     }
     if (
-      new Date(value.includedAt as string).getTime() < new Date(value.requestedAt as string).getTime() ||
-      new Date(value.acknowledgedAt as string).getTime() < new Date(value.includedAt as string).getTime()
+      new Date(value.includedAt as string).getTime() <
+        new Date(value.requestedAt as string).getTime() ||
+      new Date(value.acknowledgedAt as string).getTime() <
+        new Date(value.includedAt as string).getTime()
     ) {
       return false;
     }
@@ -790,9 +752,12 @@ export function validateHandoffState(value: unknown): value is HandoffState {
       return false;
     }
     if (
-      new Date(value.includedAt as string).getTime() < new Date(value.requestedAt as string).getTime() ||
-      new Date(value.acknowledgedAt as string).getTime() < new Date(value.includedAt as string).getTime() ||
-      new Date(value.closedAt as string).getTime() < new Date(value.acknowledgedAt as string).getTime()
+      new Date(value.includedAt as string).getTime() <
+        new Date(value.requestedAt as string).getTime() ||
+      new Date(value.acknowledgedAt as string).getTime() <
+        new Date(value.includedAt as string).getTime() ||
+      new Date(value.closedAt as string).getTime() <
+        new Date(value.acknowledgedAt as string).getTime()
     ) {
       return false;
     }

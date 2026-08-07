@@ -10,8 +10,5 @@
     "gruntfuggly.todo-tree",
     "mikestead.dotenv"
   ],
-  "unwantedRecommendations": [
-    "GitHub.copilot",
-    "GitHub.copilot-chat"
-  ]
+  "unwantedRecommendations": ["GitHub.copilot", "GitHub.copilot-chat"]
 }

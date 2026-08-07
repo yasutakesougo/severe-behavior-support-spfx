@@ -15,9 +15,7 @@ function isCalendarDate(value: string): boolean {
   const [year, month, day] = value.split("-").map(Number);
   const date = new Date(Date.UTC(year, month - 1, day));
   return (
-    date.getUTCFullYear() === year &&
-    date.getUTCMonth() === month - 1 &&
-    date.getUTCDate() === day
+    date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
   );
 }
 
@@ -46,17 +44,11 @@ export function validateAssessmentScoreSourceRecord(
     return { valid: false, reason: "INVALID_SOURCE_REFERENCE_ID" };
   }
 
-  if (
-    typeof record.validFrom !== "string" ||
-    !isCalendarDate(record.validFrom)
-  ) {
+  if (typeof record.validFrom !== "string" || !isCalendarDate(record.validFrom)) {
     return { valid: false, reason: "INVALID_VALID_FROM_DATE" };
   }
 
-  if (
-    typeof record.validTo !== "string" ||
-    !isCalendarDate(record.validTo)
-  ) {
+  if (typeof record.validTo !== "string" || !isCalendarDate(record.validTo)) {
     return { valid: false, reason: "INVALID_VALID_TO_DATE" };
   }
 
@@ -70,11 +62,9 @@ export function validateAssessmentScoreSourceRecord(
   }
 
   const hasConfirmedAt =
-    typeof record.confirmedAt === "string" &&
-    record.confirmedAt.trim().length > 0;
+    typeof record.confirmedAt === "string" && record.confirmedAt.trim().length > 0;
   const hasConfirmedBy =
-    typeof record.confirmedBy === "string" &&
-    record.confirmedBy.trim().length > 0;
+    typeof record.confirmedBy === "string" && record.confirmedBy.trim().length > 0;
 
   const isConfirmed = hasConfirmedAt && hasConfirmedBy;
 
@@ -96,10 +86,7 @@ export function selectAssessmentScoreSource(
   if (isRecord(input) && "status" in input) {
     switch (input.status) {
       case "FETCH_FAILED": {
-        if (
-          typeof input.code !== "string" ||
-          input.code.trim().length === 0
-        ) {
+        if (typeof input.code !== "string" || input.code.trim().length === 0) {
           return { decision: "MALFORMED", reason: "EMPTY_FETCH_FAILED_CODE" };
         }
         return { decision: "FETCH_FAILED", code: input.code };
@@ -148,8 +135,7 @@ function processRecords(
       continue;
     }
 
-    const isActiveOnDate =
-      record.validFrom <= assessmentDate && assessmentDate <= record.validTo;
+    const isActiveOnDate = record.validFrom <= assessmentDate && assessmentDate <= record.validTo;
 
     if (isActiveOnDate) {
       if (val.isConfirmed) {

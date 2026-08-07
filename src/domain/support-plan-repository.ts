@@ -31,29 +31,21 @@ export interface ISupportPlanRepository {
   findByUser(
     organizationId: string,
     siteId: string,
-    userId: string
+    userId: string,
   ): Promise<RepositoryListResult<SupportPlan>>;
   findCurrentByUser(
     organizationId: string,
     siteId: string,
-    userId: string
+    userId: string,
   ): Promise<RepositoryLookupResult<SupportPlan>>;
-  save(
-    plan: SupportPlan,
-    expectedVersion: number
-  ): Promise<SaveResult<SupportPlan>>;
+  save(plan: SupportPlan, expectedVersion: number): Promise<SaveResult<SupportPlan>>;
 }
 
 /**
  * SupportPlanVersion Repository Port (Pure Interface, no SharePoint REST / PnPjs dependency)
  */
 export interface ISupportPlanVersionRepository {
-  getVersion(
-    planId: string,
-    version: number
-  ): Promise<RepositoryLookupResult<SupportPlanVersion>>;
+  getVersion(planId: string, version: number): Promise<RepositoryLookupResult<SupportPlanVersion>>;
   listVersions(planId: string): Promise<RepositoryListResult<SupportPlanVersion>>;
-  saveVersion(
-    versionRecord: SupportPlanVersion
-  ): Promise<SaveResult<SupportPlanVersion>>;
+  saveVersion(versionRecord: SupportPlanVersion): Promise<SaveResult<SupportPlanVersion>>;
 }

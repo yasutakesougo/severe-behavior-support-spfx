@@ -1,9 +1,4 @@
-import {
-  isRecord,
-  isValidIsoDateTime,
-  isReasonCode,
-  isNonEmptyString,
-} from "./validation";
+import { isRecord, isValidIsoDateTime, isReasonCode, isNonEmptyString } from "./validation";
 
 /**
  * SupportPlan status canonical enum and runtime array
@@ -22,8 +17,7 @@ export type SupportPlanStatus = (typeof SUPPORT_PLAN_STATUSES)[number];
  * Schema identity for SupportPlan contract (DEC-1 Accepted, Issue #42).
  * Not identical to SharePoint list/column names, TypeScript type names, or repo names.
  */
-export const SUPPORT_PLAN_SCHEMA_ID =
-  "severe-behavior-support.support-plan.plan" as const;
+export const SUPPORT_PLAN_SCHEMA_ID = "severe-behavior-support.support-plan.plan" as const;
 export const SUPPORT_PLAN_SCHEMA_VERSION = "1.0.0" as const;
 
 /**
@@ -221,9 +215,7 @@ export const toSupportPlanDto = (data: SupportPlan): SupportPlanDto => ({
   data,
 });
 
-export const toSupportPlanVersionDto = (
-  data: SupportPlanVersion,
-): SupportPlanVersionDto => ({
+export const toSupportPlanVersionDto = (data: SupportPlanVersion): SupportPlanVersionDto => ({
   schemaId: SUPPORT_PLAN_VERSION_SCHEMA_ID,
   schemaVersion: SUPPORT_PLAN_VERSION_SCHEMA_VERSION,
   dtoVersion: SUPPORT_PLAN_VERSION_SCHEMA_VERSION,
@@ -269,7 +261,6 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
   if (!SUPPORT_PLAN_STATUSES.includes(status as SupportPlanStatus)) {
     return false;
   }
-
 
   // Submission history group invariant (all or nothing)
   const hasSubBy = value.submittedBy !== undefined;
@@ -373,7 +364,8 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
     }
     if (
       value.effectiveTo !== undefined &&
-      new Date(value.effectiveTo as string).getTime() < new Date(value.effectiveFrom as string).getTime()
+      new Date(value.effectiveTo as string).getTime() <
+        new Date(value.effectiveFrom as string).getTime()
     ) {
       return false;
     }
@@ -403,7 +395,10 @@ export function validateSupportPlan(value: unknown): value is SupportPlan {
     if (value.closeReasonText !== undefined && !isNonEmptyString(value.closeReasonText)) {
       return false;
     }
-    if (new Date(value.effectiveTo as string).getTime() < new Date(value.effectiveFrom as string).getTime()) {
+    if (
+      new Date(value.effectiveTo as string).getTime() <
+      new Date(value.effectiveFrom as string).getTime()
+    ) {
       return false;
     }
   }
@@ -477,9 +472,7 @@ export function validateSupportPlanDto(value: unknown): value is SupportPlanDto 
 /**
  * Validates SupportPlanVersion DTO envelope against canonical schema constants.
  */
-export function validateSupportPlanVersionDto(
-  value: unknown,
-): value is SupportPlanVersionDto {
+export function validateSupportPlanVersionDto(value: unknown): value is SupportPlanVersionDto {
   if (!isRecord(value)) {
     return false;
   }
@@ -524,10 +517,7 @@ export type SupportPlanStatusTransitionResult =
     }>;
 
 export function isSupportPlanStatus(value: unknown): value is SupportPlanStatus {
-  return (
-    typeof value === "string" &&
-    SUPPORT_PLAN_STATUSES.includes(value as SupportPlanStatus)
-  );
+  return typeof value === "string" && SUPPORT_PLAN_STATUSES.includes(value as SupportPlanStatus);
 }
 
 /**
@@ -606,10 +596,8 @@ function closedCalendarIntervalsOverlap(
   left: ActiveDayInterval,
   right: ActiveDayInterval,
 ): boolean {
-  const leftEndsOnOrAfterRightStart =
-    left.toDay === null || left.toDay >= right.fromDay;
-  const rightEndsOnOrAfterLeftStart =
-    right.toDay === null || right.toDay >= left.fromDay;
+  const leftEndsOnOrAfterRightStart = left.toDay === null || left.toDay >= right.fromDay;
+  const rightEndsOnOrAfterLeftStart = right.toDay === null || right.toDay >= left.fromDay;
   return leftEndsOnOrAfterRightStart && rightEndsOnOrAfterLeftStart;
 }
 
@@ -643,9 +631,7 @@ export function evaluateActivePlanUniqueness(
 /**
  * Runtime fail-closed entry for unknown array payloads used by contract tests.
  */
-export function evaluateActivePlanUniquenessUnknown(
-  plans: unknown,
-): ActivePlanUniquenessResult {
+export function evaluateActivePlanUniquenessUnknown(plans: unknown): ActivePlanUniquenessResult {
   if (!Array.isArray(plans)) {
     return "MALFORMED_INPUT";
   }
@@ -690,11 +676,7 @@ export function evaluateActivePlanUniquenessUnknown(
       }
     }
 
-    const key = uniquenessGroupKey(
-      plan.OrganizationId,
-      plan.SiteId,
-      plan.UserId,
-    );
+    const key = uniquenessGroupKey(plan.OrganizationId, plan.SiteId, plan.UserId);
     const intervals = activeByGroup.get(key);
     const next: ActiveDayInterval = { fromDay, toDay };
     if (intervals) {
@@ -720,10 +702,7 @@ export function evaluateActivePlanUniquenessUnknown(
 // Decision-OP-2: Accepted comment 5212898450
 // ==========================================
 
-export type ObservationPeriodMembershipResult =
-  | "IN_PERIOD"
-  | "OUTSIDE_PERIOD"
-  | "MALFORMED_INPUT";
+export type ObservationPeriodMembershipResult = "IN_PERIOD" | "OUTSIDE_PERIOD" | "MALFORMED_INPUT";
 
 /**
  * Evaluate whether caller-supplied `asOf` falls inside the observation period.
@@ -766,11 +745,7 @@ export function evaluateObservationPeriodMembership(
 // Decision-RD-2: Accepted comment 5213213260
 // ==========================================
 
-export type ReviewDueRelativeResult =
-  | "BEFORE_DUE"
-  | "DUE"
-  | "OVERDUE"
-  | "MALFORMED_INPUT";
+export type ReviewDueRelativeResult = "BEFORE_DUE" | "DUE" | "OVERDUE" | "MALFORMED_INPUT";
 
 /**
  * Evaluate caller-supplied reviewDueDate relative to asOf on Asia/Tokyo calendar days.
