@@ -89,12 +89,19 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 ### 次に人が進める候補（実装PRではない・順位）
 
-1. Finding 再オープン Decision（所有は既に #24。許可辺 Accepted 後に技術契約可）
-2. FindingSeverity DEC 方式 A/B 選択（値一覧はその後）
-3. FindingCode 業務カタログ Decision
-4. Handoff 状態遷移の所有 Issue 指定（ロールは `GOV-AUD-02` と分離）
+残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
+
+1. Finding 再オープン Decision（Decision-FLR-1。所有は既に #24。許可辺 Accepted 後に技術契約可）
+2. Handoff 状態遷移の所有 Issue 指定（Decision-HO-1。ロールは `GOV-AUD-02` と分離。#24 自動割当禁止）
+3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
+4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
-6. AssessmentSnapshot 完全契約 Entry Criteria（`DEC-009` / `GOV-AUD` / Finding 境界）
+6. AssessmentSnapshot 完全契約 Entry Criteria（Decision-AS-EC-1。`DEC-009` / `GOV-AUD` / Finding 境界）
+
+```
+Next pure unit: NONE（PR #85 判定維持。Decision backlog でも再確認）
+Implementation Start: HOLD
+```
 
 ## OUT / 混ぜないもの
 
