@@ -17,16 +17,19 @@ Decision ID: Decision-SEV-2-PURPOSE
 Status: RECORDED（Human purpose-source policy）
 SEV-2-VOCAB: HOLD / V-C（維持）
 SEV-2-ASSIGN: CANDIDATE / NOT SELECTED（本単位で進めない）
-SEV-2-CONCEPT-INV: OPEN / NOT STARTED
+SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
+  正本: decision-sev-2-concept-inv.md
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
 Depends on: Decision-SEV-2-VOCAB HOLD（V-C）
 main before this canonicalization: fba1e8e04a1fd731def03bc4c5a7f21dd3e25d8a
 PR #114 / SEV-2-VOCAB HOLD: MERGED
+PR #115 / SEV-2-PURPOSE: MERGED
 ```
 
 上位入口:
 
+- [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 - [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
@@ -87,67 +90,64 @@ AI による Severity 値発明: FORBIDDEN
 制度上の正式概念の有無と、Finding 保持の要否が先である。
 ```
 
-## 調査単位 SEV-2-CONCEPT-INV（独立）
+## 調査単位 SEV-2-CONCEPT-INV（独立・結果あり）
 
 VOCAB 再評価・ASSIGN より前の **独立調査単位**。
+結果正本: [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 
 ```text
 Unit ID: SEV-2-CONCEPT-INV
-Status: OPEN / NOT STARTED
+Status: COMPLETED / OFFICIAL_CONCEPT_EXISTS
 Kind: investigation（Decision Accepted ではない）
 Depends on: SEV-2-PURPOSE（本方針）
-Blocks: SEV-2-VOCAB 値採択、SEV-2-ASSIGN、実装
+Blocks: SEV-2-VOCAB Accepted、SEV-2-ASSIGN、実装（再評価前）
 ```
 
-### 調査内容
-
-厚労省の最新一次資料（告示、実施上の留意事項、Q&A、届出様式等）から、
-**FindingSeverity に相当する制度上の正式概念が存在するかを確認する**。
-
-調査対象クラス（例示。採択ではない）:
-
-- 強度行動障害に関する制度上の判定・段階・区分
-- 生活介護に関する制度上の段階・区分
-- 重度障害者支援加算に関する対象区分・算定要件上の状態区分・届出上の区分
+### 調査結果要約
 
 ```text
-例示は調査の入口であり、VOCAB 候補の採択ではない。
-正式名称・値・意味・適用条件は一次資料で確認するまで固定しない。
+Official concept: 行動関連項目合計点数
+Official thresholds: >= 10 ; >= 18（Severity enum 値ではない）
+Generic severity taxonomy: NOT FOUND
+low / medium / high: NOT OFFICIAL / DO NOT ADOPT
+FindingSeverity = "10+" | "18+": NOT APPROPRIATE as direct adoption
 ```
 
-### 調査結果の分岐（未実施）
+### 調査結果の分岐（結果反映）
 
 | 結果 | 次判断 |
 |---|---|
-| 制度上の正式概念が **存在しない** | FindingSeverity 自体の **削除・不採用** も候補。値定義に進まない。不採用にする場合は Issue #8 新 DEC で正本化する |
-| 制度上の正式概念が **存在する** | その **正式名称・値・意味・適用条件** を SEV-2-VOCAB 候補にする。汎用 severity への丸めは後続設計判断。Accepted 時は Issue #8 新 DEC で正本化する |
+| 制度上の正式概念が **存在しない** | （本調査では該当せず） |
+| 制度上の正式概念が **存在する**（本調査） | 公式概念は **行動関連項目合計点数**。汎用 FindingSeverity taxonomy は **NOT FOUND**。次は Human SEV-2-VOCAB 再評価（Option A 不採用 / Option B 残置+写像正本化）。本調査だけでは VOCAB Accepted しない |
 
 ```text
-Investigation result: NOT RUN
-Official concept exists: UNKNOWN
-FindingSeverity removal / non-adoption: CANDIDATE only if no official concept
+Investigation result: COMPLETED
+Official concept exists: YES（行動関連項目合計点数）
+Generic FindingSeverity taxonomy: NOT FOUND
+FindingSeverity removal / non-adoption: STRONGER CANDIDATE（Option A）。未 Accepted
 SEV-2-VOCAB values: NOT DEFINED（HOLD 維持）
 Issue #8 DEC path: REQUIRED for Accepted values OR non-adoption Decision
+Next: Human SEV-2-VOCAB re-evaluation
 ```
 
 ## 正しい順序
 
 ```text
-1. SEV-2-PURPOSE（本単位）— MHLW-first purpose source を固定
-2. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査（コード変更なし）
-3. SEV-2-VOCAB 再評価
+1. SEV-2-PURPOSE（本単位）— MHLW-first purpose source を固定 — RECORDED
+2. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査 — COMPLETED（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)）
+3. SEV-2-VOCAB 再評価（Human）
    - HOLD 継続
-   - または Accepted（制度上の正式値あり）
-   - または FindingSeverity 不採用 / 契約からの除外
+   - Option A: FindingSeverity 不採用 / 契約からの除外（一次資料整合では stronger candidate）
+   - Option B: FindingSeverity を残し、MHLW 正式概念の写像を別途正本化
 4. Issue #8 新 DEC 記録（番号は現在 UNASSIGNED）
-   - Accepted（正式値あり）の場合
+   - Accepted（正式値あり / 写像あり）の場合
    - 不採用 Decision の場合
    の両方を対象にする（Decision-SEV-1 Option A の ownership / change control）
 5. 分岐後の ASSIGN / 実装
-   - Accepted（正式値あり）の場合のみ:
+   - Option B で VOCAB Accepted 後のみ:
      SEV-2-ASSIGN を別 Human Decision として扱う
      実装は別 Entry Criteria + Implementation Start
-   - 不採用 / 契約除外の場合:
+   - Option A 不採用 / 契約除外の場合:
      SEV-2-ASSIGN = N/A / DO NOT START
      実装への自動進行 = FORBIDDEN
    - HOLD 継続の場合:
@@ -167,8 +167,8 @@ Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 |---|---|
 | Decision-SEV-1 ownership | Accepted / Option A |
 | **SEV-2-PURPOSE**（本単位） | **RECORDED**（MHLW-first） |
-| **SEV-2-CONCEPT-INV** | **OPEN / NOT STARTED** |
-| SEV-2-VOCAB | HOLD / V-C（値 NOT DEFINED） |
+| **SEV-2-CONCEPT-INV** | **COMPLETED / OFFICIAL_CONCEPT_EXISTS**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)） |
+| SEV-2-VOCAB | HOLD / V-C（値 NOT DEFINED。再評価待ち） |
 | SEV-2-ASSIGN | CANDIDATE / NOT SELECTED |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |
@@ -177,10 +177,10 @@ Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 
 ## 対象外
 
-- SEV-2-VOCAB の値採択（HOLD 維持）
+- SEV-2-VOCAB の値採択（HOLD 維持。再評価は別 Human Decision）
 - SEV-2-ASSIGN の Accepted / HOLD 判定
 - TypeScript 型・validator・fixture・完全 Finding 実装
-- 厚労省一次資料の内容を agent が推測で埋めること
+- FindingSeverity = "10+" / "18+" の採択
 - 汎用 severity taxonomy の発明
 - SharePoint / adapter / UI / deploy / 実データ
 - Issue #8 DEC 番号の推測採番

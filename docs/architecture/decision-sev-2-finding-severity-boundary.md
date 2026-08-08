@@ -16,7 +16,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision packet: Decision-SEV-2
 Status: OPEN（単位ごとに状態が異なる）
 SEV-2-PURPOSE: RECORDED（MHLW-first）— decision-sev-2-purpose-source.md
-SEV-2-CONCEPT-INV: OPEN / NOT STARTED
+SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS — decision-sev-2-concept-inv.md
 SEV-2-VOCAB: HOLD（V-C）— decision-sev-2-vocab-hold.md
 SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Implementation: NOT STARTED
@@ -26,6 +26,7 @@ SEV-1 Accepted canonical: decision-sev-1-finding-severity-vocabulary-ownership.m
 SEV-1 Human Acceptance: Explicit Human GO on 2026-08-08（Decision-SEV-1 / Option A）
 SEV-2-VOCAB Human Decision: Explicit Human HOLD on 2026-08-08（V-C）
 SEV-2-PURPOSE Human Decision: Explicit Human purpose-source policy on 2026-08-08
+SEV-2-CONCEPT-INV Human investigation: Explicit Human investigation on 2026-08-08
 ```
 
 SEV-1 の Human Acceptance と Agent execution evidence は混同しない。
@@ -34,6 +35,7 @@ Live gate（Ready / Merge / Independent Review 進行状態）は repository doc
 
 上位入口:
 
+- [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -60,7 +62,7 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 | Unit ID | 判断単位 | 本 packet での状態 | 混ぜてはならないもの |
 |---|---|---|---|
 | **SEV-2-PURPOSE** | FindingSeverity **purpose source**（MHLW-first 方針） | **RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)） | 値一覧・assignment |
-| **SEV-2-CONCEPT-INV** | 厚労省一次資料での **正式概念有無** 調査 | **OPEN / NOT STARTED** | VOCAB 値採択・ASSIGN・実装 |
+| **SEV-2-CONCEPT-INV** | 厚労省一次資料での **正式概念有無** 調査 | **COMPLETED / OFFICIAL_CONCEPT_EXISTS**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)） | VOCAB Accepted・ASSIGN・実装 |
 | **SEV-2-VOCAB** | FindingSeverity **正式値・意味**、または **不採用 Decision**（Issue #8 新 DEC の本文候補） | **HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)） | assignment 主体・算出アルゴリズム |
 | **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE / NOT SELECTED（VOCAB と独立。本 HOLD で確定しない） | 値一覧そのものの採択 |
 
@@ -246,20 +248,20 @@ stable Finding ID: UNCHANGED
 1. Independent Review of this packet（判断単位分離・Option 網羅・暗黙値禁止）— done via PR #113 line
 2. Human Decision of SEV-2-VOCAB — HOLD / V-C（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)）
 3. Human purpose-source policy — SEV-2-PURPOSE（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)）
-4. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査（コード変更なし）
-5. SEV-2-VOCAB を再評価
+4. SEV-2-CONCEPT-INV — COMPLETED（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)）
+5. SEV-2-VOCAB を再評価（Human）
    - HOLD 継続
-   - または Accepted（制度上の正式値あり）
-   - または FindingSeverity 不採用 / 契約からの除外
+   - Option A: FindingSeverity 不採用 / 契約からの除外（一次資料整合では stronger candidate）
+   - Option B: FindingSeverity を残し、MHLW 正式概念の写像を別途正本化
 6. Issue #8 へ新規 DEC 本文を記録（番号は現在 UNASSIGNED）
-   - Accepted（正式値あり）の場合
+   - Accepted（正式値あり / 写像あり）の場合
    - 不採用 Decision の場合
    の両方を対象にする（Decision-SEV-1 Option A）
 7. 分岐後の ASSIGN / 実装
-   - Accepted（正式値あり）後にのみ:
+   - Option B で VOCAB Accepted 後にのみ:
      SEV-2-ASSIGN を別 Human Decision として扱う
      実装 / 型追加は別 Entry Criteria + Implementation Start
-   - 不採用 / 契約除外の場合:
+   - Option A 不採用 / 契約除外の場合:
      SEV-2-ASSIGN = N/A / DO NOT START
      実装への自動進行 = FORBIDDEN
    - HOLD 継続の場合:
@@ -269,16 +271,22 @@ stable Finding ID: UNCHANGED
 
 ```text
 Next SEV action:
-  SEV-2-CONCEPT-INV（MHLW primary-source concept investigation）
+  Human SEV-2-VOCAB re-evaluation
+  （Option A non-adoption / Option B keep+mapping / HOLD 継続）
+SEV-2-CONCEPT-INV:
+  COMPLETED / OFFICIAL_CONCEPT_EXISTS
 SEV-2-ASSIGN:
   CANDIDATE / NOT SELECTED
+Do not start:
+  SEV-2-ASSIGN / TypeScript / validator / fixture / implementation
 Non-adoption path:
   Issue #8 new DEC REQUIRED
   SEV-2-ASSIGN = N/A / DO NOT START
 ```
 
-VOCAB HOLD 中および CONCEPT-INV 未完了中に ASSIGN へ進まない。
+VOCAB HOLD 中および VOCAB 再評価前に ASSIGN へ進まない。
 不採用時も Issue #8 新 DEC 記録経路を省略しない。
+CONCEPT-INV 完了だけでは VOCAB Accepted しない。
 ## OUT / 混ぜないもの
 
 - SEV-2-VOCAB と SEV-2-ASSIGN の一括 Accepted
@@ -301,7 +309,7 @@ VOCAB HOLD 中および CONCEPT-INV 未完了中に ASSIGN へ進まない。
 Decision-SEV-1: Accepted（Option A）
 Decision-SEV-2 packet: OPEN（単位別）
 SEV-2-PURPOSE: RECORDED（MHLW-first）
-SEV-2-CONCEPT-INV: OPEN / NOT STARTED
+SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
 SEV-2-VOCAB: HOLD（V-C）
 SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Independent acceptance: REQUIRED
