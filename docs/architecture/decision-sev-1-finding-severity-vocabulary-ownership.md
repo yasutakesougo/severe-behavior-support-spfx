@@ -13,9 +13,26 @@ Decision ID: Decision-SEV-1
 Status: Accepted
 Selected: Option A
 main before this canonicalization: 08d4a2533f31b94ff86df50cb28c7a93b8426928
-Human Acceptance: Cloud Agent run bc-019fe047-09ac-7046-8f45-1cface2d7dd1
 Prior state: READY_FOR_HUMAN_DECISION / CANDIDATE / NOT ACCEPTED
 ```
+
+### Human Acceptance（durable）
+
+```text
+Human Acceptance: Explicit Human GO on 2026-08-08
+Acceptance: Decision-SEV-1 / Option A
+Canonical ownership / change control: Issue #8 に新しい DEC を追加する方式
+Contract break: NO
+FindingIdentity: UNCHANGED
+stable Finding ID: UNCHANGED
+```
+
+```text
+Agent execution evidence: NOT Human Acceptance evidence
+```
+
+Cloud Agent run ID・PR 作成 agent 識別子は実行証跡であり、Human Acceptance 証跡に用いない。
+GitHub Issue comment ID が後から付与された場合は、その comment ID を durable evidence として追記してよい。
 
 上位入口:
 

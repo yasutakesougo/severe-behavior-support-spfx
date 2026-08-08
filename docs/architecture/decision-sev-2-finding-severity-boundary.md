@@ -15,13 +15,16 @@ Decision-SEV-1（Option A / Issue #8 新 DEC 方式）Accepted 後の
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision packet: Decision-SEV-2
 Status: CANDIDATE / NOT ACCEPTED
-READY_FOR_INDEPENDENT_REVIEW: YES
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
 main before this packet: 08d4a2533f31b94ff86df50cb28c7a93b8426928
 SEV-1 Accepted canonical: decision-sev-1-finding-severity-vocabulary-ownership.md
-Human Acceptance evidence (SEV-1): Cloud Agent run bc-019fe047-09ac-7046-8f45-1cface2d7dd1
+SEV-1 Human Acceptance: Explicit Human GO on 2026-08-08（Decision-SEV-1 / Option A）
 ```
+
+SEV-1 の Human Acceptance と Agent execution evidence は混同しない。
+Live gate（Ready / Merge / Independent Review 進行状態）は repository docs に書かない
+（[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
 
 上位入口:
 
@@ -88,12 +91,17 @@ agent による値捏造: 禁止（Human が値集合を明示する）
 | Option | 概要 | メモ |
 |---|---|---|
 | **V-A** | Human 提示の **閉集合 enum** を Issue #8 DEC 正本とする | 値・意味を DEC 本文に列挙。追加は DEC 改訂 |
-| **V-B** | Human 提示の閉集合 + **明示的 UNKNOWN / UNSPECIFIED 相当**（名称は Human 指定） | fail-closed 用途を DEC で意味定義 |
+| **V-B** | Human 提示の閉集合に、**Human が明示する追加値**を含める | 名称・意味とも **Human 提示項目**。本 packet は具体名を固定しない |
 | **V-C** | 現時点では値を採択せず **HOLD** | 完全 Finding / 実装は継続不可。暗黙値は使わない |
 
 ```text
+V-B 注意:
+  具体 sentinel 名（例示を含む）を agent が候補として提示・固定しない。
+  正本根拠のない業務値名を本 packet から採用しない。
+  追加値が必要かは Human が決め、必要な場合のみ名称・意味を Human が列挙する。
+
 V-A / V-B 採択時に必須添付:
-  1. 正式値の完全列挙（文字列リテラル）
+  1. 正式値の完全列挙（文字列リテラル。すべて Human 提示）
   2. 各値の意味（1 文以上）
   3. 順序・重大度比較の要否（要なら比較規則。不要なら UNORDERED 明示）
   4. 廃止・追加の変更管理（Issue #8 DEC 改訂のみ、等）
@@ -222,8 +230,10 @@ Next pure unit / Implementation Start: HOLD
 Issue #24 Close: NO-GO
 SharePoint / tenant / M365 / Entra / Deploy: NO-GO
 real data: PROHIBITED
-Ready / Merge（本 docs PR）: 人の事前承認待ち（エージェントは実行しない）
 ```
+
+Live gate（Ready / Merge / review 進行）は PR body / Issue comment のみ。
+repository docs には書かない。
 
 ## 変更禁止境界
 
