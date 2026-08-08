@@ -39,6 +39,8 @@ Merge: DONE
 実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
 READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+Decision-SEV-1: Accepted（Option A / Issue #8 新 DEC）
+Decision-SEV-2: CANDIDATE（VOCAB / ASSIGN 分離。Implementation NOT STARTED）
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -133,8 +135,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-AUD-SAN-1** | AuditEvent value sanitization / write-boundary 完了判定 | **Accepted**。hardening MERGED（PR #102） | Issue `#27` / `#22` | SAN-VALUE-1 | Logical boundary MERGED（PR #104） |
 | **Decision-AUD-REPLAY-1** | existing-result verification / safe replay | **Accepted**。正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md) | Issue `#22A` | IDEM-1 / ALIGN-1 / PR #104 | Replay MERGED（PR #106） |
 | **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | `#29` mapping MERGED（PR #108）→ Entry PASS（5224544473）→ `#22B` Human GO（5224579776）→ PR #110 MERGED（62a43d7f…） |
-| **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | HOLD。`DEC-001〜017` に Severity 正本なし | A: Issue #8 新DEC / B: Issue #27 technical decision | 方式選択前に値一覧を採択しない | 方式 Accepted 後に **Decision-SEV-2** へ進める |
-| **Decision-SEV-2** | Severity assignment boundary（値・意味・判定主体） | HOLD。値一覧・domain算出/caller-supplied 未決 | SEV-1 の選択結果に従う | **SEV-1** | 完全 Finding 契約の Severity 欄定義候補（実装は別 Entry Criteria） |
+| **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | **Accepted**（Option A）。Issue #8 に新しい DEC を追加する方式。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。正本: [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md) | Issue #8（新 DEC。番号 UNASSIGNED） | 方式選択前に値一覧を採択しない（維持） | **Decision-SEV-2** packet へ進める（実装は開始しない） |
+| **Decision-SEV-2** | FindingSeverity boundary packet（VOCAB と ASSIGN を分離） | **CANDIDATE**。packet: [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)。**SEV-2-VOCAB**（正式値・意味）と **SEV-2-ASSIGN**（assignment / caller-supplied）を独立承認。一括 Accepted 禁止 | Issue #8 新 DEC（SEV-1 Option A） | **SEV-1 Accepted** | VOCAB/ASSIGN 各 Accepted 後に完全 Finding の Severity 欄定義候補（実装は別 Entry Criteria / NOT STARTED） |
 | **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
 | **Decision-FC-2** | Catalog delivery boundary（固定列挙 vs caller-supplied 外部カタログ） | HOLD。現行組立は caller-supplied `isReasonCode` のみ | FC-1 の所有者 | **FC-1**。採番・写像表の推測禁止 | カタログ契約 docs（domain固定 or 外部）→ 実装は別 Gate |
 | **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | HOLD。メンバシップ純関数は完了。フィールド追加・制度日数・`periodTo` 開放終端は未決 | 別 Decision（所有は OP-1 で #24 メンバシップのみ確定。Schema は #26 関連） | OP-1/OP-2 Accepted 済み前提。既存 `evaluateObservationPeriodMembership` を変更しない | Schema/フィールド Decision Accepted 後の契約・（必要なら）別純関数。既存関数への制度値混入禁止 |
@@ -179,10 +181,10 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 
 | 問い | 正本根拠 | 結論 |
 |---|---|---|
-| 正式値 | DEC 台帳に無し。`low`/`medium`/`high` 暗黙採用禁止 | **未決** |
-| A/B の意味 | ownership: 方式 A=#8新DEC / B=#27 technical | **方式未選択** |
-| 判定主体 | 正本なし | **未決** |
-| domain 算出 vs caller-supplied | 正本なし | **未決**（SEV-2） |
+| ownership / change control | Decision-SEV-1 Accepted / Option A | **Issue #8 に新しい DEC を追加** |
+| Contract / Identity | Decision-SEV-1 | Contract break **NO**。FindingIdentity / stable Finding ID **UNCHANGED** |
+| 正式値・意味 | SEV-2-VOCAB（packet CANDIDATE） | **未決**（暗黙 `low`/`medium`/`high` 禁止維持） |
+| domain 算出 vs caller-supplied | SEV-2-ASSIGN（packet CANDIDATE・VOCAB と分離） | **未決**（独立承認） |
 
 ### C. FindingCode 業務カタログ（Decision-FC-1 / FC-2）
 
@@ -225,8 +227,8 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 2. Decision-HO-1    Handoff transition ownership — Accepted（#17）。実装系列 MERGED
 3. Decision-AUD-ALIGN-1  #22A write-result / idempotency 整合 — Accepted
 4. Decision-AUD-IDEM-1 / AUD-SAN-VALUE-1 / AUD-SAN-1 / AUD-REPLAY-1 / AUD-REPO-1 — Accepted。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）
-5. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）
-6. Decision-SEV-2   Severity assignment boundary（SEV-1 後）
+5. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）— **Accepted（Option A）**
+6. Decision-SEV-2   FindingSeverity boundary packet（SEV-2-VOCAB / SEV-2-ASSIGN を分離・独立承認）
 7. Decision-FC-1    FindingCode catalog ownership
 8. Decision-FC-2    Catalog delivery boundary（FC-1 後）
 9. Decision-OP-3    Observation period Schema / 制度 / 開放終端
@@ -236,7 +238,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
 **Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 MERGED（62a43d7f…）。次工程は実 SharePoint adapter 別 Gate。SharePoint 実環境操作は NO-GO。
-SEV は SEV-1→SEV-2、FC は FC-1→FC-2 の順を崩さない。
+SEV は SEV-1 → SEV-2 packet。SEV-2 内は **VOCAB と ASSIGN を分離**し一括 Accepted しない。FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
@@ -307,13 +309,15 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePoint adapter は別 Gate / NO-GO
+Next: Decision-SEV-2 Independent Review / Human Acceptance（VOCAB と ASSIGN を分離）。実 SharePoint adapter は別 Gate / NO-GO
 Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 Ready: YES（consumed）
 Merge: DONE
 実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
 READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+Decision-SEV-1: Accepted（Option A）
+Decision-SEV-2: CANDIDATE / NOT ACCEPTED（Implementation NOT STARTED）
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO
@@ -323,12 +327,11 @@ Ready / Merge（本PR）: 人の事前承認待ち（エージェントは実行
 ## 本 PR（docs-only）の役割
 
 ```text
-1. Decision-AUD-REPO-1 Accepted を current-state 正本へ反映する
-2. PR #106 Replay logical MERGED を同期する
-3. `#22B` PR #110 Merge は synthetic/fake slice のみと固定する
+1. Decision-SEV-1 Accepted（Option A）を current-state 正本へ反映する
+2. Decision-SEV-2 decision packet（VOCAB / ASSIGN 分離）を Candidate として追加する
+3. SEV 実装・値の暗黙採択・FindingIdentity 変更は行わない
 4. SharePoint 実環境 / M365 / Deploy / real data へ進まない（別 Gate）
-5. PR #110 Merge を実 SharePoint / tenant / M365 GO と読み替えない
-6. src/** / tests/** は変更しない
+5. src/** / tests/** は変更しない
 ```
 
 ## 変更禁止境界
