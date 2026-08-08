@@ -205,9 +205,9 @@ Option A / B を将来採用する場合は、FC-4 を変更する新しい Huma
 
 ```text
 actual identifier values: UNDECIDED
-identifier syntax / string representation: UNDECIDED
-identifier representation ownership: Decision-FC-5 CANDIDATE（別単位）
-UUID / hash / semver / DEC-number strategy: UNDECIDED
+identifier syntax / string representation / concrete syntax profile: UNDECIDED
+identifier representation ownership: Decision-FC-5 Accepted / Option C（別単位）
+UUID / hash / semver / DEC-number strategy: UNDECIDED / DO NOT START
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
 snapshot physical schema: NOT STARTED
 snapshot materialization: NOT STARTED
@@ -226,7 +226,7 @@ AI は上記を補完しない。
 
 representation ownership（決定主体・構文検証天井・change-control）は
 [`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md)
-で扱う。UUID / hash / semver は FC-5 でも採択しない。
+で扱う。UUID / hash / semver 等の具体方式は FC-5 Accepted 後も別 Human Decision とする。
 
 ## Contract compatibility gate
 
@@ -286,12 +286,12 @@ real data: PROHIBITED
 
 ```text
 Decision-FC-4: Accepted / Option C
-Next substantive unit: Decision-FC-5
+Decision-FC-5: Accepted / Option C
   Catalog version identifier representation ownership
-  （candidate packet / Human Option selection 待ち）
+  （split ownership with explicit syntax-validation ceiling）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-FC-4 Accepted は Implementation Start ではない。
-Decision-FC-5 の Option 採択・UUID/hash/semver 着手は別 Human Decision とする。
+FC-4 / FC-5 Accepted は Implementation Start ではない。
+UUID / hash / semver 等の representation strategy・FC-6 着手は別 Human Decision とする。

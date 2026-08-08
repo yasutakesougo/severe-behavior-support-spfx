@@ -193,7 +193,8 @@ code numbering: UNDECIDED
 criterionId mapping: UNDECIDED
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
 catalog version identifier logical contract: Decision-FC-4 Accepted / Option C（別単位）
-actual catalog version string representation: UNDECIDED
+identifier representation ownership: Decision-FC-5 Accepted / Option C（別単位）
+actual catalog version string representation / concrete syntax profile: UNDECIDED
 snapshot physical schema: NOT STARTED
 snapshot materialization: NOT STARTED
 snapshot storage / SharePoint location: NOT STARTED / NO-GO
@@ -208,7 +209,9 @@ AI は上記を補完しない。
 
 `catalogVersionIdentifier` の論理契約は
 [`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md)
-で扱う。実際の文字列表現は引き続き UNDECIDED。
+で扱う。representation ownership は
+[`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md)
+で扱う。実際の文字列表現 / 具体 syntax profile は引き続き UNDECIDED。
 
 ## Contract compatibility gate
 
@@ -267,9 +270,10 @@ real data: PROHIBITED
 ```text
 Decision-FC-3: Accepted / Option C
 Decision-FC-4: Accepted / Option C
+Decision-FC-5: Accepted / Option C
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-FC-3 / FC-4 Accepted は Implementation Start ではない。
+FC-3 / FC-4 / FC-5 Accepted は Implementation Start ではない。
 materialization / schema / provider / identifier 物理方式は別 Human Decision とする。
