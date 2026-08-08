@@ -85,7 +85,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
-| DEC正本台帳 | Issue #8 | `DEC-001〜017` + FindingSeverity ownership は Decision-SEV-1 Accepted（Option A / 新 DEC・番号 UNASSIGNED）。PURPOSE は MHLW-first RECORDED。値は SEV-2-VOCAB HOLD |
+| DEC正本台帳 | Issue #8 | `DEC-001〜017` + FindingSeverity ownership は Decision-SEV-1 Accepted（Option A / 新 DEC・番号 UNASSIGNED）。PURPOSE は MHLW-first RECORDED。CONCEPT-INV COMPLETED（行動関連項目合計点数）。値は SEV-2-VOCAB HOLD |
 | 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
