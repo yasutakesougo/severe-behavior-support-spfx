@@ -40,7 +40,7 @@ Live gate（Ready / Merge / Independent Review 進行状態）は repository doc
 ### Human Acceptance（durable）
 
 ```text
-Human Acceptance: Explicit Human GO on 2026-08-08
+Human Acceptance: Explicit Human Option B selection on 2026-08-08
 Decision-FC-1: Accepted
 Selected: Option B
 Catalog ownership: Issue #8 / new DEC
