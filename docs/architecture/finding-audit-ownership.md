@@ -81,7 +81,7 @@ Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-001〜017` | Deferred項目はHOLD |
-| 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay は Entry + separate GO まで HOLD |
+| 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
 
@@ -147,8 +147,9 @@ closed
 AuditEvent 候補は PR #96 MERGED。実保存技術契約は PR #99 MERGED。
 logical persistence boundary は PR #104 MERGED。Replay logical は PR #106 MERGED。
 Decision-AUD-REPLAY-1 / Decision-AUD-REPO-1 Accepted。
-次工程: Issue `#29` physical definition / mapping alignment
-（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
+次工程: 実 SharePoint adapter / tenant integration の別 Gate
+（`#29` mapping / `#22B` synthetic は MERGED。SharePoint 実環境 / tenant / M365 / Deploy は NO-GO。
+ [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
  [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
 ## FindingSeverity Decision
