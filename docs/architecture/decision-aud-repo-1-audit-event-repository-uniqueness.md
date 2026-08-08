@@ -208,8 +208,13 @@ Microsoft 365 / Entra ID / Deploy
 ```text
 Decision-AUD-REPO-1: Accepted
 Technical Decision blocker: CLEARED
-Dependency blocker: Issue #29 physical definition / mapping alignment
-Concrete Repository Entry Review: FAIL（#29未完了）
+Issue #29 physical definition / mapping alignment: Accepted
+  Candidate: 5223465404 / Revision 2
+  Independent Re-review: 5223625403（PASS）
+  Human Acceptance: 5223669583
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO

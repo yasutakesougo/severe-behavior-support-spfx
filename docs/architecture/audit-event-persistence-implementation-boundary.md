@@ -23,9 +23,14 @@ Replay logical implementation: MERGED（PR #106）
 Decision-AUD-REPO-1: Accepted
   → docs/architecture/decision-aud-repo-1-audit-event-repository-uniqueness.md
 Technical Decision blocker: CLEARED
-Dependency blocker: Issue #29 physical definition / mapping alignment
+Issue #29 physical definition / mapping alignment: Accepted
   → docs/architecture/audit-event-physical-mapping-29.md
-Concrete Repository Entry Review: FAIL（#29未完了）
+  Candidate: 5223465404 / Revision 2
+  Independent Re-review: 5223625403（PASS）
+  Human Acceptance: 5223669583
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
@@ -43,12 +48,15 @@ concrete repository（`#22B`）開始には、少なくとも次を満たす。
 6. Logical persistence boundary MERGED（DONE / PR #104）。
 7. Decision-AUD-REPLAY-1 Accepted + Replay Entry PASS + separate Human Replay GO（DONE / PR #106）。
 8. Decision-AUD-REPO-1 Accepted（DONE）。
-9. Issue `#29` physical definition / mapping alignment 完了（**未**）。
+9. Issue `#29` physical definition / mapping alignment Accepted（**canonicalization PENDING**）。
 10. Concrete Repository Entry Review PASS + separate explicit Human GO（**未**）。
 
 この文書自体は `#22B` / SharePoint / M365 / Deploy を許可しない。
 
 ```text
-Next: Issue #29 physical definition / mapping alignment
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Next: Merge 後に Concrete Repository Entry Review 再実行
 Concrete repository: HOLD
 ```

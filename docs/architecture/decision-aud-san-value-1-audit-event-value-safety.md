@@ -209,7 +209,10 @@ Decision-AUD-REPLAY-1: Accepted
 Logical AuditEvent persistence boundary: MERGED（PR #104）
 Decision-AUD-REPO-1: Accepted（別正本）
 Replay logical implementation: MERGED（PR #106）
-Next: Issue #29 physical definition / mapping alignment
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Next: Merge 後に Concrete Repository Entry Review 再実行
 Concrete repository: HOLD
 ```
 
@@ -237,8 +240,10 @@ Logical AuditEvent persistence boundary: MERGED（PR #104）
 Decision-AUD-REPO-1: Accepted（別正本）
 Replay logical implementation: MERGED（PR #106）
 Technical Decision blocker: CLEARED
-Dependency blocker: Issue #29
-Concrete Repository Entry Review: FAIL（#29未完了）
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
