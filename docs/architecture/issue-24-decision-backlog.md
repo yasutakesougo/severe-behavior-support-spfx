@@ -129,7 +129,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-AUD-SAN-VALUE-1** | AuditEvent value safety（validate+reject） | **Accepted**。正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md) | Issue `#22` / `#27` hardening | ALIGN-1 | hardening MERGED（PR #102）。SAN-1 Accepted |
 | **Decision-AUD-SAN-1** | AuditEvent value sanitization / write-boundary 完了判定 | **Accepted**。hardening MERGED（PR #102） | Issue `#27` / `#22` | SAN-VALUE-1 | Logical boundary MERGED（PR #104） |
 | **Decision-AUD-REPLAY-1** | existing-result verification / safe replay | **Accepted**。正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md) | Issue `#22A` | IDEM-1 / ALIGN-1 / PR #104 | Replay MERGED（PR #106） |
-| **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | `#29` mapping MERGED（PR #108）→ Entry PASS（5224544473）→ `#22B` Human GO（5224579776）→ PR #110 REVIEW PASS / Ready YES（4888201572）/ Merge 別 GO |
+| **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | `#29` mapping MERGED（PR #108）→ Entry PASS（5224544473）→ `#22B` Human GO（5224579776）→ PR #110 MERGED（62a43d7f…） |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | HOLD。`DEC-001〜017` に Severity 正本なし | A: Issue #8 新DEC / B: Issue #27 technical decision | 方式選択前に値一覧を採択しない | 方式 Accepted 後に **Decision-SEV-2** へ進める |
 | **Decision-SEV-2** | Severity assignment boundary（値・意味・判定主体） | HOLD。値一覧・domain算出/caller-supplied 未決 | SEV-1 の選択結果に従う | **SEV-1** | 完全 Finding 契約の Severity 欄定義候補（実装は別 Entry Criteria） |
 | **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
@@ -232,7 +232,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 ```
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
-**Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 Independent Re-review PASS / Ready YES。次工程は Merge 別 GO。SharePoint 実環境操作は NO-GO。
+**Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 MERGED（62a43d7f…）。次工程は実 SharePoint adapter 別 Gate。SharePoint 実環境操作は NO-GO。
 SEV は SEV-1→SEV-2、FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
@@ -257,7 +257,7 @@ READY_FOR_HUMAN_GO: YES（consumed）
 判定理由:
 
 1. AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 Accepted。技術契約 PR #99 MERGED。hardening PR #102 MERGED。logical/replay PR #104/#106 MERGED
-2. `#22B` PR #110 REVIEW PASS / Ready YES。次は Merge 別 GO（SharePoint 実変更は NO-GO）
+2. `#22B` PR #110 MERGED。次は実 SharePoint adapter 別 Gate（SharePoint 実変更は NO-GO）
 3. Decision Accepted / logical/replay MERGED ≠ Concrete repository GO
 4. PR #104 / #106 Human GO は logical / replay で消費済み
 5. SharePoint / Microsoft 365 / deploy は NO-GO
@@ -301,7 +301,7 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: PR #110 の明示的 Merge GO（Ready YES / Merge NOT RUN。SharePoint/M365/Deploy は NO-GO）
+Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
@@ -316,9 +316,9 @@ Ready / Merge（本PR）: 人の事前承認待ち（エージェントは実行
 ```text
 1. Decision-AUD-REPO-1 Accepted を current-state 正本へ反映する
 2. PR #106 Replay logical MERGED を同期する
-3. `#22B` Human GO（5224579776）はコード実装開始のみと固定する
-4. SharePoint 実環境 / M365 / Deploy / real data へ進まない
-5. PR #104 / #106 / Entry PASS を #22B GO として流用しない（本 GO は 5224579776）
+3. `#22B` PR #110 Merge は synthetic/fake slice のみと固定する
+4. SharePoint 実環境 / M365 / Deploy / real data へ進まない（別 Gate）
+5. PR #110 Merge を実 SharePoint / tenant / M365 GO と読み替えない
 6. src/** / tests/** は変更しない
 ```
 

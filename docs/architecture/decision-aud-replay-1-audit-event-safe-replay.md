@@ -283,8 +283,8 @@ Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108�
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES
-Concrete repository / #22B: REVIEW PASS（PR #110 / 4888201572） / Ready YES / Merge NO
-READY_FOR_HUMAN_GO note: #22B Human GO consumed; PR #110 REVIEW PASS / Ready YES / Merge 別 GO
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+READY_FOR_HUMAN_GO note: #22B PR #110 MERGED（synthetic）; 実 SharePoint は別 Gate
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```

@@ -45,7 +45,7 @@ Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-g
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: PR #110 の明示的 Merge GO（code+docs review PASS / Ready YES / Merge NOT RUN）
+Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -65,7 +65,7 @@ Next: PR #110 の明示的 Merge GO（code+docs review PASS / Ready YES / Merge 
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
 | Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay MERGED（PR #106）。REPO-1 Accepted。`#29` mapping Accepted / MERGED（PR #108） / repository HOLD |
-| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。`#29` mapping MERGED（PR #108）。Entry Review PASS（5224544473） | `#22B` REVIEW PASS / Ready YES（PR #110 / 4888201572）。Merge 別 GO。SharePoint 実環境 / M365 / Deploy NO-GO |
+| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。`#29` mapping MERGED（PR #108）。Entry Review PASS（5224544473） | `#22B` MERGED（PR #110 / 62a43d7f…）。synthetic only。SharePoint 実環境 / M365 / Deploy NO-GO |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -288,7 +288,7 @@ Decision-OP-3 / Decision-RD-3。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
 AUD-RET-1 / AUD-WR-1 / value safety / hardening / REPLAY-1 / REPO-1 Decision は Accepted（DONE）。
 Replay logical は MERGED（PR #106）。
-`#22B` synthetic REVIEW PASS / Ready YES。Merge 別 GO。SharePoint 実環境 / M365 / Deploy は継続 NO-GO。
+`#22B` synthetic MERGED（PR #110 / 62a43d7f…）。SharePoint 実環境 / M365 / Deploy は継続 NO-GO（別 Gate）。
 正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 （Issue #24 系 Next pure unit は別）

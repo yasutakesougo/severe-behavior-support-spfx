@@ -40,10 +40,14 @@ Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+#22B Code Independent Re-review: PASS（4888201572 @ 9abfc781…）
+#22B Readyization docs follow-up: PASS（4888221692 @ d5fbe8e…）
+Ready: YES（consumed）
+Merge: DONE
 #22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
-Merge: NO（別 GO）
-READY_FOR_HUMAN_GO note: #22B PR #110 REVIEW PASS / Ready YES; SharePoint・Merge は別
+Merge: DONE（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+READY_FOR_HUMAN_GO note: #22B PR #110 MERGED（synthetic）; SharePoint 実環境は別 Gate
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
 
@@ -96,10 +100,14 @@ Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+#22B Code Independent Re-review: PASS（4888201572 @ 9abfc781…）
+#22B Readyization docs follow-up: PASS（4888221692 @ d5fbe8e…）
+Ready: YES（consumed）
+Merge: DONE
 #22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
-Merge: NO（別 GO）
-READY_FOR_HUMAN_GO note: #22B PR #110 REVIEW PASS / Ready YES; SharePoint・Merge は別
+Merge: DONE（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+READY_FOR_HUMAN_GO note: #22B PR #110 MERGED（synthetic）; SharePoint 実環境は別 Gate
 SharePoint adapter / M365 / Deploy: NO-GO
 ```
 
@@ -136,5 +144,5 @@ Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
 Issue #29: physical mapping docs only（実変更禁止）
-Concrete repository / #22B: REVIEW PASS（PR #110 / 4888201572） / Ready YES / Merge NO
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 ```

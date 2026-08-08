@@ -47,8 +47,8 @@ Decision-AUD-REPO-1: Accepted
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: PR #110 Merge 向けの別の明示的 GO（Ready YES / Merge NO）
-Concrete repository / #22B: REVIEW PASS（PR #110 / 4888201572） / Ready YES / Merge NO
+Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 SharePoint adapter: NO-GO
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```

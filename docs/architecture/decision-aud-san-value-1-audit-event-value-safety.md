@@ -212,7 +212,7 @@ Replay logical implementation: MERGED（PR #106）
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: PR #110 Merge 向けの別の明示的 GO（Ready YES / Merge NO）
+Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
 Concrete repository: HOLD
 ```
 
