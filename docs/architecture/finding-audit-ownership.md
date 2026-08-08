@@ -43,7 +43,7 @@ Decision-SEV-2-CONCEPT-INV（COMPLETED）: docs/architecture/decision-sev-2-conc
 Decision-SEV-2-VOCAB（Human Decision Accepted / Option A / NOT ADOPTED；Canonical PENDING_ISSUE_8_DEC_RECORD）: docs/architecture/decision-sev-2-vocab-not-adopted.md
 Decision-SEV-2-VOCAB HOLD（historical）: docs/architecture/decision-sev-2-vocab-hold.md
 Decision-SEV-2 packet（ASSIGN は N/A / DO NOT START）: docs/architecture/decision-sev-2-finding-severity-boundary.md
-Decision-FC-1（SELECTED / CANDIDATE / Implementation HOLD）: docs/architecture/decision-fc-1-finding-code-catalog-ownership.md
+Decision-FC-1（Accepted / Option B / Issue #8 new DEC / Implementation HOLD）: docs/architecture/decision-fc-1-finding-code-catalog-ownership.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
@@ -87,7 +87,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
-| DEC正本台帳 | Issue #8 | `DEC-001〜017` + FindingSeverity ownership は Decision-SEV-1 Accepted（Option A / 新 DEC・番号 UNASSIGNED）。PURPOSE は MHLW-first RECORDED。VOCAB Human Decision は Option A 不採用 Accepted。Canonical は PENDING_ISSUE_8_DEC_RECORD（Issue #8 不採用 DEC REQUIRED） |
+| DEC正本台帳 | Issue #8 | `DEC-001〜018` + FindingCode catalog ownership は Decision-FC-1 Accepted（Option B / 新 DEC・番号 UNASSIGNED）。FindingSeverity 不採用は **DEC-018**。PURPOSE は MHLW-first RECORDED |
 | 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
@@ -349,7 +349,7 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 ## 継続HOLD
 
 - FindingSeverity Human Decision は SEV-2-VOCAB **Accepted / Option A / NOT ADOPTED**。Canonical は **PENDING_ISSUE_8_DEC_RECORD**（Issue #8 DEC REQUIRED / UNASSIGNED）。purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。CONCEPT-INV は COMPLETED。assignment 境界（SEV-2-ASSIGN）は **N/A / DO NOT START**。ownership は Decision-SEV-1 Accepted。完全なFinding契約
-- FindingCode 業務カタログは Decision-FC-1 SELECTED / packet OPEN / Implementation HOLD（[`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)）。値一覧・FC-2・実装は開始しない
+- FindingCode 業務カタログ ownership は Decision-FC-1 **Accepted / Option B**（Issue #8 new DEC / business DEC）。値一覧・FC-2・実装は開始しない（[`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)）
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
 - finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）
 - Decision-OP-3（観察期間フィールド追加） / Decision-RD-3（接近窓ポリシー）
