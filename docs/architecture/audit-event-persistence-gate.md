@@ -27,15 +27,15 @@ Replay Implementation Entry Review: PASS
 Human Replay GO: Accepted / consumed by PR #106
 Replay logical implementation: MERGED（PR #106）
 Technical Decision blocker: CLEARED（Decision-AUD-REPO-1）
-Issue #29 physical definition / mapping alignment: Accepted
+Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108）
   Candidate: 5223465404 / Revision 2
   Independent Re-review: 5223625403（PASS）
   Human Acceptance: 5223669583
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Concrete Repository Entry Review: FAIL / 未再実行
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: NO
+  main: aa0e6fba7dd8abf32523c70232001b5ac78cfc1b
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
+READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
@@ -44,9 +44,10 @@ Deploy: NO-GO
 本ゲートは技術契約（PR #99）、hardening（PR #102）、logical persistence（PR #104）、
 Replay logical（PR #106）、Decision-AUD-REPO-1 Accepted を記録する。
 
-Issue `#29` physical definition / mapping alignment は Accepted。
-次工程は docs-only canonicalization Merge 後の Concrete Repository Entry Review 再実行。
-`#22B` concrete repository、SharePoint List/列実変更、adapter、M365変更、deploy は許可しない。
+Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）。
+Dependency blocker（#29 mapping）CLEARED。Concrete Repository Entry Review PASS。
+次工程は `#22B` 向けの別の明示的 Human GO。
+`#22B` 実装・SharePoint List/列実変更・adapter・M365変更・deploy は許可しない。
 
-Accepted ≠ dependency CLEARED。Accepted ≠ Concrete repository GO。
-canonicalization Merge・Entry Review 再実行 PASS・別 Human GO まで Concrete repository は HOLD。
+Entry PASS / READY_FOR_HUMAN_GO: YES ≠ `#22B` Human GO。
+別の明示的 Human GO まで Concrete repository / `#22B` は HOLD。

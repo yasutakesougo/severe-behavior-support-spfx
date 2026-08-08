@@ -45,9 +45,9 @@ AuditEvent persistence technical contract: MERGED（PR #99）
 Logical persistence / Replay: MERGED（PR #104 / #106）
 Decision-AUD-REPO-1: Accepted
 Issue #29 physical definition / mapping alignment: Accepted
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Next: Merge 後に Concrete Repository Entry Review 再実行
+Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
+Dependency blocker（#29 mapping）: CLEARED
+Next: #22B concrete repository 向けの別の明示的 Human GO（Entry PASS 済）
 Concrete repository / #22B: HOLD
 SharePoint adapter: NO-GO
 SharePoint / Microsoft 365 / Deploy: NO-GO

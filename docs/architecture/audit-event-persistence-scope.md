@@ -19,4 +19,4 @@ OUT:
 - deployment
 - real data
 
-Issue #29 physical mapping: Accepted（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。canonicalization PENDING / dependency NOT CLEARED
+Issue #29 physical mapping: Accepted / MERGED（PR #108）（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。dependency CLEARED / Entry Review PASS / `#22B` HOLD

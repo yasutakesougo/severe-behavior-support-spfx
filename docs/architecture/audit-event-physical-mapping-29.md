@@ -23,10 +23,11 @@ PR #108 Independent Re-review: 5224461296（HOLD → P1-003/P1-004 fix）
 Decision-AUD-REPO-1: Accepted
 Logical persistence: MERGED（PR #104）
 Replay logical: MERGED（PR #106）
-Canonicalization to main: THIS PR（docs-only）
-Dependency blocker: NOT CLEARED（Merge 完了まで）
-Concrete Repository Entry Review: FAIL / 未再実行
-Concrete repository / #22B: HOLD
+Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
+READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
 SharePoint adapter / Microsoft 365 / Deploy: NO-GO
 Issue #29 full provisioning: OPEN
   DEC-013 サイト命名: Proposed
@@ -50,10 +51,10 @@ Issue #29 full provisioning: OPEN
   → #22B concrete SharePoint repository implementation
 ```
 
-Accepted ≠ dependency blocker CLEARED。
-blocker は本正本の docs-only Merge 後に初めて CLEARED を検討する。
-Concrete Repository Entry Review は Merge 後に再実行する（本 PR では再実行しない）。
-`#22B` は開始しない。
+Dependency blocker（#29 mapping）: CLEARED（PR #108 MERGED）。
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）。
+READY_FOR_HUMAN_GO: YES。
+`#22B` は別の明示的 Human GO まで開始しない。
 
 ## Scope
 
@@ -79,7 +80,7 @@ deploy / 実データ / 物理削除
 logical write-result vocabulary の再定義
 Decision-AUD-REPO-1 / REPLAY-1 / IDEM-1 の再オープン
 DEC-013 / DEC-014 / Issue #4 の完了扱い
-Concrete Repository Entry Review の再実行（Merge 後）
+`#22B` 実装開始（別 Human GO 後）
 ```
 
 ## Mapping Rules
@@ -444,12 +445,13 @@ lookup count 規則（0 / 1 / ≥2）は変更しない。
 
 ```text
 Decision-AUD-REPO-1: Accepted（意味契約）
-#29 physical definition / mapping alignment: Accepted
+#29 physical definition / mapping alignment: Accepted / MERGED（PR #108）
   Candidate: 5223465404 / Revision 2
   Independent Re-review: 5223625403 / PASS
   Human Acceptance: 5223669583
+  Concrete Repository Entry Review: PASS（5224544473）
 PR #108 Independent Review: 5223968989（HOLD）→ P1-001/P1-002 addressed
-PR #108 Independent Re-review: 5224461296（HOLD）→ P1-003/P1-004 addressed in this head
+PR #108 Independent Re-review: 5224512796（PASS） / MERGED（aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 #29 full provisioning（DEC-013 / DEC-014 / #4）: OPEN
 #22B concrete repository: 未着手（HOLD / NO-GO）
 SharePoint / M365 実変更: NO-GO
@@ -459,27 +461,25 @@ SharePoint / M365 実変更: NO-GO
 
 ```text
 Decision-AUD-REPO-1: Accepted
-Issue #29 physical definition / mapping alignment: Accepted
-Canonicalization to main: THIS PR（docs-only / OPEN）
-Dependency blocker: NOT CLEARED
-Concrete Repository Entry Review: FAIL / 未再実行
-Concrete repository / #22B: HOLD
-READY_FOR_HUMAN_GO: NO
+Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108）
+Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
+READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
 SharePoint adapter: NO-GO
 Microsoft 365: NO-GO
 Deploy: NO-GO
 ```
 
-Accepted ≠ dependency blocker CLEARED。
-Accepted ≠ Concrete Repository Entry Review PASS。
-Accepted ≠ `#22B` / SharePoint / Microsoft 365 / Deploy GO。
+#29 mapping MERGED / Entry PASS / READY_FOR_HUMAN_GO: YES
+  ≠ `#22B` Human GO
+  ≠ SharePoint / Microsoft 365 / Deploy GO。
 
 ## Next Actions
 
-1. 本 head の独立再レビュー（Issue `#29` comment `5223465404` Rev2 と照合）
-2. Ready / Merge（再レビュー PASS 後）
-3. Merge 後に dependency blocker CLEARED を記録し、Concrete Repository Entry Review を再実行する
-4. Entry PASS + 別 Human GO 後にのみ `#22B` を開始する
+1. `#22B` concrete repository 向けの別の明示的 Human GO を待つ
+2. Human GO 後にのみ `#22B` 実装を開始する（SharePoint / M365 / Deploy は別 NO-GO）
 
 ## 変更禁止境界
 
@@ -491,5 +491,5 @@ deploy: NO-GO
 real data: prohibited
 src/** / tests/**: 本 Issue の docs 段階では変更しない
 #22B concrete repository: HOLD
-Concrete Repository Entry Review: 本 PR では再実行しない
+Concrete Repository Entry Review: PASS（再実行済 / 5224544473）
 ```

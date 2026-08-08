@@ -23,16 +23,16 @@ Replay logical implementation: MERGED（PR #106）
 Decision-AUD-REPO-1: Accepted
   → docs/architecture/decision-aud-repo-1-audit-event-repository-uniqueness.md
 Technical Decision blocker: CLEARED
-Issue #29 physical definition / mapping alignment: Accepted
+Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108）
   → docs/architecture/audit-event-physical-mapping-29.md
   Candidate: 5223465404 / Revision 2
   Independent Re-review: 5223625403（PASS）
   Human Acceptance: 5223669583
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Concrete Repository Entry Review: FAIL / 未再実行
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: NO
+  main: aa0e6fba7dd8abf32523c70232001b5ac78cfc1b
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
+READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
@@ -48,15 +48,16 @@ concrete repository（`#22B`）開始には、少なくとも次を満たす。
 6. Logical persistence boundary MERGED（DONE / PR #104）。
 7. Decision-AUD-REPLAY-1 Accepted + Replay Entry PASS + separate Human Replay GO（DONE / PR #106）。
 8. Decision-AUD-REPO-1 Accepted（DONE）。
-9. Issue `#29` physical definition / mapping alignment Accepted（**canonicalization PENDING**）。
-10. Concrete Repository Entry Review PASS + separate explicit Human GO（**未**）。
+9. Issue `#29` physical definition / mapping alignment Accepted / MERGED（PR #108）（**DONE**）。
+10. Concrete Repository Entry Review PASS（Issue #22 comment 5224544473）（**DONE**）。
+11. `#22B` 向けの別の明示的 Human GO（**未**）。
 
 この文書自体は `#22B` / SharePoint / M365 / Deploy を許可しない。
 
 ```text
 Issue #29 physical definition / mapping alignment: Accepted
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Next: Merge 後に Concrete Repository Entry Review 再実行
+Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
+Dependency blocker（#29 mapping）: CLEARED
+Next: #22B concrete repository 向けの別の明示的 Human GO（Entry PASS 済）
 Concrete repository: HOLD
 ```
