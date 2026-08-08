@@ -226,7 +226,7 @@ Do not start:
 - FindingIdentity / stable Finding ID の変更
 - `src/**` / `tests/**` 変更
 - 完全 Finding 実装 / FindingSeverity 型追加
-- FindingCode カタログ Decision（FC-1 / FC-2 / FC-3）
+- FindingCode カタログ Decision（FC-1 / FC-2 / FC-3 / FC-4 / FC-5）
 - AssessmentSnapshot 保存・DTO
 - SharePoint / tenant / Microsoft 365 / Entra ID / Deploy
 - real data
