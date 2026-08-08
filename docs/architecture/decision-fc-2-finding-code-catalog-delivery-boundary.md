@@ -231,11 +231,11 @@ Decision-FC-2: Accepted / Option C
 Decision-FC-3: Accepted / Option C
 Decision-FC-4: Accepted / Option C
 Decision-FC-5: Accepted / Option C
-Decision-FC-6: CANDIDATE / NOT ACCEPTED
+Decision-FC-6: Accepted / Option C
   businessOwnershipRef logical contract
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-FC-2 / FC-3 / FC-4 / FC-5 Accepted は Implementation Start ではない。
-materialization / schema / provider / identifier 物理方式 / FC-6 Option 採択の着手は別 Human Decision とする。
+FC-2 / FC-3 / FC-4 / FC-5 / FC-6 Accepted は Implementation Start ではない。
+materialization / schema / provider / identifier 物理方式 / DEC 本文の着手は別 Human Decision とする。
