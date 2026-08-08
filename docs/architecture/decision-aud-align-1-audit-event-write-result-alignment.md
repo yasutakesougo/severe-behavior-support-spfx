@@ -105,7 +105,7 @@ Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108�
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES
-Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
+Concrete repository / #22B: START AUTHORIZED / IN PROGRESS（synthetic; Human GO 5224579776）
 READY_FOR_HUMAN_GO note: #22B 実装 GO は別
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO

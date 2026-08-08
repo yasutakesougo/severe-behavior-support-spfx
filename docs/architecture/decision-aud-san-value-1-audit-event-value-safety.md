@@ -212,7 +212,7 @@ Replay logical implementation: MERGED（PR #106）
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: #22B concrete repository 向けの別の明示的 Human GO（Entry PASS 済）
+Next: #22B synthetic concrete repository 実装レビュー / Merge 別 GO
 Concrete repository: HOLD
 ```
 

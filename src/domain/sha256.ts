@@ -30,8 +30,11 @@ function utf8Bytes(value: string): Uint8Array {
   return new TextEncoder().encode(value);
 }
 
-export function sha256Hex(value: string): string {
-  const message = utf8Bytes(value);
+/**
+ * SHA-256 over raw bytes → lowercase hex.
+ * Used by AuditEvent physical identity digests (Accepted #29), which are not UTF-8 strings.
+ */
+export function sha256HexBytes(message: Uint8Array): string {
   const bitLength = message.length * 8;
   const withPaddingLength = (message.length + 9 + 63) & ~63;
   const padded = new Uint8Array(withPaddingLength);
@@ -111,4 +114,8 @@ export function sha256Hex(value: string): string {
   digestView.setUint32(24, h6);
   digestView.setUint32(28, h7);
   return toHex(digest);
+}
+
+export function sha256Hex(value: string): string {
+  return sha256HexBytes(utf8Bytes(value));
 }

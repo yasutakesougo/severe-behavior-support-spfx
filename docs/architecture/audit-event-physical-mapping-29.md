@@ -4,7 +4,7 @@
 
 Decision-AUD-REPO-1 Accepted 後の dependency blocker に対する
 AuditEvent physical definition / mapping alignment を記録する。
-SharePoint 実体変更・App Catalog・Microsoft 365 変更・deploy・`#22B` 実装は含まない。
+SharePoint 実体変更・App Catalog・Microsoft 365 変更・deploy は含まない。`#22B` コード実装は別 PR（synthetic/fake のみ）。
 
 ## 基準
 
@@ -26,8 +26,9 @@ Replay logical: MERGED（PR #106）
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-READY_FOR_HUMAN_GO: YES
-Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
+READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+Concrete repository / #22B: START AUTHORIZED（Human GO Issue #22 comment 5224579776） / IN PROGRESS（synthetic）
 SharePoint adapter / Microsoft 365 / Deploy: NO-GO
 Issue #29 full provisioning: OPEN
   DEC-013 サイト命名: Proposed
@@ -53,8 +54,11 @@ Issue #29 full provisioning: OPEN
 
 Dependency blocker（#29 mapping）: CLEARED（PR #108 MERGED）。
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）。
-READY_FOR_HUMAN_GO: YES。
-`#22B` は別の明示的 Human GO まで開始しない。
+READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+#22B implementation: START AUTHORIZED / IN PROGRESS（synthetic/fake only）
+SharePoint 実環境操作 / Microsoft 365 / Deploy: NO-GO
+Merge: 別 GO
 
 ## Scope
 
@@ -74,13 +78,12 @@ READY_FOR_HUMAN_GO: YES。
 ```text
 SharePoint 本番 List / 列作成・変更
 App Catalog 登録・更新
-PnPjs / REST / SPFx adapter 実装（#22B）
+実 tenant 向け PnPjs / REST / SPFx adapter 接続
 Entra ID / Microsoft 365 変更
 deploy / 実データ / 物理削除
 logical write-result vocabulary の再定義
 Decision-AUD-REPO-1 / REPLAY-1 / IDEM-1 の再オープン
 DEC-013 / DEC-014 / Issue #4 の完了扱い
-`#22B` 実装開始（別 Human GO 後）
 ```
 
 ## Mapping Rules
@@ -453,7 +456,8 @@ Decision-AUD-REPO-1: Accepted（意味契約）
 PR #108 Independent Review: 5223968989（HOLD）→ P1-001/P1-002 addressed
 PR #108 Independent Re-review: 5224512796（PASS） / MERGED（aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 #29 full provisioning（DEC-013 / DEC-014 / #4）: OPEN
-#22B concrete repository: 未着手（HOLD / NO-GO）
+#22B concrete repository: START AUTHORIZED / IN PROGRESS（synthetic; Issue #22 comment 5224579776）
+SharePoint 実環境操作 / M365 / Deploy: NO-GO（本 GO の範囲外）
 SharePoint / M365 実変更: NO-GO
 ```
 
@@ -465,21 +469,24 @@ Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108�
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-READY_FOR_HUMAN_GO: YES
-Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
+READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+Concrete repository / #22B: START AUTHORIZED（Human GO Issue #22 comment 5224579776） / IN PROGRESS（synthetic）
 SharePoint adapter: NO-GO
 Microsoft 365: NO-GO
 Deploy: NO-GO
 ```
 
-#29 mapping MERGED / Entry PASS / READY_FOR_HUMAN_GO: YES
-  ≠ `#22B` Human GO
-  ≠ SharePoint / Microsoft 365 / Deploy GO。
+#29 mapping MERGED / Entry PASS / READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+#22B implementation GO ≠ SharePoint / Microsoft 365 / Deploy GO
+#22B implementation GO ≠ Merge GO
 
 ## Next Actions
 
-1. `#22B` concrete repository 向けの別の明示的 Human GO を待つ
-2. Human GO 後にのみ `#22B` 実装を開始する（SharePoint / M365 / Deploy は別 NO-GO）
+1. `#22B` concrete repository（synthetic/fake）実装を進める（Accepted #29 mapping）
+2. SharePoint 実環境操作 / Microsoft 365 / Entra / Deploy / real data は継続 NO-GO
+3. Merge は別の明示的 GO 後のみ
 
 ## 変更禁止境界
 
@@ -489,7 +496,9 @@ Entra ID changes: NO-GO
 Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
-src/** / tests/**: 本 Issue の docs 段階では変更しない
-#22B concrete repository: HOLD
+SharePoint List/Column/Permission 実変更: NO-GO
+Microsoft 365 / Entra / Deploy / real data: NO-GO
+#22B concrete repository: START AUTHORIZED / IN PROGRESS（synthetic only）
 Concrete Repository Entry Review: PASS（再実行済 / 5224544473）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 ```

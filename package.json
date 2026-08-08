@@ -6,7 +6,7 @@
     "node": "22.23.1"
   },
   "scripts": {
-    "test": "tsx --test tests/**/*.test.ts",
+    "test": "tsx --test 'tests/**/*.test.ts'",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests scripts --max-warnings 0",
     "lint:fix": "eslint src tests scripts --fix --max-warnings 0",

@@ -9,13 +9,13 @@ Review focus:
 - Logical AuditEvent persistence boundary が MERGED（PR #104）であること
 - Replay logical implementation が MERGED（PR #106）であること
 - `Decision-AUD-REPO-1` が Accepted であること
-- Issue `#29` physical mapping MERGED / dependency CLEARED / Concrete Entry PASS を維持し、`#22B` は別 Human GO まで HOLD とすること
-- concrete repository / `#22B` を READY / GO としないこと
+- Issue `#29` physical mapping MERGED / dependency CLEARED / Concrete Entry PASS / `#22B` Human GO CONFIRMED（5224579776）を維持すること
+- `#22B` Human GO を SharePoint 実環境 / Merge GO と読み替えないこと
 - `SAVE_OUTCOME_UNKNOWN` を成功へ変換しないこと
 - blind retry を許可しないこと
 - retention と physical deletion を混同しないこと
 - SharePoint / adapter / deploy を混入しないこと
-- 次工程が `#22B` 向けの別の明示的 Human GO であること（SharePoint / M365 / Deploy は NO-GO）
+- 次工程が `#22B` synthetic 実装レビューであること（SharePoint / M365 / Deploy / Merge は NO-GO / 別 GO）
 
 Current conclusion:
 
@@ -34,13 +34,14 @@ Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108�
   main: aa0e6fba7dd8abf32523c70232001b5ac78cfc1b
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-READY_FOR_HUMAN_GO: YES
-Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
-READY_FOR_HUMAN_GO note: #22B 実装 GO は別
-Next: #22B 向けの別の明示的 Human GO（Entry PASS 済）
+READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+Concrete repository / #22B: START AUTHORIZED（Human GO Issue #22 comment 5224579776） / IN PROGRESS（synthetic）
+READY_FOR_HUMAN_GO note: #22B Human GO CONFIRMED（5224579776）
+Next: #22B synthetic 実装レビュー / Merge 別 GO
 ```
 
-未充足時は `#22B` / SharePoint / M365 / Deploy gate を開かない。
+SharePoint / M365 / Deploy gate は別途 NO-GO。`#22B` synthetic のみ Human GO 済。
 
 正本:
 
