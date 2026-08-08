@@ -153,8 +153,11 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: YES（consumed）
+Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+Ready: YES（consumed）
+Merge: DONE
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO

@@ -142,7 +142,7 @@ Deploy: NO-GO
 - AuditEvent 実 SharePoint adapter / tenant integration（`#22B` synthetic は MERGED）が未了
 
 Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 / persistence technical contract（PR #99）/ contract hardening（PR #102）/ logical persistence（PR #104）/ replay logical（PR #106）は完了扱い。
-Close ブロッカーから外す。Audit 系の本当の次ブロッカーは Issue `#29` physical mapping。
+Close ブロッカーから外す。Audit 系の本当の次ブロッカーは実 SharePoint adapter / tenant integration（`#29` mapping / `#22B` synthetic は MERGED。実環境は別 Gate / NO-GO）。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 

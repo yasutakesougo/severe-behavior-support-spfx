@@ -64,7 +64,7 @@ Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/
 | Handoff状態遷移関数 | Issue #17 | Decision-HO-1 Accepted。PR #90 MERGED | 完了 |
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
-| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay MERGED（PR #106）。REPO-1 Accepted。`#29` mapping Accepted / MERGED（PR #108） / repository HOLD |
+| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical/replay MERGED（PR #104/#106）。`#29` MERGED。`#22B` synthetic MERGED（PR #110 / 62a43d7f…）。実 SharePoint adapter 別 Gate / NO-GO |
 | AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。`#29` mapping MERGED（PR #108）。Entry Review PASS（5224544473） | `#22B` MERGED（PR #110 / 62a43d7f…）。synthetic only。SharePoint 実環境 / M365 / Deploy NO-GO |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
@@ -216,8 +216,10 @@ Persistence 境界の現状:
 - Decision-AUD-REPO-1: Accepted
 - Issue #29 physical mapping: Accepted / MERGED（PR #108）
 - Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-- Concrete repository: HOLD
-- READY_FOR_HUMAN_GO: YES（consumed）
+- Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+- Ready: YES（consumed） / Merge: DONE
+- 実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+- READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 - SharePoint adapter: NO-GO
 
@@ -314,7 +316,8 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted）
 - AuditLog cleanup / 物理削除運用（Decision-AUD-RET-1 **Accepted**。cleanup は別）
 - Issue `#29` physical definition / mapping alignment（docs-only。実変更 NO-GO）
-- Concrete repository: HOLD（`#29` + Entry PASS + 別 human GO 後）
+- Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO（`#29` + Entry PASS + 別 human GO 後）
 - SharePoint adapter / Entra ID / Microsoft 365 / deploy: NO-GO
 
 DONE（継続HOLDから外す）:

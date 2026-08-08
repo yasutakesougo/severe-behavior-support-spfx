@@ -240,6 +240,6 @@ Microsoft 365: NO-GO
 Deploy: NO-GO
 ```
 
-Accepted ≠ Concrete repository GO。
+Accepted / `#22B` synthetic MERGED ≠ 実 SharePoint adapter / tenant GO。
 Accepted ≠ SharePoint / Microsoft 365 / Deploy GO。
 `#22B` PR #110 MERGED（62a43d7f…）。SharePoint 実環境は別 Gate / NO-GO。

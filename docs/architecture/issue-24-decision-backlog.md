@@ -33,8 +33,11 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: YES（consumed）
+Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+Ready: YES（consumed）
+Merge: DONE
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Issue #24 Close: NO-GO
 deploy: NO-GO
@@ -249,8 +252,11 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: YES（consumed）
+Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+Ready: YES（consumed）
+Merge: DONE
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 ```
 
@@ -258,7 +264,7 @@ READY_FOR_HUMAN_GO: YES（consumed）
 
 1. AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 Accepted。技術契約 PR #99 MERGED。hardening PR #102 MERGED。logical/replay PR #104/#106 MERGED
 2. `#22B` PR #110 MERGED。次は実 SharePoint adapter 別 Gate（SharePoint 実変更は NO-GO）
-3. Decision Accepted / logical/replay MERGED ≠ Concrete repository GO
+3. Decision Accepted / logical/replay MERGED / `#22B` synthetic MERGED ≠ 実 SharePoint adapter GO
 4. PR #104 / #106 Human GO は logical / replay で消費済み
 5. SharePoint / Microsoft 365 / deploy は NO-GO
 
@@ -302,8 +308,11 @@ Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: YES（consumed）
+Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+Ready: YES（consumed）
+Merge: DONE
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO

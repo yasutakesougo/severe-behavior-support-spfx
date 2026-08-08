@@ -49,7 +49,8 @@ Issue #24 へ自動割当しない方針は維持したまま、#17 を明示 Ac
 | Replay logical implementation | MERGED（PR #106） |
 | Decision-AUD-REPO-1 | Accepted |
 | Issue #29 physical mapping | Accepted / MERGED（PR #108） |
-| Concrete repository | HOLD |
+| Concrete repository / #22B synthetic | MERGED（PR #110 / 62a43d7f…） |
+| 実 SharePoint adapter / tenant integration | 別 Gate / NO-GO |
 | SharePoint / M365 / Deploy | NO-GO |
 
 ## 実装ゲート
@@ -66,7 +67,10 @@ Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+Ready: YES（consumed）
+Merge: DONE
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
