@@ -160,8 +160,9 @@ AssessmentSnapshotのResult技術設計は
 - Result変換はdomain純粋関数（`toAssessmentSnapshotResultCandidate` / [`assessment-snapshot-result-conversion.md`](./assessment-snapshot-result-conversion.md)）、保存タイミングは`DEC-009`、保存・訂正ロールは`GOV-AUD`へ分離する。
 - AssessmentSnapshot本体型・保存実装・findingIds必須化は後続Entry CriteriaまでHOLDする。
 
-FindingSeverityは正本Decisionが未採番である。
-Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして固定するかを先に選択し、
+FindingSeverityの vocabulary ownership は Decision-SEV-1 Accepted（Option A）。
+Issue #8へ新しいDECを追加する方式とする。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。
+正式値・意味（SEV-2-VOCAB）と assignment / caller-supplied 境界（SEV-2-ASSIGN）は分離して Candidate。
 値一覧を暗黙採用しない。
 
 ## Requirement IDトレーサビリティ
@@ -208,7 +209,7 @@ Issue #8へDECを追加するか、Issue #27配下のtechnical decisionとして
 
 ## 継続HOLD
 
-- FindingSeverityのDecision方式と値一覧、完全なFinding契約
+- FindingSeverity 正式値・意味・assignment 境界（Decision-SEV-2 Candidate。ownership は SEV-1 Accepted）、完全なFinding契約
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存技術契約は MERGED（PR #99 / [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)）。実装前次工程は #22A 整合（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
