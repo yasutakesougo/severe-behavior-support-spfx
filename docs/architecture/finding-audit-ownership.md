@@ -316,16 +316,17 @@ Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 
  [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
 PR-I以降（未割当・HOLD）:
-Decision-SEV-2-ASSIGN（CANDIDATE）、完全Finding、
+Decision-SEV-2-ASSIGN（N/A）、完全Finding、
 AssessmentSnapshot完全契約、
-FindingCode 業務カタログ、
+FindingCode 値一覧 / Decision-FC-2、
 Decision-OP-3 / Decision-RD-3。
 Decision-SEV-1（FindingSeverity ownership）は Accepted（Option A / Issue #8 新 DEC）。
 Decision-SEV-2-PURPOSE は RECORDED（MHLW-first）。
 Decision-SEV-2-CONCEPT-INV は COMPLETED（行動関連項目合計点数。汎用 Severity NOT FOUND）。
-Decision-SEV-2-VOCAB Human Decision は Accepted / Option A（FindingSeverity NOT ADOPTED）。
-Decision-SEV-2-VOCAB Canonical は PENDING_ISSUE_8_DEC_RECORD（Issue #8 DEC REQUIRED）。
+Decision-SEV-2-VOCAB は Accepted / Option A（FindingSeverity NOT ADOPTED / Issue #8 / DEC-018）。
 Decision-SEV-2-ASSIGN は N/A / DO NOT START。
+Decision-FC-1 は Accepted / Option B（Issue #8 new DEC / business DEC）。Implementation HOLD。
+Decision-FC-2 は DO NOT START。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
 AUD-RET-1 / AUD-WR-1 / value safety / hardening / REPLAY-1 / REPO-1 Decision は Accepted（DONE）。
 Replay logical は MERGED（PR #106）。

@@ -105,7 +105,7 @@ DEC 本文（値一覧等）は Decision-SEV-2 以降の Accepted 内容を受�
 | assignment algorithm / caller-supplied 境界 | SEV-2-ASSIGN = N/A / DO NOT START（不採用のため） |
 | FindingIdentity / stable Finding ID | UNCHANGED |
 | 完全 Finding 契約 | HOLD（SEV-2 以降 + Entry Criteria） |
-| FindingCode 業務カタログ | Decision-FC-1 / FC-2 |
+| FindingCode 業務カタログ | Decision-FC-1 Accepted / Option B（Issue #8 new DEC）。FC-2 DO NOT START |
 | SharePoint / M365 / Deploy | NO-GO |
 
 ## 実装ゲート
