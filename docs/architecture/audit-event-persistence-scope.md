@@ -19,4 +19,4 @@ OUT:
 - deployment
 - real data
 
-Next docs: Issue #29 physical mapping（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）
+Issue #29 physical mapping: Accepted（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。canonicalization PENDING / dependency NOT CLEARED

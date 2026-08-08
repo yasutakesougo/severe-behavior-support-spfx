@@ -44,7 +44,10 @@ ownership blocker for persistence contract: CLEARED
 AuditEvent persistence technical contract: MERGED（PR #99）
 Logical persistence / Replay: MERGED（PR #104 / #106）
 Decision-AUD-REPO-1: Accepted
-Next: Issue #29 physical definition / mapping alignment
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Next: Merge 後に Concrete Repository Entry Review 再実行
 Concrete repository / #22B: HOLD
 SharePoint adapter: NO-GO
 SharePoint / Microsoft 365 / Deploy: NO-GO

@@ -42,7 +42,10 @@ AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-even
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
 Replay logical（PR #106 MERGED）: src/domain/audit-event-persistence.ts
 Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-gate.md
-Next: Issue #29 physical definition / mapping alignment
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Next: Merge 後に Concrete Repository Entry Review 再実行
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -61,8 +64,8 @@ Next: Issue #29 physical definition / mapping alignment
 | Handoff状態遷移関数 | Issue #17 | Decision-HO-1 Accepted。PR #90 MERGED | 完了 |
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
-| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay MERGED（PR #106）。REPO-1 Accepted。次: `#29` / repository HOLD |
-| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。次: Issue `#29` | `#29` 完了 + Concrete Entry PASS + 別 human GO まで HOLD。SharePoint / `#22B` は NO-GO |
+| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay MERGED（PR #106）。REPO-1 Accepted。`#29` mapping Accepted（canonicalization PENDING） / repository HOLD |
+| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。`#29` mapping Accepted（canonicalization PENDING） | Merge + Concrete Entry PASS + 別 human GO まで HOLD。SharePoint / `#22B` は NO-GO |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -211,8 +214,8 @@ Persistence 境界の現状:
 - Decision-AUD-REPLAY-1: Accepted
 - Replay logical implementation: MERGED（PR #106）
 - Decision-AUD-REPO-1: Accepted
-- Issue #29 physical mapping: IN PROGRESS（docs-only）
-- Concrete Repository Entry Review: FAIL（#29未完了）
+- Issue #29 physical mapping: Accepted（canonicalization PENDING）
+- Concrete Repository Entry Review: FAIL / 未再実行
 - Concrete repository: HOLD
 - READY_FOR_HUMAN_GO: NO
 - SharePoint adapter: NO-GO
@@ -272,7 +275,7 @@ Decision-HO-1 Accepted（#17）、遷移 PR #90、ロール PR #91、mutation PR
 AuditEvent candidate PR #96（`HANDOFF_STATUS_CHANGED` / `5215557663`）。
 実保存技術契約 MERGED（PR #99）。logical persistence boundary MERGED（PR #104）。
 Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。
-次は Issue `#29` physical definition / mapping alignment
+次は Accepted `#29` mapping の docs-only canonicalization Merge → Concrete Repository Entry Review 再実行
 （[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
  [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 

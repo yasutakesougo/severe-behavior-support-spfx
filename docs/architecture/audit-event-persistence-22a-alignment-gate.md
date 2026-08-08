@@ -38,8 +38,13 @@ Replay Implementation Entry Review: PASS
 Human Replay GO: Accepted / consumed by PR #106
 Replay logical implementation: MERGED（PR #106）
 Technical Decision blocker: CLEARED
-Dependency blocker: Issue #29 physical definition / mapping alignment
-Concrete Repository Entry Review: FAIL（#29未完了）
+Issue #29 physical definition / mapping alignment: Accepted
+  Candidate: 5223465404 / Revision 2
+  Independent Re-review: 5223625403（PASS）
+  Human Acceptance: 5223669583
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter / M365 / Deploy: NO-GO
@@ -106,8 +111,8 @@ ALIGN-01〜08: PASS。Blocking findings: 0。
 ### 分離して後続
 
 ```text
-physical SharePoint mapping（#29）← Next
-Concrete Repository Entry Review 再実行（#29 後）
+Issue #29 physical mapping: Accepted（canonicalization PENDING）
+Concrete Repository Entry Review 再実行（Merge 後）
 concrete repository / SharePoint adapter（#22B）
   （Entry PASS + separate human GO 後のみ）
 ```
@@ -125,17 +130,22 @@ concrete repository / SharePoint adapter（#22B）
 | 7 | Decision-AUD-REPLAY-1 Accepted | **DONE** |
 | 8 | Replay logical implementation | **DONE**（PR #106） |
 | 9 | Decision-AUD-REPO-1 Accepted | **DONE** |
-| 10 | Issue #29 physical mapping | **IN PROGRESS** |
-| 11 | Concrete Repository Entry Review | **FAIL**（#29未完了） |
+| 10 | Issue #29 physical mapping | **Accepted**（canonicalization PENDING） |
+| 11 | Concrete Repository Entry Review | **FAIL** / 未再実行 |
 | 12 | Concrete repository / #22B | **HOLD** |
 | 13 | SharePoint adapter / M365 / Deploy | **NO-GO** |
 
 ```text
-Next: Issue #29 physical definition / mapping alignment
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Next: Merge 後に Concrete Repository Entry Review 再実行
 Decision-AUD-REPO-1: Accepted
 Technical Decision blocker: CLEARED
-Dependency blocker: Issue #29
-Concrete Repository Entry Review: FAIL（#29未完了）
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO

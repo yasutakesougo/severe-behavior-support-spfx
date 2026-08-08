@@ -2,7 +2,8 @@
 
 この文書は Issue `#29` の **物理定義 / mapping alignment** 設計正本（docs-only）である。
 
-Decision-AUD-REPO-1 Accepted 後の dependency blocker を解消するための設計草稿であり、
+Decision-AUD-REPO-1 Accepted 後の dependency blocker に対する
+AuditEvent physical definition / mapping alignment を記録する。
 SharePoint 実体変更・App Catalog・Microsoft 365 変更・deploy・`#22B` 実装は含まない。
 
 ## 基準
@@ -10,16 +11,27 @@ SharePoint 実体変更・App Catalog・Microsoft 365 変更・deploy・`#22B` �
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Issue: #29
-main before this draft: b28bfee5beea9d6eac3f239a88693c949b6e54a3
+Status: Accepted（physical definition / mapping alignment）
+main before this canonicalization: a7fbbf0336e1a446045da87a36b05faf54c99ad3
+Accepted evidence:
+  Candidate: Issue #29 comment 5223465404 / Revision 2
+  Previous Independent Review: 5223589138（HOLD）
+  Independent Re-review: Issue #29 comment 5223625403（PASS / P0/P1/P2 = 0/0/0）
+  Human Acceptance: Issue #29 comment 5223669583
+PR #108 Independent Review: 5223968989（HOLD → P1-001/P1-002 fix）
+PR #108 Independent Re-review: 5224461296（HOLD → P1-003/P1-004 fix）
 Decision-AUD-REPO-1: Accepted
-  Candidate: 5219980098
-  Independent Review: 5220288044（PASS）
-  Human Acceptance: 5220303406
 Logical persistence: MERGED（PR #104）
 Replay logical: MERGED（PR #106）
-Concrete Repository Entry Review: FAIL（本 Issue 未完了）
+Canonicalization to main: THIS PR（docs-only）
+Dependency blocker: NOT CLEARED（Merge 完了まで）
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository / #22B: HOLD
 SharePoint adapter / Microsoft 365 / Deploy: NO-GO
+Issue #29 full provisioning: OPEN
+  DEC-013 サイト命名: Proposed
+  DEC-014 グループ命名: Proposed
+  Issue #4 A/B試験サイト・M365管理者確認: 未完了
 ```
 
 上位入口:
@@ -34,24 +46,27 @@ SharePoint adapter / Microsoft 365 / Deploy: NO-GO
 
 ```text
 #22A logical repository / mapping contract
-  → #29 physical SharePoint definition / mapping alignment  ← 本 Issue
+  → #29 physical SharePoint definition / mapping alignment  ← 本 Issue（Accepted）
   → #22B concrete SharePoint repository implementation
 ```
 
-`#29` が揃うまで Concrete Repository Entry Review は FAIL のまま。
+Accepted ≠ dependency blocker CLEARED。
+blocker は本正本の docs-only Merge 後に初めて CLEARED を検討する。
+Concrete Repository Entry Review は Merge 後に再実行する（本 PR では再実行しない）。
 `#22B` は開始しない。
 
 ## Scope
 
 ### IN
 
-- AuditEvent persistence store の物理定義候補（Site / List / 列 / 型）
-- `findByRecordId` / `findByIdempotencyKey` の物理照会要件
-- RecordId / IdempotencyKey の物理一意性 enforcement 要件（Decision-AUD-REPO-1）
+- AuditEvent persistence store の物理定義（Site role / List / 列 / uniqueness / occurredAt）
+- `findByRecordId` / `findByIdempotencyKey` の物理照会（digest key-only）
+- RecordId / IdempotencyKey の物理一意性 enforcement（Decision-AUD-REPO-1）
 - `PersistedAuditEventWrite` への往復写像（logical evidence のみ）
-- 取得失敗・保存失敗・競合・multi-match の物理側扱い（論理結果への写像）
+- UTF16BE_HEX_V1 / digest framing（Revision 2）
+- Generic List list-level state（Revision 2）
+- 取得失敗・保存失敗・競合・multi-match の物理側扱い
 - 権限・事業所分離の設計メモ（実装しない）
-- 手動設定 / 再現手順の要否記録（本番実行はしない）
 
 ### OUT
 
@@ -63,6 +78,8 @@ Entra ID / Microsoft 365 変更
 deploy / 実データ / 物理削除
 logical write-result vocabulary の再定義
 Decision-AUD-REPO-1 / REPLAY-1 / IDEM-1 の再オープン
+DEC-013 / DEC-014 / Issue #4 の完了扱い
+Concrete Repository Entry Review の再実行（Merge 後）
 ```
 
 ## Mapping Rules
@@ -74,6 +91,131 @@ Decision-AUD-REPO-1 / REPLAY-1 / IDEM-1 の再オープン
    `PersistedAuditEventWrite` に含めない
 5. DEC-6（SupportPlan Adapter Entry）と混線しない。本表は AuditEvent store 専用
 6. Decision-AUD-REPO-1 の uniqueness / multi-match / race 分類を物理手段で破らない
+7. Revision 2 が Display Name を定義していない列について、Display Name を推測で埋めない
+
+## Accepted 内容（Revision 2）
+
+Human Acceptance（Issue #29 comment `5223669583`）は
+reviewed Candidate Revision 2（`5223465404`）境界をそのまま Accepted とする。
+本正本はその境界を変更しない。
+
+独立差分レビュー `5223968989` の P1-001 / P1-002 は、本版で Accepted 境界へ戻す。
+
+### Store / Site
+
+```text
+Store role:
+  法人共通 site role
+
+actual site URL:
+  configuration で与える
+  DEC-013 Accepted 前に /sites/... を hard-code しない
+```
+
+### List
+
+| Role | Value | Status |
+|---|---|---|
+| Provisioning key | `SBS_AUDIT_EVENTS` | 確定 |
+| Display Name | `SBS Audit Events` | 確定 |
+| Path | `Lists/SBSAuditEvents` | 確定 |
+
+### Generic List list-level state（Revision 2 / P2-001）
+
+| Setting | Accepted value |
+|---|---|
+| Title | logical mapping NONE / Required NO / `#22B` read-write NO / default view excluded |
+| AttachmentsEnabled | `false` |
+| ContentTypesEnabled | `false` |
+| EnableVersioning | `true` |
+| EnableMinorVersions | `false` |
+| EnableModeration / content approval | `false` |
+| FolderCreation | `false` |
+
+### Logical uniqueness（変更しない / Decision-AUD-REPO-1）
+
+```text
+RecordId identity
+  = (OrganizationId, auditEvent.auditEventId)
+
+Idempotency identity
+  = (OrganizationId, idempotencyKey)
+
+SiteId:
+  uniqueness key には含めない
+```
+
+OrganizationId scope は port/concrete repository instance の `boundOrganizationId` で実現する。
+port signature へ OrganizationId 引数を追加しない。
+
+### Encoding / framing（Revision 2）
+
+raw reversible evidence:
+
+```text
+UTF16BE_HEX_V1
+  = "u16h1:" + 4-hex-digits per JavaScript UTF-16 code unit
+```
+
+digest helper（OrganizationId / token のみ）:
+
+```text
+encodeJsString(value):
+  U64BE(value.length)          // JavaScript UTF-16 code-unit length
+  || U16BE(each code unit)
+
+no TextEncoder / UTF-8 / normalization
+```
+
+digest material（domain tag は raw ASCII。length-prefix UTF-16 framing に入れない）:
+
+```text
+record material:
+  ASCII("AUDREC1")
+  || encodeJsString(OrganizationId)      // boundOrganizationId
+  || encodeJsString(auditEventId)        // recordId
+
+idempotency material:
+  ASCII("AUDIDEM1")
+  || encodeJsString(OrganizationId)      // boundOrganizationId
+  || encodeJsString(idempotencyKey)
+
+RecordIdentityKey
+  = SHA-256(record material) as lowercase 64 hex
+
+IdempotencyIdentityKey
+  = SHA-256(idempotency material) as lowercase 64 hex
+```
+
+- domain tag `AUDREC1` / `AUDIDEM1` は raw ASCII bytes のまま連結する
+- `encodeJsString` は OrganizationId と record/idempotency token にのみ適用する
+- logical string 契約を狭めない
+- exact round-trip を維持する（raw 列は `UTF16BE_HEX_V1`）
+- raw 値に trim / normalization / case fold を適用しない
+
+### Physical uniqueness columns
+
+| Internal Name | Column Type | Indexed / Unique | Role |
+|---|---|---|---|
+| `SbsAudRecordIdentityKey` | Single line text (64) | Indexed + Unique | SHA-256(record material) |
+| `SbsAudIdempotencyIdentityKey` | Single line text (64) | Indexed + Unique | SHA-256(idempotency material) |
+
+logical composite identity をそのまま unique text 列に載せない。
+SharePoint text unique は case-insensitive であり、255 文字制限もあるため、
+raw と固定長 identity key を分離する。
+
+### Collision
+
+```text
+unique collision
+  -> SAVE_OUTCOME_UNKNOWN
+  -> REPLAY-1 dual verification
+
+confirmed different logical write
+  -> CONFLICT
+
+detected uniqueness violation を直ちに CONFLICT としない
+```
 
 ## Logical evidence（変更しない）
 
@@ -101,73 +243,44 @@ appVersion?
 ruleSetVersion?
 ```
 
-## Physical uniqueness requirements（Decision-AUD-REPO-1）
-
-Accepted uniqueness scope（変更しない）:
-
-```text
-RecordId identity
-  = (OrganizationId, auditEvent.auditEventId)
-
-Idempotency identity
-  = (OrganizationId, idempotencyKey)
-
-SiteId:
-  uniqueness key には含めない
-```
-
-| Logical identity | Uniqueness | Lookup port | Multi-match |
-|---|---|---|---|
-| `(OrganizationId, auditEvent.auditEventId)` | OrganizationId 空間内一意 MUST | `findByRecordId`（Org scope 内） | ≥2 → `RETRIEVAL_FAILED`（選ばない） |
-| `(OrganizationId, idempotencyKey)` | 同一 OrganizationId 空間内一意 MUST | `findByIdempotencyKey`（Org scope 内） | ≥2 → `RETRIEVAL_FAILED`（選ばない） |
-
-物理手段（unique column / indexed column / 別 List / conditional write）は
-**未確認**。手段を推測で確定しない。要件だけ固定する。
-store 全体一意や SiteId 込み uniqueness へ広げない。
-
-競合作成（Decision-AUD-REPO-1 Accepted）:
-
-```text
-confirmed different logical write
-  -> CONFLICT
-
-collision したが save response だけでは
-winner が same replay か conflict か判定不能
-  -> SAVE_OUTCOME_UNKNOWN
-  -> dual verification
-
-detected uniqueness violation を直ちに CONFLICT としない
-```
-
 ## Mapping Table（Contract → Physical）
 
-Status 凡例: `確定` = 論理側確定 / `未確認` = 物理名未確認 / `対象外` = logical evidence 外
+Status 凡例:
+
+- `確定` = Accepted Revision 2 から転記済み
+- `対象外` = logical evidence 外
+- Display Name: Revision 2 が定義していない列は埋めない（—）
 
 | Mapping ID | Logical Field | Required | Logical Type | SP List | Display Name | Internal Name | Column Type | Indexed / Unique | Read Conversion | Write Conversion | Status |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| MAP-AUD-STORE-001 | （store 自体） | 必須 | AuditEvent persistence store | 未確認 | 未確認 | 未確認 | List | — | — | — | 未確認 |
-| MAP-AUD-001 | auditEvent.auditEventId | 必須 | string（RecordId component） | 未確認 | 未確認 | 未確認 | 未確認 | Unique with OrganizationId MUST | 非空 string | 非空 string | 論理確定 / 物理未確認 |
-| MAP-AUD-002 | idempotencyKey | 必須 | string（write metadata） | 未確認 | 未確認 | 未確認 | 未確認 | Unique with OrganizationId MUST | 非空 string | 非空 string | 論理確定 / 物理未確認 |
-| MAP-AUD-003 | OrganizationId | 必須 | string（uniqueness scope） | 未確認 | 未確認 | 未確認 | 未確認 | uniqueness key 構成要素 | 非空 | 非空 | 論理確定 / 物理未確認 |
-| MAP-AUD-004 | SiteId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | uniqueness key に含めない | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
-| MAP-AUD-005 | actorStaffId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
-| MAP-AUD-006 | actionCode | 必須 | string（actionCode） | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 非空 | 非空 | 論理確定 / 物理未確認 |
-| MAP-AUD-007 | targetType | 必須 | enum（初期: HandoffState） | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 許可値のみ | 許可値のみ | 論理確定 / 物理未確認 |
-| MAP-AUD-008 | targetRecordId | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
-| MAP-AUD-009 | result | 必須 | success/denied/failed | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | 許可値のみ | 許可値のみ | 論理確定 / 物理未確認 |
-| MAP-AUD-010 | occurredAt | 必須 | ISO DateTime | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | ISO DateTime | ISO DateTime | 論理確定 / 物理未確認 |
-| MAP-AUD-011 | correlationId | 必須 | string | 未確認 | 未確認 | 未確認 | 未確認 | Unique ではない | 非空 | 非空 | 論理確定 / 物理未確認 |
-| MAP-AUD-012 | reasonCode | 任意 | reasonCode? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
-| MAP-AUD-013 | appVersion | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
-| MAP-AUD-014 | ruleSetVersion | 任意 | string? | 未確認 | 未確認 | 未確認 | 未確認 | 未確認 | absent↔未設定 | absent↔未設定 | 論理確定 / 物理未確認 |
+| MAP-AUD-STORE-001 | （store 自体） | 必須 | AuditEvent persistence store | `SBS_AUDIT_EVENTS` / `Lists/SBSAuditEvents` | SBS Audit Events | — | List | — | — | — | 確定 |
+| MAP-AUD-KEY-001 | RecordId identity key | 必須 | derived | `SBS_AUDIT_EVENTS` | — | `SbsAudRecordIdentityKey` | Single line text (64) | Indexed + Unique | digest hex | SHA-256(record material) | 確定 |
+| MAP-AUD-KEY-002 | Idempotency identity key | 必須 | derived | `SBS_AUDIT_EVENTS` | — | `SbsAudIdempotencyIdentityKey` | Single line text (64) | Indexed + Unique | digest hex | SHA-256(idempotency material) | 確定 |
+| MAP-AUD-001 | auditEvent.auditEventId | 必須 | string（RecordId component） | `SBS_AUDIT_EVENTS` | — | `SbsAudAuditEventIdEncoded` | Multiple lines plain text | — | `UTF16BE_HEX_V1` → string | string → `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-002 | idempotencyKey | 必須 | string（write metadata） | `SBS_AUDIT_EVENTS` | — | `SbsAudIdempotencyKeyEncoded` | Multiple lines plain text | — | `UTF16BE_HEX_V1` → string | string → `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-003 | OrganizationId | 必須 | string（uniqueness scope） | `SBS_AUDIT_EVENTS` | — | `SbsAudOrganizationIdEncoded` | Multiple lines plain text | — | `UTF16BE_HEX_V1` → string | string → `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-004 | SiteId | 任意 | string? | `SBS_AUDIT_EVENTS` | — | `SbsAudSiteIdEncoded` | Multiple lines plain text | uniqueness key に含めない | absent↔未設定 / `UTF16BE_HEX_V1` | absent↔未設定 / `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-005 | actorStaffId | 任意 | string? | `SBS_AUDIT_EVENTS` | — | `SbsAudActorStaffIdEncoded` | Multiple lines plain text | — | absent↔未設定 / `UTF16BE_HEX_V1` | absent↔未設定 / `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-006 | actionCode | 必須 | string（actionCode） | `SBS_AUDIT_EVENTS` | — | `SbsAudActionCode` | Single line text (64) | — | 非空 | 非空 | 確定 |
+| MAP-AUD-007 | targetType | 必須 | enum（初期: HandoffState） | `SBS_AUDIT_EVENTS` | — | `SbsAudTargetType` | Choice: HandoffState | — | 許可値のみ | 許可値のみ | 確定 |
+| MAP-AUD-008 | targetRecordId | 任意 | string? | `SBS_AUDIT_EVENTS` | — | `SbsAudTargetRecordIdEncoded` | Multiple lines plain text | — | absent↔未設定 / `UTF16BE_HEX_V1` | absent↔未設定 / `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-009 | result | 必須 | success/denied/failed | `SBS_AUDIT_EVENTS` | — | `SbsAudResult` | Choice: success/denied/failed | — | 許可値のみ | 許可値のみ | 確定 |
+| MAP-AUD-010a | occurredAt（lexical 正本） | 必須 | ISO DateTime lexical | `SBS_AUDIT_EVENTS` | — | `SbsAudOccurredAtRaw` | Single line text | — | lexical string | lexical exact | 確定 |
+| MAP-AUD-010b | occurredAt（query/retention） | 必須 | derived DateTime | `SBS_AUDIT_EVENTS` | — | `SbsAudOccurredAtUtc` | Date and Time | Indexed | DateTime | derived from lexical | 確定 |
+| MAP-AUD-011 | correlationId | 必須 | string | `SBS_AUDIT_EVENTS` | — | `SbsAudCorrelationIdEncoded` | Multiple lines plain text | Unique ではない | `UTF16BE_HEX_V1` → string | string → `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-012 | reasonCode | 任意 | reasonCode? | `SBS_AUDIT_EVENTS` | — | `SbsAudReasonCode` | Single line text (64) | — | absent↔未設定 | absent↔未設定 | 確定 |
+| MAP-AUD-013 | appVersion | 任意 | string? | `SBS_AUDIT_EVENTS` | — | `SbsAudAppVersionEncoded` | Multiple lines plain text | — | absent↔未設定 / `UTF16BE_HEX_V1` | absent↔未設定 / `UTF16BE_HEX_V1` | 確定 |
+| MAP-AUD-014 | ruleSetVersion | 任意 | string? | `SBS_AUDIT_EVENTS` | — | `SbsAudRuleSetVersionEncoded` | Multiple lines plain text | — | absent↔未設定 / `UTF16BE_HEX_V1` | absent↔未設定 / `UTF16BE_HEX_V1` | 確定 |
 | MAP-AUD-META-001 | ListItemId | — | physical | — | — | — | — | — | logical evidence に含めない | — | 対象外 |
-| MAP-AUD-META-002 | ETag | — | physical | — | — | — | — | — | logical evidence に含めない | race/条件付書込は #29 手段として別記 | 対象外（logical） |
+| MAP-AUD-META-002 | ETag | — | physical | — | — | — | — | — | logical evidence に含めない | race/条件付書込は手段として別記 | 対象外（logical） |
 | MAP-AUD-META-003 | Created / Modified / Author | — | physical | — | — | — | — | — | logical evidence に含めない | — | 対象外 |
 
 ## Physical query requirements
 
-lookup / unique enforcement は OrganizationId uniqueness space 内で行う。
-SiteId で絞って uniqueness を分けない。
+lookup / unique enforcement の OrganizationId scope は **digest 入力の `boundOrganizationId`** で実現する。
+物理 query に `OrganizationId == boundOrganizationId` の追加 filter を付けない。
+OrganizationId raw evidence は `SbsAudOrganizationIdEncoded`（`UTF16BE_HEX_V1`）に保存し、
+取得後の Integrity verification（下記）で検証する。
 
 ```text
 AuditEventExistingResultPort / concrete repository instance:
@@ -178,69 +291,167 @@ port signature: 変更しない
   findByIdempotencyKey(idempotencyKey)
 ```
 
-OrganizationId は port 引数へ追加しない。instance の `boundOrganizationId` で filter する。
+Accepted Revision 2 lookup（key-only）:
 
 ```text
 findByRecordId(recordId):
-  filter:
-    OrganizationId == boundOrganizationId
-    AND RecordId == recordId
+  key = SHA-256(
+          ASCII("AUDREC1")
+          || encodeJsString(boundOrganizationId)
+          || encodeJsString(recordId)
+        ) as lowercase 64 hex
+  query SbsAudRecordIdentityKey == key
   0 rows -> NOT_FOUND
-  1 row  -> FOUND（PersistedAuditEventWrite へ変換可能なら）
-           変換不能なら logical MALFORMED 経路
+  1 row  -> read/convert + integrity verification（下記）
   >=2    -> RETRIEVAL_FAILED（1行を選ばない）
 
 findByIdempotencyKey(idempotencyKey):
-  filter:
-    OrganizationId == boundOrganizationId
-    AND IdempotencyKey == idempotencyKey
+  key = SHA-256(
+          ASCII("AUDIDEM1")
+          || encodeJsString(boundOrganizationId)
+          || encodeJsString(idempotencyKey)
+        ) as lowercase 64 hex
+  query SbsAudIdempotencyIdentityKey == key
   同上の count 規則
 ```
 
 権限不足 → `FORBIDDEN`。
 一時障害・不明 → `RETRIEVAL_FAILED`（成功や NOT_FOUND へ倒さない）。
 
+## Read / write conversion（Accepted Revision 2）
+
+### Write conversion
+
+```text
+UTF16BE_HEX_V1 columns:
+  string -> "u16h1:" + 4-hex-digits per JS UTF-16 code unit
+  optional absent/undefined -> SharePoint 未設定
+  no trim / normalization / case fold
+  no TextEncoder / UTF-8 path
+
+identity keys:
+  SbsAudRecordIdentityKey = SHA-256(record material)
+  SbsAudIdempotencyIdentityKey = SHA-256(idempotency material)
+
+actionCode / reasonCode:
+  Single line text (64) — exact logical token（Encoded ではない）
+
+Choice columns:
+  SbsAudTargetType: 許可値のみ（初期: HandoffState）。未知値は書込拒否
+  SbsAudResult: success / denied / failed のみ。未知値は書込拒否
+
+occurredAt:
+  SbsAudOccurredAtRaw = lexical ISO DateTime string（logical 正本）
+  SbsAudOccurredAtUtc = derived Date and Time（query / retention）
+```
+
+### Read conversion
+
+```text
+UTF16BE_HEX_V1 decoder（fail-closed）:
+  prefix が "u16h1:" でない -> fail
+  残りが 4-hex 境界でない -> fail
+  non-hex -> fail
+  U+FFFD 置換なし
+  成功時のみ JS string を復元
+
+optional columns:
+  SharePoint 未設定 <-> logical undefined / absent
+
+Choice columns:
+  未知 choice -> fail-closed（成功へ倒さない）
+
+occurredAt logical source:
+  SbsAudOccurredAtRaw のみ
+  SbsAudOccurredAtUtc は query/retention 用 derived。logical occurredAt の正本にしない
+```
+
+## Integrity verification（Accepted Revision 2）
+
+1 行取得後、`FOUND` + `PersistedAuditEventWrite` を返す前に次をすべて満たすこと。
+論理 write-result vocabulary は再定義しない。
+
+### Pre-return checks（MUST）
+
+```text
+1. all UTF16BE_HEX_V1 columns decode successfully
+2. recompute RecordIdentityKey == stored SbsAudRecordIdentityKey
+3. recompute IdempotencyIdentityKey == stored SbsAudIdempotencyIdentityKey
+4. validateAuditEvent(reconstructed auditEvent) == true
+5. decoded idempotencyKey is string
+6. SbsAudOccurredAtRaw parses to the same instant as SbsAudOccurredAtUtc
+7. template / system metadata is not copied into logical evidence
+   （ListItemId / ETag / Created / Modified / Author / URL 等）
+```
+
+recompute 時の OrganizationId / recordId / idempotencyKey は、
+decode 済み raw 値と lookup 時の `boundOrganizationId` / 引数 token の
+Accepted digest material 定義に従う。
+
+### Failure classification
+
+```text
+identity metadata mismatch
+encoding malformed
+  （UTF16BE_HEX_V1 prefix / 4-hex boundary / non-hex）
+derived date mismatch
+  （OccurredAtRaw instant != OccurredAtUtc instant）
+  -> RETRIEVAL_FAILED
+
+logical object reconstructed but invalid
+  （validateAuditEvent == false 等）
+  -> existing REPLAY-1 MALFORMED boundary
+
+template/system metadata を logical evidence に混ぜない
+  （混ぜた実装は不正。canonical conversion では除外する）
+```
+
+lookup count 規則（0 / 1 / ≥2）は変更しない。
+本節は 1 行取得後の conversion / integrity のみを固定する。
+
 ## Failure Behavior（physical → logical）
 
 | Physical situation | Logical result |
 |---|---|
-| 0 matches（OrganizationId scope 内） | `NOT_FOUND` |
-| 1 usable match | `FOUND` + `PersistedAuditEventWrite` |
-| 1 unusable / malformed row | lookup `FOUND` だが verification 側 `MALFORMED` |
-| ≥2 matches（OrganizationId scope 内） | `RETRIEVAL_FAILED` |
+| 0 matches（digest key） | `NOT_FOUND` |
+| 1 row + integrity checks PASS | `FOUND` + `PersistedAuditEventWrite` |
+| 1 row + identity metadata mismatch / encoding malformed / derived date mismatch | `RETRIEVAL_FAILED` |
+| 1 row + logical object reconstructed but invalid | REPLAY-1 `MALFORMED` boundary |
+| ≥2 matches（digest key） | `RETRIEVAL_FAILED` |
 | permission denied | `FORBIDDEN` |
 | transport / timeout / unknown | `RETRIEVAL_FAILED` |
 | confirmed different logical write | `CONFLICT`（SAVED にしない） |
-| collision したが winner が same replay / conflict か判定不能 | `SAVE_OUTCOME_UNKNOWN` → dual verification |
+| unique collision / winner が same replay / conflict か判定不能 | `SAVE_OUTCOME_UNKNOWN` → dual verification |
 | commit outcome uncertain | `SAVE_OUTCOME_UNKNOWN` |
 
 ## Permissions / 事業所分離（設計メモ）
 
 - 書込権限拒否は `FORBIDDEN`（success / not-found へ変換しない）
-- OrganizationId / SiteId は AuditEvent 上の業務識別子。物理 List の権限モデルとの対応は **未確認**
+- OrganizationId / SiteId は AuditEvent 上の業務識別子。物理 List の権限モデルとの対応は **未確認**（DEC-014 / Issue `#4` 未完了）
 - UI だけの分離に依存しないこと
 - 本ドキュメントでは Entra グループ写像を確定しない
 
-## Unresolved Items（#29 完了条件）
+## Review fix notes（PR #108）
 
-次が揃うまで `#29` は未完了、Concrete Repository Entry Review は FAIL:
-
-1. AuditEvent persistence 用 SharePoint Site / List の識別（確定または明示 HOLD 理由）
-2. MAP-AUD-001〜014 の Internal Name / Column Type（確定）
-3. `(OrganizationId, RecordId)` / `(OrganizationId, IdempotencyKey)` の物理 unique enforcement 手段（確定）。SiteId を key に入れない
-4. boundOrganizationId 付き `findByRecordId` / `findByIdempotencyKey` の物理照会手段（確定）。port signature は変更しない
-5. race / conditional write に ETag 等を使う場合の手段メモ（使うなら確定、使わないなら対象外明示）
-6. logical ↔ physical 変換で metadata を logical evidence へ漏らさないことの確認
-7. 本番変更手順を成果物に含めないことの確認
-
-仮名のまま Status を `確定` へ上げない。
+| Finding | Fix |
+|---|---|
+| P1-001 canonicalization 未完了 | Internal Name / Column Type / list-level state / framing 詳細を Accepted Revision 2 から転記。Display Name は Rev2 未定義のため埋めない |
+| P1-002 lookup strategy drift | `OrganizationId == boundOrganizationId AND ...` 追加 filter を削除。digest key-only lookup に戻す |
+| P1-003 digest domain-tag framing | domain tag は raw ASCII(`AUDREC1`/`AUDIDEM1`)。`encodeJsString` は OrganizationId と token のみ |
+| P1-004 read/write + integrity verification | Accepted の conversion / pre-return checks / 失敗分類を正本へ転記 |
 
 ## Approvals
 
 ```text
 Decision-AUD-REPO-1: Accepted（意味契約）
-#29 physical mapping: 設計中 / 物理名未確認
-#22B concrete repository: 未着手（NO-GO）
+#29 physical definition / mapping alignment: Accepted
+  Candidate: 5223465404 / Revision 2
+  Independent Re-review: 5223625403 / PASS
+  Human Acceptance: 5223669583
+PR #108 Independent Review: 5223968989（HOLD）→ P1-001/P1-002 addressed
+PR #108 Independent Re-review: 5224461296（HOLD）→ P1-003/P1-004 addressed in this head
+#29 full provisioning（DEC-013 / DEC-014 / #4）: OPEN
+#22B concrete repository: 未着手（HOLD / NO-GO）
 SharePoint / M365 実変更: NO-GO
 ```
 
@@ -248,20 +459,26 @@ SharePoint / M365 実変更: NO-GO
 
 ```text
 Decision-AUD-REPO-1: Accepted
-Issue #29 physical definition / mapping alignment: IN PROGRESS（本 docs）
-Concrete Repository Entry Review: FAIL（#29未完了）
-Concrete repository: HOLD
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: THIS PR（docs-only / OPEN）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
+Concrete repository / #22B: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
 Microsoft 365: NO-GO
 Deploy: NO-GO
 ```
 
+Accepted ≠ dependency blocker CLEARED。
+Accepted ≠ Concrete Repository Entry Review PASS。
+Accepted ≠ `#22B` / SharePoint / Microsoft 365 / Deploy GO。
+
 ## Next Actions
 
-1. 法人 / 運用側で AuditEvent store の Site / List / 列 Internal Name を確認し、本表の `未確認` を埋める
-2. OrganizationId-scoped RecordId / IdempotencyKey の物理 unique 手段を確定する（SiteId は key 外）
-3. `#29` 完了後に Concrete Repository Entry Review を再実行する
+1. 本 head の独立再レビュー（Issue `#29` comment `5223465404` Rev2 と照合）
+2. Ready / Merge（再レビュー PASS 後）
+3. Merge 後に dependency blocker CLEARED を記録し、Concrete Repository Entry Review を再実行する
 4. Entry PASS + 別 Human GO 後にのみ `#22B` を開始する
 
 ## 変更禁止境界
@@ -274,4 +491,5 @@ deploy: NO-GO
 real data: prohibited
 src/** / tests/**: 本 Issue の docs 段階では変更しない
 #22B concrete repository: HOLD
+Concrete Repository Entry Review: 本 PR では再実行しない
 ```

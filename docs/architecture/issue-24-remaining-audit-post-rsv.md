@@ -52,7 +52,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
-| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。REPO-1 Accepted。`#29` / `#22B` HOLD・NO-GO |
+| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。REPO-1 Accepted。`#29` mapping Accepted（canonicalization PENDING）。`#22B` HOLD・NO-GO |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
@@ -65,7 +65,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | AuditEvent logical persistence boundary | #22A | **DONE**（PR #104） | **完了** | 6-value write result / port |
 | AuditEvent Replay implementation | #22A / REPLAY-1 | **DONE**（PR #106） | **完了** | Entry PASS + Human GO 消費済み |
 | Decision-AUD-REPO-1 | #22A | **Accepted** | **完了** | uniqueness / multi-match / race |
-| AuditEvent physical mapping | #29 | **IN PROGRESS** | **不可（今は #22B）** | docs-only。実変更 NO-GO |
+| AuditEvent physical mapping | #29 | **Accepted**（canonicalization PENDING） | **不可（今は #22B）** | docs-only。実変更 NO-GO |
 | AuditEvent concrete repository / SharePoint | #22B | **HOLD / NO-GO** | **不可** | `#29` + Entry PASS + 別 GO 後 |
 | 訂正・削除・復旧運用 | Issue #17 | HOLD（`GOV-AUD`） | **不可** | #19 回答待ち |
 
@@ -97,7 +97,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。次は Issue `#29` physical mapping。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)
+2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted（canonicalization PENDING）。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。次は Merge 後の Concrete Repository Entry Review 再実行
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）

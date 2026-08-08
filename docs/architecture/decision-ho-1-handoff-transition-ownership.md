@@ -48,7 +48,7 @@ Issue #24 へ自動割当しない方針は維持したまま、#17 を明示 Ac
 | Decision-AUD-REPLAY-1 | Accepted |
 | Replay logical implementation | MERGED（PR #106） |
 | Decision-AUD-REPO-1 | Accepted |
-| Issue #29 physical mapping | IN PROGRESS |
+| Issue #29 physical mapping | Accepted（canonicalization PENDING） |
 | Concrete repository | HOLD |
 | SharePoint / M365 / Deploy | NO-GO |
 
@@ -61,8 +61,11 @@ Logical AuditEvent persistence boundary: MERGED（PR #104）
 Decision-AUD-REPLAY-1: Accepted
 Replay logical implementation: MERGED（PR #106）
 Decision-AUD-REPO-1: Accepted
-Next: Issue #29 physical definition / mapping alignment
-Concrete Repository Entry Review: FAIL（#29未完了）
+Issue #29 physical definition / mapping alignment: Accepted
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
+Next: Merge 後に Concrete Repository Entry Review 再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint / Microsoft 365 / Deploy: NO-GO

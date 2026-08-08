@@ -97,19 +97,33 @@ findByRecordId(recordId)
 findByIdempotencyKey(idempotencyKey)
 ```
 
-物理 filter（Issue `#29` / `#22B`）:
+物理 lookup（Issue `#29` Accepted Revision 2 / `#22B`）:
+
+OrganizationId scope は digest 入力の `boundOrganizationId` で実現する。
+物理 query に `OrganizationId == boundOrganizationId` の追加 filter は付けない。
+正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)
 
 ```text
 findByRecordId(recordId):
-  filter:
-    OrganizationId == boundOrganizationId
-    AND RecordId == recordId
+  key = SHA-256(
+          ASCII("AUDREC1")
+          || encodeJsString(boundOrganizationId)
+          || encodeJsString(recordId)
+        ) as lowercase 64 hex
+  query SbsAudRecordIdentityKey == key
 
 findByIdempotencyKey(idempotencyKey):
-  filter:
-    OrganizationId == boundOrganizationId
-    AND IdempotencyKey == idempotencyKey
+  key = SHA-256(
+          ASCII("AUDIDEM1")
+          || encodeJsString(boundOrganizationId)
+          || encodeJsString(idempotencyKey)
+        ) as lowercase 64 hex
+  query SbsAudIdempotencyIdentityKey == key
 ```
+
+`encodeJsString` / domain-tag ASCII 契約の正本は
+[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。
+domain tag を length-prefix UTF-16 framing に入れない。
 
 ### Lookup match count
 
@@ -208,8 +222,13 @@ Microsoft 365 / Entra ID / Deploy
 ```text
 Decision-AUD-REPO-1: Accepted
 Technical Decision blocker: CLEARED
-Dependency blocker: Issue #29 physical definition / mapping alignment
-Concrete Repository Entry Review: FAIL（#29未完了）
+Issue #29 physical definition / mapping alignment: Accepted
+  Candidate: 5223465404 / Revision 2
+  Independent Re-review: 5223625403（PASS）
+  Human Acceptance: 5223669583
+Canonicalization to main: PENDING / THIS PR（docs-only）
+Dependency blocker: NOT CLEARED
+Concrete Repository Entry Review: FAIL / 未再実行
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
