@@ -39,8 +39,9 @@ Decision-AUD-REPLAY-1（Accepted）: docs/architecture/decision-aud-replay-1-aud
 Decision-AUD-REPO-1（Accepted）: docs/architecture/decision-aud-repo-1-audit-event-repository-uniqueness.md
 Decision-SEV-1（Accepted / Option A）: docs/architecture/decision-sev-1-finding-severity-vocabulary-ownership.md
 Decision-SEV-2-PURPOSE（RECORDED / MHLW-first）: docs/architecture/decision-sev-2-purpose-source.md
+Decision-SEV-2-CONCEPT-INV（COMPLETED）: docs/architecture/decision-sev-2-concept-inv.md
 Decision-SEV-2-VOCAB（HOLD / V-C）: docs/architecture/decision-sev-2-vocab-hold.md
-Decision-SEV-2 packet（ASSIGN は CANDIDATE）: docs/architecture/decision-sev-2-finding-severity-boundary.md
+Decision-SEV-2 packet（ASSIGN は CANDIDATE / NOT SELECTED）: docs/architecture/decision-sev-2-finding-severity-boundary.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
@@ -174,10 +175,13 @@ stable Finding ID: UNCHANGED
 ```text
 Decision-SEV-2 packet: OPEN（単位別）
 SEV-2-PURPOSE: RECORDED（MHLW-first / decision-sev-2-purpose-source.md）
-SEV-2-CONCEPT-INV: OPEN / NOT STARTED
+SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS（decision-sev-2-concept-inv.md）
+  Official concept: 行動関連項目合計点数
+  Generic severity taxonomy: NOT FOUND
 SEV-2-VOCAB: HOLD / V-C（decision-sev-2-vocab-hold.md）
   Formal values / Meanings / Ordering: NOT DEFINED
-SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED
+  Next: Human SEV-2-VOCAB re-evaluation（Option A / B / HOLD）
+SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Implementation: NOT STARTED
 正本: decision-sev-2-finding-severity-boundary.md
 ```
@@ -185,8 +189,9 @@ Implementation: NOT STARTED
 方式 Accepted 後も、値一覧の暗黙採択は禁止する。
 `low`、`medium`、`high`等を暗黙の正本として使用しない。
 ローカル発明の severity taxonomy は FORBIDDEN。
-厚労省一次資料で正式概念の有無を確認するまで値を定義しない。
-正式概念が無い場合は FindingSeverity 自体の削除・不採用も候補とする。
+CONCEPT-INV により公式概念は **行動関連項目合計点数**（閾値 10 / 18 は Severity enum ではない）。
+汎用 FindingSeverity taxonomy は **NOT FOUND**。次は Human VOCAB 再評価（Option A / B）。
+FindingSeverity = "10+" / "18+" 直写は採択しない。
 
 ## AssessmentSnapshotの分離境界
 
@@ -310,8 +315,8 @@ FindingCode 業務カタログ、
 Decision-OP-3 / Decision-RD-3。
 Decision-SEV-1（FindingSeverity ownership）は Accepted（Option A / Issue #8 新 DEC）。
 Decision-SEV-2-PURPOSE は RECORDED（MHLW-first）。
-Decision-SEV-2-CONCEPT-INV は OPEN / NOT STARTED。
-Decision-SEV-2-VOCAB は HOLD / V-C（値 NOT DEFINED）。
+Decision-SEV-2-CONCEPT-INV は COMPLETED（行動関連項目合計点数。汎用 Severity NOT FOUND）。
+Decision-SEV-2-VOCAB は HOLD / V-C（再評価待ち）。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
 AUD-RET-1 / AUD-WR-1 / value safety / hardening / REPLAY-1 / REPO-1 Decision は Accepted（DONE）。
 Replay logical は MERGED（PR #106）。
@@ -334,7 +339,7 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 
 ## 継続HOLD
 
-- FindingSeverity 正式値・意味は SEV-2-VOCAB **HOLD / V-C**（NOT DEFINED）。purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。CONCEPT-INV は OPEN。assignment 境界（SEV-2-ASSIGN）は CANDIDATE。ownership は Decision-SEV-1 Accepted
+- FindingSeverity 正式値・意味は SEV-2-VOCAB **HOLD / V-C**（NOT DEFINED）。purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。CONCEPT-INV は COMPLETED。assignment 境界（SEV-2-ASSIGN）は CANDIDATE / NOT SELECTED。ownership は Decision-SEV-1 Accepted
 - 完全なFinding契約
 - FindingCode 業務カタログ
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
