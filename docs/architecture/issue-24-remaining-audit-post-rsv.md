@@ -99,7 +99,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
 2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。次は実 SharePoint adapter 別 Gate（PR #110 MERGED / SharePoint 実環境 NO-GO）
 3. FindingSeverity Decision-SEV-2 — CONCEPT-INV **COMPLETED**。VOCAB **Accepted / Option A / NOT ADOPTED**。Canonical **COMPLETE（Issue #8 / DEC-018）**。ASSIGN **N/A**
-4. FindingCode 業務カタログ Decision — **FC-1〜FC-6 Accepted**（businessOwnershipRef = Option C）。実装 HOLD。値一覧未決
+4. FindingCode 業務カタログ Decision — **FC-1〜FC-6 Accepted**。残件は [`fc-decision-exit-review.md`](./fc-decision-exit-review.md) の A-class（値一覧・採番・mapping・DEC 番号・identifier strategy）。FC-7 NOT CREATED。実装 HOLD
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
 6. AssessmentSnapshot 完全契約 Entry Criteria（Decision-AS-EC-1。`DEC-009` / `GOV-AUD` / Finding 境界）
 
