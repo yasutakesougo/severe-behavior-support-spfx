@@ -19,4 +19,4 @@ OUT:
 - deployment
 - real data
 
-Issue #29 physical mapping: Accepted / MERGED（PR #108）（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。dependency CLEARED / Entry Review PASS / `#22B` Human GO CONFIRMED（5224579776）/ synthetic IN PROGRESS
+Issue #29 physical mapping: Accepted / MERGED（PR #108）（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。dependency CLEARED / Entry Review PASS / `#22B` PR #110 REVIEW PASS / Ready YES（4888201572）/ Merge NO
