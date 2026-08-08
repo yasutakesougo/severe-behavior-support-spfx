@@ -63,6 +63,10 @@ Required logical information:
 
 `businessOwnershipRef` は Issue #8 の business catalog edition への論理参照であり、DEC 番号の推測採番は行わない。
 
+論理契約の詳細は
+[`decision-fc-6-business-ownership-ref-logical-contract.md`](./decision-fc-6-business-ownership-ref-logical-contract.md)
+（CANDIDATE）で扱う。
+
 ## Version uniqueness responsibility
 
 ```text

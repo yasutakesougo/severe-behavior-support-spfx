@@ -208,6 +208,7 @@ UUID / hash / semver / DEC-number strategy: UNDECIDED / DO NOT START
 actual identifier values: UNDECIDED
 identifier syntax concrete profile: NOT STARTED
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
+businessOwnershipRef logical contract: Decision-FC-6 CANDIDATE（別単位）
 snapshot physical schema: NOT STARTED
 snapshot materialization: NOT STARTED
 snapshot storage / SharePoint location: NOT STARTED / NO-GO
@@ -222,6 +223,10 @@ Implementation Start: HOLD
 ```
 
 AI は上記を補完しない。
+
+`businessOwnershipRef` の論理契約は
+[`decision-fc-6-business-ownership-ref-logical-contract.md`](./decision-fc-6-business-ownership-ref-logical-contract.md)
+で扱う。
 
 ## Contract compatibility gate
 
@@ -281,8 +286,12 @@ real data: PROHIBITED
 
 ```text
 Decision-FC-5: Accepted / Option C
-→ Independent Re-review on new HEAD
-→ Human Ready Decision
+Next substantive unit: Decision-FC-6
+  businessOwnershipRef logical contract
+  （candidate packet / Human Option selection 待ち）
+Implementation Start: HOLD
+Implementation auto-start: FORBIDDEN
 ```
 
-Independent Re-review が PASS しても、Ready / Merge / Implementation を自動実行しない。
+FC-5 Accepted は Implementation Start ではない。
+Decision-FC-6 の Option 採択・DEC 本文 / representation strategy / materialization 着手は別 Human Decision とする。
