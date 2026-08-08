@@ -97,18 +97,20 @@ findByRecordId(recordId)
 findByIdempotencyKey(idempotencyKey)
 ```
 
-物理 filter（Issue `#29` / `#22B`）:
+物理 lookup（Issue `#29` Accepted Revision 2 / `#22B`）:
+
+OrganizationId scope は digest 入力の `boundOrganizationId` で実現する。
+物理 query に `OrganizationId == boundOrganizationId` の追加 filter は付けない。
+正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)
 
 ```text
 findByRecordId(recordId):
-  filter:
-    OrganizationId == boundOrganizationId
-    AND RecordId == recordId
+  key = digest(AUDREC1, boundOrganizationId, recordId)
+  query SbsAudRecordIdentityKey == key
 
 findByIdempotencyKey(idempotencyKey):
-  filter:
-    OrganizationId == boundOrganizationId
-    AND IdempotencyKey == idempotencyKey
+  key = digest(AUDIDEM1, boundOrganizationId, idempotencyKey)
+  query SbsAudIdempotencyIdentityKey == key
 ```
 
 ### Lookup match count
