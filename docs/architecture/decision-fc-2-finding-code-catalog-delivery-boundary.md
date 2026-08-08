@@ -133,7 +133,7 @@ code numbering: UNDECIDED
 criterionId mapping: UNDECIDED
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
 catalog version identifier format: UNDECIDED
-snapshot logical contract: Decision-FC-3 CANDIDATE（別単位）
+snapshot logical contract: Decision-FC-3 Accepted / Option C（別単位）
 snapshot schema: NOT STARTED
 snapshot materialization: NOT STARTED
 snapshot storage: NOT STARTED
@@ -218,12 +218,12 @@ real data: PROHIBITED
 
 ```text
 Decision-FC-2: Accepted / Option C
-Next substantive unit: Decision-FC-3
+Decision-FC-3: Accepted / Option C
   FindingCode catalog snapshot logical contract
-  （candidate packet / Human Option selection 待ち）
+  （complete logical contract surface）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-FC-2 Accepted は Implementation Start ではない。
-Decision-FC-3 の Option 採択・materialization / schema / provider 着手は別 Human Decision とする。
+FC-2 / FC-3 Accepted は Implementation Start ではない。
+materialization / schema / provider 着手は別 Human Decision とする。
