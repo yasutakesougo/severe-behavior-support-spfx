@@ -40,7 +40,7 @@ Decision-AUD-REPO-1（Accepted）: docs/architecture/decision-aud-repo-1-audit-e
 Decision-SEV-1（Accepted / Option A）: docs/architecture/decision-sev-1-finding-severity-vocabulary-ownership.md
 Decision-SEV-2-PURPOSE（RECORDED / MHLW-first）: docs/architecture/decision-sev-2-purpose-source.md
 Decision-SEV-2-CONCEPT-INV（COMPLETED）: docs/architecture/decision-sev-2-concept-inv.md
-Decision-SEV-2-VOCAB（Human Decision Accepted / Option A / NOT ADOPTED；Canonical PENDING_ISSUE_8_DEC_RECORD）: docs/architecture/decision-sev-2-vocab-not-adopted.md
+Decision-SEV-2-VOCAB（Accepted / Option A / NOT ADOPTED；Canonical COMPLETE / DEC-018）: docs/architecture/decision-sev-2-vocab-not-adopted.md
 Decision-SEV-2-VOCAB HOLD（historical）: docs/architecture/decision-sev-2-vocab-hold.md
 Decision-SEV-2 packet（ASSIGN は N/A / DO NOT START）: docs/architecture/decision-sev-2-finding-severity-boundary.md
 Decision-FC-1（Accepted / Option B / Issue #8 new DEC / Implementation HOLD）: docs/architecture/decision-fc-1-finding-code-catalog-ownership.md
@@ -87,7 +87,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
-| DEC正本台帳 | Issue #8 | `DEC-001〜018` + FindingCode catalog ownership は Decision-FC-1 Accepted（Option B / 新 DEC・番号 UNASSIGNED）。FindingSeverity 不採用は **DEC-018**。PURPOSE は MHLW-first RECORDED |
+| DEC正本台帳 | Issue #8 | `DEC-001〜018`。FindingSeverity 不採用は **DEC-018**（comment `5225426738`）。VOCAB Canonical COMPLETE。FindingCode catalog ownership は Decision-FC-1 Accepted（Option B / 新 DEC・番号 UNASSIGNED）。PURPOSE は MHLW-first RECORDED |
 | 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
@@ -171,9 +171,8 @@ stable Finding ID: UNCHANGED
 正本: decision-sev-1-finding-severity-vocabulary-ownership.md
 ```
 
-`DEC-001〜017` に Severity 値正本は無い（FindingSeverity 不採用）。Issue #8 新規 DEC 番号は **UNASSIGNED**。
-不採用 Decision の Issue #8 台帳追記が最終 canonical（Decision-SEV-1 Option A）。
-repository docs は Human Decision durable record であり、Issue #8 DEC 前は最終 Accepted 正本ではない。
+Severity 値正本は無い（FindingSeverity 不採用）。不採用 Decision の最終 canonical は **Issue #8 / DEC-018**（comment `5225426738`）。
+repository docs は Accepted 正本 mirror（Decision-SEV-1 Option A）。
 
 ```text
 Decision-SEV-2 packet: OPEN（単位別）
@@ -182,9 +181,9 @@ SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS（decision-sev-2-concept-
   Official concept: 行動関連項目合計点数
   Generic severity taxonomy: NOT FOUND
 SEV-2-VOCAB Human Decision: Accepted / Option A / FindingSeverity NOT ADOPTED
-SEV-2-VOCAB Canonical: PENDING_ISSUE_8_DEC_RECORD
-  durable record: decision-sev-2-vocab-not-adopted.md
-  Issue #8 non-adoption DEC: REQUIRED（番号 UNASSIGNED）
+SEV-2-VOCAB Canonical: COMPLETE（Issue #8 / DEC-018）
+  Accepted 正本 mirror: decision-sev-2-vocab-not-adopted.md
+  Issue #8 non-adoption DEC: DEC-018（comment 5225426738）
 SEV-2-ASSIGN: N/A / DO NOT START
 Implementation: NOT STARTED
 正本: decision-sev-2-finding-severity-boundary.md
@@ -196,9 +195,9 @@ Implementation: NOT STARTED
 CONCEPT-INV により公式概念は **行動関連項目合計点数**（閾値 10 / 18 は Severity enum ではない）。
 汎用 FindingSeverity taxonomy は **NOT FOUND**。
 FindingSeverity Human Decision は **NOT ADOPTED**（SEV-2-VOCAB Option A）。
-Canonical は **PENDING_ISSUE_8_DEC_RECORD**。
+Canonical は **COMPLETE（Issue #8 / DEC-018）**。
 FindingSeverity = "10+" / "18+" 直写は採択しない。
-代替概念（合計点 / predicates / scheme / RuleSetVersion）は方向のみ。型・実装は Issue #8 DEC 後の別 Entry Criteria。
+代替概念（合計点 / predicates / scheme / RuleSetVersion）は方向のみ。型・実装は別 Entry Criteria（次 unit 未選定）。
 
 ## AssessmentSnapshotの分離境界
 
@@ -323,7 +322,8 @@ Decision-OP-3 / Decision-RD-3。
 Decision-SEV-1（FindingSeverity ownership）は Accepted（Option A / Issue #8 新 DEC）。
 Decision-SEV-2-PURPOSE は RECORDED（MHLW-first）。
 Decision-SEV-2-CONCEPT-INV は COMPLETED（行動関連項目合計点数。汎用 Severity NOT FOUND）。
-Decision-SEV-2-VOCAB は Accepted / Option A（FindingSeverity NOT ADOPTED / Issue #8 / DEC-018）。
+Decision-SEV-2-VOCAB は Accepted / Option A（FindingSeverity NOT ADOPTED）。
+Decision-SEV-2-VOCAB Canonical は COMPLETE（Issue #8 / DEC-018 / comment 5225426738）。
 Decision-SEV-2-ASSIGN は N/A / DO NOT START。
 Decision-FC-1 は Accepted / Option B（Issue #8 new DEC / business DEC）。Implementation HOLD。
 Decision-FC-2 は DO NOT START。
@@ -349,7 +349,7 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 
 ## 継続HOLD
 
-- FindingSeverity Human Decision は SEV-2-VOCAB **Accepted / Option A / NOT ADOPTED**。Canonical は **PENDING_ISSUE_8_DEC_RECORD**（Issue #8 DEC REQUIRED / UNASSIGNED）。purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。CONCEPT-INV は COMPLETED。assignment 境界（SEV-2-ASSIGN）は **N/A / DO NOT START**。ownership は Decision-SEV-1 Accepted。完全なFinding契約
+- FindingSeverity は SEV-2-VOCAB **Accepted / Option A / NOT ADOPTED**。Canonical は **COMPLETE（Issue #8 / DEC-018 / comment 5225426738）**。purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。CONCEPT-INV は COMPLETED。assignment 境界（SEV-2-ASSIGN）は **N/A / DO NOT START**。ownership は Decision-SEV-1 Accepted。完全なFinding契約
 - FindingCode 業務カタログ ownership は Decision-FC-1 **Accepted / Option B**（Issue #8 new DEC / business DEC）。値一覧・FC-2・実装は開始しない（[`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)）
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
 - finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）

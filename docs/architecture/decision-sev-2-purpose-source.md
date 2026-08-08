@@ -8,7 +8,7 @@ FindingSeverity の用途一次情報として、
 本単位は **SEV-2-VOCAB の値採択ではない**。
 **SEV-2-ASSIGN でもない**。
 VOCAB Human Decision は再評価により **Accepted / Option A（FindingSeverity NOT ADOPTED）**。
-Canonical は **PENDING_ISSUE_8_DEC_RECORD**（Issue #8 DEC REQUIRED）。
+Canonical は **COMPLETE（Issue #8 / DEC-018）**。
 
 ## 基準
 
@@ -17,14 +17,14 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-SEV-2-PURPOSE
 Status: RECORDED（Human purpose-source policy）
 SEV-2-VOCAB: Human Decision Accepted / Option A / FindingSeverity NOT ADOPTED
-  Canonical status: PENDING_ISSUE_8_DEC_RECORD（Issue #8 DEC REQUIRED / UNASSIGNED）
-  durable record: decision-sev-2-vocab-not-adopted.md
+  Canonical status: COMPLETE（Issue #8 / DEC-018）
+  Accepted 正本 mirror: decision-sev-2-vocab-not-adopted.md
 SEV-2-ASSIGN: N/A / DO NOT START
 SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
   正本: decision-sev-2-concept-inv.md
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
-Depends on: Decision-SEV-2-VOCAB Human Decision（Canonical は Issue #8 DEC 待ち）
+Depends on: Decision-SEV-2-VOCAB Accepted / DEC-018 COMPLETE
 main before this canonicalization: fba1e8e04a1fd731def03bc4c5a7f21dd3e25d8a
 PR #114 / SEV-2-VOCAB HOLD: MERGED
 PR #115 / SEV-2-PURPOSE: MERGED
@@ -33,7 +33,7 @@ PR #115 / SEV-2-PURPOSE: MERGED
 上位入口:
 
 - [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
-- [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)（Human Decision durable record）
+- [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)（Accepted 正本 mirror / DEC-018）
 - [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)（historical HOLD）
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
@@ -129,9 +129,9 @@ Investigation result: COMPLETED
 Official concept exists: YES（行動関連項目合計点数）
 Generic FindingSeverity taxonomy: NOT FOUND
 SEV-2-VOCAB Human Decision: Accepted / Option A / FindingSeverity NOT ADOPTED
-SEV-2-VOCAB Canonical: PENDING_ISSUE_8_DEC_RECORD
-  durable record: decision-sev-2-vocab-not-adopted.md
-Issue #8 DEC path: REQUIRED for non-adoption Decision（番号 UNASSIGNED）
+SEV-2-VOCAB Canonical: COMPLETE（Issue #8 / DEC-018）
+  Accepted 正本 mirror: decision-sev-2-vocab-not-adopted.md
+Issue #8 DEC path: COMPLETE（DEC-018 / comment 5225426738）
 SEV-2-ASSIGN: N/A / DO NOT START
 ```
 
@@ -142,18 +142,18 @@ SEV-2-ASSIGN: N/A / DO NOT START
 2. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査 — COMPLETED（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)）
 3. SEV-2-VOCAB 再評価（Human）— **Human Decision Accepted / Option A**
    - FindingSeverity 不採用 / 契約からの除外
-   - durable record: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
-   - Canonical status: PENDING_ISSUE_8_DEC_RECORD（最終 Accepted 正本ではない）
-4. Issue #8 新 DEC 記録（番号は現在 UNASSIGNED）
-   - 不採用 Decision を記録対象とする（Decision-SEV-1 Option A）
-   - これが最終 canonical ownership / change control
-   - 記録後に repository docs を最終 Accepted 正本へ更新してよい
-5. 分岐後の ASSIGN / 実装
+   - Accepted 正本 mirror: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+   - Canonical status: COMPLETE（Issue #8 / DEC-018）
+4. Issue #8 新 DEC 記録 — **DEC-018**（comment `5225426738`）
+   - 不採用 Decision を記録（Decision-SEV-1 Option A）
+   - 最終 canonical ownership / change control = Issue #8 / DEC-018
+5. repository docs を最終 Accepted 正本 mirror へ昇格
+6. 分岐後の ASSIGN / 実装
    - Option A 不採用 / 契約除外のため:
      SEV-2-ASSIGN = N/A / DO NOT START
      実装への自動進行 = FORBIDDEN
    - 代替概念（合計点 / predicates / scheme / RuleSetVersion）は
-     Issue #8 DEC 後の別 Entry Criteria + Human Implementation Start まで開始しない
+     次 substantive unit 未選定 / 別 Entry Criteria + Human Implementation Start まで開始しない
 ```
 
 ```text
@@ -169,7 +169,7 @@ Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 | Decision-SEV-1 ownership | Accepted / Option A |
 | **SEV-2-PURPOSE**（本単位） | **RECORDED**（MHLW-first） |
 | **SEV-2-CONCEPT-INV** | **COMPLETED / OFFICIAL_CONCEPT_EXISTS**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)） |
-| SEV-2-VOCAB | **Human Decision Accepted / Option A / NOT ADOPTED**；**Canonical PENDING_ISSUE_8_DEC_RECORD** |
+| SEV-2-VOCAB | **Human Decision Accepted / Option A / NOT ADOPTED**；**Canonical COMPLETE（Issue #8 / DEC-018）** |
 | SEV-2-ASSIGN | **N/A / DO NOT START** |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |
@@ -185,7 +185,7 @@ Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 - FindingSeverity = "10+" / "18+" の採択
 - 汎用 severity taxonomy の発明
 - SharePoint / adapter / UI / deploy / 実データ
-- Issue #8 DEC 番号の推測採番
+- 代替概念 Entry Criteria / 実装開始（未選定）
 - 不採用時の Issue #8 記録経路省略（禁止。本単位で経路は固定済み）
 
 ## 変更禁止境界

@@ -4,8 +4,8 @@
 **結果正本**である。
 
 本単位は **investigation result** である。
-VOCAB の最終 Accepted 正本ではない（Issue #8 DEC が最終 canonical）。
-Human Decision（Option A / NOT ADOPTED）は後続再評価で記録済み。
+VOCAB の最終 canonical は Issue #8 / DEC-018。
+Human Decision（Option A / NOT ADOPTED）は再評価で記録済み。repository docs は mirror。
 **SEV-2-ASSIGN でもない**。
 
 ## 基準
@@ -17,8 +17,8 @@ Kind: investigation result（Decision Accepted ではない）
 Status: COMPLETED / OFFICIAL_CONCEPT_EXISTS
 SEV-2-PURPOSE: RECORDED（MHLW-first）
 SEV-2-VOCAB Human Decision: Accepted / Option A / FindingSeverity NOT ADOPTED
-SEV-2-VOCAB Canonical: PENDING_ISSUE_8_DEC_RECORD
-  （durable record: decision-sev-2-vocab-not-adopted.md）
+SEV-2-VOCAB Canonical: COMPLETE（Issue #8 / DEC-018）
+  （Accepted 正本 mirror: decision-sev-2-vocab-not-adopted.md）
 SEV-2-ASSIGN: N/A / DO NOT START
 Implementation: NOT STARTED
 Depends on: Decision-SEV-2-PURPOSE
@@ -29,7 +29,7 @@ PR #115 / SEV-2-PURPOSE: MERGED
 上位入口:
 
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
-- [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)（Human Decision durable record）
+- [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)（Accepted 正本 mirror / DEC-018）
 - [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)（historical HOLD）
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -150,18 +150,18 @@ Official concept that exists instead: 行動関連項目合計点数 (+ regulato
 ```text
 Primary-source alignment (investigation judgment): Option A is the stronger candidate
 SEV-2-VOCAB Human Decision: Accepted / Option A / FindingSeverity NOT ADOPTED
-SEV-2-VOCAB Canonical: PENDING_ISSUE_8_DEC_RECORD
-durable record: decision-sev-2-vocab-not-adopted.md
+SEV-2-VOCAB Canonical: COMPLETE（Issue #8 / DEC-018）
+Accepted 正本 mirror: decision-sev-2-vocab-not-adopted.md
 ```
 
 Option A 採択後:
 
 ```text
-Issue #8 新 DEC: REQUIRED（Decision-SEV-1 Option A / non-adoption path / 番号 UNASSIGNED）
-Canonical status until recorded: PENDING_ISSUE_8_DEC_RECORD
+Issue #8 新 DEC: DEC-018 Accepted（comment 5225426738）
+Canonical status: COMPLETE
 SEV-2-ASSIGN: N/A / DO NOT START
 Implementation auto-start: FORBIDDEN
-代替概念の型・schema・実装: Issue #8 DEC 後の別 Entry Criteria + Human Implementation Start
+代替概念の型・schema・実装: 次 substantive unit 未選定（別 Entry Criteria）
 ```
 
 ## 停止点
@@ -169,13 +169,13 @@ Implementation auto-start: FORBIDDEN
 ```text
 SEV-2-CONCEPT-INV: RESULT AVAILABLE（本正本）
 SEV-2-VOCAB Human Decision: Accepted / Option A / NOT ADOPTED
-SEV-2-VOCAB Canonical: PENDING_ISSUE_8_DEC_RECORD
+SEV-2-VOCAB Canonical: COMPLETE（Issue #8 / DEC-018）
 Do not start:
   SEV-2-ASSIGN
   TypeScript FindingSeverity type
   validator
   fixture
-  代替モデル実装（Issue #8 DEC 後の別 Entry Criteria まで）
+  代替モデル実装（次 substantive unit 未選定 / 別 Entry Criteria）
 ```
 
 ## 分離（維持）
@@ -185,7 +185,7 @@ Do not start:
 | Decision-SEV-1 ownership | Accepted / Option A |
 | SEV-2-PURPOSE | RECORDED（MHLW-first） |
 | **SEV-2-CONCEPT-INV**（本単位） | **COMPLETED / OFFICIAL_CONCEPT_EXISTS** |
-| SEV-2-VOCAB | **Human Decision Accepted / Option A / NOT ADOPTED**；**Canonical PENDING_ISSUE_8_DEC_RECORD** |
+| SEV-2-VOCAB | **Human Decision Accepted / Option A / NOT ADOPTED**；**Canonical COMPLETE（Issue #8 / DEC-018）** |
 | SEV-2-ASSIGN | **N/A / DO NOT START** |
 | TypeScript / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |
@@ -201,7 +201,7 @@ Do not start:
 - 既存 `classifyBehaviorScore` / 点数帯の再定義
 - 代替概念の型・schema・実装開始
 - TypeScript FindingSeverity 型・validator・fixture
-- Issue #8 DEC 番号の推測採番
+- 代替概念 Entry Criteria / 実装開始（未選定）
 - SharePoint / adapter / UI / deploy / 実データ
 
 ## 変更禁止境界

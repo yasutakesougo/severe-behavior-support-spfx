@@ -3,17 +3,17 @@
 この文書は、**Decision-SEV-2-VOCAB** 再評価の Decision Packet である。
 比較材料と Human Decision 記録を正本化する。
 
-Human Decision durable record:
+Accepted 正本 mirror:
 [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
 
 ```text
 Human Decision: Accepted / Option A / NOT ADOPTED
-Canonical status: PENDING_ISSUE_8_DEC_RECORD
-Issue #8 DEC: REQUIRED / UNASSIGNED
+Canonical status: COMPLETE
+Canonical ownership / change control: Issue #8 / DEC-018
+Issue #8 comment ID: 5225426738
 ```
 
-Issue #8 DEC 記録前は、repository docs を最終 Accepted 正本として扱わない
-（Decision-SEV-1 Option A / P1-001）。
+Issue #8 / DEC-018（comment `5225426738`）記録済み。repository docs は Accepted 正本 mirror。
 
 ## 基準
 
@@ -24,8 +24,9 @@ Status: CONSUMED（Human Decision recorded）
 Selected: Option A
 FindingSeverity: NOT ADOPTED
 SEV-2-ASSIGN: N/A / DO NOT START
-Canonical status: PENDING_ISSUE_8_DEC_RECORD
-Issue #8 DEC: REQUIRED / UNASSIGNED
+Canonical status: COMPLETE
+Canonical ownership / change control: Issue #8 / DEC-018
+Issue #8 comment ID: 5225426738
 main at packet baseline: b0cc1f75be274fda04f16bc339de76b1bd8cec8c
 PR #117 merge ancestor: PASS
 ```
@@ -42,7 +43,7 @@ SEV-2-VOCAB:          HOLD / V-C / NOT ACCEPTED（再評価前）
 SEV-2-ASSIGN:         CANDIDATE / NOT SELECTED（再評価前）
 Implementation:       NOT STARTED
 Decision-SEV-1:       Accepted / Option A
-Issue #8 DEC number:  UNASSIGNED
+Issue #8 DEC number:  UNASSIGNED（再評価時点。後に DEC-018）
 ```
 
 問い:
@@ -119,7 +120,7 @@ Issue #8 最終 DEC 本文: まだ作成しない
 
 | ID | Kind | Content |
 |---|---|---|
-| R-1 | FACT | A/B 確定時は Issue #8 新 DEC 記録が必須（番号 UNASSIGNED） |
+| R-1 | FACT | A 確定時は Issue #8 新 DEC 記録が必須 → **DEC-018** で完了 |
 | R-2 | FACT | ASSIGN / TS / validator / 実装への自動進行は禁止 |
 | R-3 | INFERENCE | Option A 採択後も代替モデル契約が無いと実装へ進めない |
 
@@ -142,17 +143,16 @@ If A:
   SEV-2-ASSIGN = N/A / DO NOT START
 
 Canonical status:
-  PENDING_ISSUE_8_DEC_RECORD
+  COMPLETE（Issue #8 / DEC-018）
 
 Issue #8 DEC:
-  REQUIRED / UNASSIGNED
+  DEC-018 Accepted（comment 5225426738）
 
 Implementation:
   NOT STARTED
 ```
 
-Durable record: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
-（最終 Accepted 正本ではない。Issue #8 DEC 待ち）
+Accepted 正本 mirror: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
 
 ## 10. Explicit stop boundary（Accepted 後も維持）
 
@@ -162,7 +162,7 @@ Do not auto-start:
   TypeScript FindingSeverity type
   validator / fixture
   代替モデル実装
-  Issue #8 DEC 番号推測採番
+  Next substantive unit（未選定）
   SharePoint / tenant / M365 / Entra / Deploy
   real data
 ```
