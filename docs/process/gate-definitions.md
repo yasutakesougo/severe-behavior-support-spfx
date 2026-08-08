@@ -113,6 +113,17 @@ PR をマージ候補へ進めてよいかを、実装者とは別視点で監�
 - 追加確認待ち: `HOLD`
 - マージ不可: `FAIL`
 
+### 自己参照 stale
+
+マージ前に当該 PR 自身のライブ状態（`Merge: NO` / `NOT RUN` / `Next: Merge GO` 等）を repository docs へ書いた結果として残る stale は、Merge Gate failure にしない。
+
+正本: `docs/process/self-referential-gate-policy.md`（Self-Referential Gate Policy v1）
+
+- 分類: `EXPECTED_P2` / `NON_BLOCKING`
+- 専用 sync PR: `NO_DEDICATED_SYNC_PR`
+- 修正: 次の substantive PR が同文書を自然に触るときのみ opportunistic に更新
+- Live gate（`Ready` / `Merge pending` / `Next`）は PR body / Issue comment に限定し、repository docs へ横断複製しない
+
 ## Release Gate
 
 ### 目的

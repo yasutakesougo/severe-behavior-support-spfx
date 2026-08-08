@@ -43,6 +43,12 @@
 - Merge Gate
 - Release Gate
 
+自己参照 stale（マージ後に残る当該 PR 自身の `Merge: NOT RUN` 等）の扱い:
+
+- 正本: `docs/process/self-referential-gate-policy.md`
+- Gate failure にしない（`EXPECTED_P2` / `NON_BLOCKING`）
+- 専用 sync PR は原則禁止（`NO_DEDICATED_SYNC_PR`）
+
 ## 権限境界
 
 上位正本: `docs/decisions/DEC-AI-ORG-003.md`
@@ -83,6 +89,7 @@
 |---|---|
 | Skill 実行順・AI/人の責務 | `docs/process/development-process.md` |
 | Gate 通過条件 | `docs/process/gate-definitions.md` |
+| 自己参照 Gate 方針 | `docs/process/self-referential-gate-policy.md` |
 | 品質ゲート詳細 | `docs/development/quality-gates.md` |
 | Skill カタログ | `docs/process/skill-catalog.md` |
 | 共通判定 | `.agents/skills/_shared/judgement-rules.md` |

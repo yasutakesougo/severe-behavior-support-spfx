@@ -98,6 +98,7 @@ Evidence は「実行したこと」と「見ていないこと」を区別し�
 7. 承認証跡の対象・範囲・版が現操作と不一致
 8. CI 必須チェック未実施または失敗なのに完了扱いを要求
 9. 呼び出し Skill 未導入なのに当該工程の完了を要求
+10. 自己参照 stale（マージ済み PR 自身の `Merge: NOT RUN` 等）だけを消す専用 sync PR の作成要求（Human 明示の hygiene-only を除く。正本: `docs/process/self-referential-gate-policy.md`）
 
 停止時の出力は `HOLD` または `FAIL` とし、不足項目と Next Actions を残す。
 
@@ -136,6 +137,7 @@ Background Agent 実行が完了とみなせる条件:
 |---|---|
 | Governance | `docs/process/ai-governance.md` |
 | Workflow | `docs/process/ai-workflow.md` |
+| 自己参照 Gate 方針 | `docs/process/self-referential-gate-policy.md` |
 | Cursor Agent Adapter | `.agents/commands/adapters/cursor-agent.md` |
 | handoff-builder | `.agents/skills/handoff-builder/SKILL.md` |
 | auto-handoff | `scripts/auto-handoff.mjs` |
