@@ -287,11 +287,12 @@ real data: PROHIBITED
 ```text
 Decision-FC-4: Accepted / Option C
 Decision-FC-5: Accepted / Option C
-  Catalog version identifier representation ownership
-  （split ownership with explicit syntax-validation ceiling）
+Decision-FC-6: CANDIDATE / NOT ACCEPTED
+  businessOwnershipRef logical contract
+  （candidate packet / Human Option selection 待ち）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
 FC-4 / FC-5 Accepted は Implementation Start ではない。
-UUID / hash / semver 等の representation strategy・FC-6 着手は別 Human Decision とする。
+UUID / hash / semver 等の representation strategy・FC-6 Option 採択は別 Human Decision とする。

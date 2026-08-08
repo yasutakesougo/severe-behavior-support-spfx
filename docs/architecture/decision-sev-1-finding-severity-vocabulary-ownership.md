@@ -105,7 +105,7 @@ Issue #8 comment ID: 5225426738
 | assignment algorithm / caller-supplied 境界 | SEV-2-ASSIGN = N/A / DO NOT START（不採用のため） |
 | FindingIdentity / stable Finding ID | UNCHANGED |
 | 完全 Finding 契約 | HOLD（SEV-2 以降 + Entry Criteria） |
-| FindingCode 業務カタログ | Decision-FC-1 Accepted / Option B（Issue #8 new DEC）。FC-2〜FC-5 Accepted / Option C |
+| FindingCode 業務カタログ | Decision-FC-1 Accepted / Option B（Issue #8 new DEC）。FC-2〜FC-5 Accepted / Option C。FC-6 CANDIDATE |
 | SharePoint / M365 / Deploy | NO-GO |
 
 ## 実装ゲート

@@ -55,7 +55,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。`#29` MERGED。`#22B` PR #110 MERGED（synthetic）。SharePoint 実環境 NO-GO |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | Decision-SEV-1 Accepted（Option A）。PURPOSE RECORDED。CONCEPT-INV COMPLETED。VOCAB Accepted / Option A / NOT ADOPTED；Canonical COMPLETE（Issue #8 / DEC-018） | Severity 不採用完了。完全 Finding は別 | **不可**（Severity 型は作らない） | ASSIGN N/A。代替概念は別 Entry |
-| FindingCode 業務カタログ | Decision-FC-1 Accepted / Option B（Issue #8 new DEC） | ownership COMPLETE。FC-2〜FC-5 Accepted / Option C。値一覧未決 | **不可**（実装 HOLD） | Issue #8 FindingCode DEC 番号 UNASSIGNED。値一覧・UUID/hash/semver・schema / storage / provider は後続 |
+| FindingCode 業務カタログ | Decision-FC-1 Accepted / Option B（Issue #8 new DEC） | ownership COMPLETE。FC-2〜FC-5 Accepted / Option C。FC-6 CANDIDATE。値一覧未決 | **不可**（実装 HOLD） | Issue #8 FindingCode DEC 番号 UNASSIGNED。値一覧・UUID/hash/semver・schema / storage / provider は後続 |
 | AssessmentSnapshot 完全契約・保存・DTO・findingIds | Issue #24 | HOLD（`DEC-009` / `GOV-AUD`） | **不可** | Result変換のみ完了 |
 | AssessmentSnapshot 候補生成（Result変換超） | Issue #24 | HOLD（Entry Criteria） | **不可** | Finding 本体境界と混線しやすい |
 | Decision-OP-3（観察期間フィールド追加） | 別 Decision | HOLD（制度/Schema） | **不可** | メンバシップ純関数は完了 |
@@ -78,7 +78,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | FindingSeverity DEC 方式 A/B | Decision-SEV-1 Accepted（Option A） | CONCEPT-INV COMPLETED。VOCAB Human Decision Option A 不採用 Accepted。Canonical COMPLETE（Issue #8 / DEC-018）。ASSIGN N/A |
 | Finding 再オープン Decision | lifecycle（Decision-FLR-1 Accepted・実装 NONE） | 次単位へ入れない（変更不要） |
 | Handoff 所有指定 | transition 純関数 | Decision-HO-1 Accepted（#17）。実保存は別 |
-| FindingCode カタログ Decision | 写像表・採番 | FC-1〜FC-5 Accepted。representation strategy / FC-6 DO NOT START。値一覧は後続。次単位へ値を入れない |
+| FindingCode カタログ Decision | 写像表・採番 | FC-1〜FC-5 Accepted。FC-6 businessOwnershipRef CANDIDATE。値一覧は後続。次単位へ値を入れない |
 
 ## 選定結果
 
@@ -99,7 +99,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
 2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。次は実 SharePoint adapter 別 Gate（PR #110 MERGED / SharePoint 実環境 NO-GO）
 3. FindingSeverity Decision-SEV-2 — CONCEPT-INV **COMPLETED**。VOCAB **Accepted / Option A / NOT ADOPTED**。Canonical **COMPLETE（Issue #8 / DEC-018）**。ASSIGN **N/A**
-4. FindingCode 業務カタログ Decision — **FC-1〜FC-5 Accepted**（identifier representation ownership = Option C）。実装 HOLD。値一覧未決。FC-6 DO NOT START
+4. FindingCode 業務カタログ Decision — **FC-1〜FC-5 Accepted**。**FC-6 CANDIDATE**（businessOwnershipRef logical contract）。実装 HOLD。値一覧未決
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
 6. AssessmentSnapshot 完全契約 Entry Criteria（Decision-AS-EC-1。`DEC-009` / `GOV-AUD` / Finding 境界）
 
