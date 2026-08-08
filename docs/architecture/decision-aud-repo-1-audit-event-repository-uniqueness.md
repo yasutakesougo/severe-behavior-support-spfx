@@ -105,13 +105,25 @@ OrganizationId scope は digest 入力の `boundOrganizationId` で実現する�
 
 ```text
 findByRecordId(recordId):
-  key = digest(AUDREC1, boundOrganizationId, recordId)
+  key = SHA-256(
+          ASCII("AUDREC1")
+          || encodeJsString(boundOrganizationId)
+          || encodeJsString(recordId)
+        ) as lowercase 64 hex
   query SbsAudRecordIdentityKey == key
 
 findByIdempotencyKey(idempotencyKey):
-  key = digest(AUDIDEM1, boundOrganizationId, idempotencyKey)
+  key = SHA-256(
+          ASCII("AUDIDEM1")
+          || encodeJsString(boundOrganizationId)
+          || encodeJsString(idempotencyKey)
+        ) as lowercase 64 hex
   query SbsAudIdempotencyIdentityKey == key
 ```
+
+`encodeJsString` / domain-tag ASCII 契約の正本は
+[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。
+domain tag を length-prefix UTF-16 framing に入れない。
 
 ### Lookup match count
 
