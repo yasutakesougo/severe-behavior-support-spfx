@@ -54,7 +54,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 |---|---|---|---|---|
 | Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。`#29` MERGED。`#22B` PR #110 MERGED（synthetic）。SharePoint 実環境 NO-GO |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
-| FindingSeverity / 完全 Finding | Decision-SEV-1 Accepted（Option A）。PURPOSE RECORDED（MHLW-first）。VOCAB HOLD / V-C | HOLD（値 NOT DEFINED） | **不可** | CONCEPT-INV OPEN。ASSIGN は別 CANDIDATE。暗黙値禁止 |
+| FindingSeverity / 完全 Finding | Decision-SEV-1 Accepted（Option A）。PURPOSE RECORDED（MHLW-first）。CONCEPT-INV COMPLETED。VOCAB HOLD / V-C | HOLD（値 NOT DEFINED） | **不可** | 公式概念は行動関連項目合計点数。ASSIGN は別 CANDIDATE。暗黙値禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
 | AssessmentSnapshot 完全契約・保存・DTO・findingIds | Issue #24 | HOLD（`DEC-009` / `GOV-AUD`） | **不可** | Result変換のみ完了 |
 | AssessmentSnapshot 候補生成（Result変換超） | Issue #24 | HOLD（Entry Criteria） | **不可** | Finding 本体境界と混線しやすい |
@@ -98,7 +98,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
 2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。次は実 SharePoint adapter 別 Gate（PR #110 MERGED / SharePoint 実環境 NO-GO）
-3. FindingSeverity Decision-SEV-2 — PURPOSE **RECORDED**（MHLW-first）。次は CONCEPT-INV。VOCAB **HOLD / V-C**。ASSIGN は別
+3. FindingSeverity Decision-SEV-2 — PURPOSE **RECORDED**。CONCEPT-INV **COMPLETED**。次は Human VOCAB 再評価。VOCAB **HOLD / V-C**。ASSIGN は別
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
 6. AssessmentSnapshot 完全契約 Entry Criteria（Decision-AS-EC-1。`DEC-009` / `GOV-AUD` / Finding 境界）
@@ -138,7 +138,7 @@ Deploy: NO-GO
 
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
-- FindingSeverity / 完全 Finding（SEV-1 ownership Accepted。PURPOSE MHLW-first RECORDED。CONCEPT-INV OPEN。SEV-2-VOCAB HOLD / V-C。ASSIGN Candidate）が未了
+- FindingSeverity / 完全 Finding（SEV-1 ownership Accepted。PURPOSE MHLW-first RECORDED。CONCEPT-INV COMPLETED。SEV-2-VOCAB HOLD / V-C。ASSIGN Candidate）が未了
 - AuditEvent 実 SharePoint adapter / tenant integration（`#22B` synthetic は MERGED）が未了
 
 Decision-FLR-1 / Decision-HO-1 / Decision-SEV-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 / persistence technical contract（PR #99）/ contract hardening（PR #102）/ logical persistence（PR #104）/ replay logical（PR #106）は完了扱い。

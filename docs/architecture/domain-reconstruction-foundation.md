@@ -163,10 +163,10 @@ AssessmentSnapshotのResult技術設計は
 FindingSeverityの vocabulary ownership は Decision-SEV-1 Accepted（Option A）。
 Issue #8へ新しいDECを追加する方式とする。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。
 purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。ローカル severity taxonomy FORBIDDEN。
-正式概念調査（SEV-2-CONCEPT-INV）は OPEN / NOT STARTED。
-正式値・意味（SEV-2-VOCAB）は **HOLD / V-C**（NOT DEFINED）。
+正式概念調査（SEV-2-CONCEPT-INV）は COMPLETED / OFFICIAL_CONCEPT_EXISTS（行動関連項目合計点数。汎用 Severity NOT FOUND）。
+正式値・意味（SEV-2-VOCAB）は **HOLD / V-C**（NOT DEFINED。Human 再評価待ち）。
 assignment / caller-supplied 境界（SEV-2-ASSIGN）は分離して Candidate。
-値一覧を暗黙採用しない。
+値一覧を暗黙採用しない。`"10+"` / `"18+"` の即時 Severity 化も禁止。
 
 ## Requirement IDトレーサビリティ
 
@@ -212,7 +212,7 @@ assignment / caller-supplied 境界（SEV-2-ASSIGN）は分離して Candidate�
 
 ## 継続HOLD
 
-- FindingSeverity 正式値・意味は SEV-2-VOCAB HOLD / V-C（NOT DEFINED）。PURPOSE は MHLW-first RECORDED。CONCEPT-INV は OPEN。assignment 境界は SEV-2-ASSIGN Candidate。ownership は SEV-1 Accepted。完全なFinding契約
+- FindingSeverity 正式値・意味は SEV-2-VOCAB HOLD / V-C（NOT DEFINED）。PURPOSE は MHLW-first RECORDED。CONCEPT-INV は COMPLETED（行動関連項目合計点数）。assignment 境界は SEV-2-ASSIGN Candidate。ownership は SEV-1 Accepted。完全なFinding契約
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存技術契約は MERGED（PR #99 / [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)）。実装前次工程は #22A 整合（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）

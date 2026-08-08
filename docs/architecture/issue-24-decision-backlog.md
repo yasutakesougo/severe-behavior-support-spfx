@@ -41,7 +41,7 @@ READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Decision-SEV-1: Accepted（Option A / Issue #8 新 DEC）
 Decision-SEV-2-PURPOSE: RECORDED（MHLW-first）
-Decision-SEV-2-CONCEPT-INV: OPEN / NOT STARTED
+Decision-SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
 Decision-SEV-2-VOCAB: HOLD（V-C / NOT DEFINED）
 Decision-SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED
 Issue #24 Close: NO-GO
@@ -55,6 +55,7 @@ SharePoint / M365: 変更なし
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
 - [`domain-reconstruction-foundation.md`](./domain-reconstruction-foundation.md)
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
+- [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 
 ## Phase 1 — read-only 再監査結果
 
@@ -140,7 +141,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-AUD-REPLAY-1** | existing-result verification / safe replay | **Accepted**。正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md) | Issue `#22A` | IDEM-1 / ALIGN-1 / PR #104 | Replay MERGED（PR #106） |
 | **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | `#29` mapping MERGED（PR #108）→ Entry PASS（5224544473）→ `#22B` Human GO（5224579776）→ PR #110 MERGED（62a43d7f…） |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | **Accepted**（Option A）。Issue #8 に新しい DEC を追加する方式。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。正本: [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md) | Issue #8（新 DEC。番号 UNASSIGNED） | 方式選択前に値一覧を採択しない（維持） | **Decision-SEV-2** packet へ進める（実装は開始しない） |
-| **Decision-SEV-2** | FindingSeverity boundary packet（PURPOSE / CONCEPT-INV / VOCAB / ASSIGN を分離） | packet: [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)。**PURPOSE = RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)。MHLW-first）。**CONCEPT-INV = OPEN / NOT STARTED**。**SEV-2-VOCAB = HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)。値 NOT DEFINED）。**SEV-2-ASSIGN = CANDIDATE**（独立。一括 Accepted 禁止） | Issue #8 新 DEC（SEV-1 Option A） | **SEV-1 Accepted** | CONCEPT-INV 後に VOCAB 再評価。ASSIGN は別判断。実装 NOT STARTED |
+| **Decision-SEV-2** | FindingSeverity boundary packet（PURPOSE / CONCEPT-INV / VOCAB / ASSIGN を分離） | packet: [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)。**PURPOSE = RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)。MHLW-first）。**CONCEPT-INV = COMPLETED / OFFICIAL_CONCEPT_EXISTS**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)。行動関連項目合計点数。汎用 Severity NOT FOUND）。**SEV-2-VOCAB = HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)。値 NOT DEFINED）。**SEV-2-ASSIGN = CANDIDATE**（独立。一括 Accepted 禁止） | Issue #8 新 DEC（SEV-1 Option A） | **SEV-1 Accepted** | Human VOCAB 再評価（Option A 不採用が強い候補・未 Accepted）。ASSIGN は別判断。実装 NOT STARTED |
 | **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
 | **Decision-FC-2** | Catalog delivery boundary（固定列挙 vs caller-supplied 外部カタログ） | HOLD。現行組立は caller-supplied `isReasonCode` のみ | FC-1 の所有者 | **FC-1**。採番・写像表の推測禁止 | カタログ契約 docs（domain固定 or 外部）→ 実装は別 Gate |
 | **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | HOLD。メンバシップ純関数は完了。フィールド追加・制度日数・`periodTo` 開放終端は未決 | 別 Decision（所有は OP-1 で #24 メンバシップのみ確定。Schema は #26 関連） | OP-1/OP-2 Accepted 済み前提。既存 `evaluateObservationPeriodMembership` を変更しない | Schema/フィールド Decision Accepted 後の契約・（必要なら）別純関数。既存関数への制度値混入禁止 |
@@ -188,8 +189,8 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | ownership / change control | Decision-SEV-1 Accepted / Option A | **Issue #8 に新しい DEC を追加** |
 | Contract / Identity | Decision-SEV-1 | Contract break **NO**。FindingIdentity / stable Finding ID **UNCHANGED** |
 | purpose source | SEV-2-PURPOSE RECORDED | **MHLW / statutory-regulatory source first**。ローカル severity taxonomy **FORBIDDEN** |
-| 制度概念調査 | SEV-2-CONCEPT-INV | **OPEN / NOT STARTED**（厚労省一次資料。ASSIGN より前） |
-| 正式値・意味 | SEV-2-VOCAB HOLD / V-C | **NOT DEFINED**（暗黙値禁止。制度概念確認待ち） |
+| 制度概念調査 | SEV-2-CONCEPT-INV COMPLETED | **OFFICIAL_CONCEPT_EXISTS**（行動関連項目合計点数。閾値 >=10 / >=18 は predicates。汎用 Severity NOT FOUND） |
+| 正式値・意味 | SEV-2-VOCAB HOLD / V-C | **NOT DEFINED**（Human VOCAB 再評価待ち。`"10+"`/`"18+"` 即時採択禁止） |
 | domain 算出 vs caller-supplied | SEV-2-ASSIGN（CANDIDATE・VOCAB と分離） | **未決**（独立承認。本 VOCAB HOLD で確定しない） |
 
 ### C. FindingCode 業務カタログ（Decision-FC-1 / FC-2）
@@ -234,7 +235,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 3. Decision-AUD-ALIGN-1  #22A write-result / idempotency 整合 — Accepted
 4. Decision-AUD-IDEM-1 / AUD-SAN-VALUE-1 / AUD-SAN-1 / AUD-REPLAY-1 / AUD-REPO-1 — Accepted。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）
 5. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）— **Accepted（Option A）**
-6. Decision-SEV-2   FindingSeverity boundary — PURPOSE **RECORDED**；CONCEPT-INV **OPEN**；VOCAB **HOLD / V-C**；ASSIGN は CANDIDATE（分離維持）
+6. Decision-SEV-2   FindingSeverity boundary — PURPOSE **RECORDED**；CONCEPT-INV **COMPLETED**；VOCAB **HOLD / V-C**；ASSIGN は CANDIDATE（分離維持）
 7. Decision-FC-1    FindingCode catalog ownership
 8. Decision-FC-2    Catalog delivery boundary（FC-1 後）
 9. Decision-OP-3    Observation period Schema / 制度 / 開放終端
@@ -244,7 +245,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
 **Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 MERGED（62a43d7f…）。次工程は実 SharePoint adapter 別 Gate。SharePoint 実環境操作は NO-GO。
-SEV は SEV-1 → SEV-2 packet。PURPOSE は MHLW-first。CONCEPT-INV が次。VOCAB は **HOLD / V-C**。ASSIGN は独立 CANDIDATE。一括 Accepted しない。FC は FC-1→FC-2 の順を崩さない。
+SEV は SEV-1 → SEV-2 packet。PURPOSE は MHLW-first。CONCEPT-INV は COMPLETED（行動関連項目合計点数）。VOCAB は **HOLD / V-C**（Human 再評価待ち）。ASSIGN は独立 CANDIDATE。一括 Accepted しない。FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
@@ -324,7 +325,7 @@ READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Decision-SEV-1: Accepted（Option A）
 Decision-SEV-2-PURPOSE: RECORDED（MHLW-first）
-Decision-SEV-2-CONCEPT-INV: OPEN / NOT STARTED
+Decision-SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
 Decision-SEV-2-VOCAB: HOLD（V-C / NOT DEFINED）
 Decision-SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED（Implementation NOT STARTED）
 Issue #24 Close: NO-GO
@@ -335,12 +336,13 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. SEV-2-PURPOSE（MHLW-first purpose source）を正本へ記録する
-2. SEV-2-CONCEPT-INV を独立調査単位として OPEN / NOT STARTED で固定する
-3. SEV-2-VOCAB HOLD / V-C と Formal values NOT DEFINED を維持する
-4. SEV-2-ASSIGN・型・validator・実装には進まない
-5. SharePoint 実環境 / M365 / Deploy / real data へ進まない
-6. src/** / tests/** は変更しない
+1. SEV-2-CONCEPT-INV 結果（OFFICIAL_CONCEPT_EXISTS）を正本へ記録する
+2. 正式概念 = 行動関連項目合計点数。汎用 Severity taxonomy = NOT FOUND
+3. >=10 / >=18 は regulatory predicates。FindingSeverity 値への即時写像は禁止
+4. SEV-2-VOCAB HOLD / V-C を維持し、次を Human VOCAB 再評価とする
+5. SEV-2-ASSIGN・型・validator・実装には進まない
+6. SharePoint 実環境 / M365 / Deploy / real data へ進まない
+7. src/** / tests/** は変更しない
 ```
 
 ## 変更禁止境界

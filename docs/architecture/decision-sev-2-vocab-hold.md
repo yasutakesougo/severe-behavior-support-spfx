@@ -22,6 +22,7 @@ Depends on packet: decision-sev-2-finding-severity-boundary.md
 上位入口:
 
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
+- [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -55,7 +56,9 @@ Issue #8 DEC number: UNASSIGNED
 
 Reason:
 FindingSeverity の正式値・意味について、
-厚労省制度上の正式概念が未確認のまま値を定義できない。
+厚労省制度上の正式概念は確認されたが、
+それは汎用 Severity taxonomy ではなく行動関連項目合計点数である。
+FindingSeverity としての値採択は未決定（Human VOCAB 再評価待ち）。
 AIによる値の補完・推測は行わない。
 ```
 
@@ -63,10 +66,11 @@ AIによる値の補完・推測は行わない。
 
 - FindingSeverity の正式値・意味・順序は **NOT DEFINED** のままである。
 - purpose source 方針は [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md) で固定済み（MHLW-first）。
+- CONCEPT-INV 結果は [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md):
+  **COMPLETED / OFFICIAL_CONCEPT_EXISTS**（行動関連項目合計点数）。
+- 汎用 Severity taxonomy は **NOT FOUND**。`low` / `medium` / `high` は **NOT OFFICIAL / DO NOT ADOPT**。
+- `"10+"` / `"18+"` を FindingSeverity 値として即時採択しない（閾値は regulatory predicates）。
 - ローカル発明の severity taxonomy は **FORBIDDEN**。
-- 正式値の個数・名称・意味・順序を、制度一次資料なしに決めない。
-- `low` / `medium` / `high` 等を AI / 実装側が補完しない（従来禁止の維持）。
-- 架空説明用ラベル（例: A/B/C）は **採用候補ではない**。
 - 本 HOLD は判断不能による失敗ではなく、未決定業務ルールを設計しない **fail-closed** である。
 
 ## 次に確認する問い（値より手前）
@@ -80,11 +84,21 @@ AIによる値の補完・推測は行わない。
 それを Finding に保持する必要があるか？
 ```
 
-次工程は SEV-2-ASSIGN ではなく、独立調査単位 **SEV-2-CONCEPT-INV**
-（厚労省一次資料での正式概念有無確認）。詳細は purpose source 正本。
+CONCEPT-INV により正式概念（行動関連項目合計点数）は確認済み。
+次工程は **Human SEV-2-VOCAB re-evaluation**（ASSIGN / 実装ではない）。
 
-正式概念が無い場合は FindingSeverity 自体の削除・不採用も候補とする。
-正式概念がある場合のみ、その正式名称・値・意味・適用条件を VOCAB 候補にする。
+再評価の比較候補（未選択）:
+
+| Option | 概要 |
+|---|---|
+| **A** | FindingSeverity 不採用 / 契約除外。行動関連項目合計点 + 制度判定結果 + RuleSetVersion を明示モデル化 |
+| **B** | FindingSeverity 残置。MHLW 正式概念の写像を別途正本化 |
+
+```text
+Preference signal (not Acceptance): Option A is stronger
+SEV-2-VOCAB Accepted: NOT IMPLIED by CONCEPT-INV
+FindingSeverity = "10+" | "18+": FORBIDDEN as immediate adoption
+```
 
 Issue #8 新 DEC 記録経路（Decision-SEV-1 Option A）:
 
@@ -104,7 +118,7 @@ HOLD 継続 → Issue #8 新 DEC 本文はまだ記録しない
 |---|---|
 | Decision-SEV-1 ownership | Accepted / Option A / main canonical |
 | SEV-2-PURPOSE | RECORDED（MHLW-first） |
-| SEV-2-CONCEPT-INV | OPEN / NOT STARTED |
+| SEV-2-CONCEPT-INV | COMPLETED / OFFICIAL_CONCEPT_EXISTS |
 | **SEV-2-VOCAB**（本 Decision） | **HOLD / V-C** |
 | SEV-2-ASSIGN | CANDIDATE / NOT SELECTED（本 HOLD で確定しない） |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
@@ -121,17 +135,17 @@ Implementation Start (Severity vocabulary): N/A（開始しない）
 src/** / tests/**: 変更しない
 SEV-2-ASSIGN: 本 Decision では進めない（CANDIDATE / NOT SELECTED）
 Bundle Accepted with ASSIGN: FORBIDDEN
-Next SEV action: SEV-2-CONCEPT-INV（MHLW primary-source concept investigation）
+Next SEV action: Human SEV-2-VOCAB re-evaluation
 Issue #24 Close: NO-GO
 ```
 
 ## 対象外
 
 - SEV-2-ASSIGN の Accepted / HOLD 判定（別判断）
-- SEV-2-CONCEPT-INV の調査結果確定（別単位・未着手）
+- SEV-2-VOCAB Accepted / 不採用の確定（次の Human Decision）
 - `FindingSeverity` 型・validator・fixture
 - 完全 Finding 契約の Severity 欄実装
-- Issue #8 DEC 本文の値列挙（UNASSIGNED / NOT DEFINED）
+- Issue #8 DEC 番号の推測採番（本文記録は Accepted または不採用 Decision 後）
 - SharePoint / adapter / UI / deploy / 実データ
 
 ## 変更禁止境界
