@@ -15,7 +15,7 @@ Review focus:
 - blind retry を許可しないこと
 - retention と physical deletion を混同しないこと
 - SharePoint / adapter / deploy を混入しないこと
-- 次工程が実 SharePoint adapter 別 Gate であること（SharePoint / M365 / Deploy は NO-GO）
+- 次工程が PR #111 Merge 別 GO であること（Ready YES / Independent Re-review PASS 4888290222）。実 SharePoint adapter はさらに別 Gate / NO-GO
 
 Current conclusion:
 

@@ -54,9 +54,10 @@ Replay logical（PR #106）、Decision-AUD-REPO-1 Accepted を記録する。
 
 Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）。
 Dependency blocker（#29 mapping）CLEARED。Concrete Repository Entry Review PASS。
-次工程は実 SharePoint adapter / tenant integration 向けの別 Gate。
+次工程は PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。
+その後も実 SharePoint adapter / tenant integration は別 Gate。
 SharePoint List/列実変更・実接続・M365変更・deploy / real data は許可しない。
-PR #110 Merge は synthetic/fake slice のみ。実 adapter / tenant 承認には拡張しない。
+PR #110 / #111 は synthetic docs sync まで。実 adapter / tenant 承認には拡張しない。
 
 Entry PASS / READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
@@ -66,5 +67,9 @@ Entry PASS / READY_FOR_HUMAN_GO: YES（consumed）
 expected merge head: 2a135246090a29578133246eccda62510200843e
 Ready: YES（consumed）
 Merge: DONE
+PR #111 post-merge Gate sync: Independent Re-review PASS（GitHub Review 4888290222）
+PR #111 re-review PASS head: 3bf26dfccb3e7a2af465a3dc078d7826a6317c7f
+PR #111 Ready: YES
+PR #111 Merge: NO（別 GO / NOT RUN）
 SharePoint 実環境 / tenant 接続 / M365 / Deploy: NO-GO
 real data: PROHIBITED

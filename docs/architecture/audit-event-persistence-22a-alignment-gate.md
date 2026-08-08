@@ -146,7 +146,7 @@ concrete repository / SharePoint adapter（#22B）
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
+Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePoint adapter は別 Gate / NO-GO
 Decision-AUD-REPO-1: Accepted
 Technical Decision blocker: CLEARED
 Issue #29 physical definition / mapping alignment: Accepted

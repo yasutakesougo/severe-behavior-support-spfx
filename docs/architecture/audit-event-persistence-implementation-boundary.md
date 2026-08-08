@@ -65,7 +65,7 @@ SharePoint 実環境操作 / Microsoft 365 / Deploy / real data は許可しな�
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
+Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePoint adapter は別 Gate / NO-GO
 Concrete repository: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 Merge: DONE（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 SharePoint 実環境 / M365 / Deploy: NO-GO

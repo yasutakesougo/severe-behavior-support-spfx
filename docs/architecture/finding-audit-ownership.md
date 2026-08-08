@@ -45,7 +45,7 @@ Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-g
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
+Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePoint adapter は別 Gate / NO-GO
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -279,7 +279,7 @@ Decision-HO-1 Accepted（#17）、遷移 PR #90、ロール PR #91、mutation PR
 AuditEvent candidate PR #96（`HANDOFF_STATUS_CHANGED` / `5215557663`）。
 実保存技術契約 MERGED（PR #99）。logical persistence boundary MERGED（PR #104）。
 Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。
-次は PR #110 Merge 向けの別の明示的 GO（Ready YES）
+次は PR #111 の明示的 Merge GO（Independent Re-review PASS 4888290222 / Ready YES）。実 SharePoint adapter は別 Gate / NO-GO
 （[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
  [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
