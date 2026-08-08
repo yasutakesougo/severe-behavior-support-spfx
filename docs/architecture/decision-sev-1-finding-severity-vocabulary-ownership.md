@@ -61,8 +61,9 @@ stable Finding ID: UNCHANGED
 - Issue #27 配下の technical decision として Severity vocabulary を固定する方式（Option B）は **不採用**。
 - 本 Accepted は ownership / change-control 方式のみを確定する。
 - Severity の正式値・意味・判定主体・assignment アルゴリズムは **決めない**（Decision-SEV-2 以降）。
-  後続: SEV-2-VOCAB は Accepted / Option A / FindingSeverity NOT ADOPTED
+  後続: SEV-2-VOCAB Human Decision は Accepted / Option A / FindingSeverity NOT ADOPTED
   （[`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)）。
+  Canonical status: PENDING_ISSUE_8_DEC_RECORD（Issue #8 DEC が最終 ownership）。
   SEV-2-ASSIGN は N/A / DO NOT START。
 - `low` / `medium` / `high` 等を暗黙の正本として採用しない方針は維持する。
 - `FindingIdentity` 契約と安定 Finding ID 導出は変更しない。
@@ -100,7 +101,7 @@ DEC 本文（値一覧等）は Decision-SEV-2 以降の Accepted 内容を受�
 | 単位 | 扱い |
 |---|---|
 | Vocabulary ownership / change control | **本 Decision（Accepted / Option A）** |
-| 正式値・意味 / 採否 | Decision-SEV-2-VOCAB Accepted / Option A（NOT ADOPTED） |
+| 正式値・意味 / 採否 | Decision-SEV-2-VOCAB Human Decision Accepted / Option A（NOT ADOPTED）；Canonical PENDING_ISSUE_8_DEC_RECORD |
 | assignment algorithm / caller-supplied 境界 | SEV-2-ASSIGN = N/A / DO NOT START（不採用のため） |
 | FindingIdentity / stable Finding ID | UNCHANGED |
 | 完全 Finding 契約 | HOLD（SEV-2 以降 + Entry Criteria） |

@@ -164,11 +164,12 @@ FindingSeverityの vocabulary ownership は Decision-SEV-1 Accepted（Option A�
 Issue #8へ新しいDECを追加する方式とする。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。
 purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。ローカル severity taxonomy FORBIDDEN。
 正式概念調査（SEV-2-CONCEPT-INV）は COMPLETED / OFFICIAL_CONCEPT_EXISTS（行動関連項目合計点数。汎用 Severity taxonomy NOT FOUND）。
-SEV-2-VOCAB は **Accepted / Option A / FindingSeverity NOT ADOPTED**。
+SEV-2-VOCAB Human Decision は **Accepted / Option A / FindingSeverity NOT ADOPTED**。
+SEV-2-VOCAB Canonical は **PENDING_ISSUE_8_DEC_RECORD**（Issue #8 DEC REQUIRED / UNASSIGNED）。
 SEV-2-ASSIGN は **N/A / DO NOT START**。
 値一覧を暗黙採用しない。FindingSeverity = "10+" / "18+" 直写も採択しない。
-代替概念（合計点 / predicates / scheme / RuleSetVersion）は方向のみ。型・実装は別 Entry Criteria。
-Issue #8 不採用 DEC 台帳追記は別操作（番号 UNASSIGNED）。
+代替概念（合計点 / predicates / scheme / RuleSetVersion）は方向のみ。型・実装は Issue #8 DEC 後の別 Entry Criteria。
+repository docs は Human Decision durable record であり、Issue #8 DEC 前は最終 Accepted 正本ではない。
 ## Requirement IDトレーサビリティ
 
 | Requirement ID | 対応内容 | 主な実装・テスト |
@@ -213,7 +214,7 @@ Issue #8 不採用 DEC 台帳追記は別操作（番号 UNASSIGNED）。
 
 ## 継続HOLD
 
-- FindingSeverity は SEV-2-VOCAB Accepted / Option A / NOT ADOPTED。PURPOSE は MHLW-first RECORDED。CONCEPT-INV は COMPLETED。ASSIGN は N/A / DO NOT START。ownership は SEV-1 Accepted。完全なFinding契約
+- FindingSeverity Human Decision は SEV-2-VOCAB Accepted / Option A / NOT ADOPTED。Canonical は PENDING_ISSUE_8_DEC_RECORD。PURPOSE は MHLW-first RECORDED。CONCEPT-INV は COMPLETED。ASSIGN は N/A / DO NOT START。ownership は SEV-1 Accepted。完全なFinding契約
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存技術契約は MERGED（PR #99 / [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)）。実装前次工程は #22A 整合（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）

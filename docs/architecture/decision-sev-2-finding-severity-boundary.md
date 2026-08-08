@@ -17,7 +17,7 @@ Decision packet: Decision-SEV-2
 Status: OPEN（単位ごとに状態が異なる）
 SEV-2-PURPOSE: RECORDED（MHLW-first）— decision-sev-2-purpose-source.md
 SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS — decision-sev-2-concept-inv.md
-SEV-2-VOCAB: Accepted / Option A / FindingSeverity NOT ADOPTED — decision-sev-2-vocab-not-adopted.md
+SEV-2-VOCAB: Human Decision Accepted / Option A / NOT ADOPTED；Canonical PENDING_ISSUE_8_DEC_RECORD — decision-sev-2-vocab-not-adopted.md
 SEV-2-ASSIGN: N/A / DO NOT START
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
@@ -28,6 +28,7 @@ SEV-2-PURPOSE Human Decision: Explicit Human purpose-source policy on 2026-08-08
 SEV-2-CONCEPT-INV Human decision: Investigation result accepted / recorded on 2026-08-08
 SEV-2-CONCEPT-INV investigation execution: Agent-assisted MHLW primary-source research
 SEV-2-VOCAB Human Decision (Re-evaluation): Explicit Human GO on 2026-08-08（Option A / NOT ADOPTED）
+SEV-2-VOCAB Canonical status: PENDING_ISSUE_8_DEC_RECORD（Issue #8 DEC REQUIRED / UNASSIGNED）
 ```
 
 SEV-1 の Human Acceptance と Agent execution evidence は混同しない。
@@ -68,7 +69,7 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 |---|---|---|---|
 | **SEV-2-PURPOSE** | FindingSeverity **purpose source**（MHLW-first 方針） | **RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)） | 値一覧・assignment |
 | **SEV-2-CONCEPT-INV** | 厚労省一次資料での **正式概念有無** 調査 | **COMPLETED / OFFICIAL_CONCEPT_EXISTS**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)） | VOCAB Accepted・ASSIGN・実装 |
-| **SEV-2-VOCAB** | FindingSeverity **正式値・意味**、または **不採用 Decision**（Issue #8 新 DEC の本文候補） | **Accepted / Option A / NOT ADOPTED**（[`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)） | assignment 主体・算出アルゴリズム |
+| **SEV-2-VOCAB** | FindingSeverity **正式値・意味**、または **不採用 Decision**（Issue #8 新 DEC が最終 canonical） | **Human Decision Accepted / Option A / NOT ADOPTED**；**Canonical PENDING_ISSUE_8_DEC_RECORD**（[`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)） | assignment 主体・算出アルゴリズム |
 | **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | **N/A / DO NOT START**（不採用のため） | 値一覧そのものの採択 |
 
 
@@ -122,23 +123,27 @@ agent による値捏造: 禁止
 
 ### SEV-2-VOCAB Human Decision（記録済み）
 
-正本: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+Durable record: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
 
 ```text
-Decision-SEV-2-VOCAB: Accepted
+Decision-SEV-2-VOCAB Human Decision: Accepted
 Selected: Option A（Re-evaluation）
 FindingSeverity: NOT ADOPTED
 Formal values: N/A
 Meanings: N/A
 Ordering: N/A
 SEV-2-ASSIGN: N/A / DO NOT START
-Issue #8 DEC number: UNASSIGNED
+Canonical status: PENDING_ISSUE_8_DEC_RECORD
+Issue #8 DEC: REQUIRED / UNASSIGNED
 Instead (direction only / NOT STARTED):
   behaviorRelatedItemsTotalScore
   regulatory evaluation / predicates
   applicable scheme / rule
   RuleSetVersion
 ```
+
+Issue #8 DEC 記録前は、repository docs を最終 Accepted 正本として扱わない
+（Decision-SEV-1 Option A / P1-001）。
 
 HOLD 履歴: [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)
 
@@ -187,20 +192,22 @@ SEV-2-ASSIGN progression after non-adoption: FORBIDDEN
 2. Human Decision of SEV-2-VOCAB — HOLD / V-C（historical）
 3. Human purpose-source policy — SEV-2-PURPOSE
 4. SEV-2-CONCEPT-INV — COMPLETED
-5. SEV-2-VOCAB 再評価 — Accepted / Option A / NOT ADOPTED
-6. Issue #8 へ不採用 DEC 本文を記録（番号は現在 UNASSIGNED / 別操作）
+5. SEV-2-VOCAB 再評価 — Human Decision Accepted / Option A / NOT ADOPTED
+6. Issue #8 へ不採用 DEC 本文を記録（番号は現在 UNASSIGNED / Canonical 昇格の前提）
 7. ASSIGN / Severity 実装 — N/A（不採用）
-8. 代替概念モデル — 別 Entry Criteria + Human Implementation Start
+8. 代替概念モデル — Issue #8 DEC 後の別 Entry Criteria + Human Implementation Start
 ```
 
 ```text
 Next SEV action:
-  Issue #8 non-adoption DEC recording（番号 UNASSIGNED / 別操作）
-  代替概念の Entry Criteria は別単位（本 packet で開始しない）
+  Issue #8 non-adoption DEC recording（REQUIRED / UNASSIGNED）
+  → その後 repository docs を最終 Accepted 正本へ更新してよい
+  代替概念の Entry Criteria は Issue #8 DEC 後の別単位
 SEV-2-CONCEPT-INV:
   COMPLETED / OFFICIAL_CONCEPT_EXISTS
 SEV-2-VOCAB:
-  Accepted / Option A / FindingSeverity NOT ADOPTED
+  Human Decision Accepted / Option A / FindingSeverity NOT ADOPTED
+  Canonical status: PENDING_ISSUE_8_DEC_RECORD
 SEV-2-ASSIGN:
   N/A / DO NOT START
 Do not start:
@@ -231,7 +238,8 @@ Decision-SEV-1: Accepted（Option A）
 Decision-SEV-2 packet: OPEN（単位別）
 SEV-2-PURPOSE: RECORDED（MHLW-first）
 SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
-SEV-2-VOCAB: Accepted / Option A / FindingSeverity NOT ADOPTED
+SEV-2-VOCAB: Human Decision Accepted / Option A / FindingSeverity NOT ADOPTED
+SEV-2-VOCAB Canonical: PENDING_ISSUE_8_DEC_RECORD（Issue #8 DEC REQUIRED / UNASSIGNED）
 SEV-2-ASSIGN: N/A / DO NOT START
 Independent acceptance: REQUIRED
 Implementation: NOT STARTED

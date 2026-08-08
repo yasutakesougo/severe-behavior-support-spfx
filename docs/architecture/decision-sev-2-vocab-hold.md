@@ -2,15 +2,17 @@
 
 この文書は、**Decision-SEV-2-VOCAB** の **HOLD（V-C）履歴正本**である。
 
-**現正本（Accepted / Option A / NOT ADOPTED）:**
+**現正本（Human Decision durable record）:**
 [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
 
 再評価 packet:
 [`decision-sev-2-vocab-reevaluation-packet.md`](./decision-sev-2-vocab-reevaluation-packet.md)
 
 ```text
-Superseded by: decision-sev-2-vocab-not-adopted.md
-Current Status: Accepted / Option A / FindingSeverity NOT ADOPTED
+Superseded HOLD by: decision-sev-2-vocab-not-adopted.md
+Human Decision: Accepted / Option A / FindingSeverity NOT ADOPTED
+Canonical status: PENDING_ISSUE_8_DEC_RECORD
+Issue #8 DEC: REQUIRED / UNASSIGNED
 SEV-2-ASSIGN: N/A / DO NOT START
 ```
 
@@ -85,11 +87,12 @@ AIによる値の補完・推測は行わない。
 SEV-2-CONCEPT-INV 完了後の Human 再評価により、本 HOLD は解除された。
 
 ```text
-SEV-2-VOCAB Re-evaluation: Accepted
-Selected: Option A
+SEV-2-VOCAB Human Decision: Accepted / Option A
 FindingSeverity: NOT ADOPTED
+Canonical status: PENDING_ISSUE_8_DEC_RECORD
+Issue #8 DEC: REQUIRED / UNASSIGNED
 SEV-2-ASSIGN: N/A / DO NOT START
-正本: decision-sev-2-vocab-not-adopted.md
+durable record: decision-sev-2-vocab-not-adopted.md
 ```
 
 ## 分離（HOLD 時点の記録）
@@ -99,7 +102,7 @@ SEV-2-ASSIGN: N/A / DO NOT START
 | Decision-SEV-1 ownership | Accepted / Option A / main canonical |
 | SEV-2-PURPOSE | RECORDED（MHLW-first） |
 | SEV-2-CONCEPT-INV | COMPLETED / OFFICIAL_CONCEPT_EXISTS |
-| **SEV-2-VOCAB**（本 Decision） | **HOLD / V-C**（再評価待ち）→ 現在は Accepted / Option A |
+| **SEV-2-VOCAB**（本 Decision） | **HOLD / V-C**（再評価待ち）→ Human Decision Accepted / Option A；Canonical PENDING_ISSUE_8_DEC_RECORD |
 | SEV-2-ASSIGN | CANDIDATE / NOT SELECTED → 現在は N/A / DO NOT START |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |

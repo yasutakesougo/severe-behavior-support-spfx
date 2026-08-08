@@ -3,7 +3,17 @@
 この文書は、**Decision-SEV-2-VOCAB** 再評価の Decision Packet である。
 比較材料と Human Decision 記録を正本化する。
 
-Accepted 正本: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+Human Decision durable record:
+[`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+
+```text
+Human Decision: Accepted / Option A / NOT ADOPTED
+Canonical status: PENDING_ISSUE_8_DEC_RECORD
+Issue #8 DEC: REQUIRED / UNASSIGNED
+```
+
+Issue #8 DEC 記録前は、repository docs を最終 Accepted 正本として扱わない
+（Decision-SEV-1 Option A / P1-001）。
 
 ## 基準
 
@@ -14,6 +24,8 @@ Status: CONSUMED（Human Decision recorded）
 Selected: Option A
 FindingSeverity: NOT ADOPTED
 SEV-2-ASSIGN: N/A / DO NOT START
+Canonical status: PENDING_ISSUE_8_DEC_RECORD
+Issue #8 DEC: REQUIRED / UNASSIGNED
 main at packet baseline: b0cc1f75be274fda04f16bc339de76b1bd8cec8c
 PR #117 merge ancestor: PASS
 ```
@@ -129,14 +141,18 @@ If A:
   FindingSeverity = NOT ADOPTED
   SEV-2-ASSIGN = N/A / DO NOT START
 
-Issue #8 DEC number:
-  UNASSIGNED
+Canonical status:
+  PENDING_ISSUE_8_DEC_RECORD
+
+Issue #8 DEC:
+  REQUIRED / UNASSIGNED
 
 Implementation:
   NOT STARTED
 ```
 
-正本: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+Durable record: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+（最終 Accepted 正本ではない。Issue #8 DEC 待ち）
 
 ## 10. Explicit stop boundary（Accepted 後も維持）
 
