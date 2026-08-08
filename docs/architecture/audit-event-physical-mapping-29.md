@@ -30,7 +30,7 @@ READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Concrete repository / #22B: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
 #22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
-#22B Readyization docs head: 965bd4d151e9d625693a7c2409a906a4c0e2f421
+#22B Readyization: docs-only commits after PASS head（Ready YES / Merge NO）
 Merge: NO（別 GO）
 SharePoint adapter / Microsoft 365 / Deploy: NO-GO
 Issue #29 full provisioning: OPEN
@@ -61,7 +61,7 @@ READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 #22B synthetic repository: REVIEW PASS（PR #110 Independent Re-review 4888201572）
 #22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
-#22B Readyization docs head: 965bd4d151e9d625693a7c2409a906a4c0e2f421
+#22B Readyization: docs-only commits after PASS head（Ready YES / Merge NO）
 Ready: YES
 Merge: NO（別 GO）
 SharePoint 実環境操作 / Microsoft 365 / Deploy: NO-GO
@@ -465,7 +465,7 @@ PR #108 Independent Re-review: 5224512796（PASS） / MERGED（aa0e6fba7dd8abf32
 #29 full provisioning（DEC-013 / DEC-014 / #4）: OPEN
 #22B concrete repository: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
 #22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
-#22B Readyization docs head: 965bd4d151e9d625693a7c2409a906a4c0e2f421
+#22B Readyization: docs-only commits after PASS head（Ready YES / Merge NO）
 Merge: NO（別 GO）
 SharePoint 実環境操作 / M365 / Deploy: NO-GO
 SharePoint / M365 実変更: NO-GO
@@ -483,7 +483,7 @@ READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Concrete repository / #22B: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
 #22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
-#22B Readyization docs head: 965bd4d151e9d625693a7c2409a906a4c0e2f421
+#22B Readyization: docs-only commits after PASS head（Ready YES / Merge NO）
 Merge: NO（別 GO）
 SharePoint adapter: NO-GO
 Microsoft 365: NO-GO
