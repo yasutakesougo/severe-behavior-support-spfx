@@ -144,8 +144,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | `#29` mapping MERGED（PR #108）→ Entry PASS（5224544473）→ `#22B` Human GO（5224579776）→ PR #110 MERGED（62a43d7f…） |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | **Accepted**（Option A）。Issue #8 に新しい DEC を追加する方式。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。正本: [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md) | Issue #8（新 DEC。番号 UNASSIGNED） | 方式選択前に値一覧を採択しない（維持） | **Decision-SEV-2** packet へ進める（実装は開始しない） |
 | **Decision-SEV-2** | FindingSeverity boundary packet（PURPOSE / CONCEPT-INV / VOCAB / ASSIGN を分離） | packet: [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)。**PURPOSE = RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)。MHLW-first）。**CONCEPT-INV = COMPLETED**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)。公式概念=行動関連項目合計点数。汎用 Severity taxonomy NOT FOUND）。**SEV-2-VOCAB Human Decision = Accepted / Option A / NOT ADOPTED**；**Canonical = PENDING_ISSUE_8_DEC_RECORD**（[`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)）。**SEV-2-ASSIGN = N/A / DO NOT START** | Issue #8 新 DEC（SEV-1 Option A / 不採用記録・番号 UNASSIGNED）が最終 canonical | **SEV-1 Accepted** | Issue #8 不採用 DEC 台帳追記 → docs 最終 Accepted 正本化。代替概念モデルは別 Entry Criteria。実装 NOT STARTED |
-| **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
-| **Decision-FC-2** | Catalog delivery boundary（固定列挙 vs caller-supplied 外部カタログ） | HOLD。現行組立は caller-supplied `isReasonCode` のみ | FC-1 の所有者 | **FC-1**。採番・写像表の推測禁止 | カタログ契約 docs（domain固定 or 外部）→ 実装は別 Gate |
+| **Decision-FC-1** | FindingCode catalog ownership | **SELECTED as next substantive unit**。packet OPEN / CANDIDATE / NOT ACCEPTED。正本: [`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)。Identity 組立は完了・UNCHANGED。Implementation Start **HOLD** | Issue #24 / #8 / #27 等（Option A/B/C 未選択） | Identity 組立契約を再定義しない。値一覧は決めない | Human Option 選択後に **Decision-FC-2** 候補化（FC-1 Accepted 後のみ） |
+| **Decision-FC-2** | Catalog delivery boundary（固定列挙 vs caller-supplied 外部カタログ） | HOLD / **DO NOT START**。現行組立は caller-supplied `isReasonCode` のみ | FC-1 の所有者 | **FC-1 Accepted**。採番・写像表の推測禁止 | カタログ契約 docs（domain固定 or 外部）→ 実装は別 Gate |
 | **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | HOLD。メンバシップ純関数は完了。フィールド追加・制度日数・`periodTo` 開放終端は未決 | 別 Decision（所有は OP-1 で #24 メンバシップのみ確定。Schema は #26 関連） | OP-1/OP-2 Accepted 済み前提。既存 `evaluateObservationPeriodMembership` を変更しない | Schema/フィールド Decision Accepted 後の契約・（必要なら）別純関数。既存関数への制度値混入禁止 |
 | **Decision-RD-3** | 接近窓・制度日数・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決 | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止 |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
@@ -199,10 +199,12 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 
 | 問い | 正本根拠 | 結論 |
 |---|---|---|
-| コード一覧正本 | Identity 組立は caller-supplied。カタログ無し | **未決** |
-| 追加・廃止の所有者 | #24 部分。カタログは別 Decision | **FC-1 待ち** |
-| domain 固定列挙 vs 外部 | 現行は caller-supplied | **FC-2 待ち**。現行組立を壊さない |
-
+| 次 substantive unit | Human selection | **Decision-FC-1 SELECTED**（[`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)） |
+| ownership / change control | Decision-FC-1 packet | **CANDIDATE / NOT ACCEPTED**（Option A/B/C/D） |
+| コード一覧正本 | Identity 組立は caller-supplied。カタログ無し | **未決**（FC-1 では決めない） |
+| 追加・廃止の所有者 | FC-1 packet | **FC-1 Human Decision 待ち** |
+| domain 固定列挙 vs 外部 | 現行は caller-supplied | **FC-2 待ち / DO NOT START**。現行組立を壊さない |
+| Implementation Start | FC-1 packet | **HOLD** |
 ### D. Handoff 所有（Decision-HO-1）— Accepted
 
 正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)
@@ -238,8 +240,8 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 4. Decision-AUD-IDEM-1 / AUD-SAN-VALUE-1 / AUD-SAN-1 / AUD-REPLAY-1 / AUD-REPO-1 — Accepted。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）
 5. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）— **Accepted（Option A）**
 6. Decision-SEV-2   FindingSeverity boundary — PURPOSE **RECORDED**；CONCEPT-INV **COMPLETED**；VOCAB Human Decision **Accepted / Option A / NOT ADOPTED**；Canonical **PENDING_ISSUE_8_DEC_RECORD**；ASSIGN **N/A / DO NOT START**
-7. Decision-FC-1    FindingCode catalog ownership
-8. Decision-FC-2    Catalog delivery boundary（FC-1 後）
+7. Decision-FC-1    FindingCode catalog ownership — **SELECTED** / packet OPEN / Implementation HOLD
+8. Decision-FC-2    Catalog delivery boundary（FC-1 Accepted 後のみ / DO NOT START）
 9. Decision-OP-3    Observation period Schema / 制度 / 開放終端
 10. Decision-RD-3    Review due 接近窓 / 算出 / 超過後
 11. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
@@ -247,7 +249,8 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
 **Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 MERGED（62a43d7f…）。次工程は実 SharePoint adapter 別 Gate。SharePoint 実環境操作は NO-GO。
-SEV は SEV-1 → SEV-2 packet。PURPOSE は MHLW-first。CONCEPT-INV は COMPLETED。VOCAB Human Decision は Option A 不採用 Accepted。Canonical は Issue #8 DEC 待ち（PENDING_ISSUE_8_DEC_RECORD）。ASSIGN は N/A。代替概念は Issue #8 DEC 後の別 Entry。一括 Accepted しない。FC は FC-1→FC-2 の順を崩さない。
+SEV 系（FindingSeverity）の substantive line は DEC-018 不採用で区切り。ASSIGN / 型 / 実装は自動再開しない。
+**Next substantive unit = Decision-FC-1**（ownership packet）。FC-1→FC-2 の順を崩さない。値一覧・enum・validator は FC-1 では決めない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位

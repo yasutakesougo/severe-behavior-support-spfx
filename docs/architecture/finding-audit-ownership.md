@@ -43,6 +43,7 @@ Decision-SEV-2-CONCEPT-INV（COMPLETED）: docs/architecture/decision-sev-2-conc
 Decision-SEV-2-VOCAB（Human Decision Accepted / Option A / NOT ADOPTED；Canonical PENDING_ISSUE_8_DEC_RECORD）: docs/architecture/decision-sev-2-vocab-not-adopted.md
 Decision-SEV-2-VOCAB HOLD（historical）: docs/architecture/decision-sev-2-vocab-hold.md
 Decision-SEV-2 packet（ASSIGN は N/A / DO NOT START）: docs/architecture/decision-sev-2-finding-severity-boundary.md
+Decision-FC-1（SELECTED / CANDIDATE / Implementation HOLD）: docs/architecture/decision-fc-1-finding-code-catalog-ownership.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
@@ -348,7 +349,7 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 ## 継続HOLD
 
 - FindingSeverity Human Decision は SEV-2-VOCAB **Accepted / Option A / NOT ADOPTED**。Canonical は **PENDING_ISSUE_8_DEC_RECORD**（Issue #8 DEC REQUIRED / UNASSIGNED）。purpose source は SEV-2-PURPOSE RECORDED（MHLW-first）。CONCEPT-INV は COMPLETED。assignment 境界（SEV-2-ASSIGN）は **N/A / DO NOT START**。ownership は Decision-SEV-1 Accepted。完全なFinding契約
-- FindingCode 業務カタログ
+- FindingCode 業務カタログは Decision-FC-1 SELECTED / packet OPEN / Implementation HOLD（[`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)）。値一覧・FC-2・実装は開始しない
 - AssessmentSnapshot完全契約と保存運用（Result変換・永続なしは `assessment-snapshot-result-conversion.md`）
 - finding再発の複数prior探索・永続照会（単一 prior 受け取り判定は `finding-recurrence.md`）
 - Decision-OP-3（観察期間フィールド追加） / Decision-RD-3（接近窓ポリシー）
