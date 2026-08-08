@@ -34,16 +34,19 @@ PR #115 / SEV-2-PURPOSE: MERGED
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
 
-### Human investigation record（durable）
+### Investigation / Human decision record（durable）
 
 ```text
-Human CONCEPT-INV: Explicit Human investigation on 2026-08-08
+Investigation execution: Agent-assisted MHLW primary-source research
+Human decision: Investigation result accepted / recorded on 2026-08-08
 Scope: MHLW current primary sources
   - 障害支援区分認定調査（行動関連項目）
   - 生活介護 実施上の留意事項（2026-05-28 最終改正を含む）
   - 厚労省告示第556号（10点以上 / 18点以上の別基準）
-Agent execution evidence: NOT Human investigation evidence
+Agent execution evidence: NOT Human investigation execution evidence
 ```
+
+Human は調査結果の受理・正本記録を行った。調査実行そのものの証跡としては扱わない。
 
 ## 調査結果
 

@@ -26,10 +26,12 @@ SEV-1 Accepted canonical: decision-sev-1-finding-severity-vocabulary-ownership.m
 SEV-1 Human Acceptance: Explicit Human GO on 2026-08-08（Decision-SEV-1 / Option A）
 SEV-2-VOCAB Human Decision: Explicit Human HOLD on 2026-08-08（V-C）
 SEV-2-PURPOSE Human Decision: Explicit Human purpose-source policy on 2026-08-08
-SEV-2-CONCEPT-INV Human investigation: Explicit Human investigation on 2026-08-08
+SEV-2-CONCEPT-INV Human decision: Investigation result accepted / recorded on 2026-08-08
+SEV-2-CONCEPT-INV investigation execution: Agent-assisted MHLW primary-source research
 ```
 
 SEV-1 の Human Acceptance と Agent execution evidence は混同しない。
+CONCEPT-INV の調査実行（agent-assisted）と Human の結果受理も混同しない。
 Live gate（Ready / Merge / Independent Review 進行状態）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
 
