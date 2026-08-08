@@ -132,7 +132,8 @@ FindingCode values: UNDECIDED
 code numbering: UNDECIDED
 criterionId mapping: UNDECIDED
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
-catalog version identifier format: UNDECIDED
+catalog version identifier logical contract: Decision-FC-4 Accepted / Option C（別単位）
+actual catalog version string representation: UNDECIDED
 snapshot logical contract: Decision-FC-3 Accepted / Option C（別単位）
 snapshot schema: NOT STARTED
 snapshot materialization: NOT STARTED
@@ -149,6 +150,10 @@ AI は上記を補完しない。
 snapshot の論理契約（必須情報・version 一意識別責務・immutable の意味・
 selected 整合・fail-closed 境界）は
 [`decision-fc-3-finding-code-catalog-snapshot-logical-contract.md`](./decision-fc-3-finding-code-catalog-snapshot-logical-contract.md)
+で扱う。
+
+`catalogVersionIdentifier` の論理契約（一意性・opaque・edition 対応・reuse 禁止・fail-closed）は
+[`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md)
 で扱う。
 
 ## 後続 technical contract の fail-closed 要件
@@ -219,11 +224,12 @@ real data: PROHIBITED
 ```text
 Decision-FC-2: Accepted / Option C
 Decision-FC-3: Accepted / Option C
-  FindingCode catalog snapshot logical contract
-  （complete logical contract surface）
+Decision-FC-4: Accepted / Option C
+  Catalog version identifier contract
+  （complete identifier logical contract）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-FC-2 / FC-3 Accepted は Implementation Start ではない。
-materialization / schema / provider 着手は別 Human Decision とする。
+FC-2 / FC-3 / FC-4 Accepted は Implementation Start ではない。
+materialization / schema / provider / identifier 物理方式の着手は別 Human Decision とする。
