@@ -30,17 +30,36 @@ function utf8Bytes(value: string): Uint8Array {
   return new TextEncoder().encode(value);
 }
 
-export function sha256Hex(value: string): string {
-  const message = utf8Bytes(value);
-  const bitLength = message.length * 8;
-  const withPaddingLength = (message.length + 9 + 63) & ~63;
+/** Max byte length whose bit-length (×8) stays a safe integer for U64BE encoding. */
+export const SHA256_MAX_MESSAGE_BYTES = Math.floor(Number.MAX_SAFE_INTEGER / 8);
+
+/**
+ * SHA-256 over raw bytes → lowercase hex.
+ * Fail-closed when message length cannot be represented exactly in the SHA-256
+ * 64-bit length field via safe integer arithmetic (no silent 32-bit wrap).
+ */
+export function sha256HexBytes(message: Uint8Array): string {
+  const byteLength = message.length;
+  if (
+    !Number.isSafeInteger(byteLength) ||
+    byteLength < 0 ||
+    byteLength > SHA256_MAX_MESSAGE_BYTES
+  ) {
+    throw new RangeError("sha256HexBytes: message length exceeds supported range (fail-closed)");
+  }
+
+  const bitLength = byteLength * 8;
+  const withPaddingLength = (byteLength + 9 + 63) & ~63;
   const padded = new Uint8Array(withPaddingLength);
   padded.set(message);
-  padded[message.length] = 0x80;
+  padded[byteLength] = 0x80;
 
   const view = new DataView(padded.buffer);
-  // SHA-256 length is 64-bit big-endian. Inputs used here stay far below 2^32 bytes.
-  view.setUint32(padded.length - 4, bitLength >>> 0);
+  // SHA-256 length is 64-bit big-endian bit count.
+  const high = Math.floor(bitLength / 0x1_0000_0000);
+  const low = bitLength >>> 0;
+  view.setUint32(padded.length - 8, high, false);
+  view.setUint32(padded.length - 4, low, false);
 
   let h0 = 0x6a09e667;
   let h1 = 0xbb67ae85;
@@ -111,4 +130,8 @@ export function sha256Hex(value: string): string {
   digestView.setUint32(24, h6);
   digestView.setUint32(28, h7);
   return toHex(digest);
+}
+
+export function sha256Hex(value: string): string {
+  return sha256HexBytes(utf8Bytes(value));
 }

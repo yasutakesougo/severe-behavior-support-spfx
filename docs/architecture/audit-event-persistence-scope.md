@@ -14,9 +14,9 @@ OUT:
 - src/**（本 docs 正本化では変更しない）
 - tests/**
 - SharePoint List / columns 実変更
-- concrete adapter（#22B）
+- 実 tenant SharePoint adapter（#22B の実接続。synthetic は別）
 - M365 changes
 - deployment
 - real data
 
-Issue #29 physical mapping: Accepted / MERGED（PR #108）（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。dependency CLEARED / Entry Review PASS / `#22B` HOLD
+Issue #29 physical mapping: Accepted / MERGED（PR #108）（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）。dependency CLEARED / Entry Review PASS / `#22B` PR #110 REVIEW PASS / Ready YES（4888201572）/ Merge NO

@@ -45,8 +45,11 @@ Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108�
   main: aa0e6fba7dd8abf32523c70232001b5ac78cfc1b
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-READY_FOR_HUMAN_GO: YES
-Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
+READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
+Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
+#22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
+Merge: NO（別 GO）
 SharePoint adapter / M365 / Deploy: NO-GO
 ```
 
@@ -132,14 +135,14 @@ concrete repository / SharePoint adapter（#22B）
 | 9 | Decision-AUD-REPO-1 Accepted | **DONE** |
 | 10 | Issue #29 physical mapping | **Accepted**（MERGED（PR #108）） |
 | 11 | Concrete Repository Entry Review | **PASS**（5224544473） |
-| 12 | Concrete repository / #22B | **HOLD**（別 Human GO 待ち） |
+| 12 | Concrete repository / #22B | **REVIEW PASS / Ready YES / Merge NO**（code 4888201572 @ 9abfc781… / docs 4888221692 @ d5fbe8e…） |
 | 13 | SharePoint adapter / M365 / Deploy | **NO-GO** |
 
 ```text
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: #22B concrete repository 向けの別の明示的 Human GO（Entry PASS 済）
+Next: PR #110 の明示的 Merge GO（Ready YES / Merge NOT RUN。SharePoint/M365/Deploy は NO-GO）
 Decision-AUD-REPO-1: Accepted
 Technical Decision blocker: CLEARED
 Issue #29 physical definition / mapping alignment: Accepted
@@ -147,7 +150,8 @@ Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 Concrete repository: HOLD
-READY_FOR_HUMAN_GO: YES
+READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```
@@ -156,7 +160,8 @@ Microsoft 365 / Deploy: NO-GO
 
 - ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 Accepted、hardening MERGED、logical/replay MERGED を concrete repository GO と読み替えること
 - PR #104 / PR #106 Human GO を `#22B` GO として流用すること
-- Concrete Repository Entry Review PASS / READY_FOR_HUMAN_GO: YES を `#22B` Human GO と読み替えること
+- Concrete Repository Entry Review PASS / READY_FOR_HUMAN_GO: YES（consumed）
+#22B Human GO: CONFIRMED（Issue #22 comment 5224579776） を `#22B` Human GO と読み替えること
 - SharePoint List / 列 / adapter 実装（`#22B`）を先取りすること
 - blind retry の許可化
 - `SAVE_OUTCOME_UNKNOWN` の success 変換
@@ -171,5 +176,5 @@ Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
 Issue #29: physical mapping docs only（実変更禁止）
-Concrete repository / #22B: HOLD
+Concrete repository / #22B: REVIEW PASS（PR #110 / 4888201572） / Ready YES / Merge NO
 ```
