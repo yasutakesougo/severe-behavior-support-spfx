@@ -1,8 +1,8 @@
-# Decision-FC-4 — Catalog version identifier contract candidate packet
+# Decision-FC-4 — Catalog version identifier contract
 
-この文書は、**Decision-FC-4**（Catalog version identifier contract）の Candidate Packet である。
+この文書は、**Decision-FC-4**（Catalog version identifier contract）の Accepted 正本である。
 
-Decision-FC-4 は、Decision-FC-3 Accepted / Option C が必須とした `catalogVersionIdentifier` について、論理契約だけを扱う。
+Decision-FC-4 は、Decision-FC-3 Accepted / Option C が必須とした `catalogVersionIdentifier` について、論理契約だけを固定する。
 
 実際の identifier 値、DEC 番号の自動採番、UUID / hash / semver 等の具体方式、snapshot physical schema、SharePoint storage、provider、TypeScript、validator、fixture、FindingCode values / numbering / mapping は扱わない。
 
@@ -11,10 +11,11 @@ Decision-FC-4 は、Decision-FC-3 Accepted / Option C が必須とした `catalo
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-FC-4
-Status: CANDIDATE / NOT ACCEPTED
-Selected: NONE
-Human substantive-unit selection: 2026-08-08
+Status: Accepted
+Selected: Option C
+Human Acceptance: Explicit Human Option C selection on 2026-08-08
 main baseline: 816ba40549e4650cde90e83391b7e44ff39bd705
+Candidate head: 4c7624bc6576ea5931c9a52290a4c43b81b5ddb7
 Depends on:
   Decision-FC-1 Accepted / Option B
   Decision-FC-2 Accepted / Option C
@@ -22,101 +23,36 @@ Depends on:
 Catalog ownership: Issue #8 / new business DEC
 Delivery boundary: versioned immutable catalog snapshot input
 Snapshot logical contract: Complete logical contract surface
+FindingIdentity: UNCHANGED
+stable Finding ID: UNCHANGED
+Identity assembly: UNCHANGED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-## FC-1〜FC-3 から継承する固定境界
+Live gate（Ready / Merge / Independent Review 進行状態）は repository docs に書かない。
+
+## Human Acceptance
 
 ```text
-catalogVersionIdentifier:
-  required logical information
-  opaque to technical layer
-
-identifier issuance / uniqueness:
-  business catalog change control（Issue #8 DEC side）
-
-technical layer:
-  MUST NOT interpret
-  MUST NOT re-number
-  MUST NOT infer
-
-same identifier with different logical content:
-  PROHIBITED
-
-catalog revision:
-  new identifier required
+Human Acceptance: Explicit Human Option C selection on 2026-08-08
+Decision-FC-4: Accepted
+Selected: Option C
+Logical contract: Complete identifier logical contract
+Implementation Start: HOLD
 ```
-
-Decision-FC-4 は FindingIdentity、stable Finding ID、`assembleFindingIdentity` を変更しない。
-
-## FC-4 が答える問い
 
 ```text
-catalogVersionIdentifier は、どの論理条件を満たせば
-安全な version identifier として扱えるか。
+Agent recommendation: Option C
+Binding: NO
+Agent recommendation is not Human Acceptance evidence.
 ```
 
-対象は次の5点に限定する。
+## Accepted 内容
 
-1. 一意性条件
-2. opaque identifier として扱う境界
-3. business catalog edition との対応責務
-4. identifier reuse 禁止
-5. missing / malformed / duplicate の fail-closed 境界
+Option C — **Complete identifier logical contract** を採択する。
 
-## Candidate Options
-
-### Option A — Minimal opaque uniqueness contract
-
-```text
-Uniqueness:
-  各 business catalog edition に対して一意
-
-Opaque boundary:
-  technical layer は値の構造を解釈しない
-
-Edition relation:
-  identifier は1つの business catalog edition を指す
-
-Reuse:
-  異なる edition への再利用は禁止
-
-Fail-closed:
-  missing
-  malformed
-  duplicate
-```
-
-利点は契約面が最小であること。
-
-一方、同一 edition への複数 identifier 発行や historical stability の扱いは弱い。
-
-### Option B — Stable edition identity contract
-
-Option A に加え、business catalog edition と identifier の対応を安定させる。
-
-```text
-Edition → identifier:
-  one-to-one
-
-Same edition:
-  新 identifier への置換禁止
-
-Different edition:
-  同一 identifier 再利用禁止
-
-Historical stability:
-  一度採択済みの対応は後から変更しない
-```
-
-利点は edition と identifier の対応を後から追跡しやすいこと。
-
-一方、identifier 発行責務と fail-closed 条件の詳細はまだ分散する。
-
-### Option C — Complete identifier logical contract
-
-Option B を含み、identifier の安全条件を一つの論理契約として固定する。
+`catalogVersionIdentifier` は、次の論理面を一体として満たす。
 
 ```text
 Uniqueness:
@@ -147,56 +83,131 @@ Fail-closed:
   same edition mapped to multiple identifiers
 ```
 
-実際の文字列表現や生成方式は本 Decision では決めない。
+実際の文字列表現や生成方式（UUID / hash / semver / DEC 番号など）は本 Decision では決めない。
 
-### Option D — HOLD
+## Uniqueness
 
 ```text
-Decision-FC-4:
+catalogVersionIdentifier:
+  unique across the catalog edition space
+
+same identifier with different edition:
+  PROHIBITED
+
+same edition with multiple identifiers:
+  PROHIBITED
+```
+
+## Opaque boundary
+
+```text
+technical layer:
+  MUST NOT interpret identifier internal structure
+  MUST NOT generate identifier
+  MUST NOT re-number identifier
+  MUST NOT infer identifier
+```
+
+技術層は identifier を opaque token として扱い、値の構文や意味から edition を推定しない。
+
+## Edition mapping responsibility
+
+```text
+Issuance / uniqueness:
+  business catalog change control（Issue #8 DEC side）
+
+Edition ↔ identifier:
+  one-to-one
+  immutable once associated
+
+catalog revision:
+  new catalogVersionIdentifier required
+```
+
+## Reuse prohibition
+
+```text
+Reuse across different editions:
+  PROHIBITED
+
+Historical stability:
+  once accepted, edition ↔ identifier relation MUST NOT be rewritten
+```
+
+## Fail-closed boundary
+
+後続 technical contract は、少なくとも次を正常 identifier と混同してはならない。
+
+```text
+identifier missing
+identifier malformed
+identifier unknown
+duplicate identifier
+same identifier mapped to different edition
+same edition mapped to multiple identifiers
+```
+
+Result 名、Result 型、physical schema、保存先は本 Decision では定義しない。
+
+## FC-1〜FC-3 から継承する固定境界
+
+```text
+Catalog ownership / change control:
+  Issue #8 / new business DEC（FC-1 Option B）
+
+Delivery boundary:
+  versioned immutable catalog snapshot input（FC-2 Option C）
+
+Snapshot logical contract:
+  Complete logical contract surface（FC-3 Option C）
+
+catalogVersionIdentifier:
+  required logical information
+  opaque to technical layer
+
+FindingCode:
+  caller-supplied required input
+
+Identity validation:
+  isReasonCode only
+
+Implicit catalog conversion:
+  PROHIBITED
+
+FindingIdentity:
+  UNCHANGED
+
+stable Finding ID:
+  UNCHANGED
+
+assembleFindingIdentity:
+  UNCHANGED
+```
+
+`assembleFindingIdentity` に catalog lookup、membership 判定、identifier 生成、criterionId mapping を追加しない。
+
+## 採択しなかった方式
+
+```text
+Option A:
+  Minimal opaque uniqueness contract
+
+Option B:
+  Stable edition identity contract
+
+Option D:
   HOLD
-
-Identifier physical representation:
-  DO NOT START
-
-Implementation:
-  DO NOT START
 ```
 
-## 比較
+Option A / B を将来採用する場合は、FC-4 を変更する新しい Human Decision として扱う。
 
-| 観点 | Option A | Option B | Option C | Option D |
-|---|---|---|---|---|
-| opaque boundary | Yes | Yes | Yes | N/A |
-| editionとの一意対応 | 部分 | Yes | Yes | No |
-| historical stability | 弱い | Yes | Yes | No |
-| reuse禁止 | Yes | Yes | Yes | No |
-| fail-closed契約 | 最小 | 中 | 完全論理面 | No |
-| 具体identifier方式を決める | No | No | No | No |
-| Implementation Start | HOLD | HOLD | HOLD | HOLD |
-
-## Agent recommendation（non-binding）
-
-```text
-Recommendation: Option C
-Binding: NO
-```
-
-理由:
-
-- FC-3 の complete logical contract と整合する。
-- identifier の一意性・再利用禁止・edition 対応・fail-closed を分散させずに固定できる。
-- UUID / hash / semver / DEC番号などの物理方式を先取りしない。
-- technical layer が identifier を解釈・推定しない境界を維持できる。
-
-この recommendation は Human Decision ではない。
-
-## FC-4 で決めないこと
+## FC-4 で決めていないこと
 
 ```text
 actual identifier values: UNDECIDED
 identifier syntax / string representation: UNDECIDED
 UUID / hash / semver / DEC-number strategy: UNDECIDED
-Issue #8 FindingCode DEC number: UNASSIGNED
+Issue #8 FindingCode catalog DEC number: UNASSIGNED
 snapshot physical schema: NOT STARTED
 snapshot materialization: NOT STARTED
 snapshot storage / SharePoint location: NOT STARTED / NO-GO
@@ -222,27 +233,23 @@ FindingIdentity: UNCHANGED
 stable Finding ID: UNCHANGED
 assembleFindingIdentity: UNCHANGED
 FindingCode remains caller-supplied
+isReasonCode remains structural validation boundary
 No implicit code generation
 No identifier inference
 No identifier fallback
+No catalog fallback
 Contract break: NO
 ```
 
-## Human Decision Gate
+## Implementation Gate
+
+FC-4 Accepted は Implementation Start ではない。
 
 ```text
-Decision-FC-4: CANDIDATE / NOT ACCEPTED
-Selected: NONE
-Independent Review: REQUIRED
-Human Decision: REQUIRED
+Decision-FC-4: Accepted / Option C
+Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-```
 
-Independent Review が PASS しても Option を自動採択しない。
-
-## 変更禁止境界
-
-```text
 src/** changes: prohibited
 tests/** changes: prohibited
 identifier value invention: prohibited
@@ -255,14 +262,27 @@ TypeScript type creation: prohibited
 validator creation: prohibited
 fixture creation: prohibited
 FindingCode value invention: prohibited
-SharePoint / tenant / Microsoft 365 / Entra / Deploy: NO-GO
+```
+
+## 継続する境界
+
+```text
+FindingSeverity: NOT ADOPTED
+SEV-2-ASSIGN: N/A / DO NOT START
+SharePoint changes: NO-GO
+tenant changes: NO-GO
+Microsoft 365 changes: NO-GO
+Entra changes: NO-GO
+deploy: NO-GO
 real data: PROHIBITED
 ```
 
 ## 次の停止点
 
 ```text
-Decision-FC-4 Candidate Packet
-→ Independent Review
-→ Human FC-4 Decision
+Decision-FC-4: Accepted / Option C
+→ Independent Re-review on new HEAD
+→ Human Ready Decision
 ```
+
+Independent Re-review が PASS しても、Ready / Merge / Implementation を自動実行しない。
