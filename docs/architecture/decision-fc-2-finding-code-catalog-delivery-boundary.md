@@ -134,6 +134,7 @@ criterionId mapping: UNDECIDED
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
 catalog version identifier logical contract: Decision-FC-4 Accepted / Option C（別単位）
 identifier representation ownership: Decision-FC-5 Accepted / Option C（別単位）
+businessOwnershipRef logical contract: Decision-FC-6 Accepted / Option C（別単位）
 actual catalog version string representation / concrete syntax profile: UNDECIDED
 snapshot logical contract: Decision-FC-3 Accepted / Option C（別単位）
 snapshot schema: NOT STARTED
@@ -233,9 +234,12 @@ Decision-FC-4: Accepted / Option C
 Decision-FC-5: Accepted / Option C
   Catalog version identifier representation ownership
   （split ownership with explicit syntax-validation ceiling）
+Decision-FC-6: Accepted / Option C
+  businessOwnershipRef logical contract
+  （complete businessOwnershipRef logical contract）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-FC-2 / FC-3 / FC-4 / FC-5 Accepted は Implementation Start ではない。
+FC-2 / FC-3 / FC-4 / FC-5 / FC-6 Accepted は Implementation Start ではない。
 materialization / schema / provider / identifier 物理方式の着手は別 Human Decision とする。
