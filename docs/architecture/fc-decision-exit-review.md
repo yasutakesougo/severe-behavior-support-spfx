@@ -142,7 +142,9 @@ B に落ちるのは、strategy が Human Accepted された **後** の non-sem
 
 - A-1〜A-3 は **1 つの Issue #8 FindingCode catalog DEC 本文** にまとめて Human 採択してよい（機械的に FC-7/FC-8… へ細分化しない）
 - A-4 は台帳登録操作であり、値本文と同時でも、先行でもよいが Implementation Entry 前に確定が必要
-- A-5 は A-1〜A-3 と同一 DEC に混ぜても、別 Human Decision でもよい。**FC-5 ownership を技術チームへ移管しない**
+- Historical pre-acceptance note: this Exit Review listed same-DEC and separate-Decision as structural options before the A-class structure was accepted.
+- The later Human acceptance in [`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md) is the current structural authority: **A-1〜A-4 bundle / A-5 separate**. This clarification does not reopen A-class content or select an A-5 representation strategy.
+- FC-5 ownership remains with the Issue #8 business Decision; it is not transferred to the technical team.
 - いずれも本 Exit Review では内容を発明・採択しない
 
 ```text
