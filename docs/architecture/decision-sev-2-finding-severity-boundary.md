@@ -16,7 +16,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision packet: Decision-SEV-2
 Status: OPEN（単位ごとに状態が異なる）
 SEV-2-VOCAB: HOLD（V-C）— decision-sev-2-vocab-hold.md
-SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED
+SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
 main before this packet: 08d4a2533f31b94ff86df50cb28c7a93b8426928
@@ -56,7 +56,7 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 | Unit ID | 判断単位 | 本 packet での状態 | 混ぜてはならないもの |
 |---|---|---|---|
 | **SEV-2-VOCAB** | FindingSeverity **正式値・意味**（Issue #8 新 DEC の本文候補） | **HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)） | assignment 主体・算出アルゴリズム |
-| **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE（VOCAB と独立。本 HOLD で確定しない） | 値一覧そのものの採択 |
+| **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE / NOT SELECTED（VOCAB と独立。本 HOLD で確定しない） | 値一覧そのものの採択 |
 
 
 ```text
@@ -228,11 +228,23 @@ stable Finding ID: UNCHANGED
 ```text
 1. Independent Review of this packet（判断単位分離・Option 網羅・暗黙値禁止）— done via PR #113 line
 2. Human Decision of SEV-2-VOCAB — HOLD / V-C（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)）
-3. Human が FindingSeverity の用途・必要性を一次情報で定義できるまで値採択しない
-4. Human Acceptance of SEV-2-ASSIGN（VOCAB と独立。値未定義のまま実装しない）
-5. Issue #8 へ新規 DEC 本文を記録（値定義後のみ。番号は現在 UNASSIGNED）
-6. 実装 / 型追加は別 Entry Criteria + Implementation Start（NOT STARTED）
+3. FindingSeverity の用途・必要性の Human 一次情報を得る
+4. SEV-2-VOCAB を再評価
+   - HOLD 継続
+   - または Human-supplied values / meanings / ordering で Acceptance
+5. SEV-2-VOCAB Accepted 後に、SEV-2-ASSIGN を別 Human Decision として扱う
+6. Issue #8 へ新規 DEC 本文を記録（値定義後のみ。番号は現在 UNASSIGNED）
+7. 実装 / 型追加は別 Entry Criteria + Implementation Start（NOT STARTED）
 ```
+
+```text
+Next SEV action:
+  FindingSeverity purpose / necessity primary information
+SEV-2-ASSIGN:
+  CANDIDATE / NOT SELECTED
+```
+
+VOCAB HOLD 中に ASSIGN へ進まない。
 
 ## OUT / 混ぜないもの
 
@@ -252,7 +264,7 @@ stable Finding ID: UNCHANGED
 Decision-SEV-1: Accepted（Option A）
 Decision-SEV-2 packet: OPEN（単位別）
 SEV-2-VOCAB: HOLD（V-C）
-SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED
+SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Independent acceptance: REQUIRED
 Implementation: NOT STARTED
 Next pure unit / Implementation Start: HOLD

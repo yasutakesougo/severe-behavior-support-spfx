@@ -60,7 +60,8 @@ AIによる値の補完・推測は行わない。
 
 意味:
 
-- FindingSeverity は「見つかった問題の重さラベル」になり得るが、**重さの定義・必要ラベル集合が業務ルールとして未確定**である。
+- FindingSeverity の業務上の用途・必要性・意味は **未定義** である。
+- Human の一次情報なしに用途を推定しない。
 - 正式値の個数・名称・意味・順序を、根拠なしに決めない。
 - `low` / `medium` / `high` 等を AI / 実装側が補完しない（従来禁止の維持）。
 - 架空説明用ラベル（例: A/B/C）は **採用候補ではない**。
@@ -83,7 +84,7 @@ AIによる値の補完・推測は行わない。
 |---|---|
 | Decision-SEV-1 ownership | Accepted / Option A / main canonical |
 | **SEV-2-VOCAB**（本 Decision） | **HOLD / V-C** |
-| SEV-2-ASSIGN | CANDIDATE / NOT ACCEPTED（本 HOLD で確定しない） |
+| SEV-2-ASSIGN | CANDIDATE / NOT SELECTED（本 HOLD で確定しない） |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |
 | SharePoint / tenant / M365 / Entra / Deploy | NO-GO |
@@ -96,8 +97,9 @@ Decision-SEV-2-VOCAB: HOLD（V-C）
 Formal values / Meanings / Ordering: NOT DEFINED
 Implementation Start (Severity vocabulary): N/A（開始しない）
 src/** / tests/**: 変更しない
-SEV-2-ASSIGN: 本 Decision では進めない
+SEV-2-ASSIGN: 本 Decision では進めない（CANDIDATE / NOT SELECTED）
 Bundle Accepted with ASSIGN: FORBIDDEN
+Next SEV action: FindingSeverity purpose / necessity primary information
 Issue #24 Close: NO-GO
 ```
 
