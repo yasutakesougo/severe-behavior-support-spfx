@@ -36,16 +36,17 @@ Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
-#22B code-reviewed head: 9abfc781e84912590e8a237d362066dadeed1dc2
-#22B Code Independent Re-review: PASS（GitHub Review 4888201572）
-#22B Readyization docs follow-up review PASS head: d5fbe8e665b1b006f8d39dca3ff8c4391585f48c（GitHub Review 4888221692 / P0/P1/P2 = 0/0/0）
-#22B note: subsequent docs-only recording commits may follow; code unchanged since 9abfc781…
-Ready: YES
-Merge: NO（別 GO / NOT RUN）
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+#22B code-reviewed head: 9abfc781e84912590e8a237d362066dadeed1dc2（GitHub Review 4888201572）
+#22B Readyization docs follow-up PASS head: d5fbe8e665b1b006f8d39dca3ff8c4391585f48c（GitHub Review 4888221692）
+expected merge head: 2a135246090a29578133246eccda62510200843e
+Ready: YES（consumed）
+Merge: DONE
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
+tenant 接続試験: NO-GO
+real data: PROHIBITED
 ```
 
 本ゲートは技術契約（PR #99）、hardening（PR #102）、logical persistence（PR #104）、
@@ -53,15 +54,22 @@ Replay logical（PR #106）、Decision-AUD-REPO-1 Accepted を記録する。
 
 Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）。
 Dependency blocker（#29 mapping）CLEARED。Concrete Repository Entry Review PASS。
-次工程は PR #110 の明示的 Merge GO。
+次工程は PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。
+その後も実 SharePoint adapter / tenant integration は別 Gate。
 SharePoint List/列実変更・実接続・M365変更・deploy / real data は許可しない。
-Merge GO を受けても実 SharePoint adapter / tenant 接続・M365 変更の承認には拡張しない。
+PR #110 / #111 は synthetic docs sync まで。実 adapter / tenant 承認には拡張しない。
 
 Entry PASS / READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-#22B synthetic repository: REVIEW PASS（code 4888201572 / docs follow-up 4888221692）
-#22B code-reviewed head: 9abfc781e84912590e8a237d362066dadeed1dc2
-#22B Readyization docs follow-up review PASS head: d5fbe8e665b1b006f8d39dca3ff8c4391585f48c
-Ready: YES
-Merge: NO（NOT RUN / 別 GO）
-SharePoint 実環境 / M365 / Deploy: NO-GO
+#22B synthetic repository: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+#22B code-reviewed head: 9abfc781e84912590e8a237d362066dadeed1dc2（4888201572）
+#22B Readyization docs follow-up PASS head: d5fbe8e665b1b006f8d39dca3ff8c4391585f48c（4888221692）
+expected merge head: 2a135246090a29578133246eccda62510200843e
+Ready: YES（consumed）
+Merge: DONE
+PR #111 post-merge Gate sync: Independent Re-review PASS（GitHub Review 4888290222）
+PR #111 re-review PASS head: 3bf26dfccb3e7a2af465a3dc078d7826a6317c7f
+PR #111 Ready: YES
+PR #111 Merge: NO（別 GO / NOT RUN）
+SharePoint 実環境 / tenant 接続 / M365 / Deploy: NO-GO
+real data: PROHIBITED

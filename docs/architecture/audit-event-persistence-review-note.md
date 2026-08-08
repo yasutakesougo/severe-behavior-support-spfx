@@ -9,13 +9,13 @@ Review focus:
 - Logical AuditEvent persistence boundary が MERGED（PR #104）であること
 - Replay logical implementation が MERGED（PR #106）であること
 - `Decision-AUD-REPO-1` が Accepted であること
-- Issue `#29` MERGED / Entry PASS / `#22B` Human GO CONFIRMED / PR #110 Independent Re-review PASS（4888201572）/ Ready YES を維持すること
+- Issue `#29` MERGED / Entry PASS / `#22B` Human GO CONFIRMED / PR #110 MERGED（62a43d7f…）を維持すること
 - `#22B` Human GO を SharePoint 実環境 / Merge GO と読み替えないこと
 - `SAVE_OUTCOME_UNKNOWN` を成功へ変換しないこと
 - blind retry を許可しないこと
 - retention と physical deletion を混同しないこと
 - SharePoint / adapter / deploy を混入しないこと
-- 次工程が PR #110 Merge 別 GO であること（SharePoint / M365 / Deploy は NO-GO）
+- 次工程が PR #111 Merge 別 GO であること（Ready YES / Independent Re-review PASS 4888290222）。実 SharePoint adapter はさらに別 Gate / NO-GO
 
 Current conclusion:
 
@@ -36,14 +36,18 @@ Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
+Concrete repository / #22B: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+#22B Code Independent Re-review: PASS（4888201572 @ 9abfc781…）
+#22B Readyization docs follow-up: PASS（4888221692 @ d5fbe8e…）
+Ready: YES（consumed）
+Merge: DONE
 #22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
-Merge: NO（別 GO）
-READY_FOR_HUMAN_GO note: #22B PR #110 REVIEW PASS / Ready YES / Merge 別 GO
-Next: PR #110 の明示的 Merge GO（Ready YES / Merge NOT RUN。SharePoint/M365/Deploy は NO-GO）
+Merge: DONE（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+READY_FOR_HUMAN_GO note: #22B PR #110 MERGED（synthetic）; 実 SharePoint は別 Gate
+Next: 実 SharePoint adapter / tenant integration は別 Gate（SharePoint/M365/Deploy NO-GO）
 ```
 
-SharePoint / M365 / Deploy gate は別途 NO-GO。`#22B` synthetic REVIEW PASS / Ready YES。Merge は別 GO。
+SharePoint / M365 / Deploy gate は別途 NO-GO。`#22B` synthetic MERGED（PR #110）。実 adapter は別 Gate。
 
 正本:
 

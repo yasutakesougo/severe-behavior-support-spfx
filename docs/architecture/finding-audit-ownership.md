@@ -45,7 +45,7 @@ Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-g
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: PR #110 の明示的 Merge GO（code+docs review PASS / Ready YES / Merge NOT RUN）
+Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePoint adapter は別 Gate / NO-GO
 ```
 
 この文書は所有境界と実装ゲートを固定する。
@@ -64,8 +64,8 @@ Next: PR #110 の明示的 Merge GO（code+docs review PASS / Ready YES / Merge 
 | Handoff状態遷移関数 | Issue #17 | Decision-HO-1 Accepted。PR #90 MERGED | 完了 |
 | Handoff ロールポリシー | Issue #17 / `GOV-AUD-02` 分離 | PR #91 MERGED | 完了（ロール値の法人最終確定は #19） |
 | HandoffState mutation | Issue #17 | PR #93 MERGED | 完了 |
-| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical persistence MERGED（PR #104）。Replay MERGED（PR #106）。REPO-1 Accepted。`#29` mapping Accepted / MERGED（PR #108） / repository HOLD |
-| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。`#29` mapping MERGED（PR #108）。Entry Review PASS（5224544473） | `#22B` REVIEW PASS / Ready YES（PR #110 / 4888201572）。Merge 別 GO。SharePoint 実環境 / M365 / Deploy NO-GO |
+| Handoff AuditEvent candidate | Issue #17 / `5215557663` | PR #96 MERGED。正本 `handoff-audit-event.md` | 候補完了。logical/replay MERGED（PR #104/#106）。`#29` MERGED。`#22B` synthetic MERGED（PR #110 / 62a43d7f…）。実 SharePoint adapter 別 Gate / NO-GO |
+| AuditEvent 実保存 | #22A（AUD-WR-1 Accepted） | 技術契約 MERGED（PR #99）。logical MERGED（PR #104）。Replay MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。`#29` mapping MERGED（PR #108）。Entry Review PASS（5224544473） | `#22B` MERGED（PR #110 / 62a43d7f…）。synthetic only。SharePoint 実環境 / M365 / Deploy NO-GO |
 | Finding lifecycle transition | Issue #24 | C0 `5209785751` / 技術契約 `finding-lifecycle-transition.md` | PR-D完了（PR #64） |
 | finding生成条件 | Issue #24 | 技術契約 `finding-generation-conditions.md`（eligibility only） | PR-E完了（PR #65） |
 | finding安定ID生成 | Issue #24 | 技術契約 `finding-stable-id.md` / CONDITIONAL GO `5205731811` | PR-C完了（PR #55） |
@@ -81,7 +81,7 @@ Next: PR #110 の明示的 Merge GO（code+docs review PASS / Ready YES / Merge 
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
 | DEC正本台帳 | Issue #8 | `DEC-001〜017` | Deferred項目はHOLD |
-| 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay は Entry + separate GO まで HOLD |
+| 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
 
@@ -147,8 +147,9 @@ closed
 AuditEvent 候補は PR #96 MERGED。実保存技術契約は PR #99 MERGED。
 logical persistence boundary は PR #104 MERGED。Replay logical は PR #106 MERGED。
 Decision-AUD-REPLAY-1 / Decision-AUD-REPO-1 Accepted。
-次工程: Issue `#29` physical definition / mapping alignment
-（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
+次工程: 実 SharePoint adapter / tenant integration の別 Gate
+（`#29` mapping / `#22B` synthetic は MERGED。SharePoint 実環境 / tenant / M365 / Deploy は NO-GO。
+ [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
  [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
 ## FindingSeverity Decision
@@ -216,8 +217,10 @@ Persistence 境界の現状:
 - Decision-AUD-REPO-1: Accepted
 - Issue #29 physical mapping: Accepted / MERGED（PR #108）
 - Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-- Concrete repository: HOLD
-- READY_FOR_HUMAN_GO: YES（consumed）
+- Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+- Ready: YES（consumed） / Merge: DONE
+- 実 SharePoint adapter / tenant integration: 別 Gate / NO-GO
+- READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 - SharePoint adapter: NO-GO
 
@@ -276,7 +279,7 @@ Decision-HO-1 Accepted（#17）、遷移 PR #90、ロール PR #91、mutation PR
 AuditEvent candidate PR #96（`HANDOFF_STATUS_CHANGED` / `5215557663`）。
 実保存技術契約 MERGED（PR #99）。logical persistence boundary MERGED（PR #104）。
 Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 Accepted。
-次は PR #110 Merge 向けの別の明示的 GO（Ready YES）
+次は PR #111 の明示的 Merge GO（Independent Re-review PASS 4888290222 / Ready YES）。実 SharePoint adapter は別 Gate / NO-GO
 （[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) /
  [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）。
 
@@ -288,7 +291,7 @@ Decision-OP-3 / Decision-RD-3。
 Decision-FLR-1（Finding 再オープン）は Accepted（不許可・実装 NONE）。
 AUD-RET-1 / AUD-WR-1 / value safety / hardening / REPLAY-1 / REPO-1 Decision は Accepted（DONE）。
 Replay logical は MERGED（PR #106）。
-`#22B` synthetic REVIEW PASS / Ready YES。Merge 別 GO。SharePoint 実環境 / M365 / Deploy は継続 NO-GO。
+`#22B` synthetic MERGED（PR #110 / 62a43d7f…）。SharePoint 実環境 / M365 / Deploy は継続 NO-GO（別 Gate）。
 正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)。
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 （Issue #24 系 Next pure unit は別）
@@ -314,7 +317,8 @@ PR-I候補の支援計画遷移は、Issue #24所有表への自動割当を行�
 - `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted）
 - AuditLog cleanup / 物理削除運用（Decision-AUD-RET-1 **Accepted**。cleanup は別）
 - Issue `#29` physical definition / mapping alignment（docs-only。実変更 NO-GO）
-- Concrete repository: HOLD（`#29` + Entry PASS + 別 human GO 後）
+- Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
+実 SharePoint adapter / tenant integration: 別 Gate / NO-GO（`#29` + Entry PASS + 別 human GO 後）
 - SharePoint adapter / Entra ID / Microsoft 365 / deploy: NO-GO
 
 DONE（継続HOLDから外す）:

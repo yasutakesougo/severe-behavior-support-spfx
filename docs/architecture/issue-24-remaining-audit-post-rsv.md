@@ -52,7 +52,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 
 | 単位 | 所有 | 分類 | 独立実装可否 | 備考 |
 |---|---|---|---|---|
-| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。`#29` MERGED。`#22B` PR #110 REVIEW PASS / Ready YES。Merge 別 GO。SharePoint 実環境 NO-GO |
+| Handoff 状態遷移純関数 | Issue #17 | **Accepted / MERGED**（HO-1 + PR #90〜#96） | 候補まで完了 | logical/replay DONE（PR #104/#106）。`#29` MERGED。`#22B` PR #110 MERGED（synthetic）。SharePoint 実環境 NO-GO |
 | Finding 再オープン（Resolved から） | Issue #24（lifecycle） | **Accepted**（Decision-FLR-1） | **実装不要** | 再オープン不許可・`Resolved` 終端維持。impact NONE。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md) |
 | FindingSeverity / 完全 Finding | DEC 方式 A/B 未選択 | HOLD（Decision 未） | **不可** | 値一覧の暗黙採用禁止 |
 | FindingCode 業務カタログ | Issue #24（部分） | HOLD（カタログ Decision） | **不可** | Identity 組立は完了。カタログは別 |
@@ -66,7 +66,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 | AuditEvent Replay implementation | #22A / REPLAY-1 | **DONE**（PR #106） | **完了** | Entry PASS + Human GO 消費済み |
 | Decision-AUD-REPO-1 | #22A | **Accepted** | **完了** | uniqueness / multi-match / race |
 | AuditEvent physical mapping | #29 | **Accepted**（MERGED（PR #108）） | **不可（今は #22B）** | docs-only。実変更 NO-GO |
-| AuditEvent concrete repository / SharePoint | #22B | **REVIEW PASS / Ready YES**（PR #110） | **synthetic のみ** | Re-review 4888201572。Merge 別 GO。SharePoint 実環境 NO-GO |
+| AuditEvent concrete repository / SharePoint | #22B | **MERGED（synthetic）**（PR #110 / 62a43d7f…） | **synthetic のみ完了** | 実 SharePoint adapter は別 Gate / NO-GO |
 | 訂正・削除・復旧運用 | Issue #17 | HOLD（`GOV-AUD`） | **不可** | #19 回答待ち |
 
 ### 3. Approval Dependency
@@ -97,7 +97,7 @@ PR-I 選定時点で「後続候補」だった支援計画系純粋ルール
 残 Decision 分類正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
 1. Decision-FLR-1 Finding 再オープン — **Accepted**（不許可・実装 NONE）。正本: [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)
-2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。次は PR #110 Merge 別 GO（REVIEW PASS / Ready YES / SharePoint 実環境 NO-GO）
+2. AuditEvent 実保存の次工程 — ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 **Accepted**。logical/replay MERGED（PR #104/#106）。`#29` mapping Accepted / MERGED（PR #108）。正本: [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)。次は実 SharePoint adapter 別 Gate（PR #110 MERGED / SharePoint 実環境 NO-GO）
 3. FindingSeverity DEC 方式 A/B 選択（Decision-SEV-1。値一覧は SEV-2）
 4. FindingCode 業務カタログ Decision（Decision-FC-1 / FC-2）
 5. Decision-OP-3 / Decision-RD-3（フィールド・制度窓。完了済み純関数の代替ではない）
@@ -118,7 +118,7 @@ Implementation Start: HOLD
 - FindingCode カタログの暗黙採択
 - Decision-FLR-1 に反する再オープン辺の追加（Accepted: 不許可）
 - AuditLog 保存期間・書込先の推測採択
-- AuditEvent `#22B` SharePoint 実環境 adapter（PR #110 は synthetic slice のみ PASS。実変更 NO-GO）
+- AuditEvent `#22B` SharePoint 実環境 adapter（PR #110 MERGED は synthetic のみ。実変更 NO-GO / 別 Gate）
 - OP-3 / RD-3 の制度値埋め込み
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
@@ -139,10 +139,10 @@ Deploy: NO-GO
 - AssessmentSnapshot 完全契約・保存（`DEC-009` / `GOV-AUD`）が未了
 - FindingCode 業務カタログが未了
 - FindingSeverity / 完全 Finding が未了
-- AuditEvent `#22B` Merge（PR #110 Ready YES / Merge 別 GO）および実 SharePoint adapter が未了
+- AuditEvent 実 SharePoint adapter / tenant integration（`#22B` synthetic は MERGED）が未了
 
 Decision-FLR-1 / Decision-HO-1 / AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 / persistence technical contract（PR #99）/ contract hardening（PR #102）/ logical persistence（PR #104）/ replay logical（PR #106）は完了扱い。
-Close ブロッカーから外す。Audit 系の本当の次ブロッカーは Issue `#29` physical mapping。
+Close ブロッカーから外す。Audit 系の本当の次ブロッカーは実 SharePoint adapter / tenant integration（`#29` mapping / `#22B` synthetic は MERGED。実環境は別 Gate / NO-GO）。
 
 支援計画系純粋ルール系列の完了は、上記 HOLD を解消しない。
 
