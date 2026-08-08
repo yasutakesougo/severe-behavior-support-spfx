@@ -7,7 +7,7 @@ FindingSeverity の用途一次情報として、
 
 本単位は **SEV-2-VOCAB の値採択ではない**。
 **SEV-2-ASSIGN でもない**。
-VOCAB HOLD（V-C）は維持する。
+VOCAB は再評価により **Accepted / Option A（FindingSeverity NOT ADOPTED）**。
 
 ## 基準
 
@@ -15,13 +15,13 @@ VOCAB HOLD（V-C）は維持する。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-SEV-2-PURPOSE
 Status: RECORDED（Human purpose-source policy）
-SEV-2-VOCAB: HOLD / V-C（維持）
-SEV-2-ASSIGN: CANDIDATE / NOT SELECTED（本単位で進めない）
+SEV-2-VOCAB: Accepted / Option A / FindingSeverity NOT ADOPTED
+SEV-2-ASSIGN: N/A / DO NOT START
 SEV-2-CONCEPT-INV: COMPLETED / OFFICIAL_CONCEPT_EXISTS
   正本: decision-sev-2-concept-inv.md
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
-Depends on: Decision-SEV-2-VOCAB HOLD（V-C）
+Depends on: Decision-SEV-2-VOCAB（現正本: NOT ADOPTED）
 main before this canonicalization: fba1e8e04a1fd731def03bc4c5a7f21dd3e25d8a
 PR #114 / SEV-2-VOCAB HOLD: MERGED
 PR #115 / SEV-2-PURPOSE: MERGED
@@ -30,7 +30,8 @@ PR #115 / SEV-2-PURPOSE: MERGED
 上位入口:
 
 - [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
-- [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)
+- [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+- [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)（historical HOLD）
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -124,10 +125,10 @@ FindingSeverity = "10+" | "18+": NOT APPROPRIATE as direct adoption
 Investigation result: COMPLETED
 Official concept exists: YES（行動関連項目合計点数）
 Generic FindingSeverity taxonomy: NOT FOUND
-FindingSeverity removal / non-adoption: STRONGER CANDIDATE（Option A）。未 Accepted
-SEV-2-VOCAB values: NOT DEFINED（HOLD 維持）
-Issue #8 DEC path: REQUIRED for Accepted values OR non-adoption Decision
-Next: Human SEV-2-VOCAB re-evaluation
+SEV-2-VOCAB: Accepted / Option A / FindingSeverity NOT ADOPTED
+  正本: decision-sev-2-vocab-not-adopted.md
+Issue #8 DEC path: REQUIRED for non-adoption Decision（番号 UNASSIGNED）
+SEV-2-ASSIGN: N/A / DO NOT START
 ```
 
 ## 正しい順序
@@ -135,24 +136,18 @@ Next: Human SEV-2-VOCAB re-evaluation
 ```text
 1. SEV-2-PURPOSE（本単位）— MHLW-first purpose source を固定 — RECORDED
 2. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査 — COMPLETED（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)）
-3. SEV-2-VOCAB 再評価（Human）
-   - HOLD 継続
-   - Option A: FindingSeverity 不採用 / 契約からの除外（一次資料整合では stronger candidate）
-   - Option B: FindingSeverity を残し、MHLW 正式概念の写像を別途正本化
+3. SEV-2-VOCAB 再評価（Human）— **Accepted / Option A**
+   - FindingSeverity 不採用 / 契約からの除外
+   - 正本: [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
 4. Issue #8 新 DEC 記録（番号は現在 UNASSIGNED）
-   - Accepted（正式値あり / 写像あり）の場合
-   - 不採用 Decision の場合
-   の両方を対象にする（Decision-SEV-1 Option A の ownership / change control）
+   - 不採用 Decision を記録対象とする（Decision-SEV-1 Option A）
+   - 台帳本文追記は docs 正本化とは別操作
 5. 分岐後の ASSIGN / 実装
-   - Option B で VOCAB Accepted 後のみ:
-     SEV-2-ASSIGN を別 Human Decision として扱う
-     実装は別 Entry Criteria + Implementation Start
-   - Option A 不採用 / 契約除外の場合:
+   - Option A 不採用 / 契約除外のため:
      SEV-2-ASSIGN = N/A / DO NOT START
      実装への自動進行 = FORBIDDEN
-   - HOLD 継続の場合:
-     SEV-2-ASSIGN = CANDIDATE / NOT SELECTED を維持
-     Issue #8 新 DEC 本文はまだ記録しない
+   - 代替概念（合計点 / predicates / scheme / RuleSetVersion）は
+     別 Entry Criteria + Human Implementation Start まで開始しない
 ```
 
 ```text
@@ -168,8 +163,8 @@ Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 | Decision-SEV-1 ownership | Accepted / Option A |
 | **SEV-2-PURPOSE**（本単位） | **RECORDED**（MHLW-first） |
 | **SEV-2-CONCEPT-INV** | **COMPLETED / OFFICIAL_CONCEPT_EXISTS**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)） |
-| SEV-2-VOCAB | HOLD / V-C（値 NOT DEFINED。再評価待ち） |
-| SEV-2-ASSIGN | CANDIDATE / NOT SELECTED |
+| SEV-2-VOCAB | **Accepted / Option A / FindingSeverity NOT ADOPTED** |
+| SEV-2-ASSIGN | **N/A / DO NOT START** |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |
 | SharePoint / tenant / M365 / Entra / Deploy | NO-GO |
@@ -177,9 +172,10 @@ Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 
 ## 対象外
 
-- SEV-2-VOCAB の値採択（HOLD 維持。再評価は別 Human Decision）
-- SEV-2-ASSIGN の Accepted / HOLD 判定
-- TypeScript 型・validator・fixture・完全 Finding 実装
+- SEV-2-VOCAB 値一覧の採択（不採用のため N/A）
+- SEV-2-ASSIGN（N/A / DO NOT START）
+- 代替概念の型・schema・実装開始
+- TypeScript FindingSeverity 型・validator・fixture
 - FindingSeverity = "10+" / "18+" の採択
 - 汎用 severity taxonomy の発明
 - SharePoint / adapter / UI / deploy / 実データ

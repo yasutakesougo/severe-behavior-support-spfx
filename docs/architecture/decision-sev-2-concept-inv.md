@@ -4,9 +4,8 @@
 **結果正本**である。
 
 本単位は **investigation result** である。
-**SEV-2-VOCAB Accepted ではない**。
+VOCAB 再評価の Accepted 正本ではない（後続 Human Decision で確定済み）。
 **SEV-2-ASSIGN でもない**。
-VOCAB HOLD（V-C）は、Human 再評価まで維持する。
 
 ## 基準
 
@@ -16,8 +15,9 @@ Unit ID: SEV-2-CONCEPT-INV
 Kind: investigation result（Decision Accepted ではない）
 Status: COMPLETED / OFFICIAL_CONCEPT_EXISTS
 SEV-2-PURPOSE: RECORDED（MHLW-first）
-SEV-2-VOCAB: HOLD / V-C（維持。本結果で Accepted しない）
-SEV-2-ASSIGN: CANDIDATE / NOT SELECTED（進めない）
+SEV-2-VOCAB: Accepted / Option A / FindingSeverity NOT ADOPTED
+  （後続再評価。正本: decision-sev-2-vocab-not-adopted.md）
+SEV-2-ASSIGN: N/A / DO NOT START
 Implementation: NOT STARTED
 Depends on: Decision-SEV-2-PURPOSE
 main before this canonicalization: e8176293c63b78e3e6763e59ada05fd71751e1ff
@@ -27,7 +27,8 @@ PR #115 / SEV-2-PURPOSE: MERGED
 上位入口:
 
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
-- [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)
+- [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+- [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)（historical HOLD）
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 
@@ -135,49 +136,41 @@ Official concept that exists instead: 行動関連項目合計点数 (+ regulato
 したがって、現時点で FindingSeverity という汎用フィールド自体を
 制度正本として採択する根拠は、本調査では見つかっていない。
 
-## 次の Human Decision（SEV-2-VOCAB 再評価）— 未決
+## 後続 Human Decision（SEV-2-VOCAB 再評価）— 完了
 
-本結果を受けて比較する候補は実質次の 2 つ。
-**まだ Accepted していない。**
+本調査結果を受けた再評価は **Accepted / Option A**。
 
-| Option | 内容 |
-|---|---|
-| **A** | FindingSeverity を **不採用 / 契約から除外**する。代わりに行動関連項目合計点 + 制度判定結果 + RuleSetVersion を明示モデル化する |
-| **B** | FindingSeverity を残す。ただし MHLW のどの正式概念を何に写像するかを **別途正本化**する必要がある |
+| Option | 内容 | 結果 |
+|---|---|---|
+| **A** | FindingSeverity を **不採用 / 契約から除外**する。代わりに行動関連項目合計点 + 制度判定結果 + RuleSetVersion を明示モデル化する方向 | **Selected** |
+| **B** | FindingSeverity を残す。ただし MHLW のどの正式概念を何に写像するかを **別途正本化**する必要がある | Not selected |
 
 ```text
 Primary-source alignment (investigation judgment): Option A is the stronger candidate
-SEV-2-VOCAB Accepted: NO（再評価待ち）
-Selected option: NOT SELECTED
+SEV-2-VOCAB: Accepted / Option A / FindingSeverity NOT ADOPTED
+正本: decision-sev-2-vocab-not-adopted.md
 ```
 
-Option A 採択時:
+Option A 採択後:
 
 ```text
-Issue #8 新 DEC: REQUIRED（Decision-SEV-1 Option A / non-adoption path）
+Issue #8 新 DEC: REQUIRED（Decision-SEV-1 Option A / non-adoption path / 番号 UNASSIGNED）
 SEV-2-ASSIGN: N/A / DO NOT START
 Implementation auto-start: FORBIDDEN
-```
-
-Option B 採択時:
-
-```text
-Mapping Decision / VOCAB values: REQUIRED before implementation
-SEV-2-ASSIGN: 別 Human Decision（VOCAB Accepted 後のみ）
-FindingSeverity = "10+" | "18+" への安易な写像: FORBIDDEN without separate canon
+代替概念の型・schema・実装: 別 Entry Criteria + Human Implementation Start
 ```
 
 ## 停止点
 
 ```text
 SEV-2-CONCEPT-INV: RESULT AVAILABLE（本正本）
-Next: Human SEV-2-VOCAB re-evaluation（Option A / B / HOLD 継続）
+SEV-2-VOCAB: Accepted / Option A / NOT ADOPTED
 Do not start:
   SEV-2-ASSIGN
   TypeScript FindingSeverity type
   validator
   fixture
-  implementation
+  代替モデル実装（別 Entry Criteria まで）
 ```
 
 ## 分離（維持）
@@ -187,8 +180,8 @@ Do not start:
 | Decision-SEV-1 ownership | Accepted / Option A |
 | SEV-2-PURPOSE | RECORDED（MHLW-first） |
 | **SEV-2-CONCEPT-INV**（本単位） | **COMPLETED / OFFICIAL_CONCEPT_EXISTS** |
-| SEV-2-VOCAB | HOLD / V-C（再評価待ち。本結果で Accepted しない） |
-| SEV-2-ASSIGN | CANDIDATE / NOT SELECTED |
+| SEV-2-VOCAB | **Accepted / Option A / FindingSeverity NOT ADOPTED** |
+| SEV-2-ASSIGN | **N/A / DO NOT START** |
 | TypeScript / validator / 実装 | NOT STARTED |
 | FindingIdentity / stable Finding ID | UNCHANGED |
 | SharePoint / tenant / M365 / Entra / Deploy | NO-GO |
@@ -196,12 +189,13 @@ Do not start:
 
 ## 対象外
 
-- SEV-2-VOCAB の Accepted / 不採用の確定（Human 再評価）
-- SEV-2-ASSIGN
+- FindingSeverity 値一覧の採択（不採用のため N/A）
+- SEV-2-ASSIGN（N/A）
 - FindingSeverity = "10+" / "18+" の採択
 - `low` / `medium` / `high` の採択
 - 既存 `classifyBehaviorScore` / 点数帯の再定義
-- TypeScript 型・validator・fixture・完全 Finding 実装
+- 代替概念の型・schema・実装開始
+- TypeScript FindingSeverity 型・validator・fixture
 - Issue #8 DEC 番号の推測採番
 - SharePoint / adapter / UI / deploy / 実データ
 
