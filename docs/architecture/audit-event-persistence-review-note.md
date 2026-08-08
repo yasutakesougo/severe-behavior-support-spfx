@@ -36,11 +36,11 @@ Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-Concrete repository / #22B: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
+Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
 #22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
 Merge: NO（別 GO）
 READY_FOR_HUMAN_GO note: #22B PR #110 REVIEW PASS / Ready YES / Merge 別 GO
-Next: PR #110 Merge 向けの別の明示的 GO（Ready YES / Merge NO）
+Next: PR #110 の明示的 Merge GO（Ready YES / Merge NOT RUN。SharePoint/M365/Deploy は NO-GO）
 ```
 
 SharePoint / M365 / Deploy gate は別途 NO-GO。`#22B` synthetic REVIEW PASS / Ready YES。Merge は別 GO。

@@ -45,7 +45,7 @@ Alignment / next gate: docs/architecture/audit-event-persistence-22a-alignment-g
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: PR #110 Merge 向けの別の明示的 GO（Independent Re-review PASS / Ready YES）
+Next: PR #110 の明示的 Merge GO（code+docs review PASS / Ready YES / Merge NOT RUN）
 ```
 
 この文書は所有境界と実装ゲートを固定する。

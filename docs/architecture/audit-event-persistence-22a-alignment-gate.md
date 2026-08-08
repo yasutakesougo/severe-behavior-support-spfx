@@ -47,7 +47,7 @@ Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
-Concrete repository / #22B: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
+Concrete repository / #22B: REVIEW PASS（code 4888201572 / docs 4888221692） / Ready YES / Merge NO
 #22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
 Merge: NO（別 GO）
 SharePoint adapter / M365 / Deploy: NO-GO
@@ -135,14 +135,14 @@ concrete repository / SharePoint adapter（#22B）
 | 9 | Decision-AUD-REPO-1 Accepted | **DONE** |
 | 10 | Issue #29 physical mapping | **Accepted**（MERGED（PR #108）） |
 | 11 | Concrete Repository Entry Review | **PASS**（5224544473） |
-| 12 | Concrete repository / #22B | **REVIEW PASS / Ready YES**（PR #110 / 4888201572 / head 9abfc781…） |
+| 12 | Concrete repository / #22B | **REVIEW PASS / Ready YES / Merge NO**（code 4888201572 @ 9abfc781… / docs 4888221692 @ d5fbe8e…） |
 | 13 | SharePoint adapter / M365 / Deploy | **NO-GO** |
 
 ```text
 Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
-Next: PR #110 Merge 向けの別の明示的 GO（Ready YES / Merge NO）
+Next: PR #110 の明示的 Merge GO（Ready YES / Merge NOT RUN。SharePoint/M365/Deploy は NO-GO）
 Decision-AUD-REPO-1: Accepted
 Technical Decision blocker: CLEARED
 Issue #29 physical definition / mapping alignment: Accepted

@@ -301,7 +301,7 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: PR #110 Merge 向けの別の明示的 GO（Ready YES / Merge NO）
+Next: PR #110 の明示的 Merge GO（Ready YES / Merge NOT RUN。SharePoint/M365/Deploy は NO-GO）
 Concrete repository: HOLD
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
