@@ -61,7 +61,7 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 |---|---|---|---|
 | **SEV-2-PURPOSE** | FindingSeverity **purpose source**（MHLW-first 方針） | **RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)） | 値一覧・assignment |
 | **SEV-2-CONCEPT-INV** | 厚労省一次資料での **正式概念有無** 調査 | **OPEN / NOT STARTED** | VOCAB 値採択・ASSIGN・実装 |
-| **SEV-2-VOCAB** | FindingSeverity **正式値・意味**（Issue #8 新 DEC の本文候補） | **HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)） | assignment 主体・算出アルゴリズム |
+| **SEV-2-VOCAB** | FindingSeverity **正式値・意味**、または **不採用 Decision**（Issue #8 新 DEC の本文候補） | **HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)） | assignment 主体・算出アルゴリズム |
 | **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE / NOT SELECTED（VOCAB と独立。本 HOLD で確定しない） | 値一覧そのものの採択 |
 
 
@@ -69,12 +69,16 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 Independent acceptance: REQUIRED
 Bundle Accepted: FORBIDDEN
 Order preference:
-  SEV-2-PURPOSE → SEV-2-CONCEPT-INV → SEV-2-VOCAB → SEV-2-ASSIGN
-  （値定義・ASSIGN は制度概念確認後。enum 検証を伴う assignment は VOCAB Accepted 後が安全）
+  SEV-2-PURPOSE → SEV-2-CONCEPT-INV → SEV-2-VOCAB →
+  Issue #8 DEC（Accepted values OR non-adoption）→
+  SEV-2-ASSIGN（Accepted values の場合のみ）
+  （値定義・ASSIGN は制度概念確認後。不採用時 ASSIGN は N/A。
+   enum 検証を伴う assignment は VOCAB Accepted 後が安全）
 ```
 
 旧 backlog 表記「Severity assignment boundary（値・意味・判定主体）」は、
 VOCAB と ASSIGN に **分割**し、さらに PURPOSE / CONCEPT-INV を前置する。
+不採用 Decision も Decision-SEV-1 Option A に従い Issue #8 新 DEC で正本化する。
 
 ---
 
@@ -245,11 +249,22 @@ stable Finding ID: UNCHANGED
 4. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査（コード変更なし）
 5. SEV-2-VOCAB を再評価
    - HOLD 継続
-   - または 制度上の正式概念に基づく Acceptance
+   - または Accepted（制度上の正式値あり）
    - または FindingSeverity 不採用 / 契約からの除外
-6. SEV-2-VOCAB Accepted（値定義あり）後に、SEV-2-ASSIGN を別 Human Decision として扱う
-7. Issue #8 へ新規 DEC 本文を記録（値定義後のみ。番号は現在 UNASSIGNED）
-8. 実装 / 型追加は別 Entry Criteria + Implementation Start（NOT STARTED）
+6. Issue #8 へ新規 DEC 本文を記録（番号は現在 UNASSIGNED）
+   - Accepted（正式値あり）の場合
+   - 不採用 Decision の場合
+   の両方を対象にする（Decision-SEV-1 Option A）
+7. 分岐後の ASSIGN / 実装
+   - Accepted（正式値あり）後にのみ:
+     SEV-2-ASSIGN を別 Human Decision として扱う
+     実装 / 型追加は別 Entry Criteria + Implementation Start
+   - 不採用 / 契約除外の場合:
+     SEV-2-ASSIGN = N/A / DO NOT START
+     実装への自動進行 = FORBIDDEN
+   - HOLD 継続の場合:
+     SEV-2-ASSIGN = CANDIDATE / NOT SELECTED を維持
+     Issue #8 新 DEC 本文はまだ記録しない
 ```
 
 ```text
@@ -257,14 +272,19 @@ Next SEV action:
   SEV-2-CONCEPT-INV（MHLW primary-source concept investigation）
 SEV-2-ASSIGN:
   CANDIDATE / NOT SELECTED
+Non-adoption path:
+  Issue #8 new DEC REQUIRED
+  SEV-2-ASSIGN = N/A / DO NOT START
 ```
 
 VOCAB HOLD 中および CONCEPT-INV 未完了中に ASSIGN へ進まない。
-
+不採用時も Issue #8 新 DEC 記録経路を省略しない。
 ## OUT / 混ぜないもの
 
 - SEV-2-VOCAB と SEV-2-ASSIGN の一括 Accepted
 - PURPOSE / CONCEPT-INV / VOCAB / ASSIGN の一括確定
+- FindingSeverity 不採用時に Issue #8 新 DEC 記録を省略すること
+- 「値定義後のみ」Issue #8 に書くこと（不採用 Decision も記録対象）
 - `low` / `medium` / `high` の暗黙正本化
 - ローカル発明の severity taxonomy
 - FindingIdentity / stable Finding ID の変更

@@ -86,6 +86,18 @@ AIによる値の補完・推測は行わない。
 正式概念が無い場合は FindingSeverity 自体の削除・不採用も候補とする。
 正式概念がある場合のみ、その正式名称・値・意味・適用条件を VOCAB 候補にする。
 
+Issue #8 新 DEC 記録経路（Decision-SEV-1 Option A）:
+
+```text
+VOCAB 再評価結果が Accepted（正式値あり）→ Issue #8 新 DEC に記録
+VOCAB 再評価結果が 不採用 / 契約除外 → Issue #8 新 DEC に不採用 Decision を記録
+HOLD 継続 → Issue #8 新 DEC 本文はまだ記録しない
+不採用時: SEV-2-ASSIGN = N/A / DO NOT START
+実装への自動進行: FORBIDDEN
+```
+
+「値定義後のみ Issue #8 に書く」は **禁止**。不採用も ownership / change control の対象である。
+
 ## 分離（維持）
 
 | 単位 | 状態 |

@@ -119,14 +119,15 @@ Blocks: SEV-2-VOCAB 値採択、SEV-2-ASSIGN、実装
 
 | 結果 | 次判断 |
 |---|---|
-| 制度上の正式概念が **存在しない** | FindingSeverity 自体の **削除・不採用** も候補。値定義に進まない |
-| 制度上の正式概念が **存在する** | その **正式名称・値・意味・適用条件** を SEV-2-VOCAB 候補にする。汎用 severity への丸めは後続設計判断 |
+| 制度上の正式概念が **存在しない** | FindingSeverity 自体の **削除・不採用** も候補。値定義に進まない。不採用にする場合は Issue #8 新 DEC で正本化する |
+| 制度上の正式概念が **存在する** | その **正式名称・値・意味・適用条件** を SEV-2-VOCAB 候補にする。汎用 severity への丸めは後続設計判断。Accepted 時は Issue #8 新 DEC で正本化する |
 
 ```text
 Investigation result: NOT RUN
 Official concept exists: UNKNOWN
 FindingSeverity removal / non-adoption: CANDIDATE only if no official concept
 SEV-2-VOCAB values: NOT DEFINED（HOLD 維持）
+Issue #8 DEC path: REQUIRED for Accepted values OR non-adoption Decision
 ```
 
 ## 正しい順序
@@ -136,19 +137,30 @@ SEV-2-VOCAB values: NOT DEFINED（HOLD 維持）
 2. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査（コード変更なし）
 3. SEV-2-VOCAB 再評価
    - HOLD 継続
-   - または 制度上の正式概念に基づく Acceptance
+   - または Accepted（制度上の正式値あり）
    - または FindingSeverity 不採用 / 契約からの除外
-4. SEV-2-VOCAB Accepted（値定義あり）後にのみ
-   SEV-2-ASSIGN を別 Human Decision として扱う
-5. Issue #8 新 DEC 本文記録（値定義後。番号は UNASSIGNED）
-6. 実装は別 Entry Criteria + Implementation Start
+4. Issue #8 新 DEC 記録（番号は現在 UNASSIGNED）
+   - Accepted（正式値あり）の場合
+   - 不採用 Decision の場合
+   の両方を対象にする（Decision-SEV-1 Option A の ownership / change control）
+5. 分岐後の ASSIGN / 実装
+   - Accepted（正式値あり）の場合のみ:
+     SEV-2-ASSIGN を別 Human Decision として扱う
+     実装は別 Entry Criteria + Implementation Start
+   - 不採用 / 契約除外の場合:
+     SEV-2-ASSIGN = N/A / DO NOT START
+     実装への自動進行 = FORBIDDEN
+   - HOLD 継続の場合:
+     SEV-2-ASSIGN = CANDIDATE / NOT SELECTED を維持
+     Issue #8 新 DEC 本文はまだ記録しない
 ```
 
 ```text
 SEV-2-ASSIGN auto progression: FORBIDDEN
+Non-adoption → SEV-2-ASSIGN: N/A / DO NOT START
 Bundle with VOCAB / PURPOSE / CONCEPT-INV: FORBIDDEN
+Issue #8 DEC recording limited to "値定義後のみ": FORBIDDEN
 ```
-
 ## 分離（維持）
 
 | 単位 | 状態 |
@@ -172,6 +184,7 @@ Bundle with VOCAB / PURPOSE / CONCEPT-INV: FORBIDDEN
 - 汎用 severity taxonomy の発明
 - SharePoint / adapter / UI / deploy / 実データ
 - Issue #8 DEC 番号の推測採番
+- 不採用時の Issue #8 記録経路省略（禁止。本単位で経路は固定済み）
 
 ## 変更禁止境界
 
