@@ -31,15 +31,16 @@ Replay Implementation Entry Review: PASS
 Human Replay GO: Accepted / consumed by PR #106
 Replay logical implementation: MERGED（PR #106）
 Technical Decision blocker: CLEARED
-Issue #29 physical definition / mapping alignment: Accepted
+Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108）
   Candidate: 5223465404 / Revision 2
   Independent Re-review: 5223625403（PASS）
   Human Acceptance: 5223669583
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Concrete Repository Entry Review: FAIL / 未再実行
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: NO
+  main: aa0e6fba7dd8abf32523c70232001b5ac78cfc1b
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
+READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
+READY_FOR_HUMAN_GO note: #22B 実装 GO は別
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
 
@@ -83,23 +84,24 @@ Human Persistence GO: Accepted / consumed by PR #104
 Logical AuditEvent persistence boundary: MERGED（PR #104）
 Replay logical implementation: MERGED（PR #106）
 Technical Decision blocker: CLEARED
-Issue #29 physical definition / mapping alignment: Accepted
+Issue #29 physical definition / mapping alignment: Accepted / MERGED（PR #108）
   Candidate: 5223465404 / Revision 2
   Independent Re-review: 5223625403（PASS）
   Human Acceptance: 5223669583
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Concrete Repository Entry Review: FAIL / 未再実行
-Concrete repository: HOLD
-READY_FOR_HUMAN_GO: NO
+  main: aa0e6fba7dd8abf32523c70232001b5ac78cfc1b
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
+READY_FOR_HUMAN_GO: YES
+Concrete repository / #22B: HOLD（別の明示的 Human GO 待ち）
+READY_FOR_HUMAN_GO note: #22B 実装 GO は別
 SharePoint adapter / M365 / Deploy: NO-GO
 ```
 
 ## 実装前に引き続き必要なこと
 
-- Issue `#29` physical definition / mapping alignment Accepted の docs canonicalization Merge
-- Concrete Repository Entry Review 再実行 PASS
-- `#22B` 向けの別の明示的 human GO（PR #104 / #106 GO とは別）
+- Issue `#29` physical definition / mapping alignment Accepted / MERGED（PR #108）（DONE）
+- Concrete Repository Entry Review PASS（Issue #22 comment 5224544473）（DONE）
+- `#22B` 向けの別の明示的 human GO（PR #104 / #106 / #108 GO とは別）（**未**）
 
 正本:
 
@@ -112,7 +114,7 @@ SharePoint adapter / M365 / Deploy: NO-GO
 
 - docs-only 契約 MERGED / Decision Accepted / hardening MERGED / logical/replay MERGED を repository GO と読み替えること
 - PR #104 / PR #106 Human GO を `#22B` GO として流用すること
-- Issue `#29` 未完了のまま Concrete Repository Entry Review を PASS 扱いすること
+- Concrete Repository Entry Review PASS / READY_FOR_HUMAN_GO: YES を `#22B` Human GO と読み替えること
 - SharePoint List / 列作成
 - concrete adapter 実装
 - Microsoft 365 変更

@@ -210,9 +210,9 @@ Logical AuditEvent persistence boundary: MERGED（PR #104）
 Decision-AUD-REPO-1: Accepted（別正本）
 Replay logical implementation: MERGED（PR #106）
 Issue #29 physical definition / mapping alignment: Accepted
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Next: Merge 後に Concrete Repository Entry Review 再実行
+Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
+Dependency blocker（#29 mapping）: CLEARED
+Next: #22B concrete repository 向けの別の明示的 Human GO（Entry PASS 済）
 Concrete repository: HOLD
 ```
 
@@ -241,11 +241,11 @@ Decision-AUD-REPO-1: Accepted（別正本）
 Replay logical implementation: MERGED（PR #106）
 Technical Decision blocker: CLEARED
 Issue #29 physical definition / mapping alignment: Accepted
-Canonicalization to main: PENDING / THIS PR（docs-only）
-Dependency blocker: NOT CLEARED
-Concrete Repository Entry Review: FAIL / 未再実行
+Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
+Dependency blocker（#29 mapping）: CLEARED
+Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 Concrete repository: HOLD
-READY_FOR_HUMAN_GO: NO
+READY_FOR_HUMAN_GO: YES
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```
