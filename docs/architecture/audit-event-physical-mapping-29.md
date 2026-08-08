@@ -29,7 +29,8 @@ Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Concrete repository / #22B: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
-#22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Readyization docs head: 8bdbaa8a1daaf25fb4f5eefe910eb849d685b874
 Merge: NO（別 GO）
 SharePoint adapter / Microsoft 365 / Deploy: NO-GO
 Issue #29 full provisioning: OPEN
@@ -59,7 +60,8 @@ Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）。
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 #22B synthetic repository: REVIEW PASS（PR #110 Independent Re-review 4888201572）
-#22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Readyization docs head: 8bdbaa8a1daaf25fb4f5eefe910eb849d685b874
 Ready: YES
 Merge: NO（別 GO）
 SharePoint 実環境操作 / Microsoft 365 / Deploy: NO-GO
@@ -462,7 +464,8 @@ PR #108 Independent Review: 5223968989（HOLD）→ P1-001/P1-002 addressed
 PR #108 Independent Re-review: 5224512796（PASS） / MERGED（aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 #29 full provisioning（DEC-013 / DEC-014 / #4）: OPEN
 #22B concrete repository: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
-#22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Readyization docs head: 8bdbaa8a1daaf25fb4f5eefe910eb849d685b874
 Merge: NO（別 GO）
 SharePoint 実環境操作 / M365 / Deploy: NO-GO
 SharePoint / M365 実変更: NO-GO
@@ -479,7 +482,8 @@ Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
 READY_FOR_HUMAN_GO: YES（consumed）
 #22B Human GO: CONFIRMED（Issue #22 comment 5224579776）
 Concrete repository / #22B: REVIEW PASS（PR #110 Independent Re-review 4888201572） / Ready YES
-#22B head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Independent Re-review PASS head: 9abfc781e84912590e8a237d362066dadeed1dc2
+#22B Readyization docs head: 8bdbaa8a1daaf25fb4f5eefe910eb849d685b874
 Merge: NO（別 GO）
 SharePoint adapter: NO-GO
 Microsoft 365: NO-GO
