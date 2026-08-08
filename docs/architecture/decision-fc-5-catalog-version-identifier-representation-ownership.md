@@ -110,7 +110,7 @@ UUID / hash / semver / DEC-number strategy: UNDECIDED / DO NOT START
 actual identifier values: UNDECIDED
 identifier syntax concrete profile: NOT STARTED
 Issue #8 FindingCode catalog DEC number: UNASSIGNED
-businessOwnershipRef logical contract: DO NOT START until FC-5 merge completes and FC-6 is re-evaluated
+businessOwnershipRef logical contract: Decision-FC-6 Accepted / Option C（別単位）
 snapshot physical schema: NOT STARTED
 snapshot materialization: NOT STARTED
 snapshot storage / SharePoint location: NOT STARTED / NO-GO
@@ -125,6 +125,10 @@ Implementation Start: HOLD
 ```
 
 AI は上記を補完しない。
+
+`businessOwnershipRef` の論理契約は
+[`decision-fc-6-business-ownership-ref-logical-contract.md`](./decision-fc-6-business-ownership-ref-logical-contract.md)
+で扱う。
 
 ## Contract compatibility gate
 
@@ -167,16 +171,20 @@ fixture creation: prohibited
 FindingCode value invention: prohibited
 ```
 
-## FC-6 Gate
+## 次の停止点
 
 ```text
-PR #126: HOLD
-Decision-FC-6: DO NOT START
+Decision-FC-5: Accepted / Option C
+Decision-FC-6: Accepted / Option C
+  businessOwnershipRef logical contract
+  （complete businessOwnershipRef logical contract）
+Implementation Start: HOLD
+Implementation auto-start: FORBIDDEN
 ```
 
-FC-5 の Accepted canonicalization、Independent Review、Human Ready、Human Merge が完了するまで FC-6 を再開しない。
-
-FC-5 merge 後にのみ PR #126 / FC-6 を新しい main に対して再評価する。
+FC-5 / FC-6 Accepted は Implementation Start ではない。
+DEC 本文 / representation strategy / materialization は別 Human Decision とする。
+Stale PR #126 は Merge しない。
 
 ## 継続する境界
 
