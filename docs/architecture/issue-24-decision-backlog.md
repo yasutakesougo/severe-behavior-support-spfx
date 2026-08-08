@@ -347,7 +347,7 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-6 Accepted / Option C系。FindingCode 値一覧・representation strategy 未決。実 SharePoint adapter は別 Gate / NO-GO
+Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-6 Accepted。Exit Review A-class（値一覧・strategy 等）待ち。FC-7 NOT CREATED。実 SharePoint adapter は別 Gate / NO-GO
 Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 Ready: YES（consumed）
 Merge: DONE
