@@ -11,10 +11,12 @@ IN:
 
 OUT:
 
-- src/**
+- src/**（本 docs 正本化では変更しない）
 - tests/**
-- SharePoint List / columns
-- concrete adapter
+- SharePoint List / columns 実変更
+- concrete adapter（#22B）
 - M365 changes
 - deployment
 - real data
+
+Next docs: Issue #29 physical mapping（[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)）

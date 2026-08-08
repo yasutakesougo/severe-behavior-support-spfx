@@ -25,11 +25,14 @@ Decision-AUD-IDEM-1: Accepted
 Decision-AUD-SAN-VALUE-1: Accepted
 Decision-AUD-SAN-1: Accepted
 Decision-AUD-REPLAY-1: Accepted
+Decision-AUD-REPO-1: Accepted
 AuditEvent contract hardening: MERGED（PR #102）
 Logical AuditEvent persistence boundary: MERGED（PR #104）
-Next audit gate: Replay Implementation Entry Review
-Replay implementation: HOLD pending Entry PASS + separate human GO
+Replay logical implementation: MERGED（PR #106）
+Next audit gate: Issue #29 physical definition / mapping alignment
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -83,6 +86,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | Decision-AUD-SAN-VALUE-1 | Accepted（validate+reject / FINITE_ENUM targetType） | [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md) |
 | Decision-AUD-SAN-1 | Accepted（hardening MERGED / PR #102） | validateAuditEvent は SAN-VALUE 適合 |
 | Decision-AUD-REPLAY-1 | Accepted（safe replay / dual lookup） | [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md) |
+| Decision-AUD-REPO-1 | Accepted（uniqueness / multi-match / race） | [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md) / #22 `5219980098` / `5220288044` / `5220303406` |
+| Issue #29 physical mapping | IN PROGRESS（docs-only） | [`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md) |
 | FindingIdentity 組立 | Accepted / Start | `5210065336` / `5210078985` |
 | finding 再発 | Accepted / Start | `5210206944` / `5210210553` |
 | Snapshot Result変換 | Selection / Decision / Start | `5210366943` / `5210389077` / `5210392317` |
@@ -120,7 +125,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-AUD-IDEM-1** | AuditEvent persistence identity / replay | **Accepted**。正本: [`decision-aud-idem-1-audit-event-idempotency.md`](./decision-aud-idem-1-audit-event-idempotency.md) | Issue `#22A` | ALIGN-1 | write envelope + FX-IDEM 表現 |
 | **Decision-AUD-SAN-VALUE-1** | AuditEvent value safety（validate+reject） | **Accepted**。正本: [`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md) | Issue `#22` / `#27` hardening | ALIGN-1 | hardening MERGED（PR #102）。SAN-1 Accepted |
 | **Decision-AUD-SAN-1** | AuditEvent value sanitization / write-boundary 完了判定 | **Accepted**。hardening MERGED（PR #102） | Issue `#27` / `#22` | SAN-VALUE-1 | Logical boundary MERGED（PR #104） |
-| **Decision-AUD-REPLAY-1** | existing-result verification / safe replay | **Accepted**。正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md) | Issue `#22A` | IDEM-1 / ALIGN-1 / PR #104 | Replay Implementation Entry Review → separate human GO |
+| **Decision-AUD-REPLAY-1** | existing-result verification / safe replay | **Accepted**。正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md) | Issue `#22A` | IDEM-1 / ALIGN-1 / PR #104 | Replay MERGED（PR #106） |
+| **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | Issue `#29` physical mapping → Concrete Entry Review 再実行 |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | HOLD。`DEC-001〜017` に Severity 正本なし | A: Issue #8 新DEC / B: Issue #27 technical decision | 方式選択前に値一覧を採択しない | 方式 Accepted 後に **Decision-SEV-2** へ進める |
 | **Decision-SEV-2** | Severity assignment boundary（値・意味・判定主体） | HOLD。値一覧・domain算出/caller-supplied 未決 | SEV-1 の選択結果に従う | **SEV-1** | 完全 Finding 契約の Severity 欄定義候補（実装は別 Entry Criteria） |
 | **Decision-FC-1** | FindingCode catalog ownership | HOLD。Identity 組立は完了。業務カタログ正本なし | Issue #24（部分・カタログは別 Decision）。確定は人の承認 | Identity 組立契約を再定義しない | 所有者確定後に **Decision-FC-2** |
@@ -212,7 +218,7 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 1. Decision-FLR-1   Finding reopen policy — Accepted（実装 NONE / PR #88 MERGED）
 2. Decision-HO-1    Handoff transition ownership — Accepted（#17）。実装系列 MERGED
 3. Decision-AUD-ALIGN-1  #22A write-result / idempotency 整合 — Accepted
-4. Decision-AUD-IDEM-1 / AUD-SAN-VALUE-1 / AUD-SAN-1 / AUD-REPLAY-1 — Accepted。logical boundary MERGED（PR #104）
+4. Decision-AUD-IDEM-1 / AUD-SAN-VALUE-1 / AUD-SAN-1 / AUD-REPLAY-1 / AUD-REPO-1 — Accepted。logical/replay MERGED（PR #104/#106）。次は `#29`
 5. Decision-SEV-1   FindingSeverity vocabulary ownership（A/B）
 6. Decision-SEV-2   Severity assignment boundary（SEV-1 後）
 7. Decision-FC-1    FindingCode catalog ownership
@@ -222,33 +228,36 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 11. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
-注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1 は Accepted。hardening MERGED（PR #102）。logical boundary MERGED（PR #104）。
-**次工程は Replay Implementation Entry Review**。Replay / repository コードはまだ開始しない。
+注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
+**次工程は Issue `#29` physical definition / mapping alignment**。`#22B` はまだ開始しない。
 SEV は SEV-1→SEV-2、FC は FC-1→FC-2 の順を崩さない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
-Replay Entry PASS + separate human GO なしに replay 実装を始めない。
+`#29` 完了 + Concrete Entry PASS + 別 human GO なしに `#22B` を始めない。
 ## Phase 4 — 次の安全な純関数単位
 
 ```text
 Next Handoff domain unit: NONE（候補まで MERGED）
 Persistence technical contract: MERGED（PR #99）
-Decision-AUD-ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1: Accepted
+Decision-AUD-ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1: Accepted
 AuditEvent contract hardening: MERGED（PR #102）
 Logical AuditEvent persistence boundary: MERGED（PR #104）
-Next gate: Replay Implementation Entry Review
-Implementation Start (Replay): HOLD pending Entry PASS + separate human GO
+Replay logical implementation: MERGED（PR #106）
+Next gate: Issue #29 physical definition / mapping alignment
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 ```
 
 判定理由:
 
-1. AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 Accepted。技術契約 PR #99 MERGED。hardening PR #102 MERGED。logical boundary PR #104 MERGED
-2. 実装前の本当の次工程は **Replay Implementation Entry Review**
-3. Decision Accepted / logical boundary MERGED ≠ Replay implementation GO
-4. PR #104 Human GO は logical boundary で消費済み
+1. AUD-RET-1 / AUD-WR-1 / ALIGN-1 / IDEM-1 / SAN-VALUE-1 / SAN-1 / REPLAY-1 / REPO-1 Accepted。技術契約 PR #99 MERGED。hardening PR #102 MERGED。logical/replay PR #104/#106 MERGED
+2. 実装前の本当の次工程は **Issue `#29` physical definition / mapping alignment**
+3. Decision Accepted / logical/replay MERGED ≠ Concrete repository GO
+4. PR #104 / #106 Human GO は logical / replay で消費済み
 5. SharePoint / Microsoft 365 / deploy は NO-GO
 
-正本: [`decision-aud-replay-1-audit-event-safe-replay.md`](./decision-aud-replay-1-audit-event-safe-replay.md)
+正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)、
+[`audit-event-physical-mapping-29.md`](./audit-event-physical-mapping-29.md)
 
 ## OUT / 混ぜないもの
 
@@ -262,7 +271,7 @@ Concrete repository: HOLD
 - Snapshot 保存・DTO・SharePoint / SPFx / Schema / M365 / Deploy
 - Issue #24 Close
 - Decision の一括 Accepted 前提
-- AuditEvent 実保存 / SharePoint adapter
+- AuditEvent `#22B` concrete repository / SharePoint adapter / M365 実変更
 
 ## Gate
 
@@ -271,17 +280,21 @@ Decision backlog 整理: READY（docs-only）
 PR #99: MERGED
 PR #102: MERGED
 PR #104: MERGED
+PR #106: MERGED
 Persistence technical contract: MERGED
 Decision-AUD-ALIGN-1: Accepted
 Decision-AUD-IDEM-1: Accepted
 Decision-AUD-SAN-VALUE-1: Accepted
 Decision-AUD-SAN-1: Accepted
 Decision-AUD-REPLAY-1: Accepted
+Decision-AUD-REPO-1: Accepted
 AuditEvent contract hardening: MERGED（PR #102）
 Logical AuditEvent persistence boundary: MERGED（PR #104）
-Next: Replay Implementation Entry Review
-Implementation Start (Replay): HOLD pending Entry PASS + separate human GO
+Replay logical implementation: MERGED（PR #106）
+Next: Issue #29 physical definition / mapping alignment
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO
@@ -291,11 +304,11 @@ Ready / Merge（本PR）: 人の事前承認待ち（エージェントは実行
 ## 本 PR（docs-only）の役割
 
 ```text
-1. Decision-AUD-REPLAY-1 Accepted を current-state 正本へ反映する
-2. PR #104 logical boundary MERGED を同期する
-3. 次工程を Replay Implementation Entry Review として固定する
-4. Replay / repository コードへ進まない
-5. PR #104 Human GO を Replay GO として流用しない
+1. Decision-AUD-REPO-1 Accepted を current-state 正本へ反映する
+2. PR #106 Replay logical MERGED を同期する
+3. 次工程を Issue #29 physical mapping として固定する
+4. #22B / SharePoint / M365 / Deploy へ進まない
+5. PR #104 / #106 Human GO を #22B GO として流用しない
 6. src/** / tests/** は変更しない
 ```
 

@@ -17,15 +17,23 @@ Human Persistence GO: Accepted / consumed by PR #104
 Logical AuditEvent persistence boundary: MERGED（PR #104）
 Decision-AUD-REPLAY-1: Accepted
   → docs/architecture/decision-aud-replay-1-audit-event-safe-replay.md
-Next: Replay Implementation Entry Review
-Replay implementation: HOLD pending Entry PASS + separate human GO
+Replay Implementation Entry Review: PASS
+Human Replay GO: Accepted / consumed by PR #106
+Replay logical implementation: MERGED（PR #106）
+Decision-AUD-REPO-1: Accepted
+  → docs/architecture/decision-aud-repo-1-audit-event-repository-uniqueness.md
+Technical Decision blocker: CLEARED
+Dependency blocker: Issue #29 physical definition / mapping alignment
+  → docs/architecture/audit-event-physical-mapping-29.md
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
 Microsoft 365 changes: NO-GO
 Deploy: NO-GO
 ```
 
-実装開始には、少なくとも次を満たす。
+concrete repository（`#22B`）開始には、少なくとも次を満たす。
 
 1. persistence technical contract が MERGED（DONE / PR #99）。
 2. #22A の write-result / `SAVE_OUTCOME_UNKNOWN` 境界と矛盾しない（DONE / Decision-AUD-ALIGN-1）。
@@ -33,12 +41,14 @@ Deploy: NO-GO
 4. 値安全性契約が明示される（DONE / Decision-AUD-SAN-VALUE-1）。
 5. `validateAuditEvent` hardening is merged and Decision-AUD-SAN-1 Accepted（DONE / PR #102）。
 6. Logical persistence boundary MERGED（DONE / PR #104）。
-7. Decision-AUD-REPLAY-1 Accepted（DONE）。
-8. Replay Implementation Entry Review PASS + separate explicit human GO（**未**）。
+7. Decision-AUD-REPLAY-1 Accepted + Replay Entry PASS + separate Human Replay GO（DONE / PR #106）。
+8. Decision-AUD-REPO-1 Accepted（DONE）。
+9. Issue `#29` physical definition / mapping alignment 完了（**未**）。
+10. Concrete Repository Entry Review PASS + separate explicit Human GO（**未**）。
 
-この文書自体は replay / repository 実装を許可しない。
+この文書自体は `#22B` / SharePoint / M365 / Deploy を許可しない。
 
 ```text
-Replay implementation:
-HOLD pending Entry PASS + separate human GO
+Next: Issue #29 physical definition / mapping alignment
+Concrete repository: HOLD
 ```

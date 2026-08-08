@@ -272,12 +272,16 @@ Deploy: OUT
 ```text
 Decision-AUD-REPLAY-1: Accepted
 Logical AuditEvent persistence boundary: MERGED（PR #104）
-Next: Replay Implementation Entry Review
-Replay implementation: HOLD pending Entry PASS + separate human GO
+Replay logical implementation: MERGED（PR #106）
+Decision-AUD-REPO-1: Accepted（別正本）
+Technical Decision blocker: CLEARED
+Dependency blocker: Issue #29 physical definition / mapping alignment
+Concrete Repository Entry Review: FAIL（#29未完了）
 Concrete repository: HOLD
+READY_FOR_HUMAN_GO: NO
 SharePoint adapter: NO-GO
 Microsoft 365 / Deploy: NO-GO
 ```
 
-PR #104 の Human Persistence GO は logical boundary 実装で消費済み。
-Replay 実装には別の明示的 human GO が必要。
+PR #104 / PR #106 の Human GO は logical / replay 実装で消費済み。
+`#22B` には Issue `#29` 完了・Concrete Repository Entry Review PASS・別の明示的 human GO が必要。
