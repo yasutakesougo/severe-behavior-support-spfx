@@ -63,6 +63,9 @@ export function createSyntheticAuditEventRepository(
 
     async findByRecordId(recordId: string): Promise<AuditEventExistingLookupResult> {
       const key = computeRecordIdentityKey(boundOrganizationId, recordId);
+      if (key === null) {
+        return { kind: "RETRIEVAL_FAILED" };
+      }
       return lookupByKey(store.findByRecordIdentityKey(key), {
         kind: "recordId",
         token: recordId,
@@ -71,6 +74,9 @@ export function createSyntheticAuditEventRepository(
 
     async findByIdempotencyKey(idempotencyKey: string): Promise<AuditEventExistingLookupResult> {
       const key = computeIdempotencyIdentityKey(boundOrganizationId, idempotencyKey);
+      if (key === null) {
+        return { kind: "RETRIEVAL_FAILED" };
+      }
       return lookupByKey(store.findByIdempotencyIdentityKey(key), {
         kind: "idempotencyKey",
         token: idempotencyKey,

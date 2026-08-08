@@ -244,4 +244,88 @@ describe("Synthetic AuditEvent concrete repository (#22B / Accepted #29)", () =>
     });
     assert.equal(await repository.save(request), "SAVE_FAILED");
   });
+
+  it("REPO-11: physical null optional encoded fields map to logical undefined (P1-001)", async () => {
+    const request = createRequest({
+      auditEvent: {
+        auditEventId: "synthetic-audit-event-null-opt",
+        OrganizationId: SYNTHETIC_FINDING_ID_ORG,
+        actionCode: "SYNTHETIC_ACTION_RECORD_CREATED",
+        targetType: "HandoffState",
+        result: "success",
+        occurredAt: "2026-08-06T10:00:00.000Z",
+        correlationId: "synthetic-correlation-null-opt",
+      },
+      idempotencyKey: "synthetic-idempotency-key-null-opt",
+    });
+
+    const { repository, store } = createHarness();
+    assert.equal(await repository.save(request), "SAVED");
+
+    const saved = store.snapshotRows()[0];
+    assert.equal(saved.SbsAudSiteIdEncoded, null);
+    assert.equal(saved.SbsAudActorStaffIdEncoded, null);
+    assert.equal(saved.SbsAudTargetRecordIdEncoded, null);
+    assert.equal(saved.SbsAudAppVersionEncoded, null);
+    assert.equal(saved.SbsAudRuleSetVersionEncoded, null);
+    assert.equal(saved.SbsAudReasonCode, null);
+
+    // Explicit physical nulls (SharePoint unset) must not become RETRIEVAL_FAILED.
+    const nullStore = new SyntheticAuditEventListStore();
+    const nullRepo = createSyntheticAuditEventRepository(SYNTHETIC_FINDING_ID_ORG, nullStore);
+    nullStore.forceInsert({
+      ...saved,
+      SbsAudSiteIdEncoded: null,
+      SbsAudActorStaffIdEncoded: null,
+      SbsAudTargetRecordIdEncoded: null,
+      SbsAudAppVersionEncoded: null,
+      SbsAudRuleSetVersionEncoded: null,
+      SbsAudReasonCode: null,
+    });
+
+    const found = await nullRepo.findByRecordId(request.auditEvent.auditEventId);
+    assert.equal(found.kind, "FOUND");
+    if (found.kind === "FOUND") {
+      assert.deepEqual(found.persisted, {
+        auditEvent: request.auditEvent,
+        idempotencyKey: request.idempotencyKey,
+      });
+      assert.equal(
+        Object.prototype.hasOwnProperty.call(
+          (found.persisted as { auditEvent: object }).auditEvent,
+          "SiteId",
+        ),
+        false,
+      );
+    }
+  });
+
+  it("REPO-12: malformed non-null optional physical values remain RETRIEVAL_FAILED", async () => {
+    const request = createRequest({
+      auditEvent: {
+        auditEventId: "synthetic-audit-event-bad-opt",
+        OrganizationId: SYNTHETIC_FINDING_ID_ORG,
+        actionCode: "SYNTHETIC_ACTION_RECORD_CREATED",
+        targetType: "HandoffState",
+        result: "success",
+        occurredAt: "2026-08-06T10:00:00.000Z",
+        correlationId: "synthetic-correlation-bad-opt",
+      },
+      idempotencyKey: "synthetic-idempotency-key-bad-opt",
+    });
+    const seedStore = new SyntheticAuditEventListStore();
+    const seedRepo = createSyntheticAuditEventRepository(SYNTHETIC_FINDING_ID_ORG, seedStore);
+    assert.equal(await seedRepo.save(request), "SAVED");
+    const row = seedStore.snapshotRows()[0];
+
+    const badStore = new SyntheticAuditEventListStore();
+    const badRepo = createSyntheticAuditEventRepository(SYNTHETIC_FINDING_ID_ORG, badStore);
+    badStore.forceInsert({
+      ...row,
+      SbsAudSiteIdEncoded: "not-valid-utf16be-hex",
+    });
+    assert.deepEqual(await badRepo.findByRecordId(request.auditEvent.auditEventId), {
+      kind: "RETRIEVAL_FAILED",
+    });
+  });
 });

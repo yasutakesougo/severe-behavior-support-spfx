@@ -29,6 +29,9 @@ export const AUDIT_EVENT_PHYSICAL_COLUMNS = {
   ruleSetVersionEncoded: "SbsAudRuleSetVersionEncoded",
 } as const;
 
+/** Optional physical scalar: unset may be omitted or explicit null (Accepted #29). */
+export type PhysicalOptionalString = string | null | undefined;
+
 /**
  * Synthetic SharePoint-shaped list item.
  * System metadata may exist on the row but must never enter logical evidence.
@@ -39,18 +42,18 @@ export type AuditEventPhysicalRow = Readonly<{
   SbsAudOrganizationIdEncoded: string;
   SbsAudAuditEventIdEncoded: string;
   SbsAudIdempotencyKeyEncoded: string;
-  SbsAudSiteIdEncoded?: string;
-  SbsAudActorStaffIdEncoded?: string;
+  SbsAudSiteIdEncoded?: PhysicalOptionalString;
+  SbsAudActorStaffIdEncoded?: PhysicalOptionalString;
   SbsAudActionCode: string;
   SbsAudTargetType: string;
-  SbsAudTargetRecordIdEncoded?: string;
+  SbsAudTargetRecordIdEncoded?: PhysicalOptionalString;
   SbsAudResult: string;
   SbsAudOccurredAtRaw: string;
   SbsAudOccurredAtUtc: string;
   SbsAudCorrelationIdEncoded: string;
-  SbsAudReasonCode?: string;
-  SbsAudAppVersionEncoded?: string;
-  SbsAudRuleSetVersionEncoded?: string;
+  SbsAudReasonCode?: PhysicalOptionalString;
+  SbsAudAppVersionEncoded?: PhysicalOptionalString;
+  SbsAudRuleSetVersionEncoded?: PhysicalOptionalString;
   // Physical-only metadata (ignored on read conversion)
   ListItemId?: number;
   ETag?: string;

@@ -3,11 +3,13 @@ import assert from "node:assert/strict";
 import {
   AUDIT_IDEMPOTENCY_IDENTITY_TAG,
   AUDIT_RECORD_IDENTITY_TAG,
+  ENCODE_JS_STRING_MAX_UNIT_COUNT,
+  FramingLengthError,
   computeIdempotencyIdentityKey,
   computeRecordIdentityKey,
   encodeJsString,
 } from "../../../../src/adapters/sharepoint/audit-event";
-import { sha256HexBytes } from "../../../../src/domain/sha256";
+import { SHA256_MAX_MESSAGE_BYTES, sha256HexBytes } from "../../../../src/domain/sha256";
 
 function asciiBytes(value: string): Uint8Array {
   const out = new Uint8Array(value.length);
@@ -75,5 +77,26 @@ describe("AuditEvent identity digests (Accepted #29)", () => {
       computeRecordIdentityKey("synthetic-org-001", token),
       computeRecordIdentityKey("synthetic-org-002", token),
     );
+  });
+
+  it("KEY-05: encodeJsString fail-closes instead of silently wrapping oversized length", () => {
+    const oversized = {
+      length: ENCODE_JS_STRING_MAX_UNIT_COUNT + 1,
+      charCodeAt() {
+        return 0x41;
+      },
+    } as unknown as string;
+
+    assert.throws(() => encodeJsString(oversized), FramingLengthError);
+    assert.equal(computeRecordIdentityKey(oversized, "synthetic-token"), null);
+  });
+
+  it("KEY-06: sha256HexBytes writes U64BE bit-length and fail-closes oversized messages", () => {
+    const empty = sha256HexBytes(new Uint8Array(0));
+    assert.equal(empty, "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855");
+
+    const oversized = new Uint8Array(0);
+    Object.defineProperty(oversized, "length", { value: SHA256_MAX_MESSAGE_BYTES + 1 });
+    assert.throws(() => sha256HexBytes(oversized), RangeError);
   });
 });

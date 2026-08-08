@@ -8,7 +8,7 @@ import type {
 } from "../../../domain/audit-event-persistence";
 import { validateAuditEvent, type AuditEvent } from "../../../domain/finding-audit";
 import { computeIdempotencyIdentityKey, computeRecordIdentityKey } from "./identity-keys";
-import type { AuditEventPhysicalRow } from "./physical-columns";
+import type { AuditEventPhysicalRow, PhysicalOptionalString } from "./physical-columns";
 import { decodeUtf16BeHexV1, encodeUtf16BeHexV1 } from "./utf16be-hex-v1";
 
 export type PhysicalWriteBuildResult =
@@ -40,21 +40,31 @@ function sameInstant(left: string, right: string): boolean {
   return leftMs === rightMs;
 }
 
-function encodeOptional(value: string | undefined): string | undefined {
-  return value === undefined ? undefined : encodeUtf16BeHexV1(value);
+/**
+ * Logical absent → physical null (SharePoint unset).
+ * Present string → UTF16BE_HEX_V1.
+ */
+function encodeOptional(value: string | undefined): string | null {
+  return value === undefined ? null : encodeUtf16BeHexV1(value);
 }
 
-function decodeRequired(encoded: string | undefined): string | null {
+function decodeRequired(encoded: unknown): string | null {
   if (typeof encoded !== "string") {
     return null;
   }
   return decodeUtf16BeHexV1(encoded);
 }
 
+/**
+ * Accepted #29 optional physical:
+ *   null | undefined → logical undefined
+ *   valid encoded string → decode
+ *   malformed non-null string / other types → fail
+ */
 function decodeOptional(
-  encoded: string | undefined,
+  encoded: PhysicalOptionalString | unknown,
 ): Readonly<{ ok: true; value: string | undefined }> | Readonly<{ ok: false }> {
-  if (encoded === undefined) {
+  if (encoded === undefined || encoded === null) {
     return { ok: true, value: undefined };
   }
   if (typeof encoded !== "string") {
@@ -65,6 +75,18 @@ function decodeOptional(
     return { ok: false };
   }
   return { ok: true, value: decoded };
+}
+
+function decodeOptionalPlain(
+  value: PhysicalOptionalString | unknown,
+): Readonly<{ ok: true; value: string | undefined }> | Readonly<{ ok: false }> {
+  if (value === undefined || value === null) {
+    return { ok: true, value: undefined };
+  }
+  if (typeof value !== "string") {
+    return { ok: false };
+  }
+  return { ok: true, value };
 }
 
 export function buildPhysicalRow(
@@ -83,15 +105,21 @@ export function buildPhysicalRow(
     return { ok: false, reason: "INVALID_EVENT" };
   }
 
+  const recordIdentityKey = computeRecordIdentityKey(
+    boundOrganizationId,
+    request.auditEvent.auditEventId,
+  );
+  const idempotencyIdentityKey = computeIdempotencyIdentityKey(
+    boundOrganizationId,
+    request.idempotencyKey,
+  );
+  if (recordIdentityKey === null || idempotencyIdentityKey === null) {
+    return { ok: false, reason: "INVALID_EVENT" };
+  }
+
   const row: AuditEventPhysicalRow = {
-    SbsAudRecordIdentityKey: computeRecordIdentityKey(
-      boundOrganizationId,
-      request.auditEvent.auditEventId,
-    ),
-    SbsAudIdempotencyIdentityKey: computeIdempotencyIdentityKey(
-      boundOrganizationId,
-      request.idempotencyKey,
-    ),
+    SbsAudRecordIdentityKey: recordIdentityKey,
+    SbsAudIdempotencyIdentityKey: idempotencyIdentityKey,
     SbsAudOrganizationIdEncoded: encodeUtf16BeHexV1(request.auditEvent.OrganizationId),
     SbsAudAuditEventIdEncoded: encodeUtf16BeHexV1(request.auditEvent.auditEventId),
     SbsAudIdempotencyKeyEncoded: encodeUtf16BeHexV1(request.idempotencyKey),
@@ -104,7 +132,8 @@ export function buildPhysicalRow(
     SbsAudOccurredAtRaw: request.auditEvent.occurredAt,
     SbsAudOccurredAtUtc: occurredAtUtc,
     SbsAudCorrelationIdEncoded: encodeUtf16BeHexV1(request.auditEvent.correlationId),
-    SbsAudReasonCode: request.auditEvent.reasonCode,
+    SbsAudReasonCode:
+      request.auditEvent.reasonCode === undefined ? null : request.auditEvent.reasonCode,
     SbsAudAppVersionEncoded: encodeOptional(request.auditEvent.appVersion),
     SbsAudRuleSetVersionEncoded: encodeOptional(request.auditEvent.ruleSetVersion),
   };
@@ -143,12 +172,14 @@ export function readPhysicalRow(
   const targetRecordId = decodeOptional(row.SbsAudTargetRecordIdEncoded);
   const appVersion = decodeOptional(row.SbsAudAppVersionEncoded);
   const ruleSetVersion = decodeOptional(row.SbsAudRuleSetVersionEncoded);
+  const reasonCode = decodeOptionalPlain(row.SbsAudReasonCode);
   if (
     !siteId.ok ||
     !actorStaffId.ok ||
     !targetRecordId.ok ||
     !appVersion.ok ||
-    !ruleSetVersion.ok
+    !ruleSetVersion.ok ||
+    !reasonCode.ok
   ) {
     return { kind: "RETRIEVAL_FAILED" };
   }
@@ -167,6 +198,8 @@ export function readPhysicalRow(
   const expectedRecordKey = computeRecordIdentityKey(organizationId, auditEventId);
   const expectedIdempotencyKey = computeIdempotencyIdentityKey(organizationId, idempotencyKey);
   if (
+    expectedRecordKey === null ||
+    expectedIdempotencyKey === null ||
     expectedRecordKey !== row.SbsAudRecordIdentityKey ||
     expectedIdempotencyKey !== row.SbsAudIdempotencyIdentityKey
   ) {
@@ -200,8 +233,8 @@ export function readPhysicalRow(
   if (targetRecordId.value !== undefined) {
     auditEvent.targetRecordId = targetRecordId.value;
   }
-  if (row.SbsAudReasonCode !== undefined) {
-    auditEvent.reasonCode = row.SbsAudReasonCode;
+  if (reasonCode.value !== undefined) {
+    auditEvent.reasonCode = reasonCode.value;
   }
   if (appVersion.value !== undefined) {
     auditEvent.appVersion = appVersion.value;
