@@ -10,7 +10,7 @@
 
 マージ前に当該 PR 自身のライブ状態（`Merge: NO` / `NOT RUN` / `Next: Merge GO` 等）を repository docs へ書いた結果として、マージ後に同一文言が残ることは **必然的な文書遅延** である。
 
-この遅延を Gate failure と誤判定し、専用 hygiene sync PR（例: `#110` → `#111` → `#112` …）を連鎖させない。
+この遅延を Gate failure と誤判定し、専用 hygiene sync PR（例: `PR #N` → stale-cleanup `PR #N+1` → stale-cleanup `PR #N+2` → …）を連鎖させない。
 
 ## 1. 自己参照 stale の分類
 
@@ -107,26 +107,11 @@ Human が明示した場合だけ作成可能。
 - AI / Background Agent が自己判断で hygiene-only sync PR を開かない
 - Human が対象・範囲・理由を明示したときのみ作成してよい
 
-## 適用スナップショット（参考・非ライブ）
-
-本 Policy 採用時点の確定事実（ライブ状態の複製ではない）:
-
-| 項目 | 事実 |
-|---|---|
-| PR #111 | MERGED |
-| main | `f4b8f378e7f9b0fda20b20c1361364ab7b518d25` |
-| Self-reference stale | `EXPECTED_P2` / `NON_BLOCKING` / `NO_DEDICATED_SYNC_PR` |
-| #22B synthetic | MERGED |
-| SharePoint real environment | NO-GO |
-| tenant integration | NO-GO |
-| Microsoft 365 / Entra / Deploy | NO-GO |
-| real data | PROHIBITED |
-
 ## 非変更事項
 
 本 Policy は substantive unit の選定を変更しない。
 
-- Decision-SEV-1 は引き続き Human Acceptance 待ち（`READY_FOR_HUMAN_DECISION` / `NOT ACCEPTED`）であれば SEV-2 に進まない
+- Decision-SEV-1 / Decision-SEV-2 の Acceptance・順序・状態は本 Policy では変更しない
 - 自己参照 P2 は Decision-SEV-1 の判断をブロックしない
 
 ## 関連正本
