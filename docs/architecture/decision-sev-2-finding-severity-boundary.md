@@ -15,6 +15,8 @@ Decision-SEV-1（Option A / Issue #8 新 DEC 方式）Accepted 後の
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision packet: Decision-SEV-2
 Status: OPEN（単位ごとに状態が異なる）
+SEV-2-PURPOSE: RECORDED（MHLW-first）— decision-sev-2-purpose-source.md
+SEV-2-CONCEPT-INV: OPEN / NOT STARTED
 SEV-2-VOCAB: HOLD（V-C）— decision-sev-2-vocab-hold.md
 SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Implementation: NOT STARTED
@@ -23,6 +25,7 @@ main before this packet: 08d4a2533f31b94ff86df50cb28c7a93b8426928
 SEV-1 Accepted canonical: decision-sev-1-finding-severity-vocabulary-ownership.md
 SEV-1 Human Acceptance: Explicit Human GO on 2026-08-08（Decision-SEV-1 / Option A）
 SEV-2-VOCAB Human Decision: Explicit Human HOLD on 2026-08-08（V-C）
+SEV-2-PURPOSE Human Decision: Explicit Human purpose-source policy on 2026-08-08
 ```
 
 SEV-1 の Human Acceptance と Agent execution evidence は混同しない。
@@ -31,6 +34,7 @@ Live gate（Ready / Merge / Independent Review 進行状態）は repository doc
 
 上位入口:
 
+- [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
@@ -55,6 +59,8 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 
 | Unit ID | 判断単位 | 本 packet での状態 | 混ぜてはならないもの |
 |---|---|---|---|
+| **SEV-2-PURPOSE** | FindingSeverity **purpose source**（MHLW-first 方針） | **RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)） | 値一覧・assignment |
+| **SEV-2-CONCEPT-INV** | 厚労省一次資料での **正式概念有無** 調査 | **OPEN / NOT STARTED** | VOCAB 値採択・ASSIGN・実装 |
 | **SEV-2-VOCAB** | FindingSeverity **正式値・意味**（Issue #8 新 DEC の本文候補） | **HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)） | assignment 主体・算出アルゴリズム |
 | **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE / NOT SELECTED（VOCAB と独立。本 HOLD で確定しない） | 値一覧そのものの採択 |
 
@@ -62,12 +68,13 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 ```text
 Independent acceptance: REQUIRED
 Bundle Accepted: FORBIDDEN
-Order preference: SEV-2-VOCAB → SEV-2-ASSIGN（推奨。必須束縛ではないが、
-  enum 検証を伴う assignment は VOCAB Accepted 後が安全）
+Order preference:
+  SEV-2-PURPOSE → SEV-2-CONCEPT-INV → SEV-2-VOCAB → SEV-2-ASSIGN
+  （値定義・ASSIGN は制度概念確認後。enum 検証を伴う assignment は VOCAB Accepted 後が安全）
 ```
 
 旧 backlog 表記「Severity assignment boundary（値・意味・判定主体）」は、
-本 packet で上記 2 単位に **分割**する。
+VOCAB と ASSIGN に **分割**し、さらに PURPOSE / CONCEPT-INV を前置する。
 
 ---
 
@@ -82,10 +89,12 @@ Issue #8 新規 DEC に記録する FindingSeverity の **正式値集合** と�
 
 ```text
 Ownership: Issue #8 新 DEC（Decision-SEV-1 Option A）
+Purpose source: MHLW / statutory-regulatory source first（SEV-2-PURPOSE）
+Local invented severity taxonomy: FORBIDDEN
 暗黙採用禁止: low / medium / high 等を正本未確定のまま使わない
 FindingIdentity キーへの Severity 追加: 禁止（UNCHANGED）
 stable Finding ID 入力への Severity 混入: 禁止
-agent による値捏造: 禁止（Human が値集合を明示する）
+agent による値捏造: 禁止（制度一次資料に基づき Human が値集合を明示する）
 ```
 
 ### 候補オプション（Human が選択 / 修正）
@@ -131,17 +140,21 @@ Meanings: NOT DEFINED
 Ordering: NOT DEFINED
 Issue #8 DEC number: UNASSIGNED
 Reason:
-  FindingSeverity の業務上の用途・正式値・意味について、
-  Human が根拠を持って定義できる一次情報がまだない。
+  FindingSeverity の正式値・意味について、
+  厚労省制度上の正式概念が未確認のまま値を定義できない。
   AIによる値の補完・推測は行わない。
 ```
 
-値採択に進む前の前提問い（Human 一次情報）:
+値採択に進む前の前提問い（purpose source 正本）:
 
 ```text
-このアプリで FindingSeverity という項目は、
-そもそも何のために必要なのか？
+厚労省の制度上、強度行動障害・生活介護・重度障害者支援加算等について、
+段階・区分・閾値・優先度を表す正式な概念が存在し、
+それを Finding に保持する必要があるか？
 ```
+
+purpose source / 調査単位の正本:
+[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 
 ### SEV-2-VOCAB Acceptance 記録テンプレ（履歴）
 
@@ -228,28 +241,32 @@ stable Finding ID: UNCHANGED
 ```text
 1. Independent Review of this packet（判断単位分離・Option 網羅・暗黙値禁止）— done via PR #113 line
 2. Human Decision of SEV-2-VOCAB — HOLD / V-C（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)）
-3. FindingSeverity の用途・必要性の Human 一次情報を得る
-4. SEV-2-VOCAB を再評価
+3. Human purpose-source policy — SEV-2-PURPOSE（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)）
+4. SEV-2-CONCEPT-INV — 厚労省一次資料で正式概念の有無を調査（コード変更なし）
+5. SEV-2-VOCAB を再評価
    - HOLD 継続
-   - または Human-supplied values / meanings / ordering で Acceptance
-5. SEV-2-VOCAB Accepted 後に、SEV-2-ASSIGN を別 Human Decision として扱う
-6. Issue #8 へ新規 DEC 本文を記録（値定義後のみ。番号は現在 UNASSIGNED）
-7. 実装 / 型追加は別 Entry Criteria + Implementation Start（NOT STARTED）
+   - または 制度上の正式概念に基づく Acceptance
+   - または FindingSeverity 不採用 / 契約からの除外
+6. SEV-2-VOCAB Accepted（値定義あり）後に、SEV-2-ASSIGN を別 Human Decision として扱う
+7. Issue #8 へ新規 DEC 本文を記録（値定義後のみ。番号は現在 UNASSIGNED）
+8. 実装 / 型追加は別 Entry Criteria + Implementation Start（NOT STARTED）
 ```
 
 ```text
 Next SEV action:
-  FindingSeverity purpose / necessity primary information
+  SEV-2-CONCEPT-INV（MHLW primary-source concept investigation）
 SEV-2-ASSIGN:
   CANDIDATE / NOT SELECTED
 ```
 
-VOCAB HOLD 中に ASSIGN へ進まない。
+VOCAB HOLD 中および CONCEPT-INV 未完了中に ASSIGN へ進まない。
 
 ## OUT / 混ぜないもの
 
 - SEV-2-VOCAB と SEV-2-ASSIGN の一括 Accepted
+- PURPOSE / CONCEPT-INV / VOCAB / ASSIGN の一括確定
 - `low` / `medium` / `high` の暗黙正本化
+- ローカル発明の severity taxonomy
 - FindingIdentity / stable Finding ID の変更
 - `src/**` / `tests/**` 変更
 - 完全 Finding 実装
@@ -263,6 +280,8 @@ VOCAB HOLD 中に ASSIGN へ進まない。
 ```text
 Decision-SEV-1: Accepted（Option A）
 Decision-SEV-2 packet: OPEN（単位別）
+SEV-2-PURPOSE: RECORDED（MHLW-first）
+SEV-2-CONCEPT-INV: OPEN / NOT STARTED
 SEV-2-VOCAB: HOLD（V-C）
 SEV-2-ASSIGN: CANDIDATE / NOT SELECTED
 Independent acceptance: REQUIRED
@@ -288,4 +307,6 @@ real data: prohibited
 src/** / tests/**: 本 packet では変更しない
 FindingIdentity: UNCHANGED
 stable Finding ID: UNCHANGED
+Local invented severity taxonomy: FORBIDDEN
+AI vocabulary invention: prohibited
 ```
