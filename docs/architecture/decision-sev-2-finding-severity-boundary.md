@@ -14,12 +14,15 @@ Decision-SEV-1（Option A / Issue #8 新 DEC 方式）Accepted 後の
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision packet: Decision-SEV-2
-Status: CANDIDATE / NOT ACCEPTED
+Status: OPEN（単位ごとに状態が異なる）
+SEV-2-VOCAB: HOLD（V-C）— decision-sev-2-vocab-hold.md
+SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED
 Implementation: NOT STARTED
 Depends on: Decision-SEV-1 Accepted（Option A）
 main before this packet: 08d4a2533f31b94ff86df50cb28c7a93b8426928
 SEV-1 Accepted canonical: decision-sev-1-finding-severity-vocabulary-ownership.md
 SEV-1 Human Acceptance: Explicit Human GO on 2026-08-08（Decision-SEV-1 / Option A）
+SEV-2-VOCAB Human Decision: Explicit Human HOLD on 2026-08-08（V-C）
 ```
 
 SEV-1 の Human Acceptance と Agent execution evidence は混同しない。
@@ -52,8 +55,9 @@ Issue #8 の新規 DEC 番号は **UNASSIGNED** のままとする。
 
 | Unit ID | 判断単位 | 本 packet での状態 | 混ぜてはならないもの |
 |---|---|---|---|
-| **SEV-2-VOCAB** | FindingSeverity **正式値・意味**（Issue #8 新 DEC の本文候補） | CANDIDATE | assignment 主体・算出アルゴリズム |
-| **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE（VOCAB と独立承認） | 値一覧そのものの採択 |
+| **SEV-2-VOCAB** | FindingSeverity **正式値・意味**（Issue #8 新 DEC の本文候補） | **HOLD / V-C**（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)） | assignment 主体・算出アルゴリズム |
+| **SEV-2-ASSIGN** | Severity **assignment algorithm / caller-supplied 境界** | CANDIDATE（VOCAB と独立。本 HOLD で確定しない） | 値一覧そのものの採択 |
+
 
 ```text
 Independent acceptance: REQUIRED
@@ -115,7 +119,31 @@ V-A / V-B 採択時に必須添付:
 - FindingCode カタログ
 - 完全 Finding の他フィールド
 
-### SEV-2-VOCAB Acceptance 記録テンプレ
+### SEV-2-VOCAB Human Decision（記録済み）
+
+正本: [`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)
+
+```text
+Decision-SEV-2-VOCAB: HOLD
+Selected: V-C
+Formal values: NOT DEFINED
+Meanings: NOT DEFINED
+Ordering: NOT DEFINED
+Issue #8 DEC number: UNASSIGNED
+Reason:
+  FindingSeverity の業務上の用途・正式値・意味について、
+  Human が根拠を持って定義できる一次情報がまだない。
+  AIによる値の補完・推測は行わない。
+```
+
+値採択に進む前の前提問い（Human 一次情報）:
+
+```text
+このアプリで FindingSeverity という項目は、
+そもそも何のために必要なのか？
+```
+
+### SEV-2-VOCAB Acceptance 記録テンプレ（履歴）
 
 ```text
 Decision-SEV-2-VOCAB:
@@ -198,11 +226,12 @@ stable Finding ID: UNCHANGED
 ## 推奨レビュー順
 
 ```text
-1. Independent Review of this packet（判断単位分離・Option 網羅・暗黙値禁止）
-2. Human Acceptance of SEV-2-VOCAB（値は Human 明示）
-3. Human Acceptance of SEV-2-ASSIGN（VOCAB と独立記録）
-4. Issue #8 へ新規 DEC 本文を記録（番号採番含む。本 PR では実行しない）
-5. 実装 / 型追加は別 Entry Criteria + Implementation Start（本 packet では NOT STARTED）
+1. Independent Review of this packet（判断単位分離・Option 網羅・暗黙値禁止）— done via PR #113 line
+2. Human Decision of SEV-2-VOCAB — HOLD / V-C（[`decision-sev-2-vocab-hold.md`](./decision-sev-2-vocab-hold.md)）
+3. Human が FindingSeverity の用途・必要性を一次情報で定義できるまで値採択しない
+4. Human Acceptance of SEV-2-ASSIGN（VOCAB と独立。値未定義のまま実装しない）
+5. Issue #8 へ新規 DEC 本文を記録（値定義後のみ。番号は現在 UNASSIGNED）
+6. 実装 / 型追加は別 Entry Criteria + Implementation Start（NOT STARTED）
 ```
 
 ## OUT / 混ぜないもの
@@ -221,9 +250,9 @@ stable Finding ID: UNCHANGED
 
 ```text
 Decision-SEV-1: Accepted（Option A）
-Decision-SEV-2 packet: CANDIDATE / NOT ACCEPTED
-SEV-2-VOCAB: CANDIDATE
-SEV-2-ASSIGN: CANDIDATE
+Decision-SEV-2 packet: OPEN（単位別）
+SEV-2-VOCAB: HOLD（V-C）
+SEV-2-ASSIGN: CANDIDATE / NOT ACCEPTED
 Independent acceptance: REQUIRED
 Implementation: NOT STARTED
 Next pure unit / Implementation Start: HOLD
