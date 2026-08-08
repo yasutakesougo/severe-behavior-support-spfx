@@ -49,6 +49,7 @@ Decision-FC-1: Accepted / Option B（Issue #8 new DEC / business DEC）/ Impleme
 Decision-FC-2: Accepted / Option C（versioned immutable catalog snapshot input）/ Implementation HOLD
 Decision-FC-3: Accepted / Option C（complete logical contract surface）/ Implementation HOLD
 Decision-FC-4: Accepted / Option C（complete identifier logical contract）/ Implementation HOLD
+Decision-FC-5: CANDIDATE / NOT ACCEPTED（identifier representation ownership / Human Option selection 待ち）
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -63,6 +64,7 @@ SharePoint / M365: 変更なし
 - [`decision-fc-2-finding-code-catalog-delivery-boundary.md`](./decision-fc-2-finding-code-catalog-delivery-boundary.md)
 - [`decision-fc-3-finding-code-catalog-snapshot-logical-contract.md`](./decision-fc-3-finding-code-catalog-snapshot-logical-contract.md)
 - [`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md)
+- [`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md)
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 - [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 - [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
@@ -155,7 +157,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-FC-1** | FindingCode catalog ownership | **Accepted / Option B**。Issue #8 に新しい DEC を追加する方式。Kind = business DEC。Identity 組立 UNCHANGED。Implementation Start **HOLD**。正本: [`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md) | Issue #8（新 DEC。番号 UNASSIGNED） | Identity 組立契約を再定義しない。値一覧は決めない | **Decision-FC-2** Accepted 済み |
 | **Decision-FC-2** | Catalog delivery boundary | **Accepted / Option C**。delivery = versioned immutable catalog snapshot input。repository は catalog 値を ownership しない。正本: [`decision-fc-2-finding-code-catalog-delivery-boundary.md`](./decision-fc-2-finding-code-catalog-delivery-boundary.md) | FC-1 Accepted（Option B / Issue #8） | **FC-1 Accepted**。採番・写像表の推測禁止 | **Decision-FC-3** Accepted |
 | **Decision-FC-3** | Catalog snapshot logical contract | **Accepted / Option C**。Complete logical contract surface（必須情報・version 一意識別責務・immutable・selected 整合・fail-closed）。正本: [`decision-fc-3-finding-code-catalog-snapshot-logical-contract.md`](./decision-fc-3-finding-code-catalog-snapshot-logical-contract.md) | FC-2 Accepted（Option C） | version 文字列・schema・storage・provider・値一覧は決めない | **Decision-FC-4** Accepted |
-| **Decision-FC-4** | Catalog version identifier contract | **Accepted / Option C**。Complete identifier logical contract（一意性・opaque・edition対応・reuse禁止・fail-closed）。正本: [`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md) | FC-3 Accepted（Option C） | UUID/hash/semver/DEC番号・schema・storage・provider・値一覧は決めない | materialization / schema / provider は別 Human Start。Implementation HOLD |
+| **Decision-FC-4** | Catalog version identifier contract | **Accepted / Option C**。Complete identifier logical contract（一意性・opaque・edition対応・reuse禁止・fail-closed）。正本: [`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md) | FC-3 Accepted（Option C） | UUID/hash/semver/DEC番号・schema・storage・provider・値一覧は決めない | **Decision-FC-5** representation ownership（Candidate） |
+| **Decision-FC-5** | Catalog version identifier representation ownership | **CANDIDATE / NOT ACCEPTED**。representation 決定主体・business/technical 責務・構文検証天井・change-control・unsupported fail-closed。正本: [`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md) | FC-4 Accepted（Option C） | UUID/hash/semver 採択・値・schema・provider・実装は決めない | Accepted 後の representation strategy は別 Human Start。Implementation HOLD |
 | **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | HOLD。メンバシップ純関数は完了。フィールド追加・制度日数・`periodTo` 開放終端は未決 | 別 Decision（所有は OP-1 で #24 メンバシップのみ確定。Schema は #26 関連） | OP-1/OP-2 Accepted 済み前提。既存 `evaluateObservationPeriodMembership` を変更しない | Schema/フィールド Decision Accepted 後の契約・（必要なら）別純関数。既存関数への制度値混入禁止 |
 | **Decision-RD-3** | 接近窓・制度日数・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決 | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止 |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
@@ -205,7 +208,7 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | 正式値・意味 / 採否 | SEV-2-VOCAB Accepted / Option A | **FindingSeverity NOT ADOPTED**。Canonical **COMPLETE（Issue #8 / DEC-018 / comment 5225426738）** |
 | domain 算出 vs caller-supplied | SEV-2-ASSIGN | **N/A / DO NOT START**（不採用のため） |
 
-### C. FindingCode 業務カタログ（Decision-FC-1 / FC-2 / FC-3 / FC-4）
+### C. FindingCode 業務カタログ（Decision-FC-1 / FC-2 / FC-3 / FC-4 / FC-5）
 
 | 問い | 正本根拠 | 結論 |
 |---|---|---|
@@ -215,8 +218,9 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | delivery boundary | Decision-FC-2 Accepted / Option C | **versioned immutable catalog snapshot input**。repository は catalog 値を ownership しない |
 | snapshot logical contract | Decision-FC-3 Accepted / Option C | Complete logical contract surface（必須情報・version 一意識別責務・immutable・selected 整合・fail-closed） |
 | catalog version identifier | Decision-FC-4 Accepted / Option C | Complete identifier logical contract（一意性・opaque・edition対応・reuse禁止・fail-closed） |
-| version 文字列 / schema / storage / provider | FC-4 対象外 | **UNDECIDED / DO NOT START** |
-| Implementation Start | FC-1 / FC-2 / FC-3 / FC-4 | **HOLD** |
+| identifier representation ownership | Decision-FC-5 CANDIDATE | 決定主体・責務境界・構文検証天井・change-control・unsupported fail-closed。**Human Option selection 待ち** |
+| UUID / hash / semver / version 文字列 / schema / storage / provider | FC-5 対象外 | **UNDECIDED / DO NOT START** |
+| Implementation Start | FC-1〜FC-5 | **HOLD** |
 ### D. Handoff 所有（Decision-HO-1）— Accepted
 
 正本: [`decision-ho-1-handoff-transition-ownership.md`](./decision-ho-1-handoff-transition-ownership.md)
@@ -256,15 +260,16 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 8. Decision-FC-2    Catalog delivery boundary — **Accepted / Option C**（versioned immutable catalog snapshot input）。Implementation HOLD
 9. Decision-FC-3    Catalog snapshot logical contract — **Accepted / Option C**（complete logical contract surface）。Implementation HOLD
 10. Decision-FC-4    Catalog version identifier contract — **Accepted / Option C**（complete identifier logical contract）。Implementation HOLD
-11. Decision-OP-3    Observation period Schema / 制度 / 開放終端
-12. Decision-RD-3    Review due 接近窓 / 算出 / 超過後
-13. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
+11. Decision-FC-5    Catalog version identifier representation ownership — **CANDIDATE / NOT ACCEPTED**（Human Option selection 待ち）
+12. Decision-OP-3    Observation period Schema / 制度 / 開放終端
+13. Decision-RD-3    Review due 接近窓 / 算出 / 超過後
+14. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
 **Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 MERGED（62a43d7f…）。次工程は実 SharePoint adapter 別 Gate。SharePoint 実環境操作は NO-GO。
 SEV 系（FindingSeverity）の substantive line は DEC-018 不採用で区切り。Canonical は **COMPLETE（Issue #8 / DEC-018）**。ASSIGN / 型 / 実装は自動再開しない。
-**Decision-FC-1 = Accepted / Option B**。**Decision-FC-2 = Accepted / Option C**。**Decision-FC-3 = Accepted / Option C**。**Decision-FC-4 = Accepted / Option C**。値一覧・enum・validator・version 文字列・storage / provider は未決。Issue #8 FindingCode DEC 番号は UNASSIGNED。
+**Decision-FC-1 = Accepted / Option B**。**Decision-FC-2〜FC-4 = Accepted / Option C**。**Decision-FC-5 = CANDIDATE**。値一覧・UUID/hash/semver・storage / provider は未決。Issue #8 FindingCode DEC 番号は UNASSIGNED。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
@@ -335,7 +340,7 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-4 Accepted / Option C系。FindingCode 値一覧未決。実 SharePoint adapter は別 Gate / NO-GO
+Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-4 Accepted。FC-5 CANDIDATE。FindingCode 値一覧未決。実 SharePoint adapter は別 Gate / NO-GO
 Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 Ready: YES（consumed）
 Merge: DONE
@@ -352,6 +357,7 @@ Decision-FC-1: Accepted / Option B（Issue #8 new DEC / business DEC）/ Impleme
 Decision-FC-2: Accepted / Option C（versioned immutable catalog snapshot input）/ Implementation HOLD
 Decision-FC-3: Accepted / Option C（complete logical contract surface）/ Implementation HOLD
 Decision-FC-4: Accepted / Option C（complete identifier logical contract）/ Implementation HOLD
+Decision-FC-5: CANDIDATE / NOT ACCEPTED（identifier representation ownership）
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO
@@ -360,10 +366,10 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. Decision-FC-4 を Accepted / Option C として正本化し living docs へ同期する
-2. FC-1 / FC-2 / FC-3 Accepted 境界を維持する
-3. Implementation Start は HOLD を維持する（auto-start FORBIDDEN）
-4. FindingCode 値一覧・identifier 物理方式・schema・storage・provider・実装には進まない
+1. Decision-FC-5 candidate packet を次 substantive unit として正本化する
+2. FC-1〜FC-4 Accepted 境界を維持する
+3. FC-5 Option は自動採択しない（Human Decision 待ち）
+4. UUID / hash / semver / FindingCode 値一覧・schema・storage・provider・実装には進まない
 5. FindingSeverity = "10+" / "18+" を採択しない
 6. SharePoint 実環境 / M365 / Deploy / real data へ進まない
 7. src/** / tests/** は変更しない
