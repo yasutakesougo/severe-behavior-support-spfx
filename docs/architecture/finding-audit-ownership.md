@@ -49,7 +49,8 @@ Decision-FC-3（Accepted / Option C / complete logical contract surface / Implem
 Decision-FC-4（Accepted / Option C / complete identifier logical contract / Implementation HOLD）: docs/architecture/decision-fc-4-catalog-version-identifier-contract.md
 Decision-FC-5（Accepted / Option C / split ownership with explicit syntax-validation ceiling / Implementation HOLD）: docs/architecture/decision-fc-5-catalog-version-identifier-representation-ownership.md
 Decision-FC-6（Accepted / Option C / complete businessOwnershipRef logical contract / Implementation HOLD）: docs/architecture/decision-fc-6-business-ownership-ref-logical-contract.md
-FC Decision Exit Review（REVIEWED / NOT IMPLEMENTATION START / FC-7 NOT CREATED）: docs/architecture/fc-decision-exit-review.md
+FC Decision Exit Review（ACCEPTED / FC-7 NOT CREATED）: docs/architecture/fc-decision-exit-review.md
+A-class structure acceptance（Bundle A-1〜A-4 / Separate A-5 / Content NOT ACCEPTED）: docs/architecture/a-class-structure-acceptance.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts

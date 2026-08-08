@@ -56,8 +56,13 @@ real data: PROHIBITED
 
 ## Next gate
 
-Exit Review Accepted 後の次工程は、A-1〜A-4 を business catalog decision bundle として扱うか、A-5 representation strategy を分離維持するかの Human 整理である。
+A-class structure は Accepted（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。
 
-この整理自体も A-class の内容採択ではない。
+```text
+Bundle: A-1〜A-4 = one FindingCode business catalog Decision
+Separate: A-5 = catalogVersionIdentifier representation strategy
+Content acceptance: NO
+```
 
-Implementation Start は別 Human Decision とする。
+次工程は A-1〜A-4 bundle の業務 catalog 内容に対する Human Decision とする。
+A-5 と Implementation Start は各別 Human Decision とする。

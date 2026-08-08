@@ -51,7 +51,8 @@ Decision-FC-3: Accepted / Option C（complete logical contract surface）/ Imple
 Decision-FC-4: Accepted / Option C（complete identifier logical contract）/ Implementation HOLD
 Decision-FC-5: Accepted / Option C（split ownership with explicit syntax-validation ceiling）/ Implementation HOLD
 Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contract）/ Implementation HOLD
-FC Decision Exit Review: REVIEWED / NOT IMPLEMENTATION START（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md)）。FC-7 NOT CREATED
+FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
+A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -69,6 +70,8 @@ SharePoint / M365: 変更なし
 - [`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md)
 - [`decision-fc-6-business-ownership-ref-logical-contract.md`](./decision-fc-6-business-ownership-ref-logical-contract.md)
 - [`fc-decision-exit-review.md`](./fc-decision-exit-review.md)
+- [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)
+- [`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 - [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 - [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
@@ -347,7 +350,7 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-6 Accepted。Exit Review A-class（値一覧・strategy 等）待ち。FC-7 NOT CREATED。実 SharePoint adapter は別 Gate / NO-GO
+Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-6 Accepted。A-class structure Accepted（Bundle A-1〜A-4 / Separate A-5）。次は business catalog 内容 Human Decision。FC-7 NOT CREATED。実 SharePoint adapter は別 Gate / NO-GO
 Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 Ready: YES（consumed）
 Merge: DONE
@@ -366,7 +369,8 @@ Decision-FC-3: Accepted / Option C（complete logical contract surface）/ Imple
 Decision-FC-4: Accepted / Option C（complete identifier logical contract）/ Implementation HOLD
 Decision-FC-5: Accepted / Option C（split ownership with explicit syntax-validation ceiling）/ Implementation HOLD
 Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contract）/ Implementation HOLD
-FC Decision Exit Review: REVIEWED / NOT IMPLEMENTATION START（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md)）。FC-7 NOT CREATED
+FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
+A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO
@@ -375,11 +379,11 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. FC-1〜FC-6 Accepted 後の Exit Review を正本化する
-2. 残 Human Decisions を A-class 有限リスト化する（FC-7 を作らない）
-3. Implementation Entry Criteria を定義する（充足判定しない）
+1. A-class structure（Bundle A-1〜A-4 / Separate A-5）を Accepted として正本化する
+2. FindingCode business catalog 内容（値・採番・mapping・DEC 番号）は採択しない
+3. A-5 representation strategy は分離維持し、自動選択しない
 4. Implementation Start は HOLD を維持する（auto-start FORBIDDEN）
-5. FindingCode 値 / 採番 / mapping / DEC 番号 / UUID・hash・semver を採択しない
+5. FC-7 を作らない
 6. Stale PR #126 は Merge しない
 7. FindingSeverity = "10+" / "18+" を採択しない
 8. SharePoint 実環境 / M365 / Deploy / real data へ進まない
