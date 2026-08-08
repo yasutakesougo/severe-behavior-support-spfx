@@ -21,6 +21,7 @@ Depends on packet: decision-sev-2-finding-severity-boundary.md
 
 上位入口:
 
+- [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 - [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)
 - [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -53,36 +54,57 @@ Ordering: NOT DEFINED
 Issue #8 DEC number: UNASSIGNED
 
 Reason:
-FindingSeverity の業務上の用途・正式値・意味について、
-Human が根拠を持って定義できる一次情報がまだない。
+FindingSeverity の正式値・意味について、
+厚労省制度上の正式概念が未確認のまま値を定義できない。
 AIによる値の補完・推測は行わない。
 ```
 
 意味:
 
-- FindingSeverity の業務上の用途・必要性・意味は **未定義** である。
-- Human の一次情報なしに用途を推定しない。
-- 正式値の個数・名称・意味・順序を、根拠なしに決めない。
+- FindingSeverity の正式値・意味・順序は **NOT DEFINED** のままである。
+- purpose source 方針は [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md) で固定済み（MHLW-first）。
+- ローカル発明の severity taxonomy は **FORBIDDEN**。
+- 正式値の個数・名称・意味・順序を、制度一次資料なしに決めない。
 - `low` / `medium` / `high` 等を AI / 実装側が補完しない（従来禁止の維持）。
 - 架空説明用ラベル（例: A/B/C）は **採用候補ではない**。
 - 本 HOLD は判断不能による失敗ではなく、未決定業務ルールを設計しない **fail-closed** である。
 
 ## 次に確認する問い（値より手前）
 
-値の段階数を決める前に、Human が一次情報で答えられる必要がある。
+旧問い「FindingSeverity を何に使いたいか」は使わない。
+修正後の問い（purpose source 正本に従う）:
 
 ```text
-このアプリで FindingSeverity という項目は、
-そもそも何のために必要なのか？
+厚労省の制度上、強度行動障害・生活介護・重度障害者支援加算等について、
+段階・区分・閾値・優先度を表す正式な概念が存在し、
+それを Finding に保持する必要があるか？
 ```
 
-用途・必要性・使い方が説明できるようになってから、正式値・意味・順序を定義する。
+次工程は SEV-2-ASSIGN ではなく、独立調査単位 **SEV-2-CONCEPT-INV**
+（厚労省一次資料での正式概念有無確認）。詳細は purpose source 正本。
+
+正式概念が無い場合は FindingSeverity 自体の削除・不採用も候補とする。
+正式概念がある場合のみ、その正式名称・値・意味・適用条件を VOCAB 候補にする。
+
+Issue #8 新 DEC 記録経路（Decision-SEV-1 Option A）:
+
+```text
+VOCAB 再評価結果が Accepted（正式値あり）→ Issue #8 新 DEC に記録
+VOCAB 再評価結果が 不採用 / 契約除外 → Issue #8 新 DEC に不採用 Decision を記録
+HOLD 継続 → Issue #8 新 DEC 本文はまだ記録しない
+不採用時: SEV-2-ASSIGN = N/A / DO NOT START
+実装への自動進行: FORBIDDEN
+```
+
+「値定義後のみ Issue #8 に書く」は **禁止**。不採用も ownership / change control の対象である。
 
 ## 分離（維持）
 
 | 単位 | 状態 |
 |---|---|
 | Decision-SEV-1 ownership | Accepted / Option A / main canonical |
+| SEV-2-PURPOSE | RECORDED（MHLW-first） |
+| SEV-2-CONCEPT-INV | OPEN / NOT STARTED |
 | **SEV-2-VOCAB**（本 Decision） | **HOLD / V-C** |
 | SEV-2-ASSIGN | CANDIDATE / NOT SELECTED（本 HOLD で確定しない） |
 | TypeScript 型 / validator / 実装 | NOT STARTED |
@@ -99,13 +121,14 @@ Implementation Start (Severity vocabulary): N/A（開始しない）
 src/** / tests/**: 変更しない
 SEV-2-ASSIGN: 本 Decision では進めない（CANDIDATE / NOT SELECTED）
 Bundle Accepted with ASSIGN: FORBIDDEN
-Next SEV action: FindingSeverity purpose / necessity primary information
+Next SEV action: SEV-2-CONCEPT-INV（MHLW primary-source concept investigation）
 Issue #24 Close: NO-GO
 ```
 
 ## 対象外
 
 - SEV-2-ASSIGN の Accepted / HOLD 判定（別判断）
+- SEV-2-CONCEPT-INV の調査結果確定（別単位・未着手）
 - `FindingSeverity` 型・validator・fixture
 - 完全 Finding 契約の Severity 欄実装
 - Issue #8 DEC 本文の値列挙（UNASSIGNED / NOT DEFINED）
@@ -123,5 +146,6 @@ real data: prohibited
 src/** / tests/**: 本 Decision では変更しない
 FindingIdentity: UNCHANGED
 stable Finding ID: UNCHANGED
+Local invented severity taxonomy: FORBIDDEN
 AI vocabulary invention: prohibited
 ```
