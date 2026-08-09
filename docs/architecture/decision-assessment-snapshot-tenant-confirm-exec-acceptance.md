@@ -46,8 +46,10 @@ Concrete values（本 Acceptance では埋めない）:
   Internal Column Name: NOT CONFIRMED / HOLD
 
 Tenant confirmation execution:
-  AUTHORIZED / NOT STARTED
-  （本 Acceptance は実行許可のみ。実行完了・値確定ではない）
+  IN PROGRESS / READ-ONLY
+  （DailyActivityRecords required-fields evidence =
+    OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY。
+    Decision-AS-TARGET-REUSE-1 = Accepted / LOCKED / B）
 
 SP-PLACEMENT / DEC6-MAPPING / SP-ADAPTER / APP-SAVE / TENANT-CONFIRM GO:
   UNCHANGED / LOCKED（再 Decision しない）
@@ -146,10 +148,13 @@ NOT SELECTED:
 具体値・実行完了（LOCKED として埋めない / 完了扱いにしない）:
 
 ```text
-Site value: NOT CONFIRMED / HOLD
-List value: NOT CONFIRMED / HOLD
-Internal Column Name: NOT CONFIRMED / HOLD
-Tenant confirmation execution: AUTHORIZED / NOT STARTED
+Observed existing environment:
+  OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
+  → tenant-confirmation-daily-activity-records-required-fields-evidence.md
+Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
+Tenant confirmation execution: IN PROGRESS / READ-ONLY
 ```
 
 失敗時 MUST NOT（LOCKED）:
@@ -205,15 +210,20 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
-Tenant confirmation execution: AUTHORIZED / NOT STARTED
-Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
+Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
+  → decision-assessment-snapshot-target-reuse-acceptance.md
+Tenant confirmation execution: IN PROGRESS / READ-ONLY
+DailyActivityRecords required-fields evidence:
+  OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
+Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes / List / column creation: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next substantive unit: NOT SELECTED by this Acceptance
 Ready: NOT RUN
 Merge: NOT RUN
 ```
