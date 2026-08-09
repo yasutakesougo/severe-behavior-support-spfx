@@ -142,7 +142,7 @@ FindingCode:
 | BS-004 | 想定結果が得られずチーム再確認・見直しが必要 | NOTICE（定期モニタリング） | **NOT ADOPTED** | **NONE**（catalog OUT） | モニタリング会議・見直しで管理 | **FIXED** |
 | BS-005 | 計画に沿って支援し手順記録で経過観察している（正常サイクル） | OTHER（通常運用） | **NOT ADOPTED** | **NONE**（catalog OUT） | 手順記録とモニタリングで管理 | **FIXED** |
 | BS-006 | モニタリング実施と計画見直し・更新結果を記録した | OTHER（監査証跡） | **NOT ADOPTED** | **NONE**（catalog OUT） | 監査証跡・実績記録として保持 | **FIXED** |
-| BS-007 | （Human が提示） | | | | | **OPEN** |
+| BS-007 | モニタリングで決まった対応が未完了 | （候補）FOLLOW_UP? | （未決） | （未決） | 未対応追跡が要るか確認中 | **CANDIDATE** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
 ## 確定済み — BS-002
@@ -473,49 +473,60 @@ catalog OUT
   FindingCode ではなく audit / evidence contract へ
 ```
 
-## 未決 — BS-007（未解決追跡の要否確認）
+## 候補 — BS-007（FIXED にしない / Human 確認待ち）
 
 ```text
 ID: BS-007
-Status: OPEN — Human 提示待ち
-Purpose:
-  監査証跡でも通常業務でもなく、
-  本当に「未解決状態として追跡する必要があるもの」が存在するか確認する
-Note:
-  BS-001〜006 はすべて Finding NOT ADOPTED / catalog OUT
-  Finding ADOPTED 件数: 0
-Possible outcomes（Human が選ぶ）:
-  - 具体的な未解決状態を1件提示 → Finding ADOPTED を検討
-  - 「現時点では該当なし」と明示 → Finding catalog は空／後続へ
-Agent: 業務状態を発明しない / FindingCode を命名しない
+Status: CANDIDATE — NOT FIXED
+Finding ADOPTED so far: 0
+Current inventory reading:
+  BS-001〜003 → 入力・進行時の HARD GATE
+  BS-004〜005 → 支援手順記録と定期モニタリングで扱う通常業務
+  BS-006 → 重度加算のための監査証跡
+  明確に Finding として追跡すべきものは、まだ見つかっていない
+Agent invention: NO
 ```
 
-Human が埋める形式（BS-007）:
-
 ```text
 ID: BS-007
-Status: DECIDED（日付）
+Status: CANDIDATE（2026-08-09）
 
 Business State:
-  （未解決追跡が要る具体状態）
-  または
-  「現時点では、未解決状態として Finding 追跡が必要な業務状態は無い」
+  モニタリングで必要な対応が決まったが、
+  その対応がまだ完了していない
 
-System behavior:
-  HARD GATE | NOTICE | FOLLOW_UP | OTHER | NONE
-  → （振る舞い）
+例:
+  「支援計画を修正する」と決定
+    ↓
+  会議は終了
+    ↓
+  修正作業は未完了
+    ↓
+  誰かが対応する必要がある
+    ↓
+  完了するまで残る
 
-Finding:
-  ADOPTED | NOT ADOPTED | N/A（該当なしのとき）
+Candidate note:
+  Finding にする必要があるとは限らない
+  「会議記録に対応事項を書いて、次回確認する」で十分
+    → Finding 不要 / catalog OUT
+  完了までアプリ上で未解決として残し、担当者が対応して Close する運用が必要
+    → ここで初めて Finding: ADOPTED の意味が出る
+```
 
-FindingCode:
-  NONE | PENDING | N/A
+### BS-007 確認問（1問）
 
-継続管理:
-  Findingとして行う | Findingとしては行わない | N/A
+```text
+問:
+  モニタリングで決まった対応事項について、
+  完了するまで「未対応」として追跡する運用は必要ですか？
 
-Finding catalog scope:
-  IN | OUT | N/A
+A. 必要 → BS-007 で Finding 候補を検討
+B. 不要。モニタリング記録だけでよい → catalog OUT
+C. まだ分からない → HOLD
+
+答え: UNSELECTED（A / B / C 待ち）
+FIXED / Finding ADOPTED: FORBIDDEN until Human answers
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
@@ -582,11 +593,12 @@ BS-002: FIXED（HARD GATE / catalog OUT）
 BS-003: FIXED（HARD GATE / catalog OUT）
 BS-004: FIXED（NOTICE / 定期モニタリング吸収 / catalog OUT）
 BS-005: FIXED（OTHER / 正常業務サイクル / catalog OUT）
-BS-006: FIXED（OTHER / 監査証跡 / catalog OUT）
-BS-001〜006: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
-BS-007: OPEN — Human 提示待ち
-Finding ADOPTED 件数: 0（まだ未提示）
-Boundary: 監査上必要 ≠ Finding
+BS-001〜003: FIXED（HARD GATE / catalog OUT）
+BS-004〜005: FIXED（通常業務 / catalog OUT）
+BS-006: FIXED（監査証跡 / SEPARATE / catalog OUT）
+BS-007: CANDIDATE — 確認問 UNSELECTED（A / B / C）
+Finding ADOPTED 件数: 0
+Boundary: 監査上必要 ≠ Finding / 継続保存 ≠ Finding
 Audit save details: separate audit / evidence contract（FindingCode ではない）
 A-1: PENDING
 A-2: PENDING
@@ -599,11 +611,15 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-007** で確認してください:
-   監査証跡でも通常業務でもなく、未解決として追跡すべき状態があるか
-2. ある → 具体状態を同じ形式で1件
-3. 無い → 「現時点では該当なし」と明示してよい
-4. hard gate / モニタリング / 正常サイクル / 監査証跡に載るものは Finding にしない
+BS-007 について、次の1問に **A / B / C** で答えてください。
 
-Agent は FindingCode 名を付けません。BS-007 の中身を勝手に書きません。
-監査保存項目の詳細も、ここでは決めません。
+```text
+モニタリングで決まった対応事項について、
+完了するまで「未対応」として追跡する運用は必要ですか？
+```
+
+- **A** … 必要 → Finding 候補を検討
+- **B** … 不要。モニタリング記録だけでよい → catalog OUT
+- **C** … まだ分からない → HOLD
+
+Agent は FindingCode 名を付けません。回答前に BS-007 を FIXED / Finding ADOPTED にしません。
