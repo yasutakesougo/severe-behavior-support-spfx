@@ -123,7 +123,8 @@ Schema ID / SharePoint / FindingCode / A-5 / post-retention: NOT STARTED from th
 ILB1_ELEVENTH_RESIDUAL_DECISION_SELECTION: CONSUMED / Selected B
 Selected residual Decision: application save（DEC-009 application 層）
 Next after selection（別工程）:
-  application save 境界・Entry / Decision packet（実装 GO は別 Human）
+  assessment-snapshot-application-save-entry-criteria.md（read-only；Entry NOT MET）
+  → persistence port / tests plan → Implementation Start（各別 Human）
 Remaining queue（not selected）: C → D → A
 FindingCode: HOLD
 A-5: HOLD
