@@ -427,9 +427,9 @@ Business State:
 
 System behavior:
   OTHER
-  → モニタリングを実施した事実を記録する
-  → 見直し・更新内容を記録する
-  → 重度加算の実績として後から確認できる状態を維持する
+  → モニタリング実施の事実を記録
+  → 見直し・更新結果を記録
+  → 重度加算の実績として後から確認可能にする
 
 Finding:
   NOT ADOPTED
@@ -438,11 +438,13 @@ FindingCode:
   NONE
 
 継続管理:
-  Findingとしては行わない
-  → 監査証跡・実績記録として保持する
+  監査証跡・実績記録として保持
 
 Finding catalog scope:
   OUT
+
+Findingとの関係:
+  SEPARATE
 
 Evidence status:
   Human一次情報
@@ -463,21 +465,28 @@ catalog OUT
 ```
 
 ```text
-新境界:
+新境界（Human一次情報）:
+  継続保存が必要でも、監査証跡なら Finding とは限らない
   監査上必要 ≠ Finding
-  監査記録と Finding は分離して判断する
+  Findingとの関係: SEPARATE
 保存項目の詳細:
   FindingCode ではなく audit / evidence contract へ
 ```
 
-## 未決 — BS-007
+## 未決 — BS-007（未解決追跡の要否確認）
 
 ```text
 ID: BS-007
 Status: OPEN — Human 提示待ち
+Purpose:
+  監査証跡でも通常業務でもなく、
+  本当に「未解決状態として追跡する必要があるもの」が存在するか確認する
 Note:
   BS-001〜006 はすべて Finding NOT ADOPTED / catalog OUT
-  Finding: ADOPTED が必要な状態は、まだ Human が提示していない
+  Finding ADOPTED 件数: 0
+Possible outcomes（Human が選ぶ）:
+  - 具体的な未解決状態を1件提示 → Finding ADOPTED を検討
+  - 「現時点では該当なし」と明示 → Finding catalog は空／後続へ
 Agent: 業務状態を発明しない / FindingCode を命名しない
 ```
 
@@ -488,23 +497,25 @@ ID: BS-007
 Status: DECIDED（日付）
 
 Business State:
-  （人の言葉）
+  （未解決追跡が要る具体状態）
+  または
+  「現時点では、未解決状態として Finding 追跡が必要な業務状態は無い」
 
 System behavior:
-  HARD GATE | NOTICE | FOLLOW_UP | OTHER
+  HARD GATE | NOTICE | FOLLOW_UP | OTHER | NONE
   → （振る舞い）
 
 Finding:
-  ADOPTED | NOT ADOPTED
+  ADOPTED | NOT ADOPTED | N/A（該当なしのとき）
 
 FindingCode:
-  NONE | PENDING
+  NONE | PENDING | N/A
 
 継続管理:
-  Findingとしては行わない | Findingとして行う
+  Findingとして行う | Findingとしては行わない | N/A
 
 Finding catalog scope:
-  OUT | IN
+  IN | OUT | N/A
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
@@ -588,10 +599,11 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-007** を同じ形式で1件書いてください
-2. hard gate / モニタリング / 正常サイクル / 監査証跡に載るものは Finding にしない
-3. Finding: ADOPTED は、未解決課題として継続追跡が必要なものだけ検討
-4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
+1. **BS-007** で確認してください:
+   監査証跡でも通常業務でもなく、未解決として追跡すべき状態があるか
+2. ある → 具体状態を同じ形式で1件
+3. 無い → 「現時点では該当なし」と明示してよい
+4. hard gate / モニタリング / 正常サイクル / 監査証跡に載るものは Finding にしない
 
 Agent は FindingCode 名を付けません。BS-007 の中身を勝手に書きません。
 監査保存項目の詳細も、ここでは決めません。
