@@ -116,6 +116,7 @@ AssessmentSnapshot complete-contract Independent Review（PR #168 / PASS）: doc
 Decision-ILB-1 tenth residual Decision selection（SELECTED / A / Implementation Start GO）: docs/architecture/decision-ilb-1-tenth-residual-decision-selection.md
 Decision-ILB-1 eleventh residual Decision selection（SELECTED / B / application save）: docs/architecture/decision-ilb-1-eleventh-residual-decision-selection.md
 Decision-ILB-1 eleventh residual Decision selection packet（CONSUMED / B）: docs/architecture/decision-ilb-1-eleventh-residual-decision-selection-packet.md
+AssessmentSnapshot application save Entry Criteria / boundary（read-only / NOT MET）: docs/architecture/assessment-snapshot-application-save-entry-criteria.md
 AS-EC-1 Entry #2 canonicalization consistency check: docs/architecture/decision-as-ec-1-entry-2-canonicalization-consistency-check.md
 AS-EC-1 Entry #2 Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-entry-2-independent-review.md
 Decision-ILB-1 sixth residual Decision selection（SELECTED / A / AS-EC-1 Entry #5）: docs/architecture/decision-ilb-1-sixth-residual-decision-selection.md

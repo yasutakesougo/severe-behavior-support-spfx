@@ -121,9 +121,10 @@ Order:
  10. Ninth residual: Decision-AS-EC-1 overall MET / Accepted（DONE / CONSUMED）
  11. Tenth residual: Implementation Start / PR-J domain GO（DONE / CONSUMED；PR #168 MERGED @ 08a6bde…）
  12. Eleventh residual: SELECTED / B — application save（CONSUMED selection；Implementation Start HOLD）
+     Entry Criteria / boundary: assessment-snapshot-application-save-entry-criteria.md（NOT MET）
      recommended remaining order（Human only）: C Schema ID → D SharePoint/adapter → A post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: MERGED / ON MAIN
-application save: SELECTED / not Implementation Start
+application save: SELECTED / Entry NOT MET / Implementation Start HOLD
 ```

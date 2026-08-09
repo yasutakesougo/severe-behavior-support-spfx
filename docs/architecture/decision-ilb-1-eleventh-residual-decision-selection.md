@@ -72,8 +72,11 @@ MUST NOT start from this selection alone:
 
 ```text
 Eleventh residual: CONSUMED / B
-Next engineering step（別 Human / 別 packet）:
-  application save 境界 Decision packet または Entry 固定
+Application save Entry Criteria / boundary（read-only）:
+  assessment-snapshot-application-save-entry-criteria.md
+  Entry Criteria: NOT MET（persistence port / tests plan / Implementation Start = HOLD）
+Next engineering step（別 Human）:
+  Entry #7 persistence port 契約 または Entry #8 tests 計画
   → Implementation Start はさらに別 GO
 Remaining recommended order: C → D → A（自動選定・自動開始禁止）
 ```
