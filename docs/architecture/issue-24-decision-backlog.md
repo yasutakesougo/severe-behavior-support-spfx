@@ -119,6 +119,7 @@ Decision-RD-3: **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-accep
   採用しない: 期限超過状態 / 超過警告 / 業務制限 / 90日固定 / hard due·overdue
   Logical contract: [`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md)
   Consistency: [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md)（**CONSISTENT** docs-internal；FINAL は Merge 後）
+  Independent Review: [`decision-rd-3-independent-review.md`](./decision-rd-3-independent-review.md)（**PASS**）
   Selected via: ILB-1 residual Option C（[`decision-ilb-1-next-residual-decision-selection.md`](./decision-ilb-1-next-residual-decision-selection.md)）
 Current single gate: **他残存 Decision を一件ずつ選定・判定**（RD-3 は CONSUMED）
 OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data

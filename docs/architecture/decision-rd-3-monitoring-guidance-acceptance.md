@@ -175,12 +175,15 @@ Decision-ILB-1 Human Policy: FINAL CONSISTENT（上位方針）
 他 inventory provisional 行: NOT Accepted by this document
 ```
 
-## Consistency
+## Consistency / Independent Review
 
 正本整合: [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md)
 
+Independent Review: [`decision-rd-3-independent-review.md`](./decision-rd-3-independent-review.md)
+
 ```text
 Docs-internal consistency: CONSISTENT
+Independent Review: PASS（P0=0 / P1=0 / P2=0）
 FINAL CONSISTENT: after PR Merge attestation
 ```
 

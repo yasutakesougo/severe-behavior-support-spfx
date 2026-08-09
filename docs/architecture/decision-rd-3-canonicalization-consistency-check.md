@@ -2,7 +2,10 @@
 
 Status: **CONSISTENT**（docs-internal / 2026-08-09）
 PR #153: OPEN（Acceptance）— FINAL CONSISTENT は Merge 後に確定
-Depends on: PR #152（ILB-1 Human Policy FINAL CONSISTENT）Merge 推奨
+Depends on: PR #152（ILB-1 Human Policy FINAL CONSISTENT）**MERGED**
+  merge commit: `9f5fd78093843229c3b06e1debff1298427d88ff`
+  merged head: `1ad7e51f73159b6204886b2a7fb5f4706800a899`
+PR #153 rebase: onto `origin/main` @ `9f5fd78…`（post-#152）
 
 Related:
 
@@ -56,9 +59,12 @@ Merge 後に **FINAL CONSISTENT** へ昇格する。
 | C7 | FindingCode / A-5 / Implementation | HOLD | **PASS** |
 | C8 | 90日 / hard due / 業務制限 | NOT ADOPTED / 採用しない | **PASS** |
 | C9 | PR Merge attestation | Merge 前 | **HOLD**（FINAL は Merge 後） |
+| C10 | Rebase onto post-#152 main | base = `9f5fd78…`；#152 MERGED | **PASS** |
 
 ```text
 Docs-internal consistency: PASS
+PR #152 dependency: MERGED（9f5fd78… / head 1ad7e51…）
+PR #153 rebase onto main: PASS
 PR #153 merge attestation: HOLD（未 Merge）
 Contradiction found in repository docs: NONE
 Verdict: CONSISTENT（docs-internal）
