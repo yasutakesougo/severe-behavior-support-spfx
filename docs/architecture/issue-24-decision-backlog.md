@@ -486,7 +486,7 @@ Implementation Start: HOLD
 SEV 系（FindingSeverity）の substantive line は DEC-018 不採用で区切り。Canonical は **COMPLETE（Issue #8 / DEC-018）**。ASSIGN / 型 / 実装は自動再開しない。
 **Decision-FC-1 = Accepted / Option B**。**Decision-FC-2〜FC-6 = Accepted / Option C**。Finding catalog = DEC-019 EMPTY。値発明禁止。Stale PR #126 は Merge しない。Implementation HOLD。
 **DEC-008** は 3 軸分離。制度資格・最終承認者は未決。AI 要約を根拠にしない。
-AS-EC-1 は Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #8 技術計画 Accepted。残る Finding 境界 / Schema 等（#5/#6/#7）が先。overall Entry satisfied は自動宣言しない。
+AS-EC-1 は Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #5 PASS·MET（findingIds NOT REQUIRED） / #8 技術計画 Accepted。残る #6/#7（NOT_APPLICABLE reason / Schema）が先。overall Entry satisfied は自動宣言しない。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
 
