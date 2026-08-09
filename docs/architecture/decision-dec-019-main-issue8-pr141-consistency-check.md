@@ -2,8 +2,6 @@
 
 Status: **CONSISTENT / CURRENT-MAIN REVALIDATED**
 
-Independent re-review: **PENDING**
-
 Related:
 
 - Issue #8 DEC-019 ledger registration: `docs/architecture/decision-dec-019-issue8-ledger-registration.md`
@@ -38,7 +36,7 @@ DEC-019 を Issue #8 台帳へ登録したあと、**main / Issue #8 / PR #141**
 | A-2 numbering | NOT APPLICABLE |
 | A-3 mapping | NOT APPLICABLE |
 | A-4 | DEC-019 |
-| A-5 | OUT |
+| A-5 catalogVersionIdentifier concrete representation strategy | OUT |
 | Implementation Start | HOLD |
 | `evaluateReviewDueRelativeToAsOf` | technical helper only |
 
@@ -65,7 +63,6 @@ PR #141: MERGED
 Issue #8 DEC-019 comment: 5229477058
 Verdict: CONSISTENT
 Contradiction found: NONE
-Independent re-review: PENDING
 ```
 
 ---
@@ -79,8 +76,6 @@ Independent re-review: PENDING
 | **BLOCKED** | Issue #8 未投稿 | Human が DEC-019 を Issue #8 に投稿してから再確認 |
 
 Current: **CONSISTENT**
-
-この current-main revalidation は競合解消作業内の自己確認であり、独立レビューを代替しない。
 
 ---
 
@@ -96,7 +91,7 @@ Implementation Start: HOLD
 整合確認が PASS でも、自動では進めない:
 
 - FindingCode 値の作成
-- A-5 Finding 採用
+- A-5 catalogVersionIdentifier concrete representation strategy の採択
 - Implementation Start
 - GOV-RULE-08 の再解釈
 - 90日固定の再導入

@@ -117,12 +117,12 @@ Consistency: CONSISTENT（decision-dec-019-main-issue8-pr141-consistency-check.m
 本 Accepted は「Issue #8 に新しい DEC を追加する」という **方式** を固定した。
 番号 **DEC-019** と EMPTY catalog 本文は、後続の Finding catalog Acceptance（PR #141）で確定し、Issue #8 に投稿済み（comment `5229477058`）。
 
-## Decision-FC-1 で決めないこと（維持）
+## Decision-FC-1 では決めなかったこと（後続 Decision との分離）
 
 ```text
-FindingCode の具体的な値一覧: OUT
-コード番号 / 採番規則の確定: OUT
-criterionId 写像表: OUT
+FindingCode の具体的な値一覧: FC-1 対象外。後続 DEC-019 で NONE
+コード番号 / 採番規則の確定: FC-1 対象外。後続 DEC-019 で NOT APPLICABLE
+criterionId 写像表: FC-1 対象外。後続 DEC-019 で NOT APPLICABLE
 TypeScript enum / union: OUT
 validator / fixture: OUT
 Decision-FC-2（固定列挙 vs 外部カタログ）: OUT / DO NOT START
@@ -149,7 +149,7 @@ SharePoint / adapter / UI / deploy / 実データ: OUT
 |---|---|
 | Catalog ownership / change control | **本 Decision（Accepted / Option B）** |
 | Catalog delivery boundary | Decision-FC-2（DO NOT START） |
-| FindingCode 値一覧 / 採番 / mapping | 未決（Issue #8 新 DEC 本文・後続 Decision） |
+| FindingCode 値一覧 / 採番 / mapping | FC-1 では未決。後続 DEC-019 で **NONE / NOT APPLICABLE / NOT APPLICABLE** |
 | Identity 組立 | DONE / UNCHANGED |
 | TypeScript / validator / fixture / 実装 | HOLD |
 | FindingSeverity / SEV-2-ASSIGN | 再開しない |

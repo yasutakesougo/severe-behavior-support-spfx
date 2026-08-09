@@ -15,7 +15,6 @@ repository docs: mirror
 main merge (Acceptance): PR #141 / 9cc7829aabe6fc1fce027d068e339cc738d4beba
 merged head: 064c633af398228d8f8fcc59da402b3bf7090371
 current-main revalidation: 42b251be83447d6e82090312ea2f18ed69968377 / PASS（DEC-019 meaning preserved）
-independent re-review: PENDING
 Implementation Start: HOLD
 FindingCode invention: FORBIDDEN
 A-5: OUT
@@ -118,7 +117,6 @@ DEC-019 docs Acceptance: MERGED on main（PR #141）
 Issue #8 ledger registration: POSTED / 5229477058
 Consistency (main / Issue #8 / PR #141): CONSISTENT
 Current-main revalidation: PASS at 42b251be83447d6e82090312ea2f18ed69968377
-Independent re-review: PENDING
 FindingCode 作成: DO NOT START
 A-5: OUT
 Implementation Start: HOLD
