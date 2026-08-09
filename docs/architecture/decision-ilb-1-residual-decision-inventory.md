@@ -38,7 +38,7 @@ Twentieth residual Decision: SELECTED / CONSUMED — New SPFx target provisionin
 Twenty-first residual Decision: SELECTED / CONSUMED — New SPFx Site / List naming（Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1；intended values HUMAN-PROVIDED / PLACEHOLDER）
 Twenty-third residual Decision: SELECTED / CONSUMED — Multi-facility org site topology（Decision-AS-ORG-SITE-TOPOLOGY-1 Accepted / LOCKED / OT-1+FS-1+SP-1+PP-1+PH-1+XB-1）
 Twenty-fourth residual Decision: SELECTED / CONSUMED — Pilot facility identity / Site naming（Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1；List names DEFERRED）
-Twenty-fifth residual Decision: SELECTED / OPEN — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 OPEN / NOT ACCEPTED；recommended LO-1）
+Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1；List names DEFERRED）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -78,10 +78,10 @@ Placeholder creation: FORBIDDEN
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
   磯子=isogo → /sites/severe-support-isogo
   本牧=honmoku → /sites/severe-support-honmoku
-Next gate: PILOT LIST NAMES（after ownership check）
-Ownership check: READY（decision-assessment-snapshot-pilot-list-ownership-check.md）
-Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
-  recommended LO-1: List A=SupportPlan / List B=AssessmentSnapshot
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
+  List A = SupportPlan + SupportPlanVersion
+  List B = AssessmentSnapshot
+Next gate: PILOT LIST NAMES
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -231,15 +231,17 @@ Order:
      remaining examples: List ownership / List names / common-management naming / post-retention / DEC-015 / SV-1·LV-1·CN-1 after real creation
      FindingCode / A-5: HOLD
      Note: open PR #186 PROVISION-EXEC（if present）Execution GO remains NOT GIVEN；placeholder 作成 FORBIDDEN
- 25. Twenty-fifth residual: Pilot List ownership（SELECTED / OPEN；Decision-AS-PILOT-LIST-OWNERSHIP-1 OPEN / NOT ACCEPTED）
-     ownership check: decision-assessment-snapshot-pilot-list-ownership-check.md（READY）
+ 25. Twenty-fifth residual: Pilot List ownership（DONE / CONSUMED；Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1）
+     acceptance: decision-assessment-snapshot-pilot-list-ownership-acceptance.md
+     ownership check: decision-assessment-snapshot-pilot-list-ownership-check.md（CONSUMED）
      packet: decision-assessment-snapshot-pilot-list-ownership-packet.md
      selection: decision-ilb-1-twenty-fifth-residual-pilot-list-ownership-selection.md
-     recommended CANDIDATE（NOT LOCKED）:
-       LO-1 List A = SupportPlan 正本（Version 同居 VP-1）
-            List B = AssessmentSnapshot 正本
-       EX-1 AuditEvent / DailyActivityRecords を 2 slot に入れない
-       NB-1 List names は後続 Decision
+     next gate: decision-assessment-snapshot-pilot-list-names-next-gate.md
+       = PILOT LIST NAMES
+     LOCKED ownership:
+       List A = SupportPlan + SupportPlanVersion
+       List B = AssessmentSnapshot
+       EX-1 AuditEvent / DailyActivityRecords 除外
      contingent name candidates（NOT LOCKED）:
        SupportPlans / AssessmentSnapshots
 AS-EC-1 overall: MET / Accepted
@@ -270,9 +272,10 @@ List names: DEFERRED
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-Next gate: PILOT LIST NAMES（after ownership check）
-Ownership check: READY
-Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+Decision-AS-PILOT-LIST-OWNERSHIP-1: LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
+  List A = SupportPlan + SupportPlanVersion
+  List B = AssessmentSnapshot
+Next gate: PILOT LIST NAMES
 List names: DEFERRED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN

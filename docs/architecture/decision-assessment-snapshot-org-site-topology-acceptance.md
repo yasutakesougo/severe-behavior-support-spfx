@@ -262,12 +262,12 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + 
   → decision-assessment-snapshot-pilot-facility-identity-acceptance.md
   磯子=isogo → /sites/severe-support-isogo
   本牧=honmoku → /sites/severe-support-honmoku
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+  List A = SupportPlan + SupportPlanVersion
+  List B = AssessmentSnapshot
 Next gate: FIXED
-  PILOT LIST NAMES（after ownership check）
-  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
-Ownership check: READY
-Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
-  recommended LO-1: List A=SupportPlan / List B=AssessmentSnapshot
+  PILOT LIST NAMES
+  → decision-assessment-snapshot-pilot-list-names-next-gate.md
 List names: DEFERRED
 Common management Site name: NOT SELECTED / OPEN
 Site / List creation: NO-GO

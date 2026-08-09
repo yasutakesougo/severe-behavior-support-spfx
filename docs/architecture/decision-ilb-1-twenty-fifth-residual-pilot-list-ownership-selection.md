@@ -6,14 +6,14 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_TWENTY_FIFTH_RESIDUAL_SELECTION
-Status: SELECTED / OPEN
-  （Decision-AS-PILOT-LIST-OWNERSHIP-1 = OPEN / NOT ACCEPTED）
+Status: SELECTED / CONSUMED
+  （Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED）
 Selected unit: Pilot List ownership / 正本責務
 Follow-up Decision ID: Decision-AS-PILOT-LIST-OWNERSHIP-1
 
 Ownership check（read-only）:
   decision-assessment-snapshot-pilot-list-ownership-check.md
-  Status: READY FOR HUMAN OWNERSHIP DECISION
+  Status: CONSUMED（ownership Accepted）
 
 Locked basis（再 Decision しない）:
   Decision-AS-PILOT-FACILITY-IDENTITY-1 = Accepted / LOCKED
@@ -23,9 +23,12 @@ Locked basis（再 Decision しない）:
   Decision-AS-SP-PLACEMENT-1 = SV-1 + LV-1 + CN-1 + SC-1
   LV-3 SupportPlan List 同一視 = NOT SELECTED
 
+Ownership:
+  Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+
 Current state:
   Site identity = LOCKED（isogo / honmoku）
-  List ownership pairing = OPEN / NOT ACCEPTED
+  List ownership pairing = Accepted / LOCKED
   List names = DEFERRED
   Site / List creation = NO-GO
 ```
@@ -36,19 +39,25 @@ Current state:
 次 Human Decision として選ぶ。
 
 ```text
-SELECTED / OPEN:
+SELECTED / CONSUMED:
   Decision-AS-PILOT-LIST-OWNERSHIP-1
+  Human Decision: LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+  Human Accept phrase:
+    「LO-1 + VP-1 + EX-1 + NB-1 + XB-1 でいく」
 
-In scope:
-  List A / List B 正本責務 pairing
-  SupportPlanVersion の同居可否（axis）
-  ownership ≠ List name Acceptance ≠ creation GO
+Closed:
+  List A = SupportPlan 正本（Version 同居）
+  List B = AssessmentSnapshot 正本
+  AuditEvent / DailyActivityRecords exclusion
+  naming / creation boundaries
 
-Out of scope:
-  concrete List names（ownership LOCK 後）
+Still OPEN / NOT AUTHORIZED:
+  concrete List names
   Site / List creation
-  AuditEvent / DailyActivityRecords reassignment
   Implementation Start
+  SharePoint / adapter / application implementation
+  Schema / DTO code assignment
+  Deploy / real data
 ```
 
 Selection ≠ Acceptance ≠ List naming ≠ Site/List creation.
@@ -65,14 +74,26 @@ Selection ≠ Acceptance ≠ List naming ≠ Site/List creation.
 ## Next
 
 ```text
-Selection SELECTED / OPEN
-  → decision-assessment-snapshot-pilot-list-ownership-packet.md
-Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+Selection CONSUMED → Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED
+  decision-assessment-snapshot-pilot-list-ownership-acceptance.md
+  List ownership pairing:       LO-1
+  SupportPlanVersion placement: VP-1
+  Exclusion boundary:           EX-1
+  Naming boundary:              NB-1
+  Execution boundary:           XB-1
 
-Recommended candidate（NOT LOCKED）:
-  LO-1 — List A = SupportPlan 正本 / List B = AssessmentSnapshot 正本
+LOCKED ownership:
+  List A = SupportPlan + SupportPlanVersion
+  List B = AssessmentSnapshot
 
-Until Human Accept:
-  List names remain DEFERRED
-  Site / List creation = NO-GO
+Next gate: FIXED
+  PILOT LIST NAMES
+  → decision-assessment-snapshot-pilot-list-names-next-gate.md
+
+Still HOLD / NO-GO:
+  List names
+  Site / List creation
+  Placeholder creation
+  Implementation Start
+  tenant mutation
 ```

@@ -3,6 +3,9 @@
 この文書は、Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED を前提に、
 **事業所サイト内 2 List slot の正本責務**を判断する Human Decision Packet である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-pilot-list-ownership-acceptance.md`](./decision-assessment-snapshot-pilot-list-ownership-acceptance.md)
+
 Read-only ownership check:
 [`decision-assessment-snapshot-pilot-list-ownership-check.md`](./decision-assessment-snapshot-pilot-list-ownership-check.md)
 
@@ -20,16 +23,22 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-PILOT-LIST-OWNERSHIP-1
-Kind: Human Decision packet（compare → OPEN）
-Status: OPEN / NOT ACCEPTED
-Human Decision: NOT SELECTED
-Acceptance 正本: NOT CREATED
-
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+Human Selected:
+  List ownership pairing:       LO-1
+  SupportPlanVersion placement: VP-1
+  Exclusion boundary:           EX-1
+  Naming boundary:              NB-1
+  Execution boundary:           XB-1
+Human Accept phrase:
+  「LO-1 + VP-1 + EX-1 + NB-1 + XB-1 でいく」
 Selected via:
   decision-ilb-1-twenty-fifth-residual-pilot-list-ownership-selection.md
 
 Current state:
-  List ownership pairing = OPEN / NOT ACCEPTED
+  List ownership pairing = Accepted / LOCKED
   List names = DEFERRED
   Site / List creation = NO-GO
   Placeholder creation = FORBIDDEN
@@ -56,16 +65,15 @@ Historical note:
   候補・Agent recommendation は比較用。
   採択は Acceptance 正本のみが LOCKED である。
   Schema ID ≠ List name。
-  本 packet は OPEN / NOT ACCEPTED。
 ```
 
-## 2. Compare axes
+## 2. Compare axes（比較履歴）
 
 ### LO — List ownership pairing
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **LO-1** | List A = SupportPlan 正本（facility）／ List B = AssessmentSnapshot 正本（facility） | CANDIDATE（recommended） |
+| **LO-1** | List A = SupportPlan 正本（facility）／ List B = AssessmentSnapshot 正本（facility） | **Accepted** |
 | LO-2 | List A / B を別 entity 組合せにする（Human が明示） | NOT SELECTED |
 | LO-HOLD | 正本責務をまだ決めない | NOT SELECTED |
 
@@ -73,15 +81,15 @@ Historical note:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **VP-1** | SupportPlanVersion は SupportPlan 正本 List（List A）に同居させる | CANDIDATE（recommended） |
-| VP-2 | SupportPlanVersion を第3 List にする | NOT SELECTED（2-slot 前提と衝突しやすい） |
+| **VP-1** | SupportPlanVersion は SupportPlan 正本 List（List A）に同居させる | **Accepted** |
+| VP-2 | SupportPlanVersion を第3 List にする | NOT SELECTED |
 | VP-HOLD | Version 配置をまだ決めない | NOT SELECTED |
 
 ### EX — Exclusion boundary
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **EX-1** | AuditEvent（`SBS_AUDIT_EVENTS`）と DailyActivityRecords は本 2 slot に入れない | CANDIDATE（required with Accept） |
+| **EX-1** | AuditEvent（`SBS_AUDIT_EVENTS`）と DailyActivityRecords は本 2 slot に入れない | **Accepted** |
 | EX-2 | どちらかを facility 2 slot に入れる | NOT SELECTED |
 | EX-HOLD | 除外境界未決定 | NOT SELECTED |
 
@@ -89,7 +97,7 @@ Historical note:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **NB-1** | 本 Decision では具体 List names を発明・固定しない。names は ownership LOCK 後の別 Human Decision | CANDIDATE（required with Accept） |
+| **NB-1** | 本 Decision では具体 List names を発明・固定しない。names は ownership LOCK 後の別 Human Decision | **Accepted** |
 | NB-2 | ownership と同時に List names も Agent が決める | NOT SELECTED |
 | NB-HOLD | naming boundary 未決定 | NOT SELECTED |
 
@@ -97,15 +105,15 @@ Historical note:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | ownership Acceptance ≠ List name Acceptance ≠ Site/List creation GO | CANDIDATE（required with Accept） |
+| **XB-1** | ownership Acceptance ≠ List name Acceptance ≠ Site/List creation GO | **Accepted** |
 | XB-2 | ownership Acceptance と同時に作成する | NOT SELECTED |
 | XB-HOLD | execution boundary 未決定 | NOT SELECTED |
 
-## 3. Recommended ownership（CANDIDATE / NOT LOCKED）
+## 3. Accepted ownership（LOCKED）
 
 ```text
-Status: CANDIDATE / NOT ACCEPTED / NOT LOCKED
-Agent recommendation: LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+Status: Accepted / LOCKED
+Human Decision: LO-1 + VP-1 + EX-1 + NB-1 + XB-1
 ```
 
 ```text
@@ -122,20 +130,7 @@ Excluded from these 2 slots:
   DailyActivityRecords → REFERENCE ONLY
 ```
 
-根拠（read-only check より）:
-
-```text
-- sharepoint-contract-mapping Scope = SupportPlan / SupportPlanVersion
-- AssessmentSnapshot は独立 Schema ID + SP adapter / save 境界を持つ
-- SP-PLACEMENT LV-3 = SupportPlan List 同一視 NOT SELECTED
-- NAMES-1 = ちょうど 2 List slots
-- AuditEvent #29 = 法人共通 store role
-- TARGET-REUSE B = DailyActivityRecords を新 SPFx List にしない
-```
-
 ## 4. Contingent List name candidates（still NOT this Decision）
-
-ownership が LO-1 で LOCK された後の **別 Decision** 用の比較候補。
 
 | Role | Candidate display | Candidate English name | Status |
 |---|---|---|---|
@@ -143,34 +138,33 @@ ownership が LO-1 で LOCK された後の **別 Decision** 用の比較候補�
 | List B | アセスメントスナップショット | `AssessmentSnapshots` | CONTINGENT / NOT LOCKED |
 
 ```text
-本 packet では List names を Accepted にしない（NB-1）。
+List names は別 Decision（NB-1）。
 ```
 
 ## 5. Explicit non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
-  treating LO-1 as Accepted / LOCKED
+This packet / Acceptance does NOT authorize:
   Accepting List names
   creating Site / List / columns
   creating with XXXXX / YYYYY
+  treating Schema ID as List name
   reopening AuditEvent store mapping
   Implementation Start
   SharePoint / adapter / application implementation
   Deploy / real data
 ```
 
-## 6. Next
+## 6. Next after Human Acceptance
 
 ```text
-Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
-Waiting for Human Accept such as:
-  「LO-1 + VP-1 + EX-1 + NB-1 + XB-1 でいく」
-  （List A=SupportPlan / List B=AssessmentSnapshot /
-    Version 同居 / names は後続 / 作成しない）
-
-Until then:
-  List names = DEFERRED
-  Site / List creation = NO-GO
-  Acceptance 正本 = NOT CREATED
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+  → decision-assessment-snapshot-pilot-list-ownership-acceptance.md
+Next gate: FIXED
+  PILOT LIST NAMES
+  → decision-assessment-snapshot-pilot-list-names-next-gate.md
+List names: DEFERRED
+Site / List creation: NO-GO
+Placeholder creation: FORBIDDEN
+Implementation Start: HOLD
 ```

@@ -12,9 +12,10 @@ Follow-up Decision packet（OPEN）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: read-only ownership inventory
-Status: READY FOR HUMAN OWNERSHIP DECISION
-Acceptance: NOT CREATED / NOT STARTED
-List names: NOT ACCEPTED
+Status: CONSUMED（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED）
+Acceptance:
+  decision-assessment-snapshot-pilot-list-ownership-acceptance.md
+List names: NOT ACCEPTED（NB-1；別 Decision）
 Site / List creation: NO-GO
 
 Baseline:
@@ -34,18 +35,17 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ## Summary
 
 ```text
-判定: READY FOR HUMAN OWNERSHIP DECISION
-（ownership pairing はまだ Accepted / LOCKED ではない）
+判定: CONSUMED
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
 
-Repo が LOCK していること:
-  - 事業所サイトごとに専用 Lists（FS-1 / LT-1）
-  - NAMES-1 の List slot 数 = 2（XXXXX / YYYYY；placeholder）
-  - AssessmentSnapshot List を SupportPlan List と同一視しない（LV-3 NOT SELECTED）
+LOCKED ownership:
+  List A = SupportPlan 正本 + SupportPlanVersion 同居
+  List B = AssessmentSnapshot 正本
+  AuditEvent / DailyActivityRecords = 2 slot 外
 
-Repo がまだ LOCK していないこと:
-  - 2 slot それぞれがどの entity の正本か
-  - SupportPlanVersion を SupportPlan と同じ List に置くか
-  - 具体 List names
+Still OPEN:
+  具体 List names（次 gate）
+  Site / List creation = NO-GO
 ```
 
 ## 1. Locked prerequisites（再 Decision しない）
@@ -82,14 +82,15 @@ Slot entity assignment: NOT LOCKED in repo
 
 | Slot | Candidate 正本責務 | Supporting evidence | Gaps / contradictions | Verdict |
 |---|---|---|---|---|
-| **List A** | SupportPlan の施設サイト正本（版本文 SupportPlanVersion の同居可否は別 OPEN） | Contract mapping Scope が SupportPlan / Version；facility Site に専用 Lists（FS-1/LT-1） | Version を同一 List に置くかは未記載 | **CANDIDATE** |
-| **List B** | AssessmentSnapshot の施設サイト正本 | SP-ADAPTER / APP-SAVE / DEC-009 が AS 永続境界を持つ；**LV-3 = SupportPlan List 同一視 NOT SELECTED** | AS→具体 List 名は未記載 | **CANDIDATE** |
+| **List A** | SupportPlan の施設サイト正本 + SupportPlanVersion 同居 | Contract mapping Scope；FS-1/LT-1；VP-1 Accepted | 具体 List name は DEFERRED | **Accepted / LOCKED（LO-1 + VP-1）** |
+| **List B** | AssessmentSnapshot の施設サイト正本 | SP-ADAPTER / APP-SAVE / DEC-009；LV-3 NOT SELECTED；LO-1 Accepted | 具体 List name は DEFERRED | **Accepted / LOCKED（LO-1）** |
 
 ```text
-NOT derived as LOCKED:
-  XXXXX = SupportPlan
-  YYYYY = AssessmentSnapshot
+LOCKED via Decision-AS-PILOT-LIST-OWNERSHIP-1.
+Still NOT derived:
   Schema ID = List name
+  concrete List names Accepted
+  XXXXX / YYYYY = creatable
 ```
 
 ## 4. Explicit non-claims
@@ -138,11 +139,11 @@ Do NOT create Lists from these names.
 
 | Item | Status | Needed Human action |
 |---|---|---|
-| List A / List B 正本責務 pairing | **OPEN** | Accept LO-1 or alternate |
-| SupportPlanVersion same List as SupportPlan? | **OPEN** | ownership Decision 内で明示 or 別 Decision |
-| Concrete List names | **DEFERRED** | ownership LOCK 後の List names Decision |
+| List A / List B 正本責務 pairing | **Accepted / LOCKED（LO-1）** | — |
+| SupportPlanVersion same List as SupportPlan? | **Accepted / LOCKED（VP-1）** | — |
+| Concrete List names | **DEFERRED** | PILOT LIST NAMES Decision |
 | List count ≠ 2 | **NOT REOPENED** by this check | 変更するなら別 Human Decision |
-| AuditEvent facility List? | **NOT ADOPTED** by existing #29 mapping | 再 Decision しない（本 check） |
+| AuditEvent facility List? | **NOT ADOPTED（EX-1）** | 再 Decision しない |
 
 ## 7. Out of scope
 
@@ -160,11 +161,10 @@ post-retention deletion
 ## 8. Next
 
 ```text
-1. Human Decision: Decision-AS-PILOT-LIST-OWNERSHIP-1（OPEN packet）
-   recommended candidate: LO-1
-     List A = SupportPlan 正本（facility）
-     List B = AssessmentSnapshot 正本（facility）
-     SupportPlanVersion placement = OPEN axis inside that Decision
-2. Only after ownership LOCKED → PILOT LIST NAMES Decision
-3. Creation remains later execution gate / NO-GO
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+Next gate: FIXED
+  PILOT LIST NAMES
+  → decision-assessment-snapshot-pilot-list-names-next-gate.md
+List names: DEFERRED / NOT SELECTED
+Creation: NO-GO
 ```
