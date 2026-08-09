@@ -56,6 +56,7 @@ Does NOT authorize:
 ```
 
 A が選択された場合も、具体値の候補提示・採択は別 Human Decision とする。
+比較正本: [`decision-assessment-snapshot-schema-id-value-naming-packet.md`](./decision-assessment-snapshot-schema-id-value-naming-packet.md)（OPEN / NOT ACCEPTED）
 
 ### B — HOLD
 

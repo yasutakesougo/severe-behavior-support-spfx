@@ -38,4 +38,14 @@ It does **not** authorize:
 
 ## Next gate
 
-Prepare a read-only value / naming Decision packet with concrete candidate patterns and trade-offs. No candidate becomes accepted merely by appearing in that packet.
+```text
+Compare packet（read-only / NOT ACCEPTED）:
+  decision-assessment-snapshot-schema-id-value-naming-packet.md
+
+Human must explicitly Accept naming rule + concrete Schema ID
+（optional: initial schemaVersion）before assignment.
+
+No candidate becomes accepted merely by appearing in the compare packet.
+Schema ID assignment: HOLD / NOT STARTED
+Implementation Start: HOLD
+```
