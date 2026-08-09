@@ -228,7 +228,7 @@ Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 ```
 
-Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)  
+Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
 DEC body packet: [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)
 
 ## 7. Human への依頼（現段）
