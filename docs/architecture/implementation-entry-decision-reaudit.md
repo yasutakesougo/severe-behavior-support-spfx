@@ -229,10 +229,12 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 
 **Current selected substantive unit:** F — Decision-ILB-1
 → Human Policy **Accepted / Option A / FINAL CONSISTENT**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md) / [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)）
-First residual Decision: **SELECTED / C — Decision-RD-3 Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
-Inventory provisional rows（RD-3 以外）: **NOT Accepted**（一件ずつ判定）
+First residual Decision: **SELECTED / C — Decision-RD-3 FINAL CONSISTENT**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
+Second residual Decision: **SELECTED / A — GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）
+post-retention deletion: **OPEN / 別 Decision**
+Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A）
 
 **Do not next / DO NOT START:**
 

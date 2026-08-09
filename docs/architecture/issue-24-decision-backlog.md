@@ -118,12 +118,19 @@ Decision-RD-3: **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-accep
   制度・業務上の見直しは維持（モニタリング不要ではない）
   採用しない: 期限超過状態 / 超過警告 / 業務制限 / 90日固定 / hard due·overdue
   Logical contract: [`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md)
-  Consistency: [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md)（**CONSISTENT** docs-internal；FINAL は Merge 後）
+  Consistency: [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
   Independent Review: [`decision-rd-3-independent-review.md`](./decision-rd-3-independent-review.md)（**PASS**）
   Selected via: ILB-1 residual Option C（[`decision-ilb-1-next-residual-decision-selection.md`](./decision-ilb-1-next-residual-decision-selection.md)）
-Current single gate: **他残存 Decision を一件ずつ選定・判定**（RD-3 は CONSUMED）
+PR #153 / #154: MERGED（RD-3 Acceptance / FINAL CONSISTENT）
+GOV-AUD-05 / DEC-012: **Accepted / LOCKED / Option A**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）
+  法定保存期間中: 完全削除を禁止する / 保存期間: 5年間
+  5年経過後の削除可否: **別 Decision（OPEN）**
+  5年経過後の自動完全削除 / 物理削除の自動実行: NOT ADOPTED
+  Logical contract: [`retention-complete-deletion-prohibition-contract.md`](./retention-complete-deletion-prohibition-contract.md)
+  Selected via: ILB-1 second residual Option A（[`decision-ilb-1-second-residual-decision-selection.md`](./decision-ilb-1-second-residual-decision-selection.md)）
+Current single gate: **他残存 Decision を一件ずつ選定・判定**（RD-3 / retention prohibition は CONSUMED）
 OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
-  GOV-AUD-05 自動 Accepted / 日数・ロール・承認発明
+  post-retention deletion 自動 Accepted / 日数・ロール・承認発明
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -410,15 +417,16 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 ```text
 Current single gate（canonical）:
   Decision-ILB-1 Human Policy FINAL CONSISTENT
-  → Decision-RD-3 Accepted / LOCKED（first residual）
-  → 他残存 Decision を一件ずつ判定
+  → Decision-RD-3 FINAL CONSISTENT
+  → GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED
+  → 他残存 Decision を一件ずつ判定（post-retention deletion 含む）
 Decision-ILB-1 Human Policy 1–6: ACCEPTED / LOCKED / FINAL CONSISTENT
-  Classification frame A–E: adopted
-  Inventory provisional rows（RD-3 以外）: NOT Accepted
-Decision-RD-3: Accepted / LOCKED（informational monitoring guidance）
+Decision-RD-3: Accepted / LOCKED / FINAL CONSISTENT
+GOV-AUD-05 / DEC-012（retention prohibition）: Accepted / LOCKED / Option A
+  Closes only: 5年間は完全削除しない
+  post-retention deletion: OPEN / 別 Decision
 GOV-AUD-04: Accepted / LOCKED / Option E / FINAL CONSISTENT
 GOV-AUD-03: Accepted / Option E
-GOV-AUD-05: OUT / DO NOT START unless newly selected（auto-Accepted 禁止）
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT
 DEC-008 submit/return: Accepted / LOCKED / Option C / FINAL CONSISTENT
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED

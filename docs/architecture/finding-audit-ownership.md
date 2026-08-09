@@ -87,9 +87,13 @@ Decision-ILB-1 residual Decision inventory（read-only / row classifications pro
 Decision-ILB-1 next residual Decision selection（SELECTED / C / Decision-RD-3）: docs/architecture/decision-ilb-1-next-residual-decision-selection.md
 Decision-ILB-1 next residual Decision selection packet（CONSUMED / C）: docs/architecture/decision-ilb-1-next-residual-decision-selection-packet.md
 Decision-RD-3 monitoring guidance Acceptance（Accepted / LOCKED）: docs/architecture/decision-rd-3-monitoring-guidance-acceptance.md
-Decision-RD-3 canonicalization consistency check（CONSISTENT docs-internal / PR #153）: docs/architecture/decision-rd-3-canonicalization-consistency-check.md
+Decision-RD-3 canonicalization consistency check（FINAL CONSISTENT / PR #153 / #154）: docs/architecture/decision-rd-3-canonicalization-consistency-check.md
 Decision-RD-3 Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #153）: docs/architecture/decision-rd-3-independent-review.md
 Review monitoring guidance logical contract: docs/architecture/review-monitoring-guidance-contract.md
+Decision-ILB-1 second residual Decision selection（SELECTED / A / GOV-AUD-05·DEC-012）: docs/architecture/decision-ilb-1-second-residual-decision-selection.md
+Decision-ILB-1 second residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-second-residual-decision-selection-packet.md
+GOV-AUD-05 / DEC-012 retention complete-deletion prohibition Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md
+Retention complete-deletion prohibition logical contract: docs/architecture/retention-complete-deletion-prohibition-contract.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -172,12 +176,13 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `GOV-AUD-02` | handoff状態変更ロール | Issue #19 |
 | `GOV-AUD-03` | Snapshot訂正承認者 | Issue #19（**Accepted / Option E** — application 対象外 / ロール NOT DEFINED。正本 [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |
 | `GOV-AUD-04` | 論理削除を許可するロール | Issue #19（**Accepted / Option E / FINAL CONSISTENT** — application 対象外 / ロール NOT DEFINED。PR #149 MERGED。正本 [`decision-gov-aud-04-logical-delete-role-acceptance.md`](./decision-gov-aud-04-logical-delete-role-acceptance.md) / 整合 [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)） |
-| `GOV-AUD-05` | 物理削除方針 | Issue #19（**OUT** from GOV-AUD-04 Acceptance；自動開始しない） |
-| `GOV-AUD-06` / `DEC-011` | AuditLog・業務データの保存期間 | Issue #19 / Issue #8 |
-| `DEC-012` | 論理削除データの完全削除方針 | Issue #8 |
+| `GOV-AUD-05` | 物理削除方針 | Issue #19（**Accepted / LOCKED / Option A** — 法定保存期間中の完全削除禁止 / 5年。自動物理削除 NOT ADOPTED。経過後の可否は別 Decision。正本 [`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)） |
+| `GOV-AUD-06` / `DEC-011` | AuditLog・業務データの保存期間 | Issue #19 / Issue #8（Decision-AUD-RET-1 **Accepted**） |
+| `DEC-012` | 論理削除データの完全削除方針 | Issue #8（**Accepted / LOCKED / Option A** — GOV-AUD-05 と同一 Acceptance で保存期間中禁止。経過後は別 Decision。正本同上） |
 | `DEC-015` | バックアップ・復元責任者 | Issue #8 |
 
-正式回答前に、具体ロール、保存期間、物理削除手順をコードへ埋め込まない。
+保存期間中の完全削除禁止は Accepted（GOV-AUD-05 / DEC-012）。経過後の削除可否・自動削除・cleanup 実装は別 Decision / HOLD。
+具体ロール Binding や物理削除手順をコードへ埋め込まない（Implementation HOLD）。
 
 ### 所有が未確定の事項
 

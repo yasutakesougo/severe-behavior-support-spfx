@@ -27,6 +27,9 @@ elapsed 5 years alone MUST NOT trigger automatic deletion
 - 5 年到達を自動物理削除トリガにしない。
 - より長い法令・法人文書管理規程等がある場合は長い方を優先する。
 - 削除・完全消去は別 Decision（`GOV-AUD-05` / `DEC-012` 等）に従う。
+  法定保存期間中の完全削除禁止は
+  [`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)
+  で **Accepted / LOCKED**（5年経過後の可否は別 Decision）。
 
 ## 決めないこと
 
@@ -41,6 +44,7 @@ elapsed 5 years alone MUST NOT trigger automatic deletion
 ```text
 Decision-AUD-RET-1: Accepted
 retention blocker for persistence contract: CLEARED
-physical deletion policy: separate HOLD
+GOV-AUD-05 / DEC-012 retention prohibition: Accepted / LOCKED（Option A）
+post-retention deletion: separate OPEN Decision
 SharePoint / Microsoft 365 / Deploy: NO-GO
 ```
