@@ -138,7 +138,8 @@ FindingCode:
 |---|---|---|---|---|---|---|
 | BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
 | BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
-| BS-003 | （Human が提示） | | | | | **OPEN** |
+| BS-003 | 支援手順記録に必要な記録項目が不足している | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
+| BS-004 | （継続追跡が要る状態 — Human 提示） | | | | | **OPEN** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
 ## 確定済み — BS-002
@@ -210,6 +211,100 @@ C. 現場確認が必要 → HOLD
 答え: A（2026-08-09）
 ```
 
+## 確定済み — BS-003
+
+```text
+ID: BS-003
+Status: FIXED（Human primary information / 2026-08-09）
+Finding catalog: OUT OF SCOPE（対象外）
+Agent invention: NO
+```
+
+```text
+ID: BS-003
+Status: FIXED（2026-08-09）
+
+Business State:
+  支援手順記録に必要な記録項目が不足している
+
+System behavior:
+  HARD GATE
+  → 必須項目が揃うまで記録を確定させない
+
+Finding:
+  NOT ADOPTED
+
+FindingCode:
+  NONE
+
+継続管理:
+  Findingとしては行わない
+
+Finding catalog scope:
+  OUT
+```
+
+流れ:
+
+```text
+必須記録項目が不足
+  ↓
+記録を確定させない
+  ↓
+HARD GATE
+  ↓
+Finding は作らない
+  ↓
+FindingCode も作らない
+```
+
+```text
+BS-001〜003 まとめ:
+  いずれも「その場で止める」
+  Finding として継続追跡しない
+  Finding catalog OUT
+```
+
+## 未決 — BS-004（継続追跡候補を検討）
+
+```text
+ID: BS-004
+Status: OPEN — Human 提示待ち
+Focus:
+  その場では解消できず、
+  後からチームで確認・対応する必要がある状態
+Purpose:
+  Finding: ADOPTED が本当に必要か判断しやすくする
+Agent: 業務状態を発明しない / FindingCode を命名しない
+```
+
+Human が埋める形式（BS-004）:
+
+```text
+ID: BS-004
+Status: DECIDED（日付）
+
+Business State:
+  （人の言葉 — 継続追跡が要りそうな状態）
+
+System behavior:
+  HARD GATE | NOTICE | FOLLOW_UP | OTHER
+  → （振る舞い）
+
+Finding:
+  ADOPTED | NOT ADOPTED
+  （継続追跡が要るなら ADOPTED を検討）
+
+FindingCode:
+  NONE | PENDING
+
+継続管理:
+  Findingとしては行わない | Findingとして行う
+
+Finding catalog scope:
+  OUT | IN
+```
+
 ## Finding にする／しない の判断メモ（Human 用）
 
 Finding にしやすいもの:
@@ -242,6 +337,8 @@ DEC number: PENDING — Human selection（A-4）
    - BS-001: 有効な支援計画がないため手順記録へ進めない
      （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
    - BS-002: 適用すべき支援手順が確認できないため手順記録を確定させない
+     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
+   - BS-003: 支援手順記録に必要な記録項目が不足している
      （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
    - （その他 NOT ADOPTED 行）
 
