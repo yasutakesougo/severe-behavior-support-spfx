@@ -123,5 +123,5 @@ Implementation Start: HOLD
 
 1. A-4 = **DEC-019** は記録済み
 2. PR #141 のマージと DEC-019 台帳登録は完了済み
-3. Issue #8 上へ DEC-019 本文／コメント登録は Human（正本 ownership）
+3. Issue #8 への DEC-019 本文／コメント登録は完了済み（POSTED / comment 5229477058）。以後の正本更新は Human ownership とする
 4. Implementation Start は HOLD
