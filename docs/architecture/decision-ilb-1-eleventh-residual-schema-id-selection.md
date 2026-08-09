@@ -47,11 +47,15 @@ Deploy / real data: NO-GO
 ## Next gate
 
 ```text
-Selection CONSUMED → Decision-AS-SCHEMA-ID-1 Accepted / LOCKED
+Selection CONSUMED for Schema ID unit → Decision-AS-SCHEMA-ID-1 Accepted / LOCKED
   decision-assessment-snapshot-schema-id-value-naming-acceptance.md
 
+Twelfth residual SELECTED / A — schemaVersion / dtoVersion
+  decision-ilb-1-twelfth-residual-schemaversion-selection.md
+  concrete value: HOLD / NOT DECIDED
+
 Still HOLD:
-  schemaVersion / dtoVersion
+  schemaVersion / dtoVersion concrete adoption
   Schema / DTO / SharePoint / adapter / application save
   Implementation Start
   FindingCode / A-5
