@@ -83,10 +83,10 @@ Depends on / keep:
   GOV-AUD-03 Accepted / Option E
   Result conversion DONE（PR #72）
 Still HOLD / OPEN for overall:
-  Entry #5 Finding / findingIds 境界
   Entry #6 NOT_APPLICABLE reason
   Entry #7 Schema / DTO versioning
   Decision-AS-EC-1 overall Entry satisfied
+Entry #5 findingIds boundary: PASS / MET（NOT REQUIRED；完全 Finding 実装は別）
 Entry #2 ownership / PR-J: PASS / MET（境界のみ；実装は別 GO）
 ```
 
