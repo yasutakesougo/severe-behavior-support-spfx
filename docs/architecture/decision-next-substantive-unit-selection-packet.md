@@ -1,6 +1,6 @@
-# Decision Packet — 次 substantive unit 選定（post Decision-OP-3）
+# Decision Packet — 次 substantive unit 選定（post DEC-008 submit/return）
 
-この文書は、Decision-OP-3 が **FINAL CONSISTENT**（PR #146 MERGED）になったあとの
+この文書は、DEC-008 提出・差戻しロールが **FINAL CONSISTENT**（PR #147 MERGED）になったあとの
 **次 substantive unit 選定** のための Human Decision Packet である。
 
 FindingCode 値作成ではない。
@@ -14,19 +14,20 @@ Agent が次 unit を自動選定しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
 Kind: Human Decision packet
-Status: CONSUMED（Human Selected Option E after OP-3 FINAL CONSISTENT）
+Status: CONSUMED（Human Selected Option B — GOV-AUD-04）
 Selection record: decision-next-substantive-unit-selection.md
 Depends on:
-  Decision-OP-3 Accepted / LOCKED / Option A
+  DEC-008 submit/return Accepted / LOCKED / Option C
   Consistency: FINAL CONSISTENT
-  PR #146 MERGED（42b251b… / head 974d083…）
+  PR #147 MERGED（ce05cd0… / head 31e1df0…）
 Prior CONSUMED:
-  B — GOV-AUD-03 Accepted / Option E（PR #145）
-  C — Decision-OP-3 Accepted / LOCKED / Option A（PR #146）
+  prior-B — GOV-AUD-03 Accepted / Option E
+  C — Decision-OP-3 Accepted / LOCKED / Option A
+  E — DEC-008 提出・差戻し Accepted / LOCKED / Option C
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: SELECTED / E — DEC-008 提出・差戻しロール
+Next substantive unit: SELECTED / B — GOV-AUD-04
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -34,8 +35,8 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 上位入口:
 
-- [`decision-op-3-canonicalization-consistency-check.md`](./decision-op-3-canonicalization-consistency-check.md)
-- [`decision-op-3-observation-period-schema-acceptance.md`](./decision-op-3-observation-period-schema-acceptance.md)
+- [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)
+- [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 - [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
@@ -43,9 +44,13 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ## 1. Current locked state
 
 ```text
-Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT
+DEC-008:
+  制度上の作成者: ACCEPTED = 実践研修修了者
+  独立した最終承認者: NOT ADOPTED
+  提出・差戻しロール: NOT ADOPTED（application 非埋め込み / Option C）
+  Consistency: FINAL CONSISTENT（PR #147）
+Decision-OP-3: FINAL CONSISTENT
 GOV-AUD-03: Accepted / Option E
-DEC-008（制度上の作成者 / 独立最終承認者）: Accepted / LOCKED / CONSISTENT
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD
 A-5: HOLD
@@ -60,32 +65,34 @@ Implementation Start: HOLD
 
 | ID | 扱い |
 |---|---|
+| DEC-008 submit/return | **closed / Option C** — 再開しない |
 | Decision-OP-3 | **closed / LOCKED** — 再開しない |
 | GOV-AUD-03 | **closed / Option E** — 再開しない |
-| DEC-009 | **再 Decision しない**（Human: 既存正本で Accepted 済み） |
+| DEC-009 | **再 Decision しない**（Human: already Accepted） |
+| GOV-AUD-05 | **OUT**（本選定では選ばない） |
 | FindingCode 値作成 | **OUT / HOLD** |
 | A-5 | **OUT / HOLD** |
 | Implementation Start | **OUT / HOLD** |
 | SharePoint / Deploy / real data | **NO-GO** |
-| 日数・期限 invention | **FORBIDDEN** |
 | 次 substantive unit | **本 packet** |
 
 ## 3. Options（候補）
 
-### Option A — DEC-009（AssessmentSnapshot 保存タイミング）— OUT for re-decision
+### Option A — DEC-009 — OUT for re-decision
 
 ```text
-Status: OUT for re-decision（Human reason: already Accepted in existing canonical docs）
+Status: OUT for re-decision
 Do not re-open as next unit
 ```
 
-### Option B — Issue #19 最小 GOV-AUD 残件（01 / 04 / 05 等）
+### Option B — Issue #19 最小 GOV-AUD 残件（GOV-AUD-04）
 
 ```text
 Meaning:
-  GOV-AUD-03 は CONSUMED。別の最小 GOV-AUD 単位を選ぶ
-Requires:
-  Human が対象 GOV-AUD ID を明示する
+  GOV-AUD-03 は CONSUMED。
+  次は GOV-AUD-04「論理削除を許可するロール」を最小単位として選ぶ
+OUT:
+  GOV-AUD-05 物理削除方針
 ```
 
 ### Option C — Decision-OP-3 — CONSUMED
@@ -103,15 +110,11 @@ Boundary:
   90日 / overdue を発明しない
 ```
 
-### Option E — DEC-008 残面（提出・差戻しロール）のみ
+### Option E — DEC-008 提出・差戻しロール — CONSUMED
 
 ```text
-Meaning:
-  制度上の作成者 / 独立最終承認者は触らず、
-  提出・差戻しロールだけを狭域 Decision する
-OUT:
-  制度上の作成者の再決定
-  独立最終承認者の再導入
+Status: CONSUMED / Accepted / LOCKED / Option C
+Do not re-select
 ```
 
 ### Option F — 別単位（Human が明示）
@@ -134,7 +137,8 @@ FindingCode values invention / catalog fill
 A-5 UUID/hash/semver invention
 Implementation Start
 DEC-009 re-decision
-Decision-OP-3 / GOV-AUD-03 re-open
+GOV-AUD-05 as this selection
+Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return re-open
 hard due / overdue implementation
 SharePoint / M365 / Deploy / real data
 ```
@@ -143,6 +147,8 @@ SharePoint / M365 / Deploy / real data
 
 ```text
 Recommended: NONE（自動選定しない）
+Note（historical Human preference for this round）:
+  B — GOV-AUD-04 を推奨（物理削除より論理削除ロールを先に分離）
 ```
 
 ## 6. Human Decision
@@ -151,28 +157,21 @@ Recommended: NONE（自動選定しない）
 問:
   次に着手する substantive unit はどれですか？
 
-答え: E（2026-08-09）— after OP-3 FINAL CONSISTENT
-Scope:
-  支援計画シートの提出ロール
-  支援計画シートの差戻しロール
-OUT:
-  制度上の作成者の再決定
-  独立最終承認者の再導入
-  FindingCode / A-5 / Implementation Start
+答え: B（2026-08-09）
+Scope: GOV-AUD-04 論理削除を許可するロール
+OUT: GOV-AUD-05 / FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
 Selection record: decision-next-substantive-unit-selection.md
 ```
 
 ## 7. Gate
 
 ```text
-Decision-OP-3: FINAL CONSISTENT
-NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected E
-Selected unit: DEC-008 submit / return roles
-Acceptance: Option C / LOCKED
-  → decision-dec-008-submit-return-roles-acceptance.md
-Consistency: DOCS CONSISTENT / MERGE PENDING（PR #147）
-Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
-Path: Human Merge Decision
+DEC-008 submit/return: FINAL CONSISTENT
+NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected B
+Selected unit: GOV-AUD-04
+Acceptance: Option E / LOCKED
+  → decision-gov-aud-04-logical-delete-role-acceptance.md
+GOV-AUD-05: DO NOT START
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD

@@ -230,10 +230,10 @@ Implementation Start: HOLD
 ```text
 DEC-008 / SUBMIT_RETURN_ROLES: CONSUMED / Accepted / Option C
 Acceptance: decision-dec-008-submit-return-roles-acceptance.md
-Consistency: DOCS CONSISTENT / MERGE PENDING（PR #147）
+Consistency: FINAL CONSISTENT（PR #147 MERGED / ce05cd0…）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Next: Independent Review → Human Merge Decision
+Next substantive unit: NOT SELECTED
 ```

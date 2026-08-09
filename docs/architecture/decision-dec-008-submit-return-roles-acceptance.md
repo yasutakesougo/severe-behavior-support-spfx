@@ -144,11 +144,11 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-Docs consistency: CONSISTENT
-Independent Review: PASS（HEAD d1b5d544…）
-Next: Human Merge Decision（PR #147）
+PR #147: MERGED（ce05cd0… / head 31e1df0…）
+Consistency: FINAL CONSISTENT
+Independent Review: PASS（reviewed content HEAD d1b5d544…）
+Next substantive unit: SELECTED / B — GOV-AUD-04（本 Acceptance 外）
 FindingCode / A-5 / Implementation: HOLD
-Next substantive unit: NOT SELECTED（Merge 後に Human が選ぶ）
 ```
 
 ```text

@@ -1,10 +1,12 @@
 # DEC-008 提出・差戻しロール — docs / transition / PR #147 整合確認
 
-Status: **DOCS CONSISTENT**（2026-08-09）
+Status: **FINAL CONSISTENT**（2026-08-09）
 Independent Review: **PASS**（P0=0 / P1=0 / P2=0）
-  HEAD: `d1b5d544d900a548110bae4df110f5a73cc392bd`
+  reviewed content HEAD: `d1b5d544d900a548110bae4df110f5a73cc392bd`
   → `decision-dec-008-submit-return-roles-independent-review.md`
-PR #147 merge: PENDING_AT_MERGE（Human Merge Decision）
+PR #147: MERGED
+  merge commit: `ce05cd0d355c108a63e17bce5af0538af779246e`
+  merged head: `31e1df01ae78af7f75ba75d35d8ce01fa20465db`
 
 Related:
 
@@ -13,7 +15,7 @@ Related:
 - Decision packet: `docs/architecture/decision-dec-008-submit-return-roles-decision-packet.md`
 - Separation: `docs/architecture/decision-dec-008-support-plan-role-separation.md`
 - Transition: `docs/architecture/support-plan-status-transition.md`
-- PR #147: DEC-008 submit/return Option C Acceptance
+- PR #147: DEC-008 submit/return Option C Acceptance（MERGED）
 
 ---
 
@@ -40,7 +42,7 @@ DEC-008 提出・差戻しロールを **Option C / LOCKED Accepted** として�
 | FindingCode | HOLD |
 | A-5 | HOLD |
 | Implementation Start | HOLD |
-| Next substantive unit | NOT SELECTED（Merge 後） |
+| Next substantive unit | NOT SELECTED |
 
 ---
 
@@ -55,15 +57,14 @@ DEC-008 提出・差戻しロールを **Option C / LOCKED Accepted** として�
 | C5 | Institutional creator | UNCHANGED / 再決定なし | **PASS** |
 | C6 | Final approver | NOT ADOPTED / 再導入なし | **PASS** |
 | C7 | FindingCode / A-5 / Implementation | HOLD | **PASS** |
-| C8 | PR #147 | Acceptance docs on branch；merge preserves meaning | PENDING_AT_MERGE |
+| C8 | PR #147 | MERGED；merge preserves LOCKED meaning | **PASS** |
 
 ```text
 Docs-internal consistency: PASS
 Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
-PR #147 merge: PENDING — Human Merge Decision
+PR #147 merge: PASS（ce05cd0… / head 31e1df0…）
 Contradiction found in repository docs: NONE
-Verdict (docs): CONSISTENT
-Final after merge: CONSISTENT if C8 PASS
+Verdict: FINAL CONSISTENT
 ```
 
 ---
@@ -76,17 +77,7 @@ Final after merge: CONSISTENT if C8 PASS
 | **INCONSISTENT** | any FAIL | 矛盾箇所を特定し Human 判断 |
 | **BLOCKED** | PR 未マージで意味が壊れる | Merge してから再確認 |
 
-Current: **DOCS CONSISTENT / MERGE PENDING**
-
-Recommended path:
-
-```text
-Acceptance 正本化: DONE
-Independent Review: PASS
-→ Human Merge Decision（PR #147）
-→ Final CONSISTENT
-→ Next substantive unit selection（NOT SELECTED）
-```
+Current: **FINAL CONSISTENT**
 
 ---
 
@@ -104,7 +95,12 @@ transitionSupportPlanStatus 破壊: FORBIDDEN
 
 ---
 
-## 6. After FINAL CONSISTENT（merge 後）
+## 6. After FINAL CONSISTENT
 
-Human が次の substantive unit を新たに選ぶ。
-Agent は自動選定しない。
+```text
+Next substantive unit: SELECTED / B — GOV-AUD-04
+  → decision-gov-aud-04-logical-delete-role-decision-packet.md
+FindingCode / A-5 / Implementation: HOLD
+```
+
+GOV-AUD-04 は本整合確認の対象外（別 unit）。

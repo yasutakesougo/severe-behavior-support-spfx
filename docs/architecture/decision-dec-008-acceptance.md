@@ -98,11 +98,10 @@ MUST NOT invent:
 
 ```text
 Issue #8 DEC-008 core: POSTED / comment 5229571943
-Submit/return residual: Accepted / Option C
-Consistency (submit/return): DOCS CONSISTENT
-Independent Review: PASS（PR #147 / HEAD d1b5d544… / P0=0 / P1=0 / P2=0）
-Path: Human Merge Decision（PR #147）
-Next substantive unit: NOT SELECTED（Merge 後に Human が新たに選ぶ）
+Submit/return residual: Accepted / Option C / FINAL CONSISTENT
+PR #147: MERGED（ce05cd0… / head 31e1df0…）
+Independent Review: PASS（reviewed content HEAD d1b5d544… / P0=0 / P1=0 / P2=0）
+Next substantive unit: NOT SELECTED（Human が新たに選ぶ）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
