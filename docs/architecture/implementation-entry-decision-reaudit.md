@@ -228,7 +228,7 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 3. Decision-RD-3（接近窓等。08 NOT ADOPTED を開始信号にしない）
 4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
-**Current selected substantive unit:** E — DEC-008 提出・差戻しロール  
+**Current selected substantive unit:** E — DEC-008 提出・差戻しロール
 （[`decision-dec-008-submit-return-roles-decision-packet.md`](./decision-dec-008-submit-return-roles-decision-packet.md)）
 
 **CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision
