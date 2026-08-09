@@ -26,10 +26,11 @@ Eighth residual Decision: SELECTED / A — AS-EC-1 Entry #7（Accepted / LOCKED 
 Ninth residual Decision: SELECTED / A — Decision-AS-EC-1 overall（MET / Accepted / LOCKED）
 Tenth residual Decision: SELECTED / A — Implementation Start（PR-J domain GO after Preflight C→A）
 Eleventh residual Decision: SELECTED / C — Schema ID（Decision-AS-SCHEMA-ID-1 naming+value Accepted / LOCKED）
+Twelfth residual Decision: SELECTED / A — schemaVersion / dtoVersion（selection only；concrete value HOLD）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
-schemaVersion / dtoVersion: HOLD / NOT DECIDED
+schemaVersion / dtoVersion: HOLD / NOT DECIDED（unit SELECTED；value NOT DECIDED）
 ```
 
 ## 1. Classification legend（provisional）
@@ -122,10 +123,11 @@ Order:
  10. Ninth residual: Decision-AS-EC-1 overall MET / Accepted（DONE / CONSUMED）
  11. Tenth residual: Implementation Start / PR-J domain GO（DONE / CONSUMED；Preflight C → GO A）
  12. Eleventh residual: Schema ID naming+value（DONE / CONSUMED；Decision-AS-SCHEMA-ID-1 Accepted / LOCKED）
-     remaining examples: post-retention / application save / SharePoint / schemaVersion
+ 13. Twelfth residual: schemaVersion / dtoVersion（SELECTED / A；concrete value HOLD / NOT DECIDED）
+     remaining examples: post-retention / application save / SharePoint
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
-schemaVersion / dtoVersion: HOLD / NOT DECIDED
+schemaVersion / dtoVersion: HOLD / NOT DECIDED（Twelfth residual SELECTED only）
 ```
