@@ -34,6 +34,7 @@ Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name
 Seventeenth residual Decision: SELECTED / A — Tenant confirmation GO（Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
 Eighteenth residual Decision: SELECTED — Tenant confirmation execution authorization（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
 Nineteenth residual Decision: SELECTED / CONSUMED — New SPFx deployment target reuse（Decision-AS-TARGET-REUSE-1 Accepted / LOCKED / B）
+Twentieth residual Decision: SELECTED / CONSUMED — New SPFx target provisioning（Decision-AS-NEW-TARGET-PROVISION-1 Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -46,11 +47,14 @@ Placement confirmation rules: Accepted / LOCKED（SV-1+LV-1+CN-1+SC-1）
 Tenant confirmation GO boundary: Accepted / LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: Accepted / LOCKED（ES-1+TB-1+EO-1+FG-1）
 Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B（existing = reference only）
+Decision-AS-NEW-TARGET-PROVISION-1: Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
-New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+New SPFx deployment target: TOPOLOGY LOCKED（dedicated Site + dedicated Lists）/ NOT CREATED / HOLD
+Concrete Site / List / Internal Names: NOT SELECTED / OPEN
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
+Site / List creation: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -159,11 +163,15 @@ Order:
      evidence: tenant-confirmation-daily-activity-records-required-fields-evidence.md
        （OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY）
      IR: decision-assessment-snapshot-pr-181-independent-review.md（F-001 ADDRESSED）
-     New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+     New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD（pre-twentieth）
      Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
      Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
-     execution: IN PROGRESS / READ-ONLY
-     remaining examples: post-retention / DEC-015 / new SPFx Site·List preparation Decision
+ 21. Twentieth residual: New SPFx target provisioning（DONE / CONSUMED；Decision-AS-NEW-TARGET-PROVISION-1 Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1）
+     topology: dedicated new Site + dedicated new Lists
+     concrete names: NOT SELECTED / OPEN
+     Site / List creation: NO-GO
+     execution: IN PROGRESS / READ-ONLY（existing-app evidence）
+     remaining examples: post-retention / DEC-015 / concrete naming Decision / provisioning execution gate
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
@@ -177,11 +185,14 @@ Placement confirmation rules: LOCKED（SV-1+LV-1+CN-1+SC-1）
 Tenant confirmation GO boundary: LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: LOCKED（ES-1+TB-1+EO-1+FG-1）
 Decision-AS-TARGET-REUSE-1: LOCKED / B
+Decision-AS-NEW-TARGET-PROVISION-1: LOCKED / ST-1+LT-1+NM-1+EX-1
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
 Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY
-New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
+Concrete Site / List / Internal Names: NOT SELECTED / OPEN
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
+Site / List creation: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
