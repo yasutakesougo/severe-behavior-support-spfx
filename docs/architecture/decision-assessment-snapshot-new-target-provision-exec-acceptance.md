@@ -210,6 +210,7 @@ Next gate: FIXED
   → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
 Execution GO: NOT GIVEN / NOT STARTED
 Site / List creation: AUTHORIZED / NOT STARTED
+Current stop: waiting for explicit execution GO（auto-start FORBIDDEN）
 
 After explicit GO only:
   1. Site/List 作成実行（intended LOCKED values only）

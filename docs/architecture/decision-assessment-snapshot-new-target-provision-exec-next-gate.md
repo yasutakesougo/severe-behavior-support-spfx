@@ -137,4 +137,11 @@ custom columns / permissions / config: NO-GO
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
+
+Human confirmation（2026-08-09）:
+  PR #186 OPEN / Draft / mergeable=true
+  HEAD: c06cbad1b8758221e8225701c7b0ce9c9f85e443
+  boundaries CONFIRMED as above
+  Current stop: waiting for explicit execution GO
+  auto-start: FORBIDDEN
 ```
