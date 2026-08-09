@@ -7,11 +7,16 @@ Accepted / LOCKED 後に、実 SharePoint 画面から取得した **read-only �
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Primary-evidence observation record（EO-1 / EV-1）
-Status: OBSERVED / NOT ACCEPTED
+Status: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
 Decision basis:
   Decision-AS-TENANT-CONFIRM-1 = Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1
   Decision-AS-TENANT-CONFIRM-EXEC-1 = Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1
   Decision-AS-SP-PLACEMENT-1 = Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1
+
+Environment meaning:
+  Observed existing environment = 現在運用中の強度行動障害支援アプリ環境
+  New SPFx deployment target = NOT SELECTED / NOT CREATED / HOLD
+  Reuse existing /sites/welfare for new SPFx = NOT DECIDED
 
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Mutation: NONE
@@ -23,27 +28,31 @@ FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
 
-**本記録は Value Acceptance ではない。**
-観測値を新 SPFx 環境値として Accepted / LOCKED にする判断は、別 Human Decision
-（Decision-AS-TENANT-CONFIRM-VALUES-1）で行う。
+**本記録は既存アプリ環境の一次 evidence である。**
+新 SPFx の deployment target / 環境値 Acceptance ではない。
+既存 `/sites/welfare` を新 SPFx で再利用するかは、別 Human Decision
+（Decision-AS-TARGET-REUSE-1）で先に判断する。
 
 ## 1. Observation summary
 
 ```text
 Method: SharePoint UI read-only（必須設定画面 + 既存の列編集 URL 観測）
 Scope: DailyActivityRecords の「必須」チェックがある列のみ
+Environment class: EXISTING-APP（現行運用環境）
 Mutation: NONE
 Fail-closed: 必須チェックが無い列は本 evidence に含めない
 ```
 
 | 対象 | 観測値 | 状態 |
 |---|---|---|
-| Site | `/sites/welfare` | **OBSERVED** |
-| List | `DailyActivityRecords` | **OBSERVED** |
-| List ID | `70ce9940-a50e-4a52-a3cf-97e2c83b2240` | **OBSERVED** |
-| Required application fields | UserCode / RecordDate / TimeSlot / Observation / Behavior | **OBSERVED** |
-| Internal Names（required 5） | 5 / 5 | **OBSERVED / CONFIRMED as observed** |
-| Value Acceptance | — | **NOT ACCEPTED** |
+| Site | `/sites/welfare` | **OBSERVED / EXISTING-APP** |
+| List | `DailyActivityRecords` | **OBSERVED / EXISTING-APP** |
+| List ID | `70ce9940-a50e-4a52-a3cf-97e2c83b2240` | **OBSERVED / EXISTING-APP** |
+| Required application fields | UserCode / RecordDate / TimeSlot / Observation / Behavior | **OBSERVED / EXISTING-APP** |
+| Internal Names（required 5） | 5 / 5 | **OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE** |
+| New SPFx deployment target | — | **NOT SELECTED / NOT CREATED / HOLD** |
+| Reuse for new SPFx | — | **NOT DECIDED** |
+| New SPFx Value Acceptance | — | **NOT OPEN（blocked by TARGET-REUSE）** |
 
 ## 2. Required fields（画面上「必須」チェックあり）
 
@@ -59,7 +68,7 @@ Fail-closed: 必須チェックが無い列は本 evidence に含めない
 | `Behavior` | 1行テキスト | YES |
 
 ```text
-Required application fields OBSERVED:
+Required application fields OBSERVED（existing-app）:
   UserCode
   RecordDate
   TimeSlot
@@ -67,13 +76,13 @@ Required application fields OBSERVED:
   Behavior
 
 Internal Names for required fields:
-  5 / 5 OBSERVED
+  5 / 5 OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
 ```
 
 ## 3. Explicitly NOT in this required-evidence set
 
 次は、今回の必須設定画面上で必須チェックが無い。
-したがって **「今回確認した必須記録」には含めない**（未観測として必須 evidence に入れない）。
+したがって **「今回確認した必須記録」には含めない**。
 
 ```text
 NOT INCLUDED in this required-fields evidence:
@@ -87,27 +96,27 @@ NOT INCLUDED in this required-fields evidence:
   DeletedBy
 ```
 
-これらを環境値として扱うには、別途の一次 evidence と別 Human Decision が必要である。
-
 ## 4. Recording boundary（RB-1 / SC-1）
 
 ```text
 This evidence record:
-  records OBSERVED primary information only
-  does NOT Accept environment values
+  records OBSERVED primary information for the EXISTING welfare app environment only
+  does NOT select new SPFx deployment target
+  does NOT Accept /sites/welfare as new SPFx environment values
   does NOT write environment values into repository logical mapping contracts
   does NOT invent missing Internal Names / types / required flags
 
-Accepted environment values（if any）must go through:
-  Decision-AS-TENANT-CONFIRM-VALUES-1
-  and remain deployment configuration（SC-1）side
+Before any new-SPFx Value Acceptance:
+  Decision-AS-TARGET-REUSE-1 must be decided（A / B / HOLD）
 ```
 
 ## 5. Explicit non-authorization
 
 ```text
 This evidence does NOT authorize:
-  Value Acceptance / LOCKED environment values
+  treating EXISTING-APP OBSERVED values as new SPFx deployment configuration
+  Value Acceptance / LOCKED environment values for new SPFx
+  Site / List creation for new SPFx
   tenant / Entra / M365 setting changes
   List / column creation or modification
   permissions changes
@@ -123,14 +132,18 @@ This evidence does NOT authorize:
 ## 6. Next
 
 ```text
-Evidence status: OBSERVED / NOT ACCEPTED
-Next Human gate:
-  Decision-AS-TENANT-CONFIRM-VALUES-1
-  — Site / List / List ID / required 5 Internal Names・型・必須性を
-    新 SPFx 環境値として Accepted / LOCKED にするか
+Evidence status: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT DECIDED
 
-Until Value Acceptance:
-  Site / List / Internal Name environment values: OBSERVED / NOT ACCEPTED
+Next Human gate:
+  Decision-AS-TARGET-REUSE-1
+  A — reuse existing /sites/welfare + DailyActivityRecords as new SPFx target
+  B — existing env = reference evidence only; new Site/List separately
+  HOLD — not decided yet
+
+Until TARGET-REUSE is decided:
+  New SPFx Value Acceptance: NOT OPEN
   Tenant confirmation execution: IN PROGRESS / READ-ONLY
   Mutation: NONE
   Implementation Start: HOLD

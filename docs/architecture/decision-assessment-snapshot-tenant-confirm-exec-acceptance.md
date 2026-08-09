@@ -47,8 +47,9 @@ Concrete values（本 Acceptance では埋めない）:
 
 Tenant confirmation execution:
   IN PROGRESS / READ-ONLY
-  （DailyActivityRecords required-fields evidence OBSERVED / NOT ACCEPTED。
-    Value Acceptance は Decision-AS-TENANT-CONFIRM-VALUES-1）
+  （DailyActivityRecords required-fields evidence =
+    OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE。
+    次 gate は Decision-AS-TARGET-REUSE-1。Value Acceptance は未開放）
 
 SP-PLACEMENT / DEC6-MAPPING / SP-ADAPTER / APP-SAVE / TENANT-CONFIRM GO:
   UNCHANGED / LOCKED（再 Decision しない）
@@ -147,8 +148,10 @@ NOT SELECTED:
 具体値・実行完了（LOCKED として埋めない / 完了扱いにしない）:
 
 ```text
-Site / List / required Internal Names: OBSERVED / NOT ACCEPTED
+Observed existing environment: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
   → tenant-confirmation-daily-activity-records-required-fields-evidence.md
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT DECIDED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 ```
 
@@ -206,10 +209,13 @@ MUST NOT start from this Acceptance alone:
 ```text
 Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
-DailyActivityRecords required-fields evidence: OBSERVED / NOT ACCEPTED
+DailyActivityRecords required-fields evidence:
+  OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
   → tenant-confirmation-daily-activity-records-required-fields-evidence.md
-Next Human gate: Decision-AS-TENANT-CONFIRM-VALUES-1（OPEN / NOT ACCEPTED）
-Site / List / Internal Column Name values: OBSERVED / NOT ACCEPTED
+Next Human gate: Decision-AS-TARGET-REUSE-1（OPEN / NOT ACCEPTED；A/B/HOLD）
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT DECIDED
+New SPFx Value Acceptance: NOT OPEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes / List / column creation: NO-GO

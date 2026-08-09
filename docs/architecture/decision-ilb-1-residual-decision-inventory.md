@@ -33,7 +33,7 @@ Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-
 Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
 Seventeenth residual Decision: SELECTED / A — Tenant confirmation GO（Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
 Eighteenth residual Decision: SELECTED — Tenant confirmation execution authorization（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
-Nineteenth residual Decision: SELECTED — Tenant confirmation observed values Acceptance（Decision-AS-TENANT-CONFIRM-VALUES-1 compare OPEN / NOT ACCEPTED）
+Nineteenth residual Decision: SELECTED — New SPFx deployment target reuse（Decision-AS-TARGET-REUSE-1 compare OPEN / NOT ACCEPTED；A/B/HOLD）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -45,8 +45,11 @@ DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）
 Placement confirmation rules: Accepted / LOCKED（SV-1+LV-1+CN-1+SC-1）
 Tenant confirmation GO boundary: Accepted / LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: Accepted / LOCKED（ES-1+TB-1+EO-1+FG-1）
-DailyActivityRecords required-fields evidence: OBSERVED / NOT ACCEPTED
-Site / List / Internal Column Name values: OBSERVED（DailyActivityRecords required 5）/ NOT ACCEPTED
+DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
+Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）OBSERVED
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT DECIDED
+New SPFx Value Acceptance: NOT OPEN（blocked by TARGET-REUSE）
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -151,9 +154,14 @@ Order:
      values: NOT CONFIRMED / HOLD
  18. Seventeenth residual: Tenant confirmation GO（DONE / CONSUMED；Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
  19. Eighteenth residual: Tenant confirmation execution authorization（DONE / CONSUMED；Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
- 20. Nineteenth residual: Tenant confirmation observed values Acceptance（SELECTED；Decision-AS-TENANT-CONFIRM-VALUES-1 compare OPEN / NOT ACCEPTED）
-     evidence: tenant-confirmation-daily-activity-records-required-fields-evidence.md（OBSERVED / NOT ACCEPTED）
-     execution: IN PROGRESS / READ-ONLY；values: OBSERVED / NOT ACCEPTED
+ 20. Nineteenth residual: New SPFx deployment target reuse（SELECTED；Decision-AS-TARGET-REUSE-1 compare OPEN / NOT ACCEPTED；A/B/HOLD）
+     evidence: tenant-confirmation-daily-activity-records-required-fields-evidence.md
+       （OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE）
+     IR: decision-assessment-snapshot-pr-181-independent-review.md（HOLD / F-001）
+     New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+     Reuse existing /sites/welfare for new SPFx: NOT DECIDED
+     Value Acceptance: NOT OPEN
+     execution: IN PROGRESS / READ-ONLY
      remaining examples: post-retention / DEC-015
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
@@ -169,7 +177,9 @@ Tenant confirmation GO boundary: LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: LOCKED（ES-1+TB-1+EO-1+FG-1）
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
-Site URL / List name / Internal Column Name: OBSERVED（DailyActivityRecords required 5）/ NOT ACCEPTED
+Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = OBSERVED / EXISTING-APP
+New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+Reuse existing /sites/welfare for new SPFx: NOT DECIDED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
