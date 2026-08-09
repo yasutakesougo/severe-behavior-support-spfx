@@ -94,8 +94,8 @@ Next substantive unit: SELECTED / F — Decision-ILB-1
 Human Policy: Accepted / LOCKED / Option A / FINAL CONSISTENT（PR #151）
   → decision-ilb-1-human-policy-acceptance.md
   → decision-ilb-1-canonicalization-consistency-check.md
-First residual Decision: NOT SELECTED
-  → decision-ilb-1-next-residual-decision-selection-packet.md
+First residual Decision: SELECTED / C — Decision-RD-3 Accepted / LOCKED
+  → decision-rd-3-monitoring-guidance-acceptance.md
 FindingCode / A-5 / Implementation: HOLD
 ```
 

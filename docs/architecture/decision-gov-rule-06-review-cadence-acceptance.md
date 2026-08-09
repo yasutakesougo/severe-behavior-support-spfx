@@ -23,7 +23,7 @@ GOV-RULE-05 基準日: Accepted（別正本 decision-gov-rule-05-review-anchor-a
 GOV-RULE-07 通知開始: Accepted（別正本 decision-gov-rule-07-notice-acceptance.md / Option C）
 GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本 decision-gov-rule-08-due-overdue-acceptance.md）
 duration_days = 90: NOT AUTHORIZED
-Decision-RD-3: HOLD（接近窓・算出・超過後。本 Acceptance に含めない）
+Decision-RD-3: Accepted / LOCKED（別正本 decision-rd-3-monitoring-guidance-acceptance.md。本 Acceptance に含めない）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 NOT derived: 90日 / 91日目 overdue / 3暦月自動違反
@@ -90,7 +90,7 @@ GOV-RULE-05 基準日: Accepted（別 Decision / [`decision-gov-rule-05-review-a
 GOV-RULE-07 通知開始: Accepted（別正本 decision-gov-rule-07-notice-acceptance.md / Option C）
 GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本 decision-gov-rule-08-due-overdue-acceptance.md）
 duration_days = 90: NOT AUTHORIZED
-Decision-RD-3 接近窓・期限算出・超過後ポリシー: HOLD
+Decision-RD-3 接近窓・期限算出・超過後ポリシー: Accepted / LOCKED（別正本。informational only）
 reviewDueDate 自動算出: NOT STARTED
 evaluateReviewDueRelativeToAsOf: UNCHANGED
 SupportPlan Schema / SharePoint 変更: NOT STARTED

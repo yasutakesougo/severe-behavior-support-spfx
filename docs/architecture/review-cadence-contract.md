@@ -20,7 +20,7 @@ Status: Accepted（GOV-RULE-06 Human Acceptance）
 Human Acceptance: decision-gov-rule-06-review-cadence-acceptance.md
 Source review: decision-gov-rule-06-review-cadence-source-review.md（PASS）
 Related Issues: #16 / #19 / #24
-Related: Decision-RD-3 HOLD（接近窓・算出・超過後。本 cadence と混ぜない）
+Related: Decision-RD-3 Accepted / LOCKED（informational monitoring guidance。本 cadence と混ぜない / 実装は別）
 main baseline（candidate write）: f371f5e3c8b5ce48fe2ce0f5f27a8b5d820c9d05
 Acceptance baseline: 5cc03cffcdfbdd5c5a6e1ca9e1d9fbbaa4718a52
 Implementation Start: HOLD
@@ -67,7 +67,7 @@ GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本）
 | GOV-RULE-07 | 通知開始時期 | cadence 本体 | **Accepted**（Option C / [`review-notice-contract.md`](./review-notice-contract.md)） |
 | GOV-RULE-08 | 期限当日・期限超過の定義 | cadence 本体 | **Accepted** / Option A / NOT ADOPTED（[`review-due-overdue-contract.md`](./review-due-overdue-contract.md)） |
 | Decision-RD-1/RD-2 | caller-supplied due の asOf 相対判定所有・境界 | cadence / 制度窓 | Accepted（既存） |
-| Decision-RD-3 | 接近窓・期限算出・超過後ポリシー | practice cadence の一次表現 | HOLD |
+| Decision-RD-3 | モニタリング目安の表示・通知 / 超過後 | practice cadence の一次表現 | **Accepted / LOCKED**（[`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md)） |
 
 ## Accepted 型
 

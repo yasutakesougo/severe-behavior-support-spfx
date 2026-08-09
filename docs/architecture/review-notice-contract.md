@@ -47,7 +47,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | GOV-RULE-06 | practice cadence | 通知 | **Accepted** |
 | **GOV-RULE-07** | 通知開始時期 | due / overdue | **Accepted（Option C）** |
 | GOV-RULE-08 | due / overdue 定義 | 通知開始 | **Accepted** / Option A / NOT ADOPTED |
-| Decision-RD-3 | 接近窓・算出・超過後の技術ポリシー | 通知の一次表現 | HOLD |
+| Decision-RD-3 | モニタリング目安の表示・通知 / 超過後 | 通知の一次表現（GOV-RULE-07） | **Accepted / LOCKED**（informational；[`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md)） |
 
 ## Accepted 型
 

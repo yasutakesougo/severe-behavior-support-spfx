@@ -96,10 +96,10 @@ Order（維持）:
   1. Human Policy Accepted / FINAL CONSISTENT（DONE）
   2. 制度根拠を確認
   3. 個別 Decision を一件ずつ Human 選定・判定
-First residual Decision selection:
-  OPEN / NOT SELECTED
-  → decision-ilb-1-next-residual-decision-selection-packet.md
+First residual Decision:
+  SELECTED / C — Decision-RD-3 Accepted / LOCKED
+  → decision-rd-3-monitoring-guidance-acceptance.md
 FindingCode / A-5 / Implementation: HOLD
 ```
 
-個別残存 Decision の判定は本整合確認の対象外（別 Human Selection）。
+個別残存 Decision の判定は本整合確認の対象外（別 Human Selection / Acceptance）。

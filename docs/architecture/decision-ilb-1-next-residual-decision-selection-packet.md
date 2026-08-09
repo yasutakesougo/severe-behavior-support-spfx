@@ -16,16 +16,17 @@ Agent が次 Decision を自動選定・自動 Accepted しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_NEXT_RESIDUAL_DECISION_SELECTION
 Kind: Human Decision packet
-Status: OPEN / NOT SELECTED
+Status: CONSUMED（Human Selected Option C — Decision-RD-3）
+Selection record: decision-ilb-1-next-residual-decision-selection.md
 Depends on:
   Decision-ILB-1 HUMAN_POLICY Accepted / LOCKED / Option A
   Consistency: FINAL CONSISTENT
   PR #151 MERGED（e2bd256… / head 4f5a833…）
-Inventory: decision-ilb-1-residual-decision-inventory.md（rows provisional）
+Inventory: decision-ilb-1-residual-decision-inventory.md（other rows provisional）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-First residual Decision: NOT SELECTED
+First residual Decision: SELECTED / C — Decision-RD-3
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -74,11 +75,17 @@ Provisional class（inventory）: E
 Note: GOV-AUD-05 と分離維持
 ```
 
-### Option C — Decision-RD-3（見直し接近窓・期限算出・超過後）
+### Option C — Decision-RD-3（見直し接近窓・期限算出・超過後）— SELECTED
 
 ```text
-Provisional class（inventory）: E
-Boundary: GOV-RULE-08 NOT ADOPTED を開始信号にしない；90日発明禁止
+Selected: C（2026-08-09）
+Acceptance: decision-rd-3-monitoring-guidance-acceptance.md（Accepted / LOCKED）
+Meaning:
+  モニタリング時期「3か月に1回程度」を目安として表示・通知
+  informational only
+  期限超過 / 警告・業務制限 / 90日固定: 採用しない
+  hard due / overdue: NOT ADOPTED
+Boundary: GOV-RULE-08 と整合；90日発明禁止；Implementation HOLD
 ```
 
 ### Option D — Decision-AS-EC-1 / DEC-009 証跡整合（再 Decision ではない）
@@ -105,24 +112,27 @@ Requires: Human が Decision ID と判定範囲を明示
 ## 3. Human Decision
 
 ```text
-答え: NOT SELECTED
-Awaiting: Explicit Human Option after Decision-ILB-1 FINAL CONSISTENT
+答え: C（2026-08-09）
+Selected:
+  C — Decision-RD-3
+Acceptance: decision-rd-3-monitoring-guidance-acceptance.md
+Selection record: decision-ilb-1-next-residual-decision-selection.md
 ```
 
 ```text
 Agent auto-select: FORBIDDEN
 Agent recommendation: NOT Human Selection evidence
-GOV-AUD-05 / RD-3 auto-Accepted: FORBIDDEN
-inventory A–E hardening from selection alone: FORBIDDEN
+GOV-AUD-05 auto-Accepted: FORBIDDEN
+他 inventory 行の一括 Accepted: FORBIDDEN
 ```
 
 ## 4. Gate
 
 ```text
-ILB1_NEXT_RESIDUAL_DECISION_SELECTION: OPEN / NOT SELECTED
-After Human selects one Option:
-  制度根拠確認 → 当該 Decision のみ判定
-  他行は provisional のまま
+ILB1_NEXT_RESIDUAL_DECISION_SELECTION: CONSUMED / Selected C
+Selected residual Decision: Decision-RD-3
+  → Accepted / LOCKED（informational monitoring guidance）
+他行: provisional のまま
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD

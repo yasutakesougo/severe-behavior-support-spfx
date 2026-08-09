@@ -22,7 +22,7 @@ main baseline: fc67f70016e09341f7b3155d934f9b80658e006d
 GOV-RULE-07 通知開始: Accepted（別正本 decision-gov-rule-07-notice-acceptance.md / Option C）
 GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本 decision-gov-rule-08-due-overdue-acceptance.md）
 duration_days = 90: NOT AUTHORIZED
-Decision-RD-3: HOLD
+Decision-RD-3: Accepted / LOCKED（別正本 decision-rd-3-monitoring-guidance-acceptance.md）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 NOT derived from this Acceptance alone:
@@ -114,7 +114,7 @@ GOV-RULE-06: Accepted
 GOV-RULE-07 通知開始: Accepted（別 Decision / Option C）
 GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本 decision-gov-rule-08-due-overdue-acceptance.md）
 duration_days = 90: NOT AUTHORIZED
-Decision-RD-3: HOLD
+Decision-RD-3: Accepted / LOCKED（別正本 decision-rd-3-monitoring-guidance-acceptance.md）
 前回見直し日の物理列 / Schema: UNDECIDED
 reviewDueDate 自動算出実装: NOT STARTED
 evaluateReviewDueRelativeToAsOf: UNCHANGED

@@ -45,7 +45,7 @@ asOf 比較の狭域判定は技術分離可能
 |---|---|
 | 純関数の asOf 相対判定境界 | **固定する**（本技術契約） |
 | 見直し期限日の算出（例: Active.effectiveFrom + N日） | **OUT / 呼び出し側または別 Decision** |
-| 接近窓・通知ポリシー（制度日数） | **埋め込まない / HOLD** |
+| 接近窓・通知ポリシー（制度日数） | **埋め込まない**。Decision-RD-3 **Accepted / LOCKED**: informational「3か月に1回程度」目安のみ。90日・hard due NOT ADOPTED（[`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md)） |
 | 支援運用上の見直し周期（「3ヶ月に1回程度」） | **OUT**（本純関数の対象外）。GOV-RULE-06 **Accepted**: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) |
 | SupportPlan `reviewDueDate` Schema 変更 | **OUT**（MAP-PLAN-010 確定済みを再利用） |
 
@@ -69,13 +69,13 @@ GOV-RULE-06 の practice cadence（およそ3ヶ月）を日数固定値へ変�
 |---|---|---|
 | Decision-RD-1 | 見直し期限 asOf 相対判定純関数の所有を Issue #24 とするか | 期限算出、接近窓、Schema 変更 |
 | Decision-RD-2 | `reviewDueDate` / `asOf` は関数入力とし、制度接近窓を domain に埋め込まないか | 通知・UI・永続化 |
-| Decision-RD-3 | 接近窓・超過後ポリシー（制度日数）の要否（別単位） | 本純関数の実装詳細・practice cadence |
+| Decision-RD-3 | モニタリング目安表示・通知 / 超過後（**Accepted / LOCKED** / informational） | 本純関数の実装詳細・practice cadence |
 | GOV-RULE-06 | 見直し周期 practice cadence（**Accepted** / [`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・超過定義 |
 | GOV-RULE-05 | 見直し周期の基準日（**Accepted** / [`review-anchor-contract.md`](./review-anchor-contract.md)） | 本純関数・due 算出実装・超過定義 |
 | GOV-RULE-07 | 通知開始（**Accepted** / Option C / [`review-notice-contract.md`](./review-notice-contract.md)） | 本純関数・due/overdue・日数接近窓 |
 | GOV-RULE-08 | due / overdue 業務定義（**Accepted** / Option A / NOT ADOPTED / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md)） | 本純関数の再定義・業務 overdue 実装・90日規則・通知=overdue |
 
-本 docs-only PR は **技術契約の固定**までとする。  
+本 docs-only PR は **技術契約の固定**までとする。
 Decision-RD-1 / RD-2 が Accepted になるまで **Implementation Start は HOLD** とする。
 
 Decision-RD-3 および GOV-RULE-06 は本純関数実装の前提にしない。
