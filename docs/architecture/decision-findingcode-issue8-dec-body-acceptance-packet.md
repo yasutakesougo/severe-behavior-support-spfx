@@ -180,8 +180,8 @@ A-4 review: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingc
 
 ```text
 A-4: DEC-019 SELECTED
-Next recommended: Merge PR #141
-Still open: Issue #8 上への DEC-019 台帳登録（Human）
+PR #141: MERGED / consumed by DEC-019
+Issue #8 DEC-019 ledger registration: POSTED / comment 5229477058
 Re-open Finding catalog only with new Human primary information
 Implementation Start: HOLD
 ```

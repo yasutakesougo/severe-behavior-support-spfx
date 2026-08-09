@@ -128,10 +128,12 @@ Contract break: NO
 ## FC-2 で決めていないこと
 
 ```text
-FindingCode values: UNDECIDED
-code numbering: UNDECIDED
-criterionId mapping: UNDECIDED
-Issue #8 FindingCode catalog DEC number: UNASSIGNED
+FindingCode values: 本 Decision では未決。後続 DEC-019 で NONE
+code numbering: 本 Decision では未決。後続 DEC-019 で NOT APPLICABLE
+criterionId mapping: 本 Decision では未決。後続 DEC-019 で NOT APPLICABLE
+Issue #8 FindingCode catalog DEC number: 後続 Human Decision で DEC-019
+Finding catalog: EMPTY / NOT ADOPTED
+A-5: OUT（separate representation-strategy Decision は未開始）
 catalog version identifier logical contract: Decision-FC-4 Accepted / Option C（別単位）
 identifier representation ownership: Decision-FC-5 Accepted / Option C（別単位）
 actual catalog version string representation / concrete syntax profile: UNDECIDED

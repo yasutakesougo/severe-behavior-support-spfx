@@ -34,7 +34,7 @@ Live gate は repository docs に書かない
 - [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
 
-## 1. 確認できた採番情報（repository mirror）
+## 1. 選択前に確認した採番情報（historical repository mirror）
 
 Issue #8 本体 API は本環境から **403 / NOT_FOUND** のため、
 ライブ台帳の直接読取はできなかった。
@@ -54,7 +54,7 @@ DEC正本台帳（docs mirror）:
 
 FindingCode catalog DEC:
   FC-1 Accepted / Option B = Issue #8 に新しい DEC を追加
-  番号: いまも UNASSIGNED
+  番号: UNASSIGNED（A-4 選択前の状態）
 ```
 
 根拠 docs:
@@ -74,7 +74,7 @@ FindingCode catalog DEC:
   3. Finding catalog / FindingCode 用 DEC が既に無いか
 ```
 
-## 3. 候補（未選択）
+## 3. 候補（選択前のhistorical options）
 
 repository mirror だけを見ると、連番の次候補は次のとおり。
 
@@ -113,15 +113,15 @@ A-4: DEC-019
 ```text
 A-4: DEC-019（SELECTED）
 DEC body Acceptance: Accepted / EMPTY / DEC-019
-Next recommended: Merge PR #141
-Still required on Issue #8 ledger:
-  Human registers DEC-019 body / comment on Issue #8（canonical ownership）
+PR #141: MERGED / consumed by DEC-019
+Issue #8 ledger registration:
+  POSTED / comment 5229477058
 Implementation Start: HOLD
 ```
 
 ## Human への依頼（わかりやすく）
 
 1. A-4 = **DEC-019** は記録済み
-2. 次は **Merge GO** で PR #141 をマージ
-3. Issue #8 上へ DEC-019 本文／コメント登録は Human（正本 ownership）
+2. PR #141 のマージと DEC-019 台帳登録は完了済み
+3. Issue #8 への DEC-019 本文／コメント登録は完了済み（POSTED / comment 5229477058）。以後の正本更新は Human ownership とする
 4. Implementation Start は HOLD

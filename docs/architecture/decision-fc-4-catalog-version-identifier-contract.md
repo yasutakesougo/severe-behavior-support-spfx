@@ -208,7 +208,7 @@ actual identifier values: UNDECIDED
 identifier syntax / string representation / concrete syntax profile: UNDECIDED
 identifier representation ownership: Decision-FC-5 Accepted / Option C（別単位）
 UUID / hash / semver / DEC-number strategy: UNDECIDED / DO NOT START
-Issue #8 FindingCode catalog DEC number: UNASSIGNED
+Issue #8 FindingCode catalog DEC number: 後続 Human Decision で DEC-019
 snapshot physical schema: NOT STARTED
 snapshot materialization: NOT STARTED
 snapshot storage / SharePoint location: NOT STARTED / NO-GO
@@ -216,9 +216,11 @@ runtime provider: NOT STARTED
 TypeScript type: NOT STARTED
 validator: NOT STARTED
 fixture: NOT STARTED
-FindingCode values: UNDECIDED
-code numbering: UNDECIDED
-criterionId mapping: UNDECIDED
+FindingCode values: 本 Decision では未決。後続 DEC-019 で NONE
+code numbering: 本 Decision では未決。後続 DEC-019 で NOT APPLICABLE
+criterionId mapping: 本 Decision では未決。後続 DEC-019 で NOT APPLICABLE
+Finding catalog: EMPTY / NOT ADOPTED
+A-5: OUT（separate representation-strategy Decision は未開始）
 Implementation Start: HOLD
 ```
 

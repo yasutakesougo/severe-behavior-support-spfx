@@ -37,7 +37,7 @@ D-class HOLD: 7
 
 ## Acceptance boundary
 
-今回の Human Acceptance は次を意味しない。
+今回の Human Acceptance 時点では次を意味しなかった（historical snapshot）。
 
 ```text
 A-1〜A-5 content acceptance: NO
@@ -64,5 +64,6 @@ Separate: A-5 = catalogVersionIdentifier representation strategy
 Content acceptance: NO
 ```
 
-次工程は A-1〜A-4 bundle の業務 catalog 内容に対する Human Decision とする。
-A-5 と Implementation Start は各別 Human Decision とする。
+この次工程は後続DEC-019で消費済みである。Current mirror は Finding catalog
+EMPTY / NOT ADOPTED、A-1 NONE、A-2・A-3 NOT APPLICABLE、A-4 DEC-019、
+A-5 OUT。A-5 separate Decision と Implementation Start は未開始 / HOLD のまま。

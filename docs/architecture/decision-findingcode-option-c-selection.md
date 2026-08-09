@@ -56,7 +56,7 @@ Order（一次情報 → 業務ルール → システム表現）:
   ⑥ Acceptance
 ```
 
-## A-1〜A-4 現状
+## A-1〜A-4 選択時点の状態（historical）
 
 | ID | 項目 | 状態 |
 |---|---|---|
@@ -70,7 +70,11 @@ Completion for Acceptance: NOT MET
 Reason: Option C は選択済みだが、A-1〜A-4 の Human 一次情報は未提示
 ```
 
-## Next work（本選択の直後）
+後続 Human Decision により現在は、A-1 NONE / A-2・A-3 NOT APPLICABLE /
+A-4 DEC-019、Finding catalog EMPTY / NOT ADOPTED である。A-5 は本工程 OUT、
+Implementation Start は HOLD のまま。
+
+## Next work（本選択直後のhistorical step）
 
 ```text
 Next work:

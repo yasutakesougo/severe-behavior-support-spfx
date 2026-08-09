@@ -100,8 +100,9 @@ Next automatic from GOV-RULE line: NONE
 | FC-1〜FC-6 | Accepted（logical） |
 | FC Decision Exit Review | ACCEPTED |
 | A-class structure | ACCEPTED（Bundle A-1〜A-4 / Separate A-5） |
-| A-1〜A-4 content | **UNDECIDED**（current single gate） |
-| A-5 representation strategy | UNDECIDED / separate |
+| A-1〜A-4 content | **DEC-019で消費済み**（NONE / N/A / N/A / DEC-019） |
+| Finding catalog | **EMPTY / NOT ADOPTED** |
+| A-5 representation strategy | DEC-019 scopeでは OUT / separate Decision は未開始 |
 | Entry Criteria | **DEFINED** / satisfaction **NOT EVALUATED** |
 | Implementation Start | **HOLD** |
 
@@ -111,16 +112,20 @@ Entry を阻む残 Decision:
 
 | ID | 状態 | Entry 阻害 |
 |---|---|---|
-| A-1 values | UNDECIDED | Yes |
-| A-2 numbering | UNDECIDED | Yes |
-| A-3 criterionId mapping | UNDECIDED | Yes |
-| A-4 Issue #8 DEC number | UNASSIGNED | Yes |
-| A-5 strategy | UNDECIDED | Yes（または当該 slice 対象外の Human 明示） |
+| A-1 values | NONE（DEC-019） | No（EMPTY catalog scope） |
+| A-2 numbering | NOT APPLICABLE（DEC-019） | No |
+| A-3 criterionId mapping | NOT APPLICABLE（DEC-019） | No |
+| A-4 Issue #8 DEC number | DEC-019 / POSTED | No |
+| A-5 strategy | DEC-019 scopeでは OUT / separate Decision 未開始 | **Yes — generic Implementation Entry blocker** |
+
+A-5 は DEC-019 のカタログ内容スコープでは OUT だが、不要になったわけではない。
+Separate representation-strategy Decision は未開始であり、generic Implementation Entry では残存 blocker として扱う。
+A-5 が Accepted されるか、対象 implementation slice から Human が明示的に除外するまで、Entry 充足とは扱わない。
+A-5 の representation strategy 自体は本監査で決めない。
 
 ```text
-Current single gate (canonical):
-  HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
-  = A-1〜A-4 bundle content
+A-1〜A-4 bundle gate:
+  CONSUMED by DEC-019 / EMPTY / NOT ADOPTED
 FC-7: NOT CREATED
 FindingCode value invention: FORBIDDEN
 ```
@@ -214,14 +219,16 @@ save / Schema ID採番 / SharePoint / type impl: NOT started
 | backlog §D「AuditEvent 実保存 Entry Criteria HOLD」 | Persistence Entry は MET 済みと矛盾 | 本 PR で **MET（実 adapter は別 Gate）** へ同期 |
 | foundation の #22A「実装前次工程」表現 | #22A/#22B 後も残る古い言い回し | 本再監査を正とし、軽い同期を行う |
 
-## Recommended next Human Decision unit
+## Recommended next Human Decision unit（再監査時点のhistorical recommendation）
 
-**Primary（canonical current single gate）:**
+**Primary at the time of this re-audit:**
 
 ```text
 HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 = A-1〜A-4（values / numbering / criterionId mapping / Issue #8 DEC number）
 ```
+
+この推奨単位は後続DEC-019で消費済みである。以下は再監査時点の理由を保持する。
 
 理由:
 
@@ -276,16 +283,16 @@ SharePoint / M365 / Deploy / real data
 | 必要な承認 | 状態 |
 |---|---|
 | 本再監査の Independent Review | 本 PR で実施 |
-| Human: 次 unit 選択（既定候補 = A-1〜A-4 bundle） | **opened** — Decision packet READY_FOR_HUMAN_DECISION |
-| Human: A-1〜A-4 Option / content | **待ち**（[`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)） |
+| Human: 次 unit 選択（既定候補 = A-1〜A-4 bundle） | **consumed** — DEC-019 |
+| Human: A-1〜A-4 Option / content | **Accepted / EMPTY / NOT ADOPTED** |
 | Human: Implementation Entry satisfaction（各 track） | NOT EVALUATED |
 | Human: Implementation Start | HOLD |
 
 ## Next Actions
 
 1. 本再監査を main へ載せる（docs-only）— **DONE（PR #139）**
-2. FindingCode A-1〜A-4 Decision packet を READY_FOR_HUMAN_DECISION で固定 — 後続 PR
-3. Human が Option A–D を選び、内容を提示するか HOLD する
+2. FindingCode A-1〜A-4 Decision packet — **DONE / consumed by DEC-019**
+3. Human Decision — **DONE / EMPTY / NOT ADOPTED**
 4. Acceptance / Entry satisfaction / Implementation Start は別 Gate
 
 ## 変更禁止境界

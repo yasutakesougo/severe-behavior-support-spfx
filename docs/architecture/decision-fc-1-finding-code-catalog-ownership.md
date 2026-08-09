@@ -16,8 +16,14 @@ Selected: Option B
 Catalog ownership: Issue #8 / new DEC
 Kind: business DEC
 Implementation Start: HOLD
-Decision-FC-2: DO NOT START
-Issue #8 DEC number: UNASSIGNED
+Decision-FC-2〜FC-6: Accepted（logical）/ Implementation Start HOLD
+Issue #8 DEC number: DEC-019
+Finding catalog: EMPTY / NOT ADOPTED
+A-1: NONE
+A-2: NOT APPLICABLE
+A-3: NOT APPLICABLE
+A-4: DEC-019
+A-5: OUT（separate representation-strategy Decision は未開始）
 main before this canonicalization: ecc7fcff4777a6c74ae41cea3d2125e8be95c4e9
 Prior packet head: 41c734f1e48ecff7627a026b9beca5ff481d5ef4
 Depends on: FindingIdentity assembly DONE（finding-identity-assembly.md / PR #66）
@@ -48,10 +54,13 @@ Change control:
   FindingCode catalog の追加・廃止は Issue #8 DEC の新規採択または改訂で管理する
 Kind: business DEC
 Identity assembly: UNCHANGED
-Decision-FC-2: DO NOT START until FC-1 canonicalized
+Decision-FC-2: DO NOT START until FC-1 canonicalized（FC-1 Acceptance 時点）
 Implementation Start: HOLD
-Issue #8 DEC number: UNASSIGNED
+Issue #8 DEC number: UNASSIGNED（FC-1 Acceptance 時点）
 ```
+
+後続の Human Decision により、現行状態は **DEC-019 / EMPTY / NOT ADOPTED**
+（A-1 NONE / A-2・A-3 NOT APPLICABLE / A-4 DEC-019 / A-5 OUT）である。
 
 ```text
 Agent execution evidence: NOT Human Acceptance evidence
@@ -77,7 +86,7 @@ FindingIdentity: UNCHANGED
 stable Finding ID: UNCHANGED
 Identity assembly: UNCHANGED
 Implementation Start: HOLD
-Decision-FC-2: DO NOT START
+Decision-FC-2: DO NOT START（FC-1 Acceptance 時点。後続で FC-2〜FC-6 Accepted）
 ```
 
 意味:
@@ -106,22 +115,23 @@ Option D:
 ## DEC 番号
 
 ```text
-Issue #8 ledger 上の FindingCode catalog DEC 番号: UNASSIGNED
+Issue #8 ledger 上の FindingCode catalog DEC 番号: DEC-019
 ```
 
-番号採番・Issue #8 本文／コメントへの台帳追記は、本 docs 正本化とは別操作とする。
+番号採番・Issue #8 本文／コメントへの台帳追記は、本 docs 正本化とは別操作として
+後続 Human action で完了した（Issue #8 comment `5229477058`）。
 本 Accepted は「Issue #8 に新しい DEC を追加する」という **方式** を固定する。
-DEC 本文（値一覧等）は Decision-FC-2 以降および別 Human Decision を受けて Issue #8 に記録する。
+DEC 本文は後続 Human Decision により EMPTY / NOT ADOPTED として記録された。
 
 ## Decision-FC-1 で決めないこと（維持）
 
 ```text
-FindingCode の具体的な値一覧: OUT
-コード番号 / 採番規則の確定: OUT
-criterionId 写像表: OUT
+FindingCode の具体的な値一覧: 本 Decision では OUT。後続 DEC-019 で NONE
+コード番号 / 採番規則の確定: 本 Decision では OUT。後続 DEC-019 で NOT APPLICABLE
+criterionId 写像表: 本 Decision では OUT。後続 DEC-019 で NOT APPLICABLE
 TypeScript enum / union: OUT
 validator / fixture: OUT
-Decision-FC-2（固定列挙 vs 外部カタログ）: OUT / DO NOT START
+Decision-FC-2（固定列挙 vs 外部カタログ）: 本 Decision では OUT。後続で FC-2〜FC-6 Accepted（logical）
 assembleFindingIdentity の再定義: OUT
 FindingSeverity / SEV-2-ASSIGN: OUT
 完全 Finding 契約: OUT
@@ -135,7 +145,7 @@ SharePoint / adapter / UI / deploy / 実データ: OUT
 | [`finding-identity-assembly.md`](./finding-identity-assembly.md) | **UNCHANGED**。caller-supplied FindingCode + `isReasonCode` 境界を壊さない |
 | [`finding-stable-id.md`](./finding-stable-id.md) | **UNCHANGED** |
 | [`finding-audit-ownership.md`](./finding-audit-ownership.md) | FindingCode catalog ownership は FC-1 Accepted / Option B |
-| [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) | FC-1 → FC-2 順を維持。FC-2 は DO NOT START |
+| [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) | FC-1〜FC-6 Accepted（logical）。DEC-019 EMPTY。Implementation HOLD |
 | Decision-SEV-1 Option A | 業務語彙の change control を Issue #8 DEC に寄せる方針と整合 |
 | Issue #8 / DEC-018 | FindingSeverity 不採用。本 Decision で Severity を再開しない |
 
@@ -144,8 +154,8 @@ SharePoint / adapter / UI / deploy / 実データ: OUT
 | 単位 | 扱い |
 |---|---|
 | Catalog ownership / change control | **本 Decision（Accepted / Option B）** |
-| Catalog delivery boundary | Decision-FC-2（DO NOT START） |
-| FindingCode 値一覧 / 採番 / mapping | 未決（Issue #8 新 DEC 本文・後続 Decision） |
+| Catalog delivery boundary | Decision-FC-2 Accepted / Option C（logical） |
+| FindingCode 値一覧 / 採番 / mapping | DEC-019: NONE / NOT APPLICABLE / NOT APPLICABLE |
 | Identity 組立 | DONE / UNCHANGED |
 | TypeScript / validator / fixture / 実装 | HOLD |
 | FindingSeverity / SEV-2-ASSIGN | 再開しない |
@@ -157,10 +167,11 @@ SharePoint / adapter / UI / deploy / 実データ: OUT
 Decision-FC-1: Accepted / Option B
 Implementation Start: HOLD
 src/** / tests/**: 変更しない
-Decision-FC-2: DO NOT START
+Decision-FC-2〜FC-6: Accepted（logical）/ Implementation Start HOLD
 FindingCode 値一覧 / enum / validator / fixture: DO NOT CREATE
-Issue #8 DEC number: UNASSIGNED（推測採番しない）
-Next after this canonicalization: Decision-FC-2 packet は別 Human Start
+Issue #8 DEC number: DEC-019（Human canonical。推測採番ではない）
+Finding catalog: EMPTY / NOT ADOPTED
+A-1 / A-2 / A-3 / A-4 / A-5: NONE / NOT APPLICABLE / NOT APPLICABLE / DEC-019 / OUT
 Issue #24 Close: NO-GO
 SharePoint / tenant / M365 / Entra / Deploy: NO-GO
 real data: PROHIBITED

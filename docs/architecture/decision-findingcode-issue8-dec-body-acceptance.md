@@ -129,9 +129,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 A-4: DEC-019 SELECTED
-Next recommended: Merge PR #141
-Still open:
-  Issue #8 上への DEC-019 台帳登録（Human）
+PR #141: MERGED / consumed by DEC-019
+Current status:
+  Issue #8 DEC-019 台帳登録: POSTED / comment 5229477058
   Future re-open if new Human primary information requires Finding ADOPTED
 Implementation Start: HOLD
 ```

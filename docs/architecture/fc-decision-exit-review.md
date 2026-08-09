@@ -77,7 +77,7 @@ fail-closed: missing / malformed / unknown / mismatch
 ```text
 FC-1〜FC-6: UNCHANGED / ACCEPTED
 Identity assembly: UNCHANGED
-FindingCode remains caller-supplied until business catalog Accepted
+FindingCode remains caller-supplied（Exit Review時点）。後続DEC-019は EMPTY / NOT ADOPTED
 No identifier inference
 No ownership-ref inference of catalog values
 No FindingSeverity restart
@@ -135,7 +135,7 @@ B に落ちるのは、strategy が Human Accepted された **後** の non-sem
 | **A-1** | FindingCode business catalog values | 業務意味・分類そのもの。AI 補完禁止 | Issue #8 FindingCode business DEC 本文 |
 | **A-2** | FindingCode numbering | カタログ採番規則は業務正本の一部 | Issue #8 FindingCode business DEC 本文 |
 | **A-3** | criterionId mapping | FindingCode↔criterion の対応は業務意味 | Issue #8 FindingCode business DEC 本文 |
-| **A-4** | Issue #8 FindingCode DEC number / ledger registration | 法人 DEC 台帳上の正本識別。FC-1 は方式のみ Accepted、番号 UNASSIGNED | Issue #8 ledger |
+| **A-4** | Issue #8 FindingCode DEC number / ledger registration | Exit Review時点は UNASSIGNED。後続 Human Decision で DEC-019 | Issue #8 ledger |
 | **A-5** | catalogVersionIdentifier concrete representation strategy（UUID / hash / semver / DEC-number / other） | FC-5 により Issue #8 business DEC 所有。技術先取り禁止 | Issue #8 business DEC（representation strategy） |
 
 注記:
@@ -148,6 +148,7 @@ B に落ちるのは、strategy が Human Accepted された **後** の non-sem
 - いずれも本 Exit Review では内容を発明・採択しない
 
 ```text
+Historical state at FC Decision Exit Review acceptance:
 A-class count: 5
 FindingCode values: UNDECIDED
 FindingCode numbering: UNDECIDED
@@ -155,6 +156,9 @@ criterionId mapping: UNDECIDED
 Issue #8 FindingCode DEC number: UNASSIGNED
 catalogVersionIdentifier strategy: UNDECIDED / DO NOT SELECT in this review
 ```
+
+Current mirror: Finding catalog EMPTY / NOT ADOPTED、A-1 NONE、A-2・A-3 NOT APPLICABLE、
+A-4 DEC-019、A-5 OUT。Implementation Start は HOLD。
 
 ## B-class — Delegated technical design
 

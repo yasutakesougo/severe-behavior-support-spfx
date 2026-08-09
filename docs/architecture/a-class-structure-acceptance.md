@@ -13,7 +13,8 @@ Human Acceptance: Explicit Human A-class structure acceptance on 2026-08-08
 main baseline: 58fa2559740a298c5458009dc1fd66a5443f1e85
 FC Decision Exit Review: ACCEPTED
 FC-7: NOT CREATED
-Content acceptance: NO
+Content acceptance: NO（本 structure Acceptance 時点）
+Later content Decision: DEC-019 / EMPTY / NOT ADOPTED
 Implementation Entry satisfaction: NOT EVALUATED / NOT CLAIMED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
@@ -48,12 +49,12 @@ Separate:
 今回の Human Acceptance は次を意味しない。
 
 ```text
-FindingCode values: UNDECIDED
-FindingCode numbering: UNDECIDED
-criterionId mapping: UNDECIDED
+FindingCode values: UNDECIDED（本 structure Acceptance 時点）→ DEC-019 で NONE
+FindingCode numbering: UNDECIDED（同時点）→ DEC-019 で NOT APPLICABLE
+criterionId mapping: UNDECIDED（同時点）→ DEC-019 で NOT APPLICABLE
 Issue #8 FindingCode DEC number: DEC-019（後続 Acceptance で選定）
 FindingCode business catalog DEC body: Accepted EMPTY（後続）
-catalogVersionIdentifier strategy: UNDECIDED
+catalogVersionIdentifier strategy: A-5 / OUT（separate Decision は未開始）
 UUID / hash / semver selection: NOT STARTED
 A-5 Decision start: NOT AUTOMATIC
 Implementation Entry satisfaction: NOT EVALUATED
@@ -67,10 +68,10 @@ FC-7: NOT CREATED
 [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md) /
 [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)。
 
-## Next gate
+## Next gate（structure Acceptance 時点の履歴）
 
 ```text
-Current single gate:
+Historical next gate:
   HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
   （A-1〜A-4 bundle の業務 catalog 内容）
 Decision packet:

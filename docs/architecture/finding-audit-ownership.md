@@ -50,7 +50,7 @@ Decision-FC-4（Accepted / Option C / complete identifier logical contract / Imp
 Decision-FC-5（Accepted / Option C / split ownership with explicit syntax-validation ceiling / Implementation HOLD）: docs/architecture/decision-fc-5-catalog-version-identifier-representation-ownership.md
 Decision-FC-6（Accepted / Option C / complete businessOwnershipRef logical contract / Implementation HOLD）: docs/architecture/decision-fc-6-business-ownership-ref-logical-contract.md
 FC Decision Exit Review（ACCEPTED / FC-7 NOT CREATED）: docs/architecture/fc-decision-exit-review.md
-A-class structure acceptance（Bundle A-1〜A-4 / Separate A-5 / Content NOT ACCEPTED）: docs/architecture/a-class-structure-acceptance.md
+A-class structure acceptance（Bundle A-1〜A-4 / Separate A-5；content は DEC-019 EMPTY / NOT ADOPTED で消費済み）: docs/architecture/a-class-structure-acceptance.md
 Implementation Entry Decision Re-audit（post GOV-RULE-05〜08）: docs/architecture/implementation-entry-decision-reaudit.md
 FindingCode A-1〜A-4 bundle content Decision packet: docs/architecture/decision-findingcode-a14-bundle-content-decision-packet.md
 FindingCode Option C selection: docs/architecture/decision-findingcode-option-c-selection.md
