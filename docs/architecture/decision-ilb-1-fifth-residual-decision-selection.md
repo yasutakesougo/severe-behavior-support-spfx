@@ -46,10 +46,11 @@ AS-EC-1 Entry #2 ownership / PR boundary
 ## Next
 
 ```text
-Acceptance + boundary: LOCKED（本選定の正本化対象）
-Entry #2: PASS / MET（ownership / PR boundary recorded）
+Acceptance + boundary: LOCKED / FINAL CONSISTENT（PR #161 MERGED）
+Entry #2: PASS / MET / FINAL CONSISTENT（ownership / PR-J）
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation Start: HOLD
+PR-J implementation: DO NOT START
 Next residual Decision: NOT SELECTED
-Sixth residual packet: NOT OPENED（Human が一件選ぶまで）
+Sixth residual packet: OPEN（Entry #5 / #6 / #7 handling）
 ```

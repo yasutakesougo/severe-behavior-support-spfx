@@ -150,7 +150,7 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 | # | 条件 | 現状 |
 |---|---|---|
 | 1 | Result 技術設計が main | **PASS / MET**（監査 [`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)） |
-| 2 | 所有 Issue / PR 境界 | **PASS / MET**（所有 #24 / **PR-J** 専用独立。正本 [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)） |
+| 2 | 所有 Issue / PR 境界 | **PASS / MET / FINAL CONSISTENT**（所有 #24 / **PR-J** 専用独立。正本 [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / 整合 [`decision-as-ec-1-entry-2-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-2-canonicalization-consistency-check.md)） |
 | 3 | `DEC-009` 保存タイミング | **Accepted / LOCKED / Option A** |
 | 4 | `GOV-AUD-03` 訂正承認境界 | **Accepted / Option E**（application 対象外明示） |
 | 5 | Finding / findingIds 境界 | **未**（FC 内容依存） |
@@ -163,7 +163,7 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 ```text
 Decision-AS-EC-1: HOLD（overall）
 AS-EC-1 #1: PASS / MET
-AS-EC-1 #2: PASS / MET（PR-J boundary）
+AS-EC-1 #2: PASS / MET / FINAL CONSISTENT（PR-J boundary）
 AS-EC-1 #3（DEC-009）: Accepted / LOCKED
 AS-EC-1 #8: Accepted / LOCKED / FINAL CONSISTENT（plan only）
 Result conversion: DONE（永続なし）
@@ -237,11 +237,12 @@ First residual Decision: **SELECTED / C — Decision-RD-3 FINAL CONSISTENT**（[
 Second residual Decision: **SELECTED / A — GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）
 Third residual Decision: **SELECTED / A — DEC-009 save timing FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）
 Fourth residual Decision: **SELECTED / A — AS-EC-1 Entry #8 technical plan FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)）
-Fifth residual Decision: **SELECTED / A — AS-EC-1 Entry #2 ownership / PR-J boundary PASS / MET**（[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）
-Entry #1/#2: **#1 PASS / #2 PASS / MET**（[`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)）
+Fifth residual Decision: **SELECTED / A — AS-EC-1 Entry #2 ownership / PR-J boundary PASS / MET / FINAL CONSISTENT**（[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`decision-as-ec-1-entry-2-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-2-canonicalization-consistency-check.md)）
+Entry #1/#2: **#1 PASS / #2 PASS / MET / FINAL CONSISTENT**（[`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)）
 post-retention deletion: **OPEN / 別 Decision**
 Decision-AS-EC-1 overall: **HOLD**
 Next residual Decision: **NOT SELECTED**
+Sixth residual packet: **OPEN**（[`decision-ilb-1-sixth-residual-decision-selection-packet.md`](./decision-ilb-1-sixth-residual-decision-selection-packet.md) — Entry #5/#6/#7 handling）
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
 **CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A） / AS-EC-1 Entry #8 technical plan（Option A） / AS-EC-1 Entry #2 ownership·PR boundary（Option A）

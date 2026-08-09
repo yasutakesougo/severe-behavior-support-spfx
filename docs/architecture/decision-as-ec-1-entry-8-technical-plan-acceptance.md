@@ -120,9 +120,9 @@ AS-EC-1 overall: HOLD
 AS-EC-1 Entry #8: Accepted / LOCKED / Option A / FINAL CONSISTENT
   Consistency: decision-as-ec-1-entry-8-canonicalization-consistency-check.md
   PR #159: MERGED（4c55e1c… / head 056a31c…）
-Entry #1 / #2: #1 PASS / #2 PASS·MET（PR-J；Entry #2 Acceptance）
+Entry #1 / #2: #1 PASS / #2 PASS·MET / FINAL CONSISTENT（PR-J；PR #161）
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation: HOLD
 Next residual Decision: NOT SELECTED
-Fifth residual: CONSUMED（Entry #2 Option A）
+Sixth residual packet: OPEN（Entry #5/#6/#7 handling）
 ```

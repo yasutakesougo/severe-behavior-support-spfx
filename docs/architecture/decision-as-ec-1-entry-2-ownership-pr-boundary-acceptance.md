@@ -126,10 +126,14 @@ AS-EC-1 overall: HOLD
 ## Next
 
 ```text
-AS-EC-1 Entry #2: Accepted / LOCKED / Option A / PASS / MET
+AS-EC-1 Entry #2: Accepted / LOCKED / Option A / PASS / MET / FINAL CONSISTENT
   Consistency: decision-as-ec-1-entry-2-canonicalization-consistency-check.md
+  PR #161: MERGED（1586104… / head 4a4b3d9…）
+  FINAL CONSISTENT IR: decision-as-ec-1-entry-2-final-consistent-independent-review.md
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation: HOLD
+PR-J implementation: DO NOT START
 Next residual Decision: NOT SELECTED
-Entry #5 / #6 / #7 / overall / post-retention: Human が一件選ぶまで自動開始しない
+Sixth residual packet: OPEN
+  （decision-ilb-1-sixth-residual-decision-selection-packet.md — Entry #5/#6/#7 handling）
 ```
