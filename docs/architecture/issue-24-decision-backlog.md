@@ -100,8 +100,13 @@ DEC-008 submit/return: **Accepted / LOCKED / Option C**（[`decision-dec-008-sub
   Independent Review: PASS（[`decision-dec-008-submit-return-roles-independent-review.md`](./decision-dec-008-submit-return-roles-independent-review.md)）
   Consistency: [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
 PR #147: MERGED（`ce05cd0…` / head `31e1df0…`）
-Current single gate: **次 substantive unit 選定（NOT SELECTED）**
-  Selection packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)（OPEN）
+Next substantive unit: **SELECTED / B / GOV-AUD-04**
+  Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
+  Scope: 論理削除を許可するロール
+  Open-points: [`decision-gov-aud-04-logical-delete-role-open-points.md`](./decision-gov-aud-04-logical-delete-role-open-points.md)
+  Decision packet: [`decision-gov-aud-04-logical-delete-role-decision-packet.md`](./decision-gov-aud-04-logical-delete-role-decision-packet.md)
+Current single gate: **GOV-AUD-04 Human Decision**
+OUT: GOV-AUD-05 / FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -112,7 +117,6 @@ hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -388,13 +392,14 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  次 substantive unit 選定（OPEN / NOT SELECTED）
+  GOV-AUD-04 Human Decision（論理削除を許可するロール）
+Next substantive unit: SELECTED / B
+  → decision-gov-aud-04-logical-delete-role-decision-packet.md
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT（PR #146 / 42b251b…）
 DEC-008 submit/return: Accepted / LOCKED / Option C / FINAL CONSISTENT
   PR #147 MERGED（ce05cd0… / head 31e1df0…）
-  提出ロール: application に固定しない
-  差戻しロール: application に固定しない
 GOV-AUD-03: Accepted / Option E
+GOV-AUD-05: OUT（本 unit で始めない）
 DEC-008 core: Accepted / LOCKED / Issue #8 comment 5229571943
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD
@@ -402,7 +407,6 @@ A-5: HOLD
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
 ```
 
 
