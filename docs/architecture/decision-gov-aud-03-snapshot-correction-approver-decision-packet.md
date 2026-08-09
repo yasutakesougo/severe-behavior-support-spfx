@@ -16,7 +16,8 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-AUD-03
 Kind: Human Decision packet（narrow）
-Status: READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Decision Accepted / Option E）
+Accepted 正本: decision-gov-aud-03-snapshot-correction-approver-acceptance.md
 Owner: Issue #19
 Related design: assessment-snapshot-result-design.md
   （訂正 = 元 Snapshot 不変 + 置換 Snapshot + SnapshotCorrection）
@@ -26,8 +27,10 @@ FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Agent recommendation: NONE（役割名を発明しない）
+Agent recommendation（historical）: NONE
+Human Selected: Option E
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
@@ -189,8 +192,12 @@ D. 別ロール / 別規則（明示）
 E. 当面 application 層対象外として明示
 F. まだ決めない / HOLD
 
-答え: （Human 記入）
-D の場合の役割名/規則: （Human 記入）
+答え: E（2026-08-09）
+Acceptance: decision-gov-aud-03-snapshot-correction-approver-acceptance.md
+Meaning:
+  訂正承認者は当面 application 層対象外
+  具体的な承認ロール: NOT ADOPTED / NOT DEFINED
+  訂正そのものを不要にする決定ではない
 ```
 
 ## 7. After Decision
@@ -198,10 +205,10 @@ D の場合の役割名/規則: （Human 記入）
 | Selected | Next |
 |---|---|
 | A–D | Acceptance 記録。AS-EC-1 #4 向けに承認境界を固定。実装は別 GO |
-| E | application 対象外の明示を Acceptance 記録。ロール実装 DO NOT START |
+| **E（SELECTED）** | application 対象外の明示を Acceptance 済み。ロール実装 DO NOT START |
 | F | HOLD 維持 |
 
-いずれでも自動開始しない:
+維持:
 
 ```text
 FindingCode: HOLD / DO NOT CREATE
@@ -209,15 +216,17 @@ A-5: HOLD
 Implementation Start: HOLD
 GOV-AUD-04/05: DO NOT START
 DEC-009 再定義: DO NOT START
+訂正モデル: UNCHANGED（廃止しない）
 SharePoint / M365 / Deploy / real data: NO-GO
+次 substantive unit: NOT SELECTED
 ```
 
 ## 8. Gate
 
 ```text
-NEXT_SUBSTANTIVE_UNIT: SELECTED / B / GOV-AUD-03
-GOV-AUD-03 packet: READY_FOR_HUMAN_DECISION
-Scope: 判定スナップショット訂正の承認者
-Human Decision: PENDING
+GOV-AUD-03 packet: CONSUMED / Accepted Option E
+具体的な承認ロール: NOT ADOPTED / NOT DEFINED
+application contract: 訂正承認者 OUT
+訂正モデル: retained
 Implementation Start: HOLD
 ```

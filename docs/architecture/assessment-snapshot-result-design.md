@@ -241,7 +241,7 @@ SnapshotCorrection
 - `originalSnapshotId`と`replacementSnapshotId`は異なる。
 - replacementは単独でも完全なAssessmentSnapshotとして検証可能である。
 - 通常表示で最新版を選択する責任はapplication・read model側に置く。
-- 訂正承認者は`GOV-AUD-03`待ちであり、本書では決定しない。
+- 訂正承認者は`GOV-AUD-03` Accepted / Option E（当面 application 層対象外 / ロール NOT DEFINED）。本書の訂正モデル自体は維持する。正本: [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)。
 - 物理削除や元Snapshotの上書きを訂正として扱わない。
 
 ## Result変換表
@@ -276,7 +276,7 @@ SnapshotCorrection
 |---|---|
 | いつ保存するか | `DEC-009` / Issue #8・#19 |
 | 誰が保存・確定するか | `GOV-AUD` / Issue #19 |
-| 誰が訂正を承認するか | `GOV-AUD-03` / Issue #19 |
+| 誰が訂正を承認するか | `GOV-AUD-03` Accepted / Option E（application 対象外 / ロール NOT DEFINED） |
 | handoffへいつ渡すか | Issue #17・#19 |
 | SharePoint列・DTO mapping | adapter設計 / DEC-6 |
 | 保存期間・完全削除 | `DEC-011`・`DEC-012` |
@@ -289,7 +289,7 @@ AssessmentSnapshot完全契約のコード実装へ進む前に、次を満た�
 1. 本技術設計がmainへマージ済み
 2. AssessmentSnapshotの所有IssueとPR境界が記録済み
 3. DEC-009の保存タイミングがAcceptedまたは実装対象外として明示済み
-4. GOV-AUD-03の訂正承認境界がAcceptedまたはapplication層対象外として明示済み
+4. GOV-AUD-03の訂正承認境界がAcceptedまたはapplication層対象外として明示済み（**DONE** — Option E / application 対象外）
 5. 完全なFinding契約またはfindingIds参照境界が確定済み
 6. サービス別NOT_APPLICABLE reason codeの正本またはHOLD方針が確定済み
 7. Schema ID・schemaVersion・DTO versioning方針が確定済み
@@ -306,7 +306,7 @@ Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先�
 - fixture・contract tests
 - `DEC-009`保存タイミング
 - 保存・確定ロール
-- `GOV-AUD-03`訂正承認者
+- `GOV-AUD-03`訂正承認者（Accepted / Option E — application 対象外。ロール実装しない）
 - handoff連携タイミング
 - 完全なFinding契約
 - サービス別`NOT_APPLICABLE` reason code enum

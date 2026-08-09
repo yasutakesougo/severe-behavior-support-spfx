@@ -83,11 +83,15 @@ DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](
 Next substantive unit: **SELECTED / B / GOV-AUD-03**
   Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
   Scope: 判定スナップショット訂正の承認者
-Current single gate: **GOV-AUD-03 Human Decision**
-Decision packet: [`decision-gov-aud-03-snapshot-correction-approver-decision-packet.md`](./decision-gov-aud-03-snapshot-correction-approver-decision-packet.md)（READY）
-DEC-009: Human-attested Accepted（保存タイミング）。本 unit で再定義しない
+GOV-AUD-03: **Accepted** / Option E（[`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)）
+  訂正承認者: 当面 application 層対象外
+  具体的な承認ロール: NOT ADOPTED / NOT DEFINED
+  訂正そのもの: 不要化しない（モデル維持）
+DEC-009: Human-attested Accepted（保存タイミング）。再定義しない
+Current single gate: **次 substantive unit 選定（NOT SELECTED）**
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
+根拠のない承認権限をアプリに作る: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
@@ -98,6 +102,7 @@ Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
+
 
 
 
@@ -252,7 +257,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | 1 | Result 技術設計が main にある | DONE（設計 + Result変換 PR #72） |
 | 2 | 所有 Issue と PR 境界が記録済み | 部分（Result変換は #24。完全契約境界は未固定） |
 | 3 | `DEC-009` 保存タイミング Accepted または対象外明示 | **未**（Issue #8/#19） |
-| 4 | `GOV-AUD-03` 訂正承認境界 Accepted または application 対象外明示 | **packet READY**（Issue #19 / [`decision-gov-aud-03-snapshot-correction-approver-decision-packet.md`](./decision-gov-aud-03-snapshot-correction-approver-decision-packet.md)） |
+| 4 | `GOV-AUD-03` 訂正承認境界 Accepted または application 対象外明示 | **Accepted / Option E**（application 対象外明示 / [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |
 | 5 | 完全 Finding または findingIds 参照境界 | **未**（SEV / FC / 完全 Finding 依存） |
 | 6 | サービス別 `NOT_APPLICABLE` reason 正本または HOLD 方針 | **未** |
 | 7 | Schema ID / schemaVersion / DTO versioning | **未** |
@@ -366,10 +371,12 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  GOV-AUD-03 Human Decision
-  = 判定スナップショット訂正の承認者（A/B/C/D/E/F）
-  packet: decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
-Next substantive unit: SELECTED / B / GOV-AUD-03
+  次 substantive unit 選定（NOT SELECTED）
+GOV-AUD-03: Accepted / Option E
+  訂正承認者 = application 層対象外
+  具体的な承認ロール = NOT ADOPTED / NOT DEFINED
+  訂正モデル = retained（不要化しない）
+Next substantive unit (previous): SELECTED / B / GOV-AUD-03（CONSUMED）
 DEC-008: Accepted / LOCKED / Issue #8 comment 5229571943
 Consistency (docs / Issue #8 / PR #143): CONSISTENT（最終確定）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
@@ -378,6 +385,7 @@ A-5: HOLD
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 
