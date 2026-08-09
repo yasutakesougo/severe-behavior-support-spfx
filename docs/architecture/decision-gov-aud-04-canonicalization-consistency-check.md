@@ -90,11 +90,9 @@ GOV-AUD-05: DO NOT START
 ## 6. After FINAL CONSISTENT
 
 ```text
-Next substantive unit: NOT SELECTED
-Selection packet: OPEN
-  → decision-next-substantive-unit-selection-packet.md
-Agent auto-select: FORBIDDEN
+Next substantive unit: SELECTED / F — Decision-ILB-1
+  → decision-ilb-1-institutional-local-boundary-decision-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```
 
-Human が次の substantive unit を新たに選ぶ。
+Decision-ILB-1 は本整合確認の対象外（別 unit）。

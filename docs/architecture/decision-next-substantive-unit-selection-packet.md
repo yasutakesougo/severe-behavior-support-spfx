@@ -1,6 +1,6 @@
 # Decision Packet — 次 substantive unit 選定（post GOV-AUD-04）
 
-この文書は、GOV-AUD-04 が **FINAL CONSISTENT**（PR #149 MERGED）になったあとの
+この文書は、GOV-AUD-04 が **FINAL CONSISTENT**（PR #149 / #150 MERGED）になったあとの
 **次 substantive unit 選定** のための Human Decision Packet である。
 
 FindingCode 値作成ではない。
@@ -14,12 +14,13 @@ Agent が次 unit を自動選定しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
 Kind: Human Decision packet
-Status: OPEN / READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Selected Option F — Decision-ILB-1）
 Selection record: decision-next-substantive-unit-selection.md
 Depends on:
   GOV-AUD-04 Accepted / LOCKED / Option E
   Consistency: FINAL CONSISTENT
-  PR #149 MERGED（cb14c13… / head 55112f4…）
+  PR #149 MERGED（cb14c13…）
+  PR #150 MERGED（f97d072…）
 Prior CONSUMED:
   prior-B — GOV-AUD-03 Accepted / Option E
   C — Decision-OP-3 Accepted / LOCKED / Option A
@@ -28,7 +29,7 @@ Prior CONSUMED:
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
+Next substantive unit: SELECTED / F — Decision-ILB-1
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -37,146 +38,90 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 上位入口:
 
 - [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)
-- [`decision-gov-aud-04-logical-delete-role-acceptance.md`](./decision-gov-aud-04-logical-delete-role-acceptance.md)
+- [`decision-ilb-1-institutional-local-boundary-decision-packet.md`](./decision-ilb-1-institutional-local-boundary-decision-packet.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
-- [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
 
 ## 1. Current locked state
 
 ```text
 GOV-AUD-04: Accepted / LOCKED / Option E / FINAL CONSISTENT
-  論理削除許可ロール: application 層対象外
-  具体ロール: NOT ADOPTED / NOT DEFINED
 GOV-AUD-03: Accepted / Option E
 GOV-AUD-05: OUT / DO NOT START unless newly selected
 DEC-008 submit/return: FINAL CONSISTENT / Option C
 Decision-OP-3: FINAL CONSISTENT
-Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
 ```
 
 問い:
 
 > 次に着手する substantive unit はどれですか？
 
-## 2. 判断単位の分離（混ぜない）
-
-| ID | 扱い |
-|---|---|
-| GOV-AUD-04 | **closed / Option E** — 再開しない |
-| GOV-AUD-03 | **closed / Option E** — 再開しない |
-| DEC-008 submit/return | **closed / Option C** — 再開しない |
-| Decision-OP-3 | **closed / LOCKED** — 再開しない |
-| DEC-009 | **再 Decision しない**（Human: already Accepted） |
-| FindingCode 値作成 | **OUT / HOLD** |
-| A-5 | **OUT / HOLD** |
-| Implementation Start | **OUT / HOLD** |
-| SharePoint / Deploy / real data | **NO-GO** |
-| 次 substantive unit | **本 packet** |
-
-## 3. Options（候補）
+## 2. Options（候補）
 
 ### Option A — DEC-009 — OUT for re-decision
 
 ```text
-Status: OUT for re-decision
-Do not re-open as next unit
+Status: OUT for re-decision（Human: already Accepted attested in some docs；AS-EC-1 表は未同期）
+Do not re-open as next unit here
 ```
 
 ### Option B — Issue #19 最小 GOV-AUD 残件（例: GOV-AUD-05）
 
 ```text
-Meaning:
-  GOV-AUD-03 / 04 は CONSUMED。
-  別の最小 GOV-AUD 単位を選ぶ（例: GOV-AUD-05 物理削除方針）
-Requires:
-  Human が対象 GOV-AUD ID を明示する
-Note:
-  GOV-AUD-04 Acceptance だけでは GOV-AUD-05 を自動開始しない
+Requires: Human が対象 GOV-AUD ID を明示
+Note: GOV-AUD-04 だけでは GOV-AUD-05 を自動開始しない
 ```
 
 ### Option C — Decision-OP-3 — CONSUMED
 
-```text
-Status: CONSUMED / FINAL CONSISTENT
-Do not re-select
-```
-
 ### Option D — Decision-RD-3（接近窓 / 算出 / 超過後）
 
 ```text
-Boundary:
-  GOV-RULE-08 NOT ADOPTED を開始信号にしない
-  90日 / overdue を発明しない
+Boundary: GOV-RULE-08 NOT ADOPTED を開始信号にしない；90日発明禁止
 ```
 
 ### Option E — DEC-008 提出・差戻し — CONSUMED
 
-```text
-Status: CONSUMED / Option C
-Do not re-select
-```
-
-### Option F — 別単位（Human が明示）
+### Option F — 別単位（Human が明示）— SELECTED
 
 ```text
-Requires: 単位名を Human が記入
-Agent MUST NOT invent the unit name
+Selected unit name（Human）:
+  制度要件とローカルルールの境界整理
+Decision ID: Decision-ILB-1
 ```
 
 ### Option G — まだ決めない
 
+## 3. Human Decision
+
 ```text
-Meaning: Next substantive unit は NOT SELECTED のまま
+答え: F（2026-08-09）
+Selected:
+  F — 制度要件とローカルルールの境界整理
+  Decision-ILB-1
+Scope:
+  生活介護・強度行動障害支援について、
+  制度上必須のルールと、
+  制度が要求していない application 独自ルールを分離する
+Purpose:
+  残存 Decision を
+  「制度上必要か」→「法人 Human Decision か」→「現場裁量か」
+  の順で判断できる状態にする
+Selection record: decision-next-substantive-unit-selection.md
 ```
 
-## 4. Explicit non-options（選ばない）
+## 4. Gate
 
 ```text
-FindingCode values invention / catalog fill
-A-5 UUID/hash/semver invention
-Implementation Start
-DEC-009 re-decision
-GOV-AUD-03 / GOV-AUD-04 / Decision-OP-3 / DEC-008 submit-return re-open
-hard due / overdue implementation
-SharePoint / M365 / Deploy / real data
-```
-
-## 5. Agent recommendation
-
-```text
-Recommended: NONE（自動選定しない）
-```
-
-## 6. Human Decision
-
-```text
-問:
-  次に着手する substantive unit はどれですか？
-
-A. DEC-009 — OUT for re-decision
-B. Issue #19 最小 GOV-AUD 残件（対象 ID を明示）
-C. Decision-OP-3 — CONSUMED
-D. Decision-RD-3（接近窓等）
-E. DEC-008 提出・差戻し — CONSUMED
-F. 別単位（単位名を明示）
-G. まだ決めない
-
-答え: （Human 記入）
-Scope: （Human 記入）
-```
-
-## 7. Gate
-
-```text
-GOV-AUD-04: FINAL CONSISTENT
-NEXT_SUBSTANTIVE_UNIT_SELECTION: OPEN / NOT SELECTED
+NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected F
+Selected unit: Decision-ILB-1
+Packet: decision-ilb-1-institutional-local-boundary-decision-packet.md
+Inventory: decision-ilb-1-residual-decision-inventory.md
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Agent auto-select: FORBIDDEN
+Classification Accepted: NOT YET
 ```
