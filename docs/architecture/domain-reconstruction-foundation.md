@@ -159,6 +159,7 @@ AssessmentSnapshotのResult技術設計は
 - `demo`・`retrieval_failed`は正式Resultへ含めない。
 - Result変換はdomain純粋関数（`toAssessmentSnapshotResultCandidate` / [`assessment-snapshot-result-conversion.md`](./assessment-snapshot-result-conversion.md)）、保存タイミングは`DEC-009`、保存・訂正ロールは`GOV-AUD`へ分離する。
 - AssessmentSnapshot本体型・保存実装・findingIds必須化は後続Entry CriteriaまでHOLDする。
+  （更新: Entry Criteria overall MET 後、**PR-J domain 型 / validator は Implementation Start GO**。findingIds REQUIRED は NOT ADOPTED。保存 / SharePoint は HOLD）
 
 FindingSeverityの vocabulary ownership は Decision-SEV-1 Accepted（Option A）。
 Issue #8へ新しいDECを追加する方式とする。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。
@@ -215,7 +216,7 @@ repository docs は Accepted 正本 mirror（Issue #8 / DEC-018）。
 ## 継続HOLD
 
 - FindingSeverity Human Decision は SEV-2-VOCAB Accepted / Option A / NOT ADOPTED。Canonical は COMPLETE（Issue #8 / DEC-018）。PURPOSE は MHLW-first RECORDED。CONCEPT-INV は COMPLETED。ASSIGN は N/A / DO NOT START。ownership は SEV-1 Accepted。完全なFinding契約
-- AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
+- AssessmentSnapshot本体のTypeScript型・validator・fixture・contract tests は **PR-J GO**（[`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）。findingIds必須化は NOT ADOPTED。SharePoint / DTO / Schema ID / application 保存は HOLD
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
 - Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存技術契約は MERGED（PR #99 / [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)）。Persistence Entry MET / #22B synthetic MERGED。実 SharePoint adapter は別 Gate / NO-GO（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) / [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode catalog ownership は FC-1 Accepted / Option B。delivery は FC-2 Accepted / Option C。FC-3 Accepted / Option C。FC-4 Accepted / Option C。FC-5 Accepted / Option C。FC-6 Accepted / Option C。残 Human Decision は [`fc-decision-exit-review.md`](./fc-decision-exit-review.md) A-class。値一覧・Snapshot候補はHOLD）

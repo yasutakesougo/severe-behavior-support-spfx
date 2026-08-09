@@ -99,7 +99,7 @@ MUST NOT equate:
 ```text
 FindingCode: HOLD
 A-5: HOLD
-Implementation Start: HOLD
-Decision-AS-EC-1 overall: HOLD
+Implementation Start: GO（PR-J domain only；別 selection）
+Decision-AS-EC-1 overall: MET / Accepted
 Schema / SharePoint / UI / provider: NOT STARTED
 ```

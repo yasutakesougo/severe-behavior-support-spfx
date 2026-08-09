@@ -9,9 +9,12 @@ Human Acceptance:
 ```text
 Kind: ownership / PR-boundary record only
 Status: Accepted as Entry #2 evidence（Option A）
-Implementation Start: HOLD
-Implementation auto-start: FORBIDDEN
-GitHub PR number: NOT ASSIGNED YET（Implementation GO 時に採番）
+Implementation Start: GO（domain complete-contract only；Human A after Preflight PASS）
+Technical contract: assessment-snapshot-complete-contract.md
+Selection: decision-ilb-1-tenth-residual-decision-selection.md
+GitHub PR number: assigned by Implementation PR（PR-J）
+SharePoint / DTO / Schema ID: DO NOT START
+FindingCode / A-5: HOLD
 ```
 
 ## 1. 所有 Issue
@@ -64,24 +67,21 @@ MUST NOT start from this boundary alone:
 ## 4. 実装開始条件（境界上のゲート）
 
 ```text
-PR-J のコード実装開始には、別途:
-  - 残 AS-EC-1 Entry Criteria の Human 判定
-  - 明示的 Implementation Start Decision
-が必要。
+Entry Criteria / overall MET 後、Preflight PASS、明示 Human Implementation Start GO により
+PR-J domain 完全契約実装を開始した。
 
-Entry #2 Acceptance / 本境界記録だけでは実装を開始しない。
+GO 範囲: assessment-snapshot-complete-contract.md
+Entry #2 Acceptance / 本境界記録だけでは実装を開始しない（履歴どおり）。
 ```
 
-## 5. Explicit non-goals（本段階）
+## 5. Explicit non-goals（GO 後も維持）
 
 ```text
-TypeScript型の実装: DO NOT START
-validator実装: DO NOT START
-fixture実装: DO NOT START
-contract tests実装: DO NOT START
 SharePoint / DTO 実装: DO NOT START
+AssessmentSnapshot Schema ID 採番: DO NOT START
 FindingCode: HOLD
 A-5: HOLD
-Implementation Start: HOLD
-src/** / tests/**: unchanged in this boundary PR
+application 保存・確定フロー: OUT（別 GO）
+サービス別 NOT_APPLICABLE reason enum: FORBIDDEN
+findingIds REQUIRED: NOT ADOPTED
 ```
