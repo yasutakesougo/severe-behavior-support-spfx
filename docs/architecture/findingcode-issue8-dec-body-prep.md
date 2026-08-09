@@ -63,6 +63,7 @@ FindingCode:
 ```text
 ID: BS-001
 Status: DECIDED（Human primary information / 2026-08-09）
+Finding catalog: OUT OF SCOPE（対象外）
 
 Business State:
   有効な支援計画がないため、支援手順記録へ進めない
@@ -79,6 +80,10 @@ FindingCode:
 
 継続管理:
   Findingとしては行わない
+
+Catalog implication:
+  本状態は Finding catalog（A-1 値一覧）の対象外
+  Issue #8 DEC 本文では「Finding にしない業務状態」側に記載する
 ```
 
 流れ:
