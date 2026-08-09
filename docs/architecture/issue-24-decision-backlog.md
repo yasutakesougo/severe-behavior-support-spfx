@@ -72,8 +72,8 @@ Implementation Entry Decision Re-audit: [`implementation-entry-decision-reaudit.
 PR #139 / Implementation Entry Decision Re-audit: MERGED（merge `99c8b24f0fa22f502803f4ae772c976886aed261` / head `d58e947abdf97f011ac9054fec0058f143671b2f`）
 Finding catalog DEC-019: **Accepted** / EMPTY / NOT ADOPTED（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
 A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019** / A-5: OUT
-DEC-019 ledger registration: [`decision-dec-019-issue8-ledger-registration.md`](./decision-dec-019-issue8-ledger-registration.md)（READY_FOR_HUMAN_POST）
-Consistency check after post: [`decision-dec-019-main-issue8-pr141-consistency-check.md`](./decision-dec-019-main-issue8-pr141-consistency-check.md)
+DEC-019 ledger registration: [`decision-dec-019-issue8-ledger-registration.md`](./decision-dec-019-issue8-ledger-registration.md)（POSTED / comment `5229477058`）
+Consistency check: [`decision-dec-019-main-issue8-pr141-consistency-check.md`](./decision-dec-019-main-issue8-pr141-consistency-check.md)（**CONSISTENT**）
 FindingCode 作成: DO NOT START
 DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
   制度上の作成者: ACCEPTED = 実践研修修了者 = 支援計画シート等の制度上の作成者
@@ -113,12 +113,6 @@ Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
-
-
-
-
-
-
 
 
 
@@ -246,7 +240,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-AUD-REPO-1** | repository uniqueness / multi-match / race | **Accepted**。正本: [`decision-aud-repo-1-audit-event-repository-uniqueness.md`](./decision-aud-repo-1-audit-event-repository-uniqueness.md)。証跡 #22 `5219980098` / `5220288044` / `5220303406` | Issue `#22A` | REPLAY-1 / IDEM-1 | `#29` mapping MERGED（PR #108）→ Entry PASS（5224544473）→ `#22B` Human GO（5224579776）→ PR #110 MERGED（62a43d7f…） |
 | **Decision-SEV-1** | FindingSeverity vocabulary ownership（DEC方式 A/B） | **Accepted**（Option A）。Issue #8 に新しい DEC を追加する方式。Contract break NO。FindingIdentity / stable Finding ID UNCHANGED。正本: [`decision-sev-1-finding-severity-vocabulary-ownership.md`](./decision-sev-1-finding-severity-vocabulary-ownership.md) | Issue #8（**DEC-018** で不採用本文を記録済み） | 方式選択前に値一覧を採択しない（維持） | **Decision-SEV-2** packet へ進める（実装は開始しない） |
 | **Decision-SEV-2** | FindingSeverity boundary packet（PURPOSE / CONCEPT-INV / VOCAB / ASSIGN を分離） | packet: [`decision-sev-2-finding-severity-boundary.md`](./decision-sev-2-finding-severity-boundary.md)。**PURPOSE = RECORDED**（[`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)。MHLW-first）。**CONCEPT-INV = COMPLETED**（[`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)。公式概念=行動関連項目合計点数。汎用 Severity taxonomy NOT FOUND）。**SEV-2-VOCAB = Accepted / Option A / NOT ADOPTED**；**Canonical = COMPLETE（Issue #8 / DEC-018）**（[`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)）。**SEV-2-ASSIGN = N/A / DO NOT START** | Issue #8 / **DEC-018**（comment `5225426738`） | **SEV-1 Accepted** | SEV line 完了。代替概念モデルは別 Entry Criteria。実装 NOT STARTED |
-| **Decision-FC-1** | FindingCode catalog ownership | **Accepted / Option B**。Issue #8 に新しい DEC を追加する方式。Kind = business DEC。Identity 組立 UNCHANGED。Implementation Start **HOLD**。正本: [`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md) | Issue #8 / **DEC-019**（EMPTY / NOT ADOPTED；live post PENDING） | Identity 組立契約を再定義しない。値一覧は NONE（発明しない） | **Decision-FC-2** Accepted 済み |
+| **Decision-FC-1** | FindingCode catalog ownership | **Accepted / Option B**。Issue #8 に新しい DEC を追加する方式。Kind = business DEC。Identity 組立 UNCHANGED。Implementation Start **HOLD**。正本: [`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md) | Issue #8 / **DEC-019**（EMPTY / NOT ADOPTED；comment `5229477058`） | Identity 組立契約を再定義しない。値一覧は NONE（発明しない） | **Decision-FC-2** Accepted 済み |
 | **Decision-FC-2** | Catalog delivery boundary | **Accepted / Option C**。delivery = versioned immutable catalog snapshot input。repository は catalog 値を ownership しない。正本: [`decision-fc-2-finding-code-catalog-delivery-boundary.md`](./decision-fc-2-finding-code-catalog-delivery-boundary.md) | FC-1 Accepted（Option B / Issue #8） | **FC-1 Accepted**。採番・写像表の推測禁止 | **Decision-FC-3** Accepted |
 | **Decision-FC-3** | Catalog snapshot logical contract | **Accepted / Option C**。Complete logical contract surface（必須情報・version 一意識別責務・immutable・selected 整合・fail-closed）。正本: [`decision-fc-3-finding-code-catalog-snapshot-logical-contract.md`](./decision-fc-3-finding-code-catalog-snapshot-logical-contract.md) | FC-2 Accepted（Option C） | version 文字列・schema・storage・provider・値一覧は決めない | **Decision-FC-4** Accepted |
 | **Decision-FC-4** | Catalog version identifier contract | **Accepted / Option C**。Complete identifier logical contract（一意性・opaque・edition対応・reuse禁止・fail-closed）。正本: [`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md) | FC-3 Accepted（Option C） | UUID/hash/semver/DEC番号・schema・storage・provider・値一覧は決めない | **Decision-FC-5** Accepted |
@@ -311,7 +305,7 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | 問い | 正本根拠 | 結論 |
 |---|---|---|
 | ownership / change control | Decision-FC-1 Accepted / Option B | **Issue #8 に新しい DEC を追加**（business DEC） |
-| コード一覧正本 | Identity 組立は caller-supplied。カタログ無し | **未決**（FC-1 では決めない。Issue #8 DEC 番号 UNASSIGNED） |
+| コード一覧正本 | Identity 組立は caller-supplied。カタログ無し | **EMPTY / NOT ADOPTED**（DEC-019 / comment `5229477058`）。値 = NONE |
 | 追加・廃止の所有者 | Decision-FC-1 Option B | **Issue #8 DEC の新規採択または改訂** |
 | delivery boundary | Decision-FC-2 Accepted / Option C | **versioned immutable catalog snapshot input**。repository は catalog 値を ownership しない |
 | snapshot logical contract | Decision-FC-3 Accepted / Option C | Complete logical contract surface（必須情報・version 一意識別責務・immutable・selected 整合・fail-closed） |
@@ -384,33 +378,25 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  PR #146 Merge → OP-3 Final CONSISTENT
-  → then 次 substantive unit 選定（OPEN / NOT SELECTED）
+  Human selects next substantive unit（OPEN / NOT SELECTED）
 Decision-OP-3: Accepted / LOCKED / Option A
   periodFrom: REQUIRED
   periodTo: REQUIRED
   Open-ended periodTo: NOT ADOPTED
   制度日数・既定観察窓 domain 埋め込み: NOT ADOPTED
   evaluateObservationPeriodMembership: UNCHANGED
-Docs consistency: CONSISTENT（merge PENDING）
+Docs consistency: CONSISTENT（PR #146 MERGED / main `42b251b…`）
 GOV-AUD-03: Accepted / Option E
 DEC-008: Accepted / LOCKED / Issue #8 comment 5229571943
-Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
-FindingCode: HOLD
-A-5: HOLD
+Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED / comment 5229477058
+Consistency (main / Issue #8 / PR #141): CONSISTENT
+A-1 NONE / A-2 N/A / A-3 N/A / A-4 DEC-019 / A-5 OUT
+FindingCode 作成: DO NOT START
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 Next substantive unit: NOT SELECTED
 ```
-
-
-
-
-
-
-
-
 
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
@@ -515,12 +501,13 @@ Decision-FC-5: Accepted / Option C（split ownership with explicit syntax-valida
 Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contract）/ Implementation HOLD
 FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
 A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5
-Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
+Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED（PR #141 MERGED；Issue #8 comment `5229477058`）。Consistency **CONSISTENT**
+A-1 NONE / A-2 N/A / A-3 N/A / A-4 DEC-019 / A-5 OUT
+次 substantive unit: NOT SELECTED
+FindingCode 作成: DO NOT START
 DEC-008: **Accepted**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
   制度上の作成者 = 実践研修修了者
   独立した最終承認者 = NOT ADOPTED
-
-
 Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）
 Decision-RC-2 / GOV-RULE-05: **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）
 GOV-RULE-07: **Accepted** / Option C（[`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md)）
