@@ -30,7 +30,7 @@ Twelfth residual Decision: SELECTED / A — schemaVersion / dtoVersion（Decisio
 Thirteenth residual Decision: SELECTED / A — application save（Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
 Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1；IR PASS）
 Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
-Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（selection only；Decision-AS-SP-PLACEMENT-1 compare OPEN）
+Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -39,7 +39,8 @@ Application save boundary: Accepted / LOCKED（SC-1 + FR-1）；implementation D
 SharePoint / adapter boundary: Accepted / LOCKED（PB-1+EM-1+CV-1+D6-1+UP-1）；implementation DO NOT START
 Decision-AS-SP-ADAPTER-1 Independent Review: PASS（P0=0 / P1=0 / P2=0）
 DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）
-Site / List / Internal Column Name: NOT CONFIRMED / HOLD（placement compare OPEN）
+Placement confirmation rules: Accepted / LOCKED（SV-1+LV-1+CN-1+SC-1）
+Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
 
@@ -138,6 +139,8 @@ Order:
  15. Fourteenth residual: SharePoint / adapter（DONE / CONSUMED；Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1）
      Independent Review: PASS（decision-assessment-snapshot-sp-adapter-independent-review.md；P0=0 / P1=0 / P2=0）
  16. Fifteenth residual: DEC-6 concrete mapping（DONE / CONSUMED；Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
+ 17. Sixteenth residual: Site / List / Internal Column Name（DONE / CONSUMED；Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
+     values: NOT CONFIRMED / HOLD
      remaining examples: post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
@@ -148,8 +151,9 @@ Schema / DTO code assignment: HOLD / NOT STARTED
 Application save boundary: LOCKED（SC-1 + FR-1）
 SharePoint / adapter boundary: LOCKED（PB-1+EM-1+CV-1+D6-1+UP-1）
 DEC-6 mapping rules: LOCKED（LF-1+RW-1+MF-1+VR-1）
+Placement confirmation rules: LOCKED（SV-1+LV-1+CN-1+SC-1）
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
-Site URL / List name / Internal Column Name: NOT DECIDED
+Site URL / List name / Internal Column Name: NOT CONFIRMED / HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
