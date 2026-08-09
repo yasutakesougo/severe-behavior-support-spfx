@@ -103,6 +103,7 @@ Decision-ILB-1 fourth residual Decision selection（SELECTED / A / AS-EC-1 Entry
 Decision-ILB-1 fourth residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-fourth-residual-decision-selection-packet.md
 AS-EC-1 Entry #8 technical plan Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-as-ec-1-entry-8-technical-plan-acceptance.md
 AssessmentSnapshot complete-contract technical plan: docs/architecture/assessment-snapshot-complete-contract-technical-plan.md
+AS-EC-1 Entry #8 Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #159）: docs/architecture/decision-as-ec-1-entry-8-independent-review.md
 AS-EC-1 Entry #1/#2 read-only consistency audit（#1 PASS / #2 PARTIAL）: docs/architecture/decision-as-ec-1-entry-1-2-read-only-consistency-audit.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 

@@ -139,6 +139,7 @@ DEC-009: **Accepted / LOCKED / Option A**（[`decision-dec-009-snapshot-save-tim
 PR #157 / #158: MERGED（DEC-009 Acceptance / FINAL CONSISTENT）
 AS-EC-1 Entry #8: **Accepted / LOCKED / Option A**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md)）
   Plan: [`assessment-snapshot-complete-contract-technical-plan.md`](./assessment-snapshot-complete-contract-technical-plan.md)
+  Independent Review: [`decision-as-ec-1-entry-8-independent-review.md`](./decision-as-ec-1-entry-8-independent-review.md)（**PASS**）
   Selected via: ILB-1 fourth residual Option A（[`decision-ilb-1-fourth-residual-decision-selection.md`](./decision-ilb-1-fourth-residual-decision-selection.md)）
 AS-EC-1 Entry #1/#2 audit: [`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)
   #1 PASS / MET · #2 PARTIAL / NOT FULLY MET
