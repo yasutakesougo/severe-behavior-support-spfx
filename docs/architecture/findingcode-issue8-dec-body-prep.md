@@ -263,7 +263,9 @@ Selected Option: C
 Current work: business-state inventory（1件ずつ）
 BS-001: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
 BS-002: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
-BS-003: OPEN — Human 提示待ち
+BS-003: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
+BS-001〜003: その場で止める / Finding 継続追跡しない / catalog OUT
+BS-004: OPEN — 継続追跡が必要な状態を Human が提示
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -275,9 +277,9 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-003** を同じ形式で1件書いてください  
-2. ここからは「その場で止めるだけか / 継続追跡（Finding）が必要か」を見る  
-3. Finding: ADOPTED は、継続追跡が必要なものが出たときに初めて検討  
+1. **BS-004** を書いてください（目安: その場では解消できず、後からチーム確認・対応が要る状態）  
+2. その1件で Finding: ADOPTED が要るか判断してください  
+3. 要らなければ NOT ADOPTED のままでよいです  
 4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します  
 
-Agent は FindingCode 名を付けません。BS-003 の中身を勝手に書きません。
+Agent は FindingCode 名を付けません。BS-004 の中身を勝手に書きません。
