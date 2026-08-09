@@ -1,6 +1,8 @@
 # DEC-019 registration 後 — main / Issue #8 / PR #141 整合確認
 
-Status: **CONSISTENT**
+Status: **CONSISTENT / CURRENT-MAIN REVALIDATED**
+
+Independent re-review: **PENDING**
 
 Related:
 
@@ -46,10 +48,10 @@ DEC-019 を Issue #8 台帳へ登録したあと、**main / Issue #8 / PR #141**
 
 | # | Source | Check | Result |
 |---|---|---|---|
-| C1 | main tip | tip = PR #141 merge (`9cc7829…`) or successor that preserves meaning | **PASS** — `origin/main` = `9cc7829aabe6fc1fce027d068e339cc738d4beba` |
+| C1 | main tip | tip = PR #141 merge (`9cc7829…`) or successor that preserves meaning | **PASS** — `origin/main` = `42b251be83447d6e82090312ea2f18ed69968377`; PR #141 merge `9cc7829…` is an ancestor and DEC-019 meaning is retained |
 | C2 | PR #141 | merged; EMPTY catalog Acceptance retained | **PASS** — MERGED 2026-08-09; merge `9cc7829…` / head `064c633…` |
 | C3 | Issue #8 | DEC-019 comment exists; Status Accepted; catalog EMPTY / NOT ADOPTED | **PASS** — Human returned comment ID `5229477058` as DEC-019 ledger post |
-| C4 | Issue #8 vs docs | comment body matches `decision-dec-019-issue8-ledger-registration.md` §1 paste body | **PASS** — Human posted per registration prep; Agent cannot re-read Issue #8 body (API 403); ownership = Human attestation + comment ID |
+| C4 | Issue #8 vs docs | comment body matches `decision-dec-019-issue8-ledger-registration.md` §1 paste body | **PASS** — GitHub comment `5229477058` was re-read directly; EMPTY / NOT ADOPTED, A-1 NONE, A-2/A-3 N/A, A-4 DEC-019, A-5 OUT, and Implementation HOLD match |
 | C5 | A-1–A-5 | NONE / N/A / N/A / DEC-019 / OUT — no invent | **PASS** |
 | C6 | Implementation | remains HOLD; no auto-start | **PASS** |
 | C7 | GOV-RULE-08 | remains NOT ADOPTED; no hard due reintroduction | **PASS** |
@@ -57,11 +59,13 @@ DEC-019 を Issue #8 台帳へ登録したあと、**main / Issue #8 / PR #141**
 
 ```text
 Checked at: 2026-08-09
-main tip: 9cc7829aabe6fc1fce027d068e339cc738d4beba
+main tip: 42b251be83447d6e82090312ea2f18ed69968377
+PR #141 merge: 9cc7829aabe6fc1fce027d068e339cc738d4beba（ancestor of current main）
 PR #141: MERGED
 Issue #8 DEC-019 comment: 5229477058
 Verdict: CONSISTENT
 Contradiction found: NONE
+Independent re-review: PENDING
 ```
 
 ---
@@ -75,6 +79,8 @@ Contradiction found: NONE
 | **BLOCKED** | Issue #8 未投稿 | Human が DEC-019 を Issue #8 に投稿してから再確認 |
 
 Current: **CONSISTENT**
+
+この current-main revalidation は競合解消作業内の自己確認であり、独立レビューを代替しない。
 
 ---
 
