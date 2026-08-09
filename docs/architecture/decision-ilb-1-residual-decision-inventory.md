@@ -35,6 +35,7 @@ Seventeenth residual Decision: SELECTED / A — Tenant confirmation GO（Decisio
 Eighteenth residual Decision: SELECTED — Tenant confirmation execution authorization（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
 Nineteenth residual Decision: SELECTED / CONSUMED — New SPFx deployment target reuse（Decision-AS-TARGET-REUSE-1 Accepted / LOCKED / B）
 Twentieth residual Decision: SELECTED / CONSUMED — New SPFx target provisioning（Decision-AS-NEW-TARGET-PROVISION-1 Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1）
+Twenty-first residual Decision: SELECTED / CONSUMED — New SPFx Site / List naming（Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1；intended values HUMAN-PROVIDED）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -48,10 +49,18 @@ Tenant confirmation GO boundary: Accepted / LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: Accepted / LOCKED（ES-1+TB-1+EO-1+FG-1）
 Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B（existing = reference only）
 Decision-AS-NEW-TARGET-PROVISION-1: Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1
+Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1
+  Site URL: https://isogokatudouhome.sharepoint.com/sites/XXXXX
+  Site name: XXXXX
+  Lists: XXXXX / YYYYY
+  Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0；HEAD b37e3e6d0d3f925e8686f2e2805094b55479b024）
+PR #184: MERGED（expected head 84745355929c7e43dcc6c89dd00d29935f79034c / merge 0be50a12e3699d187bce0f27caa732f3e7ccea24）
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
 New SPFx deployment target: TOPOLOGY LOCKED（dedicated Site + dedicated Lists）/ NOT CREATED / HOLD
-Concrete Site / List / Internal Names: NOT SELECTED / OPEN
+Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
+Internal Column Names: OPEN（IN-1）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Site / List creation: NO-GO
@@ -170,8 +179,18 @@ Order:
      topology: dedicated new Site + dedicated new Lists
      concrete names: NOT SELECTED / OPEN
      Site / List creation: NO-GO
-     execution: IN PROGRESS / READ-ONLY（existing-app evidence）
-     remaining examples: post-retention / DEC-015 / concrete naming Decision / provisioning execution gate
+     PR #184: MERGED（8474535… / 0be50a1…）
+ 22. Twenty-first residual: New SPFx Site / List naming（DONE / CONSUMED；Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1）
+     acceptance: decision-assessment-snapshot-new-target-names-acceptance.md
+     intended Site URL: https://isogokatudouhome.sharepoint.com/sites/XXXXX
+     intended Site name: XXXXX
+     intended Lists: XXXXX / YYYYY
+     status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+     Internal Names: OPEN（IN-1 — post-creation CN-1）
+     IR: decision-assessment-snapshot-pr-185-independent-review.md（PASS；P0=0 / P1=0 / P2=0）
+     Ready / Merge: NOT RUN（次 Human gate = PR #185 Ready Decision）
+     creation / provisioning execution: 別 Human gate / NO-GO
+     remaining examples: provisioning execution gate / post-retention / DEC-015 / SV-1·LV-1·CN-1 confirmation after creation
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
@@ -186,11 +205,13 @@ Tenant confirmation GO boundary: LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: LOCKED（ES-1+TB-1+EO-1+FG-1）
 Decision-AS-TARGET-REUSE-1: LOCKED / B
 Decision-AS-NEW-TARGET-PROVISION-1: LOCKED / ST-1+LT-1+NM-1+EX-1
+Decision-AS-NEW-TARGET-NAMES-1: LOCKED / SU-1+LN-1+IN-1+XB-1
+  intended values: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
 Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY
 New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
-Concrete Site / List / Internal Names: NOT SELECTED / OPEN
+Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
 Site / List creation: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY

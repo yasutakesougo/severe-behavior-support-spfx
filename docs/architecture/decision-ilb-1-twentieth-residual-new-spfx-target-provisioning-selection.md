@@ -73,4 +73,9 @@ Still OPEN / HOLD / NO-GO:
   Schema / DTO code assignment
   FindingCode / A-5
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
+
+Next substantive unit after this Acceptance:
+  SELECTED — Decision-AS-NEW-TARGET-NAMES-1
+  （twenty-first residual / concrete naming / value；OPEN / NOT ACCEPTED）
+Creation / provisioning execution: NOT SELECTED（別 Human gate）
 ```
