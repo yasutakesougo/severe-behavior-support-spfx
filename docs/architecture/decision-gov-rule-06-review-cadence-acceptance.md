@@ -19,7 +19,7 @@ Accepted cadence:
 Source review: PASS
 Independent Review (PR #135): PASS
 main baseline before acceptance write: 5cc03cffcdfbdd5c5a6e1ca9e1d9fbbaa4718a52
-GOV-RULE-05 基準日: HOLD
+GOV-RULE-05 基準日: Accepted（別正本 decision-gov-rule-05-review-anchor-acceptance.md）
 GOV-RULE-07 通知開始: HOLD
 GOV-RULE-08 due / overdue 定義: HOLD
 duration_days = 90: NOT AUTHORIZED
@@ -86,7 +86,7 @@ NOT derived from GOV-RULE-06 Accepted:
 今回の Human Acceptance は次を意味しない。境界は維持する。
 
 ```text
-GOV-RULE-05 基準日: HOLD
+GOV-RULE-05 基準日: Accepted（別 Decision / [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）
 GOV-RULE-07 通知開始: HOLD
 GOV-RULE-08 due / overdue 定義: HOLD
 duration_days = 90: NOT AUTHORIZED
@@ -107,7 +107,9 @@ real data: PROHIBITED
 | 単位 | 本 Acceptance 後 |
 |---|---|
 | GOV-RULE-06 practice cadence | **Accepted** |
+| GOV-RULE-05 基準日 | **Accepted**（別正本） |
 | [`review-cadence-contract.md`](./review-cadence-contract.md) | Accepted logical contract（実装は別 Entry） |
+| [`review-anchor-contract.md`](./review-anchor-contract.md) | Accepted logical contract（実装は別 Entry） |
 | [`review-due.md`](./review-due.md) / `evaluateReviewDueRelativeToAsOf` | UNCHANGED |
 | Issue #24 89/90/91 境界 | practice cadence の根拠にしない（技術エンジン境界として分離可） |
 
@@ -116,8 +118,7 @@ real data: PROHIBITED
 ```text
 Next automatic: NONE
 Human may separately decide:
-  Ready / Merge for PR #135（別 GO）
-  GOV-RULE-05 / 07 / 08
+  GOV-RULE-07 / 08
   Decision-RD-3
   Implementation Entry / Start（別 Gate）
 ```
