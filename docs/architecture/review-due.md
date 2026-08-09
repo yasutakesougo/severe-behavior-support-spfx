@@ -73,6 +73,7 @@ GOV-RULE-06 の practice cadence（およそ3ヶ月）を日数固定値へ変�
 | GOV-RULE-06 | 見直し周期 practice cadence（**Accepted** / [`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・超過定義 |
 | GOV-RULE-05 | 見直し周期の基準日（**Accepted** / [`review-anchor-contract.md`](./review-anchor-contract.md)） | 本純関数・due 算出実装・超過定義 |
 | GOV-RULE-07 | 通知開始（**Accepted** / Option C / [`review-notice-contract.md`](./review-notice-contract.md)） | 本純関数・due/overdue・日数接近窓 |
+| GOV-RULE-08 | due / overdue 業務定義（READY_FOR_HUMAN_DECISION / [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md)） | 本純関数の再定義・90日規則・通知=overdue |
 
 本 docs-only PR は **技術契約の固定**までとする。  
 Decision-RD-1 / RD-2 が Accepted になるまで **Implementation Start は HOLD** とする。
