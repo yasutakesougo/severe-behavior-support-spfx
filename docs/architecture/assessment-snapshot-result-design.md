@@ -293,7 +293,7 @@ AssessmentSnapshot完全契約のコード実装へ進む前に、次を満た�
 5. 完全なFinding契約またはfindingIds参照境界が確定済み
 6. サービス別NOT_APPLICABLE reason codeの正本またはHOLD方針が確定済み
 7. Schema ID・schemaVersion・DTO versioning方針が確定済み
-8. TypeScript型、runtime validator、合成fixture、contract testsの計画が存在（**DONE** — Entry #8 Accepted / LOCKED / Option A。実装は別 Human Implementation Start）
+8. TypeScript型、runtime validator、合成fixture、contract testsの計画が存在（**DONE / FINAL CONSISTENT** — Entry #8 Accepted / LOCKED / Option A。実装は別 Human Implementation Start）
 ```
 
 Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先行実装しない。

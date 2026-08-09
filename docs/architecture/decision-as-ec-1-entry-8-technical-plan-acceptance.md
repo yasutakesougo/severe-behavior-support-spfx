@@ -117,9 +117,13 @@ AS-EC-1 overall: HOLD
 ## Next
 
 ```text
-AS-EC-1 Entry #8: Accepted / LOCKED / Option A
+AS-EC-1 Entry #8: Accepted / LOCKED / Option A / FINAL CONSISTENT
+  Consistency: decision-as-ec-1-entry-8-canonicalization-consistency-check.md
+  PR #159: MERGED（4c55e1c… / head 056a31c…）
 Entry #1 / #2 read-only audit: recorded（#1 PASS / #2 PARTIAL）
-AS-EC-1 overall: HOLD（leave-HOLD は別 Human 判断。本 Acceptance だけでは不可）
+AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation: HOLD
 Next residual Decision: NOT SELECTED
+Entry #2 fill-or-defer packet: OPEN
+  （decision-ilb-1-fifth-residual-decision-selection-packet.md）
 ```

@@ -156,7 +156,7 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 | 5 | Finding / findingIds 境界 | **未**（FC 内容依存） |
 | 6 | `NOT_APPLICABLE` reason 正本 | **未** |
 | 7 | Schema / DTO versioning | **未** |
-| 8 | 型・validator・fixture 計画 | **Accepted / LOCKED / Option A**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / 実装 DO NOT START） |
+| 8 | 型・validator・fixture 計画 | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / 整合 [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)。実装 DO NOT START） |
 
 正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) Snapshot 表 / [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md) / [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md)
 
@@ -165,7 +165,7 @@ Decision-AS-EC-1: HOLD（overall）
 AS-EC-1 #1: PASS / MET
 AS-EC-1 #2: PARTIAL
 AS-EC-1 #3（DEC-009）: Accepted / LOCKED
-AS-EC-1 #8: Accepted / LOCKED（plan only）
+AS-EC-1 #8: Accepted / LOCKED / FINAL CONSISTENT（plan only）
 Result conversion: DONE（永続なし）
 save / Schema / SharePoint / type impl: NOT in Entry #8 alone
 ```
@@ -236,11 +236,12 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 First residual Decision: **SELECTED / C — Decision-RD-3 FINAL CONSISTENT**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
 Second residual Decision: **SELECTED / A — GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）
 Third residual Decision: **SELECTED / A — DEC-009 save timing FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）
-Fourth residual Decision: **SELECTED / A — AS-EC-1 Entry #8 technical plan Accepted / LOCKED**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`assessment-snapshot-complete-contract-technical-plan.md`](./assessment-snapshot-complete-contract-technical-plan.md)）
+Fourth residual Decision: **SELECTED / A — AS-EC-1 Entry #8 technical plan FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)）
 Entry #1/#2 audit: **#1 PASS / #2 PARTIAL**（[`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)）
 post-retention deletion: **OPEN / 別 Decision**
 Decision-AS-EC-1 overall: **HOLD**
 Next residual Decision: **NOT SELECTED**
+Fifth residual packet: **OPEN**（[`decision-ilb-1-fifth-residual-decision-selection-packet.md`](./decision-ilb-1-fifth-residual-decision-selection-packet.md) — Entry #2 fill-or-defer）
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
 **CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A） / AS-EC-1 Entry #8 technical plan（Option A）
