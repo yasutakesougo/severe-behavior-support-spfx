@@ -11,52 +11,69 @@
   [`decision-dec-008-final-approver-acceptance.md`](./decision-dec-008-final-approver-acceptance.md)
 - 分離 framing:
   [`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md)
+- Issue #8 台帳登録 prep:
+  [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)
+- 正本化・整合確認:
+  [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008
 Status: Accepted
 Canonical ownership: Issue #8 / DEC-008
-Human Acceptance: Explicit Human conclusion on 2026-08-09
+Human Acceptance: Explicit Human freeze on 2026-08-09
+LOCKED:
 
-Accepted meaning:
-  実践研修修了者 = 支援計画シート等の制度上の作成者
-  独立した最終承認者 = 設定しない（制度根拠未確認 / NOT ADOPTED）
+DEC-008
+制度上の作成者:
+  ACCEPTED
+  強度行動障害支援者養成研修（実践研修）修了者
+  = 支援計画シート等の制度上の作成者
+独立した最終承認者:
+  NOT ADOPTED
+  → アプリ独自の最終承認者を設定しない
+サービス管理責任者を最終承認者とする案:
+  NOT ADOPTED / 不採用
+FindingCode:
+  HOLD / DO NOT CREATE
+A-5:
+  HOLD
+Implementation Start:
+  HOLD
+Next substantive unit:
+  NOT SELECTED
 
-FindingCode 作成: DO NOT START
-A-5: OUT
-Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
-## Human Acceptance（結論）
+## Human Acceptance（固定結論）
 
 ```text
-DEC-008: Accepted
+DEC-008: Accepted / LOCKED
 
 制度上の作成者:
+  ACCEPTED
   強度行動障害支援者養成研修（実践研修）修了者
   = 支援計画シート等の制度上の作成者
 
 独立した最終承認者:
-  設定しない
-  Reason: 制度根拠が確認できないため、設定しないのが最も安全
+  NOT ADOPTED
+  → アプリ独自の最終承認者を設定しない
+
+サービス管理責任者を最終承認者とする案:
+  NOT ADOPTED / 不採用
 ```
 
-## 分離の最終状態
-
-| 軸 | 結果 |
-|---|---|
-| 支援計画シート等の制度上の作成者 | **Accepted** = 実践研修修了者 |
-| 独立した最終承認者 | **NOT ADOPTED**（設定しない） |
-| サービス管理責任者を最終承認者とする案 | **未採択 / 不採用**（独立最終承認者自体を置かない） |
-
-## Boundary
+## 分離境界（維持）
 
 ```text
-MUST NOT invent from this Acceptance:
-  追加の独立承認ロール
-  提出・差戻しロールの一括確定
+MAINTAIN:
+  「制度上の作成者」と「独立した最終承認者」を分離する
+  制度資料が支持しない承認フローを追加しない
+
+MUST NOT invent:
+  アプリ独自の最終承認フロー
+  サービス管理責任者 = 最終承認者 としての実装
   FindingCode values
   Implementation / 権限コード
   SharePoint / Deploy
@@ -65,8 +82,10 @@ MUST NOT invent from this Acceptance:
 ## Next
 
 ```text
-DEC-008 current scope: closed
-次 substantive unit: NOT SELECTED
+1. DEC-008 正本化・整合確認を完了する
+   → decision-dec-008-canonicalization-consistency-check.md
+2. Issue #8 台帳へ登録文面を投稿する（Human）
+   → decision-dec-008-issue8-ledger-registration.md
+3. その後、新しい substantive unit を選定する（NOT SELECTED のまま）
 FindingCode / A-5 / Implementation: HOLD
-Issue #8 台帳本文の追記が必要なら別 Human 操作
 ```

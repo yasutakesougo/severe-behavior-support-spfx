@@ -13,17 +13,19 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008（Issue #8 台帳上の既存番号）
 Kind: role / qualification separation framing
-Status: Accepted scope closed
-  制度上の作成者: Accepted = 実践研修修了者
-  独立した最終承認者: NOT ADOPTED（設定しない）
+Status: Accepted / LOCKED
+  制度上の作成者: ACCEPTED = 実践研修修了者
+  独立した最終承認者: NOT ADOPTED → アプリ独自の最終承認者を設定しない
 Canonical ownership: Issue #8 / DEC-008
 Related technical contract: support-plan-status-transition.md（role-free / UNCHANGED）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED（別 track）
-FindingCode 作成: DO NOT START
-A-5: OUT
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 Implementation auto-start: FORBIDDEN
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
@@ -32,6 +34,10 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 - DEC-008 要約 Acceptance:
   [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)
+- Issue #8 台帳登録:
+  [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)
+- 正本化・整合確認:
+  [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)
 - 制度上の作成者 Acceptance:
   [`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md)
 - 独立最終承認者 Acceptance（NOT ADOPTED）:
@@ -66,18 +72,20 @@ DEC-008 は「提出・差戻し・承認ロール、制度値」を含む広い
 | 軸 | 結果 | 意味 |
 |---|---|---|
 | **支援計画シート等の制度上の作成者** | **Accepted** = 強度行動障害支援者養成研修（**実践研修**）修了者 | 制度上の作成者として固定 |
-| **独立した最終承認者** | **NOT ADOPTED**（設定しない） | 制度根拠が確認できないため置かないのが最も安全 |
-| サービス管理責任者を最終承認者とする案 | **未採択 / 不採用** | 独立最終承認者自体を置かない |
+| **独立した最終承認者** | **NOT ADOPTED** | アプリ独自の最終承認者を設定しない（制度根拠未確認） |
+| サービス管理責任者を最終承認者とする案 | **NOT ADOPTED / 不採用** | 独立最終承認者自体を置かない |
 
 ```text
 DEC-008:
-  支援計画シート等の制度上の作成者:
-    実践研修修了者
-    → Accepted
+  制度上の作成者:
+    ACCEPTED
+    強度行動障害支援者養成研修（実践研修）修了者
+    = 支援計画シート等の制度上の作成者
   独立した最終承認者:
-    設定しない
-    → NOT ADOPTED（制度根拠未確認）
+    NOT ADOPTED
+    → アプリ独自の最終承認者を設定しない
 ```
+
 
 ## 3. いま断定しないこと（安全境界）
 
@@ -103,13 +111,15 @@ AI 要約だけを根拠に追加ロールを硬化しない。
 ## 5. Current scope gate
 
 ```text
-DEC-008 current scope: closed
-制度上の作成者: Accepted / 実践研修修了者
-独立した最終承認者: NOT ADOPTED
-FindingCode 作成: DO NOT START
-A-5: OUT
+DEC-008: Accepted / LOCKED
+制度上の作成者: ACCEPTED / 実践研修修了者
+独立した最終承認者: NOT ADOPTED → アプリ独自の最終承認者を設定しない
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
 Implementation Start: HOLD
-次 substantive unit: NOT SELECTED
+Next substantive unit: NOT SELECTED
+Next: Issue #8 ledger post + consistency check final PASS
+  → then Human selects next substantive unit
 ```
 
 将来、制度通知等で独立承認者が必要と確認された場合は別 Human Decision とする。

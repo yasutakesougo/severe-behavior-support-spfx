@@ -22,11 +22,13 @@ Selected Option: A — はい
   = 支援計画シート等の制度上の作成者
 独立した最終承認者: NOT ADOPTED（別正本）
 サービス管理責任者を最終承認者とする案: 未採択 / 不採用
-FindingCode 作成: DO NOT START
-A-5: OUT
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 Implementation auto-start: FORBIDDEN
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。

@@ -15,19 +15,21 @@ Decision packet: [`decision-dec-008-final-approver-decision-packet.md`](./decisi
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008 / FINAL_APPROVER
 Status: Accepted
-Selected: NOT ADOPTED — 独立した最終承認者は設定しない
-Human Acceptance: Explicit Human conclusion on 2026-08-09
+Selected: NOT ADOPTED — アプリ独自の最終承認者を設定しない
+Human Acceptance: Explicit Human freeze on 2026-08-09
 Reason:
   独立した最終承認者を置く制度根拠が確認できない
   そのため設定しないのが最も安全
 制度上の作成者:
-  実践研修修了者 = Accepted（支援計画シート等）
-サービス管理責任者を最終承認者とする案: 未採択 / 不採用（独立最終承認者自体を置かない）
-FindingCode 作成: DO NOT START
-A-5: OUT
+  ACCEPTED = 実践研修修了者（支援計画シート等）
+サービス管理責任者を最終承認者とする案: NOT ADOPTED / 不採用
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 Implementation auto-start: FORBIDDEN
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
@@ -35,13 +37,14 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ## Human Acceptance
 
 ```text
-Human Acceptance: Explicit Human conclusion on 2026-08-09
+Human Acceptance: Explicit Human freeze on 2026-08-09
 DEC-008 FINAL_APPROVER: Accepted / NOT ADOPTED
 Meaning:
-  独立した最終承認者ロールは設定しない
+  アプリ独自の最終承認者を設定しない
 Reason:
   制度根拠が確認できないため
 ```
+
 
 ```text
 Agent-authored Option A/B/C labels: NOT required as Human Acceptance form
@@ -67,8 +70,10 @@ Selected: NOT ADOPTED
 
 ```text
 独立した最終承認者:
-  設定しない（制度根拠未確認のため NOT ADOPTED）
+  NOT ADOPTED
+  → アプリ独自の最終承認者を設定しない
 ```
+
 
 ## Acceptance boundary
 
