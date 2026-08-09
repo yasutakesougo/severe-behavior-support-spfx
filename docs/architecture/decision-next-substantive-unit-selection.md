@@ -59,7 +59,9 @@ Agent recommendation: NOT Human Selection evidence
 ## Next
 
 ```text
-Open-points: decision-dec-008-submit-return-roles-open-points.md
-Decision packet: decision-dec-008-submit-return-roles-decision-packet.md
+Acceptance: decision-dec-008-submit-return-roles-acceptance.md（LOCKED / Option C）
+Consistency: DOCS CONSISTENT / MERGE PENDING
+Path: Independent Review → Human Merge Decision（PR #147）
+After merge: Next substantive unit NOT SELECTED（Human が新たに選ぶ）
 FindingCode / A-5 / Implementation Start: HOLD
 ```

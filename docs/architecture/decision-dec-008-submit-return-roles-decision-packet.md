@@ -18,11 +18,14 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008 / SUBMIT_RETURN_ROLES
 Kind: Human Decision packet（narrow）
-Status: OPEN / READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Decision Accepted / Option C）
+Accepted 正本: decision-dec-008-submit-return-roles-acceptance.md
+Consistency: decision-dec-008-submit-return-roles-canonicalization-consistency-check.md
 Separation authority: decision-dec-008-support-plan-role-separation.md
 DEC-008 locked core:
-  制度上の作成者 = 実践研修修了者（Accepted / 触らない）
-  独立した最終承認者 = NOT ADOPTED（触らない / 再導入しない）
+  制度上の作成者 = 実践研修修了者（Accepted / UNCHANGED）
+  独立した最終承認者 = NOT ADOPTED（再導入しない）
+  提出・差戻しロール = NOT ADOPTED（application 非埋め込み）
 Canonical ownership: Issue #8 / DEC-008（残面）
 Related technical contract: support-plan-status-transition.md（role-free / UNCHANGED）
 Selected via: next substantive unit E
@@ -32,7 +35,8 @@ FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Agent recommendation: NONE
+Agent recommendation（historical）: NONE
+Human Selected: Option C
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -54,8 +58,8 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 DEC-008:
   制度上の作成者: ACCEPTED = 実践研修修了者
   独立した最終承認者: NOT ADOPTED
-  提出ロール: UNDECIDED（本 packet）
-  差戻しロール: UNDECIDED（本 packet）
+  提出ロール: Accepted / Option C — application に固定しない
+  差戻しロール: Accepted / Option C — application に固定しない
 
 SupportPlan status transition（role-free / UNCHANGED）:
   Draft → PendingReview          ← 提出に対応
@@ -195,24 +199,27 @@ C. 提出・差戻しロールをアプリに埋め込まない（NOT ADOPTED）
 D. 提出と差戻しを別ロールとして明示（両方記入）
 E. 制度資料・一次情報をさらに確認してから決める
 
-答え: （Human 記入）
-提出ロール: （必要なら記入）
-差戻しロール: （必要なら記入）
+答え: C（2026-08-09）
+提出ロール: application contract に固定しない
+差戻しロール: application contract に固定しない
+Acceptance: decision-dec-008-submit-return-roles-acceptance.md
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A / B / C / D | Acceptance 正本を記録し、分離表へ追記 |
-| E | 未決定のまま。追加一次情報待ち |
+| **C（SELECTED）** | Acceptance LOCKED。整合確認 → Independent Review → Human Merge（PR #147） |
+| A / B / D | （未選択） |
+| E | （未選択） |
 
 維持:
 
 ```text
-制度上の作成者: 実践研修修了者（Accepted）
-独立した最終承認者: NOT ADOPTED
-support-plan-status-transition.md: UNCHANGED until separate Implementation GO
+制度上の作成者: 実践研修修了者（Accepted / UNCHANGED）
+独立した最終承認者: NOT ADOPTED / 再導入しない
+提出・差戻しロール: NOT ADOPTED（application 非埋め込み）
+support-plan-status-transition.md: UNCHANGED / role-free
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
@@ -221,11 +228,12 @@ Implementation Start: HOLD
 ## 8. Gate
 
 ```text
-DEC-008 / SUBMIT_RETURN_ROLES: READY_FOR_HUMAN_DECISION
-Open-points: decision-dec-008-submit-return-roles-open-points.md
-Accepted: NOT YET
+DEC-008 / SUBMIT_RETURN_ROLES: CONSUMED / Accepted / Option C
+Acceptance: decision-dec-008-submit-return-roles-acceptance.md
+Consistency: DOCS CONSISTENT / MERGE PENDING（PR #147）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
+Next: Independent Review → Human Merge Decision
 ```

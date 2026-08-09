@@ -15,13 +15,16 @@
   [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)
 - 正本化・整合確認:
   [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)
+- 提出・差戻しロール Acceptance（Option C）:
+  [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008
-Status: Accepted
+Status: Accepted / LOCKED
 Canonical ownership: Issue #8 / DEC-008
 Human Acceptance: Explicit Human freeze on 2026-08-09
+  + Explicit Human Option C on submit/return roles on 2026-08-09
 LOCKED:
 
 DEC-008
@@ -34,8 +37,12 @@ DEC-008
   → アプリ独自の最終承認者を設定しない
 サービス管理責任者を最終承認者とする案:
   NOT ADOPTED / 不採用
+提出ロール:
+  application contract に固定しない（Option C）
+差戻しロール:
+  application contract に固定しない（Option C）
 FindingCode:
-  HOLD / DO NOT CREATE
+  HOLD
 A-5:
   HOLD
 Implementation Start:
@@ -62,6 +69,12 @@ DEC-008: Accepted / LOCKED
 
 サービス管理責任者を最終承認者とする案:
   NOT ADOPTED / 不採用
+
+提出ロール:
+  application contract に固定しない（Option C）
+
+差戻しロール:
+  application contract に固定しない（Option C）
 ```
 
 ## 分離境界（維持）
@@ -70,10 +83,12 @@ DEC-008: Accepted / LOCKED
 MAINTAIN:
   「制度上の作成者」と「独立した最終承認者」を分離する
   制度資料が支持しない承認フローを追加しない
+  提出・差戻しを最終承認の別名として再導入しない
 
 MUST NOT invent:
   アプリ独自の最終承認フロー
   サービス管理責任者 = 最終承認者 としての実装
+  提出/差戻しロール Binding（本 scope では NOT ADOPTED）
   FindingCode values
   Implementation / 権限コード
   SharePoint / Deploy
@@ -82,10 +97,12 @@ MUST NOT invent:
 ## Next
 
 ```text
-Issue #8 DEC-008: POSTED / comment 5229571943
-Consistency (docs / Issue #8 / PR #143): CONSISTENT
-Next substantive unit: NOT SELECTED（Human が新たに選ぶ）
-FindingCode: HOLD / DO NOT CREATE
+Issue #8 DEC-008 core: POSTED / comment 5229571943
+Submit/return residual: Accepted / Option C
+Consistency (submit/return): DOCS CONSISTENT / PR #147 MERGE PENDING
+Path: Independent Review → Human Merge Decision
+Next substantive unit: NOT SELECTED（Merge 後に Human が新たに選ぶ）
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 ```

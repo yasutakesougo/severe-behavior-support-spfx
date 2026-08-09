@@ -16,14 +16,16 @@ Agent がロール名を発明しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit ID: DEC-008 / SUBMIT_RETURN_ROLES / OPEN-POINTS
 Kind: open-points extraction / source inventory
-Status: OPEN（Decision packet へ供給）
+Status: CONSUMED（Decision Accepted / Option C）
 Selected via: next substantive unit E（2026-08-09）
 main baseline: 42b251be83447d6e82090312ea2f18ed69968377
 DEC-008 locked core:
-  制度上の作成者 = 実践研修修了者（Accepted）
+  制度上の作成者 = 実践研修修了者（Accepted / UNCHANGED）
   独立した最終承認者 = NOT ADOPTED
+  提出・差戻しロール = NOT ADOPTED（application 非埋め込み）
 SupportPlan status transition: role-free / UNCHANGED
 Decision-OP-3: FINAL CONSISTENT
+Acceptance: decision-dec-008-submit-return-roles-acceptance.md
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
@@ -71,12 +73,12 @@ support-plan-status-transition.md:
 
 | ID | 問い | 現状 |
 |---|---|---|
-| **U1** | 誰が提出できるか（`Draft → PendingReview`） | UNDECIDED |
-| **U2** | 誰が差し戻せるか（`PendingReview → Returned`） | UNDECIDED |
-| **U3** | 提出ロールと差戻しロールを同一視するか | UNDECIDED |
-| **U4** | 制度上の作成者（実践研修修了者）との関係 | 自動同一視しない。Human が決める |
-| **U5** | アプリに提出/差戻しロール検査を埋め込むか | UNDECIDED（候補に NOT ADOPTED / role-free 維持あり） |
-| **U6** | `PendingReview → Active` の有効化ロール | **OUT**（本 unit 対象外） |
+| **U1** | 誰が提出できるか（`Draft → PendingReview`） | **NOT ADOPTED（application に固定しない）** |
+| **U2** | 誰が差し戻せるか（`PendingReview → Returned`） | **NOT ADOPTED（application に固定しない）** |
+| **U3** | 提出ロールと差戻しロールを同一視するか | N/A（双方 app Binding しない） |
+| **U4** | 制度上の作成者（実践研修修了者）との関係 | **UNCHANGED**（提出ロールへ自動同一視しない） |
+| **U5** | アプリに提出/差戻しロール検査を埋め込むか | **NOT ADOPTED / Option C** |
+| **U6** | `PendingReview → Active` の有効化ロール | **OUT**（本 unit 対象外 / 最終承認者再導入しない） |
 
 ## 4. 明示的に混ぜないもの
 
@@ -94,7 +96,8 @@ Implementation Start / 権限コード / SharePoint
 ## 5. Next
 
 ```text
-Decision packet: decision-dec-008-submit-return-roles-decision-packet.md
-Human Decision 待ち
+Acceptance: decision-dec-008-submit-return-roles-acceptance.md（LOCKED / Option C）
+Consistency: DOCS CONSISTENT / MERGE PENDING
+Path: Independent Review → Human Merge Decision（PR #147）
 FindingCode / A-5 / Implementation: HOLD
 ```

@@ -229,9 +229,10 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
 **Current selected substantive unit:** E — DEC-008 提出・差戻しロール
-（[`decision-dec-008-submit-return-roles-decision-packet.md`](./decision-dec-008-submit-return-roles-decision-packet.md)）
+→ **Accepted / Option C**（[`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)）
+Path: Independent Review → Human Merge（PR #147）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C）
 
 **Do not next / DO NOT START:**
 

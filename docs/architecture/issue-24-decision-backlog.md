@@ -95,11 +95,12 @@ Decision-OP-3: **Accepted / LOCKED** / Option A（[`decision-op-3-observation-pe
   Logical contract: [`observation-period-schema-contract.md`](./observation-period-schema-contract.md)
   Consistency: [`decision-op-3-canonicalization-consistency-check.md`](./decision-op-3-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
 PR #146: MERGED（`42b251b…` / head `974d083…`）
-Next substantive unit: **SELECTED / E / DEC-008 提出・差戻しロール**
+Next substantive unit: **SELECTED / E / DEC-008 提出・差戻しロール** → **Accepted / Option C**
   Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
-  Open-points: [`decision-dec-008-submit-return-roles-open-points.md`](./decision-dec-008-submit-return-roles-open-points.md)
-  Decision packet: [`decision-dec-008-submit-return-roles-decision-packet.md`](./decision-dec-008-submit-return-roles-decision-packet.md)
-Current single gate: **DEC-008 提出・差戻しロール Human Decision**
+  Acceptance: [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)
+  Consistency: [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)（DOCS CONSISTENT / MERGE PENDING）
+  提出/差戻しロール: application contract に固定しない（NOT ADOPTED）
+Current single gate: **PR #147 Independent Review → Human Merge Decision**
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -110,6 +111,7 @@ hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit（after merge）: NOT SELECTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -260,7 +262,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
-| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者 / 提出・差戻し） | **core Accepted / LOCKED / CONSISTENT**（Issue #8 comment `5229571943`）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**。提出・差戻し=**UNDECIDED**（unit E）。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / 残面 packet [`decision-dec-008-submit-return-roles-decision-packet.md`](./decision-dec-008-submit-return-roles-decision-packet.md) | Issue #8 / DEC-008 | アプリ独自最終承認を再導入しない。SupportPlan role-free 契約を壊さない | 提出・差戻し Human Decision → Acceptance |
+| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者 / 提出・差戻し） | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み / Option C）**。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) / 整合 [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自最終承認・提出/差戻し Binding を再導入しない。role-free 遷移維持 | PR #147 Independent Review → Merge → Final CONSISTENT。次 unit は Merge 後 |
 
 ### Snapshot Entry Criteria（整理のみ・実装しない）
 
@@ -385,19 +387,22 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  DEC-008 提出・差戻しロール Human Decision
+  PR #147 Independent Review → Human Merge Decision
+  → DEC-008 submit/return Final CONSISTENT
+  → then 次 substantive unit 選定（NOT SELECTED）
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT（PR #146 / 42b251b…）
-Next substantive unit: SELECTED / E
-  → decision-dec-008-submit-return-roles-decision-packet.md
+DEC-008 submit/return: Accepted / LOCKED / Option C
+  提出ロール: application に固定しない
+  差戻しロール: application に固定しない
 GOV-AUD-03: Accepted / Option E
 DEC-008 core: Accepted / LOCKED / Issue #8 comment 5229571943
-  提出・差戻し: UNDECIDED
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD
 A-5: HOLD
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED（after merge）
 ```
 
 
