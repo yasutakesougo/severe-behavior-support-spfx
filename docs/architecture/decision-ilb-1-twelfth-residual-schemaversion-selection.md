@@ -5,7 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: 3e3526e3ffe784686607487622e13010671375ad
 Decision kind: residual substantive-unit selection only
 Selected: A — schemaVersion / dtoVersion
-Status: SELECTED / NOT IMPLEMENTATION START
+Status: SELECTED / CONSUMED（Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED）
 Human Selection: Explicit A on 2026-08-09
 ```
 
@@ -19,11 +19,13 @@ Meaning:
   次に扱う substantive unit を AssessmentSnapshot の
   schemaVersion / dtoVersion 判断単位とする。
   本記録は選定のみであり、具体値の採択・実装を決めない。
+  （具体値は後続 Decision-AS-SCHEMA-VERSION-1 で Accepted）
 ```
 
-## Explicit non-authorization
+## Explicit non-authorization（selection 時点）
 
 ```text
+（historical at selection）
 schemaVersion concrete value: HOLD / NOT DECIDED
 dtoVersion concrete value: HOLD / NOT DECIDED
   （DEC-1: dtoVersion = Schema Version 方針のみ既存 LOCKED）
@@ -34,11 +36,10 @@ application save: HOLD
 FindingCode: HOLD
 A-5: HOLD
 Deploy / real data: NO-GO
-value invention of schemaVersion / dtoVersion: FORBIDDEN until next explicit Human Decision
 ```
 
 本 Selection から Implementation Start を導出しない。
-本 Selection から schemaVersion / dtoVersion 具体値を導出しない。
+本 Selection 単体から schemaVersion / dtoVersion 具体値を導出しない。
 
 ## Prior state preserved
 
@@ -52,16 +53,14 @@ value invention of schemaVersion / dtoVersion: FORBIDDEN until next explicit Hum
 ## Next gate
 
 ```text
-Next action:
-  schemaVersion / dtoVersion Decision packet / compare（read-only）
-  or explicit Human Decision on concrete SemVer
+Selection CONSUMED → Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / A
+  decision-assessment-snapshot-schema-version-acceptance.md
+  schemaVersion = 1.0.0
+  dtoVersion    = 1.0.0
 
-Not allowed from this document alone:
-  adopting schemaVersion = 1.0.0（or any SemVer）
-  creating dtoVersion as a separate value
-  modifying TypeScript types / validators / fixtures / tests
-  Schema / DTO / SharePoint / adapter implementation
-  application save
-  FindingCode / A-5
+Still HOLD:
+  Schema ID / schemaVersion / dtoVersion のコード割当
+  Schema / DTO / SharePoint / adapter / application save
   Implementation Start
+  FindingCode / A-5
 ```
