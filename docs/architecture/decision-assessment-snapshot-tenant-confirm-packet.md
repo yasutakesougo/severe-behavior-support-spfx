@@ -28,7 +28,8 @@ Depends on:
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Tenant confirmation GO boundary: Accepted / LOCKED（RO-1 + EV-1 + RB-1 + XG-1）
-Tenant confirmation execution: NOT STARTED
+Tenant confirmation execution authorization: Accepted / LOCKED（ES-1 + TB-1 + EO-1 + FG-1）
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
 Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
 tenant changes: NO-GO
 List / column creation: NO-GO
@@ -168,7 +169,9 @@ Do NOT:
 ```text
 Decision-AS-TENANT-CONFIRM-1: Accepted / LOCKED / RO-1 + EV-1 + RB-1 + XG-1
   → decision-assessment-snapshot-tenant-confirm-acceptance.md
-Tenant confirmation execution: NOT STARTED
+Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
+  → decision-assessment-snapshot-tenant-confirm-exec-acceptance.md
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
 Site / List / Internal Name values: NOT CONFIRMED / HOLD
 Ready / Merge: NOT RUN by this Decision
 ```
