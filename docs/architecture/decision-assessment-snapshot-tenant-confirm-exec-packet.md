@@ -2,11 +2,20 @@
 
 この文書は、Decision-AS-TENANT-CONFIRM-1（RO-1 + EV-1 + RB-1 + XG-1）Accepted / LOCKED 後に、**read-only tenant confirmation を実際に実行してよいか**を判断する Human Decision Packet である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-tenant-confirm-exec-acceptance.md`](./decision-assessment-snapshot-tenant-confirm-exec-acceptance.md)
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-TENANT-CONFIRM-EXEC-1
-Kind: Human Decision packet（compare only）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: ES-1 + TB-1 + EO-1 + FG-1
+Human Selected:
+  Execution scope:           ES-1
+  Tool / mutation boundary:  TB-1
+  Evidence output:           EO-1
+  Fail-closed gate:          FG-1
 Selected via:
   decision-ilb-1-eighteenth-residual-tenant-confirm-exec-selection.md
 
@@ -14,7 +23,8 @@ Locked basis:
   Decision-AS-TENANT-CONFIRM-1 = Accepted / LOCKED
   RO-1 + EV-1 + RB-1 + XG-1
 
-Tenant confirmation execution: NOT STARTED
+Tenant confirmation execution authorization: Accepted / LOCKED（ES-1 + TB-1 + EO-1 + FG-1）
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
 Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
 tenant changes / List / column creation: NO-GO
 Implementation Start: HOLD
@@ -24,6 +34,9 @@ Deploy / real data mutation: NO-GO
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
+
+Live gate（Ready / Merge / review 進行）は repository docs に書かない
+（[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
 
 ## 1. Question
 
@@ -36,43 +49,49 @@ Question:
 本 Decision は **実行許可だけ**を扱う。
 実行結果そのもの、Site / List / Internal Name の値 Acceptance、tenant 変更、実装開始は扱わない。
 
-## 2. Compare axes
+```text
+Historical note:
+  候補・Agent recommendation は比較用。採択は Acceptance 正本のみが LOCKED である。
+  実行許可 Accepted ≠ 実行完了 ≠ 具体値確定。
+```
+
+## 2. Compare axes（比較履歴）
 
 ### ES — execution scope
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **ES-1** | 実 SharePoint の Site / List / Internal Column Name を read-only で確認する実行だけを許可 | RO-1 と一致 |
-| ES-2 | 確認中に不足 List / 列を作成してよい | XG-1 と衝突 |
-| ES-3 | 確認と同時に adapter / DTO 実装を開始してよい | Implementation Start HOLD と衝突 |
-| ES-HOLD | 実行開始しない | 現状維持 |
+| **ES-1** | 実 SharePoint の Site / List / Internal Column Name を read-only で確認する実行だけを許可 | **Accepted** |
+| ES-2 | 確認中に不足 List / 列を作成してよい | NOT SELECTED |
+| ES-3 | 確認と同時に adapter / DTO 実装を開始してよい | NOT SELECTED |
+| ES-HOLD | 実行開始しない | NOT SELECTED |
 
 ### TB — tool / mutation boundary
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **TB-1** | read-only API / metadata view / SharePoint UI の参照のみ。作成・更新・削除・権限変更・設定変更は禁止 | XG-1 と一致 |
-| TB-2 | read-only を原則とするが不足時は変更可 | NO-GO を曖昧化 |
-| TB-HOLD | 使用手段を未確定のまま停止 | 実行しない |
+| **TB-1** | read-only API / metadata view / SharePoint UI の参照のみ。作成・更新・削除・権限変更・設定変更は禁止 | **Accepted** |
+| TB-2 | read-only を原則とするが不足時は変更可 | NOT SELECTED |
+| TB-HOLD | 使用手段を未確定のまま停止 | NOT SELECTED |
 
 ### EO — evidence output
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **EO-1** | 実テナントで観測した Site / List / Internal Column Name の一次情報だけを evidence として記録し、未確認値は HOLD のまま残す | EV-1 / RB-1 と一致 |
-| EO-2 | Display Name・設計メモ・TypeScript 名から推測して埋める | EV-1 と衝突 |
-| EO-HOLD | evidence を記録しない | 再現性不足 |
+| **EO-1** | 実テナントで観測した Site / List / Internal Column Name の一次情報だけを evidence として記録し、未確認値は HOLD のまま残す | **Accepted** |
+| EO-2 | Display Name・設計メモ・TypeScript 名から推測して埋める | NOT SELECTED |
+| EO-HOLD | evidence を記録しない | NOT SELECTED |
 
 ### FG — fail-closed gate
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **FG-1** | access denied / object missing / ambiguous / evidence insufficient の場合は停止し、その値を NOT CONFIRMED / HOLD のままにする。作成・推測・代替値採用をしない | fail-closed |
-| FG-2 | 欠落時は推奨名を仮採用する | 値発明 |
-| FG-3 | 欠落時は List / 列を作成して継続する | tenant mutation |
-| FG-HOLD | failure policy 未決定 | 実行しない |
+| **FG-1** | access denied / object missing / ambiguous / evidence insufficient の場合は停止し、その値を NOT CONFIRMED / HOLD のままにする。作成・推測・代替値採用をしない | **Accepted** |
+| FG-2 | 欠落時は推奨名を仮採用する | NOT SELECTED |
+| FG-3 | 欠落時は List / 列を作成して継続する | NOT SELECTED |
+| FG-HOLD | failure policy 未決定 | NOT SELECTED |
 
-## 3. Agent recommendation（NOT Acceptance）
+## 3. Agent recommendation（historical / NOT Acceptance）
 
 ```text
 Agent recommendation:
@@ -82,16 +101,15 @@ Rationale:
   Accepted / LOCKED の RO-1 + EV-1 + RB-1 + XG-1 をそのまま実行境界へ落とし、
   read-only confirmation だけを前進させる。
 
-This is NOT Human Acceptance evidence.
-Human must explicitly Accept an ES / TB / EO / FG combination.
+This was NOT Human Acceptance evidence.
+Human Acceptance is recorded in the Acceptance 正本 only.
 ```
 
-## 4. Explicit non-authorization
+## 4. Explicit non-authorization（unchanged）
 
 ```text
-This packet does NOT authorize:
-  tenant confirmation execution before Human Acceptance
-  Site / List / Internal Name value Acceptance
+This packet / Acceptance does NOT authorize:
+  Site / List / Internal Name value Acceptance without primary evidence
   tenant / Entra / M365 setting changes
   List / column creation or modification
   permissions changes
@@ -106,14 +124,13 @@ This packet does NOT authorize:
 ## 5. Next after Human Acceptance
 
 ```text
-If Human accepts ES-1 + TB-1 + EO-1 + FG-1:
-  → tenant confirmation execution may start read-only
+Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
+  → decision-assessment-snapshot-tenant-confirm-exec-acceptance.md
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
+  → may start read-only under ES-1 + TB-1 + EO-1 + FG-1
   → capture primary evidence only
   → on any ambiguity/failure, stop fail-closed
-  → concrete values remain NOT CONFIRMED / HOLD until evidence is actually obtained and separately recorded
-  → tenant mutation and Implementation Start remain NO-GO / HOLD
-
-Until explicit Human Acceptance:
-  Decision-AS-TENANT-CONFIRM-EXEC-1: OPEN / NOT ACCEPTED
-  Tenant confirmation execution: NOT STARTED
+Site / List / Internal Name values: NOT CONFIRMED / HOLD
+tenant mutation and Implementation Start: NO-GO / HOLD
+Ready / Merge: NOT RUN by this Decision
 ```

@@ -47,7 +47,9 @@ Concrete values（本 Acceptance では埋めない）:
   Internal Column Name: NOT CONFIRMED / HOLD
 
 Tenant confirmation execution:
-  NOT STARTED（本 Acceptance だけでは自動実行しない）
+  AUTHORIZED / NOT STARTED
+  （実行許可は Decision-AS-TENANT-CONFIRM-EXEC-1 = ES-1+TB-1+EO-1+FG-1。
+    本 GO Acceptance だけでは自動実行しない）
 
 SP-PLACEMENT / DEC6-MAPPING / SP-ADAPTER / APP-SAVE:
   UNCHANGED / LOCKED（再 Decision しない）
@@ -143,13 +145,13 @@ NOT SELECTED:
   XG-2 / XG-3 / XG-HOLD / XG-X
 ```
 
-具体値・実行（LOCKED として埋めない / 開始しない）:
+具体値・実行（LOCKED として埋めない / 完了扱いにしない）:
 
 ```text
 Site value: NOT CONFIRMED / HOLD
 List value: NOT CONFIRMED / HOLD
 Internal Column Name: NOT CONFIRMED / HOLD
-Tenant confirmation execution: NOT STARTED
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
 ```
 
 失敗時 MUST NOT（LOCKED）:
@@ -199,7 +201,9 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-TENANT-CONFIRM-1: Accepted / LOCKED / RO-1 + EV-1 + RB-1 + XG-1
-Tenant confirmation execution: NOT STARTED
+Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
+  → decision-assessment-snapshot-tenant-confirm-exec-acceptance.md
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
 Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START

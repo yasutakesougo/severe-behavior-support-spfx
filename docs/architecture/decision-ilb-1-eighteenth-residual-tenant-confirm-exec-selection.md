@@ -5,7 +5,7 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_EIGHTEENTH_RESIDUAL_SELECTION
-Status: SELECTED
+Status: SELECTED / CONSUMED（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED）
 Selected unit: Tenant confirmation execution authorization
 Follow-up Decision ID: Decision-AS-TENANT-CONFIRM-EXEC-1
 
@@ -13,7 +13,9 @@ Basis:
   Decision-AS-TENANT-CONFIRM-1: Accepted / LOCKED
   RO-1 + EV-1 + RB-1 + XG-1
 
-Tenant confirmation execution: NOT STARTED
+Tenant confirmation execution authorization:
+  Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
+Tenant confirmation execution: AUTHORIZED / NOT STARTED
 Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
 tenant changes / List / column creation: NO-GO
 Implementation Start: HOLD
@@ -29,11 +31,12 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 この Selection は、次の Human Decision を **read-only tenant confirmation の実行許可**に限定する。
 
 ```text
-SELECTED:
+SELECTED / CONSUMED:
   Decision-AS-TENANT-CONFIRM-EXEC-1
+  （実行許可境界は Decision-AS-TENANT-CONFIRM-EXEC-1 で Accepted）
 
-NOT SELECTED / NOT AUTHORIZED by this selection:
-  tenant confirmation execution itself
+NOT SELECTED / NOT AUTHORIZED by this selection alone:
+  tenant confirmation execution completion
   Site / List / Internal Name value acceptance
   tenant changes
   List / column creation
@@ -47,5 +50,21 @@ NOT SELECTED / NOT AUTHORIZED by this selection:
 
 ## Next
 
-`decision-assessment-snapshot-tenant-confirm-exec-packet.md` の compare を Human が判定する。
-Human Acceptance までは tenant confirmation execution を開始しない。
+```text
+Selection CONSUMED → Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED
+  decision-assessment-snapshot-tenant-confirm-exec-acceptance.md
+  Execution scope:           ES-1
+  Tool / mutation boundary:  TB-1
+  Evidence output:           EO-1
+  Fail-closed gate:          FG-1
+
+Still AUTHORIZED / NOT STARTED / HOLD / NOT CONFIRMED:
+  Tenant confirmation execution（may start read-only；not complete）
+  Site / List / Internal Column Name concrete values
+  Implementation Start
+  SharePoint / adapter / application code
+  tenant changes / List / column creation
+  Schema / DTO code assignment
+  FindingCode / A-5
+Post-retention deletion: OPEN / AUTO-START FORBIDDEN
+```
