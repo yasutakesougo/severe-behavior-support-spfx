@@ -1,6 +1,6 @@
 # Decision-OP-3 正本化 — docs / membership / PR #146 整合確認
 
-Status: **CONSISTENT**（docs-internal / 2026-08-09）  
+Status: **CONSISTENT**（docs-internal / 2026-08-09）
 PR #146 merge: PENDING_AT_MERGE（未マージなら Merge 後も意味維持を確認）
 
 Related:
