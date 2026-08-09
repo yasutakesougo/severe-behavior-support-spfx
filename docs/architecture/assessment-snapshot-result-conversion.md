@@ -96,7 +96,7 @@ AssessmentSnapshotResultCandidateResult =
 
 - AssessmentSnapshot 保存・読込・DTO
 - DEC-009 / GOV-AUD / handoff
-- findingIds 必須化・完全 Finding
+- findingIds 必須化・完全 Finding（Entry #5: findingIds **NOT REQUIRED** / [`assessment-snapshot-finding-ids-boundary.md`](./assessment-snapshot-finding-ids-boundary.md)。完全 Finding 実装は別 HOLD）
 - FindingCode カタログ
 - サービス別 NOT_APPLICABLE reason enum
 - Schema / SharePoint / adapter
