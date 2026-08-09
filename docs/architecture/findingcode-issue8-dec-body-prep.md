@@ -570,6 +570,8 @@ DEC number: PENDING — Human selection（A-4）
      （OTHER / Finding ではない / catalog OUT）
    - BS-006: モニタリング実施と計画見直し・更新結果を記録した
      （OTHER / 監査証跡 / Finding NOT ADOPTED / catalog OUT）
+   - BS-007: モニタリングで決まった対応が未完了
+     （モニタリング記録で足りる / Finding NOT ADOPTED / catalog OUT）
    - （その他 NOT ADOPTED 行）
 
 4. 変更管理
