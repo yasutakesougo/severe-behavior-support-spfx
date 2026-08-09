@@ -69,6 +69,9 @@ FC-7: NOT CREATED
 Current single gate:
   HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
   （A-1〜A-4 bundle の業務 catalog 内容）
+Decision packet:
+  decision-findingcode-a14-bundle-content-decision-packet.md
+  Status: READY_FOR_HUMAN_DECISION
 
 Separate later:
   A-5 representation strategy Decision
