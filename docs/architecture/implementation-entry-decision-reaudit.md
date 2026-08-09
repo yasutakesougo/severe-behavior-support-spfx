@@ -153,9 +153,9 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 | 2 | 所有 Issue / PR 境界 | **PASS / MET**（所有 #24 / **PR-J** 専用独立。正本 [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)） |
 | 3 | `DEC-009` 保存タイミング | **Accepted / LOCKED / Option A** |
 | 4 | `GOV-AUD-03` 訂正承認境界 | **Accepted / Option E**（application 対象外明示） |
-| 5 | Finding / findingIds 境界 | **未**（FC 内容依存） |
-| 6 | `NOT_APPLICABLE` reason 正本 | **未** |
-| 7 | Schema / DTO versioning | **未** |
+| 5 | Finding / findingIds 境界 | **未 / NOT MET**（監査 [`decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md`](./decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md)） |
+| 6 | `NOT_APPLICABLE` reason 正本 | **未 / NOT MET**（同監査） |
+| 7 | Schema / DTO versioning | **未 / NOT MET**（同監査） |
 | 8 | 型・validator・fixture 計画 | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / 整合 [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)。実装 DO NOT START） |
 
 正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) Snapshot 表 / [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md) / [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)
@@ -239,8 +239,9 @@ Third residual Decision: **SELECTED / A — DEC-009 save timing FINAL CONSISTENT
 Fourth residual Decision: **SELECTED / A — AS-EC-1 Entry #8 technical plan FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)）
 Fifth residual Decision: **SELECTED / A — AS-EC-1 Entry #2 ownership / PR-J boundary PASS / MET**（[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）
 Entry #1/#2: **#1 PASS / #2 PASS / MET**（[`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)）
+Entry #5/#6/#7: **未 / NOT MET**（[`decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md`](./decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md)）
 post-retention deletion: **OPEN / 別 Decision**
-Decision-AS-EC-1 overall: **HOLD**
+Decision-AS-EC-1 overall: **HOLD**（#5/#6/#7 NOT MET のため leave-HOLD 不可）
 Next residual Decision: **NOT SELECTED**
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 

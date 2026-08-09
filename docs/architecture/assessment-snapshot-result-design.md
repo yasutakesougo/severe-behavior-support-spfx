@@ -290,9 +290,9 @@ AssessmentSnapshot完全契約のコード実装へ進む前に、次を満た�
 2. AssessmentSnapshotの所有IssueとPR境界が記録済み（**PASS / MET** — 所有 Issue #24 / 完全契約実装 **PR-J** 専用独立。正本 [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）
 3. DEC-009の保存タイミングがAcceptedまたは実装対象外として明示済み（**DONE** — Option A / LOCKED）
 4. GOV-AUD-03の訂正承認境界がAcceptedまたはapplication層対象外として明示済み（**DONE** — Option E / application 対象外）
-5. 完全なFinding契約またはfindingIds参照境界が確定済み
-6. サービス別NOT_APPLICABLE reason codeの正本またはHOLD方針が確定済み
-7. Schema ID・schemaVersion・DTO versioning方針が確定済み
+5. 完全なFinding契約またはfindingIds参照境界が確定済み（**未 / NOT MET** — 監査 [`decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md`](./decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md)）
+6. サービス別NOT_APPLICABLE reason codeの正本またはHOLD方針が確定済み（**未 / NOT MET** — 同監査）
+7. Schema ID・schemaVersion・DTO versioning方針が確定済み（**未 / NOT MET** — 同監査）
 8. TypeScript型、runtime validator、合成fixture、contract testsの計画が存在（**DONE / FINAL CONSISTENT** — Entry #8 Accepted / LOCKED / Option A。実装は別 Human Implementation Start）
 ```
 
@@ -312,7 +312,7 @@ Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先�
 - サービス別`NOT_APPLICABLE` reason code enum
 - Schema / DTO / SharePoint mapping
 - SharePoint、Entra ID、Microsoft 365、deploy
-- Decision-AS-EC-1 overall Entry satisfied（Entry #5/#6/#7 未。Entry #2 は PASS / MET）
+- Decision-AS-EC-1 overall Entry satisfied（Entry #5/#6/#7 **未 / NOT MET**。Entry #2 は PASS / MET。監査 [`decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md`](./decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md)）
 
 ## 変更禁止境界
 

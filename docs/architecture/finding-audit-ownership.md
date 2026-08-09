@@ -107,6 +107,7 @@ AS-EC-1 Entry #8 canonicalization consistency check（FINAL CONSISTENT / PR #159
 AS-EC-1 Entry #8 Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #159）: docs/architecture/decision-as-ec-1-entry-8-independent-review.md
 AS-EC-1 Entry #8 FINAL CONSISTENT Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #160）: docs/architecture/decision-as-ec-1-entry-8-final-consistent-independent-review.md
 AS-EC-1 Entry #1/#2 read-only consistency audit（#1 PASS / #2 PASS·MET after Option A）: docs/architecture/decision-as-ec-1-entry-1-2-read-only-consistency-audit.md
+AS-EC-1 Entry #5/#6/#7 read-only canonicalization audit（#5/#6/#7 NOT MET / overall HOLD）: docs/architecture/decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md
 Decision-ILB-1 fifth residual Decision selection（SELECTED / A / AS-EC-1 Entry #2）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection.md
 Decision-ILB-1 fifth residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection-packet.md
 AS-EC-1 Entry #2 ownership / PR-boundary Acceptance（Accepted / LOCKED / Option A / PASS·MET）: docs/architecture/decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md
