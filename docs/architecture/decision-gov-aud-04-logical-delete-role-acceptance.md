@@ -31,6 +31,7 @@ Boundary:
   根拠のない削除権限をアプリに作らない
 GOV-AUD-05:
   OUT / DO NOT START from this Acceptance alone
+  （後続: retention prohibition は別 Acceptance で Accepted。本文書は変更しない）
 FindingCode:
   HOLD
 A-5:

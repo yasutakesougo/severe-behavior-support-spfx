@@ -98,7 +98,8 @@ GOV-AUD-05 / 他 inventory 行: NOT Accepted here
 
 ```text
 Decision-RD-3: FINAL CONSISTENT
-Next residual Decision: NOT SELECTED
+Second residual Decision: SELECTED / A — GOV-AUD-05 / DEC-012 retention prohibition
+  → decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md
 他残存 Decision は一件ずつ Human 選定・判定
 FindingCode / A-5 / Implementation: HOLD
 ```
