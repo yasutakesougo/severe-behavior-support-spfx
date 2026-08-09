@@ -25,6 +25,7 @@ Seventh residual Decision: SELECTED / A — AS-EC-1 Entry #6（Accepted / LOCKED
 Eighth residual Decision: SELECTED / A — AS-EC-1 Entry #7（Accepted / LOCKED / PASS·MET / DEC-1 versioning）
 Ninth residual Decision: SELECTED / A — Decision-AS-EC-1 overall（MET / Accepted / LOCKED）
 Tenth residual Decision: SELECTED / A — Implementation Start（PR-J domain GO after Preflight C→A）
+Eleventh residual Decision: SELECTED / B — application save（Implementation Start HOLD）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema ID: DO NOT START
@@ -47,7 +48,7 @@ PR-J SharePoint / DTO / Schema ID: DO NOT START
 | **GOV-AUD-05** | 物理削除方針 | はい（個人情報・監査・保存との関係） | Decision-AUD-RET-1（最低5年）+ 本 Acceptance | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）。自動物理削除 **NOT ADOPTED**。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **DEC-012** | 論理削除データの完全削除方針 | はい | 同上 | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（GOV-AUD-05 と同一 Acceptance）。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **Decision-RD-3** | 見直し接近窓・期限算出・超過後 | 部分（cadence は Accepted だが窓日数は別） | GOV-RULE-06 Accepted；08 = NOT ADOPTED | — | — | **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）。informational only。期限超過・警告・業務制限・90日・hard due **NOT ADOPTED** | **closed** |
-| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1〜#8 個別閉鎖／Accepted；**overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)） | 実装開始は別 | 低 | **Tenth residual CONSUMED** — PR-J domain Implementation Start GO（[`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）。FindingCode / A-5 / SharePoint / DTO / Schema ID = HOLD | **closed（overall）** / PR-J domain GO / 他 HOLD |
+| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1〜#8 個別閉鎖／Accepted；**overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)） | 実装開始は別 | 低 | **Tenth residual CONSUMED** — PR-J domain MERGED（PR #168）。**Eleventh residual SELECTED / B — application save**（実装 GO は別）。FindingCode / A-5 / SharePoint / DTO / Schema ID = HOLD | **closed（overall）** / PR-J domain MERGED / application save SELECTED |
 | **DEC-009** | Snapshot 保存タイミング | 業務上必要になり得る | Human Acceptance LOCKED | — | — | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）。下書き / 確定時保存 / 元保持＋新版 / 上書き NOT ADOPTED / 履歴保持 | **closed** |
 | **DEC-015** | バックアップ・復元責任者 | 運用・監査 | 所有表のみ | はい | 低〜中 | 要 | **E** |
 | **DEC-6** | SharePoint 列変換 | 技術/adapter | adapter Entry 前提 | 技術契約寄り | N/A | Adapter Entry + Human GO | **D** 候補（業務ルール発明ではない） |
@@ -118,9 +119,11 @@ Order:
   8. Seventh residual: AS-EC-1 Entry #6 NOT_APPLICABLE HOLD方針 PASS / MET（DONE / CONSUMED）
   9. Eighth residual: AS-EC-1 Entry #7 DEC-1 versioning PASS / MET（DONE / CONSUMED）
  10. Ninth residual: Decision-AS-EC-1 overall MET / Accepted（DONE / CONSUMED）
- 11. Tenth residual: Implementation Start / PR-J domain GO（DONE / CONSUMED；Preflight C → GO A）
-     remaining examples: post-retention / application save / Schema ID / SharePoint
+ 11. Tenth residual: Implementation Start / PR-J domain GO（DONE / CONSUMED；PR #168 MERGED @ 08a6bde…）
+ 12. Eleventh residual: SELECTED / B — application save（CONSUMED selection；Implementation Start HOLD）
+     recommended remaining order（Human only）: C Schema ID → D SharePoint/adapter → A post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
-PR-J domain: IN PROGRESS（technical contract locked）
+PR-J domain: MERGED / ON MAIN
+application save: SELECTED / not Implementation Start
 ```
