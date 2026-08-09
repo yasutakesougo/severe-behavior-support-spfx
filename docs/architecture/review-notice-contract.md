@@ -121,7 +121,7 @@ ReviewNoticePolicy を review-due 結果集合へ混ぜない
 
 - GOV-RULE-05 / 06 / 07 Accepted — **充足**
 - 本契約と Accepted 内容が一致 — **充足**
-- GOV-RULE-08 を本実装へ混ぜない（HOLD）
+- GOV-RULE-08 hard due/overdue を本実装へ混ぜない（Accepted / Option A / NOT ADOPTED）
 - 通知を day-count へ変換しない
 - Human Implementation Start（別 Gate）
 

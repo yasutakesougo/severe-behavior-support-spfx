@@ -284,7 +284,7 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | OP-3 | `evaluateObservationPeriodMembership` | SupportPlan/SP 列、制度日数、開放終端（現行は `periodTo` 必須） |
 | RD-3 | `evaluateReviewDueRelativeToAsOf` | 接近窓、期限算出、超過後ポリシー（**90日必須化を cadence 根拠にしない**） |
 | RC-1 / GOV-RULE-06 | **Accepted**（「3ヶ月に1回程度」/ approximate month cadence） | 実装・Schema は別 Entry |
-| RC-2 / GOV-RULE-05 | **Accepted**（初回=有効開始日 / 以降=前回見直し日） | 物理列・due 算出は別。07/08・RD-3 は HOLD |
+| RC-2 / GOV-RULE-05 | **Accepted**（初回=有効開始日 / 以降=前回見直し日） | 物理列は別。RD-3 は HOLD。07/08 は Accepted（08 は NOT ADOPTED） |
 | GOV-RULE-07 | **Accepted** / Option C（対象暦月に入ったら通知） | 日数変換禁止。08 と分離。実装は別 |
 | GOV-RULE-08 | **Accepted** / Option A / NOT ADOPTED | hard due/overdue 実装 DO NOT START。通知は informational |
 

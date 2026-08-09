@@ -163,7 +163,7 @@ MUST NOT:
 - GOV-RULE-05 が Human Accepted（基準日）— **充足**（別正本）
 - GOV-RULE-07 が Human Accepted（通知開始）— **充足**（別正本 / Option C）
 - 本契約と Accepted 内容が一致する — **充足**
-- GOV-RULE-08 を本実装へ混ぜない（HOLD）
+- GOV-RULE-08 hard due/overdue を本実装へ混ぜない（Accepted / Option A / NOT ADOPTED）
 - `duration_days = 90` を正式 cadence として導入しない
 - 既存 `review-due` 相対判定へ制度 cadence を埋め込まない
 - Schema / SharePoint 変更が必要なら別 Decision / 別 PR
