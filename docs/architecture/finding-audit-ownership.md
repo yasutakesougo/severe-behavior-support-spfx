@@ -66,9 +66,11 @@ GOV-AUD-03 Acceptance（Accepted / Option E / application 対象外）: docs/arc
 Next substantive unit selection（SELECTED / C / Decision-OP-3）: docs/architecture/decision-next-substantive-unit-selection.md
 Decision-OP-3 Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-op-3-observation-period-schema-acceptance.md
 Observation period logical Schema contract: docs/architecture/observation-period-schema-contract.md
-Decision-OP-3 canonicalization consistency check（DOCS CONSISTENT）: docs/architecture/decision-op-3-canonicalization-consistency-check.md
-Next substantive unit selection（post OP-3 / OPEN / NOT SELECTED）: docs/architecture/decision-next-substantive-unit-selection.md
-Next substantive unit selection packet（OPEN）: docs/architecture/decision-next-substantive-unit-selection-packet.md
+Decision-OP-3 canonicalization consistency check（FINAL CONSISTENT / PR #146）: docs/architecture/decision-op-3-canonicalization-consistency-check.md
+Next substantive unit selection（SELECTED / E / DEC-008 submit-return）: docs/architecture/decision-next-substantive-unit-selection.md
+Next substantive unit selection packet（CONSUMED / E）: docs/architecture/decision-next-substantive-unit-selection-packet.md
+DEC-008 submit/return roles open-points: docs/architecture/decision-dec-008-submit-return-roles-open-points.md
+DEC-008 submit/return roles Decision packet（OPEN）: docs/architecture/decision-dec-008-submit-return-roles-decision-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -114,7 +116,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
 | AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | 完全契約までHOLD。訂正モデルは維持。承認ロール実装 DO NOT START |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
-| 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED**（comment `5229571943`）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**。整合 **CONSISTENT**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md) | ロール実装 DO NOT START。制度資料が支持しない承認フローを追加しない |
+| 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **core Accepted / LOCKED**（comment `5229571943`）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**。提出・差戻し=**UNDECIDED**（unit E packet OPEN）。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-decision-packet.md`](./decision-dec-008-submit-return-roles-decision-packet.md) | ロール実装 DO NOT START。最終承認者再導入禁止。制度資料が支持しない承認フローを追加しない |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
 | 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3 **Accepted / Option A**（[`decision-op-3-observation-period-schema-acceptance.md`](./decision-op-3-observation-period-schema-acceptance.md)）。純関数 UNCHANGED。実装は別 GO |
 | 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD。89/90/91日境界は practice cadence とみなさない |

@@ -1,14 +1,16 @@
 # Decision-OP-3 正本化 — docs / membership / PR #146 整合確認
 
-Status: **CONSISTENT**（docs-internal / 2026-08-09）
-PR #146 merge: PENDING_AT_MERGE（未マージなら Merge 後も意味維持を確認）
+Status: **FINAL CONSISTENT**（2026-08-09）
+PR #146: MERGED
+  merge commit: `42b251be83447d6e82090312ea2f18ed69968377`
+  merged head: `974d083ab4d0e05e640474a3a0627ab76f0b856d`
 
 Related:
 
 - Acceptance LOCKED: `docs/architecture/decision-op-3-observation-period-schema-acceptance.md`
 - Logical contract: `docs/architecture/observation-period-schema-contract.md`
 - Membership: `docs/architecture/observation-period.md`
-- PR #146: Decision-OP-3 Acceptance docs
+- PR #146: Decision-OP-3 Acceptance docs（MERGED）
 
 ---
 
@@ -49,15 +51,14 @@ Decision-OP-3 を **LOCKED Accepted** として正本化したあと、
 | C4 | Open-points U1–U4 | fields ADOPTED；open-end NOT；day count NOT | **PASS** |
 | C5 | GOV-RULE-06 separation | 3ヶ月 cadence ≠ observation Schema days | **PASS** |
 | C6 | FindingCode / A-5 / Implementation | HOLD | **PASS** |
-| C7 | Next substantive unit | NOT SELECTED；自動選定しない | **PASS** |
-| C8 | PR #146 | docs Acceptance on branch；merge preserves meaning | PENDING_AT_MERGE |
+| C7 | Next substantive unit | NOT SELECTED at OP-3 lock；後続で Human が選定 | **PASS** |
+| C8 | PR #146 | MERGED；merge preserves LOCKED meaning | **PASS** |
 
 ```text
 Docs-internal consistency: PASS
-PR #146 merge: PENDING — Human Merge GO（if still open）
+PR #146 merge: PASS（42b251b… / head 974d083…）
 Contradiction found in repository docs: NONE
-Verdict (docs): CONSISTENT
-Final after merge: CONSISTENT if C8 PASS
+Verdict: FINAL CONSISTENT
 ```
 
 ---
@@ -70,7 +71,7 @@ Final after merge: CONSISTENT if C8 PASS
 | **INCONSISTENT** | any FAIL | 矛盾箇所を特定し Human 判断 |
 | **BLOCKED** | PR 未マージで意味が壊れる | Merge してから再確認 |
 
-Current: **DOCS CONSISTENT / MERGE PENDING**
+Current: **FINAL CONSISTENT**
 
 ---
 
@@ -80,22 +81,18 @@ Current: **DOCS CONSISTENT / MERGE PENDING**
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
 日数・期限 invention: FORBIDDEN
 evaluateObservationPeriodMembership 破壊: FORBIDDEN
 ```
 
 ---
 
-## 6. After CONSISTENT（merge 後）
+## 6. After FINAL CONSISTENT
 
 ```text
-Next substantive unit: NOT SELECTED
-Selection packet: OPEN
-  → decision-next-substantive-unit-selection-packet.md
-Agent auto-select: FORBIDDEN
+Next substantive unit: SELECTED / E
+  — DEC-008 残面（提出・差戻しロールのみ）
+Selection: decision-next-substantive-unit-selection.md
+Packet: decision-dec-008-submit-return-roles-decision-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```
-
-Human が packet から次の substantive unit を選ぶ。
-候補の自動選定はしない。
