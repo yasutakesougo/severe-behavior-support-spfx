@@ -190,6 +190,6 @@ Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Next substantive unit: NOT SELECTED by this Acceptance
-Ready: NOT RUN
+Human Ready Decision: A — Ready 化（Explicit Human Ready on 2026-08-09；PR #184）
 Merge: NOT RUN
 ```
