@@ -246,16 +246,17 @@ SharePoint / M365 / Deploy / real data
 | 必要な承認 | 状態 |
 |---|---|
 | 本再監査の Independent Review | 本 PR で実施 |
-| Human: 次 unit 選択（既定候補 = A-1〜A-4 bundle） | **待ち** |
+| Human: 次 unit 選択（既定候補 = A-1〜A-4 bundle） | **opened** — Decision packet READY_FOR_HUMAN_DECISION |
+| Human: A-1〜A-4 Option / content | **待ち**（[`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)） |
 | Human: Implementation Entry satisfaction（各 track） | NOT EVALUATED |
 | Human: Implementation Start | HOLD |
 
 ## Next Actions
 
-1. 本再監査を main へ載せる（docs-only）
-2. Human が次 Decision unit を選ぶ（推奨: FindingCode A-1〜A-4 content）
-3. 選択後にだけ Decision packet / Acceptance を進める
-4. Implementation Start は Entry satisfaction 後の別 GO
+1. 本再監査を main へ載せる（docs-only）— **DONE（PR #139）**
+2. FindingCode A-1〜A-4 Decision packet を READY_FOR_HUMAN_DECISION で固定 — 後続 PR
+3. Human が Option A–D を選び、内容を提示するか HOLD する
+4. Acceptance / Entry satisfaction / Implementation Start は別 Gate
 
 ## 変更禁止境界
 
