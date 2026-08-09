@@ -312,7 +312,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-3 / GOV-RULE-07** | 通知開始時期 | **Accepted**（2026-08-09）/ Option C。見直し対象暦月に入ったら通知 / precision = approximate。正本: [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md) / [`review-notice-contract.md`](./review-notice-contract.md) / packet [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06 Accepted 前提。GOV-RULE-08 / RD-3 と混ぜない。日数変換禁止 | 通知実装は別 Entry + Human Implementation Start。`evaluateReviewDueRelativeToAsOf` UNCHANGED |
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | **Accepted / LOCKED**（2026-08-09）。モニタリング時期「3か月に1回程度」を目安として表示・通知 / informational only。期限超過・警告・業務制限・90日固定: 採用しない。hard due/overdue: NOT ADOPTED。正本: [`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md) / [`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md) | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted。GOV-RULE-05〜08 と整合。`evaluateReviewDueRelativeToAsOf` UNCHANGED | Implementation は別 Human GO。日数接近窓 domain 埋め込み禁止。89/90/91 は practice rule とみなさない |
-| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD（overall）。Entry #1 **PASS** / #2 **PASS / MET**（所有 #24 / **PR-J**） / #3 DEC-009 Accepted / #4 GOV-AUD-03 Option E / #5 **PASS / MET**（findingIds NOT REQUIRED） / #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**。#6/#7 未。正本 [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md) / [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) | Issue #24（完全契約）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009 Accepted**。Entry #5 findingIds NOT REQUIRED。Entry #8 plan FINAL CONSISTENT。Entry #2 PR-J 境界 LOCKED。#6/#7・実装は未 | overall Entry satisfied は別 Human 記録。**保存実装・Schema・SharePoint / 型実装は含めない** |
+| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD（overall）。Entry #1 **PASS** / #2 **PASS / MET**（所有 #24 / **PR-J**） / #3 DEC-009 Accepted / #4 GOV-AUD-03 Option E / #5 **PASS / MET**（findingIds NOT REQUIRED） / #6 **PASS / MET**（NOT_APPLICABLE HOLD方針） / #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**。#7 未。正本 [`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md) / [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md) | Issue #24（完全契約）＋ `DEC-009` / `GOV-AUD`（#8/#19） | Entry #5/#6 PASS。Entry #8 plan FINAL CONSISTENT。Entry #2 PR-J。#7・実装は未 | overall Entry satisfied は別 Human 記録。**保存実装・Schema・SharePoint / 型実装は含めない** |
 | **DEC-009** | AssessmentSnapshot 保存タイミング | **Accepted / LOCKED / Option A / FINAL CONSISTENT**。下書き / 確定時保存 / 元確定保持＋新版 / 上書き NOT ADOPTED / 履歴保持。正本: [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`assessment-snapshot-save-timing-contract.md`](./assessment-snapshot-save-timing-contract.md) / 整合 [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md) | Issue #8 / #19 / #24 | AS-EC-1 overall・Schema・FindingCode と混ぜない | AS-EC-1 #3 unlock。実装は別 Human Implementation Start |
 | **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者 / 提出・差戻し） | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み / Option C）**。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) / 整合 [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自最終承認・提出/差戻し Binding を再導入しない。role-free 遷移維持 | PR #147 Independent Review → Merge → Final CONSISTENT。次 unit は Merge 後 |
 
@@ -327,7 +327,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | 3 | `DEC-009` 保存タイミング Accepted または対象外明示 | **Accepted / LOCKED / Option A**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md)） |
 | 4 | `GOV-AUD-03` 訂正承認境界 Accepted または application 対象外明示 | **Accepted / Option E**（application 対象外明示 / [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |
 | 5 | 完全 Finding または findingIds 参照境界 | **PASS / MET**（findingIds **NOT REQUIRED**。正本 [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md) / [`assessment-snapshot-finding-ids-boundary.md`](./assessment-snapshot-finding-ids-boundary.md)。完全 Finding 実装は要求しない） |
-| 6 | サービス別 `NOT_APPLICABLE` reason 正本または HOLD 方針 | **未** |
+| 6 | サービス別 `NOT_APPLICABLE` reason 正本または HOLD 方針 | **PASS / MET**（HOLD方針 = サービス別正本は今採択しない。正本 [`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md) / [`assessment-snapshot-not-applicable-reason-hold.md`](./assessment-snapshot-not-applicable-reason-hold.md)。値一覧発明 FORBIDDEN） |
 | 7 | Schema ID / schemaVersion / DTO versioning | **未** |
 | 8 | 型・validator・合成 fixture・contract tests 計画 | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`assessment-snapshot-complete-contract-technical-plan.md`](./assessment-snapshot-complete-contract-technical-plan.md) / 整合 [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)。実装 DO NOT START） |
 
@@ -406,9 +406,9 @@ Issue #24 89/90/91 tests: MUST NOT REPRESENT THE 3-MONTH PRACTICE RULE
 
 ### F. AssessmentSnapshot Entry Criteria（Decision-AS-EC-1）
 
-Result変換は完了。Entry #8 技術計画は Accepted（計画のみ）。Entry #2 は PASS / MET（PR-J）。Entry #5 は PASS / MET（findingIds NOT REQUIRED）。完全契約へ進める条件は上記 Entry Criteria 表。
-Entry #6/#7 は未のため overall は HOLD。
-`NOT_APPLICABLE` reason / Schema/DTO が揃うまで保存・DTO・SharePoint / 型実装はしない。PR-J 実装は別 Implementation Start。
+Result変換は完了。Entry #8 技術計画は Accepted（計画のみ）。Entry #2 は PASS / MET（PR-J）。Entry #5 は PASS / MET（findingIds NOT REQUIRED）。Entry #6 は PASS / MET（NOT_APPLICABLE HOLD方針）。完全契約へ進める条件は上記 Entry Criteria 表。
+Entry #7 は未のため overall は HOLD。
+Schema/DTO 方針が揃うまで保存・DTO・SharePoint / 型実装はしない。PR-J 実装は別 Implementation Start。reason code 値発明 FORBIDDEN。
 
 ## 推奨承認順
 
@@ -486,7 +486,7 @@ Implementation Start: HOLD
 SEV 系（FindingSeverity）の substantive line は DEC-018 不採用で区切り。Canonical は **COMPLETE（Issue #8 / DEC-018）**。ASSIGN / 型 / 実装は自動再開しない。
 **Decision-FC-1 = Accepted / Option B**。**Decision-FC-2〜FC-6 = Accepted / Option C**。Finding catalog = DEC-019 EMPTY。値発明禁止。Stale PR #126 は Merge しない。Implementation HOLD。
 **DEC-008** は 3 軸分離。制度資格・最終承認者は未決。AI 要約を根拠にしない。
-AS-EC-1 は Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #5 PASS·MET（findingIds NOT REQUIRED） / #8 技術計画 Accepted。残る #6/#7（NOT_APPLICABLE reason / Schema）が先。overall Entry satisfied は自動宣言しない。
+AS-EC-1 は Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #5 PASS·MET（findingIds NOT REQUIRED） / #6 PASS·MET（NOT_APPLICABLE HOLD方針） / #8 技術計画 Accepted。残る #7（Schema / DTO versioning）が先。overall Entry satisfied は自動宣言しない。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
 
@@ -610,11 +610,11 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. AS-EC-1 Entry #5 を findingIds NOT REQUIRED 境界で PASS / MET として正本化する
-2. Sixth residual Option A を CONSUMED とする（再選定しない）
-3. Entry #6 / #7 / overall / FindingCode / A-5 / Implementation / PR-J は HOLD を維持する
-4. 完全 Finding 実装・FindingCode 値発明は開始しない
-5. 次 residual Decision は自動選定しない（次候補は Entry #6）
+1. AS-EC-1 Entry #6 を NOT_APPLICABLE reason HOLD 方針で PASS / MET として正本化する
+2. Seventh residual Option A を CONSUMED とする（再選定しない）
+3. Entry #7 / overall / FindingCode / A-5 / Implementation / PR-J は HOLD を維持する
+4. サービス別 reason code 値一覧は発明しない
+5. 次 residual Decision は自動選定しない（次候補は Entry #7）
 6. src/** / tests/** は変更しない
 ```
 

@@ -119,6 +119,12 @@ AS-EC-1 Entry #5 findingIds boundary Acceptance（Accepted / LOCKED / Option A /
 AssessmentSnapshot findingIds boundary（NOT REQUIRED）: docs/architecture/assessment-snapshot-finding-ids-boundary.md
 AS-EC-1 Entry #5 canonicalization consistency check（CONSISTENT / #5 PASS·MET）: docs/architecture/decision-as-ec-1-entry-5-canonicalization-consistency-check.md
 AS-EC-1 Entry #5 Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-entry-5-independent-review.md
+Decision-ILB-1 seventh residual Decision selection（SELECTED / A / AS-EC-1 Entry #6）: docs/architecture/decision-ilb-1-seventh-residual-decision-selection.md
+Decision-ILB-1 seventh residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-seventh-residual-decision-selection-packet.md
+AS-EC-1 Entry #6 NOT_APPLICABLE reason Acceptance（Accepted / LOCKED / Option A / PASS·MET）: docs/architecture/decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md
+AssessmentSnapshot NOT_APPLICABLE reason HOLD policy: docs/architecture/assessment-snapshot-not-applicable-reason-hold.md
+AS-EC-1 Entry #6 canonicalization consistency check（CONSISTENT / #6 PASS·MET）: docs/architecture/decision-as-ec-1-entry-6-canonicalization-consistency-check.md
+AS-EC-1 Entry #6 Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-entry-6-independent-review.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -162,7 +168,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
-| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**（実装 DO NOT START）。Entry #1 PASS / #2 **PASS / MET**（所有 #24 / **PR-J**）。Entry #5 **PASS / MET**（findingIds **NOT REQUIRED**。正本 [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md)）。保存・DTO・型実装は未了（PR-J Implementation Start 待ち）。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | 完全契約実装までHOLD（overall + Implementation Start）。PR-J 字母割当済。findingIds 必須化しない。承認ロール / 型実装 DO NOT START |
+| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**（実装 DO NOT START）。Entry #1 PASS / #2 **PASS / MET**（所有 #24 / **PR-J**）。Entry #5 **PASS / MET**（findingIds **NOT REQUIRED**）。Entry #6 **PASS / MET**（NOT_APPLICABLE **HOLD方針**。正本 [`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md)）。保存・DTO・型実装は未了（PR-J Implementation Start 待ち）。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | 完全契約実装までHOLD（overall + Implementation Start）。PR-J 字母割当済。findingIds 必須化しない。サービス別 reason enum 不採択。承認ロール / 型実装 DO NOT START |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
 | 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED / FINAL CONSISTENT**（comment `5229571943` + Option C / PR #147）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み）**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) | ロール実装 DO NOT START。最終承認者・提出/差戻し Binding 再導入禁止。role-free 遷移維持 |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |

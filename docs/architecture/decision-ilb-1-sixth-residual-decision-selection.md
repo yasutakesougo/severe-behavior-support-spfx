@@ -50,9 +50,10 @@ findingIds: NOT REQUIRED
 ```text
 Acceptance + boundary: LOCKED（本選定の正本化対象）
 Entry #5: PASS / MET
-Entry #6 / #7: 未
+Entry #6: PASS / MET（後続 seventh residual / HOLD方針）
+Entry #7: 未
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation Start / PR-J: HOLD
 Next residual Decision: NOT SELECTED
-Recommended next candidate（Human のみ）: Entry #6
+Recommended next candidate（Human のみ）: Entry #7
 ```
