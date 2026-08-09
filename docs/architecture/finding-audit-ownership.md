@@ -159,7 +159,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `GOV-AUD-01` | handoffの正本 | Issue #19 |
 | `GOV-AUD-02` | handoff状態変更ロール | Issue #19 |
 | `GOV-AUD-03` | Snapshot訂正承認者 | Issue #19（**Accepted / Option E** — application 対象外 / ロール NOT DEFINED。正本 [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |
-| `GOV-AUD-04` | 論理削除を許可するロール | Issue #19（**Accepted / Option E** — application 対象外 / ロール NOT DEFINED。正本 [`decision-gov-aud-04-logical-delete-role-acceptance.md`](./decision-gov-aud-04-logical-delete-role-acceptance.md)） |
+| `GOV-AUD-04` | 論理削除を許可するロール | Issue #19（**Accepted / Option E / FINAL CONSISTENT** — application 対象外 / ロール NOT DEFINED。PR #149 MERGED。正本 [`decision-gov-aud-04-logical-delete-role-acceptance.md`](./decision-gov-aud-04-logical-delete-role-acceptance.md) / 整合 [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)） |
 | `GOV-AUD-05` | 物理削除方針 | Issue #19（**OUT** from GOV-AUD-04 Acceptance；自動開始しない） |
 | `GOV-AUD-06` / `DEC-011` | AuditLog・業務データの保存期間 | Issue #19 / Issue #8 |
 | `DEC-012` | 論理削除データの完全削除方針 | Issue #8 |

@@ -228,10 +228,11 @@ Implementation Start: HOLD
 ```text
 GOV-AUD-04: CONSUMED / Accepted / LOCKED / Option E
 Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md
+Consistency: FINAL CONSISTENT（PR #149 MERGED / cb14c13…）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 GOV-AUD-05: DO NOT START
-Next substantive unit: NOT SELECTED（Merge 後）
+Next substantive unit: NOT SELECTED
 ```
