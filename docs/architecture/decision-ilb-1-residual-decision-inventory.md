@@ -26,9 +26,10 @@ Eighth residual Decision: SELECTED / A — AS-EC-1 Entry #7（Accepted / LOCKED 
 Ninth residual Decision: SELECTED / A — Decision-AS-EC-1 overall（MET / Accepted / LOCKED）
 Tenth residual Decision: SELECTED / A — Implementation Start（PR-J domain GO after Preflight C→A）
 Eleventh residual Decision: SELECTED / B — application save（Implementation Start HOLD）
+Twelfth residual Decision: SELECTED / C — Schema ID（concrete value NOT ASSIGNED）
 FindingCode: HOLD
 A-5: HOLD
-PR-J SharePoint / DTO / Schema ID: DO NOT START
+PR-J SharePoint / DTO: DO NOT START
 ```
 
 ## 1. Classification legend（provisional）
@@ -122,9 +123,12 @@ Order:
  11. Tenth residual: Implementation Start / PR-J domain GO（DONE / CONSUMED；PR #168 MERGED @ 08a6bde…）
  12. Eleventh residual: SELECTED / B — application save（CONSUMED selection；Implementation Start HOLD）
      Entry Criteria / boundary: assessment-snapshot-application-save-entry-criteria.md（NOT MET）
-     recommended remaining order（Human only）: C Schema ID → D SharePoint/adapter → A post-retention
+ 13. Twelfth residual: SELECTED / C — Schema ID（CONSUMED selection；concrete value NOT ASSIGNED）
+     Entry / assignment boundary: assessment-snapshot-schema-id-entry-criteria.md（NOT MET）
+     recommended remaining order（Human only）: D SharePoint/adapter → A post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: MERGED / ON MAIN
 application save: SELECTED / Entry NOT MET / Implementation Start HOLD
+Schema ID: SELECTED / Assignment Entry NOT MET / value NOT ASSIGNED
 ```

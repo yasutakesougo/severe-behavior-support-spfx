@@ -12,10 +12,6 @@ Selected residual Decision:
 Selected meaning:
   次の残存 Decision 単位を application save とする
   本選定は Implementation Start GO ではない
-Recommended remaining order（not auto-started）:
-  C — Schema ID
-  → D — SharePoint / adapter
-  → A — post-retention deletion
 Prior CONSUMED:
   first residual C — Decision-RD-3
   second residual A — GOV-AUD-05 / DEC-012 retention prohibition
@@ -27,9 +23,12 @@ Prior CONSUMED:
   eighth residual A — AS-EC-1 Entry #7
   ninth residual A — Decision-AS-EC-1 overall
   tenth residual A — Implementation Start / PR-J domain（PR #168 MERGED）
+Later SELECTED（別単位）:
+  twelfth residual C — Schema ID（concrete value NOT ASSIGNED）
 FindingCode: HOLD
 A-5: HOLD
-Schema ID / SharePoint / DTO: DO NOT START
+Schema ID concrete value: NOT ASSIGNED
+SharePoint / DTO: DO NOT START
 application save Implementation Start: HOLD
 post-retention deletion: NOT SELECTED
 ```
@@ -72,11 +71,9 @@ MUST NOT start from this selection alone:
 
 ```text
 Eleventh residual: CONSUMED / B
-Application save Entry Criteria / boundary（read-only）:
-  assessment-snapshot-application-save-entry-criteria.md
-  Entry Criteria: NOT MET（persistence port / tests plan / Implementation Start = HOLD）
-Next engineering step（別 Human）:
-  Entry #7 persistence port 契約 または Entry #8 tests 計画
-  → Implementation Start はさらに別 GO
-Remaining recommended order: C → D → A（自動選定・自動開始禁止）
+Application save Entry Criteria: NOT MET（HOLD 維持）
+Twelfth residual: SELECTED / C — Schema ID
+  assessment-snapshot-schema-id-entry-criteria.md（Assignment Entry NOT MET）
+Remaining after C: D → A（自動選定・自動開始禁止）
+application save Implementation Start: HOLD
 ```

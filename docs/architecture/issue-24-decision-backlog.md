@@ -151,7 +151,7 @@ AS-EC-1 Entry #2 Acceptance: [`decision-as-ec-1-entry-2-ownership-pr-boundary-ac
 AS-EC-1 overall: **MET / Accepted / LOCKED**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)；Basis = Entry #1〜#8）
 Ninth residual: SELECTED / A — AS-EC-1 overall（CONSUMED / [`decision-ilb-1-ninth-residual-decision-selection.md`](./decision-ilb-1-ninth-residual-decision-selection.md)）
 Fifth residual: SELECTED / A — Entry #2（CONSUMED / [`decision-ilb-1-fifth-residual-decision-selection.md`](./decision-ilb-1-fifth-residual-decision-selection.md)）
-Current single gate: **他残存 Decision を一件ずつ選定・判定**（Eleventh residual SELECTED / B — application save；Entry Criteria **NOT MET** — [`assessment-snapshot-application-save-entry-criteria.md`](./assessment-snapshot-application-save-entry-criteria.md)；PR-J domain MERGED；RD-3 / retention / DEC-009 / Entry #8 / Entry #2 / #5/#6/#7 / overall / PR-J Implementation Start は CONSUMED。application save Implementation Start / Schema ID / SharePoint / FindingCode / A-5 は HOLD）
+Current single gate: **他残存 Decision を一件ずつ選定・判定**（Twelfth residual SELECTED / C — Schema ID；Assignment Entry **NOT MET** — [`assessment-snapshot-schema-id-entry-criteria.md`](./assessment-snapshot-schema-id-entry-criteria.md)。Eleventh / application save は SELECTED 維持・Entry NOT MET・Implementation HOLD。PR-J domain MERGED。Schema ID 具体値 / SharePoint / FindingCode / A-5 / application save Implementation Start は HOLD）
 OUT: FindingCode / A-5 / Implementation Start / PR-J implementation / SharePoint・Deploy・real data
   post-retention deletion 自動 Accepted / overall MET を実装開始とみなすこと / 日数・ロール・承認発明
 日数・期限の発明: FORBIDDEN
