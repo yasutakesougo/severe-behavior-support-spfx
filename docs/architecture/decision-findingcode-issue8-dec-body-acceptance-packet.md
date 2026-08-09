@@ -14,13 +14,16 @@ A-5 を開始しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision surface: Issue #8 Finding business catalog DEC body
 Kind: Human Acceptance packet
-Status: READY_FOR_HUMAN_ACCEPTANCE
+Status: CONSUMED（Human Acceptance Accepted / Option A / EMPTY catalog）
+Accepted 正本: decision-findingcode-issue8-dec-body-acceptance.md
 Selected path: Option C（DEC 本文先）
+Selected Acceptance Option: A
 Business-state review: findingcode-issue8-dec-body-prep.md
 BS reviewed: BS-001〜BS-007
 Finding ADOPTED: 0
-Finding catalog proposal: EMPTY / NOT ADOPTED
-Issue #8 DEC number: UNASSIGNED — Human selection required
+Finding catalog: EMPTY / NOT ADOPTED
+Issue #8 DEC number: UNASSIGNED — Human 未指定（Agent 採番せず）
+A-1: NONE / A-2: NOT APPLICABLE / A-3: NOT APPLICABLE
 A-5: OUT
 Implementation Entry satisfaction: NOT CLAIMED
 Implementation Start: HOLD
@@ -159,24 +162,28 @@ Constraint:
 
 ```text
 Issue #8 Finding business catalog DEC body:
-  READY_FOR_HUMAN_ACCEPTANCE
-Selected Option: UNSELECTED
+  Accepted / Option A / EMPTY / NOT ADOPTED
+Selected Option: A（2026-08-09）
 Finding ADOPTED: 0
-Finding catalog proposal: EMPTY / NOT ADOPTED
+Finding catalog: EMPTY / NOT ADOPTED
+A-1: NONE
+A-2: NOT APPLICABLE
+A-3: NOT APPLICABLE
 A-4 DEC number: UNASSIGNED
 A-5: OUT
 Implementation Start: HOLD
 ```
 
-## 7. Human への依頼
+Acceptance evidence: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)
 
-次のいずれかを明示する:
+## 7. Human への依頼（Acceptance 後）
 
-1. **Option A** — EMPTY catalog DEC 本文を Accept
-2. **Option B** — HOLD / 洗い出し継続
-3. **Option C** — その他（内容を明示）
-
-Option A の場合、可能なら **A-4 Issue #8 DEC 番号** も併せて指定する。
-未指定なら DEC 番号は UNASSIGNED のまま残し、本文だけ Accept してよい。
+```text
+Still open optional:
+  A-4 Issue #8 DEC number（Human selection）
+Next automatic: NONE
+Re-open Finding catalog only with new Human primary information
+Implementation Start: HOLD
+```
 
 Agent は FindingCode 値・DEC 番号を書かない。

@@ -632,22 +632,22 @@ BS-001〜007: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
 BS inventory: PAUSED（BS-008 以降は増やさない — Finding 探索の逆転を避ける）
 Finding ADOPTED 件数: 0
 A-1 FindingCode values: EMPTY OK（無理に作らない）
-Next work: Issue #8 DEC body Acceptance packet
-  decision-findingcode-issue8-dec-body-acceptance-packet.md
+DEC body Acceptance: Option A / EMPTY / NOT ADOPTED
+  decision-findingcode-issue8-dec-body-acceptance.md
 Boundary: 監査上必要 ≠ Finding / 継続保存 ≠ Finding / 未完了対応 ≠ 即 Finding
 Audit save details: separate audit / evidence contract（FindingCode ではない）
-A-1: NONE（proposal）
-A-2: NOT APPLICABLE（proposal）
-A-3: NOT APPLICABLE（proposal）
-A-4: UNASSIGNED — Human selection required
-Acceptance: READY_FOR_HUMAN_ACCEPTANCE（DEC body packet）
+A-1: NONE（Accepted）
+A-2: NOT APPLICABLE（Accepted）
+A-3: NOT APPLICABLE（Accepted）
+A-4: UNASSIGNED
+Acceptance: Accepted（DEC body）
 A-5: HOLD
 Implementation Start: HOLD
 ```
 
 ## Human への次の依頼（わかりやすく）
 
-1. 洗い出しは一旦停止（推奨どおり）
-2. [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md) で DEC 本文を Accept するか選ぶ
-3. Option A = EMPTY catalog を Accept / Option B = 洗い出し再開 / Option C = その他
-4. DEC 番号（A-4）は Human が決める。Agent は採番しない
+1. 洗い出しは停止のまま（Finding ADOPTED = 0）
+2. 任意: A-4 Issue #8 DEC 番号を Human が採番
+3. Finding 対象が新たに出たら別 Decision で再評価
+4. Implementation Start は HOLD。Agent はコードを作らない

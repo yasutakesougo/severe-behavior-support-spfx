@@ -15,7 +15,7 @@ A-5 / FC-7 を開始しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 Kind: Human Decision packet
-Status: OPTION_C_SELECTED / DEC_BODY_ACCEPTANCE_READY
+Status: ACCEPTED / Option C path / EMPTY catalog（DEC body Option A）
 Structure authority: a-class-structure-acceptance.md（Bundle A-1〜A-4 / Separate A-5）
 FC Decision Exit Review: ACCEPTED
 Decision-FC-1〜FC-6: Accepted（logical）
@@ -25,20 +25,19 @@ PR #140 / A-1〜A-4 Decision packet: MERGED
   merged head: 89665b53f3afb0af6e6d232fa821e2cfd1394d47
 main baseline: f254af4392f6579bcafba82d744b1e3c4eb04217
 Selected Option: C（decision-findingcode-option-c-selection.md）
+DEC body Acceptance: Option A（decision-findingcode-issue8-dec-body-acceptance.md）
 BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
-A-1 proposal: NONE
-A-2 proposal: NOT APPLICABLE
-A-3 proposal: NOT APPLICABLE
-A-4: UNASSIGNED — Human selection required
+A-1: NONE
+A-2: NOT APPLICABLE
+A-3: NOT APPLICABLE
+A-4: UNASSIGNED — optional later Human selection
 A-5: OUT / separate later
-Next work: decision-findingcode-issue8-dec-body-acceptance-packet.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 FC-7: NOT CREATED
 FindingCode value invention: FORBIDDEN
 DEC number invention: FORBIDDEN
-packet auto-Accepted: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -215,27 +214,29 @@ FORBIDDEN in this packet:
 
 ```text
 HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION:
-  OPTION_C_SELECTED / DEC_BODY_ACCEPTANCE_READY
-Selected Option: C
-A-1 values: NONE（proposal）
-A-2 numbering: NOT APPLICABLE（proposal）
-A-3 criterionId mapping: NOT APPLICABLE（proposal）
-A-4 Issue #8 DEC number: UNASSIGNED — Human selection required
+  ACCEPTED / EMPTY catalog
+Selected Option: C（path） / DEC body Option A
+A-1 values: NONE
+A-2 numbering: NOT APPLICABLE
+A-3 criterionId mapping: NOT APPLICABLE
+A-4 Issue #8 DEC number: UNASSIGNED
 A-5: OUT
 Finding ADOPTED: 0（BS-001〜007）
-Next work: decision-findingcode-issue8-dec-body-acceptance-packet.md
+Acceptance evidence: decision-findingcode-issue8-dec-body-acceptance.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 ```
 
-Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
-DEC body packet: [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)
+Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)  
+DEC body packet: [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)  
+Acceptance: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)
 
-## 7. Human への依頼（現段）
+## 7. Human への依頼（Acceptance 後）
 
-1. [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md) で Option A/B/C を選ぶ
-2. Option A なら EMPTY catalog DEC 本文を Accept
-3. A-4 DEC 番号は Human が選ぶ（未指定なら UNASSIGNED のまま可）
-4. Agent は FindingCode 値・DEC 番号を発明しない
+```text
+Optional later: A-4 Issue #8 DEC number
+Re-open catalog only with new Human primary information requiring Finding ADOPTED
+Implementation Start: HOLD
+```
 
-Acceptance / Entry satisfaction / Implementation Start は別 Gate。
+Agent は FindingCode 値・DEC 番号を発明しない。

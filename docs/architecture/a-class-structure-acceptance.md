@@ -72,11 +72,11 @@ Current single gate:
 Decision packet:
   decision-findingcode-a14-bundle-content-decision-packet.md
 Selected Option: C
-Status: OPTION_C_SELECTED / DEC_BODY_ACCEPTANCE_READY
+DEC body Acceptance: Option A / EMPTY / NOT ADOPTED
+Status: A-1 NONE / A-2 N/A / A-3 N/A / A-4 UNASSIGNED
 BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
-Next work:
-  decision-findingcode-issue8-dec-body-acceptance-packet.md
-  （Issue #8 DEC 本文 / EMPTY catalog Acceptance）
+Acceptance evidence:
+  decision-findingcode-issue8-dec-body-acceptance.md
 
 Separate later:
   A-5 representation strategy Decision
