@@ -45,7 +45,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | Result conversion | 永続なし候補変換 | 保存タイミング | **DONE** |
 | **DEC-009（本契約）** | 下書き / 確定時保存 / 版管理 | Schema / storage | **Accepted / LOCKED** |
 | GOV-AUD-03 | 訂正承認ロール | 保存タイミング | **Accepted / Option E** |
-| Decision-AS-EC-1 | 完全契約 Entry 全体 | — | **HOLD** |
+| Decision-AS-EC-1 | 完全契約 Entry 全体 | — | **MET / Accepted**（overall）。PR-J domain Implementation Start GO（[`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）。SharePoint / Schema ID / FindingCode = HOLD |
 
 ## Accepted 型
 
@@ -99,7 +99,7 @@ MUST NOT equate:
 ```text
 FindingCode: HOLD
 A-5: HOLD
-Implementation Start: HOLD
-Decision-AS-EC-1 overall: HOLD
+Implementation Start: GO（PR-J domain only；別 selection）
+Decision-AS-EC-1 overall: MET / Accepted
 Schema / SharePoint / UI / provider: NOT STARTED
 ```

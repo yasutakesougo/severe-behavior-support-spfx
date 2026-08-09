@@ -111,6 +111,9 @@ Decision-ILB-1 fifth residual Decision selection（SELECTED / A / AS-EC-1 Entry 
 Decision-ILB-1 fifth residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection-packet.md
 AS-EC-1 Entry #2 ownership / PR-boundary Acceptance（Accepted / LOCKED / Option A / PASS·MET）: docs/architecture/decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md
 AssessmentSnapshot complete-contract PR boundary（PR-J / Issue #24）: docs/architecture/assessment-snapshot-complete-contract-pr-boundary.md
+AssessmentSnapshot complete-contract technical contract（PR-J / Implementation Start GO）: docs/architecture/assessment-snapshot-complete-contract.md
+AssessmentSnapshot complete-contract Independent Review（PR #168 / PASS）: docs/architecture/assessment-snapshot-complete-contract-independent-review.md
+Decision-ILB-1 tenth residual Decision selection（SELECTED / A / Implementation Start GO）: docs/architecture/decision-ilb-1-tenth-residual-decision-selection.md
 AS-EC-1 Entry #2 canonicalization consistency check: docs/architecture/decision-as-ec-1-entry-2-canonicalization-consistency-check.md
 AS-EC-1 Entry #2 Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-entry-2-independent-review.md
 Decision-ILB-1 sixth residual Decision selection（SELECTED / A / AS-EC-1 Entry #5）: docs/architecture/decision-ilb-1-sixth-residual-decision-selection.md
@@ -179,7 +182,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
-| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #1〜#8 個別閉鎖／Accepted。**Decision-AS-EC-1 overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）。Entry #5 findingIds NOT REQUIRED / #6 NOT_APPLICABLE HOLD方針 / #7 DEC-1 versioning（固有 Schema ID 未採番）/ #8 plan FINAL CONSISTENT。保存・DTO・型実装は未了。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | **Implementation Start / PR-J / FindingCode / A-5 = HOLD**（overall MET ≠ 実装開始）。PR-J 字母割当済・実装 DO NOT START |
+| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #1〜#8 個別閉鎖／Accepted。**Decision-AS-EC-1 overall = MET / Accepted**。**PR-J Implementation Start GO**（domain 型 / validator / fixture / contract tests；正本 [`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）。Entry #5 findingIds NOT REQUIRED / #6 NOT_APPLICABLE HOLD方針 / #7 DEC-1 versioning（固有 Schema ID 未採番）/ #8 plan FINAL CONSISTENT。SharePoint / DTO / Schema ID / application 保存は未了。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | **FindingCode / A-5 = HOLD**。SharePoint / DTO / Schema ID = DO NOT START。PR-J 字母割当済・domain 実装中 |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
 | 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED / FINAL CONSISTENT**（comment `5229571943` + Option C / PR #147）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み）**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) | ロール実装 DO NOT START。最終承認者・提出/差戻し Binding 再導入禁止。role-free 遷移維持 |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
@@ -224,7 +227,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `DEC-015` | バックアップ・復元責任者 | Issue #8 |
 
 保存期間中の完全削除禁止は Accepted（GOV-AUD-05 / DEC-012）。経過後の削除可否・自動削除・cleanup 実装は別 Decision / HOLD。
-DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 Entry #8 技術計画は FINAL CONSISTENT（計画のみ）。AS-EC-1 Entry #2 は PASS / MET（PR-J 境界）。**AS-EC-1 overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）。固有 Snapshot Schema ID 未採番・保存実装・型実装は HOLD。overall MET ≠ Implementation Start。
+DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 Entry #8 技術計画は FINAL CONSISTENT。AS-EC-1 Entry #2 は PASS / MET（PR-J 境界）。**AS-EC-1 overall = MET / Accepted**。**PR-J Implementation Start GO**（domain；[`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）。固有 Snapshot Schema ID 未採番・SharePoint / DTO / application 保存実装は HOLD。
 具体ロール Binding や物理削除手順をコードへ埋め込まない（Implementation HOLD）。
 
 ### 所有が未確定の事項
@@ -409,13 +412,14 @@ Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI / re
 選定ゲート: PR #73（docs-only）。実装: PR #74（domain 純関数 + contract tests）。
 PR #73 を実装 PR へ変質させない。
 
-PR-J（Entry #2 Accepted / LOCKED / PASS·MET — 字母割当のみ）:
+PR-J（Entry #2 Accepted / LOCKED / PASS·MET — 実装 GO）:
 AssessmentSnapshot 完全契約実装の専用独立 PR 単位。
 所有 Issue: #24。
 正本: [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md) /
-[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)。
-GitHub PR #: 未採番。Implementation Start: HOLD。
-型 / validator / fixture / contract tests / SharePoint / DTO: DO NOT START。
+[`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md) /
+[`decision-ilb-1-tenth-residual-decision-selection.md`](./decision-ilb-1-tenth-residual-decision-selection.md)。
+Implementation Start: GO（domain 型 / validator / fixture / contract tests）。
+SharePoint / DTO / Schema ID / FindingCode / A-5: DO NOT START / HOLD。
 他実装単位と混在させない。
 
 PR-I以降（支援計画系純粋ルール・完了）:
@@ -433,7 +437,7 @@ Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 
 
 PR-I以降（未割当・HOLD）:
 Decision-SEV-2-ASSIGN（N/A）、完全Finding、
-AssessmentSnapshot完全契約（**PR-J 字母割当済** / Implementation Start HOLD）、
+AssessmentSnapshot SharePoint / DTO / Schema ID / application 保存（**PR-J domain GO 済**；永続は別）、
 FindingCode 値一覧 / identifier 物理方式、
 Decision-OP-3 / Decision-RD-3。
 Decision-SEV-1（FindingSeverity ownership）は Accepted（Option A / Issue #8 新 DEC）。

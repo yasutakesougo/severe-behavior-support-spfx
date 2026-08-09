@@ -182,7 +182,7 @@ EvaluationDecision = INDETERMINATE
 - 各reason codeは非空の大文字コード形式とする。
 - 重複reason codeは正規化時に除外する。
 - 自由記述本文をreason codeへ格納しない。
-- サービス別reason code正本が未確定な間は、完全契約実装をHOLDする。
+- サービス別reason code正本は Entry #6 HOLD方針（今採択しない）。完全契約実装は enum を埋め込まず `isReasonCode` で進める（正本 [`assessment-snapshot-not-applicable-reason-hold.md`](./assessment-snapshot-not-applicable-reason-hold.md)）。
 
 ## Q6. demo / retrieval_failedの扱い
 
@@ -298,13 +298,11 @@ AssessmentSnapshot完全契約のコード実装へ進む前に、次を満た�
 
 Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先行実装しない。
 
-## 継続HOLD
+## 継続HOLD / PR-J 進捗
 
-- TypeScriptの`AssessmentSnapshotResult`・`AssessmentSnapshot`型（Entry #8 は計画 Accepted。実装 DO NOT START）
-- Result変換純粋関数（狭域変換は完了。完全契約拡張は未）
-- runtime validator
-- fixture・contract tests
-- `DEC-009`保存タイミング（**Accepted / LOCKED** — 実装は別 Human Implementation Start）
+- TypeScriptの`AssessmentSnapshot`完全契約型 / validator / fixture / contract tests:**PR-J Implementation Start GO**（正本 [`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）
+- Result変換純粋関数（狭域変換は完了。**UNCHANGED**）
+- `DEC-009`保存タイミング意味は Accepted / LOCKED。**application 保存・確定フロー実装は別 GO**
 - 保存・確定ロール
 - `GOV-AUD-03`訂正承認者（Accepted / Option E — application 対象外。ロール実装しない）
 - handoff連携タイミング
@@ -312,18 +310,17 @@ Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先�
 - サービス別`NOT_APPLICABLE` reason code enum（Entry #6 は HOLD方針で閉じた。値一覧・enum 採択は別 Decision / FORBIDDEN now）
 - Schema / DTO / SharePoint mapping（Entry #7 は DEC-1 versioning 方針のみ。固有 Schema ID 採番・物理写像は別 HOLD）
 - SharePoint、Entra ID、Microsoft 365、deploy
-- Implementation Start / PR-J 実装（**overall MET ≠ 実装開始** — [`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）
 
-Decision-AS-EC-1 overall Entry Criteria: **MET / Accepted**（Entry #1〜#8）。実装開始は別 Human。
+Decision-AS-EC-1 overall Entry Criteria: **MET / Accepted**（Entry #1〜#8）。
+Implementation Start: **GO（PR-J domain only）** — [`decision-ilb-1-tenth-residual-decision-selection.md`](./decision-ilb-1-tenth-residual-decision-selection.md)
 
 ## 変更禁止境界
 
 ```text
-src/**: 変更しない
-tests/**: 変更しない
 SharePoint changes: NO-GO
 Entra ID changes: NO-GO
 Microsoft 365 changes: NO-GO
 deploy: NO-GO
 real data: prohibited
+Result conversion semantics: UNCHANGED
 ```

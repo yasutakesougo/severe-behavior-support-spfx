@@ -8,10 +8,11 @@ Human Acceptance:
 [`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md)
 
 ```text
-Kind: technical plan only
+Kind: technical plan（Entry #8）→ Implementation Start GO 後は実装正本へ接続
 Status: Accepted as Entry #8 evidence（Option A）
-Implementation Start: HOLD
-Implementation auto-start: FORBIDDEN
+Implementation Start: GO（domain；Human A after Preflight PASS）
+Implementation contract: assessment-snapshot-complete-contract.md
+SharePoint / DTO / Schema ID / FindingCode / A-5: HOLD / DO NOT START
 ```
 
 ## 1. 目的
@@ -100,16 +101,14 @@ Implementation Start requires separate Human GO after:
 MUST NOT start from overall MET / Entry #8 Acceptance alone
 ```
 
-## 7. Explicit non-goals（本段階）
+## 7. Explicit non-goals（計画時点 → GO 後も OUT）
 
 ```text
-TypeScript型の実装: DO NOT START
-validator実装: DO NOT START
-fixture実装: DO NOT START
-contract tests実装: DO NOT START
+計画時点（Entry #8）: 型 / validator / fixture / contract tests = DO NOT START
+Implementation Start GO 後（PR-J）: 上記 domain 面のみ開始
 SharePoint / DTO 実装: DO NOT START
+AssessmentSnapshot Schema ID 採番: DO NOT START
 FindingCode: HOLD
 A-5: HOLD
-Implementation Start: HOLD
-src/** / tests/**: unchanged in this plan PR
+application 保存・確定フロー: OUT（別 GO）
 ```
