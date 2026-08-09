@@ -129,7 +129,8 @@ FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Next substantive unit: NOT SELECTED
-Path: Independent Review → Human Merge（PR #147）→ Final CONSISTENT
+Independent Review: PASS（PR #147 / HEAD d1b5d544… / P0=0 / P1=0 / P2=0）
+Path: Ready 化 → Human Merge（PR #147）→ Final CONSISTENT
 ```
 
 将来、制度通知等で独立承認者や提出/差戻し Binding が必要と確認された場合は別 Human Decision とする。

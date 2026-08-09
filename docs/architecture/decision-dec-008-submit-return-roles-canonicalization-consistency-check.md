@@ -1,11 +1,15 @@
 # DEC-008 提出・差戻しロール — docs / transition / PR #147 整合確認
 
 Status: **DOCS CONSISTENT**（2026-08-09）
-PR #147 merge: PENDING_AT_MERGE（Independent Review → Human Merge Decision）
+Independent Review: **PASS**（P0=0 / P1=0 / P2=0）
+  HEAD: `d1b5d544d900a548110bae4df110f5a73cc392bd`
+  → `decision-dec-008-submit-return-roles-independent-review.md`
+PR #147 merge: PENDING_AT_MERGE（Ready 化 → Human Merge Decision）
 
 Related:
 
 - Acceptance LOCKED: `docs/architecture/decision-dec-008-submit-return-roles-acceptance.md`
+- Independent Review: `docs/architecture/decision-dec-008-submit-return-roles-independent-review.md`
 - Decision packet: `docs/architecture/decision-dec-008-submit-return-roles-decision-packet.md`
 - Separation: `docs/architecture/decision-dec-008-support-plan-role-separation.md`
 - Transition: `docs/architecture/support-plan-status-transition.md`
@@ -55,7 +59,8 @@ DEC-008 提出・差戻しロールを **Option C / LOCKED Accepted** として�
 
 ```text
 Docs-internal consistency: PASS
-PR #147 merge: PENDING — Independent Review → Human Merge Decision
+Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
+PR #147 merge: PENDING — Ready 化 → Human Merge Decision
 Contradiction found in repository docs: NONE
 Verdict (docs): CONSISTENT
 Final after merge: CONSISTENT if C8 PASS
@@ -76,8 +81,9 @@ Current: **DOCS CONSISTENT / MERGE PENDING**
 Recommended path:
 
 ```text
-Acceptance 正本化（DONE on this PR）
-→ Independent Review
+Acceptance 正本化: DONE
+Independent Review: PASS
+→ Ready 化（Human）
 → Human Merge Decision（PR #147）
 → Final CONSISTENT
 → Next substantive unit selection（NOT SELECTED）

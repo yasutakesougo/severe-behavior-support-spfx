@@ -18,6 +18,10 @@ Decision ID: DEC-008 / SUBMIT_RETURN_ROLES
 Status: Accepted / LOCKED
 Human Acceptance: Explicit Human Option C on 2026-08-09
 Selected Option: C
+Independent Review: PASS
+  PR #147 / HEAD d1b5d544d900a548110bae4df110f5a73cc392bd
+  P0=0 / P1=0 / P2=0
+  → decision-dec-008-submit-return-roles-independent-review.md
 
 LOCKED:
 
@@ -140,10 +144,14 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-1. 整合確認（docs-internal）
-   → decision-dec-008-submit-return-roles-canonicalization-consistency-check.md
-2. Independent Review
-3. Human Merge Decision（PR #147）
+Docs consistency: CONSISTENT
+Independent Review: PASS（HEAD d1b5d544…）
+Next: Ready 化 → Human Merge Decision（PR #147）
 FindingCode / A-5 / Implementation: HOLD
 Next substantive unit: NOT SELECTED（Merge 後に Human が選ぶ）
+```
+
+```text
+Independent Review: NOT Human Acceptance evidence
+This Acceptance records the Human Decision only.
 ```

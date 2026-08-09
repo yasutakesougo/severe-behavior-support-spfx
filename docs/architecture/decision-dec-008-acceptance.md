@@ -99,8 +99,9 @@ MUST NOT invent:
 ```text
 Issue #8 DEC-008 core: POSTED / comment 5229571943
 Submit/return residual: Accepted / Option C
-Consistency (submit/return): DOCS CONSISTENT / PR #147 MERGE PENDING
-Path: Independent Review → Human Merge Decision
+Consistency (submit/return): DOCS CONSISTENT
+Independent Review: PASS（PR #147 / HEAD d1b5d544… / P0=0 / P1=0 / P2=0）
+Path: Ready 化 → Human Merge Decision（PR #147）
 Next substantive unit: NOT SELECTED（Merge 後に Human が新たに選ぶ）
 FindingCode: HOLD
 A-5: HOLD

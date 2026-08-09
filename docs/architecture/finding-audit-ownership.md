@@ -70,6 +70,7 @@ Decision-OP-3 canonicalization consistency check（FINAL CONSISTENT / PR #146）
 Next substantive unit selection（SELECTED / E / DEC-008 submit-return）: docs/architecture/decision-next-substantive-unit-selection.md
 Next substantive unit selection packet（CONSUMED / E）: docs/architecture/decision-next-substantive-unit-selection-packet.md
 DEC-008 submit/return roles Acceptance（Accepted / LOCKED / Option C）: docs/architecture/decision-dec-008-submit-return-roles-acceptance.md
+DEC-008 submit/return roles Independent Review（PASS / P0=0 / P1=0 / P2=0 / d1b5d544…）: docs/architecture/decision-dec-008-submit-return-roles-independent-review.md
 DEC-008 submit/return roles consistency（DOCS CONSISTENT）: docs/architecture/decision-dec-008-submit-return-roles-canonicalization-consistency-check.md
 DEC-008 submit/return roles open-points（CONSUMED）: docs/architecture/decision-dec-008-submit-return-roles-open-points.md
 DEC-008 submit/return roles Decision packet（CONSUMED / Option C）: docs/architecture/decision-dec-008-submit-return-roles-decision-packet.md

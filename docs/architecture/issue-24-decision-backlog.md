@@ -100,7 +100,9 @@ Next substantive unit: **SELECTED / E / DEC-008 提出・差戻しロール** �
   Acceptance: [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)
   Consistency: [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)（DOCS CONSISTENT / MERGE PENDING）
   提出/差戻しロール: application contract に固定しない（NOT ADOPTED）
-Current single gate: **PR #147 Independent Review → Human Merge Decision**
+Independent Review: **PASS**（PR #147 / HEAD `d1b5d544…` / P0=0 / P1=0 / P2=0）
+  → [`decision-dec-008-submit-return-roles-independent-review.md`](./decision-dec-008-submit-return-roles-independent-review.md)
+Current single gate: **PR #147 Ready 化 → Human Merge Decision**
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -387,11 +389,12 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  PR #147 Independent Review → Human Merge Decision
+  PR #147 Ready 化 → Human Merge Decision
   → DEC-008 submit/return Final CONSISTENT
   → then 次 substantive unit 選定（NOT SELECTED）
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT（PR #146 / 42b251b…）
 DEC-008 submit/return: Accepted / LOCKED / Option C
+  Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
   提出ロール: application に固定しない
   差戻しロール: application に固定しない
 GOV-AUD-03: Accepted / Option E
