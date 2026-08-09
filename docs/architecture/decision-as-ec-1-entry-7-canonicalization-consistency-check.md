@@ -6,8 +6,28 @@ Status: **CONSISTENT（Entry #7 = PASS / MET）**（2026-08-09）
 Merge 後の FINAL CONSISTENT 追記は別工程で行う。
 
 ```text
-base: Entry #6 tip（NOT_APPLICABLE HOLD方針）
-upstream main ancestor: 15861046484362e7e15d4b87aebd101eedf0c40b
+base: main（PR #165 MERGED 後）
+main: 4a87ef3b8cceeb6927dbfa956bc0118bf29d9378
+prior stack tip（pre-retarget）: Entry #6 tip cb641ffaf1d07ea7a5800505016d1e7b9dfc48c8
+upstream main ancestor at original Acceptance: 15861046484362e7e15d4b87aebd101eedf0c40b
+```
+
+## 0. Post-retarget re-audit（PR #166 → base main）
+
+```text
+Event: retarget PR #166 base → main after PR #165 MERGED
+Action: merge origin/main into cursor/as-ec-1-entry-7-schema-dto-versioning-dd56
+Content conflicts: NONE（ort clean merge）
+src/** / tests/**: unchanged（0）
+Entry #7 substantive meaning: UNCHANGED
+  Schema / DTO versioning = follow DEC-1
+  concrete AssessmentSnapshot Schema ID = not assigned now
+  SharePoint / DTO / PR-J implementation = DO NOT START
+  overall / FindingCode / A-5 / Implementation Start = HOLD
+Re-audit verdict: CONSISTENT（Entry #7 = PASS / MET）on main @ 4a87ef3…
+Ready: NOT RUN（Human）
+Merge: NOT RUN（Human）
+#167: parked（do not advance in this step）
 ```
 
 ## 1. 確定した範囲
