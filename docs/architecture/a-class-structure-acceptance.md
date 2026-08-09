@@ -71,7 +71,11 @@ Current single gate:
   （A-1〜A-4 bundle の業務 catalog 内容）
 Decision packet:
   decision-findingcode-a14-bundle-content-decision-packet.md
-  Status: READY_FOR_HUMAN_DECISION
+Selected Option: C
+Status: OPTION_C_SELECTED / CONTENT_PENDING
+Next work:
+  findingcode-issue8-dec-body-prep.md
+  （Finding として管理すべき業務状態の洗い出し）
 
 Separate later:
   A-5 representation strategy Decision

@@ -15,22 +15,26 @@ A-5 / FC-7 を開始しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 Kind: Human Decision packet
-Status: READY_FOR_HUMAN_DECISION
+Status: OPTION_C_SELECTED / CONTENT_PENDING
 Structure authority: a-class-structure-acceptance.md（Bundle A-1〜A-4 / Separate A-5）
 FC Decision Exit Review: ACCEPTED
 Decision-FC-1〜FC-6: Accepted（logical）
 PR #139 / Implementation Entry Decision Re-audit: MERGED
-  merge commit: 99c8b24f0fa22f502803f4ae772c976886aed261
-  merged head: d58e947abdf97f011ac9054fec0058f143671b2f
-main baseline: 99c8b24f0fa22f502803f4ae772c976886aed261
-A-1〜A-4 content: UNDECIDED
+PR #140 / A-1〜A-4 Decision packet: MERGED
+  merge commit: f254af4392f6579bcafba82d744b1e3c4eb04217
+  merged head: 89665b53f3afb0af6e6d232fa821e2cfd1394d47
+main baseline: f254af4392f6579bcafba82d744b1e3c4eb04217
+Selected Option: C（decision-findingcode-option-c-selection.md）
+A-1〜A-4 content: PENDING（Issue #8 DEC 本文確定後）
 A-5: OUT / separate later
 Issue #8 FindingCode DEC number: UNASSIGNED
+Next work: findingcode-issue8-dec-body-prep.md（業務状態の洗い出し）
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 FC-7: NOT CREATED
 FindingCode value invention: FORBIDDEN
+packet auto-Accepted: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -207,26 +211,29 @@ FORBIDDEN in this packet:
 
 ```text
 HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION:
-  READY_FOR_HUMAN_DECISION
-Selected Option: UNSELECTED
-A-1 values: UNDECIDED
-A-2 numbering: UNDECIDED
-A-3 criterionId mapping: UNDECIDED
-A-4 Issue #8 DEC number: UNASSIGNED
+  OPTION_C_SELECTED / CONTENT_PENDING
+Selected Option: C
+A-1 values: PENDING — Issue #8 DEC本文確定後
+A-2 numbering: PENDING — A-1確定後
+A-3 criterionId mapping: PENDING — 業務ルールとの対応確定後
+A-4 Issue #8 DEC number: PENDING — Human selection required
 A-5: OUT
-Independent Review: NOT DONE（PR 進行で実施）
+Acceptance: NOT STARTED（A-1〜A-4 Human 一次情報未提示）
+Next work: findingcode-issue8-dec-body-prep.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 ```
 
-## 7. Human への依頼
+Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
 
-次のいずれかを明示する:
+## 7. Human への依頼（Option C 選択後）
 
-1. **Option A** — A-1〜A-4 の内容を提示（Acceptance 候補へ）
-2. **Option B** — HOLD / defer（gate 維持）
-3. **Option C** — Issue #8 DEC 本文を先に Human 確定（bundle 維持）
-4. **Option D** — その他（A-1〜A-4 の扱いを明示）
+いまやることは FindingCode の命名ではない。
 
-Agent は選択前に catalog 値を書かない。
+1. [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md) で業務状態を洗い出す  
+2. Finding にするもの／しないものを Human が決める  
+3. Issue #8 DEC 本文を Human が承認する  
+4. その後に A-1〜A-4 を確定し、Acceptance へ進む  
+
+Agent は catalog 値を書かない。
 Acceptance / Entry satisfaction / Implementation Start は別 Gate。

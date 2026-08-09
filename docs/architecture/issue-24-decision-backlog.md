@@ -71,7 +71,11 @@ Decision packet GOV-RULE-08: CONSUMED（[`decision-gov-rule-08-due-overdue-decis
 Implementation Entry Decision Re-audit: [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)（post GOV-RULE-05〜08）
 PR #139 / Implementation Entry Decision Re-audit: MERGED（merge `99c8b24f0fa22f502803f4ae772c976886aed261` / head `d58e947abdf97f011ac9054fec0058f143671b2f`）
 Current single gate: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
-Decision packet: [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)（READY_FOR_HUMAN_DECISION）
+Decision packet: [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)
+Selected Option: C（[`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)）
+Status: OPTION_C_SELECTED / CONTENT_PENDING
+Next work: [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md)（業務状態の洗い出し。FindingCode 命名ではない）
+A-1〜A-4: PENDING
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
@@ -113,6 +117,8 @@ SharePoint / M365: 変更なし
 - [`review-due.md`](./review-due.md)
 - [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)
 - [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)
+- [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
+- [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md)
 
 ## Phase 1 — read-only 再監査結果
 
