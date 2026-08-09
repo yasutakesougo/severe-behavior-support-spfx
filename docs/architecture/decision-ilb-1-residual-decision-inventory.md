@@ -29,6 +29,7 @@ Eleventh residual Decision: SELECTED / C — Schema ID（Decision-AS-SCHEMA-ID-1
 Twelfth residual Decision: SELECTED / A — schemaVersion / dtoVersion（Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / 1.0.0）
 Thirteenth residual Decision: SELECTED / A — application save（Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
 Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1；IR PASS）
+Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -36,7 +37,7 @@ schemaVersion / dtoVersion: Accepted / LOCKED = 1.0.0 / 1.0.0
 Application save boundary: Accepted / LOCKED（SC-1 + FR-1）；implementation DO NOT START
 SharePoint / adapter boundary: Accepted / LOCKED（PB-1+EM-1+CV-1+D6-1+UP-1）；implementation DO NOT START
 Decision-AS-SP-ADAPTER-1 Independent Review: PASS（P0=0 / P1=0 / P2=0）
-DEC-6 concrete mapping: NOT DECIDED
+DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）；Site/List/Internal Name NOT DECIDED
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
 
@@ -60,7 +61,7 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1〜#8 個別閉鎖／Accepted；**overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)） | 実装開始は別 | 低 | **Tenth residual CONSUMED** — PR-J domain Implementation Start GO（[`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)）。**Decision-AS-SCHEMA-ID-1 Accepted**（[`decision-assessment-snapshot-schema-id-value-naming-acceptance.md`](./decision-assessment-snapshot-schema-id-value-naming-acceptance.md)）。**Decision-AS-SCHEMA-VERSION-1 Accepted**（[`decision-assessment-snapshot-schema-version-acceptance.md`](./decision-assessment-snapshot-schema-version-acceptance.md) = 1.0.0）。FindingCode / A-5 / SharePoint / DTO code = HOLD | **closed（overall）** / PR-J domain GO / Schema ID+Version LOCKED / 他 HOLD |
 | **DEC-009** | Snapshot 保存タイミング | 業務上必要になり得る | Human Acceptance LOCKED | — | — | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）。下書き / 確定時保存 / 元保持＋新版 / 上書き NOT ADOPTED / 履歴保持 | **closed** |
 | **DEC-015** | バックアップ・復元責任者 | 運用・監査 | 所有表のみ | はい | 低〜中 | 要 | **E** |
-| **DEC-6** | SharePoint 列変換 | 技術/adapter | adapter Entry 前提 | 技術契約寄り | N/A | Adapter Entry + Human GO | **D** 候補（業務ルール発明ではない） |
+| **DEC-6** | SharePoint 列変換 | 技術/adapter | adapter Entry 前提 | 技術契約寄り | N/A | **Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED**（LF-1+RW-1+MF-1+VR-1；[`decision-assessment-snapshot-dec6-mapping-acceptance.md`](./decision-assessment-snapshot-dec6-mapping-acceptance.md)）。具体 Site/List/Internal Name = NOT DECIDED；実装 DO NOT START | **partial closed**（rules LOCKED / values OPEN） |
 | **FindingCode / A-5** | catalog 値・representation | 業務カタログ | DEC-019 EMPTY Accepted | はい（値を作るなら） | なし（発明禁止） | 現状 **HOLD / DO NOT CREATE** | **D**（再開しない） |
 | **GOV-AUD-03/04** | 訂正承認 / 論理削除ロール | — | Accepted / Option E | — | — | **再 Decision しない** | closed |
 | **DEC-008** | 作成者 / 最終承認 / 提出差戻し | — | Accepted / LOCKED | — | — | **再 Decision しない** | closed |
@@ -134,6 +135,7 @@ Order:
  14. Thirteenth residual: application save（DONE / CONSUMED；Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
  15. Fourteenth residual: SharePoint / adapter（DONE / CONSUMED；Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1）
      Independent Review: PASS（decision-assessment-snapshot-sp-adapter-independent-review.md；P0=0 / P1=0 / P2=0）
+ 16. Fifteenth residual: DEC-6 concrete mapping（DONE / CONSUMED；Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
      remaining examples: post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
@@ -143,8 +145,9 @@ schemaVersion / dtoVersion: LOCKED = 1.0.0 / 1.0.0
 Schema / DTO code assignment: HOLD / NOT STARTED
 Application save boundary: LOCKED（SC-1 + FR-1）
 SharePoint / adapter boundary: LOCKED（PB-1+EM-1+CV-1+D6-1+UP-1）
+DEC-6 mapping rules: LOCKED（LF-1+RW-1+MF-1+VR-1）
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
-DEC-6 concrete mapping: NOT DECIDED
+Site URL / List name / Internal Column Name: NOT DECIDED
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
