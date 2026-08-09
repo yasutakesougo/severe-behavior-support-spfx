@@ -129,7 +129,7 @@ AssessmentSnapshot Schema ID 採番: DO NOT START
 FindingCode / A-5: HOLD
 サービス別 NOT_APPLICABLE reason enum: FORBIDDEN（Entry #6）
 findingIds REQUIRED: NOT ADOPTED（Entry #5）
-application 保存・確定・訂正承認 Binding: OUT
+application 保存・確定・訂正承認 Binding: OUT（Eleventh residual SELECTED / B は選定のみ；Implementation Start HOLD）
 実データ / deploy / Entra / M365: NO-GO
 ```
 
