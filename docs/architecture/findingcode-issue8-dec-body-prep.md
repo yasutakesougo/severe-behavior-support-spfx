@@ -398,21 +398,92 @@ BS-001〜005: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
 Finding ADOPTED 件数: 0（まだ未提示）
 ```
 
-## 未決 — BS-006
+## 確定済み — BS-006
 
 ```text
 ID: BS-006
+Status: FIXED（Human primary information / 2026-08-09）
+Finding catalog: OUT OF SCOPE（対象外）
+Kind: 監査証跡・実績記録（Finding ではない）
+Boundary:
+  「監査で後から確認する必要がある」
+  ≠ 「未解決課題として Finding で追跡する」
+Rejected framing:
+  単なる「未完了通知」としては整理しない
+Separate later（FindingCode ではない）:
+  監査要件を満たすために「何を保存するか」
+  → 今後の audit / evidence contract で扱う
+Agent invention: NO
+```
+
+```text
+ID: BS-006
+Status: FIXED（2026-08-09）
+
+Business State:
+  モニタリングを実施し、
+  支援計画シートの見直し・更新結果を記録した状態
+
+System behavior:
+  OTHER
+  → モニタリングを実施した事実を記録する
+  → 見直し・更新内容を記録する
+  → 重度加算の実績として後から確認できる状態を維持する
+
+Finding:
+  NOT ADOPTED
+
+FindingCode:
+  NONE
+
+継続管理:
+  Findingとしては行わない
+  → 監査証跡・実績記録として保持する
+
+Finding catalog scope:
+  OUT
+
+Evidence status:
+  Human一次情報
+```
+
+流れ:
+
+```text
+モニタリング実施
+  ↓
+見直し・更新結果を記録
+  ↓
+監査証跡 / 重度加算実績として保持
+  ↓
+Finding は作らない / FindingCode も作らない
+  ↓
+catalog OUT
+```
+
+```text
+新境界:
+  監査上必要 ≠ Finding
+  監査記録と Finding は分離して判断する
+保存項目の詳細:
+  FindingCode ではなく audit / evidence contract へ
+```
+
+## 未決 — BS-007
+
+```text
+ID: BS-007
 Status: OPEN — Human 提示待ち
 Note:
-  基本線（正常サイクル）と hard gate / モニタリング吸収は整理済み
+  BS-001〜006 はすべて Finding NOT ADOPTED / catalog OUT
   Finding: ADOPTED が必要な状態は、まだ Human が提示していない
 Agent: 業務状態を発明しない / FindingCode を命名しない
 ```
 
-Human が埋める形式（BS-006）:
+Human が埋める形式（BS-007）:
 
 ```text
-ID: BS-006
+ID: BS-007
 Status: DECIDED（日付）
 
 Business State:
