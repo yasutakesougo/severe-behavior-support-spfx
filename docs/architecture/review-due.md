@@ -46,7 +46,20 @@ asOf 比較の狭域判定は技術分離可能
 | 純関数の asOf 相対判定境界 | **固定する**（本技術契約） |
 | 見直し期限日の算出（例: Active.effectiveFrom + N日） | **OUT / 呼び出し側または別 Decision** |
 | 接近窓・通知ポリシー（制度日数） | **埋め込まない / HOLD** |
+| 支援運用上の見直し周期（「3ヶ月に1回程度」） | **OUT**。正本候補は [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) |
 | SupportPlan `reviewDueDate` Schema 変更 | **OUT**（MAP-PLAN-010 確定済みを再利用） |
+
+### Practice cadence との分離（追記）
+
+本純関数は **caller-supplied `reviewDueDate`** の東京暦日相対判定だけを扱う。
+GOV-RULE-06 の practice cadence（およそ3ヶ月）を日数固定値へ変換しない。
+
+```text
+3ヶ月に1回程度 → 90日: FORBIDDEN as meaning of this contract
+89 / 90 / 91 day boundaries:
+  残すなら day-based relative engine の技術境界テストへ降格
+  MUST NOT represent the official 3-month practice cadence rule
+```
 
 ## Decision 単位（Implementation Start 前に分離承認）
 
@@ -56,12 +69,14 @@ asOf 比較の狭域判定は技術分離可能
 |---|---|---|
 | Decision-RD-1 | 見直し期限 asOf 相対判定純関数の所有を Issue #24 とするか | 期限算出、接近窓、Schema 変更 |
 | Decision-RD-2 | `reviewDueDate` / `asOf` は関数入力とし、制度接近窓を domain に埋め込まないか | 通知・UI・永続化 |
-| Decision-RD-3 | 接近窓・超過後ポリシー（制度日数）の要否（別単位） | 本純関数の実装詳細 |
+| Decision-RD-3 | 接近窓・超過後ポリシー（制度日数）の要否（別単位） | 本純関数の実装詳細・practice cadence |
+| GOV-RULE-06 | 見直し周期 practice cadence（[`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・基準日・通知・超過定義 |
 
 本 docs-only PR は **技術契約の固定**までとする。  
 Decision-RD-1 / RD-2 が Accepted になるまで **Implementation Start は HOLD** とする。
 
-Decision-RD-3 は本純関数実装の前提にしない。
+Decision-RD-3 および GOV-RULE-06 は本純関数実装の前提にしない。
+GOV-RULE-06 を `duration_days = 90` として本契約へ埋め込まない。
 
 ## 判定対象
 
@@ -112,6 +127,7 @@ MALFORMED_INPUT
 不正入力を無視して `BEFORE_DUE` / `DUE` / `OVERDUE` へ倒さない（fail-closed）。
 
 接近窓（例: 期限 N 日前）を本結果集合へ混ぜない。接近判定が必要なら Decision-RD-3 後の別単位とする。
+practice cadence（およそ3ヶ月）や `duration_days = 90` を本結果集合の意味にしない。
 
 ## 純関数境界
 
@@ -166,6 +182,8 @@ Observation 本文
 - SupportPlan 型・status enum・Schema / DTO の変更
 - `reviewDueDate` の算出・既定付与
 - 接近窓・通知・超過後ポリシー（制度日数）
+- GOV-RULE-06 practice cadence / ReviewCadence 型の導入（[`review-cadence-contract.md`](./review-cadence-contract.md)）
+- `duration_days = 90` を正式な見直し周期として保存すること
 - Observation / AbcRecord の契約変更
 - Active plan uniqueness / status transition / observation period の変更
 - RuleSetVersion 選択
@@ -203,6 +221,8 @@ Decision-RD-3（接近窓ポリシー）は本純関数実装の前提にしな�
 Owner: Issue #24（候補・Decision-RD-1 待ち）
 Technical contract (asOf relative due comparison): FIXED in docs-only gate
 Institutional approaching window: HOLD / Decision-RD-3
+Practice cadence (GOV-RULE-06): OUT / see review-cadence-contract.md
+3ヶ月 → 90日 conversion: FORBIDDEN
 reviewDueDate calculation: OUT
 SupportPlan Schema change: OUT（MAP-PLAN-010 再利用）
 Implementation Start: HOLD until Decision-RD-1 and Decision-RD-2 Accepted
