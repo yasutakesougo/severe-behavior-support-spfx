@@ -169,7 +169,8 @@ Schema / DTO versioning、型・validator・fixture 計画。
 
 ```text
 DEC-009: Accepted / LOCKED / Option A
-→ Independent Review → Human Ready / Merge
-→（Merge 後）FINAL CONSISTENT 同期（別 PR 可）
+PR #157: MERGED
+Consistency: FINAL CONSISTENT（decision-dec-009-canonicalization-consistency-check.md）
 AS-EC-1 overall / FindingCode / A-5 / Implementation: HOLD
+Next residual Decision: NOT SELECTED
 ```
