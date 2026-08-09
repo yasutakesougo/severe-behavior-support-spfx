@@ -91,7 +91,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
 | 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3フィールド追加はHOLD |
 | 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD。89/90/91日境界は practice cadence とみなさない |
-| 見直し周期 practice cadence（GOV-RULE-06） | Issue #16 / #19（判断）・契約候補 docs | source review PASS / READY_FOR_HUMAN_ACCEPTANCE。正本 [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) | Human Acceptance 待ち。`duration_days=90` 変換禁止。基準日・通知・超過は HOLD |
+| 見直し周期 practice cadence（GOV-RULE-06） | Issue #16 / #19（判断）・契約 docs | **Accepted**（2026-08-09）。正本 [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) | `duration_days=90` 変換禁止。基準日・通知・超過は HOLD。Implementation HOLD |
 | RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |

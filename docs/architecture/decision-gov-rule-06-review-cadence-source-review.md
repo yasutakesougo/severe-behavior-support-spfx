@@ -4,23 +4,24 @@
 国リハ資料群と現行の厚生労働省一次資料を突き合わせた **source review 結果正本** である。
 
 本単位は **investigation / source review** である。
-Human Acceptance（Accepted）ではない。
-基準日・通知・期限超過判定の確定でもない。
-`duration_days = 90` への変換実装でもない。
+Human Acceptance の durable evidence は
+[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) である。
+基準日・通知・期限超過判定の確定でも、`duration_days = 90` への変換実装でもない。
 
 ## 基準
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit ID: GOV-RULE-06-SOURCE-REVIEW
-Kind: source review result（Decision Accepted ではない）
-Status: PASS / READY_FOR_HUMAN_ACCEPTANCE
+Kind: source review result
+Status: PASS（GOV-RULE-06 Human Accepted on 2026-08-09）
 Related Issues: #16 / #19 / #24
 Related Decision backlog: Decision-RD-3（接近窓・期限算出・超過後）とは分離
-Related contract candidate: review-cadence-contract.md
+Related contract: review-cadence-contract.md（Accepted logical contract）
+Human Acceptance: decision-gov-rule-06-review-cadence-acceptance.md
 main baseline: f371f5e3c8b5ce48fe2ce0f5f27a8b5d820c9d05
 Implementation: NOT STARTED
-Canonical write: THIS UNIT（docs-only）
+Canonical write: THIS UNIT（docs-only）+ acceptance write
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -28,6 +29,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 上位入口:
 
+- [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)
 - [`review-cadence-contract.md`](./review-cadence-contract.md)
 - [`review-due.md`](./review-due.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -85,7 +87,7 @@ FORBIDDEN conversions:
 | ID | 問い | 本 review での扱い |
 |---|---|---|
 | **GOV-RULE-05** | 見直し周期を何の日から数えるか | **HOLD / 未決定** |
-| **GOV-RULE-06** | 見直し周期 | Candidate 採用可能 → **READY_FOR_HUMAN_ACCEPTANCE** |
+| **GOV-RULE-06** | 見直し周期 | **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)） |
 | **GOV-RULE-07** | 何日前から注意を出すか | **HOLD / 未決定** |
 | **GOV-RULE-08** | 「期限当日」「期限超過」をどう定義するか | **HOLD**。「3ヶ月に1回程度」だけでは決めない |
 
@@ -136,56 +138,53 @@ App alignment (conceptual, not schema change):
 国リハ資料が支援手順書・行動記録・支援振り返り・修正版支援手順書を
 別教材として扱う点とも整合する、という整理である。
 
-## Candidate（Human Acceptance 待ち）
-
-推奨する Human Acceptance 範囲（本 review の提案。Binding ではない）:
+## Human Acceptance（完了）
 
 ```text
-Proposed Human Acceptance for GOV-RULE-06 only:
+Human Acceptance: Explicit Human GOV-RULE-06 acceptance on 2026-08-09
+Accepted:
   「3ヶ月に1回程度」
   / calendar-month cadence
   / precision = approximate
-
-Keep as separate Decisions (HOLD):
-  GOV-RULE-05  基準日
-  GOV-RULE-07  通知開始
-  GOV-RULE-08  期限当日・期限超過の定義
-  Decision-RD-3 接近窓・期限算出・超過後ポリシー（技術側）
+Durable evidence: decision-gov-rule-06-review-cadence-acceptance.md
+Logical contract: review-cadence-contract.md（Accepted）
 ```
 
+Keep as separate Decisions (HOLD):
+
 ```text
-Agent recommendation: Accept GOV-RULE-06 as practice cadence only
-Binding: NO
-Agent recommendation is not Human Acceptance evidence.
+GOV-RULE-05  基準日
+GOV-RULE-07  通知開始
+GOV-RULE-08  期限当日・期限超過の定義
+Decision-RD-3 接近窓・期限算出・超過後ポリシー（技術側）
 ```
 
 ## 次の substantive unit
 
 ```text
-Next substantive unit:
-  資料に忠実な Review Cadence Contract を確定する
-  （「3ヶ月ルールを実装する」ではない）
-
+Next automatic substantive unit: NONE
 Do not start automatically:
   duration_days = 90 実装
   91日目違反判定
   接近窓・通知 UI
   SupportPlan Schema 変更
   SharePoint / M365 / Deploy
+  FindingCode / A-5 / Implementation Start
 ```
 
-契約候補の正本: [`review-cadence-contract.md`](./review-cadence-contract.md)
+論理契約正本: [`review-cadence-contract.md`](./review-cadence-contract.md)  
+Acceptance 正本: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)
 
 ## 現時点の判定
 
 ```text
 Source review: PASS
-「3ヶ月に1回程度」: SUPPORTED AS PRACTICE CADENCE
+「3ヶ月に1回程度」: SUPPORTED AS PRACTICE CADENCE / Accepted
 「90日」: NOT AUTHORIZED
-GOV-RULE-06: READY_FOR_HUMAN_ACCEPTANCE
+GOV-RULE-06: Accepted
 GOV-RULE-05 / 07 / 08: HOLD
 Issue #24 89/90/91 tests: MUST NOT REPRESENT THE 3-MONTH PRACTICE RULE
-Repository / Canonical write: THIS DOCS UNIT
+Repository / Canonical write: THIS DOCS UNIT + acceptance write
 Implementation Start: HOLD
 ```
 
@@ -194,8 +193,9 @@ Implementation Start: HOLD
 | 単位 | 状態 |
 |---|---|
 | `evaluateReviewDueRelativeToAsOf`（[`review-due.md`](./review-due.md)） | DONE / UNCHANGED。caller-supplied due の asOf 相対判定のみ |
-| **GOV-RULE-06 source review**（本単位） | **PASS / READY_FOR_HUMAN_ACCEPTANCE** |
-| Review Cadence Contract candidate | [`review-cadence-contract.md`](./review-cadence-contract.md) |
+| **GOV-RULE-06 source review**（本単位） | **PASS** |
+| **GOV-RULE-06 Human Acceptance** | **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)） |
+| Review Cadence Contract | Accepted（[`review-cadence-contract.md`](./review-cadence-contract.md)） |
 | GOV-RULE-05 基準日 | HOLD |
 | GOV-RULE-07 通知開始 | HOLD |
 | GOV-RULE-08 期限当日・超過定義 | HOLD |
@@ -206,7 +206,6 @@ Implementation Start: HOLD
 
 ## 対象外
 
-- GOV-RULE-06 の Human Accepted 記録（Issue comment / DEC 本文）
 - 基準日・通知・超過判定の確定
 - `reviewDueDate` 算出アルゴリズム
 - SupportPlan / SharePoint Schema 変更

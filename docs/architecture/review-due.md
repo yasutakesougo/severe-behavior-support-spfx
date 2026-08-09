@@ -46,7 +46,7 @@ asOf 比較の狭域判定は技術分離可能
 | 純関数の asOf 相対判定境界 | **固定する**（本技術契約） |
 | 見直し期限日の算出（例: Active.effectiveFrom + N日） | **OUT / 呼び出し側または別 Decision** |
 | 接近窓・通知ポリシー（制度日数） | **埋め込まない / HOLD** |
-| 支援運用上の見直し周期（「3ヶ月に1回程度」） | **OUT**。正本候補は [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) |
+| 支援運用上の見直し周期（「3ヶ月に1回程度」） | **OUT**（本純関数の対象外）。GOV-RULE-06 **Accepted**: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) |
 | SupportPlan `reviewDueDate` Schema 変更 | **OUT**（MAP-PLAN-010 確定済みを再利用） |
 
 ### Practice cadence との分離（追記）
@@ -70,7 +70,7 @@ GOV-RULE-06 の practice cadence（およそ3ヶ月）を日数固定値へ変�
 | Decision-RD-1 | 見直し期限 asOf 相対判定純関数の所有を Issue #24 とするか | 期限算出、接近窓、Schema 変更 |
 | Decision-RD-2 | `reviewDueDate` / `asOf` は関数入力とし、制度接近窓を domain に埋め込まないか | 通知・UI・永続化 |
 | Decision-RD-3 | 接近窓・超過後ポリシー（制度日数）の要否（別単位） | 本純関数の実装詳細・practice cadence |
-| GOV-RULE-06 | 見直し周期 practice cadence（[`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・基準日・通知・超過定義 |
+| GOV-RULE-06 | 見直し周期 practice cadence（**Accepted** / [`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・基準日・通知・超過定義 |
 
 本 docs-only PR は **技術契約の固定**までとする。  
 Decision-RD-1 / RD-2 が Accepted になるまで **Implementation Start は HOLD** とする。
@@ -221,7 +221,7 @@ Decision-RD-3（接近窓ポリシー）は本純関数実装の前提にしな�
 Owner: Issue #24（候補・Decision-RD-1 待ち）
 Technical contract (asOf relative due comparison): FIXED in docs-only gate
 Institutional approaching window: HOLD / Decision-RD-3
-Practice cadence (GOV-RULE-06): OUT / see review-cadence-contract.md
+Practice cadence (GOV-RULE-06): Accepted / OUT of this pure function / see review-cadence-contract.md
 3ヶ月 → 90日 conversion: FORBIDDEN
 reviewDueDate calculation: OUT
 SupportPlan Schema change: OUT（MAP-PLAN-010 再利用）
