@@ -80,8 +80,8 @@ Independent Review: PASS
 P0: 0
 P1: 0
 P2: 0
-Status: READY_FOR_HUMAN_READY_DECISION（live；Human）
-Ready / Merge: NOT RUN（Human）
+Human Ready Decision: A — Ready 化（Explicit Human Ready on 2026-08-09）
+Merge: NOT RUN（別 Human 判断）
 ```
 
 ## 3. decision-review Summary
