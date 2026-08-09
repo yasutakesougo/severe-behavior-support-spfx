@@ -68,8 +68,10 @@ Agent recommendation: NOT Human Selection evidence
 ## Next
 
 ```text
-Decision packet: decision-ilb-1-institutional-local-boundary-decision-packet.md
-Residual inventory: decision-ilb-1-residual-decision-inventory.md
+Human Policy Acceptance: decision-ilb-1-human-policy-acceptance.md（LOCKED / Option A）
+Residual inventory rows: provisional（NOT Accepted）
+Next order:
+  制度根拠確認 → 個別 Decision を一件ずつ判定
 FindingCode / A-5 / Implementation Start: HOLD
-Classification Accepted: NOT YET（本 unit だけでは Accepted にしない）
+GOV-AUD-05 / RD-3 auto-Accepted: FORBIDDEN
 ```

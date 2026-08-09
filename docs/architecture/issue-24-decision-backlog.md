@@ -105,12 +105,13 @@ GOV-AUD-04: **Accepted / LOCKED / Option E**（[`decision-gov-aud-04-logical-del
   具体的な許可ロール: NOT ADOPTED / NOT DEFINED
   Consistency: [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
 PR #149: MERGED（`cb14c13…` / head `55112f4…`）
-Next substantive unit: **SELECTED / F / Decision-ILB-1**
-  Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
-  Scope: 制度要件とローカルルールの境界整理
+Decision-ILB-1: **Human Policy 1–6 Accepted / LOCKED**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)）
+  用途: 残存 Decision を分類・判断する正本方針
+  分類 A–E: 判断フレームとして採用
+  inventory provisional 行: **自動 Accepted しない**
   Packet: [`decision-ilb-1-institutional-local-boundary-decision-packet.md`](./decision-ilb-1-institutional-local-boundary-decision-packet.md)
-  Inventory: [`decision-ilb-1-residual-decision-inventory.md`](./decision-ilb-1-residual-decision-inventory.md)（read-only / provisional）
-Current single gate: **Decision-ILB-1 Human Policy Accepted 待ち**
+  Inventory: [`decision-ilb-1-residual-decision-inventory.md`](./decision-ilb-1-residual-decision-inventory.md)
+Current single gate: **制度根拠確認 → 個別 Decision を一件ずつ判定**
 OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
   GOV-AUD-05 / RD-3 自動 Accepted / 日数・ロール・承認発明
 日数・期限の発明: FORBIDDEN
@@ -398,13 +399,15 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  Decision-ILB-1 Human Policy Accepted 待ち
-Next substantive unit: SELECTED / F
-  → decision-ilb-1-institutional-local-boundary-decision-packet.md
+  Decision-ILB-1 Human Policy Accepted
+  → 制度根拠確認 → 個別 Decision を一件ずつ判定
+Decision-ILB-1 Human Policy 1–6: ACCEPTED / LOCKED
+  Classification frame A–E: adopted
+  Inventory provisional rows: NOT Accepted
 GOV-AUD-04: Accepted / LOCKED / Option E / FINAL CONSISTENT
-  PR #149 MERGED（cb14c13…）/ PR #150 MERGED（f97d072…）
 GOV-AUD-03: Accepted / Option E
-GOV-AUD-05: OUT / DO NOT START unless newly selected
+GOV-AUD-05: OUT / DO NOT START unless newly selected（auto-Accepted 禁止）
+Decision-RD-3: HOLD（auto-Accepted 禁止）
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT
 DEC-008 submit/return: Accepted / LOCKED / Option C / FINAL CONSISTENT
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
@@ -413,7 +416,6 @@ A-5: HOLD
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
-Classification Accepted（ILB-1 rows）: NOT YET
 ```
 
 

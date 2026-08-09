@@ -17,7 +17,8 @@ Agent が制度根拠・日数・ロール・承認フローを発明しない�
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-ILB-1
 Kind: Human Decision packet（boundary framing）
-Status: OPEN / READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Policy Accepted / Option A）
+Accepted 正本: decision-ilb-1-human-policy-acceptance.md
 Selected via: next substantive unit F（2026-08-09）
 main baseline: f97d072948ad3e68513193fc7e0e39c8026d7e50
 GOV-AUD-04: FINAL CONSISTENT / Option E
@@ -25,8 +26,9 @@ FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Classification Accepted from this packet alone: FORBIDDEN
-Agent recommendation: NONE
+Individual row classification Accepted: FORBIDDEN（still）
+Agent recommendation（historical）: NONE
+Human Selected: Option A
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -55,9 +57,9 @@ Non-goals:
   FindingCode / Implementation Start
 ```
 
-## 2. Human Policy（Work Order 入力・本 packet では未 Accepted）
+## 2. Human Policy（Accepted / LOCKED）
 
-本 Work Order で Human が示した方針。**Acceptance は §6 の問いへの回答後**とする。
+正本: [`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)
 
 ```text
 1. 生活介護事業および強度行動障害支援の制度要件に従う。
@@ -70,6 +72,11 @@ Non-goals:
    「例外対応」の名目で突破可能にしてはならない。
 6. 制度根拠が確認できない期限、日数、役職、承認者、状態、
    FindingCode、通知条件等を発明しない。
+```
+
+```text
+Status: ACCEPTED as classification / judgment policy
+Does NOT accept: inventory provisional rows（GOV-AUD-05 / RD-3 等）
 ```
 
 ## 3. Classification axes（候補整理用・未 Accepted）
@@ -137,7 +144,9 @@ A. はい — Human Policy 1〜6 を Decision-ILB-1 の分類正本として Acc
 B. いいえ — 修正方針を Human が明示する
 C. まだ決めない / 追加確認が必要
 
-答え: （Human 記入）
+答え: A（2026-08-09）
+Acceptance: decision-ilb-1-human-policy-acceptance.md
+Human Policy 1–6: ACCEPTED（分類正本方針）
 ```
 
 ```text
@@ -159,16 +168,18 @@ SharePoint / SPFx / Entra / M365 / Deploy / real data
 GOV-AUD-05 自動 Accepted
 Decision-RD-3 自動 Accepted
 既存 Accepted Decision の再 Decision
-本 packet のみでの個別分類 Accepted
+inventory provisional 行の一括 Accepted
 ```
 
 ## 8. Gate
 
 ```text
-Decision-ILB-1: READY_FOR_HUMAN_DECISION（Human Policy Accepted 待ち）
-Inventory: decision-ilb-1-residual-decision-inventory.md（read-only / provisional）
+Decision-ILB-1 HUMAN_POLICY: CONSUMED / Accepted / Option A
+Acceptance: decision-ilb-1-human-policy-acceptance.md
+Inventory rows: provisional（NOT Accepted）
+Next order:
+  制度根拠確認 → 個別 Decision を一件ずつ判定
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Ready / Merge: Human only（本 Work Order では Draft PR まで）
 ```

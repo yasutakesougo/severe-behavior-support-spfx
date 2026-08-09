@@ -228,8 +228,9 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 3. Decision-RD-3（接近窓等。08 NOT ADOPTED を開始信号にしない）
 4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
-**Current selected substantive unit:** F — Decision-ILB-1（制度要件とローカルルールの境界）
-（[`decision-ilb-1-institutional-local-boundary-decision-packet.md`](./decision-ilb-1-institutional-local-boundary-decision-packet.md)）
+**Current selected substantive unit:** F — Decision-ILB-1
+→ Human Policy **Accepted / Option A**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)）
+Inventory provisional rows: **NOT Accepted**（一件ずつ判定）
 
 **CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E）
 

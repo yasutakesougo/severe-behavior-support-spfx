@@ -118,10 +118,11 @@ Selection record: decision-next-substantive-unit-selection.md
 ```text
 NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected F
 Selected unit: Decision-ILB-1
-Packet: decision-ilb-1-institutional-local-boundary-decision-packet.md
-Inventory: decision-ilb-1-residual-decision-inventory.md
+Human Policy: ACCEPTED / LOCKED（Option A）
+  → decision-ilb-1-human-policy-acceptance.md
+Inventory rows: provisional（NOT Accepted）
+Next: 制度根拠確認 → 個別 Decision を一件ずつ判定
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Classification Accepted: NOT YET
 ```

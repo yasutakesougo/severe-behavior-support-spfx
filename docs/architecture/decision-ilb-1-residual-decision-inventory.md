@@ -10,7 +10,10 @@
 Decision packet: [`decision-ilb-1-institutional-local-boundary-decision-packet.md`](./decision-ilb-1-institutional-local-boundary-decision-packet.md)
 
 ```text
-Status: READ-ONLY INVENTORY / NOT ACCEPTED
+Status: READ-ONLY INVENTORY / ROW CLASSIFICATIONS NOT ACCEPTED
+Human Policy 1–6: ACCEPTED（decision-ilb-1-human-policy-acceptance.md）
+  → 分類・判断の正本方針のみ Accepted
+  → 本表の provisional 行は自動 Accepted しない
 main baseline: f97d072948ad3e68513193fc7e0e39c8026d7e50
 FindingCode: HOLD
 A-5: HOLD
@@ -83,8 +86,19 @@ Implementation Start: HOLD
 ```text
 Do NOT:
   Accept individual A/B/C/D/E rows from this inventory alone
-  Auto-start GOV-AUD-05 or Decision-RD-3
+    （Human Policy Accepted 後も一件ずつ判定）
+  Auto-start / auto-Accept GOV-AUD-05 or Decision-RD-3
   Re-decide Accepted Decisions
   Invent FindingCode / days / roles / approvers / notice rules
   Implementation Start
+```
+
+## 7. Next after Human Policy Accepted
+
+```text
+Order:
+  1. Human Policy Accepted（DONE）
+  2. 制度根拠確認
+  3. 個別 Decision を一件ずつ Human 選定・判定
+FindingCode / A-5 / Implementation: HOLD
 ```
