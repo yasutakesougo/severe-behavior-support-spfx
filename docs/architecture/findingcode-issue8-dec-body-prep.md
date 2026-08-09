@@ -140,12 +140,14 @@ FindingCode:
 | BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | NOT ADOPTED | NONE（catalog OUT） | Findingとしては行わない | **CANDIDATE** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
-## 候補 — BS-002（Human Decision candidate / 未採用）
+## 候補 — BS-002（FIXED にしない / 現場確認待ち）
 
 ```text
 ID: BS-002
-Status: CANDIDATE — Human「採用」待ち
+Status: CANDIDATE — NOT FIXED
+Evidence status: Human一次情報として未確定
 Source: Human Decision candidate（既存資料からの確定一次情報ではない）
+Next needed: 現場運用として正しいかの Human 確認（下記 1問）
 Agent invention: NO
 推測で入れない例:
   「記録が計画・手順と食い違っている状態」等は、
@@ -160,21 +162,21 @@ Business State:
   支援手順記録を行う時点で、
   適用すべき支援手順が確認できない
 
-System behavior:
+Candidate behavior:
   HARD GATE
   → 支援手順記録を確定できない
 
-Finding:
+Candidate Finding:
   NOT ADOPTED
 
-FindingCode:
+Candidate FindingCode:
   NONE
 
-継続管理:
-  Findingとしては行わない
-
-Finding catalog scope:
+Candidate catalog scope:
   OUT
+
+継続管理（候補）:
+  Findingとしては行わない
 ```
 
 理由（候補提示時の Human 説明）:
@@ -190,9 +192,19 @@ Finding: ADOPTED の検討は BS-003 以降で、
   が出たときに行う
 ```
 
+### BS-002 確認問（1問）
+
 ```text
-採用するとき: Human が「採用」と明示
-採用するまで: DECIDED / FIXED にしない
+問:
+  「適用すべき支援手順が確認できない場合、
+   支援手順記録を確定させない」運用で合っていますか？
+
+A. 合っている → BS-002 を FIXED 候補へ
+B. 違う → 内容を修正
+C. 現場確認が必要 → HOLD
+
+答え: UNSELECTED（A / B / C 待ち）
+FIXED: FORBIDDEN until A かつ明示採用
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
@@ -245,7 +257,7 @@ DEC number: PENDING — Human selection（A-4）
 Selected Option: C
 Current work: business-state inventory（1件ずつ）
 BS-001: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
-BS-002: CANDIDATE — Human「採用」待ち（既存資料一次情報ではない）
+BS-002: CANDIDATE — NOT FIXED（Evidence 未確定 / 確認問 UNSELECTED）
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -257,9 +269,15 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. BS-002 をこれでよければ **「採用」** と書いてください
-2. 違うなら修正案を同じ形式で出してください
-3. 採用後、BS-003 以降は「継続追跡が必要か」を見て Finding ADOPTED を検討
-4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
+BS-002 について、次の1問に **A / B / C** で答えてください。
 
-Agent は FindingCode 名を付けません。BS-002 を「採用」なしで FIXED にしません。
+```text
+「適用すべき支援手順が確認できない場合、
+ 支援手順記録を確定させない」運用で合っていますか？
+```
+
+- **A** … 合っている → FIXED 候補へ  
+- **B** … 違う → 内容を修正  
+- **C** … 現場確認が必要 → HOLD  
+
+Agent は FindingCode 名を付けません。確認前に BS-002 を FIXED にしません。
