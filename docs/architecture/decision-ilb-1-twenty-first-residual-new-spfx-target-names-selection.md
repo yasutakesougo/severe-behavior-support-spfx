@@ -6,7 +6,7 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_TWENTY_FIRST_RESIDUAL_SELECTION
-Status: SELECTED
+Status: SELECTED / CONSUMED（Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED on axes；values OPEN）
 Selected unit: New SPFx Site / List concrete naming / value Decision
 Follow-up Decision ID: Decision-AS-NEW-TARGET-NAMES-1
 
@@ -22,11 +22,15 @@ Locked basis:
   Reuse existing /sites/welfare = NOT ADOPTED
   New SPFx topology = dedicated new Site + dedicated new Lists
 
+Naming axes:
+  Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
+
 Current state:
   New SPFx deployment target = TOPOLOGY LOCKED / NOT CREATED / HOLD
-  Concrete Site URL / Site name = OPEN / NOT SELECTED
-  Concrete List names = OPEN / NOT SELECTED
-  Internal Column Names = OPEN / NOT SELECTED
+  Naming axes = LOCKED（SU-1 + LN-1 + IN-1 + XB-1）
+  Concrete Site URL / Site name = OPEN / NOT SELECTED（SU-1 payload pending）
+  Concrete List names = OPEN / NOT SELECTED（LN-1 payload pending）
+  Internal Column Names = OPEN（IN-1 — post-creation CN-1）
   Site / List / column creation = NO-GO
   tenant mutation = NO-GO
   Implementation Start = HOLD
@@ -41,17 +45,19 @@ Current state:
 次 Human Decision として選ぶ。
 
 ```text
-SELECTED:
+SELECTED / CONSUMED:
   Decision-AS-NEW-TARGET-NAMES-1
+  Human Decision: SU-1 + LN-1 + IN-1 + XB-1
 
-Closes only when later Accepted:
-  concrete Site URL / Site name（Human 明示）
-  concrete List name(s)（Human 明示）
-  Internal Name 方針（発明禁止 or 作成後 CN-1 等）
-  naming Acceptance ≠ creation GO の再確認
+Axes closed:
+  SU-1 — Human 明示で Site URL / Site name を採択
+  LN-1 — Human 明示で List name(s) を採択
+  IN-1 — Internal Names は本 Decision で固定しない（作成後 CN-1）
+  XB-1 — naming ≠ creation GO
 
-NOT SELECTED / NOT AUTHORIZED by this selection:
-  Agent による具体 Site URL / List name / Internal Name 発明
+Still OPEN / NOT AUTHORIZED:
+  concrete Site URL / Site name / List name(s) 文字列
+  Internal Column Names CONFIRMED
   Site creation
   List / column creation
   tenant / Entra / M365 mutation
@@ -61,11 +67,10 @@ NOT SELECTED / NOT AUTHORIZED by this selection:
   Deploy / real data
   FindingCode / A-5
   post-retention deletion
-  Decision-AS-NEW-TARGET-PROVISION-1 再 Decision
 ```
 
 Selection ≠ Acceptance ≠ Site/List creation.
-（NM-1 が要求した concrete naming Decision を開くだけ。EX-1 の作成 gate は別）
+（axes Acceptance 後も SU-1/LN-1 文字列と XB-1 作成 gate は別）
 
 ## Options considered（selection-time）
 
@@ -79,19 +84,25 @@ Selection ≠ Acceptance ≠ Site/List creation.
 ## Next
 
 ```text
-Selection SELECTED → open Decision-AS-NEW-TARGET-NAMES-1 compare packet
-  decision-assessment-snapshot-new-target-names-packet.md
-  Status: OPEN / NOT ACCEPTED
+Selection CONSUMED → Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED（axes）
+  decision-assessment-snapshot-new-target-names-acceptance.md
+  Site URL / Site name mode:  SU-1
+  List names mode:            LN-1
+  Internal Column Names:      IN-1
+  Execution boundary:         XB-1
 
-Until Human Acceptance:
-  Concrete Site URL / Site name = OPEN / NOT SELECTED
-  Concrete List names = OPEN / NOT SELECTED
-  Internal Column Names = OPEN / NOT SELECTED
-  Site / List creation = NO-GO
-  tenant mutation = NO-GO
-  Implementation Start = HOLD
-  SharePoint implementation = DO NOT START
-  Schema / DTO code = HOLD
-  FindingCode / A-5 = HOLD
+Still OPEN / HOLD / NO-GO:
+  Concrete Site URL / Site name / List name(s)（SU-1 / LN-1 payload）
+  Internal Column Names（IN-1）
+  Site / List creation
+  Implementation Start
+  SharePoint / adapter / application code
+  tenant mutation
+  Schema / DTO code assignment
+  FindingCode / A-5
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
+
+Next Human fill:
+  SU-1 / LN-1 concrete strings
+Creation / provisioning execution: NOT SELECTED（別 Human gate）
 ```

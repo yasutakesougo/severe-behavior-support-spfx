@@ -3,6 +3,9 @@
 この文書は、Decision-AS-NEW-TARGET-PROVISION-1 Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1 を前提に、
 **新 SPFx 用 Site / List の concrete naming / value** を判断する Human Decision Packet である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-new-target-names-acceptance.md`](./decision-assessment-snapshot-new-target-names-acceptance.md)
+
 Selected via:
 [`decision-ilb-1-twenty-first-residual-new-spfx-target-names-selection.md`](./decision-ilb-1-twenty-first-residual-new-spfx-target-names-selection.md)
 
@@ -17,8 +20,14 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-NEW-TARGET-NAMES-1
-Kind: Human Decision packet（compare only）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED on axes；values OPEN）
+Human Decision: SU-1 + LN-1 + IN-1 + XB-1
+Human Selected:
+  Site URL / Site name mode:  SU-1
+  List names mode:            LN-1
+  Internal Column Names:      IN-1
+  Execution boundary:         XB-1
 Selected via:
   decision-ilb-1-twenty-first-residual-new-spfx-target-names-selection.md
 
@@ -37,9 +46,10 @@ Locked basis:
 
 Current state:
   New SPFx deployment target = TOPOLOGY LOCKED / NOT CREATED / HOLD
-  Concrete Site URL / Site name = OPEN / NOT SELECTED
-  Concrete List names = OPEN / NOT SELECTED
-  Internal Column Names = OPEN / NOT SELECTED
+  Naming axes = LOCKED（SU-1 + LN-1 + IN-1 + XB-1）
+  Concrete Site URL / Site name = OPEN / NOT SELECTED（SU-1 payload pending）
+  Concrete List names = OPEN / NOT SELECTED（LN-1 payload pending）
+  Internal Column Names = OPEN（IN-1 — post-creation CN-1）
   Site / List / column creation = NO-GO
   tenant mutation = NO-GO
   Implementation Start = HOLD
@@ -63,79 +73,77 @@ naming Acceptance と Site/List 作成 GO を分離するか。
 具体文字列は Agent が発明しない。Human Acceptance で明示する。
 ```
 
-## 2. Compare axes
+```text
+Historical note:
+  候補・Agent recommendation は比較用。採択は Acceptance 正本のみが LOCKED である。
+  axes Accepted ≠ 具体文字列確定 ≠ Site/List 作成。
+```
+
+## 2. Compare axes（比較履歴）
 
 ### SU — Site URL / Site name
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **SU-1** | Human Acceptance で具体 Site URL + Site name を明示採択する。Agent は候補を Accepted 値として発明しない | NM-1 の「別 Human Decision」を満たす |
-| SU-2 | Agent が具体 Site URL / Site name を発明し、そのまま採択する | 値発明。SV-1 / SC-1 と衝突しやすい |
-| SU-HOLD | Site 具体値をまだ決めない | 現状維持 |
+| **SU-1** | Human Acceptance で具体 Site URL + Site name を明示採択する。Agent は候補を Accepted 値として発明しない | **Accepted** |
+| SU-2 | Agent が具体 Site URL / Site name を発明し、そのまま採択する | NOT SELECTED |
+| SU-HOLD | Site 具体値をまだ決めない | NOT SELECTED |
 
 ### LN — List names
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **LN-1** | Human Acceptance で具体 List name(s) を明示採択する。Agent は Accepted 値を発明しない | NM-1 の「別 Human Decision」を満たす |
-| LN-2 | Agent が具体 List name(s) を発明し、そのまま採択する | 値発明。LV-1 / SC-1 と衝突しやすい |
-| LN-HOLD | List 具体値をまだ決めない | 現状維持 |
+| **LN-1** | Human Acceptance で具体 List name(s) を明示採択する。Agent は Accepted 値を発明しない | **Accepted** |
+| LN-2 | Agent が具体 List name(s) を発明し、そのまま採択する | NOT SELECTED |
+| LN-HOLD | List 具体値をまだ決めない | NOT SELECTED |
 
 ### IN — Internal Column Names
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **IN-1** | 本 Decision では Internal Column Names を発明・固定しない。作成後に CN-1（実 SharePoint 確認）で確定 | CN-1 と最も整合 |
-| IN-2 | Human が intended Internal Column Names を本 Decision で採択する。作成後も CN-1 確認は必須。未確認値を CONFIRMED 扱いしない | 作成前の意図値のみ。確認は別 |
-| IN-3 | Agent が Internal Column Names を発明して固定する | CN-1 違反 |
-| IN-HOLD | Internal Name 方針未決定 | Acceptance 不可にしやすい |
+| **IN-1** | 本 Decision では Internal Column Names を発明・固定しない。作成後に CN-1（実 SharePoint 確認）で確定 | **Accepted** |
+| IN-2 | Human が intended Internal Column Names を本 Decision で採択する。作成後も CN-1 確認は必須。未確認値を CONFIRMED 扱いしない | NOT SELECTED |
+| IN-3 | Agent が Internal Column Names を発明して固定する | NOT SELECTED |
+| IN-HOLD | Internal Name 方針未決定 | NOT SELECTED |
 
 ### XB — execution boundary
 
-| ID | 内容 | 判定上の意味 |
+| ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | naming Acceptance ≠ Site/List creation GO。実 tenant mutation / provisioning は別 Human gate | EX-1 を維持 |
-| XB-2 | naming Acceptance と同時に Site/List を作成する | mutation auto-start |
-| XB-HOLD | execution boundary 未決定 | Acceptance 不可 |
+| **XB-1** | naming Acceptance ≠ Site/List creation GO。実 tenant mutation / provisioning は別 Human gate | **Accepted** |
+| XB-2 | naming Acceptance と同時に Site/List を作成する | NOT SELECTED |
+| XB-HOLD | execution boundary 未決定 | NOT SELECTED |
 
-## 3. Agent recommendation（NOT Acceptance）
+## 3. Agent recommendation（historical / NOT Acceptance）
 
 ```text
 Agent recommendation:
   SU-1 + LN-1 + IN-1 + XB-1
 
-Rationale:
-  NM-1 が要求した concrete naming Decision を開き、
-  具体文字列は Human が Acceptance で明示する（Agent 発明禁止）。
-  Internal Names は未作成 Site 上で確認できないため IN-1 で CN-1 後段へ残す。
-  EX-1 を XB-1 で維持し、作成実行は別 Human gate に残す。
-
-This is NOT Human Acceptance evidence.
-Human must explicitly Accept an SU / LN / IN / XB combination
-and, for SU-1 / LN-1, write the concrete strings in the Acceptance 正本.
+This was NOT Human Acceptance evidence.
+Human Acceptance is recorded in the Acceptance 正本 only.
 ```
 
-## 4. Concrete value slots（Acceptance 時のみ埋める）
+## 4. Concrete value slots（SU-1 / LN-1 payload）
 
 ```text
-Until Human Acceptance, leave EMPTY / NOT SELECTED:
+Axes Accepted / LOCKED. Concrete strings remain OPEN:
 
-  New Site URL:        ________
-  New Site name:       ________
-  New List name(s):    ________
-  Internal Names:      N/A under IN-1 recommendation
-                       （IN-2 を選ぶ場合のみ Human が intended 値を明示）
+  New Site URL:        NOT SELECTED / OPEN
+  New Site name:       NOT SELECTED / OPEN
+  New List name(s):    NOT SELECTED / OPEN
+  Internal Names:      OPEN under IN-1（post-creation CN-1）
 
-FORBIDDEN now:
+FORBIDDEN:
   Agent inventing or hard-coding the blanks above as Accepted values
   Treating blanks as OBSERVED / CONFIRMED
-  Treating naming Acceptance as Site/List creation GO
+  Treating axes Acceptance as Site/List creation GO
 ```
 
-## 5. Explicit non-authorization
+## 5. Explicit non-authorization（unchanged）
 
 ```text
-This packet does NOT authorize:
+This packet / Acceptance does NOT authorize:
   Agent invention of Site URL / Site name / List names / Internal Names
   treating EXISTING-APP /sites/welfare values as new-SPFx names
   Site creation
@@ -153,17 +161,12 @@ This packet does NOT authorize:
 ## 6. Next after Human Acceptance
 
 ```text
-If Human accepts SU-1 + LN-1 + IN-1 + XB-1
-  and writes concrete Site URL / Site name / List name(s):
-  → Decision-AS-NEW-TARGET-NAMES-1 becomes Accepted / LOCKED
-  → intended deployment-config names LOCKED（SC-1 env values）
-  → Internal Column Names remain OPEN until post-creation CN-1
-  → Site / List creation remains NO-GO until separate Human execution gate
-  → Implementation Start remains HOLD
-
-Until explicit Human Acceptance:
-  Decision-AS-NEW-TARGET-NAMES-1 = OPEN / NOT ACCEPTED
-  Concrete Site / List / Internal Names = OPEN / NOT SELECTED
-  Site / List creation = NO-GO
-  New SPFx deployment target = TOPOLOGY LOCKED / NOT CREATED / HOLD
+Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED（axes） / SU-1 + LN-1 + IN-1 + XB-1
+  → decision-assessment-snapshot-new-target-names-acceptance.md
+Concrete Site URL / Site name / List names: NOT SELECTED / OPEN
+  → next Human fill: SU-1 / LN-1 concrete strings
+Internal Column Names: OPEN（IN-1）
+Site / List creation: NO-GO until separate Human execution gate
+Implementation Start: HOLD
+Ready / Merge: NOT RUN by this Decision
 ```

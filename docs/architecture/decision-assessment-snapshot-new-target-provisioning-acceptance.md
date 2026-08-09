@@ -183,18 +183,16 @@ Decision-AS-NEW-TARGET-PROVISION-1: Accepted / LOCKED / ST-1 + LT-1 + NM-1 + EX-
 PR #184: MERGED
   expected head: 84745355929c7e43dcc6c89dd00d29935f79034c
   merge commit:  0be50a12e3699d187bce0f27caa732f3e7ccea24
+Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED（axes） / SU-1 + LN-1 + IN-1 + XB-1
 New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
 Concrete Site / List / Internal Names: NOT SELECTED / OPEN
-Site / List creation: NO-GO
+  → next Human fill: SU-1 / LN-1 concrete strings
+Site / List creation: NO-GO（XB-1）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next substantive unit: SELECTED — Decision-AS-NEW-TARGET-NAMES-1
-  （twenty-first residual / concrete naming / value；OPEN / NOT ACCEPTED）
-  selection: decision-ilb-1-twenty-first-residual-new-spfx-target-names-selection.md
-  packet:    decision-assessment-snapshot-new-target-names-packet.md
 Creation / provisioning execution: NOT SELECTED（別 Human gate / NO-GO）
 ```
