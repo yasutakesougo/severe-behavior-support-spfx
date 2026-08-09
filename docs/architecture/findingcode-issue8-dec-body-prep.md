@@ -494,14 +494,12 @@ ID: BS-007
 Status: FIXED（2026-08-09）
 
 Business State:
-  モニタリングで必要な対応が決まったが、
-  その対応がまだ完了していない
+  モニタリングで決まった対応が未完了
 
 System behavior:
-  OTHER（モニタリング記録）
-  → 会議記録等に対応事項を書く
-  → 次回モニタリング等で確認する
-  → アプリ上の未解決 Finding としては残さない
+  OTHER
+  → モニタリング記録で管理する
+  → 別の未解決トラッキングは行わない
 
 Finding:
   NOT ADOPTED
@@ -511,7 +509,7 @@ FindingCode:
 
 継続管理:
   Findingとしては行わない
-  → モニタリング記録だけで管理する
+  → モニタリング記録で保持する
 
 Finding catalog scope:
   OUT
@@ -552,6 +550,9 @@ Inventory so far:
   BS-006 → 監査証跡（Finding SEPARATE）
   BS-007 → モニタリング記録で足りる未完了対応（Finding 不要）
   Finding ADOPTED 件数: 0
+  A-1 FindingCode values: EMPTY のままで不自然ではない
+  Policy: 現場一次情報から Finding 対象が出てこない限り、
+          FindingCode を無理に作らない
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
@@ -580,7 +581,10 @@ DEC number: PENDING — Human selection（A-4）
    Finding として継続管理する業務状態の正本
 
 2. Finding にする業務状態
-   - （Finding = ADOPTED の行を人の言葉で列挙）
+   - （現時点）なし
+   - Finding ADOPTED 件数: 0
+   - したがって A-1 FindingCode values は空でもよい
+     （現場一次情報から対象が出るまでコードを作らない）
 
 3. Finding にしない業務状態（Finding catalog 対象外）
    - BS-001: 有効な支援計画がないため手順記録へ進めない
@@ -625,11 +629,12 @@ BS-004〜005: FIXED（通常業務 / catalog OUT）
 BS-006: FIXED（監査証跡 / SEPARATE / catalog OUT）
 BS-007: FIXED（モニタリング記録で足りる未完了対応 / catalog OUT）
 BS-001〜007: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
-BS-008: OPEN — Human 提示待ち
+BS-008: OPEN — Human 提示待ち（任意）
 Finding ADOPTED 件数: 0
+A-1 FindingCode values: EMPTY OK（無理に作らない）
 Boundary: 監査上必要 ≠ Finding / 継続保存 ≠ Finding / 未完了対応 ≠ 即 Finding
 Audit save details: separate audit / evidence contract（FindingCode ではない）
-A-1: PENDING
+A-1: PENDING / may remain empty until Finding ADOPTED appears
 A-2: PENDING
 A-3: PENDING
 A-4: PENDING
@@ -640,7 +645,7 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-008** を同じ形式で1件書いてください
-2. または、現時点で Finding ADOPTED は無いと明示して Issue #8 DEC 骨子へ進んでもよいです
-3. Finding: ADOPTED は、未解決をアプリ上で担当・Close する運用が必要なものだけ
-4. Agent は FindingCode 名を付けません。BS-008 の中身を勝手に書きません
+1. **BS-008** を続けるか、洗い出しを一旦止めて Issue #8 DEC 骨子（Finding 対象なし）へ進むか選んでください
+2. Finding ADOPTED が 0 のままなら、A-1 値一覧は空でよいです
+3. FindingCode は現場一次情報から対象が出るまで作りません
+4. Agent は FindingCode 名を発明しません
