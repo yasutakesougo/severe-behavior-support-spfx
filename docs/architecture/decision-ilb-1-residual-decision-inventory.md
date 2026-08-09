@@ -28,11 +28,14 @@ Tenth residual Decision: SELECTED / A — Implementation Start（PR-J domain GO 
 Eleventh residual Decision: SELECTED / C — Schema ID（Decision-AS-SCHEMA-ID-1 naming+value Accepted / LOCKED）
 Twelfth residual Decision: SELECTED / A — schemaVersion / dtoVersion（Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / 1.0.0）
 Thirteenth residual Decision: SELECTED / A — application save（Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
+Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（selection only；Decision-AS-SP-ADAPTER-1 compare OPEN）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
 schemaVersion / dtoVersion: Accepted / LOCKED = 1.0.0 / 1.0.0
 Application save boundary: Accepted / LOCKED（SC-1 + FR-1）；implementation DO NOT START
+SharePoint implementation: DO NOT START
+DEC-6 concrete mapping: NOT DECIDED
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
 
@@ -128,7 +131,9 @@ Order:
  12. Eleventh residual: Schema ID naming+value（DONE / CONSUMED；Decision-AS-SCHEMA-ID-1 Accepted / LOCKED）
  13. Twelfth residual: schemaVersion / dtoVersion（DONE / CONSUMED；Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / A = 1.0.0）
  14. Thirteenth residual: application save（DONE / CONSUMED；Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
-     remaining examples: post-retention / SharePoint
+ 15. Fourteenth residual: SharePoint / adapter（SELECTED / A；concrete boundary HOLD / NOT DECIDED）
+     compare packet: decision-assessment-snapshot-sp-adapter-packet.md（OPEN / NOT ACCEPTED）
+     remaining examples: post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
@@ -137,5 +142,7 @@ schemaVersion / dtoVersion: LOCKED = 1.0.0 / 1.0.0
 Schema / DTO code assignment: HOLD / NOT STARTED
 Application save boundary: LOCKED（SC-1 + FR-1）
 Application / adapter implementation: HOLD / DO NOT START
+SharePoint implementation: DO NOT START
+DEC-6 concrete mapping: NOT DECIDED
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
