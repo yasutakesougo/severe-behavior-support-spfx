@@ -61,7 +61,8 @@ Agent recommendation: NOT Human Selection evidence
 ```text
 Acceptance: decision-dec-008-submit-return-roles-acceptance.md（LOCKED / Option C）
 Consistency: DOCS CONSISTENT / MERGE PENDING
-Path: Independent Review → Human Merge Decision（PR #147）
+Independent Review: PASS（reviewed content HEAD d1b5d544… / P0=0 / P1=0 / P2=0）
+Path: Ready 化 → Human Merge Decision（PR #147）
 After merge: Next substantive unit NOT SELECTED（Human が新たに選ぶ）
 FindingCode / A-5 / Implementation Start: HOLD
 ```
