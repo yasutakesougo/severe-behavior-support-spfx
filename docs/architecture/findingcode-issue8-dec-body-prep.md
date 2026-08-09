@@ -136,42 +136,63 @@ FindingCode:
 
 | ID | 業務状態（人の言葉） | System behavior | Finding | FindingCode | 継続管理 | 状態 |
 |---|---|---|---|---|---|---|
-| BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog 対象外） | Findingとしては行わない | **DECIDED** |
+| BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **DECIDED / FIXED** |
+| BS-002 | （Human が提示） | | | | | **OPEN** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
-| （次） | （Human が1件提示） | | | | | OPEN |
 
-## 未決 — BS-002（次の1件）
+## 候補 — BS-002（Human Decision candidate / 未採用）
 
 ```text
 ID: BS-002
-Status: OPEN — Human input required
-Agent: 業務状態・Finding 採否・FindingCode を発明しない
+Status: CANDIDATE — Human「採用」待ち
+Source: Human Decision candidate（既存資料からの確定一次情報ではない）
+Agent invention: NO
+推測で入れない例:
+  「記録が計画・手順と食い違っている状態」等は、
+  現場判断が曖昧になりやすいので BS-002 では採用候補にしない
 ```
 
-Human が埋める形式:
-
 ```text
 ID: BS-002
-Status: DECIDED（日付）
+Status: CANDIDATE（2026-08-09）
 
 Business State:
-  （人の言葉 — Human 提示）
+  支援手順記録を行う時点で、
+  適用すべき支援手順が確認できない
 
 System behavior:
-  HARD GATE | NOTICE | OTHER
-  → （振る舞いの説明）
+  HARD GATE
+  → 支援手順記録を確定できない
 
 Finding:
-  ADOPTED | NOT ADOPTED
+  NOT ADOPTED
 
 FindingCode:
-  NONE | PENDING
+  NONE
 
 継続管理:
-  Findingとしては行わない | Findingとして行う
+  Findingとしては行わない
 
 Finding catalog scope:
-  OUT | IN（Finding ADOPTED のとき）
+  OUT
+```
+
+理由（候補提示時の Human 説明）:
+
+```text
+BS-001 と同じ境界を固める:
+  その場で操作を止めれば解決する
+  入力・前提条件の不足を、何でも Finding にしない
+
+Finding: ADOPTED の検討は BS-003 以降で、
+  「その場で止めるだけではなく、
+   未解決状態として継続的に追跡する必要があるもの」
+  が出たときに行う
+```
+
+```text
+採用するとき: Human が「採用」と明示
+採用するまで: DECIDED / FIXED にしない
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
@@ -223,7 +244,8 @@ DEC number: PENDING — Human selection（A-4）
 ```text
 Selected Option: C
 Current work: business-state inventory（1件ずつ）
-BS-001: DECIDED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE）
+BS-001: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
+BS-002: OPEN — Human 提示待ち
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -235,9 +257,9 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **次の業務状態を1件**、上と同じ形式で書いてください
+1. **BS-002** を上と同じ形式で1件書いてください
 2. Finding にする / しない をその1件で決めてください
 3. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
 4. そのあとで初めて A-1〜A-4（コード名・採番など）を決めます
 
-Agent は FindingCode 名を付けません。次の候補を勝手に増やしません。
+Agent は FindingCode 名を付けません。BS-002 の中身を勝手に書きません。
