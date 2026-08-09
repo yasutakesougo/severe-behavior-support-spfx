@@ -78,9 +78,10 @@ DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-d
   独立した最終承認者: **NOT ADOPTED** → アプリ独自の最終承認者を設定しない
   サービス管理責任者を最終承認者とする案: NOT ADOPTED / 不採用
 PR #143 / DEC-008: MERGED（`713c40a…` / head `cfbbcd3…`）
-DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（READY_FOR_HUMAN_POST）
-DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（DOCS+MERGE PASS / LIVE PENDING）
-Current single gate: **Issue #8 へ DEC-008 paste body 投稿 → comment ID**
+DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（POSTED / comment `5229571943`）
+DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（**CONSISTENT**）
+Current single gate: **次 substantive unit 選定（NOT SELECTED）**
+
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
@@ -236,7 +237,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
-| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者） | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**（アプリ独自の最終承認者を設定しない）。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)。台帳: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)。整合: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自承認フローを追加しない。SupportPlan role-free 契約を壊さない | Issue #8 post + final consistency 後、次 substantive unit 選定 |
+| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者） | **Accepted / LOCKED / CONSISTENT**（Issue #8 comment `5229571943`）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md) / [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自承認フローを追加しない。SupportPlan role-free 契約を壊さない | 次 substantive unit 選定（NOT SELECTED） |
 
 ### Snapshot Entry Criteria（整理のみ・実装しない）
 
@@ -361,11 +362,11 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  DEC-008 正本化完了
-  = Issue #8 ledger post + consistency check final PASS
-DEC-008: Accepted / LOCKED
+  次 substantive unit 選定（NOT SELECTED）
+DEC-008: Accepted / LOCKED / Issue #8 comment 5229571943
   制度上の作成者 = 実践研修修了者
   独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
+Consistency (docs / Issue #8 / PR #143): CONSISTENT
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
@@ -373,6 +374,7 @@ Next substantive unit: NOT SELECTED
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 
