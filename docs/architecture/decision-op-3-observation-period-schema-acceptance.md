@@ -1,7 +1,7 @@
 # Decision-OP-3 — 観察期間論理 Schema Human Acceptance
 
 この文書は、**Decision-OP-3**（観察期間を SupportPlan 論理 Schema としてどう表現するか）についての
-**Human Acceptance evidence** である。
+**Human Acceptance 正本（LOCKED）** である。
 
 Decision packet: [`decision-op-3-observation-period-schema-decision-packet.md`](./decision-op-3-observation-period-schema-decision-packet.md)
 
@@ -9,38 +9,56 @@ Open-points: [`decision-op-3-open-points-extraction.md`](./decision-op-3-open-po
 
 論理契約: [`observation-period-schema-contract.md`](./observation-period-schema-contract.md)
 
+整合確認: [`decision-op-3-canonicalization-consistency-check.md`](./decision-op-3-canonicalization-consistency-check.md)
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-OP-3
-Status: Accepted
+Status: Accepted / LOCKED
 Human Acceptance: Explicit Human Option A on 2026-08-09
-Selected Option: A
-Logical Schema:
-  SupportPlan に観察期間を持つ
-  periodFrom: ISO DateTime（必須）
-  periodTo: ISO DateTime（必須）
-Open-ended periodTo: NOT ADOPTED
-Institutional day count in domain: NOT ADOPTED
-evaluateObservationPeriodMembership: UNCHANGED
+  + Explicit Human freeze on 2026-08-09
+
+LOCKED:
+
+Decision-OP-3: Accepted
+SupportPlan observation period:
+  periodFrom: REQUIRED
+  periodTo: REQUIRED
+Open-ended periodTo:
+  NOT ADOPTED
+制度日数・既定観察窓の domain 埋め込み:
+  NOT ADOPTED
+evaluateObservationPeriodMembership:
+  UNCHANGED
+FindingCode:
+  HOLD
+A-5:
+  HOLD
+Implementation Start:
+  HOLD
+Next substantive unit:
+  NOT SELECTED
+
 SharePoint columns / DEC-6: OUT（別 Decision）
-FindingCode: HOLD / DO NOT CREATE
-A-5: HOLD
-Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
 
-## Human Acceptance
+## Human Acceptance（固定結論）
 
 ```text
-Human Acceptance: Explicit Human Option A on 2026-08-09
-Decision-OP-3: Accepted
+Human Acceptance: Explicit Human Option A + freeze on 2026-08-09
+Decision-OP-3: Accepted / LOCKED
 Selected Option: A
-観察期間論理 Schema:
-  periodFrom / periodTo（両端必須）
-制度日数の domain 埋め込み: NOT ADOPTED
+
+SupportPlan observation period:
+  periodFrom: REQUIRED
+  periodTo: REQUIRED
+Open-ended periodTo: NOT ADOPTED
+制度日数・既定観察窓の domain 埋め込み: NOT ADOPTED
+evaluateObservationPeriodMembership: UNCHANGED
 ```
 
 ```text
@@ -51,36 +69,30 @@ This document records the Human Decision only.
 ## Accepted 内容
 
 ```text
-Decision-OP-3: Accepted
+Decision-OP-3: Accepted / LOCKED
 Selected: Option A
 
 SupportPlan logical observation period:
-  periodFrom: required ISO DateTime
-  periodTo: required ISO DateTime
+  periodFrom: REQUIRED
+  periodTo: REQUIRED
 
 Open-ended periodTo: NOT ADOPTED
-Institutional day count / default window in domain: NOT ADOPTED
+制度日数・既定観察窓の domain 埋め込み: NOT ADOPTED
 Period derivation (e.g. Active.effectiveFrom + N): OUT
 SharePoint physical columns: OUT / separate Decision
+evaluateObservationPeriodMembership: UNCHANGED
 ```
 
 日本語正本:
 
 ```text
 観察期間（SupportPlan 論理 Schema）:
-  periodFrom（必須）
-  periodTo（必須）
-開放終端: 採択しない
-制度日数の domain 埋め込み: 採択しない
+  periodFrom: REQUIRED
+  periodTo: REQUIRED
+開放終端: NOT ADOPTED
+制度日数・既定観察窓の domain 埋め込み: NOT ADOPTED
+メンバシップ純関数: UNCHANGED
 ```
-
-意味:
-
-- 観察期間を **データとして SupportPlan 論理 Schema に持つ**。
-- 現行メンバシップ契約（`periodTo` 必須・caller-supplied 入力形）と整合する。
-- 日数・期限を AI / Agent が発明しない。制度日数は domain に埋め込まない。
-- `evaluateObservationPeriodMembership` は **変更しない**。
-- SharePoint 列実装・Schema code 実装は本 Acceptance だけでは開始しない。
 
 ## Acceptance boundary
 
@@ -93,6 +105,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
   FindingCode 作成
   A-5
   Implementation Start
+  次 substantive unit の自動選定
   Deploy / real data
 ```
 
@@ -101,21 +114,16 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | 単位 | 本 Acceptance 後 |
 |---|---|
 | `observation-period.md` メンバシップ | **UNCHANGED** |
-| OP-1 / OP-2 | Accepted / 維持（caller-supplied・日数非埋め込み） |
-| 観察期間論理 Schema | **Accepted / Option A** |
+| 観察期間論理 Schema | **Accepted / LOCKED / Option A** |
 | GOV-RULE-06（3ヶ月に1回程度） | 別 track / 混ぜない |
 | FindingCode / A-5 / Implementation | HOLD |
 
 ## Next
 
 ```text
-Decision-OP-3: Accepted / Option A
-Logical contract: observation-period-schema-contract.md
-Next:
-  Schema / code Implementation は別 Human GO
-  SharePoint 列は別 Decision
+1. OP-3 正本化・整合確認を完了する
+   → decision-op-3-canonicalization-consistency-check.md
+2. PR #146 Merge（未マージなら）
+3. その後、新しい substantive unit を選定する（NOT SELECTED のまま）
 FindingCode / A-5 / Implementation: HOLD
-次 substantive unit: NOT SELECTED
 ```
-
-Agent は本 Acceptance を理由に Implementation や日数埋め込みへ自動進行しない。
