@@ -255,6 +255,10 @@ tenant changes: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next substantive unit: NOT SELECTED by this Acceptance
-  natural candidate: provisioning execution gate（creation）— still NO-GO until Human selects
+Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
+  → decision-assessment-snapshot-pr-185-independent-review.md
+  Reviewed HEAD: b37e3e6d0d3f925e8686f2e2805094b55479b024
+Ready: NOT RUN
+Merge: NOT RUN
+Next Human gate: PR #185 Ready Decision
 ```

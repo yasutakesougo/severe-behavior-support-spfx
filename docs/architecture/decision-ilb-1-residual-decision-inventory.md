@@ -54,6 +54,7 @@ Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1
   Site name: XXXXX
   Lists: XXXXX / YYYYY
   Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0；HEAD b37e3e6d0d3f925e8686f2e2805094b55479b024）
 PR #184: MERGED（expected head 84745355929c7e43dcc6c89dd00d29935f79034c / merge 0be50a12e3699d187bce0f27caa732f3e7ccea24）
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
@@ -186,6 +187,8 @@ Order:
      intended Lists: XXXXX / YYYYY
      status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
      Internal Names: OPEN（IN-1 — post-creation CN-1）
+     IR: decision-assessment-snapshot-pr-185-independent-review.md（PASS；P0=0 / P1=0 / P2=0）
+     Ready / Merge: NOT RUN（次 Human gate = PR #185 Ready Decision）
      creation / provisioning execution: 別 Human gate / NO-GO
      remaining examples: provisioning execution gate / post-retention / DEC-015 / SV-1·LV-1·CN-1 confirmation after creation
      FindingCode / A-5: HOLD
