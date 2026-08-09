@@ -197,5 +197,7 @@ SharePoint implementation: DO NOT START
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next: explicit Site/List creation execution + VR-1 read-back（auto-start FORBIDDEN）
+Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NOT STARTED（auto-start FORBIDDEN）
 ```

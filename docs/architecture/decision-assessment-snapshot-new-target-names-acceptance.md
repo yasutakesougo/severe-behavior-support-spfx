@@ -259,5 +259,7 @@ FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
 PR #185: MERGED（1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
-Next: explicit Site/List creation execution + VR-1 read-back（auto-start FORBIDDEN）
+Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NOT STARTED（auto-start FORBIDDEN）
 ```
