@@ -53,8 +53,8 @@ value invention of schemaVersion / dtoVersion: FORBIDDEN until next explicit Hum
 
 ```text
 Next action:
-  schemaVersion / dtoVersion Decision packet / compare（read-only）
-  or explicit Human Decision on concrete SemVer
+  Decision-AS-SCHEMA-VERSION-1 compare packet（read-only / NOT ACCEPTED）
+  → decision-assessment-snapshot-schema-version-packet.md
 
 Not allowed from this document alone:
   adopting schemaVersion = 1.0.0（or any SemVer）
