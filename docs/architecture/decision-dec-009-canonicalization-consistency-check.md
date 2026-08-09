@@ -49,10 +49,11 @@ Verdict: FINAL CONSISTENT
 ```text
 Decision-AS-EC-1 overall: HOLD
 AS-EC-1 remaining examples:
+  Entry #2 完全契約 PR 境界（PARTIAL）
   Finding / findingIds 境界
   NOT_APPLICABLE reason
   Schema / DTO versioning
-  型・validator・fixture 計画
+  （Entry #8 技術計画: FINAL CONSISTENT / DONE）
 post-retention deletion: OPEN（別単位）
 ```
 

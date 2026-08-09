@@ -104,7 +104,7 @@ Entry #2 を PASS に上げるには、完全契約実装の PR 境界（また�
 | #5 Finding / findingIds | 未 |
 | #6 NOT_APPLICABLE reason | 未 |
 | #7 Schema / DTO versioning | 未 |
-| #8 technical plan | Accepted / LOCKED（本 work stream） |
+| #8 technical plan | Accepted / LOCKED / FINAL CONSISTENT（PR #159 MERGED） |
 
 ```text
 Contradiction found vs main evidence: NONE

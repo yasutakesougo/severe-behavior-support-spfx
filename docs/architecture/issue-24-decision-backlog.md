@@ -137,13 +137,16 @@ DEC-009: **Accepted / LOCKED / Option A**（[`decision-dec-009-snapshot-save-tim
   Consistency: [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
   Selected via: ILB-1 third residual Option A（[`decision-ilb-1-third-residual-decision-selection.md`](./decision-ilb-1-third-residual-decision-selection.md)）
 PR #157 / #158: MERGED（DEC-009 Acceptance / FINAL CONSISTENT）
-AS-EC-1 Entry #8: **Accepted / LOCKED / Option A**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md)）
+AS-EC-1 Entry #8: **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md)）
   Plan: [`assessment-snapshot-complete-contract-technical-plan.md`](./assessment-snapshot-complete-contract-technical-plan.md)
+  Consistency: [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
   Independent Review: [`decision-as-ec-1-entry-8-independent-review.md`](./decision-as-ec-1-entry-8-independent-review.md)（**PASS**）
   Selected via: ILB-1 fourth residual Option A（[`decision-ilb-1-fourth-residual-decision-selection.md`](./decision-ilb-1-fourth-residual-decision-selection.md)）
+PR #159: MERGED（Entry #8 Acceptance + Entry #1/#2 audit）
 AS-EC-1 Entry #1/#2 audit: [`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)
   #1 PASS / MET · #2 PARTIAL / NOT FULLY MET
 AS-EC-1 overall: **HOLD**
+Fifth residual packet: OPEN（[`decision-ilb-1-fifth-residual-decision-selection-packet.md`](./decision-ilb-1-fifth-residual-decision-selection-packet.md) — Entry #2 fill-or-defer）
 Current single gate: **他残存 Decision を一件ずつ選定・判定**（RD-3 / retention prohibition / DEC-009 / Entry #8 は CONSUMED）
 OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
   post-retention deletion 自動 Accepted / AS-EC-1 overall 自動充足 / 日数・ロール・承認発明
@@ -306,7 +309,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-3 / GOV-RULE-07** | 通知開始時期 | **Accepted**（2026-08-09）/ Option C。見直し対象暦月に入ったら通知 / precision = approximate。正本: [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md) / [`review-notice-contract.md`](./review-notice-contract.md) / packet [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06 Accepted 前提。GOV-RULE-08 / RD-3 と混ぜない。日数変換禁止 | 通知実装は別 Entry + Human Implementation Start。`evaluateReviewDueRelativeToAsOf` UNCHANGED |
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | **Accepted / LOCKED**（2026-08-09）。モニタリング時期「3か月に1回程度」を目安として表示・通知 / informational only。期限超過・警告・業務制限・90日固定: 採用しない。hard due/overdue: NOT ADOPTED。正本: [`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md) / [`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md) | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted。GOV-RULE-05〜08 と整合。`evaluateReviewDueRelativeToAsOf` UNCHANGED | Implementation は別 Human GO。日数接近窓 domain 埋め込み禁止。89/90/91 は practice rule とみなさない |
-| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD（overall）。Entry #1 **PASS** / #2 **PARTIAL** / #3 DEC-009 Accepted / #4 GOV-AUD-03 Option E / #8 技術計画 **Accepted / LOCKED**。#5/#6/#7 未。監査正本 [`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md) | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009 Accepted**。GOV-AUD-03 Option E 済。Entry #8 plan Accepted。完全 Finding / findingIds・Schema・完全契約 PR 境界は未 | overall Entry satisfied は別 Human 記録。**保存実装・Schema・SharePoint / 型実装は含めない** |
+| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD（overall）。Entry #1 **PASS** / #2 **PARTIAL** / #3 DEC-009 Accepted / #4 GOV-AUD-03 Option E / #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**。#5/#6/#7 未。監査正本 [`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md) | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009 Accepted**。GOV-AUD-03 Option E 済。Entry #8 plan FINAL CONSISTENT。完全 Finding / findingIds・Schema・完全契約 PR 境界は未 | overall Entry satisfied は別 Human 記録。**保存実装・Schema・SharePoint / 型実装は含めない** |
 | **DEC-009** | AssessmentSnapshot 保存タイミング | **Accepted / LOCKED / Option A / FINAL CONSISTENT**。下書き / 確定時保存 / 元確定保持＋新版 / 上書き NOT ADOPTED / 履歴保持。正本: [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`assessment-snapshot-save-timing-contract.md`](./assessment-snapshot-save-timing-contract.md) / 整合 [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md) | Issue #8 / #19 / #24 | AS-EC-1 overall・Schema・FindingCode と混ぜない | AS-EC-1 #3 unlock。実装は別 Human Implementation Start |
 | **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者 / 提出・差戻し） | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み / Option C）**。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) / 整合 [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自最終承認・提出/差戻し Binding を再導入しない。role-free 遷移維持 | PR #147 Independent Review → Merge → Final CONSISTENT。次 unit は Merge 後 |
 
@@ -323,7 +326,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | 5 | 完全 Finding または findingIds 参照境界 | **未**（SEV / FC / 完全 Finding 依存） |
 | 6 | サービス別 `NOT_APPLICABLE` reason 正本または HOLD 方針 | **未** |
 | 7 | Schema ID / schemaVersion / DTO versioning | **未** |
-| 8 | 型・validator・合成 fixture・contract tests 計画 | **Accepted / LOCKED / Option A**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`assessment-snapshot-complete-contract-technical-plan.md`](./assessment-snapshot-complete-contract-technical-plan.md)。実装 DO NOT START） |
+| 8 | 型・validator・合成 fixture・contract tests 計画 | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`assessment-snapshot-complete-contract-technical-plan.md`](./assessment-snapshot-complete-contract-technical-plan.md) / 整合 [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)。実装 DO NOT START） |
 
 Result変換純関数は完成済みとして扱い、拡張しない。
 
@@ -438,9 +441,10 @@ Current single gate（canonical）:
   → Decision-RD-3 FINAL CONSISTENT
   → GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED
   → DEC-009 save timing FINAL CONSISTENT
-  → AS-EC-1 Entry #8 technical plan Accepted / LOCKED（Option A）
+  → AS-EC-1 Entry #8 technical plan FINAL CONSISTENT（Option A）
   → Entry #1/#2 read-only audit recorded（#1 PASS / #2 PARTIAL）
-  → 他残存 Decision を一件ずつ判定（Entry #2 PASS 化 / #5/#6/#7 / overall / post-retention 含む）
+  → 他残存 Decision を一件ずつ判定（Entry #2 fill-or-defer / #5/#6/#7 / overall / post-retention 含む）
+    Fifth residual packet: OPEN（[`decision-ilb-1-fifth-residual-decision-selection-packet.md`](./decision-ilb-1-fifth-residual-decision-selection-packet.md)）
 Decision-ILB-1 Human Policy 1–6: ACCEPTED / LOCKED / FINAL CONSISTENT
 Decision-RD-3: Accepted / LOCKED / FINAL CONSISTENT
 GOV-AUD-05 / DEC-012（retention prohibition）: Accepted / LOCKED / Option A
@@ -448,7 +452,7 @@ GOV-AUD-05 / DEC-012（retention prohibition）: Accepted / LOCKED / Option A
   post-retention deletion: OPEN / 別 Decision
 DEC-009: Accepted / LOCKED / Option A / FINAL CONSISTENT
   Closes only: AssessmentSnapshot 保存タイミング業務意味
-AS-EC-1 Entry #8: Accepted / LOCKED / Option A
+AS-EC-1 Entry #8: Accepted / LOCKED / Option A / FINAL CONSISTENT
   Closes only: 技術計画の存在（実装開始ではない）
 AS-EC-1 Entry #1: PASS / MET
 AS-EC-1 Entry #2: PARTIAL / NOT FULLY MET
@@ -603,8 +607,8 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. AS-EC-1 Entry #8 を Accepted / LOCKED（Option A）として正本化する（技術計画のみ）
-2. Entry #1/#2 の read-only 整合監査を記録する（#1 PASS / #2 PARTIAL）
+1. PR #159 MERGED 後の AS-EC-1 Entry #8 を FINAL CONSISTENT として同期する
+2. Entry #2 fill-or-defer の Human Decision packet を OPEN で置く（自動選定しない）
 3. AS-EC-1 overall / FindingCode / A-5 / Implementation Start は HOLD を維持する
 4. 型 / validator / fixture / contract tests / SharePoint / DTO 実装は開始しない
 5. 次 residual Decision は自動選定しない
