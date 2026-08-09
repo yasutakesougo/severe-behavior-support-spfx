@@ -59,9 +59,10 @@ A-class structure: ACCEPTED
   Bundle: A-1 + A-2 + A-3 + A-4 = one FindingCode business catalog Decision
   Separate: A-5 representation strategy = later Human Decision
 
-FC-1: Issue #8 new business DEC owns catalog change control（番号 UNASSIGNED）
+FC-1: Issue #8 new business DEC owns catalog change control（DEC-019）
 FC-2〜FC-6: delivery / snapshot / identifier / ownership-ref logical contracts Accepted
-FindingCode remains caller-supplied until business catalog content Accepted
+Finding catalog: EMPTY / NOT ADOPTED（A-1 NONE / A-2・A-3 N/A / A-4 DEC-019）
+No FindingCode values are supplied or generated; existing identity boundary remains unchanged
 Identity assembly: UNCHANGED
 FindingSeverity: NOT ADOPTED
 SEV-2-ASSIGN: N/A / DO NOT START
@@ -235,8 +236,8 @@ Acceptance: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-fi
 
 ```text
 A-1〜A-4: complete for EMPTY catalog scope（A-4 = DEC-019）
-Next recommended: Merge PR #141
-Issue #8 ledger registration of DEC-019: Human
+PR #141: MERGED / consumed by DEC-019
+Issue #8 ledger registration of DEC-019: POSTED / comment 5229477058
 Re-open catalog only with new Human primary information requiring Finding ADOPTED
 Implementation Start: HOLD
 ```

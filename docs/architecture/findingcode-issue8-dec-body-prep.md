@@ -9,9 +9,9 @@ Issue #8 DEC 本文に入れる **「Finding として管理すべき業務状�
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: DEC body preparation / business-state inventory
-Status: OPEN — continue one business state at a time
+Status: CONSUMED / historical preparation record
 Selected Option: C（decision-findingcode-option-c-selection.md）
-A-1〜A-4: PENDING（本文書では確定しない）
+A-1〜A-4: PENDING（prep開始時点の履歴。後続DEC-019で確定）
 FindingCode naming: FORBIDDEN in this document
 Implementation Start: HOLD
 ```
@@ -641,7 +641,7 @@ A-2: NOT APPLICABLE（Accepted）
 A-3: NOT APPLICABLE（Accepted）
 A-4: DEC-019（SELECTED）
 Acceptance: Accepted（DEC body + A-4）
-A-5: HOLD
+A-5: OUT（DEC-019 scope。separate Decision は未開始）
 Implementation Start: HOLD
 ```
 
@@ -649,5 +649,5 @@ Implementation Start: HOLD
 
 1. 洗い出しは停止のまま（Finding ADOPTED = 0）
 2. A-4 = DEC-019 は記録済み
-3. 次は **Merge GO** で PR #141
-4. Issue #8 への DEC-019 台帳登録は Human。Implementation Start は HOLD
+3. PR #141: MERGED（consumed）
+4. Issue #8 DEC-019: POSTED / comment 5229477058。Implementation Start は HOLD

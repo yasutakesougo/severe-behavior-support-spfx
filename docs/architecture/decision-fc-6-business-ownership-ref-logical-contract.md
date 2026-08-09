@@ -141,11 +141,13 @@ FC-6 Accepted は ownership / delivery / snapshot / identifier / representation 
 ## FC-6 で決めていないこと
 
 ```text
-Issue #8 FindingCode catalog DEC number: UNASSIGNED
-DEC ledger write procedure details: NOT STARTED
-FindingCode values: UNDECIDED
-code numbering: UNDECIDED
-criterionId mapping: UNDECIDED
+Issue #8 FindingCode catalog DEC number: 後続 Human Decision で DEC-019
+DEC ledger write: POSTED（Issue #8 comment 5229477058）
+FindingCode values: 本 Decision では未決。後続 DEC-019 で NONE
+code numbering: 本 Decision では未決。後続 DEC-019 で NOT APPLICABLE
+criterionId mapping: 本 Decision では未決。後続 DEC-019 で NOT APPLICABLE
+Finding catalog: EMPTY / NOT ADOPTED
+A-5: OUT（本 DEC-019 scope。representation strategy は別 Decision / DO NOT START）
 UUID / hash / semver / DEC-number strategy: UNDECIDED / DO NOT START
 actual identifier values: UNDECIDED
 ownership ref physical string format: UNDECIDED
