@@ -35,6 +35,7 @@ Seventeenth residual Decision: SELECTED / A — Tenant confirmation GO（Decisio
 Eighteenth residual Decision: SELECTED — Tenant confirmation execution authorization（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
 Nineteenth residual Decision: SELECTED / CONSUMED — New SPFx deployment target reuse（Decision-AS-TARGET-REUSE-1 Accepted / LOCKED / B）
 Twentieth residual Decision: SELECTED / CONSUMED — New SPFx target provisioning（Decision-AS-NEW-TARGET-PROVISION-1 Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1）
+Twenty-first residual Decision: SELECTED — New SPFx Site / List concrete naming / value（Decision-AS-NEW-TARGET-NAMES-1 OPEN / NOT ACCEPTED）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -48,6 +49,8 @@ Tenant confirmation GO boundary: Accepted / LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: Accepted / LOCKED（ES-1+TB-1+EO-1+FG-1）
 Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B（existing = reference only）
 Decision-AS-NEW-TARGET-PROVISION-1: Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1
+Decision-AS-NEW-TARGET-NAMES-1: OPEN / NOT ACCEPTED
+PR #184: MERGED（expected head 84745355929c7e43dcc6c89dd00d29935f79034c / merge 0be50a12e3699d187bce0f27caa732f3e7ccea24）
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
 New SPFx deployment target: TOPOLOGY LOCKED（dedicated Site + dedicated Lists）/ NOT CREATED / HOLD
@@ -170,8 +173,14 @@ Order:
      topology: dedicated new Site + dedicated new Lists
      concrete names: NOT SELECTED / OPEN
      Site / List creation: NO-GO
-     execution: IN PROGRESS / READ-ONLY（existing-app evidence）
-     remaining examples: post-retention / DEC-015 / concrete naming Decision / provisioning execution gate
+     PR #184: MERGED（8474535… / 0be50a1…）
+ 22. Twenty-first residual: New SPFx Site / List concrete naming / value（SELECTED；Decision-AS-NEW-TARGET-NAMES-1 OPEN / NOT ACCEPTED）
+     selection: decision-ilb-1-twenty-first-residual-new-spfx-target-names-selection.md
+     packet: decision-assessment-snapshot-new-target-names-packet.md
+     Agent recommendation（NOT Acceptance）: SU-1 + LN-1 + IN-1 + XB-1
+     concrete strings: Human Acceptance で明示 / Agent 発明禁止
+     creation / provisioning execution: 別 Human gate / NO-GO
+     remaining examples: post-retention / DEC-015 / provisioning execution gate
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
@@ -186,6 +195,7 @@ Tenant confirmation GO boundary: LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: LOCKED（ES-1+TB-1+EO-1+FG-1）
 Decision-AS-TARGET-REUSE-1: LOCKED / B
 Decision-AS-NEW-TARGET-PROVISION-1: LOCKED / ST-1+LT-1+NM-1+EX-1
+Decision-AS-NEW-TARGET-NAMES-1: OPEN / NOT ACCEPTED
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
 Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY

@@ -173,6 +173,9 @@ MUST NOT start from this Acceptance alone:
 Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
 Decision-AS-NEW-TARGET-PROVISION-1: Accepted / LOCKED / ST-1 + LT-1 + NM-1 + EX-1
   → decision-assessment-snapshot-new-target-provisioning-acceptance.md
+PR #184: MERGED
+  expected head: 84745355929c7e43dcc6c89dd00d29935f79034c
+  merge commit:  0be50a12e3699d187bce0f27caa732f3e7ccea24
 Observed existing environment: REFERENCE ONLY
 New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
 Concrete Site / List / Internal Names: NOT SELECTED / OPEN
@@ -185,7 +188,7 @@ tenant changes / List / column creation: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next substantive unit: NOT SELECTED by this Acceptance
-Ready: NOT RUN
-Merge: NOT RUN
+Next substantive unit: SELECTED — Decision-AS-NEW-TARGET-NAMES-1
+  （twenty-first residual / concrete naming / value；OPEN / NOT ACCEPTED）
+Creation / provisioning execution: NOT SELECTED（別 Human gate / NO-GO）
 ```
