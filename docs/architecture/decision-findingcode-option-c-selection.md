@@ -39,6 +39,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 - [`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)
 - [`decision-fc-1-finding-code-catalog-ownership.md`](./decision-fc-1-finding-code-catalog-ownership.md)
 - [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md)
+- [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)
 
 ## Selected Option: C
 

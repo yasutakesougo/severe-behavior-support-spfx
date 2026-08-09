@@ -215,29 +215,27 @@ FORBIDDEN in this packet:
 
 ```text
 HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION:
-  OPTION_C_SELECTED / CONTENT_PENDING
+  OPTION_C_SELECTED / DEC_BODY_ACCEPTANCE_READY
 Selected Option: C
-A-1 values: PENDING — Issue #8 DEC本文確定後
-A-2 numbering: PENDING — A-1確定後
-A-3 criterionId mapping: PENDING — 業務ルールとの対応確定後
-A-4 Issue #8 DEC number: PENDING — Human selection required
+A-1 values: NONE（proposal）
+A-2 numbering: NOT APPLICABLE（proposal）
+A-3 criterionId mapping: NOT APPLICABLE（proposal）
+A-4 Issue #8 DEC number: UNASSIGNED — Human selection required
 A-5: OUT
-Acceptance: NOT STARTED（A-1〜A-4 Human 一次情報未提示）
-Next work: findingcode-issue8-dec-body-prep.md
+Finding ADOPTED: 0（BS-001〜007）
+Next work: decision-findingcode-issue8-dec-body-acceptance-packet.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 ```
 
-Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
+Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)  
+DEC body packet: [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)
 
-## 7. Human への依頼（Option C 選択後）
+## 7. Human への依頼（現段）
 
-いまやることは FindingCode の命名ではない。
+1. [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md) で Option A/B/C を選ぶ
+2. Option A なら EMPTY catalog DEC 本文を Accept
+3. A-4 DEC 番号は Human が選ぶ（未指定なら UNASSIGNED のまま可）
+4. Agent は FindingCode 値・DEC 番号を発明しない
 
-1. [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md) で業務状態を洗い出す
-2. Finding にするもの／しないものを Human が決める
-3. Issue #8 DEC 本文を Human が承認する
-4. その後に A-1〜A-4 を確定し、Acceptance へ進む
-
-Agent は catalog 値を書かない。
 Acceptance / Entry satisfaction / Implementation Start は別 Gate。
