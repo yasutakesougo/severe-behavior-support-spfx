@@ -9,7 +9,7 @@ Issue #8 DEC 本文に入れる **「Finding として管理すべき業務状�
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: DEC body preparation / business-state inventory
-Status: OPEN — Human input required
+Status: OPEN — continue one business state at a time
 Selected Option: C（decision-findingcode-option-c-selection.md）
 A-1〜A-4: PENDING（本文書では確定しない）
 FindingCode naming: FORBIDDEN in this document
@@ -36,64 +36,111 @@ Live gate は repository docs に書かない
 ⑥ Acceptance
 ```
 
-いまやるのは **①〜③**。
+いまやるのは **①〜③を1件ずつ**。
 ④ は Human 承認。⑤⑥ は後工程。
 
-## すでに決まっている例（コード名は付けない）
+## 1件ずつの記録形式（必須）
 
-Accepted 済みの整理を、洗い出しの見本として再掲する。
-ここから FindingCode 名を作らない。
-
-### 例1 — 見直し通知
+次の形式でだけ確定する。Agent が空欄を補完しない。
 
 ```text
-一次情報:
-  「3ヶ月に1回程度、支援を見直す」（GOV-RULE-06 Accepted）
-
-業務ルール:
-  見直し対象月に入ったら知らせる（GOV-RULE-07 Accepted / Option C）
-
-扱い:
-  情報通知である
-  期限超過・違反 Finding にはしない（GOV-RULE-08 Accepted / NOT ADOPTED）
-
-Finding にする?:
-  NO（現行 scope）
-```
-
-### 例2 — 支援計画がないと進めない
-
-```text
-一次情報の候補:
-  「必要な支援計画がない状態では、支援手順記録へ進めない」
-
-Human 分岐（2026-08-09）:
-  Selected: A
-  A. hard gate だけでよい
-     （進めない／止める。Finding としては残さない）
-  B. 未作成状態を Finding として継続管理する
-     （選ばない）
-
-Finding にする?:
-  NO — hard gate のみ（Human Selected A）
+Business State:
+  （人の言葉）
+System behavior:
+  HARD GATE | NOTICE | OTHER（Human が明示）
+Finding:
+  ADOPTED | NOT ADOPTED
 FindingCode:
-  付けない（本状態は catalog 候補にしない）
+  NONE | PENDING（Finding ADOPTED のときだけ後で命名）
+継続管理:
+  Findingとしては行わない | Findingとして行う
 ```
 
-## Human 入力表（空欄を Agent が埋めない）
+## 確定済み（Human Decision）
 
-各行について、Human が埋める。
-FindingCode 名・番号は書かない。
+### BS-001 — 有効な支援計画がないため手順記録へ進めない
 
-| # | 業務状態（人の言葉） | 一次情報・根拠 | 継続管理するか | Finding にするか | しない場合の扱い | Human メモ |
+```text
+ID: BS-001
+Status: DECIDED（Human primary information / 2026-08-09）
+
+Business State:
+  有効な支援計画がないため、支援手順記録へ進めない
+
+System behavior:
+  HARD GATE
+  → その場で進行を禁止する
+
+Finding:
+  NOT ADOPTED
+
+FindingCode:
+  NONE
+
+継続管理:
+  Findingとしては行わない
+```
+
+流れ:
+
+```text
+支援計画なし
+  ↓
+手順記録へ進めない
+  ↓
+その場で止める
+  ↓
+Finding は生成しない
+  ↓
+FindingCode も作らない
+```
+
+分岐メモ（記録用）:
+
+```text
+Human Selected: A（hard gate のみ）
+B（Finding として継続管理）: 選ばない
+```
+
+### BS-REF-01 — 見直し対象月に入った（参考・既存 Accepted）
+
+FindingCode catalog 候補ではない。見本として残す。
+
+```text
+ID: BS-REF-01
+Status: REFERENCE（GOV-RULE-06/07/08 Accepted — catalog 候補外）
+
+Business State:
+  見直し対象月に入った（「3ヶ月に1回程度」の見直し時期）
+
+System behavior:
+  NOTICE
+  → 職員へ「見直し時期です」と知らせる
+
+Finding:
+  NOT ADOPTED
+
+FindingCode:
+  NONE
+
+継続管理:
+  Findingとしては行わない（情報通知のみ）
+```
+
+## Business-state table（要約）
+
+| ID | 業務状態（人の言葉） | System behavior | Finding | FindingCode | 継続管理 | 状態 |
 |---|---|---|---|---|---|---|
-| 1 | （例）見直し対象月に入った | GOV-RULE-06/07 | 通知として扱う | **NO** | 情報通知のみ | Accepted 見本 |
-| 2 | 必要な支援計画がないまま手順記録へ進もうとする | （Human） | （Human） | （Human: YES/NO） | hard gate のみ / 他 | |
-| 3 | | | | | | |
-| 4 | | | | | | |
-| 5 | | | | | | |
+| BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE** | Findingとしては行わない | **DECIDED** |
+| BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
+| （次） | （Human が1件提示） | | | | | OPEN |
 
-必要なら行を増やす。Agent は行を業務推測で埋めない。
+## 未決（次の1件）
+
+```text
+Next: Human が次の Business State を同じ形式で1件提示する
+Agent: 候補を発明しない / FindingCode を命名しない
+```
 
 ## Finding にする／しない の判断メモ（Human 用）
 
@@ -110,7 +157,7 @@ Finding にしなくてよいもの:
 
 ## Issue #8 DEC 本文に入れる骨子（下書き枠）
 
-Human が ①〜③ を埋めたあと、DEC 本文の骨子は次の形にする。
+Human が必要件数の ①〜③ を埋めたあと、DEC 本文の骨子は次の形にする。
 番号・コード名は **Human が後で** 付ける（A-1〜A-4）。
 
 ```text
@@ -121,10 +168,12 @@ DEC number: PENDING — Human selection（A-4）
    Finding として継続管理する業務状態の正本
 
 2. Finding にする業務状態
-   - （Human 表の YES 行を人の言葉で列挙）
+   - （Finding = ADOPTED の行を人の言葉で列挙）
 
 3. Finding にしない業務状態
-   - （Human 表の NO 行と理由）
+   - BS-001: 有効な支援計画がないため手順記録へ進めない
+     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE）
+   - （その他 NOT ADOPTED 行）
 
 4. 変更管理
    追加・廃止は本 DEC の改訂による（FC-1）
@@ -141,7 +190,8 @@ DEC number: PENDING — Human selection（A-4）
 
 ```text
 Selected Option: C
-Current work: business-state inventory for Issue #8 DEC body
+Current work: business-state inventory（1件ずつ）
+BS-001: DECIDED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE）
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -153,9 +203,9 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. 上の表に、**業務状態を人の言葉で** 足してください
-2. それぞれ **Finding にする / しない** を書いてください
-3. そろったら Issue #8 の DEC 本文案を Human が承認します
+1. **次の業務状態を1件**、上と同じ形式で書いてください
+2. Finding にする / しない をその1件で決めてください
+3. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
 4. そのあとで初めて A-1〜A-4（コード名・採番など）を決めます
 
-Agent は FindingCode 名を付けません。
+Agent は FindingCode 名を付けません。次の候補を勝手に増やしません。
