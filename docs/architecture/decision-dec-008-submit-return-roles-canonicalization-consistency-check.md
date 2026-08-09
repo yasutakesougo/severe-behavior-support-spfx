@@ -98,9 +98,9 @@ transitionSupportPlanStatus 破壊: FORBIDDEN
 ## 6. After FINAL CONSISTENT
 
 ```text
-Next substantive unit: NOT SELECTED
-Agent auto-select: FORBIDDEN
+Next substantive unit: SELECTED / B — GOV-AUD-04
+  → decision-gov-aud-04-logical-delete-role-decision-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```
 
-Human が次の substantive unit を新たに選ぶ。
+GOV-AUD-04 は本整合確認の対象外（別 unit）。
