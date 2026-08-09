@@ -70,13 +70,13 @@ Selected: Option A
 
 - **実践研修修了者＝支援計画シート等の制度上の作成者** を Accepted する。
 - 独立した最終承認者は置かない（[`decision-dec-008-final-approver-acceptance.md`](./decision-dec-008-final-approver-acceptance.md)）。
-- サービス管理責任者を最終承認者とする案は採択しない。
+- サービス管理責任者を最終承認者とする案は NOT ADOPTED / 不採用。
 
 ## Acceptance boundary
 
 ```text
 NOT derived / MUST NOT start from this Acceptance alone:
-  独立した最終承認者ロールの発明
+  アプリ独自の最終承認者ロールの発明
   サービス管理責任者 = 最終承認者
   提出・差戻しロールの確定
   SupportPlan 遷移契約へのロール検査埋め込み
@@ -85,6 +85,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
   Implementation Start
   SharePoint / M365 / Deploy / real data
 ```
+
 
 ## 既存契約との関係
 
@@ -100,9 +101,13 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 Accepted: 制度上の作成者 = 実践研修修了者
-独立した最終承認者: NOT ADOPTED
-FindingCode / A-5 / Implementation: HOLD
-次 substantive unit: NOT SELECTED
+独立した最終承認者: NOT ADOPTED → アプリ独自の最終承認者を設定しない
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
+Next: Issue #8 ledger post + consistency check
 ```
 
 Agent は本 Acceptance を理由に Implementation や FindingCode へ自動進行しない。
+

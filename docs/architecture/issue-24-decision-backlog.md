@@ -73,24 +73,27 @@ PR #139 / Implementation Entry Decision Re-audit: MERGED（merge `99c8b24f0fa22f
 Finding catalog DEC-019: **Accepted** / EMPTY / NOT ADOPTED（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
 A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019** / A-5: OUT
 FindingCode 作成: DO NOT START
-DEC-008: **Accepted**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
-  制度上の作成者: 実践研修修了者 = 支援計画シート等の制度上の作成者
-  独立した最終承認者: **NOT ADOPTED**（設定しない / 制度根拠未確認）
-  サービス管理責任者を最終承認者とする案: 未採択 / 不採用
-DEC-008 separation: [`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md)
-Current single gate: **次 substantive unit 選定（NOT SELECTED）**
+DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
+  制度上の作成者: ACCEPTED = 実践研修修了者 = 支援計画シート等の制度上の作成者
+  独立した最終承認者: **NOT ADOPTED** → アプリ独自の最終承認者を設定しない
+  サービス管理責任者を最終承認者とする案: NOT ADOPTED / 不採用
+DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（READY_FOR_HUMAN_POST）
+DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（DOCS PASS / LIVE PENDING）
+Current single gate: **DEC-008 正本化完了（Issue #8 post + final consistency）**
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
+制度資料が支持しない承認フロー追加: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
-FindingCode 作成: DO NOT START
-A-5: OUT
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
 Implementation Start: HOLD
-次 substantive unit: NOT SELECTED
+Next substantive unit: NOT SELECTED（正本化完了後に選定）
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
+
 
 
 
@@ -232,7 +235,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
-| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者） | **Accepted**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**（設定しない）。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md) / [`decision-dec-008-final-approver-acceptance.md`](./decision-dec-008-final-approver-acceptance.md) | Issue #8 / DEC-008 | 独立承認ロールを発明しない。SupportPlan role-free 契約を壊さない | current scope closed。再評価は別 Human Decision |
+| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者） | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**（アプリ独自の最終承認者を設定しない）。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)。台帳: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)。整合: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自承認フローを追加しない。SupportPlan role-free 契約を壊さない | Issue #8 post + final consistency 後、次 substantive unit 選定 |
 
 ### Snapshot Entry Criteria（整理のみ・実装しない）
 
@@ -357,15 +360,19 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  次 substantive unit 選定（NOT SELECTED）
-DEC-008: Accepted
+  DEC-008 正本化完了
+  = Issue #8 ledger post + consistency check final PASS
+DEC-008: Accepted / LOCKED
   制度上の作成者 = 実践研修修了者
-  独立した最終承認者 = NOT ADOPTED
+  独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
-FindingCode 作成: DO NOT START
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Next substantive unit: NOT SELECTED
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 
@@ -498,16 +505,17 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. DEC-008 を制度上の作成者 / 独立最終承認者に分離して扱う
-2. 実践研修修了者 = 支援計画シート等の制度上の作成者 を Accepted する
-3. 独立した最終承認者は制度根拠未確認のため NOT ADOPTED（設定しない）
-4. サービス管理責任者を最終承認者とする案は採択しない
-5. FindingCode / A-5 / Implementation Start は HOLD を維持する
-6. SupportPlan role-free 技術契約は変更しない
-7. SharePoint 実環境 / M365 / Deploy / real data へ進まない
-8. src/** / tests/** は変更しない
-9. 次 substantive unit は自動選定しない
+1. DEC-008 を Accepted / LOCKED として固定する
+2. 制度上の作成者 = 実践研修修了者 を ACCEPTED する
+3. 独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
+4. サービス管理責任者を最終承認者とする案 = NOT ADOPTED / 不採用
+5. Issue #8 台帳登録文面と正本化整合確認を置く
+6. FindingCode / A-5 / Implementation Start は HOLD を維持する
+7. SupportPlan role-free 技術契約は変更しない
+8. SharePoint 実環境 / M365 / Deploy / real data へ進まない
+9. 次 substantive unit は正本化完了後に Human が選定する
 ```
+
 
 
 

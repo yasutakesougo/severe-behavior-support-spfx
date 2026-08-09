@@ -58,7 +58,9 @@ FindingCode Issue #8 DEC body prep（BS-001〜007 PAUSED / Finding ADOPTED = 0�
 FindingCode Issue #8 DEC body Acceptance packet（EMPTY catalog）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance-packet.md
 FindingCode Issue #8 DEC body Acceptance（Accepted / Option A / EMPTY）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance.md
 FindingCode A-4 DEC number review（SELECTED / DEC-019）: docs/architecture/decision-findingcode-a4-dec-number-review.md
-DEC-008 Acceptance（Accepted / 制度上の作成者=実践研修修了者 / 独立最終承認者 NOT ADOPTED）: docs/architecture/decision-dec-008-acceptance.md
+DEC-008 Acceptance（LOCKED）: docs/architecture/decision-dec-008-acceptance.md
+DEC-008 Issue #8 ledger registration（READY_FOR_HUMAN_POST）: docs/architecture/decision-dec-008-issue8-ledger-registration.md
+DEC-008 canonicalization consistency check: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 DEC-008 authoring-center Acceptance: docs/architecture/decision-dec-008-authoring-center-acceptance.md
 DEC-008 final-approver Acceptance（NOT ADOPTED）: docs/architecture/decision-dec-008-final-approver-acceptance.md
