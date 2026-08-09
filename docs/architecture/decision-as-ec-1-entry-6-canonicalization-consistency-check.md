@@ -6,8 +6,29 @@ Status: **CONSISTENT（Entry #6 = PASS / MET）**（2026-08-09）
 Merge 後の FINAL CONSISTENT 追記は別工程で行う。
 
 ```text
-base: Entry #5 tip（findingIds NOT REQUIRED Acceptance）
-upstream main ancestor: 15861046484362e7e15d4b87aebd101eedf0c40b
+base: main（PR #164 MERGED 後）
+main: c7f465803e518e395719bf673738b20cf3cbcf9b
+prior stack tip（pre-retarget）: Entry #5 tip 0c7b4250563295363385295cf0f9661309a9b1d2
+upstream main ancestor at original Acceptance: 15861046484362e7e15d4b87aebd101eedf0c40b
+```
+
+## 0. Post-retarget re-audit（PR #165 → base main）
+
+```text
+Event: Human retargeted PR #165 base → main after PR #164 MERGED
+Observed: GitHub briefly mergeable=false after retarget
+Action: merge origin/main into cursor/as-ec-1-entry-6-not-applicable-hold-dd56
+Content conflicts: NONE（ort clean merge）
+src/** / tests/**: unchanged（0）
+Entry #6 substantive meaning: UNCHANGED
+  サービス別 NOT_APPLICABLE reason 正本 = 今採択しない
+  Entry #6 = HOLD方針として PASS / MET
+  値一覧発明 = FORBIDDEN
+  Entry #7 / overall / PR-J / FindingCode / A-5 / Implementation = HOLD
+Re-audit verdict: CONSISTENT（Entry #6 = PASS / MET）on main @ c7f4658…
+Ready: NOT RUN（Human）
+Merge: NOT RUN（Human）
+#166 / #167: parked（do not advance in this step）
 ```
 
 ## 1. 確定した範囲
