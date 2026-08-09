@@ -1,6 +1,6 @@
 # 次 substantive unit 選定 — Human Selection
 
-この文書は、DEC-008 正本化 **CONSISTENT** / GOV-AUD-03 Accepted 後の
+この文書は、Decision-OP-3 正本化（Accepted / LOCKED / DOCS CONSISTENT）後の
 **次 substantive unit 選定** の Human Decision 記録である。
 
 Decision packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)
@@ -8,38 +8,36 @@ Decision packet: [`decision-next-substantive-unit-selection-packet.md`](./decisi
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
-Status: SELECTED
-Human Selection: Explicit Human Option C on 2026-08-09
-Selected substantive unit:
-  C — Decision-OP-3（観察期間 Schema）
-Scope:
-  観察期間をデータとしてどう表現するか
-  （既存資料の未決定点抽出 → Human Decision）
-日数・期限の発明: FORBIDDEN
-FindingCode: HOLD / DO NOT CREATE
+Status: NOT SELECTED
+Depends on:
+  Decision-OP-3 Accepted / LOCKED / Option A
+  consistency: DOCS CONSISTENT（PR #146 Merge → Final CONSISTENT）
+Prior selections（CONSUMED）:
+  B — GOV-AUD-03（Accepted / Option E）
+  C — Decision-OP-3（Accepted / LOCKED / Option A）
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 ```
 
 ## Human Selection
 
 ```text
-Selected: C
-Decision-OP-3（観察期間 Schema）
+Selected: NOT SELECTED
+Awaiting: Explicit Human Option after OP-3 lock
 ```
 
-理由（Human）:
+理由（process）:
 
 ```text
-支援計画に沿って支援手順記録を経過観察し、
-モニタリングで更新する業務ルールまで Human 一次情報が固まっている。
-次は「観察期間をデータとしてどう表現するか」を閉じると、
-業務ルールから contract への接続が進む。
-期間の日数や期限は AI 側で発明しない。
-まず OP-3 の既存資料から未決定点だけを抽出して Human Decision にする。
+Decision-OP-3 の Acceptance / 整合確認を正本化したあと、
+新しい substantive unit を選ぶのが安全である。
+Agent は自動選定しない。
 ```
 
 ```text
+Prior selection C / Decision-OP-3: CONSUMED（Accepted / LOCKED / Option A）
 Prior selection B / GOV-AUD-03: CONSUMED（Accepted / Option E）
 Agent recommendation: NOT Human Selection evidence
 ```
@@ -47,7 +45,7 @@ Agent recommendation: NOT Human Selection evidence
 ## Next
 
 ```text
-Open-points: decision-op-3-open-points-extraction.md
-Decision packet: decision-op-3-observation-period-schema-decision-packet.md
-Implementation Start: HOLD
+1. PR #146 Merge（未マージなら）→ OP-3 Final CONSISTENT
+2. Human が packet から次 substantive unit を選ぶ
+FindingCode / A-5 / Implementation Start: HOLD
 ```

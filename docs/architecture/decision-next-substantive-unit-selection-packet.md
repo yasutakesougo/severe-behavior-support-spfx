@@ -1,6 +1,6 @@
-# Decision Packet — 次 substantive unit 選定
+# Decision Packet — 次 substantive unit 選定（post Decision-OP-3）
 
-この文書は、DEC-008 正本化が **CONSISTENT** になったあとの
+この文書は、Decision-OP-3 が **Accepted / LOCKED**（docs DOCS CONSISTENT）になったあとの
 **次 substantive unit 選定** のための Human Decision Packet である。
 
 FindingCode 値作成ではない。
@@ -14,29 +14,30 @@ Agent が次 unit を自動選定しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
 Kind: Human Decision packet
-Status: CONSUMED（Human Selected Option C after GOV-AUD-03）
+Status: OPEN / READY_FOR_HUMAN_DECISION
 Selection record: decision-next-substantive-unit-selection.md
 Depends on:
-  DEC-008 Accepted / LOCKED
-  Issue #8 comment 5229571943
-  PR #143 MERGED（713c40a…）
-  consistency: CONSISTENT
-  GOV-AUD-03 Accepted / Option E（PR #145 / f7448d2…）
-FindingCode: HOLD / DO NOT CREATE
+  Decision-OP-3 Accepted / LOCKED / Option A
+  Acceptance: decision-op-3-observation-period-schema-acceptance.md
+  Logical contract: observation-period-schema-contract.md
+  Consistency: decision-op-3-canonicalization-consistency-check.md
+    （DOCS CONSISTENT / PR #146 Merge → Final CONSISTENT）
+Prior CONSUMED:
+  B — GOV-AUD-03 Accepted / Option E（PR #145）
+  C — Decision-OP-3 Accepted / LOCKED / Option A（PR #146）
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: SELECTED / Decision-OP-3
+Next substantive unit: NOT SELECTED
 ```
-
-
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
 
 上位入口:
 
-- [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)
-- [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)
+- [`decision-op-3-canonicalization-consistency-check.md`](./decision-op-3-canonicalization-consistency-check.md)
+- [`decision-op-3-observation-period-schema-acceptance.md`](./decision-op-3-observation-period-schema-acceptance.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
 - [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)
 - [`finding-audit-ownership.md`](./finding-audit-ownership.md)
@@ -44,12 +45,16 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ## 1. Current locked state
 
 ```text
-DEC-008 / Issue #8: POSTED / 5229571943
-PR #143: MERGED / 713c40a…
-制度上の作成者: 実践研修修了者
-独立した最終承認者: NOT ADOPTED
-Consistency: CONSISTENT
-FindingCode: HOLD / DO NOT CREATE
+Decision-OP-3: Accepted / LOCKED / Option A
+  periodFrom: REQUIRED
+  periodTo: REQUIRED
+  Open-ended periodTo: NOT ADOPTED
+  制度日数・既定観察窓の domain 埋め込み: NOT ADOPTED
+  evaluateObservationPeriodMembership: UNCHANGED
+GOV-AUD-03: Accepted / Option E
+DEC-008: Accepted / LOCKED / CONSISTENT
+Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Next substantive unit: NOT SELECTED
@@ -63,11 +68,13 @@ Next substantive unit: NOT SELECTED
 
 | ID | 扱い |
 |---|---|
-| DEC-008 current scope | **closed / CONSISTENT** — 再開しない |
-| FindingCode 値作成 | **OUT / DO NOT CREATE** |
+| Decision-OP-3 | **closed / LOCKED** — 再開しない |
+| GOV-AUD-03 | **closed / Option E** — 再開しない |
+| FindingCode 値作成 | **OUT / HOLD** |
 | A-5 | **OUT / HOLD** |
 | Implementation Start | **OUT / HOLD** |
 | SharePoint / Deploy / real data | **NO-GO** |
+| 日数・期限 invention | **FORBIDDEN** |
 | 次 substantive unit | **本 packet** |
 
 ## 3. Options（候補）
@@ -81,22 +88,20 @@ Does NOT start:
   Schema / SharePoint / 保存実装
 ```
 
-### Option B — GOV-AUD-03（訂正承認境界）または Issue #19 の最小 GOV-AUD 単位
+### Option B — Issue #19 最小 GOV-AUD 残件（01 / 04 / 05 等）
 
 ```text
 Meaning:
-  Snapshot 訂正承認など、GOV-AUD 残件の最小単位を選ぶ
+  GOV-AUD-03 は CONSUMED。別の最小 GOV-AUD 単位を選ぶ
 Requires:
-  Human が対象 GOV-AUD ID を明示してもよい
+  Human が対象 GOV-AUD ID を明示する
 ```
 
-### Option C — Decision-OP-3（観察期間 Schema / 制度日数 / 開放終端）
+### Option C — Decision-OP-3（観察期間 Schema）— CONSUMED
 
 ```text
-Meaning:
-  観察期間の Schema / 制度日数 / periodTo 開放終端を決める
-Keeps:
-  evaluateObservationPeriodMembership UNCHANGED until Decision
+Status: CONSUMED / Accepted / LOCKED / Option A
+Do not re-select as next unit
 ```
 
 ### Option D — Decision-RD-3（接近窓 / 算出 / 超過後）
@@ -139,6 +144,7 @@ Implementation Start
 FC-7
 SEV-2-ASSIGN / FindingSeverity restart
 hard due / overdue implementation
+Decision-OP-3 re-open / day-count invention
 SharePoint / M365 / Deploy / real data
 ```
 
@@ -147,9 +153,10 @@ SharePoint / M365 / Deploy / real data
 ```text
 Recommended: NONE（自動選定しない）
 Note:
-  FindingCode 作成線は DEC-019 EMPTY 後も HOLD / DO NOT CREATE。
-  旧「A-1〜A-4 bundle が current single gate」推奨は消費済み（DEC-019）。
-  安全な候補は A / B / C / E。
+  OP-3 Acceptance / 整合確認の正本化が先。
+  PR #146 Merge 後に Human が選ぶのが安全。
+  FindingCode / A-5 / Implementation は HOLD 維持。
+  安全な候補の例: A（DEC-009）/ B（明示 GOV-AUD ID）/ E。
   D は GOV-RULE-08 NOT ADOPTED 境界を厳守する場合のみ。
 ```
 
@@ -160,30 +167,25 @@ Note:
   次に着手する substantive unit はどれですか？
 
 A. DEC-009（AssessmentSnapshot 保存タイミング）
-B. GOV-AUD-03 または Issue #19 最小 GOV-AUD 単位
-C. Decision-OP-3（観察期間 Schema / 制度日数 / 開放終端）
+B. Issue #19 最小 GOV-AUD 残件（対象 ID を明示）
+C. Decision-OP-3 — CONSUMED（選ばない）
 D. Decision-RD-3（接近窓等）
 E. DEC-008 残面（提出・差戻しロール）のみ
 F. 別単位（単位名を明示）
 G. まだ決めない
 
-答え: C（2026-08-09）— after GOV-AUD-03 Accepted / Option E
-Scope: Decision-OP-3 観察期間 Schema（未決定点抽出 → Human Decision）
-Selection record: decision-next-substantive-unit-selection.md
-Prior B / GOV-AUD-03: CONSUMED
+答え: （Human 記入）
+Scope: （Human 記入）
 ```
 
 ## 7. Gate
 
 ```text
-DEC-008 consistency: CONSISTENT
-GOV-AUD-03: Accepted / Option E
-NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected C
-Selected unit: Decision-OP-3
-OP-3 open-points: decision-op-3-open-points-extraction.md
-OP-3 packet: READY_FOR_HUMAN_DECISION
-  → decision-op-3-observation-period-schema-decision-packet.md
-FindingCode: HOLD / DO NOT CREATE
+Decision-OP-3: Accepted / LOCKED / DOCS CONSISTENT
+PR #146: Merge → Final CONSISTENT
+NEXT_SUBSTANTIVE_UNIT_SELECTION: OPEN / NOT SELECTED
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
+Agent auto-select: FORBIDDEN
 ```

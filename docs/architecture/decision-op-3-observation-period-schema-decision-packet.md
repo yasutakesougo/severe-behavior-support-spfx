@@ -16,21 +16,24 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-OP-3
 Kind: Human Decision packet
-Status: CONSUMED（Human Decision Accepted / Option A）
+Status: CONSUMED（Human Decision Accepted / LOCKED / Option A）
 Accepted 正本: decision-op-3-observation-period-schema-acceptance.md
 Logical contract: observation-period-schema-contract.md
+Consistency: decision-op-3-canonicalization-consistency-check.md
 Owner candidates: Issue #24（メンバシップ）/ Issue #26（Schema 関連）
 Membership contract: observation-period.md（UNCHANGED）
 main baseline: f7448d245d5744940c0b0f921b5aca57b18cb32d
 PR #145 / GOV-AUD-03: MERGED
-Selected via: next substantive unit C
+Selected via: next substantive unit C（CONSUMED）
 duration_days invention: FORBIDDEN
-FindingCode: HOLD / DO NOT CREATE
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
+Next substantive unit: NOT SELECTED
 Agent recommendation（historical）: Option A
 Human Selected: Option A
+Human freeze: 2026-08-09（LOCKED wording）
 ```
 
 

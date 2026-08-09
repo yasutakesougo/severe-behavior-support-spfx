@@ -121,9 +121,11 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-1. OP-3 正本化・整合確認を完了する
-   → decision-op-3-canonicalization-consistency-check.md
-2. PR #146 Merge（未マージなら）
-3. その後、新しい substantive unit を選定する（NOT SELECTED のまま）
+Docs-internal Acceptance / consistency: DONE
+  → decision-op-3-canonicalization-consistency-check.md（DOCS CONSISTENT）
+PR #146 Merge: Human Merge GO（C8 → Final CONSISTENT）
+Next substantive unit: NOT SELECTED
+  → packet OPEN: decision-next-substantive-unit-selection-packet.md
+  → Agent MUST NOT auto-select
 FindingCode / A-5 / Implementation: HOLD
 ```

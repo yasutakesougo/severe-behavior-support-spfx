@@ -89,6 +89,13 @@ evaluateObservationPeriodMembership 破壊: FORBIDDEN
 
 ## 6. After CONSISTENT（merge 後）
 
-Human が次の substantive unit を新たに選ぶ。
+```text
+Next substantive unit: NOT SELECTED
+Selection packet: OPEN
+  → decision-next-substantive-unit-selection-packet.md
+Agent auto-select: FORBIDDEN
+FindingCode / A-5 / Implementation: HOLD
+```
 
-候補の提示は、Human が求めたときだけ行う。
+Human が packet から次の substantive unit を選ぶ。
+候補の自動選定はしない。

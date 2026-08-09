@@ -64,8 +64,11 @@ DEC-008 canonicalization consistency check（CONSISTENT / 最終確定）: docs/
 Next substantive unit selection（SELECTED / B / GOV-AUD-03）: docs/architecture/decision-next-substantive-unit-selection.md
 GOV-AUD-03 Acceptance（Accepted / Option E / application 対象外）: docs/architecture/decision-gov-aud-03-snapshot-correction-approver-acceptance.md
 Next substantive unit selection（SELECTED / C / Decision-OP-3）: docs/architecture/decision-next-substantive-unit-selection.md
-Decision-OP-3 Acceptance（Accepted / Option A）: docs/architecture/decision-op-3-observation-period-schema-acceptance.md
+Decision-OP-3 Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-op-3-observation-period-schema-acceptance.md
 Observation period logical Schema contract: docs/architecture/observation-period-schema-contract.md
+Decision-OP-3 canonicalization consistency check（DOCS CONSISTENT）: docs/architecture/decision-op-3-canonicalization-consistency-check.md
+Next substantive unit selection（post OP-3 / OPEN / NOT SELECTED）: docs/architecture/decision-next-substantive-unit-selection.md
+Next substantive unit selection packet（OPEN）: docs/architecture/decision-next-substantive-unit-selection-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 

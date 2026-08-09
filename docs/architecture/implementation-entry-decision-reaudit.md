@@ -181,9 +181,9 @@ save / Schema / SharePoint: NOT in this re-audit start
 
 | ID | 状態 | Entry |
 |---|---|---|
-| Decision-OP-3 | **Accepted / Option A** | periodFrom/periodTo required；制度日数 NOT ADOPTED；開放終端 NOT ADOPTED；実装 HOLD |
+| Decision-OP-3 | **Accepted / LOCKED / Option A** | periodFrom/periodTo REQUIRED；制度日数・既定窓 NOT ADOPTED；開放終端 NOT ADOPTED；純関数 UNCHANGED；実装 HOLD |
 | DEC-6 SharePoint column conversion | HOLD | Adapter Entry |
-| Open-end `periodTo` / RSV `effectiveTo` | HOLD | 別 Decision 要 |
+| Open-end `periodTo` | **NOT ADOPTED**（OP-3） | 再開しない。RSV `effectiveTo` は別 |
 
 ## Remaining blockers（混在禁止）
 
@@ -191,9 +191,9 @@ save / Schema / SharePoint: NOT in this re-audit start
 |---|---|---|
 | FindingCode | A-1〜A-4 content → A-5 → Entry satisfaction → Start | FC |
 | Review ops | Schema/物理列 / notice 実装 Entry / RD-3（任意） | Review |
-| Snapshot | DEC-009 / GOV-AUD-03 / Finding 境界 / reasons / Schema | AS-EC-1 |
+| Snapshot | DEC-009 / Finding 境界 / reasons / Schema（GOV-AUD-03 = Option E 済） | AS-EC-1 |
 | Audit real env | 実 adapter Gate | Audit（別） |
-| SupportPlan Schema | OP-3 / DEC-6 | Schema/Adapter |
+| SupportPlan Schema | OP-3 LOCKED → DEC-6 | Schema/Adapter |
 | Closed | GOV-RULE-08 hard due / SEV-2-ASSIGN / FC-7 | DO NOT START |
 
 ## Conflicts / stale language（re-audit notes）
@@ -223,10 +223,12 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 
 **Safe parallel alternatives（Human が明示選択した場合のみ）:**
 
-1. `DEC-009` および/または `GOV-AUD-03`（AS-EC-1 向け最小 unlock）
-2. Decision-OP-3（観察期間 Schema/制度。review overdue と分離）
+1. `DEC-009`（AS-EC-1 向け最小 unlock；GOV-AUD-03 は Option E 済）
+2. Issue #19 最小 GOV-AUD 残件（対象 ID を Human が明示）
 3. Decision-RD-3（接近窓等。08 NOT ADOPTED を開始信号にしない）
 4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
+
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03
 
 **Do not next / DO NOT START:**
 

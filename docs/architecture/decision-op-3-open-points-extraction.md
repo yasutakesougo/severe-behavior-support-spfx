@@ -13,19 +13,23 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit ID: Decision-OP-3-OPEN-POINTS
 Kind: open-points extraction / source inventory
-Status: CONSUMED（Decision-OP-3 Accepted / Option A）
+Status: CONSUMED（Decision-OP-3 Accepted / LOCKED / Option A）
 main baseline: f7448d245d5744940c0b0f921b5aca57b18cb32d
 Membership pure function: DONE（PR #79 / #80 / observation-period.md）
 Decision-OP-1 / OP-2: Accepted（ownership 表）
-Decision-OP-3: Accepted / Option A
-  U1: fields ADOPTED（periodFrom / periodTo）
+Decision-OP-3: Accepted / LOCKED / Option A
+  U1: fields ADOPTED（periodFrom / periodTo REQUIRED）
   U2: ISO DateTime both required
   U3: open-end NOT ADOPTED
-  U4: institutional day count NOT ADOPTED
+  U4: 制度日数・既定観察窓 domain 埋め込み NOT ADOPTED
+  evaluateObservationPeriodMembership: UNCHANGED
+Acceptance: decision-op-3-observation-period-schema-acceptance.md
+Consistency: decision-op-3-canonicalization-consistency-check.md
 duration_days invention: FORBIDDEN
-FindingCode: HOLD / DO NOT CREATE
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 ```
 
 
