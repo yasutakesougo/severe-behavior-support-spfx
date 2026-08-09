@@ -42,7 +42,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | **GOV-RULE-05** | 見直し周期の基準日 | cadence・通知・due/overdue | **Accepted** |
 | GOV-RULE-06 | practice cadence | 基準日 | **Accepted** |
 | GOV-RULE-07 | 通知開始時期 | 基準日 | **Accepted**（Option C / [`review-notice-contract.md`](./review-notice-contract.md)） |
-| GOV-RULE-08 | 期限当日・期限超過の定義 | 基準日 | HOLD |
+| GOV-RULE-08 | 期限当日・期限超過の定義 | 基準日 | **Accepted** / Option A / NOT ADOPTED |
 | Decision-RD-3 | 接近窓・期限算出・超過後ポリシー | 基準日の一次表現 | HOLD |
 
 ## Accepted 型
@@ -122,7 +122,7 @@ Anchor + Cadence → reviewDueDate 自動算出: OUT / HOLD（GOV-RULE-08・RD-3
 
 - GOV-RULE-05 / GOV-RULE-06 が Human Accepted — **充足**
 - 本契約と Accepted 内容が一致する — **充足**
-- GOV-RULE-08 を本実装へ混ぜない（HOLD）
+- GOV-RULE-08 hard due/overdue を本実装へ混ぜない（Accepted / Option A / NOT ADOPTED）
 - `duration_days = 90` を正式 cadence として導入しない
 - 既存 `review-due` 相対判定へ制度値を埋め込まない
 - Schema / SharePoint 変更が必要なら別 Decision / 別 PR
@@ -134,8 +134,8 @@ Anchor + Cadence → reviewDueDate 自動算出: OUT / HOLD（GOV-RULE-08・RD-3
 GOV-RULE-05: Accepted
 GOV-RULE-06: Accepted
 GOV-RULE-07: Accepted（Option C / 別正本）
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本）
 ReviewAnchorPolicy contract: Accepted（logical only）
-GOV-RULE-08: HOLD
 Decision-RD-3: HOLD
 3ヶ月 → 90日 conversion: FORBIDDEN
 Implementation Start: HOLD

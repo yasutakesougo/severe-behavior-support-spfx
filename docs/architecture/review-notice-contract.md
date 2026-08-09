@@ -46,7 +46,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | GOV-RULE-05 | 基準日 | 通知 | **Accepted** |
 | GOV-RULE-06 | practice cadence | 通知 | **Accepted** |
 | **GOV-RULE-07** | 通知開始時期 | due / overdue | **Accepted（Option C）** |
-| GOV-RULE-08 | due / overdue 定義 | 通知開始 | HOLD |
+| GOV-RULE-08 | due / overdue 定義 | 通知開始 | **Accepted** / Option A / NOT ADOPTED |
 | Decision-RD-3 | 接近窓・算出・超過後の技術ポリシー | 通知の一次表現 | HOLD |
 
 ## Accepted 型
@@ -121,7 +121,7 @@ ReviewNoticePolicy を review-due 結果集合へ混ぜない
 
 - GOV-RULE-05 / 06 / 07 Accepted — **充足**
 - 本契約と Accepted 内容が一致 — **充足**
-- GOV-RULE-08 を本実装へ混ぜない（HOLD）
+- GOV-RULE-08 hard due/overdue を本実装へ混ぜない（Accepted / Option A / NOT ADOPTED）
 - 通知を day-count へ変換しない
 - Human Implementation Start（別 Gate）
 
@@ -130,9 +130,10 @@ ReviewNoticePolicy を review-due 結果集合へ混ぜない
 ```text
 GOV-RULE-07: Accepted / Option C
 ReviewNoticePolicy contract: Accepted（logical only）
-GOV-RULE-08: HOLD
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（通知は informational）
 Decision-RD-3: HOLD
 notice → day-count conversion: FORBIDDEN
+notice-month = overdue: FORBIDDEN
 Implementation Start: HOLD
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO

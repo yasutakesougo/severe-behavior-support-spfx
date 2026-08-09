@@ -20,8 +20,8 @@ Source review: PASS
 Independent Review (PR #135): PASS
 main baseline before acceptance write: 5cc03cffcdfbdd5c5a6e1ca9e1d9fbbaa4718a52
 GOV-RULE-05 基準日: Accepted（別正本 decision-gov-rule-05-review-anchor-acceptance.md）
-GOV-RULE-07 通知開始: HOLD
-GOV-RULE-08 due / overdue 定義: HOLD
+GOV-RULE-07 通知開始: Accepted（別正本 decision-gov-rule-07-notice-acceptance.md / Option C）
+GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本 decision-gov-rule-08-due-overdue-acceptance.md）
 duration_days = 90: NOT AUTHORIZED
 Decision-RD-3: HOLD（接近窓・算出・超過後。本 Acceptance に含めない）
 Implementation Start: HOLD
@@ -87,8 +87,8 @@ NOT derived from GOV-RULE-06 Accepted:
 
 ```text
 GOV-RULE-05 基準日: Accepted（別 Decision / [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）
-GOV-RULE-07 通知開始: HOLD
-GOV-RULE-08 due / overdue 定義: HOLD
+GOV-RULE-07 通知開始: Accepted（別正本 decision-gov-rule-07-notice-acceptance.md / Option C）
+GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本 decision-gov-rule-08-due-overdue-acceptance.md）
 duration_days = 90: NOT AUTHORIZED
 Decision-RD-3 接近窓・期限算出・超過後ポリシー: HOLD
 reviewDueDate 自動算出: NOT STARTED
