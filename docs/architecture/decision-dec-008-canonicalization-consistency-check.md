@@ -49,15 +49,17 @@ DEC-008 を **LOCKED Accepted** として正本化したあと、
 | C5 | SupportPlan contract | role-free transition UNCHANGED; no role checks invented | **PASS** |
 | C6 | FindingCode / A-5 / Implementation | HOLD / DO NOT CREATE / HOLD | **PASS** |
 | C7 | Next substantive unit | NOT SELECTED；自動選定しない | **PASS** |
-| C8 | PR #143 | docs Acceptance on branch; merge preserves meaning | PENDING_AT_MERGE |
+| C8 | PR #143 | docs Acceptance merged; meaning preserved | **PASS** — MERGED `713c40a…` / head `cfbbcd3…` |
 | C9 | Issue #8 | DEC-008 Accepted comment exists; body matches §1 paste | PENDING_HUMAN_POST / VERIFY |
 
 ```text
 Docs-internal consistency: PASS
+PR #143 merge: PASS（713c40a0126fce50d13a8816270890e1016c443b）
 Issue #8 live post: PENDING — Human
-PR #143 merge: PENDING — Human Merge GO（if still open）
 Contradiction found in repository docs: NONE
+Current: DOCS+MERGE PASS / LIVE LEDGER PENDING
 ```
+
 
 ---
 

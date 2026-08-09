@@ -59,8 +59,9 @@ FindingCode Issue #8 DEC body Acceptance packet（EMPTY catalog）: docs/archite
 FindingCode Issue #8 DEC body Acceptance（Accepted / Option A / EMPTY）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance.md
 FindingCode A-4 DEC number review（SELECTED / DEC-019）: docs/architecture/decision-findingcode-a4-dec-number-review.md
 DEC-008 Acceptance（LOCKED）: docs/architecture/decision-dec-008-acceptance.md
-DEC-008 Issue #8 ledger registration（READY_FOR_HUMAN_POST）: docs/architecture/decision-dec-008-issue8-ledger-registration.md
-DEC-008 canonicalization consistency check: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
+DEC-008 Issue #8 ledger registration（READY_FOR_HUMAN_POST；PR #143 MERGED 713c40a…）: docs/architecture/decision-dec-008-issue8-ledger-registration.md
+DEC-008 canonicalization consistency check（DOCS+MERGE PASS / LIVE PENDING）: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
+
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 DEC-008 authoring-center Acceptance: docs/architecture/decision-dec-008-authoring-center-acceptance.md
 DEC-008 final-approver Acceptance（NOT ADOPTED）: docs/architecture/decision-dec-008-final-approver-acceptance.md

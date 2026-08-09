@@ -77,9 +77,10 @@ DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-d
   制度上の作成者: ACCEPTED = 実践研修修了者 = 支援計画シート等の制度上の作成者
   独立した最終承認者: **NOT ADOPTED** → アプリ独自の最終承認者を設定しない
   サービス管理責任者を最終承認者とする案: NOT ADOPTED / 不採用
+PR #143 / DEC-008: MERGED（`713c40a…` / head `cfbbcd3…`）
 DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（READY_FOR_HUMAN_POST）
-DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（DOCS PASS / LIVE PENDING）
-Current single gate: **DEC-008 正本化完了（Issue #8 post + final consistency）**
+DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（DOCS+MERGE PASS / LIVE PENDING）
+Current single gate: **Issue #8 へ DEC-008 paste body 投稿 → comment ID**
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
