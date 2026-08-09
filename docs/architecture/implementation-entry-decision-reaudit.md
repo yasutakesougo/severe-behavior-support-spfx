@@ -154,7 +154,7 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 | 3 | `DEC-009` 保存タイミング | **Accepted / LOCKED / Option A** |
 | 4 | `GOV-AUD-03` 訂正承認境界 | **Accepted / Option E**（application 対象外明示） |
 | 5 | Finding / findingIds 境界 | **PASS / MET**（findingIds **NOT REQUIRED**。正本 [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md)） |
-| 6 | `NOT_APPLICABLE` reason 正本 | **未** |
+| 6 | `NOT_APPLICABLE` reason 正本 | **PASS / MET**（HOLD方針。正本 [`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md)） |
 | 7 | Schema / DTO versioning | **未** |
 | 8 | 型・validator・fixture 計画 | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / 整合 [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)。実装 DO NOT START） |
 
@@ -166,9 +166,10 @@ AS-EC-1 #1: PASS / MET
 AS-EC-1 #2: PASS / MET（PR-J boundary）
 AS-EC-1 #3（DEC-009）: Accepted / LOCKED
 AS-EC-1 #5: PASS / MET（findingIds NOT REQUIRED）
+AS-EC-1 #6: PASS / MET（NOT_APPLICABLE HOLD方針）
 AS-EC-1 #8: Accepted / LOCKED / FINAL CONSISTENT（plan only）
 Result conversion: DONE（永続なし）
-save / Schema / SharePoint / type impl: NOT in Entry #2 / #5 / #8 alone
+save / Schema / SharePoint / type impl: NOT in Entry #2 / #5 / #6 / #8 alone
 ```
 
 ### 4. AuditEvent persistence / real adapter
@@ -240,16 +241,18 @@ Third residual Decision: **SELECTED / A — DEC-009 save timing FINAL CONSISTENT
 Fourth residual Decision: **SELECTED / A — AS-EC-1 Entry #8 technical plan FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)）
 Fifth residual Decision: **SELECTED / A — AS-EC-1 Entry #2 ownership / PR-J boundary PASS / MET**（[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）
 Sixth residual Decision: **SELECTED / A — AS-EC-1 Entry #5 findingIds NOT REQUIRED PASS / MET**（[`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md) / [`assessment-snapshot-finding-ids-boundary.md`](./assessment-snapshot-finding-ids-boundary.md)）
+Seventh residual Decision: **SELECTED / A — AS-EC-1 Entry #6 NOT_APPLICABLE HOLD方針 PASS / MET**（[`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md) / [`assessment-snapshot-not-applicable-reason-hold.md`](./assessment-snapshot-not-applicable-reason-hold.md)）
 Entry #1/#2: **#1 PASS / #2 PASS / MET**
 Entry #5: **PASS / MET**（findingIds NOT REQUIRED）
-Entry #6/#7: **未**
+Entry #6: **PASS / MET**（NOT_APPLICABLE HOLD方針）
+Entry #7: **未**
 post-retention deletion: **OPEN / 別 Decision**
-Decision-AS-EC-1 overall: **HOLD**（#6/#7 未のため leave-HOLD 不可）
+Decision-AS-EC-1 overall: **HOLD**（#7 未のため leave-HOLD 不可）
 Next residual Decision: **NOT SELECTED**
-Recommended next candidate（Human only）: **Entry #6**
+Recommended next candidate（Human only）: **Entry #7**
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A） / AS-EC-1 Entry #8 technical plan（Option A） / AS-EC-1 Entry #2 ownership·PR boundary（Option A） / AS-EC-1 Entry #5 findingIds boundary（Option A）
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A） / AS-EC-1 Entry #8 technical plan（Option A） / AS-EC-1 Entry #2 ownership·PR boundary（Option A） / AS-EC-1 Entry #5 findingIds boundary（Option A） / AS-EC-1 Entry #6 NOT_APPLICABLE HOLD policy（Option A）
 
 **Do not next / DO NOT START:**
 

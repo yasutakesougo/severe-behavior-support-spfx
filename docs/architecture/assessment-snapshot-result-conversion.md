@@ -98,7 +98,7 @@ AssessmentSnapshotResultCandidateResult =
 - DEC-009 / GOV-AUD / handoff
 - findingIds 必須化・完全 Finding（Entry #5: findingIds **NOT REQUIRED** / [`assessment-snapshot-finding-ids-boundary.md`](./assessment-snapshot-finding-ids-boundary.md)。完全 Finding 実装は別 HOLD）
 - FindingCode カタログ
-- サービス別 NOT_APPLICABLE reason enum
+- サービス別 NOT_APPLICABLE reason enum（Entry #6: HOLD方針 = 今採択しない / [`assessment-snapshot-not-applicable-reason-hold.md`](./assessment-snapshot-not-applicable-reason-hold.md)。値一覧発明 FORBIDDEN）
 - Schema / SharePoint / adapter
 - deploy / 実データ
 
