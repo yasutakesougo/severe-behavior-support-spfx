@@ -197,6 +197,8 @@ tenant changes / List / column creation: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next Human gate: FORMAL PILOT FACILITY SITE / LIST NAMING
+Next Human gate: FORMAL PILOT FACILITY IDENTITY / SITE NAMING
   → decision-assessment-snapshot-org-site-topology-next-gate.md
+Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+List names: DEFERRED
 ```

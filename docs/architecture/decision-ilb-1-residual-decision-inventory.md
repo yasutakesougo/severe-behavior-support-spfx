@@ -37,6 +37,7 @@ Nineteenth residual Decision: SELECTED / CONSUMED — New SPFx deployment target
 Twentieth residual Decision: SELECTED / CONSUMED — New SPFx target provisioning（Decision-AS-NEW-TARGET-PROVISION-1 Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1）
 Twenty-first residual Decision: SELECTED / CONSUMED — New SPFx Site / List naming（Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1；intended values HUMAN-PROVIDED / PLACEHOLDER）
 Twenty-third residual Decision: SELECTED / CONSUMED — Multi-facility org site topology（Decision-AS-ORG-SITE-TOPOLOGY-1 Accepted / LOCKED / OT-1+FS-1+SP-1+PP-1+PH-1+XB-1）
+Twenty-fourth residual Decision: SELECTED / OPEN — Pilot facility identity / Site naming（Decision-AS-PILOT-FACILITY-IDENTITY-1 OPEN / NOT ACCEPTED；List names DEFERRED）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -72,7 +73,10 @@ Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-Next gate: FORMAL PILOT FACILITY SITE / LIST NAMING
+Next gate: FORMAL PILOT FACILITY IDENTITY / SITE NAMING
+Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+  recommended CANDIDATE: 磯子=isogo / 本牧=honmoku + Site names/URLs
+List names: DEFERRED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -204,8 +208,20 @@ Order:
      packet: decision-assessment-snapshot-org-site-topology-packet.md
      selection: decision-ilb-1-twenty-third-residual-org-site-topology-selection.md
      next gate: decision-assessment-snapshot-org-site-topology-next-gate.md
-       = FORMAL PILOT FACILITY SITE / LIST NAMING
-     remaining examples: formal pilot naming / common-management naming / post-retention / DEC-015 / SV-1·LV-1·CN-1 after real creation
+       = FORMAL PILOT FACILITY IDENTITY / SITE NAMING
+ 24. Twenty-fourth residual: Pilot facility identity / Site naming（SELECTED / OPEN；Decision-AS-PILOT-FACILITY-IDENTITY-1 OPEN / NOT ACCEPTED）
+     packet: decision-assessment-snapshot-pilot-facility-identity-packet.md
+     selection: decision-ilb-1-twenty-fourth-residual-pilot-facility-identity-selection.md
+     recommended CANDIDATE（NOT LOCKED）:
+       Pilot1 磯子活動ホーム / facilityKey=isogo
+         Site=強度行動障害支援 - 磯子活動ホーム
+         URL=/sites/severe-support-isogo
+       Pilot2 本牧活動ホーム / facilityKey=honmoku
+         Site=強度行動障害支援 - 本牧活動ホーム
+         URL=/sites/severe-support-honmoku
+     List names: DEFERRED
+     Accept phrase waiting: 「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
+     remaining examples: List names after ownership check / common-management naming / post-retention / DEC-015 / SV-1·LV-1·CN-1 after real creation
      FindingCode / A-5: HOLD
      Note: open PR #186 PROVISION-EXEC（if present）Execution GO remains NOT GIVEN；placeholder 作成 FORBIDDEN
 AS-EC-1 overall: MET / Accepted

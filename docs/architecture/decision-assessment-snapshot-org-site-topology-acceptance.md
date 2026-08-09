@@ -258,9 +258,12 @@ Open PR #186（PROVISION-EXEC）if present:
 ```text
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
 Next gate: FIXED
-  FORMAL PILOT FACILITY SITE / LIST NAMING
+  FORMAL PILOT FACILITY IDENTITY / SITE NAMING
   → decision-assessment-snapshot-org-site-topology-next-gate.md
-Formal pilot Site / List names: NOT SELECTED / OPEN
+Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+  → decision-assessment-snapshot-pilot-facility-identity-packet.md
+  recommended: 磯子=isogo / 本牧=honmoku + Site names/URLs（CANDIDATE / NOT LOCKED）
+List names: DEFERRED
 Common management Site name: NOT SELECTED / OPEN
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN

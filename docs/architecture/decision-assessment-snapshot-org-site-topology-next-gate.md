@@ -1,4 +1,4 @@
-# Next gate — Formal pilot facility Site / List naming
+# Next gate — Formal pilot facility identity / Site naming
 
 この文書は、**Decision-AS-ORG-SITE-TOPOLOGY-1 Accepted / LOCKED /
 OT-1+FS-1+SP-1+PP-1+PH-1+XB-1** 後の次 Human gate を固定する正本である。
@@ -6,23 +6,28 @@ OT-1+FS-1+SP-1+PP-1+PH-1+XB-1** 後の次 Human gate を固定する正本であ
 Authorization / topology 正本:
 [`decision-assessment-snapshot-org-site-topology-acceptance.md`](./decision-assessment-snapshot-org-site-topology-acceptance.md)
 
+Next Decision packet（OPEN）:
+[`decision-assessment-snapshot-pilot-facility-identity-packet.md`](./decision-assessment-snapshot-pilot-facility-identity-packet.md)
+
 Placeholder names 正本:
 [`decision-assessment-snapshot-new-target-names-acceptance.md`](./decision-assessment-snapshot-new-target-names-acceptance.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Next-gate definition（docs-only）
-Status: FIXED / NOT STARTED
+Status: FIXED / OPEN PACKET
 Authorization basis:
   Decision-AS-ORG-SITE-TOPOLOGY-1 = Accepted / LOCKED
     / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
 
 Next gate:
-  FORMAL PILOT FACILITY SITE / LIST NAMING
+  FORMAL PILOT FACILITY IDENTITY / SITE NAMING
+  Decision-AS-PILOT-FACILITY-IDENTITY-1 = OPEN / NOT ACCEPTED
 
 Naming GO: NOT GIVEN / NOT STARTED
 Creation GO: NOT GIVEN / NO-GO
-This document does NOT invent names and does NOT start tenant mutation.
+List names: DEFERRED
+This document does NOT invent Accepted names and does NOT start tenant mutation.
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -32,28 +37,48 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 ```text
 Next gate:
-  FORMAL PILOT FACILITY SITE / LIST NAMING
+  FORMAL PILOT FACILITY IDENTITY / SITE NAMING
 
-Sequence after Human naming Decision:
-  1. Human がパイロット事業所専用サイトの正式 Site URL / Site name を明示
-  2. Human が専用 Lists の正式 List name(s) を明示
-  3. Agent は Accepted 値を発明しない（NAMES-1 SU-1 / LN-1 と同型）
-  4. STOP（作成はさらに別 Human execution gate）
+In scope:
+  1. Pilot facility order
+  2. facilityKey
+  3. Site display name
+  4. Site URL suffix
+  5. naming ≠ creation GO
 
-NOT next:
-  Site/List creation with XXXXX / YYYYY
-  PROVISION-EXEC Execution GO against placeholders
-  法人共通管理サイトの同時作成
+Out of scope / DEFERRED:
+  List names（List 正本責務確認後）
+  Site / List creation
+  法人共通管理サイト命名
 ```
 
-## 2. Pilot site purpose（LOCKED）
+## 2. Recommended candidate payload（NOT LOCKED）
+
+```text
+Status: CANDIDATE / NOT ACCEPTED
+Source: decision-assessment-snapshot-pilot-facility-identity-packet.md
+
+Pilot 1:
+  Facility: 磯子活動ホーム
+  facilityKey: isogo
+  Site name: 強度行動障害支援 - 磯子活動ホーム
+  Site URL:  https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
+
+Pilot 2:
+  Facility: 本牧活動ホーム
+  facilityKey: honmoku
+  Site name: 強度行動障害支援 - 本牧活動ホーム
+  Site URL:  https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
+
+Human Accept phrase required before LOCKED:
+  「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
+```
+
+## 3. Pilot site purpose（LOCKED by ORG-SITE-TOPOLOGY-1）
 
 ```text
 Site purpose:
   パイロット事業所の強度行動障害支援アプリ用
-
-Site type（intended design；作成は別）:
-  Team Site / 標準チーム（作成時に別確認）
 
 Data boundary:
   この事業所のデータのみ
@@ -63,7 +88,7 @@ Not this site:
   他事業所データ
 ```
 
-## 3. Placeholder status（FORBIDDEN as creation target）
+## 4. Placeholder status（FORBIDDEN as creation target）
 
 ```text
 NAMES-1 placeholders:
@@ -75,12 +100,12 @@ NAMES-1 placeholders:
 
 Under PH-1:
   placeholder への Site / List 作成 = FORBIDDEN
-  INTENDED placeholder を OBSERVED / CONFIRMED 扱い = FORBIDDEN
 ```
 
-## 4. Out of scope（unchanged）
+## 5. Out of scope（unchanged）
 
 ```text
+List names: DEFERRED
 Site / List creation: NO-GO
 custom columns: NO-GO
 Internal Column Names: OPEN / post-creation CN-1
@@ -94,37 +119,39 @@ post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Common management site naming / creation: 別 Human Decision
 ```
 
-## 5. Explicit non-start
+## 6. Explicit non-start
 
 ```text
 This next-gate definition alone does NOT:
-  invent formal Site / List names
+  Accept / LOCK facilityKey or Site names
+  invent formal List names
   create Site / List / columns
   perform tenant mutation
   mark SV-1 / LV-1 CONFIRMED
   authorize PROVISION-EXEC Execution GO
   start Implementation / SharePoint code / Deploy
 
-Requires separate explicit Human Decision to fill formal pilot names.
+Requires separate explicit Human Acceptance of
+Decision-AS-PILOT-FACILITY-IDENTITY-1.
 Creation remains a later Human execution gate after real names exist.
 ```
 
-## 6. Current state
+## 7. Current state
 
 ```text
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
-Next gate: FIXED = FORMAL PILOT FACILITY SITE / LIST NAMING
-Naming GO: NOT GIVEN / NOT STARTED
+Next gate: FIXED = FORMAL PILOT FACILITY IDENTITY / SITE NAMING
+Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+Recommended payload: CANDIDATE / NOT LOCKED
+List names: DEFERRED
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
 PROVISION-EXEC Execution GO: NOT GIVEN / BLOCKED by PH-1
-SV-1 / LV-1: NOT CONFIRMED
-Internal Column Names: OPEN（IN-1）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for Human formal pilot Site / List names
+  waiting for Human Accept of pilot facility identity / Site naming
   auto-start: FORBIDDEN
 ```

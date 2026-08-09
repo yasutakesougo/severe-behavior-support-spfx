@@ -262,6 +262,9 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-185-independent-review.md
   Reviewed HEAD: b37e3e6d0d3f925e8686f2e2805094b55479b024
-Next Human gate: FORMAL PILOT FACILITY SITE / LIST NAMING
+Next Human gate: FORMAL PILOT FACILITY IDENTITY / SITE NAMING
   → decision-assessment-snapshot-org-site-topology-next-gate.md
+Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+  → decision-assessment-snapshot-pilot-facility-identity-packet.md
+List names: DEFERRED
 ```
