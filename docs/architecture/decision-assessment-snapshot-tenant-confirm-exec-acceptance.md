@@ -46,8 +46,9 @@ Concrete values（本 Acceptance では埋めない）:
   Internal Column Name: NOT CONFIRMED / HOLD
 
 Tenant confirmation execution:
-  AUTHORIZED / NOT STARTED
-  （本 Acceptance は実行許可のみ。実行完了・値確定ではない）
+  IN PROGRESS / READ-ONLY
+  （DailyActivityRecords required-fields evidence OBSERVED / NOT ACCEPTED。
+    Value Acceptance は Decision-AS-TENANT-CONFIRM-VALUES-1）
 
 SP-PLACEMENT / DEC6-MAPPING / SP-ADAPTER / APP-SAVE / TENANT-CONFIRM GO:
   UNCHANGED / LOCKED（再 Decision しない）
@@ -146,10 +147,9 @@ NOT SELECTED:
 具体値・実行完了（LOCKED として埋めない / 完了扱いにしない）:
 
 ```text
-Site value: NOT CONFIRMED / HOLD
-List value: NOT CONFIRMED / HOLD
-Internal Column Name: NOT CONFIRMED / HOLD
-Tenant confirmation execution: AUTHORIZED / NOT STARTED
+Site / List / required Internal Names: OBSERVED / NOT ACCEPTED
+  → tenant-confirmation-daily-activity-records-required-fields-evidence.md
+Tenant confirmation execution: IN PROGRESS / READ-ONLY
 ```
 
 失敗時 MUST NOT（LOCKED）:
@@ -205,15 +205,17 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
-Tenant confirmation execution: AUTHORIZED / NOT STARTED
-Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
+Tenant confirmation execution: IN PROGRESS / READ-ONLY
+DailyActivityRecords required-fields evidence: OBSERVED / NOT ACCEPTED
+  → tenant-confirmation-daily-activity-records-required-fields-evidence.md
+Next Human gate: Decision-AS-TENANT-CONFIRM-VALUES-1（OPEN / NOT ACCEPTED）
+Site / List / Internal Column Name values: OBSERVED / NOT ACCEPTED
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes / List / column creation: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Next substantive unit: NOT SELECTED by this Acceptance
 Ready: NOT RUN
 Merge: NOT RUN
 ```

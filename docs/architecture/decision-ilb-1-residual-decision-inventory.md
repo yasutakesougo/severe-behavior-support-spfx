@@ -33,6 +33,7 @@ Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-
 Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
 Seventeenth residual Decision: SELECTED / A — Tenant confirmation GO（Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
 Eighteenth residual Decision: SELECTED — Tenant confirmation execution authorization（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
+Nineteenth residual Decision: SELECTED — Tenant confirmation observed values Acceptance（Decision-AS-TENANT-CONFIRM-VALUES-1 compare OPEN / NOT ACCEPTED）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -44,10 +45,12 @@ DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）
 Placement confirmation rules: Accepted / LOCKED（SV-1+LV-1+CN-1+SC-1）
 Tenant confirmation GO boundary: Accepted / LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: Accepted / LOCKED（ES-1+TB-1+EO-1+FG-1）
-Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
-Tenant confirmation execution: AUTHORIZED / NOT STARTED
+DailyActivityRecords required-fields evidence: OBSERVED / NOT ACCEPTED
+Site / List / Internal Column Name values: OBSERVED（DailyActivityRecords required 5）/ NOT ACCEPTED
+Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
+
 
 ## 1. Classification legend（provisional）
 
@@ -148,7 +151,9 @@ Order:
      values: NOT CONFIRMED / HOLD
  18. Seventeenth residual: Tenant confirmation GO（DONE / CONSUMED；Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
  19. Eighteenth residual: Tenant confirmation execution authorization（DONE / CONSUMED；Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
-     execution: AUTHORIZED / NOT STARTED；values: NOT CONFIRMED / HOLD
+ 20. Nineteenth residual: Tenant confirmation observed values Acceptance（SELECTED；Decision-AS-TENANT-CONFIRM-VALUES-1 compare OPEN / NOT ACCEPTED）
+     evidence: tenant-confirmation-daily-activity-records-required-fields-evidence.md（OBSERVED / NOT ACCEPTED）
+     execution: IN PROGRESS / READ-ONLY；values: OBSERVED / NOT ACCEPTED
      remaining examples: post-retention / DEC-015
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
@@ -164,7 +169,7 @@ Tenant confirmation GO boundary: LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: LOCKED（ES-1+TB-1+EO-1+FG-1）
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
-Site URL / List name / Internal Column Name: NOT CONFIRMED / HOLD
-Tenant confirmation execution: AUTHORIZED / NOT STARTED
+Site URL / List name / Internal Column Name: OBSERVED（DailyActivityRecords required 5）/ NOT ACCEPTED
+Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
