@@ -46,3 +46,16 @@ Independent Review: PASS
 Entry #7: PASS / MET
 overall: HOLD
 ```
+
+## Post-retarget re-audit（base = main @ 4a87ef3…）
+
+```text
+Trigger: PR #166 retarget to main after PR #165 MERGED
+Scope re-check: docs-only Entry #7 only
+Content conflicts after merge main: NONE
+R1–R8: still PASS
+Findings: P0=0 / P1=0 / P2=0
+Independent Review after retarget: PASS
+Ready / Merge: NOT RUN（Human）
+#167: parked
+```
