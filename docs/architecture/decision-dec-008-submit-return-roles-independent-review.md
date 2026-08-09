@@ -57,7 +57,7 @@ Related:
 
 | # | Check | Result |
 |---|---|---|
-| R1 | HEAD 拘束: `d1b5d544d900a548110bae4df110f5a73cc392bd` | **PASS** |
+| R1 | Reviewed content HEAD: `d1b5d544d900a548110bae4df110f5a73cc392bd` | **PASS** |
 | R2 | PR 差分は docs-only（`src/` / `tests/` 変更なし） | **PASS** |
 | R3 | Acceptance LOCKED が Human Option C と一致 | **PASS** |
 | R4 | 提出/差戻し = application に固定しない / NOT ADOPTED | **PASS** |
@@ -107,7 +107,7 @@ Gate failure / P0 / P1 / unresolved P2 に数えない。
 Independent Review: PASS
 repository: yasutakesougo/severe-behavior-support-spfx
 PR: #147
-review target HEAD: d1b5d544d900a548110bae4df110f5a73cc392bd
+reviewed content HEAD: d1b5d544d900a548110bae4df110f5a73cc392bd
 P0: 0
 P1: 0
 P2: 0
@@ -116,12 +116,12 @@ Human Merge Decision: NOT YET
 Readyization / Merge: NOT PERFORMED by this review
 ```
 
-HEAD が変わった場合、本 PASS は失効し再レビューが必要。
+LOCKED Acceptance meaning を変える差分が入った場合、本 PASS は失効し再レビューが必要。
 
 ## 6. Next（Human）
 
 ```text
-1. Ready 化（Human）
+1. Ready 化（Human）— Merge はまだしない
 2. Human Merge Decision（PR #147）
 3. Merge 後: Final CONSISTENT → 次 substantive unit 選定（NOT SELECTED）
 FindingCode / A-5 / Implementation: HOLD
