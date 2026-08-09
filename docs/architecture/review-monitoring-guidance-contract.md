@@ -4,8 +4,12 @@
 
 **Decision-RD-3** として、モニタリング時期を
 「3か月に1回程度」の **目安表示・通知（informational only）** に留め、
-期限超過・警告・業務制限・90日固定・hard due/overdue を採択しないことを
+期限超過状態・超過警告・業務制限・90日固定・hard due/overdue を採択しないことを
 論理契約として固定する。
+
+本契約は **「モニタリングをしなくてよい」を意味しない**。
+制度・業務上の「3か月に1回程度の見直し」は維持し、
+アプリが独自に「期限切れ」「違反」と判定して現場業務を止めない。
 
 本単位は **Accepted logical contract** である。
 UI / job / Schema 実装、`evaluateReviewDueRelativeToAsOf` の変更は含めない。
@@ -59,8 +63,10 @@ type ReviewMonitoringGuidancePolicy = {
   kind: "informational_cadence_guide";
   guideText: "3か月に1回程度";
   purpose: "display_and_notify_as_guide";
-  overdue: "not_adopted";
-  pastDueWarningOrBusinessRestriction: "not_adopted";
+  institutionalReviewCadence: "maintained";
+  overdueState: "not_adopted";
+  overdueWarning: "not_adopted";
+  overdueBusinessRestriction: "not_adopted";
   fixedNinetyDays: "not_adopted";
   hardDueOverdue: "not_adopted";
 };
@@ -71,8 +77,10 @@ type ReviewMonitoringGuidancePolicy = {
 | `kind` | `"informational_cadence_guide"` | 情報提供の目安表示・通知 |
 | `guideText` | `"3か月に1回程度"` | 表示・通知に使う目安文言 |
 | `purpose` | `"display_and_notify_as_guide"` | hard due ではない |
-| `overdue` | `"not_adopted"` | 期限超過を採択しない |
-| `pastDueWarningOrBusinessRestriction` | `"not_adopted"` | 警告・業務制限を採択しない |
+| `institutionalReviewCadence` | `"maintained"` | 制度・業務上の見直しは維持 |
+| `overdueState` | `"not_adopted"` | 期限超過という状態を採択しない |
+| `overdueWarning` | `"not_adopted"` | 期限超過警告を採択しない |
+| `overdueBusinessRestriction` | `"not_adopted"` | 業務制限を採択しない |
 | `fixedNinetyDays` | `"not_adopted"` | 90日固定を採択しない |
 | `hardDueOverdue` | `"not_adopted"` | GOV-RULE-08 と整合 |
 
@@ -82,10 +90,16 @@ type ReviewMonitoringGuidancePolicy = {
 モニタリング時期:
   「3か月に1回程度」を目安として表示・通知する
 扱い: informational only
-期限超過: 採用しない
-過ぎた場合の警告・業務制限: 採用しない
-90日固定: 採用しない
-hard due / overdue: NOT ADOPTED
+採用しない:
+  期限超過という状態
+  期限超過警告
+  期限超過による業務制限
+  90日固定
+  hard due / overdue
+Design intent:
+  モニタリング不要ではない
+  制度・業務上の見直しは維持
+  アプリが期限切れ/違反で現場業務を止めない
 ```
 
 ### 禁止表現
@@ -95,11 +109,12 @@ MUST NOT convert this contract into:
   duration_days = 90
   day-count approach window constants in domain
   overdue / violation engine
-  past-due business restriction
+  past-due business restriction that stops field work
 
 MUST NOT equate:
+  informational only = モニタリング不要
   3か月に1回程度 = 90日
-  目安表示 / 通知 = hard due / 業務違反
+  目安表示 / 通知 = hard due / 業務違反 / 現場業務停止
 ```
 
 ## 既存純関数との関係

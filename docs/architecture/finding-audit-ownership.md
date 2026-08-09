@@ -87,6 +87,7 @@ Decision-ILB-1 residual Decision inventory（read-only / row classifications pro
 Decision-ILB-1 next residual Decision selection（SELECTED / C / Decision-RD-3）: docs/architecture/decision-ilb-1-next-residual-decision-selection.md
 Decision-ILB-1 next residual Decision selection packet（CONSUMED / C）: docs/architecture/decision-ilb-1-next-residual-decision-selection-packet.md
 Decision-RD-3 monitoring guidance Acceptance（Accepted / LOCKED）: docs/architecture/decision-rd-3-monitoring-guidance-acceptance.md
+Decision-RD-3 canonicalization consistency check（CONSISTENT docs-internal / PR #153）: docs/architecture/decision-rd-3-canonicalization-consistency-check.md
 Review monitoring guidance logical contract: docs/architecture/review-monitoring-guidance-contract.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 

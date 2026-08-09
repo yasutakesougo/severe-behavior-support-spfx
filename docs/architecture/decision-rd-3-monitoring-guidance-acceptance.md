@@ -21,20 +21,23 @@ LOCKED:
   「3か月に1回程度」を目安として表示・通知する
 扱い:
   informational only
-期限超過:
-  採用しない
-過ぎた場合の警告・業務制限:
-  採用しない
-90日固定:
-  採用しない
-hard due / overdue:
-  NOT ADOPTED
+採用しない:
+  期限超過という状態
+  期限超過警告
+  期限超過による業務制限
+  90日固定
+  hard due / overdue
 FindingCode:
   HOLD
 A-5:
   HOLD
 Implementation Start:
   HOLD
+
+Design intent（固定）:
+  「モニタリングをしなくてよい」ではない
+  制度・業務上の「3か月に1回程度の見直し」は維持する
+  アプリが独自に「期限切れ」「違反」と判定して現場業務を止めない
 
 Implementation auto-start: FORBIDDEN
 evaluateReviewDueRelativeToAsOf: UNCHANGED
@@ -54,10 +57,20 @@ Decision-RD-3: Accepted / LOCKED
   「3か月に1回程度」を目安として表示・通知する
 扱い:
   informational only
-期限超過: 採用しない
-過ぎた場合の警告・業務制限: 採用しない
-90日固定: 採用しない
-hard due / overdue: NOT ADOPTED
+採用しない:
+  期限超過という状態
+  期限超過警告
+  期限超過による業務制限
+  90日固定
+  hard due / overdue
+```
+
+理由（Human / 設計意図）:
+
+```text
+「モニタリングをしなくてよい」という意味ではない。
+制度・業務上の「3か月に1回程度の見直し」は維持しつつ、
+アプリが独自に「期限切れ」「違反」と判定して現場業務を止めない。
 ```
 
 ```text
@@ -74,11 +87,15 @@ Monitoring guidance:
   display / notify 「3か月に1回程度」 as a guide
   meaning = informational only
   aligns with GOV-RULE-06 practice cadence（「3ヶ月に1回程度」）
+  institutional / operational review cadence: MAINTAINED
+  does NOT mean monitoring is optional or unnecessary
   does NOT create a hard day-count approach window
+  does NOT let the app stop field work via overdue / violation
 
 NOT ADOPTED:
-  期限超過
-  過ぎた場合の警告・業務制限
+  期限超過という状態
+  期限超過警告
+  期限超過による業務制限
   90日固定
   hard due / overdue（GOV-RULE-08 と整合）
 ```
@@ -90,8 +107,10 @@ type ReviewMonitoringGuidancePolicy = {
   kind: "informational_cadence_guide";
   guideText: "3か月に1回程度";
   purpose: "display_and_notify_as_guide";
-  overdue: "not_adopted";
-  pastDueWarningOrBusinessRestriction: "not_adopted";
+  institutionalReviewCadence: "maintained";
+  overdueState: "not_adopted";
+  overdueWarning: "not_adopted";
+  overdueBusinessRestriction: "not_adopted";
   fixedNinetyDays: "not_adopted";
   hardDueOverdue: "not_adopted";
 };
@@ -99,20 +118,25 @@ type ReviewMonitoringGuidancePolicy = {
 
 意味:
 
-- モニタリング時期は、GOV-RULE-06 の practice cadence を
+- 制度・業務上の「3か月に1回程度の見直し」は **維持**する。
+- アプリ上の扱いは、GOV-RULE-06 の practice cadence を
   **目安として表示・通知**する情報提供に留める。
-- 日数固定の接近窓エンジン、期限超過、警告、業務制限を採択しない。
+- 「モニタリング不要」や「見直ししなくてよい」を意味しない。
+- アプリが独自に「期限切れ」「違反」と判定して現場業務を止めない。
+- 日数固定の接近窓エンジン、期限超過状態、超過警告、業務制限を採択しない。
 - `90日` への変換、hard due / overdue を採択しない（GOV-RULE-08 と整合）。
 
 ### この決定からは導出しない
 
 ```text
 NOT derived / MUST NOT equate:
+  informational only = モニタリング不要
+  informational only = 見直ししなくてよい
   3か月に1回程度 = 90日
   3ヶ月に1回程度 = 90日
   目安表示 = hard due
-  通知 = 業務違反
-  過ぎた = overdue / 業務制限
+  通知 = 業務違反 / 現場業務停止
+  過ぎた = overdue 状態 / 業務制限
   duration_days = 90
   day-count approach window in domain
 ```
@@ -151,11 +175,22 @@ Decision-ILB-1 Human Policy: FINAL CONSISTENT（上位方針）
 他 inventory provisional 行: NOT Accepted by this document
 ```
 
+## Consistency
+
+正本整合: [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md)
+
+```text
+Docs-internal consistency: CONSISTENT
+FINAL CONSISTENT: after PR Merge attestation
+```
+
 ## Next
 
 ```text
 Decision-RD-3: Accepted / LOCKED
-Next after Merge:
-  FINAL CONSISTENT 同期（別 PR）または次残存 Decision の Human 選定
+Consistency: CONSISTENT（docs-internal）
+Next:
+  Review / Merge → FINAL CONSISTENT 同期
+  他残存 Decision は一件ずつ（自動選定しない）
 FindingCode / A-5 / Implementation: HOLD
 ```

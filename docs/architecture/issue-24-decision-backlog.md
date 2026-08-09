@@ -115,9 +115,10 @@ Decision-ILB-1: **Human Policy 1–6 Accepted / LOCKED / Option A / FINAL CONSIS
 PR #151: MERGED（`e2bd256…` / head `4f5a833…`）
 Decision-RD-3: **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
   モニタリング時期「3か月に1回程度」を目安として表示・通知 / informational only
-  期限超過・警告・業務制限・90日固定: 採用しない
-  hard due / overdue: NOT ADOPTED
+  制度・業務上の見直しは維持（モニタリング不要ではない）
+  採用しない: 期限超過状態 / 超過警告 / 業務制限 / 90日固定 / hard due·overdue
   Logical contract: [`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md)
+  Consistency: [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md)（**CONSISTENT** docs-internal；FINAL は Merge 後）
   Selected via: ILB-1 residual Option C（[`decision-ilb-1-next-residual-decision-selection.md`](./decision-ilb-1-next-residual-decision-selection.md)）
 Current single gate: **他残存 Decision を一件ずつ選定・判定**（RD-3 は CONSUMED）
 OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
