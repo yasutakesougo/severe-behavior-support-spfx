@@ -108,7 +108,7 @@ GOV-RULE-06: Accepted
 
 ```text
 GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本）
-Decision-RD-3: HOLD
+Decision-RD-3: Accepted / LOCKED（別正本 decision-rd-3-monitoring-guidance-acceptance.md）
 「見直し対象となる暦月」の算出アルゴリズム実装: NOT STARTED
 通知 UI / job / SharePoint: NOT STARTED
 evaluateReviewDueRelativeToAsOf: UNCHANGED

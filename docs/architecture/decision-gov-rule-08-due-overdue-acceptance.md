@@ -108,7 +108,7 @@ hard due/overdue business rule: NOT ADOPTED
 business violation engine: DO NOT START
 reviewDueDate auto-derivation from cadence/anchor: DO NOT START
 evaluateReviewDueRelativeToAsOf: UNCHANGED（technical helper only）
-Decision-RD-3: HOLD（接近窓等の別技術単位。本 NOT ADOPTED を理由に開始しない）
+Decision-RD-3: Accepted / LOCKED（別正本 decision-rd-3-monitoring-guidance-acceptance.md。hard due を再採択しない）
 SupportPlan Schema / SharePoint 変更: NOT STARTED
 TypeScript business overdue type beyond logical not_adopted: NOT STARTED
 Implementation Start: HOLD

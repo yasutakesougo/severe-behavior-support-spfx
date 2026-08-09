@@ -84,8 +84,12 @@ Decision-ILB-1 Human Policy Acceptance（Accepted / LOCKED / Option A / FINAL CO
 Decision-ILB-1 canonicalization consistency check（FINAL CONSISTENT / PR #151）: docs/architecture/decision-ilb-1-canonicalization-consistency-check.md
 Decision-ILB-1 institutional/local boundary packet（CONSUMED / Policy Accepted / FINAL CONSISTENT）: docs/architecture/decision-ilb-1-institutional-local-boundary-decision-packet.md
 Decision-ILB-1 residual Decision inventory（read-only / row classifications provisional）: docs/architecture/decision-ilb-1-residual-decision-inventory.md
-Decision-ILB-1 next residual Decision selection（OPEN / NOT SELECTED）: docs/architecture/decision-ilb-1-next-residual-decision-selection.md
-Decision-ILB-1 next residual Decision selection packet（OPEN / NOT SELECTED）: docs/architecture/decision-ilb-1-next-residual-decision-selection-packet.md
+Decision-ILB-1 next residual Decision selection（SELECTED / C / Decision-RD-3）: docs/architecture/decision-ilb-1-next-residual-decision-selection.md
+Decision-ILB-1 next residual Decision selection packet（CONSUMED / C）: docs/architecture/decision-ilb-1-next-residual-decision-selection-packet.md
+Decision-RD-3 monitoring guidance Acceptance（Accepted / LOCKED）: docs/architecture/decision-rd-3-monitoring-guidance-acceptance.md
+Decision-RD-3 canonicalization consistency check（CONSISTENT docs-internal / PR #153）: docs/architecture/decision-rd-3-canonicalization-consistency-check.md
+Decision-RD-3 Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #153）: docs/architecture/decision-rd-3-independent-review.md
+Review monitoring guidance logical contract: docs/architecture/review-monitoring-guidance-contract.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -134,7 +138,8 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED / FINAL CONSISTENT**（comment `5229571943` + Option C / PR #147）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み）**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) | ロール実装 DO NOT START。最終承認者・提出/差戻し Binding 再導入禁止。role-free 遷移維持 |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
 | 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3 **Accepted / Option A**（[`decision-op-3-observation-period-schema-acceptance.md`](./decision-op-3-observation-period-schema-acceptance.md)）。純関数 UNCHANGED。実装は別 GO |
-| 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD。89/90/91日境界は practice cadence とみなさない |
+| 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3 **Accepted / LOCKED**（informational only / 90日・hard due NOT ADOPTED）。89/90/91日境界は practice cadence とみなさない |
+| 見直しモニタリング時期表示・通知（Decision-RD-3） | Issue #16 / #19（判断）・#24（相対判定分離） | **Accepted / LOCKED**（2026-08-09）。「3か月に1回程度」を目安として表示・通知 / informational only。制度・業務上の見直しは維持（モニタリング不要ではない）。正本 [`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md) / [`review-monitoring-guidance-contract.md`](./review-monitoring-guidance-contract.md) / 整合 [`decision-rd-3-canonicalization-consistency-check.md`](./decision-rd-3-canonicalization-consistency-check.md) | 期限超過状態・超過警告・業務制限・90日・hard due NOT ADOPTED。アプリが違反判定で業務を止めない。`evaluateReviewDueRelativeToAsOf` UNCHANGED。Implementation HOLD |
 | 見直し周期 practice cadence（GOV-RULE-06） | Issue #16 / #19（判断）・契約 docs | **Accepted**（2026-08-09）。正本 [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) | `duration_days=90` 変換禁止。07/08 Accepted（08 NOT ADOPTED）。Implementation HOLD |
 | 見直し周期の基準日（GOV-RULE-05） | Issue #16 / #19（判断）・契約 docs | **Accepted**（2026-08-09）。初回=支援計画有効開始日 / 以降=前回見直し日。正本 [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) | 物理列は未決。GOV-RULE-08 Accepted / NOT ADOPTED。Implementation HOLD |
 | 見直し通知開始（GOV-RULE-07） | Issue #16 / #19（判断）・契約 docs | **Accepted**（2026-08-09）/ Option C。対象暦月に入ったら通知 / precision = approximate。正本 [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md) / [`review-notice-contract.md`](./review-notice-contract.md) | 日数変換禁止。通知 ≠ overdue / 違反。Implementation HOLD |

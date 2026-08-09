@@ -133,7 +133,7 @@ FindingCode value invention: FORBIDDEN
 | GOV-RULE-08 | NOT ADOPTED（hard due Entry は閉じる） |
 | previous_review_date 物理列 / Schema | UNDECIDED |
 | notice algorithm / UI / job | NOT STARTED |
-| Decision-RD-3 | **HOLD** |
+| Decision-RD-3 | **Accepted / LOCKED**（informational monitoring guidance；hard due/overdue NOT ADOPTED） |
 | Human Implementation Start | **HOLD** |
 
 正本: [`review-cadence-contract.md`](./review-cadence-contract.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) / [`review-notice-contract.md`](./review-notice-contract.md)
@@ -141,7 +141,7 @@ FindingCode value invention: FORBIDDEN
 ```text
 Logical Accepted ≠ Schema / UI Start
 hard due/overdue: DO NOT START（08 NOT ADOPTED）
-RD-3: HOLD（08 NOT ADOPTED を理由に自動開始しない）
+RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 90日必須化: FORBIDDEN
 ```
 
@@ -190,7 +190,7 @@ save / Schema / SharePoint: NOT in this re-audit start
 | 領域 | 残 Decision / Gate | Entry track |
 |---|---|---|
 | FindingCode | A-1〜A-4 content → A-5 → Entry satisfaction → Start | FC |
-| Review ops | Schema/物理列 / notice 実装 Entry / RD-3（任意） | Review |
+| Review ops | Schema/物理列 / notice 実装 Entry（RD-3 logical Accepted；実装別 GO） | Review |
 | Snapshot | DEC-009 / Finding 境界 / reasons / Schema（GOV-AUD-03 = Option E 済） | AS-EC-1 |
 | Audit real env | 実 adapter Gate | Audit（別） |
 | SupportPlan Schema | OP-3 LOCKED → DEC-6 | Schema/Adapter |
@@ -225,15 +225,14 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 
 1. `DEC-009`（AS-EC-1 向け最小 unlock；GOV-AUD-03 は Option E 済）
 2. Issue #19 最小 GOV-AUD 残件（対象 ID を Human が明示）
-3. Decision-RD-3（接近窓等。08 NOT ADOPTED を開始信号にしない）
-4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
+3. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
 **Current selected substantive unit:** F — Decision-ILB-1
 → Human Policy **Accepted / Option A / FINAL CONSISTENT**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md) / [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)）
-Inventory provisional rows: **NOT Accepted**（一件ずつ判定）
-First residual Decision: **NOT SELECTED**（[`decision-ilb-1-next-residual-decision-selection-packet.md`](./decision-ilb-1-next-residual-decision-selection-packet.md)）
+First residual Decision: **SELECTED / C — Decision-RD-3 Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
+Inventory provisional rows（RD-3 以外）: **NOT Accepted**（一件ずつ判定）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A）
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3
 
 **Do not next / DO NOT START:**
 
