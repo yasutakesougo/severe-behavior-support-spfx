@@ -20,11 +20,13 @@ Depends on:
   assessment-snapshot-finding-ids-boundary.md（findingIds NOT REQUIRED）
   assessment-snapshot-not-applicable-reason-hold.md（enum NOT ADOPTED）
   assessment-snapshot-schema-dto-versioning.md
-    （Schema ID 文字列 Accepted / schemaVersion HOLD / DTO DO NOT START）
+    （Schema ID + schemaVersion/dtoVersion=1.0.0 Accepted / DTO DO NOT START）
   assessment-snapshot-save-timing-contract.md（DEC-009 意味）
   decision-as-ec-1-overall-entry-acceptance.md（overall MET）
   decision-assessment-snapshot-schema-id-value-naming-acceptance.md
     （Decision-AS-SCHEMA-ID-1 Accepted / LOCKED）
+  decision-assessment-snapshot-schema-version-acceptance.md
+    （Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / A = 1.0.0）
 FindingCode: HOLD
 A-5: HOLD
 SharePoint / DTO / Schema code assignment: DO NOT START
@@ -82,7 +84,8 @@ ValidateAssessmentSnapshotResult =
 - 例外を投げない。
 - 未知キーは拒否する（strict allowlist）。
 - Schema ID / schemaVersion / dtoVersion フィールドは持たない
-  （Decision-AS-SCHEMA-ID-1: ID 文字列は Accepted；schemaVersion = HOLD；domain 型への割当は NOT STARTED）。
+  （Decision-AS-SCHEMA-ID-1 / Decision-AS-SCHEMA-VERSION-1: 論理値は Accepted；
+   domain 型への割当は NOT STARTED）。
 
 ## 検証規則
 
@@ -132,8 +135,9 @@ UNCHANGED:
 SharePoint / DTO / provider: DO NOT START
 AssessmentSnapshot Schema ID string:
   Accepted / LOCKED = severe-behavior-support.assessment-snapshot.snapshot
-schemaVersion / dtoVersion: HOLD / NOT DECIDED
-Schema ID assignment into TypeScript / DTO / SharePoint: DO NOT START
+schemaVersion / dtoVersion:
+  Accepted / LOCKED = 1.0.0 / 1.0.0
+Schema ID / schemaVersion / dtoVersion assignment into TypeScript / DTO / SharePoint: DO NOT START
 FindingCode / A-5: HOLD
 サービス別 NOT_APPLICABLE reason enum: FORBIDDEN（Entry #6）
 findingIds REQUIRED: NOT ADOPTED（Entry #5）

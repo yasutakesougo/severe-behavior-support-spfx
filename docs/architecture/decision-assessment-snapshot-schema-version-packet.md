@@ -3,12 +3,19 @@
 この文書は、Twelfth residual（SELECTED / A — schemaVersion / dtoVersion）後の
 **初回 schemaVersion / dtoVersion 具体値の比較用 Human Decision Packet** である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-schema-version-acceptance.md`](./decision-assessment-snapshot-schema-version-acceptance.md)
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: 337ffe87b8de17819d37b036d2fd0b2e8b18816b
 Decision ID: Decision-AS-SCHEMA-VERSION-1
-Kind: Human Decision packet（compare only）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: A
+Human Selected:
+  schemaVersion = 1.0.0
+  dtoVersion    = 1.0.0
 Depends on:
   decision-ilb-1-twelfth-residual-schemaversion-selection.md（SELECTED / A）
   decision-assessment-snapshot-schema-id-value-naming-acceptance.md
@@ -16,14 +23,14 @@ Depends on:
   assessment-snapshot-schema-dto-versioning.md（Entry #7）
   contracts-v1.md（DEC-1）
 Implementation Start: HOLD
-schemaVersion concrete value: HOLD / NOT DECIDED
-dtoVersion concrete value: HOLD / NOT DECIDED
+schemaVersion concrete value: Accepted / 1.0.0
+dtoVersion concrete value: Accepted / 1.0.0
 Schema ID assignment into code / DTO / SharePoint: HOLD / NOT STARTED
 Schema / DTO / SharePoint / adapter: HOLD
 application save: HOLD
 FindingCode / A-5: HOLD
 Deploy / real data: NO-GO
-value invention as Accepted without Human Decision: FORBIDDEN
+SemVer invention beyond Accepted 1.0.0: FORBIDDEN without new Human Decision
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -49,8 +56,8 @@ DEC-1:
 ```
 
 ```text
-本 packet に候補・Agent recommendation が書いてあっても Accepted にはならない。
-採択は明示 Human Decision / Acceptance が必要。
+Historical note:
+  候補・Agent recommendation は比較用。採択は Acceptance 正本のみが LOCKED である。
 ```
 
 ## 2. 再 Decision しない前提（LOCKED）
@@ -70,33 +77,28 @@ severe-behavior-support.support-plan.plan @ 1.0.0
 severe-behavior-support.support-plan.plan-version @ 1.0.0
 ```
 
-## 3. Options（比較・未採択）
+## 3. Options（比較履歴）
 
-### A — Initial version = 1.0.0
+### A — Initial version = 1.0.0 — **Accepted**
 
 ```text
 Meaning:
   schemaVersion = 1.0.0
   dtoVersion    = 1.0.0
   （DEC-1: 同一値）
-
-Rationale（比較用・非 Acceptance）:
-  初回完全契約に対する最初の安定版として自然
-  SupportPlan 先例も 1.0.0
 ```
 
-### B — HOLD
+### B — HOLD — **NOT SELECTED**
 
 ```text
 Meaning:
   concrete value は未決定のまま維持する
-  schemaVersion / dtoVersion = HOLD / NOT DECIDED
 ```
 
-| ID | 結果の意味 | 利点 | リスク / 欠点 |
-|---|---|---|---|
-| **A** | `1.0.0` / `1.0.0` を採択 | 先例一致・初回安定版として明確 | 値採択 ≠ 実装開始を混同しやすい |
-| **B** | 未決定維持 | 実装境界をさらに遅延できる | Schema ID だけ LOCKED のまま版が空 |
+| ID | 結果の意味 | 結果 |
+|---|---|---|
+| **A** | `1.0.0` / `1.0.0` を採択 | **Accepted** |
+| **B** | 未決定維持 | NOT SELECTED |
 
 ```text
 NOT candidates（本 packet に載せない / 採択禁止）:
@@ -106,21 +108,20 @@ NOT candidates（本 packet に載せない / 採択禁止）:
   版を Schema ID に埋め込むこと
 ```
 
-## 4. Agent recommendation（NOT Acceptance）
+## 4. Agent recommendation（historical / NOT Acceptance）
 
 ```text
 Agent recommendation: A — Initial version = 1.0.0
-
-This is NOT Human Acceptance evidence.
-Human must explicitly Accept A or B（or HOLD）.
+Human Decision: A（Accepted / LOCKED）
+Agent recommendation alone was NOT Acceptance evidence.
 ```
 
 ## 5. 判断単位の分離
 
 | 決める / 決めない | 本 packet |
 |---|---|
-| 初回 schemaVersion 具体値 | **比較対象（A/B）** |
-| dtoVersion（= schemaVersion） | **A 採択時のみ同値で決まる；別判断にしない** |
+| 初回 schemaVersion 具体値 | **Accepted / 1.0.0** |
+| dtoVersion（= schemaVersion） | **Accepted / 1.0.0** |
 | Schema ID 文字列 | OUT（LOCKED） |
 | TypeScript / validator / fixtures / tests | OUT |
 | Schema ID / schemaVersion / dtoVersion のコード割当 | OUT |
@@ -129,18 +130,17 @@ Human must explicitly Accept A or B（or HOLD）.
 | FindingCode / A-5 | OUT |
 | Implementation Start | HOLD |
 
-## 6. Human Decision（未選択）
-
-Human は次を明示する（未記載は NOT DECIDED）。
+## 6. Human Decision（固定）
 
 ```text
-Decision-AS-SCHEMA-VERSION-1: A / B / HOLD
+Decision-AS-SCHEMA-VERSION-1: A
+schemaVersion = 1.0.0
+dtoVersion    = 1.0.0
 ```
 
 ```text
-Until explicit Human Acceptance:
-  schemaVersion concrete value: HOLD / NOT DECIDED
-  dtoVersion concrete value: HOLD / NOT DECIDED
+After Acceptance:
+  schemaVersion / dtoVersion concrete values: LOCKED（Acceptance 正本）
   Implementation Start: HOLD
   TypeScript / validator / fixtures / tests: DO NOT START
   Schema ID / schemaVersion / dtoVersion のコード割当: DO NOT START
@@ -152,7 +152,7 @@ Until explicit Human Acceptance:
 ## 7. A を選んでも自動開始しない境界
 
 ```text
-Even if Human Accepts A（1.0.0）:
+Human Accepted A（1.0.0）:
   Implementation Start: HOLD
   TypeScript / validator / fixtures / tests: DO NOT START
   Schema ID / schemaVersion / dtoVersion のコード割当: DO NOT START
@@ -166,20 +166,18 @@ Even if Human Accepts A（1.0.0）:
 
 ```text
 Do NOT:
-  treat this compare packet as Acceptance
-  lock 1.0.0 by Agent recommendation alone
-  invent a SemVer outside A without explicit Human text
+  treat this compare packet alone as the LOCKED Acceptance（use Acceptance 正本）
+  invent a SemVer beyond Accepted 1.0.0 without new Human Decision
   set dtoVersion ≠ schemaVersion
   start TypeScript / DTO / SharePoint / adapter / application save
   reopen FindingCode / A-5
 ```
 
-## 9. Next after Human Decision（将来）
+## 9. Next after Human Decision
 
 ```text
-If Human Accepts A:
-  → write Acceptance LOCKED doc（別手順）
-  → still NOT auto Implementation Start
-If Human Selects B / HOLD:
-  → remain HOLD / NOT DECIDED
+Decision-AS-SCHEMA-VERSION-1: Accepted / LOCKED / A = 1.0.0
+  → decision-assessment-snapshot-schema-version-acceptance.md
+Implementation Start: HOLD
+Ready / Merge: NOT RUN by this Decision
 ```
