@@ -86,7 +86,7 @@ FORBIDDEN conversions:
 
 | ID | 問い | 本 review での扱い |
 |---|---|---|
-| **GOV-RULE-05** | 見直し周期を何の日から数えるか | **HOLD / 未決定** |
+| **GOV-RULE-05** | 見直し周期を何の日から数えるか | **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）。初回=有効開始日 / 以降=前回見直し日 |
 | **GOV-RULE-06** | 見直し周期 | **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)） |
 | **GOV-RULE-07** | 何日前から注意を出すか | **HOLD / 未決定** |
 | **GOV-RULE-08** | 「期限当日」「期限超過」をどう定義するか | **HOLD**。「3ヶ月に1回程度」だけでは決めない |
@@ -150,13 +150,13 @@ Durable evidence: decision-gov-rule-06-review-cadence-acceptance.md
 Logical contract: review-cadence-contract.md（Accepted）
 ```
 
-Keep as separate Decisions (HOLD):
+Keep as separate Decisions:
 
 ```text
-GOV-RULE-05  基準日
-GOV-RULE-07  通知開始
-GOV-RULE-08  期限当日・期限超過の定義
-Decision-RD-3 接近窓・期限算出・超過後ポリシー（技術側）
+GOV-RULE-05  基準日 — Accepted（別正本）
+GOV-RULE-07  通知開始 — HOLD
+GOV-RULE-08  期限当日・期限超過の定義 — HOLD
+Decision-RD-3 接近窓・期限算出・超過後ポリシー（技術側）— HOLD
 ```
 
 ## 次の substantive unit
@@ -183,7 +183,8 @@ Source review: PASS
 「3ヶ月に1回程度」: SUPPORTED AS PRACTICE CADENCE / Accepted
 「90日」: NOT AUTHORIZED
 GOV-RULE-06: Accepted
-GOV-RULE-05 / 07 / 08: HOLD
+GOV-RULE-05: Accepted（別正本）
+GOV-RULE-07 / 08: HOLD
 Issue #24 89/90/91 tests: MUST NOT REPRESENT THE 3-MONTH PRACTICE RULE
 Repository / Canonical write: THIS DOCS UNIT + acceptance write
 Implementation Start: HOLD
@@ -197,7 +198,7 @@ Implementation Start: HOLD
 | **GOV-RULE-06 source review**（本単位） | **PASS** |
 | **GOV-RULE-06 Human Acceptance** | **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)） |
 | Review Cadence Contract | Accepted（[`review-cadence-contract.md`](./review-cadence-contract.md)） |
-| GOV-RULE-05 基準日 | HOLD |
+| GOV-RULE-05 基準日 | **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)） |
 | GOV-RULE-07 通知開始 | HOLD |
 | GOV-RULE-08 期限当日・超過定義 | HOLD |
 | Decision-RD-3 接近窓・算出・超過後 | HOLD（90日必須化を cadence 根拠にしない） |
