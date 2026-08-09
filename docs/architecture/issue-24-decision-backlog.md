@@ -103,9 +103,11 @@ PR #147: MERGED（`ce05cd0…` / head `31e1df0…`）
 GOV-AUD-04: **Accepted / LOCKED / Option E**（[`decision-gov-aud-04-logical-delete-role-acceptance.md`](./decision-gov-aud-04-logical-delete-role-acceptance.md)）
   論理削除を許可するロール: 当面 application 層対象外
   具体的な許可ロール: NOT ADOPTED / NOT DEFINED
-  Packet: [`decision-gov-aud-04-logical-delete-role-decision-packet.md`](./decision-gov-aud-04-logical-delete-role-decision-packet.md)（CONSUMED）
-Current single gate: **PR #149（GOV-AUD-04 Acceptance）→ Merge 後 次 unit 選定**
-OUT: GOV-AUD-05 / FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
+  Consistency: [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
+PR #149: MERGED（`cb14c13…` / head `55112f4…`）
+Current single gate: **次 substantive unit 選定（NOT SELECTED）**
+  Selection packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)（OPEN）
+OUT: GOV-AUD-05 auto-start / FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -116,7 +118,7 @@ hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED（after merge）
+Next substantive unit: NOT SELECTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -392,13 +394,13 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  PR #149 Merge（GOV-AUD-04 Option E Acceptance）
-  → then 次 substantive unit 選定（NOT SELECTED）
-GOV-AUD-04: Accepted / LOCKED / Option E
+  次 substantive unit 選定（OPEN / NOT SELECTED）
+GOV-AUD-04: Accepted / LOCKED / Option E / FINAL CONSISTENT
+  PR #149 MERGED（cb14c13… / head 55112f4…）
   論理削除ロール: application 対象外
   具体ロール: NOT ADOPTED / NOT DEFINED
 GOV-AUD-03: Accepted / Option E
-GOV-AUD-05: OUT / DO NOT START from GOV-AUD-04
+GOV-AUD-05: OUT / DO NOT START unless newly selected
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT（PR #146 / 42b251b…）
 DEC-008 submit/return: Accepted / LOCKED / Option C / FINAL CONSISTENT
   PR #147 MERGED（ce05cd0… / head 31e1df0…）
@@ -409,7 +411,7 @@ A-5: HOLD
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED（after merge）
+Next substantive unit: NOT SELECTED
 ```
 
 

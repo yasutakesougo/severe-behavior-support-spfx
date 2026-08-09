@@ -74,11 +74,12 @@ DEC-008 submit/return roles Independent Review（PASS / P0=0 / P1=0 / P2=0 / d1b
 DEC-008 submit/return roles consistency（FINAL CONSISTENT / PR #147）: docs/architecture/decision-dec-008-submit-return-roles-canonicalization-consistency-check.md
 DEC-008 submit/return roles open-points（CONSUMED）: docs/architecture/decision-dec-008-submit-return-roles-open-points.md
 DEC-008 submit/return roles Decision packet（CONSUMED / Option C）: docs/architecture/decision-dec-008-submit-return-roles-decision-packet.md
-Next substantive unit selection（SELECTED / B / GOV-AUD-04）: docs/architecture/decision-next-substantive-unit-selection.md
-Next substantive unit selection packet（CONSUMED / B）: docs/architecture/decision-next-substantive-unit-selection-packet.md
 GOV-AUD-04 logical-delete role Acceptance（Accepted / LOCKED / Option E）: docs/architecture/decision-gov-aud-04-logical-delete-role-acceptance.md
+GOV-AUD-04 canonicalization consistency check（FINAL CONSISTENT / PR #149）: docs/architecture/decision-gov-aud-04-canonicalization-consistency-check.md
 GOV-AUD-04 logical-delete role open-points（CONSUMED）: docs/architecture/decision-gov-aud-04-logical-delete-role-open-points.md
 GOV-AUD-04 logical-delete role Decision packet（CONSUMED / Option E）: docs/architecture/decision-gov-aud-04-logical-delete-role-decision-packet.md
+Next substantive unit selection（post GOV-AUD-04 / OPEN / NOT SELECTED）: docs/architecture/decision-next-substantive-unit-selection.md
+Next substantive unit selection packet（OPEN）: docs/architecture/decision-next-substantive-unit-selection-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 

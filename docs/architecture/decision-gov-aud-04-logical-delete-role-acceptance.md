@@ -130,10 +130,13 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-GOV-AUD-04: Accepted / LOCKED / Option E
+PR #149: MERGED（cb14c13… / head 55112f4…）
+Consistency: FINAL CONSISTENT
+  → decision-gov-aud-04-canonicalization-consistency-check.md
 GOV-AUD-05: DO NOT START from this Acceptance
 FindingCode / A-5 / Implementation: HOLD
-Next substantive unit: NOT SELECTED（Merge 後に Human が選ぶ）
+Next substantive unit: NOT SELECTED
+  → decision-next-substantive-unit-selection-packet.md（OPEN）
 ```
 
 Agent は本 Acceptance を理由に削除ロール実装や FindingCode / Implementation / GOV-AUD-05 へ自動進行しない。
