@@ -5,7 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: 52474cb5993b0d4b24fbdaeccf934a5e96d3d1b1
 Decision kind: residual substantive-unit selection only
 Selected: A — Site / List / Internal Column Name
-Status: SELECTED / NOT IMPLEMENTATION START
+Status: SELECTED / CONSUMED（Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED）
 Human Selection: Explicit A on 2026-08-09
 ```
 
@@ -20,12 +20,12 @@ Meaning:
   Site / List / Internal Column Name の確定根拠
   （Decision-AS-SP-PLACEMENT-1）とする。
   本記録は選定のみであり、具体 Site/List/Internal Name 値・実装を決めない。
+  （確認根拠・SoT 境界は後続 Decision-AS-SP-PLACEMENT-1 で Accepted）
 ```
 
-## Explicit non-authorization
+## Explicit non-authorization（selection 時点 / 実装は継続 HOLD）
 
 ```text
-Decision-AS-SP-PLACEMENT-1: OPEN via compare packet / NOT ACCEPTED
 Site value: NOT CONFIRMED / HOLD
 List value: NOT CONFIRMED / HOLD
 Internal Column Name: NOT CONFIRMED / HOLD
@@ -52,7 +52,7 @@ DEC-009 / Decision-AS-APP-SAVE-1 / Decision-AS-SP-ADAPTER-1 / Decision-AS-DEC6-M
 - application save boundary CLOSED（SC-1 + FR-1）
 - SharePoint / adapter boundary CLOSED（PB-1+EM-1+CV-1+D6-1+UP-1）
 - DEC-6 mapping rules CLOSED（LF-1+RW-1+MF-1+VR-1）
-- Site / List / Internal Column Name remain NOT DECIDED / NOT CONFIRMED
+- Site / List / Internal Column Name remain NOT CONFIRMED / HOLD
 - Schema / DTO / SharePoint code assignment remains NOT STARTED
 - FindingCode / A-5 remain HOLD
 - Post-retention deletion remains OPEN / AUTO-START FORBIDDEN
@@ -68,23 +68,19 @@ DEC-009 / Decision-AS-APP-SAVE-1 / Decision-AS-SP-ADAPTER-1 / Decision-AS-DEC6-M
 ## Next gate
 
 ```text
-Next action:
-  Site / List / Internal Column Name read-only Decision packet / compare
-  → decision-assessment-snapshot-sp-placement-packet.md
-  Focus（Decision-AS-SP-PLACEMENT-1）:
-    SV — Site value confirmation
-    LV — List value confirmation
-    CN — Internal Column Name confirmation
-    SC — source-of-truth / configuration boundary
+Selection CONSUMED → Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED
+  decision-assessment-snapshot-sp-placement-acceptance.md
+  Site confirmation:         SV-1
+  List confirmation:         LV-1
+  Internal Column Name:      CN-1
+  Source-of-truth / config:  SC-1
 
-Not allowed from this document alone:
-  accepting placement options as LOCKED
-  inventing Site URL / List name / Internal Column Name
-  tenant confirmation / SharePoint changes
-  modifying TypeScript / application / adapter / SharePoint code
-  Schema / DTO code assignment
-  FindingCode / A-5
-  post-retention deletion
+Still HOLD / NOT CONFIRMED:
+  Site / List / Internal Column Name concrete values
   Implementation Start
-  Deploy / real data
+  SharePoint / adapter / application code
+  tenant confirmation GO
+  Schema ID / schemaVersion / dtoVersion code assignment
+  FindingCode / A-5
+Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
