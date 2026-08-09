@@ -16,7 +16,8 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008 / AUTHORING_CENTER
 Kind: Human Decision packet（narrow）
-Status: READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Decision Accepted / Option A）
+Accepted 正本: decision-dec-008-authoring-center-acceptance.md
 Separation authority: decision-dec-008-support-plan-role-separation.md
 Canonical ownership: Issue #8 / DEC-008
 main baseline: 9cc7829aabe6fc1fce027d068e339cc738d4beba
@@ -25,8 +26,10 @@ FindingCode 作成: DO NOT START
 A-5: OUT
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Agent recommendation: Option C
+Agent recommendation（historical）: Option C
+Human Selected: Option A
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
@@ -151,34 +154,35 @@ A. はい
 B. いいえ
 C. 制度資料をさらに確認してから決める
 
-答え: （Human 記入）
+答え: A（2026-08-09）
+Acceptance: decision-dec-008-authoring-center-acceptance.md
 ```
 
 ## 6. After Decision
 
 | Selected | Next |
 |---|---|
-| A | 実務中心者 = 実践研修修了者 を Acceptance 記録。制度資格・最終承認者は未決のまま |
+| **A（SELECTED）** | 実務中心者 = 実践研修修了者 Acceptance 済み。制度資格・最終承認者は未決のまま → FINAL_APPROVER packet |
 | B | Human が代替の実務中心者を明示するまで HOLD |
 | C | 制度資料確認（生活介護・重度障害者支援加算の現行通知）へ。実務中心者は未採択のまま |
 
-いずれでも自動開始しない:
+維持:
 
 ```text
 FindingCode 作成: DO NOT START
 A-5: OUT
 Implementation Start: HOLD
-最終承認者採択: DO NOT START
-制度資格の断定: DO NOT START（C では確認作業のみ）
-サービス管理責任者 = 最終承認者: NOT ADOPTED
+制度資格の断定: DO NOT START（未確定のまま）
+サービス管理責任者 = 最終承認者: 未採択（FINAL_APPROVER packet で問う）
+Next: decision-dec-008-final-approver-decision-packet.md
 ```
 
 ## 7. Gate
 
 ```text
 DEC-008 separation: FRAMED
-AUTHORING_CENTER packet: READY_FOR_HUMAN_DECISION
-Agent recommendation: C
-Human Decision: PENDING
+AUTHORING_CENTER packet: CONSUMED / Accepted Option A
+FINAL_APPROVER packet: READY_FOR_HUMAN_DECISION
+制度上の資格要件: 未確定
 Implementation Start: HOLD
 ```

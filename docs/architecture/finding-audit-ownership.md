@@ -59,7 +59,8 @@ FindingCode Issue #8 DEC body Acceptance packet（EMPTY catalog）: docs/archite
 FindingCode Issue #8 DEC body Acceptance（Accepted / Option A / EMPTY）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance.md
 FindingCode A-4 DEC number review（SELECTED / DEC-019）: docs/architecture/decision-findingcode-a4-dec-number-review.md
 DEC-008 support-plan role separation（FRAMED）: docs/architecture/decision-dec-008-support-plan-role-separation.md
-DEC-008 authoring-center Decision packet（READY / recommend C）: docs/architecture/decision-dec-008-authoring-center-decision-packet.md
+DEC-008 authoring-center Acceptance（Accepted / Option A / 実践研修修了者）: docs/architecture/decision-dec-008-authoring-center-acceptance.md
+DEC-008 final-approver Decision packet（READY）: docs/architecture/decision-dec-008-final-approver-decision-packet.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
@@ -97,7 +98,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
 | AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD（DEC-009 / GOV-AUD） |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
-| 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **FRAMED**（制度資格=未確定 / 実務中心者=実践研修修了者候補 / 最終承認者=未決定）。狭域 packet READY。サービス管理責任者案は未採択。正本 [`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md) / [`decision-dec-008-authoring-center-decision-packet.md`](./decision-dec-008-authoring-center-decision-packet.md) | ロール実装 DO NOT START。AI 要約を根拠に硬化しない |
+| 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | 制度資格=未確定 / 実務中心者=**Accepted 実践研修修了者** / 最終承認者=未決定。FINAL_APPROVER packet READY。サービス管理責任者案は未採択。正本 [`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md) / [`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md) / [`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md) | ロール実装 DO NOT START。制度資格と最終承認を混ぜない |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
 | 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3フィールド追加はHOLD |
 | 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD。89/90/91日境界は practice cadence とみなさない |

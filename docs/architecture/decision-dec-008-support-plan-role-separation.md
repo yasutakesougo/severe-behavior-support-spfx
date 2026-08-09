@@ -13,7 +13,7 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008（Issue #8 台帳上の既存番号）
 Kind: role / qualification separation framing
-Status: FRAMED / READY_FOR_NARROW_HUMAN_DECISION
+Status: FRAMED / AUTHORING_CENTER Accepted / FINAL_APPROVER READY
 Canonical ownership: Issue #8 / DEC-008
 Related technical contract: support-plan-status-transition.md（role-free / UNCHANGED）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED（別 track）
@@ -28,7 +28,11 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 関連:
 
-- 次の狭域 Human Decision packet:
+- 実務中心者 Acceptance:
+  [`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md)
+- 次の狭域 Human Decision packet（最終承認者）:
+  [`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md)
+- 実務中心者 packet（CONSUMED）:
   [`decision-dec-008-authoring-center-decision-packet.md`](./decision-dec-008-authoring-center-decision-packet.md)
 - 支援計画状態遷移（ロール判定 OUT）:
   [`support-plan-status-transition.md`](./support-plan-status-transition.md)
@@ -58,9 +62,9 @@ DEC-008 は「提出・差戻し・承認ロール、制度値」を含む広い
 
 | 軸 | 現時点の状態 | 根拠の扱い | 次 |
 |---|---|---|---|
-| **制度上の資格要件** | **未確定** | 生活介護・重度障害者支援加算の **現行通知本文** で確認する。公式ページ要約や AI 要約だけでは断定しない | 制度資料確認（別作業） |
-| **支援計画シート作成の実務中心者** | **候補** = 強度行動障害支援者養成研修（**実践研修**）修了者 | Human 一次情報としての候補。国リハ実践研修カリキュラム（支援手順書作成プロセス / 記録に基づく評価 / 障害特性の理解とプランニング）とは方向性が近いが、それだけでは制度要件にしない | 狭域 Human Decision（下記） |
-| **最終承認者** | **未決定** | 「作成者」と「最終的に有効化する人」を分離して決める。サービス管理責任者案は **未採択** | 実務中心者の後（別問い） |
+| **制度上の資格要件** | **未確定** | 生活介護・重度障害者支援加算の **現行通知本文** で確認する。公式ページ要約や AI 要約だけでは断定しない | 制度資料確認（別作業・本軸と分離維持） |
+| **支援計画シート作成の実務中心者** | **Accepted** = 強度行動障害支援者養成研修（**実践研修**）修了者 | Human Option A（2026-08-09）。実務上の作成中心者のみ。制度要件にはしない | 完了（Acceptance） |
+| **最終承認者** | **未決定** | 「作成者」と「最終的に有効化する人」を分離して決める。サービス管理責任者案は **未採択**（最終承認者 packet で採否を問う） | 狭域 Human Decision（下記） |
 
 ```text
 DEC-008:
@@ -69,11 +73,12 @@ DEC-008:
     → 生活介護・重度障害者支援加算の現行通知で確認する
   支援計画シート作成の実務中心者:
     強度行動障害支援者養成研修（実践研修）修了者
-    → Human 一次情報として候補
+    → Accepted（実務上の作成中心者のみ）
   最終承認者:
     未決定
     → 「作成者」と「最終的に有効化する人」を分離して決める
 ```
+
 
 ## 3. いま断定しないこと（安全境界）
 
@@ -94,16 +99,18 @@ MUST NOT assert from AI summary / incomplete official pages alone:
 
 ```text
 ALLOWED:
-  実務中心者候補として実践研修修了者を置く（Human 一次情報）
+  実務中心者 = 実践研修修了者（Accepted / 実務上のみ）
   制度要件は現行通知確認まで未確定のまま残す
-  最終承認者を作成者と分離した未決定のまま残す
+  最終承認者を作成者と分離した未決定のまま残す（次 packet で問う）
 
 FORBIDDEN for Agent:
   invent institutional qualification rules
   invent final approver
   harden AI summary into Accepted DEC body
+  equate authoring center Acceptance with institutional qualification
   start Implementation / role checks in code
 ```
+
 
 ## 4. 既存技術契約との関係
 
@@ -116,15 +123,15 @@ FORBIDDEN for Agent:
 
 ## 5. 次の Human 判断（1問に絞る）
 
-最終承認者や制度資格要件は、この時点では問わない。
+実務中心者は Accepted。制度資格要件は未確定のまま触らない。
 
 狭域の問いだけを次 packet に置く:
 
-> 支援計画シートを実際に作成する中心者は、実践研修修了者でよいですか？
+> 作成した支援計画シートを、誰が確認・承認して有効化しますか？
 
-Options: A / B / C（Agent 推奨: **C**）
+Options: A サービス管理責任者 / B 別役割（明示） / C まだ決めない
 
-正本: [`decision-dec-008-authoring-center-decision-packet.md`](./decision-dec-008-authoring-center-decision-packet.md)
+正本: [`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md)
 
 ## 6. Explicit non-goals
 
@@ -132,8 +139,7 @@ Options: A / B / C（Agent 推奨: **C**）
 FindingCode 作成: DO NOT START
 A-5: OUT
 Implementation Start: HOLD
-最終承認者の採択: DO NOT START（本 framing では未決定のまま）
 制度資格要件の断定: DO NOT START（未確定のまま）
-サービス管理責任者 = 最終承認者: NOT ADOPTED（案としても未採択）
+サービス管理責任者 = 最終承認者: 未採択（FINAL_APPROVER packet 待ち）
 src/** / tests/** / SharePoint / Deploy: 変更しない
 ```
