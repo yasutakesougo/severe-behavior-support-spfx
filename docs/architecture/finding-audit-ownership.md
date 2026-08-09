@@ -110,7 +110,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
-| DEC正本台帳 | Issue #8 | `DEC-001〜018` + Finding catalog **DEC-019**（EMPTY / NOT ADOPTED；A-4 Selected）。FindingSeverity 不採用は **DEC-018**（comment `5225426738`）。**DEC-008** は役割分離 framing（制度資格/実務中心者/最終承認者）。VOCAB Canonical COMPLETE。FindingCode catalog ownership は Decision-FC-1 Accepted（Option B）。delivery は Decision-FC-2 Accepted（Option C）。FC-3〜FC-6 Accepted / Option C。PURPOSE は MHLW-first RECORDED |
+| DEC正本台帳 | Issue #8 | `DEC-001〜018` + Finding catalog **DEC-019**（EMPTY / NOT ADOPTED；A-4 Selected）。FindingSeverity 不採用は **DEC-018**（comment `5225426738`）。**DEC-008 Accepted**：制度上の作成者=実践研修修了者 / 独立最終承認者 NOT ADOPTED。VOCAB Canonical COMPLETE。FindingCode catalog ownership は Decision-FC-1 Accepted（Option B）。delivery は Decision-FC-2 Accepted（Option C）。FC-3〜FC-6 Accepted / Option C。PURPOSE は MHLW-first RECORDED |
 | 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
