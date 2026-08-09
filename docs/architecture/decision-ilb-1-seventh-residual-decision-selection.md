@@ -49,11 +49,11 @@ Entry #6: HOLD方針として閉じる
 ## Next
 
 ```text
-Acceptance + policy: LOCKED（本選定の正本化対象）
+Acceptance + policy: LOCKED
 Entry #6: PASS / MET
-Entry #7: 未
+Entry #7: PASS / MET（後続 eighth residual / DEC-1 versioning）
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation Start / PR-J: HOLD
 Next residual Decision: NOT SELECTED
-Recommended next candidate（Human only）: Entry #7
+Recommended next candidate（Human only）: AS-EC-1 overall leave-HOLD 判定
 ```

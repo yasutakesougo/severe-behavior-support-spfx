@@ -155,21 +155,22 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 | 4 | `GOV-AUD-03` 訂正承認境界 | **Accepted / Option E**（application 対象外明示） |
 | 5 | Finding / findingIds 境界 | **PASS / MET**（findingIds **NOT REQUIRED**。正本 [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md)） |
 | 6 | `NOT_APPLICABLE` reason 正本 | **PASS / MET**（HOLD方針。正本 [`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md)） |
-| 7 | Schema / DTO versioning | **未** |
+| 7 | Schema / DTO versioning | **PASS / MET**（DEC-1 方針。正本 [`decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md`](./decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md)） |
 | 8 | 型・validator・fixture 計画 | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / 整合 [`decision-as-ec-1-entry-8-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-8-canonicalization-consistency-check.md)。実装 DO NOT START） |
 
 正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) Snapshot 表 / [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md) / [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-as-ec-1-entry-8-technical-plan-acceptance.md`](./decision-as-ec-1-entry-8-technical-plan-acceptance.md) / [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)
 
 ```text
-Decision-AS-EC-1: HOLD（overall）
+Decision-AS-EC-1: HOLD（overall；別 Human Decision）
 AS-EC-1 #1: PASS / MET
 AS-EC-1 #2: PASS / MET（PR-J boundary）
 AS-EC-1 #3（DEC-009）: Accepted / LOCKED
 AS-EC-1 #5: PASS / MET（findingIds NOT REQUIRED）
 AS-EC-1 #6: PASS / MET（NOT_APPLICABLE HOLD方針）
+AS-EC-1 #7: PASS / MET（DEC-1 versioning；固有 Schema ID 未採番）
 AS-EC-1 #8: Accepted / LOCKED / FINAL CONSISTENT（plan only）
 Result conversion: DONE（永続なし）
-save / Schema / SharePoint / type impl: NOT in Entry #2 / #5 / #6 / #8 alone
+save / Schema ID採番 / SharePoint / type impl: NOT in Entry Criteria alone
 ```
 
 ### 4. AuditEvent persistence / real adapter
@@ -242,17 +243,18 @@ Fourth residual Decision: **SELECTED / A — AS-EC-1 Entry #8 technical plan FIN
 Fifth residual Decision: **SELECTED / A — AS-EC-1 Entry #2 ownership / PR-J boundary PASS / MET**（[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）
 Sixth residual Decision: **SELECTED / A — AS-EC-1 Entry #5 findingIds NOT REQUIRED PASS / MET**（[`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md) / [`assessment-snapshot-finding-ids-boundary.md`](./assessment-snapshot-finding-ids-boundary.md)）
 Seventh residual Decision: **SELECTED / A — AS-EC-1 Entry #6 NOT_APPLICABLE HOLD方針 PASS / MET**（[`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md) / [`assessment-snapshot-not-applicable-reason-hold.md`](./assessment-snapshot-not-applicable-reason-hold.md)）
+Eighth residual Decision: **SELECTED / A — AS-EC-1 Entry #7 DEC-1 versioning PASS / MET**（[`decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md`](./decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md) / [`assessment-snapshot-schema-dto-versioning.md`](./assessment-snapshot-schema-dto-versioning.md)）
 Entry #1/#2: **#1 PASS / #2 PASS / MET**
 Entry #5: **PASS / MET**（findingIds NOT REQUIRED）
 Entry #6: **PASS / MET**（NOT_APPLICABLE HOLD方針）
-Entry #7: **未**
+Entry #7: **PASS / MET**（DEC-1 versioning；固有 Schema ID 未採番）
 post-retention deletion: **OPEN / 別 Decision**
-Decision-AS-EC-1 overall: **HOLD**（#7 未のため leave-HOLD 不可）
+Decision-AS-EC-1 overall: **HOLD**（個別 Entry は揃ったが overall は別 Human Decision）
 Next residual Decision: **NOT SELECTED**
-Recommended next candidate（Human only）: **Entry #7**
+Recommended next candidate（Human only）: **AS-EC-1 overall leave-HOLD 判定**
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A） / AS-EC-1 Entry #8 technical plan（Option A） / AS-EC-1 Entry #2 ownership·PR boundary（Option A） / AS-EC-1 Entry #5 findingIds boundary（Option A） / AS-EC-1 Entry #6 NOT_APPLICABLE HOLD policy（Option A）
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A） / AS-EC-1 Entry #8 technical plan（Option A） / AS-EC-1 Entry #2 ownership·PR boundary（Option A） / AS-EC-1 Entry #5 findingIds boundary（Option A） / AS-EC-1 Entry #6 NOT_APPLICABLE HOLD policy（Option A） / AS-EC-1 Entry #7 Schema·DTO versioning（Option A）
 
 **Do not next / DO NOT START:**
 
