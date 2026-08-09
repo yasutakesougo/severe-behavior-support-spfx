@@ -113,15 +113,19 @@ A-4: DEC-019
 ```text
 A-4: DEC-019（SELECTED）
 DEC body Acceptance: Accepted / EMPTY / DEC-019
-Next recommended: Merge PR #141
-Still required on Issue #8 ledger:
-  Human registers DEC-019 body / comment on Issue #8（canonical ownership）
+PR #141: MERGED（9cc7829）
+Issue #8 ledger registration:
+  docs prep: decision-dec-019-issue8-ledger-registration.md
+  live post: PENDING — Human
+After post: decision-dec-019-main-issue8-pr141-consistency-check.md
 Implementation Start: HOLD
 ```
 
 ## Human への依頼（わかりやすく）
 
-1. A-4 = **DEC-019** は記録済み
-2. 次は **Merge GO** で PR #141 をマージ
-3. Issue #8 上へ DEC-019 本文／コメント登録は Human（正本 ownership）
-4. Implementation Start は HOLD
+1. A-4 = **DEC-019** は記録済み（PR #141 MERGED）
+2. Issue #8 へ DEC-019 台帳文面を投稿（正本 ownership / Human）
+   — 文面: [`decision-dec-019-issue8-ledger-registration.md`](./decision-dec-019-issue8-ledger-registration.md) §1
+3. comment ID を返し、docs を同期
+4. main / Issue #8 / PR #141 整合確認
+5. FindingCode 作成 / Implementation には自動で進まない

@@ -235,8 +235,13 @@ Acceptance: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-fi
 
 ```text
 A-1〜A-4: complete for EMPTY catalog scope（A-4 = DEC-019）
-Next recommended: Merge PR #141
-Issue #8 ledger registration of DEC-019: Human
+PR #141: MERGED
+Next:
+  Issue #8 ledger registration of DEC-019（Human）
+  → decision-dec-019-issue8-ledger-registration.md
+  then consistency check（main / Issue #8 / PR #141）
+  → decision-dec-019-main-issue8-pr141-consistency-check.md
+NOT automatic: FindingCode 作成 / A-5 / Implementation
 Re-open catalog only with new Human primary information requiring Finding ADOPTED
 Implementation Start: HOLD
 ```

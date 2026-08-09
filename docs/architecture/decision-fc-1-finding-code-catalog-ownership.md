@@ -17,7 +17,7 @@ Catalog ownership: Issue #8 / new DEC
 Kind: business DEC
 Implementation Start: HOLD
 Decision-FC-2: DO NOT START
-Issue #8 DEC number: UNASSIGNED
+Issue #8 DEC number: DEC-019（Finding catalog EMPTY / NOT ADOPTED；live Issue #8 post PENDING Human）
 main before this canonicalization: ecc7fcff4777a6c74ae41cea3d2125e8be95c4e9
 Prior packet head: 41c734f1e48ecff7627a026b9beca5ff481d5ef4
 Depends on: FindingIdentity assembly DONE（finding-identity-assembly.md / PR #66）
@@ -50,7 +50,7 @@ Kind: business DEC
 Identity assembly: UNCHANGED
 Decision-FC-2: DO NOT START until FC-1 canonicalized
 Implementation Start: HOLD
-Issue #8 DEC number: UNASSIGNED
+Issue #8 DEC number: DEC-019（assigned after EMPTY catalog Acceptance；values remain NONE）
 ```
 
 ```text
@@ -106,12 +106,16 @@ Option D:
 ## DEC 番号
 
 ```text
-Issue #8 ledger 上の FindingCode catalog DEC 番号: UNASSIGNED
+Issue #8 ledger 上の FindingCode catalog DEC 番号: DEC-019
+Meaning: Finding catalog = EMPTY / NOT ADOPTED
+A-1 values: NONE（値一覧は発明しない）
+Live Issue #8 comment: PENDING — Human
+Registration prep: decision-dec-019-issue8-ledger-registration.md
 ```
 
-番号採番・Issue #8 本文／コメントへの台帳追記は、本 docs 正本化とは別操作とする。
-本 Accepted は「Issue #8 に新しい DEC を追加する」という **方式** を固定する。
-DEC 本文（値一覧等）は Decision-FC-2 以降および別 Human Decision を受けて Issue #8 に記録する。
+本 Accepted は「Issue #8 に新しい DEC を追加する」という **方式** を固定した。
+番号 **DEC-019** と EMPTY catalog 本文は、後続の Finding catalog Acceptance（PR #141）で確定した。
+Issue #8 実コメント投稿は Human 操作（正本 ownership）。
 
 ## Decision-FC-1 で決めないこと（維持）
 
@@ -159,8 +163,9 @@ Implementation Start: HOLD
 src/** / tests/**: 変更しない
 Decision-FC-2: DO NOT START
 FindingCode 値一覧 / enum / validator / fixture: DO NOT CREATE
-Issue #8 DEC number: UNASSIGNED（推測採番しない）
-Next after this canonicalization: Decision-FC-2 packet は別 Human Start
+Issue #8 DEC number: DEC-019（EMPTY catalog；live post PENDING Human）
+FindingCode value invention: FORBIDDEN
+Next after this canonicalization: Decision-FC-2 packet は別 Human Start（historical；FC-2 Accepted 済み）
 Issue #24 Close: NO-GO
 SharePoint / tenant / M365 / Entra / Deploy: NO-GO
 real data: PROHIBITED
