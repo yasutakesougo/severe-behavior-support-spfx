@@ -19,7 +19,7 @@ main baseline: e2bd25667b23274270755bbd42866e73c501f09d
 PR #151: MERGED（e2bd256… / head 4f5a833…）
 First residual Decision: SELECTED / C — Decision-RD-3（Accepted / LOCKED）
 Fourth residual Decision: SELECTED / A — AS-EC-1 Entry #8（Accepted / LOCKED / FINAL CONSISTENT）
-Fifth residual Decision: NOT SELECTED（packet OPEN — Entry #2 fill-or-defer）
+Fifth residual Decision: SELECTED / A — AS-EC-1 Entry #2（Accepted / LOCKED / PASS·MET / PR-J）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
@@ -42,7 +42,7 @@ Implementation Start: HOLD
 | **GOV-AUD-05** | 物理削除方針 | はい（個人情報・監査・保存との関係） | Decision-AUD-RET-1（最低5年）+ 本 Acceptance | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）。自動物理削除 **NOT ADOPTED**。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **DEC-012** | 論理削除データの完全削除方針 | はい | 同上 | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（GOV-AUD-05 と同一 Acceptance）。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **Decision-RD-3** | 見直し接近窓・期限算出・超過後 | 部分（cadence は Accepted だが窓日数は別） | GOV-RULE-06 Accepted；08 = NOT ADOPTED | — | — | **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）。informational only。期限超過・警告・業務制限・90日・hard due **NOT ADOPTED** | **closed** |
-| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1 PASS / #2 PARTIAL / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #8 plan FINAL CONSISTENT；#5/#6/#7 未 | はい（Entry 充足宣言） | 低 | overall Entry satisfied は別 Human 記録。監査 [`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)。第五 residual packet OPEN | **E**（overall HOLD） |
+| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #8 plan FINAL CONSISTENT；#5/#6/#7 未 | はい（Entry 充足宣言） | 低 | overall Entry satisfied は別 Human 記録。Entry #2 正本 [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)。第五 residual CONSUMED | **E**（overall HOLD） |
 | **DEC-009** | Snapshot 保存タイミング | 業務上必要になり得る | Human Acceptance LOCKED | — | — | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）。下書き / 確定時保存 / 元保持＋新版 / 上書き NOT ADOPTED / 履歴保持 | **closed** |
 | **DEC-015** | バックアップ・復元責任者 | 運用・監査 | 所有表のみ | はい | 低〜中 | 要 | **E** |
 | **DEC-6** | SharePoint 列変換 | 技術/adapter | adapter Entry 前提 | 技術契約寄り | N/A | Adapter Entry + Human GO | **D** 候補（業務ルール発明ではない） |
@@ -98,7 +98,7 @@ Do NOT:
   Implementation Start
 ```
 
-## 7. Next after RD-3 / retention prohibition / DEC-009 / Entry #8
+## 7. Next after RD-3 / retention prohibition / DEC-009 / Entry #8 / Entry #2
 
 ```text
 Order:
@@ -107,10 +107,10 @@ Order:
   3. Second residual: GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED（DONE）
   4. Third residual: DEC-009 save timing FINAL CONSISTENT（DONE）
   5. Fourth residual: AS-EC-1 Entry #8 technical plan FINAL CONSISTENT（DONE）
-     + Entry #1/#2 read-only audit（#1 PASS / #2 PARTIAL）
-  6. Fifth residual packet: OPEN（Entry #2 fill-or-defer）
-     Next residual: NOT SELECTED（Human が一件選ぶまで自動開始しない）
-     packet: decision-ilb-1-fifth-residual-decision-selection-packet.md
+     + Entry #1/#2 read-only audit（#1 PASS；#2 was PARTIAL at audit）
+  6. Fifth residual: AS-EC-1 Entry #2 ownership / PR-J PASS / MET（DONE / CONSUMED）
+  7. Next residual: NOT SELECTED（Human が一件選ぶまで自動開始しない）
+     remaining examples: Entry #5/#6/#7 / overall / post-retention
 FindingCode / A-5 / Implementation: HOLD
 AS-EC-1 overall: HOLD
 ```

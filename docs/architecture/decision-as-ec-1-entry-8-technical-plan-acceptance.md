@@ -108,7 +108,7 @@ NOT started from this Acceptance alone:
 ```text
 AS-EC-1 Entry #8: Accepted / LOCKED（本文書 + 技術計画）
 AS-EC-1 Entry #1: PASS / MET（read-only audit）
-AS-EC-1 Entry #2: PARTIAL / NOT FULLY MET（read-only audit）
+AS-EC-1 Entry #2: PASS / MET（Option A / PR-J；後続正本化）
 AS-EC-1 Entry #3: Accepted（DEC-009）
 AS-EC-1 Entry #4: Accepted（GOV-AUD-03 Option E）
 AS-EC-1 overall: HOLD
@@ -120,10 +120,9 @@ AS-EC-1 overall: HOLD
 AS-EC-1 Entry #8: Accepted / LOCKED / Option A / FINAL CONSISTENT
   Consistency: decision-as-ec-1-entry-8-canonicalization-consistency-check.md
   PR #159: MERGED（4c55e1c… / head 056a31c…）
-Entry #1 / #2 read-only audit: recorded（#1 PASS / #2 PARTIAL）
+Entry #1 / #2: #1 PASS / #2 PASS·MET（PR-J；Entry #2 Acceptance）
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation: HOLD
 Next residual Decision: NOT SELECTED
-Entry #2 fill-or-defer packet: OPEN
-  （decision-ilb-1-fifth-residual-decision-selection-packet.md）
+Fifth residual: CONSUMED（Entry #2 Option A）
 ```

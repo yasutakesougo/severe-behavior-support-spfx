@@ -35,9 +35,8 @@ TypeScript型 / runtime validator / 合成fixture / contract tests:
 
 ```text
 Acceptance + plan: LOCKED / FINAL CONSISTENT（PR #159 MERGED）
-Entry #1 / #2 read-only audit: recorded（#1 PASS / #2 PARTIAL）
+Entry #1 / #2: #1 PASS / #2 PASS·MET（PR-J；fifth residual Option A CONSUMED）
 AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation Start: HOLD
 Next residual Decision: NOT SELECTED
-Fifth residual packet: OPEN（Entry #2 fill-or-defer）
 ```

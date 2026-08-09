@@ -3,6 +3,9 @@
 この文書は、**Decision-AS-EC-1** Entry Criteria **#1** および **#2** が
 現行 main 上ですでに満たされているかを確認する **read-only 整合監査** である。
 
+Entry #2 は、本監査時点では PARTIAL だったが、後続の Human Option A 正本化により
+**PASS / MET** へ更新された（Acceptance / PR-J 境界）。履歴として PARTIAL 証跡を残す。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Audit ID: AS-EC-1-ENTRY-1-2-READONLY-CONSISTENCY
@@ -59,7 +62,7 @@ Entry #1: PASS / MET
 
 ## Entry #2 — 所有 Issue と PR 境界が記録済み
 
-### 実測証跡（満たしている部分）
+### 実測証跡（本監査時点 = PARTIAL）
 
 | 証跡 | 値 |
 |---|---|
@@ -69,36 +72,47 @@ Entry #1: PASS / MET
 | PR 境界（Result 変換） | PR-H / GitHub PR #72 MERGED |
 | 完全契約の所有候補 | Issue #24（所有表に記録。状態は HOLD） |
 
-### 残ギャップ（完全契約トラック）
+### 本監査時点の残ギャップ（完全契約トラック）
 
-| 項目 | 現状 |
+| 項目 | 本監査時点 |
 |---|---|
 | 完全契約実装の専用 PR 字母 | **未割当**（所有表は「別 Entry Criteria に従う」） |
 | 保存・DTO・findingIds・確定の PR 境界 | **未固定**（HOLD） |
 
-現行 living docs の表記「部分（Result変換は #24。完全契約境界は未固定）」と整合する。
+### 後続正本化による閉塞（Human Option A）
+
+| 項目 | 正本化後 |
+|---|---|
+| 所有 Issue | **Issue #24**（維持・明示） |
+| 完全契約実装の専用 PR 字母 | **PR-J**（専用・独立） |
+| GitHub PR # | 未採番（Implementation GO 時） |
+| Acceptance | [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) |
+| Boundary | [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md) |
+| Consistency | [`decision-as-ec-1-entry-2-canonicalization-consistency-check.md`](./decision-as-ec-1-entry-2-canonicalization-consistency-check.md) |
 
 ### 判定
 
 ```text
-Entry #2: PARTIAL / NOT FULLY MET
+Entry #2 at this audit snapshot: PARTIAL / NOT FULLY MET
+Entry #2 after Option A canonicalization: PASS / MET
 
-PASS portion:
+PASS portion（audit-time）:
   Issue #24 ownership recorded
   Result design/conversion PR boundaries recorded
 
-NOT FULLY MET portion:
-  AssessmentSnapshot 完全契約実装の専用 PR 境界が未固定
+CLOSED by later Human Option A:
+  AssessmentSnapshot 完全契約実装の専用 PR 境界（PR-J）
 ```
 
-Entry #2 を PASS に上げるには、完全契約実装の PR 境界（または「実装前は未採番でよい」ことの Human 明示）が必要。
+Entry #2 の現行判定は Acceptance / PR-J 境界正本を優先する（**PASS / MET**）。
+本節の PARTIAL 記述は監査時点の履歴証跡である。
 
 ## 総合
 
 | Entry | 判定 |
 |---|---|
 | #1 | **PASS / MET** |
-| #2 | **PARTIAL / NOT FULLY MET** |
+| #2 | **PASS / MET**（Option A 正本化後。監査時点履歴は PARTIAL） |
 | #3 DEC-009 | Accepted（既存） |
 | #4 GOV-AUD-03 | Accepted / Option E（既存） |
 | #5 Finding / findingIds | 未 |
@@ -115,22 +129,13 @@ AS-EC-1 overall: HOLD
 ## overall へ進められるか
 
 ```text
-Can AS-EC-1 overall leave HOLD solely from this audit?: NO
+Can AS-EC-1 overall leave HOLD solely from Entry #2 PASS?: NO
 
 Reasons:
-  1. Entry #2 is PARTIAL（完全契約 PR 境界未固定）
-  2. Entry #5 / #6 / #7 remain 未
-  3. Entry #8 Acceptance is plan-only（実装開始ではない）
+  1. Entry #5 / #6 / #7 remain 未
+  2. Entry #8 Acceptance is plan-only（実装開始ではない）
+  3. Entry #2 PASS は所有 / PR 境界のみ（実装認可ではない）
   4. overall Entry satisfied requires separate Human Decision
-```
-
-Human が次に取り得る例:
-
-```text
-A. Entry #2 を完全契約 PR 境界の明示で PASS 化する
-B. Entry #5 / #6 / #7 を一件ずつ Human Decision
-C. 別 residual Decision を選ぶ
-D. overall は HOLD のまま維持
 ```
 
 ## 維持する HOLD

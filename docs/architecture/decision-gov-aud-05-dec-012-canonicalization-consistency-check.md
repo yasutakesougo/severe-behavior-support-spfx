@@ -66,6 +66,6 @@ SharePoint / M365 / Deploy / real data: NO-GO
 Next residual Decision: NOT SELECTED
 DEC-009: FINAL CONSISTENT（DONE）
 AS-EC-1 Entry #8: FINAL CONSISTENT（DONE）
-AS-EC-1 Entry #2 fill-or-defer / 他 residual: Human が一件選ぶまで自動開始しない
+AS-EC-1 Entry #2 / 他 residual: Human が一件選ぶまで自動開始しない（Entry #2 は後続 Option A で PASS / MET）
 FindingCode / A-5 / Implementation: HOLD
 ```
