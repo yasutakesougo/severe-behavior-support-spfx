@@ -232,9 +232,10 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 → Human Policy **Accepted / Option A / FINAL CONSISTENT**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md) / [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)）
 First residual Decision: **SELECTED / C — Decision-RD-3 FINAL CONSISTENT**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
 Second residual Decision: **SELECTED / A — GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）
-Third residual Decision: **SELECTED / A — DEC-009 save timing Accepted / LOCKED**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md)）
+Third residual Decision: **SELECTED / A — DEC-009 save timing FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）
 post-retention deletion: **OPEN / 別 Decision**
 Decision-AS-EC-1 overall: **HOLD**
+Next residual Decision: **NOT SELECTED**
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
 **CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A）

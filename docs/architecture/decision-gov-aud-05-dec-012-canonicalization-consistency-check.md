@@ -62,6 +62,9 @@ SharePoint / M365 / Deploy / real data: NO-GO
 
 ## 5. Next
 
-次 residual Decision は **NOT SELECTED** とする（DEC-009 は別 Human Selection）。
-
-Human が残存 Decision を一件選ぶまで、個別 Decision を自動開始しない。
+```text
+Next residual Decision: NOT SELECTED
+DEC-009: FINAL CONSISTENT（DONE）
+AS-EC-1 remaining Entry Criteria / 他 residual: Human が一件選ぶまで自動開始しない
+FindingCode / A-5 / Implementation: HOLD
+```

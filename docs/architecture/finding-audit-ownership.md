@@ -98,7 +98,7 @@ Decision-ILB-1 third residual Decision selection（SELECTED / A / DEC-009）: do
 Decision-ILB-1 third residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-third-residual-decision-selection-packet.md
 DEC-009 AssessmentSnapshot save-timing Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-dec-009-snapshot-save-timing-acceptance.md
 AssessmentSnapshot save-timing logical contract: docs/architecture/assessment-snapshot-save-timing-contract.md
-DEC-009 canonicalization consistency check（CONSISTENT docs-internal）: docs/architecture/decision-dec-009-canonicalization-consistency-check.md
+DEC-009 canonicalization consistency check（FINAL CONSISTENT / PR #157）: docs/architecture/decision-dec-009-canonicalization-consistency-check.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -176,7 +176,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 
 | Decision | 内容 | 正本 |
 |---|---|---|
-| `DEC-009` | AssessmentSnapshotの保存タイミング | Issue #8 / Issue #19（**Accepted / LOCKED / Option A** — 下書き / 確定時保存 / 元確定保持＋新版 / 上書き NOT ADOPTED / 履歴保持。正本 [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`assessment-snapshot-save-timing-contract.md`](./assessment-snapshot-save-timing-contract.md)） |
+| `DEC-009` | AssessmentSnapshotの保存タイミング | Issue #8 / Issue #19（**Accepted / LOCKED / Option A / FINAL CONSISTENT** — 下書き / 確定時保存 / 元確定保持＋新版 / 上書き NOT ADOPTED / 履歴保持。正本 [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`assessment-snapshot-save-timing-contract.md`](./assessment-snapshot-save-timing-contract.md) / 整合 [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)） |
 | `GOV-AUD-01` | handoffの正本 | Issue #19 |
 | `GOV-AUD-02` | handoff状態変更ロール | Issue #19 |
 | `GOV-AUD-03` | Snapshot訂正承認者 | Issue #19（**Accepted / Option E** — application 対象外 / ロール NOT DEFINED。正本 [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |

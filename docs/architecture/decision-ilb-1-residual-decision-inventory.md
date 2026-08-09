@@ -103,7 +103,8 @@ Order:
   1. Human Policy Accepted / FINAL CONSISTENT（DONE）
   2. First residual: Decision-RD-3 FINAL CONSISTENT（DONE）
   3. Second residual: GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED（DONE）
-  4. Third residual: DEC-009 save timing Accepted / LOCKED（DONE）
+  4. Third residual: DEC-009 save timing FINAL CONSISTENT（DONE）
   5. 他残存 Decision を一件ずつ（post-retention deletion / AS-EC-1 overall 含む）
+     Next residual: NOT SELECTED（Human が一件選ぶまで自動開始しない）
 FindingCode / A-5 / Implementation: HOLD
 ```
