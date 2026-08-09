@@ -120,14 +120,16 @@ NOT SELECTED:
 Observed existing environment:
   OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 
-New SPFx deployment target:
-  NOT SELECTED / NOT CREATED / HOLD
-
 Reuse existing /sites/welfare for new SPFx:
   NOT ADOPTED
 
 Value Acceptance for /sites/welfare as new-SPFx target:
   NOT APPLICABLE
+
+Follow-on（not closed by this Acceptance; now LOCKED elsewhere）:
+  Decision-AS-NEW-TARGET-PROVISION-1 = Accepted / LOCKED / ST-1+LT-1+NM-1+EX-1
+  New SPFx deployment target = TOPOLOGY LOCKED / NOT CREATED / HOLD
+  Concrete Site / List / Internal Names = NOT SELECTED / OPEN
 ```
 
 ### この決定からは導出しない
