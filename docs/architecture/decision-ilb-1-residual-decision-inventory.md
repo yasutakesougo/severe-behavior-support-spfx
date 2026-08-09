@@ -40,8 +40,8 @@ Implementation Start: HOLD
 | **GOV-AUD-05** | 物理削除方針 | はい（個人情報・監査・保存との関係） | Decision-AUD-RET-1（最低5年）+ 本 Acceptance | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）。自動物理削除 **NOT ADOPTED**。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **DEC-012** | 論理削除データの完全削除方針 | はい | 同上 | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（GOV-AUD-05 と同一 Acceptance）。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **Decision-RD-3** | 見直し接近窓・期限算出・超過後 | 部分（cadence は Accepted だが窓日数は別） | GOV-RULE-06 Accepted；08 = NOT ADOPTED | — | — | **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）。informational only。期限超過・警告・業務制限・90日・hard due **NOT ADOPTED** | **closed** |
-| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry 表あり。DEC-009 行は「未」、他 docs は Human-attested Accepted と記載 — **同期 NOT CONFIRMED** | はい（Entry 充足宣言） | 低 | 要（Entry 充足の記録） | **E**（再 Decision ではなく整合確認が先） |
-| **DEC-009** | Snapshot 保存タイミング | 業務上必要になり得る | 台帳行あり。Accepted 証跡の docs 同期が不一致 | はい | 中 | 要（再 Decision ではなく証跡同期 / 明示） | **E**（OUT for casual re-decision） |
+| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #3 DEC-009 = Accepted / LOCKED；残条件あり | はい（Entry 充足宣言） | 低 | overall Entry satisfied は別 Human 記録 | **E**（overall HOLD） |
+| **DEC-009** | Snapshot 保存タイミング | 業務上必要になり得る | Human Acceptance LOCKED | — | — | **Accepted / LOCKED / Option A**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md)）。下書き / 確定時保存 / 元保持＋新版 / 上書き NOT ADOPTED / 履歴保持 | **closed** |
 | **DEC-015** | バックアップ・復元責任者 | 運用・監査 | 所有表のみ | はい | 低〜中 | 要 | **E** |
 | **DEC-6** | SharePoint 列変換 | 技術/adapter | adapter Entry 前提 | 技術契約寄り | N/A | Adapter Entry + Human GO | **D** 候補（業務ルール発明ではない） |
 | **FindingCode / A-5** | catalog 値・representation | 業務カタログ | DEC-019 EMPTY Accepted | はい（値を作るなら） | なし（発明禁止） | 現状 **HOLD / DO NOT CREATE** | **D**（再開しない） |
@@ -66,7 +66,7 @@ Implementation Start: HOLD
 | Item | Why NOT CONFIRMED | Action |
 |---|---|---|
 | 生活介護「少なくとも6か月に1回以上見直し」を、本アプリの HARD GATE として GOV-RULE-06（3ヶ月に1回程度）へ統合すべきか | 外部一次資料候補（例: 生活介護計画の確認項目 PDF）と、repo 正本の GOV-RULE-06（強度行動障害支援の practice cadence）は論点が異なり、統合結論を本 Work Order で確定できない | 分類 E。Human Policy Accepted 後に別問いへ |
-| DEC-009 が Accepted か未か | AS-EC-1 表は「未」、一部 packet は Human-attested Accepted | 証跡同期を Human 確認。再 Decision しない |
+| DEC-009 保存タイミングの実装細部（物理キー / Schema） | Acceptance は業務意味のみ | Schema / storage は別 Entry。自動実装禁止 |
 | 5年経過後の完全削除・物理削除の可否 | 本 Acceptance は保存期間中禁止のみを閉じた | 別 Human Decision（OPEN）。自動開始禁止 |
 | RD-3 接近窓の全国一律日数 | Decision-RD-3 Accepted: 90日固定 NOT ADOPTED | 再開しない（新 Human Decision が必要） |
 | 「現場裁量」へ自動落下してよいか | 安全性・算定・監査との衝突未確認 | Decision rule 遵守。自動 C 分類禁止 |
@@ -96,13 +96,14 @@ Do NOT:
   Implementation Start
 ```
 
-## 7. Next after RD-3 FINAL / GOV-AUD-05·DEC-012 retention prohibition
+## 7. Next after RD-3 / retention prohibition / DEC-009
 
 ```text
 Order:
   1. Human Policy Accepted / FINAL CONSISTENT（DONE）
   2. First residual: Decision-RD-3 FINAL CONSISTENT（DONE）
   3. Second residual: GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED（DONE）
-  4. 他残存 Decision を一件ずつ（post-retention deletion 含む）
+  4. Third residual: DEC-009 save timing Accepted / LOCKED（DONE）
+  5. 他残存 Decision を一件ずつ（post-retention deletion / AS-EC-1 overall 含む）
 FindingCode / A-5 / Implementation: HOLD
 ```

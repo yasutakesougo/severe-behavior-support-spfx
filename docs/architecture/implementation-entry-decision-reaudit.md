@@ -151,19 +151,20 @@ RD-3: Accepted / LOCKED（informational only；Implementation HOLD）
 |---|---|---|
 | 1 | Result 技術設計が main | DONE |
 | 2 | 所有 Issue / PR 境界 | 部分 |
-| 3 | `DEC-009` 保存タイミング | **未** |
+| 3 | `DEC-009` 保存タイミング | **Accepted / LOCKED / Option A** |
 | 4 | `GOV-AUD-03` 訂正承認境界 | **Accepted / Option E**（application 対象外明示） |
 | 5 | Finding / findingIds 境界 | **未**（FC 内容依存） |
 | 6 | `NOT_APPLICABLE` reason 正本 | **未** |
 | 7 | Schema / DTO versioning | **未** |
 | 8 | 型・validator・fixture 計画 | **未** |
 
-正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) Snapshot 表 / [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md)
+正本: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md) Snapshot 表 / [`assessment-snapshot-result-design.md`](./assessment-snapshot-result-design.md) / [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md)
 
 ```text
-Decision-AS-EC-1: HOLD
+Decision-AS-EC-1: HOLD（overall）
+AS-EC-1 #3（DEC-009）: Accepted / LOCKED
 Result conversion: DONE（永続なし）
-save / Schema / SharePoint: NOT in this re-audit start
+save / Schema / SharePoint: NOT in this Acceptance alone
 ```
 
 ### 4. AuditEvent persistence / real adapter
@@ -191,7 +192,7 @@ save / Schema / SharePoint: NOT in this re-audit start
 |---|---|---|
 | FindingCode | A-1〜A-4 content → A-5 → Entry satisfaction → Start | FC |
 | Review ops | Schema/物理列 / notice 実装 Entry（RD-3 logical Accepted；実装別 GO） | Review |
-| Snapshot | DEC-009 / Finding 境界 / reasons / Schema（GOV-AUD-03 = Option E 済） | AS-EC-1 |
+| Snapshot | Finding 境界 / reasons / Schema（DEC-009 Accepted；GOV-AUD-03 = Option E 済） | AS-EC-1 |
 | Audit real env | 実 adapter Gate | Audit（別） |
 | SupportPlan Schema | OP-3 LOCKED → DEC-6 | Schema/Adapter |
 | Closed | GOV-RULE-08 hard due / SEV-2-ASSIGN / FC-7 | DO NOT START |
@@ -223,18 +224,20 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 
 **Safe parallel alternatives（Human が明示選択した場合のみ）:**
 
-1. `DEC-009`（AS-EC-1 向け最小 unlock；GOV-AUD-03 は Option E 済）
-2. Issue #19 最小 GOV-AUD 残件（対象 ID を Human が明示）
+1. Decision-AS-EC-1 overall Entry 充足判定（残条件明示のうえ）
+2. Issue #19 最小 GOV-AUD 残件（対象 ID を Human が明示；post-retention deletion 含む）
 3. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
 **Current selected substantive unit:** F — Decision-ILB-1
 → Human Policy **Accepted / Option A / FINAL CONSISTENT**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md) / [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)）
 First residual Decision: **SELECTED / C — Decision-RD-3 FINAL CONSISTENT**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）
 Second residual Decision: **SELECTED / A — GOV-AUD-05 / DEC-012 retention prohibition Accepted / LOCKED**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）
+Third residual Decision: **SELECTED / A — DEC-009 save timing Accepted / LOCKED**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md)）
 post-retention deletion: **OPEN / 別 Decision**
+Decision-AS-EC-1 overall: **HOLD**
 Inventory provisional rows（上記以外）: **NOT Accepted**（一件ずつ判定）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A）
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A） / Decision-RD-3 / GOV-AUD-05·DEC-012 retention prohibition（Option A） / DEC-009 save timing（Option A）
 
 **Do not next / DO NOT START:**
 
