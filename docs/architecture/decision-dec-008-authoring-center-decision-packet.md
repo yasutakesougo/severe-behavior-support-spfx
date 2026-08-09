@@ -18,10 +18,13 @@ Decision ID: DEC-008 / AUTHORING_CENTER
 Kind: Human Decision packet（narrow）
 Status: CONSUMED（Human Decision Accepted / Option A）
 Accepted 正本: decision-dec-008-authoring-center-acceptance.md
+DEC-008 要約: decision-dec-008-acceptance.md
 Separation authority: decision-dec-008-support-plan-role-separation.md
 Canonical ownership: Issue #8 / DEC-008
 main baseline: 9cc7829aabe6fc1fce027d068e339cc738d4beba
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED（別 track）
+Meaning clarified: 実践研修修了者 = 支援計画シート等の制度上の作成者
+独立した最終承認者: NOT ADOPTED（別正本）
 FindingCode 作成: DO NOT START
 A-5: OUT
 Implementation Start: HOLD
@@ -29,6 +32,7 @@ Implementation auto-start: FORBIDDEN
 Agent recommendation（historical）: Option C
 Human Selected: Option A
 ```
+
 
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -156,15 +160,16 @@ C. 制度資料をさらに確認してから決める
 
 答え: A（2026-08-09）
 Acceptance: decision-dec-008-authoring-center-acceptance.md
+Clarified meaning: 実践研修修了者 = 支援計画シート等の制度上の作成者
 ```
 
 ## 6. After Decision
 
 | Selected | Next |
 |---|---|
-| **A（SELECTED）** | 実務中心者 = 実践研修修了者 Acceptance 済み。制度資格・最終承認者は未決のまま → FINAL_APPROVER packet |
-| B | Human が代替の実務中心者を明示するまで HOLD |
-| C | 制度資料確認（生活介護・重度障害者支援加算の現行通知）へ。実務中心者は未採択のまま |
+| **A（SELECTED）** | 制度上の作成者 = 実践研修修了者 Acceptance。独立最終承認者は NOT ADOPTED |
+| B | Human が代替の作成者を明示するまで HOLD |
+| C | 制度資料確認へ。作成者は未採択のまま |
 
 維持:
 
@@ -172,17 +177,17 @@ Acceptance: decision-dec-008-authoring-center-acceptance.md
 FindingCode 作成: DO NOT START
 A-5: OUT
 Implementation Start: HOLD
-制度資格の断定: DO NOT START（未確定のまま）
-サービス管理責任者 = 最終承認者: 未採択（FINAL_APPROVER packet で問う）
-Next: decision-dec-008-final-approver-decision-packet.md
+独立した最終承認者: NOT ADOPTED
+サービス管理責任者 = 最終承認者: 未採択 / 不採用
+DEC-008 current scope: closed
+次 substantive unit: NOT SELECTED
 ```
 
 ## 7. Gate
 
 ```text
-DEC-008 separation: FRAMED
 AUTHORING_CENTER packet: CONSUMED / Accepted Option A
-FINAL_APPROVER packet: READY_FOR_HUMAN_DECISION
-制度上の資格要件: 未確定
+FINAL_APPROVER: Accepted / NOT ADOPTED
+DEC-008 current scope: closed
 Implementation Start: HOLD
 ```

@@ -73,26 +73,25 @@ PR #139 / Implementation Entry Decision Re-audit: MERGED（merge `99c8b24f0fa22f
 Finding catalog DEC-019: **Accepted** / EMPTY / NOT ADOPTED（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
 A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019** / A-5: OUT
 FindingCode 作成: DO NOT START
-DEC-008 AUTHORING_CENTER: **Accepted** / Option A（[`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md)）
-  実務中心者: 実践研修修了者（実務上の作成中心者のみ）
-Current single gate: **DEC-008 FINAL_APPROVER Human Decision**
+DEC-008: **Accepted**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
+  制度上の作成者: 実践研修修了者 = 支援計画シート等の制度上の作成者
+  独立した最終承認者: **NOT ADOPTED**（設定しない / 制度根拠未確認）
+  サービス管理責任者を最終承認者とする案: 未採択 / 不採用
 DEC-008 separation: [`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md)
-  制度上の資格要件: 未確定のまま
-  実務中心者: Accepted = 実践研修修了者
-  最終承認者: 未決定（サービス管理責任者案は未採択）
-Decision packet: [`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md)
-  問: 作成した支援計画シートを、誰が確認・承認して有効化しますか？
-  Options: A サービス管理責任者 / B 別役割（明示） / C まだ決めない
+Current single gate: **次 substantive unit 選定（NOT SELECTED）**
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
+FindingCode 作成: DO NOT START
+A-5: OUT
 Implementation Start: HOLD
-次 substantive unit: **DEC-008**（narrow final-approver packet）
+次 substantive unit: NOT SELECTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
+
 
 
 
@@ -233,7 +232,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
-| **DEC-008** | 支援計画シート役割（制度資格 / 実務中心者 / 最終承認者） | **FRAMED**。3 軸分離。制度資格=未確定 / 実務中心者=**Accepted 実践研修修了者** / 最終承認者=未決定。サービス管理責任者案は未採択。正本: [`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md)。Acceptance: [`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md)。次 packet: [`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md) | Issue #8 / DEC-008 | AI 要約を根拠に硬化しない。制度資格と最終承認者を混ぜない。SupportPlan role-free 契約を壊さない | Human が最終承認者 A/B/C を選択 |
+| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者） | **Accepted**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**（設定しない）。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md) / [`decision-dec-008-final-approver-acceptance.md`](./decision-dec-008-final-approver-acceptance.md) | Issue #8 / DEC-008 | 独立承認ロールを発明しない。SupportPlan role-free 契約を壊さない | current scope closed。再評価は別 Human Decision |
 
 ### Snapshot Entry Criteria（整理のみ・実装しない）
 
@@ -358,15 +357,16 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  DEC-008 FINAL_APPROVER Human Decision
-  = 作成した支援計画シートを誰が確認・承認して有効化するか（A/B/C）
-DEC-008 AUTHORING_CENTER: Accepted / Option A / 実践研修修了者
-制度上の資格要件: 未確定のまま
+  次 substantive unit 選定（NOT SELECTED）
+DEC-008: Accepted
+  制度上の作成者 = 実践研修修了者
+  独立した最終承認者 = NOT ADOPTED
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode 作成: DO NOT START
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
@@ -472,9 +472,10 @@ Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contr
 FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
 A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
-DEC-008: FRAMED（[`decision-dec-008-support-plan-role-separation.md`](./decision-dec-008-support-plan-role-separation.md)）
-DEC-008 AUTHORING_CENTER: Accepted / Option A（[`decision-dec-008-authoring-center-acceptance.md`](./decision-dec-008-authoring-center-acceptance.md)）
-DEC-008 FINAL_APPROVER packet: READY（[`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md)）
+DEC-008: **Accepted**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
+  制度上の作成者 = 実践研修修了者
+  独立した最終承認者 = NOT ADOPTED
+
 
 Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）
 Decision-RC-2 / GOV-RULE-05: **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）
@@ -497,16 +498,17 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. DEC-008 を制度資格 / 実務中心者 / 最終承認者の 3 軸に分離する
-2. 実務中心者 Human Decision Option A を Acceptance する（実践研修修了者）
-3. 制度資格・最終承認者は未確定/未決定のまま維持する
-4. 次の Human 判断を「誰が確認・承認して有効化するか」1問に絞る
-5. サービス管理責任者案は最終承認者 packet の Option A として置き、採択は Human 待ち
-6. FindingCode / A-5 / Implementation Start は HOLD を維持する
-7. SupportPlan role-free 技術契約は変更しない
-8. SharePoint 実環境 / M365 / Deploy / real data へ進まない
-9. src/** / tests/** は変更しない
+1. DEC-008 を制度上の作成者 / 独立最終承認者に分離して扱う
+2. 実践研修修了者 = 支援計画シート等の制度上の作成者 を Accepted する
+3. 独立した最終承認者は制度根拠未確認のため NOT ADOPTED（設定しない）
+4. サービス管理責任者を最終承認者とする案は採択しない
+5. FindingCode / A-5 / Implementation Start は HOLD を維持する
+6. SupportPlan role-free 技術契約は変更しない
+7. SharePoint 実環境 / M365 / Deploy / real data へ進まない
+8. src/** / tests/** は変更しない
+9. 次 substantive unit は自動選定しない
 ```
+
 
 
 
