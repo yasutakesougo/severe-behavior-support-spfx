@@ -140,7 +140,8 @@ FindingCode:
 | BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
 | BS-003 | 支援手順記録に必要な記録項目が不足している | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
 | BS-004 | 想定結果が得られずチーム再確認・見直しが必要 | NOTICE（定期モニタリング） | **NOT ADOPTED** | **NONE**（catalog OUT） | モニタリング会議・見直しで管理 | **FIXED** |
-| BS-005 | （Human が提示） | | | | | **OPEN** |
+| BS-005 | 計画に沿って支援し手順記録で経過観察している（正常サイクル） | OTHER（通常運用） | **NOT ADOPTED** | **NONE**（catalog OUT） | 手順記録とモニタリングで管理 | **FIXED** |
+| BS-006 | （Human が提示） | | | | | **OPEN** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
 ## 確定済み — BS-002
@@ -330,21 +331,88 @@ catalog OUT
   既存の見直し・通知運用に吸収できるものは catalog OUT
 ```
 
-## 未決 — BS-005
+## 確定済み — BS-005
 
 ```text
 ID: BS-005
+Status: FIXED（Human primary information / 2026-08-09）
+Finding catalog: OUT OF SCOPE（対象外）
+Kind: 正常な業務サイクル（Finding ではない）
+Rejected framing:
+  「新しい状況が出たら即チーム確認」という別ルールを追加しない
+  → 通常の支援サイクルとして整理する
+Agent invention: NO
+```
+
+```text
+ID: BS-005
+Status: FIXED（2026-08-09）
+
+Business State:
+  アセスメントを基に作成された支援計画シートに沿って支援を行い、
+  支援手順記録によって経過観察している状態
+
+System behavior:
+  OTHER
+  → 支援計画シートに沿って支援する
+  → 支援手順記録を継続する
+  → 記録された経過をモニタリングで確認する
+  → モニタリング結果に基づいて必要な更新を行う
+
+Finding:
+  NOT ADOPTED
+
+FindingCode:
+  NONE
+
+継続管理:
+  Findingとしては行わない
+  → 支援手順記録とモニタリングで管理する
+
+Finding catalog scope:
+  OUT
+
+Evidence status:
+  Human一次情報
+```
+
+正常業務サイクル:
+
+```text
+アセスメント
+  ↓
+支援計画シート
+  ↓
+支援
+  ↓
+支援手順記録による経過観察
+  ↓
+モニタリング
+  ↓
+必要な更新
+```
+
+```text
+この正常な業務サイクルそのものは Finding ではない
+BS-001〜005: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
+Finding ADOPTED 件数: 0（まだ未提示）
+```
+
+## 未決 — BS-006
+
+```text
+ID: BS-006
 Status: OPEN — Human 提示待ち
 Note:
-  BS-001〜004 はすべて Finding NOT ADOPTED / catalog OUT
+  基本線（正常サイクル）と hard gate / モニタリング吸収は整理済み
   Finding: ADOPTED が必要な状態は、まだ Human が提示していない
 Agent: 業務状態を発明しない / FindingCode を命名しない
 ```
 
-Human が埋める形式（BS-005）:
+Human が埋める形式（BS-006）:
 
 ```text
-ID: BS-005
+ID: BS-006
 Status: DECIDED（日付）
 
 Business State:
@@ -404,6 +472,8 @@ DEC number: PENDING — Human selection（A-4）
      （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
    - BS-004: 想定結果が得られずチーム再確認・見直しが必要
      （NOTICE / 定期モニタリング吸収 / Finding NOT ADOPTED / catalog OUT）
+   - BS-005: 計画に沿って支援し手順記録で経過観察している（正常サイクル）
+     （OTHER / Finding ではない / catalog OUT）
    - （その他 NOT ADOPTED 行）
 
 4. 変更管理
@@ -426,8 +496,9 @@ BS-001: FIXED（HARD GATE / catalog OUT）
 BS-002: FIXED（HARD GATE / catalog OUT）
 BS-003: FIXED（HARD GATE / catalog OUT）
 BS-004: FIXED（NOTICE / 定期モニタリング吸収 / catalog OUT）
-BS-001〜004: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
-BS-005: OPEN — Human 提示待ち
+BS-005: FIXED（OTHER / 正常業務サイクル / catalog OUT）
+BS-001〜005: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
+BS-006: OPEN — Human 提示待ち
 Finding ADOPTED 件数: 0（まだ未提示）
 A-1: PENDING
 A-2: PENDING
@@ -440,9 +511,9 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-005** を同じ形式で1件書いてください
-2. 「あとで確認が必要」だけでは Finding にしない（BS-004 の境界を維持）
-3. Finding: ADOPTED は、既存の見直し・通知・hard gate に吸収できないものだけ検討
+1. **BS-006** を同じ形式で1件書いてください
+2. 正常サイクル（BS-005）・hard gate（BS-001〜003）・モニタリング吸収（BS-004）に載るものは Finding にしない
+3. Finding: ADOPTED は、それらに吸収できないものだけ検討
 4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
 
-Agent は FindingCode 名を付けません。BS-005 の中身を勝手に書きません。
+Agent は FindingCode 名を付けません。BS-006 の中身を勝手に書きません。
