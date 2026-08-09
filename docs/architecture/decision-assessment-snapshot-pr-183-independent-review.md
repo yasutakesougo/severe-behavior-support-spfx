@@ -9,17 +9,15 @@ Human Acceptance の代替ではない。Ready 化・Merge・実装開始では�
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Independent Review（docs-only）
 Skill basis: decision-review
-Status: HOLD → F-001 REMEDIATION IN PROGRESS
+Status: HOLD（#183 body stale）→ remediated via superseding PR #184
 Findings: P0=0 / P1=1 / P2=0
-PR: #183
-Reviewed HEAD: 0b7560475148cf1bac0356132693255bbb4c8465
+PR: #183（body stale；Acceptance docs PASS）
+Superseding PR: #184（Accepted / LOCKED body synced；agent-managed）
+Reviewed HEAD（#183）: 0b7560475148cf1bac0356132693255bbb4c8465
+Remediation HEAD（#184）: 55e7b9313f529f029f72bd6914e53b39c66beb84
 Draft: YES
-mergeable: YES
-Ready: NO-GO（body stale）
-Merge: NO-GO
-
-Acceptance docs: PASS
-PR body: STALE（OPEN / NOT ACCEPTED framing）
+Ready: review against #184 body（synced）
+Merge: NO-GO until Human Ready
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
