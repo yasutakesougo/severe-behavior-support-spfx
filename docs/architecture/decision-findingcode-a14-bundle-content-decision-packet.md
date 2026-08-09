@@ -230,10 +230,10 @@ Selection record: [`decision-findingcode-option-c-selection.md`](./decision-find
 
 いまやることは FindingCode の命名ではない。
 
-1. [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md) で業務状態を洗い出す  
-2. Finding にするもの／しないものを Human が決める  
-3. Issue #8 DEC 本文を Human が承認する  
-4. その後に A-1〜A-4 を確定し、Acceptance へ進む  
+1. [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md) で業務状態を洗い出す
+2. Finding にするもの／しないものを Human が決める
+3. Issue #8 DEC 本文を Human が承認する
+4. その後に A-1〜A-4 を確定し、Acceptance へ進む
 
 Agent は catalog 値を書かない。
 Acceptance / Entry satisfaction / Implementation Start は別 Gate。
