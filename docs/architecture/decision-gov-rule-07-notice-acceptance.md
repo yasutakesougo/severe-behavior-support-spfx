@@ -23,7 +23,7 @@ main baseline: ed77f5e480ee8546c38809c60774fd5c512ab17e
 Depends on:
   GOV-RULE-05 Accepted
   GOV-RULE-06 Accepted
-GOV-RULE-08: HOLD / 別 Decision
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本）
 duration_days = 90: NOT AUTHORIZED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
@@ -43,7 +43,7 @@ Selected Option: C — 暦月ベース
 意味:
   「見直し時期です」と職員へ知らせる
 precision: approximate
-GOV-RULE-08: HOLD / 別 Decision
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本・通知は informational）
 ```
 
 ```text
@@ -107,7 +107,7 @@ GOV-RULE-06: Accepted
 ## Acceptance boundary
 
 ```text
-GOV-RULE-08 due / overdue 定義: HOLD / 別 Decision
+GOV-RULE-08 due / overdue 定義: Accepted / Option A / NOT ADOPTED（別正本）
 Decision-RD-3: HOLD
 「見直し対象となる暦月」の算出アルゴリズム実装: NOT STARTED
 通知 UI / job / SharePoint: NOT STARTED
@@ -127,7 +127,7 @@ real data: PROHIBITED
 |---|---|
 | GOV-RULE-07 通知開始 | **Accepted**（Option C） |
 | GOV-RULE-05 / 06 | Accepted（UNCHANGED） |
-| GOV-RULE-08 | HOLD |
+| GOV-RULE-08 | Accepted / Option A / NOT ADOPTED（別正本） |
 | [`review-notice-contract.md`](./review-notice-contract.md) | Accepted logical contract（実装は別 Entry） |
 | [`review-due.md`](./review-due.md) / `evaluateReviewDueRelativeToAsOf` | UNCHANGED |
 
@@ -135,10 +135,10 @@ real data: PROHIBITED
 
 ```text
 Next automatic: NONE
-Still HOLD:
-  GOV-RULE-08
+Still HOLD / separate:
   Decision-RD-3
   Implementation Entry / Start
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本）
 ```
 
 Agent は本 Acceptance を理由に通知実装・90日規則・GOV-RULE-08・FindingCode / A-5 へ自動進行しない。

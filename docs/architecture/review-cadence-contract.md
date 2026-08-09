@@ -53,7 +53,7 @@ Human Acceptance（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decis
 GOV-RULE-06: Accepted
 GOV-RULE-05: Accepted（別正本）
 GOV-RULE-07: Accepted（Option C / 別正本）
-GOV-RULE-08: HOLD
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本）
 ```
 
 したがって本契約は **近似の暦月周期** を保持し、日数固定値へ変換しない。
@@ -65,7 +65,7 @@ GOV-RULE-08: HOLD
 | **GOV-RULE-06** | 見直し周期の practice cadence 表現 | 基準日・通知・超過定義 | **Accepted** |
 | GOV-RULE-05 | 何の日から数えるか | cadence 本体 | **Accepted**（[`review-anchor-contract.md`](./review-anchor-contract.md)） |
 | GOV-RULE-07 | 通知開始時期 | cadence 本体 | **Accepted**（Option C / [`review-notice-contract.md`](./review-notice-contract.md)） |
-| GOV-RULE-08 | 期限当日・期限超過の定義 | cadence 本体 | HOLD |
+| GOV-RULE-08 | 期限当日・期限超過の定義 | cadence 本体 | **Accepted** / Option A / NOT ADOPTED（[`review-due-overdue-contract.md`](./review-due-overdue-contract.md)） |
 | Decision-RD-1/RD-2 | caller-supplied due の asOf 相対判定所有・境界 | cadence / 制度窓 | Accepted（既存） |
 | Decision-RD-3 | 接近窓・期限算出・超過後ポリシー | practice cadence の一次表現 | HOLD |
 
@@ -177,8 +177,8 @@ Source review: PASS
 GOV-RULE-06: Accepted
 GOV-RULE-05: Accepted（別正本）
 GOV-RULE-07: Accepted（Option C / 別正本）
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED（別正本）
 ReviewCadence contract: Accepted（logical only）
-GOV-RULE-08: HOLD
 Decision-RD-3: HOLD
 3ヶ月 → 90日 conversion: FORBIDDEN
 Implementation Start: HOLD

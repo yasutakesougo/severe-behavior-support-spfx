@@ -13,7 +13,9 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-RC-4 / GOV-RULE-08
 Kind: Human Decision packet
-Status: READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Decision Accepted / Option A / NOT ADOPTED）
+Accepted 正本: decision-gov-rule-08-due-overdue-acceptance.md
+Logical contract: review-due-overdue-contract.md
 PR #135 / GOV-RULE-06: MERGED（Accepted）
 PR #136 / GOV-RULE-05: MERGED（Accepted）
 PR #137 / GOV-RULE-07: MERGED（Accepted / Option C）
@@ -23,7 +25,7 @@ main baseline: ba97f2df2cf369454dd6ab0670fca0bfbb1e1436
 GOV-RULE-05: Accepted（main）
 GOV-RULE-06: Accepted（main）
 GOV-RULE-07: Accepted / Option C（main）
-GOV-RULE-08: HOLD → 本 packet で判断単位を固定
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED
 duration_days = 90: NOT AUTHORIZED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
@@ -78,7 +80,7 @@ Existing technical pure function（業務 due 定義ではない）:
 | GOV-RULE-05 | 基準日 | Accepted / 触らない |
 | GOV-RULE-06 | practice cadence | Accepted / 触らない |
 | GOV-RULE-07 | 通知開始 | Accepted / 触らない |
-| **GOV-RULE-08** | due / overdue 定義 | **本 packet** |
+| **GOV-RULE-08** | due / overdue 定義 | **Accepted / Option A / NOT ADOPTED**（本 packet 消費） |
 | Decision-RD-3 | 接近窓・算出・超過後の技術ポリシー | HOLD / 混ぜない |
 | `evaluateReviewDueRelativeToAsOf` | caller-supplied due の相対判定 | UNCHANGED / 再定義しない |
 | Implementation | Schema / UI / 違反判定実装 | HOLD / 混ぜない |
@@ -129,46 +131,40 @@ Agent は具体日数や「翌月1日=overdue」等を Binding 推薦しない�
 
 ## 5. Option 骨格（値は Human が埋める）
 
-### Option A — hard due / overdue を当面採択しない
+### Option A — hard due / overdue を当面採択しない — **Selected**
 
 ```text
-GOV-RULE-08: NOT ADOPTED or OUT for current scope
-business overdue / violation: DO NOT START
-GOV-RULE-07 notice remains informational
-evaluateReviewDueRelativeToAsOf: may remain as technical helper for caller-supplied dates
+Selected by Human Decision on 2026-08-09:
+  GOV-RULE-08: NOT ADOPTED for current scope
+  business overdue / violation: DO NOT START
+  GOV-RULE-07 notice remains informational
+  evaluateReviewDueRelativeToAsOf: technical helper for caller-supplied dates only
+Accepted 正本: decision-gov-rule-08-due-overdue-acceptance.md
 ```
 
 ### Option B — 暦月ベースの due / overdue（GOV-RULE-07 と整合しやすい）
 
 ```text
-例の型（値は Human）:
-  due = 見直し対象暦月の末日（または対象月中の特定日）
-  overdue = 対象暦月の翌月以降に未見直し
-precision: exact calendar-month boundary か approximate かを Human が明示
-NOT: 90日 / 91日変換
+Not selected
 ```
 
 ### Option C — caller-supplied `reviewDueDate` のみを due とし、業務規則は持たない
 
 ```text
-business cadence/anchor/notice: informational
-due/overdue meaning: only relative to an explicitly supplied reviewDueDate
-no automatic derivation from GOV-RULE-05/06/07
-aligns with existing evaluateReviewDueRelativeToAsOf ownership
+Not selected
 ```
 
 ### Option D — anchor + cadence から due を導出（硬化リスク高）
 
 ```text
-due = f(anchor, approximately 3 months)
-overdue = after that due
-requires Human to specify f and precision
-Agent MUST NOT fill f with 90/91-day rules
+Not selected
 ```
 
 ### Option E — その他（Human 明示）
 
-Human が A–D 以外を書く場合のみ。Agent が補完しない。
+```text
+Not selected
+```
 
 ## 6. 禁止事項
 
@@ -180,58 +176,47 @@ FORBIDDEN:
   GOV-RULE-08 と GOV-RULE-07 を一括 Accepted して曖昧にすること
   evaluateReviewDueRelativeToAsOf へ制度接近窓・cadence 定数を埋め込むこと
   Implementation / UI / SharePoint / FindingCode を本 packet で開始すること
+  NOT ADOPTED を黙って hard due 実装へ進めること
 ```
 
-## 7. Accepted 時に必要になる論理面（予告・未採択）
+## 7. Accepted 論理面
 
-Human が Option を選んだ後に、別 Acceptance / contract docs で固定しうる最小面の例:
+正本:
+
+- [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md)
+- [`review-due-overdue-contract.md`](./review-due-overdue-contract.md)
 
 ```ts
-// 例示。採用は Human Decision 後。本 packet では採択しない。
-type ReviewDueOverduePolicy =
-  | { kind: "not_adopted" }
-  | {
-      kind: "calendar_month";
-      due: "end_of_target_review_month" | "human_specified";
-      overdue: "after_target_review_month" | "human_specified";
-      violationMeaning: "none" | "operational_late" | "human_specified";
-      precision: "exact" | "approximate";
-    }
-  | {
-      kind: "caller_supplied_review_due_date_only";
-      businessDerivationFromCadence: false;
-    };
+type ReviewDueOverduePolicy = {
+  kind: "not_adopted";
+};
 ```
 
-本 packet の段階では型も値も Accepted にしない。
-
-## 8. Human Decision 記録欄（未記入）
+## 8. Human Decision 記録欄
 
 ```text
-Human Decision: UNRECORDED
-GOV-RULE-08: HOLD / READY_FOR_HUMAN_DECISION
-Selected Option: UNSELECTED
-hard due/overdue adopted: UNDECIDED
-due definition: UNDECIDED
-overdue definition: UNDECIDED
-violationMeaning: UNDECIDED
-relation to GOV-RULE-07 notice: UNDECIDED
-relation to evaluateReviewDueRelativeToAsOf: UNDECIDED
+Human Decision: Explicit Human GOV-RULE-08 acceptance on 2026-08-09
+GOV-RULE-08: Accepted
+Selected Option: A
+hard due/overdue adopted: NO / NOT ADOPTED
+due definition: N/A（不採択）
+overdue definition: N/A（不採択）
+violationMeaning: NONE / DO NOT START
+relation to GOV-RULE-07 notice: informational only（≠ overdue / ≠ 違反）
+relation to evaluateReviewDueRelativeToAsOf: UNCHANGED technical helper
 Implementation Start: HOLD
 ```
-
-Human が決定したら、別 Acceptance 正本（`decision-gov-rule-08-*-acceptance.md`）へ記録する。
 
 ## 9. Gate
 
 ```text
-Packet: READY_FOR_HUMAN_DECISION
+Packet: CONSUMED
 GOV-RULE-05 / 06 / 07: Accepted（main）
-GOV-RULE-08: NOT ACCEPTED
+GOV-RULE-08: Accepted / Option A / NOT ADOPTED
 duration_days = 90: NOT AUTHORIZED
 Implementation Start: HOLD
 SharePoint / M365 / Deploy: NO-GO
-src/** / tests/**: 本 packet では変更しない
+src/** / tests/**: 本 packet / acceptance では変更しない
 evaluateReviewDueRelativeToAsOf: UNCHANGED
 ```
 
