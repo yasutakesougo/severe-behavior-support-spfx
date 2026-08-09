@@ -168,8 +168,10 @@ Selection record: decision-next-substantive-unit-selection.md
 Decision-OP-3: FINAL CONSISTENT
 NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected E
 Selected unit: DEC-008 submit / return roles
-Open-points: decision-dec-008-submit-return-roles-open-points.md
-Decision packet: decision-dec-008-submit-return-roles-decision-packet.md
+Acceptance: Option C / LOCKED
+  → decision-dec-008-submit-return-roles-acceptance.md
+Consistency: DOCS CONSISTENT / MERGE PENDING（PR #147）
+Path: Independent Review → Human Merge Decision
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
