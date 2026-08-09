@@ -60,10 +60,10 @@ FindingCode Issue #8 DEC body Acceptance（Accepted / Option A / EMPTY）: docs/
 FindingCode A-4 DEC number review（SELECTED / DEC-019）: docs/architecture/decision-findingcode-a4-dec-number-review.md
 DEC-008 Acceptance（LOCKED）: docs/architecture/decision-dec-008-acceptance.md
 DEC-008 Issue #8 ledger registration（POSTED / comment 5229571943）: docs/architecture/decision-dec-008-issue8-ledger-registration.md
-DEC-008 canonicalization consistency check（CONSISTENT）: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
-
-
+DEC-008 canonicalization consistency check（CONSISTENT / 最終確定）: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
+Next substantive unit selection packet（READY）: docs/architecture/decision-next-substantive-unit-selection-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
+
 DEC-008 authoring-center Acceptance: docs/architecture/decision-dec-008-authoring-center-acceptance.md
 DEC-008 final-approver Acceptance（NOT ADOPTED）: docs/architecture/decision-dec-008-final-approver-acceptance.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
