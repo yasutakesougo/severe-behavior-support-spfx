@@ -6,8 +6,8 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_TWENTY_FOURTH_RESIDUAL_SELECTION
-Status: SELECTED / OPEN
-  （Decision-AS-PILOT-FACILITY-IDENTITY-1 = OPEN / NOT ACCEPTED）
+Status: SELECTED / CONSUMED
+  （Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED）
 Selected unit: Formal pilot facility identity / Site naming
 Follow-up Decision ID: Decision-AS-PILOT-FACILITY-IDENTITY-1
 
@@ -18,9 +18,12 @@ Locked basis（再 Decision しない）:
   Decision-AS-ORG-SITE-TOPOLOGY-1 = Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
   Placeholder XXXXX / YYYYY = INTENDED / PLACEHOLDER / NOT CREATABLE
 
+Identity / Site naming:
+  Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+
 Current state:
   Org site topology = LOCKED
-  Pilot facility identity / Site naming = OPEN / NOT ACCEPTED
+  Pilot facility identity / Site naming = Accepted / LOCKED
   List names = DEFERRED（本 Decision 対象外）
   Site / List creation = NO-GO
   Placeholder creation = FORBIDDEN
@@ -33,23 +36,29 @@ Current state:
 だけを次 Human Decision として選ぶ。
 
 ```text
-SELECTED / OPEN:
+SELECTED / CONSUMED:
   Decision-AS-PILOT-FACILITY-IDENTITY-1
-  Status: OPEN / NOT ACCEPTED
+  Human Decision: PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  Human Accept phrase:
+    「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
 
-In scope:
+Closed:
   Pilot facility order
-  facilityKey（変更されにくい識別子）
-  Site display name
-  Site URL suffix
+  facilityKey（isogo / honmoku）
+  Site display name / URL
   naming ≠ creation GO
+  List names deferred（LN-D）
 
-Out of scope / DEFERRED:
-  List names（List 正本責務確認後に別 Decision）
-  法人共通管理サイト命名
+Still OPEN / NOT AUTHORIZED:
+  List names
   Site / List creation
-  Internal Column Names
+  treating INTENDED as OBSERVED / CONFIRMED / CREATED
   Implementation Start
+  SharePoint / adapter / application implementation
+  Schema / DTO code assignment
+  Deploy / real data
+  FindingCode / A-5
+  post-retention deletion
 ```
 
 Selection ≠ Acceptance ≠ Site/List creation.
@@ -66,16 +75,26 @@ Selection ≠ Acceptance ≠ Site/List creation.
 ## Next
 
 ```text
-Selection SELECTED / OPEN
-  → decision-assessment-snapshot-pilot-facility-identity-packet.md
-Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+Selection CONSUMED → Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED
+  decision-assessment-snapshot-pilot-facility-identity-acceptance.md
+  Pilot facility order:  PO-1
+  facilityKey:           FK-1
+  Site naming:           SN-1
+  List names:            LN-D
+  Execution boundary:    XB-1
 
-Human Acceptance requires explicit confirmation such as:
-  「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
+LOCKED payload:
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
 
-Until that:
-  recommended payload = CANDIDATE / NOT LOCKED
-  Site / List creation = NO-GO
-  Placeholder creation = FORBIDDEN
-  List names = DEFERRED
+Next gate: FIXED
+  PILOT LIST NAMES（after ownership check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
+
+Still HOLD / NO-GO:
+  List names
+  Site / List creation
+  Placeholder creation
+  Implementation Start
+  tenant mutation
 ```

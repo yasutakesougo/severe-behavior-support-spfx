@@ -95,11 +95,15 @@ Selection CONSUMED → Decision-AS-ORG-SITE-TOPOLOGY-1 Accepted / LOCKED
   Placeholder:      PH-1
   Execution:        XB-1
 
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
 Next Human gate: FIXED
-  FORMAL PILOT FACILITY SITE / LIST NAMING
-  → decision-assessment-snapshot-org-site-topology-next-gate.md
+  PILOT LIST NAMES（after ownership check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
 
 Still HOLD / NO-GO:
+  List names
   Site / List creation（含む placeholder 作成）
   PROVISION-EXEC Execution GO
   Implementation Start

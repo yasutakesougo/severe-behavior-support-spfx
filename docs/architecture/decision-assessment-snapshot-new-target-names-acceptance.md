@@ -262,9 +262,12 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-185-independent-review.md
   Reviewed HEAD: b37e3e6d0d3f925e8686f2e2805094b55479b024
-Next Human gate: FORMAL PILOT FACILITY IDENTITY / SITE NAMING
-  → decision-assessment-snapshot-org-site-topology-next-gate.md
-Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
-  → decision-assessment-snapshot-pilot-facility-identity-packet.md
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  → decision-assessment-snapshot-pilot-facility-identity-acceptance.md
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
+  （XXXXX / YYYYY = PLACEHOLDER / SUPERSEDED FOR CREATION）
+Next Human gate: PILOT LIST NAMES（after ownership check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
 List names: DEFERRED
 ```

@@ -6,8 +6,8 @@ OT-1+FS-1+SP-1+PP-1+PH-1+XB-1** 後の次 Human gate を固定する正本であ
 Authorization / topology 正本:
 [`decision-assessment-snapshot-org-site-topology-acceptance.md`](./decision-assessment-snapshot-org-site-topology-acceptance.md)
 
-Next Decision packet（OPEN）:
-[`decision-assessment-snapshot-pilot-facility-identity-packet.md`](./decision-assessment-snapshot-pilot-facility-identity-packet.md)
+Next Decision（CONSUMED → Accepted）:
+[`decision-assessment-snapshot-pilot-facility-identity-acceptance.md`](./decision-assessment-snapshot-pilot-facility-identity-acceptance.md)
 
 Placeholder names 正本:
 [`decision-assessment-snapshot-new-target-names-acceptance.md`](./decision-assessment-snapshot-new-target-names-acceptance.md)
@@ -20,14 +20,18 @@ Authorization basis:
   Decision-AS-ORG-SITE-TOPOLOGY-1 = Accepted / LOCKED
     / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
 
-Next gate:
+Next gate（historical for ORG-SITE-TOPOLOGY-1）:
   FORMAL PILOT FACILITY IDENTITY / SITE NAMING
-  Decision-AS-PILOT-FACILITY-IDENTITY-1 = OPEN / NOT ACCEPTED
+  → Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED
+    / PO-1 + FK-1 + SN-1 + LN-D + XB-1
 
-Naming GO: NOT GIVEN / NOT STARTED
+Active next after identity Acceptance:
+  PILOT LIST NAMES（after ownership check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
+
 Creation GO: NOT GIVEN / NO-GO
 List names: DEFERRED
-This document does NOT invent Accepted names and does NOT start tenant mutation.
+This document does NOT start tenant mutation.
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -52,11 +56,11 @@ Out of scope / DEFERRED:
   法人共通管理サイト命名
 ```
 
-## 2. Recommended candidate payload（NOT LOCKED）
+## 2. Accepted identity payload（LOCKED as INTENDED）
 
 ```text
-Status: CANDIDATE / NOT ACCEPTED
-Source: decision-assessment-snapshot-pilot-facility-identity-packet.md
+Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+Source: decision-assessment-snapshot-pilot-facility-identity-acceptance.md
 
 Pilot 1:
   Facility: 磯子活動ホーム
@@ -70,7 +74,7 @@ Pilot 2:
   Site name: 強度行動障害支援 - 本牧活動ホーム
   Site URL:  https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
 
-Human Accept phrase required before LOCKED:
+Human Accept phrase（recorded）:
   「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
 ```
 
@@ -123,7 +127,6 @@ Common management site naming / creation: 別 Human Decision
 
 ```text
 This next-gate definition alone does NOT:
-  Accept / LOCK facilityKey or Site names
   invent formal List names
   create Site / List / columns
   perform tenant mutation
@@ -131,27 +134,25 @@ This next-gate definition alone does NOT:
   authorize PROVISION-EXEC Execution GO
   start Implementation / SharePoint code / Deploy
 
-Requires separate explicit Human Acceptance of
-Decision-AS-PILOT-FACILITY-IDENTITY-1.
-Creation remains a later Human execution gate after real names exist.
+Identity / Site naming is Accepted / LOCKED.
+Creation remains a later Human execution gate after List names exist.
 ```
 
 ## 7. Current state
 
 ```text
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
-Next gate: FIXED = FORMAL PILOT FACILITY IDENTITY / SITE NAMING
-Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
-Recommended payload: CANDIDATE / NOT LOCKED
-List names: DEFERRED
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+Active next gate: PILOT LIST NAMES（after ownership check）
+List names: DEFERRED / NOT SELECTED
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-PROVISION-EXEC Execution GO: NOT GIVEN / BLOCKED by PH-1
+PROVISION-EXEC Execution GO: NOT GIVEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for Human Accept of pilot facility identity / Site naming
+  waiting for List ownership check + List names Human Decision
   auto-start: FORBIDDEN
 ```

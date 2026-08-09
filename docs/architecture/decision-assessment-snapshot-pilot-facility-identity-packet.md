@@ -3,6 +3,9 @@
 この文書は、Decision-AS-ORG-SITE-TOPOLOGY-1 Accepted / LOCKED を前提に、
 **パイロット事業所の identity と Site 命名**を判断する Human Decision Packet である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-pilot-facility-identity-acceptance.md`](./decision-assessment-snapshot-pilot-facility-identity-acceptance.md)
+
 Selected via:
 [`decision-ilb-1-twenty-fourth-residual-pilot-facility-identity-selection.md`](./decision-ilb-1-twenty-fourth-residual-pilot-facility-identity-selection.md)
 
@@ -17,11 +20,17 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-PILOT-FACILITY-IDENTITY-1
-Kind: Human Decision packet（compare → OPEN）
-Status: OPEN / NOT ACCEPTED
-Human Decision: NOT SELECTED
-Acceptance 正本: NOT CREATED
-
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: PO-1 + FK-1 + SN-1 + LN-D + XB-1
+Human Selected:
+  Pilot facility order:  PO-1
+  facilityKey:           FK-1
+  Site naming:           SN-1
+  List names:            LN-D
+  Execution boundary:    XB-1
+Human Accept phrase:
+  「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
 Selected via:
   decision-ilb-1-twenty-fourth-residual-pilot-facility-identity-selection.md
 
@@ -33,8 +42,8 @@ Locked basis:
   Per-facility Site + Lists topology = ST-1 + LT-1（再 Decision しない）
 
 Current state:
-  Pilot facility identity / Site naming = OPEN / NOT ACCEPTED
-  Recommended payload = CANDIDATE / NOT LOCKED
+  Pilot facility identity / Site naming = Accepted / LOCKED
+  Naming payload = HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
   List names = DEFERRED
   Site / List creation = NO-GO
   Placeholder creation = FORBIDDEN
@@ -61,23 +70,22 @@ XXXXX / YYYYY は実値として使わない。
 Historical note:
   候補・Agent recommendation は比較用。
   採択は Acceptance 正本のみが LOCKED である。
-  本 packet は OPEN / NOT ACCEPTED。
 ```
 
-## 2. Compare axes
+## 2. Compare axes（比較履歴）
 
 ### PO — Pilot facility order
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **PO-1** | Pilot 1 = 磯子活動ホーム / Pilot 2 = 本牧活動ホーム | CANDIDATE（Human-provided order） |
+| **PO-1** | Pilot 1 = 磯子活動ホーム / Pilot 2 = 本牧活動ホーム | **Accepted** |
 | PO-HOLD | 順序をまだ決めない | NOT SELECTED |
 
 ### FK — facilityKey
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **FK-1** | 磯子活動ホーム → `isogo` / 本牧活動ホーム → `honmoku` | CANDIDATE（recommended） |
+| **FK-1** | 磯子活動ホーム → `isogo` / 本牧活動ホーム → `honmoku` | **Accepted** |
 | FK-2 | Agent が別キーを発明して採択する | NOT SELECTED |
 | FK-HOLD | facilityKey をまだ決めない | NOT SELECTED |
 
@@ -85,7 +93,7 @@ Historical note:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **SN-1** | display name = `強度行動障害支援 - {事業所名}` / URL = `/sites/severe-support-{facilityKey}` | CANDIDATE（recommended） |
+| **SN-1** | display name = `強度行動障害支援 - {事業所名}` / URL = `/sites/severe-support-{facilityKey}` | **Accepted** |
 | SN-2 | Agent が別命名規則を発明して採択する | NOT SELECTED |
 | SN-HOLD | Site naming をまだ決めない | NOT SELECTED |
 
@@ -93,23 +101,22 @@ Historical note:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **LN-D** | List names は本 Decision 対象外。List 正本責務確認後に別 Human Decision | **DEFERRED** |
+| **LN-D** | List names は本 Decision 対象外。List 正本責務確認後に別 Human Decision | **Accepted（DEFERRED）** |
 | LN-1 | 本 Decision で List names も同時採択する | NOT SELECTED |
 
 ### XB — Execution boundary
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | identity / Site naming Acceptance ≠ Site/List creation GO | CANDIDATE（required with Accept） |
+| **XB-1** | identity / Site naming Acceptance ≠ Site/List creation GO | **Accepted** |
 | XB-2 | naming Acceptance と同時に Site/List を作成する | NOT SELECTED |
 | XB-HOLD | execution boundary 未決定 | NOT SELECTED |
 
-## 3. Recommended naming payload（CANDIDATE / NOT LOCKED）
+## 3. Accepted naming payload（LOCKED as INTENDED）
 
 ```text
-Status: CANDIDATE / NOT ACCEPTED / NOT LOCKED
-≠ HUMAN ACCEPTANCE
-≠ CREATABLE / OBSERVED / CONFIRMED
+Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+≠ OBSERVED / CONFIRMED / CREATED
 ```
 
 ### Pilot facility 1
@@ -132,37 +139,27 @@ Site URL:           https://isogokatudouhome.sharepoint.com/sites/severe-support
 Site URL suffix:    /sites/severe-support-honmoku
 ```
 
-### Naming rationale（比較用）
-
-```text
-- 表示名は日本語で人間に分かりやすくする
-- URL は英小文字・短く固定する
-- facilityKey（isogo / honmoku）は将来表示名が変わっても識別子として残せる
-- List names はまだ決めない（全事業所共通 List 名は責務確認後）
-```
-
-## 4. Agent recommendation（NOT Acceptance）
+## 4. Agent recommendation（historical / NOT Acceptance）
 
 ```text
 Agent / design recommendation:
   PO-1 + FK-1 + SN-1 + LN-D + XB-1
 
-Recommended Accept phrase（Human が明示するまで LOCKED にしない）:
+Human Accept phrase:
   「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
 
-This recommendation is NOT Human Acceptance evidence.
-Do NOT create Acceptance 正本 from this packet alone.
+This recommendation was NOT Human Acceptance evidence by itself.
+Human Acceptance is recorded in the Acceptance 正本 only.
 ```
 
 ## 5. Explicit non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
-  treating recommended payload as Accepted / LOCKED
-  inventing different facilityKey / Site names as Accepted values
-  deciding List names
+This packet / Acceptance does NOT authorize:
+  inventing List names
   creating Site / List / columns
   creating with XXXXX / YYYYY
+  treating INTENDED as OBSERVED / CONFIRMED / CREATED
   PROVISION-EXEC Execution GO
   tenant / Entra / M365 mutation
   Implementation Start
@@ -173,35 +170,16 @@ This OPEN packet does NOT authorize:
   post-retention deletion
 ```
 
-## 6. What Human Acceptance would close（when given）
+## 6. Next after Human Acceptance
 
 ```text
-If Human explicitly Accepts PO-1 + FK-1 + SN-1 + LN-D + XB-1 with the
-recommended payload, Acceptance would lock only:
-
-  Pilot order
-  facilityKey = isogo / honmoku
-  Site display names / URLs above
-
-It would still NOT lock / authorize:
-  List names
-  Site / List creation
-  common management site naming
-  Implementation Start
-```
-
-## 7. Next
-
-```text
-Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
-Waiting for Human Accept phrase:
-  「磯子=isogo / 本牧=honmoku、この Site 名・URL でいく」
-  or an explicit alternate payload
-
-Until then:
-  recommended payload = CANDIDATE / NOT LOCKED
-  List names = DEFERRED
-  Site / List creation = NO-GO
-  Placeholder creation = FORBIDDEN
-  Acceptance 正本 = NOT CREATED
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  → decision-assessment-snapshot-pilot-facility-identity-acceptance.md
+Next gate: FIXED
+  PILOT LIST NAMES（after List ownership / responsibility check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
+List names: DEFERRED
+Site / List creation: NO-GO
+Placeholder creation: FORBIDDEN
+Implementation Start: HOLD
 ```

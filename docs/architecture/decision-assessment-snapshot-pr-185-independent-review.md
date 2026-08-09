@@ -91,9 +91,11 @@ P0 = 0 / P1 = 0 / P2 = 0
 PR #185: MERGED
   merge commit: 1aef0d3971165f6504f7f13d6e68a51d7cfdaf61
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
-Next Human gate: FORMAL PILOT FACILITY IDENTITY / SITE NAMING
-  → decision-assessment-snapshot-org-site-topology-next-gate.md
-Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
+Next Human gate: PILOT LIST NAMES（after ownership check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
 List names: DEFERRED
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START

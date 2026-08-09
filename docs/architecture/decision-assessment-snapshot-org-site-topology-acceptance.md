@@ -60,8 +60,8 @@ Related open work:
   Placeholder 作成実行 = FORBIDDEN（PH-1 + XB-1）
 
 Formal names:
-  Pilot facility Site URL / name: NOT SELECTED / OPEN
-  Pilot facility List names: NOT SELECTED / OPEN
+  Pilot facility Site URL / name: LOCKED via Decision-AS-PILOT-FACILITY-IDENTITY-1
+  Pilot facility List names: DEFERRED / NOT SELECTED
   Common management Site URL / name: NOT SELECTED / OPEN
 
 Site / List / column creation:
@@ -84,7 +84,7 @@ Post-retention deletion:
 Closes only:
   Decision-AS-ORG-SITE-TOPOLOGY-1 org pattern（OT/FS/SP/PP/PH/XB）
 Does NOT close:
-  第1パイロット事業所の正式 Site / List 名称
+  List names（後続 Decision-AS-PILOT-FACILITY-IDENTITY-1 でも LN-D）
   法人共通管理サイトの正式名称
   Site / List / column creation
   PROVISION-EXEC Execution GO
@@ -98,6 +98,7 @@ Implementation auto-start: FORBIDDEN
 Site / List creation auto-start: FORBIDDEN
 Placeholder creation: FORBIDDEN
 Formal name invention by Agent: FORBIDDEN
+Pilot Site names/URLs: closed by Decision-AS-PILOT-FACILITY-IDENTITY-1
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -257,17 +258,18 @@ Open PR #186（PROVISION-EXEC）if present:
 
 ```text
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  → decision-assessment-snapshot-pilot-facility-identity-acceptance.md
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
 Next gate: FIXED
-  FORMAL PILOT FACILITY IDENTITY / SITE NAMING
-  → decision-assessment-snapshot-org-site-topology-next-gate.md
-Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
-  → decision-assessment-snapshot-pilot-facility-identity-packet.md
-  recommended: 磯子=isogo / 本牧=honmoku + Site names/URLs（CANDIDATE / NOT LOCKED）
+  PILOT LIST NAMES（after ownership check）
+  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
 List names: DEFERRED
 Common management Site name: NOT SELECTED / OPEN
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-PROVISION-EXEC Execution GO: NOT GIVEN / BLOCKED by PH-1 until formal names
+PROVISION-EXEC Execution GO: NOT GIVEN
 New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
