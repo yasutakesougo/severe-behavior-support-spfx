@@ -133,8 +133,8 @@ AS-EC-1 Entry #4: Accepted（GOV-AUD-03 Option E）
 AS-EC-1 Entry #5: PASS / MET（findingIds NOT REQUIRED）
 AS-EC-1 Entry #6: PASS / MET（NOT_APPLICABLE HOLD方針）
 AS-EC-1 Entry #8: Accepted / LOCKED / FINAL CONSISTENT（plan only）
-AS-EC-1 overall: HOLD
-  （Entry Criteria 個別は揃いつつあるが、overall Entry satisfied は別 Human Decision）
+Decision-AS-EC-1 overall: MET / Accepted（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）
+  （overall MET ≠ Implementation Start / PR-J / FindingCode / A-5）
 ```
 
 ## Next
@@ -142,8 +142,7 @@ AS-EC-1 overall: HOLD
 ```text
 AS-EC-1 Entry #7: Accepted / LOCKED / Option A / PASS / MET
   Consistency: decision-as-ec-1-entry-7-canonicalization-consistency-check.md
-AS-EC-1 overall: HOLD（別 Human Decision まで自動充足しない）
+Decision-AS-EC-1 overall: MET / Accepted / LOCKED（ninth residual Option A）
 FindingCode / A-5 / Implementation / PR-J: HOLD
-Next residual Decision: NOT SELECTED
-  （overall leave-HOLD 判定は別工程）
+Next residual Decision: NOT SELECTED（Implementation Start は別 Human）
 ```

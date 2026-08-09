@@ -312,7 +312,9 @@ Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先�
 - サービス別`NOT_APPLICABLE` reason code enum（Entry #6 は HOLD方針で閉じた。値一覧・enum 採択は別 Decision / FORBIDDEN now）
 - Schema / DTO / SharePoint mapping（Entry #7 は DEC-1 versioning 方針のみ。固有 Schema ID 採番・物理写像は別 HOLD）
 - SharePoint、Entra ID、Microsoft 365、deploy
-- Decision-AS-EC-1 overall Entry satisfied（Entry #1〜#8 個別は閉じた／Accepted。overall は別 Human Decision / HOLD）
+- Implementation Start / PR-J 実装（**overall MET ≠ 実装開始** — [`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）
+
+Decision-AS-EC-1 overall Entry Criteria: **MET / Accepted**（Entry #1〜#8）。実装開始は別 Human。
 
 ## 変更禁止境界
 
