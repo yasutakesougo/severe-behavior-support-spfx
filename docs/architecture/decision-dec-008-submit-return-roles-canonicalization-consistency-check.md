@@ -4,7 +4,7 @@ Status: **DOCS CONSISTENT**（2026-08-09）
 Independent Review: **PASS**（P0=0 / P1=0 / P2=0）
   HEAD: `d1b5d544d900a548110bae4df110f5a73cc392bd`
   → `decision-dec-008-submit-return-roles-independent-review.md`
-PR #147 merge: PENDING_AT_MERGE（Ready 化 → Human Merge Decision）
+PR #147 merge: PENDING_AT_MERGE（Human Merge Decision）
 
 Related:
 
@@ -60,7 +60,7 @@ DEC-008 提出・差戻しロールを **Option C / LOCKED Accepted** として�
 ```text
 Docs-internal consistency: PASS
 Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
-PR #147 merge: PENDING — Ready 化 → Human Merge Decision
+PR #147 merge: PENDING — Human Merge Decision
 Contradiction found in repository docs: NONE
 Verdict (docs): CONSISTENT
 Final after merge: CONSISTENT if C8 PASS
@@ -83,7 +83,6 @@ Recommended path:
 ```text
 Acceptance 正本化: DONE
 Independent Review: PASS
-→ Ready 化（Human）
 → Human Merge Decision（PR #147）
 → Final CONSISTENT
 → Next substantive unit selection（NOT SELECTED）

@@ -172,7 +172,7 @@ Acceptance: Option C / LOCKED
   → decision-dec-008-submit-return-roles-acceptance.md
 Consistency: DOCS CONSISTENT / MERGE PENDING（PR #147）
 Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
-Path: Ready 化 → Human Merge Decision
+Path: Human Merge Decision
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD

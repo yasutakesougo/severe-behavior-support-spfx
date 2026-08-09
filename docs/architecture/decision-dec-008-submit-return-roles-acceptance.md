@@ -146,7 +146,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 Docs consistency: CONSISTENT
 Independent Review: PASS（HEAD d1b5d544…）
-Next: Ready 化 → Human Merge Decision（PR #147）
+Next: Human Merge Decision（PR #147）
 FindingCode / A-5 / Implementation: HOLD
 Next substantive unit: NOT SELECTED（Merge 後に Human が選ぶ）
 ```
