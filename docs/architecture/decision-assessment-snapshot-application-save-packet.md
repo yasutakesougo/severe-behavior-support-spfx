@@ -3,12 +3,19 @@
 この文書は、Thirteenth residual（SELECTED / A — application save）後の
 **application 層 save candidate / 失敗結果境界の比較用 Human Decision Packet** である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-application-save-acceptance.md`](./decision-assessment-snapshot-application-save-acceptance.md)
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: 9514128ee32322337126e2aadf532390f60a0552
 Decision ID: Decision-AS-APP-SAVE-1
-Kind: Human Decision packet（compare only）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: SC-1 + FR-1
+Human Selected:
+  Save candidate: SC-1
+  Failure results: FR-1
 Depends on:
   decision-ilb-1-thirteenth-residual-application-save-selection.md（SELECTED / A）
   decision-dec-009-snapshot-save-timing-acceptance.md（LOCKED — 再 Decision しない）
@@ -17,13 +24,13 @@ Depends on:
   decision-assessment-snapshot-schema-id-value-naming-acceptance.md
   decision-assessment-snapshot-schema-version-acceptance.md
 Implementation Start: HOLD
-Application save concrete design: HOLD / NOT DECIDED
+Application save boundary: Accepted / LOCKED（SC-1 + FR-1）
+Application code / adapter implementation: DO NOT START
 Schema ID / schemaVersion / dtoVersion code assignment: HOLD / NOT STARTED
 Schema / DTO / SharePoint / adapter: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Deploy / real data: NO-GO
-value invention as Accepted without Human Decision: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -40,8 +47,8 @@ Question 2 — Failure results:
 ```
 
 ```text
-本 packet に候補・Agent recommendation が書いてあっても Accepted にはならない。
-採択は明示 Human Decision / Acceptance が必要。
+Historical note:
+  候補・Agent recommendation は比較用。採択は Acceptance 正本のみが LOCKED である。
 ```
 
 ## 2. 再 Decision しない前提（LOCKED）
@@ -75,15 +82,15 @@ DEC-009 → application 操作概念（参照のみ・再決定しない）:
 | 上書き NOT ADOPTED | overwrite 成功に倒さない |
 | 履歴保持 | 旧版消去・置換しない |
 
-## 3. Save candidate 候補（比較・未採択）
+## 3. Save candidate 候補（比較履歴）
 
-| ID | candidate | 意味 | 利点 | リスク |
-|---|---|---|---|---|
-| **SC-1** | validated `AssessmentSnapshot` + explicit intent（`draft` / `finalize` / `correct-as-new-version`） | domain `validateAssessmentSnapshot` ok 後のみ保存対象 | fail-closed と整合；domain 境界が明確 | intent の扱いを別途固定する必要 |
-| **SC-2** | raw `unknown` + intent（save 内で validate） | 入口が一つ | application が domain 失敗と persistence 失敗を混同しやすい | |
-| **SC-3** | UI/DTO 形を直接受け取る | 実装が早く見える | Schema/DTO HOLD と衝突；DEC-1 非同一視を崩しやすい | |
-| **SC-HOLD** | 未決定のまま | 追加判断を遅延 | Entry が進まない | |
-| **SC-X** | Human 明示 | Human 指定 | 未記載なら採択不可 | |
+| ID | candidate | 結果 |
+|---|---|---|
+| **SC-1** | validated `AssessmentSnapshot` + explicit intent（`draft` / `finalize` / `correct-as-new-version`） | **Accepted** |
+| **SC-2** | raw `unknown` + intent（save 内で validate） | NOT SELECTED |
+| **SC-3** | UI/DTO 形を直接受け取る | NOT SELECTED |
+| **SC-HOLD** | 未決定のまま | NOT SELECTED |
+| **SC-X** | Human 明示 | NOT SELECTED |
 
 ```text
 NOT candidates:
@@ -92,17 +99,26 @@ NOT candidates:
   SharePoint List item 形を save candidate と同一視
 ```
 
-## 4. Failure results 候補（比較・未採択）
+## 4. Failure results 候補（比較履歴）
 
-| ID | 失敗結果の形 | 意味 | 利点 | リスク |
-|---|---|---|---|---|
-| **FR-1** | 判別可能な fail-closed 結果（例: `VALIDATION_FAILED` / `PERSISTENCE_UNAVAILABLE` / `OVERWRITE_FORBIDDEN` / `MALFORMED_INTENT`） | 失敗種別を成功に倒さない | 監査・テストしやすい | 結果集合の固定が別 Acceptance になる |
-| **FR-2** | throw / exception のみ | 実装が薄い | 契約テストしづらい；成功黙殺と区別しにくい | |
-| **FR-3** | boolean / 無言失敗 | 最短 | fail-closed と衝突しやすい | |
-| **FR-HOLD** | 未決定のまま | 遅延可 | Entry #7 相当が進まない | |
-| **FR-X** | Human 明示集合 | Human 指定 | 未記載なら採択不可 | |
+| ID | 失敗結果の形 | 結果 |
+|---|---|---|
+| **FR-1** | 判別可能な fail-closed 結果 | **Accepted** |
+| **FR-2** | throw / exception のみ | NOT SELECTED |
+| **FR-3** | boolean / 無言失敗 | NOT SELECTED |
+| **FR-HOLD** | 未決定のまま | NOT SELECTED |
+| **FR-X** | Human 明示集合 | NOT SELECTED |
 
-失敗時に **やってはいけないこと**（比較前提・LOCKED 志向）:
+Accepted FR-1 初期語彙:
+
+```text
+VALIDATION_FAILED
+PERSISTENCE_UNAVAILABLE
+OVERWRITE_FORBIDDEN
+MALFORMED_INTENT
+```
+
+失敗時に **やってはいけないこと**（LOCKED）:
 
 ```text
 MUST NOT:
@@ -113,27 +129,20 @@ MUST NOT:
   domain 禁止 Result を application で迂回する
 ```
 
-## 5. Agent recommendation（NOT Acceptance）
+## 5. Agent recommendation（historical / NOT Acceptance）
 
 ```text
-Agent recommendation:
-  Save candidate: SC-1
-  Failure results: FR-1
-
-Rationale（比較用）:
-  PR-J domain validator を前提に、validated snapshot + intent のみを candidate にする
-  失敗は判別可能な fail-closed 結果で返し、成功へ倒さない
-
-This is NOT Human Acceptance evidence.
-Human must explicitly Accept SC-* and FR-*（組み合わせ可）.
+Agent recommendation: SC-1 + FR-1
+Human Decision: SC-1 + FR-1（Accepted / LOCKED）
+Agent recommendation alone was NOT Acceptance evidence.
 ```
 
 ## 6. 判断単位の分離
 
 | 決める / 決めない | 本 packet |
 |---|---|
-| Save candidate 境界（SC-*） | **比較対象** |
-| Failure results 境界（FR-*） | **比較対象** |
+| Save candidate 境界（SC-*） | **Accepted / SC-1** |
+| Failure results 境界（FR-*） | **Accepted / FR-1** |
 | DEC-009 業務意味 | OUT（LOCKED） |
 | persistence port 実装 / SharePoint adapter | OUT |
 | Schema / DTO コード割当 | OUT |
@@ -142,18 +151,16 @@ Human must explicitly Accept SC-* and FR-*（組み合わせ可）.
 | post-retention deletion | OUT |
 | Implementation Start | HOLD |
 
-## 7. Human Decision（未選択）
-
-Human は次を明示する（未記載は NOT DECIDED）。
+## 7. Human Decision（固定）
 
 ```text
-Save candidate:   SC-1 / SC-2 / SC-3 / SC-HOLD / SC-X:<text>
-Failure results:  FR-1 / FR-2 / FR-3 / FR-HOLD / FR-X:<text>
+Save candidate:   SC-1
+Failure results:  FR-1
 ```
 
 ```text
-Until explicit Human Acceptance:
-  Application save concrete design: HOLD / NOT DECIDED
+After Acceptance:
+  Application save boundary: LOCKED（Acceptance 正本）
   Implementation Start: HOLD
   TypeScript / application / adapter: DO NOT START
   Schema ID / schemaVersion / dtoVersion code assignment: DO NOT START
@@ -166,22 +173,19 @@ Until explicit Human Acceptance:
 
 ```text
 Do NOT:
-  treat this compare packet as Acceptance
+  treat this compare packet alone as the LOCKED Acceptance（use Acceptance 正本）
   re-decide DEC-009
-  lock SC-* / FR-* by Agent recommendation alone
   start application / persistence / SharePoint / DTO code
   assign schemaId / schemaVersion / dtoVersion into TypeScript
   reopen FindingCode / A-5
   auto-start post-retention deletion
 ```
 
-## 9. Next after Human Acceptance（将来）
+## 9. Next after Human Decision
 
 ```text
-If Human Accepts SC-* + FR-*:
-  → write Acceptance LOCKED doc（別手順）
-  → still NOT auto Implementation Start
-  → SharePoint / DTO / Schema code assignment remain separate
-Else:
-  → remain HOLD
+Decision-AS-APP-SAVE-1: Accepted / LOCKED / SC-1 + FR-1
+  → decision-assessment-snapshot-application-save-acceptance.md
+Implementation Start: HOLD
+Ready / Merge: NOT RUN by this Decision
 ```
