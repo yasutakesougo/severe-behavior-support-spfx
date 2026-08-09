@@ -169,8 +169,9 @@ Selection record: decision-next-substantive-unit-selection.md
 DEC-008 submit/return: FINAL CONSISTENT
 NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected B
 Selected unit: GOV-AUD-04
-Open-points: decision-gov-aud-04-logical-delete-role-open-points.md
-Decision packet: decision-gov-aud-04-logical-delete-role-decision-packet.md
+Acceptance: Option E / LOCKED
+  → decision-gov-aud-04-logical-delete-role-acceptance.md
+GOV-AUD-05: DO NOT START
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD

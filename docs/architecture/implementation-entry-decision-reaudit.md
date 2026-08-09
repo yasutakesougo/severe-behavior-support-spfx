@@ -228,10 +228,10 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 3. Decision-RD-3（接近窓等。08 NOT ADOPTED を開始信号にしない）
 4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
-**Current selected substantive unit:** B — GOV-AUD-04（論理削除を許可するロール）
-（[`decision-gov-aud-04-logical-delete-role-decision-packet.md`](./decision-gov-aud-04-logical-delete-role-decision-packet.md)）
+**Current selected substantive unit:** B — GOV-AUD-04
+→ **Accepted / Option E**（[`decision-gov-aud-04-logical-delete-role-acceptance.md`](./decision-gov-aud-04-logical-delete-role-acceptance.md)）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C）
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E）
 
 **Do not next / DO NOT START:**
 

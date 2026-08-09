@@ -56,7 +56,8 @@ Agent recommendation: NOT Human Selection evidence
 ## Next
 
 ```text
-Open-points: decision-gov-aud-04-logical-delete-role-open-points.md
-Decision packet: decision-gov-aud-04-logical-delete-role-decision-packet.md
+Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md（LOCKED / Option E）
+GOV-AUD-05: DO NOT START from this unit
+After PR #149 Merge: Next substantive unit NOT SELECTED（Human が新たに選ぶ）
 FindingCode / A-5 / Implementation Start: HOLD
 ```

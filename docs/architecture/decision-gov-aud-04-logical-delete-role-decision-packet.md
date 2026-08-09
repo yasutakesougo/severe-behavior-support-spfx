@@ -19,7 +19,8 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-AUD-04
 Kind: Human Decision packet（narrow）
-Status: OPEN / READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Decision Accepted / Option E）
+Accepted 正本: decision-gov-aud-04-logical-delete-role-acceptance.md
 Owner: Issue #19
 Selected via: decision-next-substantive-unit-selection.md（Option B）
 Related:
@@ -31,7 +32,8 @@ FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Agent recommendation: NONE
+Agent recommendation（historical）: NONE
+Human Selected: Option E
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -50,7 +52,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ## 1. Current canonical state
 
 ```text
-GOV-AUD-04: UNDECIDED（本 packet）
+GOV-AUD-04: Accepted / Option E（application 対象外）
 GOV-AUD-05: OUT（本 packet で決めない）
 GOV-AUD-03: Accepted / Option E
   訂正承認者 = 当面 application 層対象外
@@ -195,17 +197,20 @@ D. 別ロール / 別規則（明示）
 E. 当面 application 層対象外として明示（NOT ADOPTED / NOT DEFINED）
 F. まだ決めない / HOLD
 
-答え: （Human 記入）
-対象エンティティ（必要なら）: （Human 記入）
+答え: E（2026-08-09）
+Meaning:
+  論理削除を許可するロールは当面 application 層対象外
+  具体的な許可ロール: NOT ADOPTED / NOT DEFINED
+Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A–D | Acceptance 記録。ロール Binding を正本化。実装は別 GO |
-| E | application 対象外の明示を Acceptance。ロール実装 DO NOT START |
-| F | HOLD 維持 |
+| A–D | （未選択） |
+| **E（SELECTED）** | application 対象外の明示を Acceptance 済み。ロール実装 DO NOT START |
+| F | （未選択） |
 
 維持:
 
@@ -221,12 +226,12 @@ Implementation Start: HOLD
 ## 8. Gate
 
 ```text
-GOV-AUD-04: READY_FOR_HUMAN_DECISION
-Open-points: decision-gov-aud-04-logical-delete-role-open-points.md
-Accepted: NOT YET
+GOV-AUD-04: CONSUMED / Accepted / LOCKED / Option E
+Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 GOV-AUD-05: DO NOT START
+Next substantive unit: NOT SELECTED（Merge 後）
 ```

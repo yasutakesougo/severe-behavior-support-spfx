@@ -14,12 +14,14 @@ Agent がロール名を発明しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit ID: GOV-AUD-04 / OPEN-POINTS
 Kind: open-points extraction / source inventory
-Status: OPEN（Decision packet へ供給）
+Status: CONSUMED（Decision Accepted / Option E）
 Owner: Issue #19
 Selected via: next substantive unit B（2026-08-09）
 main / baseline: ce05cd0d355c108a63e17bce5af0538af779246e（PR #147 MERGED）
 GOV-AUD-03: Accepted / Option E（application 対象外）
+GOV-AUD-04: Accepted / LOCKED / Option E（application 対象外）
 DEC-008 submit/return: FINAL CONSISTENT / Option C
+Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
@@ -63,11 +65,11 @@ Implementation Start: HOLD
 
 | ID | 問い | 現状 |
 |---|---|---|
-| **U1** | 論理削除の対象エンティティ（AssessmentSnapshot か、より広い Audit/業務データか） | UNDECIDED（所有表はロールのみ。Snapshot 系列として読むのが自然だが断定しない） |
-| **U2** | 誰が論理削除を許可されるか（ロール） | **UNDECIDED（本 unit）** |
-| **U3** | 論理削除を application contract に埋め込むか / 対象外とするか | UNDECIDED |
-| **U4** | GOV-AUD-02（PLANNER / SERVICE_MANAGER）との関係 | 自動同一視しない |
-| **U5** | GOV-AUD-03 Option E（application 対象外）との関係 | 自動流用しない。別 Decision |
+| **U1** | 論理削除の対象エンティティ | Binding しない（ロール自体を app に埋め込まない） |
+| **U2** | 誰が論理削除を許可されるか（ロール） | **NOT ADOPTED / NOT DEFINED** |
+| **U3** | 論理削除を application contract に埋め込むか / 対象外とするか | **対象外 / Option E** |
+| **U4** | GOV-AUD-02（PLANNER / SERVICE_MANAGER）との関係 | Binding しない |
+| **U5** | GOV-AUD-03 Option E との関係 | 別 Decision。自動流用しない |
 | **U6** | GOV-AUD-05 / DEC-012（物理・完全削除） | **OUT**（本 unit で決めない） |
 
 ## 4. 明示的に混ぜないもの
@@ -86,7 +88,8 @@ SharePoint / Entra / Deploy / real data
 ## 5. Next
 
 ```text
-Decision packet: decision-gov-aud-04-logical-delete-role-decision-packet.md
-Human Decision 待ち
+Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md（LOCKED / Option E）
+GOV-AUD-05: DO NOT START
 FindingCode / A-5 / Implementation: HOLD
+Next substantive unit: NOT SELECTED（Merge 後）
 ```
