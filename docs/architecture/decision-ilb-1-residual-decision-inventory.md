@@ -124,10 +124,11 @@ Order:
  11. Tenth residual: Implementation Start / PR-J domain GO（DONE / CONSUMED；Preflight C → GO A）
  12. Eleventh residual: Schema ID naming+value（DONE / CONSUMED；Decision-AS-SCHEMA-ID-1 Accepted / LOCKED）
  13. Twelfth residual: schemaVersion / dtoVersion（SELECTED / A；concrete value HOLD / NOT DECIDED）
+     compare packet: decision-assessment-snapshot-schema-version-packet.md（OPEN / NOT ACCEPTED）
      remaining examples: post-retention / application save / SharePoint
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
-schemaVersion / dtoVersion: HOLD / NOT DECIDED（Twelfth residual SELECTED only）
+schemaVersion / dtoVersion: HOLD / NOT DECIDED（Decision-AS-SCHEMA-VERSION-1 OPEN）
 ```
