@@ -16,7 +16,7 @@ Human Acceptance: Explicit Human Option A on 2026-08-09
 Meaning: Finding catalog EMPTY / NOT ADOPTED for current Human primary information
 BS reviewed: BS-001〜BS-007
 Finding ADOPTED: 0
-Issue #8 DEC number: UNASSIGNED（Human 未指定。Agent 採番せず）
+Issue #8 DEC number: DEC-019（A-4 Human Selected A / 2026-08-09）
 A-5: OUT
 Implementation Entry satisfaction: NOT CLAIMED
 Implementation Start: HOLD
@@ -37,7 +37,7 @@ Finding catalog: EMPTY / NOT ADOPTED
 FindingCode values: NONE
 FindingCode numbering: NOT APPLICABLE
 FindingCode mapping: NOT APPLICABLE
-Issue #8 DEC number: UNASSIGNED
+Issue #8 DEC number: DEC-019
 ```
 
 ```text
@@ -50,7 +50,7 @@ This document records the Human Decision only.
 ```text
 Title: Finding business catalog
 Owner: Issue #8
-DEC number: UNASSIGNED — Human selection still required for ledger id（A-4）
+DEC number: DEC-019
 
 Human business-state review:
   BS-001〜BS-007 reviewed
@@ -90,12 +90,12 @@ Future:
 | A-1 | **NONE** | 値を無理に作らない |
 | A-2 | **NOT APPLICABLE** | 値が無い |
 | A-3 | **NOT APPLICABLE** | 値が無い |
-| A-4 | **UNASSIGNED** | Human が DEC 番号を未指定。Agent 採番禁止 |
+| A-4 | **DEC-019** | Human Selected A（2026-08-09） |
 
 ```text
-A-1〜A-3: closed for current scope as empty / N/A
-A-4: still open as ledger identifier only（番号未採番）
+A-1〜A-4: closed for current EMPTY catalog scope
 A-5: OUT / separate later
+Issue #8 ledger registration of DEC-019: Human ownership action
 ```
 
 ## Acceptance boundary
@@ -121,21 +121,19 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | FC-1〜FC-6 | Accepted logical（UNCHANGED） |
 | A-class structure | Accepted（Bundle A-1〜A-4 / Separate A-5） |
 | Issue #8 DEC body（catalog content） | **Accepted / EMPTY / NOT ADOPTED** |
-| A-4 DEC number | UNASSIGNED |
+| A-4 DEC number | **DEC-019** |
 | A-5 | OUT |
 | Implementation Start | HOLD |
 
 ## Next
 
 ```text
-Next: A-4 DEC number review / Human selection
-  decision-findingcode-a4-dec-number-review.md
+A-4: DEC-019 SELECTED
+Next recommended: Merge PR #141
 Still open:
-  A-4 Issue #8 DEC number（UNASSIGNED）
+  Issue #8 上への DEC-019 台帳登録（Human）
   Future re-open if new Human primary information requires Finding ADOPTED
-Recommended order:
-  Issue #8 ledger confirm → Human selects DEC number → Merge PR #141
 Implementation Start: HOLD
 ```
 
-Agent は本 Acceptance を理由に FindingCode 値・DEC 番号・A-5・Implementation へ自動進行しない。
+Agent は本 Acceptance を理由に FindingCode 値・A-5・Implementation へ自動進行しない。

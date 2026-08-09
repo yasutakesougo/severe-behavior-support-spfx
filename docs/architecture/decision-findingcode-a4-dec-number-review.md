@@ -11,16 +11,16 @@ Implementation Start ではない。
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision surface: A-4 Issue #8 FindingCode / Finding catalog DEC number
-Status: READY_FOR_HUMAN_SELECTION
+Status: SELECTED / A-4 = DEC-019
 Depends on:
   Issue #8 DEC body Accepted / EMPTY
   （decision-findingcode-issue8-dec-body-acceptance.md）
 A-1: NONE
 A-2: NOT APPLICABLE
 A-3: NOT APPLICABLE
-A-4: UNASSIGNED
+A-4: DEC-019（Human Selected A / 2026-08-09）
 A-5: OUT
-DEC number invention: FORBIDDEN
+DEC number invention: FORBIDDEN（本選択は Human）
 Implementation Start: HOLD
 ```
 
@@ -104,26 +104,24 @@ B. 別番号を使う
 C. まだ分からない / Issue #8 確認が必要
    → HOLD（A-4 UNASSIGNED のまま）
 
-答え: UNSELECTED
-A-4: UNASSIGNED until Human answers
-Agent MUST NOT assign DEC-019 automatically
+答え: A（2026-08-09）
+A-4: DEC-019
 ```
 
 ## 5. Gate
 
 ```text
-A-4: UNASSIGNED
-DEC body Acceptance: Accepted / EMPTY
-Next: Human verifies Issue #8 ledger → selects A / B / C
-Then: record A-4 → Merge PR #141
+A-4: DEC-019（SELECTED）
+DEC body Acceptance: Accepted / EMPTY / DEC-019
+Next recommended: Merge PR #141
+Still required on Issue #8 ledger:
+  Human registers DEC-019 body / comment on Issue #8（canonical ownership）
 Implementation Start: HOLD
 ```
 
 ## Human への依頼（わかりやすく）
 
-1. Issue #8 で最後の DEC 番号を確認する
-2. 次に使える番号を決める
-3. このチャットで **A / B / C**（B なら番号）を返す
-4. それが揃ってから #141 を Merge する
-
-Agent は DEC-019 を勝手に確定しません。
+1. A-4 = **DEC-019** は記録済み
+2. 次は **Merge GO** で PR #141 をマージ
+3. Issue #8 上へ DEC-019 本文／コメント登録は Human（正本 ownership）
+4. Implementation Start は HOLD

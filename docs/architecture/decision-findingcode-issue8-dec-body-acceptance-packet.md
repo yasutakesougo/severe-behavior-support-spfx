@@ -22,13 +22,12 @@ Business-state review: findingcode-issue8-dec-body-prep.md
 BS reviewed: BS-001〜BS-007
 Finding ADOPTED: 0
 Finding catalog: EMPTY / NOT ADOPTED
-Issue #8 DEC number: UNASSIGNED — Human 未指定（Agent 採番せず）
-A-1: NONE / A-2: NOT APPLICABLE / A-3: NOT APPLICABLE
+Issue #8 DEC number: DEC-019（A-4 Human Selected A）
+A-1: NONE / A-2: NOT APPLICABLE / A-3: NOT APPLICABLE / A-4: DEC-019
 A-5: OUT
 Implementation Entry satisfaction: NOT CLAIMED
 Implementation Start: HOLD
 FindingCode value invention: FORBIDDEN
-DEC number invention: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -74,7 +73,7 @@ Agent は DEC 番号を埋めない。Human が A-4 で選ぶ。
 ```text
 Title: Finding business catalog
 Owner: Issue #8
-DEC number: UNASSIGNED — Human selection required（A-4）
+DEC number: DEC-019
 
 Human business-state review:
   BS-001〜BS-007 reviewed
@@ -119,7 +118,7 @@ Out of this DEC body:
 | A-1 values | **NONE**（空） | 無理に作らない |
 | A-2 numbering | **NOT APPLICABLE** | 値が無いため |
 | A-3 mapping | **NOT APPLICABLE** | 値が無いため |
-| A-4 DEC number | **UNASSIGNED** | Human が選ぶ。Agent 採番禁止 |
+| A-4 DEC number | **DEC-019** | Human Selected A |
 
 ```text
 A-1〜A-3 は「値を無理に作らない」結論で閉じられる可能性がある
@@ -169,21 +168,22 @@ Finding catalog: EMPTY / NOT ADOPTED
 A-1: NONE
 A-2: NOT APPLICABLE
 A-3: NOT APPLICABLE
-A-4 DEC number: UNASSIGNED
+A-4 DEC number: DEC-019
 A-5: OUT
 Implementation Start: HOLD
 ```
 
 Acceptance evidence: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)
+A-4 review: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)
 
 ## 7. Human への依頼（Acceptance 後）
 
 ```text
-Still open optional:
-  A-4 Issue #8 DEC number（Human selection）
-Next automatic: NONE
+A-4: DEC-019 SELECTED
+Next recommended: Merge PR #141
+Still open: Issue #8 上への DEC-019 台帳登録（Human）
 Re-open Finding catalog only with new Human primary information
 Implementation Start: HOLD
 ```
 
-Agent は FindingCode 値・DEC 番号を書かない。
+Agent は FindingCode 値を書かない。

@@ -75,14 +75,13 @@ Decision packet: [`decision-findingcode-a14-bundle-content-decision-packet.md`](
 Selected Option: C（[`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)）
 Issue #8 DEC body: **Accepted** / Option A / EMPTY（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
 BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
-A-1: NONE / A-2: N/A / A-3: N/A / A-4: UNASSIGNED
-A-4 review: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)（READY_FOR_HUMAN_SELECTION）
-Docs mirror ledger: DEC-001〜018（末尾 DEC-018）。Issue #8 ライブ確認は Human
+A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019**
+A-4 review: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)（SELECTED / DEC-019）
+Docs mirror ledger was DEC-001〜018；Finding catalog DEC = DEC-019
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode value invention: FORBIDDEN
-DEC number invention: FORBIDDEN
 Implementation Start: HOLD
 Issue #24 Close: NO-GO
 deploy: NO-GO

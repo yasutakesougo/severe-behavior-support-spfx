@@ -30,14 +30,13 @@ BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
 A-1: NONE
 A-2: NOT APPLICABLE
 A-3: NOT APPLICABLE
-A-4: UNASSIGNED — optional later Human selection
+A-4: DEC-019（Human Selected A / 2026-08-09）
 A-5: OUT / separate later
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 FC-7: NOT CREATED
 FindingCode value invention: FORBIDDEN
-DEC number invention: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -219,10 +218,11 @@ Selected Option: C（path） / DEC body Option A
 A-1 values: NONE
 A-2 numbering: NOT APPLICABLE
 A-3 criterionId mapping: NOT APPLICABLE
-A-4 Issue #8 DEC number: UNASSIGNED
+A-4 Issue #8 DEC number: DEC-019
 A-5: OUT
 Finding ADOPTED: 0（BS-001〜007）
 Acceptance evidence: decision-findingcode-issue8-dec-body-acceptance.md
+A-4 review: decision-findingcode-a4-dec-number-review.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 ```
@@ -234,9 +234,11 @@ Acceptance: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-fi
 ## 7. Human への依頼（Acceptance 後）
 
 ```text
-Optional later: A-4 Issue #8 DEC number
+A-1〜A-4: complete for EMPTY catalog scope（A-4 = DEC-019）
+Next recommended: Merge PR #141
+Issue #8 ledger registration of DEC-019: Human
 Re-open catalog only with new Human primary information requiring Finding ADOPTED
 Implementation Start: HOLD
 ```
 
-Agent は FindingCode 値・DEC 番号を発明しない。
+Agent は FindingCode 値を発明しない。

@@ -639,8 +639,8 @@ Audit save details: separate audit / evidence contract（FindingCode ではな�
 A-1: NONE（Accepted）
 A-2: NOT APPLICABLE（Accepted）
 A-3: NOT APPLICABLE（Accepted）
-A-4: UNASSIGNED
-Acceptance: Accepted（DEC body）
+A-4: DEC-019（SELECTED）
+Acceptance: Accepted（DEC body + A-4）
 A-5: HOLD
 Implementation Start: HOLD
 ```
@@ -648,6 +648,6 @@ Implementation Start: HOLD
 ## Human への次の依頼（わかりやすく）
 
 1. 洗い出しは停止のまま（Finding ADOPTED = 0）
-2. A-4: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md) で DEC 番号を Human 選択
-3. Issue #8 台帳確認 → 番号選択 → その後 PR #141 Merge
-4. Implementation Start は HOLD。Agent はコードも DEC 番号も作らない
+2. A-4 = DEC-019 は記録済み
+3. 次は **Merge GO** で PR #141
+4. Issue #8 への DEC-019 台帳登録は Human。Implementation Start は HOLD

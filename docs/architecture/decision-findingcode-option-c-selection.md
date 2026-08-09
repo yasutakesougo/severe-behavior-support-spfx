@@ -20,7 +20,7 @@ PR #140: MERGED
 A-1 FindingCode values: NONE（Accepted）
 A-2 numbering: NOT APPLICABLE（Accepted）
 A-3 mapping: NOT APPLICABLE（Accepted）
-A-4 Issue #8 DEC number: UNASSIGNED
+A-4 Issue #8 DEC number: DEC-019（Human Selected A / 2026-08-09）
 A-5: HOLD / FORBIDDEN（本工程外）
 BS inventory: PAUSED at BS-001〜007（Finding ADOPTED = 0）
 DEC body Acceptance: Option A / EMPTY（decision-findingcode-issue8-dec-body-acceptance.md）
