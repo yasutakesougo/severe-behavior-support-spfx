@@ -21,13 +21,17 @@ Depends on（再 Decision しない）:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-NEW-TARGET-NAMES-1
 Kind: Human Decision packet（compare → CONSUMED）
-Status: CONSUMED（Human Decision Accepted / LOCKED on axes；values OPEN）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Human Decision: SU-1 + LN-1 + IN-1 + XB-1
 Human Selected:
   Site URL / Site name mode:  SU-1
   List names mode:            LN-1
   Internal Column Names:      IN-1
   Execution boundary:         XB-1
+Human-provided intended values:
+  New Site URL:  https://isogokatudouhome.sharepoint.com/sites/XXXXX
+  New Site name: XXXXX
+  New List names: XXXXX / YYYYY
 Selected via:
   decision-ilb-1-twenty-first-residual-new-spfx-target-names-selection.md
 
@@ -47,8 +51,8 @@ Locked basis:
 Current state:
   New SPFx deployment target = TOPOLOGY LOCKED / NOT CREATED / HOLD
   Naming axes = LOCKED（SU-1 + LN-1 + IN-1 + XB-1）
-  Concrete Site URL / Site name = OPEN / NOT SELECTED（SU-1 payload pending）
-  Concrete List names = OPEN / NOT SELECTED（LN-1 payload pending）
+  Concrete Site / List strings = LOCKED as HUMAN-PROVIDED / INTENDED
+  Live confirmation（SV-1 / LV-1）= NOT CONFIRMED
   Internal Column Names = OPEN（IN-1 — post-creation CN-1）
   Site / List / column creation = NO-GO
   tenant mutation = NO-GO
@@ -124,20 +128,22 @@ This was NOT Human Acceptance evidence.
 Human Acceptance is recorded in the Acceptance 正本 only.
 ```
 
-## 4. Concrete value slots（SU-1 / LN-1 payload）
+## 4. Concrete value slots（SU-1 / LN-1 payload — 比較履歴）
 
 ```text
-Axes Accepted / LOCKED. Concrete strings remain OPEN:
+Human-provided intended values（Accepted verbatim）:
 
-  New Site URL:        NOT SELECTED / OPEN
-  New Site name:       NOT SELECTED / OPEN
-  New List name(s):    NOT SELECTED / OPEN
+  New Site URL:        https://isogokatudouhome.sharepoint.com/sites/XXXXX
+  New Site name:       XXXXX
+  New List name(s):    XXXXX / YYYYY
+  Status:              HUMAN-PROVIDED / INTENDED
+                       NOT CREATED / NOT CONFIRMED（SV-1 / LV-1 pending）
   Internal Names:      OPEN under IN-1（post-creation CN-1）
 
 FORBIDDEN:
-  Agent inventing or hard-coding the blanks above as Accepted values
-  Treating blanks as OBSERVED / CONFIRMED
-  Treating axes Acceptance as Site/List creation GO
+  Agent inventing different Accepted values
+  Treating INTENDED values as OBSERVED / CONFIRMED
+  Treating naming Acceptance as Site/List creation GO
 ```
 
 ## 5. Explicit non-authorization（unchanged）
@@ -161,10 +167,10 @@ This packet / Acceptance does NOT authorize:
 ## 6. Next after Human Acceptance
 
 ```text
-Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED（axes） / SU-1 + LN-1 + IN-1 + XB-1
+Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
   → decision-assessment-snapshot-new-target-names-acceptance.md
-Concrete Site URL / Site name / List names: NOT SELECTED / OPEN
-  → next Human fill: SU-1 / LN-1 concrete strings
+Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
+Live confirmation（SV-1 / LV-1）: NOT CONFIRMED
 Internal Column Names: OPEN（IN-1）
 Site / List creation: NO-GO until separate Human execution gate
 Implementation Start: HOLD
