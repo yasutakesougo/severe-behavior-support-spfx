@@ -248,7 +248,9 @@ Concrete Site / List strings: PLACEHOLDER INTENDED；formal pilot names OPEN
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-Next gate: FORMAL PILOT FACILITY SITE / LIST NAMING
+Next gate: FORMAL PILOT FACILITY IDENTITY / SITE NAMING
+Decision-AS-PILOT-FACILITY-IDENTITY-1: OPEN / NOT ACCEPTED
+List names: DEFERRED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
