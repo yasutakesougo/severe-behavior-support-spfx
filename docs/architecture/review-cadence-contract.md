@@ -91,16 +91,19 @@ cadence = approximately_every_3_months
 representation = calendar-month cadence · approximate
 ```
 
-### 禁止表現（本候補の不変条件）
+### 禁止表現（Accepted 契約の不変条件）
+
+GOV-RULE-06 Accepted から次は導出しない。
 
 ```text
 MUST NOT store as sole canonical cadence:
   duration_days: 90
 
-MUST NOT imply from this contract alone:
+MUST NOT imply from this contract / GOV-RULE-06 Accepted:
+  90日
+  91日目から overdue
+  3暦月経過で自動違反
   due = anchor + 90 days
-  day 91 = violation
-  elapsed 3 calendar months = automatic overdue
 ```
 
 `duration_days` を技術エンジンの入力として使う場合でも、

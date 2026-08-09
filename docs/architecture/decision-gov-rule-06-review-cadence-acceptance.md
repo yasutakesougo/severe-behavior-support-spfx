@@ -3,7 +3,8 @@
 この文書は、**GOV-RULE-06**（見直し周期 practice cadence）についての
 **Human Acceptance evidence** である。
 
-source review 正本: [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md)  
+source review 正本: [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md)
+
 論理契約正本: [`review-cadence-contract.md`](./review-cadence-contract.md)
 
 ```text
@@ -49,11 +50,16 @@ This document records the Human Decision only.
 ## Accepted 内容
 
 ```text
-Practice cadence: SUPPORTED / Accepted
-Statutory nationwide 90-day mandate: NOT AUTHORIZED / NOT ADOPTED
-Canonical storage as duration_days = 90: FORBIDDEN
-day 91 = automatic violation: FORBIDDEN as meaning of this Acceptance
-elapsed 3 calendar months = automatic overdue: FORBIDDEN as meaning of this Acceptance
+GOV-RULE-06: Accepted
+Human decision:
+  「3ヶ月に1回程度」
+  / calendar-month cadence
+  / precision = approximate
+ReviewCadence = {
+  unit: "month";
+  interval: 3;
+  precision: "approximate";
+}
 ```
 
 意味:
@@ -62,14 +68,25 @@ elapsed 3 calendar months = automatic overdue: FORBIDDEN as meaning of this Acce
 - 表現は暦月 cadence かつ approximate であり、厳密な日数期限エンジンではない。
 - 法令上の全国一律「90日以内」必須値としては採択しない。
 
-## Acceptance boundary
-
-今回の Human Acceptance は次を意味しない。
+### この決定からは導出しない
 
 ```text
-GOV-RULE-05 起算日: HOLD / UNDECIDED
-GOV-RULE-07 通知開始: HOLD / UNDECIDED
-GOV-RULE-08 期限当日・期限超過定義: HOLD / UNDECIDED
+NOT derived from GOV-RULE-06 Accepted:
+  90日
+  91日目から overdue
+  3暦月経過で自動違反
+  duration_days = 90（NOT AUTHORIZED as canonical cadence）
+```
+
+## Acceptance boundary
+
+今回の Human Acceptance は次を意味しない。境界は維持する。
+
+```text
+GOV-RULE-05 基準日: HOLD
+GOV-RULE-07 通知開始: HOLD
+GOV-RULE-08 due / overdue 定義: HOLD
+duration_days = 90: NOT AUTHORIZED
 Decision-RD-3 接近窓・期限算出・超過後ポリシー: HOLD
 reviewDueDate 自動算出: NOT STARTED
 evaluateReviewDueRelativeToAsOf: UNCHANGED

@@ -172,7 +172,8 @@ Do not start automatically:
   FindingCode / A-5 / Implementation Start
 ```
 
-論理契約正本: [`review-cadence-contract.md`](./review-cadence-contract.md)  
+論理契約正本: [`review-cadence-contract.md`](./review-cadence-contract.md)
+
 Acceptance 正本: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)
 
 ## 現時点の判定
