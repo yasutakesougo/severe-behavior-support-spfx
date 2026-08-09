@@ -31,6 +31,7 @@ Thirteenth residual Decision: SELECTED / A — application save（Decision-AS-AP
 Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1；IR PASS）
 Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
 Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
+Seventeenth residual Decision: NOT SELECTED（selection packet OPEN）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -141,7 +142,10 @@ Order:
  16. Fifteenth residual: DEC-6 concrete mapping（DONE / CONSUMED；Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
  17. Sixteenth residual: Site / List / Internal Column Name（DONE / CONSUMED；Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
      values: NOT CONFIRMED / HOLD
-     remaining examples: post-retention
+ 18. Seventeenth residual: NOT SELECTED
+     selection packet: decision-ilb-1-seventeenth-residual-decision-selection-packet.md（OPEN）
+     options: A tenant-confirm GO / B DEC-015 / C post-retention / D HOLD
+     remaining examples: post-retention / DEC-015
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
