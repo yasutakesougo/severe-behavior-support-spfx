@@ -80,10 +80,12 @@ DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-d
 PR #143 / DEC-008: MERGED（`713c40a…` / head `cfbbcd3…`）
 DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（POSTED / comment `5229571943`）
 DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（**CONSISTENT** / 最終確定）
-Current single gate: **NEXT_SUBSTANTIVE_UNIT_SELECTION**
-Selection packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)（READY）
-
-
+Next substantive unit: **SELECTED / B / GOV-AUD-03**
+  Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
+  Scope: 判定スナップショット訂正の承認者
+Current single gate: **GOV-AUD-03 Human Decision**
+Decision packet: [`decision-gov-aud-03-snapshot-correction-approver-decision-packet.md`](./decision-gov-aud-03-snapshot-correction-approver-decision-packet.md)（READY）
+DEC-009: Human-attested Accepted（保存タイミング）。本 unit で再定義しない
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
@@ -92,11 +94,11 @@ hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED（正本化完了後に選定）
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
+
 
 
 
