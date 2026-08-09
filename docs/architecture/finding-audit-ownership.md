@@ -57,6 +57,7 @@ FindingCode Option C selection: docs/architecture/decision-findingcode-option-c-
 FindingCode Issue #8 DEC body prep（BS-001〜007 PAUSED / Finding ADOPTED = 0）: docs/architecture/findingcode-issue8-dec-body-prep.md
 FindingCode Issue #8 DEC body Acceptance packet（EMPTY catalog）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance-packet.md
 FindingCode Issue #8 DEC body Acceptance（Accepted / Option A / EMPTY）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance.md
+FindingCode A-4 DEC number review（READY_FOR_HUMAN_SELECTION）: docs/architecture/decision-findingcode-a4-dec-number-review.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
