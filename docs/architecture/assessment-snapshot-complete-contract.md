@@ -19,12 +19,15 @@ Depends on:
   assessment-snapshot-complete-contract-pr-boundary.md（Entry #2）
   assessment-snapshot-finding-ids-boundary.md（findingIds NOT REQUIRED）
   assessment-snapshot-not-applicable-reason-hold.md（enum NOT ADOPTED）
-  assessment-snapshot-schema-dto-versioning.md（Schema ID 未採番）
+  assessment-snapshot-schema-dto-versioning.md
+    （Schema ID 文字列 Accepted / schemaVersion HOLD / DTO DO NOT START）
   assessment-snapshot-save-timing-contract.md（DEC-009 意味）
   decision-as-ec-1-overall-entry-acceptance.md（overall MET）
+  decision-assessment-snapshot-schema-id-value-naming-acceptance.md
+    （Decision-AS-SCHEMA-ID-1 Accepted / LOCKED）
 FindingCode: HOLD
 A-5: HOLD
-SharePoint / DTO / Schema ID: DO NOT START
+SharePoint / DTO / Schema code assignment: DO NOT START
 ```
 
 上位入口: [`finding-audit-ownership.md`](./finding-audit-ownership.md)
@@ -34,8 +37,9 @@ SharePoint / DTO / Schema ID: DO NOT START
 AssessmentSnapshot の **domain 完全契約面**（型・validator・合成 fixture・contract tests）を
 例外なしで検証可能にする。
 
-永続化・SharePoint・DTO・Schema ID 採番・FindingCode・承認ロールは扱わない。
+永続化・SharePoint・DTO・Schema/DTO コード実装・FindingCode・承認ロールは扱わない。
 Result 変換（`toAssessmentSnapshotResultCandidate`）は再定義しない。
+Schema ID 文字列は Decision-AS-SCHEMA-ID-1 で Accepted だが、本 domain 型には載せない。
 
 ## 型
 
@@ -77,7 +81,8 @@ ValidateAssessmentSnapshotResult =
 
 - 例外を投げない。
 - 未知キーは拒否する（strict allowlist）。
-- Schema ID / schemaVersion / dtoVersion フィールドは持たない（Entry #7: 固有 ID 未採番）。
+- Schema ID / schemaVersion / dtoVersion フィールドは持たない
+  （Decision-AS-SCHEMA-ID-1: ID 文字列は Accepted；schemaVersion = HOLD；domain 型への割当は NOT STARTED）。
 
 ## 検証規則
 
@@ -125,7 +130,10 @@ UNCHANGED:
 
 ```text
 SharePoint / DTO / provider: DO NOT START
-AssessmentSnapshot Schema ID 採番: DO NOT START
+AssessmentSnapshot Schema ID string:
+  Accepted / LOCKED = severe-behavior-support.assessment-snapshot.snapshot
+schemaVersion / dtoVersion: HOLD / NOT DECIDED
+Schema ID assignment into TypeScript / DTO / SharePoint: DO NOT START
 FindingCode / A-5: HOLD
 サービス別 NOT_APPLICABLE reason enum: FORBIDDEN（Entry #6）
 findingIds REQUIRED: NOT ADOPTED（Entry #5）

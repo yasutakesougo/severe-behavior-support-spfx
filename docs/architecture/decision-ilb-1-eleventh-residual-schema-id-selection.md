@@ -39,19 +39,20 @@ Deploy / real data: NO-GO
 
 - PR-J domain complete contract is already implemented on main.
 - `findingIds` remains OPTIONAL.
-- AssessmentSnapshot-specific Schema ID remains unassigned.
+- AssessmentSnapshot Schema ID string is now Accepted via Decision-AS-SCHEMA-ID-1
+  (`severe-behavior-support.assessment-snapshot.snapshot`).
+- schemaVersion / dtoVersion remain HOLD / NOT DECIDED.
 - SharePoint / DTO / application save remain separate units.
 
 ## Next gate
 
 ```text
-Next action:
-  Schema ID Decision packet / read-only boundary clarification
+Selection CONSUMED → Decision-AS-SCHEMA-ID-1 Accepted / LOCKED
+  decision-assessment-snapshot-schema-id-value-naming-acceptance.md
 
-Not allowed from this document alone:
-  assigning any concrete Schema ID
-  creating schemaVersion / dtoVersion values
-  modifying TypeScript types or validators
-  SharePoint column mapping
-  adapter implementation
+Still HOLD:
+  schemaVersion / dtoVersion
+  Schema / DTO / SharePoint / adapter / application save
+  Implementation Start
+  FindingCode / A-5
 ```

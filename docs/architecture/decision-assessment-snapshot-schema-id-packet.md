@@ -5,9 +5,13 @@
 ```text
 Decision kind: Schema ID decision packet only
 Selected substantive unit: C — AssessmentSnapshot Schema ID
+Status: CONSUMED（Human A → Decision-AS-SCHEMA-ID-1 Accepted / LOCKED）
 Implementation Start: HOLD
-Schema ID assignment: HOLD / NOT STARTED
-Schema ID value invention: FORBIDDEN
+Schema ID naming / concrete value: Accepted / LOCKED
+  （decision-assessment-snapshot-schema-id-value-naming-acceptance.md）
+schemaVersion / dtoVersion: HOLD / NOT DECIDED
+Schema ID assignment into code / DTO / SharePoint: HOLD / NOT STARTED
+Schema ID value invention beyond Accepted ID-1: FORBIDDEN
 Schema / DTO / SharePoint / FindingCode / A-5: HOLD
 ```
 
@@ -21,10 +25,14 @@ Schema ID != SharePoint List name
 Schema ID != TypeScript type name
 Schema Version: SemVer
 DTO Version: Schema Version と同一
-AssessmentSnapshot 固有 Schema ID: 現在未採番
+AssessmentSnapshot 固有 Schema ID 文字列:
+  Accepted / LOCKED
+  = severe-behavior-support.assessment-snapshot.snapshot
+  （Decision-AS-SCHEMA-ID-1）
+schemaVersion / dtoVersion: HOLD / NOT DECIDED
 ```
 
-PR-J domain complete contract は main に実装済みだが、AssessmentSnapshot 固有 Schema ID は持たない。
+PR-J domain complete contract は main に実装済みだが、domain 型へ schemaId / schemaVersion / dtoVersion はまだ持たない。
 
 ## 2. 今回 Human が判断する問い
 
@@ -55,8 +63,10 @@ Does NOT authorize:
   Deploy / real data
 ```
 
-A が選択された場合も、具体値の候補提示・採択は別 Human Decision とする。
-比較正本: [`decision-assessment-snapshot-schema-id-value-naming-packet.md`](./decision-assessment-snapshot-schema-id-value-naming-packet.md)（OPEN / NOT ACCEPTED）
+A は選択済み（CONSUMED）。具体値の比較・採択は Decision-AS-SCHEMA-ID-1 で完了。
+
+- 比較正本: [`decision-assessment-snapshot-schema-id-value-naming-packet.md`](./decision-assessment-snapshot-schema-id-value-naming-packet.md)（CONSUMED）
+- Acceptance 正本: [`decision-assessment-snapshot-schema-id-value-naming-acceptance.md`](./decision-assessment-snapshot-schema-id-value-naming-acceptance.md)（Accepted / LOCKED）
 
 ### B — HOLD
 
@@ -83,12 +93,15 @@ Do NOT:
 ## 5. Current gate
 
 ```text
-Human Decision required:
-  A — proceed to Schema ID value / naming Decision
-  B — HOLD
+Human Decision on this packet: A — CONSUMED
+Decision-AS-SCHEMA-ID-1: Accepted / LOCKED
+  Naming rule = NR-1
+  Schema ID = severe-behavior-support.assessment-snapshot.snapshot
+  schemaVersion = HOLD / NOT DECIDED
 
-Until explicit Human A:
-  Schema ID assignment: HOLD
-  value invention: FORBIDDEN
-  Implementation Start: HOLD
+Still HOLD:
+  Schema ID assignment into code / DTO / SharePoint
+  Implementation Start
+  Schema / DTO / SharePoint / adapter / application save
+  FindingCode / A-5
 ```

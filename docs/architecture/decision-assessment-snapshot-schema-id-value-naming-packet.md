@@ -3,11 +3,19 @@
 この文書は、Human A（proceed to Schema ID value / naming Decision）承認後の
 **具体候補・命名規則の比較用 Human Decision Packet** である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-schema-id-value-naming-acceptance.md`](./decision-assessment-snapshot-schema-id-value-naming-acceptance.md)
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-SCHEMA-ID-1（value / naming）
-Kind: Human Decision packet（compare only）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: ACCEPT
+Human Selected:
+  Naming rule: NR-1
+  Concrete Schema ID: ID-1
+  Initial schemaVersion: SV-HOLD
 Depends on:
   decision-ilb-1-eleventh-residual-schema-id-selection.md（SELECTED / C）
   decision-assessment-snapshot-schema-id-packet.md
@@ -15,10 +23,11 @@ Depends on:
   assessment-snapshot-schema-dto-versioning.md（Entry #7）
   contracts-v1.md（DEC-1）
 Implementation Start: HOLD
-Schema ID assignment: HOLD / NOT STARTED
-Schema ID concrete value: NOT DECIDED
-Schema ID naming rule: NOT DECIDED
-value invention by Agent as Accepted: FORBIDDEN
+Schema ID naming rule: Accepted / NR-1
+Schema ID concrete value: Accepted / severe-behavior-support.assessment-snapshot.snapshot
+schemaVersion / dtoVersion: HOLD / NOT DECIDED（SV-HOLD）
+Schema ID assignment into code / DTO / SharePoint: HOLD / NOT STARTED
+value invention beyond Accepted ID-1: FORBIDDEN
 Schema / DTO / SharePoint / adapter: HOLD
 FindingCode / A-5: HOLD
 Deploy / real data: NO-GO
@@ -41,8 +50,8 @@ Question 3 — Initial schemaVersion（任意・分離可）:
 ```
 
 ```text
-本 packet に候補が書いてあっても Accepted にはならない。
-採択は明示 Human Acceptance が必要。
+Historical note:
+  候補表は比較用。採択は Acceptance 正本のみが LOCKED である。
 ```
 
 ## 2. 再 Decision しない前提（LOCKED）
@@ -63,15 +72,15 @@ severe-behavior-support.support-plan.plan @ 1.0.0
 severe-behavior-support.support-plan.plan-version @ 1.0.0
 ```
 
-## 3. Naming rule 候補（比較・未採択）
+## 3. Naming rule 候補（比較履歴）
 
-| ID | 規則 | 例の形 | 利点 | リスク / 欠点 |
-|---|---|---|---|---|
-| **NR-1** | `{product}.{aggregate}.{artifact}` 小文字ドット区切り（SupportPlan 同型） | `severe-behavior-support.assessment-snapshot.<leaf>` | 既存正本と一貫 | leaf 名の選択が別判断 |
-| **NR-2** | `{product}.{aggregate}` のみ（leaf なし） | `severe-behavior-support.assessment-snapshot` | 短い | 将来 artifact 分割時に改名圧力 |
-| **NR-3** | reverse-DNS / URI 風 | `jp.local...assessment-snapshot` | 全球一意っぽい | 本 repo 先例と不一致；組織ドメイン発明になりやすい |
-| **NR-4** | opaque UUID | `urn:uuid:...` | 意味衝突しにくい | 可読性・先例不一致；運用しづらい |
-| **NR-X** | Human 明示規則 | （Human が書く） | 最大の自由度 | 規則未記載なら採択不可 |
+| ID | 規則 | 例の形 | 結果 |
+|---|---|---|---|
+| **NR-1** | `{product}.{aggregate}.{artifact}` 小文字ドット区切り（SupportPlan 同型） | `severe-behavior-support.assessment-snapshot.<leaf>` | **Accepted** |
+| **NR-2** | `{product}.{aggregate}` のみ（leaf なし） | `severe-behavior-support.assessment-snapshot` | NOT SELECTED |
+| **NR-3** | reverse-DNS / URI 風 | `jp.local...assessment-snapshot` | NOT SELECTED |
+| **NR-4** | opaque UUID | `urn:uuid:...` | NOT SELECTED |
+| **NR-X** | Human 明示規則 | （Human が書く） | NOT SELECTED |
 
 ```text
 FORBIDDEN as naming rule / ID source:
@@ -81,17 +90,17 @@ FORBIDDEN as naming rule / ID source:
   環境名・テナント名・ブランチ名を ID に含める
 ```
 
-## 4. Concrete Schema ID 候補（比較・未採択）
+## 4. Concrete Schema ID 候補（比較履歴）
 
-前提: 下表は **NR-1 を仮定した比較用**。NR-1 未採択なら葉の議論も保留してよい。
+前提: 下表は **NR-1 を仮定した比較用**。
 
-| ID | 候補文字列 | 意図 | 整合 | 注意 |
-|---|---|---|---|---|
-| **ID-1** | `severe-behavior-support.assessment-snapshot.snapshot` | 集約本体 | SupportPlan の `.plan` に対応しやすい | 「snapshot」重複感 |
-| **ID-2** | `severe-behavior-support.assessment-snapshot.result` | Result 面強調 | Result 変換と語彙が近い | 完全契約全体より狭い命名 |
-| **ID-3** | `severe-behavior-support.assessment-snapshot.record` | 永続記録面 | draft/finalized 記録に合う | 「record」が汎用すぎる可能性 |
-| **ID-4** | `severe-behavior-support.assessment-snapshot.complete` | 完全契約面 | PR-J 呼称に近い | プロセス用語が ID に残る |
-| **ID-X** | Human 明示文字列 | Human 指定 | — | Agent が書き換えない |
+| ID | 候補文字列 | 意図 | 結果 |
+|---|---|---|---|
+| **ID-1** | `severe-behavior-support.assessment-snapshot.snapshot` | 集約本体 | **Accepted** |
+| **ID-2** | `severe-behavior-support.assessment-snapshot.result` | Result 面強調 | NOT SELECTED |
+| **ID-3** | `severe-behavior-support.assessment-snapshot.record` | 永続記録面 | NOT SELECTED |
+| **ID-4** | `severe-behavior-support.assessment-snapshot.complete` | 完全契約面 | NOT SELECTED |
+| **ID-X** | Human 明示文字列 | Human 指定 | NOT SELECTED |
 
 ```text
 NOT candidates（比較表に載せない / 採択禁止）:
@@ -100,46 +109,47 @@ NOT candidates（比較表に載せない / 採択禁止）:
   severe-behavior-support.assessment-snapshot.v1（版を ID に混入）
 ```
 
-## 5. Initial schemaVersion 候補（分離可・未採択）
+## 5. Initial schemaVersion 候補（分離可）
 
-| ID | 値 | 意味 |
+| ID | 値 | 結果 |
 |---|---|---|
-| **SV-1** | `1.0.0` | 初回採番の慣例 |
-| **SV-HOLD** | 未設定のまま | Schema ID だけ先に決め、Version は DTO 着手時 |
-| **SV-X** | Human 明示 SemVer | Human 指定 |
+| **SV-1** | `1.0.0` | NOT SELECTED |
+| **SV-HOLD** | 未設定のまま | **Accepted（HOLD / NOT DECIDED）** |
+| **SV-X** | Human 明示 SemVer | NOT SELECTED |
 
 ```text
 DTO Version = Schema Version（DEC-1）。別値にしない。
-SV を決めても DTO / SharePoint 実装は自動開始しない。
+SV-HOLD は schemaVersion を補完しない。DTO / SharePoint 実装は自動開始しない。
 ```
 
 ## 6. 判断単位の分離
 
 | 決める / 決めない | 本 packet |
 |---|---|
-| Naming rule（NR-*） | **比較対象** |
-| Concrete Schema ID（ID-*） | **比較対象** |
-| Initial schemaVersion（SV-*） | **比較対象（分離可）** |
+| Naming rule（NR-*） | **Accepted / NR-1** |
+| Concrete Schema ID（ID-*） | **Accepted / ID-1** |
+| Initial schemaVersion（SV-*） | **Accepted as SV-HOLD** |
 | DTO 型実装 | OUT |
 | SharePoint / DEC-6 | OUT |
 | application save | OUT |
 | FindingCode / A-5 | OUT |
 | Implementation Start | HOLD |
 
-## 7. Human Decision（未選択）
-
-Human は次を明示する（組み合わせ可。未記載は NOT DECIDED）。
+## 7. Human Decision（固定）
 
 ```text
-Naming rule:    NR-1 / NR-2 / NR-3 / NR-4 / NR-X:<text> / HOLD
-Schema ID:      ID-1 / ID-2 / ID-3 / ID-4 / ID-X:<text> / HOLD
-schemaVersion:  SV-1 / SV-HOLD / SV-X:<semver> / HOLD
+Naming rule:    NR-1
+Schema ID:      ID-1 — severe-behavior-support.assessment-snapshot.snapshot
+schemaVersion:  SV-HOLD
+Human Decision: ACCEPT
 ```
 
 ```text
-Until explicit Human Acceptance of concrete values:
-  Schema ID assignment: HOLD / NOT STARTED
-  value invention: FORBIDDEN
+After Acceptance:
+  Schema ID naming + concrete value: LOCKED（Acceptance 正本）
+  schemaVersion / dtoVersion: HOLD / NOT DECIDED
+  Schema ID assignment into code / DTO / SharePoint: HOLD / NOT STARTED
+  value invention beyond Accepted ID-1: FORBIDDEN
   Implementation Start: HOLD
   Schema / DTO / SharePoint / adapter: DO NOT START
 ```
@@ -148,19 +158,19 @@ Until explicit Human Acceptance of concrete values:
 
 ```text
 Do NOT:
-  treat this compare packet as Acceptance
-  lock any NR-* / ID-* / SV-* by Agent recommendation alone
-  invent an ID outside the table without Human ID-X text
+  treat this compare packet alone as the LOCKED Acceptance（use Acceptance 正本）
+  invent an ID outside Accepted ID-1
+  complement schemaVersion as 1.0.0 from this packet
   start TypeScript / DTO / SharePoint / adapter / application save
   reopen FindingCode / A-5
 ```
 
-## 9. Next after Human Acceptance（将来）
+## 9. Next after Human Acceptance
 
 ```text
-If Human Accepts naming + concrete ID（and optional SV）:
-  → write Acceptance LOCKED doc（別 PR）
-  → still NOT auto Implementation Start
-Else:
-  → remain HOLD
+Decision-AS-SCHEMA-ID-1: Accepted / LOCKED
+  → decision-assessment-snapshot-schema-id-value-naming-acceptance.md
+schemaVersion / dtoVersion: HOLD / NOT DECIDED
+Implementation Start: HOLD
+Ready / Merge: NOT RUN by this Decision
 ```
