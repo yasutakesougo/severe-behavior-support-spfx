@@ -63,8 +63,11 @@ DEC-008 Issue #8 ledger registration（POSTED / comment 5229571943）: docs/arch
 DEC-008 canonicalization consistency check（CONSISTENT / 最終確定）: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
 Next substantive unit selection（SELECTED / B / GOV-AUD-03）: docs/architecture/decision-next-substantive-unit-selection.md
 GOV-AUD-03 Acceptance（Accepted / Option E / application 対象外）: docs/architecture/decision-gov-aud-03-snapshot-correction-approver-acceptance.md
-GOV-AUD-03 Decision packet（CONSUMED）: docs/architecture/decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
+Next substantive unit selection（SELECTED / C / Decision-OP-3）: docs/architecture/decision-next-substantive-unit-selection.md
+Decision-OP-3 open-points extraction: docs/architecture/decision-op-3-open-points-extraction.md
+Decision-OP-3 Decision packet（READY）: docs/architecture/decision-op-3-observation-period-schema-decision-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
+
 
 
 
@@ -109,7 +112,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
 | 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED**（comment `5229571943`）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**。整合 **CONSISTENT**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md) | ロール実装 DO NOT START。制度資料が支持しない承認フローを追加しない |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
-| 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3フィールド追加はHOLD |
+| 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3 packet READY（[`decision-op-3-observation-period-schema-decision-packet.md`](./decision-op-3-observation-period-schema-decision-packet.md)）。日数発明禁止 |
 | 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD。89/90/91日境界は practice cadence とみなさない |
 | 見直し周期 practice cadence（GOV-RULE-06） | Issue #16 / #19（判断）・契約 docs | **Accepted**（2026-08-09）。正本 [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) | `duration_days=90` 変換禁止。07/08 Accepted（08 NOT ADOPTED）。Implementation HOLD |
 | 見直し周期の基準日（GOV-RULE-05） | Issue #16 / #19（判断）・契約 docs | **Accepted**（2026-08-09）。初回=支援計画有効開始日 / 以降=前回見直し日。正本 [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) | 物理列は未決。GOV-RULE-08 Accepted / NOT ADOPTED。Implementation HOLD |

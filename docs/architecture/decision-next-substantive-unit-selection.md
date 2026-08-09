@@ -1,6 +1,6 @@
 # 次 substantive unit 選定 — Human Selection
 
-この文書は、DEC-008 正本化 **CONSISTENT** 後の
+この文書は、DEC-008 正本化 **CONSISTENT** / GOV-AUD-03 Accepted 後の
 **次 substantive unit 選定** の Human Decision 記録である。
 
 Decision packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)
@@ -9,11 +9,13 @@ Decision packet: [`decision-next-substantive-unit-selection-packet.md`](./decisi
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
 Status: SELECTED
-Human Selection: Explicit Human Option B on 2026-08-09
+Human Selection: Explicit Human Option C on 2026-08-09
 Selected substantive unit:
-  B — GOV-AUD-03 / Issue #19 最小単位
+  C — Decision-OP-3（観察期間 Schema）
 Scope:
-  判定スナップショット訂正の承認者
+  観察期間をデータとしてどう表現するか
+  （既存資料の未決定点抽出 → Human Decision）
+日数・期限の発明: FORBIDDEN
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
@@ -22,37 +24,30 @@ Implementation Start: HOLD
 ## Human Selection
 
 ```text
-Selected: B
-GOV-AUD-03 / Issue #19 最小単位
-Scope: 判定スナップショット訂正の承認者
+Selected: C
+Decision-OP-3（観察期間 Schema）
 ```
 
 理由（Human）:
 
 ```text
-DEC-009 はすでに保存タイミングが Accepted 済みであり、
-A（DEC-009 再選定）の優先度は低い。
-次に進めるなら、AssessmentSnapshot の訂正時に
-誰が承認するかという未決定の責任境界を 1 件だけ閉じる方が自然。
+支援計画に沿って支援手順記録を経過観察し、
+モニタリングで更新する業務ルールまで Human 一次情報が固まっている。
+次は「観察期間をデータとしてどう表現するか」を閉じると、
+業務ルールから contract への接続が進む。
+期間の日数や期限は AI 側で発明しない。
+まず OP-3 の既存資料から未決定点だけを抽出して Human Decision にする。
 ```
 
 ```text
+Prior selection B / GOV-AUD-03: CONSUMED（Accepted / Option E）
 Agent recommendation: NOT Human Selection evidence
-```
-
-## Notes
-
-```text
-DEC-009:
-  Human-attested Accepted（保存タイミング）
-  docs mirror 上の「未」表記同期は本選定の対象外（別 sync 可）
-FindingCode / A-5 / Implementation: HOLD（変更しない）
 ```
 
 ## Next
 
 ```text
-Next unit: GOV-AUD-03 Human Decision packet
-  → decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
+Open-points: decision-op-3-open-points-extraction.md
+Decision packet: decision-op-3-observation-period-schema-decision-packet.md
 Implementation Start: HOLD
 ```

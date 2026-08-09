@@ -14,19 +14,20 @@ Agent が次 unit を自動選定しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
 Kind: Human Decision packet
-Status: CONSUMED（Human Selected Option B）
+Status: CONSUMED（Human Selected Option C after GOV-AUD-03）
 Selection record: decision-next-substantive-unit-selection.md
 Depends on:
   DEC-008 Accepted / LOCKED
   Issue #8 comment 5229571943
   PR #143 MERGED（713c40a…）
   consistency: CONSISTENT
-    （decision-dec-008-canonicalization-consistency-check.md）
+  GOV-AUD-03 Accepted / Option E（PR #145 / f7448d2…）
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: SELECTED / GOV-AUD-03
+Next substantive unit: SELECTED / Decision-OP-3
 ```
+
 
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -166,19 +167,22 @@ E. DEC-008 残面（提出・差戻しロール）のみ
 F. 別単位（単位名を明示）
 G. まだ決めない
 
-答え: B（2026-08-09）
-Scope: 判定スナップショット訂正の承認者
+答え: C（2026-08-09）— after GOV-AUD-03 Accepted / Option E
+Scope: Decision-OP-3 観察期間 Schema（未決定点抽出 → Human Decision）
 Selection record: decision-next-substantive-unit-selection.md
+Prior B / GOV-AUD-03: CONSUMED
 ```
 
 ## 7. Gate
 
 ```text
 DEC-008 consistency: CONSISTENT
-NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected B
-Selected unit: GOV-AUD-03
-GOV-AUD-03 packet: READY_FOR_HUMAN_DECISION
-  → decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
+GOV-AUD-03: Accepted / Option E
+NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected C
+Selected unit: Decision-OP-3
+OP-3 open-points: decision-op-3-open-points-extraction.md
+OP-3 packet: READY_FOR_HUMAN_DECISION
+  → decision-op-3-observation-period-schema-decision-packet.md
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
