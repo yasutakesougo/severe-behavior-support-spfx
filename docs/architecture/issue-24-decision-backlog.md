@@ -71,7 +71,13 @@ Decision packet GOV-RULE-08: CONSUMED（[`decision-gov-rule-08-due-overdue-decis
 Implementation Entry Decision Re-audit: [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)（post GOV-RULE-05〜08）
 PR #139 / Implementation Entry Decision Re-audit: MERGED（merge `99c8b24f0fa22f502803f4ae772c976886aed261` / head `d58e947abdf97f011ac9054fec0058f143671b2f`）
 Current single gate: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
-Decision packet: [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)（READY_FOR_HUMAN_DECISION）
+Decision packet: [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)
+Selected Option: C（[`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)）
+Issue #8 DEC body: **Accepted** / Option A / EMPTY（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
+BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
+A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019**
+A-4 review: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)（SELECTED / DEC-019）
+Docs mirror ledger was DEC-001〜018；Finding catalog DEC = DEC-019
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
@@ -113,6 +119,11 @@ SharePoint / M365: 変更なし
 - [`review-due.md`](./review-due.md)
 - [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)
 - [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)
+- [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
+- [`findingcode-issue8-dec-body-prep.md`](./findingcode-issue8-dec-body-prep.md)
+- [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)
+- [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)
+- [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)
 
 ## Phase 1 — read-only 再監査結果
 

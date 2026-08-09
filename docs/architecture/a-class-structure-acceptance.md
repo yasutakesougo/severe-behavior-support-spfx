@@ -51,10 +51,10 @@ Separate:
 FindingCode values: UNDECIDED
 FindingCode numbering: UNDECIDED
 criterionId mapping: UNDECIDED
-Issue #8 FindingCode DEC number: UNASSIGNED
-FindingCode business catalog DEC body: NOT STARTED
+Issue #8 FindingCode DEC number: DEC-019（後続 Acceptance で選定）
+FindingCode business catalog DEC body: Accepted EMPTY（後続）
 catalogVersionIdentifier strategy: UNDECIDED
-UUID / hash / semver / DEC-number selection: NOT STARTED
+UUID / hash / semver selection: NOT STARTED
 A-5 Decision start: NOT AUTOMATIC
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
@@ -62,6 +62,10 @@ SharePoint / M365 / Entra / Deploy: NO-GO
 real data: PROHIBITED
 FC-7: NOT CREATED
 ```
+
+注: A-4 = DEC-019 と EMPTY DEC body の durable evidence は
+[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md) /
+[`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)。
 
 ## Next gate
 
@@ -71,7 +75,14 @@ Current single gate:
   （A-1〜A-4 bundle の業務 catalog 内容）
 Decision packet:
   decision-findingcode-a14-bundle-content-decision-packet.md
-  Status: READY_FOR_HUMAN_DECISION
+Selected Option: C
+DEC body Acceptance: Option A / EMPTY / NOT ADOPTED
+Status: A-1 NONE / A-2 N/A / A-3 N/A / A-4 DEC-019
+BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
+Acceptance evidence:
+  decision-findingcode-issue8-dec-body-acceptance.md
+A-4 review:
+  decision-findingcode-a4-dec-number-review.md
 
 Separate later:
   A-5 representation strategy Decision

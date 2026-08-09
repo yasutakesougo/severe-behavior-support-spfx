@@ -15,17 +15,23 @@ A-5 / FC-7 を開始しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 Kind: Human Decision packet
-Status: READY_FOR_HUMAN_DECISION
+Status: ACCEPTED / Option C path / EMPTY catalog（DEC body Option A）
 Structure authority: a-class-structure-acceptance.md（Bundle A-1〜A-4 / Separate A-5）
 FC Decision Exit Review: ACCEPTED
 Decision-FC-1〜FC-6: Accepted（logical）
 PR #139 / Implementation Entry Decision Re-audit: MERGED
-  merge commit: 99c8b24f0fa22f502803f4ae772c976886aed261
-  merged head: d58e947abdf97f011ac9054fec0058f143671b2f
-main baseline: 99c8b24f0fa22f502803f4ae772c976886aed261
-A-1〜A-4 content: UNDECIDED
+PR #140 / A-1〜A-4 Decision packet: MERGED
+  merge commit: f254af4392f6579bcafba82d744b1e3c4eb04217
+  merged head: 89665b53f3afb0af6e6d232fa821e2cfd1394d47
+main baseline: f254af4392f6579bcafba82d744b1e3c4eb04217
+Selected Option: C（decision-findingcode-option-c-selection.md）
+DEC body Acceptance: Option A（decision-findingcode-issue8-dec-body-acceptance.md）
+BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
+A-1: NONE
+A-2: NOT APPLICABLE
+A-3: NOT APPLICABLE
+A-4: DEC-019（Human Selected A / 2026-08-09）
 A-5: OUT / separate later
-Issue #8 FindingCode DEC number: UNASSIGNED
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
@@ -207,26 +213,32 @@ FORBIDDEN in this packet:
 
 ```text
 HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION:
-  READY_FOR_HUMAN_DECISION
-Selected Option: UNSELECTED
-A-1 values: UNDECIDED
-A-2 numbering: UNDECIDED
-A-3 criterionId mapping: UNDECIDED
-A-4 Issue #8 DEC number: UNASSIGNED
+  ACCEPTED / EMPTY catalog
+Selected Option: C（path） / DEC body Option A
+A-1 values: NONE
+A-2 numbering: NOT APPLICABLE
+A-3 criterionId mapping: NOT APPLICABLE
+A-4 Issue #8 DEC number: DEC-019
 A-5: OUT
-Independent Review: NOT DONE（PR 進行で実施）
+Finding ADOPTED: 0（BS-001〜007）
+Acceptance evidence: decision-findingcode-issue8-dec-body-acceptance.md
+A-4 review: decision-findingcode-a4-dec-number-review.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 ```
 
-## 7. Human への依頼
+Selection record: [`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)
+DEC body packet: [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md)
+Acceptance: [`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)
 
-次のいずれかを明示する:
+## 7. Human への依頼（Acceptance 後）
 
-1. **Option A** — A-1〜A-4 の内容を提示（Acceptance 候補へ）
-2. **Option B** — HOLD / defer（gate 維持）
-3. **Option C** — Issue #8 DEC 本文を先に Human 確定（bundle 維持）
-4. **Option D** — その他（A-1〜A-4 の扱いを明示）
+```text
+A-1〜A-4: complete for EMPTY catalog scope（A-4 = DEC-019）
+Next recommended: Merge PR #141
+Issue #8 ledger registration of DEC-019: Human
+Re-open catalog only with new Human primary information requiring Finding ADOPTED
+Implementation Start: HOLD
+```
 
-Agent は選択前に catalog 値を書かない。
-Acceptance / Entry satisfaction / Implementation Start は別 Gate。
+Agent は FindingCode 値を発明しない。
