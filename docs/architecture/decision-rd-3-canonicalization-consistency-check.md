@@ -1,11 +1,12 @@
 # Decision-RD-3 正本化 — docs / ownership / Acceptance 整合確認
 
-Status: **CONSISTENT**（docs-internal / 2026-08-09）
-PR #153: OPEN（Acceptance）— FINAL CONSISTENT は Merge 後に確定
+Status: **FINAL CONSISTENT**（2026-08-09）
+PR #153: MERGED
+  merge commit: `775200264a214f8219a7a44dc8d5d94ccec3d8df`
+  merged head: `2a5da13eb4fc9cddfa8fda96e92386a8fafbd73b`
 Depends on: PR #152（ILB-1 Human Policy FINAL CONSISTENT）**MERGED**
   merge commit: `9f5fd78093843229c3b06e1debff1298427d88ff`
   merged head: `1ad7e51f73159b6204886b2a7fb5f4706800a899`
-PR #153 rebase: onto `origin/main` @ `9f5fd78…`（post-#152）
 
 Related:
 
@@ -13,18 +14,16 @@ Related:
 - Logical contract: `docs/architecture/review-monitoring-guidance-contract.md`
 - Selection: `docs/architecture/decision-ilb-1-next-residual-decision-selection.md`（Option C）
 - Ownership: `docs/architecture/finding-audit-ownership.md`
-- PR #153: Decision-RD-3 Acceptance
+- PR #153: Decision-RD-3 Acceptance（MERGED）
 
 ---
 
 ## 1. Purpose
 
 Decision-RD-3 を **Accepted / LOCKED** として正本化した内容が、
-Acceptance / logical contract / ownership / backlog と矛盾していないことを確認する。
+Acceptance / logical contract / ownership / backlog / PR #153 merge 証跡と矛盾していないことを確認する。
 
 この確認は **Implementation 着手ではない**。
-Merge 証跡確定前のため、Verdict は **CONSISTENT（docs-internal）** とする。
-Merge 後に **FINAL CONSISTENT** へ昇格する。
 
 ---
 
@@ -58,17 +57,15 @@ Merge 後に **FINAL CONSISTENT** へ昇格する。
 | C6 | Ownership / backlog | RD-3 Accepted / LOCKED；HOLD 解消 | **PASS** |
 | C7 | FindingCode / A-5 / Implementation | HOLD | **PASS** |
 | C8 | 90日 / hard due / 業務制限 | NOT ADOPTED / 採用しない | **PASS** |
-| C9 | PR Merge attestation | Merge 前 | **HOLD**（FINAL は Merge 後） |
-| C10 | Rebase onto post-#152 main | base = `9f5fd78…`；#152 MERGED | **PASS** |
+| C9 | PR #153 Merge attestation | MERGED；merge preserves LOCKED meaning | **PASS** |
+| C10 | PR #152 dependency | MERGED / dependency satisfied | **PASS** |
 
 ```text
 Docs-internal consistency: PASS
 PR #152 dependency: MERGED（9f5fd78… / head 1ad7e51…）
-PR #153 rebase onto main: PASS
-PR #153 merge attestation: HOLD（未 Merge）
+PR #153 merge: PASS（7752002… / head 2a5da13…）
 Contradiction found in repository docs: NONE
-Verdict: CONSISTENT（docs-internal）
-FINAL CONSISTENT: deferred until Merge
+Verdict: FINAL CONSISTENT
 ```
 
 ---
@@ -77,12 +74,10 @@ FINAL CONSISTENT: deferred until Merge
 
 | Outcome | Condition | Next |
 |---|---|---|
-| **CONSISTENT** | C1–C8 PASS；C9 HOLD | Review / Merge へ |
-| **FINAL CONSISTENT** | C1–C9 all PASS（Merge 証跡あり） | 次残存 Decision 選定 |
-| **INCONSISTENT** | any of C1–C8 FAIL | 矛盾箇所を特定し Human 判断 |
-| **BLOCKED** | 依存 PR 未マージで意味が壊れる | #152 Merge 後に再確認可 |
+| **FINAL CONSISTENT** | C1–C10 all PASS | 次残存 Decision を Human が一件選定 |
+| **INCONSISTENT** | any FAIL | 矛盾箇所を特定し Human 判断 |
 
-Current: **CONSISTENT（docs-internal）**
+Current: **FINAL CONSISTENT**
 
 ---
 
@@ -99,11 +94,11 @@ GOV-AUD-05 / 他 inventory 行: NOT Accepted here
 
 ---
 
-## 6. After Review / Merge
+## 6. After FINAL CONSISTENT
 
 ```text
-After PR #153 MERGED:
-  本 check を FINAL CONSISTENT に更新（merge commit / head を記録）
-  他残存 Decision を一件ずつ Human 選定・判定
+Decision-RD-3: FINAL CONSISTENT
+Next residual Decision: NOT SELECTED
+他残存 Decision は一件ずつ Human 選定・判定
 FindingCode / A-5 / Implementation: HOLD
 ```
