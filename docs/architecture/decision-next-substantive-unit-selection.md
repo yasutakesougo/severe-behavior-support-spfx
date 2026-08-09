@@ -1,6 +1,6 @@
 # 次 substantive unit 選定 — Human Selection
 
-この文書は、DEC-008 正本化 **CONSISTENT** 後の
+この文書は、Decision-OP-3 正本化（Accepted / LOCKED / DOCS CONSISTENT）後の
 **次 substantive unit 選定** の Human Decision 記録である。
 
 Decision packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)
@@ -8,51 +8,44 @@ Decision packet: [`decision-next-substantive-unit-selection-packet.md`](./decisi
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
-Status: SELECTED
-Human Selection: Explicit Human Option B on 2026-08-09
-Selected substantive unit:
-  B — GOV-AUD-03 / Issue #19 最小単位
-Scope:
-  判定スナップショット訂正の承認者
-FindingCode: HOLD / DO NOT CREATE
+Status: NOT SELECTED
+Depends on:
+  Decision-OP-3 Accepted / LOCKED / Option A
+  consistency: DOCS CONSISTENT（PR #146 Merge → Final CONSISTENT）
+Prior selections（CONSUMED）:
+  B — GOV-AUD-03（Accepted / Option E）
+  C — Decision-OP-3（Accepted / LOCKED / Option A）
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 ```
 
 ## Human Selection
 
 ```text
-Selected: B
-GOV-AUD-03 / Issue #19 最小単位
-Scope: 判定スナップショット訂正の承認者
+Selected: NOT SELECTED
+Awaiting: Explicit Human Option after OP-3 lock
 ```
 
-理由（Human）:
+理由（process）:
 
 ```text
-DEC-009 はすでに保存タイミングが Accepted 済みであり、
-A（DEC-009 再選定）の優先度は低い。
-次に進めるなら、AssessmentSnapshot の訂正時に
-誰が承認するかという未決定の責任境界を 1 件だけ閉じる方が自然。
+Decision-OP-3 の Acceptance / 整合確認を正本化したあと、
+新しい substantive unit を選ぶのが安全である。
+Agent は自動選定しない。
 ```
 
 ```text
+Prior selection C / Decision-OP-3: CONSUMED（Accepted / LOCKED / Option A）
+Prior selection B / GOV-AUD-03: CONSUMED（Accepted / Option E）
 Agent recommendation: NOT Human Selection evidence
-```
-
-## Notes
-
-```text
-DEC-009:
-  Human-attested Accepted（保存タイミング）
-  docs mirror 上の「未」表記同期は本選定の対象外（別 sync 可）
-FindingCode / A-5 / Implementation: HOLD（変更しない）
 ```
 
 ## Next
 
 ```text
-Next unit: GOV-AUD-03 Human Decision packet
-  → decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
-Implementation Start: HOLD
+1. PR #146 Merge（未マージなら）→ OP-3 Final CONSISTENT
+2. Human が packet から次 substantive unit を選ぶ
+FindingCode / A-5 / Implementation Start: HOLD
 ```

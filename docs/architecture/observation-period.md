@@ -198,12 +198,24 @@ Decision-OP-3（フィールド追加）は本純関数実装の前提にしな�
 Owner: Issue #24（Decision-OP-1 待ち）
 Technical contract (caller-supplied membership): FIXED in docs-only gate
 Institutional day count: HOLD
-SupportPlan field addition: OUT / Decision-OP-3
-Implementation Start: HOLD until Decision-OP-1 and Decision-OP-2 Accepted
+SupportPlan logical fields: Accepted / LOCKED / Decision-OP-3 Option A
+  → observation-period-schema-contract.md
+  periodFrom: REQUIRED
+  periodTo: REQUIRED
+Open-ended periodTo: NOT ADOPTED
+制度日数・既定観察窓の domain 埋め込み: NOT ADOPTED
+evaluateObservationPeriodMembership: UNCHANGED
+Consistency: decision-op-3-canonicalization-consistency-check.md
+Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO
+duration_days invention: FORBIDDEN
+FindingCode / A-5: HOLD
 ```
+
+
 
 ## 実装配置（Decision Accepted 後）
 
