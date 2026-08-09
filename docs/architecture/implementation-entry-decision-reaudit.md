@@ -181,7 +181,7 @@ save / Schema / SharePoint: NOT in this re-audit start
 
 | ID | 状態 | Entry |
 |---|---|---|
-| Decision-OP-3 | HOLD | Observation Schema / 制度日数 / 開放終端 |
+| Decision-OP-3 | **Accepted / Option A** | periodFrom/periodTo required；制度日数 NOT ADOPTED；開放終端 NOT ADOPTED；実装 HOLD |
 | DEC-6 SharePoint column conversion | HOLD | Adapter Entry |
 | Open-end `periodTo` / RSV `effectiveTo` | HOLD | 別 Decision 要 |
 

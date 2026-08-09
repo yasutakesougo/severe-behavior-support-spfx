@@ -87,11 +87,13 @@ GOV-AUD-03: **Accepted** / Option E（[`decision-gov-aud-03-snapshot-correction-
   訂正承認者: 当面 application 層対象外
   具体的な承認ロール: NOT ADOPTED / NOT DEFINED
 PR #145: MERGED（`f7448d2…` / head `ef738ed…`）
-Next substantive unit: **SELECTED / C / Decision-OP-3**
-  Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
-  Open-points: [`decision-op-3-open-points-extraction.md`](./decision-op-3-open-points-extraction.md)
-Current single gate: **Decision-OP-3 Human Decision**
-Decision packet: [`decision-op-3-observation-period-schema-decision-packet.md`](./decision-op-3-observation-period-schema-decision-packet.md)（READY）
+Decision-OP-3: **Accepted** / Option A（[`decision-op-3-observation-period-schema-acceptance.md`](./decision-op-3-observation-period-schema-acceptance.md)）
+  Logical Schema: periodFrom / periodTo（両端必須）
+  Open-ended periodTo: NOT ADOPTED
+  Institutional day count in domain: NOT ADOPTED
+  Membership function: UNCHANGED
+  Logical contract: [`observation-period-schema-contract.md`](./observation-period-schema-contract.md)
+Current single gate: **次 substantive unit 選定（NOT SELECTED）**
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -106,6 +108,7 @@ Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
+
 
 
 
@@ -244,7 +247,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-FC-4** | Catalog version identifier contract | **Accepted / Option C**。Complete identifier logical contract（一意性・opaque・edition対応・reuse禁止・fail-closed）。正本: [`decision-fc-4-catalog-version-identifier-contract.md`](./decision-fc-4-catalog-version-identifier-contract.md) | FC-3 Accepted（Option C） | UUID/hash/semver/DEC番号・schema・storage・provider・値一覧は決めない | **Decision-FC-5** Accepted |
 | **Decision-FC-5** | Catalog version identifier representation ownership | **Accepted / Option C**。Split ownership with explicit syntax-validation ceiling（business = Issue #8 change control / technical = Accepted profile 後の non-semantic syntax validation のみ）。正本: [`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md) | FC-4 Accepted（Option C） | UUID/hash/semver 採択・値・schema・provider・実装は決めない | **Decision-FC-6** Accepted |
 | **Decision-FC-6** | businessOwnershipRef logical contract | **Accepted / Option C**。Complete businessOwnershipRef logical contract（ownershipLedgerRef / catalogEditionRef・1:1 identifier 対応・immutable・fail-closed）。正本: [`decision-fc-6-business-ownership-ref-logical-contract.md`](./decision-fc-6-business-ownership-ref-logical-contract.md) | FC-3 / FC-5 Accepted | DEC 番号・値一覧・representation strategy・schema・provider・実装は決めない | DEC 本文 / strategy / materialization は別 Human Start。Implementation HOLD。Stale PR #126 は Merge しない |
-| **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | **packet READY**。未決定点抽出済み。メンバシップ純関数は完了・UNCHANGED。日数発明禁止。正本: [`decision-op-3-open-points-extraction.md`](./decision-op-3-open-points-extraction.md) / [`decision-op-3-observation-period-schema-decision-packet.md`](./decision-op-3-observation-period-schema-decision-packet.md) | Issue #24（メンバシップ）/ #26（Schema 関連） | OP-1/OP-2 Accepted。既存 `evaluateObservationPeriodMembership` を変更しない。GOV-RULE-06 と混ぜない | Human が A〜E を選択 |
+| **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | **Accepted / Option A**。periodFrom / periodTo 両端必須。開放終端 NOT ADOPTED。制度日数 domain 埋め込み NOT ADOPTED。純関数 UNCHANGED。正本: [`decision-op-3-observation-period-schema-acceptance.md`](./decision-op-3-observation-period-schema-acceptance.md) / [`observation-period-schema-contract.md`](./observation-period-schema-contract.md) | Issue #24（メンバシップ）/ #26（Schema 関連） | OP-1/OP-2 Accepted。GOV-RULE-06 と混ぜない。日数発明禁止 | Schema/code Implementation は別 Human GO。SharePoint 列は別 Decision |
 | **Decision-RC-1 / GOV-RULE-06** | 見直し周期 practice cadence（「3ヶ月に1回程度」） | **Accepted**（2026-08-09）。calendar-month cadence · approximate。正本: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) | Issue #16 / #19（判断）・#24（相対判定との分離維持） | `duration_days=90` へ変換しない。GOV-RULE-07/08 と混ぜない | Schema/実装は別 Entry + Human Implementation Start。既存 `evaluateReviewDueRelativeToAsOf` UNCHANGED |
 | **Decision-RC-2 / GOV-RULE-05** | 見直し周期の基準日 | **Accepted**（2026-08-09）。初回=支援計画の有効開始日 / 2回目以降=前回見直し日。正本: [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) | Issue #16 / #19（判断）・#24（相対判定との分離維持） | GOV-RULE-06 と分離維持。due/overdue・通知・物理列は決めない | Schema/算出実装は別 Entry。`evaluateReviewDueRelativeToAsOf` UNCHANGED |
 | **Decision-RC-3 / GOV-RULE-07** | 通知開始時期 | **Accepted**（2026-08-09）/ Option C。見直し対象暦月に入ったら通知 / precision = approximate。正本: [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md) / [`review-notice-contract.md`](./review-notice-contract.md) / packet [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06 Accepted 前提。GOV-RULE-08 / RD-3 と混ぜない。日数変換禁止 | 通知実装は別 Entry + Human Implementation Start。`evaluateReviewDueRelativeToAsOf` UNCHANGED |
@@ -376,12 +379,13 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  Decision-OP-3 Human Decision
-  = 観察期間論理 Schema 表現（A/B/C/D/E）
-  open-points: decision-op-3-open-points-extraction.md
-  packet: decision-op-3-observation-period-schema-decision-packet.md
-Next substantive unit: SELECTED / C / Decision-OP-3
-GOV-AUD-03: Accepted / Option E（CONSUMED）
+  次 substantive unit 選定（NOT SELECTED）
+Decision-OP-3: Accepted / Option A
+  periodFrom / periodTo required
+  open-end NOT ADOPTED
+  institutional day count NOT ADOPTED
+  membership UNCHANGED
+GOV-AUD-03: Accepted / Option E
 DEC-008: Accepted / LOCKED / Issue #8 comment 5229571943
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD / DO NOT CREATE
@@ -390,6 +394,7 @@ A-5: HOLD
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 

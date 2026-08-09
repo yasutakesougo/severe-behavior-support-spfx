@@ -16,19 +16,23 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-OP-3
 Kind: Human Decision packet
-Status: READY_FOR_HUMAN_DECISION
-Owner candidates: Issue #24（メンバシップ）/ Issue #26（Schema 関連・要 Human 確認）
-Membership contract: observation-period.md（UNCHANGED unless Human opens U3）
+Status: CONSUMED（Human Decision Accepted / Option A）
+Accepted 正本: decision-op-3-observation-period-schema-acceptance.md
+Logical contract: observation-period-schema-contract.md
+Owner candidates: Issue #24（メンバシップ）/ Issue #26（Schema 関連）
+Membership contract: observation-period.md（UNCHANGED）
 main baseline: f7448d245d5744940c0b0f921b5aca57b18cb32d
 PR #145 / GOV-AUD-03: MERGED
-Selected via: next substantive unit C（Human recommended）
+Selected via: next substantive unit C
 duration_days invention: FORBIDDEN
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Agent recommendation: Option A（日数非発明・現行純関数整合）
+Agent recommendation（historical）: Option A
+Human Selected: Option A
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
@@ -154,36 +158,37 @@ C. 開放終端を許す（メンバシップ契約の別 GO が必要）
 D. その他（明示）
 E. まだ決めない / HOLD
 
-答え: （Human 記入）
-D の場合の内容: （Human 記入）
-制度日数を採る場合の日数と根拠: （Human 記入 / 無いなら NOT ADOPTED）
+答え: A（2026-08-09）
+Acceptance: decision-op-3-observation-period-schema-acceptance.md
+Logical contract: observation-period-schema-contract.md
 ```
 
 ## 6. After Decision
 
 | Selected | Next |
 |---|---|
-| A | Acceptance + 論理 Schema 契約 docs。純関数 UNCHANGED。SP 列は別 |
+| **A（SELECTED）** | Acceptance + 論理 Schema 契約 docs。純関数 UNCHANGED。SP 列は別 |
 | B | Acceptance（フィールド追加 NOT ADOPTED）。caller-supplied 維持 |
 | C | Acceptance + メンバシップ開放終端の別 Decision を必須化 |
 | D | Human 明示内容で Acceptance |
 | E | HOLD |
 
-いずれでも自動開始しない:
+維持:
 
 ```text
 日数・期限の発明: FORBIDDEN
-evaluateObservationPeriodMembership 破壊: FORBIDDEN
+evaluateObservationPeriodMembership: UNCHANGED
 FindingCode / A-5 / Implementation: HOLD
 SharePoint / Deploy: NO-GO
+次 substantive unit: NOT SELECTED
 ```
 
 ## 7. Gate
 
 ```text
-Decision-OP-3 open-points: READY
-Decision-OP-3 packet: READY_FOR_HUMAN_DECISION
-Agent recommendation: A
-Human Decision: PENDING
+Decision-OP-3 packet: CONSUMED / Accepted Option A
+Logical Schema: periodFrom / periodTo required
+Open-ended periodTo: NOT ADOPTED
+Institutional day count in domain: NOT ADOPTED
 Implementation Start: HOLD
 ```
