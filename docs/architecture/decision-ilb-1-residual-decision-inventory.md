@@ -33,7 +33,7 @@ Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-
 Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（Decision-AS-SP-PLACEMENT-1 Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1）
 Seventeenth residual Decision: SELECTED / A — Tenant confirmation GO（Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
 Eighteenth residual Decision: SELECTED — Tenant confirmation execution authorization（Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
-Nineteenth residual Decision: SELECTED — New SPFx deployment target reuse（Decision-AS-TARGET-REUSE-1 compare OPEN / NOT ACCEPTED；A/B/HOLD）
+Nineteenth residual Decision: SELECTED / CONSUMED — New SPFx deployment target reuse（Decision-AS-TARGET-REUSE-1 Accepted / LOCKED / B）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -45,11 +45,12 @@ DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）
 Placement confirmation rules: Accepted / LOCKED（SV-1+LV-1+CN-1+SC-1）
 Tenant confirmation GO boundary: Accepted / LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: Accepted / LOCKED（ES-1+TB-1+EO-1+FG-1）
-DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
-Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）OBSERVED
+Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B（existing = reference only）
+DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
+Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
 New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
-Reuse existing /sites/welfare for new SPFx: NOT DECIDED
-New SPFx Value Acceptance: NOT OPEN（blocked by TARGET-REUSE）
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
+Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -154,15 +155,15 @@ Order:
      values: NOT CONFIRMED / HOLD
  18. Seventeenth residual: Tenant confirmation GO（DONE / CONSUMED；Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
  19. Eighteenth residual: Tenant confirmation execution authorization（DONE / CONSUMED；Decision-AS-TENANT-CONFIRM-EXEC-1 Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1）
- 20. Nineteenth residual: New SPFx deployment target reuse（SELECTED；Decision-AS-TARGET-REUSE-1 compare OPEN / NOT ACCEPTED；A/B/HOLD）
+ 20. Nineteenth residual: New SPFx deployment target reuse（DONE / CONSUMED；Decision-AS-TARGET-REUSE-1 Accepted / LOCKED / B）
      evidence: tenant-confirmation-daily-activity-records-required-fields-evidence.md
-       （OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE）
-     IR: decision-assessment-snapshot-pr-181-independent-review.md（HOLD / F-001）
+       （OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY）
+     IR: decision-assessment-snapshot-pr-181-independent-review.md（F-001 ADDRESSED）
      New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
-     Reuse existing /sites/welfare for new SPFx: NOT DECIDED
-     Value Acceptance: NOT OPEN
+     Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
+     Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
      execution: IN PROGRESS / READ-ONLY
-     remaining examples: post-retention / DEC-015
+     remaining examples: post-retention / DEC-015 / new SPFx Site·List preparation Decision
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
@@ -175,11 +176,12 @@ DEC-6 mapping rules: LOCKED（LF-1+RW-1+MF-1+VR-1）
 Placement confirmation rules: LOCKED（SV-1+LV-1+CN-1+SC-1）
 Tenant confirmation GO boundary: LOCKED（RO-1+EV-1+RB-1+XG-1）
 Tenant confirmation execution authorization: LOCKED（ES-1+TB-1+EO-1+FG-1）
+Decision-AS-TARGET-REUSE-1: LOCKED / B
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
-Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = OBSERVED / EXISTING-APP
+Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY
 New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
-Reuse existing /sites/welfare for new SPFx: NOT DECIDED
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```

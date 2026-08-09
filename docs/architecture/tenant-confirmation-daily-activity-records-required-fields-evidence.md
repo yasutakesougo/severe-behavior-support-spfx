@@ -7,16 +7,18 @@ Accepted / LOCKED 後に、実 SharePoint 画面から取得した **read-only �
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Primary-evidence observation record（EO-1 / EV-1）
-Status: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
+Status: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Decision basis:
   Decision-AS-TENANT-CONFIRM-1 = Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1
   Decision-AS-TENANT-CONFIRM-EXEC-1 = Accepted / LOCKED / ES-1+TB-1+EO-1+FG-1
   Decision-AS-SP-PLACEMENT-1 = Accepted / LOCKED / SV-1+LV-1+CN-1+SC-1
+  Decision-AS-TARGET-REUSE-1 = Accepted / LOCKED / B
 
 Environment meaning:
-  Observed existing environment = 現在運用中の強度行動障害支援アプリ環境
+  Observed existing environment = 現在運用中の強度行動障害支援アプリ環境（reference only）
   New SPFx deployment target = NOT SELECTED / NOT CREATED / HOLD
-  Reuse existing /sites/welfare for new SPFx = NOT DECIDED
+  Reuse existing /sites/welfare for new SPFx = NOT ADOPTED（B）
+  Value Acceptance for /sites/welfare as new-SPFx target = NOT APPLICABLE
 
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Mutation: NONE
@@ -28,10 +30,10 @@ FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
 
-**本記録は既存アプリ環境の一次 evidence である。**
+**本記録は既存アプリ環境の一次 evidence（reference）である。**
 新 SPFx の deployment target / 環境値 Acceptance ではない。
-既存 `/sites/welfare` を新 SPFx で再利用するかは、別 Human Decision
-（Decision-AS-TARGET-REUSE-1）で先に判断する。
+Decision-AS-TARGET-REUSE-1 = **Accepted / LOCKED / B** により、
+既存 `/sites/welfare` は新 SPFx で再利用しない（reference only）。
 
 ## 1. Observation summary
 
@@ -51,8 +53,8 @@ Fail-closed: 必須チェックが無い列は本 evidence に含めない
 | Required application fields | UserCode / RecordDate / TimeSlot / Observation / Behavior | **OBSERVED / EXISTING-APP** |
 | Internal Names（required 5） | 5 / 5 | **OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE** |
 | New SPFx deployment target | — | **NOT SELECTED / NOT CREATED / HOLD** |
-| Reuse for new SPFx | — | **NOT DECIDED** |
-| New SPFx Value Acceptance | — | **NOT OPEN（blocked by TARGET-REUSE）** |
+| Reuse for new SPFx | — | **NOT ADOPTED（B）** |
+| Value Acceptance for /sites/welfare as new-SPFx target | — | **NOT APPLICABLE** |
 
 ## 2. Required fields（画面上「必須」チェックあり）
 
@@ -106,8 +108,11 @@ This evidence record:
   does NOT write environment values into repository logical mapping contracts
   does NOT invent missing Internal Names / types / required flags
 
-Before any new-SPFx Value Acceptance:
-  Decision-AS-TARGET-REUSE-1 must be decided（A / B / HOLD）
+Before any new-SPFx deployment target values:
+  Decision-AS-TARGET-REUSE-1 = Accepted / LOCKED / B
+  → existing welfare env is reference only
+  → new Site / List must be separately prepared（NOT CREATED / HOLD）
+  → Value Acceptance for /sites/welfare as new-SPFx target = NOT APPLICABLE
 ```
 
 ## 5. Explicit non-authorization
@@ -132,19 +137,15 @@ This evidence does NOT authorize:
 ## 6. Next
 
 ```text
-Evidence status: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
+Evidence status: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
+Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
 New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
-Reuse existing /sites/welfare for new SPFx: NOT DECIDED
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
+Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 
-Next Human gate:
-  Decision-AS-TARGET-REUSE-1
-  A — reuse existing /sites/welfare + DailyActivityRecords as new SPFx target
-  B — existing env = reference evidence only; new Site/List separately
-  HOLD — not decided yet
-
-Until TARGET-REUSE is decided:
-  New SPFx Value Acceptance: NOT OPEN
-  Tenant confirmation execution: IN PROGRESS / READ-ONLY
-  Mutation: NONE
-  Implementation Start: HOLD
+Still NO-GO / HOLD:
+  new SPFx Site / List creation
+  Implementation Start
+  Mutation
+  Deploy / real data
 ```

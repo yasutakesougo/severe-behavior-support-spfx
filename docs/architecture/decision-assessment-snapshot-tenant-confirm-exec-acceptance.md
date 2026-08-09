@@ -48,8 +48,8 @@ Concrete values（本 Acceptance では埋めない）:
 Tenant confirmation execution:
   IN PROGRESS / READ-ONLY
   （DailyActivityRecords required-fields evidence =
-    OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE。
-    次 gate は Decision-AS-TARGET-REUSE-1。Value Acceptance は未開放）
+    OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY。
+    Decision-AS-TARGET-REUSE-1 = Accepted / LOCKED / B）
 
 SP-PLACEMENT / DEC6-MAPPING / SP-ADAPTER / APP-SAVE / TENANT-CONFIRM GO:
   UNCHANGED / LOCKED（再 Decision しない）
@@ -148,10 +148,12 @@ NOT SELECTED:
 具体値・実行完了（LOCKED として埋めない / 完了扱いにしない）:
 
 ```text
-Observed existing environment: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
+Observed existing environment:
+  OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
   → tenant-confirmation-daily-activity-records-required-fields-evidence.md
+Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
 New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
-Reuse existing /sites/welfare for new SPFx: NOT DECIDED
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 ```
 
@@ -208,14 +210,14 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-TENANT-CONFIRM-EXEC-1: Accepted / LOCKED / ES-1 + TB-1 + EO-1 + FG-1
+Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
+  → decision-assessment-snapshot-target-reuse-acceptance.md
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 DailyActivityRecords required-fields evidence:
-  OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE
-  → tenant-confirmation-daily-activity-records-required-fields-evidence.md
-Next Human gate: Decision-AS-TARGET-REUSE-1（OPEN / NOT ACCEPTED；A/B/HOLD）
+  OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
-Reuse existing /sites/welfare for new SPFx: NOT DECIDED
-New SPFx Value Acceptance: NOT OPEN
+Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
+Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes / List / column creation: NO-GO
