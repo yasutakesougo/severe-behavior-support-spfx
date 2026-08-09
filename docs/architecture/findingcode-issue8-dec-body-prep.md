@@ -141,7 +141,8 @@ FindingCode:
 | BS-003 | 支援手順記録に必要な記録項目が不足している | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
 | BS-004 | 想定結果が得られずチーム再確認・見直しが必要 | NOTICE（定期モニタリング） | **NOT ADOPTED** | **NONE**（catalog OUT） | モニタリング会議・見直しで管理 | **FIXED** |
 | BS-005 | 計画に沿って支援し手順記録で経過観察している（正常サイクル） | OTHER（通常運用） | **NOT ADOPTED** | **NONE**（catalog OUT） | 手順記録とモニタリングで管理 | **FIXED** |
-| BS-006 | （Human が提示） | | | | | **OPEN** |
+| BS-006 | モニタリング実施と計画見直し・更新結果を記録した | OTHER（監査証跡） | **NOT ADOPTED** | **NONE**（catalog OUT） | 監査証跡・実績記録として保持 | **FIXED** |
+| BS-007 | （Human が提示） | | | | | **OPEN** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
 ## 確定済み — BS-002
@@ -545,6 +546,8 @@ DEC number: PENDING — Human selection（A-4）
      （NOTICE / 定期モニタリング吸収 / Finding NOT ADOPTED / catalog OUT）
    - BS-005: 計画に沿って支援し手順記録で経過観察している（正常サイクル）
      （OTHER / Finding ではない / catalog OUT）
+   - BS-006: モニタリング実施と計画見直し・更新結果を記録した
+     （OTHER / 監査証跡 / Finding NOT ADOPTED / catalog OUT）
    - （その他 NOT ADOPTED 行）
 
 4. 変更管理
@@ -568,9 +571,12 @@ BS-002: FIXED（HARD GATE / catalog OUT）
 BS-003: FIXED（HARD GATE / catalog OUT）
 BS-004: FIXED（NOTICE / 定期モニタリング吸収 / catalog OUT）
 BS-005: FIXED（OTHER / 正常業務サイクル / catalog OUT）
-BS-001〜005: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
-BS-006: OPEN — Human 提示待ち
+BS-006: FIXED（OTHER / 監査証跡 / catalog OUT）
+BS-001〜006: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
+BS-007: OPEN — Human 提示待ち
 Finding ADOPTED 件数: 0（まだ未提示）
+Boundary: 監査上必要 ≠ Finding
+Audit save details: separate audit / evidence contract（FindingCode ではない）
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -582,9 +588,10 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-006** を同じ形式で1件書いてください
-2. 正常サイクル（BS-005）・hard gate（BS-001〜003）・モニタリング吸収（BS-004）に載るものは Finding にしない
-3. Finding: ADOPTED は、それらに吸収できないものだけ検討
+1. **BS-007** を同じ形式で1件書いてください
+2. hard gate / モニタリング / 正常サイクル / 監査証跡に載るものは Finding にしない
+3. Finding: ADOPTED は、未解決課題として継続追跡が必要なものだけ検討
 4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
 
-Agent は FindingCode 名を付けません。BS-006 の中身を勝手に書きません。
+Agent は FindingCode 名を付けません。BS-007 の中身を勝手に書きません。
+監査保存項目の詳細も、ここでは決めません。
