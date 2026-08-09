@@ -194,6 +194,7 @@ MUST NOT start from this Acceptance alone:
 Decision-AS-SP-ADAPTER-1: Accepted / LOCKED / PB-1 + EM-1 + CV-1 + D6-1 + UP-1
 Independent Review: PASS（decision-assessment-snapshot-sp-adapter-independent-review.md）
   P0=0 / P1=0 / P2=0
+Human Ready Decision: A — Ready 化（Explicit Human Ready on 2026-08-09）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 DEC-6 concrete mapping: NOT DECIDED
@@ -203,12 +204,6 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Next substantive unit: NOT SELECTED by this Acceptance
 ```
 
-Live gate（Ready / Merge）は repository docs に書かない
+Live gate（Ready / Merge 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
-本 Acceptance 時点の Human 待ち（PR / Issue 側）:
-
-```text
-Status: READY_FOR_HUMAN_READY_DECISION
-Ready: NOT RUN
-Merge: NOT RUN
-```
+Merge は別 Human 判断。

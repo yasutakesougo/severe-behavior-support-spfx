@@ -30,18 +30,12 @@ FindingCode: HOLD
 A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Deploy / real data / real tenant: NO-GO
-Ready / Merge: NOT RUN（Human）
+Human Ready Decision: A — Ready 化（Explicit Human Ready on 2026-08-09）
+Merge: NOT RUN（別 Human 判断）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
-本 Review 時点の live gate 要約（PR / Issue 側）:
-
-```text
-Status: READY_FOR_HUMAN_READY_DECISION
-Ready: NOT RUN
-Merge: NOT RUN
-```
 
 Related:
 
@@ -142,12 +136,13 @@ Do NOT from this Independent Review alone:
 ## 6. Next
 
 ```text
-Independent Review: PASS
-Decision-AS-SP-ADAPTER-1: Accepted / LOCKED
-Status: READY_FOR_HUMAN_READY_DECISION
-Ready: NOT RUN（Human）
-Merge: NOT RUN（Human）
+Independent Review: PASS（reviewed HEAD 5efdd79…；IR 文書追記は meaning-preserving）
+Human Ready Decision: A — Ready 化へ進む（Explicit Human Ready on 2026-08-09）
+Merge: NOT RUN（別 Human 判断）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 DEC-6 concrete mapping: NOT DECIDED
 ```
+
+Live gate（Ready / Merge 進行）の詳細は PR / Issue 側。
+本 Review は Merge を実行しない。
