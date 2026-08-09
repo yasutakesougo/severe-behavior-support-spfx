@@ -5,7 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: bb3f65dc9a2d87052cbdbaccd0bedfa618106f57
 Decision kind: residual substantive-unit selection only
 Selected: A — SharePoint / adapter
-Status: SELECTED / NOT IMPLEMENTATION START
+Status: SELECTED / CONSUMED（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED）
 Human Selection: Explicit A on 2026-08-09
 ```
 
@@ -20,12 +20,12 @@ Meaning:
   application save contract と SharePoint persistence adapter
   の責務境界（Decision-AS-SP-ADAPTER-1）とする。
   本記録は選定のみであり、具体設計・実装・列写像を決めない。
+  （境界は後続 Decision-AS-SP-ADAPTER-1 で Accepted）
 ```
 
-## Explicit non-authorization
+## Explicit non-authorization（selection 時点 / 実装は継続 HOLD）
 
 ```text
-Decision-AS-SP-ADAPTER-1 concrete boundary: HOLD / NOT DECIDED
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 DEC-6 concrete mapping: NOT DECIDED
@@ -65,23 +65,19 @@ DEC-009 / Decision-AS-APP-SAVE-1（SC-1 + FR-1）は再 Decision しない。
 ## Next gate
 
 ```text
-Next action:
-  SharePoint / adapter read-only Decision packet / compare
-  → decision-assessment-snapshot-sp-adapter-packet.md
-  Focus（Decision-AS-SP-ADAPTER-1）:
-    port の入力/出力境界
-    SharePoint固有エラー → FR-1 の変換責務
-    read/write conversion の責務位置
-    DEC-6 との関係（具体写像は決めない）
-    persistence unavailable 時の fail-closed
+Selection CONSUMED → Decision-AS-SP-ADAPTER-1 Accepted / LOCKED
+  decision-assessment-snapshot-sp-adapter-acceptance.md
+  Port I/O                 = PB-1
+  Error mapping            = EM-1
+  Conversion location      = CV-1
+  DEC-6 relation           = D6-1
+  Persistence unavailable  = UP-1
 
-Not allowed from this document alone:
-  accepting adapter boundary options as LOCKED
-  modifying TypeScript / application / adapter / SharePoint code
-  Site URL / List / Internal Name / column invention
-  DEC-6 concrete mapping Accepted
-  FindingCode / A-5
-  post-retention deletion
+Still HOLD:
   Implementation Start
-  Deploy / real data
+  SharePoint / adapter / application code
+  DEC-6 concrete mapping
+  Schema ID / schemaVersion / dtoVersion code assignment
+  FindingCode / A-5
+Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
