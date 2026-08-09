@@ -167,9 +167,13 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-TARGET-REUSE-1: Accepted / LOCKED / B
+Decision-AS-NEW-TARGET-PROVISION-1: Accepted / LOCKED / ST-1 + LT-1 + NM-1 + EX-1
+  → decision-assessment-snapshot-new-target-provisioning-acceptance.md
 Observed existing environment: REFERENCE ONLY
-New SPFx deployment target: NOT SELECTED / NOT CREATED / HOLD
+New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
+Concrete Site / List / Internal Names: NOT SELECTED / OPEN
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
+Site / List creation: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
