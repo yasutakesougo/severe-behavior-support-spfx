@@ -41,7 +41,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 |---|---|---|---|
 | **GOV-RULE-05** | 見直し周期の基準日 | cadence・通知・due/overdue | **Accepted** |
 | GOV-RULE-06 | practice cadence | 基準日 | **Accepted** |
-| GOV-RULE-07 | 何日前から注意を出すか | 基準日 | HOLD |
+| GOV-RULE-07 | 通知開始時期 | 基準日 | **Accepted**（Option C / [`review-notice-contract.md`](./review-notice-contract.md)） |
 | GOV-RULE-08 | 期限当日・期限超過の定義 | 基準日 | HOLD |
 | Decision-RD-3 | 接近窓・期限算出・超過後ポリシー | 基準日の一次表現 | HOLD |
 

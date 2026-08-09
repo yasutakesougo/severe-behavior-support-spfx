@@ -3,7 +3,8 @@
 この文書は、**GOV-RULE-07**（見直し通知開始時期）についての
 **Human Acceptance evidence** である。
 
-Decision packet: [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md)  
+Decision packet: [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md)
+
 論理契約: [`review-notice-contract.md`](./review-notice-contract.md)
 
 ```text

@@ -142,10 +142,10 @@ real data: PROHIBITED
 ```text
 Next automatic: NONE
 Still HOLD:
-  GOV-RULE-07
   GOV-RULE-08
   Decision-RD-3
   Implementation Entry / Start
+GOV-RULE-07: Accepted（別正本 / Option C）
 ```
 
 Agent は本 Acceptance を理由に due 算出実装・90日規則・FindingCode / A-5 へ自動進行しない。
