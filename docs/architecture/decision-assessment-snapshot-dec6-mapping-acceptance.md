@@ -178,6 +178,7 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-DEC6-MAPPING-1: Accepted / LOCKED / LF-1 + RW-1 + MF-1 + VR-1
+Human Ready Decision: A — Ready 化（Explicit Human Ready on 2026-08-09）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Site URL / List name / Internal Column Name: NOT DECIDED
@@ -185,6 +186,8 @@ Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Next substantive unit: NOT SELECTED by this Acceptance
-Ready: NOT RUN
-Merge: NOT RUN
 ```
+
+Live gate（Ready / Merge 進行）は repository docs に書かない
+（[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
+Merge は別 Human 判断。
