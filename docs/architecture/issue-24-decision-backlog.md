@@ -70,23 +70,33 @@ ReviewDueOverdue contract: Accepted logical（[`review-due-overdue-contract.md`]
 Decision packet GOV-RULE-08: CONSUMED（[`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md)）
 Implementation Entry Decision Re-audit: [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)（post GOV-RULE-05〜08）
 PR #139 / Implementation Entry Decision Re-audit: MERGED（merge `99c8b24f0fa22f502803f4ae772c976886aed261` / head `d58e947abdf97f011ac9054fec0058f143671b2f`）
-Current single gate: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
-Decision packet: [`decision-findingcode-a14-bundle-content-decision-packet.md`](./decision-findingcode-a14-bundle-content-decision-packet.md)
-Selected Option: C（[`decision-findingcode-option-c-selection.md`](./decision-findingcode-option-c-selection.md)）
-Issue #8 DEC body: **Accepted** / Option A / EMPTY（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
-BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
-A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019**
-A-4 review: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md)（SELECTED / DEC-019）
-Docs mirror ledger was DEC-001〜018；Finding catalog DEC = DEC-019
+Finding catalog DEC-019: **Accepted** / EMPTY / NOT ADOPTED（[`decision-findingcode-issue8-dec-body-acceptance.md`](./decision-findingcode-issue8-dec-body-acceptance.md)）
+A-1: NONE / A-2: N/A / A-3: N/A / A-4: **DEC-019** / A-5: OUT
+FindingCode 作成: DO NOT START
+DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
+  制度上の作成者: ACCEPTED = 実践研修修了者 = 支援計画シート等の制度上の作成者
+  独立した最終承認者: **NOT ADOPTED** → アプリ独自の最終承認者を設定しない
+  サービス管理責任者を最終承認者とする案: NOT ADOPTED / 不採用
+DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（READY_FOR_HUMAN_POST）
+DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（DOCS PASS / LIVE PENDING）
+Current single gate: **DEC-008 正本化完了（Issue #8 post + final consistency）**
+AI 要約を DEC-008 根拠に硬化: FORBIDDEN
+制度資料が支持しない承認フロー追加: FORBIDDEN
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
 hard due / overdue: OUT OF CURRENT SCOPE
-FindingCode value invention: FORBIDDEN
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
 Implementation Start: HOLD
+Next substantive unit: NOT SELECTED（正本化完了後に選定）
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
 ```
+
+
+
+
 
 上位入口:
 
@@ -225,6 +235,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-RC-4 / GOV-RULE-08** | 期限当日・期限超過の定義 | **Accepted**（2026-08-09）/ Option A / **NOT ADOPTED**。正本: [`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / packet [`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06/07 Accepted 前提。通知 ≠ overdue。`evaluateReviewDueRelativeToAsOf` UNCHANGED | hard due/overdue 実装 DO NOT START。再採択は新 Human Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
+| **DEC-008** | 支援計画シート役割（制度上の作成者 / 独立最終承認者） | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**（アプリ独自の最終承認者を設定しない）。正本: [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)。台帳: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)。整合: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md) | Issue #8 / DEC-008 | アプリ独自承認フローを追加しない。SupportPlan role-free 契約を壊さない | Issue #8 post + final consistency 後、次 substantive unit 選定 |
 
 ### Snapshot Entry Criteria（整理のみ・実装しない）
 
@@ -349,16 +360,27 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
-  = A-1〜A-4 bundle content
+  DEC-008 正本化完了
+  = Issue #8 ledger post + consistency check final PASS
+DEC-008: Accepted / LOCKED
+  制度上の作成者 = 実践研修修了者
+  独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
+Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Next substantive unit: NOT SELECTED
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
 
+
+
+
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
 **Issue `#29` physical definition / mapping alignment は Accepted / MERGED（PR #108）**。`#22B` PR #110 MERGED（62a43d7f…）。次工程は実 SharePoint adapter 別 Gate。SharePoint 実環境操作は NO-GO。
 SEV 系（FindingSeverity）の substantive line は DEC-018 不採用で区切り。Canonical は **COMPLETE（Issue #8 / DEC-018）**。ASSIGN / 型 / 実装は自動再開しない。
-**Decision-FC-1 = Accepted / Option B**。**Decision-FC-2〜FC-6 = Accepted / Option C**。値一覧・UUID/hash/semver・storage / provider は未決。Issue #8 FindingCode DEC 番号は UNASSIGNED。Stale PR #126 は Merge しない。Implementation HOLD。
+**Decision-FC-1 = Accepted / Option B**。**Decision-FC-2〜FC-6 = Accepted / Option C**。Finding catalog = DEC-019 EMPTY。値発明禁止。Stale PR #126 は Merge しない。Implementation HOLD。
+**DEC-008** は 3 軸分離。制度資格・最終承認者は未決。AI 要約を根拠にしない。
 AS-EC-1 は DEC-009 / GOV-AUD / Finding 境界が先。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
@@ -435,7 +457,7 @@ Issue #29 physical definition / mapping alignment: Accepted
 Canonicalization to main: MERGED（PR #108 / aa0e6fba7dd8abf32523c70232001b5ac78cfc1b）
 Dependency blocker（#29 mapping）: CLEARED
 Concrete Repository Entry Review: PASS（Issue #22 comment 5224544473）
-Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-6 Accepted。A-class structure Accepted（Bundle A-1〜A-4 / Separate A-5）。次は business catalog 内容 Human Decision。FC-7 NOT CREATED。実 SharePoint adapter は別 Gate / NO-GO
+Next: SEV-2-VOCAB Canonical COMPLETE（DEC-018）。FC-1〜FC-6 Accepted。Finding catalog DEC-019 EMPTY Accepted。次は DEC-008 実務中心者 Human Decision（A/B/C・推奨 C）。FC-7 NOT CREATED。実 SharePoint adapter は別 Gate / NO-GO
 Concrete repository / #22B synthetic: MERGED（PR #110 / 62a43d7fbb5b33f69e0f4adfbba405ab00c1fb81）
 Ready: YES（consumed）
 Merge: DONE
@@ -455,7 +477,13 @@ Decision-FC-4: Accepted / Option C（complete identifier logical contract）/ Im
 Decision-FC-5: Accepted / Option C（split ownership with explicit syntax-validation ceiling）/ Implementation HOLD
 Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contract）/ Implementation HOLD
 FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
-A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
+A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5
+Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
+DEC-008: **Accepted**（[`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)）
+  制度上の作成者 = 実践研修修了者
+  独立した最終承認者 = NOT ADOPTED
+
+
 Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）
 Decision-RC-2 / GOV-RULE-05: **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）
 GOV-RULE-07: **Accepted** / Option C（[`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md)）
@@ -466,6 +494,8 @@ ReviewNotice contract: Accepted logical（[`review-notice-contract.md`](./review
 ReviewDueOverdue contract: Accepted logical（[`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / not_adopted）
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
+FindingCode 作成: DO NOT START
+A-5: OUT
 Implementation Start: HOLD
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
@@ -475,16 +505,20 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. PR #135/#136/#137 MERGED 後状態（GOV-RULE-05/06/07 Accepted）を前提に固定する
-2. GOV-RULE-08 Decision packet を置き、Option A（hard due/overdue NOT ADOPTED）を Accepted する
-3. 90日 / 91日 overdue / 通知月=overdue を採択しない
-4. GOV-RULE-07 通知は informational のまま維持する
-5. evaluateReviewDueRelativeToAsOf は変更しない（technical helper）
-6. Implementation Start は HOLD を維持する（auto-start FORBIDDEN）
-7. FindingCode / FindingSeverity 内容は採択しない
+1. DEC-008 を Accepted / LOCKED として固定する
+2. 制度上の作成者 = 実践研修修了者 を ACCEPTED する
+3. 独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
+4. サービス管理責任者を最終承認者とする案 = NOT ADOPTED / 不採用
+5. Issue #8 台帳登録文面と正本化整合確認を置く
+6. FindingCode / A-5 / Implementation Start は HOLD を維持する
+7. SupportPlan role-free 技術契約は変更しない
 8. SharePoint 実環境 / M365 / Deploy / real data へ進まない
-9. src/** / tests/** は変更しない
+9. 次 substantive unit は正本化完了後に Human が選定する
 ```
+
+
+
+
 
 ## 変更禁止境界
 
