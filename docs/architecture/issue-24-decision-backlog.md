@@ -105,9 +105,14 @@ GOV-AUD-04: **Accepted / LOCKED / Option E**（[`decision-gov-aud-04-logical-del
   具体的な許可ロール: NOT ADOPTED / NOT DEFINED
   Consistency: [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
 PR #149: MERGED（`cb14c13…` / head `55112f4…`）
-Current single gate: **次 substantive unit 選定（NOT SELECTED）**
-  Selection packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)（OPEN）
-OUT: GOV-AUD-05 auto-start / FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
+Next substantive unit: **SELECTED / F / Decision-ILB-1**
+  Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
+  Scope: 制度要件とローカルルールの境界整理
+  Packet: [`decision-ilb-1-institutional-local-boundary-decision-packet.md`](./decision-ilb-1-institutional-local-boundary-decision-packet.md)
+  Inventory: [`decision-ilb-1-residual-decision-inventory.md`](./decision-ilb-1-residual-decision-inventory.md)（read-only / provisional）
+Current single gate: **Decision-ILB-1 Human Policy Accepted 待ち**
+OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
+  GOV-AUD-05 / RD-3 自動 Accepted / 日数・ロール・承認発明
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -118,7 +123,6 @@ hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -394,24 +398,22 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  次 substantive unit 選定（OPEN / NOT SELECTED）
+  Decision-ILB-1 Human Policy Accepted 待ち
+Next substantive unit: SELECTED / F
+  → decision-ilb-1-institutional-local-boundary-decision-packet.md
 GOV-AUD-04: Accepted / LOCKED / Option E / FINAL CONSISTENT
-  PR #149 MERGED（cb14c13… / head 55112f4…）
-  論理削除ロール: application 対象外
-  具体ロール: NOT ADOPTED / NOT DEFINED
+  PR #149 MERGED（cb14c13…）/ PR #150 MERGED（f97d072…）
 GOV-AUD-03: Accepted / Option E
 GOV-AUD-05: OUT / DO NOT START unless newly selected
-Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT（PR #146 / 42b251b…）
+Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT
 DEC-008 submit/return: Accepted / LOCKED / Option C / FINAL CONSISTENT
-  PR #147 MERGED（ce05cd0… / head 31e1df0…）
-DEC-008 core: Accepted / LOCKED / Issue #8 comment 5229571943
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD
 A-5: HOLD
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
+Classification Accepted（ILB-1 rows）: NOT YET
 ```
 
 
