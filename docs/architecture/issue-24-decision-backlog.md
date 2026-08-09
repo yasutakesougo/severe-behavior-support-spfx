@@ -53,6 +53,12 @@ Decision-FC-5: Accepted / Option C（split ownership with explicit syntax-valida
 Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contract）/ Implementation HOLD
 FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
 A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
+Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）。「3ヶ月に1回程度」/ calendar-month cadence / precision = approximate
+ReviewCadence contract: Accepted logical（[`review-cadence-contract.md`](./review-cadence-contract.md)）
+Source review: PASS（[`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md)）
+GOV-RULE-05 / 07 / 08: HOLD
+3ヶ月 → 90日 conversion: FORBIDDEN
+Implementation Start: HOLD
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -75,6 +81,10 @@ SharePoint / M365: 変更なし
 - [`decision-sev-2-purpose-source.md`](./decision-sev-2-purpose-source.md)
 - [`decision-sev-2-concept-inv.md`](./decision-sev-2-concept-inv.md)
 - [`decision-sev-2-vocab-not-adopted.md`](./decision-sev-2-vocab-not-adopted.md)
+- [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)
+- [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md)
+- [`review-cadence-contract.md`](./review-cadence-contract.md)
+- [`review-due.md`](./review-due.md)
 
 ## Phase 1 — read-only 再監査結果
 
@@ -129,6 +139,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | Review due RD-1/RD-2 | Accepted（ownership 表） | comment ID は ownership 表に未記載 |
 | RuleSetVersion RSV-1〜4 | Accepted（ownership 表） | comment ID は ownership 表に未記載 |
 | Issue #19 / GOV-AUD-01〜10 | 正式回答待ち | — |
+| Issue #16 / #19 / GOV-RULE-06 | 見直し周期 practice cadence | **Accepted** [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / source review PASS / contract Accepted |
 | Issue #8 / DEC-009 等 | Deferred 含む | — |
 
 ### 完了済み純関数（再オープンしない）
@@ -168,7 +179,11 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-FC-5** | Catalog version identifier representation ownership | **Accepted / Option C**。Split ownership with explicit syntax-validation ceiling（business = Issue #8 change control / technical = Accepted profile 後の non-semantic syntax validation のみ）。正本: [`decision-fc-5-catalog-version-identifier-representation-ownership.md`](./decision-fc-5-catalog-version-identifier-representation-ownership.md) | FC-4 Accepted（Option C） | UUID/hash/semver 採択・値・schema・provider・実装は決めない | **Decision-FC-6** Accepted |
 | **Decision-FC-6** | businessOwnershipRef logical contract | **Accepted / Option C**。Complete businessOwnershipRef logical contract（ownershipLedgerRef / catalogEditionRef・1:1 identifier 対応・immutable・fail-closed）。正本: [`decision-fc-6-business-ownership-ref-logical-contract.md`](./decision-fc-6-business-ownership-ref-logical-contract.md) | FC-3 / FC-5 Accepted | DEC 番号・値一覧・representation strategy・schema・provider・実装は決めない | DEC 本文 / strategy / materialization は別 Human Start。Implementation HOLD。Stale PR #126 は Merge しない |
 | **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | HOLD。メンバシップ純関数は完了。フィールド追加・制度日数・`periodTo` 開放終端は未決 | 別 Decision（所有は OP-1 で #24 メンバシップのみ確定。Schema は #26 関連） | OP-1/OP-2 Accepted 済み前提。既存 `evaluateObservationPeriodMembership` を変更しない | Schema/フィールド Decision Accepted 後の契約・（必要なら）別純関数。既存関数への制度値混入禁止 |
-| **Decision-RD-3** | 接近窓・制度日数・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決 | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止 |
+| **Decision-RC-1 / GOV-RULE-06** | 見直し周期 practice cadence（「3ヶ月に1回程度」） | **Accepted**（2026-08-09）。calendar-month cadence · approximate。正本: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) | Issue #16 / #19（判断）・#24（相対判定との分離維持） | `duration_days=90` へ変換しない。GOV-RULE-05/07/08 と混ぜない | Schema/実装は別 Entry + Human Implementation Start。既存 `evaluateReviewDueRelativeToAsOf` UNCHANGED |
+| **GOV-RULE-05** | 見直し周期の起算日 | **HOLD**。source review では未決定 | Issue #19 判断単位 | GOV-RULE-06 と分離 | 起算日 Decision 後に算出契約候補 |
+| **GOV-RULE-07** | 注意開始（何日前） | **HOLD**。source review では未決定 | Issue #19 判断単位 | GOV-RULE-06 / RD-3 と分離 | 通知ポリシー別単位 |
+| **GOV-RULE-08** | 期限当日・期限超過の定義 | **HOLD**。「3ヶ月に1回程度」だけでは決めない | Issue #19 判断単位 | practice cadence と超過定義を混同しない | RD-3 / 超過判定契約と整合させる別 Decision |
+| **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
 
 ### Snapshot Entry Criteria（整理のみ・実装しない）
@@ -242,12 +257,20 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | 実装（遷移〜候補） | PR #90 / #91 / #93 / #96 | **MERGED** |
 | AuditEvent 実保存 | Entry Criteria | **HOLD**（`GOV-AUD-06` / `DEC-011` + 書込先所有） |
 
-### E. OP-3 / RD-3
+### E. OP-3 / RD-3 / Review Cadence（GOV-RULE-06）
 
 | Decision | 完了済み（触らない） | 残 |
 |---|---|---|
 | OP-3 | `evaluateObservationPeriodMembership` | SupportPlan/SP 列、制度日数、開放終端（現行は `periodTo` 必須） |
-| RD-3 | `evaluateReviewDueRelativeToAsOf` | 接近窓、制度日数、期限算出、超過後ポリシー |
+| RD-3 | `evaluateReviewDueRelativeToAsOf` | 接近窓、期限算出、超過後ポリシー（**90日必須化を cadence 根拠にしない**） |
+| RC-1 / GOV-RULE-06 | **Accepted**（「3ヶ月に1回程度」/ approximate month cadence） | 実装・Schema は別 Entry。05/07/08・RD-3 は HOLD |
+| GOV-RULE-05 / 07 / 08 | — | 起算日・通知・超過定義は HOLD |
+
+```text
+Issue #16 duration_days-only design: REVISION CANDIDATE
+Issue #24 89/90/91 tests: MUST NOT REPRESENT THE 3-MONTH PRACTICE RULE
+  （残すなら day-based relative engine の技術境界テストへ降格）
+```
 
 ### F. AssessmentSnapshot Entry Criteria（Decision-AS-EC-1）
 
@@ -271,9 +294,11 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 10. Decision-FC-4    Catalog version identifier contract — **Accepted / Option C**（complete identifier logical contract）。Implementation HOLD
 11. Decision-FC-5    Catalog version identifier representation ownership — **Accepted / Option C**（split ownership with explicit syntax-validation ceiling）。Implementation HOLD
 12. Decision-FC-6    businessOwnershipRef logical contract — **Accepted / Option C**（complete businessOwnershipRef logical contract）。Implementation HOLD
-13. Decision-OP-3    Observation period Schema / 制度 / 開放終端
-14. Decision-RD-3    Review due 接近窓 / 算出 / 超過後
-15. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
+13. Decision-RC-1 / GOV-RULE-06  Review practice cadence（「3ヶ月に1回程度」）— **Accepted**
+14. GOV-RULE-05 / 07 / 08        起算日・通知・超過定義 — HOLD（06 と混ぜない）
+15. Decision-OP-3    Observation period Schema / 制度 / 開放終端
+16. Decision-RD-3    Review due 接近窓 / 算出 / 超過後（90日必須を cadence 根拠にしない）
+17. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
@@ -323,6 +348,9 @@ READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 - FindingSeverity 値の暗黙採択 / ローカル severity taxonomy 発明 / FindingCode 捏造
 - 既存許可3辺・完了済み純関数の再オープン改変
 - OP-3/RD-3 の制度値を既存メンバシップ/相対判定へ混入
+- GOV-RULE-06 を `duration_days = 90` へ変換して正式周期とすること
+- 89/90/91 日境界を「3ヶ月に1回程度」practice rule の根拠とすること
+- GOV-RULE-05 / 07 / 08 を GOV-RULE-06 と一括 Accepted すること
 - Snapshot 保存・DTO・SharePoint / SPFx / Schema / M365 / Deploy
 - Issue #24 Close
 - Decision の一括 Accepted 前提
@@ -371,6 +399,11 @@ Decision-FC-5: Accepted / Option C（split ownership with explicit syntax-valida
 Decision-FC-6: Accepted / Option C（complete businessOwnershipRef logical contract）/ Implementation HOLD
 FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision-exit-review.md) / [`fc-decision-exit-review-acceptance.md`](./fc-decision-exit-review-acceptance.md)）。FC-7 NOT CREATED
 A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
+Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）
+GOV-RULE-05 / 07 / 08: HOLD
+ReviewCadence contract: Accepted logical（[`review-cadence-contract.md`](./review-cadence-contract.md)）
+3ヶ月 → 90日 conversion: FORBIDDEN
+Implementation Start: HOLD
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO
@@ -379,15 +412,16 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. A-class structure（Bundle A-1〜A-4 / Separate A-5）を Accepted として正本化する
-2. FindingCode business catalog 内容（値・採番・mapping・DEC 番号）は採択しない
-3. A-5 representation strategy は分離維持し、自動選択しない
-4. Implementation Start は HOLD を維持する（auto-start FORBIDDEN）
-5. FC-7 を作らない
-6. Stale PR #126 は Merge しない
-7. FindingSeverity = "10+" / "18+" を採択しない
-8. SharePoint 実環境 / M365 / Deploy / real data へ進まない
-9. src/** / tests/** は変更しない
+1. GOV-RULE-06 source review を PASS として正本化する
+2. GOV-RULE-06 を Human Accepted として記録する（3ヶ月に1回程度 / month cadence / approximate）
+3. ReviewCadence 論理契約（month/3/approximate）を Accepted として固定する
+4. GOV-RULE-05 / 07 / 08 と RD-3 を分離したまま HOLD する
+5. duration_days=90 および 89/90/91 を正式3ヶ月規則とみなさない
+6. evaluateReviewDueRelativeToAsOf は変更しない
+7. Implementation Start は HOLD を維持する（auto-start FORBIDDEN）
+8. FindingCode / FindingSeverity 内容は採択しない
+9. SharePoint 実環境 / M365 / Deploy / real data へ進まない
+10. src/** / tests/** は変更しない
 ```
 
 ## 変更禁止境界
