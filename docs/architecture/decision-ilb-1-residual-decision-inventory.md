@@ -11,10 +11,13 @@ Decision packet: [`decision-ilb-1-institutional-local-boundary-decision-packet.m
 
 ```text
 Status: READ-ONLY INVENTORY / ROW CLASSIFICATIONS NOT ACCEPTED
-Human Policy 1–6: ACCEPTED（decision-ilb-1-human-policy-acceptance.md）
+Human Policy 1–6: ACCEPTED / FINAL CONSISTENT（decision-ilb-1-human-policy-acceptance.md）
   → 分類・判断の正本方針のみ Accepted
   → 本表の provisional 行は自動 Accepted しない
-main baseline: f97d072948ad3e68513193fc7e0e39c8026d7e50
+Consistency: decision-ilb-1-canonicalization-consistency-check.md
+main baseline: e2bd25667b23274270755bbd42866e73c501f09d
+PR #151: MERGED（e2bd256… / head 4f5a833…）
+First residual Decision selection: OPEN / NOT SELECTED
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
@@ -93,12 +96,14 @@ Do NOT:
   Implementation Start
 ```
 
-## 7. Next after Human Policy Accepted
+## 7. Next after Human Policy FINAL CONSISTENT
 
 ```text
 Order:
-  1. Human Policy Accepted（DONE）
+  1. Human Policy Accepted / FINAL CONSISTENT（DONE / PR #151）
   2. 制度根拠確認
   3. 個別 Decision を一件ずつ Human 選定・判定
+First residual Decision: NOT SELECTED
+  → decision-ilb-1-next-residual-decision-selection-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```

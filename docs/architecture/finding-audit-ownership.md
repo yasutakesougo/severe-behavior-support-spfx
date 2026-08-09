@@ -80,9 +80,12 @@ GOV-AUD-04 logical-delete role open-points（CONSUMED）: docs/architecture/deci
 GOV-AUD-04 logical-delete role Decision packet（CONSUMED / Option E）: docs/architecture/decision-gov-aud-04-logical-delete-role-decision-packet.md
 Next substantive unit selection（SELECTED / F / Decision-ILB-1）: docs/architecture/decision-next-substantive-unit-selection.md
 Next substantive unit selection packet（CONSUMED / F）: docs/architecture/decision-next-substantive-unit-selection-packet.md
-Decision-ILB-1 Human Policy Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-ilb-1-human-policy-acceptance.md
-Decision-ILB-1 institutional/local boundary packet（CONSUMED / Policy Accepted）: docs/architecture/decision-ilb-1-institutional-local-boundary-decision-packet.md
+Decision-ILB-1 Human Policy Acceptance（Accepted / LOCKED / Option A / FINAL CONSISTENT）: docs/architecture/decision-ilb-1-human-policy-acceptance.md
+Decision-ILB-1 canonicalization consistency check（FINAL CONSISTENT / PR #151）: docs/architecture/decision-ilb-1-canonicalization-consistency-check.md
+Decision-ILB-1 institutional/local boundary packet（CONSUMED / Policy Accepted / FINAL CONSISTENT）: docs/architecture/decision-ilb-1-institutional-local-boundary-decision-packet.md
 Decision-ILB-1 residual Decision inventory（read-only / row classifications provisional）: docs/architecture/decision-ilb-1-residual-decision-inventory.md
+Decision-ILB-1 next residual Decision selection（OPEN / NOT SELECTED）: docs/architecture/decision-ilb-1-next-residual-decision-selection.md
+Decision-ILB-1 next residual Decision selection packet（OPEN / NOT SELECTED）: docs/architecture/decision-ilb-1-next-residual-decision-selection-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 

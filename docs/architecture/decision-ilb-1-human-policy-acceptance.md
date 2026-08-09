@@ -14,6 +14,10 @@ Decision ID: Decision-ILB-1 / HUMAN_POLICY
 Status: Accepted / LOCKED
 Human Acceptance: Explicit Human Option A on 2026-08-09
 Selected Option: A
+Consistency: FINAL CONSISTENT
+PR #151: MERGED
+  merge commit: e2bd25667b23274270755bbd42866e73c501f09d
+  merged head: 4f5a8339bb95eb3cc2c5c72ef0c0846d9930c2e0
 
 LOCKED:
 
@@ -129,12 +133,22 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | inventory provisional 分類 | **provisional のまま** |
 | FindingCode / A-5 / Implementation | HOLD |
 
+## Consistency
+
+正本整合: [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)
+
+```text
+Consistency: FINAL CONSISTENT
+PR #151: MERGED（e2bd256… / head 4f5a833…）
+```
+
 ## Next
 
 ```text
-Decision-ILB-1 Human Policy: Accepted / LOCKED
+Decision-ILB-1 Human Policy: Accepted / LOCKED / FINAL CONSISTENT
 Next:
   制度根拠確認のうえ、個別 Decision を一件ずつ Human 選定・判定
-  （最初の個別 unit は別 Human Selection）
+  First residual Decision selection: OPEN / NOT SELECTED
+  → decision-ilb-1-next-residual-decision-selection-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```

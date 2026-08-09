@@ -229,10 +229,11 @@ HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 4. 実 SharePoint Audit adapter Gate（明示 Human GO のみ）
 
 **Current selected substantive unit:** F — Decision-ILB-1
-→ Human Policy **Accepted / Option A**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)）
+→ Human Policy **Accepted / Option A / FINAL CONSISTENT**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md) / [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)）
 Inventory provisional rows: **NOT Accepted**（一件ずつ判定）
+First residual Decision: **NOT SELECTED**（[`decision-ilb-1-next-residual-decision-selection-packet.md`](./decision-ilb-1-next-residual-decision-selection-packet.md)）
 
-**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E）
+**CONSUMED（次 unit として再選しない）:** Decision-OP-3 / GOV-AUD-03 / DEC-009 re-decision / DEC-008 submit-return（Option C） / GOV-AUD-04（Option E） / Decision-ILB-1 HUMAN_POLICY（Option A）
 
 **Do not next / DO NOT START:**
 
