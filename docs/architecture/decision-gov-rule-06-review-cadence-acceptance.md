@@ -19,11 +19,14 @@ Accepted cadence:
 Source review: PASS
 Independent Review (PR #135): PASS
 main baseline before acceptance write: 5cc03cffcdfbdd5c5a6e1ca9e1d9fbbaa4718a52
-GOV-RULE-05 / 07 / 08: HOLD（本 Acceptance に含めない）
+GOV-RULE-05 基準日: HOLD
+GOV-RULE-07 通知開始: HOLD
+GOV-RULE-08 due / overdue 定義: HOLD
+duration_days = 90: NOT AUTHORIZED
 Decision-RD-3: HOLD（接近窓・算出・超過後。本 Acceptance に含めない）
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-3ヶ月 → 90日 conversion: FORBIDDEN
+NOT derived: 90日 / 91日目 overdue / 3暦月自動違反
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
