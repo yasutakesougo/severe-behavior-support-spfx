@@ -288,7 +288,7 @@ AssessmentSnapshot完全契約のコード実装へ進む前に、次を満た�
 ```text
 1. 本技術設計がmainへマージ済み
 2. AssessmentSnapshotの所有IssueとPR境界が記録済み
-3. DEC-009の保存タイミングがAcceptedまたは実装対象外として明示済み
+3. DEC-009の保存タイミングがAcceptedまたは実装対象外として明示済み（**DONE** — Option A / LOCKED）
 4. GOV-AUD-03の訂正承認境界がAcceptedまたはapplication層対象外として明示済み（**DONE** — Option E / application 対象外）
 5. 完全なFinding契約またはfindingIds参照境界が確定済み
 6. サービス別NOT_APPLICABLE reason codeの正本またはHOLD方針が確定済み
@@ -304,7 +304,7 @@ Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先�
 - Result変換純粋関数
 - runtime validator
 - fixture・contract tests
-- `DEC-009`保存タイミング
+- `DEC-009`保存タイミング（**Accepted / LOCKED** — 実装は別 Human Implementation Start）
 - 保存・確定ロール
 - `GOV-AUD-03`訂正承認者（Accepted / Option E — application 対象外。ロール実装しない）
 - handoff連携タイミング

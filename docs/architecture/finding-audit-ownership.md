@@ -94,6 +94,11 @@ Decision-ILB-1 second residual Decision selection（SELECTED / A / GOV-AUD-05·D
 Decision-ILB-1 second residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-second-residual-decision-selection-packet.md
 GOV-AUD-05 / DEC-012 retention complete-deletion prohibition Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md
 Retention complete-deletion prohibition logical contract: docs/architecture/retention-complete-deletion-prohibition-contract.md
+Decision-ILB-1 third residual Decision selection（SELECTED / A / DEC-009）: docs/architecture/decision-ilb-1-third-residual-decision-selection.md
+Decision-ILB-1 third residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-third-residual-decision-selection-packet.md
+DEC-009 AssessmentSnapshot save-timing Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-dec-009-snapshot-save-timing-acceptance.md
+AssessmentSnapshot save-timing logical contract: docs/architecture/assessment-snapshot-save-timing-contract.md
+DEC-009 canonicalization consistency check（CONSISTENT docs-internal）: docs/architecture/decision-dec-009-canonicalization-consistency-check.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -171,7 +176,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 
 | Decision | 内容 | 正本 |
 |---|---|---|
-| `DEC-009` | AssessmentSnapshotの保存タイミング | Issue #8 / Issue #19 |
+| `DEC-009` | AssessmentSnapshotの保存タイミング | Issue #8 / Issue #19（**Accepted / LOCKED / Option A** — 下書き / 確定時保存 / 元確定保持＋新版 / 上書き NOT ADOPTED / 履歴保持。正本 [`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`assessment-snapshot-save-timing-contract.md`](./assessment-snapshot-save-timing-contract.md)） |
 | `GOV-AUD-01` | handoffの正本 | Issue #19 |
 | `GOV-AUD-02` | handoff状態変更ロール | Issue #19 |
 | `GOV-AUD-03` | Snapshot訂正承認者 | Issue #19（**Accepted / Option E** — application 対象外 / ロール NOT DEFINED。正本 [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |
@@ -182,6 +187,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `DEC-015` | バックアップ・復元責任者 | Issue #8 |
 
 保存期間中の完全削除禁止は Accepted（GOV-AUD-05 / DEC-012）。経過後の削除可否・自動削除・cleanup 実装は別 Decision / HOLD。
+DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 overall・Schema・保存実装は HOLD。
 具体ロール Binding や物理削除手順をコードへ埋め込まない（Implementation HOLD）。
 
 ### 所有が未確定の事項
