@@ -10,6 +10,7 @@ Owner: Issue #24
 PR letter: PR-J
 Kind: complete-contract domain implementation
 Implementation Start: GO（承認範囲のみ・Human A after Preflight PASS）
+GitHub PR: #168
 Selection: decision-ilb-1-tenth-residual-decision-selection.md
 Depends on:
   assessment-snapshot-result-design.md

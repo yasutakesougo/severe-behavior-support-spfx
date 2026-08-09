@@ -12,7 +12,7 @@ Status: Accepted as Entry #2 evidence（Option A）
 Implementation Start: GO（domain complete-contract only；Human A after Preflight PASS）
 Technical contract: assessment-snapshot-complete-contract.md
 Selection: decision-ilb-1-tenth-residual-decision-selection.md
-GitHub PR number: assigned by Implementation PR（PR-J）
+GitHub PR: #168
 SharePoint / DTO / Schema ID: DO NOT START
 FindingCode / A-5: HOLD
 ```
@@ -32,7 +32,7 @@ Issue #24 は Result 変換（狭域・永続なし / PR-H / GitHub PR #72）の
 ```text
 PR letter: PR-J
 Meaning: AssessmentSnapshot 完全契約実装の専用独立 PR 単位
-GitHub PR #: 未採番（Implementation Start / Human GO 後に採番）
+GitHub PR #: #168（Implementation Start GO）
 ```
 
 | 既存単位 | 字母 | 関係 |
