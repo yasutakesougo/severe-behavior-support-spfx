@@ -58,6 +58,18 @@ severe-behavior-support.support-plan.plan @ 1.0.0
 severe-behavior-support.support-plan.plan-version @ 1.0.0
 ```
 
+AssessmentSnapshot系の正式値（Decision-AS-SCHEMA-ID-1 / Decision-AS-SCHEMA-VERSION-1）:
+
+```text
+severe-behavior-support.assessment-snapshot.snapshot @ 1.0.0
+```
+
+```text
+NOTE:
+  上記は論理 Schema ID / Schema Version の Accepted 値である。
+  TypeScript / DTO / SharePoint への割当・実装は別 Human GO まで DO NOT START。
+```
+
 対応表のContract側正本: `docs/architecture/sharepoint-contract-mapping.md`
 
 ## 日付検証
