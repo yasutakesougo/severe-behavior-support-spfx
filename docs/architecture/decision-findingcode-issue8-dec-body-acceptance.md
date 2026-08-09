@@ -95,9 +95,8 @@ Future:
 ```text
 A-1〜A-4: closed for current EMPTY catalog scope
 A-5: OUT / separate later
-Issue #8 ledger registration of DEC-019:
-  docs: decision-dec-019-issue8-ledger-registration.md
-  live post: Human ownership action（PENDING）
+Issue #8 ledger registration of DEC-019: POSTED / comment 5229477058
+Consistency (main / Issue #8 / PR #141): CONSISTENT
 ```
 
 ## Acceptance boundary
@@ -132,16 +131,14 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 A-4: DEC-019 SELECTED
 PR #141: MERGED
-Next:
-  1. Issue #8 へ DEC-019 台帳登録（Human）
-     → decision-dec-019-issue8-ledger-registration.md
-  2. main / Issue #8 / PR #141 整合確認
-     → decision-dec-019-main-issue8-pr141-consistency-check.md
-  3. 矛盾がなければ次の substantive unit を新たに選ぶ
+Issue #8 DEC-019: POSTED / comment 5229477058
+Consistency (main / Issue #8 / PR #141): CONSISTENT
+次 substantive unit: NOT SELECTED（Human が新たに選ぶ）
 NOT automatic:
-  FindingCode 作成 / A-5 / Implementation Start
+  FindingCode 作成: DO NOT START
+  A-5: OUT
+  Implementation Start: HOLD
 Future re-open if new Human primary information requires Finding ADOPTED
-Implementation Start: HOLD
 ```
 
 Agent は本 Acceptance を理由に FindingCode 値・A-5・Implementation へ自動進行しない。

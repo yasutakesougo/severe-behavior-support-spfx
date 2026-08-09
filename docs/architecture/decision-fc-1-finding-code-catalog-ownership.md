@@ -17,7 +17,7 @@ Catalog ownership: Issue #8 / new DEC
 Kind: business DEC
 Implementation Start: HOLD
 Decision-FC-2: DO NOT START
-Issue #8 DEC number: DEC-019（Finding catalog EMPTY / NOT ADOPTED；live Issue #8 post PENDING Human）
+Issue #8 DEC number: DEC-019（Finding catalog EMPTY / NOT ADOPTED；comment 5229477058）
 main before this canonicalization: ecc7fcff4777a6c74ae41cea3d2125e8be95c4e9
 Prior packet head: 41c734f1e48ecff7627a026b9beca5ff481d5ef4
 Depends on: FindingIdentity assembly DONE（finding-identity-assembly.md / PR #66）
@@ -109,13 +109,13 @@ Option D:
 Issue #8 ledger 上の FindingCode catalog DEC 番号: DEC-019
 Meaning: Finding catalog = EMPTY / NOT ADOPTED
 A-1 values: NONE（値一覧は発明しない）
-Live Issue #8 comment: PENDING — Human
-Registration prep: decision-dec-019-issue8-ledger-registration.md
+Live Issue #8 comment: 5229477058
+Registration: decision-dec-019-issue8-ledger-registration.md
+Consistency: CONSISTENT（decision-dec-019-main-issue8-pr141-consistency-check.md）
 ```
 
 本 Accepted は「Issue #8 に新しい DEC を追加する」という **方式** を固定した。
-番号 **DEC-019** と EMPTY catalog 本文は、後続の Finding catalog Acceptance（PR #141）で確定した。
-Issue #8 実コメント投稿は Human 操作（正本 ownership）。
+番号 **DEC-019** と EMPTY catalog 本文は、後続の Finding catalog Acceptance（PR #141）で確定し、Issue #8 に投稿済み（comment `5229477058`）。
 
 ## Decision-FC-1 で決めないこと（維持）
 
@@ -163,8 +163,12 @@ Implementation Start: HOLD
 src/** / tests/**: 変更しない
 Decision-FC-2: DO NOT START
 FindingCode 値一覧 / enum / validator / fixture: DO NOT CREATE
-Issue #8 DEC number: DEC-019（EMPTY catalog；live post PENDING Human）
+Issue #8 DEC number: DEC-019（EMPTY catalog；comment 5229477058）
 FindingCode value invention: FORBIDDEN
+FindingCode 作成: DO NOT START
+A-5: OUT
+Implementation Start: HOLD
+次 substantive unit: NOT SELECTED
 Next after this canonicalization: Decision-FC-2 packet は別 Human Start（historical；FC-2 Accepted 済み）
 Issue #24 Close: NO-GO
 SharePoint / tenant / M365 / Entra / Deploy: NO-GO
