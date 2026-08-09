@@ -116,7 +116,12 @@ Entry を阻む残 Decision:
 | A-2 numbering | NOT APPLICABLE（DEC-019） | No |
 | A-3 criterionId mapping | NOT APPLICABLE（DEC-019） | No |
 | A-4 Issue #8 DEC number | DEC-019 / POSTED | No |
-| A-5 strategy | OUT（DEC-019）/ separate Decision 未開始 | 本同期では評価しない |
+| A-5 strategy | DEC-019 scopeでは OUT / separate Decision 未開始 | **Yes — generic Implementation Entry blocker** |
+
+A-5 は DEC-019 のカタログ内容スコープでは OUT だが、不要になったわけではない。
+Separate representation-strategy Decision は未開始であり、generic Implementation Entry では残存 blocker として扱う。
+A-5 が Accepted されるか、対象 implementation slice から Human が明示的に除外するまで、Entry 充足とは扱わない。
+A-5 の representation strategy 自体は本監査で決めない。
 
 ```text
 A-1〜A-4 bundle gate:
