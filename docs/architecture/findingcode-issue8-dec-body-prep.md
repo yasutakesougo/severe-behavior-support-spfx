@@ -648,6 +648,6 @@ Implementation Start: HOLD
 ## Human への次の依頼（わかりやすく）
 
 1. 洗い出しは停止のまま（Finding ADOPTED = 0）
-2. 任意: A-4 Issue #8 DEC 番号を Human が採番
-3. Finding 対象が新たに出たら別 Decision で再評価
-4. Implementation Start は HOLD。Agent はコードを作らない
+2. A-4: [`decision-findingcode-a4-dec-number-review.md`](./decision-findingcode-a4-dec-number-review.md) で DEC 番号を Human 選択
+3. Issue #8 台帳確認 → 番号選択 → その後 PR #141 Merge
+4. Implementation Start は HOLD。Agent はコードも DEC 番号も作らない

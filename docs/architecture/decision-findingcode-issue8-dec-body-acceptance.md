@@ -128,10 +128,13 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-Next automatic: NONE
+Next: A-4 DEC number review / Human selection
+  decision-findingcode-a4-dec-number-review.md
 Still open:
-  A-4 Issue #8 DEC number（Human selection）— optional to record later
+  A-4 Issue #8 DEC number（UNASSIGNED）
   Future re-open if new Human primary information requires Finding ADOPTED
+Recommended order:
+  Issue #8 ledger confirm → Human selects DEC number → Merge PR #141
 Implementation Start: HOLD
 ```
 
