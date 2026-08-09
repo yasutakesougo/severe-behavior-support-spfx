@@ -247,18 +247,17 @@ Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
   Lists:     XXXXX / YYYYY
 Live confirmation（SV-1 / LV-1）: NOT CONFIRMED
 Internal Column Names: OPEN（IN-1 — post-creation CN-1）
-Site / List creation: NO-GO（XB-1；別 Human gate）
+Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
+  → decision-assessment-snapshot-new-target-provision-exec-acceptance.md
+Site / List creation: AUTHORIZED / NOT STARTED
 New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
-tenant changes: NO-GO
+custom columns / permissions / config: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
-  → decision-assessment-snapshot-pr-185-independent-review.md
-  Reviewed HEAD: b37e3e6d0d3f925e8686f2e2805094b55479b024
-Ready: NOT RUN
-Merge: NOT RUN
-Next Human gate: PR #185 Ready Decision
+PR #185: MERGED（1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
+Next: explicit Site/List creation execution + VR-1 read-back（auto-start FORBIDDEN）
 ```

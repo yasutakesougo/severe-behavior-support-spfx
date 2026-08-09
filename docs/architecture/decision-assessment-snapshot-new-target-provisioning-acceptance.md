@@ -188,14 +188,15 @@ Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
   Status:    HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
 New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
 Internal Column Names: OPEN（IN-1）
-Site / List creation: NO-GO（XB-1）
+Site / List creation: AUTHORIZED / NOT STARTED
+custom column creation: NO-GO
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
-tenant changes: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Creation / provisioning execution: NOT SELECTED（別 Human gate / NO-GO）
+Next: explicit Site/List creation execution + VR-1 read-back（auto-start FORBIDDEN）
 ```

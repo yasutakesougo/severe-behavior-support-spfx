@@ -179,20 +179,23 @@ Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
   Status:    HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
+  → decision-assessment-snapshot-new-target-provision-exec-acceptance.md
 PR #184: MERGED
   expected head: 84745355929c7e43dcc6c89dd00d29935f79034c
   merge commit:  0be50a12e3699d187bce0f27caa732f3e7ccea24
+PR #185: MERGED（1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
 Observed existing environment: REFERENCE ONLY
 New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
 Internal Column Names: OPEN（IN-1）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
-Site / List creation: NO-GO（XB-1）
+Site / List creation: AUTHORIZED / NOT STARTED
+custom column creation: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
-tenant changes / List / column creation: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Creation / provisioning execution: NOT SELECTED（別 Human gate / NO-GO）
+Next: explicit Site/List creation execution + VR-1 read-back（auto-start FORBIDDEN）
 ```
