@@ -77,8 +77,11 @@ Selection CONSUMED → Decision-AS-NEW-TARGET-PROVISION-EXEC-1 Accepted / LOCKED
   Failure boundary:        FG-1
   Scope boundary:          XB-1
 
+Next gate: FIXED
+  EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NOT STARTED
 Site / List creation: AUTHORIZED / NOT STARTED
-  → next: explicit execution step + VR-1 read-back
 SV-1 / LV-1: NOT CONFIRMED
 Internal Column Names: OPEN（IN-1）
 custom columns / Implementation Start: NO-GO / HOLD

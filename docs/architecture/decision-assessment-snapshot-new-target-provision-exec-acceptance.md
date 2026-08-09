@@ -205,8 +205,22 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
+Next gate: FIXED
+  EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NOT STARTED
 Site / List creation: AUTHORIZED / NOT STARTED
-  → next: explicit execution step（tenant mutation）+ VR-1 read-back
+
+After explicit GO only:
+  1. Site/List 作成実行（intended LOCKED values only）
+  2. VR-1 read-back（Site URL / Site name / List names）
+  3. intended 一致時のみ SV-1 / LV-1 = CONFIRMED
+  4. STOP
+fail-closed STOP:
+  access denied / name conflict / already exists /
+  ambiguous result / partial failure / evidence不足
+  → 代替名発明 / overwrite / blind retry FORBIDDEN
+
 SV-1 / LV-1: NOT CONFIRMED
 Internal Column Names: OPEN（IN-1 — post-creation CN-1）
 custom columns / permissions / config: NO-GO

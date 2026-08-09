@@ -137,8 +137,11 @@ This packet / Acceptance does NOT authorize:
 ```text
 Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
   → decision-assessment-snapshot-new-target-provision-exec-acceptance.md
+Next gate: FIXED
+  EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NOT STARTED
 Site / List creation: AUTHORIZED / NOT STARTED
-  → explicit execution step + VR-1 read-back required
 SV-1 / LV-1: NOT CONFIRMED
 Internal Column Names: OPEN（IN-1）
 custom columns / Implementation Start: NO-GO / HOLD

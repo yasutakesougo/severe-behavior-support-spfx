@@ -57,8 +57,11 @@ Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1
   Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
 Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1
   Site / List creation: AUTHORIZED / NOT STARTED
+Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NOT STARTED
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0；HEAD b37e3e6d0d3f925e8686f2e2805094b55479b024）
-PR #185: MERGED（1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
+PR #185: MERGED / CONSUMED（1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
 PR #184: MERGED（expected head 84745355929c7e43dcc6c89dd00d29935f79034c / merge 0be50a12e3699d187bce0f27caa732f3e7ccea24）
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
@@ -67,7 +70,7 @@ Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
 Internal Column Names: OPEN（IN-1）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
-Site / List creation: AUTHORIZED / NOT STARTED（PX-1；Acceptance ≠ completed）
+Site / List creation: AUTHORIZED / NOT STARTED（PX-1；Acceptance ≠ completed；Execution GO NOT GIVEN）
 custom column creation: NO-GO（XB-1）
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
@@ -196,10 +199,13 @@ Order:
      PR #185: MERGED（1aef0d3…）
  23. Twenty-second residual: New SPFx Site / List provisioning execution（DONE / CONSUMED；Decision-AS-NEW-TARGET-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1）
      acceptance: decision-assessment-snapshot-new-target-provision-exec-acceptance.md
+     next-gate: decision-assessment-snapshot-new-target-provision-exec-next-gate.md
+     Next gate FIXED: EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+     Execution GO: NOT GIVEN / NOT STARTED
      Site / List creation: AUTHORIZED / NOT STARTED
      SV-1 / LV-1: NOT CONFIRMED（VR-1 read-back pending）
      custom columns: NO-GO（XB-1）
-     remaining examples: explicit creation execution + read-back / post-retention / DEC-015 / CN-1
+     remaining examples: explicit GO → create → read-back → CONFIRMED|STOP / post-retention / DEC-015 / CN-1
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
