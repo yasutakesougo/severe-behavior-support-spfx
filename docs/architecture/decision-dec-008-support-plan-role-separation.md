@@ -13,16 +13,17 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: DEC-008（Issue #8 台帳上の既存番号）
 Kind: role / qualification separation framing
-Status: Accepted / LOCKED
+Status: Accepted / LOCKED（制度上の作成者 / 独立最終承認者）
   制度上の作成者: ACCEPTED = 実践研修修了者
   独立した最終承認者: NOT ADOPTED → アプリ独自の最終承認者を設定しない
+  提出・差戻しロール: NOT ADOPTED（application 非埋め込み / Option C）
 Canonical ownership: Issue #8 / DEC-008
 Related technical contract: support-plan-status-transition.md（role-free / UNCHANGED）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED（別 track）
-FindingCode: HOLD / DO NOT CREATE
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
+Next substantive unit: NOT SELECTED（unit E CONSUMED）
 Implementation auto-start: FORBIDDEN
 ```
 
@@ -45,6 +46,12 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 - packets（CONSUMED）:
   [`decision-dec-008-authoring-center-decision-packet.md`](./decision-dec-008-authoring-center-decision-packet.md)
   [`decision-dec-008-final-approver-decision-packet.md`](./decision-dec-008-final-approver-decision-packet.md)
+- 提出・差戻しロール（Accepted / Option C）:
+  [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)
+  [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)
+  packets/open-points（CONSUMED）:
+  [`decision-dec-008-submit-return-roles-open-points.md`](./decision-dec-008-submit-return-roles-open-points.md)
+  [`decision-dec-008-submit-return-roles-decision-packet.md`](./decision-dec-008-submit-return-roles-decision-packet.md)
 - 支援計画状態遷移（ロール判定 OUT）:
   [`support-plan-status-transition.md`](./support-plan-status-transition.md)
 - backlog: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -74,6 +81,7 @@ DEC-008 は「提出・差戻し・承認ロール、制度値」を含む広い
 | **支援計画シート等の制度上の作成者** | **Accepted** = 強度行動障害支援者養成研修（**実践研修**）修了者 | 制度上の作成者として固定 |
 | **独立した最終承認者** | **NOT ADOPTED** | アプリ独自の最終承認者を設定しない（制度根拠未確認） |
 | サービス管理責任者を最終承認者とする案 | **NOT ADOPTED / 不採用** | 独立最終承認者自体を置かない |
+| **提出・差戻しロール** | **NOT ADOPTED**（application 非埋め込み / Option C） | app contract に固定しない。遷移辺は維持。最終承認者再導入ではない |
 
 ```text
 DEC-008:
@@ -93,10 +101,11 @@ DEC-008:
 MUST NOT invent:
   独立した最終承認者ロール（本 scope では NOT ADOPTED）
   サービス管理責任者 = 最終承認者 としての実装
-  提出・差戻しロールの一括確定
+  提出・差戻しロール名の Agent 発明
   FindingCode / Implementation
 ```
 
+提出・差戻しは Option C で application 非埋め込みとして LOCKED。
 AI 要約だけを根拠に追加ロールを硬化しない。
 
 ## 4. 既存技術契約との関係
@@ -111,15 +120,17 @@ AI 要約だけを根拠に追加ロールを硬化しない。
 ## 5. Current scope gate
 
 ```text
-DEC-008: Accepted / LOCKED
+DEC-008: Accepted / LOCKED（core + submit/return residual）
 制度上の作成者: ACCEPTED / 実践研修修了者
 独立した最終承認者: NOT ADOPTED → アプリ独自の最終承認者を設定しない
-FindingCode: HOLD / DO NOT CREATE
+提出・差戻しロール: NOT ADOPTED（application に固定しない）
+  → decision-dec-008-submit-return-roles-acceptance.md
+FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Next substantive unit: NOT SELECTED
-Next: Issue #8 ledger post + consistency check final PASS
-  → then Human selects next substantive unit
+Independent Review: PASS（PR #147 / HEAD d1b5d544… / P0=0 / P1=0 / P2=0）
+Path: Human Merge（PR #147）→ Final CONSISTENT
 ```
 
-将来、制度通知等で独立承認者が必要と確認された場合は別 Human Decision とする。
+将来、制度通知等で独立承認者や提出/差戻し Binding が必要と確認された場合は別 Human Decision とする。

@@ -121,11 +121,10 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-Docs-internal Acceptance / consistency: DONE
-  → decision-op-3-canonicalization-consistency-check.md（DOCS CONSISTENT）
-PR #146 Merge: Human Merge GO（C8 → Final CONSISTENT）
-Next substantive unit: NOT SELECTED
-  → packet OPEN: decision-next-substantive-unit-selection-packet.md
-  → Agent MUST NOT auto-select
+PR #146: MERGED（42b251b… / head 974d083…）
+Consistency: FINAL CONSISTENT
+Next substantive unit: SELECTED / E
+  — DEC-008 提出・差戻しロール
+  → decision-dec-008-submit-return-roles-decision-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```

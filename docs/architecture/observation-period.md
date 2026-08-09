@@ -205,9 +205,9 @@ SupportPlan logical fields: Accepted / LOCKED / Decision-OP-3 Option A
 Open-ended periodTo: NOT ADOPTED
 制度日数・既定観察窓の domain 埋め込み: NOT ADOPTED
 evaluateObservationPeriodMembership: UNCHANGED
-Consistency: decision-op-3-canonicalization-consistency-check.md
+Consistency: decision-op-3-canonicalization-consistency-check.md（FINAL CONSISTENT）
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
+Next substantive unit: SELECTED / E（DEC-008 提出・差戻し；OP-3 外）
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
 Deploy: NO-GO

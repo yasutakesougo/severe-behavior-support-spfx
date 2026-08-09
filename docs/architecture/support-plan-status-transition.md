@@ -92,6 +92,7 @@ SupportPlanStatusTransitionResult =
 
 - SupportPlanStatus / SupportPlan 契約の再定義
 - ロール・権限・approvedBy 等の業務承認者判定
+- 提出・差戻しロール Binding（DEC-008 Option C: application に固定しない / NOT ADOPTED）
 - Active 計画一意性
 - 観察期間
 - 見直し期限の算出・接近/超過
@@ -102,6 +103,8 @@ SupportPlanStatusTransitionResult =
 - Handoff / Finding / AssessmentSnapshot
 - Entra ID / Microsoft 365 / deploy / 実データ
 - Issue #24 Close
+
+DEC-008 提出・差戻し Acceptance: [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)（Option C）。本契約の role-free 境界と整合。
 
 ## レビュー・テスト・完了判定基準（正本）
 

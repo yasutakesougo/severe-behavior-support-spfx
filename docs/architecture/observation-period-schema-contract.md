@@ -29,7 +29,7 @@ SharePoint / DEC-6: OUT
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED
+Next substantive unit: SELECTED / E（DEC-008 提出・差戻し；本契約外）
 ```
 
 ## Logical fields
