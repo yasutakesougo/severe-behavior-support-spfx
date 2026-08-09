@@ -629,23 +629,25 @@ BS-004〜005: FIXED（通常業務 / catalog OUT）
 BS-006: FIXED（監査証跡 / SEPARATE / catalog OUT）
 BS-007: FIXED（モニタリング記録で足りる未完了対応 / catalog OUT）
 BS-001〜007: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
-BS-008: OPEN — Human 提示待ち（任意）
+BS inventory: PAUSED（BS-008 以降は増やさない — Finding 探索の逆転を避ける）
 Finding ADOPTED 件数: 0
 A-1 FindingCode values: EMPTY OK（無理に作らない）
+Next work: Issue #8 DEC body Acceptance packet
+  decision-findingcode-issue8-dec-body-acceptance-packet.md
 Boundary: 監査上必要 ≠ Finding / 継続保存 ≠ Finding / 未完了対応 ≠ 即 Finding
 Audit save details: separate audit / evidence contract（FindingCode ではない）
-A-1: PENDING / may remain empty until Finding ADOPTED appears
-A-2: PENDING
-A-3: PENDING
-A-4: PENDING
-Acceptance: NOT STARTED
+A-1: NONE（proposal）
+A-2: NOT APPLICABLE（proposal）
+A-3: NOT APPLICABLE（proposal）
+A-4: UNASSIGNED — Human selection required
+Acceptance: READY_FOR_HUMAN_ACCEPTANCE（DEC body packet）
 A-5: HOLD
 Implementation Start: HOLD
 ```
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-008** を続けるか、洗い出しを一旦止めて Issue #8 DEC 骨子（Finding 対象なし）へ進むか選んでください
-2. Finding ADOPTED が 0 のままなら、A-1 値一覧は空でよいです
-3. FindingCode は現場一次情報から対象が出るまで作りません
-4. Agent は FindingCode 名を発明しません
+1. 洗い出しは一旦停止（推奨どおり）
+2. [`decision-findingcode-issue8-dec-body-acceptance-packet.md`](./decision-findingcode-issue8-dec-body-acceptance-packet.md) で DEC 本文を Accept するか選ぶ
+3. Option A = EMPTY catalog を Accept / Option B = 洗い出し再開 / Option C = その他
+4. DEC 番号（A-4）は Human が決める。Agent は採番しない

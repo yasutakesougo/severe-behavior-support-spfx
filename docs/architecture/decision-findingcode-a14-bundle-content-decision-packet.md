@@ -15,7 +15,7 @@ A-5 / FC-7 を開始しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
 Kind: Human Decision packet
-Status: OPTION_C_SELECTED / CONTENT_PENDING
+Status: OPTION_C_SELECTED / DEC_BODY_ACCEPTANCE_READY
 Structure authority: a-class-structure-acceptance.md（Bundle A-1〜A-4 / Separate A-5）
 FC Decision Exit Review: ACCEPTED
 Decision-FC-1〜FC-6: Accepted（logical）
@@ -25,15 +25,19 @@ PR #140 / A-1〜A-4 Decision packet: MERGED
   merged head: 89665b53f3afb0af6e6d232fa821e2cfd1394d47
 main baseline: f254af4392f6579bcafba82d744b1e3c4eb04217
 Selected Option: C（decision-findingcode-option-c-selection.md）
-A-1〜A-4 content: PENDING（Issue #8 DEC 本文確定後）
+BS inventory: PAUSED（BS-001〜007 / Finding ADOPTED = 0）
+A-1 proposal: NONE
+A-2 proposal: NOT APPLICABLE
+A-3 proposal: NOT APPLICABLE
+A-4: UNASSIGNED — Human selection required
 A-5: OUT / separate later
-Issue #8 FindingCode DEC number: UNASSIGNED
-Next work: findingcode-issue8-dec-body-prep.md（業務状態の洗い出し）
+Next work: decision-findingcode-issue8-dec-body-acceptance-packet.md
 Implementation Entry satisfaction: NOT EVALUATED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 FC-7: NOT CREATED
 FindingCode value invention: FORBIDDEN
+DEC number invention: FORBIDDEN
 packet auto-Accepted: FORBIDDEN
 ```
 

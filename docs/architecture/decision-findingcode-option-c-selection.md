@@ -17,11 +17,13 @@ Selected Option: C
 Human Selection: Explicit Option C on 2026-08-09
 main baseline: f254af4392f6579bcafba82d744b1e3c4eb04217
 PR #140: MERGED
-A-1 FindingCode values: PENDING — Issue #8 DEC本文確定後
-A-2 numbering: PENDING — A-1確定後
-A-3 mapping: PENDING — 業務ルールとの対応確定後
-A-4 Issue #8 DEC number: PENDING — Human selection required
+A-1 FindingCode values: NONE（proposal — EMPTY OK）
+A-2 numbering: NOT APPLICABLE（proposal）
+A-3 mapping: NOT APPLICABLE（proposal）
+A-4 Issue #8 DEC number: UNASSIGNED — Human selection required
 A-5: HOLD / FORBIDDEN（本工程外）
+BS inventory: PAUSED at BS-001〜007（Finding ADOPTED = 0）
+Next: decision-findingcode-issue8-dec-body-acceptance-packet.md
 Implementation Entry satisfaction: NOT CLAIMED
 Implementation Start: HOLD
 FindingCode value invention: FORBIDDEN

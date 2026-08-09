@@ -53,8 +53,9 @@ FC Decision Exit Review（ACCEPTED / FC-7 NOT CREATED）: docs/architecture/fc-d
 A-class structure acceptance（Bundle A-1〜A-4 / Separate A-5 / Content NOT ACCEPTED）: docs/architecture/a-class-structure-acceptance.md
 Implementation Entry Decision Re-audit（post GOV-RULE-05〜08）: docs/architecture/implementation-entry-decision-reaudit.md
 FindingCode A-1〜A-4 bundle content Decision packet: docs/architecture/decision-findingcode-a14-bundle-content-decision-packet.md
-FindingCode Option C selection（CONTENT_PENDING）: docs/architecture/decision-findingcode-option-c-selection.md
-FindingCode Issue #8 DEC body prep（業務状態洗い出し）: docs/architecture/findingcode-issue8-dec-body-prep.md
+FindingCode Option C selection: docs/architecture/decision-findingcode-option-c-selection.md
+FindingCode Issue #8 DEC body prep（BS-001〜007 PAUSED / Finding ADOPTED = 0）: docs/architecture/findingcode-issue8-dec-body-prep.md
+FindingCode Issue #8 DEC body Acceptance packet（EMPTY catalog）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance-packet.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
 AuditEvent persistence contract（PR #99 MERGED）: docs/architecture/audit-event-persistence-contract.md
 Logical persistence boundary（PR #104 MERGED）: src/domain/audit-event-persistence.ts
