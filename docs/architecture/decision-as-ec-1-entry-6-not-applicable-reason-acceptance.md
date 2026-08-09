@@ -142,8 +142,8 @@ AS-EC-1 overall: HOLD
 ```text
 AS-EC-1 Entry #6: Accepted / LOCKED / Option A / PASS / MET
   Consistency: decision-as-ec-1-entry-6-canonicalization-consistency-check.md
-AS-EC-1 Entry #7: 未（次候補）
-AS-EC-1 overall: HOLD
+AS-EC-1 Entry #7: PASS / MET（DEC-1 versioning）
+AS-EC-1 overall: HOLD（別 Human Decision）
 FindingCode / A-5 / Implementation / PR-J: HOLD
-Next residual Decision: NOT SELECTED（#7 は別 Human 選定）
+Next residual Decision: NOT SELECTED（overall は別 Human 選定）
 ```

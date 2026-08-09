@@ -292,7 +292,7 @@ AssessmentSnapshot完全契約のコード実装へ進む前に、次を満た�
 4. GOV-AUD-03の訂正承認境界がAcceptedまたはapplication層対象外として明示済み（**DONE** — Option E / application 対象外）
 5. 完全なFinding契約またはfindingIds参照境界が確定済み（**PASS / MET** — findingIds **NOT REQUIRED**。正本 [`decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md`](./decision-as-ec-1-entry-5-finding-ids-boundary-acceptance.md) / [`assessment-snapshot-finding-ids-boundary.md`](./assessment-snapshot-finding-ids-boundary.md)）
 6. サービス別NOT_APPLICABLE reason codeの正本またはHOLD方針が確定済み（**PASS / MET** — HOLD方針 = サービス別正本は今採択しない。正本 [`decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md`](./decision-as-ec-1-entry-6-not-applicable-reason-acceptance.md) / [`assessment-snapshot-not-applicable-reason-hold.md`](./assessment-snapshot-not-applicable-reason-hold.md)）
-7. Schema ID・schemaVersion・DTO versioning方針が確定済み
+7. Schema ID・schemaVersion・DTO versioning方針が確定済み（**PASS / MET** — DEC-1 準拠；固有 Schema ID 採番は今しない。正本 [`decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md`](./decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md) / [`assessment-snapshot-schema-dto-versioning.md`](./assessment-snapshot-schema-dto-versioning.md)）
 8. TypeScript型、runtime validator、合成fixture、contract testsの計画が存在（**DONE / FINAL CONSISTENT** — Entry #8 Accepted / LOCKED / Option A。実装は別 Human Implementation Start）
 ```
 
@@ -310,9 +310,9 @@ Entry Criteriaを満たす前に、代替型、暫定enum、SharePoint列を先�
 - handoff連携タイミング
 - 完全なFinding契約（Entry #5 は findingIds NOT REQUIRED で閉じた。完全 Finding 実装は別 HOLD）
 - サービス別`NOT_APPLICABLE` reason code enum（Entry #6 は HOLD方針で閉じた。値一覧・enum 採択は別 Decision / FORBIDDEN now）
-- Schema / DTO / SharePoint mapping
+- Schema / DTO / SharePoint mapping（Entry #7 は DEC-1 versioning 方針のみ。固有 Schema ID 採番・物理写像は別 HOLD）
 - SharePoint、Entra ID、Microsoft 365、deploy
-- Decision-AS-EC-1 overall Entry satisfied（Entry #7 未。Entry #5/#6 は PASS / MET）
+- Decision-AS-EC-1 overall Entry satisfied（Entry #1〜#8 個別は閉じた／Accepted。overall は別 Human Decision / HOLD）
 
 ## 変更禁止境界
 
