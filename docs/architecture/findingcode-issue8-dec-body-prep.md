@@ -137,7 +137,8 @@ FindingCode:
 | ID | 業務状態（人の言葉） | System behavior | Finding | FindingCode | 継続管理 | 状態 |
 |---|---|---|---|---|---|---|
 | BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
-| BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | NOT ADOPTED | NONE（catalog OUT） | Findingとしては行わない | **CANDIDATE** |
+| BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
+| BS-003 | （Human が提示） | | | | | **OPEN** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
 ## 確定済み — BS-002
@@ -239,7 +240,9 @@ DEC number: PENDING — Human selection（A-4）
 
 3. Finding にしない業務状態（Finding catalog 対象外）
    - BS-001: 有効な支援計画がないため手順記録へ進めない
-     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT OF SCOPE）
+     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
+   - BS-002: 適用すべき支援手順が確認できないため手順記録を確定させない
+     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
    - （その他 NOT ADOPTED 行）
 
 4. 変更管理
@@ -259,7 +262,8 @@ DEC number: PENDING — Human selection（A-4）
 Selected Option: C
 Current work: business-state inventory（1件ずつ）
 BS-001: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
-BS-002: CANDIDATE — NOT FIXED（Evidence 未確定 / 確認問 UNSELECTED）
+BS-002: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
+BS-003: OPEN — Human 提示待ち
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -271,15 +275,9 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-BS-002 について、次の1問に **A / B / C** で答えてください。
+1. **BS-003** を同じ形式で1件書いてください  
+2. ここからは「その場で止めるだけか / 継続追跡（Finding）が必要か」を見る  
+3. Finding: ADOPTED は、継続追跡が必要なものが出たときに初めて検討  
+4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します  
 
-```text
-「適用すべき支援手順が確認できない場合、
- 支援手順記録を確定させない」運用で合っていますか？
-```
-
-- **A** … 合っている → FIXED 候補へ  
-- **B** … 違う → 内容を修正  
-- **C** … 現場確認が必要 → HOLD  
-
-Agent は FindingCode 名を付けません。確認前に BS-002 を FIXED にしません。
+Agent は FindingCode 名を付けません。BS-003 の中身を勝手に書きません。
