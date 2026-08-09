@@ -30,6 +30,7 @@ Twelfth residual Decision: SELECTED / A — schemaVersion / dtoVersion（Decisio
 Thirteenth residual Decision: SELECTED / A — application save（Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
 Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1；IR PASS）
 Fifteenth residual Decision: SELECTED / A — DEC-6 concrete mapping（Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1）
+Sixteenth residual Decision: SELECTED / A — Site / List / Internal Column Name（selection only；Decision-AS-SP-PLACEMENT-1 compare OPEN）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -37,7 +38,8 @@ schemaVersion / dtoVersion: Accepted / LOCKED = 1.0.0 / 1.0.0
 Application save boundary: Accepted / LOCKED（SC-1 + FR-1）；implementation DO NOT START
 SharePoint / adapter boundary: Accepted / LOCKED（PB-1+EM-1+CV-1+D6-1+UP-1）；implementation DO NOT START
 Decision-AS-SP-ADAPTER-1 Independent Review: PASS（P0=0 / P1=0 / P2=0）
-DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）；Site/List/Internal Name NOT DECIDED
+DEC-6 mapping rules: Accepted / LOCKED（LF-1+RW-1+MF-1+VR-1）
+Site / List / Internal Column Name: NOT CONFIRMED / HOLD（placement compare OPEN）
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
 
