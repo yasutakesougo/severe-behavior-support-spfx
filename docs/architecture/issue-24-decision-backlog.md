@@ -105,13 +105,16 @@ GOV-AUD-04: **Accepted / LOCKED / Option E**（[`decision-gov-aud-04-logical-del
   具体的な許可ロール: NOT ADOPTED / NOT DEFINED
   Consistency: [`decision-gov-aud-04-canonicalization-consistency-check.md`](./decision-gov-aud-04-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
 PR #149: MERGED（`cb14c13…` / head `55112f4…`）
-Decision-ILB-1: **Human Policy 1–6 Accepted / LOCKED**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)）
+Decision-ILB-1: **Human Policy 1–6 Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)）
   用途: 残存 Decision を分類・判断する正本方針
   分類 A–E: 判断フレームとして採用
   inventory provisional 行: **自動 Accepted しない**
+  Consistency: [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
   Packet: [`decision-ilb-1-institutional-local-boundary-decision-packet.md`](./decision-ilb-1-institutional-local-boundary-decision-packet.md)
   Inventory: [`decision-ilb-1-residual-decision-inventory.md`](./decision-ilb-1-residual-decision-inventory.md)
-Current single gate: **制度根拠確認 → 個別 Decision を一件ずつ判定**
+PR #151: MERGED（`e2bd256…` / head `4f5a833…`）
+Current single gate: **最初の残存 Decision 選定（OPEN / NOT SELECTED）→ 制度根拠確認 → 一件ずつ判定**
+  Selection: [`decision-ilb-1-next-residual-decision-selection-packet.md`](./decision-ilb-1-next-residual-decision-selection-packet.md)
 OUT: FindingCode / A-5 / Implementation Start / SharePoint・Deploy・real data
   GOV-AUD-05 / RD-3 自動 Accepted / 日数・ロール・承認発明
 日数・期限の発明: FORBIDDEN
@@ -399,9 +402,10 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  Decision-ILB-1 Human Policy Accepted
+  Decision-ILB-1 Human Policy FINAL CONSISTENT
+  → First residual Decision selection OPEN / NOT SELECTED
   → 制度根拠確認 → 個別 Decision を一件ずつ判定
-Decision-ILB-1 Human Policy 1–6: ACCEPTED / LOCKED
+Decision-ILB-1 Human Policy 1–6: ACCEPTED / LOCKED / FINAL CONSISTENT
   Classification frame A–E: adopted
   Inventory provisional rows: NOT Accepted
 GOV-AUD-04: Accepted / LOCKED / Option E / FINAL CONSISTENT

@@ -91,8 +91,12 @@ GOV-AUD-05: DO NOT START
 
 ```text
 Next substantive unit: SELECTED / F — Decision-ILB-1
-  → decision-ilb-1-institutional-local-boundary-decision-packet.md
+Human Policy: Accepted / LOCKED / Option A / FINAL CONSISTENT（PR #151）
+  → decision-ilb-1-human-policy-acceptance.md
+  → decision-ilb-1-canonicalization-consistency-check.md
+First residual Decision: NOT SELECTED
+  → decision-ilb-1-next-residual-decision-selection-packet.md
 FindingCode / A-5 / Implementation: HOLD
 ```
 
-Decision-ILB-1 は本整合確認の対象外（別 unit）。
+Decision-ILB-1 は本整合確認の対象外（別 unit）。Human Policy 整合は ILB-1 consistency check を正とする。

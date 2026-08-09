@@ -118,10 +118,13 @@ Selection record: decision-next-substantive-unit-selection.md
 ```text
 NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected F
 Selected unit: Decision-ILB-1
-Human Policy: ACCEPTED / LOCKED（Option A）
+Human Policy: ACCEPTED / LOCKED / Option A / FINAL CONSISTENT
   → decision-ilb-1-human-policy-acceptance.md
+  → decision-ilb-1-canonicalization-consistency-check.md
 Inventory rows: provisional（NOT Accepted）
-Next: 制度根拠確認 → 個別 Decision を一件ずつ判定
+Next:
+  First residual Decision selection OPEN / NOT SELECTED
+  → decision-ilb-1-next-residual-decision-selection-packet.md
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD

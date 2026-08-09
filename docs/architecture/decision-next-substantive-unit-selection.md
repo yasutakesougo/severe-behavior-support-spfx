@@ -68,9 +68,13 @@ Agent recommendation: NOT Human Selection evidence
 ## Next
 
 ```text
-Human Policy Acceptance: decision-ilb-1-human-policy-acceptance.md（LOCKED / Option A）
+Human Policy Acceptance: decision-ilb-1-human-policy-acceptance.md
+  LOCKED / Option A / FINAL CONSISTENT（PR #151 / e2bd256…）
+Consistency: decision-ilb-1-canonicalization-consistency-check.md
 Residual inventory rows: provisional（NOT Accepted）
 Next order:
+  First residual Decision selection OPEN / NOT SELECTED
+  → decision-ilb-1-next-residual-decision-selection-packet.md
   制度根拠確認 → 個別 Decision を一件ずつ判定
 FindingCode / A-5 / Implementation Start: HOLD
 GOV-AUD-05 / RD-3 auto-Accepted: FORBIDDEN

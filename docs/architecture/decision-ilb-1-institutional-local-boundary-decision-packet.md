@@ -17,10 +17,12 @@ Agent が制度根拠・日数・ロール・承認フローを発明しない�
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-ILB-1
 Kind: Human Decision packet（boundary framing）
-Status: CONSUMED（Human Policy Accepted / Option A）
+Status: CONSUMED（Human Policy Accepted / Option A / FINAL CONSISTENT）
 Accepted 正本: decision-ilb-1-human-policy-acceptance.md
+Consistency: decision-ilb-1-canonicalization-consistency-check.md（FINAL CONSISTENT）
 Selected via: next substantive unit F（2026-08-09）
-main baseline: f97d072948ad3e68513193fc7e0e39c8026d7e50
+main baseline: e2bd25667b23274270755bbd42866e73c501f09d
+PR #151: MERGED（e2bd256… / head 4f5a833…）
 GOV-AUD-04: FINAL CONSISTENT / Option E
 FindingCode: HOLD
 A-5: HOLD
@@ -36,6 +38,9 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 上位入口:
 
+- [`decision-ilb-1-human-policy-acceptance.md`](./decision-ilb-1-human-policy-acceptance.md)
+- [`decision-ilb-1-canonicalization-consistency-check.md`](./decision-ilb-1-canonicalization-consistency-check.md)
+- [`decision-ilb-1-next-residual-decision-selection-packet.md`](./decision-ilb-1-next-residual-decision-selection-packet.md)
 - [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
 - [`decision-ilb-1-residual-decision-inventory.md`](./decision-ilb-1-residual-decision-inventory.md)
 - [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)
@@ -174,11 +179,14 @@ inventory provisional 行の一括 Accepted
 ## 8. Gate
 
 ```text
-Decision-ILB-1 HUMAN_POLICY: CONSUMED / Accepted / Option A
+Decision-ILB-1 HUMAN_POLICY: CONSUMED / Accepted / Option A / FINAL CONSISTENT
 Acceptance: decision-ilb-1-human-policy-acceptance.md
+Consistency: FINAL CONSISTENT（PR #151 / e2bd256…）
 Inventory rows: provisional（NOT Accepted）
 Next order:
   制度根拠確認 → 個別 Decision を一件ずつ判定
+First residual Decision: NOT SELECTED
+  → decision-ilb-1-next-residual-decision-selection-packet.md
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
