@@ -121,7 +121,8 @@ LOCKED Acceptance meaning を変える差分が入った場合、本 PASS は失
 ## 6. Next（Human）
 
 ```text
-1. Human Merge Decision（PR #147）— Merge は Human のみ
-2. Merge 後: Final CONSISTENT → 次 substantive unit 選定（NOT SELECTED）
+PR #147: MERGED（ce05cd0… / head 31e1df0…）
+Consistency: FINAL CONSISTENT
+Next: 次 substantive unit 選定（NOT SELECTED）
 FindingCode / A-5 / Implementation: HOLD
 ```

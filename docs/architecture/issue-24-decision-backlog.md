@@ -95,14 +95,13 @@ Decision-OP-3: **Accepted / LOCKED** / Option A（[`decision-op-3-observation-pe
   Logical contract: [`observation-period-schema-contract.md`](./observation-period-schema-contract.md)
   Consistency: [`decision-op-3-canonicalization-consistency-check.md`](./decision-op-3-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
 PR #146: MERGED（`42b251b…` / head `974d083…`）
-Next substantive unit: **SELECTED / E / DEC-008 提出・差戻しロール** → **Accepted / Option C**
-  Selection: [`decision-next-substantive-unit-selection.md`](./decision-next-substantive-unit-selection.md)
-  Acceptance: [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)
-  Consistency: [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)（DOCS CONSISTENT / MERGE PENDING）
+DEC-008 submit/return: **Accepted / LOCKED / Option C**（[`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md)）
   提出/差戻しロール: application contract に固定しない（NOT ADOPTED）
-Independent Review: **PASS**（PR #147 / HEAD `d1b5d544…` / P0=0 / P1=0 / P2=0）
-  → [`decision-dec-008-submit-return-roles-independent-review.md`](./decision-dec-008-submit-return-roles-independent-review.md)
-Current single gate: **PR #147 Human Merge Decision**
+  Independent Review: PASS（[`decision-dec-008-submit-return-roles-independent-review.md`](./decision-dec-008-submit-return-roles-independent-review.md)）
+  Consistency: [`decision-dec-008-submit-return-roles-canonicalization-consistency-check.md`](./decision-dec-008-submit-return-roles-canonicalization-consistency-check.md)（**FINAL CONSISTENT**）
+PR #147: MERGED（`ce05cd0…` / head `31e1df0…`）
+Current single gate: **次 substantive unit 選定（NOT SELECTED）**
+  Selection packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)（OPEN）
 日数・期限の発明: FORBIDDEN
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -113,7 +112,7 @@ hard due / overdue: OUT OF CURRENT SCOPE
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit（after merge）: NOT SELECTED
+Next substantive unit: NOT SELECTED
 Issue #24 Close: NO-GO
 deploy: NO-GO
 SharePoint / M365: 変更なし
@@ -389,12 +388,10 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  PR #147 Human Merge Decision
-  → DEC-008 submit/return Final CONSISTENT
-  → then 次 substantive unit 選定（NOT SELECTED）
+  次 substantive unit 選定（OPEN / NOT SELECTED）
 Decision-OP-3: Accepted / LOCKED / FINAL CONSISTENT（PR #146 / 42b251b…）
-DEC-008 submit/return: Accepted / LOCKED / Option C
-  Independent Review: PASS（d1b5d544… / P0=0 / P1=0 / P2=0）
+DEC-008 submit/return: Accepted / LOCKED / Option C / FINAL CONSISTENT
+  PR #147 MERGED（ce05cd0… / head 31e1df0…）
   提出ロール: application に固定しない
   差戻しロール: application に固定しない
 GOV-AUD-03: Accepted / Option E
@@ -405,7 +402,7 @@ A-5: HOLD
 日数・期限 invention: FORBIDDEN
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED（after merge）
+Next substantive unit: NOT SELECTED
 ```
 
 
