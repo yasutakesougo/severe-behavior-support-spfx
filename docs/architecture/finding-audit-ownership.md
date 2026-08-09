@@ -105,6 +105,7 @@ AS-EC-1 Entry #8 technical plan Acceptance（Accepted / LOCKED / Option A / FINA
 AssessmentSnapshot complete-contract technical plan: docs/architecture/assessment-snapshot-complete-contract-technical-plan.md
 AS-EC-1 Entry #8 canonicalization consistency check（FINAL CONSISTENT / PR #159）: docs/architecture/decision-as-ec-1-entry-8-canonicalization-consistency-check.md
 AS-EC-1 Entry #8 Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #159）: docs/architecture/decision-as-ec-1-entry-8-independent-review.md
+AS-EC-1 Entry #8 FINAL CONSISTENT Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #160）: docs/architecture/decision-as-ec-1-entry-8-final-consistent-independent-review.md
 AS-EC-1 Entry #1/#2 read-only consistency audit（#1 PASS / #2 PARTIAL）: docs/architecture/decision-as-ec-1-entry-1-2-read-only-consistency-audit.md
 Decision-ILB-1 fifth residual Decision selection packet（OPEN / Entry #2 fill-or-defer）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
