@@ -486,7 +486,7 @@ Implementation Start: HOLD
 SEV 系（FindingSeverity）の substantive line は DEC-018 不採用で区切り。Canonical は **COMPLETE（Issue #8 / DEC-018）**。ASSIGN / 型 / 実装は自動再開しない。
 **Decision-FC-1 = Accepted / Option B**。**Decision-FC-2〜FC-6 = Accepted / Option C**。Finding catalog = DEC-019 EMPTY。値発明禁止。Stale PR #126 は Merge しない。Implementation HOLD。
 **DEC-008** は 3 軸分離。制度資格・最終承認者は未決。AI 要約を根拠にしない。
-AS-EC-1 は Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #8 技術計画 Accepted。残る Finding 境界 / Schema 等（#5/#6/#7）が先。overall Entry satisfied は自動宣言しない。
+AS-EC-1 は Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #8 技術計画 Accepted。Entry #5/#6/#7 は **未 / NOT MET**（[`decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md`](./decision-as-ec-1-entry-5-6-7-read-only-canonicalization-audit.md)）。overall Entry satisfied は自動宣言しない。
 `#22B` Human GO はコード実装開始のみ。SharePoint 実環境 / M365 / Deploy / Merge は別 GO。
 ## Phase 4 — 次の安全な純関数単位
 
@@ -610,10 +610,10 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. AS-EC-1 Entry #2 を所有 Issue #24 / PR-J 境界で PASS / MET として正本化する
-2. Fifth residual Option A を CONSUMED とする（再選定しない）
-3. AS-EC-1 overall / FindingCode / A-5 / Implementation Start は HOLD を維持する
-4. 型 / validator / fixture / contract tests / SharePoint / DTO 実装は開始しない
+1. AS-EC-1 Entry #5 / #6 / #7 の正本化状態を read-only 監査する
+2. 隣接 Accepted（FC / DEC-1 / 設計 Q）だけでは Entry MET にならないことを固定する
+3. #5/#6/#7 = NOT MET / overall HOLD を維持する（自動充足しない）
+4. FindingCode / A-5 / Implementation Start / PR-J 実装は HOLD を維持する
 5. 次 residual Decision は自動選定しない
 6. src/** / tests/** は変更しない
 ```
