@@ -64,17 +64,20 @@ Finding にする?:
 ### 例2 — 支援計画がないと進めない
 
 ```text
-一次情報の候補（Human が確認する）:
+一次情報の候補:
   「必要な支援計画がない状態では、支援手順記録へ進めない」
 
-Human が決める分岐:
+Human 分岐（2026-08-09）:
+  Selected: A
   A. hard gate だけでよい
      （進めない／止める。Finding としては残さない）
   B. 未作成状態を Finding として継続管理する
-     （誰かが解消するまで業務上の課題として残す）
+     （選ばない）
 
 Finding にする?:
-  UNDECIDED — Human 入力待ち
+  NO — hard gate のみ（Human Selected A）
+FindingCode:
+  付けない（本状態は catalog 候補にしない）
 ```
 
 ## Human 入力表（空欄を Agent が埋めない）
