@@ -151,7 +151,7 @@ AS-EC-1 Entry #2 Acceptance: [`decision-as-ec-1-entry-2-ownership-pr-boundary-ac
 AS-EC-1 overall: **MET / Accepted / LOCKED**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)；Basis = Entry #1〜#8）
 Ninth residual: SELECTED / A — AS-EC-1 overall（CONSUMED / [`decision-ilb-1-ninth-residual-decision-selection.md`](./decision-ilb-1-ninth-residual-decision-selection.md)）
 Fifth residual: SELECTED / A — Entry #2（CONSUMED / [`decision-ilb-1-fifth-residual-decision-selection.md`](./decision-ilb-1-fifth-residual-decision-selection.md)）
-Current single gate: **他残存 Decision を一件ずつ選定・判定**（PR-J domain Implementation Start GO / RD-3 / retention / DEC-009 / Entry #8 / Entry #2 / #5/#6/#7 / overall / Schema ID naming+value（Decision-AS-SCHEMA-ID-1）/ schemaVersion+dtoVersion（Decision-AS-SCHEMA-VERSION-1 = 1.0.0）は CONSUMED。FindingCode / A-5 / SharePoint / Schema·DTO code assignment = HOLD）
+Current single gate: **他残存 Decision を一件ずつ選定・判定**（PR-J domain Implementation Start GO / RD-3 / retention / DEC-009 / Entry #8 / Entry #2 / #5/#6/#7 / overall / Schema ID naming+value / schemaVersion+dtoVersion（1.0.0）/ application save 境界（Decision-AS-APP-SAVE-1 = SC-1+FR-1）は CONSUMED。FindingCode / A-5 / SharePoint / Schema·DTO code assignment / application 実装 = HOLD。Post-retention = OPEN / AUTO-START FORBIDDEN）
 OUT: FindingCode / A-5 / Implementation Start / PR-J implementation / SharePoint・Deploy・real data
   post-retention deletion 自動 Accepted / overall MET を実装開始とみなすこと / 日数・ロール・承認発明
 日数・期限の発明: FORBIDDEN
