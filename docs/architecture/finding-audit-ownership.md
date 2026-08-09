@@ -78,8 +78,11 @@ GOV-AUD-04 logical-delete role Acceptance（Accepted / LOCKED / Option E）: doc
 GOV-AUD-04 canonicalization consistency check（FINAL CONSISTENT / PR #149）: docs/architecture/decision-gov-aud-04-canonicalization-consistency-check.md
 GOV-AUD-04 logical-delete role open-points（CONSUMED）: docs/architecture/decision-gov-aud-04-logical-delete-role-open-points.md
 GOV-AUD-04 logical-delete role Decision packet（CONSUMED / Option E）: docs/architecture/decision-gov-aud-04-logical-delete-role-decision-packet.md
-Next substantive unit selection（post GOV-AUD-04 / OPEN / NOT SELECTED）: docs/architecture/decision-next-substantive-unit-selection.md
-Next substantive unit selection packet（OPEN）: docs/architecture/decision-next-substantive-unit-selection-packet.md
+Next substantive unit selection（SELECTED / F / Decision-ILB-1）: docs/architecture/decision-next-substantive-unit-selection.md
+Next substantive unit selection packet（CONSUMED / F）: docs/architecture/decision-next-substantive-unit-selection-packet.md
+Decision-ILB-1 Human Policy Acceptance（Accepted / LOCKED / Option A）: docs/architecture/decision-ilb-1-human-policy-acceptance.md
+Decision-ILB-1 institutional/local boundary packet（CONSUMED / Policy Accepted）: docs/architecture/decision-ilb-1-institutional-local-boundary-decision-packet.md
+Decision-ILB-1 residual Decision inventory（read-only / row classifications provisional）: docs/architecture/decision-ilb-1-residual-decision-inventory.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
