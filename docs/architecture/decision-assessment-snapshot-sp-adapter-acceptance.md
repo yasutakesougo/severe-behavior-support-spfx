@@ -192,6 +192,8 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-SP-ADAPTER-1: Accepted / LOCKED / PB-1 + EM-1 + CV-1 + D6-1 + UP-1
+Independent Review: PASS（decision-assessment-snapshot-sp-adapter-independent-review.md）
+  P0=0 / P1=0 / P2=0
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 DEC-6 concrete mapping: NOT DECIDED
@@ -199,6 +201,14 @@ Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Next substantive unit: NOT SELECTED by this Acceptance
+```
+
+Live gate（Ready / Merge）は repository docs に書かない
+（[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
+本 Acceptance 時点の Human 待ち（PR / Issue 側）:
+
+```text
+Status: READY_FOR_HUMAN_READY_DECISION
 Ready: NOT RUN
 Merge: NOT RUN
 ```

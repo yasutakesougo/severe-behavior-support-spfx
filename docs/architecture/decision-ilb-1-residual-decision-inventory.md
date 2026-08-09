@@ -28,13 +28,14 @@ Tenth residual Decision: SELECTED / A — Implementation Start（PR-J domain GO 
 Eleventh residual Decision: SELECTED / C — Schema ID（Decision-AS-SCHEMA-ID-1 naming+value Accepted / LOCKED）
 Twelfth residual Decision: SELECTED / A — schemaVersion / dtoVersion（Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / 1.0.0）
 Thirteenth residual Decision: SELECTED / A — application save（Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
-Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1）
+Fourteenth residual Decision: SELECTED / A — SharePoint / adapter（Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1；IR PASS）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
 schemaVersion / dtoVersion: Accepted / LOCKED = 1.0.0 / 1.0.0
 Application save boundary: Accepted / LOCKED（SC-1 + FR-1）；implementation DO NOT START
 SharePoint / adapter boundary: Accepted / LOCKED（PB-1+EM-1+CV-1+D6-1+UP-1）；implementation DO NOT START
+Decision-AS-SP-ADAPTER-1 Independent Review: PASS（P0=0 / P1=0 / P2=0）
 DEC-6 concrete mapping: NOT DECIDED
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -132,6 +133,7 @@ Order:
  13. Twelfth residual: schemaVersion / dtoVersion（DONE / CONSUMED；Decision-AS-SCHEMA-VERSION-1 Accepted / LOCKED / A = 1.0.0）
  14. Thirteenth residual: application save（DONE / CONSUMED；Decision-AS-APP-SAVE-1 Accepted / LOCKED / SC-1 + FR-1）
  15. Fourteenth residual: SharePoint / adapter（DONE / CONSUMED；Decision-AS-SP-ADAPTER-1 Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1）
+     Independent Review: PASS（decision-assessment-snapshot-sp-adapter-independent-review.md；P0=0 / P1=0 / P2=0）
      remaining examples: post-retention
      FindingCode / A-5: HOLD
 AS-EC-1 overall: MET / Accepted
