@@ -89,7 +89,8 @@ SharePoint / Entra / Deploy / real data
 
 ```text
 Acceptance: decision-gov-aud-04-logical-delete-role-acceptance.md（LOCKED / Option E）
+Consistency: FINAL CONSISTENT（PR #149 / cb14c13…）
 GOV-AUD-05: DO NOT START
 FindingCode / A-5 / Implementation: HOLD
-Next substantive unit: NOT SELECTED（Merge 後）
+Next substantive unit: NOT SELECTED
 ```
