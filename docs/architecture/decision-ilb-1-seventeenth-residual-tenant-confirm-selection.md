@@ -5,7 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: 78748790a442578ed138933dcc69cad05ed11bb3
 Decision kind: residual substantive-unit selection only
 Selected: A — Tenant confirmation / primary-evidence acquisition GO
-Status: SELECTED / NOT IMPLEMENTATION START
+Status: SELECTED / CONSUMED（Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED）
 Human Selection: Explicit A on 2026-08-09
 ```
 
@@ -20,12 +20,12 @@ Meaning:
   Decision-AS-TENANT-CONFIRM-1
   （read-only tenant confirmation / primary-evidence acquisition GO）とする。
   本記録は選定のみであり、実確認の実行・具体値確定・実装を決めない。
+  （GO 境界は後続 Decision-AS-TENANT-CONFIRM-1 で Accepted）
 ```
 
-## Explicit non-authorization
+## Explicit non-authorization（selection 時点 / 実行は継続 NOT STARTED）
 
 ```text
-Decision-AS-TENANT-CONFIRM-1: OPEN via compare packet / NOT ACCEPTED
 Tenant confirmation execution: NOT STARTED
 Site / List / Internal Column Name values: NOT CONFIRMED / HOLD
 tenant changes: NO-GO
@@ -68,20 +68,20 @@ Selection packet: [`decision-ilb-1-seventeenth-residual-decision-selection-packe
 ## Next gate
 
 ```text
-Next action:
-  Decision-AS-TENANT-CONFIRM-1 read-only compare / GO packet
-  → decision-assessment-snapshot-tenant-confirm-packet.md
-  Focus:
-    read-only confirmation scope
-    primary-evidence bar
-    where confirmed values may be recorded（SC-1）
-    explicit NO-GO exclusions
+Selection CONSUMED → Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED
+  decision-assessment-snapshot-tenant-confirm-acceptance.md
+  Read-only scope:     RO-1
+  Evidence bar:        EV-1
+  Recording boundary:  RB-1
+  NO-GO exclusions:    XG-1
 
-Not allowed from this document alone:
-  accepting GO options as LOCKED
-  executing tenant confirmation
+Still NOT STARTED / HOLD / NOT CONFIRMED:
+  Tenant confirmation execution
+  Site / List / Internal Column Name concrete values
+  Implementation Start
+  SharePoint / adapter / application code
   tenant changes / List / column creation
-  inventing Site / List / Internal Name
-  Implementation Start / SharePoint implementation
-  Deploy / real data
+  Schema / DTO code assignment
+  FindingCode / A-5
+Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```

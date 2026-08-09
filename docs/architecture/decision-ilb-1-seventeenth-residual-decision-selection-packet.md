@@ -66,7 +66,8 @@ Agent recommendation alone was NOT Selection evidence.
 Selected: A — Tenant confirmation / primary-evidence acquisition GO
 Decision ID: Decision-AS-TENANT-CONFIRM-1
 Selection record: decision-ilb-1-seventeenth-residual-tenant-confirm-selection.md
-Compare packet: decision-assessment-snapshot-tenant-confirm-packet.md（OPEN / NOT ACCEPTED）
+Compare packet: decision-assessment-snapshot-tenant-confirm-packet.md（CONSUMED）
+Acceptance: decision-assessment-snapshot-tenant-confirm-acceptance.md（Accepted / LOCKED / RO-1+EV-1+RB-1+XG-1）
 ```
 
 ```text
