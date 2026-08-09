@@ -139,7 +139,8 @@ FindingCode:
 | BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
 | BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
 | BS-003 | 支援手順記録に必要な記録項目が不足している | HARD GATE | **NOT ADOPTED** | **NONE**（catalog OUT） | Findingとしては行わない | **FIXED** |
-| BS-004 | （継続追跡が要る状態 — Human 提示） | | | | | **OPEN** |
+| BS-004 | 想定結果が得られずチーム再確認・見直しが必要 | NOTICE（定期モニタリング） | **NOT ADOPTED** | **NONE**（catalog OUT） | モニタリング会議・見直しで管理 | **FIXED** |
+| BS-005 | （Human が提示） | | | | | **OPEN** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
 ## 確定済み — BS-002
@@ -265,27 +266,89 @@ BS-001〜003 まとめ:
   Finding catalog OUT
 ```
 
-## 未決 — BS-004（継続追跡候補を検討）
+## 確定済み — BS-004
 
 ```text
 ID: BS-004
+Status: FIXED（Human primary information / 2026-08-09）
+Finding catalog: OUT OF SCOPE（対象外）
+Absorbed by:
+  GOV-RULE-06 Accepted（3ヶ月に1回程度の見直し）
+  GOV-RULE-07 Accepted / Option C（対象月に入ったら通知）
+Boundary:
+  「あとで確認が必要」≠ 即 Finding
+Agent invention: NO
+```
+
+```text
+ID: BS-004
+Status: FIXED（2026-08-09）
+
+Business State:
+  支援を続けているが想定した結果が得られず、
+  チームで再確認・見直しが必要な状態
+
+System behavior:
+  NOTICE
+  → 3ヶ月に1回程度のモニタリング会議で確認する
+  → 必要に応じて支援内容を更新する
+  → 日々の支援手順記録は止めない
+
+Finding:
+  NOT ADOPTED
+
+FindingCode:
+  NONE
+
+継続管理:
+  Findingとしては行わない
+  → モニタリング会議・見直しプロセスで管理する
+
+Finding catalog scope:
+  OUT
+```
+
+流れ:
+
+```text
+想定結果が得られない / チーム再確認が必要
+  ↓
+定期モニタリング（3ヶ月に1回程度）で扱う
+  ↓
+対象月通知（GOV-RULE-07）に吸収可能
+  ↓
+日々の手順記録は止めない
+  ↓
+Finding は作らない / FindingCode も作らない
+  ↓
+catalog OUT
+```
+
+```text
+境界メモ:
+  「あとで確認が必要」だから即 Finding、ではない
+  既存の見直し・通知運用に吸収できるものは catalog OUT
+```
+
+## 未決 — BS-005
+
+```text
+ID: BS-005
 Status: OPEN — Human 提示待ち
-Focus:
-  その場では解消できず、
-  後からチームで確認・対応する必要がある状態
-Purpose:
-  Finding: ADOPTED が本当に必要か判断しやすくする
+Note:
+  BS-001〜004 はすべて Finding NOT ADOPTED / catalog OUT
+  Finding: ADOPTED が必要な状態は、まだ Human が提示していない
 Agent: 業務状態を発明しない / FindingCode を命名しない
 ```
 
-Human が埋める形式（BS-004）:
+Human が埋める形式（BS-005）:
 
 ```text
-ID: BS-004
+ID: BS-005
 Status: DECIDED（日付）
 
 Business State:
-  （人の言葉 — 継続追跡が要りそうな状態）
+  （人の言葉）
 
 System behavior:
   HARD GATE | NOTICE | FOLLOW_UP | OTHER
@@ -293,7 +356,6 @@ System behavior:
 
 Finding:
   ADOPTED | NOT ADOPTED
-  （継続追跡が要るなら ADOPTED を検討）
 
 FindingCode:
   NONE | PENDING
@@ -340,6 +402,8 @@ DEC number: PENDING — Human selection（A-4）
      （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
    - BS-003: 支援手順記録に必要な記録項目が不足している
      （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
+   - BS-004: 想定結果が得られずチーム再確認・見直しが必要
+     （NOTICE / 定期モニタリング吸収 / Finding NOT ADOPTED / catalog OUT）
    - （その他 NOT ADOPTED 行）
 
 4. 変更管理
@@ -358,11 +422,13 @@ DEC number: PENDING — Human selection（A-4）
 ```text
 Selected Option: C
 Current work: business-state inventory（1件ずつ）
-BS-001: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
-BS-002: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
-BS-003: FIXED（HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT）
-BS-001〜003: その場で止める / Finding 継続追跡しない / catalog OUT
-BS-004: OPEN — 継続追跡が必要な状態を Human が提示
+BS-001: FIXED（HARD GATE / catalog OUT）
+BS-002: FIXED（HARD GATE / catalog OUT）
+BS-003: FIXED（HARD GATE / catalog OUT）
+BS-004: FIXED（NOTICE / 定期モニタリング吸収 / catalog OUT）
+BS-001〜004: Finding NOT ADOPTED / FindingCode NONE / catalog OUT
+BS-005: OPEN — Human 提示待ち
+Finding ADOPTED 件数: 0（まだ未提示）
 A-1: PENDING
 A-2: PENDING
 A-3: PENDING
@@ -374,9 +440,9 @@ Implementation Start: HOLD
 
 ## Human への次の依頼（わかりやすく）
 
-1. **BS-004** を書いてください（目安: その場では解消できず、後からチーム確認・対応が要る状態）  
-2. その1件で Finding: ADOPTED が要るか判断してください  
-3. 要らなければ NOT ADOPTED のままでよいです  
-4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します  
+1. **BS-005** を同じ形式で1件書いてください
+2. 「あとで確認が必要」だけでは Finding にしない（BS-004 の境界を維持）
+3. Finding: ADOPTED は、既存の見直し・通知・hard gate に吸収できないものだけ検討
+4. 必要件数がそろったら Issue #8 の DEC 本文案を Human が承認します
 
-Agent は FindingCode 名を付けません。BS-004 の中身を勝手に書きません。
+Agent は FindingCode 名を付けません。BS-005 の中身を勝手に書きません。
