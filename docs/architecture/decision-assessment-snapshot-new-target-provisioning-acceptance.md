@@ -187,15 +187,18 @@ Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
   Site URL:  https://isogokatudouhome.sharepoint.com/sites/XXXXX
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
-  Status:    HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
-New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
+  Status:    HUMAN-PROVIDED / INTENDED / PLACEHOLDER / NOT CREATED / NOT CONFIRMED
+Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
+New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Internal Column Names: OPEN（IN-1）
-Site / List creation: NO-GO（XB-1）
+Site / List creation: NO-GO
+Placeholder creation: FORBIDDEN（PH-1）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Creation / provisioning execution: NOT SELECTED（別 Human gate / NO-GO）
+Next Human gate: FORMAL PILOT FACILITY SITE / LIST NAMING
+  → decision-assessment-snapshot-org-site-topology-next-gate.md
 ```

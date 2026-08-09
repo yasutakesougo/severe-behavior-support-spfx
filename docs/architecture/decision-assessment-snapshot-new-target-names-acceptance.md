@@ -241,14 +241,18 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
-Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
+Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED / PLACEHOLDER
   Site URL:  https://isogokatudouhome.sharepoint.com/sites/XXXXX
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
+  ≠ REAL / CREATABLE（Decision-AS-ORG-SITE-TOPOLOGY-1 / PH-1）
 Live confirmation（SV-1 / LV-1）: NOT CONFIRMED
 Internal Column Names: OPEN（IN-1 — post-creation CN-1）
-Site / List creation: NO-GO（XB-1；別 Human gate）
-New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
+Site / List creation: NO-GO（XB-1；placeholder 作成 FORBIDDEN）
+PR #185: MERGED
+  merge commit: 1aef0d3971165f6504f7f13d6e68a51d7cfdaf61
+Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
+New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes: NO-GO
@@ -258,7 +262,6 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-185-independent-review.md
   Reviewed HEAD: b37e3e6d0d3f925e8686f2e2805094b55479b024
-Ready: NOT RUN
-Merge: NOT RUN
-Next Human gate: PR #185 Ready Decision
+Next Human gate: FORMAL PILOT FACILITY SITE / LIST NAMING
+  → decision-assessment-snapshot-org-site-topology-next-gate.md
 ```
