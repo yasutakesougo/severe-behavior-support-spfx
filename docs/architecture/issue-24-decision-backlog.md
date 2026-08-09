@@ -79,8 +79,10 @@ DEC-008: **Accepted / LOCKED**（[`decision-dec-008-acceptance.md`](./decision-d
   サービス管理責任者を最終承認者とする案: NOT ADOPTED / 不採用
 PR #143 / DEC-008: MERGED（`713c40a…` / head `cfbbcd3…`）
 DEC-008 Issue #8 ledger: [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md)（POSTED / comment `5229571943`）
-DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（**CONSISTENT**）
-Current single gate: **次 substantive unit 選定（NOT SELECTED）**
+DEC-008 consistency: [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)（**CONSISTENT** / 最終確定）
+Current single gate: **NEXT_SUBSTANTIVE_UNIT_SELECTION**
+Selection packet: [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)（READY）
+
 
 AI 要約を DEC-008 根拠に硬化: FORBIDDEN
 制度資料が支持しない承認フロー追加: FORBIDDEN
@@ -362,18 +364,20 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  次 substantive unit 選定（NOT SELECTED）
+  NEXT_SUBSTANTIVE_UNIT_SELECTION
+  = decision-next-substantive-unit-selection-packet.md
 DEC-008: Accepted / LOCKED / Issue #8 comment 5229571943
   制度上の作成者 = 実践研修修了者
   独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
-Consistency (docs / Issue #8 / PR #143): CONSISTENT
+Consistency (docs / Issue #8 / PR #143): CONSISTENT（最終確定）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
-Next substantive unit: NOT SELECTED
+Next substantive unit: NOT SELECTED（selection packet READY）
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 

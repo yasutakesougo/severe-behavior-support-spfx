@@ -1,6 +1,6 @@
 # DEC-008 正本化 — docs / Issue #8 / PR #143 整合確認
 
-Status: **CONSISTENT**
+Status: **CONSISTENT**（最終確定 / 2026-08-09）
 
 Related:
 
@@ -9,6 +9,8 @@ Related:
 - Issue #8 comment ID: **5229571943**
 - PR #143: DEC-008 Acceptance docs（MERGED `713c40a…`）
 - SupportPlan role-free contract: `docs/architecture/support-plan-status-transition.md`
+- Next unit selection packet: `docs/architecture/decision-next-substantive-unit-selection-packet.md`
+
 
 ---
 
@@ -98,6 +100,13 @@ Next substantive unit: NOT SELECTED
 
 ## 6. After CONSISTENT
 
-Human が次の substantive unit を新たに選ぶ。
+正本化条件は揃った。次は substantive unit 選定:
 
-候補の提示は、Human が求めたときだけ行う。
+- [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)
+
+```text
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Implementation Start: HOLD
+Next substantive unit: NOT SELECTED until Human Option
+```
