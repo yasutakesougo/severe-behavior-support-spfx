@@ -59,9 +59,15 @@ FindingCode Issue #8 DEC body Acceptance packet（EMPTY catalog）: docs/archite
 FindingCode Issue #8 DEC body Acceptance（Accepted / Option A / EMPTY）: docs/architecture/decision-findingcode-issue8-dec-body-acceptance.md
 FindingCode A-4 DEC number review（SELECTED / DEC-019）: docs/architecture/decision-findingcode-a4-dec-number-review.md
 DEC-008 Acceptance（LOCKED）: docs/architecture/decision-dec-008-acceptance.md
-DEC-008 Issue #8 ledger registration（READY_FOR_HUMAN_POST）: docs/architecture/decision-dec-008-issue8-ledger-registration.md
-DEC-008 canonicalization consistency check: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
+DEC-008 Issue #8 ledger registration（POSTED / comment 5229571943）: docs/architecture/decision-dec-008-issue8-ledger-registration.md
+DEC-008 canonicalization consistency check（CONSISTENT / 最終確定）: docs/architecture/decision-dec-008-canonicalization-consistency-check.md
+Next substantive unit selection（SELECTED / B / GOV-AUD-03）: docs/architecture/decision-next-substantive-unit-selection.md
+GOV-AUD-03 Acceptance（Accepted / Option E / application 対象外）: docs/architecture/decision-gov-aud-03-snapshot-correction-approver-acceptance.md
+GOV-AUD-03 Decision packet（CONSUMED）: docs/architecture/decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
+
+
+
 DEC-008 authoring-center Acceptance: docs/architecture/decision-dec-008-authoring-center-acceptance.md
 DEC-008 final-approver Acceptance（NOT ADOPTED）: docs/architecture/decision-dec-008-final-approver-acceptance.md
 Issue #29 physical mapping: docs/architecture/audit-event-physical-mapping-29.md
@@ -99,9 +105,9 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
-| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了 | 完全契約までHOLD（DEC-009 / GOV-AUD） |
+| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。保存・findingIds・DTOは未了。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | 完全契約までHOLD。訂正モデルは維持。承認ロール実装 DO NOT START |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
-| 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED**。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**（アプリ独自の最終承認者を設定しない）。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md)。台帳 [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md) | ロール実装 DO NOT START。制度資料が支持しない承認フローを追加しない |
+| 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED**（comment `5229571943`）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED**。整合 **CONSISTENT**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-issue8-ledger-registration.md`](./decision-dec-008-issue8-ledger-registration.md) | ロール実装 DO NOT START。制度資料が支持しない承認フローを追加しない |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
 | 観察期間メンバシップ | Issue #24 | OP-1/OP-2 Accepted / 技術契約 `observation-period.md` | 完了（PR #79 / #80）。OP-3フィールド追加はHOLD |
 | 見直し期限 asOf 相対判定 | Issue #24 | RD-1/RD-2 Accepted / 技術契約 `review-due.md` | 完了（PR #81 / #82）。RD-3接近窓はHOLD。89/90/91日境界は practice cadence とみなさない |
@@ -112,7 +118,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | RuleSetVersion選択 | Issue #24 | RSV-1〜4 Accepted / 技術契約 `ruleset-version-selection.md` | 完了（PR #83 / #84） |
 | 訂正・削除・監査ログ・復旧の運用設計 | Issue #17 | 設計案あり | `GOV-AUD`回答待ち |
 | `GOV-AUD-01〜10`回答 | Issue #19 | 回答正本 | 正式回答待ち |
-| DEC正本台帳 | Issue #8 | `DEC-001〜018` + Finding catalog **DEC-019**（EMPTY / NOT ADOPTED；A-4 Selected）。FindingSeverity 不採用は **DEC-018**（comment `5225426738`）。**DEC-008 Accepted**：制度上の作成者=実践研修修了者 / 独立最終承認者 NOT ADOPTED。VOCAB Canonical COMPLETE。FindingCode catalog ownership は Decision-FC-1 Accepted（Option B）。delivery は Decision-FC-2 Accepted（Option C）。FC-3〜FC-6 Accepted / Option C。PURPOSE は MHLW-first RECORDED |
+| DEC正本台帳 | Issue #8 | `DEC-001〜018` + Finding catalog **DEC-019**（EMPTY / NOT ADOPTED；A-4 Selected）。FindingSeverity 不採用は **DEC-018**（comment `5225426738`）。**DEC-008 Accepted**（comment `5229571943`）：制度上の作成者=実践研修修了者 / 独立最終承認者 NOT ADOPTED。VOCAB Canonical COMPLETE。FindingCode catalog ownership は Decision-FC-1 Accepted（Option B）。delivery は Decision-FC-2 Accepted（Option C）。FC-3〜FC-6 Accepted / Option C。PURPOSE は MHLW-first RECORDED |
 | 許可フィールド値のサニタイズ | Issue #22または新規audit-write-boundary / Decision-AUD-SAN-VALUE-1 | 値契約 Accepted（[`decision-aud-san-value-1-audit-event-value-safety.md`](./decision-aud-san-value-1-audit-event-value-safety.md)）。`validateAuditEvent` hardening MERGED（PR #102） | Decision-AUD-SAN-1 Accepted。Replay logical MERGED（PR #106）。`#22B` synthetic MERGED（PR #110）。実 SharePoint adapter / tenant integration は別 Gate / NO-GO |
 
 ## Decision分類
@@ -135,7 +141,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `DEC-009` | AssessmentSnapshotの保存タイミング | Issue #8 / Issue #19 |
 | `GOV-AUD-01` | handoffの正本 | Issue #19 |
 | `GOV-AUD-02` | handoff状態変更ロール | Issue #19 |
-| `GOV-AUD-03` | Snapshot訂正承認者 | Issue #19 |
+| `GOV-AUD-03` | Snapshot訂正承認者 | Issue #19（**Accepted / Option E** — application 対象外 / ロール NOT DEFINED。正本 [`decision-gov-aud-03-snapshot-correction-approver-acceptance.md`](./decision-gov-aud-03-snapshot-correction-approver-acceptance.md)） |
 | `GOV-AUD-04` | 論理削除を許可するロール | Issue #19 |
 | `GOV-AUD-05` | 物理削除方針 | Issue #19 |
 | `GOV-AUD-06` / `DEC-011` | AuditLog・業務データの保存期間 | Issue #19 / Issue #8 |

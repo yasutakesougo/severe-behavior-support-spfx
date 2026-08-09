@@ -1,18 +1,20 @@
 # DEC-008 — Issue #8 台帳登録（正本化）
 
-この文書は、Issue #8 への **DEC-008 Accepted 台帳登録**のための
-登録文面と正本化手順である。
-
-本環境の GitHub Issues API は Issue #8 に対して **403** のため、
-Agent は Issue #8 へ直接コメントできない。
-Human が Issue #8 に下記文面を投稿する。
+この文書は、Issue #8 への **DEC-008 Accepted 台帳登録**の
+登録文面と正本化記録である。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 DEC: DEC-008
 Title: 支援計画シート等の制度上の作成者 / 独立最終承認者
-Status: Accepted（docs）/ Issue #8 ledger registration: READY_FOR_HUMAN_POST
-PR: #143（docs Acceptance）
+Status: Accepted
+Issue #8 ledger: POSTED
+comment ID: 5229571943
+Canonical ownership: Issue #8 / DEC-008
+repository docs: mirror
+PR #143: MERGED
+merge commit: 713c40a0126fce50d13a8816270890e1016c443b
+merged head: cfbbcd3f87dd620fcbed0c7983df2416a6ba06ba
 Implementation Start: HOLD
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
@@ -26,7 +28,7 @@ Next substantive unit: NOT SELECTED
 - [`decision-dec-008-final-approver-acceptance.md`](./decision-dec-008-final-approver-acceptance.md)
 - [`decision-dec-008-canonicalization-consistency-check.md`](./decision-dec-008-canonicalization-consistency-check.md)
 
-## 1. Issue #8 に投稿する文面（そのまま貼る）
+## 1. Issue #8 登録文面（投稿済み）
 
 ```text
 DEC-008 — 支援計画シート等の制度上の作成者 / 独立最終承認者
@@ -64,14 +66,14 @@ Evidence (repository mirror):
 - decision-dec-008-acceptance.md
 - decision-dec-008-authoring-center-acceptance.md
 - decision-dec-008-final-approver-acceptance.md
-- PR #143
+- PR #143 MERGED / merge 713c40a0126fce50d13a8816270890e1016c443b
 ```
 
-## 2. 登録後に記録すること
+## 2. 登録後の状態
 
 ```text
 Issue #8 DEC-008 ledger: POSTED
-comment ID: （Human が記入）
+comment ID: 5229571943
 Canonical ownership: Issue #8 / DEC-008
 repository docs: mirror
 ```
@@ -79,14 +81,11 @@ repository docs: mirror
 ## 3. Gate
 
 ```text
-DEC-008 docs Acceptance: LOCKED（PR #143）
-Issue #8 ledger registration: READY_FOR_HUMAN_POST
-Consistency check: decision-dec-008-canonicalization-consistency-check.md
-Next Human:
-  1) Merge PR #143（未マージなら）
-  2) Post the payload to Issue #8
-  3) Return comment ID
-  4) Then consistency check final PASS
-  5) Then choose next substantive unit（別 Decision）
-FindingCode / A-5 / Implementation: HOLD
+DEC-008 docs Acceptance: MERGED on main（PR #143 / 713c40a…）
+Issue #8 ledger registration: POSTED / 5229571943
+Consistency (docs / Issue #8 / PR #143): CONSISTENT
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
 ```

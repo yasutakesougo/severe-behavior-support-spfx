@@ -152,7 +152,7 @@ RD-3: HOLD（08 NOT ADOPTED を理由に自動開始しない）
 | 1 | Result 技術設計が main | DONE |
 | 2 | 所有 Issue / PR 境界 | 部分 |
 | 3 | `DEC-009` 保存タイミング | **未** |
-| 4 | `GOV-AUD-03` 訂正承認境界 | **未** |
+| 4 | `GOV-AUD-03` 訂正承認境界 | **Accepted / Option E**（application 対象外明示） |
 | 5 | Finding / findingIds 境界 | **未**（FC 内容依存） |
 | 6 | `NOT_APPLICABLE` reason 正本 | **未** |
 | 7 | Schema / DTO versioning | **未** |

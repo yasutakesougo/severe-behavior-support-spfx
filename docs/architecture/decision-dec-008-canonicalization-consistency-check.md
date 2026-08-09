@@ -1,13 +1,16 @@
 # DEC-008 正本化 — docs / Issue #8 / PR #143 整合確認
 
-Status: **READY_FOR_FINAL_CHECK**（Issue #8 実コメント後に最終判定）
+Status: **CONSISTENT**（最終確定 / 2026-08-09）
 
 Related:
 
 - DEC-008 Acceptance: `docs/architecture/decision-dec-008-acceptance.md`
 - Issue #8 ledger registration: `docs/architecture/decision-dec-008-issue8-ledger-registration.md`
-- PR #143: DEC-008 Acceptance docs
+- Issue #8 comment ID: **5229571943**
+- PR #143: DEC-008 Acceptance docs（MERGED `713c40a…`）
 - SupportPlan role-free contract: `docs/architecture/support-plan-status-transition.md`
+- Next unit selection packet: `docs/architecture/decision-next-substantive-unit-selection-packet.md`
+
 
 ---
 
@@ -18,7 +21,7 @@ DEC-008 を **LOCKED Accepted** として正本化したあと、
 
 この確認は **次 substantive unit 選定でも FindingCode / Implementation 着手でもない**。
 
-矛盾がなければ、次の substantive unit を **新たに選ぶ段階** に入る。
+矛盾がなければ、次の substantive unit を **新たに選ぶ段階** に入る（選定自体は別 Human 操作）。
 
 ---
 
@@ -49,14 +52,16 @@ DEC-008 を **LOCKED Accepted** として正本化したあと、
 | C5 | SupportPlan contract | role-free transition UNCHANGED; no role checks invented | **PASS** |
 | C6 | FindingCode / A-5 / Implementation | HOLD / DO NOT CREATE / HOLD | **PASS** |
 | C7 | Next substantive unit | NOT SELECTED；自動選定しない | **PASS** |
-| C8 | PR #143 | docs Acceptance on branch; merge preserves meaning | PENDING_AT_MERGE |
-| C9 | Issue #8 | DEC-008 Accepted comment exists; body matches §1 paste | PENDING_HUMAN_POST / VERIFY |
+| C8 | PR #143 | docs Acceptance merged; meaning preserved | **PASS** — MERGED `713c40a…` / head `cfbbcd3…` |
+| C9 | Issue #8 | DEC-008 Accepted comment exists; body matches §1 paste | **PASS** — Human returned comment ID `5229571943`（Agent API 403；Human attestation） |
 
 ```text
-Docs-internal consistency: PASS
-Issue #8 live post: PENDING — Human
-PR #143 merge: PENDING — Human Merge GO（if still open）
-Contradiction found in repository docs: NONE
+Checked at: 2026-08-09
+main tip: 713c40a0126fce50d13a8816270890e1016c443b
+PR #143: MERGED
+Issue #8 DEC-008 comment: 5229571943
+Verdict: CONSISTENT
+Contradiction found: NONE
 ```
 
 ---
@@ -69,11 +74,18 @@ Contradiction found in repository docs: NONE
 | **INCONSISTENT** | any FAIL | 矛盾箇所を特定し、docs / Issue #8 のどちらを正とするか Human 判断 |
 | **BLOCKED** | Issue #8 未投稿 or PR 未マージで意味が壊れる | Human が投稿/Merge してから再確認 |
 
-Current: **DOCS PASS / LIVE LEDGER PENDING**
+Current: **CONSISTENT**
 
 ---
 
-## 5. Explicit non-goals
+## 5. Explicit non-goals（維持）
+
+```text
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Implementation Start: HOLD
+Next substantive unit: NOT SELECTED
+```
 
 整合確認が PASS でも、自動では進めない:
 
@@ -88,6 +100,13 @@ Current: **DOCS PASS / LIVE LEDGER PENDING**
 
 ## 6. After CONSISTENT
 
-Human が次の substantive unit を新たに選ぶ。
+正本化条件は揃った。次は substantive unit 選定:
 
-候補の提示は、Human が求めたときだけ行う。
+- [`decision-next-substantive-unit-selection-packet.md`](./decision-next-substantive-unit-selection-packet.md)
+
+```text
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Implementation Start: HOLD
+Next substantive unit: NOT SELECTED until Human Option
+```

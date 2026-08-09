@@ -82,10 +82,10 @@ MUST NOT invent:
 ## Next
 
 ```text
-1. DEC-008 正本化・整合確認を完了する
-   → decision-dec-008-canonicalization-consistency-check.md
-2. Issue #8 台帳へ登録文面を投稿する（Human）
-   → decision-dec-008-issue8-ledger-registration.md
-3. その後、新しい substantive unit を選定する（NOT SELECTED のまま）
-FindingCode / A-5 / Implementation: HOLD
+Issue #8 DEC-008: POSTED / comment 5229571943
+Consistency (docs / Issue #8 / PR #143): CONSISTENT
+Next substantive unit: NOT SELECTED（Human が新たに選ぶ）
+FindingCode: HOLD / DO NOT CREATE
+A-5: HOLD
+Implementation Start: HOLD
 ```
