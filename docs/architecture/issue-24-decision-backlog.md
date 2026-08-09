@@ -250,7 +250,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | 1 | Result 技術設計が main にある | DONE（設計 + Result変換 PR #72） |
 | 2 | 所有 Issue と PR 境界が記録済み | 部分（Result変換は #24。完全契約境界は未固定） |
 | 3 | `DEC-009` 保存タイミング Accepted または対象外明示 | **未**（Issue #8/#19） |
-| 4 | `GOV-AUD-03` 訂正承認境界 Accepted または application 対象外明示 | **未**（Issue #19） |
+| 4 | `GOV-AUD-03` 訂正承認境界 Accepted または application 対象外明示 | **packet READY**（Issue #19 / [`decision-gov-aud-03-snapshot-correction-approver-decision-packet.md`](./decision-gov-aud-03-snapshot-correction-approver-decision-packet.md)） |
 | 5 | 完全 Finding または findingIds 参照境界 | **未**（SEV / FC / 完全 Finding 依存） |
 | 6 | サービス別 `NOT_APPLICABLE` reason 正本または HOLD 方針 | **未** |
 | 7 | Schema ID / schemaVersion / DTO versioning | **未** |
@@ -364,19 +364,19 @@ post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision
 
 ```text
 Current single gate（canonical）:
-  NEXT_SUBSTANTIVE_UNIT_SELECTION
-  = decision-next-substantive-unit-selection-packet.md
+  GOV-AUD-03 Human Decision
+  = 判定スナップショット訂正の承認者（A/B/C/D/E/F）
+  packet: decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
+Next substantive unit: SELECTED / B / GOV-AUD-03
 DEC-008: Accepted / LOCKED / Issue #8 comment 5229571943
-  制度上の作成者 = 実践研修修了者
-  独立した最終承認者 = NOT ADOPTED（アプリ独自の最終承認者を設定しない）
 Consistency (docs / Issue #8 / PR #143): CONSISTENT（最終確定）
 Finding catalog DEC-019: Accepted / EMPTY / NOT ADOPTED
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
-Next substantive unit: NOT SELECTED（selection packet READY）
 Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
 Implementation Start: HOLD
 ```
+
 
 
 

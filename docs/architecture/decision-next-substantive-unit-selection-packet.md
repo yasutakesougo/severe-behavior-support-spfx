@@ -14,7 +14,8 @@ Agent が次 unit を自動選定しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: NEXT_SUBSTANTIVE_UNIT_SELECTION
 Kind: Human Decision packet
-Status: READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Selected Option B）
+Selection record: decision-next-substantive-unit-selection.md
 Depends on:
   DEC-008 Accepted / LOCKED
   Issue #8 comment 5229571943
@@ -24,8 +25,9 @@ Depends on:
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
-Next substantive unit: NOT SELECTED（本 packet で選ぶ）
+Next substantive unit: SELECTED / GOV-AUD-03
 ```
+
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
@@ -164,18 +166,20 @@ E. DEC-008 残面（提出・差戻しロール）のみ
 F. 別単位（単位名を明示）
 G. まだ決めない
 
-答え: （Human 記入）
-F の場合の単位名: （Human 記入）
-B の場合の GOV-AUD ID（任意）: （Human 記入）
+答え: B（2026-08-09）
+Scope: 判定スナップショット訂正の承認者
+Selection record: decision-next-substantive-unit-selection.md
 ```
 
 ## 7. Gate
 
 ```text
 DEC-008 consistency: CONSISTENT
-NEXT_SUBSTANTIVE_UNIT_SELECTION: READY_FOR_HUMAN_DECISION
+NEXT_SUBSTANTIVE_UNIT_SELECTION: CONSUMED / Selected B
+Selected unit: GOV-AUD-03
+GOV-AUD-03 packet: READY_FOR_HUMAN_DECISION
+  → decision-gov-aud-03-snapshot-correction-approver-decision-packet.md
 FindingCode: HOLD / DO NOT CREATE
 A-5: HOLD
 Implementation Start: HOLD
-Human Decision: PENDING
 ```
