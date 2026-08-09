@@ -217,15 +217,16 @@ repository docs は Accepted 正本 mirror（Issue #8 / DEC-018）。
 - FindingSeverity Human Decision は SEV-2-VOCAB Accepted / Option A / NOT ADOPTED。Canonical は COMPLETE（Issue #8 / DEC-018）。PURPOSE は MHLW-first RECORDED。CONCEPT-INV は COMPLETED。ASSIGN は N/A / DO NOT START。ownership は SEV-1 Accepted。完全なFinding契約
 - AssessmentSnapshot本体のTypeScript型・保存validator・findingIds必須化・永続fixture
 - `DEC-009`・`GOV-AUD`に依存するAssessmentSnapshotの保存・確定・訂正・handoff運用
-- Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存技術契約は MERGED（PR #99 / [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)）。実装前次工程は #22A 整合（[`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
+- Handoff状態遷移〜 AuditEvent candidate は完了（#17 / PR #96）。実保存技術契約は MERGED（PR #99 / [`audit-event-persistence-contract.md`](./audit-event-persistence-contract.md)）。Persistence Entry MET / #22B synthetic MERGED。実 SharePoint adapter は別 Gate / NO-GO（[`audit-event-persistence-entry-criteria.md`](./audit-event-persistence-entry-criteria.md) / [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
 - Issue #24が所有するSnapshot候補生成（安定ID・lifecycle・Identity組立・再発判定・Result変換は技術契約化・PR-C〜H完了。FindingCode catalog ownership は FC-1 Accepted / Option B。delivery は FC-2 Accepted / Option C。FC-3 Accepted / Option C。FC-4 Accepted / Option C。FC-5 Accepted / Option C。FC-6 Accepted / Option C。残 Human Decision は [`fc-decision-exit-review.md`](./fc-decision-exit-review.md) A-class。値一覧・Snapshot候補はHOLD）
 - SupportPlan status transition / Active一意性 / 観察期間メンバシップ / 見直し期限 asOf 相対判定 / RuleSetVersion選択は完了。GOV-RULE-05/06/07 は Accepted。GOV-RULE-08 は Accepted / Option A / NOT ADOPTED（[`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) / [`review-due-overdue-contract.md`](./review-due-overdue-contract.md)）。残る SupportPlan 系は OP-3・RD-3 等の制度・フィールド Decision（[`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) / [`review-notice-contract.md`](./review-notice-contract.md)）
+- Implementation Entry 残 Decision 再監査: [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)（current single gate = FindingCode A-1〜A-4 content。Implementation Start HOLD）
 - Finding 再オープンは Decision-FLR-1 Accepted（不許可・実装 NONE / [`decision-flr-1-finding-reopen-policy.md`](./decision-flr-1-finding-reopen-policy.md)）
 - Issue #24 残 Decision 分類: [`issue-24-decision-backlog.md`](./issue-24-decision-backlog.md)（Next pure unit: NONE）
 - 削除を実行できる具体的業務ロール
 - 再連携を実行できる具体的業務ロール
 - `AuditEvent.actionCode`最終enum（`HANDOFF_STATUS_CHANGED` は Accepted `5215557663`）
-- AuditEvent 実保存・SharePoint adapter（契約 MERGED。実装は #22A 整合 Gate HOLD / [`audit-event-persistence-22a-alignment-gate.md`](./audit-event-persistence-22a-alignment-gate.md)）
+- AuditEvent 実保存・SharePoint adapter（Persistence Entry MET / synthetic MERGED。実環境 adapter は別 Gate / NO-GO）
 - 許可フィールド値のサニタイズ（Issue #22 adapterまたは新規audit-write-boundary）
 - サービス別`NOT_APPLICABLE`・`UNKNOWN` reasonCode enum
 - 施設割合、職員研修割合

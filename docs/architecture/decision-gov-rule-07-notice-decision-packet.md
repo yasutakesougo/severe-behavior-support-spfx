@@ -24,10 +24,12 @@ main baseline: ed77f5e480ee8546c38809c60774fd5c512ab17e
 GOV-RULE-05: Accepted（main）
 GOV-RULE-06: Accepted（main）
 GOV-RULE-07: Accepted（Option C）
-GOV-RULE-08: HOLD
+GOV-RULE-08: HOLD（packet-time snapshot; superseded — now Accepted / Option A / NOT ADOPTED）
 duration_days = 90: NOT AUTHORIZED
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
+Current status after PR #138: see decision-gov-rule-08-due-overdue-acceptance.md
+  / implementation-entry-decision-reaudit.md
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
