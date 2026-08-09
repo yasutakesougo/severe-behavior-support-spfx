@@ -269,5 +269,9 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + 
   （XXXXX / YYYYY = PLACEHOLDER / SUPERSEDED FOR CREATION）
 Next Human gate: PILOT LIST NAMES（after ownership check）
   → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
+Ownership check: READY
+  → decision-assessment-snapshot-pilot-list-ownership-check.md
+Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+  recommended LO-1: List A=SupportPlan / List B=AssessmentSnapshot
 List names: DEFERRED
 ```

@@ -144,6 +144,9 @@ Creation remains a later Human execution gate after List names exist.
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
 Active next gate: PILOT LIST NAMES（after ownership check）
+Ownership check: READY
+Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+  recommended LO-1: List A=SupportPlan / List B=AssessmentSnapshot
 List names: DEFERRED / NOT SELECTED
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
@@ -153,6 +156,6 @@ SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for List ownership check + List names Human Decision
+  waiting for Human Accept of List ownership pairing
   auto-start: FORBIDDEN
 ```

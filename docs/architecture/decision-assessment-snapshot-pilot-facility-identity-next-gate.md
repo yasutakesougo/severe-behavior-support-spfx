@@ -9,7 +9,7 @@ Identity / Site naming 正本:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Next-gate definition（docs-only）
-Status: FIXED / NOT STARTED
+Status: FIXED / OWNERSHIP CHECK READY
 Authorization basis:
   Decision-AS-PILOT-FACILITY-IDENTITY-1 = Accepted / LOCKED
     / PO-1 + FK-1 + SN-1 + LN-D + XB-1
@@ -18,7 +18,14 @@ Next gate:
   PILOT LIST NAMES
   （after List ownership / responsibility check）
 
-List naming GO: NOT GIVEN / NOT STARTED
+Ownership check:
+  decision-assessment-snapshot-pilot-list-ownership-check.md
+  Status: READY FOR HUMAN OWNERSHIP DECISION
+Active Decision:
+  Decision-AS-PILOT-LIST-OWNERSHIP-1 = OPEN / NOT ACCEPTED
+  → decision-assessment-snapshot-pilot-list-ownership-packet.md
+
+List naming GO: NOT GIVEN / NOT STARTED（ownership LOCK 後）
 Creation GO: NOT GIVEN / NO-GO
 This document does NOT invent List names and does NOT start tenant mutation.
 ```
@@ -33,13 +40,17 @@ Next gate:
   PILOT LIST NAMES（after List ownership / responsibility check）
 
 Sequence:
-  1. 2つの List それぞれの正本責務を確認する
-  2. 全事業所で共通利用する List name(s) を Human Decision で採択する
-  3. STOP（作成はさらに別 Human execution gate）
+  1. 2つの List それぞれの正本責務を確認する → READY（ownership check）
+  2. Human が ownership pairing を Accept する（Decision-AS-PILOT-LIST-OWNERSHIP-1）
+  3. 全事業所で共通利用する List name(s) を別 Human Decision で採択する
+  4. STOP（作成はさらに別 Human execution gate）
+
+Current step:
+  2 — waiting for Human Accept of ownership（LO-1 candidate）
 
 NOT next:
   Site/List creation
-  inventing List names without ownership check
+  inventing List names without ownership Accept
   creating with XXXXX / YYYYY
 ```
 
@@ -97,6 +108,11 @@ Creation remains a later Human execution gate after List names exist.
 ```text
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
 Next gate: FIXED = PILOT LIST NAMES（after ownership check）
+Ownership check: READY FOR HUMAN OWNERSHIP DECISION
+Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+  recommended: LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+  List A = SupportPlan 正本
+  List B = AssessmentSnapshot 正本
 List names: DEFERRED / NOT SELECTED
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
@@ -106,6 +122,6 @@ SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for List ownership check + List names Human Decision
+  waiting for Human Accept of List ownership pairing
   auto-start: FORBIDDEN
 ```

@@ -258,6 +258,11 @@ LOCKED payload:
 Next gate: FIXED
   PILOT LIST NAMES（after List ownership / responsibility check）
   → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
+Ownership check: READY
+  → decision-assessment-snapshot-pilot-list-ownership-check.md
+Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+  → decision-assessment-snapshot-pilot-list-ownership-packet.md
+  recommended: LO-1 List A=SupportPlan / List B=AssessmentSnapshot
 List names: DEFERRED / NOT SELECTED
 Site / List creation: NO-GO（XB-1）
 Placeholder creation: FORBIDDEN

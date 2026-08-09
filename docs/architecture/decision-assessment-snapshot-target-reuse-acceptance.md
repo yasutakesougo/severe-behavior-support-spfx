@@ -201,6 +201,8 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + 
   磯子=isogo → /sites/severe-support-isogo
   本牧=honmoku → /sites/severe-support-honmoku
 Next Human gate: PILOT LIST NAMES（after ownership check）
-  → decision-assessment-snapshot-pilot-facility-identity-next-gate.md
+Ownership check: READY
+Decision-AS-PILOT-LIST-OWNERSHIP-1: OPEN / NOT ACCEPTED
+  recommended LO-1: List A=SupportPlan / List B=AssessmentSnapshot
 List names: DEFERRED
 ```
