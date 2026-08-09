@@ -5,7 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: c668d820708010fd1c3e6223b1e46bd69c486ed7
 Decision kind: residual substantive-unit selection only
 Selected: A — DEC-6 concrete mapping
-Status: SELECTED / NOT IMPLEMENTATION START
+Status: SELECTED / CONSUMED（Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED）
 Human Selection: Explicit A on 2026-08-09
 ```
 
@@ -19,13 +19,12 @@ Meaning:
   次に扱う substantive unit を AssessmentSnapshot 向け
   DEC-6 concrete mapping（Decision-AS-DEC6-MAPPING-1）とする。
   本記録は選定のみであり、具体列値・Site/List・実装を決めない。
+  （写像規則は後続 Decision-AS-DEC6-MAPPING-1 で Accepted）
 ```
 
-## Explicit non-authorization
+## Explicit non-authorization（selection 時点 / 実装は継続 HOLD）
 
 ```text
-Decision-AS-DEC6-MAPPING-1: OPEN via compare packet / NOT ACCEPTED
-DEC-6 concrete mapping values: HOLD / NOT DECIDED
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Site URL / List name / Internal Column Name: NOT DECIDED
@@ -65,22 +64,18 @@ DEC-009 / Decision-AS-APP-SAVE-1 / Decision-AS-SP-ADAPTER-1 は再 Decision し�
 ## Next gate
 
 ```text
-Next action:
-  DEC-6 concrete mapping read-only Decision packet / compare
-  → decision-assessment-snapshot-dec6-mapping-packet.md
-  Focus（Decision-AS-DEC6-MAPPING-1）:
-    logical field ↔ persistence field
-    read / write conversion
-    missing / malformed column の fail-closed
-    version（schemaVersion / dtoVersion）の扱い
+Selection CONSUMED → Decision-AS-DEC6-MAPPING-1 Accepted / LOCKED
+  decision-assessment-snapshot-dec6-mapping-acceptance.md
+  Logical ↔ persistence = LF-1
+  Read/write conversion  = RW-1
+  Missing/malformed      = MF-1
+  Version handling       = VR-1
 
-Not allowed from this document alone:
-  accepting mapping options as LOCKED
-  inventing Site URL / List name / Internal Column Name
-  modifying TypeScript / application / adapter / SharePoint code
-  Schema / DTO code assignment
-  FindingCode / A-5
-  post-retention deletion
+Still HOLD:
   Implementation Start
-  Deploy / real data
+  SharePoint / adapter / application code
+  Site URL / List name / Internal Column Name
+  Schema ID / schemaVersion / dtoVersion code assignment
+  FindingCode / A-5
+Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```

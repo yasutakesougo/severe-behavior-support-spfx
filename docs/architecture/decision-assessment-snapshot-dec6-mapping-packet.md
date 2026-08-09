@@ -4,12 +4,21 @@
 **AssessmentSnapshot logical field ↔ persistence field 写像規則**についての
 比較用 Human Decision Packet である。
 
+Accepted 正本:
+[`decision-assessment-snapshot-dec6-mapping-acceptance.md`](./decision-assessment-snapshot-dec6-mapping-acceptance.md)
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 baseline main: c668d820708010fd1c3e6223b1e46bd69c486ed7
 Decision ID: Decision-AS-DEC6-MAPPING-1
-Kind: Human Decision packet（compare only）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: LF-1 + RW-1 + MF-1 + VR-1
+Human Selected:
+  Logical ↔ persistence:   LF-1
+  Read/write conversion:    RW-1
+  Missing/malformed:        MF-1
+  Version handling:         VR-1
 Depends on:
   decision-ilb-1-fifteenth-residual-dec6-mapping-selection.md（SELECTED / A）
   decision-assessment-snapshot-sp-adapter-acceptance.md（LOCKED — PB-1+EM-1+CV-1+D6-1+UP-1）
@@ -21,14 +30,13 @@ Depends on:
   sharepoint-contract-mapping.md（DEC-6 HOLD / Contract側先例）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
-DEC-6 concrete mapping values: HOLD / NOT DECIDED
+DEC-6 mapping rules: Accepted / LOCKED（LF-1 + RW-1 + MF-1 + VR-1）
 Site URL / List name / Internal Column Name: NOT DECIDED
 Schema ID / schemaVersion / dtoVersion code assignment: HOLD / NOT STARTED
 Schema / DTO code: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Deploy / real data / real tenant: NO-GO
-value invention as Accepted without Human Decision: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -53,10 +61,9 @@ Question:
 ```
 
 ```text
-本 packet に候補・Agent recommendation が書いてあっても Accepted にはならない。
-採択は明示 Human Decision / Acceptance が必要。
-
-本 packet は具体 Internal Column Name / Site URL / List name を発明しない。
+Historical note:
+  候補・Agent recommendation は比較用。採択は Acceptance 正本のみが LOCKED である。
+  本 packet は具体 Internal Column Name / Site URL / List name を発明しない。
 ```
 
 ## 2. 再 Decision しない前提（LOCKED）
@@ -83,15 +90,15 @@ MUST NOT re-open in this packet:
   post-retention deletion
 ```
 
-## 3. logical field ↔ persistence field（比較・未採択）
+## 3. logical field ↔ persistence field（比較履歴）
 
-| ID | 対応の形 | 意味 | 利点 | リスク |
-|---|---|---|---|---|
-| **LF-1** | 明示 mapping 表（logical field → persistence field slot）。Internal Name / Site / List の具体値は未確認なら書かず Status=未確認のまま | 推測埋めを防げる | 表が空欄のまま残る | |
-| **LF-2** | TypeScript フィールド名から Internal Name を推論して確定 | 実装が速い | naming 非同一視方針と衝突；発明になる | |
-| **LF-3** | Schema ID / List 名から列を一括推論 | 設定が薄い | Contract≠List≠列の分離を崩す | |
-| **LF-HOLD** | 写像形も未決定 | 遅延可 | DEC-6 が空転 | |
-| **LF-X** | Human 明示 | Human 指定 | 未記載なら採択不可 | |
+| ID | 対応の形 | 結果 |
+|---|---|---|
+| **LF-1** | 明示 mapping 表；未確認具体値は書かない | **Accepted** |
+| **LF-2** | TypeScript 名から Internal Name を推論して確定 | NOT SELECTED |
+| **LF-3** | Schema ID / List 名から列を一括推論 | NOT SELECTED |
+| **LF-HOLD** | 写像形も未決定 | NOT SELECTED |
+| **LF-X** | Human 明示 | NOT SELECTED |
 
 ```text
 NOT candidates:
@@ -100,82 +107,58 @@ NOT candidates:
   Schema ID を SharePoint List name / 列名と同一視
 ```
 
-## 4. read / write conversion（比較・未採択）
+## 4. read / write conversion（比較履歴）
 
-| ID | conversion 規則 | 意味 | 利点 | リスク |
-|---|---|---|---|---|
-| **RW-1** | 写像対象フィールドごとに read/write 変換規則を文書化。変換失敗は成功へ倒さない。変換は adapter 内（CV-1） | fail-closed と責務境界に整合 | 規則の粒度固定が必要 | |
-| **RW-2** | write のみ定義し read は best-effort / 黙殺 | 書き込み優先で速い | 履歴・再読取で壊れる | |
-| **RW-3** | Snapshot 全体を単一 opaque JSON 列へ格納 | 列設計が単純 | 列監査・部分取得・型安全が弱い；DEC-6 列変換の意味が空になる | |
-| **RW-HOLD** | 未決定のまま | 遅延可 | adapter 実装誘惑が増える | |
-| **RW-X** | Human 明示 | Human 指定 | 未記載なら採択不可 | |
+| ID | conversion 規則 | 結果 |
+|---|---|---|
+| **RW-1** | フィールドごとの read/write 規則；失敗は成功へ倒さない；adapter 内 | **Accepted** |
+| **RW-2** | write のみ / read best-effort | NOT SELECTED |
+| **RW-3** | 単一 opaque JSON 列 | NOT SELECTED |
+| **RW-HOLD** | 未決定のまま | NOT SELECTED |
+| **RW-X** | Human 明示 | NOT SELECTED |
 
-```text
-本軸で決めないもの:
-  実 SharePoint Column Type のテナント確定値
-  実デプロイ手順
-```
+## 5. missing / malformed column の fail-closed（比較履歴）
 
-## 5. missing / malformed column の fail-closed（比較・未採択）
-
-| ID | missing / malformed 時 | 意味 | 利点 | リスク |
-|---|---|---|---|---|
-| **MF-1** | 必須欠落・型不正・未知必須列は fail-closed。成功空結果や部分成功へ倒さない。adapter が FR-1 語彙へ写像（EM-1） | DEC-7 / FR-1 / EM-1 と整合 | 結果コードの詳細粒度は別固定になり得る | |
-| **MF-2** | 欠落を default 合成して成功継続 | UX が滑らか | 監査・再現性破壊 | |
-| **MF-3** | 不正列をスキップして残りを成功 | 部分データ salvage | 部分成功の黙殺 | |
-| **MF-HOLD** | 未決定のまま | 遅延可 | unavailable 以外の失敗が不定 | |
-| **MF-X** | Human 明示 | Human 指定 | 未記載なら採択不可 | |
+| ID | missing / malformed 時 | 結果 |
+|---|---|---|
+| **MF-1** | fail-closed；成功空・部分成功へ倒さない；FR-1 写像（EM-1） | **Accepted** |
+| **MF-2** | default 合成して成功継続 | NOT SELECTED |
+| **MF-3** | 不正列スキップして残り成功 | NOT SELECTED |
+| **MF-HOLD** | 未決定のまま | NOT SELECTED |
+| **MF-X** | Human 明示 | NOT SELECTED |
 
 ```text
 MUST NOT:
   missing / malformed を draft/finalize 成功として扱う
-  変換失敗を VALIDATION_FAILED 以外へ雑に倒して業務欠陥と接続失敗を混同する
-    （詳細写像は EM-1 側；本軸は成功へ倒さないこと）
   成功0件配列へ列失敗を隠す（DEC-7 先例）
 ```
 
-## 6. version（schemaVersion / dtoVersion）の扱い（比較・未採択）
+## 6. version（schemaVersion / dtoVersion）の扱い（比較履歴）
 
-| ID | version 扱い | 意味 | 利点 | リスク |
-|---|---|---|---|---|
-| **VR-1** | persistence 上でも Accepted `1.0.0` / `1.0.0`（または明示 readable set）と照合。不一致は fail-closed。TypeScript/DTO へのコード割当は依然 HOLD | SemVer LOCKED と整合 | readable set 拡張は別 Decision | |
-| **VR-2** | persistence で version を無視 | 移行が楽に見える | 破損・混在 schema を検出できない | |
-| **VR-3** | 未知 version を自動 migrate して成功 | 前方互換が速い | 暗黙破壊的変換；Human Decision 欠落 | |
-| **VR-HOLD** | 未決定のまま | 遅延可 | 読取経路の契約が不定 | |
-| **VR-X** | Human 明示 | Human 指定 | 未記載なら採択不可 | |
+| ID | version 扱い | 結果 |
+|---|---|---|
+| **VR-1** | Accepted 1.0.0 照合；不一致 fail-closed；コード割当 HOLD | **Accepted** |
+| **VR-2** | persistence で version を無視 | NOT SELECTED |
+| **VR-3** | 未知 version を自動 migrate | NOT SELECTED |
+| **VR-HOLD** | 未決定のまま | NOT SELECTED |
+| **VR-X** | Human 明示 | NOT SELECTED |
 
-```text
-MUST NOT:
-  本 packet で schemaVersion / dtoVersion 文字列自体を変更する
-  コード割当（TypeScript フィールド追加）を本 Acceptance だけで開始する
-```
-
-## 7. Agent recommendation（NOT Acceptance）
+## 7. Agent recommendation（historical / NOT Acceptance）
 
 ```text
-Agent recommendation:
-  Logical ↔ persistence:   LF-1
-  Read/write conversion:    RW-1
-  Missing/malformed:        MF-1
-  Version handling:         VR-1
-
-Rationale（比較用）:
-  明示 mapping 表で推測埋めを避け、
-  conversion と missing/malformed は adapter 内で fail-closed、
-  version は Accepted 1.0.0 照合のままコード割当は HOLD。
-
-This is NOT Human Acceptance evidence.
-Human must explicitly Accept LF-* / RW-* / MF-* / VR-*（組み合わせ可）.
+Agent recommendation: LF-1 + RW-1 + MF-1 + VR-1
+Human Decision: LF-1 + RW-1 + MF-1 + VR-1（Accepted / LOCKED）
+Agent recommendation alone was NOT Acceptance evidence.
 ```
 
 ## 8. 判断単位の分離
 
 | 決める / 決めない | 本 packet |
 |---|---|
-| logical ↔ persistence 対応形（LF-*） | **比較対象** |
-| read/write conversion（RW-*） | **比較対象** |
-| missing/malformed fail-closed（MF-*） | **比較対象** |
-| version 扱い（VR-*） | **比較対象** |
+| logical ↔ persistence 対応形（LF-*） | **Accepted / LF-1** |
+| read/write conversion（RW-*） | **Accepted / RW-1** |
+| missing/malformed fail-closed（MF-*） | **Accepted / MF-1** |
+| version 扱い（VR-*） | **Accepted / VR-1** |
 | Site URL / List name / Internal Column Name 具体値 | OUT / NOT DECIDED |
 | SharePoint / adapter コード実装 | OUT / DO NOT START |
 | Schema / DTO コード割当 | OUT / HOLD |
@@ -184,21 +167,18 @@ Human must explicitly Accept LF-* / RW-* / MF-* / VR-*（組み合わせ可）.
 | post-retention deletion | OUT / AUTO-START FORBIDDEN |
 | Implementation Start | HOLD |
 
-## 9. Human Decision（未選択）
-
-Human は次を明示する（未記載は NOT DECIDED）。
+## 9. Human Decision（固定）
 
 ```text
-Logical ↔ persistence:   LF-1 / LF-2 / LF-3 / LF-HOLD / LF-X:<text>
-Read/write conversion:    RW-1 / RW-2 / RW-3 / RW-HOLD / RW-X:<text>
-Missing/malformed:        MF-1 / MF-2 / MF-3 / MF-HOLD / MF-X:<text>
-Version handling:         VR-1 / VR-2 / VR-3 / VR-HOLD / VR-X:<text>
+Logical ↔ persistence:   LF-1
+Read/write conversion:    RW-1
+Missing/malformed:        MF-1
+Version handling:         VR-1
 ```
 
 ```text
-Until explicit Human Acceptance:
-  Decision-AS-DEC6-MAPPING-1: OPEN / NOT ACCEPTED
-  DEC-6 concrete mapping values: HOLD / NOT DECIDED
+After Acceptance:
+  DEC-6 mapping rules: LOCKED（Acceptance 正本）
   Site URL / List name / Internal Column Name: NOT DECIDED
   Implementation Start: HOLD
   SharePoint implementation: DO NOT START
@@ -214,9 +194,8 @@ Until explicit Human Acceptance:
 
 ```text
 Do NOT:
-  treat this compare packet as Acceptance
+  treat this compare packet alone as the LOCKED Acceptance（use Acceptance 正本）
   re-decide DEC-009 / APP-SAVE / SP-ADAPTER
-  lock LF-* / RW-* / MF-* / VR-* by Agent recommendation alone
   invent Site URL / List name / Internal Column Name / tenant settings
   start SharePoint / adapter / application / DTO code
   assign schemaId / schemaVersion / dtoVersion into TypeScript
@@ -225,15 +204,13 @@ Do NOT:
   Deploy / change real SharePoint / Entra / M365
 ```
 
-## 11. Next after Human Acceptance（将来）
+## 11. Next after Human Decision
 
 ```text
-If Human Accepts LF-* + RW-* + MF-* + VR-*:
-  → write Acceptance LOCKED doc（別手順）
-  → still NOT auto Implementation Start
-  → Site / List / Internal Name concrete values remain NOT DECIDED
-     unless separately Accepted with evidence（推測埋め禁止）
-  → SharePoint implementation remains DO NOT START
-Else:
-  → remain HOLD
+Decision-AS-DEC6-MAPPING-1: Accepted / LOCKED / LF-1 + RW-1 + MF-1 + VR-1
+  → decision-assessment-snapshot-dec6-mapping-acceptance.md
+Implementation Start: HOLD
+SharePoint implementation: DO NOT START
+Site / List / Internal Name: NOT DECIDED
+Ready / Merge: NOT RUN by this Decision
 ```
