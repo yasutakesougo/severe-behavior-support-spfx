@@ -139,6 +139,10 @@ Decision-ILB-1 ninth residual Decision selection packet（CONSUMED / A）: docs/
 Decision-AS-EC-1 overall Entry Acceptance（Accepted / LOCKED / MET / Option A）: docs/architecture/decision-as-ec-1-overall-entry-acceptance.md
 AS-EC-1 overall canonicalization consistency check（CONSISTENT / overall MET）: docs/architecture/decision-as-ec-1-overall-canonicalization-consistency-check.md
 AS-EC-1 overall Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-overall-independent-review.md
+Decision-ILB-1 fourteenth residual Decision selection（SELECTED / A / SharePoint·adapter / CONSUMED）: docs/architecture/decision-ilb-1-fourteenth-residual-sharepoint-adapter-selection.md
+Decision-AS-SP-ADAPTER-1 Acceptance（Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1）: docs/architecture/decision-assessment-snapshot-sp-adapter-acceptance.md
+Decision-AS-SP-ADAPTER-1 compare packet（CONSUMED）: docs/architecture/decision-assessment-snapshot-sp-adapter-packet.md
+Decision-AS-SP-ADAPTER-1 Independent Review（PR #175 / PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-assessment-snapshot-sp-adapter-independent-review.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
