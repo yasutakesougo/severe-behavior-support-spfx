@@ -140,71 +140,73 @@ FindingCode:
 | BS-002 | 支援手順記録時に適用すべき支援手順が確認できない | HARD GATE | NOT ADOPTED | NONE（catalog OUT） | Findingとしては行わない | **CANDIDATE** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 
-## 候補 — BS-002（FIXED にしない / 現場確認待ち）
+## 確定済み — BS-002
 
 ```text
 ID: BS-002
-Status: CANDIDATE — NOT FIXED
-Evidence status: Human一次情報として未確定
-Source: Human Decision candidate（既存資料からの確定一次情報ではない）
-Next needed: 現場運用として正しいかの Human 確認（下記 1問）
+Status: FIXED（Human ops confirmation / 2026-08-09）
+確認問答え: A（合っている）
+Finding catalog: OUT OF SCOPE（対象外）
+Evidence:
+  Human が運用を明示確認
+  「適用すべき支援手順が確認できない
+   → 支援手順記録を確定させない」
 Agent invention: NO
-推測で入れない例:
-  「記録が計画・手順と食い違っている状態」等は、
-  現場判断が曖昧になりやすいので BS-002 では採用候補にしない
 ```
 
 ```text
 ID: BS-002
-Status: CANDIDATE（2026-08-09）
+Status: FIXED（2026-08-09）
 
 Business State:
   支援手順記録を行う時点で、
   適用すべき支援手順が確認できない
 
-Candidate behavior:
+System behavior:
   HARD GATE
-  → 支援手順記録を確定できない
+  → 支援手順記録を確定できない / 確定させない
 
-Candidate Finding:
+Finding:
   NOT ADOPTED
+  → Finding は作らない
 
-Candidate FindingCode:
+FindingCode:
   NONE
+  → FindingCode も作らない
 
-Candidate catalog scope:
-  OUT
-
-継続管理（候補）:
+継続管理:
   Findingとしては行わない
+
+Finding catalog scope:
+  OUT
 ```
 
-理由（候補提示時の Human 説明）:
+流れ:
 
 ```text
-BS-001 と同じ境界を固める:
-  その場で操作を止めれば解決する
-  入力・前提条件の不足を、何でも Finding にしない
-
-Finding: ADOPTED の検討は BS-003 以降で、
-  「その場で止めるだけではなく、
-   未解決状態として継続的に追跡する必要があるもの」
-  が出たときに行う
+適用すべき支援手順が確認できない
+  ↓
+支援手順記録を確定させない
+  ↓
+HARD GATE
+  ↓
+Finding は作らない
+  ↓
+FindingCode も作らない
 ```
 
-### BS-002 確認問（1問）
+### BS-002 確認問（記録）
 
 ```text
 問:
   「適用すべき支援手順が確認できない場合、
    支援手順記録を確定させない」運用で合っていますか？
 
-A. 合っている → BS-002 を FIXED 候補へ
+A. 合っている → BS-002 を FIXED へ
 B. 違う → 内容を修正
 C. 現場確認が必要 → HOLD
 
-答え: UNSELECTED（A / B / C 待ち）
-FIXED: FORBIDDEN until A かつ明示採用
+答え: A（2026-08-09）
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
