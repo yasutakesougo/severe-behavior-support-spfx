@@ -386,6 +386,15 @@ Role / Active一意 / 観察・見直し / RuleSetVersion / SharePoint / UI / re
 選定ゲート: PR #73（docs-only）。実装: PR #74（domain 純関数 + contract tests）。
 PR #73 を実装 PR へ変質させない。
 
+PR-J（Entry #2 Accepted / LOCKED / PASS·MET — 字母割当のみ）:
+AssessmentSnapshot 完全契約実装の専用独立 PR 単位。
+所有 Issue: #24。
+正本: [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md) /
+[`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md)。
+GitHub PR #: 未採番。Implementation Start: HOLD。
+型 / validator / fixture / contract tests / SharePoint / DTO: DO NOT START。
+他実装単位と混在させない。
+
 PR-I以降（支援計画系純粋ルール・完了）:
 Active一意性（#76/#78）、観察期間（#79/#80）、見直し期限（#81/#82）、
 RuleSetVersion選択（#83/#84）。再監査: [`issue-24-remaining-audit-post-rsv.md`](./issue-24-remaining-audit-post-rsv.md)。
