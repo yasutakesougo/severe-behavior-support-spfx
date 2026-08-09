@@ -13,7 +13,9 @@ Implementation Start ではない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-RC-3 / GOV-RULE-07
 Kind: Human Decision packet
-Status: READY_FOR_HUMAN_DECISION
+Status: CONSUMED（Human Decision Accepted / Option C）
+Accepted 正本: decision-gov-rule-07-notice-acceptance.md
+Logical contract: review-notice-contract.md
 PR #135 / GOV-RULE-06: MERGED（Accepted）
 PR #136 / GOV-RULE-05: MERGED（Accepted）
   merge commit: ed77f5e480ee8546c38809c60774fd5c512ab17e
@@ -21,7 +23,7 @@ PR #136 / GOV-RULE-05: MERGED（Accepted）
 main baseline: ed77f5e480ee8546c38809c60774fd5c512ab17e
 GOV-RULE-05: Accepted（main）
 GOV-RULE-06: Accepted（main）
-GOV-RULE-07: HOLD → 本 packet で判断単位を固定
+GOV-RULE-07: Accepted（Option C）
 GOV-RULE-08: HOLD
 duration_days = 90: NOT AUTHORIZED
 Implementation Start: HOLD
@@ -69,7 +71,7 @@ NOT derived from 05/06:
 |---|---|---|
 | GOV-RULE-05 | 基準日 | Accepted / 触らない |
 | GOV-RULE-06 | practice cadence | Accepted / 触らない |
-| **GOV-RULE-07** | 通知開始時期 | **本 packet** |
+| **GOV-RULE-07** | 通知開始時期 | **Accepted / Option C**（本 packet 消費） |
 | GOV-RULE-08 | due / overdue 定義 | HOLD / 混ぜない |
 | Decision-RD-3 | 接近窓・算出・超過後の技術ポリシー | HOLD / 混ぜない |
 | Implementation | 通知 UI / job / Schema | HOLD / 混ぜない |
@@ -131,27 +133,28 @@ N / unit / precision: HUMAN FILLS
 GOV-RULE-08: 別途 HOLD 可だが、overdue とは分離維持必須
 ```
 
-### Option C — 暦月ベースの通知（日数 due 非依存）
+### Option C — 暦月ベースの通知（日数 due 非依存） — **Selected**
 
 ```text
-例の型（値は Human）:
-  見直し対象の暦月に入ったら注意を出す
-  または 基準月から M 暦月目の月初から
+Selected by Human Decision on 2026-08-09:
+  見直し対象となる暦月に入ったら通知する
+  意味: 「見直し時期です」と職員へ知らせる
+  precision: approximate
 day-count due を必須化しない
-precision は approximate cadence と整合しやすい
+Accepted 正本: decision-gov-rule-07-notice-acceptance.md
 ```
 
 ### Option D — 当面通知しない / NOT ADOPTED
 
 ```text
-GOV-RULE-07: NOT ADOPTED or OUT for current scope
-automated notice: DO NOT START
-GOV-RULE-08: 引き続き別 Decision
+Not selected
 ```
 
 ### Option E — その他（Human 明示）
 
-Human が A–D 以外を書く場合のみ。Agent が補完しない。
+```text
+Not selected
+```
 
 ## 6. 禁止事項
 
@@ -162,53 +165,51 @@ FORBIDDEN:
   GOV-RULE-07 と GOV-RULE-08 を一括 Accepted して曖昧にすること
   evaluateReviewDueRelativeToAsOf へ接近窓定数を埋め込むこと
   Implementation / UI / SharePoint を本 packet で開始すること
+  通知月に入った = overdue / 通知が出た = 業務違反 とみなすこと
 ```
 
-## 7. Accepted 時に必要になる論理面（予告・未採択）
+## 7. Accepted 論理面
 
-Human が採用 Option を選んだ後に、別 docs で固定しうる最小面:
+正本:
+
+- [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md)
+- [`review-notice-contract.md`](./review-notice-contract.md)
 
 ```ts
-// 例示。値・採用は Human Decision 後。本 packet では採択しない。
-type ReviewNoticePolicy =
-  | { kind: "not_adopted" }
-  | {
-      kind: "relative";
-      relativeTo: "due" | "anchor_plus_cadence" | "calendar_month";
-      offset: { unit: "day" | "month"; amount: number; precision: "exact" | "approximate" };
-      direction: "before";
-    };
+type ReviewNoticePolicy = {
+  kind: "calendar_month";
+  trigger: "enter_target_review_month";
+  purpose: "notify_staff_review_period";
+  precision: "approximate";
+};
 ```
 
-本 packet の段階では型も値も Accepted にしない。
-
-## 8. Human Decision 記録欄（未記入）
+## 8. Human Decision 記録欄
 
 ```text
-Human Decision: UNRECORDED
-GOV-RULE-07: HOLD / READY_FOR_HUMAN_DECISION
-Selected Option: UNSELECTED
-notice adopted: UNDECIDED
-relativeTo: UNDECIDED
-offset: UNDECIDED
-precision: UNDECIDED
+Human Decision: Explicit Human GOV-RULE-07 acceptance on 2026-08-09
+GOV-RULE-07: Accepted
+Selected Option: C — 暦月ベース
+notice adopted: YES
+trigger: enter target review calendar month
+purpose: notify staff 「見直し時期です」
+precision: approximate
+day-count conversion: FORBIDDEN
 GOV-RULE-08 relation: HOLD（別）
 Implementation Start: HOLD
 ```
 
-Human が決定したら、別 Acceptance 正本（`decision-gov-rule-07-*-acceptance.md`）へ記録する。
-
 ## 9. Gate
 
 ```text
-Packet: READY_FOR_HUMAN_DECISION
+Packet: CONSUMED
 GOV-RULE-05 / 06: Accepted（main）
-GOV-RULE-07: NOT ACCEPTED
+GOV-RULE-07: Accepted / Option C
 GOV-RULE-08: HOLD
 duration_days = 90: NOT AUTHORIZED
 Implementation Start: HOLD
 SharePoint / M365 / Deploy: NO-GO
-src/** / tests/**: 本 packet では変更しない
+src/** / tests/**: 本 packet / acceptance では変更しない
 ```
 
 ## 変更禁止境界

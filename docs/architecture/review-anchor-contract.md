@@ -109,20 +109,20 @@ Anchor + Cadence → reviewDueDate 自動算出: OUT / HOLD（GOV-RULE-08・RD-3
 
 ## OUT
 
-- GOV-RULE-07 / 08 の確定
+- GOV-RULE-08 の確定
 - `reviewDueDate` 算出・既定付与の実装
 - SupportPlan Schema / DTO / SharePoint 列変更
 - `previous_review_date` 物理表現の採択
 - `evaluateReviewDueRelativeToAsOf` の変更
 - 90日規則の実装
-- UI 通知
+- 通知 UI / job 実装（GOV-RULE-07 意味は別契約）
 - Issue Close / Deploy / M365 変更
 
 ## Entry Criteria（実装・Schema 反映の前）
 
 - GOV-RULE-05 / GOV-RULE-06 が Human Accepted — **充足**
 - 本契約と Accepted 内容が一致する — **充足**
-- GOV-RULE-07 / 08 を本実装へ混ぜない（未 Accepted なら HOLD）
+- GOV-RULE-08 を本実装へ混ぜない（HOLD）
 - `duration_days = 90` を正式 cadence として導入しない
 - 既存 `review-due` 相対判定へ制度値を埋め込まない
 - Schema / SharePoint 変更が必要なら別 Decision / 別 PR
@@ -133,8 +133,9 @@ Anchor + Cadence → reviewDueDate 自動算出: OUT / HOLD（GOV-RULE-08・RD-3
 ```text
 GOV-RULE-05: Accepted
 GOV-RULE-06: Accepted
+GOV-RULE-07: Accepted（Option C / 別正本）
 ReviewAnchorPolicy contract: Accepted（logical only）
-GOV-RULE-07 / 08: HOLD
+GOV-RULE-08: HOLD
 Decision-RD-3: HOLD
 3ヶ月 → 90日 conversion: FORBIDDEN
 Implementation Start: HOLD

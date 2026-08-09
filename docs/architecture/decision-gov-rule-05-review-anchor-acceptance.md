@@ -19,7 +19,7 @@ Accepted anchor policy:
   2回目以降: 前回見直し日
 Depends on: GOV-RULE-06 Accepted（practice cadence）
 main baseline: fc67f70016e09341f7b3155d934f9b80658e006d
-GOV-RULE-07 通知開始: HOLD
+GOV-RULE-07 通知開始: Accepted（別正本 decision-gov-rule-07-notice-acceptance.md / Option C）
 GOV-RULE-08 due / overdue 定義: HOLD
 duration_days = 90: NOT AUTHORIZED
 Decision-RD-3: HOLD
@@ -94,9 +94,9 @@ NOT derived from GOV-RULE-05 Accepted alone:
   91日目から overdue
   3暦月経過で自動違反
   duration_days = 90
-  GOV-RULE-07 通知開始日数
   GOV-RULE-08 due / overdue 判定規則
   reviewDueDate の確定算出式 / 自動付与実装
+  通知開始の日数変換（GOV-RULE-07 は別正本 / 暦月ベース）
 ```
 
 GOV-RULE-06 再掲（変更しない）:
@@ -111,7 +111,7 @@ GOV-RULE-06: Accepted
 ## Acceptance boundary
 
 ```text
-GOV-RULE-07 通知開始: HOLD
+GOV-RULE-07 通知開始: Accepted（別 Decision / Option C）
 GOV-RULE-08 due / overdue 定義: HOLD
 duration_days = 90: NOT AUTHORIZED
 Decision-RD-3: HOLD

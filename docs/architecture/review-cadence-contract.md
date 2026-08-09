@@ -52,7 +52,8 @@ Human Acceptance（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decis
 「90日」: NOT AUTHORIZED as nationwide mandatory statutory value
 GOV-RULE-06: Accepted
 GOV-RULE-05: Accepted（別正本）
-GOV-RULE-07 / 08: HOLD
+GOV-RULE-07: Accepted（Option C / 別正本）
+GOV-RULE-08: HOLD
 ```
 
 したがって本契約は **近似の暦月周期** を保持し、日数固定値へ変換しない。
@@ -63,7 +64,7 @@ GOV-RULE-07 / 08: HOLD
 |---|---|---|---|
 | **GOV-RULE-06** | 見直し周期の practice cadence 表現 | 基準日・通知・超過定義 | **Accepted** |
 | GOV-RULE-05 | 何の日から数えるか | cadence 本体 | **Accepted**（[`review-anchor-contract.md`](./review-anchor-contract.md)） |
-| GOV-RULE-07 | 何日前から注意を出すか | cadence 本体 | HOLD |
+| GOV-RULE-07 | 通知開始時期 | cadence 本体 | **Accepted**（Option C / [`review-notice-contract.md`](./review-notice-contract.md)） |
 | GOV-RULE-08 | 期限当日・期限超過の定義 | cadence 本体 | HOLD |
 | Decision-RD-1/RD-2 | caller-supplied due の asOf 相対判定所有・境界 | cadence / 制度窓 | Accepted（既存） |
 | Decision-RD-3 | 接近窓・期限算出・超過後ポリシー | practice cadence の一次表現 | HOLD |
@@ -144,12 +145,12 @@ MUST NOT:
 
 ## OUT
 
-- 通知窓・超過定義の確定（GOV-RULE-07 / 08）
+- 超過定義の確定（GOV-RULE-08）
 - `reviewDueDate` 算出・既定付与
 - SupportPlan Schema / DTO / SharePoint 列変更
 - `evaluateReviewDueRelativeToAsOf` の変更
 - 90日規則の実装
-- UI 通知
+- 通知 UI / job 実装（GOV-RULE-07 意味は別契約）
 - repository / SharePoint / Authorization / SPFx
 - Entra ID / Microsoft 365 / deploy
 - Issue #16 / #19 / #24 Close
@@ -160,8 +161,9 @@ MUST NOT:
 
 - GOV-RULE-06 が Human Accepted（practice cadence のみ）— **充足**
 - GOV-RULE-05 が Human Accepted（基準日）— **充足**（別正本）
+- GOV-RULE-07 が Human Accepted（通知開始）— **充足**（別正本 / Option C）
 - 本契約と Accepted 内容が一致する — **充足**
-- GOV-RULE-07 / 08 を本実装へ混ぜない（未 Accepted なら HOLD）
+- GOV-RULE-08 を本実装へ混ぜない（HOLD）
 - `duration_days = 90` を正式 cadence として導入しない
 - 既存 `review-due` 相対判定へ制度 cadence を埋め込まない
 - Schema / SharePoint 変更が必要なら別 Decision / 別 PR
@@ -174,8 +176,9 @@ MUST NOT:
 Source review: PASS
 GOV-RULE-06: Accepted
 GOV-RULE-05: Accepted（別正本）
+GOV-RULE-07: Accepted（Option C / 別正本）
 ReviewCadence contract: Accepted（logical only）
-GOV-RULE-07 / 08: HOLD
+GOV-RULE-08: HOLD
 Decision-RD-3: HOLD
 3ヶ月 → 90日 conversion: FORBIDDEN
 Implementation Start: HOLD
