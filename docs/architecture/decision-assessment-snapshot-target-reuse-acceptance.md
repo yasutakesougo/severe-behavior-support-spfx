@@ -38,7 +38,9 @@ Observed existing environment:
     UserCode / RecordDate / TimeSlot / Observation / Behavior
 
 New SPFx deployment target:
-  NOT SELECTED / NOT CREATED / HOLD
+  TOPOLOGY LOCKED（Decision-AS-NEW-TARGET-PROVISION-1 = ST-1+LT-1+NM-1+EX-1）
+  / NOT CREATED / HOLD
+  Concrete Site / List / Internal Names: NOT SELECTED / OPEN
 
 Reuse existing /sites/welfare for new SPFx:
   NOT ADOPTED（B）
