@@ -136,15 +136,42 @@ FindingCode:
 
 | ID | 業務状態（人の言葉） | System behavior | Finding | FindingCode | 継続管理 | 状態 |
 |---|---|---|---|---|---|---|
-| BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE** | Findingとしては行わない | **DECIDED** |
+| BS-001 | 有効な支援計画がないため、支援手順記録へ進めない | HARD GATE | **NOT ADOPTED** | **NONE**（catalog 対象外） | Findingとしては行わない | **DECIDED** |
 | BS-REF-01 | 見直し対象月に入った | NOTICE | NOT ADOPTED | NONE | 情報通知のみ | REFERENCE |
 | （次） | （Human が1件提示） | | | | | OPEN |
 
-## 未決（次の1件）
+## 未決 — BS-002（次の1件）
 
 ```text
-Next: Human が次の Business State を同じ形式で1件提示する
-Agent: 候補を発明しない / FindingCode を命名しない
+ID: BS-002
+Status: OPEN — Human input required
+Agent: 業務状態・Finding 採否・FindingCode を発明しない
+```
+
+Human が埋める形式:
+
+```text
+ID: BS-002
+Status: DECIDED（日付）
+
+Business State:
+  （人の言葉 — Human 提示）
+
+System behavior:
+  HARD GATE | NOTICE | OTHER
+  → （振る舞いの説明）
+
+Finding:
+  ADOPTED | NOT ADOPTED
+
+FindingCode:
+  NONE | PENDING
+
+継続管理:
+  Findingとしては行わない | Findingとして行う
+
+Finding catalog scope:
+  OUT | IN（Finding ADOPTED のとき）
 ```
 
 ## Finding にする／しない の判断メモ（Human 用）
@@ -175,9 +202,9 @@ DEC number: PENDING — Human selection（A-4）
 2. Finding にする業務状態
    - （Finding = ADOPTED の行を人の言葉で列挙）
 
-3. Finding にしない業務状態
+3. Finding にしない業務状態（Finding catalog 対象外）
    - BS-001: 有効な支援計画がないため手順記録へ進めない
-     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE）
+     （HARD GATE / Finding NOT ADOPTED / FindingCode NONE / catalog OUT OF SCOPE）
    - （その他 NOT ADOPTED 行）
 
 4. 変更管理
