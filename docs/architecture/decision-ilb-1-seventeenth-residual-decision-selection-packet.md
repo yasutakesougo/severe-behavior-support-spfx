@@ -97,7 +97,9 @@ Do NOT from this selection packet alone:
 ## 6. Next
 
 ```text
-Selection CONSUMED → Decision-AS-TENANT-CONFIRM-1 compare OPEN
-  decision-assessment-snapshot-tenant-confirm-packet.md
-Human next: Accept RO/EV/RB/XG（または HOLD）
+Selection CONSUMED → Decision-AS-TENANT-CONFIRM-1 Accepted / LOCKED
+  decision-assessment-snapshot-tenant-confirm-acceptance.md
+  RO-1 + EV-1 + RB-1 + XG-1
+Tenant confirmation execution: NOT STARTED
+Site / List / Internal Name values: NOT CONFIRMED / HOLD
 ```
