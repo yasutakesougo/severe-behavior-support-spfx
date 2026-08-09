@@ -8,6 +8,11 @@ Human Acceptance の durable evidence は
 [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) である。
 基準日・通知・期限超過判定の確定でも、`duration_days = 90` への変換実装でもない。
 
+本文中の `GOV-RULE-07/08: HOLD` は **source-review 時点の snapshot** である。
+現行: GOV-RULE-07 Accepted / Option C；GOV-RULE-08 Accepted / Option A / NOT ADOPTED
+（[`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md) /
+[`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)）。
+
 ## 基準
 
 ```text

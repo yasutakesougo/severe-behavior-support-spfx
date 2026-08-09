@@ -65,10 +65,13 @@ PR #137 / GOV-RULE-07: MERGED（merge `ba97f2df2cf369454dd6ab0670fca0bfbb1e1436`
 ReviewNotice contract: Accepted logical（[`review-notice-contract.md`](./review-notice-contract.md)）
 Decision packet GOV-RULE-07: CONSUMED（[`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md)）
 GOV-RULE-08: **Accepted** / Option A / NOT ADOPTED（[`decision-gov-rule-08-due-overdue-acceptance.md`](./decision-gov-rule-08-due-overdue-acceptance.md)）
+PR #138 / GOV-RULE-08: MERGED（merge `232d62db62b60c3d2ed8d7be8fac79b459e427d1` / head `3b555ec29c304e6fcbb611303ed648812c6950d6`）
 ReviewDueOverdue contract: Accepted logical（[`review-due-overdue-contract.md`](./review-due-overdue-contract.md) / `kind: "not_adopted"`）
 Decision packet GOV-RULE-08: CONSUMED（[`decision-gov-rule-08-due-overdue-decision-packet.md`](./decision-gov-rule-08-due-overdue-decision-packet.md)）
+Implementation Entry Decision Re-audit: [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)（post GOV-RULE-05〜08）
 3ヶ月 → 90日 conversion: FORBIDDEN
 通知月 ≠ overdue / 通知 ≠ 業務違反
+hard due / overdue: OUT OF CURRENT SCOPE
 Implementation Start: HOLD
 Issue #24 Close: NO-GO
 deploy: NO-GO
@@ -104,6 +107,7 @@ SharePoint / M365: 変更なし
 - [`review-notice-contract.md`](./review-notice-contract.md)
 - [`review-due-overdue-contract.md`](./review-due-overdue-contract.md)
 - [`review-due.md`](./review-due.md)
+- [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)
 
 ## Phase 1 — read-only 再監査結果
 
@@ -275,7 +279,7 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | #24 自動割当 | 禁止方針維持のまま #17 を明示 Accepted | 自動割当は行っていない |
 | 許可辺 | Decision-HO-EDGE-1 | Accepted（#17） |
 | 実装（遷移〜候補） | PR #90 / #91 / #93 / #96 | **MERGED** |
-| AuditEvent 実保存 | Entry Criteria | **HOLD**（`GOV-AUD-06` / `DEC-011` + 書込先所有） |
+| AuditEvent 実保存 | Entry Criteria | **MET**（PR #97 系）。実 SharePoint adapter / tenant は **別 Gate / NO-GO** |
 
 ### E. OP-3 / RD-3 / Review Cadence（GOV-RULE-06）
 
@@ -323,6 +327,16 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 17. Decision-OP-3    Observation period Schema / 制度 / 開放終端
 18. Decision-RD-3    Review due 接近窓 / 算出 / 超過後（90日必須を cadence 根拠にしない。08 NOT ADOPTED を理由に自動開始しない）
 19. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
+```
+
+post GOV-RULE-05〜08 の Entry 再監査正本: [`implementation-entry-decision-reaudit.md`](./implementation-entry-decision-reaudit.md)。
+
+```text
+Current single gate（canonical）:
+  HUMAN_FINDINGCODE_BUSINESS_CATALOG_BUNDLE_CONTENT_DECISION
+  = A-1〜A-4 bundle content
+Review GOV-RULE line: closed for current scope（08 = NOT ADOPTED）
+Implementation Start: HOLD
 ```
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
