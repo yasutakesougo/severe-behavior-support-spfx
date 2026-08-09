@@ -23,6 +23,7 @@ Fifth residual Decision: SELECTED / A — AS-EC-1 Entry #2（Accepted / LOCKED /
 Sixth residual Decision: SELECTED / A — AS-EC-1 Entry #5（Accepted / LOCKED / PASS·MET / findingIds NOT REQUIRED）
 Seventh residual Decision: SELECTED / A — AS-EC-1 Entry #6（Accepted / LOCKED / PASS·MET / NOT_APPLICABLE HOLD方針）
 Eighth residual Decision: SELECTED / A — AS-EC-1 Entry #7（Accepted / LOCKED / PASS·MET / DEC-1 versioning）
+Ninth residual Decision: SELECTED / A — Decision-AS-EC-1 overall（MET / Accepted / LOCKED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
@@ -45,7 +46,7 @@ Implementation Start: HOLD
 | **GOV-AUD-05** | 物理削除方針 | はい（個人情報・監査・保存との関係） | Decision-AUD-RET-1（最低5年）+ 本 Acceptance | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（[`decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`](./decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md)）。自動物理削除 **NOT ADOPTED**。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **DEC-012** | 論理削除データの完全削除方針 | はい | 同上 | — | — | **Accepted / LOCKED（Option A）** のうち **保存期間中の完全削除禁止**（GOV-AUD-05 と同一 Acceptance）。経過後の可否は別 Decision | **partial closed**（post-retention OPEN） |
 | **Decision-RD-3** | 見直し接近窓・期限算出・超過後 | 部分（cadence は Accepted だが窓日数は別） | GOV-RULE-06 Accepted；08 = NOT ADOPTED | — | — | **Accepted / LOCKED**（[`decision-rd-3-monitoring-guidance-acceptance.md`](./decision-rd-3-monitoring-guidance-acceptance.md)）。informational only。期限超過・警告・業務制限・90日・hard due **NOT ADOPTED** | **closed** |
-| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1 PASS / #2 PASS·MET（PR-J） / #3 DEC-009 Accepted / #4 GOV-AUD-03 / #5 PASS·MET / #6 PASS·MET / #7 PASS·MET（DEC-1） / #8 plan FINAL CONSISTENT；overall HOLD | はい（Entry 充足宣言） | 低 | overall Entry satisfied は別 Human 記録。Entry #7 正本 [`decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md`](./decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md)。第八 residual CONSUMED | **E**（overall HOLD） |
+| **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | 部分（業務保存・監査） | Entry #1〜#8 個別閉鎖／Accepted；**overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)） | 実装開始は別 | 低 | Implementation Start / PR-J / FindingCode / A-5 = HOLD。第九 residual CONSUMED | **closed（overall）** / Implementation HOLD |
 | **DEC-009** | Snapshot 保存タイミング | 業務上必要になり得る | Human Acceptance LOCKED | — | — | **Accepted / LOCKED / Option A / FINAL CONSISTENT**（[`decision-dec-009-snapshot-save-timing-acceptance.md`](./decision-dec-009-snapshot-save-timing-acceptance.md) / [`decision-dec-009-canonicalization-consistency-check.md`](./decision-dec-009-canonicalization-consistency-check.md)）。下書き / 確定時保存 / 元保持＋新版 / 上書き NOT ADOPTED / 履歴保持 | **closed** |
 | **DEC-015** | バックアップ・復元責任者 | 運用・監査 | 所有表のみ | はい | 低〜中 | 要 | **E** |
 | **DEC-6** | SharePoint 列変換 | 技術/adapter | adapter Entry 前提 | 技術契約寄り | N/A | Adapter Entry + Human GO | **D** 候補（業務ルール発明ではない） |
@@ -115,9 +116,10 @@ Order:
   7. Sixth residual: AS-EC-1 Entry #5 findingIds NOT REQUIRED PASS / MET（DONE / CONSUMED）
   8. Seventh residual: AS-EC-1 Entry #6 NOT_APPLICABLE HOLD方針 PASS / MET（DONE / CONSUMED）
   9. Eighth residual: AS-EC-1 Entry #7 DEC-1 versioning PASS / MET（DONE / CONSUMED）
- 10. Next residual: NOT SELECTED（Human が一件選ぶまで自動開始しない）
-     remaining examples: overall leave-HOLD / post-retention
-     recommended next candidate（Human only）: AS-EC-1 overall leave-HOLD 判定
-FindingCode / A-5 / Implementation: HOLD
-AS-EC-1 overall: HOLD
+ 10. Ninth residual: Decision-AS-EC-1 overall MET / Accepted（DONE / CONSUMED）
+ 11. Next residual: NOT SELECTED（Human が一件選ぶまで自動開始しない）
+     remaining examples: Implementation Start / post-retention
+     recommended next candidate（Human only）: Implementation Start（別単位；自動開始禁止）
+FindingCode / A-5 / Implementation / PR-J: HOLD
+AS-EC-1 overall: MET / Accepted
 ```

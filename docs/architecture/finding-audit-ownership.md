@@ -131,6 +131,11 @@ AS-EC-1 Entry #7 Schema / DTO versioning Acceptance（Accepted / LOCKED / Option
 AssessmentSnapshot Schema / DTO versioning policy（DEC-1）: docs/architecture/assessment-snapshot-schema-dto-versioning.md
 AS-EC-1 Entry #7 canonicalization consistency check（CONSISTENT / #7 PASS·MET）: docs/architecture/decision-as-ec-1-entry-7-canonicalization-consistency-check.md
 AS-EC-1 Entry #7 Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-entry-7-independent-review.md
+Decision-ILB-1 ninth residual Decision selection（SELECTED / A / AS-EC-1 overall）: docs/architecture/decision-ilb-1-ninth-residual-decision-selection.md
+Decision-ILB-1 ninth residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-ninth-residual-decision-selection-packet.md
+Decision-AS-EC-1 overall Entry Acceptance（Accepted / LOCKED / MET / Option A）: docs/architecture/decision-as-ec-1-overall-entry-acceptance.md
+AS-EC-1 overall canonicalization consistency check（CONSISTENT / overall MET）: docs/architecture/decision-as-ec-1-overall-canonicalization-consistency-check.md
+AS-EC-1 overall Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-overall-independent-review.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -174,7 +179,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
-| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**（実装 DO NOT START）。Entry #1 PASS / #2 **PASS / MET**（所有 #24 / **PR-J**）。Entry #5 **PASS / MET**（findingIds **NOT REQUIRED**）。Entry #6 **PASS / MET**（NOT_APPLICABLE **HOLD方針**）。Entry #7 **PASS / MET**（DEC-1 versioning；固有 Schema ID 採番は今しない。正本 [`decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md`](./decision-as-ec-1-entry-7-schema-dto-versioning-acceptance.md)）。保存・DTO・型実装は未了（PR-J Implementation Start 待ち）。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | overall HOLD。PR-J 字母割当済・実装 DO NOT START。findingIds 必須化しない。サービス別 reason enum 不採択。Schema ID 未採番。承認ロール / 型実装 DO NOT START |
+| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #1〜#8 個別閉鎖／Accepted。**Decision-AS-EC-1 overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）。Entry #5 findingIds NOT REQUIRED / #6 NOT_APPLICABLE HOLD方針 / #7 DEC-1 versioning（固有 Schema ID 未採番）/ #8 plan FINAL CONSISTENT。保存・DTO・型実装は未了。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | **Implementation Start / PR-J / FindingCode / A-5 = HOLD**（overall MET ≠ 実装開始）。PR-J 字母割当済・実装 DO NOT START |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
 | 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED / FINAL CONSISTENT**（comment `5229571943` + Option C / PR #147）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み）**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) | ロール実装 DO NOT START。最終承認者・提出/差戻し Binding 再導入禁止。role-free 遷移維持 |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
@@ -219,7 +224,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `DEC-015` | バックアップ・復元責任者 | Issue #8 |
 
 保存期間中の完全削除禁止は Accepted（GOV-AUD-05 / DEC-012）。経過後の削除可否・自動削除・cleanup 実装は別 Decision / HOLD。
-DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 Entry #8 技術計画は FINAL CONSISTENT（計画のみ）。AS-EC-1 Entry #2 は PASS / MET（PR-J 境界）。AS-EC-1 overall・Schema・保存実装・型実装は HOLD。
+DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 Entry #8 技術計画は FINAL CONSISTENT（計画のみ）。AS-EC-1 Entry #2 は PASS / MET（PR-J 境界）。**AS-EC-1 overall = MET / Accepted**（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）。固有 Snapshot Schema ID 未採番・保存実装・型実装は HOLD。overall MET ≠ Implementation Start。
 具体ロール Binding や物理削除手順をコードへ埋め込まない（Implementation HOLD）。
 
 ### 所有が未確定の事項

@@ -82,8 +82,9 @@ Depends on / keep:
   DEC-009 Accepted / LOCKED / FINAL CONSISTENT
   GOV-AUD-03 Accepted / Option E
   Result conversion DONE（PR #72）
-Still HOLD / OPEN for overall:
-  Decision-AS-EC-1 overall Entry satisfied（別 Human Decision）
+Still HOLD / OPEN for implementation:
+  Implementation Start / PR-J / FindingCode / A-5
+Decision-AS-EC-1 overall Entry satisfied: MET / Accepted（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）
 Entry #5 findingIds boundary: PASS / MET（NOT REQUIRED；完全 Finding 実装は別）
 Entry #6 NOT_APPLICABLE reason: PASS / MET（HOLD方針；値一覧不採択）
 Entry #7 Schema / DTO versioning: PASS / MET（DEC-1；固有 Schema ID 未採番）
@@ -94,9 +95,9 @@ Entry #2 ownership / PR-J: PASS / MET（境界のみ；実装は別 GO）
 
 ```text
 Implementation Start requires separate Human GO after:
-  - remaining AS-EC-1 Entry Criteria Human judgment
+  - Decision-AS-EC-1 overall Entry Criteria = MET / Accepted（done）
   - explicit Implementation Start Decision
-MUST NOT start from Entry #8 Acceptance alone
+MUST NOT start from overall MET / Entry #8 Acceptance alone
 ```
 
 ## 7. Explicit non-goals（本段階）

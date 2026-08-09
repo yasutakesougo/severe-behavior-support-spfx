@@ -49,9 +49,8 @@ versioning: DEC-1 に従う
 ```text
 Acceptance + policy: LOCKED
 Entry #7: PASS / MET
-AS-EC-1 Entry #1/#2/#3/#4/#5/#6/#7/#8: individually closed or Accepted
-AS-EC-1 overall: HOLD（別 Human Decision）
+Decision-AS-EC-1 overall: MET / Accepted（[`decision-as-ec-1-overall-entry-acceptance.md`](./decision-as-ec-1-overall-entry-acceptance.md)）
 FindingCode / A-5 / Implementation Start / PR-J: HOLD
 Next residual Decision: NOT SELECTED
-Recommended next candidate（Human only）: AS-EC-1 overall leave-HOLD 判定
+Recommended next candidate（Human only）: Implementation Start（別単位；自動開始禁止）
 ```
