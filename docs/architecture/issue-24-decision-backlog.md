@@ -55,11 +55,17 @@ FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision
 A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
 Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）。「3ヶ月に1回程度」/ calendar-month cadence / precision = approximate
 Decision-RC-2 / GOV-RULE-05: **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）。初回=支援計画有効開始日 / 以降=前回見直し日
+PR #135 / GOV-RULE-06: MERGED
+PR #136 / GOV-RULE-05: MERGED（merge `ed77f5e480ee8546c38809c60774fd5c512ab17e` / head `fb20d459fd25fca300fb5a3294632e89facd0d51`）
 ReviewCadence contract: Accepted logical（[`review-cadence-contract.md`](./review-cadence-contract.md)）
 ReviewAnchor contract: Accepted logical（[`review-anchor-contract.md`](./review-anchor-contract.md)）
 Source review: PASS（[`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md)）
-GOV-RULE-07 / 08: HOLD
+GOV-RULE-07: **Accepted** / Option C（[`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md)）。見直し対象暦月に入ったら通知 / precision = approximate
+ReviewNotice contract: Accepted logical（[`review-notice-contract.md`](./review-notice-contract.md)）
+Decision packet: CONSUMED（[`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md)）
+GOV-RULE-08: HOLD
 3ヶ月 → 90日 conversion: FORBIDDEN
+通知月 ≠ overdue / 通知 ≠ 業務違反
 Implementation Start: HOLD
 Issue #24 Close: NO-GO
 deploy: NO-GO
@@ -86,8 +92,11 @@ SharePoint / M365: 変更なし
 - [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)
 - [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md)
 - [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)
+- [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md)
+- [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md)
 - [`review-cadence-contract.md`](./review-cadence-contract.md)
 - [`review-anchor-contract.md`](./review-anchor-contract.md)
+- [`review-notice-contract.md`](./review-notice-contract.md)
 - [`review-due.md`](./review-due.md)
 
 ## Phase 1 — read-only 再監査結果
@@ -186,8 +195,8 @@ Issue 本文・コメント全文の再取得は未実施。
 | **Decision-OP-3** | SupportPlan Schema / 観察期間フィールド・制度日数・開放終端 | HOLD。メンバシップ純関数は完了。フィールド追加・制度日数・`periodTo` 開放終端は未決 | 別 Decision（所有は OP-1 で #24 メンバシップのみ確定。Schema は #26 関連） | OP-1/OP-2 Accepted 済み前提。既存 `evaluateObservationPeriodMembership` を変更しない | Schema/フィールド Decision Accepted 後の契約・（必要なら）別純関数。既存関数への制度値混入禁止 |
 | **Decision-RC-1 / GOV-RULE-06** | 見直し周期 practice cadence（「3ヶ月に1回程度」） | **Accepted**（2026-08-09）。calendar-month cadence · approximate。正本: [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / [`review-cadence-contract.md`](./review-cadence-contract.md) / source review [`decision-gov-rule-06-review-cadence-source-review.md`](./decision-gov-rule-06-review-cadence-source-review.md) | Issue #16 / #19（判断）・#24（相対判定との分離維持） | `duration_days=90` へ変換しない。GOV-RULE-07/08 と混ぜない | Schema/実装は別 Entry + Human Implementation Start。既存 `evaluateReviewDueRelativeToAsOf` UNCHANGED |
 | **Decision-RC-2 / GOV-RULE-05** | 見直し周期の基準日 | **Accepted**（2026-08-09）。初回=支援計画の有効開始日 / 2回目以降=前回見直し日。正本: [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) | Issue #16 / #19（判断）・#24（相対判定との分離維持） | GOV-RULE-06 と分離維持。due/overdue・通知・物理列は決めない | Schema/算出実装は別 Entry。`evaluateReviewDueRelativeToAsOf` UNCHANGED |
-| **GOV-RULE-07** | 注意開始（何日前） | **HOLD**。source review では未決定 | Issue #19 判断単位 | GOV-RULE-05/06 / RD-3 と分離 | 通知ポリシー別単位 |
-| **GOV-RULE-08** | 期限当日・期限超過の定義 | **HOLD**。05+06 だけでは決めない | Issue #19 判断単位 | practice cadence / 基準日と超過定義を混同しない | RD-3 / 超過判定契約と整合させる別 Decision |
+| **Decision-RC-3 / GOV-RULE-07** | 通知開始時期 | **Accepted**（2026-08-09）/ Option C。見直し対象暦月に入ったら通知 / precision = approximate。正本: [`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md) / [`review-notice-contract.md`](./review-notice-contract.md) / packet [`decision-gov-rule-07-notice-decision-packet.md`](./decision-gov-rule-07-notice-decision-packet.md) | Issue #16 / #19（判断） | GOV-RULE-05/06 Accepted 前提。GOV-RULE-08 / RD-3 と混ぜない。日数変換禁止 | 通知実装は別 Entry + Human Implementation Start。`evaluateReviewDueRelativeToAsOf` UNCHANGED |
+| **GOV-RULE-08** | 期限当日・期限超過の定義 | **HOLD**。05+06+07 だけでは決めない（通知月 ≠ overdue） | Issue #19 判断単位 | practice cadence / 基準日 / 通知開始と超過定義を混同しない | RD-3 / 超過判定契約と整合させる別 Decision |
 | **Decision-RD-3** | 接近窓・期限算出・超過後ポリシー | HOLD。asOf 相対判定は完了。接近窓・算出は未決。**90日必須を cadence 根拠にしない**（GOV-RULE-06 source review） | 別 Decision（RD-1 で #24 相対判定所有。算出・窓は別） | RD-1/RD-2 Accepted 済み前提。既存 `evaluateReviewDueRelativeToAsOf` を変更しない。RC-1/GOV-RULE-06 と分離 | 接近判定など別単位の技術契約候補。既存相対判定への窓日数混入禁止。89/90/91 は practice rule とみなさない |
 | **Decision-AS-EC-1** | AssessmentSnapshot 完全契約 Entry Criteria | HOLD。Result変換のみ完了。保存・DTO・findingIds・確定・訂正・handoff 未了 | Issue #24（完全契約候補）＋ `DEC-009` / `GOV-AUD`（#8/#19） | **DEC-009**、**GOV-AUD**（少なくとも保存・訂正境界）、完全 Finding / findingIds 境界、（必要なら）SEV・FC | Entry Criteria 充足の記録 → 完全契約 docs。**保存実装・Schema・SharePoint は含めない** |
 
@@ -270,7 +279,8 @@ Result変換純関数は完成済みとして扱い、拡張しない。
 | RD-3 | `evaluateReviewDueRelativeToAsOf` | 接近窓、期限算出、超過後ポリシー（**90日必須化を cadence 根拠にしない**） |
 | RC-1 / GOV-RULE-06 | **Accepted**（「3ヶ月に1回程度」/ approximate month cadence） | 実装・Schema は別 Entry |
 | RC-2 / GOV-RULE-05 | **Accepted**（初回=有効開始日 / 以降=前回見直し日） | 物理列・due 算出は別。07/08・RD-3 は HOLD |
-| GOV-RULE-07 / 08 | — | 通知・超過定義は HOLD |
+| GOV-RULE-07 | **Accepted** / Option C（対象暦月に入ったら通知） | 日数変換禁止。08 と分離。実装は別 |
+| GOV-RULE-08 | — | due / overdue 定義は HOLD（通知 ≠ overdue） |
 
 ```text
 Issue #16 duration_days-only design: REVISION CANDIDATE
@@ -302,10 +312,11 @@ Result変換は完了。完全契約へ進める条件は上記 Entry Criteria �
 12. Decision-FC-6    businessOwnershipRef logical contract — **Accepted / Option C**（complete businessOwnershipRef logical contract）。Implementation HOLD
 13. Decision-RC-1 / GOV-RULE-06  Review practice cadence（「3ヶ月に1回程度」）— **Accepted**
 14. Decision-RC-2 / GOV-RULE-05  Review anchor date（初回=有効開始日 / 以降=前回見直し日）— **Accepted**
-15. GOV-RULE-07 / 08             通知・超過定義 — HOLD（05/06 と混ぜない）
-16. Decision-OP-3    Observation period Schema / 制度 / 開放終端
-17. Decision-RD-3    Review due 接近窓 / 算出 / 超過後（90日必須を cadence 根拠にしない）
-18. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
+15. Decision-RC-3 / GOV-RULE-07  通知開始時期 — **Accepted** / Option C
+16. GOV-RULE-08                  due / overdue 定義 — HOLD（07 と混ぜない。通知 ≠ overdue）
+17. Decision-OP-3    Observation period Schema / 制度 / 開放終端
+18. Decision-RD-3    Review due 接近窓 / 算出 / 超過後（90日必須を cadence 根拠にしない）
+19. Decision-AS-EC-1 AssessmentSnapshot Entry Criteria（DEC-009 / GOV-AUD / Finding 境界後）
 ```
 
 注: Persistence technical contract は MERGED（PR #99）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 は Accepted。hardening MERGED（PR #102）。logical/replay MERGED（PR #104/#106）。
@@ -357,8 +368,10 @@ READY_FOR_HUMAN_GO: YES（consumed; #22B Human GO 5224579776）
 - OP-3/RD-3 の制度値を既存メンバシップ/相対判定へ混入
 - GOV-RULE-06 を `duration_days = 90` へ変換して正式周期とすること
 - 89/90/91 日境界を「3ヶ月に1回程度」practice rule の根拠とすること
-- GOV-RULE-07 / 08 を GOV-RULE-05/06 と一括 Accepted すること
-- GOV-RULE-05/06 から 90日 / 91日 overdue / 3暦月自動違反を導出すること
+- GOV-RULE-08 を GOV-RULE-05/06/07 と一括 Accepted すること
+- GOV-RULE-05/06/07 から 90日 / 91日 overdue / 3暦月自動違反を導出すること
+- 通知開始を 30日前等の日数へ変換すること
+- 通知月に入った = overdue / 通知が出た = 業務違反 とみなすこと
 - Snapshot 保存・DTO・SharePoint / SPFx / Schema / M365 / Deploy
 - Issue #24 Close
 - Decision の一括 Accepted 前提
@@ -409,10 +422,13 @@ FC Decision Exit Review: ACCEPTED（[`fc-decision-exit-review.md`](./fc-decision
 A-class structure: ACCEPTED（[`a-class-structure-acceptance.md`](./a-class-structure-acceptance.md)）。Bundle A-1〜A-4 / Separate A-5。Content NOT ACCEPTED
 Decision-RC-1 / GOV-RULE-06: **Accepted**（[`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md)）
 Decision-RC-2 / GOV-RULE-05: **Accepted**（[`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md)）
-GOV-RULE-07 / 08: HOLD
+GOV-RULE-07: **Accepted** / Option C（[`decision-gov-rule-07-notice-acceptance.md`](./decision-gov-rule-07-notice-acceptance.md)）
+GOV-RULE-08: HOLD
 ReviewCadence contract: Accepted logical（[`review-cadence-contract.md`](./review-cadence-contract.md)）
 ReviewAnchor contract: Accepted logical（[`review-anchor-contract.md`](./review-anchor-contract.md)）
+ReviewNotice contract: Accepted logical（[`review-notice-contract.md`](./review-notice-contract.md)）
 3ヶ月 → 90日 conversion: FORBIDDEN
+通知月 ≠ overdue / 通知 ≠ 業務違反
 Implementation Start: HOLD
 Issue #24 Close: NO-GO
 SharePoint / Entra ID / Microsoft 365: NO-GO
@@ -422,10 +438,10 @@ Deploy: NO-GO
 ## 本 PR（docs-only）の役割
 
 ```text
-1. GOV-RULE-05 を Human Accepted として記録する（初回=有効開始日 / 以降=前回見直し日）
-2. ReviewAnchor 論理契約を Accepted として固定する
-3. GOV-RULE-06 Accepted（3ヶ月に1回程度 / month cadence / approximate）を維持する
-4. GOV-RULE-07 / 08 と RD-3 を分離したまま HOLD する
+1. PR #135/#136 MERGED 後状態（GOV-RULE-05/06 Accepted）を前提に固定する
+2. GOV-RULE-07 Decision packet を置き、Independent Review 後に Option C を Accepted する
+3. 通知開始を暦月ベースで固定し、日数へ変換しない
+4. GOV-RULE-08 / RD-3 と混ぜない（通知 ≠ overdue）
 5. duration_days=90 および 89/90/91 を正式3ヶ月規則とみなさない
 6. evaluateReviewDueRelativeToAsOf は変更しない
 7. Implementation Start は HOLD を維持する（auto-start FORBIDDEN）

@@ -70,8 +70,9 @@ GOV-RULE-06 の practice cadence（およそ3ヶ月）を日数固定値へ変�
 | Decision-RD-1 | 見直し期限 asOf 相対判定純関数の所有を Issue #24 とするか | 期限算出、接近窓、Schema 変更 |
 | Decision-RD-2 | `reviewDueDate` / `asOf` は関数入力とし、制度接近窓を domain に埋め込まないか | 通知・UI・永続化 |
 | Decision-RD-3 | 接近窓・超過後ポリシー（制度日数）の要否（別単位） | 本純関数の実装詳細・practice cadence |
-| GOV-RULE-06 | 見直し周期 practice cadence（**Accepted** / [`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・通知・超過定義 |
-| GOV-RULE-05 | 見直し周期の基準日（**Accepted** / [`review-anchor-contract.md`](./review-anchor-contract.md)） | 本純関数・due 算出実装・通知・超過定義 |
+| GOV-RULE-06 | 見直し周期 practice cadence（**Accepted** / [`review-cadence-contract.md`](./review-cadence-contract.md)） | 本純関数・超過定義 |
+| GOV-RULE-05 | 見直し周期の基準日（**Accepted** / [`review-anchor-contract.md`](./review-anchor-contract.md)） | 本純関数・due 算出実装・超過定義 |
+| GOV-RULE-07 | 通知開始（**Accepted** / Option C / [`review-notice-contract.md`](./review-notice-contract.md)） | 本純関数・due/overdue・日数接近窓 |
 
 本 docs-only PR は **技術契約の固定**までとする。  
 Decision-RD-1 / RD-2 が Accepted になるまで **Implementation Start は HOLD** とする。
