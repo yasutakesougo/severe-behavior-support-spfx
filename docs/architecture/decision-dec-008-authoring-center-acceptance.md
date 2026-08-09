@@ -110,4 +110,3 @@ Next: Issue #8 ledger post + consistency check
 ```
 
 Agent は本 Acceptance を理由に Implementation や FindingCode へ自動進行しない。
-
