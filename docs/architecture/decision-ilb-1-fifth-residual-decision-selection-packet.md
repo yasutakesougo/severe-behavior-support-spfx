@@ -14,16 +14,16 @@ Agent が次 Decision を自動選定・自動 Accepted しない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_FIFTH_RESIDUAL_DECISION_SELECTION
 Kind: Human Decision packet
-Status: OPEN / NOT SELECTED
-Selection record: NOT YET（Human 選定後に作成）
+Status: CONSUMED / SELECTED
+Selection record: decision-ilb-1-fifth-residual-decision-selection.md
 Depends on:
   AS-EC-1 Entry #8 FINAL CONSISTENT（PR #159 MERGED）
-  Entry #1/#2 read-only audit（#1 PASS / #2 PARTIAL）
+  Entry #1/#2 read-only audit（#1 PASS / #2 was PARTIAL at audit）
   Decision-ILB-1 HUMAN_POLICY FINAL CONSISTENT
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
-Fifth residual Decision: NOT SELECTED
+Fifth residual Decision: SELECTED / A — AS-EC-1 Entry #2
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -41,7 +41,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ```text
 AS-EC-1 Entry #8: Accepted / LOCKED / Option A / FINAL CONSISTENT
 AS-EC-1 Entry #1: PASS / MET
-AS-EC-1 Entry #2: PARTIAL / NOT FULLY MET
+AS-EC-1 Entry #2: PASS / MET（Option A / PR-J boundary LOCKED）
 AS-EC-1 Entry #3（DEC-009）: Accepted / LOCKED / FINAL CONSISTENT
 AS-EC-1 Entry #4（GOV-AUD-03）: Accepted / Option E
 AS-EC-1 Entry #5 / #6 / #7: 未
@@ -49,11 +49,11 @@ AS-EC-1 overall: HOLD
 FindingCode / A-5 / Implementation: HOLD
 ```
 
-Entry #2 残ギャップ（監査正本より）:
+Entry #2 残ギャップ（監査時点 → Option A で閉塞）:
 
 ```text
-完全契約実装の専用 PR 字母: 未割当
-保存・DTO・findingIds・確定の PR 境界: 未固定
+完全契約実装の専用 PR 字母: PR-J（割当済）
+保存・DTO・findingIds・確定の PR 境界: PR-J に専用固定（実装は HOLD）
 ```
 
 問い:
@@ -117,8 +117,11 @@ SharePoint / M365 / Deploy / real data: NO-GO
 ## 4. Human Decision
 
 ```text
-答え: （未記入 — Human が A〜E を選ぶ）
-Selected: NOT SELECTED
+答え: A
+Selected: A — Entry #2 を今埋めて PASS / MET 化する
+Selection record: decision-ilb-1-fifth-residual-decision-selection.md
+Acceptance: decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md
+Boundary: assessment-snapshot-complete-contract-pr-boundary.md（PR-J / Issue #24）
 ```
 
 ```text

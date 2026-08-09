@@ -51,9 +51,8 @@ Verdict: FINAL CONSISTENT
 
 ```text
 Decision-AS-EC-1 overall: HOLD
-AS-EC-1 Entry #2: PARTIAL / NOT FULLY MET
+AS-EC-1 Entry #2: PASS / MET（後続 Option A / PR-J；本 Entry #8 整合時点の記録は PARTIAL だった）
 AS-EC-1 remaining examples:
-  Entry #2 完全契約 PR 境界
   Finding / findingIds 境界（#5）
   NOT_APPLICABLE reason（#6）
   Schema / DTO versioning（#7）
@@ -76,8 +75,7 @@ SharePoint / M365 / Deploy / real data: NO-GO
 
 ```text
 Next residual Decision: NOT SELECTED
-Entry #2 fill-or-defer: Human Decision packet OPEN
-  （decision-ilb-1-fifth-residual-decision-selection-packet.md）
+Fifth residual: CONSUMED（Entry #2 Option A / PR-J）
 AS-EC-1 remaining Entry Criteria: review candidate（Human 選定時のみ）
 他 residual Decision: Human が一件選ぶまで自動開始しない
 FindingCode / A-5 / Implementation: HOLD

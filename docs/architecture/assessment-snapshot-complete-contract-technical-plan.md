@@ -87,6 +87,7 @@ Still HOLD / OPEN for overall:
   Entry #6 NOT_APPLICABLE reason
   Entry #7 Schema / DTO versioning
   Decision-AS-EC-1 overall Entry satisfied
+Entry #2 ownership / PR-J: PASS / MET（境界のみ；実装は別 GO）
 ```
 
 ## 6. 実装開始条件（計画上のゲート）

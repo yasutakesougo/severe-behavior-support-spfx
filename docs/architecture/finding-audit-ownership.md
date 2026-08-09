@@ -106,8 +106,13 @@ AssessmentSnapshot complete-contract technical plan: docs/architecture/assessmen
 AS-EC-1 Entry #8 canonicalization consistency check（FINAL CONSISTENT / PR #159）: docs/architecture/decision-as-ec-1-entry-8-canonicalization-consistency-check.md
 AS-EC-1 Entry #8 Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #159）: docs/architecture/decision-as-ec-1-entry-8-independent-review.md
 AS-EC-1 Entry #8 FINAL CONSISTENT Independent Review（PASS / P0=0 / P1=0 / P2=0 / PR #160）: docs/architecture/decision-as-ec-1-entry-8-final-consistent-independent-review.md
-AS-EC-1 Entry #1/#2 read-only consistency audit（#1 PASS / #2 PARTIAL）: docs/architecture/decision-as-ec-1-entry-1-2-read-only-consistency-audit.md
-Decision-ILB-1 fifth residual Decision selection packet（OPEN / Entry #2 fill-or-defer）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection-packet.md
+AS-EC-1 Entry #1/#2 read-only consistency audit（#1 PASS / #2 PASS·MET after Option A）: docs/architecture/decision-as-ec-1-entry-1-2-read-only-consistency-audit.md
+Decision-ILB-1 fifth residual Decision selection（SELECTED / A / AS-EC-1 Entry #2）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection.md
+Decision-ILB-1 fifth residual Decision selection packet（CONSUMED / A）: docs/architecture/decision-ilb-1-fifth-residual-decision-selection-packet.md
+AS-EC-1 Entry #2 ownership / PR-boundary Acceptance（Accepted / LOCKED / Option A / PASS·MET）: docs/architecture/decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md
+AssessmentSnapshot complete-contract PR boundary（PR-J / Issue #24）: docs/architecture/assessment-snapshot-complete-contract-pr-boundary.md
+AS-EC-1 Entry #2 canonicalization consistency check（CONSISTENT / #2 PASS·MET）: docs/architecture/decision-as-ec-1-entry-2-canonicalization-consistency-check.md
+AS-EC-1 Entry #2 Independent Review（PASS / P0=0 / P1=0 / P2=0）: docs/architecture/decision-as-ec-1-entry-2-independent-review.md
 DEC-008 support-plan role separation: docs/architecture/decision-dec-008-support-plan-role-separation.md
 
 
@@ -151,7 +156,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | FindingCode写像・Identity組立（狭域） | Issue #24 | Decision `5210065336` / Implementation Start `5210078985` / 技術契約 `finding-identity-assembly.md` | PR-F完了（PR #66） |
 | finding再発判定 | Issue #24 | Decision `5210206944`（Q1-C/Q2-A/Q3-A/Q4-A） / 技術契約 `finding-recurrence.md` | PR-G完了（PR #67） |
 | AssessmentSnapshot Result変換（狭域・永続なし） | Issue #24 | Selection `5210366943` / Decision `5210389077` / Implementation Start `5210392317` / 技術契約 `assessment-snapshot-result-conversion.md` | PR-H完了（PR #72） |
-| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**（実装 DO NOT START）。Entry #1 PASS / #2 PARTIAL（[`decision-as-ec-1-entry-1-2-read-only-consistency-audit.md`](./decision-as-ec-1-entry-1-2-read-only-consistency-audit.md)）。保存・findingIds・DTO・完全契約 PR 境界は未了。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | 完全契約までHOLD（overall）。訂正モデルは維持。承認ロール / 型実装 DO NOT START |
+| AssessmentSnapshot候補生成・完全契約 | Issue #24 | Result変換（永続なし）は上記。Entry #8 技術計画 **Accepted / LOCKED / FINAL CONSISTENT**（実装 DO NOT START）。Entry #1 PASS / #2 **PASS / MET**（所有 #24 / **PR-J** 専用独立境界。正本 [`decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md`](./decision-as-ec-1-entry-2-ownership-pr-boundary-acceptance.md) / [`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）。保存・findingIds・DTO・型実装は未了（PR-J Implementation Start 待ち）。訂正承認は GOV-AUD-03 Accepted / Option E（application 対象外） | 完全契約実装までHOLD（overall + Implementation Start）。PR-J 字母割当済。承認ロール / 型実装 DO NOT START |
 | SupportPlan status transition（狭域・ロールなし） | Issue #24 | Accepted `5211039927` / 技術契約 `support-plan-status-transition.md` / 許可5辺 | PR-I完了（PR #73 / #74） |
 | 支援計画シート役割（DEC-008） | Issue #8 / DEC-008 | **Accepted / LOCKED / FINAL CONSISTENT**（comment `5229571943` + Option C / PR #147）。制度上の作成者=実践研修修了者 / 独立最終承認者=**NOT ADOPTED** / 提出・差戻し=**NOT ADOPTED（app 非埋め込み）**。正本 [`decision-dec-008-acceptance.md`](./decision-dec-008-acceptance.md) / [`decision-dec-008-submit-return-roles-acceptance.md`](./decision-dec-008-submit-return-roles-acceptance.md) | ロール実装 DO NOT START。最終承認者・提出/差戻し Binding 再導入禁止。role-free 遷移維持 |
 | Active計画一意性 | Issue #24 | Accepted `5212085136` / 技術契約 `active-plan-uniqueness.md` | 完了（PR #76 / #78） |
@@ -196,7 +201,7 @@ Next: PR #111 の明示的 Merge GO（Ready YES / Merge NOT RUN）。実 SharePo
 | `DEC-015` | バックアップ・復元責任者 | Issue #8 |
 
 保存期間中の完全削除禁止は Accepted（GOV-AUD-05 / DEC-012）。経過後の削除可否・自動削除・cleanup 実装は別 Decision / HOLD。
-DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 Entry #8 技術計画は FINAL CONSISTENT（計画のみ）。AS-EC-1 overall・Schema・保存実装・型実装は HOLD。
+DEC-009 保存タイミングは Accepted / LOCKED（Option A）。AS-EC-1 Entry #8 技術計画は FINAL CONSISTENT（計画のみ）。AS-EC-1 Entry #2 は PASS / MET（PR-J 境界）。AS-EC-1 overall・Schema・保存実装・型実装は HOLD。
 具体ロール Binding や物理削除手順をコードへ埋め込まない（Implementation HOLD）。
 
 ### 所有が未確定の事項
@@ -396,7 +401,7 @@ Replay logical MERGED（PR #106）。ALIGN/IDEM/SAN-VALUE/SAN-1/REPLAY-1/REPO-1 
 
 PR-I以降（未割当・HOLD）:
 Decision-SEV-2-ASSIGN（N/A）、完全Finding、
-AssessmentSnapshot完全契約、
+AssessmentSnapshot完全契約（**PR-J 字母割当済** / Implementation Start HOLD）、
 FindingCode 値一覧 / identifier 物理方式、
 Decision-OP-3 / Decision-RD-3。
 Decision-SEV-1（FindingSeverity ownership）は Accepted（Option A / Issue #8 新 DEC）。
@@ -424,8 +429,9 @@ Replay logical は MERGED（PR #106）。
 （Issue #24 系 Next pure unit は別。SEV Implementation NOT STARTED）
 ```
 
-注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は、
-本所有表の PR 字母とずれる。完全契約実装は別 Entry Criteria に従う。
+注: AssessmentSnapshot 完全契約の Entry Criteria 文書上の古い「PR-G」表記は廃止。
+完全契約実装の字母は **PR-J**（[`assessment-snapshot-complete-contract-pr-boundary.md`](./assessment-snapshot-complete-contract-pr-boundary.md)）。
+GitHub PR # は Implementation GO 時に採番する。
 
 PR-BはPR-Aマージ後を推奨する。
 PR-C以降は、それぞれの所有Issue、Decision、Entry Criteriaを記録してから開始する。
