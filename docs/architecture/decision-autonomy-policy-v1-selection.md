@@ -79,7 +79,8 @@ NONE
 - `test.run` は digest-bound command manifest と network-denied / write-scoped
   sandbox が必須
 - read は allowedReadPaths と trusted data classification の intersection、
-  mutation は dedicated worktree lease と head / index / worktree binding が必須
+  CI log は trusted redaction、mutation は fenced dedicated worktree lease と
+  head / index / worktree binding が必須
 - `Policy Accepted ≠ Policy Enabled`
 
 ## Required negative contract outcomes
@@ -133,7 +134,8 @@ AUTO-1 Acceptance ≠ Ready / Merge
 - baseline / expected head / allowedPaths / limits / idempotency が一意
 - authority intersection / exact-slice Start / inherited HOLD・kill switch が一意
 - deterministic risk matcher、read boundary、test sandbox、path grammar、
-  worktree binding、atomic limit ledger が一意
+  fenced worktree binding、atomic limit ledger、capability-specific idempotency
+  target が一意
 - approval と audit の fail-closed requirement が一意
 - mandatory negative contract outcomes が一意
 - execution backend が SDK 言語非依存

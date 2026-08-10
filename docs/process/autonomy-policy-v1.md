@@ -187,7 +187,7 @@ matcher predicates:
 | Escalator ID | Deterministic predicate |
 |---|---|
 | `DEPENDENCY_CHANGE` | proposed diff が dependency manifest / lockfile path、または dependency field pointer を変更 |
-| `CROSS_MODULE_INTEGRATION` | proposed diff の path / symbol が 2 以上の `moduleId` に属する |
+| `CROSS_MODULE_INTEGRATION` | changed path / symbol が 2 以上の `moduleId` に属する、または proposed import / call / type-reference / export edge の source と target の `moduleId` が異なる |
 | `ADAPTER_DTO_WIRING` | changed path / symbol class が `ADAPTER` または `DTO` |
 | `SCHEMA_ADJACENT_CHANGE` | class が `SCHEMA`、または changed symbol が schema symbol を参照 |
 | `NEW_BUSINESS_RULE` | `DOMAIN_BEHAVIOR` symbol の semantic fingerprint が exact `acceptedBehaviorRefs` の allowed change と一致しない |
@@ -204,10 +204,36 @@ proposed preflight path / AST-symbol / semantic-fingerprint diff とする。同
 対象言語を support しない、path / symbol が manifest 未記載、または判定結果が
 競合する場合は `UNKNOWN` として DENY する。
 
+各 language matcher は `riskRuleSet` に次を固定する。
+
+```text
+matcherPluginId / version / executableDigest
+parserId / parserVersion / grammarDigest
+astNormalizationVersion
+symbolIdentityVersion
+semanticFingerprintVersion
+dependencyEdgeKinds = IMPORT | CALL | TYPE_REFERENCE | EXPORT
+allowedChangeKinds =
+  ADD_TEST
+  | ADD_VALIDATION
+  | MECHANICAL_EXPORT
+  | REPRESENT_ACCEPTED_TYPE
+  | IMPLEMENT_ACCEPTED_PURE_FUNCTION
+```
+
+AST normalization は comment / trivia / source position を除外し、literal、operator、
+type、control-flow、resolved symbol edge を保持した canonical JSON とする。
+symbol ID は
+`language + moduleId + canonicalPath + qualifiedName + symbolKind`、
+semantic fingerprint は normalized symbol AST と sorted dependency edges の
+SHA-256 とする。rename / unresolved symbol / dynamic edge は UNKNOWN として DENY。
+`allowedChangeKinds` にない値は受理しない。
+
 Agent 自身の risk label は authority にしない。rule set にない escalator、入力源不明、
 preflight と packet の不一致は `UNKNOWN` として DENY する。各 matcher は positive /
-negative fixture を持ち、同じ proposed diff から同じ escalator set を生成できることを
-Gateway implementation Gate で検証する。
+negative fixture を持つ。特に cross-module import / call / type-reference / export
+各 edge と same-module edge を固定し、同じ proposed diff から同じ escalator set を
+生成できることを Gateway implementation Gate で検証する。
 
 ## Initial capability policy
 
@@ -329,6 +355,7 @@ baselineSHA
 expectedHeadSHA (mutation / external write when applicable)
 expectedIndexTreeSHA (mutation when applicable)
 expectedWorktreeDigest (mutation when applicable)
+leaseId / leaseOwnerId / fencingToken / leaseExpiresAt (mutation when applicable)
 capabilities[]
 risk
 riskRuleSet
@@ -337,6 +364,8 @@ allowedPaths[]
 deniedPaths[]
 sensitivePaths[]
 dataClassificationManifest
+ciRedactionPolicyDigest (ci.read when applicable)
+ciArtifactClassificationManifest (ci.read when applicable)
 limits
 approvalRef
 expiresAt
@@ -423,6 +452,21 @@ expiry、revocation state を検証できなければならない。issuer 不�
 - mutation / external write は直前状態を `expectedHeadSHA` に拘束する。
 - mutation は専用 Git worktree と repository / worktree / branch 単位の
   cross-task exclusive lease を必須とする。1 worktree を複数 task で共有しない。
+- trusted lease store の resource key は immutable
+  `repositoryId + worktreeId + fullBranchRef` とする。acquire は compare-and-swap で
+  atomic、owner は `taskPacketId + executionId`、fencing token は resource ごとの
+  monotonic unsigned integer とする。
+- 新規 acquire / owner 移転は fencing token を必ず増加する。renewal は同じ owner /
+  token の unexpired lease のみ許可し、expiry を延長しても token を減少・再利用しない。
+- 全 mutation request、limit reservation、idempotency record、`PREPARED` audit は
+  `leaseId + fencingToken` に拘束する。
+- mutation coordinator は apply 直前に trusted lease store と token / owner / expiry、
+  head / index / worktree digest を同一 critical section で比較する。stale / expired
+  token は `DENY / POLICY_BLOCKED / LEASE_STALE`。
+- Agent / backend process に worktree の直接 write permission を与えず、write は
+  fencing-aware mutation coordinator または token-bound sandbox mount だけが行う。
+- sandbox は lease expiry / token supersession で write mount を revoke して process
+  を停止する。check 後 apply 前に token が変わった場合も write を拒否する。
 - task 開始時は `HEAD = baselineSHA`、index = baseline tree、mutable worktree =
   clean でなければならない。
 - `expectedIndexTreeSHA` は index の canonical tree object SHA、
@@ -472,6 +516,19 @@ production-data fixture / export とする。名前だけに依存せず、trust
 repo.read / test.run sensitive target
 → DENY / POLICY_BLOCKED / SENSITIVE_READ_FORBIDDEN
 ```
+
+`ci.read` は provider の raw log / artifact を Agent へ直接返さない。trusted
+redaction proxy が run / job / chunk / artifact の immutable ID と content digest を
+検証し、authority root に拘束された `ciRedactionPolicyDigest` で secret /
+credential / personal-data / production-data marker を redact する。
+
+- log chunk は redaction verification `PASS` の content だけ返す。
+- artifact は `ciArtifactClassificationManifest` が `PUBLIC` または
+  `INTERNAL_SOURCE` と分類したものだけ返す。
+- manifest / content digest mismatch、分類なし、redaction status 不明、
+  unredacted sensitive marker 検出は
+  `DENY / POLICY_BLOCKED / SENSITIVE_READ_FORBIDDEN`。
+- redaction 後 content と audit には raw sensitive value を残さない。
 
 ## test.run sandbox
 
@@ -603,12 +660,34 @@ approvalRef
 repository
 baselineSHA
 capability
+targetSchemaVersion
 target
 ```
 
+`target` は free-form string / URL を受理しない。Capability Registry が
+`targetSchemaVersion` と次の canonical representation を固定する。
+
+| Capability | Canonical target |
+|---|---|
+| `repo.read` | `repositoryId + commitSHA + canonicalPath` |
+| `code.edit` | `repositoryId + worktreeId + sorted canonicalPaths digest` |
+| `test.run` | `repositoryId + worktreeId + commandManifestDigest` |
+| `branch.create` / `branch.push` | `repositoryId + remoteId + fullRef` |
+| `commit.create` | `repositoryId + worktreeId + parentSHA` |
+| `pull_request.create_draft` | `repositoryId + headFullRef + baseFullRef` |
+| `pull_request.update_draft` | `repositoryId + immutablePrNodeId` |
+| `ci.read` | `repositoryId + runId + jobId + chunkOrArtifactId` |
+| `review.request` | `repositoryId + immutablePrNodeId + reviewerKind + reviewPolicyDigest` |
+
+repository owner/name、URL、remote alias は trusted registry で immutable
+`repositoryId` / `remoteId` に解決する。ref は `refs/heads/...` の full form、
+path は本 policy の canonical path、PR は provider の immutable node ID を使う。
+alias が複数 resource に解決、display ID と immutable ID が不一致、schema version
+不明、target field 欠落は `DENY / POLICY_BLOCKED / TARGET_MISMATCH` とする。
+
 - canonical payload hash は request body に加え、`expectedHeadSHA`、
-  `expectedIndexTreeSHA`、`expectedWorktreeDigest`、risk、paths、limits snapshot を
-  含む。
+  `expectedIndexTreeSHA`、`expectedWorktreeDigest`、`leaseId`、`fencingToken`、
+  risk、paths、limits snapshot を含む。
 - 同じ key + 同じ canonical payload hash の再送は、前回結果を返して再実行しない。
 - 同じ key + 異なる payload hash は
   `DENY / IDEMPOTENCY_CONFLICT / IDEMPOTENCY_CONFLICT`。
@@ -634,6 +713,7 @@ taskPacketId / taskPacketVersion
 authoritySetVersion / authorityRootDigest / authoritySnapshotDigest
 repository / baseRef / baselineSHA / expectedHeadSHA
 expectedIndexTreeSHA / expectedWorktreeDigest
+leaseId / leaseOwnerId / fencingToken
 capability / classification / effectiveRisk
 approvalRef
 allowedPaths digest / limits snapshot
@@ -697,6 +777,7 @@ reason =
   | BASELINE_MOVED
   | HEAD_MOVED
   | WORKTREE_MOVED
+  | LEASE_STALE
   | HUMAN_ONLY
   | FORBIDDEN
   | OUT_OF_SCOPE
@@ -729,6 +810,7 @@ reason から code への mapping は次で固定する。
 | `BASELINE_MOVED` | `BASELINE_MOVED` |
 | `HEAD_MOVED` | `HEAD_MOVED` |
 | `WORKTREE_MOVED` | `WORKTREE_MOVED` |
+| `LEASE_STALE` | `POLICY_BLOCKED` |
 | `LIMIT_EXCEEDED` | `LIMIT_EXCEEDED` |
 | `IDEMPOTENCY_CONFLICT` | `IDEMPOTENCY_CONFLICT` |
 | `AUDIT_UNAVAILABLE` | `AUDIT_UNAVAILABLE` |
@@ -767,12 +849,13 @@ executionStatus =
 9. effective risk == LOW?
 10. approvals valid and exact?
 11. external write permission valid when applicable?
-12. baseline, expected head, index tree, and worktree digest match?
-13. paths / command sandbox within scope?
-14. idempotency valid?
-15. limits atomically reserved?
-16. PREPARED audit durable?
-17. ALLOW
+12. lease owner / fencing token valid when applicable?
+13. baseline, expected head, index tree, and worktree digest match?
+14. read classification / paths / command sandbox within scope?
+15. idempotency valid?
+16. limits atomically reserved?
+17. PREPARED audit durable and bound to fencing token?
+18. ALLOW
 ```
 
 各段階は前段を通過した場合のみ評価する。どこか 1 つでも false / missing /
@@ -805,13 +888,19 @@ missing exact-slice Implementation Start → DENY / POLICY_BLOCKED / IMPLEMENTAT
 unresolved HOLD → DENY / POLICY_BLOCKED / UNRESOLVED_HOLD
 external write while upper authority says NONE → DENY / POLICY_BLOCKED / EXTERNAL_WRITE_NOT_ALLOWED
 repo.read / test.run secret or production-data path → DENY / POLICY_BLOCKED / SENSITIVE_READ_FORBIDDEN
+ci.read unredacted / unclassified sensitive log → DENY / POLICY_BLOCKED / SENSITIVE_READ_FORBIDDEN
 test.run write/network outside sandbox → DENY / POLICY_BLOCKED / TEST_SANDBOX_VIOLATION
 Draft update containing head mutation → DENY / POLICY_BLOCKED / DRAFT_HEAD_MUTATION
 concurrent / uncommitted worktree mismatch → DENY / WORKTREE_MOVED / WORKTREE_MOVED
+expired / superseded lease token → DENY / POLICY_BLOCKED / LEASE_STALE
+lease changes between precheck and atomic apply → DENY / POLICY_BLOCKED / LEASE_STALE
 uncommitted proposed diff over file/byte limit → DENY / LIMIT_EXCEEDED / LIMIT_EXCEEDED
 idempotency key collision → DENY / IDEMPOTENCY_CONFLICT / IDEMPOTENCY_CONFLICT
 audit sink unavailable → DENY / AUDIT_UNAVAILABLE / AUDIT_UNAVAILABLE
 ```
+
+cross-module import / call / type-reference / export fixtures は
+`effectiveRisk >= MEDIUM`、same-module edge fixture は当該 escalator なしとする。
 
 同じ client idempotency key を異なる `taskPacketVersion` で送った fixture は、
 旧 packet の result を replay しないことを検証する。新しい scoped key として
