@@ -696,6 +696,85 @@ export function evaluateActivePlanUniquenessUnknown(plans: unknown): ActivePlanU
 }
 
 // ==========================================
+// Observation period logical schema (Decision-OP-3)
+// Technical contract: docs/architecture/observation-period-schema-contract.md
+// Decision-OP-3: Accepted / LOCKED / Option A
+// ==========================================
+
+export type SupportPlanObservationPeriodLogical = Readonly<{
+  observationPeriodFrom: string;
+  observationPeriodTo: string;
+}>;
+
+export type ValidateSupportPlanObservationPeriodLogicalResult =
+  | Readonly<{
+      ok: true;
+      observationPeriod: SupportPlanObservationPeriodLogical;
+    }>
+  | Readonly<{
+      ok: false;
+      code: "MALFORMED_INPUT";
+    }>;
+
+const SUPPORT_PLAN_OBSERVATION_PERIOD_LOGICAL_KEYS = new Set([
+  "observationPeriodFrom",
+  "observationPeriodTo",
+]);
+
+/**
+ * Validate SupportPlan observation period logical fields (Decision-OP-3 Option A).
+ *
+ * - observationPeriodFrom / observationPeriodTo are REQUIRED
+ * - Both must be valid ISO DateTime strings
+ * - Open-ended observationPeriodTo is NOT ADOPTED
+ * - Fail-closed on malformed or incomplete input
+ *
+ * validateSupportPlan wiring, SharePoint columns, and membership semantics are out of scope.
+ */
+export function validateSupportPlanObservationPeriodLogical(
+  input: unknown,
+): ValidateSupportPlanObservationPeriodLogicalResult {
+  if (!isRecord(input)) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  const keys = Object.keys(input);
+  if (!keys.every((key) => SUPPORT_PLAN_OBSERVATION_PERIOD_LOGICAL_KEYS.has(key))) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  if (
+    !("observationPeriodFrom" in input) ||
+    !("observationPeriodTo" in input) ||
+    !isValidIsoDateTime(input.observationPeriodFrom) ||
+    !isValidIsoDateTime(input.observationPeriodTo)
+  ) {
+    return { ok: false, code: "MALFORMED_INPUT" };
+  }
+
+  return {
+    ok: true,
+    observationPeriod: {
+      observationPeriodFrom: input.observationPeriodFrom,
+      observationPeriodTo: input.observationPeriodTo,
+    },
+  };
+}
+
+/**
+ * Expose validated logical fields as membership function inputs.
+ * Does not change evaluateObservationPeriodMembership semantics.
+ */
+export function toObservationPeriodMembershipInputs(
+  observationPeriod: SupportPlanObservationPeriodLogical,
+): Readonly<{ periodFrom: string; periodTo: string }> {
+  return {
+    periodFrom: observationPeriod.observationPeriodFrom,
+    periodTo: observationPeriod.observationPeriodTo,
+  };
+}
+
+// ==========================================
 // Observation period membership (Issue #24)
 // Technical contract: docs/architecture/observation-period.md
 // Decision-OP-1: Accepted comment 5212897564
