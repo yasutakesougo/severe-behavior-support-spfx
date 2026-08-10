@@ -11,11 +11,12 @@ Skill basis: [`decision-review`](../../.agents/skills/decision-review/SKILL.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Kind: Independent Review（docs-only candidate）
+Kind: Independent Review（docs-only candidate；P2-001 re-review）
 Skill basis: decision-review
 Status: PASS
-Findings: P0=0 / P1=0 / P2=2
+Findings: P0=0 / P1=0 / P2=1
 Baseline main: 632d28ae44e1b72929dc628caae183197a976477
+PR: #207
 Human Selection of unit: Option A — SELECTED
 Human Acceptance of Decision-AS-CONVERSION-1: NOT YET
 Reviewed artifacts:
@@ -40,6 +41,8 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | C-1 rejects empty/ws/null/missing/non-string | PASS | no trim-to-accept |
 | C-2 unknown Choice has no silent fallback | PASS | MF-1 fail-closed；label unused |
 | C-3 rejects invalid/non-array/null；no CSV | PASS | JSON-only |
+| C-3 duplicates fail-closed（no read-side dedupe） | PASS | P2-001 CLOSED |
+| C-3 does not use normalizeReasonCodes as repair | PASS | domain-internal UNCHANGED；persistence read separated |
 | C-4 forbids DateOnly→UTC datetime rewrite | PASS | civil-date preservation |
 | null→default / invalid→valid absent | PASS | explicit FORBIDDEN |
 | Status cells use CANDIDATE not ACCEPTED | PASS | pre-Acceptance |
@@ -47,32 +50,35 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | mapping-complete NOT claimed | PASS | NOT YET |
 | SharePoint implementation leakage avoided | PASS | no REST/PnP code；no item write |
 | Agent recommendation ≠ Acceptance | PASS | explicit |
+| C-1 / C-2 / C-4 semantics unchanged by P2-001 fix | PASS | targeted C-3 only |
 
 ## Lossy / fallback audit
 
 | Risk | Present? | Disposition |
 |---|---|---|
-| lossy conversion as success path | NO（except documented dedupe） | P2-001 |
+| lossy conversion as success path | NO | P2-001 CLOSED |
 | silent fallback | NO | — |
 | null → default | NO | forbidden |
-| invalid → valid coerce | NO | fail-closed |
-| timezone / date drift rewrite | NO as policy | P2-002 wire-form note |
+| invalid → valid coerce | NO | fail-closed（incl. duplicates） |
+| timezone / date drift rewrite | NO as policy | P2-002 wire-form note（carry-forward） |
 | Choice unknown fallback | NO | fail-closed |
 | JSON corruption accepted | NO | fail-closed |
+| duplicate persistence → unique success | NO | FAIL-CLOSED |
 | MAP-AS-009/010/ENV scope creep | NO | OUT |
 
 ## Findings
 
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
 |---|---|---|---|---|---|
-| P2-001 | P2 | OPEN | C-3-A read-side duplicate dedupe is not bit-exact for Note values that contain duplicates；it matches domain `normalizeReasonCodes` | assessment-snapshot.ts normalizeReasonCodes；C-3-A | Accept as domain-aligned；optional Human C-3-X if fail-on-duplicate preferred |
-| P2-002 | P2 | OPEN | C-4-A locks civil-date semantics but does not enumerate every SharePoint client wire shape（string vs Date object）. Adapter impl gate must still obey no civil-day rewrite | C-4-A；SP-ADAPTER CV-1 | Keep as post-Acceptance implementation constraint；not a Decision blocker |
+| P2-001 | P2 | **CLOSED** | C-3-A duplicate handling changed to FAIL-CLOSED；read-side dedupe / normalizeReasonCodes repair removed | packet C-3-A；conversion-contract MAP-AS-004 | CLOSED by Human-directed targeted resolution |
+| P2-002 | P2 | OPEN | C-4-A locks civil-date semantics but does not enumerate every SharePoint client wire shape（string vs Date object）. Adapter impl gate must still obey no civil-day rewrite | C-4-A；SP-ADAPTER CV-1 | Carry-forward；**not a Decision blocker** for Human Acceptance |
 
 ```text
 P0 = 0
 P1 = 0
-P2 = 2
-Independent Review: PASS
+P2 open = 1（P2-002 only）
+Independent Re-review: PASS
+Decision blocker from open P2: NO
 ```
 
 ## Explicit non-authorization
@@ -95,7 +101,7 @@ This IR does NOT authorize:
 ## Next
 
 ```text
-Independent Review: PASS（candidate）
+Independent Re-review: PASS（candidate；P2-001 CLOSED）
 Decision-AS-CONVERSION-1: OPEN / NOT ACCEPTED
 Next gate: HUMAN ACCEPTANCE OF Decision-AS-CONVERSION-1
 Still HOLD / FORBIDDEN:

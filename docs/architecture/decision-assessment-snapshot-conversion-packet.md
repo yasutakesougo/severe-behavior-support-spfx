@@ -156,7 +156,7 @@ Write:
 
 | ID | conversion 規則 | 結果 |
 |---|---|---|
-| **C-3-A** | JSON array of strings。compact encode。decode は JSON.parse → array + string members + isReasonCode。order preserve。duplicate は domain と同じく出現順 dedupe。invalid / non-array / null / missing → fail-closed。CSV/delimiter 不採用 | **Agent recommendation / CANDIDATE** |
+| **C-3-A** | JSON array of strings。compact encode。decode は JSON.parse → array + string members + isReasonCode。order preserve exactly。duplicate entries → fail-closed。invalid / non-array / null / missing → fail-closed。CSV/delimiter 不採用。read-side で `normalizeReasonCodes` による修復をしない | **Agent recommendation / CANDIDATE** |
 | C-3-B | pretty-print JSON / alternate whitespace-significant encode | NOT recommended（encode 一意性を弱める） |
 | C-3-HOLD | codec 未決定 | NOT recommended as default（Representation=JSON は Accepted） |
 | C-3-X | Human 明示 | available |
@@ -168,15 +168,24 @@ NOT re-Decided:
 C-3-A fixes:
   encode form: JSON.stringify(string[])（compact；no CSV/delimiter）
   decode: JSON.parse；Array.isArray；every member typeof string && isReasonCode
+  ordering: preserve exactly（no reorder）
   empty array "[]" → []（domain empty 可否は result 規則が別途判定）
   missing / null → fail-closed（必須スロット）
   invalid JSON → fail-closed
   non-array JSON → fail-closed
   non-string member → fail-closed
-  duplicate entries → preserve first-seen order；drop later duplicates
-    （domain normalizeReasonCodes と同型；write は validated deduped 配列を encode）
+  invalid ReasonCode member → fail-closed
+  duplicate entries → FAIL-CLOSED
+    （persistence JSON と logical value の差異を成功扱いしない）
+    （invalid persistence state を valid domain state へ coerce しない）
+    （read-side で normalizeReasonCodes を修復手段として使わない）
   unknown extra structure（object/map）→ fail-closed
   CSV / delimiter / multi-value column → NOT ADOPTED
+
+  Write source:
+    validated domain snapshot reasonCodes（一意配列）を compact JSON encode
+  Domain-internal normalizeReasonCodes:
+    UNCHANGED by this Decision（persistence read conversion とは分離）
 ```
 
 ### C-4 — DateOnly conversion（MAP-AS-006 / 007）

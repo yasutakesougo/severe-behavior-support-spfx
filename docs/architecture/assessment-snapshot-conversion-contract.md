@@ -58,6 +58,7 @@ FORBIDDEN in this candidate:
   unknown Choice → fallback / Display-label match success
   trim-to-accept for required Text
   CSV / delimiter for reasonCodes
+  reasonCodes duplicate persistence → silent dedupe / coerce to unique
   DateOnly → UTC datetime semantic rewrite
   inventing MAP-AS-009 / 010 / ENV conversions
 ```
@@ -104,18 +105,24 @@ Representation family = JSON（COLUMN-NAMES-1 Accepted；再 Decision しない�
 | Edge | Rule |
 |---|---|
 | encode form | `JSON.stringify(string[])` compact array |
-| decode | `JSON.parse` → must be `string[]` of `isReasonCode` |
+| decode | `JSON.parse` → must be unique `string[]` of `isReasonCode` |
+| ordering | preserve exactly |
 | empty array | `"[]"` ↔ `[]` |
 | missing / null | fail-closed |
 | invalid JSON | fail-closed |
 | non-array JSON | fail-closed |
 | non-string member | fail-closed |
 | member failing `isReasonCode` | fail-closed |
-| duplicates | first-seen order preserved；later duplicates dropped（domain同型） |
+| duplicates | **FAIL-CLOSED**（no read-side dedupe / coerce） |
 | unknown object/map structure | fail-closed |
 | CSV / delimiter / multi-value | NOT ADOPTED |
 
-Write source MUST be validated/deduped `reasonCodes` from domain snapshot。
+```text
+Lossless success only for unique string[] persistence values.
+normalizeReasonCodes MUST NOT be used as read-side persistence repair.
+Domain-internal normalizeReasonCodes behavior: UNCHANGED by this Decision.
+Write source MUST be validated unique reasonCodes from domain snapshot.
+```
 
 ### C-4 DateOnly（MAP-AS-006 / 007）— CANDIDATE C-4-A
 
@@ -139,7 +146,7 @@ Authority: contracts-v1 LocalDate + domain `isValidIsoDate` + VR-1 DateOnly OBSE
 | MAP-AS-001 | snapshotId | snapshotId | 1行テキスト | Text → non-empty string pass-through；empty/ws/null/missing/non-string fail-closed | non-empty string → Text pass-through | RW-1 + MF-1 fail-closed | CANDIDATE | C-1-A；complete-contract；VR-1 |
 | MAP-AS-002 | recordStatus | recordStatus | 選択肢 | stored Choice → enum；label unused；unknown/missing/null/empty fail-closed | enum → stored Choice | RW-1 + MF-1 fail-closed | CANDIDATE（DERIVED） | C-2-DERIVED；CHOICE-OPTIONS-1；VR-1 |
 | MAP-AS-003 | result | result | 選択肢 | stored Choice → enum；label unused；unknown/missing/null/empty fail-closed | enum → stored Choice | RW-1 + MF-1 fail-closed | CANDIDATE（DERIVED） | C-2-DERIVED；CHOICE-OPTIONS-1；VR-1 |
-| MAP-AS-004 | reasonCodes | reasonCodes | 複数行テキスト | Note JSON → string[]（isReasonCode；order；dedupe）；invalid/null/missing fail-closed | string[] → compact JSON array in Note | RW-1 + MF-1 fail-closed | CANDIDATE | C-3-A；COLUMN-NAMES-1 Representation=JSON；complete-contract |
+| MAP-AS-004 | reasonCodes | reasonCodes | 複数行テキスト | Note JSON → unique string[]（isReasonCode；order exact；duplicates fail-closed）；invalid/null/missing fail-closed | unique string[] → compact JSON array in Note | RW-1 + MF-1 fail-closed | CANDIDATE | C-3-A；COLUMN-NAMES-1 Representation=JSON；complete-contract |
 | MAP-AS-005 | ruleSetVersion | ruleSetVersion | 1行テキスト | same as MAP-AS-001 | same as MAP-AS-001 | RW-1 + MF-1 fail-closed | CANDIDATE | C-1-A；complete-contract；VR-1 |
 | MAP-AS-006 | periodStart | periodStart | 日付のみ | DateOnly → `YYYY-MM-DD` civil date；no TZ rewrite | `YYYY-MM-DD` → DateOnly civil date | RW-1 + MF-1 fail-closed | CANDIDATE | C-4-A；contracts-v1；isValidIsoDate；VR-1 |
 | MAP-AS-007 | periodEnd | periodEnd | 日付のみ | same as MAP-AS-006 | same as MAP-AS-006 | RW-1 + MF-1 fail-closed | CANDIDATE | C-4-A；contracts-v1；isValidIsoDate；VR-1 |
