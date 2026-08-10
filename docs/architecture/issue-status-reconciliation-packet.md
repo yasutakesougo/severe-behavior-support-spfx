@@ -40,8 +40,9 @@ Current SoT（durable）:
   PR #193: MERGED（README current-state）
   Decision-AS-CN1-OBSERVATION-1: CLOSED / CONSUMED / DEFAULT_COLUMNS_ONLY
   Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
-  SharePoint column path: through EG-1 Accepted
-  Human create: AUTHORIZED / NOT STARTED by Acceptance
+  SharePoint column path: EG-1 Accepted；Human Column Create COMPLETE；VR-1 PASS
+  Human create: COMPLETE（AssessmentSnapshots CV-REQ 8；isogo + honmoku）
+  Column evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
   Implementation Start: HOLD
   Deploy / real data: NO-GO
   OPEN Issues: 25 remaining of prior 28 after #5/#10/#11 Close（Human attestation）
@@ -65,7 +66,7 @@ OPEN 28件は「これから着手する仕事」ではない。
 
 | 対象 | 判定 |
 |---|---|
-| 最新 Decision / column path 進行 | 整合（CN-1 CLOSED；EG-1 Accepted） |
+| 最新 Decision / column path 進行 | 整合（CN-1 CLOSED；EG-1 Accepted；Human Column Create COMPLETE；VR-1 PASS） |
 | OPEN Issue 本文の Current / Gate / Dependency | **STALE 多数** |
 | 28件をそのまま実装バックログとみなす | **誤り** |
 | #5 / #10 / #11 | **Close 候補（強い）** |

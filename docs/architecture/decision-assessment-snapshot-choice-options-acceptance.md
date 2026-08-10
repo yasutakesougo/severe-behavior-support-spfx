@@ -29,52 +29,46 @@ LOCKED:
 
 Choice options:
   CO-1 — Human-provided Choice option stored value / Display label
-         状態 = HUMAN-PROVIDED / INTENDED
-         ≠ OBSERVED / CONFIRMED
+         Accepted values preserved exactly
+         Post-create status = HUMAN-PROVIDED / OBSERVED / CONFIRMED（VR-1 PASS）
          Agent 発明・自動採択ではない（Human 明示値）
 
 Coverage:
   CV-CHOICE-BOTH — recordStatus と result の両方
 
 Implementation / adapter / Deploy boundary:
-  XB-1 — 本 Decision ≠ column creation GO
-         ≠ Execution GO
-         ≠ Implementation Start
+  XB-1 — 本 Decision ≠ Implementation Start
          ≠ adapter / schema mapping code start
          ≠ Deploy / real data
 
-COLUMN-NAMES-1 / COLUMN-PROVISION-1 axes that REMAIN:
-  NM-1 + CV-REQ names LOCKED（INTENDED）
-  SC-AS / PX-HOLD / EG-HOLD / VR-1 / FG-1 / AP-1 UNCHANGED
+COLUMN-NAMES-1 / COLUMN-PROVISION / PX / EG axes:
+  NM-1 + CV-REQ names LOCKED / OBSERVED / CONFIRMED（VR-1 PASS）
+  SC-AS / PX-1 / EG-1 / VR-1 PASS / FG-1 / AP-1
 
 Implementation Start:
   HOLD
 SharePoint adapter / schema mapping implementation:
   HOLD
-SharePoint column creation:
-  FORBIDDEN（PX-HOLD + EG-HOLD）
-Execution GO:
-  NOT GIVEN
+AssessmentSnapshots Human Column Create:
+  COMPLETE（isogo + honmoku）
 Choice option values（recordStatus / result）:
-  ADOPTED / INTENDED（see tables）
-CONFIRMED Choice options:
-  NOT YET（await create + VR-1 CN-1 re-observation）
+  ADOPTED / OBSERVED / CONFIRMED（VR-1 PASS；see tables）
+Evidence:
+  decision-assessment-snapshot-column-create-vr1-evidence.md
 Deploy / real data:
   NO-GO
 
 Closes only:
   Decision-AS-CHOICE-OPTIONS-1（CO-1 + CV-CHOICE-BOTH + XB-1）
   Thirty-third residual
+  Choice option confirmation under VR-1（post-create）
 Does NOT close:
-  column creation Execution
-  PX-1 / EG-1
   CV extension（MAP-AS-009/010 / ENV）
-  CONFIRMED Internal Names / Choice options
+  mapping-complete / conversion completeness
   SharePoint / adapter / application 実装
   Implementation Start
   Deploy / real data
 Implementation auto-start: FORBIDDEN
-Column creation auto-start: FORBIDDEN
 Agent tenant mutation: FORBIDDEN
 ```
 
@@ -93,15 +87,14 @@ Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED
 ```text
 CO-1:
   Human が Choice option の stored value / Display label を明示採択した。
-  状態 = HUMAN-PROVIDED / INTENDED。≠ OBSERVED / CONFIRMED。
+  定義は維持。create + VR-1 後の状態 = HUMAN-PROVIDED / OBSERVED / CONFIRMED。
 CV-CHOICE-BOTH:
   recordStatus と result の両方。
 XB-1:
-  本 Acceptance だけでは column creation / Execution GO /
-  Implementation / adapter / Deploy を開始しない。
+  本 Acceptance だけでは Implementation / adapter / Deploy を開始しない。
 ```
 
-### Accepted intended Choice options（verbatim）
+### Accepted Choice options（verbatim definitions；status post VR-1）
 
 Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-honmoku`
 
@@ -109,20 +102,21 @@ Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-h
 
 | Option # | Stored value | Display label | Status |
 |---|---|---|---|
-| 1 | draft | 下書き | HUMAN-PROVIDED / INTENDED |
-| 2 | finalized | 確定 | HUMAN-PROVIDED / INTENDED |
+| 1 | draft | 下書き | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| 2 | finalized | 確定 | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
 
 #### result（Internal Name `result`；Column Type 選択肢）
 
 | Option # | Stored value | Display label | Status |
 |---|---|---|---|
-| 1 | NO_FINDINGS | 該当なし | HUMAN-PROVIDED / INTENDED |
-| 2 | FINDINGS_PRESENT | 該当あり | HUMAN-PROVIDED / INTENDED |
-| 3 | NOT_APPLICABLE | 適用外 | HUMAN-PROVIDED / INTENDED |
+| 1 | NO_FINDINGS | 該当なし | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| 2 | FINDINGS_PRESENT | 該当あり | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| 3 | NOT_APPLICABLE | 適用外 | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
 
 ```text
-INTENDED ≠ OBSERVED / CONFIRMED
+INTENDED → OBSERVED / CONFIRMED（VR-1 PASS）
 Agent recommendation ≠ Acceptance evidence
+Evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
 ```
 
 ## Accepted 内容
@@ -183,21 +177,18 @@ MUST NOT start from this Acceptance alone:
 ```text
 Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1 + CV-CHOICE-BOTH + XB-1
 Thirty-third residual: CONSUMED
-SharePoint column creation: FORBIDDEN（PX-HOLD + EG-HOLD）
-Execution GO: NOT GIVEN
+Choice options: OBSERVED / CONFIRMED（VR-1 PASS）
+AssessmentSnapshots Human Column Create: COMPLETE
+Evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
 Implementation Start: HOLD
 adapter / schema mapping implementation: HOLD
 Agent mutation: FORBIDDEN
 Deploy / real data: NO-GO
-INTENDED ≠ OBSERVED / CONFIRMED
 
-Next substantive residual: SELECTED elsewhere — PX-1 authorization path
-  （Decision-AS-COLUMN-PX-1；see thirty-fourth residual）
-Other candidates（separate units）:
-  EG-1 Execution GO（after PX-1）
+Next substantive residual: NOT SELECTED by this document
+Active parallel process residual:
+  Thirty-sixth — Issue Status Reconciliation Phase ②（#6 / #8）
+Column-path candidates（separate units）:
   CV extension（MAP-AS-009/010 / ENV）
-  Issue Status Reconciliation（#6 / #8 / #22）
-
-Ready: NOT RUN
-Merge: NOT RUN
+  conversion / mapping-complete determination（≠ impl start）
 ```

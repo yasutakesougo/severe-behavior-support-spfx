@@ -32,11 +32,14 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Thirty-fifth residual | **CONSUMED**（COLUMN-EG-1 Accepted） |
 | Decision-AS-COLUMN-EG-1 | **Accepted / LOCKED / EG-1+XB-1+AP-1** |
 | Decision-AS-COLUMN-NAMES-1 | **Accepted / LOCKED / NM-1+CV-REQ+XB-1** |
-| AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
+| AssessmentSnapshots Human Column Create | **COMPLETE** |
+| VR-1（column create） | **PASS** |
+| CV-REQ app-field Internal Names | **OBSERVED / CONFIRMED（8 / 8；both sites）** |
+| AssessmentSnapshot mapping table | UPDATED names/types CONFIRMED；**NOT mapping-complete** |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data | NO-GO |
-| Agent SharePoint mutation | FORBIDDEN |
-| SharePoint schema / list / column change | FORBIDDEN（CP-1） |
+| Agent SharePoint mutation | FORBIDDEN（mutation by Agent = 0） |
+| SharePoint schema / list / column change | FORBIDDEN without separate GO（CP-1） |
 | GitHub Issue mutation by Agent / 一括 Close / 一括本文更新 | FORBIDDEN |
 | Human Phase ①〜② Issue Close / body patch | AUTHORIZED under thirty-sixth Reconciliation packet |
 
@@ -46,14 +49,16 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 | Order | Residual | Status |
 |---|---|---|
-| 1 | Issue Status Reconciliation（#5/#10/#11 Close；#6/#8 resync） | **SELECTED（thirty-sixth）** |
-| 2 | Human create + VR-1 CN-1 re-observation | parallel Human process（EG-1 GIVEN；create separate；then CONFIRMED） |
+| 1 | Issue Status Reconciliation Phase ②（#6/#8 resync） | **SELECTED（thirty-sixth）** |
+| 2 | Human create + VR-1 CN-1 re-observation | **COMPLETE**（evidence recorded） |
 
 ```text
 Active acceptance:
   Decision-AS-COLUMN-EG-1 = EG-1 + XB-1 + AP-1
-  Execution GO GIVEN（Human process only）
-  EG-1 Acceptance ≠ Human create
+  AssessmentSnapshots Human Column Create = COMPLETE
+  VR-1 = PASS
+  INTENDED → OBSERVED / CONFIRMED（CV-REQ 8 + Choice）
+  evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
   Thirty-sixth residual: SELECTED — Issue Status Reconciliation
     selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
@@ -61,7 +66,6 @@ Active acceptance:
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START
-  INTENDED ≠ CONFIRMED
   Agent column create = FORBIDDEN
   Implementation Start = HOLD
   Agent SharePoint mutation = FORBIDDEN
@@ -75,14 +79,14 @@ Still HOLD / FORBIDDEN:
 
 | Item | Status |
 |---|---|
-| App-field Internal Names as CONFIRMED mapping values | NOT PRESENT / HOLD |
-| Intended Internal Names（CV-REQ） | ADOPTED / INTENDED（COLUMN-NAMES-1；≠ CONFIRMED） |
+| CV-REQ app-field Internal Names | OBSERVED / CONFIRMED（COLUMN-NAMES-1 + VR-1） |
+| mapping-complete / conversions | NOT COMPLETE / HOLD |
 | SharePoint adapter / schema mapping impl | HOLD（XB-1） |
 | Permissions / Entra / Graph mutation | HOLD |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data write | HOLD |
-| SharePoint column creation | FORBIDDEN（CP-1） |
-| Treating DEFAULT_COLUMNS_ONLY as mapping-complete | FORBIDDEN |
+| Additional SharePoint column creation | FORBIDDEN without separate GO（CP-1） |
+| Treating DEFAULT_COLUMNS_ONLY historical CN-1 alone as mapping-complete | FORBIDDEN |
 
 ---
 

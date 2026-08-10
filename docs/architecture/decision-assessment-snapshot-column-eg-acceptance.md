@@ -36,9 +36,8 @@ Explicit Execution GO:
   EG-1 — Human が Explicit Column Creation Execution GO を付与する
          Execution GO = GIVEN（Human process create only）
          ≠ Agent may create
-         ≠ Human create already executed
-         ≠ columns CONFIRMED
          ≠ Implementation Start
+         Human create + VR-1 = COMPLETE（separate evidence）
 
 Implementation / adapter / Deploy boundary:
   XB-1 — 本 Decision ≠ Implementation Start
@@ -47,19 +46,19 @@ Implementation / adapter / Deploy boundary:
 
 AI / Agent mutation boundary:
   AP-1 — SharePoint column mutation は本 AI foundation 手順では禁止
-         実作成は別 Human process
+         実作成は別 Human process（COMPLETED；Agent mutation = 0）
 
-Separation rule（LOCKED）:
+Separation rule（LOCKED；historical）:
   EG-1 Acceptance ≠ Human create execution
-  Human create = separate later Human process
-  After Human create → VR-1 CN-1 re-observation for CONFIRMED
+  Human create was a separate Human process
+  After Human create → VR-1 = PASS → OBSERVED / CONFIRMED
 
-COLUMN-PX-1 / NAMES / CHOICE / PROVISION axes that REMAIN:
-  PX-1 — authorization remains
+COLUMN-PX-1 / NAMES / CHOICE / PROVISION axes:
+  PX-1 — authorization remains（consumed by Human create）
   SC-AS — AssessmentSnapshots only
-  VR-1 — post-create re-observation required
-  FG-1 — fail-closed
-  CV-REQ INTENDED names / Choice options — UNCHANGED（≠ CONFIRMED）
+  VR-1 — PASS
+  FG-1 — fail-closed（not triggered）
+  CV-REQ names / Choice options — OBSERVED / CONFIRMED
 
 Implementation Start:
   HOLD
@@ -68,21 +67,22 @@ SharePoint adapter / schema mapping implementation:
 Agent SharePoint mutation:
   FORBIDDEN
 Human create:
-  AUTHORIZED to proceed as separate Human process
-  NOT started by this Acceptance alone
+  COMPLETE（isogo + honmoku AssessmentSnapshots CV-REQ 8）
   NOT performed by Agent
+Evidence:
+  decision-assessment-snapshot-column-create-vr1-evidence.md
 Deploy / real data:
   NO-GO
-INTENDED ≠ OBSERVED / CONFIRMED:
-  LOCKED until Human create + VR-1
+INTENDED → OBSERVED / CONFIRMED:
+  COMPLETE（VR-1 PASS）
 
 Closes only:
   Decision-AS-COLUMN-EG-1（EG-1 + XB-1 + AP-1）
   Thirty-fifth residual
+  Human create + VR-1 confirmation path（via evidence；not a new Decision）
 Does NOT close:
-  Human create completion
-  CONFIRMED Internal Names / Choice options
   CV extension（MAP-AS-009/010 / ENV）
+  mapping-complete / conversion completeness
   SharePoint / adapter / application 実装
   Implementation Start
   Deploy / real data
@@ -99,10 +99,12 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ```text
 Human Decision: EG-1 + XB-1 + AP-1
 Decision-AS-COLUMN-EG-1: Accepted / LOCKED
-Execution GO: GIVEN（Human process create only）
-Agent mutation: FORBIDDEN
+Execution GO: GIVEN（Human process create only；consumed）
+Human create: COMPLETE
+VR-1: PASS
+Agent mutation: FORBIDDEN（SharePoint mutation by Agent = 0）
 Implementation Start / adapter: HOLD
-EG-1 Acceptance ≠ Human create
+EG-1 Acceptance ≠ Human create（separation preserved；create completed separately）
 ```
 
 日本語正本:
@@ -111,11 +113,11 @@ EG-1 Acceptance ≠ Human create
 EG-1:
   Explicit Column Creation Execution GO を付与する。
   Human process での作成を許可する。Agent は作成しない。
-  Acceptance だけでは列はまだ作られない。
+  Acceptance 自体は作成完了ではない（作成は別 Human process で COMPLETE）。
 XB-1:
   本 Acceptance だけでは Implementation / adapter / Deploy を開始しない。
 AP-1:
-  Agent による SharePoint mutation は禁止。実作成は別 Human process。
+  Agent による SharePoint mutation は禁止。実作成は別 Human process（完了済み）。
 ```
 
 ## Accepted 内容
@@ -160,13 +162,12 @@ NOT derived / MUST NOT equate:
 ```text
 This Acceptance locks EG-1 + XB-1 + AP-1 only.
 
-AUTHORIZED by this Acceptance:
-  Human process may proceed to create Accepted INTENDED columns
-  （separate step；not executed by this document）
+AUTHORIZED by this Acceptance（historical；now consumed）:
+  Human process may create Accepted INTENDED columns
+  （separate step；COMPLETED with VR-1 PASS）
 
 MUST NOT start from this Acceptance alone:
   Agent SharePoint column create / rename / delete
-  treating INTENDED as CONFIRMED
   TypeScript / application / persistence port / adapter code
   Implementation Start
   Deploy / real data
@@ -178,22 +179,21 @@ MUST NOT start from this Acceptance alone:
 ```text
 Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1 + XB-1 + AP-1
 Thirty-fifth residual: CONSUMED
-Execution GO: GIVEN（Human process only）
-Agent mutation: FORBIDDEN
+Execution GO: GIVEN（Human process only；consumed）
+AssessmentSnapshots Human Column Create: COMPLETE
+VR-1: PASS
+Isogo / Honmoku: OBSERVED / CONFIRMED
+Evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
+Agent mutation: FORBIDDEN（SharePoint mutation by Agent = 0）
 Implementation Start: HOLD
 adapter / schema mapping implementation: HOLD
-Human create: separate next Human process（NOT started here）
-INTENDED ≠ CONFIRMED until create + VR-1
+Deploy / real data: NO-GO
 
-Later process residual: SELECTED as thirty-sixth — Issue Status Reconciliation
+Active process residual: thirty-sixth — Issue Status Reconciliation Phase ②
   selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
   packet: issue-status-reconciliation-packet.md
-Parallel Human process（not thirty-sixth）:
-  Human create execution record / evidence
-  VR-1 CN-1 re-observation after create
-Later candidates:
+Column-path next residual: NOT SELECTED
+Candidates（separate units；NOT auto-started）:
   CV extension（MAP-AS-009/010 / ENV）
-
-Ready: NOT RUN
-Merge: NOT RUN
+  conversion / mapping-complete determination（≠ impl start）
 ```

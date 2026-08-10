@@ -32,12 +32,15 @@ Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-revie
 | HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION | **COMPLETE** |
 | Decision-AS-CN1-OBSERVATION-1 | **CLOSED / CONSUMED** |
 | CN-1 result class | **DEFAULT_COLUMNS_ONLY** |
-| Custom application columns | **0 / NOT PRESENT** |
-| Match-existing-app-Internal-Names premise | **NOT APPLICABLE / INVALIDATED** |
+| Custom application columns（CN-1 baseline） | **0 at CN-1 observation** |
+| AssessmentSnapshots Human Column Create | **COMPLETE（post CN-1；CV-REQ 8 / 8）** |
+| VR-1（column create） | **PASS** |
+| CV-REQ Internal Names | **OBSERVED / CONFIRMED** |
+| Match-existing-app-Internal-Names premise | **NOT APPLICABLE / INVALIDATED**（at CN-1） |
 | Implementation Start | HOLD |
 | Deploy / real data | NO-GO |
-| Agent SharePoint mutation | FORBIDDEN（AP-1） |
-| SharePoint schema / list / column change | FORBIDDEN |
+| Agent SharePoint mutation | FORBIDDEN（AP-1；mutation by Agent = 0） |
+| SharePoint schema / list / column change | FORBIDDEN without separate GO |
 | GitHub Issue mutation / 一括 Close / 一括本文更新 | FORBIDDEN |
 
 ---
@@ -70,23 +73,25 @@ Next gate detail:
   Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
   Thirty-fifth residual: CONSUMED
   Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
-  Execution GO: GIVEN（Human process only）
-  EG-1 Acceptance ≠ Human create
-  Next residual: NOT SELECTED
+  Execution GO: GIVEN（Human process only；consumed）
+  AssessmentSnapshots Human Column Create: COMPLETE
+  VR-1（column create）: PASS
+  evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
+  Next column-path residual: NOT SELECTED
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:
-  ASSESSED / independent next-unit candidate
-  issue-status-reconciliation-assessment.md
-  close Issue ≠ body resync
+  SELECTED（thirty-sixth）
+  Phase ② #6 / #8 body resync = active process residual
+  issue-status-reconciliation-assessment.md / issue-status-reconciliation-packet.md
 
 Still HOLD:
   SharePoint adapter implementation = DO NOT START
-  schema mapping concrete Internal Names = DO NOT LOCK as CONFIRMED（none present）
+  mapping-complete / conversions = NOT COMPLETE
   Implementation Start = HOLD
-  SharePoint schema/list/column change = FORBIDDEN
+  SharePoint schema/list/column change = FORBIDDEN without separate GO
   GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
-  treating DEFAULT_COLUMNS_ONLY as mapping-complete = FORBIDDEN
+  treating CN-1 DEFAULT_COLUMNS_ONLY alone as mapping-complete = FORBIDDEN
 ```
 
 ---
@@ -95,7 +100,8 @@ Still HOLD:
 
 | Item | Status |
 |---|---|
-| App-field Internal Names（mapping） | NOT PRESENT / HOLD |
+| CV-REQ app-field Internal Names | OBSERVED / CONFIRMED（column VR-1） |
+| mapping-complete / conversions | NOT COMPLETE / HOLD |
 | SharePoint adapter / schema mapping impl | HOLD |
 | Permissions / Entra / Graph mutation | HOLD |
 | Implementation Start | HOLD |
