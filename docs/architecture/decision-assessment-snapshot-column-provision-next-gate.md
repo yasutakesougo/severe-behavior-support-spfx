@@ -5,7 +5,9 @@ Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 Names Acceptance: [`decision-assessment-snapshot-column-names-acceptance.md`](./decision-assessment-snapshot-column-names-acceptance.md)
 Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`](./decision-assessment-snapshot-choice-options-acceptance.md)
+Names packet: [`decision-assessment-snapshot-column-names-packet.md`](./decision-assessment-snapshot-column-names-packet.md)
 PX packet: [`decision-assessment-snapshot-column-px-packet.md`](./decision-assessment-snapshot-column-px-packet.md)
+PX judgment: [`decision-assessment-snapshot-column-px-judgment.md`](./decision-assessment-snapshot-column-px-judgment.md)
 Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./decision-ilb-1-thirty-fourth-residual-column-px-selection.md)
 
 ---
@@ -20,6 +22,7 @@ Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./de
 | Thirty-first〜thirty-third residual | CONSUMED |
 | Thirty-fourth residual | **SELECTED / OPEN**（PX-1 authorization path） |
 | Decision-AS-COLUMN-PX-1 | **OPEN / NOT ACCEPTED** |
+| PX-1 judgment | **READY**（採択可；Acceptance ではない） |
 | Stop point | `HUMAN_AS_COLUMN_PX_DECISION` |
 | Column creation authorization | PX-HOLD（awaiting Human PX Decision） |
 | Explicit Execution GO | NOT GIVEN（EG-HOLD；OUT of this packet） |
@@ -43,8 +46,10 @@ Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./de
 Active next:
   Decision-AS-COLUMN-PX-1 OPEN / NOT ACCEPTED
   packet: decision-assessment-snapshot-column-px-packet.md
+  judgment: decision-assessment-snapshot-column-px-judgment.md（READY / PX-1 採択可）
   Stop point: HUMAN_AS_COLUMN_PX_DECISION
   PX-1 ≠ Execution GO ≠ Agent may create
+  Awaiting: Human Acceptance（recommended PX-1+XB-1+AP-1；EG-HOLD）
 
 Still FORBIDDEN / HOLD:
   column creation = FORBIDDEN

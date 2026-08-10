@@ -152,13 +152,24 @@ EG-1 requires（COLUMN-PROVISION-1；再掲）:
   PX-1 candidate ≠ Execution GO
 ```
 
-## 4. Agent recommendation（比較用；Acceptance ではない）
+## 4. Agent recommendation / judgment（比較用；Acceptance ではない）
+
+Formal judgment:
+[`decision-assessment-snapshot-column-px-judgment.md`](./decision-assessment-snapshot-column-px-judgment.md)
 
 ```text
-Agent recommendation:
-  If Human is ready to authorize creation path: PX-1 + XB-1 + AP-1
-    （EG-HOLD remains；EG-1 = separate later residual）
-  If Human is not ready: PX-HOLD + XB-1 + AP-1
+decision-review 判定: READY
+採択可否: PX-1 採択可（下記制約を維持する場合）
+
+Recommended Accept set（比較用）:
+  PX-1 + XB-1 + AP-1
+
+Human-imposed / must keep:
+  Execution GO = NOT GIVEN
+  EG-HOLD = MAINTAIN
+  Agent SharePoint mutation = FORBIDDEN
+  Implementation Start = HOLD
+  adapter = HOLD
 
 NOT Human Acceptance evidence.
 NOT Execution GO.
