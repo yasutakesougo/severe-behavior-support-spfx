@@ -191,9 +191,10 @@ Agent mutation: FORBIDDEN
 Deploy / real data: NO-GO
 INTENDED ≠ OBSERVED / CONFIRMED
 
-Next substantive residual: NOT SELECTED by this Acceptance
-Candidates（separate units）:
-  PX-1 / EG-1 column creation authorization + Execution GO
+Next substantive residual: SELECTED elsewhere — PX-1 authorization path
+  （Decision-AS-COLUMN-PX-1；see thirty-fourth residual）
+Other candidates（separate units）:
+  EG-1 Execution GO（after PX-1）
   CV extension（MAP-AS-009/010 / ENV）
   Issue Status Reconciliation（#6 / #8 / #22）
 
