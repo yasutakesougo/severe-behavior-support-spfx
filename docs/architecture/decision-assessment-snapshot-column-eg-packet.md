@@ -150,16 +150,26 @@ EG-1 requires（COLUMN-PROVISION-1；再掲）:
   Post-EG-1 create = Human process only；then VR-1
 ```
 
-## 4. Agent recommendation（比較用；Acceptance ではない）
+## 4. Agent recommendation / judgment（比較用；Acceptance ではない）
+
+Formal judgment:
+[`decision-assessment-snapshot-column-eg-judgment.md`](./decision-assessment-snapshot-column-eg-judgment.md)
 
 ```text
-Agent recommendation:
-  If Human is ready to grant Execution GO for Human create:
-    EG-1 + XB-1 + AP-1
-  If Human is not ready:
-    EG-HOLD + XB-1 + AP-1
+decision-review 判定: READY
+採択可否: EG-1 採択可（下記制約を維持する場合）
+
+Recommended Accept set（比較用）:
+  EG-1 + XB-1 + AP-1
+
+Human-imposed / must keep:
+  Agent SharePoint mutation = FORBIDDEN
+  Implementation Start = HOLD
+  adapter = HOLD
+  EG-1 Acceptance ≠ Human create（分離必須）
 
 NOT Human Acceptance evidence.
+NOT Human create start.
 NOT Agent may create.
 NOT Implementation Start.
 NOT CONFIRMED names.
