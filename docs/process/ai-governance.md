@@ -57,6 +57,8 @@ Auto-Approval Policy v1（追加分類層・緩和なし）: `docs/decisions/DEC
 
 AUTO-UNTIL-GATE Policy v1（追加分類層・GitHub 公開前 STOP）: `docs/decisions/DEC-AA-003.md`（Accepted / LOCKED / Option A3-1；`AUTO_UNTIL_GATE_DISABLED`；`AUTO_UNTIL_GATE_ENABLED` と Implementation Start は別 GO）
 
+Routine AUG v1 標準運用モデル（eligible slice のみ・Human Adoption 記録）: `docs/process/routine-aug-v1.md`（Accepted / LOCKED / ADOPTED / Option R1；Routine adoption ≠ project-wide Implementation Start；per-slice Start = REQUIRED）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -101,6 +103,7 @@ AUTO-UNTIL-GATE Policy v1（追加分類層・GitHub 公開前 STOP）: `docs/de
 | 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
 | Auto-Approval Policy v1 | `docs/decisions/DEC-AA-001.md` |
 | AUTO-UNTIL-GATE Policy v1 | `docs/decisions/DEC-AA-003.md` |
+| Routine AUG v1 運用モデル | `docs/process/routine-aug-v1.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
