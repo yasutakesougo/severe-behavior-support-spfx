@@ -59,6 +59,19 @@ describe("POST-RA-OBS-EVIDENCE-V1", () => {
     assert.equal(result.latestObservedAt, "2026-08-10T03:00:00+09:00");
   });
 
+  it("orders by represented instant when ISO offsets differ", () => {
+    const result = summarizeObservationEvidence([
+      observation("obs-later", "2026-08-10T10:00:00+09:00", "staff-b"),
+      observation("obs-earlier", "2026-08-10T00:30:00Z", "staff-a"),
+    ]);
+
+    assert.deepEqual(
+      result.history.map((item) => item.RecordId),
+      ["obs-earlier", "obs-later"],
+    );
+    assert.equal(result.latestObservedAt, "2026-08-10T10:00:00+09:00");
+  });
+
   it("uses RecordId only as a deterministic tie-break when observedAt is equal", () => {
     const observedAt = "2026-08-10T03:00:00+09:00";
     const result = summarizeObservationEvidence([
@@ -94,6 +107,10 @@ describe("POST-RA-OBS-EVIDENCE-V1", () => {
     ]);
 
     assert.deepEqual(Object.keys(result).sort(), ["history", "latestObservedAt"]);
-    assert.deepEqual(Object.keys(result.history[0]).sort(), ["RecordId", "observedAt", "observedBy"]);
+    assert.deepEqual(Object.keys(result.history[0]).sort(), [
+      "RecordId",
+      "observedAt",
+      "observedBy",
+    ]);
   });
 });
