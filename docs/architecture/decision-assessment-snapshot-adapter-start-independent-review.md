@@ -21,16 +21,16 @@ candidate-era では P2-002 を勝手に Close していなかった。
 
 Agent recommendationのAIS-1-BはHuman Acceptanceと明確に分離されている。
 
-## Living status（post Decision-AS-ADAPTER-EC3-EC4-1）
+## Living status（post Decision-AS-ADAPTER-EC3-EC4-1 + impl-start-gate）
 
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
   / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
 P2-002 = CLOSED
 Implementation Start = HOLD
+Next = HUMAN IMPLEMENTATION START GO
 ```
 
 Acceptance IR（AIS-1-B living）:
@@ -59,5 +59,6 @@ Verdict:
 
 ```text
 PASS — historical candidate IR remains consistent
-Next gate: AIS-1-B Implementation Start gate
+Next gate: HUMAN IMPLEMENTATION START GO
+  （decision-assessment-snapshot-adapter-impl-start-gate.md）
 ```

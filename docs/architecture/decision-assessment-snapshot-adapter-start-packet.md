@@ -77,9 +77,13 @@ EC-1 = MET
 EC-2 = MET
 EC-3 = MET（Decision-AS-ADAPTER-EC3-EC4-1 / TC-1-A + DP-1-A）
 EC-4 = MET（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A + SV-1-A）
-EC-5..EC-8 = still required at Implementation Start gate
+EC-5 = MET（impl-start-gate determination）
+EC-6 = MET
+EC-7 = MET
+EC-8 = MET
 P2-002 = CLOSED
 Implementation Start = HOLD
+  （awaiting separate Human Implementation Start GO）
 ```
 
 最初のimplementation sliceはAssessmentSnapshot adapter boundaryに限定する。
@@ -103,10 +107,10 @@ Ready / Mergeの自動進行
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
   / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
-Implementation Start = HOLD
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
 P2-002 = CLOSED
-Next gate = AIS-1-B Implementation Start gate
-  （EC-5..EC-8 preserved；separate Human GO）
+Implementation Start = HOLD
+Next gate = HUMAN IMPLEMENTATION START GO
+Gate determination:
+  decision-assessment-snapshot-adapter-impl-start-gate.md
 ```

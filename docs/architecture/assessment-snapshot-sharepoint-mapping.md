@@ -236,8 +236,10 @@ ENV-001〜003: DERIVED
 MAP-AS-010: PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 mapping-complete: PASS / COMPLETE
 P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A）
-EC-3: MET / EC-4: MET（AIS-1-B）
-Next gate: AIS-1-B Implementation Start gate
+EC-1..EC-8: MET（AIS-1-B）
+Implementation Start: HOLD
+Next gate: HUMAN IMPLEMENTATION START GO
+  Gate: decision-assessment-snapshot-adapter-impl-start-gate.md
 Still HOLD:
   Implementation Start / adapter impl / Deploy
 ```

@@ -50,15 +50,22 @@ EC-3 = MET
 EC-4 = MET
   Authority: same Acceptance（CO-1-A + SV-1-A）
   P2-002 clear/omit mechanics Accepted / verified（synthetic/local）
-EC-5..EC-8 = still required at Implementation Start gate（not waived）
+EC-5 = MET
+EC-6 = MET
+EC-7 = MET
+EC-8 = MET
+  Authority: AIS-1-B Implementation Start gate determination
+  Evidence: decision-assessment-snapshot-adapter-impl-start-gate.md
 ```
 
 AIS-1-B Acceptance 自体は EC-3 / EC-4 を満たさなかった。
 
 EC-3 / EC-4 の MET は Decision-AS-ADAPTER-EC3-EC4-1 Acceptance により記録する。
 
+EC-5..EC-8 の MET は Implementation Start gate determination により記録する。
+
 したがって Implementation Start はなお HOLD である
-（EC-5..EC-8 + separate Implementation Start GO が必要）。
+（separate Human Implementation Start GO が必要；本 Acceptance ≠ GO）。
 
 ## P2-002
 
@@ -96,14 +103,17 @@ Ready / Merge = separate Human GO
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
   / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
-EC-1 = MET
-EC-2 = MET
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
 P2-002 = CLOSED
 Implementation Start = HOLD
-Next gate: AIS-1-B Implementation Start gate
-  （EC-5..EC-8 preserved；separate Human GO required）
+Next gate: HUMAN IMPLEMENTATION START GO
+  recommended option = GO-SLICE-1
+  scope = decision-assessment-snapshot-adapter-impl-start-gate.md §4
+  OUT = same doc §5
+Gate determination:
+  decision-assessment-snapshot-adapter-impl-start-gate.md
+Gate IR:
+  decision-assessment-snapshot-adapter-impl-start-gate-independent-review.md
 Acceptance 正本（EC-3/EC-4）:
   decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```

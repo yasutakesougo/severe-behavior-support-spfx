@@ -18,14 +18,13 @@ AcceptanceはAIS-1-Bを条件付きGOとしてLOCKしている。
 
 AcceptanceだけでImplementation Startへ進めていない。
 
-Living sync（post Decision-AS-ADAPTER-EC3-EC4-1）:
+Living sync（post Decision-AS-ADAPTER-EC3-EC4-1 + impl-start-gate）:
 
 ```text
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
 P2-002 = CLOSED
 Implementation Start = HOLD
-EC-5..EC-8 = still required
+Next = HUMAN IMPLEMENTATION START GO
 ```
 
 SharePoint / M365 mutation、Deploy、real dataを認可していない。
@@ -55,5 +54,6 @@ Verdict:
 
 ```text
 PASS — ACCEPTANCE CONSISTENT（living sync）
-Next gate: AIS-1-B Implementation Start gate
+Next gate: HUMAN IMPLEMENTATION START GO
+  （see decision-assessment-snapshot-adapter-impl-start-gate.md）
 ```

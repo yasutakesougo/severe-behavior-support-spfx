@@ -70,9 +70,9 @@ EC-3 / EC-4 は Decision-AS-ADAPTER-EC3-EC4-1 により Accepted / MET。
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
 P2-002 = CLOSED
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
 Implementation Start = HOLD
-Next gate = AIS-1-B Implementation Start gate
-  （EC-5..EC-8 preserved；separate Human GO）
+Next gate = HUMAN IMPLEMENTATION START GO
+Gate determination:
+  decision-assessment-snapshot-adapter-impl-start-gate.md
 ```
