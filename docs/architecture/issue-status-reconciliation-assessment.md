@@ -170,18 +170,25 @@ This assessment does NOT authorize:
 ## 6. Next
 
 ```text
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
 Immediate substantive unit: CN-1
   selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   packet: decision-assessment-snapshot-cn1-observation-packet.md
-  method: Human read-only column metadata observation；mutation 0
+  method: Human read-only observation；mutation 0
+  evidence shape: Display Name → Internal Name → Column Type → List → Site
+  Sites: isogo / honmoku
+  Lists: SupportPlans / AssessmentSnapshots
 
 After CN-1:
-  select Issue Status Reconciliation as a process unit
+  Issue Status Reconciliation = independent next-unit candidate
   resync #6 / #8 / #22 Current/Gate/Dependency against SoT
   keep close decisions separate from body updates
 
-Until then:
+Until then / FORBIDDEN now:
   Implementation Start = HOLD
   adapter / schema mapping = HOLD
+  Issue 一括 Close / 一括本文更新 = FORBIDDEN
+  SharePoint schema/list/column change = FORBIDDEN
+  GitHub Issue mutation = FORBIDDEN
   Deploy / real data = NO-GO
 ```

@@ -27,6 +27,7 @@ Current state:
   SV-1 / LV-1 = CONFIRMED
   VR-1 = PASS
   CN-1 = OPEN / NOT OBSERVED
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
   SharePoint adapter / schema mapping impl = HOLD until CN-1 closed
   Implementation Start = HOLD
 ```
@@ -40,22 +41,32 @@ Current state:
 ```text
 SELECTED / OPEN:
   Decision-AS-CN1-OBSERVATION-1
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
   Method: Human SharePoint UI / column settings read-only primary evidence
   Mutation: 0
+  Evidence shape LOCK:
+    Display Name → Internal Name → Column Type → List → Site
   Internal Name invention: FORBIDDEN
   Display Name / TypeScript 名からの逆算: FORBIDDEN
+  Values / row data / settings mutation: OUT OF SCOPE
+
+Closure basis:
+  Human observation result = CN-1 closure basis
+  Until CN-1 closed → adapter / schema mapping impl = DO NOT START
 
 Closes only when CONFIRMED:
   observed Internal Column Names for in-scope Lists
   （SupportPlans / AssessmentSnapshots × isogo / honmoku）
 
-Still NOT authorized:
-  custom column creation
+Still NOT authorized / FORBIDDEN now:
+  Implementation Start（HOLD）
+  Issue 一括 Close
+  Issue 本文の一括更新
+  SharePoint schema / list / column change
+  GitHub Issue mutation
   SharePoint adapter / schema mapping implementation
   permissions / Entra / Graph / tenant mutation
-  Implementation Start
   Deploy / real data
-  Issue close / Issue body rewrite as substitute for CN-1
 ```
 
 Selection ≠ CN-1 CONFIRMED ≠ adapter start ≠ Implementation Start。
@@ -85,21 +96,24 @@ Issue Status Reconciliation:
 ## Next
 
 ```text
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
 Selection OPEN → Decision-AS-CN1-OBSERVATION-1 packet
   decision-assessment-snapshot-cn1-observation-packet.md
 
 Awaiting:
   Human read-only column metadata observation
-  Sites: severe-support-isogo / severe-support-honmoku
+  Sites: isogo / honmoku
   Lists: SupportPlans / AssessmentSnapshots
+  Evidence: Display Name → Internal Name → Column Type → List → Site
   mutation = 0
 
 Until CN-1 closed:
   SharePoint adapter / schema mapping impl = HOLD
   Implementation Start = HOLD
   Deploy / real data = NO-GO
-  Agent SharePoint mutation = FORBIDDEN
+  SharePoint schema/list/column change = FORBIDDEN
+  GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
 
-After CN-1 closed（separate unit）:
+After CN-1 closed（independent next-unit candidate）:
   Issue Status Reconciliation（Current/Gate/Dependency resync only）
 ```

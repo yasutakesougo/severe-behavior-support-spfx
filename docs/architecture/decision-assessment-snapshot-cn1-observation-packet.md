@@ -19,14 +19,19 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-CN1-OBSERVATION-1
 Kind: Human Decision packet（observation → CONFIRMED / HOLD）
 Status: OPEN / NOT OBSERVED
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
 Human Decision: NOT YET
 Basis rule already Accepted:
   CN-1 — 実 Internal Column Name を確認して確定
          Display Name / TypeScript 名から推論しない
+Closure basis:
+  Human read-only observation result for in-scope Sites/Lists
+  = sole closure basis for CN-1
+  Until CN-1 closed → SharePoint adapter / schema mapping impl = DO NOT START
 
 Scope Sites（LOCKED / OBSERVED）:
-  https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
-  https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
+  isogo  = https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
+  honmoku = https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
 
 Scope Lists（LOCKED / OBSERVED）:
   SupportPlans
@@ -35,8 +40,11 @@ Scope Lists（LOCKED / OBSERVED）:
 CN-1: OPEN / NOT OBSERVED
 Agent environment credentials: NONE（NO_SP_ENV）
 Mutation by Agent: FORBIDDEN
+Mutation by Human during this observation: 0
 Implementation Start: HOLD
 SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
+SharePoint schema / list / column change: FORBIDDEN
+GitHub Issue mutation（bulk close / bulk body update）: FORBIDDEN
 Deploy / real data: NO-GO
 ```
 
@@ -59,6 +67,7 @@ Display Name / domain field / TS property からの逆算は禁止。
 
 | Rule | Value |
 |---|---|
+| Stop point | `HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION` |
 | Method | SharePoint UI List settings / column settings（or equivalent primary metadata） |
 | Mode | read-only |
 | Mutation | 0 |
@@ -66,24 +75,41 @@ Display Name / domain field / TS property からの逆算は禁止。
 | Evidence form | Human-provided primary evidence（screenshot / exported column metadata） |
 | Fail-closed | 未観測列は NOT OBSERVED / HOLD。推測で埋めない |
 
-```text
-MUST capture per List（minimum）:
-  Display Name
-  Internal Name
-  Type（as shown by SharePoint）
-  Required / optional if shown
-  system vs custom if distinguishable
+### 2.1 Evidence shape（LOCK）
 
+観測時に証跡化する対応は次のみとする。
+
+```text
+Display Name → Internal Name → Column Type → List → Site
+```
+
+| Capture | In / Out |
+|---|---|
+| Display Name | **IN** |
+| Internal Name | **IN** |
+| Column Type（SharePoint 表示どおり） | **IN** |
+| List | **IN** |
+| Site（isogo / honmoku） | **IN** |
+| 列の値・行データ・個人情報 | **OUT** |
+| 設定変更・権限変更・列作成/改名/削除 | **OUT** |
+| Required / system vs custom（任意・補助） | optional only；必須証跡ではない |
+
+```text
 MUST cover:
-  severe-support-isogo / SupportPlans
-  severe-support-isogo / AssessmentSnapshots
-  severe-support-honmoku / SupportPlans
-  severe-support-honmoku / AssessmentSnapshots
+  isogo / SupportPlans
+  isogo / AssessmentSnapshots
+  honmoku / SupportPlans
+  honmoku / AssessmentSnapshots
 
 Allowed outcome if only default columns exist:
   OBSERVED = Title + system columns only
   custom mapped columns = NOT PRESENT / NOT OBSERVED
   Do NOT invent intended Internal Names to fill mapping gaps.
+
+Do NOT step into:
+  item values / list data content
+  settings mutation
+  schema / list / column change
 ```
 
 ## 3. Compare axes（observation-time）
@@ -106,12 +132,14 @@ Allowed outcome if only default columns exist:
 
 ## 4. Observation table（empty until Human evidence）
 
-| Site | List | Display Name | Internal Name | Type | Notes | Status |
-|---|---|---|---|---|---|---|
-| severe-support-isogo | SupportPlans | — | — | — | awaiting Human evidence | NOT OBSERVED |
-| severe-support-isogo | AssessmentSnapshots | — | — | — | awaiting Human evidence | NOT OBSERVED |
-| severe-support-honmoku | SupportPlans | — | — | — | awaiting Human evidence | NOT OBSERVED |
-| severe-support-honmoku | AssessmentSnapshots | — | — | — | awaiting Human evidence | NOT OBSERVED |
+証跡列順 = Display Name → Internal Name → Column Type → List → Site
+
+| Display Name | Internal Name | Column Type | List | Site | Status |
+|---|---|---|---|---|---|
+| — | — | — | SupportPlans | isogo | NOT OBSERVED |
+| — | — | — | AssessmentSnapshots | isogo | NOT OBSERVED |
+| — | — | — | SupportPlans | honmoku | NOT OBSERVED |
+| — | — | — | AssessmentSnapshots | honmoku | NOT OBSERVED |
 
 ```text
 Do not pre-fill Internal Names from:
@@ -126,14 +154,17 @@ Do not pre-fill Internal Names from:
 ```text
 This OPEN packet does NOT authorize:
   Internal Names invention
-  custom column creation / rename / delete
+  SharePoint schema / list / column change（create / rename / delete）
   permissions / Entra / Graph / tenant mutation
-  SharePoint adapter implementation
+  SharePoint adapter / schema mapping implementation
   schema mapping concrete Internal Names LOCK as CONFIRMED without evidence
-  Implementation Start
+  Implementation Start（HOLD）
   Deploy / real data
   treating default-column-only Lists as mapping-complete
-  Issue Status Reconciliation / Issue close / Issue body rewrite
+  GitHub Issue mutation
+  Issue 一括 Close
+  Issue 本文の一括更新
+  Issue Status Reconciliation as current gate
 ```
 
 ## 6. Related process debt（not this packet）
@@ -149,12 +180,18 @@ Issue Status Reconciliation:
 ## 7. Next
 
 ```text
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
 Decision-AS-CN1-OBSERVATION-1: OPEN / NOT OBSERVED
-Awaiting: Human read-only column metadata evidence
-Until evidence posted and accepted:
-  CN-1 = OPEN
+Awaiting: Human read-only evidence shaped as
+  Display Name → Internal Name → Column Type → List → Site
+  Sites: isogo / honmoku
+  Lists: SupportPlans / AssessmentSnapshots
+  mutation = 0
+Until CN-1 closed:
   adapter / schema mapping impl = HOLD
   Implementation Start = HOLD
-After CN-1 CONFIRMED（separate docs / Acceptance）:
+  SharePoint schema/list/column change = FORBIDDEN
+  GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
+After CN-1 closed（separate unit candidate）:
   Issue Status Reconciliation may be selected as next process unit
 ```

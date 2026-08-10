@@ -111,10 +111,14 @@ PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 Next gate: CN-1（Internal Column Names 確認・確定）
   selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   packet: decision-assessment-snapshot-cn1-observation-packet.md
-Issue Status Reconciliation: ASSESSED / NOT CURRENT GATE
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
+  Evidence shape: Display Name → Internal Name → Column Type → List → Site
+Issue Status Reconciliation: ASSESSED / independent next-unit candidate after CN-1
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Implementation Start: HOLD
+SharePoint schema/list/column change: FORBIDDEN
+GitHub Issue mutation / 一括 Close / 一括本文更新: FORBIDDEN
 Deploy / real data: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
@@ -362,10 +366,14 @@ PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 Next gate: CN-1（Internal Column Names 確認・確定）
   selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   packet: decision-assessment-snapshot-cn1-observation-packet.md
-Issue Status Reconciliation: ASSESSED / NOT CURRENT GATE
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
+  Evidence shape: Display Name → Internal Name → Column Type → List → Site
+Issue Status Reconciliation: ASSESSED / independent next-unit candidate after CN-1
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Implementation Start: HOLD
+SharePoint schema/list/column change: FORBIDDEN
+GitHub Issue mutation / 一括 Close / 一括本文更新: FORBIDDEN
 Deploy / real data: NO-GO
 List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY

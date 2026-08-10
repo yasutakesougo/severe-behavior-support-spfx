@@ -28,9 +28,12 @@ Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-revie
 | VR-1 | PASS |
 | Independent Review #187 | PASS（P0=0 / P1=0 / P2=0） |
 | CN-1 / Internal Column Names | OPEN / NOT OBSERVED |
+| Stop point | `HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION` |
 | Implementation Start | HOLD |
 | Deploy / real data | NO-GO |
 | Agent SharePoint mutation | FORBIDDEN（AP-1） |
+| SharePoint schema / list / column change | FORBIDDEN |
+| GitHub Issue mutation / 一括 Close / 一括本文更新 | FORBIDDEN |
 
 ---
 
@@ -43,12 +46,18 @@ Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-revie
 | 3 | 以降の mapping / adapter 実装判断 | CN-1 閉鎖後のみ |
 
 ```text
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
 SELECTED / OPEN:
   decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   decision-assessment-snapshot-cn1-observation-packet.md
+Evidence shape LOCK:
+  Display Name → Internal Name → Column Type → List → Site
+  Sites: isogo / honmoku
+  Lists: SupportPlans / AssessmentSnapshots
+  mutation = 0；values / settings mutation = OUT
 
 Issue Status Reconciliation:
-  ASSESSED / NOT CURRENT GATE
+  ASSESSED / independent next-unit candidate after CN-1
   issue-status-reconciliation-assessment.md
   close Issue ≠ body resync
 
@@ -56,6 +65,8 @@ Until CN-1 is closed:
   SharePoint adapter implementation = DO NOT START
   schema mapping concrete Internal Names = DO NOT LOCK as CONFIRMED
   Implementation Start = HOLD
+  SharePoint schema/list/column change = FORBIDDEN
+  GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
 ```
 
 ---
