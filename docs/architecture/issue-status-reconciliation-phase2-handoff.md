@@ -22,10 +22,12 @@
 - Phase ② drafts ready；NOT STARTED
 
 ## Remaining
-- Human: apply Current-state patches to **#6 and #8 bodies only**
-  per `issue-status-reconciliation-resync-6-8.md`
-- Keep #8 OPEN as Decision Ledger
-- Read-back after patches；then stop before Phase ③ unless Human continues
+- Stop point: **Phase ② = READY / NOT STARTED**（Human confirmed 2026-08-10）
+- Resume SoT: `issue-status-reconciliation-resync-6-8.md`
+- On resume: #6 / #8 **body updates only**；do **not** Close #6 / #8
+- Out of scope: #4 / #9 / #12 / #15〜#19 / #20以降 / UI / EG-1 Human create /
+  SharePoint / adapter / schema changes
+- After Phase ② complete + read-back: Phase ③ may be considered
 
 ## HOLD
 - Phase ② until Human resumes

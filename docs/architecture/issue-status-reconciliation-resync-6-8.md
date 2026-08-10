@@ -9,16 +9,22 @@ Parent:
 ```text
 Status: READY for Human Phase ② / NOT STARTED
   （Phase ① → ①b = PASS；Human stopped before body updates）
+Human confirmation（2026-08-10）:
+  resume SoT = this file
+  action = #6 / #8 body Current-state reconciliation ONLY
+  stop point remains READY / NOT STARTED until Human applies patches
 Scope: #6 and #8 Issue body Current-state reconciliation ONLY
 Both Issues: KEEP OPEN（#8 = Decision Ledger；must remain OPEN）
+Close #6 / #8: FORBIDDEN（this engineering step does not Close either）
 Agent GitHub Issue mutation: FORBIDDEN
 Human body / Current / Gate / Dependency patch: AUTHORIZED（Human resume）
-Close #6 / #8: FORBIDDEN by this Phase
-Out of scope（do not touch）:
-  #20以降 / UI Issues（#68〜#71 / #125）
+Out of scope（do not touch in this step）:
+  #4 / #9 / #12 / #15〜#19（Phase ③ later）
+  #20以降
+  UI Issues（#68〜#71 / #125）
   EG-1 Human create（parallel process）
-  Phase ③ continuity Issues（#4 / #9 / #12 / #15〜#19）
-  Implementation Start / SharePoint / adapter / Deploy
+  SharePoint / adapter / schema changes
+  Implementation Start / Deploy / real data
 ```
 
 ## Shared SoT freeze（at draft write-up）
