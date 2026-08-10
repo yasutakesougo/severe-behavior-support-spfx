@@ -169,10 +169,45 @@ Risk ordinal は `LOW = 1`、`MEDIUM = 2`、`HIGH = 3` とする。
 | `DESTRUCTIVE_ACTION` | `HIGH` |
 | `PRODUCTION_DEPLOY` | `HIGH` |
 
+`riskRuleSet` は trusted authority root に拘束された次の matcher manifest を持つ。
+
+```text
+dependencyManifestPaths + dependencyFieldPointers
+moduleBoundaryManifest(path → moduleId)
+artifactClassManifest(path/symbol → class)
+symbolDependencyManifest(symbol → referenced symbols)
+acceptedBehaviorRefs(symbol + authority digest + allowedChangeKind)
+institutionalPolicyPathsAndSymbols
+dataClassificationManifest
+destructiveOperationIds
+```
+
+matcher predicates:
+
+| Escalator ID | Deterministic predicate |
+|---|---|
+| `DEPENDENCY_CHANGE` | proposed diff が dependency manifest / lockfile path、または dependency field pointer を変更 |
+| `CROSS_MODULE_INTEGRATION` | proposed diff の path / symbol が 2 以上の `moduleId` に属する |
+| `ADAPTER_DTO_WIRING` | changed path / symbol class が `ADAPTER` または `DTO` |
+| `SCHEMA_ADJACENT_CHANGE` | class が `SCHEMA`、または changed symbol が schema symbol を参照 |
+| `NEW_BUSINESS_RULE` | `DOMAIN_BEHAVIOR` symbol の semantic fingerprint が exact `acceptedBehaviorRefs` の allowed change と一致しない |
+| `INSTITUTIONAL_INTERPRETATION` | institutional path / symbol を変更し、exact Accepted authority digest に拘束された allowed change がない |
+| `SECURITY_BOUNDARY_CHANGE` | class が `SECURITY_BOUNDARY` |
+| `PERMISSION_OR_SECRET_CHANGE` | class が `PERMISSION` / `SECRET` または該当 operation ID |
+| `PRODUCTION_DATA` | target data classification が `PRODUCTION_DATA` |
+| `DESTRUCTIVE_ACTION` | delete / physical overwrite、または operation ID が `destructiveOperationIds` に一致 |
+| `PRODUCTION_DEPLOY` | operation ID が `deploy.production` |
+
 入力源は approved Task Packet、Capability Registry の immutable rule、
-preflight path/diff inventory とする。同じ変更に複数値がある場合は最大値を採用する。
+proposed preflight path / AST-symbol / semantic-fingerprint diff とする。同じ変更に
+複数値がある場合は最大値を採用する。parser / symbol mapping / fingerprint が
+対象言語を support しない、path / symbol が manifest 未記載、または判定結果が
+競合する場合は `UNKNOWN` として DENY する。
+
 Agent 自身の risk label は authority にしない。rule set にない escalator、入力源不明、
-preflight と packet の不一致は `UNKNOWN` として DENY する。
+preflight と packet の不一致は `UNKNOWN` として DENY する。各 matcher は positive /
+negative fixture を持ち、同じ proposed diff から同じ escalator set を生成できることを
+Gateway implementation Gate で検証する。
 
 ## Initial capability policy
 
@@ -280,6 +315,8 @@ policyEnablementRef
 taskPacketId
 taskPacketVersion
 authorityRefs[]
+authoritySetVersion
+authorityRootDigest
 authoritySnapshotDigest
 implementationStartRef (mutation when applicable)
 unresolvedHolds[]
@@ -290,11 +327,16 @@ repository
 baseRef
 baselineSHA
 expectedHeadSHA (mutation / external write when applicable)
+expectedIndexTreeSHA (mutation when applicable)
+expectedWorktreeDigest (mutation when applicable)
 capabilities[]
 risk
 riskRuleSet
+allowedReadPaths[]
 allowedPaths[]
 deniedPaths[]
+sensitivePaths[]
+dataClassificationManifest
 limits
 approvalRef
 expiresAt
@@ -308,9 +350,16 @@ Agent は `policyEnablementRef`、Task Packet、approval、risk、limits、
 
 ### Authority intersection
 
-`authorityRefs[]` は AUTO-1 より上位の Accepted / LOCKED authority と、その
-version / digest を列挙する。Gateway は immutable authority snapshot から
-operation classification、kill switch、HOLD、external write 境界を再計算する。
+Policy enablement approval は trusted authority registry の
+`authoritySetVersion + authorityRootDigest` に拘束する。Gateway は request の
+`authorityRefs[]` を信頼せず、root から全 transitive authority closure を取得する。
+closure は各 authority の ID、version、content digest、親 authority ID を含む
+canonical sorted manifest とし、その digest が root と一致必須である。
+
+Gateway は trusted closure と request の `authorityRefs[]` が完全一致することを
+検証し、immutable authority snapshot から operation classification、kill switch、
+HOLD、external write 境界を再計算する。Task Packet / request が authority を
+追加・省略・置換して root を作り直すことはできない。
 
 ```text
 effectiveClassification = strictest(
@@ -320,7 +369,8 @@ effectiveClassification = strictest(
 )
 ```
 
-- authority missing / stale / digest mismatch / conflict は
+- trusted root 不明、closure 取得不能、authority omission、stale / digest mismatch /
+  conflict は
   `DENY / POLICY_BLOCKED / AUTHORITY_CONFLICT`
 - mutation は exact-slice `implementationStartRef` が Accepted でなければ
   `DENY / POLICY_BLOCKED / IMPLEMENTATION_START_REQUIRED`
@@ -371,13 +421,57 @@ expiry、revocation state を検証できなければならない。issuer 不�
 ### Mutable head
 
 - mutation / external write は直前状態を `expectedHeadSHA` に拘束する。
+- mutation は専用 Git worktree と repository / worktree / branch 単位の
+  cross-task exclusive lease を必須とする。1 worktree を複数 task で共有しない。
+- task 開始時は `HEAD = baselineSHA`、index = baseline tree、mutable worktree =
+  clean でなければならない。
+- `expectedIndexTreeSHA` は index の canonical tree object SHA、
+  `expectedWorktreeDigest` は mutable roots の canonical snapshot digest とする。
+- snapshot は canonical path、mode、content SHA-256 の tuple を path byte order で
+  sort して hash し、tracked / untracked file を含む。`.git`、immutable dependency
+  root、packet 固有 ephemeral root だけを除外できる。
+- immutable / ephemeral root の manifest と digest も Task Packet approval に拘束し、
+  mutation adapter / sandbox の write target にできない。
 - branch / Draft PR head が一致しない場合は
   `DENY / HEAD_MOVED / HEAD_MOVED` とする。
+- index tree または worktree digest が request の expected 値と一致しない場合は
+  `DENY / WORKTREE_MOVED / WORKTREE_MOVED` とする。
 - 成功した mutation の result SHA を次 request の `expectedHeadSHA` として
-  明示的に引き継ぐ。
+  明示的に引き継ぎ、result index tree / worktree digest も同様に引き継ぐ。
+- `code.edit` は proposed postimage を一時領域で構成し、path / risk / cumulative
+  file・byte limits を検証して reservation を取得した後だけ atomic に反映する。
 
-baseline は task の承認起点、expected head は task 内の逐次競合防止であり、
-相互に代替しない。
+baseline は task の承認起点、expected head / index tree / worktree digest は
+task 内の逐次・cross-task 競合防止であり、相互に代替しない。
+
+## Read boundary
+
+`repo.read` と `test.run.readRoots` は path ごとに effective classification を
+再評価する。Task Packet の `allowedReadPaths[]` は後述の exact-file /
+directory-root grammarを使い、trusted authority root に含まれる
+`dataClassificationManifest` と `sensitivePaths[]` を緩和できない。
+
+```text
+read target ∈ allowedReadPaths
+read target ∉ deniedPaths
+read target ∉ sensitivePaths
+data classification ∈ {PUBLIC, INTERNAL_SOURCE}
+```
+
+`SECRET` / `CREDENTIAL` / `PERSONAL_DATA` / `PRODUCTION_DATA` は read を DENY する。
+path の data classification がない、複数分類が衝突する、manifest digest が
+authority root と一致しない場合は `UNKNOWN` として DENY する。
+
+minimum `sensitivePaths` は `.env` 系、secret/credential directory、private key、
+production-data fixture / export とする。名前だけに依存せず、trusted
+`dataClassificationManifest` の分類を優先する。
+
+結果:
+
+```text
+repo.read / test.run sensitive target
+→ DENY / POLICY_BLOCKED / SENSITIVE_READ_FORBIDDEN
+```
 
 ## test.run sandbox
 
@@ -398,6 +492,8 @@ maxProcesses
 ```
 
 - `cwd` / `readRoots` / `writeRoots` は repository 内の canonical path に限定する。
+- `readRoots` は `allowedReadPaths` の subset とし、`deniedPaths` /
+  `sensitivePaths` と交差させない。
 - `writeRoots` は `allowedPaths` の subset とする。
 - secret / credential を ambient environment から継承しない。
 - `ephemeralWriteRoots` は packet 固有 sandbox 内に限定し、commit / push /
@@ -483,8 +579,8 @@ counter semantics:
 | `maxOpenDraftPullRequests` | task が作成し、close/convert されていない Draft 数 |
 | `maxCommits` | baseline descendant として task が作成した successful commit 数 |
 | `maxPushes` | successful remote ref update 数。retry replay は idempotency により再計上しない |
-| `maxChangedFiles` | `baselineSHA...expectedHeadSHA` cumulative diff の unique preimage / postimage path 数。rename は両 path を数える |
-| `maxChangedBytes` | cumulative diff の各 path について create/modify は postimage blob size、delete は preimage blob size、rename は大きい方を合計 |
+| `maxChangedFiles` | baseline tree と proposed effective snapshot（HEAD + index + uncommitted worktree + proposed postimage）の cumulative diff にある unique preimage / postimage path 数。untracked を含み、rename は両 path を数える |
+| `maxChangedBytes` | 同じ effective snapshot diff の各 path について create/modify は postimage size、delete は preimage size、rename は大きい方を合計 |
 | `maxActionRequests` | valid task ID を持つ `REQUESTED` audit の数。DENY も含む |
 
 lease / reservation は期限を持つが、期限切れを成功・未実行の推測に使わない。
@@ -494,7 +590,25 @@ release しない。
 ## Idempotency
 
 - mutation / external write request は `idempotencyKey` 必須。
-- key scope は `policyVersion + taskPacketId + capability + target` とする。
+- key scope は次の canonical tuple の SHA-256 とする。
+
+```text
+policyVersion
+policyEnablementRef
+authoritySetVersion
+authorityRootDigest
+taskPacketId
+taskPacketVersion
+approvalRef
+repository
+baselineSHA
+capability
+target
+```
+
+- canonical payload hash は request body に加え、`expectedHeadSHA`、
+  `expectedIndexTreeSHA`、`expectedWorktreeDigest`、risk、paths、limits snapshot を
+  含む。
 - 同じ key + 同じ canonical payload hash の再送は、前回結果を返して再実行しない。
 - 同じ key + 異なる payload hash は
   `DENY / IDEMPOTENCY_CONFLICT / IDEMPOTENCY_CONFLICT`。
@@ -517,7 +631,9 @@ timestamp
 policyVersion
 policyEnablementRef
 taskPacketId / taskPacketVersion
+authoritySetVersion / authorityRootDigest / authoritySnapshotDigest
 repository / baseRef / baselineSHA / expectedHeadSHA
+expectedIndexTreeSHA / expectedWorktreeDigest
 capability / classification / effectiveRisk
 approvalRef
 allowedPaths digest / limits snapshot
@@ -556,6 +672,7 @@ code =
   POLICY_BLOCKED
   | BASELINE_MOVED
   | HEAD_MOVED
+  | WORKTREE_MOVED
   | IDEMPOTENCY_CONFLICT
   | LIMIT_EXCEEDED
   | AUDIT_UNAVAILABLE
@@ -579,9 +696,11 @@ reason =
   | TARGET_MISMATCH
   | BASELINE_MOVED
   | HEAD_MOVED
+  | WORKTREE_MOVED
   | HUMAN_ONLY
   | FORBIDDEN
   | OUT_OF_SCOPE
+  | SENSITIVE_READ_FORBIDDEN
   | TEST_SANDBOX_VIOLATION
   | DRAFT_HEAD_MUTATION
   | LIMIT_EXCEEDED
@@ -605,9 +724,11 @@ reason から code への mapping は次で固定する。
 | `ISSUER_UNTRUSTED` / `APPROVAL_EXPIRED` / `APPROVAL_REVOKED` | `POLICY_BLOCKED` |
 | `TARGET_MISMATCH` | `POLICY_BLOCKED` |
 | `HUMAN_ONLY` / `FORBIDDEN` / `OUT_OF_SCOPE` | `POLICY_BLOCKED` |
+| `SENSITIVE_READ_FORBIDDEN` | `POLICY_BLOCKED` |
 | `TEST_SANDBOX_VIOLATION` / `DRAFT_HEAD_MUTATION` | `POLICY_BLOCKED` |
 | `BASELINE_MOVED` | `BASELINE_MOVED` |
 | `HEAD_MOVED` | `HEAD_MOVED` |
+| `WORKTREE_MOVED` | `WORKTREE_MOVED` |
 | `LIMIT_EXCEEDED` | `LIMIT_EXCEEDED` |
 | `IDEMPOTENCY_CONFLICT` | `IDEMPOTENCY_CONFLICT` |
 | `AUDIT_UNAVAILABLE` | `AUDIT_UNAVAILABLE` |
@@ -646,7 +767,7 @@ executionStatus =
 9. effective risk == LOW?
 10. approvals valid and exact?
 11. external write permission valid when applicable?
-12. baseline and expected head match?
+12. baseline, expected head, index tree, and worktree digest match?
 13. paths / command sandbox within scope?
 14. idempotency valid?
 15. limits atomically reserved?
@@ -679,14 +800,22 @@ unknown capability → DENY / POLICY_BLOCKED / UNKNOWN
 policy not enabled → DENY / POLICY_BLOCKED / POLICY_NOT_ENABLED
 missing approval → DENY / POLICY_BLOCKED / APPROVAL_REQUIRED
 missing / conflicting authority → DENY / POLICY_BLOCKED / AUTHORITY_CONFLICT
+authority omitted from trusted closure → DENY / POLICY_BLOCKED / AUTHORITY_CONFLICT
 missing exact-slice Implementation Start → DENY / POLICY_BLOCKED / IMPLEMENTATION_START_REQUIRED
 unresolved HOLD → DENY / POLICY_BLOCKED / UNRESOLVED_HOLD
 external write while upper authority says NONE → DENY / POLICY_BLOCKED / EXTERNAL_WRITE_NOT_ALLOWED
+repo.read / test.run secret or production-data path → DENY / POLICY_BLOCKED / SENSITIVE_READ_FORBIDDEN
 test.run write/network outside sandbox → DENY / POLICY_BLOCKED / TEST_SANDBOX_VIOLATION
 Draft update containing head mutation → DENY / POLICY_BLOCKED / DRAFT_HEAD_MUTATION
+concurrent / uncommitted worktree mismatch → DENY / WORKTREE_MOVED / WORKTREE_MOVED
+uncommitted proposed diff over file/byte limit → DENY / LIMIT_EXCEEDED / LIMIT_EXCEEDED
 idempotency key collision → DENY / IDEMPOTENCY_CONFLICT / IDEMPOTENCY_CONFLICT
 audit sink unavailable → DENY / AUDIT_UNAVAILABLE / AUDIT_UNAVAILABLE
 ```
+
+同じ client idempotency key を異なる `taskPacketVersion` で送った fixture は、
+旧 packet の result を replay しないことを検証する。新しい scoped key として
+再評価し、current state precondition を通常どおり適用する。
 
 HUMAN_ONLY / FORBIDDEN canonical v1 projection の全行について、
 table-driven negative test を生成し、Registry に executable adapter がないことと
@@ -736,7 +865,10 @@ AUTO-1、将来の Task Packet、CI PASS、Independent Review PASS のいずれ�
 
 - capability taxonomy と initial policy set が一意
 - risk ceiling が `LOW` に固定
-- baseline / head / paths / limits / idempotency / approval / audit が判定可能
+- trusted authority closure の完全性と strict intersection が判定可能
+- risk escalator matcher と unsupported / unknown 時の DENY が一意
+- baseline / head / index / worktree / read-write paths / atomic limits /
+  idempotency / approval / audit が判定可能
 - unknown / missing / conflict がすべて DENY
 - Gateway が Ready / Merge / Decision Acceptance / forbidden writes の executor を持たない
 - core negative test 5 件の期待結果が固定

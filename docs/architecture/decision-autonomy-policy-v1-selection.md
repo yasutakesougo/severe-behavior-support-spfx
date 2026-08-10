@@ -75,9 +75,11 @@ NONE
 - policy、Task Packet、approval、baseline、paths、limits、idempotency、audit の
   どれかが不明または不一致なら DENY
 - mutation は exact-slice Implementation Start、unresolved HOLD = 0、
-  inherited kill switches、authority snapshot の一致が必須
+  inherited kill switches、trusted authority closure の完全一致が必須
 - `test.run` は digest-bound command manifest と network-denied / write-scoped
   sandbox が必須
+- read は allowedReadPaths と trusted data classification の intersection、
+  mutation は dedicated worktree lease と head / index / worktree binding が必須
 - `Policy Accepted ≠ Policy Enabled`
 
 ## Required negative contract outcomes
@@ -130,7 +132,8 @@ AUTO-1 Acceptance ≠ Ready / Merge
 - initial allow / human-only / forbidden set が一意
 - baseline / expected head / allowedPaths / limits / idempotency が一意
 - authority intersection / exact-slice Start / inherited HOLD・kill switch が一意
-- test sandbox / path grammar / atomic limit ledger が一意
+- deterministic risk matcher、read boundary、test sandbox、path grammar、
+  worktree binding、atomic limit ledger が一意
 - approval と audit の fail-closed requirement が一意
 - mandatory negative contract outcomes が一意
 - execution backend が SDK 言語非依存
