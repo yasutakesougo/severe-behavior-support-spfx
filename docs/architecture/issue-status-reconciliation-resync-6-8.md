@@ -7,11 +7,12 @@ Parent:
 [`issue-status-reconciliation-packet.md`](./issue-status-reconciliation-packet.md)
 
 ```text
-Status: READY after Phase ①（may draft now；apply after Close confirmations）
+Status: BLOCKED until Phase ①b PASS（drafts ready；do not apply yet）
 Both Issues: KEEP OPEN
 Agent GitHub Issue mutation: FORBIDDEN
-Human body / Current / Gate / Dependency patch: AUTHORIZED under this packet
+Human body / Current / Gate / Dependency patch: AUTHORIZED only after ①b PASS
 Close #6 / #8: FORBIDDEN by this Phase
+Do not mix EG-1 Human create into this Phase
 ```
 
 ## Shared SoT freeze（at draft write-up）
@@ -159,6 +160,7 @@ Do not:
 
 | Step | Action | Status |
 |---|---|---|
+| 0 | Confirm Phase ①b read-back PASS（#5/#10/#11 CLOSED；#6/#8 still OPEN） | Human gate |
 | 1 | Confirm Phase ① Close outcomes recorded | Human |
 | 2 | Patch #6 Current status with draft above | Human |
 | 3 | Patch #8 Current status / DEC-008 sync note | Human |
