@@ -45,6 +45,7 @@ Twenty-eighth residual Decision: SELECTED / CONSUMED — CN-1 Internal Column Na
 Twenty-ninth residual Decision: SELECTED / CONSUMED — Post-CN-1 schema mapping / column path（Decision-AS-SCHEMA-MAPPING-NEXT-1 Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1）
 Thirtieth residual Decision: SELECTED / CONSUMED — MT-1 mapping-table docs update（assessment-snapshot-sharepoint-mapping.md；NOT mapping-complete）
 Thirty-first residual Decision: SELECTED / CONSUMED — Column provisioning（Decision-AS-COLUMN-PROVISION-1 Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1）
+Thirty-second residual Decision: SELECTED / OPEN — NM-1 intended names path（Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -135,7 +136,12 @@ Thirty-first residual: CONSUMED — Column provisioning
   IR: decision-assessment-snapshot-column-provision-independent-review.md（PASS）
   Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
-Next residual: NOT SELECTED
+Thirty-second residual: SELECTED / OPEN — NM-1 intended names path
+  selection: decision-ilb-1-thirty-second-residual-column-names-selection.md
+  packet: decision-assessment-snapshot-column-names-packet.md
+  Decision-AS-COLUMN-NAMES-1: OPEN / NOT ACCEPTED
+  Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
+Next residual active: Decision-AS-COLUMN-NAMES-1
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
@@ -369,6 +375,13 @@ Order:
      Intended Internal Names: NOT ADOPTED / HOLD
      Agent mutation: FORBIDDEN
      Implementation Start: HOLD
+ 32. Thirty-second residual: NM-1 intended names path（SELECTED / OPEN）
+     selection: decision-ilb-1-thirty-second-residual-column-names-selection.md
+     packet: decision-assessment-snapshot-column-names-packet.md
+     Decision-AS-COLUMN-NAMES-1: OPEN / NOT ACCEPTED
+     Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
+     Agent Internal Name invention: FORBIDDEN
+     column creation: FORBIDDEN（PX-HOLD+EG-HOLD）
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -434,7 +447,11 @@ Thirty-first residual: CONSUMED — Column provisioning
   acceptance: decision-assessment-snapshot-column-provision-acceptance.md
   Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
-Next residual: NOT SELECTED
+Thirty-second residual: SELECTED / OPEN — NM-1 intended names path
+  packet: decision-assessment-snapshot-column-names-packet.md
+  Decision-AS-COLUMN-NAMES-1: OPEN / NOT ACCEPTED
+  Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
+Next residual active: Decision-AS-COLUMN-NAMES-1
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）

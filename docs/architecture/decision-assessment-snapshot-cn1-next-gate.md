@@ -24,8 +24,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Result class | **DEFAULT_COLUMNS_ONLY** |
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
-| Thirty-first residual | **CONSUMED**（column provisioning Accepted） |
-| Decision-AS-COLUMN-PROVISION-1 | **Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1** |
+| Thirty-second residual | **SELECTED / OPEN**（NM-1 intended names path） |
+| Decision-AS-COLUMN-NAMES-1 | OPEN / NOT ACCEPTED |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data | NO-GO |
@@ -39,14 +39,16 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 | Order | Residual | Why next |
 |---|---|---|
-| — | NOT SELECTED | COLUMN-PROVISION-1 Accepted；次 residual 未選定 |
-| candidates | NM-1 intended names path / Issue Status Reconciliation | separate units；auto-start FORBIDDEN |
+| 1 | Decision-AS-COLUMN-NAMES-1（NM-1 path） | intended names Human fill |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active acceptance:
-  Decision-AS-COLUMN-PROVISION-1 = NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
+Active next:
+  Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED
+  selection: decision-ilb-1-thirty-second-residual-column-names-selection.md
+  packet: decision-assessment-snapshot-column-names-packet.md
+  Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
-  MT-1 table: assessment-snapshot-sharepoint-mapping.md（UPDATED / NOT mapping-complete）
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START
@@ -54,6 +56,7 @@ Still HOLD / FORBIDDEN:
   custom column creation = FORBIDDEN
   Implementation Start = HOLD
   Agent mutation = FORBIDDEN
+  Agent Internal Name invention = FORBIDDEN
 ```
 
 ---
