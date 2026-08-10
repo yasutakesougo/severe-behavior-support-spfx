@@ -61,7 +61,10 @@ describe("POST-RA-OBS-EVIDENCE-V1", () => {
       observation("obs-earlier", "2026-08-10T00:30:00Z", "staff-a"),
     ]);
 
-    assert.deepEqual(result.history.map((item) => item.RecordId), ["obs-earlier", "obs-later"]);
+    assert.deepEqual(
+      result.history.map((item) => item.RecordId),
+      ["obs-earlier", "obs-later"],
+    );
     assert.equal(result.latestObservedAt, "2026-08-10T10:00:00+09:00");
   });
 
@@ -72,7 +75,10 @@ describe("POST-RA-OBS-EVIDENCE-V1", () => {
       observation("obs-a", observedAt, "staff-a"),
     ]);
 
-    assert.deepEqual(result.history.map((item) => item.RecordId), ["obs-a", "obs-b"]);
+    assert.deepEqual(
+      result.history.map((item) => item.RecordId),
+      ["obs-a", "obs-b"],
+    );
     assert.equal(result.latestObservedAt, observedAt);
   });
 
@@ -85,7 +91,10 @@ describe("POST-RA-OBS-EVIDENCE-V1", () => {
 
     summarizeObservationEvidence(input);
 
-    assert.deepEqual(input.map((item) => item.RecordId), originalOrder);
+    assert.deepEqual(
+      input.map((item) => item.RecordId),
+      originalOrder,
+    );
   });
 
   it("exposes evidence fields only and derives no compliance or violation state", () => {
