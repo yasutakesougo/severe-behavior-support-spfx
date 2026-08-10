@@ -21,9 +21,20 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-COLUMN-PROVISION-1
-Kind: Human Decision packet（compare → Acceptance）
-Status: OPEN / NOT ACCEPTED
-Human Decision: NOT YET
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
+Human Selected:
+  Intended column naming:        NM-HOLD
+  Scope:                         SC-AS
+  Column creation authorization: PX-HOLD
+  Explicit Execution GO:         EG-HOLD
+  Post-create verification:      VR-1
+  Failure:                       FG-1
+  Implementation boundary:       XB-1
+  AI / Agent mutation:           AP-1
+Accepted 正本:
+  decision-assessment-snapshot-column-provision-acceptance.md
 
 Locked facts（再 Decision しない）:
   CN-1 observation = CLOSED / DEFAULT_COLUMNS_ONLY / custom = 0
@@ -33,11 +44,13 @@ Locked facts（再 Decision しない）:
   Site / List = OBSERVED / CONFIRMED（isogo/honmoku；SupportPlans/AssessmentSnapshots）
   Agent SharePoint mutation = FORBIDDEN（DEC-AI-ORG-003 / AP precedent）
 
-Current boundary（unchanged by opening this packet）:
-  Implementation Start = HOLD
-  adapter / schema mapping implementation = HOLD
-  SharePoint column creation = FORBIDDEN
-  Internal Name invention = FORBIDDEN
+Current boundary（Accepted / LOCKED）:
+  Implementation Start = HOLD（XB-1）
+  adapter / schema mapping implementation = HOLD（XB-1）
+  SharePoint column creation = FORBIDDEN（NM-HOLD + PX-HOLD + EG-HOLD）
+  Intended Internal Names = NOT ADOPTED / HOLD（NM-HOLD）
+  Scope = AssessmentSnapshots only（SC-AS）
+  Agent SharePoint mutation = FORBIDDEN（AP-1）
   Deploy / real data = NO-GO
   GitHub Issue mutation = FORBIDDEN
 ```
@@ -100,10 +113,10 @@ MUST NOT re-open:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **NM-1** | Human Acceptance で intended Display Name / Internal Name / Column Type を明示採択する。状態 = HUMAN-PROVIDED / INTENDED。≠ OBSERVED / CONFIRMED。Agent は値を発明しない | OPEN candidate |
-| NM-2 | Agent が Domain / TS 名から Internal Name を発明して採択する | NOT SELECTABLE（CN-1 / IN-A 衝突） |
-| NM-HOLD | intended naming をまだ決めない（列作成 GO も出せない） | OPEN candidate |
-| NM-X | Human 明示 | OPEN candidate |
+| **NM-1** | Human Acceptance で intended Display Name / Internal Name / Column Type を明示採択する。状態 = HUMAN-PROVIDED / INTENDED。≠ OBSERVED / CONFIRMED。Agent は値を発明しない | NOT SELECTED |
+| NM-2 | Agent が Domain / TS 名から Internal Name を発明して採択する | NOT SELECTED（was NOT SELECTABLE） |
+| **NM-HOLD** | intended naming をまだ決めない（列作成 GO も出せない） | **Accepted** |
+| NM-X | Human 明示 | NOT SELECTED |
 
 ```text
 NOT candidates:
@@ -116,27 +129,27 @@ NOT candidates:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **SC-AS** | AssessmentSnapshots（isogo + honmoku）のみを本 Decision の対象にする | OPEN candidate |
-| SC-BOTH | AssessmentSnapshots + SupportPlans（両 Sites）を同時対象にする | OPEN candidate |
-| SC-HOLD | 対象 List 未決定 | OPEN candidate |
-| SC-X | Human 明示 | OPEN candidate |
+| **SC-AS** | AssessmentSnapshots（isogo + honmoku）のみを本 Decision の対象にする | **Accepted** |
+| SC-BOTH | AssessmentSnapshots + SupportPlans（両 Sites）を同時対象にする | NOT SELECTED |
+| SC-HOLD | 対象 List 未決定 | NOT SELECTED |
+| SC-X | Human 明示 | NOT SELECTED |
 
 ### PX — column creation authorization
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **PX-1** | Accepted INTENDED columns の作成を許可する（Human process；Agent 不可） | OPEN candidate |
-| PX-HOLD | まだ作成を許可しない | OPEN candidate |
-| PX-X | Human 明示 | OPEN candidate |
+| **PX-1** | Accepted INTENDED columns の作成を許可する（Human process；Agent 不可） | NOT SELECTED |
+| **PX-HOLD** | まだ作成を許可しない | **Accepted** |
+| PX-X | Human 明示 | NOT SELECTED |
 
 ### EG — Explicit Execution GO
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **EG-1** | Human が Explicit Column Creation Execution GO を付与する | OPEN candidate |
-| EG-2 | Agent / docs Acceptance だけで作成開始する | NOT SELECTABLE |
-| **EG-HOLD** | Execution GO をまだ付けない | OPEN candidate |
-| EG-X | Human 明示 | OPEN candidate |
+| **EG-1** | Human が Explicit Column Creation Execution GO を付与する | NOT SELECTED |
+| EG-2 | Agent / docs Acceptance だけで作成開始する | NOT SELECTED（was NOT SELECTABLE） |
+| **EG-HOLD** | Execution GO をまだ付けない | **Accepted** |
+| EG-X | Human 明示 | NOT SELECTED |
 
 ```text
 EG-1 requires:
@@ -149,62 +162,50 @@ EG-1 requires:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **VR-1** | 作成後 Human read-only CN-1 再観測。Intent=Observed の Internal Names のみ CONFIRMED | OPEN candidate |
-| VR-HOLD | 確認方針未決定 | OPEN candidate |
-| VR-X | Human 明示 | OPEN candidate |
+| **VR-1** | 作成後 Human read-only CN-1 再観測。Intent=Observed の Internal Names のみ CONFIRMED | **Accepted** |
+| VR-HOLD | 確認方針未決定 | NOT SELECTED |
+| VR-X | Human 明示 | NOT SELECTED |
 
 ### FG — failure
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **FG-1** | fail-closed（代替名発明・既存列上書き・blind retry 禁止） | OPEN candidate |
-| FG-HOLD | 未決定 | OPEN candidate |
-| FG-X | Human 明示 | OPEN candidate |
+| **FG-1** | fail-closed（代替名発明・既存列上書き・blind retry 禁止） | **Accepted** |
+| FG-HOLD | 未決定 | NOT SELECTED |
+| FG-X | Human 明示 | NOT SELECTED |
 
 ### XB — Implementation / adapter / Deploy boundary
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | 本 Decision / even Execution GO ≠ Implementation Start ≠ adapter code start ≠ Deploy | OPEN candidate（必須維持候補） |
-| XB-2 | column creation と同時に adapter 実装開始を許可 | NOT SELECTABLE while CN-1 re-observe pending |
-| XB-X | Human 明示 | OPEN candidate |
+| **XB-1** | 本 Decision / even Execution GO ≠ Implementation Start ≠ adapter code start ≠ Deploy | **Accepted** |
+| XB-2 | column creation と同時に adapter 実装開始を許可 | NOT SELECTED（was NOT SELECTABLE） |
+| XB-X | Human 明示 | NOT SELECTED |
 
 ### AP — AI / Agent mutation boundary
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **AP-1** | SharePoint column mutation は本 AI foundation 手順では禁止。実作成は別 Human process | OPEN candidate（必須維持候補） |
-| AP-2 | Agent がこの chat / repo 手順で直接 tenant mutation する | NOT SELECTABLE |
-| AP-X | Human 明示 | OPEN candidate |
+| **AP-1** | SharePoint column mutation は本 AI foundation 手順では禁止。実作成は別 Human process | **Accepted** |
+| AP-2 | Agent がこの chat / repo 手順で直接 tenant mutation する | NOT SELECTED（was NOT SELECTABLE） |
+| AP-X | Human 明示 | NOT SELECTED |
 
-## 4. Agent recommendation（比較用；Acceptance ではない）
+## 4. Agent recommendation（比較履歴）
 
 ```text
 Agent recommendation:
   NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
-
-Meaning:
-  NM-HOLD — intended Internal Names は Human が明示するまで採択しない
-            （Agent 発明禁止；IN-A と整合）
-  SC-AS — まず AssessmentSnapshots（両 Sites）に範囲を絞る候補
-  PX-HOLD / EG-HOLD — naming 未定のまま作成許可・Execution GO を出さない
-  VR-1 — 将来作成するなら CN-1 再観測必須
-  FG-1 — fail-closed
-  XB-1 — Implementation / adapter / Deploy は別
-  AP-1 — Agent mutation FORBIDDEN
-
-Alternate when Human is ready to supply names in Acceptance:
-  NM-1 + SC-AS + PX-1 + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
-  （names INTENDED；Execution GO はなお別明示が必要）
-
-NOT Human Acceptance evidence.
-NOT an invitation for Agent to invent Internal Names.
+Human Decision:
+  NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
+  （Accepted / LOCKED）
+Acceptance 正本:
+  decision-assessment-snapshot-column-provision-acceptance.md
 ```
 
 ## 5. Explicit non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
+This CONSUMED packet / Acceptance does NOT authorize:
   Internal Name invention
   SharePoint column create / rename / delete / overwrite
   treating INTENDED as CONFIRMED
@@ -228,15 +229,17 @@ Issue Status Reconciliation:
 ## 7. Next
 
 ```text
-Decision-AS-COLUMN-PROVISION-1: OPEN / NOT ACCEPTED
-Awaiting: Human Decision on NM + SC + PX + EG + VR + FG + XB + AP
-Recommended compare set:
-  NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
-Until Accepted + NM-1 names + Explicit Execution GO:
+Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED
+  / NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
+Thirty-first residual: CONSUMED
+Acceptance: decision-assessment-snapshot-column-provision-acceptance.md
+Next gate: decision-assessment-snapshot-column-provision-next-gate.md
+
+Still FORBIDDEN / HOLD:
   SharePoint column creation = FORBIDDEN
+  Intended Internal Names = NOT ADOPTED / HOLD
   Agent mutation = FORBIDDEN
   Implementation Start = HOLD
   adapter impl = HOLD
-After columns created（separate Human process）:
-  CN-1 re-observation required before CONFIRMED Internal Names
+Next residual: NOT SELECTED
 ```

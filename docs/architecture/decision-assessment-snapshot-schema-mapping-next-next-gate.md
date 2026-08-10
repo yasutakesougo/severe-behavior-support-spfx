@@ -1,10 +1,10 @@
 # Decision-AS-SCHEMA-MAPPING-NEXT-1 — Next Gate（after Acceptance）
 
-Status: SCHEMA-MAPPING-NEXT-1 Accepted；MT-1 docs CONSUMED；column provisioning SELECTED / OPEN
+Status: SCHEMA-MAPPING-NEXT-1 Accepted；COLUMN-PROVISION-1 Accepted；next residual NOT SELECTED
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](./decision-assessment-snapshot-schema-mapping-next-acceptance.md)
+Column Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
-Column packet: [`decision-assessment-snapshot-column-provision-packet.md`](./decision-assessment-snapshot-column-provision-packet.md)
 
 ---
 
@@ -12,68 +12,39 @@ Column packet: [`decision-assessment-snapshot-column-provision-packet.md`](./dec
 
 | Item | Status |
 |---|---|
-| PR #191 | MERGED（CN-1 observation CLOSED） |
-| Decision-AS-CN1-OBSERVATION-1 | CLOSED / CONSUMED / DEFAULT_COLUMNS_ONLY |
-| Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
-| Twenty-ninth residual | **CONSUMED** |
-| Thirtieth residual | **CONSUMED**（MT-1 mapping-table docs update） |
-| Thirty-first residual | **SELECTED / OPEN**（column provisioning） |
-| Decision-AS-COLUMN-PROVISION-1 | **OPEN / NOT ACCEPTED** |
-| AssessmentSnapshot mapping table | **UPDATED** under MT-1 / **NOT mapping-complete** |
+| Decision-AS-SCHEMA-MAPPING-NEXT-1 | Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1 |
+| Decision-AS-COLUMN-PROVISION-1 | **Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1** |
+| Twenty-ninth / thirtieth / thirty-first | **CONSUMED** |
+| AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Custom application columns | 0 / NOT PRESENT |
-| Intended Internal Names | NOT ADOPTED（IN-A）；NM still OPEN in column packet |
-| Implementation Start | HOLD（XB-1） |
-| adapter / schema mapping implementation | HOLD（XB-1） |
-| SharePoint column creation | FORBIDDEN（until Accepted + Execution GO） |
+| Intended Internal Names | NOT ADOPTED / HOLD（NM-HOLD） |
+| Scope for future columns | AssessmentSnapshots only（SC-AS） |
+| SharePoint column creation | **FORBIDDEN**（PX-HOLD + EG-HOLD） |
+| Implementation Start | HOLD |
+| adapter / schema mapping implementation | HOLD |
+| Agent SharePoint mutation | FORBIDDEN（AP-1） |
 | Deploy / real data | NO-GO |
-| Agent SharePoint mutation | FORBIDDEN |
-| GitHub Issue mutation / 一括 Close / 一括本文更新 | FORBIDDEN |
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
-| Order | Residual | Why next |
+| Order | Candidate | Why |
 |---|---|---|
-| 1 | Decision-AS-COLUMN-PROVISION-1（NM/SC/PX/EG/VR/FG/XB/AP） | CP-1 separate gate；custom columns = 0 |
+| 1 | NM-1 Human-provided intended names path | required before PX-1 / EG-1 |
 | 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 3 | SupportPlans column scope | SC-BOTH NOT SELECTED |
 
 ```text
-Active next substantive unit:
-  Decision-AS-COLUMN-PROVISION-1
-  selection: decision-ilb-1-thirty-first-residual-column-provision-selection.md
-  packet: decision-assessment-snapshot-column-provision-packet.md
-  Status: OPEN / NOT ACCEPTED
-  Agent recommendation（比較用）:
-    NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
-
-NOT auto-started:
-  SharePoint column creation
-  Internal Name invention
-  Implementation Start
-  adapter / schema mapping code
+Next substantive residual: NOT SELECTED
+column-provision next-gate:
+  decision-assessment-snapshot-column-provision-next-gate.md
 ```
 
 ---
 
-## 3. Still NO-GO / HOLD
+## 3. Explicit non-claims
 
-| Item | Status |
-|---|---|
-| App-field Internal Names as CONFIRMED | NOT PRESENT / HOLD |
-| Intended Internal Names | NOT ADOPTED yet（await NM-1 Human values） |
-| SharePoint adapter / schema mapping impl | HOLD |
-| Implementation Start | HOLD |
-| SharePoint column creation | FORBIDDEN |
-| Deploy / real data write | HOLD |
-| Agent SharePoint mutation | FORBIDDEN |
-| Treating MT-1 table as mapping-complete | FORBIDDEN |
-
----
-
-## 4. Explicit non-claims
-
-- Opening COLUMN-PROVISION-1 does **not** Accept NM/SC/PX/EG.
-- Packet OPEN does **not** authorize column creation or Agent mutation.
+- COLUMN-PROVISION-1 Accepted does **not** authorize column creation.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

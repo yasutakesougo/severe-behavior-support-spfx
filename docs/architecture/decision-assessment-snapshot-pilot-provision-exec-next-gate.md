@@ -61,10 +61,11 @@ Twenty-ninth residual: CONSUMED
   acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
   IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
 Next gate detail:
-  decision-assessment-snapshot-schema-mapping-next-next-gate.md
-  Thirty-first residual: SELECTED / OPEN
-  Decision-AS-COLUMN-PROVISION-1: OPEN / NOT ACCEPTED
-  packet: decision-assessment-snapshot-column-provision-packet.md
+  decision-assessment-snapshot-column-provision-next-gate.md
+  Thirty-first residual: CONSUMED
+  Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED
+    / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
+  Next residual: NOT SELECTED
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:

@@ -44,7 +44,7 @@ Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creati
 Twenty-eighth residual Decision: SELECTED / CONSUMED — CN-1 Internal Column Names observation（Decision-AS-CN1-OBSERVATION-1 CLOSED / CONSUMED；DEFAULT_COLUMNS_ONLY；custom = 0）
 Twenty-ninth residual Decision: SELECTED / CONSUMED — Post-CN-1 schema mapping / column path（Decision-AS-SCHEMA-MAPPING-NEXT-1 Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1）
 Thirtieth residual Decision: SELECTED / CONSUMED — MT-1 mapping-table docs update（assessment-snapshot-sharepoint-mapping.md；NOT mapping-complete）
-Thirty-first residual Decision: SELECTED / OPEN — Column provisioning（Decision-AS-COLUMN-PROVISION-1 OPEN / NOT ACCEPTED）
+Thirty-first residual Decision: SELECTED / CONSUMED — Column provisioning（Decision-AS-COLUMN-PROVISION-1 Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -128,12 +128,14 @@ Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
 Thirtieth residual: CONSUMED — MT-1 mapping-table docs update
   table: assessment-snapshot-sharepoint-mapping.md（UPDATED / NOT mapping-complete）
   selection: decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md
-Thirty-first residual: SELECTED / OPEN — Column provisioning
+Thirty-first residual: CONSUMED — Column provisioning
   selection: decision-ilb-1-thirty-first-residual-column-provision-selection.md
   packet: decision-assessment-snapshot-column-provision-packet.md
-  Decision-AS-COLUMN-PROVISION-1: OPEN / NOT ACCEPTED
-  Agent recommendation（比較用）: NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
-Next residual active: Decision-AS-COLUMN-PROVISION-1
+  acceptance: decision-assessment-snapshot-column-provision-acceptance.md
+  IR: decision-assessment-snapshot-column-provision-independent-review.md（PASS）
+  Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
+  next-gate: decision-assessment-snapshot-column-provision-next-gate.md
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
@@ -357,12 +359,14 @@ Order:
      Status: UPDATED under MT-1 / NOT mapping-complete
      app Internal Names: NOT PRESENT / 未確認
      Implementation Start: HOLD
- 31. Thirty-first residual: Column provisioning（SELECTED / OPEN）
+ 31. Thirty-first residual: Column provisioning（DONE / CONSUMED；Decision-AS-COLUMN-PROVISION-1 Accepted / LOCKED）
      selection: decision-ilb-1-thirty-first-residual-column-provision-selection.md
      packet: decision-assessment-snapshot-column-provision-packet.md
-     Decision-AS-COLUMN-PROVISION-1: OPEN / NOT ACCEPTED
-     Agent recommendation（比較用）: NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
-     SharePoint column creation: FORBIDDEN until Accepted + Execution GO
+     acceptance: decision-assessment-snapshot-column-provision-acceptance.md
+     IR: decision-assessment-snapshot-column-provision-independent-review.md（PASS）
+     Human Decision: NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
+     SharePoint column creation: FORBIDDEN
+     Intended Internal Names: NOT ADOPTED / HOLD
      Agent mutation: FORBIDDEN
      Implementation Start: HOLD
 AS-EC-1 overall: MET / Accepted
@@ -426,10 +430,11 @@ Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
   next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
 Thirtieth residual: CONSUMED — MT-1 mapping-table docs update
   table: assessment-snapshot-sharepoint-mapping.md
-Thirty-first residual: SELECTED / OPEN — Column provisioning
-  packet: decision-assessment-snapshot-column-provision-packet.md
-  Decision-AS-COLUMN-PROVISION-1: OPEN / NOT ACCEPTED
-Next residual active: Decision-AS-COLUMN-PROVISION-1
+Thirty-first residual: CONSUMED — Column provisioning
+  acceptance: decision-assessment-snapshot-column-provision-acceptance.md
+  Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
+  next-gate: decision-assessment-snapshot-column-provision-next-gate.md
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）

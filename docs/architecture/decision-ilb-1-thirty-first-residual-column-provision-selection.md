@@ -6,11 +6,12 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_THIRTY_FIRST_RESIDUAL_SELECTION
-Status: SELECTED / OPEN
+Status: SELECTED / CONSUMED
 Selected unit: Column provisioning Decision / Execution GO boundary
 Follow-up Decision / Packet ID: Decision-AS-COLUMN-PROVISION-1
   packet: decision-assessment-snapshot-column-provision-packet.md
-  Status: OPEN / NOT ACCEPTED
+  acceptance: decision-assessment-snapshot-column-provision-acceptance.md
+  Status: Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1
 
 Locked basis（再 Decision しない）:
   Decision-AS-SCHEMA-MAPPING-NEXT-1 = Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
@@ -35,23 +36,23 @@ Current state:
 **column provisioning の Decision / Execution GO 境界**だけを次 unit として選ぶ。
 
 ```text
-SELECTED / OPEN:
+SELECTED / CONSUMED:
   Decision-AS-COLUMN-PROVISION-1
-  Question:
-    AssessmentSnapshot（必要なら SupportPlan）向け custom columns について、
-    intended naming / 作成許可 / Execution GO / 作成後 CN-1 再観測 /
-    Implementation 境界をどう固定するか。
-
-Facts that MUST remain visible:
-  custom application columns = 0
-  IN-A = intended names were NOT adopted in SCHEMA-MAPPING-NEXT-1
-  Agent must NOT invent Internal Names
-  CN-1 re-observation required after any creation
-  Site/List creation Authorization ≠ column creation Authorization
+  acceptance: decision-assessment-snapshot-column-provision-acceptance.md
+  Status: Accepted / LOCKED
+  Human Decision:
+    NM-HOLD — intended names 未定
+    SC-AS — AssessmentSnapshots only
+    PX-HOLD — 作成未許可
+    EG-HOLD — Execution GO なし
+    VR-1 — 将来作成後 CN-1 再観測
+    FG-1 — fail-closed
+    XB-1 — Implementation / adapter / Deploy 別
+    AP-1 — Agent mutation FORBIDDEN
 
 Still NOT authorized / FORBIDDEN now:
   inventing Internal Names
-  SharePoint column create / rename / delete（packet OPEN ≠ GO）
+  SharePoint column create / rename / delete
   Agent tenant mutation
   Implementation Start
   adapter / schema mapping code start
@@ -59,7 +60,7 @@ Still NOT authorized / FORBIDDEN now:
   GitHub Issue mutation
 ```
 
-Selection ≠ Acceptance ≠ Execution GO ≠ column creation。
+Selection CONSUMED ≠ Execution GO ≠ column creation。
 
 ## Options considered（selection-time）
 
@@ -74,13 +75,13 @@ Selection ≠ Acceptance ≠ Execution GO ≠ column creation。
 ## Next
 
 ```text
-Thirty-first residual: SELECTED / OPEN
-  → Decision-AS-COLUMN-PROVISION-1 packet OPEN
-  decision-assessment-snapshot-column-provision-packet.md
-
-Until Accepted + Explicit Execution GO + Human-provided intended names:
-  SharePoint column creation = FORBIDDEN
-  Agent mutation = FORBIDDEN
-  Implementation Start = HOLD
-  adapter impl = HOLD
+Thirty-first residual: CONSUMED
+Decision-AS-COLUMN-PROVISION-1: Accepted / LOCKED
+  / NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
+next-gate: decision-assessment-snapshot-column-provision-next-gate.md
+SharePoint column creation = FORBIDDEN
+Agent mutation = FORBIDDEN
+Implementation Start = HOLD
+adapter impl = HOLD
+Next residual: NOT SELECTED
 ```
