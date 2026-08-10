@@ -47,8 +47,9 @@ Selection: [`decision-ilb-1-thirty-fifth-residual-column-eg-selection.md`](./dec
 |---|---|---|
 | 1 | Issue Status Reconciliation Phase ②（#6 / #8） | already SELECTED as thirty-sixth process residual |
 | 2 | Decision-AS-CONVERSION-1（MAP-AS-001〜008 conversion） | **Accepted / LOCKED（CONSUMED）** |
-| 3 | CV extension（MAP-AS-009/010 / ENV） | OUT of CV-REQ；separate Decision |
-| 4 | mapping-complete determination | conversions ACCEPTED ≠ mapping-complete ≠ impl start |
+| 3 | Decision-AS-CV-EXTENSION-1（009/010/ENV placement） | **Accepted / LOCKED（CONSUMED）** |
+| 4 | MAP-AS-010 column contract / create / VR-1 | NOT SELECTED；remaining mapping-complete blocker |
+| 5 | mapping-complete determination | 010 not column-ready ≠ mapping-complete ≠ impl start |
 
 ```text
 Next substantive residual（column-path）: NOT SELECTED
