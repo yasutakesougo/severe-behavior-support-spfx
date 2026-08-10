@@ -116,28 +116,33 @@ MAP-AS-SYS-001:
 
 ```text
 NOT mapping-complete:
-  app Internal Names still NOT PRESENT
-  Display Name / Column Type / conversions still 未確認
+  app Internal Names still NOT PRESENT as CONFIRMED（CN-1）
+  CV-REQ INTENDED names = Accepted in Decision-AS-COLUMN-NAMES-1（≠ CONFIRMED）
+  conversions still 未確認
   DTO / adapter code still HOLD
-  column provisioning still FORBIDDEN without separate GO
+  column provisioning still FORBIDDEN without separate GO（PX-HOLD + EG-HOLD）
 
-MUST NOT claim from this docs update:
+MUST NOT claim from this docs update alone:
   Implementation Start
   adapter / schema mapping code start
-  intended Internal Names Accepted
   CONFIRMED app Internal Names
   column creation GO
+  Execution GO
 ```
 
 ## Next
 
 ```text
-MT-1 mapping-table docs update: SELECTED → delivered in this artifact
-Thirtieth residual: CONSUMED when this table is on the working branch / PR
+MT-1 mapping-table docs update: delivered
+Thirtieth residual: CONSUMED
+Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
+  CV-REQ INTENDED 正本 = decision-assessment-snapshot-column-names-acceptance.md
 Next residual: NOT SELECTED
 Candidates remain:
-  Column provisioning Decision / Execution GO（CP-1）
+  PX-1 / EG-1 column creation authorization + Execution GO
+  Choice option values / CV extension
   Issue Status Reconciliation
 Still HOLD:
   Implementation Start / adapter impl / column creation / Deploy
+  INTENDED ≠ CONFIRMED until create + VR-1
 ```
