@@ -205,26 +205,27 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
-Next gate: FIXED
-  EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
-  → decision-assessment-snapshot-new-target-provision-exec-next-gate.md
-Execution GO: NOT GIVEN / NOT STARTED
-Site / List creation: AUTHORIZED / NOT STARTED
-Current stop: waiting for explicit execution GO（auto-start FORBIDDEN）
+Independent Review #186: FAIL（Ready / Merge）
+  → decision-assessment-snapshot-pr-186-independent-review.md
+Ready Decision: NO-GO
+Merge Decision: NO-GO
+Disposition: SUPERSEDED by PR #187
 
-After explicit GO only:
-  1. Site/List 作成実行（intended LOCKED values only）
-  2. VR-1 read-back（Site URL / Site name / List names）
-  3. intended 一致時のみ SV-1 / LV-1 = CONFIRMED
-  4. STOP
-fail-closed STOP:
-  access denied / name conflict / already exists /
-  ambiguous result / partial failure / evidence不足
-  → 代替名発明 / overwrite / blind retry FORBIDDEN
+Do NOT:
+  Merge PR #186
+  give Execution GO for XXXXX / YYYYY
+  create Site/List via this placeholder path
 
-SV-1 / LV-1: NOT CONFIRMED
-Internal Column Names: OPEN（IN-1 — post-creation CN-1）
-custom columns / permissions / config: NO-GO
+Current SoT（main）:
+  PR #187 MERGED
+  Decision-AS-PILOT-PROVISION-EXEC-1 + VR-1 PASS
+  SV-1 / LV-1 CONFIRMED on pilot Sites/Lists
+
+Historical note（this Acceptance only）:
+  Authorization ≠ creation
+  Site/List creation was a later separate gate
+  That gate was NOT to be entered with placeholders
+
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO

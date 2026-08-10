@@ -128,20 +128,25 @@ After that GO, handle only:
 
 ```text
 Decision-AS-NEW-TARGET-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1
-Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
-Execution GO: NOT GIVEN / NOT STARTED
-Site / List creation: AUTHORIZED / NOT STARTED
-SV-1 / LV-1: NOT CONFIRMED
-Internal Column Names: OPEN（IN-1）
-custom columns / permissions / config: NO-GO
+Independent Review #186: FAIL（Ready / Merge）
+  → decision-assessment-snapshot-pr-186-independent-review.md
+Reviewed HEAD: 973b32fd9cd248bde48622508c7e6a7cf455f07f
+Ready Decision: NO-GO
+Merge Decision: NO-GO
+Disposition: SUPERSEDED by PR #187（pilot real-name provision path）
+
+Historical next gate（this PR only；DO NOT EXECUTE）:
+  EXPLICIT SITE/LIST CREATION EXECUTION + VR-1 READ-BACK
+Execution GO via this PR: NOT GIVEN / NO-GO
+Placeholder creation（XXXXX / YYYYY）: FORBIDDEN
+Site / List creation via this PR: NO-GO
+
+Current SoT（main / PR #187 MERGED）:
+  Decision-AS-PILOT-PROVISION-EXEC-1 + VR-1 evidence
+  pilot Sites/Lists OBSERVED / CONFIRMED
+
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
-
-Human confirmation（2026-08-09）:
-  PR #186 OPEN / Draft / mergeable=true
-  HEAD: c06cbad1b8758221e8225701c7b0ce9c9f85e443
-  boundaries CONFIRMED as above
-  Current stop: waiting for explicit execution GO
-  auto-start: FORBIDDEN
+auto-start: FORBIDDEN
 ```
