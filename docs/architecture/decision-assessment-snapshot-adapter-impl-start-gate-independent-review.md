@@ -15,7 +15,7 @@ Skill basis: [`implementation-review`](../../.agents/skills/implementation-revie
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Kind: Independent Review（docs-only gate determination）
+Kind: Independent Review（docs-only gate determination；historical + living sync）
 Status: PASS
 Findings: P0=0 / P1=0 / P2=0
 Baseline main: 2b21542ae1370ea9205f7c67faa874a174db1b3d
@@ -25,16 +25,18 @@ Reviewed:
   first implementation slice IN / OUT
   Implementation Start recommendation
 
-EC-1..EC-4 prior: MET
-EC-5: MET
-EC-6: MET
-EC-7: MET
-EC-8: MET
+EC-1..EC-8: MET
 P2-002: CLOSED
 
-Implementation Start claimed GO by this IR: NO
-Implementation Start living: HOLD
-adapter code started by this IR: NO
+Living after Human Acceptance:
+  Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = Accepted / LOCKED
+  Human Decision = GO-SLICE-1
+  Implementation Start = GO-SLICE-1
+  Acceptance IR:
+    decision-assessment-snapshot-adapter-implementation-start-acceptance-independent-review.md
+
+Gate-era IR did NOT itself mark GO.
+Acceptance recording PR remains docs-only（code NOT STARTED）.
 Ready: NOT RUN
 Merge: NOT RUN
 ```
@@ -58,9 +60,10 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | MAP-AS-009 remains OUT | PASS | |
 | ENV DERIVED / no SP columns | PASS | |
 | OUT / forbidden scope explicit | PASS | |
-| Recommendation ≠ automatic GO | PASS | HOLD until Human GO |
-| No adapter implementation in this run | PASS | docs-only |
+| Recommendation ≠ automatic GO（gate-era） | PASS | Human Acceptance later recorded GO-SLICE-1 |
+| No adapter implementation in Acceptance recording PR | PASS | docs-only |
 | No SharePoint / Deploy | PASS | |
+| LOCKED OUT preserved after GO-SLICE-1 | PASS | Acceptance |
 
 ## Findings
 
@@ -76,38 +79,26 @@ P1 = 0
 P2 = 0
 Independent Review: PASS
 implementation-review Gate（Entry Criteria）: PASS
-Implementation Start living: HOLD
+Implementation Start living: GO-SLICE-1
 ```
 
 ## Explicit non-authorization
 
 ```text
-This IR does NOT authorize:
-  Human Implementation Start GO auto-record
-  Implementation Start = GO
-  adapter / DTO / schema code mutation
-  runtime dependency install
+This gate IR does NOT authorize:
   live SharePoint / M365 / Entra mutation
+  runtime dependency install
   Deploy / real data
   Ready / Merge
   expanding first-slice scope
-```
-
-## HOLD
-
-```text
-HOLD until Human Implementation Start GO:
-  adapter code start under §4
-
-NOT HOLD for:
-  Draft PR review of this gate determination
+  starting adapter code inside the docs-only Acceptance recording PR
 ```
 
 ## Verdict
 
 ```text
-PASS — READY FOR HUMAN IMPLEMENTATION START GO
-Recommended Human option: GO-SLICE-1
-  （authorize §4 only；§5 OUT preserved）
-If Human HOLDs or Rejects: Implementation Start remains HOLD
+PASS — gate determination consistent
+Human Acceptance: GO-SLICE-1（Accepted / LOCKED）
+Next: Human Ready decision for PR #214
+Subsequent implementation run may execute GO-SLICE-1 under LOCKED OUT
 ```

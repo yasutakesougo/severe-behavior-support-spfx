@@ -82,8 +82,8 @@ EC-6 = MET
 EC-7 = MET
 EC-8 = MET
 P2-002 = CLOSED
-Implementation Start = HOLD
-  （awaiting separate Human Implementation Start GO）
+Implementation Start = GO-SLICE-1
+  Authority: Decision-AS-ADAPTER-IMPLEMENTATION-START-1
 ```
 
 最初のimplementation sliceはAssessmentSnapshot adapter boundaryに限定する。
@@ -93,11 +93,11 @@ Implementation Start = HOLD
 ## Explicit OUT
 
 ```text
-このAcceptanceだけによるImplementation Start
-adapter code mutation
-SharePoint / M365 / Entra mutation
-Deploy / real data
-runtime dependency install（DP-1-A）
+AIS-1-B Acceptance だけによる Implementation Start
+GO-SLICE-1 による live tenant I/O
+GO-SLICE-1 による runtime dependency install
+GO-SLICE-1 による Deploy / real data
+SharePoint / M365 / Entra mutation by Agent
 Ready / Mergeの自動進行
 ```
 
@@ -107,10 +107,10 @@ Ready / Mergeの自動進行
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
   / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
+Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = ACCEPTED / LOCKED / GO-SLICE-1
 EC-1..EC-8 = MET
 P2-002 = CLOSED
-Implementation Start = HOLD
-Next gate = HUMAN IMPLEMENTATION START GO
-Gate determination:
-  decision-assessment-snapshot-adapter-impl-start-gate.md
+Implementation Start = GO-SLICE-1
+Next PR process gate = HUMAN READY DECISION FOR PR #214
+Next code work = implement GO-SLICE-1（separate run；LOCKED OUT preserved）
 ```

@@ -11,6 +11,12 @@ Skill basis: [`implementation-review`](../../.agents/skills/implementation-revie
 IR:
 [`decision-assessment-snapshot-adapter-impl-start-gate-independent-review.md`](./decision-assessment-snapshot-adapter-impl-start-gate-independent-review.md)
 
+Acceptance 正本:
+[`decision-assessment-snapshot-adapter-implementation-start-acceptance.md`](./decision-assessment-snapshot-adapter-implementation-start-acceptance.md)
+
+Acceptance IR:
+[`decision-assessment-snapshot-adapter-implementation-start-acceptance-independent-review.md`](./decision-assessment-snapshot-adapter-implementation-start-acceptance-independent-review.md)
+
 Depends on（再 Decision しない）:
 [`decision-assessment-snapshot-adapter-start-acceptance.md`](./decision-assessment-snapshot-adapter-start-acceptance.md)
 （AIS-1-B）
@@ -27,30 +33,34 @@ Depends on（再 Decision しない）:
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: AIS-1-B-IMPLEMENTATION-START-GATE
 Kind: Gate determination（docs-only）
-Status: DETERMINED / READY FOR HUMAN IMPLEMENTATION START GO
+Status: CONSUMED（Human Implementation Start GO Accepted）
 Baseline main: 2b21542ae1370ea9205f7c67faa874a174db1b3d
 Determination date: 2026-08-10
+Human Decision: GO-SLICE-1
+Acceptance: Decision-AS-ADAPTER-IMPLEMENTATION-START-1 Accepted / LOCKED
+PR: #214
 
 Authority:
   Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
   Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
     / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
+  Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = ACCEPTED / LOCKED / GO-SLICE-1
 
 Entry Criteria living:
   EC-1 = MET
   EC-2 = MET
   EC-3 = MET
   EC-4 = MET
-  EC-5 = MET（this determination）
-  EC-6 = MET（this determination）
-  EC-7 = MET（this determination）
-  EC-8 = MET（this determination）
+  EC-5 = MET
+  EC-6 = MET
+  EC-7 = MET
+  EC-8 = MET
   P2-002 = CLOSED
+  Entry Criteria blocker = NONE
 
-Implementation Start: HOLD
-  （≠ GO；separate Human Implementation Start GO required）
-adapter / DTO / schema code mutation: NOT STARTED / NOT AUTHORIZED by this doc alone
-runtime dependency addition: NOT AUTHORIZED（DP-1-A）
+Implementation Start: GO-SLICE-1
+adapter code in this Acceptance recording PR: NOT STARTED（docs-only）
+runtime dependency addition: NOT AUTHORIZED（DP-1-A / LOCKED OUT）
 SharePoint / M365 / Entra mutation by Agent: FORBIDDEN
 Deploy / real data: NO-GO / OUT of first slice
 ```
@@ -237,30 +247,26 @@ unless a later separate Human Decision / GO says otherwise:
   Ready / Merge / Deploy auto-run from this determination
 ```
 
-## 6. Implementation Start recommendation
+## 6. Implementation Start recommendation vs Human Decision
 
 ```text
 implementation-review Gate（Entry Criteria completeness）: PASS
   EC-1..EC-8 all MET for the proposed first slice
   no canonical Entry Criteria blocker remains
 
-Implementation Start living status: HOLD
-  This determination does NOT mark Implementation Start = GO
-
-Agent recommendation:
+Agent recommendation（historical）:
   READY FOR HUMAN IMPLEMENTATION START GO
-  scope = §4 first slice only
-  boundaries = §5 OUT / FORBIDDEN
+  option = GO-SLICE-1
 
-Human options:
-  GO-SLICE-1 — authorize §4 code start under §5 OUT
-  HOLD — keep Implementation Start = HOLD
-  REJECT / NARROW — require revised slice before GO
-```
+Human Decision（Accepted / LOCKED）:
+  GO-SLICE-1
+  Decision-AS-ADAPTER-IMPLEMENTATION-START-1
+  Acceptance 正本:
+    decision-assessment-snapshot-adapter-implementation-start-acceptance.md
 
-```text
-Agent recommendation alone is NOT Human Implementation Start GO.
-Do NOT start adapter implementation from this document alone.
+Implementation Start living status: GO-SLICE-1
+This gate determination alone was NOT the Human GO.
+This Acceptance recording PR remains docs-only（code NOT STARTED here）.
 ```
 
 ## 7. Test plan required by the slice（for later GO）
@@ -277,14 +283,13 @@ Do NOT start adapter implementation from this document alone.
 ## 8. Explicit non-authorization
 
 ```text
-This determination does NOT authorize:
-  Implementation Start = GO
-  adapter / DTO / schema code mutation
+Gate determination / GO-SLICE-1 Acceptance do NOT authorize:
+  live SharePoint tenant I/O
   runtime dependency install
-  SharePoint / M365 / Entra mutation
   Deploy / real data
-  Ready / Merge without separate Human authorization
-  expanding §4 scope
+  expanding §4 / IN scope
+  waiving §5 LOCKED OUT
+  starting adapter code inside the docs-only Acceptance recording PR
 ```
 
 ## 9. Next
@@ -292,11 +297,13 @@ This determination does NOT authorize:
 ```text
 EC-1..EC-8: all MET
 P2-002: CLOSED
-Implementation Start: HOLD
-Next gate: HUMAN IMPLEMENTATION START GO
-  （GO-SLICE-1 / HOLD / REJECT）
-If Human GO-SLICE-1:
-  authorize only §4 under §5
-  still FORBIDDEN: live tenant writes / Deploy / runtime dep install
-Stop: separate Human Implementation Start GO
+Implementation Start: GO-SLICE-1
+Decision-AS-ADAPTER-IMPLEMENTATION-START-1: Accepted / LOCKED
+Next（separate implementation run；not this docs recording）:
+  implement GO-SLICE-1 under §5 LOCKED OUT / FORBIDDEN
+Still FORBIDDEN until separate GO:
+  live tenant I/O
+  runtime dependency install
+  Deploy / real data
+Next PR process gate: HUMAN READY DECISION FOR PR #214
 ```
