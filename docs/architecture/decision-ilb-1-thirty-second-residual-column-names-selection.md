@@ -71,10 +71,9 @@ Selection CONSUMED ≠ column creation GO ≠ Execution GO ≠ CONFIRMED。
 ```text
 Thirty-second residual: CONSUMED
 Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1 + CV-REQ + XB-1
-Next substantive residual: NOT SELECTED
-Candidates（separate units）:
-  PX-1 / EG-1
-  Choice option values
-  CV extension（optional / DTO）
-  Issue Status Reconciliation（#6 / #8 / #22）
+Thirty-third residual: SELECTED / OPEN — Choice options
+  Decision-AS-CHOICE-OPTIONS-1 OPEN / NOT ACCEPTED
+  packet: decision-assessment-snapshot-choice-options-packet.md
+Still FORBIDDEN / HOLD:
+  column creation / Execution GO / Implementation / adapter / Agent mutation
 ```

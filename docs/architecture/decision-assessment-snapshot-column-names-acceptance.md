@@ -217,10 +217,10 @@ Agent mutation: FORBIDDEN
 Deploy / real data: NO-GO
 INTENDED ≠ OBSERVED / CONFIRMED
 
-Next substantive residual: NOT SELECTED by this Acceptance
-Candidates（separate units）:
+Next substantive residual: SELECTED elsewhere — Choice options
+  （Decision-AS-CHOICE-OPTIONS-1；see thirty-third residual）
+Other candidates（separate units）:
   PX-1 / EG-1 column creation authorization + Execution GO
-  Choice option values for recordStatus / result
   CV extension（MAP-AS-009/010 / ENV）
   Issue Status Reconciliation（#6 / #8 / #22）
 
