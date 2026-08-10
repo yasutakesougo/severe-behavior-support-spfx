@@ -7,7 +7,10 @@
 Selected via:
 [`decision-assessment-snapshot-conversion-selection.md`](./decision-assessment-snapshot-conversion-selection.md)
 
-Contract candidate:
+Accepted 正本:
+[`decision-assessment-snapshot-conversion-acceptance.md`](./decision-assessment-snapshot-conversion-acceptance.md)
+
+Contract:
 [`assessment-snapshot-conversion-contract.md`](./assessment-snapshot-conversion-contract.md)
 
 IR:
@@ -30,17 +33,25 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-CONVERSION-1
-Kind: Human Decision packet（compare → OPEN）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Baseline main: 632d28ae44e1b72929dc628caae183197a976477
-Human Selection of unit: Option A — Conversion Contract（SELECTED）
-Human Acceptance of conversion axes: NOT YET
+Human Selection of unit: Option A — Conversion Contract（SELECTED / CONSUMED）
+Human Decision: C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
+Human Selected:
+  C-1 Required Text:     C-1-A
+  C-2 Choice:            C-2-DERIVED
+  C-3 reasonCodes:       C-3-A
+  C-4 DateOnly:          C-4-A
+  Boundary:              XB-1
+Accepted 正本:
+  decision-assessment-snapshot-conversion-acceptance.md
 
 Agent recommendation（historical / NOT Acceptance）:
   C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
   （strict / lossless / fail-closed；Choice = DERIVED）
 
-Current boundary（unchanged by this OPEN packet）:
+Current boundary（unchanged by Acceptance for implementation）:
   Implementation Start = HOLD
   adapter / schema mapping implementation = HOLD
   SharePoint item write / column mutation = FORBIDDEN
@@ -96,7 +107,7 @@ MUST NOT re-open:
 
 | ID | conversion 規則 | 結果 |
 |---|---|---|
-| **C-1-A** | strict identity + fail-closed。string かつ trim≠"" のみ受理。trim して受理にしない。empty / whitespace-only / null / undefined / missing / non-string → fail-closed。Write は validated non-empty string をそのまま Text へ | **Agent recommendation / CANDIDATE** |
+| **C-1-A** | strict identity + fail-closed。string かつ trim≠"" のみ受理。trim して受理にしない。empty / whitespace-only / null / undefined / missing / non-string → fail-closed。Write は validated non-empty string をそのまま Text へ | **SELECTED / Accepted** |
 | C-1-B | trim してから empty 判定し、受理時も trim 済み値へ正規化する | NOT recommended（domain は trim-to-accept しない；lossy） |
 | C-1-HOLD | text conversion 未決定のまま | NOT recommended as default |
 | C-1-X | Human 明示 | available |
@@ -123,7 +134,7 @@ Authority alignment:
 
 | ID | conversion 規則 | 結果 |
 |---|---|---|
-| **C-2-DERIVED** | CHOICE-OPTIONS-1 stored value ↔ domain enum を identity で写像。Display label は persistence key に使わない。unknown / missing / null / empty / unexpected → fail-closed（MF-1） | **DERIVED / NO NEW SEMANTIC DECISION（CANDIDATE doc lock）** |
+| **C-2-DERIVED** | CHOICE-OPTIONS-1 stored value ↔ domain enum を identity で写像。Display label は persistence key に使わない。unknown / missing / null / empty / unexpected → fail-closed（MF-1） | **SELECTED / Accepted（DERIVED / NO NEW SEMANTIC DECISION）** |
 | C-2-B | unknown Choice を Display label 照合や default へ倒す | NOT SELECTABLE（silent fallback / lossy） |
 | C-2-HOLD | Choice conversion 未決定 | NOT recommended（一意導出可能） |
 | C-2-X | Human 明示 | available |
@@ -156,7 +167,7 @@ Write:
 
 | ID | conversion 規則 | 結果 |
 |---|---|---|
-| **C-3-A** | JSON array of strings。compact encode。decode は JSON.parse → array + string members + isReasonCode。order preserve exactly。duplicate entries → fail-closed。invalid / non-array / null / missing → fail-closed。CSV/delimiter 不採用。read-side で `normalizeReasonCodes` による修復をしない | **Agent recommendation / CANDIDATE** |
+| **C-3-A** | JSON array of strings。compact encode。decode は JSON.parse → array + string members + isReasonCode。order preserve exactly。duplicate entries → fail-closed。invalid / non-array / null / missing → fail-closed。CSV/delimiter 不採用。read-side で `normalizeReasonCodes` による修復をしない | **SELECTED / Accepted** |
 | C-3-B | pretty-print JSON / alternate whitespace-significant encode | NOT recommended（encode 一意性を弱める） |
 | C-3-HOLD | codec 未決定 | NOT recommended as default（Representation=JSON は Accepted） |
 | C-3-X | Human 明示 | available |
@@ -194,7 +205,7 @@ C-3-A fixes:
 
 | ID | conversion 規則 | 結果 |
 |---|---|---|
-| **C-4-A** | logical `YYYY-MM-DD` ↔ DateOnly 暦日の lossless 保存。時刻・TZ offset・UTC datetime への意味変更禁止。invalid / impossible / null / missing → fail-closed | **Agent recommendation / CANDIDATE** |
+| **C-4-A** | logical `YYYY-MM-DD` ↔ DateOnly 暦日の lossless 保存。時刻・TZ offset・UTC datetime への意味変更禁止。invalid / impossible / null / missing → fail-closed | **SELECTED / Accepted** |
 | C-4-B | DateOnly を UTC DateTime（例: `…T00:00:00Z`）として論理値へ昇格する | NOT SELECTABLE（date-only の意味変更） |
 | C-4-HOLD | date conversion 未決定 | NOT recommended as default |
 | C-4-X | Human 明示 | available |
@@ -220,7 +231,7 @@ Authority alignment:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | 本 Decision ≠ adapter Implementation Start ≠ schema wiring ≠ SharePoint write ≠ Deploy ≠ mapping-complete PASS | **REQUIRED / CANDIDATE lock** |
+| **XB-1** | 本 Decision ≠ adapter Implementation Start ≠ schema wiring ≠ SharePoint write ≠ Deploy ≠ mapping-complete PASS | **SELECTED / Accepted** |
 | XB-2 | Conversion Acceptance と同時に adapter / schema / SharePoint write を開始 | NOT SELECTABLE |
 
 ## 4. Agent recommendation（NOT Acceptance）
@@ -237,31 +248,28 @@ Meaning:
 Agent recommendation alone is NOT Human Acceptance evidence.
 ```
 
-## 5. Mapping rows status（pre-Acceptance）
+## 5. Mapping rows status（post-Acceptance）
 
 | Mapping ID | Logical Field | Decision Status |
 |---|---|---|
-| MAP-AS-001 | snapshotId | CANDIDATE（C-1-A） |
-| MAP-AS-002 | recordStatus | CANDIDATE（C-2-DERIVED） |
-| MAP-AS-003 | result | CANDIDATE（C-2-DERIVED） |
-| MAP-AS-004 | reasonCodes | CANDIDATE（C-3-A） |
-| MAP-AS-005 | ruleSetVersion | CANDIDATE（C-1-A） |
-| MAP-AS-006 | periodStart | CANDIDATE（C-4-A） |
-| MAP-AS-007 | periodEnd | CANDIDATE（C-4-A） |
-| MAP-AS-008 | inputFingerprint | CANDIDATE（C-1-A） |
+| MAP-AS-001 | snapshotId | ACCEPTED / LOCKED（C-1-A） |
+| MAP-AS-002 | recordStatus | ACCEPTED / LOCKED（C-2-DERIVED） |
+| MAP-AS-003 | result | ACCEPTED / LOCKED（C-2-DERIVED） |
+| MAP-AS-004 | reasonCodes | ACCEPTED / LOCKED（C-3-A） |
+| MAP-AS-005 | ruleSetVersion | ACCEPTED / LOCKED（C-1-A） |
+| MAP-AS-006 | periodStart | ACCEPTED / LOCKED（C-4-A） |
+| MAP-AS-007 | periodEnd | ACCEPTED / LOCKED（C-4-A） |
+| MAP-AS-008 | inputFingerprint | ACCEPTED / LOCKED（C-1-A） |
 
 ```text
-No row is ACCEPTED before Human Acceptance.
-DERIVED Choice semantics still require Human Acceptance to lock conversion rows.
+Acceptance 正本: decision-assessment-snapshot-conversion-acceptance.md
+Historical compare rows above remain for audit；living status = ACCEPTED / LOCKED.
 ```
 
 ## 6. Explicit OUT / non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
-  Human Acceptance by itself（Acceptance は別文書）
-  treating Agent recommendation as Accepted
-  MAP-AS-009 / 010 / ENV adoption or naming
+This CONSUMED packet / Acceptance does NOT authorize:
   mapping-complete PASS
   adapter / schema mapping code start
   DTO wiring
@@ -270,15 +278,17 @@ This OPEN packet does NOT authorize:
   Deploy / real data
   Issue mutation
   Ready / Merge
+  MAP-AS-009 / 010 / ENV adoption or naming
 ```
 
 ## 7. Next
 
 ```text
-Decision-AS-CONVERSION-1: OPEN / NOT ACCEPTED
-Candidate contract: assessment-snapshot-conversion-contract.md
+Decision-AS-CONVERSION-1: Accepted / LOCKED / C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
+  → decision-assessment-snapshot-conversion-acceptance.md
+Contract: assessment-snapshot-conversion-contract.md（ACCEPTED / LOCKED）
 Independent Review: decision-assessment-snapshot-conversion-independent-review.md
-Next gate: HUMAN ACCEPTANCE OF Decision-AS-CONVERSION-1
+Next gate: HUMAN READY DECISION FOR PR #207
 Still HOLD / FORBIDDEN:
   Implementation Start / adapter / schema wiring
   SharePoint / M365 mutation

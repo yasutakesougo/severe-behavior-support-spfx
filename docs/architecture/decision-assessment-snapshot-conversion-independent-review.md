@@ -1,9 +1,11 @@
-# Independent Review — Decision-AS-CONVERSION-1 Candidate
+# Independent Review — Decision-AS-CONVERSION-1 Acceptance
 
 この文書は、**Decision-AS-CONVERSION-1**
-（AssessmentSnapshots MAP-AS-001〜008 Conversion Contract）
-**Candidate Packet / Contract** の Independent Review である。
-Human Acceptance / adapter Implementation Start / mapping-complete の代替ではない。
+（C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1）
+Human Acceptance 記録の **Independent Review 正本**である。
+adapter Implementation Start / mapping-complete / SharePoint write の代替ではない。
+
+Candidate-era review evidence（P2-001 resolution）は本 Acceptance IR に統合・継承する。
 
 Skill basis: [`decision-review`](../../.agents/skills/decision-review/SKILL.md)
 
@@ -11,18 +13,17 @@ Skill basis: [`decision-review`](../../.agents/skills/decision-review/SKILL.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Kind: Independent Review（docs-only candidate；P2-001 re-review）
+Kind: Independent Review（docs-only Acceptance）
 Skill basis: decision-review
 Status: PASS
 Findings: P0=0 / P1=0 / P2=1
-Baseline main: 632d28ae44e1b72929dc628caae183197a976477
+Human Decision: C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
 PR: #207
-Human Selection of unit: Option A — SELECTED
-Human Acceptance of Decision-AS-CONVERSION-1: NOT YET
 Reviewed artifacts:
-  decision-assessment-snapshot-conversion-selection.md
+  decision-assessment-snapshot-conversion-acceptance.md
   decision-assessment-snapshot-conversion-packet.md
   assessment-snapshot-conversion-contract.md
+  decision-assessment-snapshot-conversion-selection.md
 Ready: NOT RUN
 Merge: NOT RUN
 ```
@@ -34,33 +35,32 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 | Checkpoint | Result | Note |
 |---|---|---|
-| Unit selection recorded as Option A | PASS | selection SELECTED / OPEN |
-| Scope limited to MAP-AS-001〜008 | PASS | 009/010/ENV explicit OUT |
-| Names / Choice / DateOnly types not re-Decided | PASS | Depends on LOCKED Acceptances |
-| reasonCodes Representation=JSON not re-Decided | PASS | COLUMN-NAMES-1 cited；codec only |
-| C-1 rejects empty/ws/null/missing/non-string | PASS | no trim-to-accept |
-| C-2 unknown Choice has no silent fallback | PASS | MF-1 fail-closed；label unused |
-| C-3 rejects invalid/non-array/null；no CSV | PASS | JSON-only |
-| C-3 duplicates fail-closed（no read-side dedupe） | PASS | P2-001 CLOSED |
-| C-3 does not use normalizeReasonCodes as repair | PASS | domain-internal UNCHANGED；persistence read separated |
-| C-4 forbids DateOnly→UTC datetime rewrite | PASS | civil-date preservation |
-| null→default / invalid→valid absent | PASS | explicit FORBIDDEN |
-| Status cells use CANDIDATE not ACCEPTED | PASS | pre-Acceptance |
-| XB-1 keeps Implementation / adapter HOLD | PASS | |
-| mapping-complete NOT claimed | PASS | NOT YET |
-| SharePoint implementation leakage avoided | PASS | no REST/PnP code；no item write |
+| Human Decision recorded exactly | PASS | C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1 |
+| C-1-A preserved | PASS | strict identity；no trim-to-accept；no null/default |
+| C-2-DERIVED preserved | PASS | stored↔enum；label unused；fail-closed；NO NEW SEMANTIC DECISION |
+| C-3-A duplicates = FAIL-CLOSED | PASS | no read-side dedupe；normalizeReasonCodes not repair |
+| C-4-A civil-date semantics preserved | PASS | YYYY-MM-DD；UTC rewrite FORBIDDEN |
+| P2-001 CLOSED | PASS | duplicates FAIL-CLOSED |
+| P2-002 OPEN / non-blocking | PASS | wire-form carry-forward；civil-date unchanged |
+| MAP-AS-001〜008 rows ACCEPTED / LOCKED | PASS | Acceptance + contract table |
+| No MAP-AS-009 / 010 / ENV adoption | PASS | explicit OUT |
+| No mapping-complete PASS | PASS | NOT YET |
+| No adapter implementation authorization | PASS | XB-1 HOLD |
+| No Implementation Start authorization | PASS | XB-1 HOLD |
+| No SharePoint write authorization | PASS | FORBIDDEN |
+| No Deploy authorization | PASS | NO-GO |
+| Stale CANDIDATE / NOT ACCEPTED markers removed from living status | PASS | Acceptance / contract / packet / selection synced |
 | Agent recommendation ≠ Acceptance | PASS | explicit |
-| C-1 / C-2 / C-4 semantics unchanged by P2-001 fix | PASS | targeted C-3 only |
 
 ## Lossy / fallback audit
 
 | Risk | Present? | Disposition |
 |---|---|---|
-| lossy conversion as success path | NO | P2-001 CLOSED |
+| lossy conversion as success path | NO | — |
 | silent fallback | NO | — |
 | null → default | NO | forbidden |
 | invalid → valid coerce | NO | fail-closed（incl. duplicates） |
-| timezone / date drift rewrite | NO as policy | P2-002 wire-form note（carry-forward） |
+| timezone / date drift rewrite | NO as Accepted policy | P2-002 wire-form note（carry-forward） |
 | Choice unknown fallback | NO | fail-closed |
 | JSON corruption accepted | NO | fail-closed |
 | duplicate persistence → unique success | NO | FAIL-CLOSED |
@@ -70,23 +70,20 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
 |---|---|---|---|---|---|
-| P2-001 | P2 | **CLOSED** | C-3-A duplicate handling changed to FAIL-CLOSED；read-side dedupe / normalizeReasonCodes repair removed | packet C-3-A；conversion-contract MAP-AS-004 | CLOSED by Human-directed targeted resolution |
-| P2-002 | P2 | OPEN | C-4-A locks civil-date semantics but does not enumerate every SharePoint client wire shape（string vs Date object）. Adapter impl gate must still obey no civil-day rewrite | C-4-A；SP-ADAPTER CV-1 | Carry-forward；**not a Decision blocker** for Human Acceptance |
+| P2-001 | P2 | **CLOSED** | reasonCodes duplicate persistence = FAIL-CLOSED | Acceptance C-3-A；contract | CLOSED before Acceptance；preserved |
+| P2-002 | P2 | OPEN | SharePoint client DateOnly wire-form enumeration remains for adapter impl gate；does not change Accepted civil-date semantics | Acceptance P2 disposition；C-4-A | Carry-forward；**Decision blocker: NO** |
 
 ```text
 P0 = 0
 P1 = 0
 P2 open = 1（P2-002 only）
-Independent Re-review: PASS
-Decision blocker from open P2: NO
+Independent Review: PASS
 ```
 
 ## Explicit non-authorization
 
 ```text
 This IR does NOT authorize:
-  Human Acceptance of Decision-AS-CONVERSION-1
-  treating Agent recommendation as Accepted
   Ready Decision / Merge
   mapping-complete PASS
   adapter / schema mapping code start
@@ -96,18 +93,19 @@ This IR does NOT authorize:
   Deploy / real data
   Issue mutation
   MAP-AS-009 / 010 / ENV adoption
+  P2-002 closure
 ```
 
 ## Next
 
 ```text
-Independent Re-review: PASS（candidate；P2-001 CLOSED）
-Decision-AS-CONVERSION-1: OPEN / NOT ACCEPTED
-Next gate: HUMAN ACCEPTANCE OF Decision-AS-CONVERSION-1
+Independent Review: PASS
+Decision-AS-CONVERSION-1: Accepted / LOCKED / C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
+MAP-AS-001〜008 Conversion Contract: ACCEPTED / LOCKED
+mapping-complete: NOT YET
+Next gate: HUMAN READY DECISION FOR PR #207
 Still HOLD / FORBIDDEN:
-  Implementation Start
-  adapter / schema mapping implementation
+  Implementation Start / adapter / schema wiring
   SharePoint / M365 mutation
-  mapping-complete PASS
   Deploy / real data
 ```

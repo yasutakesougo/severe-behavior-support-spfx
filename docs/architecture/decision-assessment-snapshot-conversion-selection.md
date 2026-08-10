@@ -6,13 +6,14 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_ASSESSMENTSNAPSHOT_CONVERSION_SELECTION
-Status: SELECTED / OPEN
+Status: SELECTED / CONSUMED
 Selected unit: AssessmentSnapshots Conversion Contract
 Follow-up Decision / Packet ID: Decision-AS-CONVERSION-1
   packet: decision-assessment-snapshot-conversion-packet.md
-  contract candidate: assessment-snapshot-conversion-contract.md
+  acceptance: decision-assessment-snapshot-conversion-acceptance.md
+  contract: assessment-snapshot-conversion-contract.md
   IR: decision-assessment-snapshot-conversion-independent-review.md
-  Status: OPEN / NOT ACCEPTED（Human Acceptance 待ち）
+  Status: Accepted / LOCKED / C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
 
 Baseline main:
   632d28ae44e1b72929dc628caae183197a976477
@@ -20,6 +21,10 @@ Baseline main:
 Human Selection:
   Option A — SELECT
   Explicit Human Decision on 2026-08-10
+
+Human Acceptance:
+  Explicit Human Decision on 2026-08-10
+  PR: #207
 ```
 
 ## Locked basis（再 Decision しない）
@@ -40,17 +45,19 @@ Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
 Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
 Decision-AS-DEC6-MAPPING-1: Accepted / LOCKED / LF-1+RW-1+MF-1+VR-1
 Decision-AS-SP-ADAPTER-1: Accepted / LOCKED / PB-1+EM-1+CV-1+D6-1+UP-1
+Decision-AS-CONVERSION-1: Accepted / LOCKED / C-1-A+C-2-DERIVED+C-3-A+C-4-A+XB-1
 MT-1 table: assessment-snapshot-sharepoint-mapping.md（NOT mapping-complete）
 ```
 
 ## Selection meaning
 
 ```text
-SELECTED / OPEN:
+SELECTED / CONSUMED:
   Decision-AS-CONVERSION-1
   Scope = MAP-AS-001〜008 Read / Write conversion contract determination
+  Status = Accepted / LOCKED
 
-This Selection does NOT mean:
+This Selection / Acceptance does NOT mean:
   mapping-complete PASS
   adapter implementation authorization
   schema wiring authorization
@@ -64,7 +71,7 @@ This Selection does NOT mean:
 
 | ID | unit | 結果 |
 |---|---|---|
-| **A** | AssessmentSnapshots Conversion Contract（MAP-AS-001〜008） | **SELECTED** |
+| **A** | AssessmentSnapshots Conversion Contract（MAP-AS-001〜008） | **SELECTED / CONSUMED** |
 | B | CV extension（MAP-AS-009 / 010 / ENV） | NOT SELECTED as current |
 | HOLD | NO UNIQUE NEXT UNIT | NOT SELECTED |
 
@@ -91,9 +98,10 @@ LOW-AUTO-PILOT additional batch
 ## Next
 
 ```text
-Selection: SELECTED / OPEN
-Decision-AS-CONVERSION-1: OPEN / NOT ACCEPTED
-Next gate: HUMAN ACCEPTANCE OF Decision-AS-CONVERSION-1
+Selection: SELECTED / CONSUMED
+Decision-AS-CONVERSION-1: Accepted / LOCKED / C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1
+MAP-AS-001〜008 Conversion Contract: ACCEPTED / LOCKED
+Next gate: HUMAN READY DECISION FOR PR #207
 Still HOLD / FORBIDDEN:
   Implementation Start
   adapter / schema mapping implementation
