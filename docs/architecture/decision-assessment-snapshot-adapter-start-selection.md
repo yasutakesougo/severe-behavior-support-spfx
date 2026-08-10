@@ -5,22 +5,27 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-START-1
-Selection status: SELECTED
+Selection status: SELECTED / CONSUMED
 Baseline main: efe765be21cbc934f4d72034002610805224af10
 Human Selection: 2026-08-11
+Human Acceptance: AIS-1-B / 2026-08-11
 
 Selected unit:
   AssessmentSnapshot adapter Implementation Start Decision
 
 Packet:
   decision-assessment-snapshot-adapter-start-packet.md
+Acceptance:
+  decision-assessment-snapshot-adapter-start-acceptance.md
 IR:
   decision-assessment-snapshot-adapter-start-independent-review.md
+Acceptance IR:
+  decision-assessment-snapshot-adapter-start-acceptance-independent-review.md
 
-Acceptance:
-  NOT YET
+Decision-AS-ADAPTER-START-1:
+  ACCEPTED / LOCKED as AIS-1-B
 Implementation Start:
-  HOLD
+  HOLD until AIS-1-B Entry Criteria are satisfied
 adapter / DTO / schema wiring:
   HOLD
 Deploy / real data:
@@ -46,10 +51,19 @@ P2-002はmapping-complete blockerではないが、adapter impl-gate residualで
 
 ## Selection meaning
 
-このSelectionはDecision unitを選ぶだけである。
+このSelectionはDecision unitを選んだ記録である。
 
-Implementation Start、adapter実装、依存追加、SharePoint書込み、Deployを認可しない。
+Human AcceptanceによりAIS-1-BをLOCKした。
+
+AIS-1-Bは条件付きGOであり、AcceptanceだけではImplementation Startを開始しない。
+
+adapter client / transport方式とP2-002 exact clear / omit mechanicsを明示・検証し、Entry Criteriaを満たす必要がある。
 
 ## Next
 
-Human Decision Packetで、即時GO、条件付きGO、HOLDを比較する。
+```text
+Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
+P2-002 = OPEN / CARRY-FORWARD
+Implementation Start = HOLD
+Next substantive residual = adapter client / transport + P2-002 exact mechanics Decision
+```
