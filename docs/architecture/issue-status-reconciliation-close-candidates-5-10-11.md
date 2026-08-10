@@ -7,12 +7,11 @@ Parent:
 [`issue-status-reconciliation-packet.md`](./issue-status-reconciliation-packet.md)
 
 ```text
-Status: READY for Human Phase ① only
+Status: Phase ① → ①b = PASS（Human 2026-08-10）；Phase ① CLOSED
 Agent GitHub Issue mutation: FORBIDDEN
-Human Close: AUTHORIZED only after Human confirms each Issue
-Batch Close: FORBIDDEN（1 Issue = 1 confirmation）
-Immediate Human work: Close #5 / #10 / #11 per drafts below
-Do not start Phase ② / ③ / EG-1 create from this doc
+Human Close: DONE for #5 / #10 / #11
+Immediate next（separate）: Phase ② READY / NOT STARTED
+Do not start Phase ③ / EG-1 create from this doc
 ```
 
 ## Shared SoT freeze（at draft write-up）
@@ -149,24 +148,26 @@ Current SoT tip: 658c790f34adb3489808121a72c6dcccbde97d2f
 
 | Step | Action | Status |
 |---|---|---|
-| 1 | Confirm #5 superseded against reuse-boundary SoT | Human |
-| 2 | Post Close comment + Close #5 | Human |
-| 3 | Confirm #10 superseded against repo bootstrap SoT | Human |
-| 4 | Post Close comment + Close #10 | Human |
-| 5 | Confirm #11 timeline superseded；keep #6 open | Human |
-| 6 | Post Close comment + Close #11 | Human |
-| 7 | **Read-back:** reopen list / issue pages；confirm #5 / #10 / #11 are CLOSED | Human |
-| 8 | **Read-back reason:** each Close reason reads as NOT_PLANNED or COMPLETED（superseded / consumed / timeline），not accidental | Human |
-| 9 | If 7–8 PASS → allow Phase ②；else fix / leave OPEN and stop | Human |
-| 10 | Record ①b result into docs / next handoff when convenient | docs PR if needed |
+| 1 | Confirm #5 superseded against reuse-boundary SoT | **DONE** |
+| 2 | Post Close comment + Close #5 | **DONE** — CLOSED / completed |
+| 3 | Confirm #10 superseded against repo bootstrap SoT | **DONE** |
+| 4 | Post Close comment + Close #10 | **DONE** — CLOSED / completed |
+| 5 | Confirm #11 timeline superseded；keep #6 open | **DONE** |
+| 6 | Post Close comment + Close #11 | **DONE** — CLOSED / not_planned |
+| 7 | **Read-back:** reopen list / issue pages；confirm #5 / #10 / #11 are CLOSED | **PASS** |
+| 8 | **Read-back reason:** each Close reason reads as NOT_PLANNED or COMPLETED（superseded / consumed / timeline），not accidental | **PASS**（#5/#10 completed；#11 not_planned） |
+| 9 | If 7–8 PASS → allow Phase ②；else fix / leave OPEN and stop | **PASS** — Phase ② READY / NOT STARTED |
+| 10 | Record ①b result into docs / next handoff when convenient | **DONE**（this update） |
 
-### Intended Close reason mapping
+### Observed Close reason mapping（Human 2026-08-10）
 
-| Issue | Intended reason class | Meaning |
-|---|---|---|
-| #5 | COMPLETED / SUPERSEDED | Phase 0 boundary consumed by later Accepted SoT |
-| #10 | COMPLETED / SUPERSEDED | bootstrap（AGENTS / PR template / ADR path）passed |
-| #11 | NOT_PLANNED as pre-approval gate / SUPERSEDED timeline | pre-approval premise no longer matches history；#6 remains parent |
+| Issue | Observed state | Observed reason | Matches draft |
+|---|---|---|---|
+| #5 | CLOSED | completed | YES |
+| #10 | CLOSED | completed | YES |
+| #11 | CLOSED | not_planned（timeline superseded） | YES |
+| #6 | OPEN | — | YES（keep open） |
+| #8 | OPEN | — | YES（keep open） |
 
 ```text
 If Human rejects Close for any one Issue:

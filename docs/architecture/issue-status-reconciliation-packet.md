@@ -13,14 +13,25 @@ Prior assessment:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-ISSUE-STATUS-RECONCILE-1
 Kind: Process packet（Human-executed Issue hygiene）
-Status: SELECTED / READY for Human Phase ① only
+Status: Phase ① → ①b = PASS；Phase ② READY / NOT STARTED
 Assessment date: 2026-08-10
 Assessor: Human OPEN Issue triage + repository SoT
 Agent GitHub Issues API: 403（cannot read/write Issue bodies）
 Agent GitHub Issue mutation: FORBIDDEN
-Human GitHub Issue mutation now: Phase ① Close #5 / #10 / #11 only
-Phase ②+: blocked until Phase ① read-back PASS
+Human GitHub Issue mutation now: Phase ② #6 / #8 Current-state patch（optional next）
+Phase ① Close #5 / #10 / #11: DONE（Human）
+Phase ①b read-back: PASS（Human 2026-08-10）
+Phase ②: READY / NOT STARTED（stopped here by Human）
+Phase ③: blocked until Phase ② complete
 EG-1 Human create: parallel process；do NOT mix with this packet
+
+Phase ①b Human attestation（2026-08-10）:
+  #5 CLOSED / completed（Close comment posted）
+  #10 CLOSED / completed（Close comment posted）
+  #11 CLOSED / not_planned（timeline superseded；Close comment posted）
+  #6 OPEN（confirmed）
+  #8 OPEN（confirmed）
+  reason mapping: matches close-candidates draft
 
 Current SoT（durable）:
   main HEAD at packet write-up: 658c790f34adb3489808121a72c6dcccbde97d2f
@@ -32,7 +43,7 @@ Current SoT（durable）:
   Human create: AUTHORIZED / NOT STARTED by Acceptance
   Implementation Start: HOLD
   Deploy / real data: NO-GO
-  OPEN Issues: 28（Human attestation）
+  OPEN Issues: 25 remaining of prior 28 after #5/#10/#11 Close（Human attestation）
 ```
 
 ## 1. Question
@@ -140,9 +151,9 @@ Human 2026-08-10 triage。Agent は Issue body を API 取得できないため�
 
 | Order | Action | Gate |
 |---|---|---|
-| **①** | #5 / #10 / #11 を下書きどおり Human Close | 1 Issue = 1 confirmation；いまの唯一の具体作業 |
-| **①b** | Close 後 read-back | 3件とも CLOSED かつ理由が NOT_PLANNED or COMPLETED（superseded）として意図どおりか確認 |
-| **②** | #6 / #8 の current-state reconciliation | **①b PASS 後のみ**；#8 は Decision Ledger として OPEN 維持 |
+| **①** | #5 / #10 / #11 を下書きどおり Human Close | **DONE** |
+| **①b** | Close 後 read-back | **PASS**（#5/#10 completed；#11 not_planned；#6/#8 OPEN） |
+| **②** | #6 / #8 の current-state reconciliation | **READY / NOT STARTED**；#8 は Decision Ledger として OPEN 維持 |
 | **③** | #4 / #9 / #12 / #15〜#19 の個別再判定 | **② 後のみ**；一括 Close 禁止 |
 | **④** | #20以降 / UI系は原則バックログ維持 | **いま触らない**；mutation 不要 |
 
@@ -150,9 +161,10 @@ Human 2026-08-10 triage。Agent は Issue body を API 取得できないため�
 この順なら、28件を無理に減らすのではなく、
 「いま判断が必要な Issue」と「将来の実装 Issue」だけが残る。
 
-いま Human がやる具体作業:
-  Phase ① = #5 / #10 / #11 を下書きどおり Close することだけ。
-  Phase ② / ③ / EG-1 Human create / #20以降 は混ぜない。
+いまの停止点:
+  Phase ① → ①b = PASS
+  Phase ② = READY / NOT STARTED（Human stop）
+  Phase ③ / EG-1 Human create / #20以降 は混ぜない。
 ```
 
 ## 5. Explicit non-authorization
@@ -176,9 +188,9 @@ This packet does NOT authorize:
 
 ```text
 AUTHORIZED for Human only（after reading Close/resync drafts）:
-  Phase ① now: Close #5 / #10 / #11 if Human confirms superseded
-  Phase ①b: read-back 3 Issues = CLOSED with intended reason
-  Phase ② after ①b PASS: Patch Current/Gate/Dependency on #6 / #8；#8 KEEP OPEN
+  Phase ①: DONE — Close #5 / #10 / #11
+  Phase ①b: PASS — read-back recorded
+  Phase ② READY / NOT STARTED: Patch Current/Gate/Dependency on #6 / #8；#8 KEEP OPEN
   Phase ③ after ②: Record keep-open / later-close judgment for
             #4 / #9 / #12 / #15〜#19 without batch Close
 
@@ -186,7 +198,7 @@ FORBIDDEN for Agent:
   all GitHub Issue mutations
 
 FORBIDDEN still / do not mix now:
-  Phase ② / ③ before ①b PASS
+  Phase ③ before Phase ② complete
   touching #20以降 / UI Issues
   EG-1 Human create inside this Reconciliation flow
   Implementation Start / adapter code / Deploy / tenant mutation
@@ -195,13 +207,17 @@ FORBIDDEN still / do not mix now:
 ## 7. Next
 
 ```text
-Immediate Human unit（only）:
-  Phase ① Close #5 / #10 / #11 per close-candidates draft
-  then Phase ①b read-back（3/3 CLOSED；reason intentional）
+Completed:
+  Phase ① Close #5 / #10 / #11
+  Phase ①b read-back PASS
 
-Blocked until ①b PASS:
+Stop point（Human 2026-08-10）:
+  Phase ② READY / NOT STARTED
+  do not auto-start #6 / #8 body updates
+
+When Human resumes:
   Phase ② #6 / #8 resync（#8 remains OPEN as Decision Ledger）
-  Phase ③ continuity re-check（no batch Close）
+  then Phase ③ continuity re-check（no batch Close）
 
 Do not touch now:
   Group C / D（#20以降 / UI）

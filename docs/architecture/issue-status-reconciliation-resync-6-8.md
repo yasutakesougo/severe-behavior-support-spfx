@@ -7,10 +7,11 @@ Parent:
 [`issue-status-reconciliation-packet.md`](./issue-status-reconciliation-packet.md)
 
 ```text
-Status: BLOCKED until Phase ①b PASS（drafts ready；do not apply yet）
+Status: READY for Human Phase ② / NOT STARTED
+  （Phase ① → ①b = PASS；Human stopped before body updates）
 Both Issues: KEEP OPEN
 Agent GitHub Issue mutation: FORBIDDEN
-Human body / Current / Gate / Dependency patch: AUTHORIZED only after ①b PASS
+Human body / Current / Gate / Dependency patch: AUTHORIZED（Human resume）
 Close #6 / #8: FORBIDDEN by this Phase
 Do not mix EG-1 Human create into this Phase
 ```
@@ -160,11 +161,11 @@ Do not:
 
 | Step | Action | Status |
 |---|---|---|
-| 0 | Confirm Phase ①b read-back PASS（#5/#10/#11 CLOSED；#6/#8 still OPEN） | Human gate |
-| 1 | Confirm Phase ① Close outcomes recorded | Human |
-| 2 | Patch #6 Current status with draft above | Human |
-| 3 | Patch #8 Current status / DEC-008 sync note | Human |
-| 4 | Optionally sync other clearly Accepted DEC rows | Human |
+| 0 | Confirm Phase ①b read-back PASS（#5/#10/#11 CLOSED；#6/#8 still OPEN） | **PASS**（Human 2026-08-10） |
+| 1 | Confirm Phase ① Close outcomes recorded | **DONE** |
+| 2 | Patch #6 Current status with draft above | NOT STARTED |
+| 3 | Patch #8 Current status / DEC-008 sync note | NOT STARTED |
+| 4 | Optionally sync other clearly Accepted DEC rows | NOT STARTED |
 | 5 | Leave #6 / #8 OPEN | required |
 
 ```text

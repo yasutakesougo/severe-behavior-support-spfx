@@ -1,39 +1,38 @@
-# handoff-builder — Issue Status Reconciliation Phase ①
+# handoff-builder — Issue Status Reconciliation after Phase ①b PASS
 
 ## Summary
 - 引き継ぎ文書判定: READY
-- プロジェクト進行判定: HOLD（Phase ①完了；Phase ② Human resume 待ち；Implementation Start は別途 HOLD）
+- プロジェクト進行判定: HOLD（Phase ② Human resume 待ち；Implementation Start は別途 HOLD）
 - 対象リポジトリ: yasutakesougo/severe-behavior-support-spfx
 - main SHA: 658c790f34adb3489808121a72c6dcccbde97d2f（packet freeze；PR #194 tip may advance）
 - 作業ブランチ: cursor/issue-status-reconciliation-f2c8
 
 ## References
-- Issue: #5 / #10 / #11（CLOSED）；#6 / #8（OPEN；Phase ② later）
+- Issue: #5 / #10 / #11（CLOSED）；#6 / #8（OPEN；Phase ② target）
 - PR: #194
 - 正本リンク:
   - [`issue-status-reconciliation-packet.md`](./issue-status-reconciliation-packet.md)
   - [`issue-status-reconciliation-close-candidates-5-10-11.md`](./issue-status-reconciliation-close-candidates-5-10-11.md)
-  - [`issue-status-reconciliation-phase1b-pass-handoff.md`](./issue-status-reconciliation-phase1b-pass-handoff.md)
-  - [`decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md`](./decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md)
+  - [`issue-status-reconciliation-resync-6-8.md`](./issue-status-reconciliation-resync-6-8.md)
+  - [`issue-status-reconciliation-phase1-handoff.md`](./issue-status-reconciliation-phase1-handoff.md)
 
 ## Completed
 - Thirty-sixth residual = Issue Status Reconciliation SELECTED
-- 4群分類と推奨順を packet に固定
-- #5 / #10 / #11 Close コメント下書き作成
-- Phase ① Close 実行（Human）: #5 completed / #10 completed / #11 not_planned
-- Phase ①b read-back PASS（#6 OPEN / #8 OPEN）
-- #6 / #8 resync 下書き作成（未適用）
+- Phase ①: #5 CLOSED / completed；#10 CLOSED / completed；#11 CLOSED / not_planned
+- Phase ①b read-back: PASS（#6 OPEN / #8 OPEN confirmed）
+- Close reason mapping matches drafts
 - Agent Issue mutation = 未実施（FORBIDDEN / API 403）
 
 ## Remaining
-- Stop point: Phase ② READY / NOT STARTED
-- When resumed: Phase ② #6 / #8 Current-state reconciliation（#8 OPEN 維持）
+- **Stop point:** Phase ② READY / NOT STARTED（Human 停止）
+- When resumed: #6 / #8 Current-state reconciliation（#8 KEEP OPEN as Decision Ledger）
 - After Phase ②: Phase ③ #4 / #9 / #12 / #15〜#19 個別再判定
 - #20以降 / UI: 触らない
 - EG-1 Human create: parallel；Issue 整理と混ぜない
 
 ## HOLD
-- Phase ② / ③ until Human resumes / completes Phase ②
+- Phase ② body updates until Human resumes
+- Phase ③ until Phase ② complete
 - Implementation Start
 - SharePoint adapter / schema mapping implementation
 - Agent GitHub Issue mutation
@@ -41,7 +40,6 @@
 
 ## Forbidden Actions
 - merge（Human / separate review）
-- Agent push beyond current docs PR flow without need
 - deploy
 - 本番変更
 - SharePoint変更
@@ -52,13 +50,14 @@
 - closing #8
 - batch-closing #15〜#19
 - mixing EG-1 Human create into this flow
+- Agent Issue mutation
 
 ## Verification
 - typecheck: N/A（docs）
 - test: N/A（docs）
-- audit: Phase ①b Human attestation PASS；Agent cannot read Issues（403）
+- audit: Phase ①b Human attestation recorded；Agent cannot re-read Issues（403）
 
 ## Next Actions
-1. Remain stopped at Phase ② READY / NOT STARTED unless Human resumes
-2. On resume: Human applies `issue-status-reconciliation-resync-6-8.md`
-3. Keep #6 / #8 OPEN
+1. Remain stopped unless Human resumes Phase ②
+2. On resume: apply drafts in `issue-status-reconciliation-resync-6-8.md` to #6 / #8
+3. Keep #6 / #8 OPEN；then consider Phase ③ only after Phase ②
