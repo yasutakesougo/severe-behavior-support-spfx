@@ -12,6 +12,7 @@ Depends on:
 [`decision-assessment-snapshot-mapping-complete-determination.md`](./decision-assessment-snapshot-mapping-complete-determination.md)
 [`decision-assessment-snapshot-map010-column-acceptance.md`](./decision-assessment-snapshot-map010-column-acceptance.md)
 [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
+[`decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md`](./decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
@@ -35,16 +36,14 @@ MAP-AS-001〜008 = PERSISTED / OBSERVED / CONFIRMED + conversion ACCEPTED / LOCK
 MAP-AS-009 = EXPLICITLY OUT
 MAP-AS-010 = PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 ENV-001〜003 = DERIVED
-P2-002 = OPEN / CARRY-FORWARD
+P2-002 = CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
 ```
 
-P2-002は、optionalな`supersedesSnapshotId`が論理的に欠落した場合の、SharePoint client上のexact clear / omit transport mechanicsである。
+P2-002は、optionalな`supersedesSnapshotId`が論理的に欠落した場合の、SharePoint client上のexact clear / omit transport mechanicsであった。
 
-このAPIの具体形は既存DecisionではLOCKされていない。
+Living: Decision-AS-ADAPTER-EC3-EC4-1 により CO-1-A として Accepted / CLOSED。
 
-現行`package.json`にはSharePoint adapterクライアントのruntime dependencyが存在しない。
-
-したがって、特定のREST / PnP API mechanicsをこのPacketで発明して固定しない。
+現行`package.json`にはSharePoint adapterクライアントのruntime dependencyが存在しない（DP-1-A：install 未認可）。
 
 ## 比較結果
 
@@ -71,11 +70,17 @@ EC-7 SharePoint / M365 mutation by Agent = FORBIDDEN unless separately authorize
 EC-8 Deploy / real data = separate GO
 ```
 
-EC-1とEC-2は満たしている。
+### Living status
 
-EC-3とEC-4は未充足である。
-
-したがってImplementation StartはHOLDを維持する。
+```text
+EC-1 = MET
+EC-2 = MET
+EC-3 = MET（Decision-AS-ADAPTER-EC3-EC4-1 / TC-1-A + DP-1-A）
+EC-4 = MET（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A + SV-1-A）
+EC-5..EC-8 = still required at Implementation Start gate
+P2-002 = CLOSED
+Implementation Start = HOLD
+```
 
 最初のimplementation sliceはAssessmentSnapshot adapter boundaryに限定する。
 
@@ -88,8 +93,7 @@ EC-3とEC-4は未充足である。
 adapter code mutation
 SharePoint / M365 / Entra mutation
 Deploy / real data
-P2-002の自動Close
-特定client APIの発明
+runtime dependency install（DP-1-A）
 Ready / Mergeの自動進行
 ```
 
@@ -97,8 +101,12 @@ Ready / Mergeの自動進行
 
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
+Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
+  / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
 Implementation Start = HOLD
-Next substantive residual = EC-3 + EC-4
-  adapter client / transport方式
-  P2-002 exact clear / omit mechanics
+EC-3 = MET
+EC-4 = MET
+P2-002 = CLOSED
+Next gate = AIS-1-B Implementation Start gate
+  （EC-5..EC-8 preserved；separate Human GO）
 ```

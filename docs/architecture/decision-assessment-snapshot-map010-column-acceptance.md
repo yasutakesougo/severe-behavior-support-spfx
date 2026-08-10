@@ -83,8 +83,9 @@ Implementation / create / Deploy boundary:
 
 P2 disposition:
   P2-001 CLOSED — Internal Name Human-Accepted as supersedesSnapshotId
-  P2-002 OPEN / CARRY-FORWARD — exact SharePoint clear/omit API
-         Decision blocker: NO
+  P2-002 CLOSED — exact SharePoint clear/omit API
+         Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A
+         （this MAP010-COLUMN-1 Acceptance did not close P2-002）
 
 Physical column（living；post-Acceptance Human path）:
   PRESENT（isogo + honmoku；OBSERVED / CONFIRMED）
@@ -113,11 +114,11 @@ Closes only（Acceptance-time）:
 Post-Acceptance physical path（separate evidence / determination）:
   Human column create + VR-1 — COMPLETE / PASS
   mapping-complete — PASS / COMPLETE
-Still NOT closed:
+Still NOT closed by this MAP010-COLUMN-1 Acceptance:
   adapter / schema / DTO wiring
   Implementation Start
-  P2-002 clear/omit transport API
   Deploy / real data
+P2-002 living: CLOSED by Decision-AS-ADAPTER-EC3-EC4-1（not by this Acceptance）
 Implementation auto-start: FORBIDDEN
 ```
 
@@ -267,7 +268,7 @@ Determination:
 Decision-AS-MAP010-COLUMN-1: Accepted / LOCKED
   / N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
 P2-001: CLOSED
-P2-002: OPEN / CARRY-FORWARD（non-blocking；adapter impl gate）
+P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A）
 mapping-complete: PASS / COMPLETE
 Human SharePoint create: COMPLETE
 VR-1: PASS
@@ -275,4 +276,5 @@ Implementation Start: HOLD
 adapter / schema / DTO wiring: HOLD
 SharePoint / M365 mutation by Agent: FORBIDDEN
 Deploy / real data: NO-GO
+Next gate: AIS-1-B Implementation Start gate
 ```

@@ -58,9 +58,10 @@ Fields with completed non-column dispositions:
 
 mapping-complete: PASS / COMPLETE
 Remaining principal blocker for mapping-complete: NONE
-P2-002 clear/omit transport API: OPEN / CARRY-FORWARD
+P2-002 clear/omit transport API: CLOSED
+  Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A
   mapping-complete blocker: NO
-  adapter Implementation Start blocker residual: YES（separate）
+Implementation Start: HOLD（AIS-1-B gate；EC-5..EC-8 + separate GO）
 ```
 
 ## Explicit non-claims
@@ -70,6 +71,7 @@ This matrix / mapping-complete PASS does NOT:
   authorize SharePoint / M365 mutation
   authorize adapter / DTO / schema wiring
   authorize Implementation Start
-  close P2-002
   authorize Deploy / real data
+
+P2-002 living: CLOSED by Decision-AS-ADAPTER-EC3-EC4-1（not by this matrix）
 ```

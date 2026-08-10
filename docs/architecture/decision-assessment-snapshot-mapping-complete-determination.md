@@ -42,9 +42,9 @@ MAP-AS-010: PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 ENV-001〜003: DERIVED
 
 Canonical blocker remaining for mapping-complete: NONE
-P2-002 clear/omit transport API: OPEN / CARRY-FORWARD
-  Decision blocker for mapping-complete: NO
-  Adapter impl-gate residual: YES
+P2-002 clear/omit transport API: CLOSED
+  Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A
+  Decision blocker for mapping-complete: NO（historical）
 
 Implementation Start: HOLD
 adapter / schema / DTO wiring: HOLD
@@ -71,8 +71,9 @@ CLOSED for mapping-complete:
 NOT CLOSED by this determination:
   adapter / DTO / schema wiring
   Implementation Start
-  P2-002 SharePoint clear/omit transport API
   Deploy / real data
+
+P2-002 living: CLOSED by Decision-AS-ADAPTER-EC3-EC4-1（not by this determination）
 ```
 
 ## M-1-A criteria evaluation
@@ -113,7 +114,7 @@ mapping-complete: PASS / COMPLETE
 
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
 |---|---|---|---|---|---|
-| P2-002 | P2 | OPEN / CARRY-FORWARD | exact SharePoint client clear/omit/null transport API for optional write absence | MAP010-COLUMN-1 W-1-A；adapter impl gate | Carry-forward；**mapping-complete blocker: NO** |
+| P2-002 | P2 | **CLOSED** | exact SharePoint client clear/omit/null transport API for optional write absence | Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A | **CLOSED**；mapping-complete blocker was NO |
 | — | P0 | — | なし | — | — |
 | — | P1 | — | なし | — | — |
 
@@ -139,7 +140,6 @@ NOT HOLD for:
 mapping-complete PASS / COMPLETE does NOT authorize:
   Implementation Start
   adapter / DTO / schema code start
-  P2-002 closure
   Deploy / real data
   Agent SharePoint mutation
   Ready / Merge without separate Human authorization
@@ -150,9 +150,8 @@ mapping-complete PASS / COMPLETE does NOT authorize:
 ```text
 mapping-complete: PASS / COMPLETE
 MAP-AS-010: PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
-P2-002: OPEN / CARRY-FORWARD（adapter impl gate；non-blocking）
-Next substantive residual after this closeout merge（NOT auto-started）:
-  adapter Implementation Start Decision / wiring（separate Human Selection）
+P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A）
+Next gate: AIS-1-B Implementation Start gate
 Still HOLD:
   Implementation Start / adapter / DTO / schema
   Deploy / real data

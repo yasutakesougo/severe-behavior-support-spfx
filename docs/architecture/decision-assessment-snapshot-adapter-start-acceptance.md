@@ -36,23 +36,46 @@ EC-7 SharePoint / M365 mutation by Agent = FORBIDDEN unless separately authorize
 EC-8 Deploy / real data = separate GO
 ```
 
-現在はEC-1とEC-2を満たしている。
+### Living Entry Criteria status
 
-EC-3とEC-4は未充足である。
+```text
+EC-1 = MET
+EC-2 = MET
+EC-3 = MET
+  Authority: Decision-AS-ADAPTER-EC3-EC4-1 Accepted / LOCKED
+    / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
+  Transport: SharePoint REST List Items API
+  host = SPFx SPHttpClient when available
+  Evidence: decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
+EC-4 = MET
+  Authority: same Acceptance（CO-1-A + SV-1-A）
+  P2-002 clear/omit mechanics Accepted / verified（synthetic/local）
+EC-5..EC-8 = still required at Implementation Start gate（not waived）
+```
 
-したがってImplementation StartはHOLDである。
+AIS-1-B Acceptance 自体は EC-3 / EC-4 を満たさなかった。
+
+EC-3 / EC-4 の MET は Decision-AS-ADAPTER-EC3-EC4-1 Acceptance により記録する。
+
+したがって Implementation Start はなお HOLD である
+（EC-5..EC-8 + separate Implementation Start GO が必要）。
 
 ## P2-002
 
 ```text
-Status: OPEN / CARRY-FORWARD
-Decision blocker for AIS-1-B Acceptance: NO
-Implementation Start Entry Criteria blocker: YES
+Status: CLOSED
+Closed by: Decision-AS-ADAPTER-EC3-EC4-1 Acceptance
+  / CO-1-A under TC-1-A + SV-1-A
+Decision blocker for AIS-1-B Acceptance: NO（historical）
+Implementation Start Entry Criteria blocker: NO（EC-4 MET）
 ```
 
-P2-002をこのAcceptanceでCloseしない。
+AIS-1-B Acceptance 自体は P2-002 を Close しなかった。
 
-具体的なREST / PnP / SPHttpClient mechanicsを発明しない。
+P2-002 CLOSE は Decision-AS-ADAPTER-EC3-EC4-1 Acceptance の明示記録による。
+
+Accepted clear / omit（verbatim；再解釈しない）:
+[`decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md`](./decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md)
 
 ## Boundary
 
@@ -60,6 +83,7 @@ P2-002をこのAcceptanceでCloseしない。
 Implementation Start = HOLD
 adapter / DTO / schema code mutation = NOT AUTHORIZED
 runtime dependency addition = NOT AUTHORIZED
+  （DP-1-A LOCKED by EC3-EC4-1；unchanged）
 SharePoint / M365 / Entra mutation by Agent = FORBIDDEN
 Deploy / real data = NO-GO
 Issue mutation = NOT AUTHORIZED
@@ -70,8 +94,16 @@ Ready / Merge = separate Human GO
 
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
-Next substantive residual = EC-3 + EC-4 Decision
-  adapter client / transport方式
-  P2-002 exact clear / omit mechanics
-Implementation Start remains HOLD until that residual is Accepted and verified.
+Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
+  / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
+EC-1 = MET
+EC-2 = MET
+EC-3 = MET
+EC-4 = MET
+P2-002 = CLOSED
+Implementation Start = HOLD
+Next gate: AIS-1-B Implementation Start gate
+  （EC-5..EC-8 preserved；separate Human GO required）
+Acceptance 正本（EC-3/EC-4）:
+  decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```

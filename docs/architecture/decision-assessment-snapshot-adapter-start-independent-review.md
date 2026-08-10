@@ -4,10 +4,10 @@
 [`decision-assessment-snapshot-adapter-start-packet.md`](./decision-assessment-snapshot-adapter-start-packet.md)
 
 ```text
-Review status: PASS
+Review status: PASS（candidate-era；historical）
 P0: 0
 P1: 0
-P2: 1
+P2 at candidate-era: 1（P2-002 was OPEN）
 Baseline main: efe765be21cbc934f4d72034002610805224af10
 ```
 
@@ -17,21 +17,33 @@ Selection / Packetは、mapping-complete PASSをImplementation Startへ自動昇
 
 MAP-AS-001〜010とENV dispositionsを再Decisionしていない。
 
-P2-002を勝手にCloseしていない。
-
-現行repositoryでSharePoint adapter clientが未選択であるため、specific transport APIを発明せず、Human Decisionへ戻している。
+candidate-era では P2-002 を勝手に Close していなかった。
 
 Agent recommendationのAIS-1-BはHuman Acceptanceと明確に分離されている。
 
+## Living status（post Decision-AS-ADAPTER-EC3-EC4-1）
+
+```text
+Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
+Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
+  / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
+EC-3 = MET
+EC-4 = MET
+P2-002 = CLOSED
+Implementation Start = HOLD
+```
+
+Acceptance IR（AIS-1-B living）:
+[`decision-assessment-snapshot-adapter-start-acceptance-independent-review.md`](./decision-assessment-snapshot-adapter-start-acceptance-independent-review.md)
+
+Acceptance IR（EC-3/EC-4）:
+[`decision-assessment-snapshot-adapter-ec3-ec4-acceptance-independent-review.md`](./decision-assessment-snapshot-adapter-ec3-ec4-acceptance-independent-review.md)
+
 ## Finding
 
-| ID | Severity | Status | 内容 |
+| ID | Severity | Status（candidate-era） | Living status |
 |---|---|---|---|
-| P2-002 | P2 | OPEN / CARRY-FORWARD | optional `supersedesSnapshotId` absenceのexact SharePoint clear / omit transport mechanicsはadapter client選択後に固定・検証が必要 |
-
-P2-002は本PacketのDecision blockerではない。
-
-ただし、AIS-1-BのImplementation Start Entry Criteriaを満たすには解決が必要である。
+| P2-002 | P2 | OPEN / CARRY-FORWARD（then） | **CLOSED** by Decision-AS-ADAPTER-EC3-EC4-1 |
 
 ## Boundary check
 
@@ -41,12 +53,11 @@ adapter code = NOT STARTED
 SharePoint / M365 mutation by Agent = 0
 Deploy = 0
 real data = NO-GO
-Human Acceptance = NOT YET
 ```
 
 Verdict:
 
 ```text
-PASS — READY FOR HUMAN DECISION
-Recommended candidate: AIS-1-B
+PASS — historical candidate IR remains consistent
+Next gate: AIS-1-B Implementation Start gate
 ```
