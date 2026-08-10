@@ -29,8 +29,8 @@ LOCKED:
 
 Intended column naming:
   NM-1 — Human-provided intended Display Name / Internal Name / Column Type
-         状態 = HUMAN-PROVIDED / INTENDED
-         ≠ OBSERVED / CONFIRMED
+         Accepted values preserved exactly
+         Post-create status = HUMAN-PROVIDED / OBSERVED / CONFIRMED（VR-1 PASS）
          Agent 発明・自動採択ではない（Human 明示値）
 
 Coverage:
@@ -38,18 +38,16 @@ Coverage:
            MAP-AS-009/010 / ENV-001〜003 = OUT OF THIS Acceptance
 
 Implementation / adapter / Deploy boundary:
-  XB-1 — 本 Decision ≠ column creation GO
-         ≠ Execution GO
-         ≠ Implementation Start
+  XB-1 — 本 Decision ≠ Implementation Start
          ≠ adapter / schema mapping code start
          ≠ Deploy / real data
+         （column create + VR-1 completed separately；impl still HOLD）
 
-COLUMN-PROVISION-1 axes that REMAIN（再 Decision しない）:
+COLUMN-PROVISION / PX / EG axes（再 Decision しない）:
   SC-AS — AssessmentSnapshots（isogo + honmoku）only
-  PX-HOLD — column creation still not authorized
-  EG-HOLD — Explicit Execution GO still NOT GIVEN
-  VR-1 — post-create CN-1 re-observation required before CONFIRMED
-  FG-1 — fail-closed
+  PX-1 / EG-1 — advanced via COLUMN-PX-1 / COLUMN-EG-1
+  VR-1 — PASS（Human Column Create evidence）
+  FG-1 — fail-closed（not triggered）
   AP-1 — Agent SharePoint mutation FORBIDDEN
 
 SCHEMA-MAPPING-NEXT / DEC-6 / CN-1 / Site-List provision:
@@ -59,14 +57,14 @@ Implementation Start:
   HOLD
 SharePoint adapter / schema mapping implementation:
   HOLD
-SharePoint column creation:
-  FORBIDDEN（PX-HOLD + EG-HOLD）
+AssessmentSnapshots Human Column Create:
+  COMPLETE（isogo + honmoku）
 Execution GO:
-  NOT GIVEN
-Intended Internal Names（CV-REQ）:
-  ADOPTED / INTENDED（see table）
-CONFIRMED Internal Names:
-  NOT YET（await create + VR-1 CN-1 re-observation）
+  GIVEN（Human process；consumed by create）
+CV-REQ Internal Names（MAP-AS-001〜008）:
+  ADOPTED / OBSERVED / CONFIRMED（VR-1 PASS）
+Evidence:
+  decision-assessment-snapshot-column-create-vr1-evidence.md
 Deploy / real data:
   NO-GO
 FindingCode / A-5:
@@ -77,18 +75,15 @@ Post-retention deletion:
 Closes only:
   Decision-AS-COLUMN-NAMES-1（NM-1 + CV-REQ + XB-1）
   Thirty-second residual
+  CV-REQ name/type confirmation under VR-1（post-create）
 Does NOT close:
-  column creation Execution
-  PX-1 / EG-1
-  Choice option value lock（recordStatus / result）
   MAP-AS-009/010 / ENV naming
   SupportPlans column naming
-  CONFIRMED Internal Names
+  mapping-complete / conversion completeness
   SharePoint / adapter / application 実装
   Implementation Start
   Deploy / real data
 Implementation auto-start: FORBIDDEN
-Column creation auto-start: FORBIDDEN
 Agent tenant mutation: FORBIDDEN
 ```
 
@@ -107,28 +102,27 @@ Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED
 ```text
 NM-1:
   Human が intended Display Name / Internal Name / Column Type を明示採択した。
-  状態 = HUMAN-PROVIDED / INTENDED。≠ OBSERVED / CONFIRMED。
+  定義は維持。create + VR-1 後の状態 = HUMAN-PROVIDED / OBSERVED / CONFIRMED。
 CV-REQ:
   必須 logical fields（MAP-AS-001〜008）のみ。任意・DTO envelope は対象外。
 XB-1:
-  本 Acceptance だけでは column creation / Execution GO /
-  Implementation / adapter / Deploy を開始しない。
+  本 Acceptance だけでは Implementation / adapter / Deploy を開始しない。
 ```
 
-### Accepted intended values（CV-REQ；verbatim）
+### Accepted values（CV-REQ；verbatim definitions；status post VR-1）
 
 Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-honmoku`
 
 | Mapping ID | Logical Field | Display Name | Internal Name | Column Type | Representation | Status |
 |---|---|---|---|---|---|---|
-| MAP-AS-001 | snapshotId | スナップショットID | snapshotId | 1行テキスト | — | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-002 | recordStatus | 記録状態 | recordStatus | 選択肢 | — | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-003 | result | 判定結果 | result | 選択肢 | — | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-004 | reasonCodes | 理由コード | reasonCodes | 複数行テキスト | JSON | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-005 | ruleSetVersion | ルールセットバージョン | ruleSetVersion | 1行テキスト | — | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-006 | periodStart | 対象期間開始日 | periodStart | 日付のみ | — | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-007 | periodEnd | 対象期間終了日 | periodEnd | 日付のみ | — | HUMAN-PROVIDED / INTENDED |
-| MAP-AS-008 | inputFingerprint | 入力フィンガープリント | inputFingerprint | 1行テキスト | — | HUMAN-PROVIDED / INTENDED |
+| MAP-AS-001 | snapshotId | スナップショットID | snapshotId | 1行テキスト | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-002 | recordStatus | 記録状態 | recordStatus | 選択肢 | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-003 | result | 判定結果 | result | 選択肢 | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-004 | reasonCodes | 理由コード | reasonCodes | 複数行テキスト | JSON | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-005 | ruleSetVersion | ルールセットバージョン | ruleSetVersion | 1行テキスト | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-006 | periodStart | 対象期間開始日 | periodStart | 日付のみ | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-007 | periodEnd | 対象期間終了日 | periodEnd | 日付のみ | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
+| MAP-AS-008 | inputFingerprint | 入力フィンガープリント | inputFingerprint | 1行テキスト | — | HUMAN-PROVIDED / OBSERVED / CONFIRMED |
 
 ```text
 OUT OF THIS Acceptance:
@@ -209,21 +203,18 @@ MUST NOT start from this Acceptance alone:
 ```text
 Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1 + CV-REQ + XB-1
 Thirty-second residual: CONSUMED
-SharePoint column creation: FORBIDDEN（PX-HOLD + EG-HOLD）
-Execution GO: NOT GIVEN
+CV-REQ names/types: OBSERVED / CONFIRMED（VR-1 PASS）
+AssessmentSnapshots Human Column Create: COMPLETE
+Evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
 Implementation Start: HOLD
 adapter / schema mapping implementation: HOLD
 Agent mutation: FORBIDDEN
 Deploy / real data: NO-GO
-INTENDED ≠ OBSERVED / CONFIRMED
 
-Next substantive residual: SELECTED elsewhere — Choice options
-  （Decision-AS-CHOICE-OPTIONS-1；see thirty-third residual）
-Other candidates（separate units）:
-  PX-1 / EG-1 column creation authorization + Execution GO
+Next substantive residual: NOT SELECTED by this document
+Active parallel process residual:
+  Thirty-sixth — Issue Status Reconciliation Phase ②（#6 / #8）
+Column-path candidates（separate units）:
   CV extension（MAP-AS-009/010 / ENV）
-  Issue Status Reconciliation（#6 / #8 / #22）
-
-Ready: NOT RUN
-Merge: NOT RUN
+  conversion / mapping-complete determination（≠ impl start）
 ```

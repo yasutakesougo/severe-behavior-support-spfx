@@ -20,18 +20,20 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Kind: MT-1 mapping-table docs update
 Status: UPDATED under MT-1 / NOT mapping-complete
 Human Decision basis: MT-1 + IN-A + CP-1 + XB-1
-CN-1 observation: CLOSED / DEFAULT_COLUMNS_ONLY / custom = 0
+CN-1 observation: CLOSED / DEFAULT_COLUMNS_ONLY / custom = 0（baseline）
+Human Column Create + VR-1: COMPLETE / PASS（CV-REQ 8）
 
 Persistence placement（OBSERVED；再 Decision しない）:
   Lists: AssessmentSnapshots
   Sites: severe-support-isogo / severe-support-honmoku
-  Custom application columns: NOT PRESENT
-  Observed standard Internal Name（attested）: Title only
-  App-field Internal Names: NOT PRESENT / 未確認
+  Custom application columns（CV-REQ）: 8 / 8 OBSERVED / CONFIRMED
+  Observed standard Internal Name（attested）: Title
+  App-field Internal Names（CV-REQ）: OBSERVED / CONFIRMED
+  Evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
 
 Implementation Start: HOLD
 SharePoint adapter / schema mapping implementation: HOLD
-SharePoint column creation: FORBIDDEN
+Additional SharePoint column creation: FORBIDDEN without separate GO
 Internal Name invention: FORBIDDEN
 Deploy / real data: NO-GO
 ```
@@ -50,8 +52,10 @@ LF-1 / MT-1 に従い、AssessmentSnapshot logical fields と persistence field 
 4. Contract / Domain 名と SP 列名を同一視しない
 5. Schema ID は SP List 名 / TS 型名と同一視しない
 6. DEFAULT_COLUMNS_ONLY ≠ mapping-complete
-7. INTENDED Internal Names は本表に CONFIRMED として書かない（IN-A / VR-1）
-   CV-REQ INTENDED 正本 = Decision-AS-COLUMN-NAMES-1 Acceptance（≠ CONFIRMED）
+7. CV-REQ names/types may be recorded as OBSERVED / CONFIRMED only after Human create + VR-1
+   Conversion completeness / mapping-complete は別残件（≠ Implementation Start）
+   正本 Acceptance = Decision-AS-COLUMN-NAMES-1 / CHOICE-OPTIONS-1
+   Evidence = decision-assessment-snapshot-column-create-vr1-evidence.md
 
 ## Failure Behavior（DEC-6 / adapter；再 Decision しない）
 
@@ -74,7 +78,7 @@ UP-1: PERSISTENCE_UNAVAILABLE
 | schemaVersion / dtoVersion（logical） | `1.0.0` / `1.0.0` | 確定（Accepted；DTO/SP 割当 HOLD） |
 | Target List name | `AssessmentSnapshots` | 確定（OBSERVED / CONFIRMED） |
 | Target Sites | `severe-support-isogo` / `severe-support-honmoku` | 確定（OBSERVED / CONFIRMED） |
-| Custom application columns | none | NOT PRESENT |
+| Custom application columns（CV-REQ） | 8 | OBSERVED / CONFIRMED（isogo + honmoku） |
 | Title（standard） | Internal Name `Title` | 確定（CN-1 attested；app field ではない） |
 
 ```text
@@ -87,14 +91,14 @@ SC-1:
 
 | Mapping ID | Logical Field | Logical Type | Required | SP List | Display Name | Internal Name | Column Type | Read Conversion | Write Conversion | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| MAP-AS-001 | snapshotId | string | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-002 | recordStatus | enum draft\|finalized | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-003 | result | enum NO_FINDINGS\|FINDINGS_PRESENT\|NOT_APPLICABLE | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-005 | ruleSetVersion | string | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-006 | periodStart | ISO date | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-007 | periodEnd | ISO date | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
-| MAP-AS-008 | inputFingerprint | string | 必須 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
+| MAP-AS-001 | snapshotId | string | 必須 | AssessmentSnapshots | スナップショットID | snapshotId | 1行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-002 | recordStatus | enum draft\|finalized | 必須 | AssessmentSnapshots | 記録状態 | recordStatus | 選択肢 | 未確認 | 未確認 | 確定（name/type/options OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-003 | result | enum NO_FINDINGS\|FINDINGS_PRESENT\|NOT_APPLICABLE | 必須 | AssessmentSnapshots | 判定結果 | result | 選択肢 | 未確認 | 未確認 | 確定（name/type/options OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | AssessmentSnapshots | 理由コード | reasonCodes | 複数行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-005 | ruleSetVersion | string | 必須 | AssessmentSnapshots | ルールセットバージョン | ruleSetVersion | 1行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-006 | periodStart | ISO date | 必須 | AssessmentSnapshots | 対象期間開始日 | periodStart | 日付のみ | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-007 | periodEnd | ISO date | 必須 | AssessmentSnapshots | 対象期間終了日 | periodEnd | 日付のみ | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-008 | inputFingerprint | string | 必須 | AssessmentSnapshots | 入力フィンガープリント | inputFingerprint | 1行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
 | MAP-AS-009 | findingIds | readonly string[]? | 任意 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
 | MAP-AS-010 | supersedesSnapshotId | string? | 任意 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
 | MAP-AS-ENV-001 | schemaId（DTO envelope） | string | DTO必須予定 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
@@ -116,18 +120,17 @@ MAP-AS-SYS-001:
 
 ```text
 NOT mapping-complete:
-  app Internal Names still NOT PRESENT as CONFIRMED（CN-1）
-  CV-REQ INTENDED names = Accepted in Decision-AS-COLUMN-NAMES-1（≠ CONFIRMED）
+  CV-REQ names/types = OBSERVED / CONFIRMED（VR-1 PASS）
   conversions still 未確認
+  MAP-AS-009/010 / ENV still NOT PRESENT
   DTO / adapter code still HOLD
-  column provisioning still FORBIDDEN without separate GO（PX-HOLD + EG-HOLD）
+  additional column provisioning still FORBIDDEN without separate GO
 
 MUST NOT claim from this docs update alone:
   Implementation Start
   adapter / schema mapping code start
-  CONFIRMED app Internal Names
-  column creation GO
-  Execution GO
+  mapping-complete
+  Deploy / real data GO
 ```
 
 ## Next
@@ -136,13 +139,16 @@ MUST NOT claim from this docs update alone:
 MT-1 mapping-table docs update: delivered
 Thirtieth residual: CONSUMED
 Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
-  CV-REQ INTENDED 正本 = decision-assessment-snapshot-column-names-acceptance.md
-Next residual: NOT SELECTED
+  CV-REQ OBSERVED / CONFIRMED 正本 = decision-assessment-snapshot-column-names-acceptance.md
+  evidence = decision-assessment-snapshot-column-create-vr1-evidence.md
+AssessmentSnapshots Human Column Create: COMPLETE
+VR-1: PASS
+Next column-path residual: NOT SELECTED
+Active process residual:
+  Thirty-sixth — Issue Status Reconciliation Phase ②（#6 / #8）
 Candidates remain:
-  PX-1 / EG-1 column creation authorization + Execution GO
-  Choice option values / CV extension
-  Issue Status Reconciliation
+  CV extension（MAP-AS-009/010 / ENV）
+  conversion / mapping-complete determination（≠ impl start）
 Still HOLD:
-  Implementation Start / adapter impl / column creation / Deploy
-  INTENDED ≠ CONFIRMED until create + VR-1
+  Implementation Start / adapter impl / Deploy
 ```

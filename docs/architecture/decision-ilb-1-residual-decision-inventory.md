@@ -49,7 +49,11 @@ Thirty-second residual Decision: SELECTED / CONSUMED — NM-1 intended names（D
 Thirty-third residual Decision: SELECTED / CONSUMED — Choice options（Decision-AS-CHOICE-OPTIONS-1 Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1）
 Thirty-fourth residual Decision: SELECTED / CONSUMED — PX-1 authorization（Decision-AS-COLUMN-PX-1 Accepted / LOCKED / PX-1+XB-1+AP-1；EG-HOLD）
 Thirty-fifth residual Decision: SELECTED / CONSUMED — EG-1 Execution GO（Decision-AS-COLUMN-EG-1 Accepted / LOCKED / EG-1+XB-1+AP-1；Acceptance≠Human create）
-Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
+AssessmentSnapshots Human Column Create: COMPLETE（isogo + honmoku；CV-REQ 8 / 8）
+Column VR-1: PASS（INTENDED → OBSERVED / CONFIRMED）
+  evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
+Thirty-sixth residual Decision: SELECTED — Issue Status Reconciliation（Phase ② #6/#8 body resync）
+Issue Status Reconciliation: SELECTED（#6/#8 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -81,19 +85,23 @@ Observed existing environment: /sites/welfare + DailyActivityRecords（required 
 New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 observation CLOSED
 Concrete Site strings: LOCKED / OBSERVED / CONFIRMED（isogo / honmoku）
 List names: LOCKED / OBSERVED / CONFIRMED（SupportPlans / AssessmentSnapshots）
-Internal Column Names: CLOSED observation / DEFAULT_COLUMNS_ONLY / custom = 0
+Internal Column Names: CN-1 CLOSED observation / DEFAULT_COLUMNS_ONLY / custom = 0（baseline）
+AssessmentSnapshots Human Column Create: COMPLETE（post CN-1）
+CV-REQ Internal Names: OBSERVED / CONFIRMED（VR-1 PASS；8 / 8 both sites）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Site / List creation: COMPLETED（pilot Sites + Lists）
 Placeholder creation: FORBIDDEN
-SV-1 / LV-1: CONFIRMED（VR-1 PASS）
+SV-1 / LV-1: CONFIRMED（Site/List VR-1 PASS）
+Column VR-1: PASS
 Decision-AS-CN1-OBSERVATION-1: CLOSED / CONSUMED
   Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
-  Result: DEFAULT_COLUMNS_ONLY
-  Custom application columns: 0 / NOT PRESENT
+  Result: DEFAULT_COLUMNS_ONLY（baseline before Human Column Create）
+  Custom application columns at CN-1: 0 / NOT PRESENT
   Match-existing-app-Internal-Names premise: NOT APPLICABLE / INVALIDATED
   evidence: decision-assessment-snapshot-cn1-readonly-observation-evidence.md
   closure: decision-assessment-snapshot-cn1-closure-determination.md
+  post-create evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
   磯子=isogo → /sites/severe-support-isogo
   本牧=honmoku → /sites/severe-support-honmoku
@@ -164,14 +172,20 @@ Thirty-fifth residual: CONSUMED — EG-1 Execution GO
   acceptance: decision-assessment-snapshot-column-eg-acceptance.md
   IR: decision-assessment-snapshot-column-eg-independent-review.md（PASS）
   Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
-  Execution GO: GIVEN（Human process only）
+  Execution GO: GIVEN（Human process only；consumed）
   EG-1 Acceptance ≠ Human create
-Next residual: NOT SELECTED
-Issue Status Reconciliation: ASSESSED / independent next-unit candidate
+  AssessmentSnapshots Human Column Create: COMPLETE
+  Column VR-1: PASS
+  CV-REQ names / Choice: OBSERVED / CONFIRMED
+  evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
+Next column-path residual: NOT SELECTED
+Thirty-sixth residual: SELECTED — Issue Status Reconciliation Phase ②
+Issue Status Reconciliation: SELECTED
   assessment: issue-status-reconciliation-assessment.md
+  packet: issue-status-reconciliation-packet.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
 Implementation Start: HOLD
-SharePoint schema/list/column change: FORBIDDEN
+SharePoint schema/list/column change: FORBIDDEN without separate GO
 GitHub Issue mutation / 一括 Close / 一括本文更新: FORBIDDEN
 Deploy / real data: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
@@ -405,29 +419,29 @@ Order:
      packet: decision-assessment-snapshot-column-names-packet.md
      acceptance: decision-assessment-snapshot-column-names-acceptance.md
      Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
-     INTENDED ≠ CONFIRMED
-     column creation: FORBIDDEN（PX-HOLD+EG-HOLD）
+     INTENDED → OBSERVED / CONFIRMED（VR-1 PASS）
   33. Thirty-third residual: Choice options（CONSUMED）
      selection: decision-ilb-1-thirty-third-residual-choice-options-selection.md
      packet: decision-assessment-snapshot-choice-options-packet.md
      acceptance: decision-assessment-snapshot-choice-options-acceptance.md
      Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
-     INTENDED ≠ CONFIRMED
-     column creation: FORBIDDEN（PX-HOLD+EG-HOLD）
+     INTENDED → OBSERVED / CONFIRMED（VR-1 PASS）
   34. Thirty-fourth residual: PX-1 authorization（CONSUMED）
      selection: decision-ilb-1-thirty-fourth-residual-column-px-selection.md
      packet: decision-assessment-snapshot-column-px-packet.md
      acceptance: decision-assessment-snapshot-column-px-acceptance.md
      Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
-     EG-HOLD: MAINTAINED（until COLUMN-EG-1）
-     column creation: FORBIDDEN（until EG-1+Human create）
+     authorization consumed by Human create
   35. Thirty-fifth residual: EG-1 Execution GO（CONSUMED）
      selection: decision-ilb-1-thirty-fifth-residual-column-eg-selection.md
      packet: decision-assessment-snapshot-column-eg-packet.md
      acceptance: decision-assessment-snapshot-column-eg-acceptance.md
      Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
-     Execution GO: GIVEN（Human process only）
+     Execution GO: GIVEN（Human process only；consumed）
      EG-1 Acceptance ≠ Human create
+     AssessmentSnapshots Human Column Create: COMPLETE
+     Column VR-1: PASS
+     evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
      Agent mutation: FORBIDDEN；Implementation/adapter: HOLD
   36. Thirty-sixth residual: Issue Status Reconciliation（SELECTED）
      selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
@@ -519,29 +533,37 @@ Thirty-fourth residual: CONSUMED — PX-1 authorization
   packet: decision-assessment-snapshot-column-eg-packet.md
   acceptance: decision-assessment-snapshot-column-eg-acceptance.md
   Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
-  Execution GO: GIVEN（Human process only）
+  Execution GO: GIVEN（Human process only；consumed）
   EG-1 Acceptance ≠ Human create
+  AssessmentSnapshots Human Column Create: COMPLETE
+  Column VR-1: PASS
+  Isogo / Honmoku: OBSERVED / CONFIRMED
+  CV-REQ 8 + Choice mappings: OBSERVED / CONFIRMED
+  SharePoint mutation by Agent: 0
+  evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
   36. Thirty-sixth residual: Issue Status Reconciliation（SELECTED）
      selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
      packet: issue-status-reconciliation-packet.md
      assessment: issue-status-reconciliation-assessment.md
      Phase ① Close candidates: #5 / #10 / #11 — **DONE**（CLOSED；①b PASS）
-     Phase ② resync: #6 / #8（KEEP OPEN）— **READY / NOT STARTED**
+     Phase ② resync: #6 / #8（KEEP OPEN）— **READY / NOT STARTED**（active next process gate）
      Phase ③ continuity: #4 / #9 / #12 / #15〜#19（no batch Close）
      Phase ④ backlog keep: #20以降 / UI系
      Agent GitHub Issue mutation: FORBIDDEN
      Human Issue Close / body patch: Phase ① DONE；Phase ② AUTHORIZED / NOT STARTED
-Next residual after thirty-sixth process unit: NOT SELECTED（column Human create remains parallel）
-Issue Status Reconciliation: SELECTED（thirty-sixth）
+Next column-path residual: NOT SELECTED
+  candidates: CV extension（MAP-AS-009/010 / ENV）；conversion / mapping-complete determination
+Issue Status Reconciliation: SELECTED（thirty-sixth；next substantive process gate = Phase ②）
   assessment: issue-status-reconciliation-assessment.md
   packet: issue-status-reconciliation-packet.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
 Implementation Start: HOLD
-SharePoint schema/list/column change: FORBIDDEN
+SharePoint schema/list/column change: FORBIDDEN without separate GO
 GitHub Issue mutation by Agent / 一括 Close / 一括本文更新: FORBIDDEN
 Human Phase ①〜② Issue Close / body patch: AUTHORIZED under Reconciliation packet
 Deploy / real data: NO-GO
 List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED
+CV-REQ AssessmentSnapshots columns: HUMAN-PROVIDED / OBSERVED / CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
