@@ -122,19 +122,19 @@ MT-1 から既知の logical facts だけを並べる。
 
 | Mapping ID | Logical Field | Logical Type（MT-1） | Required | Agent notes（比較用） | Display / Internal / Type |
 |---|---|---|---|---|---|
-| MAP-AS-001 | snapshotId | string | 必須 | single scalar id slot | NOT SELECTED |
-| MAP-AS-002 | recordStatus | enum `draft`\|`finalized` | 必須 | enum 表現は Human 明示（Choice / Text 等） | NOT SELECTED |
-| MAP-AS-003 | result | enum `NO_FINDINGS`\|`FINDINGS_PRESENT`\|`NOT_APPLICABLE` | 必須 | enum 表現は Human 明示 | NOT SELECTED |
-| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | 配列物理表現は Human 明示（multi / JSON / 複数列） | NOT SELECTED |
-| MAP-AS-005 | ruleSetVersion | string | 必須 | version string slot | NOT SELECTED |
-| MAP-AS-006 | periodStart | ISO date | 必須 | date/datetime 表現は Human 明示 | NOT SELECTED |
-| MAP-AS-007 | periodEnd | ISO date | 必須 | date/datetime 表現は Human 明示 | NOT SELECTED |
-| MAP-AS-008 | inputFingerprint | string | 必須 | fingerprint string slot | NOT SELECTED |
-| MAP-AS-009 | findingIds | readonly string[]? | 任意 | 配列物理表現は Human 明示 | NOT SELECTED |
-| MAP-AS-010 | supersedesSnapshotId | string? | 任意 | optional id slot | NOT SELECTED |
-| MAP-AS-ENV-001 | schemaId（DTO envelope） | string | DTO必須予定 | DTO envelope；CV 範囲は Human | NOT SELECTED |
-| MAP-AS-ENV-002 | schemaVersion（DTO envelope） | `1.0.0` | DTO必須予定 | DTO envelope；CV 範囲は Human | NOT SELECTED |
-| MAP-AS-ENV-003 | dtoVersion（DTO envelope） | `1.0.0` | DTO必須予定 | DTO envelope；CV 範囲は Human | NOT SELECTED |
+| MAP-AS-001 | snapshotId | string | 必須 | single scalar id slot | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-002 | recordStatus | enum `draft`\|`finalized` | 必須 | enum 表現は Human 明示（Choice / Text 等） | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-003 | result | enum `NO_FINDINGS`\|`FINDINGS_PRESENT`\|`NOT_APPLICABLE` | 必須 | enum 表現は Human 明示 | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | 配列物理表現は Human 明示（multi / JSON / 複数列） | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-005 | ruleSetVersion | string | 必須 | version string slot | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-006 | periodStart | ISO date | 必須 | date/datetime 表現は Human 明示 | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-007 | periodEnd | ISO date | 必須 | date/datetime 表現は Human 明示 | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-008 | inputFingerprint | string | 必須 | fingerprint string slot | Display+Type Human PARTIAL；Internal NOT SELECTED |
+| MAP-AS-009 | findingIds | readonly string[]? | 任意 | 配列物理表現は Human 明示 | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-010 | supersedesSnapshotId | string? | 任意 | optional id slot | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-ENV-001 | schemaId（DTO envelope） | string | DTO必須予定 | DTO envelope；CV 範囲は Human | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-ENV-002 | schemaVersion（DTO envelope） | `1.0.0` | DTO必須予定 | DTO envelope；CV 範囲は Human | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-ENV-003 | dtoVersion（DTO envelope） | `1.0.0` | DTO必須予定 | DTO envelope；CV 範囲は Human | OUT OF THIS FILL（CV-REQ） |
 
 ```text
 候補整理 rules:
