@@ -24,7 +24,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Result class | **DEFAULT_COLUMNS_ONLY** |
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
-| Thirtieth residual | **CONSUMED**（MT-1 mapping-table docs update） |
+| Thirty-first residual | **SELECTED / OPEN**（column provisioning） |
+| Decision-AS-COLUMN-PROVISION-1 | OPEN / NOT ACCEPTED |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data | NO-GO |
@@ -38,12 +39,14 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 | Order | Residual | Why next |
 |---|---|---|
-| — | NOT SELECTED | SCHEMA-MAPPING-NEXT-1 Acceptance は次 residual を選定しない |
-| candidates | MT-1 mapping-table docs update / Column provisioning Decision / Issue Status Reconciliation | separate units；auto-start FORBIDDEN |
+| 1 | Decision-AS-COLUMN-PROVISION-1 | CP-1 separate；custom columns = 0 |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active acceptance:
-  Decision-AS-SCHEMA-MAPPING-NEXT-1 = MT-1 + IN-A + CP-1 + XB-1
+Active next:
+  Decision-AS-COLUMN-PROVISION-1 OPEN / NOT ACCEPTED
+  selection: decision-ilb-1-thirty-first-residual-column-provision-selection.md
+  packet: decision-assessment-snapshot-column-provision-packet.md
   MT-1 table: assessment-snapshot-sharepoint-mapping.md（UPDATED / NOT mapping-complete）
   next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
 

@@ -62,7 +62,9 @@ Twenty-ninth residual: CONSUMED
   IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
 Next gate detail:
   decision-assessment-snapshot-schema-mapping-next-next-gate.md
-  Next residual: NOT SELECTED
+  Thirty-first residual: SELECTED / OPEN
+  Decision-AS-COLUMN-PROVISION-1: OPEN / NOT ACCEPTED
+  packet: decision-assessment-snapshot-column-provision-packet.md
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:
