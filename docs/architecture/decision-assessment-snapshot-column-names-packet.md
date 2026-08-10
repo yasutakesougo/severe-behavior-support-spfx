@@ -35,8 +35,15 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-COLUMN-NAMES-1
 Kind: Human Decision packet（compare → Acceptance）
 Status: OPEN / NOT ACCEPTED
-Human Decision: NOT YET
-Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
+Human Decision: PARTIAL FILL（CV-REQ Display Name + Column Type）；Internal Name NOT YET
+Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
+
+Human evidence recorded（verbatim；INTENDED only）:
+  Coverage direction = CV-REQ（MAP-AS-001〜008）
+  Display Name = filled for CV-REQ
+  Column Type = filled for CV-REQ
+  Internal Name = NOT FILLED（Agent invention FORBIDDEN）
+  MAP-AS-009/010 / ENV-001〜003 = OUT OF THIS FILL（CV-REQ）
 
 Locked basis:
   COLUMN-PROVISION-1 = NM-HOLD + SC-AS + PX-HOLD + EG-HOLD + VR-1 + FG-1 + XB-1 + AP-1
@@ -45,7 +52,7 @@ Locked basis:
   Agent Internal Name invention = FORBIDDEN
   INTENDED ≠ OBSERVED / CONFIRMED（CN-1 / VR-1）
 
-Current boundary（unchanged by opening this packet）:
+Current boundary（unchanged by this partial fill）:
   SharePoint column creation = FORBIDDEN
   Execution GO = NOT GIVEN（EG-HOLD）
   Implementation Start = HOLD
@@ -96,10 +103,10 @@ Agent は concrete 値を発明・自動採択しない。
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **CV-REQ** | 必須 logical fields（MAP-AS-001〜008）の intended names を埋める | OPEN candidate |
-| CV-ALL | 必須 + 任意 + DTO envelope（MAP-AS-001〜010 + ENV-001〜003）を埋める | OPEN candidate |
-| CV-HOLD | coverage 未決定 | OPEN candidate |
-| CV-X | Human 明示 | OPEN candidate |
+| **CV-REQ** | 必須 logical fields（MAP-AS-001〜008）の intended names を埋める | **Human direction recorded**（Display/Type partial；Internal Name pending） |
+| CV-ALL | 必須 + 任意 + DTO envelope（MAP-AS-001〜010 + ENV-001〜003）を埋める | NOT SELECTED for this fill |
+| CV-HOLD | coverage 未決定 | NOT SELECTED |
+| CV-X | Human 明示 | NOT SELECTED |
 
 ```text
 MAP-AS-SYS-001 Title:
@@ -138,47 +145,53 @@ MT-1 から既知の logical facts だけを並べる。
   INTENDED ≠ OBSERVED / CONFIRMED
 ```
 
-## 4. Human fill table（empty until Human evidence）
+## 4. Human fill table（Human evidence；Internal Name still open）
 
 証跡列順 = Mapping ID → Logical Field → Display Name → Internal Name → Column Type → Status
 
-Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-honmoku`
+Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-honmoku`  
+Coverage for this fill: **CV-REQ**（MAP-AS-001〜008）
 
 | Mapping ID | Logical Field | Display Name | Internal Name | Column Type | Status |
 |---|---|---|---|---|---|
-| MAP-AS-001 | snapshotId | — | — | — | NOT FILLED |
-| MAP-AS-002 | recordStatus | — | — | — | NOT FILLED |
-| MAP-AS-003 | result | — | — | — | NOT FILLED |
-| MAP-AS-004 | reasonCodes | — | — | — | NOT FILLED |
-| MAP-AS-005 | ruleSetVersion | — | — | — | NOT FILLED |
-| MAP-AS-006 | periodStart | — | — | — | NOT FILLED |
-| MAP-AS-007 | periodEnd | — | — | — | NOT FILLED |
-| MAP-AS-008 | inputFingerprint | — | — | — | NOT FILLED |
-| MAP-AS-009 | findingIds | — | — | — | NOT FILLED（optional） |
-| MAP-AS-010 | supersedesSnapshotId | — | — | — | NOT FILLED（optional） |
-| MAP-AS-ENV-001 | schemaId（DTO envelope） | — | — | — | NOT FILLED（optional / DTO） |
-| MAP-AS-ENV-002 | schemaVersion（DTO envelope） | — | — | — | NOT FILLED（optional / DTO） |
-| MAP-AS-ENV-003 | dtoVersion（DTO envelope） | — | — | — | NOT FILLED（optional / DTO） |
+| MAP-AS-001 | snapshotId | スナップショットID | — | 1行テキスト | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-002 | recordStatus | 記録状態 | — | 選択肢 | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-003 | result | 判定結果 | — | 選択肢 | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-004 | reasonCodes | 理由コード | — | 複数行テキスト（JSON） | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-005 | ruleSetVersion | ルールセットバージョン | — | 1行テキスト | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-006 | periodStart | 対象期間開始日 | — | 日付のみ | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-007 | periodEnd | 対象期間終了日 | — | 日付のみ | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-008 | inputFingerprint | 入力フィンガープリント | — | 1行テキスト | PARTIAL / INTENDED（Internal Name NOT FILLED） |
+| MAP-AS-009 | findingIds | — | — | — | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-010 | supersedesSnapshotId | — | — | — | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-ENV-001 | schemaId（DTO envelope） | — | — | — | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-ENV-002 | schemaVersion（DTO envelope） | — | — | — | OUT OF THIS FILL（CV-REQ） |
+| MAP-AS-ENV-003 | dtoVersion（DTO envelope） | — | — | — | OUT OF THIS FILL（CV-REQ） |
 
 ```text
-Fill rules:
-  Human provides values verbatim
-  Agent does not invent or romanize from Japanese Display Names
-  Status after Human fill = HUMAN-PROVIDED / INTENDED only
-  After create + VR-1 CN-1 re-observation → may become CONFIRMED
-  reasonCodes / findingIds physical representation must be Human-explicit
-    （multi / JSON / multiple columns — do not guess）
+Fill evidence note:
+  Source = Human message（CV-REQ + Display Names + Column Types）
+  Values above = HUMAN-PROVIDED / INTENDED only
+  ≠ OBSERVED / CONFIRMED
+  Internal Name still NOT FILLED for all CV-REQ rows
+  Agent must not invent / romanize / auto-adopt Internal Names
+  Choice option values（recordStatus / result）not yet Human-listed in this fill
+  reasonCodes physical representation = 複数行テキスト（JSON） per Human
+  NM-1 Acceptance still blocked until Internal Names filled（or Human declines NM-1）
 ```
 
 ## 5. Agent recommendation（比較用；Acceptance ではない）
 
 ```text
 Agent recommendation:
-  Await Human fill；候補整理のみ；do not invent rows
-  If Human is ready to name now: NM-1 + CV-REQ（or CV-ALL）+ XB-1
-  If Human is not ready: NM-HOLD + XB-1（remain deferred）
+  Recorded Human CV-REQ Display Name + Column Type verbatim
+  Do not invent Internal Names from Display Names or Logical Field names
+  Next Human step for NM-1 close:
+    provide intended Internal Name for MAP-AS-001〜008
+    optionally confirm Choice option values for recordStatus / result
+  Until then: packet remains OPEN / NOT ACCEPTED
 
-NOT Human Acceptance evidence.
+NOT Human Acceptance evidence for full NM-1.
 NOT column creation GO.
 NOT Execution GO.
 NOT Implementation Start.
@@ -187,7 +200,7 @@ NOT Implementation Start.
 ## 6. Explicit non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
+This OPEN packet / partial fill does NOT authorize:
   Internal Name invention / auto-adoption by Agent
   SharePoint column create / rename / delete
   treating INTENDED as OBSERVED / CONFIRMED
@@ -204,15 +217,18 @@ This OPEN packet does NOT authorize:
 
 ```text
 Decision-AS-COLUMN-NAMES-1: OPEN / NOT ACCEPTED
-Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
-Awaiting: Human Decision + filled intended names table
-  or NM-HOLD continue
-NM-1 closes only when Human adopts concrete names
-Until Accepted with Human values（NM-1）:
+Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
+Recorded: CV-REQ Display Name + Column Type（PARTIAL / INTENDED）
+Awaiting: Human intended Internal Name for MAP-AS-001〜008
+  （optional: Choice option values for recordStatus / result）
+NM-1 closes only when Human completes required name triad for CV-REQ
+  （Display Name + Internal Name + Column Type）
+Until Accepted with Human Internal Names（NM-1）:
   SharePoint column creation = FORBIDDEN
   Execution GO = NOT GIVEN
   Implementation Start = HOLD
   adapter impl = HOLD
+  SharePoint touch = NOT REQUIRED yet
 After NM-1 Accepted（separate later units still required）:
   PX-1 / EG-1 Decision or reopen path
   then Human create

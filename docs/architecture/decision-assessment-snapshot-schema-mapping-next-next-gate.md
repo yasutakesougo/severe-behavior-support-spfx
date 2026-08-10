@@ -15,10 +15,10 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 |---|---|
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1 |
 | Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1 |
-| Decision-AS-COLUMN-NAMES-1 | **OPEN / NOT ACCEPTED** |
+| Decision-AS-COLUMN-NAMES-1 | **OPEN / NOT ACCEPTED**（PARTIAL：CV-REQ Display+Type） |
 | Twenty-ninth / thirtieth / thirty-first | CONSUMED |
 | Thirty-second residual | **SELECTED / OPEN** |
-| Stop point | `HUMAN_AS_COLUMN_INTENDED_NAMES_FILL` |
+| Stop point | `HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL` |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Custom application columns | 0 / NOT PRESENT |
 | Intended Internal Names | awaiting Human fill |
@@ -39,7 +39,7 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 
 ```text
 Next substantive residual: Decision-AS-COLUMN-NAMES-1
-Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
+Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
 Agent invents no Internal Names
 column creation remains FORBIDDEN（PX-HOLD+EG-HOLD）
 ```

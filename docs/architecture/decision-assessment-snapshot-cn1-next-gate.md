@@ -25,7 +25,7 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
 | Thirty-second residual | **SELECTED / OPEN**（NM-1 intended names path） |
-| Decision-AS-COLUMN-NAMES-1 | OPEN / NOT ACCEPTED |
+| Decision-AS-COLUMN-NAMES-1 | OPEN / NOT ACCEPTED（PARTIAL：CV-REQ Display+Type） |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data | NO-GO |
@@ -44,10 +44,10 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 ```text
 Active next:
-  Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED
+  Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED（PARTIAL：CV-REQ Display+Type）
   selection: decision-ilb-1-thirty-second-residual-column-names-selection.md
   packet: decision-assessment-snapshot-column-names-packet.md
-  Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
+  Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
 
 Still HOLD / FORBIDDEN:

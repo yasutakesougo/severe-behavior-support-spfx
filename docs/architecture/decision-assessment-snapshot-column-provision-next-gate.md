@@ -15,10 +15,12 @@ Selection: [`decision-ilb-1-thirty-second-residual-column-names-selection.md`](.
 | Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1 |
 | Thirty-first residual | CONSUMED |
 | Thirty-second residual | **SELECTED / OPEN**（NM-1 intended names path） |
-| Decision-AS-COLUMN-NAMES-1 | **OPEN / NOT ACCEPTED** |
-| Stop point | `HUMAN_AS_COLUMN_INTENDED_NAMES_FILL` |
+| Decision-AS-COLUMN-NAMES-1 | **OPEN / NOT ACCEPTED**（PARTIAL fill） |
+| Stop point | `HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL` |
 | Scope | AssessmentSnapshots（isogo + honmoku）only |
-| Intended Internal Names | NOT ADOPTED / awaiting Human fill |
+| Coverage direction | CV-REQ（MAP-AS-001〜008）Human-recorded |
+| Display Name / Column Type（CV-REQ） | HUMAN-PROVIDED / INTENDED（partial） |
+| Intended Internal Names | NOT FILLED（awaiting Human） |
 | SharePoint column creation | **FORBIDDEN**（PX-HOLD + EG-HOLD） |
 | Execution GO | NOT GIVEN（EG-HOLD） |
 | Implementation Start | HOLD |
@@ -38,14 +40,16 @@ Selection: [`decision-ilb-1-thirty-second-residual-column-names-selection.md`](.
 
 ```text
 Active next:
-  Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED
+  Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED（PARTIAL）
   packet: decision-assessment-snapshot-column-names-packet.md
-  Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
-  Agent invents no Internal Names
-  empty fill table awaiting Human values
+  Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
+  CV-REQ Display Name + Column Type = HUMAN-PROVIDED / INTENDED
+  Internal Name = NOT FILLED（Agent invents none）
+  SharePoint touch = NOT REQUIRED yet
 
 Still FORBIDDEN / HOLD:
   column creation = FORBIDDEN
+  Execution GO = NOT GIVEN
   Implementation Start = HOLD
   adapter code = HOLD
   Agent mutation = FORBIDDEN
@@ -55,7 +59,7 @@ Still FORBIDDEN / HOLD:
 
 ## 3. Explicit non-claims
 
-- Opening COLUMN-NAMES-1 does **not** Accept concrete intended names.
-- Packet OPEN does **not** authorize column creation or Agent mutation.
+- Opening COLUMN-NAMES-1 / partial Display+Type fill does **not** Accept NM-1.
+- Partial fill does **not** authorize column creation, Execution GO, or Agent mutation.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.
