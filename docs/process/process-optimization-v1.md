@@ -2,9 +2,10 @@
 
 - 文書: `docs/process/process-optimization-v1.md`
 - Unit: **PROCESS-OPT-V1**
-- 位置づけ: Process Optimization v1 の **方針正本（proposal / design SoT）**
-- 状態: **PROPOSED / READY_FOR_HUMAN_DECISION**（Accepted / LOCKED **ではない**）
-- 入力: PR #195–#201 Current State；DEC-AA-001 / DEC-AA-003；Routine AUG v1；本 unit の Agent Instruction
+- 位置づけ: Process Optimization v1 の **方針正本（Human Acceptance 記録）**
+- 状態: **ACCEPTED / LOCKED**
+- Human Decision: **Option POV1-A — ACCEPTED / LOCKED**（2026-08-10）
+- 入力: PR #195–#201 Current State；DEC-AA-001 / DEC-AA-003；Routine AUG v1；PROCESS-OPT-V1 proposal IR PASS；Human Acceptance
 - 上位正本（緩和・上書きしない）:
   - `docs/decisions/DEC-AI-ORG-003.md`
   - `docs/decisions/DEC-AA-001.md`（Auto-Approval Policy v1 / Option A）
@@ -17,6 +18,40 @@
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](./self-referential-gate-policy.md)）。
 
+## Human Acceptance（固定結論）
+
+```text
+PROCESS-OPT-V1
+Option POV1-A
+Decision:
+ACCEPTED / LOCKED
+Risk model:
+LOW / MEDIUM / HIGH — ACCEPTED
+LOW auto-loop:
+DEFINED / NOT ENABLED
+Human Merge:
+HUMAN-ONLY
+Permission expansion:
+NONE
+SharePoint / M365:
+UNCHANGED / FORBIDDEN
+P2:
+5 OPEN / carry-forward
+Authorization effect:
+NONE
+Next:
+Acceptance の正本記録。
+その後、LOW Start / Ready / next-slice 自動化を有効化するかは別 Human Decision。
+```
+
+```text
+Agent recommendation / Independent Review: NOT Human Acceptance evidence
+This document records the Human Decision only.
+PROCESS-OPT-V1 Accepted ≠ auto-progress enabled
+PROCESS-OPT-V1 Accepted ≠ Implementation Start
+PROCESS-OPT-V1 Accepted ≠ Ready / Merge authorization change
+```
+
 ## 目的
 
 Accepted / LOCKED 済みの **低リスク実装**について、将来 Human 停止を減らすための
@@ -24,21 +59,23 @@ risk classification・LOW auto-loop・Stop Conditions・Human Gate 整理・batc
 Human-facing 3 状態を **正本として定義**する。
 
 ```text
-今回の目的 = 方針の docs-only 正本化 + Independent Review
-今回の目的 ≠ 実装開始
-今回の目的 ≠ permission expansion
-今回の目的 ≠ DEC-AA-001 / DEC-AA-003 semantic change
+本 Acceptance の効力 = 設計（risk model / LOW auto-loop 定義）の採択
+本 Acceptance の非効力 = 自動進行の開始 / permission expansion
+本 Acceptance ≠ 実装開始
+本 Acceptance ≠ DEC-AA-001 / DEC-AA-003 semantic change
 ```
 
 ## 非効力（厳守）
 
 ```text
-Policy proposal ≠ authorization change
+Policy Accepted ≠ authorization change
 Accepted docs ≠ AUTO permission expansion
-PROCESS-OPT-V1 PROPOSED ≠ Implementation Start
-PROCESS-OPT-V1 PROPOSED ≠ AUTO_APPROVAL / AUTO_UNTIL_GATE semantic rewrite
-PROCESS-OPT-V1 PROPOSED ≠ Ready / Merge authorization change
+PROCESS-OPT-V1 ACCEPTED ≠ Implementation Start
+PROCESS-OPT-V1 ACCEPTED ≠ AUTO_APPROVAL / AUTO_UNTIL_GATE semantic rewrite
+PROCESS-OPT-V1 ACCEPTED ≠ Ready / Merge authorization change
+PROCESS-OPT-V1 ACCEPTED ≠ LOW Start / Ready / next-slice auto enablement
 Independent Review PASS ≠ Human Acceptance
+Authorization effect: NONE
 ```
 
 本 unit は次を **認可しない・変更しない**:
@@ -172,10 +209,10 @@ HIGH 要素が混入した slice は LOW として扱わない
 batch 内に HIGH 要素を隠さない
 ```
 
-## LOW auto-loop（提案モデル — NOT ENABLED）
+## LOW auto-loop（ACCEPTED 定義 — NOT ENABLED）
 
 将来 Human が別 Decision / Explicit GO で有効化した場合のみ対象。
-**本 unit では定義のみ。実効権限は付与しない。**
+**本 Acceptance は定義のみを採択する。実効権限は付与しない。**
 
 ```text
 Accepted / LOCKED authority
@@ -215,7 +252,7 @@ PASS
 
 ```text
 現行 Routine AUG: next slice selection = HUMAN-ONLY
-本提案の next-slice auto-advance = FUTURE CANDIDATE only
+本 Acceptance の next-slice auto-advance = FUTURE CANDIDATE only / NOT ENABLED
 有効化には別 Human Decision が必要（DEC-AA / Routine AUG 改訂または下位 enable DEC）
 ```
 
@@ -246,9 +283,9 @@ next candidate ambiguity
 UNKNOWN → HOLD
 ```
 
-## Human Gate 整理（提案 — 権限は拡張しない）
+## Human Gate 整理（ACCEPTED 候補 — 権限は拡張しない）
 
-目標モデル（**候補**）:
+目標モデル（**候補 / NOT ENABLED**）:
 
 | Gate | 現行 | PROCESS-OPT-V1 候補 |
 |---|---|---|
@@ -381,19 +418,23 @@ project-wide Implementation Start
 | POV1-C4 | DEC-AA kill-switch text vs Routine AUG operational ENABLED | 本 unit は触れない | **RECORDED ONLY**（既存 P2 系と併記） |
 | POV1-C5 | Merge HUMAN-ONLY | Merge HUMAN-ONLY | **NO CONFLICT** — 維持 |
 
-## OPEN P2 carry-forward（解消しない）
+## OPEN P2（解消しない）
 
 ```text
+POV1-P2-1: OPEN — Routine AUG next-slice HUMAN-ONLY vs LOW next-slice auto-advance candidate
+POV1-P2-2: OPEN — Routine AUG / AA Start+Ready HUMAN-ONLY vs LOW Start/Ready auto candidates
 AA3-P2-1: OPEN — DEC-AI-ORG-003 vs AA-3 v1 path priority
 AA3-P2-2: OPEN — background-agent-contract verification vs Start wording
 AA3-P2-3: OPEN — development-process vs DEC-AI-ORG-003 M365 wording
 ```
 
+Acceptance はこれら 5 件を閉じない・降格しない・黙って書き換えない。
+
 ## 次工程（Human only）
 
-1. 本 docs-only recording の Independent Review / Draft PR 境界（本 unit）
-2. Human Decision: PROCESS-OPT-V1 を Accepted とするか / 改訂するか / 却下するか
-3. Accepted 後も、LOW auto-loop / Start / Ready 候補の **実効 enable は別 Explicit GO**
+1. 本 Acceptance recording の Independent Review / HEAD 一致確認（本 unit）
+2. PR #202 の Ready / Merge 判断（別 Human Gate；本 Acceptance ≠ Ready/Merge GO）
+3. LOW Start / Ready / next-slice 自動化の **実効 enable は別 Explicit GO**
 4. DEC-AA / Routine AUG 改訂が必要なら別 unit（本 unit では行わない）
 
 ## Independent Review

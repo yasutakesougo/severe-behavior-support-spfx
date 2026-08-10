@@ -8,12 +8,14 @@ Canonical process SoT: [`../process/process-optimization-v1.md`](../process/proc
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: PROCESS-OPT-V1
-Kind: docs-only process design / proposal canonicalization
-Status: PROPOSED / READY_FOR_HUMAN_DECISION
-Accepted / LOCKED: NO
+Kind: docs-only process design / Human Acceptance recording
+Status: ACCEPTED / LOCKED
+Human Decision: Option POV1-A — ACCEPTED / LOCKED（2026-08-10）
 Implementation Start: NOT AUTHORIZED
 Permission expansion: NONE
+Authorization effect: NONE
 SharePoint / M365: UNCHANGED / FORBIDDEN
+LOW auto-loop: DEFINED / NOT ENABLED
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -39,10 +41,11 @@ Recent main 上で次が揃った:
 - それでも **per-slice Human Implementation Start** と **Human next-slice selection** が毎回必要
 - Process Optimization v1 は、この Human 停止を将来減らすための **分類と候補モデル** を正本化する
 
-## Selected option
+## Selected option（Human Accepted）
 
 ```text
 Option POV1-A — Define risk model + LOW auto-loop proposal without enabling it
+Decision: ACCEPTED / LOCKED
 ```
 
 不採用（本 unit）:
@@ -55,7 +58,7 @@ Option POV1-A — Define risk model + LOW auto-loop proposal without enabling it
 
 ## Fixed design summary
 
-1. Risk classes: **LOW / MEDIUM / HIGH**
+1. Risk classes: **LOW / MEDIUM / HIGH — ACCEPTED**
 2. LOW auto-loop: **DEFINED / NOT ENABLED**
 3. Stop Conditions: explicit list + `UNKNOWN → HOLD`
 4. Human Gate candidates: Start / Ready 自動化候補、Merge = HUMAN-ONLY
@@ -70,13 +73,13 @@ Option POV1-A — Define risk model + LOW auto-loop proposal without enabling it
 | DEC-AA-001 | AUTO 分類上位。semantic change しない |
 | DEC-AA-003 | AUG loop 上位。semantic change しない |
 | Routine AUG v1 | 現行標準運用。上書きしない。衝突は CONFLICT NOTE |
-| PROCESS-OPT-V1 | 下位 proposal。Accepted 後も enable は別 GO |
+| PROCESS-OPT-V1 | Accepted 設計正本。enable は別 GO |
 
 ## Deliverables（本 unit）
 
 | File | Role |
 |---|---|
-| `docs/process/process-optimization-v1.md` | process SoT |
+| `docs/process/process-optimization-v1.md` | process SoT（ACCEPTED / LOCKED） |
 | `docs/architecture/decision-process-optimization-v1-selection.md` | 本 selection packet |
 | `docs/architecture/decision-process-optimization-v1-independent-review.md` | Independent Review |
 | `docs/process/ai-governance.md` | 最小参照追加のみ |
@@ -87,25 +90,23 @@ Option POV1-A — Define risk model + LOW auto-loop proposal without enabling it
 application / domain / test code
 SharePoint / M365 / Entra / Deploy
 Issue mutation
-Ready / Merge
+Ready / Merge authorization by this Acceptance
 DEC-AA-001 / DEC-AA-003 rewrite
 Routine AUG overwrite
 AUTO permission expansion
 project-wide Implementation Start
+LOW Start / Ready / next-slice enablement
 ```
 
-## Human Decision requested
-
-Human に求める判断は次のみ:
+## Human Decision recorded
 
 ```text
-PROCESS-OPT-V1 Option POV1-A を
-  Accepted / LOCKED とするか
-  改訂指示とするか
-  却下するか
+PROCESS-OPT-V1 Option POV1-A
+ACCEPTED / LOCKED
+Authorization effect: NONE
 ```
 
-Accepted となっても、次は **自動では有効化されない**:
+Accepted でも、次は **自動では有効化されない**:
 
 ```text
 LOW Implementation Start auto-allow
@@ -122,5 +123,6 @@ next LOW slice auto-advance
 - Stop Conditions と `UNKNOWN → HOLD` が明文化されている
 - Human Gate 候補と現行 HUMAN-ONLY の差が CONFLICT NOTE として残っている
 - Merge = HUMAN-ONLY、SharePoint/M365 UNCHANGED、permission expansion NONE
+- Human Acceptance が Option POV1-A / ACCEPTED / LOCKED として正本化されている
 - Independent Review が P0=0 / P1=0（P2 は記録可）
 - mechanical verification（docs-only 適用分）PASS
