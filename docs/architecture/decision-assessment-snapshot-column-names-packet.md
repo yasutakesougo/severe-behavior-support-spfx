@@ -4,6 +4,22 @@
 **AssessmentSnapshots 向け intended Display Name / Internal Name / Column Type**
 についての比較用 Human Decision Packet である。
 
+```text
+Packet purpose:
+  AssessmentSnapshots の各 logical field について、
+  Human が Display Name / intended Internal Name / Column Type を
+  明示採択するための比較材料を出す。
+
+Agent role:
+  候補整理のみ
+  Internal Name の発明・自動採択 = FORBIDDEN
+  Display Name / Column Type の自動採択 = FORBIDDEN
+
+Closing rule:
+  次の Human 判断で具体的な名前を採択して初めて NM-1 を閉じられる
+  packet OPEN alone ≠ NM-1 closed
+```
+
 Selected via:
 [`decision-ilb-1-thirty-second-residual-column-names-selection.md`](./decision-ilb-1-thirty-second-residual-column-names-selection.md)
 
@@ -27,10 +43,11 @@ Locked basis:
   Scope = AssessmentSnapshots（isogo + honmoku）only
   PX-HOLD / EG-HOLD remain unless separately changed later
   Agent Internal Name invention = FORBIDDEN
-  INTENDED ≠ CONFIRMED（CN-1 / VR-1）
+  INTENDED ≠ OBSERVED / CONFIRMED（CN-1 / VR-1）
 
 Current boundary（unchanged by opening this packet）:
   SharePoint column creation = FORBIDDEN
+  Execution GO = NOT GIVEN（EG-HOLD）
   Implementation Start = HOLD
   adapter / schema mapping implementation = HOLD
   Agent SharePoint mutation = FORBIDDEN
@@ -50,9 +67,10 @@ Human は intended Display Name / Internal Name / Column Type を
 採択値の状態 = HUMAN-PROVIDED / INTENDED
 ≠ OBSERVED / CONFIRMED
 ≠ column creation GO
+≠ Execution GO
 ≠ Implementation Start
 
-Agent は concrete 値を発明しない。
+Agent は concrete 値を発明・自動採択しない。
 空欄のまま Acceptance しない（NM-1 を採るなら Human が埋める）。
 ```
 
@@ -90,7 +108,37 @@ MAP-AS-SYS-001 Title:
   Do not redefine Title as AssessmentSnapshot logical field
 ```
 
-## 3. Human fill table（empty until Human evidence）
+## 3. Agent 候補整理（比較材料のみ；採択ではない）
+
+MT-1 から既知の logical facts だけを並べる。
+ここにあるのは **判断材料** であり、Display Name / Internal Name / Column Type の採択ではない。
+
+| Mapping ID | Logical Field | Logical Type（MT-1） | Required | Agent notes（比較用） | Display / Internal / Type |
+|---|---|---|---|---|---|
+| MAP-AS-001 | snapshotId | string | 必須 | single scalar id slot | NOT SELECTED |
+| MAP-AS-002 | recordStatus | enum `draft`\|`finalized` | 必須 | enum 表現は Human 明示（Choice / Text 等） | NOT SELECTED |
+| MAP-AS-003 | result | enum `NO_FINDINGS`\|`FINDINGS_PRESENT`\|`NOT_APPLICABLE` | 必須 | enum 表現は Human 明示 | NOT SELECTED |
+| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | 配列物理表現は Human 明示（multi / JSON / 複数列） | NOT SELECTED |
+| MAP-AS-005 | ruleSetVersion | string | 必須 | version string slot | NOT SELECTED |
+| MAP-AS-006 | periodStart | ISO date | 必須 | date/datetime 表現は Human 明示 | NOT SELECTED |
+| MAP-AS-007 | periodEnd | ISO date | 必須 | date/datetime 表現は Human 明示 | NOT SELECTED |
+| MAP-AS-008 | inputFingerprint | string | 必須 | fingerprint string slot | NOT SELECTED |
+| MAP-AS-009 | findingIds | readonly string[]? | 任意 | 配列物理表現は Human 明示 | NOT SELECTED |
+| MAP-AS-010 | supersedesSnapshotId | string? | 任意 | optional id slot | NOT SELECTED |
+| MAP-AS-ENV-001 | schemaId（DTO envelope） | string | DTO必須予定 | DTO envelope；CV 範囲は Human | NOT SELECTED |
+| MAP-AS-ENV-002 | schemaVersion（DTO envelope） | `1.0.0` | DTO必須予定 | DTO envelope；CV 範囲は Human | NOT SELECTED |
+| MAP-AS-ENV-003 | dtoVersion（DTO envelope） | `1.0.0` | DTO必須予定 | DTO envelope；CV 範囲は Human | NOT SELECTED |
+
+```text
+候補整理 rules:
+  Logical Field / Logical Type / Required = MT-1 既知（再 Decision しない）
+  Agent notes = 判断論点の列挙のみ
+  Agent は Display Name / Internal Name / Column Type を埋めない
+  Domain / TS 名の romanize・転記による Internal Name 自動採択 = FORBIDDEN
+  INTENDED ≠ OBSERVED / CONFIRMED
+```
+
+## 4. Human fill table（empty until Human evidence）
 
 証跡列順 = Mapping ID → Logical Field → Display Name → Internal Name → Column Type → Status
 
@@ -122,27 +170,29 @@ Fill rules:
     （multi / JSON / multiple columns — do not guess）
 ```
 
-## 4. Agent recommendation（比較用；Acceptance ではない）
+## 5. Agent recommendation（比較用；Acceptance ではない）
 
 ```text
 Agent recommendation:
-  Await Human fill；do not invent rows
+  Await Human fill；候補整理のみ；do not invent rows
   If Human is ready to name now: NM-1 + CV-REQ（or CV-ALL）+ XB-1
   If Human is not ready: NM-HOLD + XB-1（remain deferred）
 
 NOT Human Acceptance evidence.
 NOT column creation GO.
+NOT Execution GO.
 NOT Implementation Start.
 ```
 
-## 5. Explicit non-authorization
+## 6. Explicit non-authorization
 
 ```text
 This OPEN packet does NOT authorize:
-  Internal Name invention by Agent
+  Internal Name invention / auto-adoption by Agent
   SharePoint column create / rename / delete
-  treating INTENDED as CONFIRMED
+  treating INTENDED as OBSERVED / CONFIRMED
   PX-1 / EG-1 override of COLUMN-PROVISION-1 holds
+  Execution GO
   Implementation Start
   adapter / schema mapping code start
   Deploy / real data
@@ -150,15 +200,17 @@ This OPEN packet does NOT authorize:
   SupportPlans naming
 ```
 
-## 6. Next
+## 7. Next
 
 ```text
 Decision-AS-COLUMN-NAMES-1: OPEN / NOT ACCEPTED
 Stop point: HUMAN_AS_COLUMN_INTENDED_NAMES_FILL
 Awaiting: Human Decision + filled intended names table
   or NM-HOLD continue
+NM-1 closes only when Human adopts concrete names
 Until Accepted with Human values（NM-1）:
-  column creation = FORBIDDEN
+  SharePoint column creation = FORBIDDEN
+  Execution GO = NOT GIVEN
   Implementation Start = HOLD
   adapter impl = HOLD
 After NM-1 Accepted（separate later units still required）:

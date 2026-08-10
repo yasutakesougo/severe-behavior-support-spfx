@@ -48,9 +48,10 @@ Facts that MUST remain visible:
   SC-AS = AssessmentSnapshots only
 
 Still NOT authorized / FORBIDDEN now:
-  inventing Internal Names
+  inventing / auto-adopting Internal Names
   SharePoint column create / rename / delete
-  treating INTENDED as CONFIRMED
+  treating INTENDED as OBSERVED / CONFIRMED
+  Execution GO（EG-HOLD）
   Implementation Start
   adapter / schema mapping code start
   Agent tenant mutation
@@ -58,7 +59,15 @@ Still NOT authorized / FORBIDDEN now:
   SupportPlans column naming（SC-BOTH NOT SELECTED）
 ```
 
-Selection ≠ Acceptance of concrete names ≠ column creation GO。
+```text
+Packet purpose when OPEN:
+  Human が Display Name / intended Internal Name / Column Type を
+  明示採択するための比較材料
+Agent: 候補整理のみ（発明・自動採択禁止）
+NM-1 closes only after Human adopts concrete names
+```
+
+Selection ≠ Acceptance of concrete names ≠ column creation GO ≠ Execution GO。
 
 ## Options considered（selection-time）
 
