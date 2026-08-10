@@ -30,7 +30,8 @@ Issue Status Reconciliation: [`issue-status-reconciliation-packet.md`](./issue-s
 | VR-1（column create） | **PASS** |
 | CV-REQ names / Choice options | **OBSERVED / CONFIRMED** |
 | Execution GO | GIVEN（consumed by Human create） |
-| AssessmentSnapshot mapping table | UPDATED names/types CONFIRMED；**NOT mapping-complete** |
+| AssessmentSnapshot mapping table | UPDATED names/types CONFIRMED；MAP-AS-001〜008 conversion ACCEPTED / LOCKED；**NOT mapping-complete** |
+| Decision-AS-CONVERSION-1 | **Accepted / LOCKED / C-1-A+C-2-DERIVED+C-3-A+C-4-A+XB-1** |
 | Custom application columns（CV-REQ） | **8 / 8 OBSERVED / CONFIRMED（both sites）** |
 | SharePoint column creation（additional） | **FORBIDDEN** without separate GO |
 | Implementation Start | HOLD |
@@ -45,8 +46,9 @@ Issue Status Reconciliation: [`issue-status-reconciliation-packet.md`](./issue-s
 | Order | Candidate | Status |
 |---|---|---|
 | 1 | Issue Status Reconciliation Phase ②（#6/#8 body resync） | **SELECTED（thirty-sixth）** |
-| 2 | CV extension（MAP-AS-009/010 / ENV） | NOT SELECTED |
-| 3 | conversion / mapping-complete determination | NOT SELECTED（≠ impl start） |
+| 2 | Decision-AS-CONVERSION-1（MAP-AS-001〜008 conversion） | **Accepted / LOCKED（CONSUMED）** |
+| 3 | CV extension（MAP-AS-009/010 / ENV） | NOT SELECTED |
+| 4 | mapping-complete determination | NOT SELECTED（≠ impl start） |
 
 ```text
 Thirty-sixth residual: SELECTED — Issue Status Reconciliation

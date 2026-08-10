@@ -8,6 +8,9 @@ Depends on（再 Decision しない）:
 （MT-1 + IN-A + CP-1 + XB-1）
 [`decision-assessment-snapshot-dec6-mapping-acceptance.md`](./decision-assessment-snapshot-dec6-mapping-acceptance.md)
 （LF-1 + RW-1 + MF-1 + VR-1）
+[`decision-assessment-snapshot-conversion-acceptance.md`](./decision-assessment-snapshot-conversion-acceptance.md)
+（C-1-A + C-2-DERIVED + C-3-A + C-4-A + XB-1）
+[`assessment-snapshot-conversion-contract.md`](./assessment-snapshot-conversion-contract.md)
 [`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](./decision-assessment-snapshot-cn1-readonly-observation-evidence.md)
 [`assessment-snapshot-complete-contract.md`](./assessment-snapshot-complete-contract.md)
 [`decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md`](./decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md)
@@ -18,10 +21,14 @@ Contract-side precedent（SupportPlan；本表とは別）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Kind: MT-1 mapping-table docs update
-Status: UPDATED under MT-1 / NOT mapping-complete
+Status: UPDATED under MT-1 + Decision-AS-CONVERSION-1 / NOT mapping-complete
 Human Decision basis: MT-1 + IN-A + CP-1 + XB-1
 CN-1 observation: CLOSED / DEFAULT_COLUMNS_ONLY / custom = 0（baseline）
 Human Column Create + VR-1: COMPLETE / PASS（CV-REQ 8）
+Decision-AS-CONVERSION-1: Accepted / LOCKED / C-1-A+C-2-DERIVED+C-3-A+C-4-A+XB-1
+  MAP-AS-001〜008 Read/Write Conversion: ACCEPTED / LOCKED
+  Evidence: decision-assessment-snapshot-conversion-acceptance.md
+            assessment-snapshot-conversion-contract.md
 
 Persistence placement（OBSERVED；再 Decision しない）:
   Lists: AssessmentSnapshots
@@ -53,9 +60,11 @@ LF-1 / MT-1 に従い、AssessmentSnapshot logical fields と persistence field 
 5. Schema ID は SP List 名 / TS 型名と同一視しない
 6. DEFAULT_COLUMNS_ONLY ≠ mapping-complete
 7. CV-REQ names/types may be recorded as OBSERVED / CONFIRMED only after Human create + VR-1
-   Conversion completeness / mapping-complete は別残件（≠ Implementation Start）
-   正本 Acceptance = Decision-AS-COLUMN-NAMES-1 / CHOICE-OPTIONS-1
+   MAP-AS-001〜008 conversion = ACCEPTED / LOCKED via Decision-AS-CONVERSION-1
+   mapping-complete は別残件（≠ Implementation Start；009/010/ENV still open）
+   正本 Acceptance = Decision-AS-COLUMN-NAMES-1 / CHOICE-OPTIONS-1 / CONVERSION-1
    Evidence = decision-assessment-snapshot-column-create-vr1-evidence.md
+            + decision-assessment-snapshot-conversion-acceptance.md
 
 ## Failure Behavior（DEC-6 / adapter；再 Decision しない）
 
@@ -91,14 +100,14 @@ SC-1:
 
 | Mapping ID | Logical Field | Logical Type | Required | SP List | Display Name | Internal Name | Column Type | Read Conversion | Write Conversion | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| MAP-AS-001 | snapshotId | string | 必須 | AssessmentSnapshots | スナップショットID | snapshotId | 1行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-002 | recordStatus | enum draft\|finalized | 必須 | AssessmentSnapshots | 記録状態 | recordStatus | 選択肢 | 未確認 | 未確認 | 確定（name/type/options OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-003 | result | enum NO_FINDINGS\|FINDINGS_PRESENT\|NOT_APPLICABLE | 必須 | AssessmentSnapshots | 判定結果 | result | 選択肢 | 未確認 | 未確認 | 確定（name/type/options OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | AssessmentSnapshots | 理由コード | reasonCodes | 複数行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-005 | ruleSetVersion | string | 必須 | AssessmentSnapshots | ルールセットバージョン | ruleSetVersion | 1行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-006 | periodStart | ISO date | 必須 | AssessmentSnapshots | 対象期間開始日 | periodStart | 日付のみ | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-007 | periodEnd | ISO date | 必須 | AssessmentSnapshots | 対象期間終了日 | periodEnd | 日付のみ | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
-| MAP-AS-008 | inputFingerprint | string | 必須 | AssessmentSnapshots | 入力フィンガープリント | inputFingerprint | 1行テキスト | 未確認 | 未確認 | 確定（name/type OBSERVED / CONFIRMED；conversion 未確認） |
+| MAP-AS-001 | snapshotId | string | 必須 | AssessmentSnapshots | スナップショットID | snapshotId | 1行テキスト | ACCEPTED / LOCKED（C-1-A） | ACCEPTED / LOCKED（C-1-A） | 確定（name/type OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-002 | recordStatus | enum draft\|finalized | 必須 | AssessmentSnapshots | 記録状態 | recordStatus | 選択肢 | ACCEPTED / LOCKED（C-2-DERIVED） | ACCEPTED / LOCKED（C-2-DERIVED） | 確定（name/type/options OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-003 | result | enum NO_FINDINGS\|FINDINGS_PRESENT\|NOT_APPLICABLE | 必須 | AssessmentSnapshots | 判定結果 | result | 選択肢 | ACCEPTED / LOCKED（C-2-DERIVED） | ACCEPTED / LOCKED（C-2-DERIVED） | 確定（name/type/options OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-004 | reasonCodes | readonly string[] | 条件付必須 | AssessmentSnapshots | 理由コード | reasonCodes | 複数行テキスト | ACCEPTED / LOCKED（C-3-A JSON；duplicates FAIL-CLOSED） | ACCEPTED / LOCKED（C-3-A JSON） | 確定（name/type OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-005 | ruleSetVersion | string | 必須 | AssessmentSnapshots | ルールセットバージョン | ruleSetVersion | 1行テキスト | ACCEPTED / LOCKED（C-1-A） | ACCEPTED / LOCKED（C-1-A） | 確定（name/type OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-006 | periodStart | ISO date | 必須 | AssessmentSnapshots | 対象期間開始日 | periodStart | 日付のみ | ACCEPTED / LOCKED（C-4-A civil-date） | ACCEPTED / LOCKED（C-4-A civil-date） | 確定（name/type OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-007 | periodEnd | ISO date | 必須 | AssessmentSnapshots | 対象期間終了日 | periodEnd | 日付のみ | ACCEPTED / LOCKED（C-4-A civil-date） | ACCEPTED / LOCKED（C-4-A civil-date） | 確定（name/type OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
+| MAP-AS-008 | inputFingerprint | string | 必須 | AssessmentSnapshots | 入力フィンガープリント | inputFingerprint | 1行テキスト | ACCEPTED / LOCKED（C-1-A） | ACCEPTED / LOCKED（C-1-A） | 確定（name/type OBSERVED / CONFIRMED；conversion ACCEPTED / LOCKED） |
 | MAP-AS-009 | findingIds | readonly string[]? | 任意 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
 | MAP-AS-010 | supersedesSnapshotId | string? | 任意 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
 | MAP-AS-ENV-001 | schemaId（DTO envelope） | string | DTO必須予定 | AssessmentSnapshots | 未確認 | NOT PRESENT | 未確認 | 未確認 | 未確認 | 未確認 |
@@ -107,9 +116,13 @@ SC-1:
 | MAP-AS-SYS-001 | Title（SharePoint standard） | string | SP default | AssessmentSnapshots | タイトル | Title | 未確認 | 対象外（app field ではない） | 対象外 | 確定（observed；app mapping 外） |
 
 ```text
-reasonCodes / findingIds:
-  配列の物理表現（multi-value / JSON / 複数列）は未確認のまま
-  推測で単一方式を CONFIRMED にしない
+reasonCodes（MAP-AS-004）:
+  Representation = JSON（COLUMN-NAMES-1）
+  Read/Write Conversion = ACCEPTED / LOCKED（Decision-AS-CONVERSION-1 / C-3-A）
+  duplicates = FAIL-CLOSED
+
+findingIds（MAP-AS-009）:
+  配列の物理表現 / adoption は未確認のまま（OUT of CONVERSION-1）
 
 MAP-AS-SYS-001:
   CN-1 で観測された標準列の記録のみ
@@ -121,12 +134,12 @@ MAP-AS-SYS-001:
 ```text
 NOT mapping-complete:
   CV-REQ names/types = OBSERVED / CONFIRMED（VR-1 PASS）
-  conversions still 未確認
+  MAP-AS-001〜008 conversions = ACCEPTED / LOCKED（CONVERSION-1）
   MAP-AS-009/010 / ENV still NOT PRESENT
   DTO / adapter code still HOLD
   additional column provisioning still FORBIDDEN without separate GO
 
-MUST NOT claim from this docs update alone:
+MUST NOT claim from CONVERSION-1 Acceptance alone:
   Implementation Start
   adapter / schema mapping code start
   mapping-complete
@@ -139,16 +152,17 @@ MUST NOT claim from this docs update alone:
 MT-1 mapping-table docs update: delivered
 Thirtieth residual: CONSUMED
 Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
-  CV-REQ OBSERVED / CONFIRMED 正本 = decision-assessment-snapshot-column-names-acceptance.md
-  evidence = decision-assessment-snapshot-column-create-vr1-evidence.md
+Decision-AS-CONVERSION-1: Accepted / LOCKED / C-1-A+C-2-DERIVED+C-3-A+C-4-A+XB-1
+  conversion 正本 = decision-assessment-snapshot-conversion-acceptance.md
+  contract = assessment-snapshot-conversion-contract.md
 AssessmentSnapshots Human Column Create: COMPLETE
 VR-1: PASS
+MAP-AS-001〜008 conversion: ACCEPTED / LOCKED
+mapping-complete: NOT YET
 Next column-path residual: NOT SELECTED
-Active process residual:
-  Thirty-sixth — Issue Status Reconciliation Phase ②（#6 / #8）
 Candidates remain:
   CV extension（MAP-AS-009/010 / ENV）
-  conversion / mapping-complete determination（≠ impl start）
+  mapping-complete determination（≠ impl start）
 Still HOLD:
   Implementation Start / adapter impl / Deploy
 ```
