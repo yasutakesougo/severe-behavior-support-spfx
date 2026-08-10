@@ -20,8 +20,10 @@ Selection: [`decision-ilb-1-thirty-second-residual-column-names-selection.md`](.
 | Scope | AssessmentSnapshots（isogo + honmoku）only |
 | Intended Internal Names | NOT ADOPTED / awaiting Human fill |
 | SharePoint column creation | **FORBIDDEN**（PX-HOLD + EG-HOLD） |
+| Execution GO | NOT GIVEN（EG-HOLD） |
 | Implementation Start | HOLD |
 | adapter / schema mapping implementation | HOLD |
+| INTENDED ≠ OBSERVED / CONFIRMED | LOCKED |
 | Agent SharePoint mutation | FORBIDDEN |
 | Deploy / real data | NO-GO |
 
