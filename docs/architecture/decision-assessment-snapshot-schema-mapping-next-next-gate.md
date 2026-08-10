@@ -1,6 +1,6 @@
 # Decision-AS-SCHEMA-MAPPING-NEXT-1 — Next Gate（after Acceptance）
 
-Status: COLUMN-EG-1 Accepted / LOCKED；next residual NOT SELECTED
+Status: COLUMN-EG-1 Accepted / LOCKED；Issue Status Reconciliation SELECTED（thirty-sixth）；column Human create remains parallel
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](./decision-assessment-snapshot-schema-mapping-next-acceptance.md)
 Column Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
@@ -9,6 +9,7 @@ Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`]
 PX Acceptance: [`decision-assessment-snapshot-column-px-acceptance.md`](./decision-assessment-snapshot-column-px-acceptance.md)
 EG Acceptance: [`decision-assessment-snapshot-column-eg-acceptance.md`](./decision-assessment-snapshot-column-eg-acceptance.md)
 MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
+Issue Status Reconciliation: [`issue-status-reconciliation-packet.md`](./issue-status-reconciliation-packet.md)
 
 ---
 
@@ -23,9 +24,10 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 | Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1+XB-1+AP-1** |
 | Decision-AS-COLUMN-EG-1 | **Accepted / LOCKED / EG-1+XB-1+AP-1** |
 | Twenty-ninth〜thirty-fifth | CONSUMED |
-| Next residual | **NOT SELECTED** |
+| Thirty-sixth | **SELECTED** — Issue Status Reconciliation |
+| Next column-path residual | Human create / VR-1（parallel；not selected here as sole gate） |
 | Execution GO | GIVEN（Human process only；Acceptance≠create） |
-| Column creation authorization | PX-1（EG-HOLD；create FORBIDDEN） |
+| Column creation authorization | EG-1 GIVEN（Human process only；Agent create FORBIDDEN） |
 | Choice options | ADOPTED / INTENDED（≠ CONFIRMED） |
 | CV-REQ intended names | ADOPTED / INTENDED（≠ CONFIRMED） |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
@@ -39,19 +41,21 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 
 ---
 
-## 2. Immediate candidates（NOT SELECTED）
+## 2. Immediate units
 
-| Order | Candidate | Why |
+| Order | Candidate | Status |
 |---|---|---|
-| 1 | Human create execution record / evidence | EG-1 GIVEN；create is separate |
-| 2 | VR-1 CN-1 re-observation（after create） | CONFIRMED path |
-| 3 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Issue Status Reconciliation（#5/#10/#11 Close；#6/#8 resync） | **SELECTED（thirty-sixth）** |
+| 2 | Human create execution record / evidence | parallel Human process（EG-1 GIVEN） |
+| 3 | VR-1 CN-1 re-observation（after create） | after create；CONFIRMED path |
 
 ```text
-Next substantive residual: NOT SELECTED
+Thirty-sixth residual: SELECTED — Issue Status Reconciliation
 Execution GO GIVEN（Human process only）
 EG-1 Acceptance ≠ Human create
-Agent mutation FORBIDDEN；Implementation/adapter HOLD
+Agent SharePoint mutation FORBIDDEN；Implementation/adapter HOLD
+Agent GitHub Issue mutation FORBIDDEN
+Human Phase ①〜② Issue Close / body patch: AUTHORIZED under Reconciliation packet
 INTENDED ≠ CONFIRMED
 ```
 

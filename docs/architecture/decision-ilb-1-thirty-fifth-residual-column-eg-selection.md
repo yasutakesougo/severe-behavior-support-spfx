@@ -73,9 +73,12 @@ Thirty-fifth residual: CONSUMED
 Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1 + XB-1 + AP-1
 Execution GO: GIVEN（Human process only）
 Human create: separate next Human process
-Next substantive residual: NOT SELECTED
-Candidates（separate units）:
+Next process residual: SELECTED as thirty-sixth — Issue Status Reconciliation
+  selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
+  packet: issue-status-reconciliation-packet.md
+Parallel Human process（not thirty-sixth）:
   Human create execution record / evidence
   VR-1 CN-1 re-observation after create
-  CV extension / Issue Status Reconciliation
+Later candidates:
+  CV extension
 ```
