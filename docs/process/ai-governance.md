@@ -59,6 +59,8 @@ AUTO-UNTIL-GATE Policy v1（追加分類層・GitHub 公開前 STOP）: `docs/de
 
 Routine AUG v1 標準運用モデル（eligible slice のみ・Human Adoption 記録）: `docs/process/routine-aug-v1.md`（Accepted / LOCKED / ADOPTED / Option R1；Routine adoption ≠ project-wide Implementation Start；per-slice Start = REQUIRED）
 
+Process Optimization v1（risk classification / LOW auto-loop **定義採択**）: `docs/process/process-optimization-v1.md`（Accepted / LOCKED / Option POV1-A；LOW auto-loop DEFINED / NOT ENABLED；Authorization effect NONE；Merge = HUMAN-ONLY；permission expansion NONE）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -104,6 +106,7 @@ Routine AUG v1 標準運用モデル（eligible slice のみ・Human Adoption �
 | Auto-Approval Policy v1 | `docs/decisions/DEC-AA-001.md` |
 | AUTO-UNTIL-GATE Policy v1 | `docs/decisions/DEC-AA-003.md` |
 | Routine AUG v1 運用モデル | `docs/process/routine-aug-v1.md` |
+| Process Optimization v1（Accepted / NOT ENABLED） | `docs/process/process-optimization-v1.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -117,3 +120,4 @@ Routine AUG v1 標準運用モデル（eligible slice のみ・Human Adoption �
 - Auto-Approval の有効化（`AUTO_APPROVAL_ENABLED`）。DEC-AA-1 Accepted でも別 Human Explicit GO が必要
 - AUTO-UNTIL-GATE の有効化（`AUTO_UNTIL_GATE_ENABLED`）。DEC-AA-3 Accepted でも別 Human Explicit GO が必要
 - Implementation Start（DEC-AA-1 / DEC-AA-3 Policy Accepted では成立しない）
+- Process Optimization v1 の LOW auto-loop / Start / Ready / next-slice 自動候補の有効化（`docs/process/process-optimization-v1.md` Accepted / LOCKED でも Authorization effect NONE；別 Human Explicit GO が必要）
