@@ -36,7 +36,7 @@ runtime dependency install を認可していない（DP-1-A）。
 
 | ID | Severity | Status | 内容 |
 |---|---|---|---|
-| P2-002 | P2 | **CLOSED** | exact clear/omit mechanics Accepted as CO-1-A under TC-1-A by Decision-AS-ADAPTER-EC3-EC4-1 | 
+| P2-002 | P2 | **CLOSED** | exact clear/omit mechanics Accepted as CO-1-A under TC-1-A by Decision-AS-ADAPTER-EC3-EC4-1 |
 
 ## Boundary check
 
