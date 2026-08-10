@@ -75,9 +75,12 @@ Selection CONSUMED → Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED
 Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-187-independent-review.md
 Next gate: FIXED
-  Ready gate（Human）
+  CN-1（Internal Column Names 確認・確定）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
   Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED
   Execution GO: GIVEN
   VR-1: PASS / SV-1·LV-1: CONFIRMED

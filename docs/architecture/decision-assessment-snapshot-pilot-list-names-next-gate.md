@@ -23,7 +23,7 @@ Now:
   List B = AssessmentSnapshots（OBSERVED / CONFIRMED）
   Decision-AS-PILOT-PROVISION-EXEC-1 = Accepted / LOCKED
   VR-1 = PASS / SV-1·LV-1 = CONFIRMED
-  Active next = Ready gate（Human）；IR #187 = PASS
+  Active next = CN-1；IR #187 = PASS；PR #187 MERGED；PR #186 SUPERSEDED
 ```
 
 ## Current state
@@ -43,9 +43,12 @@ CN-1: OPEN
 Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-187-independent-review.md
 Active next gate:
-  Ready gate（Human）
+  CN-1（Internal Column Names 確認・確定）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Site / List creation: COMPLETED
 auto-start by Agent: FORBIDDEN
 ```
