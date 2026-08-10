@@ -241,14 +241,18 @@ MUST NOT start from this Acceptance alone:
 
 ```text
 Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
-Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED
+Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED / PLACEHOLDER
   Site URL:  https://isogokatudouhome.sharepoint.com/sites/XXXXX
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
-Live confirmation（SV-1 / LV-1）: NOT CONFIRMED
+  ≠ REAL / CREATABLE（Decision-AS-ORG-SITE-TOPOLOGY-1 / PH-1）
+Live confirmation（SV-1 / LV-1）: CONFIRMED（pilot；VR-1 PASS；CN-1 OPEN）
 Internal Column Names: OPEN（IN-1 — post-creation CN-1）
-Site / List creation: NO-GO（XB-1；別 Human gate）
-New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
+Site / List creation: NO-GO（XB-1；placeholder 作成 FORBIDDEN）
+PR #185: MERGED
+  merge commit: 1aef0d3971165f6504f7f13d6e68a51d7cfdaf61
+Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
+New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes: NO-GO
@@ -258,7 +262,25 @@ Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 Independent Re-review #185: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-185-independent-review.md
   Reviewed HEAD: b37e3e6d0d3f925e8686f2e2805094b55479b024
-Ready: NOT RUN
-Merge: NOT RUN
-Next Human gate: PR #185 Ready Decision
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  → decision-assessment-snapshot-pilot-facility-identity-acceptance.md
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
+  （XXXXX / YYYYY = PLACEHOLDER / SUPERSEDED FOR CREATION）
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+  List A = SupportPlan + SupportPlanVersion
+  List B = AssessmentSnapshot
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN
+SV-1: CONFIRMED / LV-1: CONFIRMED / VR-1: PASS
+CN-1: OPEN
+Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
+  → decision-assessment-snapshot-pr-187-independent-review.md
+Next Human gate: Ready gate（Human）
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Site / List creation: COMPLETED
 ```

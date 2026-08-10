@@ -187,15 +187,35 @@ Decision-AS-NEW-TARGET-NAMES-1: Accepted / LOCKED / SU-1 + LN-1 + IN-1 + XB-1
   Site URL:  https://isogokatudouhome.sharepoint.com/sites/XXXXX
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
-  Status:    HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
-New SPFx deployment target: TOPOLOGY LOCKED / NOT CREATED / HOLD
+  Status:    HUMAN-PROVIDED / INTENDED / PLACEHOLDER / NOT CREATED / NOT CONFIRMED
+Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
+New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Internal Column Names: OPEN（IN-1）
-Site / List creation: NO-GO（XB-1）
+Site / List creation: NO-GO
+Placeholder creation: FORBIDDEN（PH-1）
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 tenant changes: NO-GO
 Schema / DTO: HOLD
 FindingCode / A-5: HOLD
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Creation / provisioning execution: NOT SELECTED（別 Human gate / NO-GO）
+Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
+  磯子=isogo → /sites/severe-support-isogo
+  本牧=honmoku → /sites/severe-support-honmoku
+Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
+  List A = SupportPlan + SupportPlanVersion
+  List B = AssessmentSnapshot
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN
+SV-1: CONFIRMED / LV-1: CONFIRMED / VR-1: PASS
+CN-1: OPEN
+Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
+  → decision-assessment-snapshot-pr-187-independent-review.md
+Next Human gate: Ready gate（Human）
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Site / List creation: COMPLETED
 ```
