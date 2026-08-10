@@ -86,16 +86,20 @@ P2 disposition:
   P2-002 OPEN / CARRY-FORWARD — exact SharePoint clear/omit API
          Decision blocker: NO
 
-Physical column:
-  NOT PRESENT
-VR-1 for MAP-AS-010:
-  NOT RUN
-MAP-AS-010 column-ready:
-  NO
-mapping-complete:
-  NOT YET
-SharePoint column create / mutation:
-  FORBIDDEN（this Acceptance）
+Physical column（living；post-Acceptance Human path）:
+  PRESENT（isogo + honmoku；OBSERVED / CONFIRMED）
+VR-1 for MAP-AS-010（living）:
+  PASS
+MAP-AS-010 column-ready（living）:
+  YES
+mapping-complete（living）:
+  PASS / COMPLETE
+SharePoint column create / mutation by this Acceptance alone:
+  FORBIDDEN（Acceptance-time boundary retained）
+Human SharePoint create（separate physical path）:
+  COMPLETE
+Agent SharePoint mutation:
+  0
 Implementation Start:
   HOLD
 adapter / schema / DTO wiring:
@@ -103,17 +107,18 @@ adapter / schema / DTO wiring:
 Deploy / real data:
   NO-GO
 
-Closes only:
+Closes only（Acceptance-time）:
   Decision-AS-MAP010-COLUMN-1
   （N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1）
-Does NOT close:
-  Human column create / VR-1
-  mapping-complete PASS
+Post-Acceptance physical path（separate evidence / determination）:
+  Human column create + VR-1 — COMPLETE / PASS
+  mapping-complete — PASS / COMPLETE
+Still NOT closed:
   adapter / schema / DTO wiring
   Implementation Start
+  P2-002 clear/omit transport API
   Deploy / real data
 Implementation auto-start: FORBIDDEN
-Column create auto-start: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -191,9 +196,10 @@ NOT SELECTED:
 | Read Conversion | R-1-A | ACCEPTED / LOCKED |
 | Write Conversion | W-1-A | ACCEPTED / LOCKED |
 | Optional semantics | O-1-A | ACCEPTED / LOCKED |
-| Physical column | NOT PRESENT | unchanged |
-| VR-1 | NOT RUN | unchanged |
-| Column-ready | NO | unchanged |
+| Physical column | PRESENT（isogo + honmoku） | living（Human create COMPLETE） |
+| VR-1 | PASS | living |
+| Column-ready | YES | living |
+| mapping-complete | PASS / COMPLETE | living（M-1-A determination） |
 
 失敗時 MUST NOT（LOCKED）:
 
@@ -239,20 +245,20 @@ MUST NOT start from this Acceptance alone:
   Ready / Merge without separate Human authorization
 ```
 
-## Expected physical-path after this Acceptance
+## Post-Acceptance physical path（living）
 
 ```text
 MAP-AS-010 disposition: PERSISTED / ACCEPTED
 MAP-AS-010 column contract: ACCEPTED / LOCKED
-MAP-AS-010 column-ready: NO
-Physical column: NOT PRESENT
-VR-1: NOT RUN
-mapping-complete: NOT YET
+MAP-AS-010 column-ready: YES
+Physical column: PRESENT
+VR-1: PASS
+mapping-complete: PASS / COMPLETE
 
-Remaining physical-path steps（NOT authorized now）:
-  1. Human SharePoint column create
-  2. VR-1 read-only confirmation
-  3. mapping-complete determination
+Evidence:
+  decision-assessment-snapshot-map010-column-create-vr1-evidence.md
+Determination:
+  decision-assessment-snapshot-mapping-complete-determination.md
 ```
 
 ## Next
@@ -261,16 +267,12 @@ Remaining physical-path steps（NOT authorized now）:
 Decision-AS-MAP010-COLUMN-1: Accepted / LOCKED
   / N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
 P2-001: CLOSED
-P2-002: OPEN / CARRY-FORWARD（non-blocking）
-mapping-complete: NOT YET
-Human SharePoint create required now: NO
-Human SharePoint create required after PR merge: YES（separate GO）
+P2-002: OPEN / CARRY-FORWARD（non-blocking；adapter impl gate）
+mapping-complete: PASS / COMPLETE
+Human SharePoint create: COMPLETE
+VR-1: PASS
 Implementation Start: HOLD
 adapter / schema / DTO wiring: HOLD
-SharePoint / M365 mutation: FORBIDDEN
+SharePoint / M365 mutation by Agent: FORBIDDEN
 Deploy / real data: NO-GO
-
-Next gate detail（PR process）: HUMAN READY DECISION FOR PR #209
-Ready: NOT RUN by this Acceptance
-Merge: NOT RUN by this Acceptance
 ```
