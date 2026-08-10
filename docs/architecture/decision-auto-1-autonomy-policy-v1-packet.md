@@ -17,13 +17,19 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: AUTO-1 — AUTONOMY-POLICY-V1
-Kind: Human Decision packet（contract acceptance）
-Status: OPEN — PENDING HUMAN DECISION（AUTO-1-A）
+Kind: Human Decision packet（contract acceptance → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Baseline main: 5ddb05950a2123a1fb609698b9673102a6190721
+Candidate HEAD: 9fff0b6ee30090d88f06270a70347263e0baea56
 Human unit selection: AUTO-1 = SELECTED / CONSUMED（2026-08-10）
 Human plan adoption: Cursor = Builder / Codex = Independent Reviewer = ADOPTED（2026-08-10）
-Contract acceptance: NOT YET（本 packet の対象）
+Human Decision: AUTO-1-A = ACCEPT（2026-08-10；S-1〜S-8 を candidate 記録どおり Accept）
+Contract: ACCEPTED / LOCKED
+Authorization expansion: NONE
+Implementation Start: NOT GRANTED
 Lane: AI Development OS（法人アプリ本体レーンと分離；EC-3 / EC-4 は skip しない）
+Lane A（AIS-1-B ACCEPTED / LOCKED；EC-3 / EC-4 PENDING；Start HOLD）: UNCHANGED
+Acceptance 正本: ../process/autonomy-policy-v1.md
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -73,28 +79,36 @@ negative test 期待値）を契約として固定するか。
 | S-7 | audit-before-execute | 監査記録の書込成功まで実行しない。書けなければ DENY / UNKNOWN |
 | S-8 | Conflict register | AUTO-C1〜C3: Draft PR / push / review.request の AUTO_ALLOWED 分類は現行 HUMAN-ONLY（別 GO）境界と衝突 → RECORDED ONLY。分類 ≠ 有効化。有効化は別 Human Explicit GO ＋ 上位正本整合更新 |
 
-## 4. Options
+## 4. Options disposition
 
 | Option | 内容 | 結果 |
 | --- | --- | --- |
-| **AUTO-1-A** | candidate contract をそのまま Accept（S-1〜S-8 含む） | **PENDING** |
-| AUTO-1-B | 修正付き Accept（limits 数値 / 分類 / reasonCode mapping の Human 変更を反映して再固定） | PENDING |
-| AUTO-1-HOLD | 保留 | PENDING |
+| **AUTO-1-A** | candidate contract をそのまま Accept（S-1〜S-8 含む） | **ACCEPTED（2026-08-10）** |
+| AUTO-1-B | 修正付き Accept | NOT SELECTED |
+| AUTO-1-HOLD | 保留 | NOT SELECTED |
 
 ```text
-Agent recommendation（NOT Acceptance）: AUTO-1-A
-Human must still Accept（or modify / hold）.
+Human Decision（Accepted / LOCKED）: AUTO-1-A
+S-1〜S-8: ACCEPTED（S-4 は policy ceilings 解釈つき；
+  packet / pilot policy はより厳しい limit を設定してよい）
+S-8 確認: taxonomy classification ≠ current enablement ≠ current authorization
+  branch.push / pull_request.create_draft / update_draft / review.request:
+  NOT newly enabled
+pull_request.merge: HUMAN_ONLY ＋ Gateway 実装 MUST NOT EXIST（両立・非矛盾）
+
+Agent recommendation（historical）: AUTO-1-A
+Agent recommendation alone is NOT Human Acceptance evidence.
 ```
 
 ## 5. Done criteria（本 unit）
 
-- [ ] Contract candidate が machine-checkable（判定順 / reason / limits / 期待値が閉集合）で固定されている
-- [ ] 上位正本（DEC-AI-ORG-003 / DEC-AA / Routine AUG / PROCESS-OPT-V1 / LOW-AUTO-PILOT-V1）を緩和・書換していない
-- [ ] 衝突は Conflict register に RECORDED ONLY で残っている（偽解消なし）
-- [ ] AUTO-NT-1〜5 の期待値が固定されている
-- [ ] コード変更 0（docs のみ）
-- [ ] Human Acceptance（AUTO-1-A / B / HOLD）で停止している
-- [ ] Draft PR のまま Human Ready Decision で停止
+- [x] Contract candidate が machine-checkable（判定順 / reason / limits / 期待値が閉集合）で固定されている
+- [x] 上位正本（DEC-AI-ORG-003 / DEC-AA / Routine AUG / PROCESS-OPT-V1 / LOW-AUTO-PILOT-V1）を緩和・書換していない
+- [x] 衝突は Conflict register に RECORDED ONLY で残っている（偽解消なし）
+- [x] AUTO-NT-1〜5 の期待値が固定されている
+- [x] コード変更 0（docs のみ）
+- [x] Human Acceptance = AUTO-1-A ACCEPT（2026-08-10）が正本化されている
+- [ ] Draft PR のまま Human Ready Decision で停止（Live gate は PR 側で判断）
 
 ## 6. Explicit OUT / non-authorization
 
@@ -112,10 +126,14 @@ This packet does NOT authorize:
 ## 7. Next
 
 ```text
-AUTO-1 packet: OPEN
-Contract: CANDIDATE / PENDING HUMAN ACCEPTANCE
-Next gate: HUMAN DECISION（AUTO-1-A / AUTO-1-B / HOLD）
-その後: AUTO-2 Capability Registry → AUTO-3 Task Packet Schema
-        → AUTO-4 Action Gateway contract
+AUTO-1 packet: CONSUMED
+Contract: ACCEPTED / LOCKED（AUTO-1-A）
+Authorization expansion: NONE
+Implementation Start: NOT GRANTED
+AUTO-2 / AUTO-3 / AUTO-4: NOT STARTED
+Cursor execution backend: NOT STARTED
+LOW-AUTO-PILOT-V2: NOT AUTHORIZED
+Lane A EC-3 / EC-4: UNCHANGED / PENDING
+Next gate: HUMAN READY DECISION FOR AUTO-1 recording PR
 Negative tests AUTO-NT-1〜5 PASS まで LOW-AUTO-PILOT-V2 は開始しない
 ```

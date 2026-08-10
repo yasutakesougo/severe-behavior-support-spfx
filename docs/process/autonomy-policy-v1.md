@@ -2,9 +2,11 @@
 
 - 文書: `docs/process/autonomy-policy-v1.md`
 - Unit: **AUTO-1 — AUTONOMY-POLICY-V1**
-- 位置づけ: AI Development OS レーンの **autonomy policy contract 正本（candidate）**
-- 状態: **CANDIDATE / PENDING HUMAN ACCEPTANCE（AUTO-1-A）**
-- Human 入力（2026-08-10 / plan adoption・unit 固定；Policy Acceptance ではない）:
+- 位置づけ: AI Development OS レーンの **autonomy policy contract 正本（Human Acceptance 記録）**
+- 状態: **ACCEPTED / LOCKED**（AUTO-1-A）
+- Human Decision: **AUTO-1-A = ACCEPT**（2026-08-10；S-1〜S-8 を candidate 記録どおり Accept）
+- Candidate HEAD: `9fff0b6ee30090d88f06270a70347263e0baea56`
+- Human 入力（2026-08-10 / plan adoption・unit 固定；Acceptance に先行する入力）:
   - 「Cursor = Builder / Codex = Independent Reviewer」構成の plan 採用
   - 次 substantive unit = **AUTO-1 AUTONOMY-POLICY-V1** に固定
   - AUTO-1 ではコードを書かず、機械判定可能な契約のみ固定する
@@ -25,12 +27,51 @@
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](./self-referential-gate-policy.md)）。
 
+## Human Acceptance（固定結論）
+
+```text
+AUTO-1-A = ACCEPT
+```
+
+```text
+AUTONOMY-POLICY-V1
+= ACCEPTED / LOCKED
+```
+
+S-1〜S-8（packet 記録の具体化）を candidate 記録どおり Accept:
+
+```text
+S-1 HUMAN_ONLY / FORBIDDEN split:            ACCEPTED
+S-2 five-value reasonCode closed set + map:  ACCEPTED
+S-3 POLICY_BLOCKED = display label:          ACCEPTED
+S-4 limits = policy ceilings:                ACCEPTED（下記解釈つき）
+S-5 riskClass allocation（push/PR/review.request = MEDIUM）: ACCEPTED
+S-6 side-effect idempotency rule:            ACCEPTED
+S-7 audit-before-execute（記録不能 → DENY / UNKNOWN）: ACCEPTED
+S-8 Conflict register:                       ACCEPTED / RECORDED ONLY
+```
+
+```text
+Agent recommendation / Independent Review: NOT Human Acceptance evidence
+This document records the Human Decision only.
+AUTO-1-A ACCEPT ≠ authorization expansion（= NONE）
+AUTO-1-A ACCEPT ≠ Implementation Start（= NOT GRANTED）
+AUTO-1-A ACCEPT ≠ Ready / Merge of this recording PR
+AUTO-1-A ACCEPT ≠ EC-3 / EC-4 resolution or bypass
+```
+
 ## 状態（固定）
 
 ```text
 AUTO-1 unit selection: SELECTED / CONSUMED（Human 固定 2026-08-10）
-AUTONOMY-POLICY-V1 contract: CANDIDATE / PENDING HUMAN ACCEPTANCE（AUTO-1-A）
-Implementation（Registry / Gateway / backend）: NOT STARTED / OUT OF SCOPE（本 unit）
+AUTONOMY-POLICY-V1 contract: ACCEPTED / LOCKED（AUTO-1-A / 2026-08-10）
+Authorization expansion: NONE
+Implementation Start: NOT GRANTED
+AUTO-2 implementation: NOT STARTED
+AUTO-3 implementation: NOT STARTED
+AUTO-4 implementation: NOT STARTED
+Cursor execution backend: NOT STARTED
+LOW-AUTO-PILOT-V2: NOT AUTHORIZED
 Enablement（Gateway 経由の実行許可）: NOT GRANTED
 Ready: HUMAN-ONLY
 Merge: HUMAN-ONLY
@@ -39,9 +80,13 @@ Deploy: FORBIDDEN
 ```
 
 ```text
-Policy CANDIDATE ≠ ACCEPTED
-Policy ACCEPTED（将来） ≠ ENABLED
-Policy ACCEPTED（将来） ≠ Implementation Start
+Policy ACCEPTED ≠ ENABLED
+Policy ACCEPTED ≠ Implementation Start
+taxonomy classification ≠ current enablement ≠ current authorization
+branch.push: NOT newly enabled
+pull_request.create_draft: NOT newly enabled
+pull_request.update_draft: NOT newly enabled
+review.request: NOT newly enabled
 Agent recommendation / Independent Review ≠ Human Acceptance
 ```
 
@@ -83,6 +128,17 @@ AUTO-1 開始 ≠ EC-3 / EC-4 skip
 AI Development OS レーン = 「開発方法」を改善するレーン
 法人アプリ本体レーン = 法人アプリを完成させるレーン
 両レーンの gate / Decision は相互に代替しない
+```
+
+Lane A（法人アプリ本体）現状 — AUTO-1 Acceptance で変更しない:
+
+```text
+AssessmentSnapshot adapter:
+  AIS-1-B: ACCEPTED / LOCKED
+  EC-3: PENDING
+  EC-4: PENDING
+  Implementation Start: HOLD
+AUTO-1 Acceptance MUST NOT resolve or bypass EC-3 / EC-4
 ```
 
 ## 役割分離（固定）
@@ -177,6 +233,20 @@ AUTO_ALLOWED capability の実行に必要な最小権限に限定する
 （merge 可能な token を Gateway に渡さない）。
 ```
 
+### pull_request.merge の解釈（Human 確定 / LOCKED）
+
+```text
+pull_request.merge = HUMAN_ONLY
+かつ同時に
+Action Gateway implementation for pull_request.merge: MUST NOT EXIST
+
+意味:
+  Human は別系統の Human-controlled process で Merge を実施してよい
+  自律側 Action Gateway は merge 実装を受け取らず、
+  merge 可能な credential scope も受け取らない
+両立であり矛盾ではない
+```
+
 ## 3. Risk model binding
 
 ```text
@@ -229,7 +299,18 @@ policy max を超える緩和は無効（DENY / POLICY_MISMATCH）。
 ```text
 limit 超過 → DENY / POLICY_MISMATCH
 limit 計測不能 → UNKNOWN → DENY
-数値は AUTO-1-A Acceptance 対象（Human が確定する）
+数値は AUTO-1-A で Human 確定済み（policy ceilings）
+```
+
+Accepted 解釈（S-4 / Human 確定）:
+
+```text
+上表は policy maximums（上限）である。
+default authorization amounts（既定の許可量）ではない。
+Task Packet / Pilot policy はより厳しい limit を設定してよく、
+通常はそうすべきである。
+後続の LOW-AUTO-PILOT-V2 は、AUTO-1 を再オープンせずに、
+より小さい file / diff / retry limit を使用してよい。
 ```
 
 ## 7. Fail-closed rules
@@ -405,11 +486,12 @@ Ready / Merge
 
 ## 効力 / 非効力
 
-### 効力（AUTO-1-A Acceptance 後）
+### 効力（AUTO-1-A ACCEPTED / LOCKED）
 
 - Capability taxonomy / 分類 / 初期 set v1 の契約固定
 - Gateway 判定 pipeline・reasonCode 閉集合・fail-closed 規則の固定
-- baseline binding / allowedPaths / limits / approval / audit 要件の固定
+- baseline binding / allowedPaths / limits（policy ceilings）/ approval / audit 要件の固定
+- `pull_request.merge` = HUMAN_ONLY ＋ Gateway 実装 MUST NOT EXIST の解釈固定
 - AUTO-NT-1〜5 を LOW-AUTO-PILOT-V2 の前提として固定
 
 ### 非効力
@@ -417,16 +499,24 @@ Ready / Merge
 ```text
 AUTONOMY-POLICY-V1 ACCEPTED ≠ Registry / Gateway / backend の実装開始
 AUTONOMY-POLICY-V1 ACCEPTED ≠ AUTO_ALLOWED capability の実行有効化
+  （branch.push / pull_request.create_draft / update_draft /
+    review.request: NOT newly enabled；将来の自律有効化は
+    別 Human Explicit GO ＋ 上位正本との整合が必要）
 AUTONOMY-POLICY-V1 ACCEPTED ≠ 上位正本（DEC-AI-ORG-003 等）の緩和・書換
-AUTONOMY-POLICY-V1 ACCEPTED ≠ EC-3 / EC-4 の skip・代替
-AUTONOMY-POLICY-V1 ACCEPTED ≠ LOW-AUTO-PILOT-V2 開始
+AUTONOMY-POLICY-V1 ACCEPTED ≠ EC-3 / EC-4 の解消・skip・代替
+AUTONOMY-POLICY-V1 ACCEPTED ≠ LOW-AUTO-PILOT-V2 開始（NOT AUTHORIZED）
 AUTONOMY-POLICY-V1 ACCEPTED ≠ 本 recording PR の Ready / Merge
+Authorization expansion: NONE
 ```
 
 ## 次工程（Human only）
 
-1. **AUTO-1-A** — 本 contract の Human Acceptance（limits 数値・分類の確定を含む）
-2. 本 recording PR の Ready / Merge（別 Human Gate）
-3. Acceptance 後: `docs/process/ai-governance.md` への登録（別 commit / 同 PR 可）
-4. **AUTO-2** Capability Registry → **AUTO-3** Task Packet Schema → **AUTO-4** Action Gateway contract（各 unit selection は Human）
-5. AUTO-NT-1〜5 PASS 確認 → その後にのみ LOW-AUTO-PILOT-V2 を Human 判断で検討
+1. 本 Acceptance recording の Independent Review / verification（本 unit）
+2. 本 recording PR の Human Ready Decision（自動 Ready しない）
+3. Human Merge Decision（自動 Merge しない）
+4. **AUTO-2** Capability Registry → **AUTO-3** Task Packet Schema → **AUTO-4** Action Gateway contract（各 unit selection / Start は別 Human GO；いずれも NOT STARTED）
+5. AUTO-NT-1〜5 PASS 確認 → その後にのみ LOW-AUTO-PILOT-V2 を Human 判断で検討（現在 NOT AUTHORIZED）
+
+## Independent Review
+
+正本: [`../architecture/decision-auto-1-autonomy-policy-v1-independent-review.md`](../architecture/decision-auto-1-autonomy-policy-v1-independent-review.md)
