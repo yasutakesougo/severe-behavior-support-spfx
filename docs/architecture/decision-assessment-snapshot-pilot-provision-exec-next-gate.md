@@ -1,10 +1,11 @@
 # Decision-AS-PILOT-PROVISION-EXEC-1 — Next Gate
 
-Status: CONSUMED for Site/List evidence + Independent Review + PR #187 MERGED；OPEN for CN-1  
-Date: 2026-08-10  
-Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)  
-Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./decision-assessment-snapshot-pilot-provision-vr1-evidence.md)  
-Independent Review: [`decision-assessment-snapshot-pr-187-independent-review.md`](./decision-assessment-snapshot-pr-187-independent-review.md)（PASS）
+Status: CONSUMED for Site/List evidence + Independent Review + PR #187 MERGED；OPEN for CN-1
+Date: 2026-08-10
+Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)
+Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./decision-assessment-snapshot-pilot-provision-vr1-evidence.md)
+Independent Review #187: [`decision-assessment-snapshot-pr-187-independent-review.md`](./decision-assessment-snapshot-pr-187-independent-review.md)（PASS）
+Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-review.md`](./decision-assessment-snapshot-pr-188-independent-review.md)（PASS）
 
 ---
 
@@ -14,6 +15,7 @@ Independent Review: [`decision-assessment-snapshot-pr-187-independent-review.md`
 |---|---|
 | PR #187 | MERGED / Current SoT |
 | PR #186 | CLOSED / NOT MERGED / SUPERSEDED by PR #187 |
+| Independent Review #188 | PASS（P0=0 / P1=0 / P2=0） |
 | Execution GO（EG-1） | GIVEN |
 | Site creation | COMPLETED |
 | List creation | COMPLETED |

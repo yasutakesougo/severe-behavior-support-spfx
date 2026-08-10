@@ -52,7 +52,7 @@ Current step:
   PR #186 = CLOSED / SUPERSEDED
   SV-1 / LV-1 = CONFIRMED；VR-1 = PASS；CN-1 = OPEN
 
-NOT next without CN-1 / Ready:
+NOT next without CN-1:
   Internal Column Name confirmation
   Implementation Start
   creating with XXXXX / YYYYY
