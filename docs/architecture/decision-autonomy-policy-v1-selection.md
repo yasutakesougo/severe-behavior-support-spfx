@@ -3,23 +3,25 @@
 この文書は、**AUTO-1 — AUTONOMY-POLICY-V1** の選定パケットである。
 
 Canonical process SoT: [`../process/autonomy-policy-v1.md`](../process/autonomy-policy-v1.md)  
-Machine-readable SoT: [`../process/autonomy-policy-v1.json`](../process/autonomy-policy-v1.json)
+Machine-readable SoT: [`../process/autonomy-policy-v1.json`](../process/autonomy-policy-v1.json)  
+Acceptance: [`decision-autonomy-policy-v1-acceptance.md`](./decision-autonomy-policy-v1-acceptance.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: AUTO-1 — AUTONOMY-POLICY-V1
-Kind: docs-only machine-decidable policy contract / Human Acceptance candidate
-Status: SELECTED / CANDIDATE / READY_FOR_HUMAN_ACCEPTANCE
-Recommended Option: AP1-A
-Human Decision: PENDING
-Policy Accepted: NO
-Implementation: DO NOT START
+Kind: docs-only machine-decidable policy contract / Human Acceptance recording
+Status: SELECTED / CONSUMED / ACCEPTED / LOCKED
+Human Decision: AP1-A = ACCEPT（2026-08-10）
+Policy Accepted: YES（contract only）
+Implementation: DO NOT START / NOT GRANTED
 Authorization effect: NONE
 Permission expansion: NONE
-Ready: HUMAN-ONLY
-Merge: HUMAN-ONLY
+Ready: HUMAN-ONLY / NOT AUTHORIZED by Acceptance
+Merge: HUMAN-ONLY / NOT AUTHORIZED by Acceptance
 SharePoint / M365: UNCHANGED / FORBIDDEN
 Deploy: FORBIDDEN
+LOW-AUTO-PILOT-V2: NOT AUTHORIZED
+Initial Candidate HEAD: cff443813a9dade839f1e06a0af88bb6a6da3ece
 Baseline main at selection:
   5bbe912d0e5e127cf1846bb0edf5ddff24ca99a0
 ```
@@ -39,12 +41,6 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | Codex independent review path | Builder / Reviewer 分離の根拠として妥当 |
 | AssessmentSnapshot adapter | AIS-1-B ACCEPTED；EC-3 / EC-4 Decision 待ち；別レーン |
 
-観察:
-
-- LOW-AUTO-PILOT 成功は「会話上のルール」で安全を担保している
-- 次段階は Capability / Gateway による **システム強制**
-- ただし法人アプリ本体の EC-3 / EC-4 を飛ばしてはならない
-
 ## Selected unit
 
 ```text
@@ -54,14 +50,14 @@ AUTO-1 — AUTONOMY-POLICY-V1
 ≠ AssessmentSnapshot adapter EC-3 / EC-4
 ```
 
-## Options disposition（Candidate）
+## Options disposition
 
 | Option | Content | Result |
 |---|---|---|
-| **AP1-A** | AUTONOMY-POLICY-V1 契約を本正本どおり固定（taxonomy / risk / baseline / paths / limits / fail-closed / UNKNOWN→DENY / approval / audit / Gateway flow / negative tests） | **RECOMMENDED** |
-| AP1-B | Cursor SDK Runner を先に実装 | NOT SELECTED（契約なき実行は禁止） |
-| AP1-C | AssessmentSnapshot EC-3/EC-4 を AUTO-1 に混在 | NOT SELECTED（レーン分離違反） |
-| AP1-HOLD | OS レーンを進めない | available |
+| **AP1-A** | AUTONOMY-POLICY-V1 契約を本正本どおり固定 | **ACCEPTED / LOCKED** |
+| AP1-B | Cursor SDK Runner を先に実装 | NOT SELECTED |
+| AP1-C | AssessmentSnapshot EC-3/EC-4 を AUTO-1 に混在 | NOT SELECTED |
+| AP1-HOLD | OS レーンを進めない | not selected |
 
 ## Lane separation（selection constraint）
 
@@ -70,24 +66,22 @@ Lane A — AssessmentSnapshot adapter
   Decision-AS-ADAPTER-START-1 = AIS-1-B ACCEPTED / LOCKED
   Implementation Start = HOLD
   Next = EC-3 + EC-4 Decision
+  AUTO-1 effect = UNCHANGED / NOT SKIPPED
 
 Lane B — AI Development OS
-  Next = AUTO-1 AUTONOMY-POLICY-V1（本 selection）
-```
-
-```text
-Selecting AUTO-1 does NOT close EC-3 / EC-4.
-Selecting AUTO-1 does NOT authorize adapter Implementation Start.
+  AUTO-1 = ACCEPTED / LOCKED（contract）
+  Next impl units require separate GO
 ```
 
 ## Deliverables（本 unit）
 
 | File | Role |
 |---|---|
-| `docs/process/autonomy-policy-v1.md` | process SoT |
+| `docs/process/autonomy-policy-v1.md` | process SoT（ACCEPTED / LOCKED） |
 | `docs/process/autonomy-policy-v1.json` | machine-readable normative contract |
 | `docs/architecture/decision-autonomy-policy-v1-selection.md` | 本 selection packet |
 | `docs/architecture/decision-autonomy-policy-v1-packet.md` | compare / options packet |
+| `docs/architecture/decision-autonomy-policy-v1-acceptance.md` | Human Acceptance |
 | `docs/architecture/decision-autonomy-policy-v1-independent-review.md` | Independent Review |
 | `docs/process/ai-governance.md` | 最小参照追加のみ |
 
@@ -104,24 +98,23 @@ Ready / Merge authorization
 DEC-AA / Routine AUG / LOW-AUTO-PILOT rewrite
 EC-3 / EC-4 Decision packet（Lane A；別 unit）
 negative test code（要件のみ固定）
+LOW-AUTO-PILOT-V2 enablement
 ```
 
-## Done criteria（Candidate recording）
+## Done criteria（Acceptance recording）
 
-- AUTO-1 scope 10 面が正本化されている
-- initial capability set が AUTO_ALLOWED / HUMAN_ONLY / FORBIDDEN に分離されている
+- Human Decision AP1-A = ACCEPT が正本化されている
+- Status = ACCEPTED / LOCKED が一貫している
 - `pull_request.merge` が Gateway 非搭載（FORBIDDEN）として明示されている
-- Gateway decision flow と DENY reason codes が固定されている
-- Cursor execution backend が言語非依存で抽象化されている
-- Lane A（EC-3/EC-4）非侵食が明示されている
-- negative test 5 件が LOW-AUTO-PILOT-V2 前要件として固定されている
-- Authorization effect = NONE
-- Human Option Acceptance は未了（PENDING）として明示されている
+- UNKNOWN → DENY / baseline / allowedPaths / negative tests N1–N5 が LOCK されている
+- Authorization effect = NONE / Implementation Start = NOT GRANTED
+- Lane A（EC-3/EC-4）UNCHANGED
+- Independent Review PASS on Acceptance recording HEAD（P0=0 / P1=0）
 
 ## Next
 
 ```text
-1. Human Decision: AP1-A ACCEPT or HOLD
+1. Acceptance IR / Draft PR（Ready / Merge は別 Human Decision）
 2. Parallel Lane A: EC-3 + EC-4 Decision（do not skip）
-3. After AP1-A Acceptance: AUTO-2 Capability Registry（separate unit）
+3. After separate GO: AUTO-2 Capability Registry
 ```

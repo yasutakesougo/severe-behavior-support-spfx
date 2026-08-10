@@ -7,6 +7,9 @@
 Selected via:
 [`decision-autonomy-policy-v1-selection.md`](./decision-autonomy-policy-v1-selection.md)
 
+Acceptance:
+[`decision-autonomy-policy-v1-acceptance.md`](./decision-autonomy-policy-v1-acceptance.md)
+
 Canonical:
 [`../process/autonomy-policy-v1.md`](../process/autonomy-policy-v1.md)
 
@@ -19,12 +22,12 @@ IR:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: AUTO-1 — AUTONOMY-POLICY-V1
-Status: CANDIDATE / READY_FOR_HUMAN_ACCEPTANCE
-Recommended Option: AP1-A
-Human Decision: PENDING
-Baseline main:
+Status: CONSUMED / ACCEPTED / LOCKED
+Human Decision: AP1-A = ACCEPT
+Baseline main at Candidate:
   5bbe912d0e5e127cf1846bb0edf5ddff24ca99a0
-Implementation: DO NOT START
+Initial Candidate HEAD: cff443813a9dade839f1e06a0af88bb6a6da3ece
+Implementation Start: NOT GRANTED
 Authorization effect: NONE
 ```
 
@@ -47,14 +50,14 @@ AssessmentSnapshot Implementation Start = HOLD（EC-3 / EC-4 未充足）
 
 ## 比較結果
 
-| ID | 判定 | 内容 | Candidate result |
+| ID | 判定 | 内容 | Human result |
 |---|---|---|---|
-| **AP1-A** | 契約先固定 | taxonomy / class / risk / baseline / paths / limits / fail-closed / UNKNOWN→DENY / approval / audit / Gateway flow / negative tests を docs + JSON で固定。実装は後続 | **RECOMMENDED** |
+| **AP1-A** | 契約先固定 | taxonomy / class / risk / baseline / paths / limits / fail-closed / UNKNOWN→DENY / approval / audit / Gateway flow / negative tests を docs + JSON で固定。実装は後続 | **ACCEPTED / LOCKED** |
 | AP1-B | Runner 先 | Cursor SDK Runner を契約前に実装 | NOT SELECTED |
 | AP1-C | レーン混在 | EC-3/EC-4 を AUTO-1 に含める | NOT SELECTED |
-| AP1-HOLD | 延期 | OS レーンを進めない | available |
+| AP1-HOLD | 延期 | OS レーンを進めない | not selected |
 
-## AP1-A が固定する契約
+## AP1-A が LOCK した契約
 
 ### 1. Capability taxonomy
 
@@ -70,7 +73,7 @@ AssessmentSnapshot Implementation Start = HOLD（EC-3 / EC-4 未充足）
 
 ### 3. Initial capability set
 
-AUTO_ALLOWED 候補:
+AUTO_ALLOWED 候補（taxonomy only；≠ enabled）:
 
 ```text
 repo.read
@@ -85,18 +88,23 @@ ci.read
 review.request
 ```
 
-HUMAN_ONLY / FORBIDDEN:
+HUMAN_ONLY:
 
 ```text
-pull_request.ready          HUMAN_ONLY
-pull_request.merge          FORBIDDEN（非搭載）
-decision.accept             HUMAN_ONLY / POLICY_BLOCKED
-decision.lock               HUMAN_ONLY / POLICY_BLOCKED
-sharepoint.schema.write     FORBIDDEN
-sharepoint.permission.write FORBIDDEN
-github.permission.write     FORBIDDEN
-secret.write                FORBIDDEN
-deploy.production           FORBIDDEN
+pull_request.ready
+decision.accept
+decision.lock
+```
+
+Gateway-forbidden（capability 非搭載 / FORBIDDEN）:
+
+```text
+pull_request.merge
+sharepoint.schema.write
+sharepoint.permission.write
+github.permission.write
+secret.write
+deploy.production
 ```
 
 ### 4. risk
@@ -144,11 +152,11 @@ Action Gateway は pull_request.merge capability を持たない。
 
 ```text
 Cursor execution backend（language-agnostic in AUTO-1）
-AUTO-8: TypeScript SDK (@cursor/sdk) first
+AUTO-8: TypeScript SDK (@cursor/sdk) first — NOT STARTED
 Python SDK: not a basis for AUTO-1
 ```
 
-### Negative tests（要件のみ）
+### Negative tests（要件のみ；実装しない）
 
 ```text
 N1 merge → POLICY_BLOCKED
@@ -165,46 +173,38 @@ LOW-AUTO-PILOT-V2 前に 5 件すべて必須。
 ```text
 法人アプリ本体レーン:
   AssessmentSnapshot adapter
-  EC-3 / EC-4 = still required
+  EC-3 / EC-4 = PENDING / UNCHANGED
   AUTO-1 does not satisfy or skip them
 
 AI Development OS レーン:
-  AUTO-1 → Registry → Task Packet → Gateway → Cursor backend
+  AUTO-1 ACCEPTED / LOCKED
+  → Registry → Task Packet → Gateway → Cursor backend（各別 GO）
 ```
 
 ## 非効力
 
 ```text
-AP1-A Acceptance（将来）でも:
+AP1-A ACCEPT:
   Implementation Start = NOT GRANTED
   Gateway / Registry / Runner code = NOT STARTED
-  Ready / Merge = HUMAN-ONLY
+  Ready / Merge = NOT AUTHORIZED
   DEC-AA / Routine AUG rewrite = NO
   adapter EC-3 / EC-4 = NOT CLOSED
   AUTO_ALLOWED candidates = NOT ENABLED
+  LOW-AUTO-PILOT-V2 = NOT AUTHORIZED
 ```
 
-## Human Decision 記入欄
+## Human Decision recorded
 
 ```text
-Human Decision:
-  AP1-A | AP1-HOLD | other
-Status after Decision:
-  ACCEPTED / LOCKED | HOLD
-Date:
-  YYYY-MM-DD
-```
-
-Candidate 時点:
-
-```text
-Human Decision: PENDING
-Recommended: AP1-A
+Human Decision: AP1-A = ACCEPT
+Status: ACCEPTED / LOCKED
+Date: 2026-08-10
 ```
 
 ## Next after Acceptance
 
-1. 本 Acceptance recording の IR / verification
-2. Human Ready / Merge for recording PR（自動しない）
+1. Acceptance IR / mechanical verification
+2. Draft PR publication（Ready / Merge は別 Human Decision）
 3. Parallel: Lane A EC-3 + EC-4 Decision
 4. Next OS unit: AUTO-2 Capability Registry（別 GO）

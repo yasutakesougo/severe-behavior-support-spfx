@@ -1,29 +1,33 @@
-# Independent Review — AUTO-1 AUTONOMY-POLICY-V1（Candidate）
+# Independent Review — AUTO-1 AUTONOMY-POLICY-V1（Acceptance）
 
-この文書は、**AUTO-1 — AUTONOMY-POLICY-V1** の docs-only
-**Candidate / READY_FOR_HUMAN_ACCEPTANCE** 記録に対する Independent Review 正本である。
+この文書は、**AUTO-1 — AUTONOMY-POLICY-V1 / AP1-A = ACCEPT** の
+docs-only Human Acceptance recording に対する Independent Review 正本である。
 
-Human Acceptance の代替ではない。Policy Accepted / Implementation Start /
-Ready / Merge / DEC-AA rewrite / adapter EC-3・EC-4 クローズの認可ではない。
+Human Acceptance の代替ではない。Implementation Start / Gateway・Registry・Runner 実装 /
+Ready / Merge / LOW-AUTO-PILOT-V2 / DEC-AA rewrite / adapter EC-3・EC-4 クローズの認可ではない。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Kind: Independent Review（docs-only Candidate recording）
+Kind: Independent Review（docs-only Acceptance recording）
 Unit: AUTO-1 — AUTONOMY-POLICY-V1
-Recommended Option: AP1-A
-Human Decision: PENDING
+Human Decision: AP1-A = ACCEPT
+Status: PASS
+Findings: P0=0 / P1=0 / P2=2 unit + carry-forwards OPEN
+Process status: ACCEPTED / LOCKED
 Canonical: docs/process/autonomy-policy-v1.md
 Machine-readable: docs/process/autonomy-policy-v1.json
 Selection: docs/architecture/decision-autonomy-policy-v1-selection.md
 Packet: docs/architecture/decision-autonomy-policy-v1-packet.md
-Status: PASS（as Candidate recording）
-Findings: P0=0 / P1=0 / P2=2 unit + carry-forwards OPEN
-Policy Accepted: NO
+Acceptance: docs/architecture/decision-autonomy-policy-v1-acceptance.md
+Initial Candidate HEAD: cff443813a9dade839f1e06a0af88bb6a6da3ece
 Authorization effect: NONE
 Permission expansion: NONE
+Implementation Start: NOT GRANTED
+LOW-AUTO-PILOT-V2: NOT AUTHORIZED
 SharePoint / M365: UNCHANGED / FORBIDDEN
-Merge: HUMAN-ONLY
-AssessmentSnapshot EC-3 / EC-4: NOT SKIPPED / NOT CLOSED
+Ready: NOT AUTHORIZED by Acceptance
+Merge: NOT AUTHORIZED by Acceptance
+AssessmentSnapshot EC-3 / EC-4: UNCHANGED / PENDING
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -33,67 +37,71 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 | # | Check | Result |
 |---|---|---|
-| R1 | AUTO-1 scope 10 面が正本に揃っている | **PASS** |
-| R2 | Capability taxonomy が AUTO_ALLOWED / HUMAN_ONLY / FORBIDDEN に分離 | **PASS** |
-| R3 | `pull_request.merge` が FORBIDDEN かつ Gateway 非搭載として明示 | **PASS** |
-| R4 | Gateway decision flow が fail-closed / UNKNOWN→DENY | **PASS** |
-| R5 | DENY reason codes が列挙されている | **PASS** |
-| R6 | baseline SHA / allowedPaths / limits / approval / audit が契約化 | **PASS** |
-| R7 | Cursor execution backend が言語非依存；Python SDK を根拠にしていない | **PASS** |
-| R8 | Lane A（EC-3/EC-4）非侵食が明示 | **PASS** |
-| R9 | Authorization effect = NONE；permission expansion NONE | **PASS** |
-| R10 | DEC-AA / Routine AUG / LOW-AUTO-PILOT を書き換えない | **PASS** |
-| R11 | AUTO_ALLOWED 候補 ≠ enablement が明示（Capability ≠ Authorization） | **PASS** |
-| R12 | negative test 5 件が LOW-AUTO-PILOT-V2 前要件として固定 | **PASS** |
-| R13 | docs-only（src/tests/runtime 実装なし） | **PASS** |
-| R14 | Human Decision = PENDING；Accepted と偽称していない | **PASS** |
-| R15 | machine-readable JSON が markdown SoT と主要面で一致 | **PASS** |
+| R1 | Human Decision AP1-A = ACCEPT と本文が一致（ACCEPTED / LOCKED） | **PASS** |
+| R2 | Capability taxonomy / initial AUTO_ALLOWED candidates LOCK | **PASS** |
+| R3 | HUMAN_ONLY vs Gateway-forbidden が Human Acceptance と一致 | **PASS** |
+| R4 | `pull_request.merge` = FORBIDDEN / Gateway 非搭載（ABSENT） | **PASS** |
+| R5 | UNKNOWN → DENY；Gateway result = ALLOW \| DENY | **PASS** |
+| R6 | baselineSha binding / BASELINE_MOVED PRESERVED | **PASS** |
+| R7 | allowedPaths enforcement / OUT_OF_SCOPE PRESERVED | **PASS** |
+| R8 | risk LOW/MEDIUM/HIGH；UNKNOWN risk → DENY；DEC-AA 非緩和 | **PASS** |
+| R9 | Approval non-claims（CI/IR/Accepted ≠ Start）LOCK | **PASS** |
+| R10 | Audit required / forbidden-to-record fields LOCK | **PASS** |
+| R11 | Gateway evaluation order LOCK | **PASS** |
+| R12 | Negative tests N1–N5 = 5 required before LOW-AUTO-PILOT-V2 | **PASS** |
+| R13 | Cursor backend language-agnostic；AUTO-8 NOT STARTED | **PASS** |
+| R14 | Lane A EC-3/EC-4 UNCHANGED / NOT SKIPPED | **PASS** |
+| R15 | Authorization effect NONE；no permission expansion | **PASS** |
+| R16 | Markdown ↔ JSON major surfaces consistent | **PASS**（mechanical check） |
+| R17 | docs-only（src/tests/runtime 実装なし） | **PASS**（最終 diff で再確認） |
+| R18 | Acceptance ≠ Ready / Merge / AUTO-2 Start | **PASS** |
 
 ```text
-Independent Review: PASS（Candidate recording）
-AUTO-1: CANDIDATE / READY_FOR_HUMAN_ACCEPTANCE / AP1-A recommended
-Policy Accepted: NO
+Independent Review: PASS
+AUTO-1: ACCEPTED / LOCKED / AP1-A
 Authorization effect: NONE
+Implementation Start: NOT GRANTED
+Gateway merge capability: ABSENT
 ```
 
 ## Findings
 
 | Sev | ID | Status | Note |
 |---|---|---|---|
-| P2 | AP1-P2-1 | **OPEN** | AUTO_ALLOWED 候補（mutation 含む）と DEC-AA-001 v1 AUTO 集合の差。taxonomy ≠ enablement で記録；enable は別 GO |
-| P2 | AP1-P2-2 | **OPEN** | `decision.accept` の DENY reason を POLICY_BLOCKED と HUMAN_ONLY のどちらに固定するかは AUTO-4 詳細 |
-| P2 | LA1-P2-1 等 | **OPEN** | LOW-AUTO-PILOT / PROCESS-OPT / AA3 carry-forwards — 本 unit で偽クローズしない |
+| P2 | AP1-P2-1 | **OPEN** | AUTO_ALLOWED 候補（mutation 含む）と DEC-AA-001 v1 AUTO 集合の差。taxonomy ≠ enablement；enable は別 GO |
+| P2 | AP1-P2-2 | **OPEN** | `decision.accept` DENY reason の POLICY_BLOCKED vs HUMAN_ONLY 細部は AUTO-4。N3 は either を許容 |
+| P2 | LA1-P2-1 等 | **OPEN** | LOW-AUTO-PILOT / PROCESS-OPT / AA3 carry-forwards — 偽クローズしない |
 
 P0 = 0 / P1 = 0
 
 ```text
-P0 or P1 present → must NOT treat as Candidate IR PASS
-Actual: P0=0 / P1=0 → Candidate recording IR PASS
+P0 or P1 present → HOLD（must NOT treat as Acceptance recording PASS）
+Actual: P0=0 / P1=0 → Acceptance recording IR PASS
 P2 remain OPEN
 ```
 
 ## Lane separation audit
 
-| Lane | Current | AUTO-1 effect |
+| Lane | Current | AUTO-1 Acceptance effect |
 |---|---|---|
-| AssessmentSnapshot adapter | AIS-1-B ACCEPTED；EC-3/EC-4 pending；Start HOLD | **UNCHANGED / NOT SKIPPED** |
-| AI Development OS | AUTO-1 Candidate | **SELECTED for Acceptance** |
+| AssessmentSnapshot adapter | AIS-1-B ACCEPTED；EC-3/EC-4 pending；Start HOLD | **UNCHANGED** |
+| AI Development OS | AUTO-1 policy ACCEPTED / LOCKED | **contract only；impl NOT STARTED** |
 
 ## Explicit non-claims verified
 
 ```text
-IR PASS ≠ Human Acceptance
-Candidate ≠ Policy Accepted
-Candidate ≠ Implementation Start
-Candidate ≠ Gateway / Registry / Runner code
-Candidate ≠ Ready / Merge
-Candidate ≠ EC-3 / EC-4 close
-Candidate ≠ LOW-AUTO-PILOT-V2 enable
+IR PASS ≠ Human Acceptance substitute for later gates
+AP1-A ACCEPT ≠ Implementation Start
+AP1-A ACCEPT ≠ Gateway / Registry / Runner code
+AP1-A ACCEPT ≠ Ready / Merge
+AP1-A ACCEPT ≠ EC-3 / EC-4 close
+AP1-A ACCEPT ≠ LOW-AUTO-PILOT-V2
 ```
 
 ## Next
 
-1. Human Decision on AP1-A
-2. Acceptance 後に Acceptance IR を別記録
-3. Parallel Lane A: EC-3 + EC-4
-4. After Acceptance: AUTO-2 Capability Registry
+1. Draft PR publication（Human Publication GO）
+2. Human Ready Decision（NOT RUN here）
+3. Human Merge Decision（NOT RUN here）
+4. Parallel Lane A: EC-3 + EC-4
+5. AUTO-2 only after separate GO

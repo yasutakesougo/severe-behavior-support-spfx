@@ -3,8 +3,9 @@
 - 文書: `docs/process/autonomy-policy-v1.md`
 - Unit: **AUTO-1 — AUTONOMY-POLICY-V1**
 - 位置づけ: AI Development OS レーンの **自律実行ポリシー契約正本（機械判定可能な契約）**
-- 状態: **CANDIDATE / READY_FOR_HUMAN_ACCEPTANCE**
-- Human Decision: **PENDING**（推奨 Option = **AP1-A**）
+- 状態: **ACCEPTED / LOCKED**
+- Human Decision: **AP1-A = ACCEPT**（2026-08-10）
+- Initial Candidate HEAD: `cff443813a9dade839f1e06a0af88bb6a6da3ece`
 - Machine-readable SoT: [`autonomy-policy-v1.json`](./autonomy-policy-v1.json)
 - 上位正本（緩和・上書きしない）:
   - `docs/decisions/DEC-AI-ORG-003.md`
@@ -16,38 +17,45 @@
 - 関連:
   - Selection: [`../architecture/decision-autonomy-policy-v1-selection.md`](../architecture/decision-autonomy-policy-v1-selection.md)
   - Packet: [`../architecture/decision-autonomy-policy-v1-packet.md`](../architecture/decision-autonomy-policy-v1-packet.md)
+  - Acceptance: [`../architecture/decision-autonomy-policy-v1-acceptance.md`](../architecture/decision-autonomy-policy-v1-acceptance.md)
   - Independent Review: [`../architecture/decision-autonomy-policy-v1-independent-review.md`](../architecture/decision-autonomy-policy-v1-independent-review.md)
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](./self-referential-gate-policy.md)）。
 
-## Human scope fixation（本 unit で固定する契約）
+## Human Acceptance（固定結論）
+
+```text
+AP1-A = ACCEPT
+```
 
 ```text
 AUTO-1 — AUTONOMY-POLICY-V1
 Kind: docs-only / machine-decidable policy contract
-Status: CANDIDATE / READY_FOR_HUMAN_ACCEPTANCE
-Recommended Option: AP1-A
-Policy Accepted: NO
-Implementation: DO NOT START
-Capability Registry impl: NOT THIS UNIT
-Action Gateway impl: NOT THIS UNIT
-Cursor execution backend impl: NOT THIS UNIT（AUTO-8 以降）
+Status: ACCEPTED / LOCKED
+Human Decision: AP1-A = ACCEPT
+Policy Accepted: YES（contract only）
+Implementation Start: NOT GRANTED
+Capability Registry impl: NOT STARTED
+Action Gateway impl: NOT STARTED
+Cursor execution backend impl: NOT STARTED（AUTO-8 以降）
+LOW-AUTO-PILOT-V2: NOT AUTHORIZED
 Authorization effect: NONE
 Permission expansion: NONE
-Ready: HUMAN-ONLY
-Merge: HUMAN-ONLY
+Ready: HUMAN-ONLY / NOT AUTHORIZED by this Acceptance
+Merge: HUMAN-ONLY / NOT AUTHORIZED by this Acceptance
 SharePoint / M365: UNCHANGED / FORBIDDEN
 Deploy: FORBIDDEN
 ```
 
 ```text
 Agent recommendation / Independent Review: NOT Human Acceptance evidence
-This document fixes the AUTO-1 contract surface for Human Acceptance.
-AUTO-1 Candidate ≠ Policy Accepted
-AUTO-1 Candidate ≠ Implementation Start
-AUTO-1 Candidate ≠ LOW-AUTO-PILOT execution enablement
-AUTO-1 Candidate ≠ AssessmentSnapshot EC-3 / EC-4 skip
+This document records the Human Decision only.
+AP1-A ACCEPT ≠ Implementation Start
+AP1-A ACCEPT ≠ Capability Registry / Task Packet / Action Gateway / Runner code
+AP1-A ACCEPT ≠ LOW-AUTO-PILOT-V2 enablement
+AP1-A ACCEPT ≠ Ready / Merge of recording PR
+AP1-A ACCEPT ≠ AssessmentSnapshot EC-3 / EC-4 skip
 ```
 
 ## Lane separation（厳守）
@@ -102,14 +110,16 @@ Two lanes progress independently; neither substitutes for the other.
 - Gateway 判定順序と DENY reason code を固定する
 - negative test 要件（LOW-AUTO-PILOT-V2 前）を固定する
 
-### 非効力（本 unit / Candidate / 将来の Acceptance 単独でも成立しない）
+### 非効力（AP1-A Acceptance 単独でも成立しない）
 
 ```text
 Policy Accepted ≠ Implementation Start
 Policy Accepted ≠ Capability Registry / Action Gateway / Runner code
+Policy Accepted ≠ AUTO_ALLOWED candidate enablement
 Policy Accepted ≠ pull_request.merge capability の付与
 Policy Accepted ≠ Ready / Merge authorization change
 Policy Accepted ≠ DEC-AA / Routine AUG / LOW-AUTO-PILOT rewrite
+Policy Accepted ≠ LOW-AUTO-PILOT-V2
 Policy Accepted ≠ AssessmentSnapshot EC-3 / EC-4 Decision
 Policy Accepted ≠ adapter Implementation Start
 Policy Accepted ≠ SharePoint / M365 / Deploy / secret write
@@ -334,7 +344,8 @@ reason:
   | POLICY_BLOCKED
 ```
 
-`POLICY_BLOCKED` は FORBIDDEN capability 要求（例: merge / SharePoint schema write / Decision accept）に用いる。
+`POLICY_BLOCKED` は FORBIDDEN capability 要求（例: merge / SharePoint schema write）に用いる。  
+`decision.accept` は class = HUMAN_ONLY；N3 は `POLICY_BLOCKED` または `HUMAN_ONLY` を許容（AUTO-4 で reason 細部を固定）。
 
 ## Cursor execution backend（抽象）
 
@@ -381,7 +392,7 @@ AUTO-1 records the requirement only; test code is NOT this unit.
 | ID | Current authority | AUTO-1 effect | Handling |
 |---|---|---|---|
 | AP1-C1 | DEC-AI-ORG-003 Merge = 人の事前承認 | Gateway に `pull_request.merge` を持たせない（より厳しい） | **NO RELAXATION** |
-| AP1-C2 | DEC-AA-001 AUTO = read-only + mechanical verification（v1） | AUTO_ALLOWED 候補に mutation を列挙するが enable しない | **CANDIDATE taxonomy only** |
+| AP1-C2 | DEC-AA-001 AUTO = read-only + mechanical verification（v1） | AUTO_ALLOWED 候補に mutation を列挙するが enable しない | **taxonomy candidates only / NOT ENABLED** |
 | AP1-C3 | LOW-AUTO-PILOT-V1 execution NOT STARTED | 本 unit は pilot execution を開始しない | **NO CHANGE** |
 | AP1-C4 | AssessmentSnapshot EC-3/EC-4 pending | 本 unit は触らない / 飛ばさない | **LANE SEPARATION** |
 | AP1-C5 | Ready / Merge HUMAN-ONLY | 維持 | **NO CHANGE** |
@@ -394,19 +405,20 @@ P1 = 0
 P2 = OPEN carry-forwards remain OPEN（偽クローズしない）
 ```
 
-本 unit 固有 P2（Candidate）:
+本 unit 固有 P2（Acceptance 後も OPEN）:
 
 ```text
 AP1-P2-1: OPEN — AUTO_ALLOWED 候補に mutation 系を含めることと DEC-AA-001 v1 AUTO 集合の差。taxonomy ≠ enablement で記録；enable は別 GO
 AP1-P2-2: OPEN — decision.accept を HUMAN_ONLY と POLICY_BLOCKED のどちらで返すかの Gateway 細部は AUTO-4 で固定
 ```
 
-## 次工程
+## 次工程（Human only）
 
-1. Human Decision on Option **AP1-A**（本 Candidate の Acceptance）
-2. Acceptance 後も Implementation Start は別 GO
-3. 平行 Lane A: AssessmentSnapshot **EC-3 + EC-4** Decision（AUTO-1 と独立）
-4. 次 OS unit: AUTO-2 Capability Registry（Acceptance 後）
+1. 本 Acceptance recording の Independent Review / verification（本 unit）
+2. Human Ready Decision for recording PR（自動 Ready しない）
+3. Human Merge Decision（自動 Merge しない）
+4. 平行 Lane A: AssessmentSnapshot **EC-3 + EC-4** Decision（AUTO-1 と独立）
+5. 別 Human GO: AUTO-2 Capability Registry（Acceptance ≠ Start）
 
 ## Independent Review
 
