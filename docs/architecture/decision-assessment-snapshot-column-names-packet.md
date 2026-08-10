@@ -149,7 +149,7 @@ MT-1 から既知の logical facts だけを並べる。
 
 証跡列順 = Mapping ID → Logical Field → Display Name → Internal Name → Column Type → Status
 
-Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-honmoku`  
+Scope Lists: `AssessmentSnapshots` on `severe-support-isogo` / `severe-support-honmoku`
 Coverage for this fill: **CV-REQ**（MAP-AS-001〜008）
 
 | Mapping ID | Logical Field | Display Name | Internal Name | Column Type | Status |
