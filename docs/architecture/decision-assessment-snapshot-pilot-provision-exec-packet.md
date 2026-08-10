@@ -109,5 +109,6 @@ AI mutation: FORBIDDEN
 VR-1: PASS / SV-1·LV-1: CONFIRMED
 CN-1: OPEN
 evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
-Next gate: INDEPENDENT REVIEW（PR #187）then Ready gate
+Independent Review #187: PASS
+Next gate: Ready gate（Human）
 ```

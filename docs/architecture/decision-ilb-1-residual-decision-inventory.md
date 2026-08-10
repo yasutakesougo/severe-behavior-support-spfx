@@ -100,7 +100,9 @@ Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1
   VR-1: PASS
   CN-1: OPEN
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
-Next gate: INDEPENDENT REVIEW（PR #187）then Ready gate
+  Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
+Independent Review #187: PASS
+Next gate: Ready gate（Human）
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -277,8 +279,9 @@ Order:
      packet: decision-assessment-snapshot-pilot-provision-exec-packet.md
      selection: decision-ilb-1-twenty-seventh-residual-pilot-provision-exec-selection.md
      next gate: decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-       = INDEPENDENT REVIEW（PR #187）then Ready gate
+       = Ready gate（Human）；Independent Review #187 PASS
      evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+  Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
      Execution GO: GIVEN
      AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003 / AP-1）
      Separate Human creation: COMPLETED（Site + List only）
@@ -289,7 +292,7 @@ Order:
      LV-1: CONFIRMED
      VR-1: PASS
      CN-1: OPEN
-     remaining examples: Independent Review / Ready / CN-1 / common-management naming / post-retention / DEC-015
+     remaining examples: Ready / CN-1 / common-management naming / post-retention / DEC-015
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -337,7 +340,9 @@ Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   VR-1: PASS
   CN-1: OPEN
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
-Next gate: INDEPENDENT REVIEW（PR #187）then Ready gate
+  Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
+Independent Review #187: PASS
+Next gate: Ready gate（Human）
 List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN

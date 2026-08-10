@@ -46,7 +46,8 @@ Sequence:
 
 Current step:
   DONE through List names / Provision Exec / VR-1 evidence return
-  Active next = INDEPENDENT REVIEW（PR #187）then Ready gate
+  Active next = Ready gate（Human）
+  Independent Review #187 = PASS
   SV-1 / LV-1 = CONFIRMED；VR-1 = PASS；CN-1 = OPEN
 
 NOT next without CN-1 / Ready:
@@ -122,7 +123,9 @@ SV-1: CONFIRMED
 LV-1: CONFIRMED
 VR-1: PASS
 CN-1: OPEN
-Next gate: FIXED = INDEPENDENT REVIEW（PR #187）then Ready gate
+Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
+  → decision-assessment-snapshot-pr-187-independent-review.md
+Next gate: FIXED = Ready gate（Human）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
 Site / List creation: COMPLETED
@@ -132,7 +135,8 @@ SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for Independent Review → Ready gate
+  waiting for Ready gate（Human）
+  Independent Review #187: PASS
   CN-1 still OPEN
   Agent auto-start: FORBIDDEN
 ```

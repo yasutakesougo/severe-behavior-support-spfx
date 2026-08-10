@@ -1,13 +1,14 @@
 # Decision-AS-PILOT-PROVISION-EXEC-1 — Next Gate
 
-Status: CONSUMED for Site/List creation evidence；OPEN for Independent Review → Ready  
+Status: CONSUMED for Site/List evidence + Independent Review；OPEN for Ready（Human）  
 Date: 2026-08-10  
 Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)  
-Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./decision-assessment-snapshot-pilot-provision-vr1-evidence.md)
+Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./decision-assessment-snapshot-pilot-provision-vr1-evidence.md)  
+Independent Review: [`decision-assessment-snapshot-pr-187-independent-review.md`](./decision-assessment-snapshot-pr-187-independent-review.md)（PASS）
 
 ---
 
-## 1. Evidence return（CONSUMED）
+## 1. Evidence return + Independent Review（CONSUMED）
 
 | Item | Status |
 |---|---|
@@ -21,6 +22,7 @@ Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./dec
 | SV-1 | CONFIRMED |
 | LV-1 | CONFIRMED |
 | VR-1 | PASS |
+| Independent Review #187 | PASS（P0=0 / P1=0 / P2=0） |
 | CN-1 / Internal Column Names | OPEN / NOT OBSERVED |
 | Agent SharePoint mutation | FORBIDDEN（AP-1） |
 
@@ -30,9 +32,8 @@ Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./dec
 
 | Order | Residual | Why next |
 |---|---|---|
-| 1 | Independent Review（PR #187） | evidence + Acceptance boundary review |
-| 2 | Ready gate（Human） | after IR PASS |
-| 3 | Column Internal Names / schema（CN-1） | after real column observation；not done yet |
+| 1 | Ready gate（Human） | IR PASS；Ready は別 Human gate |
+| 2 | Column Internal Names / schema（CN-1） | after real column observation；not done yet |
 
 ---
 

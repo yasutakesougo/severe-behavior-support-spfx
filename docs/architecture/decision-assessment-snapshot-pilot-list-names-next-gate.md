@@ -23,7 +23,7 @@ Now:
   List B = AssessmentSnapshots（OBSERVED / CONFIRMED）
   Decision-AS-PILOT-PROVISION-EXEC-1 = Accepted / LOCKED
   VR-1 = PASS / SV-1·LV-1 = CONFIRMED
-  Active next = INDEPENDENT REVIEW（PR #187）then Ready gate
+  Active next = Ready gate（Human）；IR #187 = PASS
 ```
 
 ## Current state

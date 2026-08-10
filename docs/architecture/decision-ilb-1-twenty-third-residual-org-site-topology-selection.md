@@ -108,8 +108,10 @@ Execution GO: GIVEN
 AI SharePoint mutation: FORBIDDEN
 SV-1: CONFIRMED / LV-1: CONFIRMED / VR-1: PASS
 CN-1: OPEN
+Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
+  → decision-assessment-snapshot-pr-187-independent-review.md
 Next Human gate: FIXED
-  INDEPENDENT REVIEW（PR #187）then Ready gate
+  Ready gate（Human）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
 

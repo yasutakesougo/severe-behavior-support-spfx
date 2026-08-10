@@ -72,8 +72,10 @@ Selection CONSUMED → Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED
   List A = SupportPlans
   List B = AssessmentSnapshots
 
+Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
+  → decision-assessment-snapshot-pr-187-independent-review.md
 Next gate: FIXED
-  INDEPENDENT REVIEW（PR #187）then Ready gate
+  Ready gate（Human）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED
