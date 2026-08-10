@@ -43,6 +43,7 @@ Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decis
 Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creation execution（Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1；Execution GO GIVEN；AI mutation FORBIDDEN）
 Twenty-eighth residual Decision: SELECTED / CONSUMED — CN-1 Internal Column Names observation（Decision-AS-CN1-OBSERVATION-1 CLOSED / CONSUMED；DEFAULT_COLUMNS_ONLY；custom = 0）
 Twenty-ninth residual Decision: SELECTED / CONSUMED — Post-CN-1 schema mapping / column path（Decision-AS-SCHEMA-MAPPING-NEXT-1 Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1）
+Thirtieth residual Decision: SELECTED / CONSUMED — MT-1 mapping-table docs update（assessment-snapshot-sharepoint-mapping.md；NOT mapping-complete）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -123,6 +124,9 @@ Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
   IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
   next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
   prior CN-1 packet: decision-assessment-snapshot-cn1-observation-packet.md（CLOSED）
+Thirtieth residual: CONSUMED — MT-1 mapping-table docs update
+  table: assessment-snapshot-sharepoint-mapping.md（UPDATED / NOT mapping-complete）
+  selection: decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md
 Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
@@ -341,6 +345,12 @@ Order:
      adapter / schema mapping impl: HOLD（XB-1）
      SharePoint column creation: FORBIDDEN（CP-1）
      Intended Internal Names: NOT ADOPTED（IN-A）
+ 30. Thirtieth residual: MT-1 mapping-table docs update（DONE / CONSUMED）
+     selection: decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md
+     table: assessment-snapshot-sharepoint-mapping.md
+     Status: UPDATED under MT-1 / NOT mapping-complete
+     app Internal Names: NOT PRESENT / 未確認
+     Implementation Start: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -400,6 +410,8 @@ PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
 Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
   acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
   next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
+Thirtieth residual: CONSUMED — MT-1 mapping-table docs update
+  table: assessment-snapshot-sharepoint-mapping.md
 Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md

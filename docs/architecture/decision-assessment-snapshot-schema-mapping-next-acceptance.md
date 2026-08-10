@@ -198,6 +198,7 @@ Deploy / real data: NO-GO
 
 Authorized later（separate units; not auto-started）:
   MT-1 docs update: logical mapping 表へ Status=未確認 / NOT PRESENT を反映
+    → CONSUMED via assessment-snapshot-sharepoint-mapping.md
   Column provisioning Decision / Execution GO（CP-1 separate）
   Issue Status Reconciliation（independent process debt）
 

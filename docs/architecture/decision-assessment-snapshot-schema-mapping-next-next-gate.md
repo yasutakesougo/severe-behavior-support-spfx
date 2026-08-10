@@ -1,9 +1,10 @@
 # Decision-AS-SCHEMA-MAPPING-NEXT-1 — Next Gate（after Acceptance）
 
-Status: Decision-AS-SCHEMA-MAPPING-NEXT-1 Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1；next residual NOT SELECTED
+Status: SCHEMA-MAPPING-NEXT-1 Accepted；MT-1 mapping-table docs update CONSUMED；next residual NOT SELECTED
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](./decision-assessment-snapshot-schema-mapping-next-acceptance.md)
-Packet: [`decision-assessment-snapshot-schema-mapping-next-packet.md`](./decision-assessment-snapshot-schema-mapping-next-packet.md)
+MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
+Selection: [`decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md`](./decision-ilb-1-thirtieth-residual-mt1-mapping-table-selection.md)
 
 ---
 
@@ -15,6 +16,8 @@ Packet: [`decision-assessment-snapshot-schema-mapping-next-packet.md`](./decisio
 | Decision-AS-CN1-OBSERVATION-1 | CLOSED / CONSUMED / DEFAULT_COLUMNS_ONLY |
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
+| Thirtieth residual | **CONSUMED**（MT-1 mapping-table docs update） |
+| AssessmentSnapshot mapping table | **UPDATED** under MT-1 / **NOT mapping-complete** |
 | Custom application columns | 0 / NOT PRESENT |
 | Intended Internal Names | NOT ADOPTED（IN-A） |
 | Implementation Start | HOLD（XB-1） |
@@ -26,33 +29,32 @@ Packet: [`decision-assessment-snapshot-schema-mapping-next-packet.md`](./decisio
 
 ---
 
-## 2. Immediate candidates（NOT SELECTED by Acceptance）
+## 2. Immediate candidates（NOT SELECTED）
 
 | Order | Candidate | Why |
 |---|---|---|
-| 1 | MT-1 mapping-table docs update（Status=`未確認` / `NOT PRESENT`） | Acceptance が許可する docs unit；実装開始ではない |
-| 2 | Column provisioning Decision / Execution GO | CP-1 により別 Human gate |
-| 3 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Column provisioning Decision / Execution GO | CP-1 により別 Human gate |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Next substantive residual: NOT SELECTED by this Acceptance
-Do NOT auto-start any candidate from Acceptance alone.
+Next substantive residual: NOT SELECTED
+Do NOT auto-start any candidate.
 
 Still HOLD / FORBIDDEN:
   Implementation Start = HOLD
   adapter / schema mapping code = HOLD
   SharePoint column creation = FORBIDDEN
   Internal Name invention = FORBIDDEN
-  treating DEFAULT_COLUMNS_ONLY as mapping-complete = FORBIDDEN
+  treating DEFAULT_COLUMNS_ONLY / MT-1 table as mapping-complete = FORBIDDEN
 ```
 
 ---
 
 ## 3. Explicit non-claims
 
-- MT-1 Accepted does **not** mean mapping-complete.
-- IN-A Accepted does **not** invent or Accept intended Internal Names.
-- CP-1 Accepted does **not** authorize column creation now.
-- XB-1 Accepted does **not** start Implementation / adapter / Deploy.
+- MT-1 docs update does **not** mean mapping-complete.
+- Status=`未確認` / `NOT PRESENT` rows do **not** authorize adapter implementation.
+- CP-1 still requires a separate Human gate for column creation.
+- XB-1 still holds Implementation / adapter / Deploy.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

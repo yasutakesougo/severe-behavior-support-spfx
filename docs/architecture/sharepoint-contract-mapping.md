@@ -95,6 +95,16 @@ Read Conversion
 Write Conversion
 ```
 
+AssessmentSnapshot 向け MT-1 mapping 表（Status=`未確認` / `NOT PRESENT`）:
+[`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
+
+```text
+Pilot Lists DEFAULT_COLUMNS_ONLY（CN-1）:
+  app Internal Names = NOT PRESENT
+  mapping-complete = FORBIDDEN claim
+  Implementation Start / adapter code = HOLD
+```
+
 ## Unresolved Items
 
 - DEC-6 / SharePoint列設計
