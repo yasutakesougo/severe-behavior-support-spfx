@@ -49,7 +49,7 @@
 ## Verification
 - typecheck: N/A（docs）
 - test: N/A（docs）
-- audit: Phase ② body patches require Human；Agent API 403
+- audit: Phase ② body patches require Human；GitHub Issue connector capability = AVAILABLE；Agent Issue mutation policy for this packet = FORBIDDEN（Capability ≠ Authorization）
 
 ## Next Actions
 1. Remain at Phase ② READY / NOT STARTED until Human resumes

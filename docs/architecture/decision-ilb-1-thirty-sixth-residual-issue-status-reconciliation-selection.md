@@ -45,7 +45,7 @@ SELECTED:
   Rule: 28件を無理に減らさない
 
 Still NOT authorized / FORBIDDEN now:
-  Agent GitHub Issue mutation（API 403 / Agent 実行禁止）
+  Agent GitHub Issue mutation（policy FORBIDDEN；Capability ≠ Authorization）
   一括 Close / 一括本文更新
   Implementation Start
   SharePoint adapter / schema mapping code start
@@ -53,6 +53,12 @@ Still NOT authorized / FORBIDDEN now:
   treating Reconciliation as Human create completed
   treating INTENDED as CONFIRMED
   Deploy / real data
+```
+
+```text
+GitHub Issue connector capability: AVAILABLE
+Agent GitHub Issue mutation policy for this Selection / packet: FORBIDDEN
+Capability ≠ Authorization
 ```
 
 Selection ≠ Human create ≠ Implementation Start ≠ mapping-complete。

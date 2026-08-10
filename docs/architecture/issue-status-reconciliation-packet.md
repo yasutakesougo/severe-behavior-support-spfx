@@ -16,8 +16,9 @@ Kind: Process packet（Human-executed Issue hygiene）
 Status: Phase ① → ①b = PASS；Phase ② READY / NOT STARTED
 Assessment date: 2026-08-10
 Assessor: Human OPEN Issue triage + repository SoT
-Agent GitHub Issues API: 403（cannot read/write Issue bodies）
-Agent GitHub Issue mutation: FORBIDDEN
+GitHub Issue connector capability: AVAILABLE
+Agent GitHub Issue mutation policy for this packet: FORBIDDEN
+Capability ≠ Authorization
 Human GitHub Issue mutation now: Phase ② #6 / #8 Current-state patch（optional next）
 Phase ① Close #5 / #10 / #11: DONE（Human）
 Phase ①b read-back: PASS（Human 2026-08-10）
@@ -89,8 +90,10 @@ OPEN 28件は「これから着手する仕事」ではない。
 
 ## 3. Four-group classification（Human attestation）
 
-Human 2026-08-10 triage。Agent は Issue body を API 取得できないため、
-区分・推奨は Human 実読結果を durable に固定する。
+Human 2026-08-10 triage。区分・推奨は Human 実読結果を durable に固定する。
+（GitHub Issue connector capability = AVAILABLE；
+  本 packet の Agent Issue mutation policy = FORBIDDEN；
+  Capability ≠ Authorization）
 
 ### Group A — 古い状態を整理する候補（Close 可否を優先確認）
 
@@ -194,8 +197,11 @@ AUTHORIZED for Human only（after reading Close/resync drafts）:
   Phase ③ after ②: Record keep-open / later-close judgment for
             #4 / #9 / #12 / #15〜#19 without batch Close
 
-FORBIDDEN for Agent:
+FORBIDDEN for Agent（authorization / policy）:
   all GitHub Issue mutations
+  GitHub Issue connector capability = AVAILABLE
+  Agent GitHub Issue mutation policy for this packet = FORBIDDEN
+  Capability ≠ Authorization
 
 FORBIDDEN still / do not mix now:
   Phase ③ before Phase ② complete

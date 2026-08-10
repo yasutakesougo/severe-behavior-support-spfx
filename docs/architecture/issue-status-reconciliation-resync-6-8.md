@@ -16,7 +16,9 @@ Human confirmation（2026-08-10）:
 Scope: #6 and #8 Issue body Current-state reconciliation ONLY
 Both Issues: KEEP OPEN（#8 = Decision Ledger；must remain OPEN）
 Close #6 / #8: FORBIDDEN（this engineering step does not Close either）
-Agent GitHub Issue mutation: FORBIDDEN
+GitHub Issue connector capability: AVAILABLE
+Agent GitHub Issue mutation policy for this packet: FORBIDDEN
+Capability ≠ Authorization
 Human body / Current / Gate / Dependency patch: AUTHORIZED（Human resume）
 Out of scope（do not touch in this step）:
   #4 / #9 / #12 / #15〜#19（Phase ③ later）
@@ -39,7 +41,8 @@ Human create: AUTHORIZED / NOT STARTED by Acceptance
 Implementation Start: HOLD
 SharePoint adapter / schema mapping impl: HOLD
 Deploy / real data: NO-GO
-GitHub Issue mutation by Agent: FORBIDDEN
+GitHub Issue connector capability: AVAILABLE
+GitHub Issue mutation by Agent: FORBIDDEN（policy；Capability ≠ Authorization）
 ```
 
 ---

@@ -19,7 +19,9 @@ Kind: Process assessment（read-only）
 Status: ASSESSED → SELECTED（see thirty-sixth residual）
 Assessment date: 2026-08-10
 Assessor: Human read of OPEN Issues + repository SoT
-Agent GitHub Issues API: 403（cannot read/write Issue bodies in this environment）
+GitHub Issue connector capability: AVAILABLE
+Agent GitHub Issue mutation policy for this packet: FORBIDDEN
+Capability ≠ Authorization
 GitHub Issue mutation by this assessment: NONE
 
 Current SoT（durable；updated）:
@@ -62,10 +64,12 @@ Current SoT（durable；updated）:
   28件削減 ≠ 整理完了
 ```
 
-## 2. Human-attested STALE snapshots（not Agent-observed）
+## 2. Human-attested STALE snapshots
 
-Agent はこの環境で Issue body を API 取得できない（403）。
-以下は Human の実読結果を durable に固定する。
+Issue body triage は Human 実読を durable に固定する。
+GitHub Issue connector capability = AVAILABLE。
+本 packet / assessment の Agent Issue mutation policy = FORBIDDEN。
+Capability ≠ Authorization。
 
 ### 2.1 Issue #6（重大 STALE）
 
@@ -189,8 +193,10 @@ Selected unit: Issue Status Reconciliation
   Phase ② drafts: issue-status-reconciliation-resync-6-8.md
   Phase ③ notes: issue-status-reconciliation-continuity-4-9-12-15-19.md
 
-Human executes Issue Close / body patch.
-Agent mutation remains FORBIDDEN.
+Human executes Issue Close / body patch under packet authorization.
+GitHub Issue connector capability: AVAILABLE
+Agent mutation policy for this assessment / packet: FORBIDDEN
+Capability ≠ Authorization
 
 Parallel / separate:
   Human create under EG-1

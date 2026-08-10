@@ -23,7 +23,7 @@
 - Phase ① Close 実行（Human）: #5 completed / #10 completed / #11 not_planned
 - Phase ①b read-back PASS（#6 OPEN / #8 OPEN）
 - #6 / #8 resync 下書き作成（未適用）
-- Agent Issue mutation = 未実施（FORBIDDEN / API 403）
+- Agent Issue mutation = 未実施（policy FORBIDDEN；Capability ≠ Authorization）
 
 ## Remaining
 - Stop point: Phase ② READY / NOT STARTED
@@ -56,7 +56,7 @@
 ## Verification
 - typecheck: N/A（docs）
 - test: N/A（docs）
-- audit: Phase ①b Human attestation PASS；Agent cannot read Issues（403）
+- audit: Phase ①b Human attestation PASS；GitHub Issue connector capability = AVAILABLE；Agent Issue mutation policy = FORBIDDEN（Capability ≠ Authorization）
 
 ## Next Actions
 1. Remain stopped at Phase ② READY / NOT STARTED unless Human resumes
