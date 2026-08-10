@@ -6,11 +6,12 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_TWENTY_NINTH_RESIDUAL_SELECTION
-Status: SELECTED / OPEN
+Status: SELECTED / CONSUMED
 Selected unit: Post-CN-1 schema mapping / column path / Implementation Start gate
 Follow-up Decision / Packet ID: Decision-AS-SCHEMA-MAPPING-NEXT-1
   packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-  Status: OPEN / NOT ACCEPTED
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+  Status: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
 
 Locked basis（再 Decision しない）:
   Decision-AS-SP-PLACEMENT-1 = Accepted / LOCKED / SV-1 + LV-1 + CN-1 + SC-1
@@ -27,8 +28,10 @@ Current state:
   CN-1 observation = CLOSED / CONSUMED
   Custom application Internal Names = NOT PRESENT
   Match-existing-app-Internal-Names premise = NOT APPLICABLE / INVALIDATED
-  SharePoint adapter / schema mapping impl = HOLD
-  Implementation Start = HOLD
+  Decision-AS-SCHEMA-MAPPING-NEXT-1 = Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  SharePoint adapter / schema mapping impl = HOLD（XB-1）
+  Implementation Start = HOLD（XB-1）
+  SharePoint column creation = FORBIDDEN（CP-1）
 ```
 
 ## Selection meaning
@@ -37,37 +40,34 @@ Current state:
 **schema mapping / column path / Implementation Start 境界**だけを選ぶ。
 
 ```text
-SELECTED / OPEN:
+SELECTED / CONSUMED:
   Decision-AS-SCHEMA-MAPPING-NEXT-1
   packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-  Status: OPEN / NOT ACCEPTED
-  Question:
-    カスタム列 0 の実テナントに対し、
-    schema mapping / column provisioning / Implementation Start を
-    どの順序・境界で進めるか。
-  Compare axes:
-    MT — mapping table now
-    IN — intended Internal Names
-    CP — column provisioning path
-    XB — Implementation / adapter / Deploy boundary
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+  Status: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  Human Decision:
+    MT-1 — mapping 表更新可；Internal Name = 未確認 / NOT PRESENT
+    IN-A — intended Internal Names 不採択
+    CP-1 — column provisioning GO は別 gate
+    XB-1 — Implementation / adapter / Deploy 開始しない
 
 Facts that MUST remain visible:
   custom application columns = 0
   no existing app Internal Names to match
-  inventing Internal Names = FORBIDDEN under CN-1
+  inventing Internal Names = FORBIDDEN under CN-1 / IN-A
   DEFAULT_COLUMNS_ONLY ≠ mapping-complete
   MF-1 fail-closed still applies if required columns missing
 
 Still NOT authorized / FORBIDDEN now:
-  Implementation Start（HOLD）
-  SharePoint adapter / schema mapping code start
-  Internal Name invention
-  SharePoint schema / list / column change without separate Human GO
+  Implementation Start（HOLD / XB-1）
+  SharePoint adapter / schema mapping code start（XB-1）
+  Internal Name invention（IN-A）
+  SharePoint schema / list / column change（CP-1）
   Deploy / real data
   GitHub Issue mutation / 一括 Close / 一括本文更新
 ```
 
-Selection ≠ Acceptance ≠ Implementation Start。
+Selection CONSUMED ≠ Implementation Start ≠ column creation ≠ mapping-complete。
 
 ## Options considered（selection-time）
 
@@ -79,22 +79,20 @@ Selection ≠ Acceptance ≠ Implementation Start。
 | D | Issue Status Reconciliation only | NOT SELECTED as sole next（independent candidate） |
 | E | HOLD / no selection | NOT SELECTED |
 
-## Compare axes for the OPEN packet（not Accepted here）
+## Compare axes（Accepted）
 
-正本 packet:
-[`decision-assessment-snapshot-schema-mapping-next-packet.md`](./decision-assessment-snapshot-schema-mapping-next-packet.md)
+正本 Acceptance:
+[`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](./decision-assessment-snapshot-schema-mapping-next-acceptance.md)
 
-| Axis | Candidate IDs | Note |
+| Axis | Accepted | Note |
 |---|---|---|
-| MT | MT-1 / MT-2 / MT-HOLD / MT-X | mapping 表を今どう扱うか |
-| IN | IN-A / IN-B / IN-HOLD / IN-X | intended Internal Names を採択するか |
-| CP | CP-1 / CP-2 / CP-HOLD / CP-X | column provisioning GO を含めるか |
-| XB | XB-1（必須候補）/ XB-2 / XB-3 NOT selectable now | Implementation / adapter / Deploy 境界 |
+| MT | **MT-1** | mapping 表更新可；Internal Name = 未確認 / NOT PRESENT |
+| IN | **IN-A** | intended Internal Names 不採択 |
+| CP | **CP-1** | column provisioning GO は別 Human gate |
+| XB | **XB-1** | Implementation / adapter / Deploy 開始しない |
 
 ```text
-Agent recommendation（比較用）:
-  MT-1 + IN-A + CP-1 + XB-1
-Packet MUST keep:
+Packet MUST keep（and now LOCKED）:
   XB — Implementation Start / adapter code / Deploy = separate
   CN-1 — created columns は再観測で確定；推論禁止
   SC-1 — logical mapping vs deployment config 分離
@@ -116,17 +114,21 @@ Issue Status Reconciliation:
 
 ```text
 Twenty-eighth residual: CONSUMED（CN-1 observation CLOSED）
-Twenty-ninth residual: SELECTED / OPEN
-  Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
-  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-  theme: schema mapping / column path / Implementation Start boundary
-  fact: custom columns = 0；match-existing premise INVALIDATED
-  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
+Twenty-ninth residual: CONSUMED
+  Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+  next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
 
-Until packet Accepted + prerequisites met:
+Still HOLD:
   SharePoint adapter / schema mapping impl = HOLD
   Implementation Start = HOLD
   Deploy / real data = NO-GO
-  SharePoint schema/list/column change = FORBIDDEN without separate GO
-  Internal Name invention = FORBIDDEN
+  SharePoint schema/list/column change = FORBIDDEN（CP-1）
+  Internal Name invention = FORBIDDEN（IN-A）
+
+Next substantive residual: NOT SELECTED by this Acceptance
+Candidates（separate units）:
+  MT-1 mapping-table docs update
+  Column provisioning Decision / Execution GO
+  Issue Status Reconciliation
 ```

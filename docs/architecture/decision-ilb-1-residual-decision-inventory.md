@@ -42,7 +42,7 @@ Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / �
 Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1；SupportPlans / AssessmentSnapshots）
 Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creation execution（Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1；Execution GO GIVEN；AI mutation FORBIDDEN）
 Twenty-eighth residual Decision: SELECTED / CONSUMED — CN-1 Internal Column Names observation（Decision-AS-CN1-OBSERVATION-1 CLOSED / CONSUMED；DEFAULT_COLUMNS_ONLY；custom = 0）
-Twenty-ninth residual Decision: SELECTED / OPEN — Post-CN-1 schema mapping / column path / Implementation Start gate（Decision-AS-SCHEMA-MAPPING-NEXT-1 OPEN / NOT ACCEPTED；packet open）
+Twenty-ninth residual Decision: SELECTED / CONSUMED — Post-CN-1 schema mapping / column path（Decision-AS-SCHEMA-MAPPING-NEXT-1 Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -117,12 +117,13 @@ PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
-Next gate: Decision-AS-SCHEMA-MAPPING-NEXT-1（OPEN / NOT ACCEPTED）
-  selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
   packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-  next-gate: decision-assessment-snapshot-cn1-next-gate.md
-  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
+  IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
+  next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
   prior CN-1 packet: decision-assessment-snapshot-cn1-observation-packet.md（CLOSED）
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
@@ -330,14 +331,16 @@ Order:
      Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
      Result: DEFAULT_COLUMNS_ONLY / custom application columns = 0
      Match-existing premise: NOT APPLICABLE / INVALIDATED
- 29. Twenty-ninth residual: Post-CN-1 schema mapping / column path（SELECTED / OPEN）
+ 29. Twenty-ninth residual: Post-CN-1 schema mapping / column path（DONE / CONSUMED；Decision-AS-SCHEMA-MAPPING-NEXT-1 Accepted / LOCKED / MT-1+IN-A+CP-1+XB-1）
      selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
      packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-     Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
-     Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
-     Implementation Start: HOLD
-     adapter / schema mapping impl: HOLD（≠ mapping-complete）
-     SharePoint column creation: FORBIDDEN
+     acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+     IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
+     next gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
+     Implementation Start: HOLD（XB-1）
+     adapter / schema mapping impl: HOLD（XB-1）
+     SharePoint column creation: FORBIDDEN（CP-1）
+     Intended Internal Names: NOT ADOPTED（IN-A）
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -394,11 +397,10 @@ PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
-Next gate: Decision-AS-SCHEMA-MAPPING-NEXT-1（OPEN / NOT ACCEPTED）
-  selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
-  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-  next-gate: decision-assessment-snapshot-cn1-next-gate.md
-  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
+Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+  next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）

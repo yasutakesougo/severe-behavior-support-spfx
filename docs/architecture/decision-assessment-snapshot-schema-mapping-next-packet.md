@@ -20,9 +20,16 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-SCHEMA-MAPPING-NEXT-1
-Kind: Human Decision packet（compare → Acceptance）
-Status: OPEN / NOT ACCEPTED
-Human Decision: NOT YET
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
+Human Decision: MT-1 + IN-A + CP-1 + XB-1
+Human Selected:
+  Mapping table now:           MT-1
+  Intended Internal Names:     IN-A
+  Column provisioning path:    CP-1
+  Implementation boundary:     XB-1
+Accepted 正本:
+  decision-assessment-snapshot-schema-mapping-next-acceptance.md
 
 Baseline（PR #191 MERGED）:
   merge commit: 0738ea79e159e0bc9a60dc6c1bdccfd9784681ad
@@ -39,10 +46,11 @@ Locked facts（再 Decision しない）:
   CN-1 rule = observe real Internal Names；do not infer
   SC-1 = logical mapping ≠ deployment/config values
 
-Current boundary（unchanged by opening this packet）:
-  Implementation Start = HOLD
-  SharePoint adapter / schema mapping implementation = HOLD
-  SharePoint column creation = FORBIDDEN
+Current boundary（Accepted / LOCKED）:
+  Implementation Start = HOLD（XB-1）
+  SharePoint adapter / schema mapping implementation = HOLD（XB-1）
+  SharePoint column creation = FORBIDDEN（CP-1 → separate Human gate）
+  Intended Internal Names = NOT ADOPTED（IN-A）
   Agent SharePoint mutation = FORBIDDEN
   Deploy / real data = NO-GO
   GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
@@ -103,10 +111,10 @@ MUST NOT re-open in this packet:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **MT-1** | logical mapping 表を更新可。ただし app Internal Name は `未確認` / `NOT PRESENT` のまま。CONFIRMED 値を書かない | OPEN candidate |
-| MT-2 | mapping 表は列が存在するまで触らない | OPEN candidate |
-| MT-HOLD | mapping 表扱いも未決定のまま | OPEN candidate |
-| MT-X | Human 明示 | OPEN candidate |
+| **MT-1** | logical mapping 表を更新可。ただし app Internal Name は `未確認` / `NOT PRESENT` のまま。CONFIRMED 値を書かない | **Accepted** |
+| MT-2 | mapping 表は列が存在するまで触らない | NOT SELECTED |
+| MT-HOLD | mapping 表扱いも未決定のまま | NOT SELECTED |
+| MT-X | Human 明示 | NOT SELECTED |
 
 ```text
 NOT candidates:
@@ -119,10 +127,10 @@ NOT candidates:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **IN-A** | 本 Decision では intended Internal Names を採択しない。NOT PRESENT のまま残す | OPEN candidate |
-| **IN-B** | Human Acceptance で intended Internal Names を明示採択する。状態 = HUMAN-PROVIDED / INTENDED。≠ OBSERVED / CONFIRMED。作成後に CN-1 再観測必須 | OPEN candidate |
-| IN-HOLD | intended names 方針も未決定 | OPEN candidate |
-| IN-X | Human 明示 | OPEN candidate |
+| **IN-A** | 本 Decision では intended Internal Names を採択しない。NOT PRESENT のまま残す | **Accepted** |
+| **IN-B** | Human Acceptance で intended Internal Names を明示採択する。状態 = HUMAN-PROVIDED / INTENDED。≠ OBSERVED / CONFIRMED。作成後に CN-1 再観測必須 | NOT SELECTED |
+| IN-HOLD | intended names 方針も未決定 | NOT SELECTED |
+| IN-X | Human 明示 | NOT SELECTED |
 
 ```text
 NOT candidates:
@@ -135,10 +143,10 @@ NOT candidates:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **CP-1** | column provisioning Execution GO は本 Acceptance に含めない。別 Human gate | OPEN candidate |
-| CP-2 | 本 Acceptance に column provisioning Execution GO を含める | OPEN candidate |
-| CP-HOLD | provisioning 経路も未決定 | OPEN candidate |
-| CP-X | Human 明示 | OPEN candidate |
+| **CP-1** | column provisioning Execution GO は本 Acceptance に含めない。別 Human gate | **Accepted** |
+| CP-2 | 本 Acceptance に column provisioning Execution GO を含める | NOT SELECTED |
+| CP-HOLD | provisioning 経路も未決定 | NOT SELECTED |
+| CP-X | Human 明示 | NOT SELECTED |
 
 ```text
 NOT candidates（いずれを選んでも）:
@@ -151,10 +159,10 @@ NOT candidates（いずれを選んでも）:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | 本 Decision ≠ Implementation Start ≠ adapter/schema mapping code start ≠ Deploy / real data | OPEN candidate（必須維持候補） |
-| XB-2 | 本 Decision で adapter / schema mapping 実装開始を許可 | NOT selectable while required columns NOT PRESENT |
-| XB-3 | 本 Decision で Implementation Start = GO | NOT selectable while required columns NOT PRESENT |
-| XB-X | Human 明示 | OPEN candidate |
+| **XB-1** | 本 Decision ≠ Implementation Start ≠ adapter/schema mapping code start ≠ Deploy / real data | **Accepted** |
+| XB-2 | 本 Decision で adapter / schema mapping 実装開始を許可 | NOT SELECTED（was NOT selectable） |
+| XB-3 | 本 Decision で Implementation Start = GO | NOT SELECTED（was NOT selectable） |
+| XB-X | Human 明示 | NOT SELECTED |
 
 ```text
 While custom application columns = 0:
@@ -162,48 +170,31 @@ While custom application columns = 0:
   MF-1 fail-closed still applies to missing required columns
 ```
 
-## 4. Agent recommendation（比較用；Acceptance ではない）
+## 4. Agent recommendation（比較履歴）
 
 ```text
 Agent recommendation:
   MT-1 + IN-A + CP-1 + XB-1
-
-Meaning:
-  MT-1 — logical mapping は LF-1 どおり更新してよいが、
-         Internal Name は 未確認 / NOT PRESENT のまま
-  IN-A — 本 Decision で intended Internal Names を発明・採択しない
-  CP-1 — column creation Execution GO は別 Human gate
-  XB-1 — Implementation / adapter code / Deploy は開始しない
-
-Why not IN-B now:
-  concrete Internal Name 文字列は Human 明示が必要であり、
-  本 packet では Agent が値を埋めない。
-  Human が intended names を用意できるなら Acceptance で IN-B へ切替可。
-
-Why not CP-2 now:
-  column mutation は観測・命名・Execution GO を混ぜると境界が壊れる。
-  CN-1 再観測前提を残すため provisioning GO は分離する。
-
-Why XB-1 required:
-  custom columns = 0 のまま Implementation / adapter start は
-  MF-1 / mapping-complete 禁止と衝突する。
-
-NOT Human Acceptance evidence.
+Human Decision:
+  MT-1 + IN-A + CP-1 + XB-1（Accepted / LOCKED）
+Acceptance 正本:
+  decision-assessment-snapshot-schema-mapping-next-acceptance.md
 ```
 
 ## 5. Explicit non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
+This CONSUMED packet / Acceptance does NOT authorize:
   Internal Name invention
-  treating INTENDED as CONFIRMED
-  SharePoint column create / rename / delete
+  treating INTENDED as CONFIRMED（IN-B was NOT SELECTED）
+  SharePoint column create / rename / delete（CP-1）
   permissions / Entra / Graph / tenant mutation
-  SharePoint adapter / schema mapping implementation
-  Implementation Start
+  SharePoint adapter / schema mapping implementation（XB-1）
+  Implementation Start（XB-1）
   Deploy / real data
   GitHub Issue mutation / 一括 Close / 一括本文更新
   Issue Status Reconciliation as substitute for this Decision
+  treating DEFAULT_COLUMNS_ONLY as mapping-complete
 ```
 
 ## 6. Related process debt（not this packet）
@@ -218,17 +209,20 @@ Issue Status Reconciliation:
 ## 7. Next
 
 ```text
-Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
-Awaiting: Human Decision on MT + IN + CP + XB
-Recommended compare set: MT-1 + IN-A + CP-1 + XB-1
-Until Accepted + prerequisites met:
+Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+Twenty-ninth residual: CONSUMED
+Acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+Next gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
+
+Still HOLD / FORBIDDEN:
   Implementation Start = HOLD
   adapter / schema mapping implementation = HOLD
   SharePoint column creation = FORBIDDEN
   Deploy / real data = NO-GO
   Internal Name invention = FORBIDDEN
-If IN-B later Accepted:
-  intended names = HUMAN-PROVIDED / INTENDED only
-  then separate CP Execution GO
-  then CN-1 re-observation before CONFIRMED
+
+Authorized later as separate units（not auto-started）:
+  MT-1 mapping-table docs update（Status=未確認 / NOT PRESENT）
+  Column provisioning Decision / Execution GO（CP-1）
+  Issue Status Reconciliation（independent）
 ```

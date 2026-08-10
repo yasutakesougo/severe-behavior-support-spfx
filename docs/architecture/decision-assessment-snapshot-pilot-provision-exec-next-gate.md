@@ -55,13 +55,14 @@ Twenty-eighth residual: CONSUMED
   decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   decision-assessment-snapshot-cn1-observation-packet.md
   decision-assessment-snapshot-cn1-closure-determination.md
-Twenty-ninth residual: SELECTED / OPEN
+Twenty-ninth residual: CONSUMED
   decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
-  Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
-  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
-  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
+  Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+  IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
 Next gate detail:
-  decision-assessment-snapshot-cn1-next-gate.md
+  decision-assessment-snapshot-schema-mapping-next-next-gate.md
+  Next residual: NOT SELECTED
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:
