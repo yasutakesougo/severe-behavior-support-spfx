@@ -41,6 +41,8 @@ Twenty-fourth residual Decision: SELECTED / CONSUMED — Pilot facility identity
 Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1）
 Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1；SupportPlans / AssessmentSnapshots）
 Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creation execution（Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1；Execution GO GIVEN；AI mutation FORBIDDEN）
+Twenty-eighth residual Decision: SELECTED / OPEN — CN-1 Internal Column Names confirmation（Decision-AS-CN1-OBSERVATION-1；read-only observation；mutation 0）
+Issue Status Reconciliation: ASSESSED / SCHEDULED after CN-1（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -102,9 +104,15 @@ Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
+Independent Review #188: PASS
+PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 Next gate: CN-1（Internal Column Names 確認・確定）
+  selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
+  packet: decision-assessment-snapshot-cn1-observation-packet.md
+Issue Status Reconciliation: ASSESSED / NOT CURRENT GATE
+  assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Implementation Start: HOLD
 Deploy / real data: NO-GO
@@ -347,9 +355,15 @@ Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
+Independent Review #188: PASS
+PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 Next gate: CN-1（Internal Column Names 確認・確定）
+  selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
+  packet: decision-assessment-snapshot-cn1-observation-packet.md
+Issue Status Reconciliation: ASSESSED / NOT CURRENT GATE
+  assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Implementation Start: HOLD
 Deploy / real data: NO-GO

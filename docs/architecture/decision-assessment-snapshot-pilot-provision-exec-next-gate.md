@@ -39,9 +39,19 @@ Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-revie
 | Order | Residual | Why next |
 |---|---|---|
 | 1 | Internal Column Names（CN-1）確認・確定 | Site/List は CONFIRMED；列 Internal Name は未観測 |
-| 2 | 以降の mapping / adapter 実装判断 | CN-1 閉鎖後のみ |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | CN-1 後の process debt；Current/Gate/Dependency のみ |
+| 3 | 以降の mapping / adapter 実装判断 | CN-1 閉鎖後のみ |
 
 ```text
+SELECTED / OPEN:
+  decision-ilb-1-twenty-eighth-residual-cn1-selection.md
+  decision-assessment-snapshot-cn1-observation-packet.md
+
+Issue Status Reconciliation:
+  ASSESSED / NOT CURRENT GATE
+  issue-status-reconciliation-assessment.md
+  close Issue ≠ body resync
+
 Until CN-1 is closed:
   SharePoint adapter implementation = DO NOT START
   schema mapping concrete Internal Names = DO NOT LOCK as CONFIRMED
