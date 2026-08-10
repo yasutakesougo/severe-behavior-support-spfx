@@ -525,12 +525,12 @@ Thirty-fourth residual: CONSUMED — PX-1 authorization
      selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
      packet: issue-status-reconciliation-packet.md
      assessment: issue-status-reconciliation-assessment.md
-     Phase ① Close candidates: #5 / #10 / #11
-     Phase ② resync: #6 / #8（KEEP OPEN）
+     Phase ① Close candidates: #5 / #10 / #11 — **DONE**（CLOSED；①b PASS）
+     Phase ② resync: #6 / #8（KEEP OPEN）— **READY / NOT STARTED**
      Phase ③ continuity: #4 / #9 / #12 / #15〜#19（no batch Close）
      Phase ④ backlog keep: #20以降 / UI系
      Agent GitHub Issue mutation: FORBIDDEN
-     Human Issue Close / body patch: AUTHORIZED under packet Phases only
+     Human Issue Close / body patch: Phase ① DONE；Phase ② AUTHORIZED / NOT STARTED
 Next residual after thirty-sixth process unit: NOT SELECTED（column Human create remains parallel）
 Issue Status Reconciliation: SELECTED（thirty-sixth）
   assessment: issue-status-reconciliation-assessment.md
