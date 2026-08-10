@@ -69,14 +69,16 @@ PR #184: MERGED（expected head 84745355929c7e43dcc6c89dd00d29935f79034c / merge
 PR #185: MERGED（merge 1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
-New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
-Concrete Site strings: LOCKED as HUMAN-PROVIDED / INTENDED（isogo / honmoku）
-List names: LOCKED as HUMAN-PROVIDED / INTENDED（SupportPlans / AssessmentSnapshots）
+New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 OPEN
+Concrete Site strings: LOCKED / OBSERVED / CONFIRMED（isogo / honmoku）
+List names: LOCKED / OBSERVED / CONFIRMED（SupportPlans / AssessmentSnapshots）
 Internal Column Names: OPEN（IN-1）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
-Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
+Site / List creation: COMPLETED（pilot Sites + Lists）
 Placeholder creation: FORBIDDEN
+SV-1 / LV-1: CONFIRMED（VR-1 PASS）
+Internal Column Names: OPEN（CN-1）
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
   磯子=isogo → /sites/severe-support-isogo
   本牧=honmoku → /sites/severe-support-honmoku
@@ -89,9 +91,16 @@ Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1+XB-1
 Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   Execution GO: GIVEN
   AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003）
-  Separate Human creation: AUTHORIZED / NOT STARTED
-  SV-1 / LV-1: NOT CONFIRMED
-Next gate: SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  Separate Human creation: COMPLETED（Site + List only）
+  Intent = Observed / Mismatch = 0
+  Site count = 2 / 2
+  List count = 4 / 4
+  SV-1: CONFIRMED
+  LV-1: CONFIRMED
+  VR-1: PASS
+  CN-1: OPEN
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Next gate: INDEPENDENT REVIEW（PR #187）then Ready gate
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -268,12 +277,19 @@ Order:
      packet: decision-assessment-snapshot-pilot-provision-exec-packet.md
      selection: decision-ilb-1-twenty-seventh-residual-pilot-provision-exec-selection.md
      next gate: decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-       = SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+       = INDEPENDENT REVIEW（PR #187）then Ready gate
+     evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
      Execution GO: GIVEN
      AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003 / AP-1）
-     Separate Human creation: AUTHORIZED / NOT STARTED
-     SV-1 / LV-1: NOT CONFIRMED
-     remaining examples: VR-1 evidence / SV-1·LV-1 CONFIRMED / CN-1 / common-management naming / post-retention / DEC-015
+     Separate Human creation: COMPLETED（Site + List only）
+     Intent = Observed / Mismatch = 0
+     Site count = 2 / 2
+     List count = 4 / 4
+     SV-1: CONFIRMED
+     LV-1: CONFIRMED
+     VR-1: PASS
+     CN-1: OPEN
+     remaining examples: Independent Review / Ready / CN-1 / common-management naming / post-retention / DEC-015
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -296,12 +312,14 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
 Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY
-New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
-Concrete Site strings: HUMAN-PROVIDED / INTENDED（isogo / honmoku）
-List names: HUMAN-PROVIDED / INTENDED（SupportPlans / AssessmentSnapshots）
+New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 OPEN
+Concrete Site strings: HUMAN-PROVIDED / OBSERVED / CONFIRMED（isogo / honmoku）
+List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED（SupportPlans / AssessmentSnapshots）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
-Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
+Site / List creation: COMPLETED
 Placeholder creation: FORBIDDEN
+SV-1 / LV-1: CONFIRMED（VR-1 PASS）
+Internal Column Names: OPEN（CN-1）
 Decision-AS-PILOT-LIST-OWNERSHIP-1: LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
@@ -310,10 +328,17 @@ Decision-AS-PILOT-LIST-NAMES-1: LOCKED / LN-1+XB-1
 Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   Execution GO: GIVEN
   AI SharePoint mutation: FORBIDDEN
-  Separate Human creation: AUTHORIZED / NOT STARTED
-  SV-1 / LV-1: NOT CONFIRMED
-Next gate: SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
-List names: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+  Separate Human creation: COMPLETED（Site + List only）
+  Intent = Observed / Mismatch = 0
+  Site count = 2 / 2
+  List count = 4 / 4
+  SV-1: CONFIRMED
+  LV-1: CONFIRMED
+  VR-1: PASS
+  CN-1: OPEN
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Next gate: INDEPENDENT REVIEW（PR #187）then Ready gate
+List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```

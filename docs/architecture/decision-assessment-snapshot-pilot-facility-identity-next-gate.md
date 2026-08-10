@@ -45,12 +45,13 @@ Sequence:
   4. STOP（作成はさらに別 Human execution gate）
 
 Current step:
-  DONE through List names Accept + Provision Exec Accept
-  Active next = SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
-  Execution GO = GIVEN；Agent mutation = FORBIDDEN
+  DONE through List names / Provision Exec / VR-1 evidence return
+  Active next = INDEPENDENT REVIEW（PR #187）then Ready gate
+  SV-1 / LV-1 = CONFIRMED；VR-1 = PASS；CN-1 = OPEN
 
-NOT next for Agent / AI procedure:
-  Site/List creation by Agent
+NOT next without CN-1 / Ready:
+  Internal Column Name confirmation
+  Implementation Start
   creating with XXXXX / YYYYY
 ```
 
@@ -69,14 +70,16 @@ Pilot 2:
   Site name: 強度行動障害支援 - 本牧活動ホーム
   Site URL:  https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
 
-Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+Status: HUMAN-PROVIDED / OBSERVED / CONFIRMED（VR-1 PASS）
+Internal Column Names: OPEN（CN-1）
 ```
 
 ## 3. Out of scope（unchanged）
 
 ```text
-Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
+Site / List creation: COMPLETED
 custom columns: NO-GO
+Internal Column Names: OPEN / CN-1
 Internal Column Names: OPEN / post-creation CN-1
 permissions / config: NO-GO
 Implementation Start: HOLD
@@ -115,15 +118,21 @@ Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
 Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
 Execution GO: GIVEN
 AI SharePoint mutation: FORBIDDEN
-Next gate: FIXED = SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+SV-1: CONFIRMED
+LV-1: CONFIRMED
+VR-1: PASS
+CN-1: OPEN
+Next gate: FIXED = INDEPENDENT REVIEW（PR #187）then Ready gate
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Site / List creation: COMPLETED
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for separate Human creation + VR-1 evidence return
+  waiting for Independent Review → Ready gate
+  CN-1 still OPEN
   Agent auto-start: FORBIDDEN
 ```

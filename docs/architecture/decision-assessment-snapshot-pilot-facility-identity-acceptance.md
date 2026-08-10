@@ -58,7 +58,7 @@ LOCKED（Human-provided naming payload）:
     Site display name:  強度行動障害支援 - 磯子活動ホーム
     Site URL:           https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
     Site URL suffix:    /sites/severe-support-isogo
-    Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+    Status: HUMAN-PROVIDED / OBSERVED / CONFIRMED（VR-1 PASS）
 
   Pilot 2:
     Facility:           本牧活動ホーム
@@ -66,7 +66,7 @@ LOCKED（Human-provided naming payload）:
     Site display name:  強度行動障害支援 - 本牧活動ホーム
     Site URL:           https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
     Site URL suffix:    /sites/severe-support-honmoku
-    Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+    Status: HUMAN-PROVIDED / OBSERVED / CONFIRMED（VR-1 PASS）
 
 Supersedes as creatable target:
   NAMES-1 placeholders XXXXX / YYYYY = PLACEHOLDER / SUPERSEDED FOR CREATION
@@ -264,12 +264,19 @@ Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
 Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
 Execution GO: GIVEN
 AI SharePoint mutation: FORBIDDEN
-Separate Human creation: AUTHORIZED / NOT STARTED
-SV-1 / LV-1: NOT CONFIRMED
+Separate Human creation: COMPLETED（Site + List only）
+Intent = Observed / Mismatch = 0
+Site count = 2 / 2
+List count = 4 / 4
+SV-1: CONFIRMED
+LV-1: CONFIRMED
+VR-1: PASS
+CN-1: OPEN
 Next gate: FIXED
-  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  INDEPENDENT REVIEW（PR #187）then Ready gate
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Site / List creation: COMPLETED
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START

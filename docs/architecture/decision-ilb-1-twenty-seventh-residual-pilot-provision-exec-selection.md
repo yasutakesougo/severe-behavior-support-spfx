@@ -23,7 +23,9 @@ Human Accept phrase:
 Current state:
   Execution GO = GIVEN
   AI tenant mutation = FORBIDDEN（DEC-AI-ORG-003）
-  Site / List creation by this foundation procedure = NOT STARTED / SEPARATE PROCESS
+  Site / List creation = COMPLETED（separate Human process）
+  VR-1 = PASS / SV-1·LV-1 = CONFIRMED
+  CN-1 = OPEN
 ```
 
 ## Selection meaning
@@ -62,5 +64,9 @@ Selection CONSUMED → Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED
 
 Execution GO: GIVEN
 AI SharePoint mutation: FORBIDDEN
-Actual creation: SEPARATE HUMAN PROCESS / NOT STARTED in this repo procedure
+Actual creation: COMPLETED（Site + List only）
+VR-1: PASS / SV-1·LV-1: CONFIRMED
+CN-1: OPEN
+evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Next gate: INDEPENDENT REVIEW（PR #187）then Ready gate
 ```

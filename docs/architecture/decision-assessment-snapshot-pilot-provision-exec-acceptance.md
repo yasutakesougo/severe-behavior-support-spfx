@@ -69,17 +69,26 @@ Intended targets（再 Decision しない）:
       → AssessmentSnapshot 正本
 
   Status now:
-    HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+    Site / List creation: COMPLETED
+    SV-1 / LV-1: CONFIRMED（VR-1 PASS）
+    Internal Column Names: OPEN / NOT OBSERVED
+  Evidence:
+    decision-assessment-snapshot-pilot-provision-vr1-evidence.md
 
 Execution state:
   Execution GO: GIVEN
   AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003 / AP-1）
-  Separate Human process creation: AUTHORIZED / NOT STARTED（本 repo 手順外）
-  SV-1 / LV-1: NOT CONFIRMED
+  Separate Human process creation: COMPLETED（Site + List only）
+  Intent = Observed / Mismatch = 0
+  Site count = 2 / 2
+  List count = 4 / 4
+  SV-1: CONFIRMED
+  LV-1: CONFIRMED
+  VR-1: PASS
   Agent environment credentials: NONE（NO_SP_ENV）
 
 Internal Column Names:
-  OPEN（post-creation CN-1）
+  OPEN（CN-1 — not observed in VR-1 screenshots）
 custom column creation:
   NO-GO（XB-1）
 permissions / config:
@@ -98,14 +107,13 @@ Post-retention deletion:
 Closes only:
   Decision-AS-PILOT-PROVISION-EXEC-1（PX/VR/FG/XB/EG/AP）
   Explicit Execution GO = GIVEN
+  Site / List existence confirmation under VR-1（SV-1 / LV-1）
 Does NOT close:
-  actual Site / List creation completion
-  SV-1 / LV-1 CONFIRMED
-  AI-performed tenant mutation（forbidden）
   Internal Column Names / CN-1
   custom columns / permissions
   Implementation Start
   SharePoint / adapter / application 実装
+  AI-performed tenant mutation（forbidden）
 AI Site/List creation auto-start: FORBIDDEN
 Name invention / overwrite / blind retry: FORBIDDEN
 ```
@@ -209,19 +217,19 @@ MUST NOT be done by AI foundation procedure:
   treating INTENDED as CREATED without VR-1 evidence
 ```
 
-## Separate Human process（next real-world step）
+## Separate Human process（creation — COMPLETED）
 
 ```text
-Outside this AI foundation procedure, Human/admin may:
+Outside this AI foundation procedure, Human/admin completed:
 
-  1. Create Pilot 1 Site（severe-support-isogo）
-  2. Create Lists SupportPlans / AssessmentSnapshots on that Site
-  3. Create Pilot 2 Site（severe-support-honmoku）
-  4. Create the same Lists on Pilot 2
-  5. Read-back evidence → repo VR-1 / SV-1 / LV-1 update
-  6. STOP
+  1. Create Pilot 1 Site（severe-support-isogo） — DONE
+  2. Create Lists SupportPlans / AssessmentSnapshots on that Site — DONE
+  3. Create Pilot 2 Site（severe-support-honmoku） — DONE
+  4. Create the same Lists on Pilot 2 — DONE
+  5. Read-back evidence → repo VR-1 / SV-1 / LV-1 update — DONE
+     → decision-assessment-snapshot-pilot-provision-vr1-evidence.md
 
-On any failure: FG-1 fail-closed（no alternate names / overwrite / blind retry）
+FG-1 fail-closed: not triggered（Mismatch = 0）
 ```
 
 ## Next
@@ -231,11 +239,18 @@ Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED
   / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
 Execution GO: GIVEN
 AI SharePoint mutation: FORBIDDEN
-Separate Human creation: AUTHORIZED / NOT STARTED
-SV-1 / LV-1: NOT CONFIRMED
+Separate Human creation: COMPLETED（Site + List only）
+Intent = Observed / Mismatch = 0
+Site count = 2 / 2
+List count = 4 / 4
+SV-1: CONFIRMED
+LV-1: CONFIRMED
+VR-1: PASS
+CN-1: OPEN
 Next gate: FIXED
-  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  INDEPENDENT REVIEW（PR #187）then Ready gate
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
 Implementation Start: HOLD
 SharePoint application/adapter code: DO NOT START
 Deploy / real data: NO-GO

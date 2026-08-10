@@ -246,7 +246,7 @@ Concrete Site / List strings: LOCKED as HUMAN-PROVIDED / INTENDED / PLACEHOLDER
   Site name: XXXXX
   Lists:     XXXXX / YYYYY
   ≠ REAL / CREATABLE（Decision-AS-ORG-SITE-TOPOLOGY-1 / PH-1）
-Live confirmation（SV-1 / LV-1）: NOT CONFIRMED
+Live confirmation（SV-1 / LV-1）: CONFIRMED（pilot；VR-1 PASS；CN-1 OPEN）
 Internal Column Names: OPEN（IN-1 — post-creation CN-1）
 Site / List creation: NO-GO（XB-1；placeholder 作成 FORBIDDEN）
 PR #185: MERGED
@@ -275,7 +275,10 @@ Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
 Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
 Execution GO: GIVEN
 AI SharePoint mutation: FORBIDDEN
-Next Human gate: SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+SV-1: CONFIRMED / LV-1: CONFIRMED / VR-1: PASS
+CN-1: OPEN
+Next Human gate: INDEPENDENT REVIEW（PR #187）then Ready gate
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+Site / List creation: COMPLETED
 ```

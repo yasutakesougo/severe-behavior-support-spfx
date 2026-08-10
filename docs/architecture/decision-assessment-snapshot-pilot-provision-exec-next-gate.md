@@ -1,59 +1,58 @@
 # Decision-AS-PILOT-PROVISION-EXEC-1 — Next Gate
 
-Status: OPEN / BLOCKED awaiting Human separate creation process + VR-1 evidence return  
+Status: CONSUMED for Site/List creation evidence；OPEN for Independent Review → Ready  
 Date: 2026-08-10  
-Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)
+Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)  
+Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./decision-assessment-snapshot-pilot-provision-vr1-evidence.md)
 
 ---
 
-## 1. What is now authorized
+## 1. Evidence return（CONSUMED）
 
 | Item | Status |
 |---|---|
-| Execution GO for intended Site/List creation payload | GIVEN (`EG-1`) |
-| Intended Sites (`severe-support-isogo` / `severe-support-honmoku`) | AUTHORIZED for Human creation |
-| Intended Lists (`SupportPlans` / `AssessmentSnapshots` on each Site) | AUTHORIZED for Human creation |
-| Agent / AI foundation SharePoint mutation | Still FORBIDDEN (`AP-1` / DEC-AI-ORG-003) |
+| Execution GO（EG-1） | GIVEN |
+| Site creation | COMPLETED |
+| List creation | COMPLETED |
+| Intent = Observed | YES |
+| Mismatch | 0 |
+| Site count | 2 / 2 |
+| List count | 4 / 4 |
+| SV-1 | CONFIRMED |
+| LV-1 | CONFIRMED |
+| VR-1 | PASS |
+| CN-1 / Internal Column Names | OPEN / NOT OBSERVED |
+| Agent SharePoint mutation | FORBIDDEN（AP-1） |
 
 ---
 
-## 2. What Human/admin must do next (separate process)
-
-1. Create the two Sites with the LOCKED display names and URLs.
-2. On each Site, create Lists exactly named `SupportPlans` and `AssessmentSnapshots`.
-3. Do not create excluded Lists (`SBS_AUDIT_EVENTS`, DailyActivityRecords) as Assessment Snapshot pilot Lists.
-4. Capture VR-1 evidence (Site URL, Site title, List titles, timestamps / operator note).
-5. Return that evidence into the repository decision trail.
-
-Fail-closed (`FG-1`): stop on mismatch / conflict; no alternate names, overwrite, or blind retry.
-
----
-
-## 3. Immediate next OPEN residual after evidence return
+## 2. Immediate next OPEN residual
 
 | Order | Residual | Why next |
 |---|---|---|
-| 1 | Site existence verification (SV-1) against intended | evidence-based CONFIRMED vs NOT CREATED |
-| 2 | List existence verification (LV-1) against intended names | evidence-based CONFIRMED vs NOT CREATED |
-| 3 | Only then: column Internal Names / schema (CN-1) | after real Lists exist and verify |
+| 1 | Independent Review（PR #187） | evidence + Acceptance boundary review |
+| 2 | Ready gate（Human） | after IR PASS |
+| 3 | Column Internal Names / schema（CN-1） | after real column observation；not done yet |
 
 ---
 
-## 4. Still NO-GO / HOLD
+## 3. Still NO-GO / HOLD
 
 | Item | Status |
 |---|---|
-| Custom columns / Internal Names (CN-1) | NO-GO until SV-1/LV-1 CONFIRMED |
+| Custom columns / Internal Names（CN-1） | OPEN / NOT OBSERVED |
 | Permissions / Entra / Graph mutation | HOLD |
 | Implementation Start | HOLD |
 | Deploy / real data write | HOLD |
 | Common-management site naming/creation | HOLD / later residual |
+| Agent SharePoint mutation | FORBIDDEN |
 
 ---
 
-## 5. Explicit non-claims
+## 4. Explicit non-claims
 
-- This Next Gate does **not** claim Sites/Lists already exist.
-- This Next Gate does **not** authorize Agent to create SharePoint objects.
-- This Next Gate does **not** start Implementation.
-- Evidence return is required before CONFIRMED status.
+- VR-1 PASS does **not** confirm Internal Column Names.
+- SV-1 / LV-1 CONFIRMED does **not** start Implementation.
+- This Next Gate does **not** authorize Agent tenant mutation.
+- Ready / Merge live progress is not recorded here
+  （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

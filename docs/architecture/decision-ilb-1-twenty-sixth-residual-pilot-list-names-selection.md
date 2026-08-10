@@ -25,7 +25,7 @@ List names:
 
 Current state:
   List ownership = LOCKED
-  List names = HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
+  List names = HUMAN-PROVIDED / OBSERVED / CONFIRMED（VR-1 PASS）
   Site / List creation = NO-GO
 ```
 
@@ -73,10 +73,13 @@ Selection CONSUMED → Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED
   List B = AssessmentSnapshots
 
 Next gate: FIXED
-  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  INDEPENDENT REVIEW（PR #187）then Ready gate
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+  evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED
   Execution GO: GIVEN
+  VR-1: PASS / SV-1·LV-1: CONFIRMED
+  CN-1: OPEN
   AI SharePoint mutation: FORBIDDEN
 
 Still HOLD / NO-GO for Agent / AI procedure:
