@@ -21,14 +21,17 @@ function observation(
 }
 
 describe("POST-RA-OBS-EVIDENCE-V1", () => {
-  it("returns an empty history with no latest timestamp for no observations", () => {
-    const result = summarizeObservationEvidence([]);
+  it(
+    "returns an empty history with no latest timestamp for no observations",
+    () => {
+      const result = summarizeObservationEvidence([]);
 
-    assert.deepEqual(result, {
-      history: [],
-      latestObservedAt: undefined,
-    });
-  });
+      assert.deepEqual(result, {
+        history: [],
+        latestObservedAt: undefined,
+      });
+    },
+  );
 
   it(
     "orders observation evidence chronologically and derives latestObservedAt",
