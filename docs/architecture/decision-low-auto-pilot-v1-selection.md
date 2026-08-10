@@ -1,20 +1,22 @@
 # LOW-AUTO-PILOT-V1 — Selection / Decision Packet
 
-この文書は、**LOW-AUTO-PILOT-V1** の選定・Option 固定パケットである。
+この文書は、**LOW-AUTO-PILOT-V1** の選定・Human Acceptance 記録パケットである。
 
 Canonical process SoT: [`../process/low-auto-pilot-v1.md`](../process/low-auto-pilot-v1.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: LOW-AUTO-PILOT-V1
-Kind: docs-only enablement Decision packet
-Status: READY_FOR_HUMAN_DECISION
-Decision requested: LA1-A Option A — ACCEPT / HOLD
-Recommended: LA1-A ACCEPT
-Authorization effect (this packet): NONE
-Implementation: DO NOT START
-SharePoint / M365: UNCHANGED / FORBIDDEN
+Kind: docs-only enablement Decision / Human Acceptance recording
+Status: ACCEPTED
+Human Decision: LA1-A — Option A = ACCEPT（2026-08-10）
+Pilot policy: ACCEPTED
+Pilot execution: NOT STARTED
+Implementation: DO NOT START YET
+Ready: HUMAN-ONLY
 Merge: HUMAN-ONLY
+SharePoint / M365: UNCHANGED / FORBIDDEN
+Deploy: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -25,66 +27,59 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | Input | State |
 |---|---|
 | PROCESS-OPT-V1 | ACCEPTED / LOCKED（PR #202 MERGED） |
-| LOW auto-loop | DEFINED / NOT ENABLED |
+| LOW auto-loop（global definition） | DEFINED / NOT ENABLED（PROCESS-OPT-V1） |
+| LA1-A | Human ACCEPT — limited pilot policy |
 | Recent LOW-class evidence | OP-3 / GOV-RULE-05 / 06 / 07 domain slices |
-| Risk of broad enable | HIGH — SharePoint / 制度 / Merge 境界を誤って緩める |
 
-観察:
-
-- pure domain representation は連続して成功している
-- それでも毎回 Human Start + next-slice selection が必要
-- 全面自動化ではなく、**狭い pilot** で速度と安全境界を両立する判断が必要
-
-## Options
-
-### LA1-A — Option A（推奨）
-
-```text
-限定 LOW pilot を ENABLE
-対象: Accepted/LOCKED + LOW + pure domain/validator/tests/export wiring
-自動化: Start / verification / IR / bounded repair / next unique LOW slice
-上限: 2〜4 slices / 1 batch / post-pilot Human review
-維持: Merge HUMAN-ONLY; Ready auto NOT included; M365 FORBIDDEN
-```
-
-### LA1-B
-
-```text
-定義だけ維持して NOT ENABLED
-```
-
-### HOLD
-
-```text
-LA1-A を ACCEPT しない（実質 LA1-B と同趣旨）
-```
-
-## Explicit non-claims of this packet
-
-```text
-Packet creation ≠ ACCEPT
-Packet IR PASS ≠ ENABLE
-ACCEPT ≠ project-wide Start
-ACCEPT ≠ Merge automation
-ACCEPT ≠ Ready automation
-ACCEPT ≠ MEDIUM/HIGH automation
-Implementation of domain slices: DO NOT START in this unit
-```
-
-## Human Decision line
+## Human Decision recorded
 
 ```text
 LA1-A — Option A
-Decision:
-ACCEPT / HOLD
+= ACCEPT
 ```
 
-## Done criteria（docs-only packet）
+Accepted intent:
 
-- Option A envelope（対象 / 停止 / Human-only / pilot 上限）が固定されている
-- Ready auto を本 pilot に含めないことが明示されている
-- Merge = HUMAN-ONLY / M365 FORBIDDEN が明示されている
-- Routine AUG 衝突が CONFLICT NOTE として記録され、本文上書きしていない
-- Authorization effect of this packet = NONE
-- Independent Review P0=0 / P1=0（P2 記録可）
+```text
+Enable a limited LOW auto-loop pilot
+for pure-domain implementation slices only.
+```
+
+## Options disposition
+
+| Option | Result |
+|---|---|
+| LA1-A Option A | **ACCEPTED** |
+| LA1-B NOT ENABLED only | not selected |
+| HOLD | not selected |
+
+## Accepted envelope summary
+
+- Eligible: Accepted/LOCKED + LOW + domain type/validator/pure function/tests/export wiring
+- Auto: unique next LOW selection / Start / scoped impl / verification / repair≤3 / IR
+- Cap: 2–4 slices / 1 batch / post-pilot Human review
+- Scoped exceptions: next-slice + Start only（Routine AUG global rewrite = NO）
+- Ready auto: **NOT accepted**
+- Merge: **HUMAN-ONLY**
+
+## Explicit non-claims
+
+```text
+Acceptance recording ≠ pilot execution
+Acceptance ≠ Ready / Merge of PR #203 by itself
+Acceptance ≠ first slice Implementation Start
+Acceptance ≠ MEDIUM/HIGH / DTO / adapter / schema wiring
+Acceptance ≠ SharePoint / M365 / Deploy / real data
+Acceptance ≠ Routine AUG / DEC-AA global rewrite
+```
+
+## Done criteria（Acceptance recording）
+
+- Human ACCEPT が Option A と一致して正本化されている
+- Pilot policy ACCEPTED / execution NOT STARTED が明示されている
+- Ready auto NOT accepted / Merge HUMAN-ONLY が明示されている
+- STOP 条件と UNKNOWN → HOLD が Human Decision と一致
+- P2 = 6 OPEN（偽クローズなし）
+- Independent Review PASS on Acceptance recording HEAD
 - mechanical verification PASS
+- Draft PR のまま Human Ready Decision で停止

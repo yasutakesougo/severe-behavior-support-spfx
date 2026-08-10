@@ -2,10 +2,10 @@
 
 - 文書: `docs/process/low-auto-pilot-v1.md`
 - Unit: **LOW-AUTO-PILOT-V1**
-- 位置づけ: PROCESS-OPT-V1 の下位 **限定試行 enablement Decision 正本（packet）**
-- 状態: **READY_FOR_HUMAN_DECISION**（ACCEPT / HOLD）
-- 推奨 Option: **LA1-A（Option A）**
-- 上位正本（緩和・上書きしない）:
+- 位置づけ: PROCESS-OPT-V1 の下位 **限定試行 enablement Decision 正本（Human Acceptance 記録）**
+- 状態: **ACCEPTED**（LA1-A Option A）
+- Human Decision: **LA1-A — Option A = ACCEPT**（2026-08-10）
+- 上位正本（グローバル本文を書き換えない）:
   - `docs/decisions/DEC-AI-ORG-003.md`
   - `docs/decisions/DEC-AA-001.md`
   - `docs/decisions/DEC-AA-003.md`
@@ -18,216 +18,249 @@
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](./self-referential-gate-policy.md)）。
 
-## Current fixed state（入力）
-
-```text
-PR #202: MERGED
-PROCESS-OPT-V1: ACCEPTED / LOCKED
-LOW auto-loop: DEFINED / NOT ENABLED
-Authorization expansion: NONE
-Implementation: DO NOT START（本 packet 時点）
-```
-
-## 目的
-
-「LOW 全部を自動化するか」ではなく、**pure domain 系だけを試験的に自動化するか**を
-独立 unit として Human Decision 可能にする。
-
-```text
-本 unit の目的 = LA1-A / LA1-B の判断単位固定 + IR
-本 unit の目的 ≠ 実装開始
-本 unit の目的 ≠ SharePoint / M365 / Deploy 解禁
-本 packet 時点の Authorization effect = NONE
-```
-
-## Human Decision requested
-
-```text
-Decision:
-LA1-A Option A — ACCEPT / HOLD
-```
-
-| Choice | Meaning |
-|---|---|
-| **ACCEPT** Option A（LA1-A） | 限定 LOW pilot を **ENABLED**（下記 envelope のみ） |
-| **HOLD** | enable しない。PROCESS-OPT-V1 の DEFINED / NOT ENABLED を維持 |
-| LA1-B（参考） | 定義だけ維持して NOT ENABLED（HOLD と同趣旨の明示 option） |
-
-```text
-Agent recommendation / Independent Review: NOT Human Acceptance evidence
-本 packet は ACCEPT を自己成立させない
-```
-
-## Option A — LA1-A（推奨）
+## Human Acceptance（固定結論）
 
 ```text
 LA1-A — Option A
-LOW-AUTO-PILOT-V1 を限定試行として ENABLED
+= ACCEPT
 ```
 
-### 対象（すべて必須）
+```text
+LOW-AUTO-PILOT-V1:
+LA1-A Option A = ACCEPTED
+Pilot policy:
+ACCEPTED
+Pilot execution:
+NOT STARTED
+Implementation:
+DO NOT START YET
+Ready:
+HUMAN-ONLY
+Merge:
+HUMAN-ONLY
+SharePoint / M365:
+UNCHANGED / FORBIDDEN
+Deploy:
+FORBIDDEN
+```
 
 ```text
-Accepted / LOCKED 済み
-LOW 分類
-Domain type
+Agent recommendation / Independent Review: NOT Human Acceptance evidence
+This document records the Human Decision only.
+LA1-A ACCEPT ≠ pilot execution started
+LA1-A ACCEPT ≠ Ready / Merge of this recording PR
+LA1-A ACCEPT ≠ Routine AUG / DEC-AA global rewrite
+```
+
+## Accepted intent
+
+```text
+Enable a limited LOW auto-loop pilot
+for pure-domain implementation slices only.
+```
+
+## Accepted pilot envelope
+
+### Eligible（すべて必須）
+
+```text
+Accepted / LOCKED authority
+LOW classification
+domain type
 runtime validator
 pure domain function
 domain / contract tests
 mechanical export wiring
 ```
 
-追加除外（対象外）:
+### Pilot capacity
+
+```text
+2–4 LOW slices
+1 batch maximum
+post-pilot Human review required
+巨大 PR 禁止
+slice 単位の failure attribution 維持
+```
+
+### Auto within pilot envelope（execution 開始後のみ）
+
+```text
+eligible next LOW slice selection when unique
+per-slice Implementation Start
+scoped implementation
+mechanical verification
+bounded repair (max 3)
+Independent Review
+```
+
+### Explicitly excluded from eligible / auto
 
 ```text
 DTO wiring
-複数 domain module 統合 / union wiring
-adapter 内部ロジック
-MEDIUM / HIGH
+adapter logic
+SupportPlan union/schema wiring
+MEDIUM / HIGH work
 SharePoint / M365
-permission change
+permission mutation
 real data
 Deploy
 destructive action
-制度解釈 / 新規業務語彙 / FindingCode 値定義
+制度解釈 / 新規業務語彙 / FindingCode value invention
 project-wide Implementation Start
+Ready auto
+Merge auto
 ```
 
-### 自動化候補（ACCEPT 時のみ・pilot envelope 内）
+## Scoped exceptions accepted（pilot only）
+
+Routine AUG に対する **限定例外**（本 pilot のみ）:
 
 ```text
-per-slice Implementation Start（pilot 対象 slice に限る）
-mechanical verification
-Independent Review
-bounded repair（DEC-AA-003: max_repair_cycles = 3）
-next LOW slice selection（一意かつ下記停止条件を満たす場合のみ）
+next slice selection:
+HUMAN-ONLY
+→ pilot-scoped AUTO when exactly one eligible LOW slice exists
+
+per-slice Implementation Start:
+HUMAN REQUIRED
+→ pilot-scoped AUTO for eligible LOW slices
 ```
 
-### 自動停止条件
+```text
+These are pilot-scoped exceptions only.
+They do NOT rewrite Routine AUG globally.
+Routine AUG / DEC-AA 本文は本 Acceptance で上書きしない。
+```
 
-次を検出したら即 STOP / HOLD:
+## Human-only remains
+
+```text
+Ready:
+HUMAN-ONLY
+Merge:
+HUMAN-ONLY
+HIGH decisions:
+HUMAN-ONLY
+permission expansion:
+HUMAN-ONLY / outside pilot
+Issue mutation:
+HUMAN-ONLY
+new Decision Acceptance:
+HUMAN-ONLY
+SharePoint / M365 mutation:
+FORBIDDEN
+Deploy:
+FORBIDDEN
+```
+
+```text
+Ready auto is explicitly NOT accepted by this Decision.
+Merge auto is explicitly NOT accepted.
+```
+
+## Mandatory STOP / HOLD
+
+Pilot must stop immediately on:
 
 ```text
 UNKNOWN
 authority conflict
 scope ambiguity
-P0 / P1
+non-unique next slice
+P0
+P1
 semantic failure
-SharePoint / M365
+SharePoint / M365 dependency
 permission change
 real data
 destructive action
-next slice が一意でない
+MEDIUM / HIGH scope
+DTO / adapter / schema-adjacent expansion
+new business-rule interpretation
+FindingCode value invention
 ```
 
-原則:
+Rule:
 
 ```text
 UNKNOWN → HOLD
 ```
 
-### Human-only（ACCEPT 後も維持）
+## Explicit exclusions（本 Acceptance が認可しないこと）
 
 ```text
+implementation now
+pilot execution now
+Ready
 Merge
-HIGH 判断
-permission expansion（pilot 外）
-SharePoint / M365 mutation
+SharePoint / M365
 Deploy
-Ready（本 pilot では自動 Ready を含めない）
-Issue mutation
-Decision Acceptance / 新制度 Decision
-GitHub publication の一般解禁（pilot 外）
+real data
+permission mutation
+DTO wiring
+adapter logic
+SupportPlan union/schema wiring
+MEDIUM / HIGH work
+project-wide Implementation Start
+Routine AUG global rewrite
+DEC-AA global rewrite
 ```
 
-```text
-Merge = HUMAN-ONLY
-本 pilot は Ready 自動遷移を ENABLED にしない
-PROCESS-OPT-V1 の Ready auto candidate は本 pilot では採用しない
-```
+## Conflict register
 
-### Pilot 上限
-
-```text
-2〜4 LOW slices
-1 batch まで
-Pilot 終了後に Human review 必須
-巨大 PR 禁止
-slice 単位の failure attribution 維持
-```
-
-### ACCEPT 時の効力 / 非効力
-
-**効力（ACCEPT 後）:**
-
-- 上記 pure-domain LOW envelope 内でのみ LOW auto-loop pilot を ENABLED
-- Routine AUG の「per-slice Human Implementation Start REQUIRED」および
-  「next slice selection = HUMAN-ONLY」に対する **限定例外**（pilot 対象のみ）
-- POV1-P2-1 / POV1-P2-2 の **pilot 範囲での意図的解消試行**（全体政策の書き換えではない）
-
-**非効力（ACCEPT 後も）:**
-
-```text
-LOW 全体の恒久自動化 ≠ 本 pilot
-MEDIUM / HIGH の自動化 ≠ 本 pilot
-Merge HUMAN-ONLY 維持
-SharePoint / M365 / Deploy / real data FORBIDDEN 維持
-DEC-AA-001 / DEC-AA-003 の広範 semantic rewrite ≠ 本 pilot
-project-wide Implementation Start ≠ 本 pilot
-Pilot 上限超過の継続実行 FORBIDDEN
-```
-
-## Option B — LA1-B（参考）
-
-```text
-LA1-B:
-定義だけ維持して NOT ENABLED
-```
-
-PROCESS-OPT-V1 のまま。自動進行は開始しない。
-
-## Conflict register（上書きしない）
-
-| ID | Current authority | LA1-A if ACCEPT | Handling in this packet |
+| ID | Current authority | After LA1-A ACCEPT | Handling |
 |---|---|---|---|
-| LA1-C1 | Routine AUG: next slice selection = HUMAN-ONLY | pilot 内のみ auto selection | **SCOPED EXCEPTION candidate** — 全体上書きしない |
-| LA1-C2 | Routine AUG: per-slice Human Start REQUIRED | pilot 内 Start auto | **SCOPED EXCEPTION candidate** |
-| LA1-C3 | PROCESS-OPT-V1: LOW auto-loop NOT ENABLED | pilot ENABLED | **これが本 Decision の本丸** |
-| LA1-C4 | Ready HUMAN-ONLY / PROCESS-OPT Ready candidate | Ready auto **NOT in pilot** | **NO CHANGE** |
+| LA1-C1 | Routine AUG: next slice selection = HUMAN-ONLY | pilot-scoped AUTO when unique eligible LOW | **ACCEPTED SCOPED EXCEPTION** — 全体上書きしない |
+| LA1-C2 | Routine AUG: per-slice Human Start REQUIRED | pilot-scoped AUTO for eligible LOW | **ACCEPTED SCOPED EXCEPTION** |
+| LA1-C3 | PROCESS-OPT-V1: LOW auto-loop NOT ENABLED | pilot policy ACCEPTED；execution NOT STARTED | **pilot enablement path** |
+| LA1-C4 | Ready HUMAN-ONLY | Ready HUMAN-ONLY | **NO CHANGE** — Ready auto NOT accepted |
 | LA1-C5 | Merge HUMAN-ONLY | Merge HUMAN-ONLY | **NO CONFLICT** |
 
-```text
-古い正本（Routine AUG / DEC-AA）を本 packet で書き換えない
-ACCEPT 後も、例外は本 unit 正本 + pilot envelope に閉じる
-矛盾時の全体政策改訂は別 unit
-```
+## P2 disposition
 
-## OUT OF SCOPE（本 docs packet）
+Preserve all six P2 findings as OPEN.
 
 ```text
-application / domain / test code changes
-SharePoint / M365 / Entra / Deploy
-Issue mutation
-Ready / Merge of unrelated work
-permission expansion beyond stated pilot envelope
-DEC-AA-001 / DEC-AA-003 / Routine AUG 本文 rewrite
-Implementation Start of any domain slice
+P0 = 0
+P1 = 0
+P2 = 6 OPEN
 ```
-
-## OPEN P2 carry-forward
 
 ```text
-POV1-P2-1: OPEN — next-slice HUMAN-ONLY vs auto-advance（ACCEPT 時は pilot 例外として扱う候補）
-POV1-P2-2: OPEN — Start/Ready HUMAN-ONLY vs auto candidates（ACCEPT 時 Start のみ pilot 例外候補；Ready は対象外）
-AA3-P2-1 / AA3-P2-2 / AA3-P2-3: OPEN carry-forward（本 unit で解消しない）
+LA1-P2-1: OPEN — scoped exception operational inheritance（記録済み；偽クローズしない）
+POV1-P2-1: OPEN — may be exercised only as accepted pilot-scoped next-slice exception
+POV1-P2-2: OPEN — may be exercised only as accepted pilot-scoped Start exception；Ready 部分は未採択
+AA3-P2-1: OPEN carry-forward / unresolved
+AA3-P2-2: OPEN carry-forward / unresolved
+AA3-P2-3: OPEN carry-forward / unresolved
 ```
 
-## 次工程
+Acceptance does not falsely close them.
 
-1. 本 packet の Independent Review（docs-only）
-2. Human Decision: **LA1-A Option A — ACCEPT / HOLD**
-3. ACCEPT の場合のみ: Acceptance 正本記録 → その後に pilot 実行 GO（実装は別）
-4. HOLD / LA1-B の場合: NOT ENABLED 維持
+## 効力 / 非効力
+
+### 効力
+
+- LA1-A Option A pilot **policy** = ACCEPTED
+- pure-domain LOW envelope + STOP / Human-only / capacity を固定
+- Routine AUG に対する 2 つの pilot-scoped exceptions を Accepted として記録
+
+### 非効力
+
+```text
+Pilot execution: NOT STARTED
+Implementation: DO NOT START YET
+Ready / Merge authorization for recording PR: NOT granted by Acceptance alone
+GLOBAL Routine AUG rewrite: NO
+GLOBAL DEC-AA rewrite: NO
+```
+
+## 次工程（Human only）
+
+1. 本 Acceptance recording の Independent Review / verification（本 unit）
+2. Human Ready Decision for PR #203（自動 Ready しない）
+3. Human Merge Decision（自動 Merge しない）
+4. 別 Human GO: pilot execution / first eligible slice Start（Acceptance ≠ execution）
 
 ## Independent Review
 
