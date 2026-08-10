@@ -29,6 +29,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Decision-AS-CHOICE-OPTIONS-1 | **Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1** |
 | Thirty-fourth residual | **CONSUMED**（COLUMN-PX-1 Accepted） |
 | Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1+XB-1+AP-1** |
+| Thirty-fifth residual | **SELECTED / OPEN**（EG-1 Execution GO path） |
+| Decision-AS-COLUMN-EG-1 | OPEN / NOT ACCEPTED |
 | Decision-AS-COLUMN-NAMES-1 | **Accepted / LOCKED / NM-1+CV-REQ+XB-1** |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
@@ -39,19 +41,20 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 ---
 
-## 2. Immediate candidates（NOT SELECTED）
+## 2. Immediate next OPEN residual（substantive）
 
-| Order | Residual | Why |
+| Order | Residual | Why next |
 |---|---|---|
-| 1 | EG-1 Explicit Column Creation Execution GO | PX-1 Accepted；EG-HOLD blocks create |
+| 1 | Decision-AS-COLUMN-EG-1（EG-1 path） | PX-1 Accepted；Execution GO still NOT GIVEN |
 | 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active acceptance:
-  Decision-AS-COLUMN-PX-1 = PX-1 + XB-1 + AP-1
-  EG-HOLD maintained
+Active next:
+  Decision-AS-COLUMN-EG-1 OPEN / NOT ACCEPTED
+  selection: decision-ilb-1-thirty-fifth-residual-column-eg-selection.md
+  packet: decision-assessment-snapshot-column-eg-packet.md
+  Stop point: HUMAN_AS_COLUMN_EG_DECISION
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
-  Next residual: NOT SELECTED
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START

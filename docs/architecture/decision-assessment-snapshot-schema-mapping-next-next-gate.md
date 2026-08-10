@@ -1,12 +1,13 @@
 # Decision-AS-SCHEMA-MAPPING-NEXT-1 — Next Gate（after Acceptance）
 
-Status: COLUMN-PX-1 Accepted / LOCKED；next residual NOT SELECTED
+Status: COLUMN-PX-1 Accepted；EG-1 Execution GO path SELECTED / OPEN
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](./decision-assessment-snapshot-schema-mapping-next-acceptance.md)
 Column Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 Names Acceptance: [`decision-assessment-snapshot-column-names-acceptance.md`](./decision-assessment-snapshot-column-names-acceptance.md)
 Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`](./decision-assessment-snapshot-choice-options-acceptance.md)
 PX Acceptance: [`decision-assessment-snapshot-column-px-acceptance.md`](./decision-assessment-snapshot-column-px-acceptance.md)
+EG packet: [`decision-assessment-snapshot-column-eg-packet.md`](./decision-assessment-snapshot-column-eg-packet.md)
 MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
 
 ---
@@ -21,7 +22,9 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 | Decision-AS-CHOICE-OPTIONS-1 | **Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1** |
 | Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1+XB-1+AP-1** |
 | Twenty-ninth〜thirty-fourth | CONSUMED |
-| Next residual | **NOT SELECTED** |
+| Thirty-fifth residual | **SELECTED / OPEN** |
+| Decision-AS-COLUMN-EG-1 | **OPEN / NOT ACCEPTED** |
+| Stop point | `HUMAN_AS_COLUMN_EG_DECISION` |
 | Column creation authorization | PX-1（EG-HOLD；create FORBIDDEN） |
 | Choice options | ADOPTED / INTENDED（≠ CONFIRMED） |
 | CV-REQ intended names | ADOPTED / INTENDED（≠ CONFIRMED） |
@@ -36,18 +39,18 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 
 ---
 
-## 2. Immediate candidates（NOT SELECTED）
+## 2. Immediate next OPEN residual（substantive）
 
 | Order | Candidate | Why |
 |---|---|---|
-| 1 | EG-1 Explicit Column Creation Execution GO | PX-1 Accepted；EG-HOLD blocks create |
-| 2 | CV extension（MAP-AS-009/010 / ENV） | residual naming detail |
-| 3 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Decision-AS-COLUMN-EG-1（EG-1 path） | PX-1 Accepted；Execution GO still NOT GIVEN |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Next substantive residual: NOT SELECTED
-EG-HOLD maintained；Execution GO NOT GIVEN
-column creation remains FORBIDDEN
+Next substantive residual: Decision-AS-COLUMN-EG-1
+Stop point: HUMAN_AS_COLUMN_EG_DECISION
+EG-1 ≠ Agent may create ≠ Implementation Start
+column creation remains FORBIDDEN until EG-1 Accepted + Human create
 INTENDED ≠ CONFIRMED
 ```
 
@@ -55,6 +58,6 @@ INTENDED ≠ CONFIRMED
 
 ## 3. Explicit non-claims
 
-- COLUMN-PX-1 Accepted does **not** grant Execution GO or create columns.
+- Opening COLUMN-EG-1 does **not** Accept EG-1 or start create.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

@@ -71,10 +71,9 @@ Selection CONSUMED ≠ Execution GO ≠ column creation。
 ```text
 Thirty-fourth residual: CONSUMED
 Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1 + XB-1 + AP-1
-EG-HOLD: MAINTAINED
-Next substantive residual: NOT SELECTED
-Candidates（separate units）:
-  EG-1 Explicit Column Creation Execution GO
-  CV extension（optional / DTO）
-  Issue Status Reconciliation（#6 / #8 / #22）
+Thirty-fifth residual: SELECTED / OPEN — EG-1 Execution GO path
+  Decision-AS-COLUMN-EG-1 OPEN / NOT ACCEPTED
+  packet: decision-assessment-snapshot-column-eg-packet.md
+Still FORBIDDEN / HOLD until EG-1 Accepted:
+  column creation / Execution GO / Implementation / adapter / Agent mutation
 ```

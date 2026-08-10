@@ -188,9 +188,9 @@ Agent mutation: FORBIDDEN
 Deploy / real data: NO-GO
 INTENDED ≠ CONFIRMED
 
-Next substantive residual: NOT SELECTED by this Acceptance
-Candidates（separate units）:
-  EG-1 Explicit Column Creation Execution GO
+Next substantive residual: SELECTED elsewhere — EG-1 Execution GO path
+  （Decision-AS-COLUMN-EG-1；see thirty-fifth residual）
+Other candidates（separate units）:
   CV extension（MAP-AS-009/010 / ENV）
   Issue Status Reconciliation（#6 / #8 / #22）
 

@@ -1,13 +1,13 @@
 # Decision-AS-COLUMN-PROVISION-1 — Next Gate（after Acceptance）
 
-Status: COLUMN-PX-1 Accepted / LOCKED；next residual NOT SELECTED
+Status: COLUMN-PX-1 Accepted；EG-1 Execution GO path SELECTED / OPEN
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 Names Acceptance: [`decision-assessment-snapshot-column-names-acceptance.md`](./decision-assessment-snapshot-column-names-acceptance.md)
 Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`](./decision-assessment-snapshot-choice-options-acceptance.md)
 PX Acceptance: [`decision-assessment-snapshot-column-px-acceptance.md`](./decision-assessment-snapshot-column-px-acceptance.md)
-PX IR: [`decision-assessment-snapshot-column-px-independent-review.md`](./decision-assessment-snapshot-column-px-independent-review.md)
-Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./decision-ilb-1-thirty-fourth-residual-column-px-selection.md)
+EG packet: [`decision-assessment-snapshot-column-eg-packet.md`](./decision-assessment-snapshot-column-eg-packet.md)
+Selection: [`decision-ilb-1-thirty-fifth-residual-column-eg-selection.md`](./decision-ilb-1-thirty-fifth-residual-column-eg-selection.md)
 
 ---
 
@@ -15,14 +15,17 @@ Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./de
 
 | Item | Status |
 |---|---|
-| Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / SC-AS+EG-HOLD+VR-1+FG-1（PX advanced via COLUMN-PX-1） |
+| Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / SC-AS+VR-1+FG-1（PX via COLUMN-PX-1；EG via COLUMN-EG-1 OPEN） |
 | Decision-AS-COLUMN-NAMES-1 | Accepted / LOCKED / NM-1 + CV-REQ + XB-1 |
 | Decision-AS-CHOICE-OPTIONS-1 | Accepted / LOCKED / CO-1 + CV-CHOICE-BOTH + XB-1 |
-| Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1 + XB-1 + AP-1** |
-| Thirty-first〜thirty-fourth residual | **CONSUMED** |
-| Column creation authorization | **PX-1** |
-| Explicit Execution GO | **NOT GIVEN（EG-HOLD）** |
-| SharePoint column creation | **FORBIDDEN**（until EG-1 + Human create） |
+| Decision-AS-COLUMN-PX-1 | Accepted / LOCKED / PX-1 + XB-1 + AP-1 |
+| Thirty-first〜thirty-fourth residual | CONSUMED |
+| Thirty-fifth residual | **SELECTED / OPEN**（EG-1 Execution GO path） |
+| Decision-AS-COLUMN-EG-1 | **OPEN / NOT ACCEPTED** |
+| Stop point | `HUMAN_AS_COLUMN_EG_DECISION` |
+| Column creation authorization | PX-1 |
+| Explicit Execution GO | NOT GIVEN（EG-HOLD until Human EG Decision） |
+| SharePoint column creation | **FORBIDDEN** |
 | Implementation Start | HOLD |
 | adapter / schema mapping implementation | HOLD |
 | INTENDED ≠ OBSERVED / CONFIRMED | LOCKED |
@@ -31,21 +34,23 @@ Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./de
 
 ---
 
-## 2. Immediate candidates（NOT SELECTED）
+## 2. Immediate next OPEN residual（substantive）
 
-| Order | Candidate | Why |
+| Order | Residual | Why next |
 |---|---|---|
-| 1 | EG-1 Explicit Column Creation Execution GO | PX-1 Accepted；create still blocked by EG-HOLD |
-| 2 | CV extension（MAP-AS-009/010 / ENV） | CV-REQ OUT fields |
-| 3 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Decision-AS-COLUMN-EG-1（EG-1 path） | PX-1 Accepted；Execution GO still NOT GIVEN |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Next substantive residual: NOT SELECTED
-Do NOT auto-start any candidate.
+Active next:
+  Decision-AS-COLUMN-EG-1 OPEN / NOT ACCEPTED
+  packet: decision-assessment-snapshot-column-eg-packet.md
+  Stop point: HUMAN_AS_COLUMN_EG_DECISION
+  EG-1 ≠ Agent may create ≠ Implementation Start
 
 Still FORBIDDEN / HOLD:
   column creation = FORBIDDEN
-  Execution GO = NOT GIVEN（EG-HOLD）
+  Execution GO = NOT GIVEN
   Implementation Start = HOLD
   adapter code = HOLD
   Agent mutation = FORBIDDEN
@@ -56,7 +61,7 @@ Still FORBIDDEN / HOLD:
 
 ## 3. Explicit non-claims
 
-- COLUMN-PX-1 Accepted does **not** grant Execution GO or create columns.
-- INTENDED values are **not** CONFIRMED.
+- Opening COLUMN-EG-1 does **not** Accept EG-1 or start create.
+- Packet OPEN does **not** authorize Agent mutation or Implementation Start.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.
