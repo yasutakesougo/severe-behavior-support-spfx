@@ -176,9 +176,12 @@ CN-1: OPEN
 Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-187-independent-review.md
 Next gate: FIXED
-  Ready gate（Human）
+  CN-1（Internal Column Names 確認・確定）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Site / List creation: COMPLETED
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD

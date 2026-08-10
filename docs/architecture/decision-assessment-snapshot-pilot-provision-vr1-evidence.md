@@ -158,8 +158,10 @@ CN-1: OPEN
 Independent Review #187: PASS
   → decision-assessment-snapshot-pr-187-independent-review.md
 Next gate: FIXED
-  Ready gate（Human）
+  CN-1（Internal Column Names 確認・確定）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO

@@ -110,5 +110,8 @@ VR-1: PASS / SV-1·LV-1: CONFIRMED
 CN-1: OPEN
 evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
 Independent Review #187: PASS
-Next gate: Ready gate（Human）
+Next gate: CN-1（Internal Column Names 確認・確定）
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 ```

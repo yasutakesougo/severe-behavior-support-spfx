@@ -114,8 +114,11 @@ This IR does NOT authorize:
 Independent Review #187: PASS
 P0 = 0 / P1 = 0 / P2 = 0
 Next gate: FIXED
-  Ready gate（Human）
+  CN-1（Internal Column Names 確認・確定）
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
 CN-1: OPEN
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO

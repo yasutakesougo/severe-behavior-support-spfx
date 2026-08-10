@@ -102,7 +102,12 @@ Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
-Next gate: Ready gate（Human）
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
+Next gate: CN-1（Internal Column Names 確認・確定）
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
+Implementation Start: HOLD
+Deploy / real data: NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -251,7 +256,7 @@ Order:
      List names: DEFERRED
      remaining examples: List ownership / List names / common-management naming / post-retention / DEC-015 / SV-1·LV-1·CN-1 after real creation
      FindingCode / A-5: HOLD
-     Note: open PR #186 PROVISION-EXEC（if present）Execution GO remains NOT GIVEN；placeholder 作成 FORBIDDEN
+     Note: PR #186 CLOSED / NOT MERGED / SUPERSEDED by PR #187；placeholder 作成 FORBIDDEN
  25. Twenty-fifth residual: Pilot List ownership（DONE / CONSUMED；Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1）
      acceptance: decision-assessment-snapshot-pilot-list-ownership-acceptance.md
      ownership check: decision-assessment-snapshot-pilot-list-ownership-check.md（CONSUMED）
@@ -279,7 +284,7 @@ Order:
      packet: decision-assessment-snapshot-pilot-provision-exec-packet.md
      selection: decision-ilb-1-twenty-seventh-residual-pilot-provision-exec-selection.md
      next gate: decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-       = Ready gate（Human）；Independent Review #187 PASS
+       = CN-1（Internal Column Names）；PR #187 MERGED；PR #186 SUPERSEDED/CLOSED
      evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
      Execution GO: GIVEN
@@ -292,7 +297,7 @@ Order:
      LV-1: CONFIRMED
      VR-1: PASS
      CN-1: OPEN
-     remaining examples: Ready / CN-1 / common-management naming / post-retention / DEC-015
+     remaining examples: CN-1 / common-management naming / post-retention / DEC-015
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -342,7 +347,12 @@ Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
-Next gate: Ready gate（Human）
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
+Next gate: CN-1（Internal Column Names 確認・確定）
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
+Implementation Start: HOLD
+Deploy / real data: NO-GO
 List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN

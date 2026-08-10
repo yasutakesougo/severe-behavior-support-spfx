@@ -46,11 +46,13 @@ Sequence:
 
 Current step:
   DONE through List names / Provision Exec / VR-1 evidence return
-  Active next = Ready gate（Human）
+  Active next = CN-1（Internal Column Names 確認・確定）
   Independent Review #187 = PASS
+  PR #187 = MERGED / Current SoT
+  PR #186 = CLOSED / SUPERSEDED
   SV-1 / LV-1 = CONFIRMED；VR-1 = PASS；CN-1 = OPEN
 
-NOT next without CN-1 / Ready:
+NOT next without CN-1:
   Internal Column Name confirmation
   Implementation Start
   creating with XXXXX / YYYYY
@@ -125,9 +127,12 @@ VR-1: PASS
 CN-1: OPEN
 Independent Review #187: PASS（P0=0 / P1=0 / P2=0）
   → decision-assessment-snapshot-pr-187-independent-review.md
-Next gate: FIXED = Ready gate（Human）
+Next gate: FIXED = CN-1（Internal Column Names 確認・確定）
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
+PR #187: MERGED / Current SoT
+PR #186: CLOSED / SUPERSEDED
+SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
 Site / List creation: COMPLETED
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
@@ -135,8 +140,11 @@ SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for Ready gate（Human）
+  waiting for CN-1（Internal Column Names 確認・確定）
   Independent Review #187: PASS
+  PR #187: MERGED / Current SoT
+  PR #186: CLOSED / SUPERSEDED
   CN-1 still OPEN
+  SharePoint adapter / schema mapping impl: HOLD
   Agent auto-start: FORBIDDEN
 ```
