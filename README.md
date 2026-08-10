@@ -8,20 +8,42 @@
 
 ## 現在の工程
 
-現在は、業務契約と再利用境界を設計する準備段階です。
+現在は、承認済みの業務・データ契約をSharePoint実環境へ接続する前の、schema境界確認段階です。
 
-SPFx画面、SharePoint接続、データ移行、パイロット、本番公開は開始していません。
+CN-1のread-only観測では、対象とした4つのpilot Listについて、アプリ固有のcustom columnが存在しないことを確認しました。
+
+この観測結果は`DEFAULT_COLUMNS_ONLY`として閉鎖済みです。
+
+SharePoint adapter、schema mapping、column provisioning、SPFx実装はまだ開始していません。
+
+Implementation StartはHOLDです。
 
 | 対象 | 判定 |
 |---|---|
 | 新規リポジトリの初期化 | GO |
+| 承認済み業務・データ契約の文書化 | GO |
 | 合成fixtureを前提とするcontracts設計 | 条件付きGO |
-| 現行domainロジックの再構成 | HOLD |
+| SharePoint実環境のread-only観測 | CN-1完了 |
+| SharePoint schema mapping | HOLD |
+| SharePoint column provisioning | FORBIDDEN / Human GOが必要 |
+| SharePoint adapter実装 | HOLD |
 | SPFx実装 | HOLD |
-| SharePoint接続 | HOLD |
+| Implementation Start | HOLD |
 | データ移行 | NO-GO |
 | パイロット・本番公開 | NO-GO |
 | 現行キオスクの変更 | 禁止 |
+
+## 現在確認できているSharePoint境界
+
+CN-1では、実テナントを変更せずに対象Listの列を観測しました。
+
+対象ListにはSharePoint標準列のみが存在し、アプリ用のcustom columnは確認されませんでした。
+
+したがって、存在しないInternal Nameを推測してadapterへ固定することはしません。
+
+必要な列のDisplay Name、Internal Name、型、作成方法を決めるschema mapping / column pathは、CN-1とは別の後続unitとして扱います。
+
+Human GOなしにSharePoint schemaを変更しません。
 
 ## 再利用境界
 
@@ -32,6 +54,16 @@ SPFx画面、SharePoint接続、データ移行、パイロット、本番公開
 実在情報または匿名化状態を確認できない情報は持ち込みません。
 
 テストデータは、実値を加工せず、合成値だけで新規作成します。
+
+旧実装のschemaやInternal Nameを、新しいSharePoint schemaの根拠として自動採用しません。
+
+## リポジトリ内の正本
+
+READMEは、プロジェクトの目的、現在地、主要な禁止境界を確認する入口です。
+
+個別Decision、Acceptance、観測証跡、gate、handoffの詳細は`docs/`配下の文書を正本として扱います。
+
+READMEと個別Decision文書が競合する場合は、対象Decisionの最新Accepted文書と、その後の明示的な状態遷移を優先します。
 
 ## 想定する構成
 
@@ -59,8 +91,10 @@ tools/
 
 ## 参照元
 
-一次棚卸しの参照元は、`yasutakesougo/audit-management-system-mvp`の`61de858fc30fff1d4eff0052082b54b591a344c3`です。
+旧`audit-management-system-mvp`は、一次棚卸しと移行判断の参照元の一つです。
 
-参照元の情報は、新しい設計の根拠として再確認します。
+旧実装の情報は、新しい設計の根拠として必要な範囲で再確認します。
 
-参照元のファイルを、そのままコピーする許可を意味しません。
+旧リポジトリの特定SHA、画面、保存処理、schema、fixture、実装を、そのまま現在の正本またはコピー元として扱いません。
+
+現在の設計・実装判断は、このリポジトリ内でAcceptedされたDecisionと確認済みの一次情報に基づきます。
