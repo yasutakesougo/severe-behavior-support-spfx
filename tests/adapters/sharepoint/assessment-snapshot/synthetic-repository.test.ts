@@ -254,4 +254,26 @@ describe("AssessmentSnapshot synthetic repository — FR-1 / UP-1 / MAP-AS-010",
     assert.equal(badChoice.code, "VALIDATION_FAILED");
     assert.equal(store.snapshotRows().length, 0);
   });
+
+  it("SC-1: intent / recordStatus mismatch fails closed", async () => {
+    const store = new SyntheticAssessmentSnapshotListStore();
+    const repo = createSyntheticAssessmentSnapshotRepository(store);
+
+    const draftAsFinalize = await repo.save({
+      snapshot: validSnapshot({ snapshotId: "mismatch-1" }),
+      intent: "finalize",
+    });
+    assert.equal(draftAsFinalize.ok, false);
+    if (draftAsFinalize.ok) return;
+    assert.equal(draftAsFinalize.code, "VALIDATION_FAILED");
+
+    const finalAsDraft = await repo.save({
+      snapshot: validFinalizedSnapshot({ snapshotId: "mismatch-2" }),
+      intent: "draft",
+    });
+    assert.equal(finalAsDraft.ok, false);
+    if (finalAsDraft.ok) return;
+    assert.equal(finalAsDraft.code, "VALIDATION_FAILED");
+    assert.equal(store.snapshotRows().length, 0);
+  });
 });

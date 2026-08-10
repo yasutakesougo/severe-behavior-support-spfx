@@ -167,6 +167,50 @@ describe("AssessmentSnapshot conversion MAP-AS-001..008 + 010", () => {
     assert.equal(encodeSupersedesSnapshotId("").ok, false);
     assert.equal(encodeSupersedesSnapshotId("   ").ok, false);
     assert.equal(encodeSupersedesSnapshotId(null as unknown as string).ok, false);
+
+    const decodedAbsent = decodePhysicalRow({
+      snapshotId: "s1",
+      recordStatus: "finalized",
+      result: "NO_FINDINGS",
+      reasonCodes: "[]",
+      ruleSetVersion: "v1",
+      periodStart: "2026-03-01",
+      periodEnd: "2026-03-15",
+      inputFingerprint: "fp1",
+      supersedesSnapshotId: null,
+    });
+    assert.equal(decodedAbsent.ok, true);
+    if (!decodedAbsent.ok) return;
+    assert.equal(decodedAbsent.snapshot.supersedesSnapshotId, undefined);
+
+    assert.equal(
+      decodePhysicalRow({
+        snapshotId: "s1",
+        recordStatus: "finalized",
+        result: "NO_FINDINGS",
+        reasonCodes: "[]",
+        ruleSetVersion: "v1",
+        periodStart: "2026-03-01",
+        periodEnd: "2026-03-15",
+        inputFingerprint: "fp1",
+        supersedesSnapshotId: "",
+      }).ok,
+      false,
+    );
+    assert.equal(
+      decodePhysicalRow({
+        snapshotId: "s1",
+        recordStatus: "finalized",
+        result: "NO_FINDINGS",
+        reasonCodes: "[]",
+        ruleSetVersion: "v1",
+        periodStart: "2026-03-01",
+        periodEnd: "2026-03-15",
+        inputFingerprint: "fp1",
+        supersedesSnapshotId: "   ",
+      }).ok,
+      false,
+    );
   });
 
   it("MAP-AS-009: no persistence mapping for findingIds", () => {
