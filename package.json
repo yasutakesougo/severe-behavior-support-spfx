@@ -11,12 +11,12 @@
     "lint": "eslint src tests scripts --max-warnings 0",
     "lint:fix": "eslint src tests scripts --fix --max-warnings 0",
     "format": "prettier --write .",
-    "format:check": "prettier --write tests/domain/observation-evidence.test.ts && cat tests/domain/observation-evidence.test.ts && exit 1",
+    "format:check": "prettier --check .",
     "check:contracts-boundaries": "node scripts/ci/check-contracts-boundaries.mjs",
     "check:scope": "node scripts/ci/check-scope.mjs",
     "verify:skills": "node scripts/verify-skills.mjs",
     "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries",
-    "verify:ci": "npm run verify:skills && npm run lint && npm run format:check && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:scope",
+    "verify:ci": "npm run verify:skills && npm run lint && npm run format:check && npm run typecheck && npm test && npm run check-contracts-boundaries && npm run check:scope",
     "handoff:auto": "node scripts/auto-handoff.mjs"
   },
   "devDependencies": {
