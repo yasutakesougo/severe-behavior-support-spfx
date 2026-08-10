@@ -86,12 +86,14 @@ LOCKED ownership:
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
 
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
 Next gate: FIXED
-  PILOT LIST NAMES
-  → decision-assessment-snapshot-pilot-list-names-next-gate.md
+  EXPLICIT SITE/LIST CREATION EXECUTION
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NO-GO
 
 Still HOLD / NO-GO:
-  List names
   Site / List creation
   Placeholder creation
   Implementation Start

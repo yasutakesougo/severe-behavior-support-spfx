@@ -143,19 +143,17 @@ Creation remains a later Human execution gate after List names exist.
 ```text
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
-Active next gate: PILOT LIST NAMES
-Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
-  List A = SupportPlan + SupportPlanVersion
-  List B = AssessmentSnapshot
-List names: DEFERRED / NOT SELECTED
+Active next gate: EXPLICIT SITE/LIST CREATION EXECUTION
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
+Execution GO: NOT GIVEN / NO-GO
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-PROVISION-EXEC Execution GO: NOT GIVEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for Human Accept of concrete List names
+  waiting for explicit Site/List creation execution GO
   auto-start: FORBIDDEN
 ```

@@ -45,11 +45,11 @@ Sequence:
   4. STOP（作成はさらに別 Human execution gate）
 
 Current step:
-  3 — waiting for Human Accept of concrete List names
+  DONE through List names Accept
+  Active next = EXPLICIT SITE/LIST CREATION EXECUTION（NO-GO）
 
-NOT next:
+NOT next without explicit execution GO:
   Site/List creation
-  inventing List names without Human Accept
   creating with XXXXX / YYYYY
 ```
 
@@ -109,17 +109,18 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + 
 Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
-Next gate: FIXED = PILOT LIST NAMES
-  → decision-assessment-snapshot-pilot-list-names-next-gate.md
-List names: DEFERRED / NOT SELECTED
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
+Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NO-GO
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
-PROVISION-EXEC Execution GO: NOT GIVEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for Human Accept of concrete List names
+  waiting for explicit Site/List creation execution GO
   auto-start: FORBIDDEN
 ```

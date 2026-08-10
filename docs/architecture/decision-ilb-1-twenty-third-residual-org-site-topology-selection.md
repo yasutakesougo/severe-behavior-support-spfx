@@ -101,12 +101,14 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + 
 Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
 Next Human gate: FIXED
-  PILOT LIST NAMES
-  → decision-assessment-snapshot-pilot-list-names-next-gate.md
+  EXPLICIT SITE/LIST CREATION EXECUTION
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NO-GO
 
 Still HOLD / NO-GO:
-  List names
   Site / List creation（含む placeholder 作成）
   PROVISION-EXEC Execution GO
   Implementation Start

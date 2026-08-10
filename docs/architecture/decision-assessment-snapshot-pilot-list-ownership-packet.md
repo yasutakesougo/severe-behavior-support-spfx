@@ -160,10 +160,12 @@ This packet / Acceptance does NOT authorize:
 ```text
 Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-1 + XB-1
   → decision-assessment-snapshot-pilot-list-ownership-acceptance.md
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  SupportPlans / AssessmentSnapshots
 Next gate: FIXED
-  PILOT LIST NAMES
-  → decision-assessment-snapshot-pilot-list-names-next-gate.md
-List names: DEFERRED
+  EXPLICIT SITE/LIST CREATION EXECUTION
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NO-GO
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD

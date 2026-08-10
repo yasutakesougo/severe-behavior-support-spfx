@@ -38,7 +38,8 @@ Twentieth residual Decision: SELECTED / CONSUMED — New SPFx target provisionin
 Twenty-first residual Decision: SELECTED / CONSUMED — New SPFx Site / List naming（Decision-AS-NEW-TARGET-NAMES-1 Accepted / LOCKED / SU-1+LN-1+IN-1+XB-1；intended values HUMAN-PROVIDED / PLACEHOLDER）
 Twenty-third residual Decision: SELECTED / CONSUMED — Multi-facility org site topology（Decision-AS-ORG-SITE-TOPOLOGY-1 Accepted / LOCKED / OT-1+FS-1+SP-1+PP-1+PH-1+XB-1）
 Twenty-fourth residual Decision: SELECTED / CONSUMED — Pilot facility identity / Site naming（Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1；List names DEFERRED）
-Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1；List names DEFERRED）
+Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1）
+Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1；SupportPlans / AssessmentSnapshots）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -81,7 +82,11 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+X
 Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
-Next gate: PILOT LIST NAMES
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1+XB-1
+  List A name = SupportPlans
+  List B name = AssessmentSnapshots
+Next gate: EXPLICIT SITE/LIST CREATION EXECUTION
+Execution GO: NOT GIVEN / NO-GO
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -242,8 +247,17 @@ Order:
        List A = SupportPlan + SupportPlanVersion
        List B = AssessmentSnapshot
        EX-1 AuditEvent / DailyActivityRecords 除外
-     contingent name candidates（NOT LOCKED）:
-       SupportPlans / AssessmentSnapshots
+     List names: LOCKED via twenty-sixth
+ 26. Twenty-sixth residual: Pilot List names（DONE / CONSUMED；Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1）
+     acceptance: decision-assessment-snapshot-pilot-list-names-acceptance.md
+     packet: decision-assessment-snapshot-pilot-list-names-packet.md
+     selection: decision-ilb-1-twenty-sixth-residual-pilot-list-names-selection.md
+     next gate: decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+       = EXPLICIT SITE/LIST CREATION EXECUTION
+     LOCKED INTENDED Lists:
+       SupportPlans
+       AssessmentSnapshots
+     Creation: NO-GO（XB-1）
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -275,8 +289,11 @@ Placeholder creation: FORBIDDEN
 Decision-AS-PILOT-LIST-OWNERSHIP-1: LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
-Next gate: PILOT LIST NAMES
-List names: DEFERRED
+Decision-AS-PILOT-LIST-NAMES-1: LOCKED / LN-1+XB-1
+  SupportPlans / AssessmentSnapshots
+Next gate: EXPLICIT SITE/LIST CREATION EXECUTION
+Execution GO: NOT GIVEN / NO-GO
+List names: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```

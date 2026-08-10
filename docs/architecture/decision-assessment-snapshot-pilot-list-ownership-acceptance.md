@@ -231,12 +231,13 @@ Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-
 LOCKED ownership:
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
+Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
+  List A = SupportPlans
+  List B = AssessmentSnapshots
 Next gate: FIXED
-  PILOT LIST NAMES
-  → decision-assessment-snapshot-pilot-list-names-next-gate.md
-List names: DEFERRED / NOT SELECTED
-  contingent candidates remain NOT LOCKED:
-    SupportPlans / AssessmentSnapshots
+  EXPLICIT SITE/LIST CREATION EXECUTION
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Execution GO: NOT GIVEN / NO-GO
 Site / List creation: NO-GO
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
