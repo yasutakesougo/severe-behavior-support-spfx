@@ -46,7 +46,8 @@ Required: False / OPTIONAL（not escalated）
 
 Implementation Start: HOLD
 SharePoint adapter / schema mapping / DTO wiring: HOLD
-P2-002 clear/omit transport API: OPEN / CARRY-FORWARD（adapter impl gate）
+P2-002 clear/omit transport API: CLOSED
+  Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A
 Deploy / real data: NO-GO
 ```
 
@@ -160,5 +161,5 @@ Companion determination（same closeout unit）:
 Still HOLD:
   Implementation Start / adapter / DTO / schema wiring
   Deploy / real data
-  P2-002 closure
+P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
 ```

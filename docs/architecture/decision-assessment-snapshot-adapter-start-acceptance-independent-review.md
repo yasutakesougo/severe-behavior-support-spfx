@@ -7,7 +7,7 @@
 Review status: PASS
 P0: 0
 P1: 0
-P2: 1
+P2 open: 0（P2-002 CLOSED via Decision-AS-ADAPTER-EC3-EC4-1）
 Baseline main: efe765be21cbc934f4d72034002610805224af10
 Human Decision: AIS-1-B
 ```
@@ -18,25 +18,34 @@ AcceptanceはAIS-1-Bを条件付きGOとしてLOCKしている。
 
 AcceptanceだけでImplementation Startへ進めていない。
 
-EC-3 adapter client / transport方式とEC-4 P2-002 exact mechanicsを未充足として残している。
+Living sync（post Decision-AS-ADAPTER-EC3-EC4-1）:
 
-P2-002を自動Closeしていない。
+```text
+EC-3 = MET
+EC-4 = MET
+P2-002 = CLOSED
+Implementation Start = HOLD
+EC-5..EC-8 = still required
+```
 
 SharePoint / M365 mutation、Deploy、real dataを認可していない。
+
+runtime dependency install を認可していない（DP-1-A）。
 
 ## Finding
 
 | ID | Severity | Status | 内容 |
 |---|---|---|---|
-| P2-002 | P2 | OPEN / CARRY-FORWARD | optional `supersedesSnapshotId` absenceのexact SharePoint clear / omit transport mechanicsはImplementation Start前に固定・検証が必要 |
+| P2-002 | P2 | **CLOSED** | exact clear/omit mechanics Accepted as CO-1-A under TC-1-A by Decision-AS-ADAPTER-EC3-EC4-1 | 
 
 ## Boundary check
 
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
+Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
 Implementation Start = HOLD
 adapter code = NOT STARTED
-runtime dependency addition = NOT STARTED
+runtime dependency addition = NOT AUTHORIZED
 SharePoint / M365 mutation by Agent = 0
 Deploy = 0
 real data = NO-GO
@@ -45,6 +54,6 @@ real data = NO-GO
 Verdict:
 
 ```text
-PASS — ACCEPTANCE CONSISTENT
-Next gate: EC-3 + EC-4 Decision
+PASS — ACCEPTANCE CONSISTENT（living sync）
+Next gate: AIS-1-B Implementation Start gate
 ```

@@ -68,7 +68,8 @@ Implementation Start: HOLD
 SharePoint adapter / schema mapping implementation: HOLD
 Additional SharePoint column creation: FORBIDDEN without separate GO
 Internal Name invention: FORBIDDEN
-P2-002 clear/omit transport API: OPEN / CARRY-FORWARD（adapter impl gate）
+P2-002 clear/omit transport API: CLOSED
+  Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A under TC-1-A
 Deploy / real data: NO-GO
 ```
 
@@ -178,7 +179,8 @@ supersedesSnapshotId（MAP-AS-010）:
   Physical column = PRESENT（isogo + honmoku）
   VR-1 for MAP-AS-010 = PASS
   column-ready = YES
-  clear/omit transport API = P2-002 OPEN / adapter impl gate
+  clear/omit transport API = P2-002 CLOSED
+    （Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A；host TC-1-A）
   Evidence = decision-assessment-snapshot-map010-column-create-vr1-evidence.md
 
 ENV-001〜003:
@@ -209,8 +211,9 @@ Evidence:
 MUST NOT claim from mapping-complete PASS alone:
   Implementation Start
   adapter / schema / DTO wiring start
-  P2-002 closure
   Deploy / real data GO
+
+P2-002 living: CLOSED by Decision-AS-ADAPTER-EC3-EC4-1（not by mapping-complete）
 ```
 
 ## Next
@@ -232,9 +235,9 @@ MAP-AS-009: EXPLICITLY OUT
 ENV-001〜003: DERIVED
 MAP-AS-010: PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 mapping-complete: PASS / COMPLETE
-P2-002: OPEN / CARRY-FORWARD（adapter impl gate；non-blocking）
-Next substantive residual: NOT SELECTED by this sync
-  （candidate later: adapter Implementation Start Decision）
+P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A）
+EC-3: MET / EC-4: MET（AIS-1-B）
+Next gate: AIS-1-B Implementation Start gate
 Still HOLD:
   Implementation Start / adapter impl / Deploy
 ```

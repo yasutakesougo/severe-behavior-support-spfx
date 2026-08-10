@@ -24,8 +24,11 @@ Acceptance IR:
 
 Decision-AS-ADAPTER-START-1:
   ACCEPTED / LOCKED as AIS-1-B
+EC-3 / EC-4 residual:
+  Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
+    / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
 Implementation Start:
-  HOLD until AIS-1-B Entry Criteria are satisfied
+  HOLD until AIS-1-B Entry Criteria are satisfied and separate GO
 adapter / DTO / schema wiring:
   HOLD
 Deploy / real data:
@@ -42,12 +45,14 @@ MAP-AS-009 = EXPLICITLY OUT
 MAP-AS-010 = PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 ENV-001〜003 = DERIVED
 mapping-complete = PASS / COMPLETE
-P2-002 = OPEN / CARRY-FORWARD
+P2-002 = CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
+EC-3 = MET
+EC-4 = MET
 ```
 
 `mapping-complete` のPASSだけではImplementation Startを認可しない。
 
-P2-002はmapping-complete blockerではないが、adapter impl-gate residualである。
+EC-3 / EC-4 Acceptance だけでは Implementation Start を認可しない（XB-1）。
 
 ## Selection meaning
 
@@ -57,16 +62,17 @@ Human AcceptanceによりAIS-1-BをLOCKした。
 
 AIS-1-Bは条件付きGOであり、AcceptanceだけではImplementation Startを開始しない。
 
-adapter client / transport方式とP2-002 exact clear / omit mechanicsを明示・検証し、Entry Criteriaを満たす必要がある。
+EC-3 / EC-4 は Decision-AS-ADAPTER-EC3-EC4-1 により Accepted / MET。
 
 ## Next
 
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
-P2-002 = OPEN / CARRY-FORWARD
+Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
+P2-002 = CLOSED
+EC-3 = MET
+EC-4 = MET
 Implementation Start = HOLD
-Next substantive residual = adapter client / transport + P2-002 exact mechanics Decision
-Candidate packet = Decision-AS-ADAPTER-EC3-EC4-1（Human Decision pending）
-EC-3 = NOT YET
-EC-4 = NOT YET
+Next gate = AIS-1-B Implementation Start gate
+  （EC-5..EC-8 preserved；separate Human GO）
 ```

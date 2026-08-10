@@ -13,7 +13,8 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Independent Review（docs-only closeout）
 Skill basis: decision-review
 Status: PASS
-Findings: P0=0 / P1=0 / P2=1（P2-002 OPEN / non-blocking）
+Findings at closeout-era: P0=0 / P1=0 / P2=1（P2-002 was OPEN / non-blocking）
+Living: P2-002 = CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
 Baseline main at closeout start:
   5ddb05950a2123a1fb609698b9673102a6190721
 Reviewed artifacts:
@@ -59,7 +60,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 | M-1-A disposition completeness | PASS | 001-008 PERSISTED；009 OUT；010 PERSISTED；ENV DERIVED |
 | mapping-complete PASS / COMPLETE | PASS | determination |
 | No invented mappings / Decisions | PASS | evidence + determination only |
-| P2-002 remains OPEN | PASS | adapter impl gate；non-blocking |
+| P2-002 was OPEN at closeout-era；non-blocking for mapping-complete | PASS | later CLOSED by EC3-EC4-1 |
 | No adapter / DTO / schema wiring | PASS | HOLD |
 | No Implementation Start | PASS | HOLD |
 | No SharePoint / M365 Agent writes | PASS | 0 |
@@ -70,13 +71,11 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
 |---|---|---|---|---|---|
-| P2-002 | P2 | OPEN / CARRY-FORWARD | exact SharePoint clear/omit/null transport API remains adapter impl constraint | MAP010-COLUMN-1 W-1-A | Carry-forward；**mapping-complete blocker: NO** |
+| P2-002 | P2 | **CLOSED**（living） | exact SharePoint clear/omit/null transport API | Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A | **CLOSED**；was non-blocking for mapping-complete |
 
 ```text
-P0 = 0
-P1 = 0
-P2 open = 1（P2-002 only）
-Independent Review: PASS
+Closeout-era IR: PASS（P2-002 was OPEN / non-blocking then）
+Living P2-002: CLOSED
 ```
 
 ## Explicit non-authorization
@@ -96,11 +95,11 @@ This IR does NOT authorize:
 ## Next
 
 ```text
-Independent Review: PASS
+Independent Review: PASS（closeout-era）
 MAP-AS-010 Human create + VR-1: COMPLETE / PASS
 mapping-complete: PASS / COMPLETE
-P2-002: OPEN / CARRY-FORWARD（non-blocking）
-Next gate: HUMAN READY DECISION FOR THIS DRAFT PR
+P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
+Next gate: AIS-1-B Implementation Start gate
 Still HOLD:
   Implementation Start / adapter / DTO / schema
   Deploy / real data

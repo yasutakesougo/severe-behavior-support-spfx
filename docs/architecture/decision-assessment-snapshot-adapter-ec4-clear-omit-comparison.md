@@ -20,15 +20,17 @@ Depends on（再 Decision しない）:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-EC3-EC4-1
 Axis: EC-4 / CO-* + SV-*
-Status: CANDIDATE / READY FOR HUMAN DECISION
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Baseline main: 5bbe912d0e5e127cf1846bb0edf5ddff24ca99a0
 Internal Name under test: supersedesSnapshotId
 Column Type: 1行テキスト / Text
-EC-4: NOT YET（recommendation ≠ MET）
-P2-002: OPEN / CARRY-FORWARD（not closed by recommendation）
-Human Acceptance: NOT YET
+Human Decision: ACCEPT-RECOMMENDED
+Accepted: CO-1-A + SV-1-A（with TC-1-A + DP-1-A + XB-1）
+EC-4: MET
+P2-002: CLOSED
+Human Acceptance: decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 SharePoint / M365 mutation by Agent: 0
-synthetic / local evidence only: YES
+synthetic / local evidence only: YES（SV-1-A）
 ```
 
 ## 1. Locked conversion semantics（NOT reopened）
@@ -59,15 +61,15 @@ because R-1-A / O-1-A treat "" as invalid present.
 
 ## 3. CO-1 — Clear / omit mechanics candidates
 
-Assumes EC-3 recommendation **TC-1-A**（SharePoint REST List Items via SPHttpClient host language）.
+Assumes Accepted EC-3 **TC-1-A**（SharePoint REST List Items via SPHttpClient host language）.
 
 | ID | Create when absent | Update when absent（must clear） | Present valid string | Empty/ws/`null` logical | Aligns O/R/W-1-A? | Result |
 |---|---|---|---|---|---|---|
-| **CO-1-A** | **omit** field from POST body（preferred）；`null` also acceptable as absence | include Internal Name with JSON **`null`** in MERGE/PATCH body（explicit clear）；**omit must not be used for absence-on-update** | include field with exact non-empty string（no trim） | reject in adapter conversion；do not call transport | YES | **RECOMMENDED** |
-| CO-1-B | omit | omit only；never send clear | exact string | fail-closed | NO — cannot clear prior value；equals rejected W-1-B | NOT SELECTABLE |
-| CO-1-C | omit | send `""` to clear | exact string | send `""` as absence | NO — `""` is invalid present under O-1-A/R-1-A | NOT SELECTABLE |
-| CO-1-D | always send `null` on create/update when absent | always `null` | exact string | fail-closed | YES functionally；create-omit preferred for minimal payload | acceptable alternate；NOT primary |
-| CO-1-HOLD | undecided | undecided | — | — | blocks EC-4 | NOT RECOMMENDED |
+| **CO-1-A** | **omit** field from POST body（preferred） | include Internal Name with JSON **`null`** in MERGE/PATCH body（explicit clear）；**omit must not be used for absence-on-update** | include field with exact non-empty string（no trim） | reject in adapter conversion；do not call transport | YES | **SELECTED / Accepted** |
+| CO-1-B | omit | omit only；never send clear | exact string | fail-closed | NO — cannot clear prior value；equals rejected W-1-B | NOT SELECTED |
+| CO-1-C | omit | send `""` to clear | exact string | send `""` as absence | NO — `""` is invalid present under O-1-A/R-1-A | NOT SELECTED |
+| CO-1-D | always send `null` on create/update when absent | always `null` | exact string | fail-closed | YES functionally；create-omit preferred for minimal payload | NOT SELECTED |
+| CO-1-HOLD | undecided | undecided | — | — | blocks EC-4 | NOT SELECTED |
 
 ```text
 CO-1-A REST body language（Internal Name = supersedesSnapshotId）:
@@ -95,9 +97,9 @@ configuration concern and is **not** invented as a locked deployment constant he
 
 | ID | Method | Tenant write? | Result |
 |---|---|---|---|
-| **SV-1-A** | Synthetic / local body-construction matrix + public SharePoint REST clear semantics check；no live item write | NO | **RECOMMENDED** |
-| SV-1-B | Agent live SharePoint write/read-back on pilot lists | YES | NOT SELECTABLE（EC-7） |
-| SV-1-C | Defer all verification until Implementation Start | — | NOT RECOMMENDED（EC-4 requires defined **and verified**） |
+| **SV-1-A** | Synthetic / local body-construction matrix + public SharePoint REST clear semantics check；no live item write | NO | **SELECTED / Accepted** |
+| SV-1-B | Agent live SharePoint write/read-back on pilot lists | YES | NOT SELECTED |
+| SV-1-C | Defer all verification until Implementation Start | — | NOT SELECTED |
 
 ### 4.1 Synthetic verification matrix（local evidence）
 
@@ -128,11 +130,17 @@ Synthetic evidence sources:
   4. ValidateUpdateListItem text clear via "" is REJECTED here
      because "" conflicts with O-1-A / R-1-A
 
-NOT claimed:
+NOT claimed by synthetic matrix alone（recorded by Acceptance）:
   live tenant round-trip PASS
   SPHttpClient package integration test
-  P2-002 CLOSED
-  EC-4 MET without Human Acceptance
+  Implementation Start
+```
+
+Living after Acceptance:
+```text
+EC-4: MET
+P2-002: CLOSED
+Acceptance 正本: decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```
 
 ## 5. Read-back expectation after CO-1-A write
@@ -147,24 +155,28 @@ NOT claimed:
 ## 6. Explicit non-claims
 
 ```text
-This EC-4 comparison / recommendation does NOT:
-  mark EC-4 MET
-  close P2-002
-  Accept CO-1-A / SV-1-A（Human Decision required）
+This EC-4 comparison document does NOT by itself:
   authorize Implementation Start
   authorize adapter code mutation
   authorize SharePoint / M365 writes
   authorize Deploy / real data
   convert empty/whitespace into successful absence
+
+EC-4 MET / P2-002 CLOSED / CO-1-A + SV-1-A LOCKED
+are recorded only in Acceptance 正本.
 ```
 
-## 7. Agent recommendation（NOT Acceptance）
+## 7. Agent recommendation vs Human Decision
 
 ```text
-Agent recommendation for EC-4:
+Agent recommendation for EC-4（historical）:
   CO-1-A + SV-1-A
 
-Human Acceptance: NOT YET
-EC-4 status after this document alone: NOT YET
-P2-002 status after this document alone: OPEN / CARRY-FORWARD
+Human Decision（Accepted / LOCKED）:
+  ACCEPT-RECOMMENDED — CO-1-A + SV-1-A
+  （full set TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1）
+
+EC-4: MET
+P2-002: CLOSED
+Acceptance 正本: decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```

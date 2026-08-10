@@ -33,13 +33,16 @@ Human SharePoint create: COMPLETE（post-Acceptance physical path）
 Agent SharePoint mutation: 0
 mapping-complete: PASS / COMPLETE（see determination）
 adapter / Implementation Start: HOLD
-P2-002 clear/omit transport API: OPEN / CARRY-FORWARD
+P2-002 clear/omit transport API: CLOSED
+  Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A
 Deploy / real data: NO-GO
 
 Post-create evidence:
   decision-assessment-snapshot-map010-column-create-vr1-evidence.md
 mapping-complete determination:
   decision-assessment-snapshot-mapping-complete-determination.md
+EC-3/EC-4 Acceptance:
+  decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```
 
 ## 1. Accepted contract summary
@@ -107,8 +110,10 @@ Self-reference（value === snapshotId）:
 ```text
 Validated domain snapshot is the write source for present values.
 Exact SharePoint client clear/omit/null transport mechanics
-= adapter impl gate（P2-002 OPEN / CARRY-FORWARD；Decision blocker NO）
-REST/PnP/client API mechanic is NOT locked by this Decision.
+= CLOSED by Decision-AS-ADAPTER-EC3-EC4-1（CO-1-A under TC-1-A）
+This MAP010-COLUMN-1 Decision itself did not lock the transport API.
+Living authority:
+  decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```
 
 ## 5. Failure behavior
@@ -143,9 +148,10 @@ mapping-complete: PASS / COMPLETE（M-1-A determination）
 Still NOT authorized by contract / evidence / determination alone:
   adapter Implementation Start
   DTO / schema wiring
-  P2-002 closure
   Deploy / real data
   Agent SharePoint mutation
+
+P2-002 living: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
 ```
 
 ## 8. Next
@@ -157,8 +163,9 @@ MAP-AS-010 column-ready: YES
 Physical column: PRESENT
 VR-1: PASS
 mapping-complete: PASS / COMPLETE
-P2-002: OPEN / CARRY-FORWARD（adapter impl gate）
+P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A）
 Still HOLD:
   Implementation Start / adapter / DTO / schema
   Deploy / real data
+Next gate: AIS-1-B Implementation Start gate
 ```

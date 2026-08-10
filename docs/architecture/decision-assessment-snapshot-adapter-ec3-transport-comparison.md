@@ -17,12 +17,14 @@ Depends on（再 Decision しない）:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-EC3-EC4-1
 Axis: EC-3 / TC-* + DP-*
-Status: CANDIDATE / READY FOR HUMAN DECISION
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Baseline main: 5bbe912d0e5e127cf1846bb0edf5ddff24ca99a0
-EC-3: NOT YET（recommendation ≠ MET）
-Human Acceptance: NOT YET
+Human Decision: ACCEPT-RECOMMENDED
+Accepted: TC-1-A + DP-1-A（with CO-1-A + SV-1-A + XB-1）
+EC-3: MET
+Human Acceptance: decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 Implementation Start: HOLD
-runtime dependency addition: NOT AUTHORIZED by this comparison
+runtime dependency addition: NOT AUTHORIZED（DP-1-A）
 SharePoint / M365 mutation: 0
 ```
 
@@ -59,11 +61,11 @@ Do not add a runtime dependency in this Decision / PR:
 
 | ID | Client / transport | Runtime dep impact | Fit to baseline | Notes | Result |
 |---|---|---|---|---|---|
-| **TC-1-A** | SharePoint REST List Items API, invoked through SPFx `SPHttpClient` when SPFx host exists | **no install authorized now**；dep appears only with future SPFx scaffold GO | Prefer first-party SPFx client；same REST body semantics as raw REST | Selected approach language = REST + SPHttpClient host；mechanics specified against REST JSON | **RECOMMENDED** |
-| TC-1-B | PnPjs（`@pnp/sp`） | **requires new runtime dependency** | Conflicts with “do not add runtime dependency” | Human PnP PowerShell was create evidence only；not a runtime app dep | NOT RECOMMENDED |
-| TC-1-C | Raw `fetch` + SharePoint REST + Request Digest only | no new npm package | Zero-dep possible, but not the SPFx-native host path for this repo name / intended host | Acceptable fallback if SPFx host remains absent；same REST body as TC-1-A | NOT RECOMMENDED as primary |
-| TC-1-D | Microsoft Graph list-item APIs | would require Graph client / auth surface | No prior authority in AssessmentSnapshot docs | Different API shape；out of established residual language | NOT SELECTABLE |
-| TC-1-HOLD | leave EC-3 unselected | none | Blocks AIS-1-B Implementation Start indefinitely | Valid only if Human explicitly HOLDs | NOT RECOMMENDED |
+| **TC-1-A** | SharePoint REST List Items API, invoked through SPFx `SPHttpClient` when SPFx host exists | **no install authorized now**；dep appears only with future SPFx scaffold GO | Prefer first-party SPFx client；same REST body semantics as raw REST | Selected approach language = REST + SPHttpClient host；mechanics specified against REST JSON | **SELECTED / Accepted** |
+| TC-1-B | PnPjs（`@pnp/sp`） | **requires new runtime dependency** | Conflicts with “do not add runtime dependency” | Human PnP PowerShell was create evidence only；not a runtime app dep | NOT SELECTED |
+| TC-1-C | Raw `fetch` + SharePoint REST + Request Digest only | no new npm package | Zero-dep possible, but not the SPFx-native host path for this repo name / intended host | Acceptable fallback if SPFx host remains absent；same REST body as TC-1-A | NOT SELECTED |
+| TC-1-D | Microsoft Graph list-item APIs | would require Graph client / auth surface | No prior authority in AssessmentSnapshot docs | Different API shape；out of established residual language | NOT SELECTED |
+| TC-1-HOLD | leave EC-3 unselected | none | Blocks AIS-1-B Implementation Start indefinitely | Valid only if Human explicitly HOLDs | NOT SELECTED |
 
 ```text
 TC-1-A meaning（precise）:
@@ -81,10 +83,10 @@ TC-1-A meaning（precise）:
 
 | ID | Posture | Result |
 |---|---|---|
-| **DP-1-A** | This Decision does **not** authorize any runtime dependency addition / `npm install` | **RECOMMENDED** |
-| DP-1-B | Authorize adding `@microsoft/sp-http` / SPFx packages in this Decision | NOT SELECTABLE（task / AIS-1-B boundary） |
-| DP-1-C | Authorize adding `@pnp/sp` now | NOT SELECTABLE |
-| DP-1-HOLD | defer dependency posture | redundant with DP-1-A；NOT RECOMMENDED |
+| **DP-1-A** | This Decision does **not** authorize any runtime dependency addition / `npm install` | **SELECTED / Accepted** |
+| DP-1-B | Authorize adding `@microsoft/sp-http` / SPFx packages in this Decision | NOT SELECTED |
+| DP-1-C | Authorize adding `@pnp/sp` now | NOT SELECTED |
+| DP-1-HOLD | defer dependency posture | NOT SELECTED |
 
 ## 5. Create vs update transport surface（under TC-1-A）
 
@@ -102,23 +104,26 @@ REST / SPHttpClient details stay inside adapter（CV-1）.
 ## 6. Explicit non-claims
 
 ```text
-This EC-3 comparison / recommendation does NOT:
-  mark EC-3 MET
-  Accept TC-1-A / DP-1-A（Human Decision required）
+This EC-3 comparison document does NOT by itself:
   authorize Implementation Start
   authorize adapter / DTO / schema code
   authorize runtime dependency installation
   authorize SharePoint / M365 writes
   authorize Deploy / real data
-  select Graph / PnPjs
+
+EC-3 MET / TC-1-A + DP-1-A LOCKED are recorded only in Acceptance 正本.
 ```
 
-## 7. Agent recommendation（NOT Acceptance）
+## 7. Agent recommendation vs Human Decision
 
 ```text
-Agent recommendation for EC-3:
+Agent recommendation for EC-3（historical）:
   TC-1-A + DP-1-A
 
-Human Acceptance: NOT YET
-EC-3 status after this document alone: NOT YET
+Human Decision（Accepted / LOCKED）:
+  ACCEPT-RECOMMENDED — TC-1-A + DP-1-A
+  （full set TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1）
+
+EC-3: MET
+Acceptance 正本: decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```
