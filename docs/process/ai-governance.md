@@ -53,7 +53,9 @@
 
 上位正本: `docs/decisions/DEC-AI-ORG-003.md`
 
-Auto-Approval Policy v1（追加分類層・緩和なし）: `docs/decisions/DEC-AA-001.md`（Accepted / LOCKED / Option A；kill switch = `AUTO_APPROVAL_DISABLED`；`AUTO_APPROVAL_ENABLED` と Implementation Start は別 GO）
+Auto-Approval Policy v1（追加分類層・緩和なし）: `docs/decisions/DEC-AA-001.md`（Accepted / LOCKED / Option A；canonical kill-switch text = `AUTO_APPROVAL_DISABLED`；運用 `AUTO_APPROVAL_ENABLED` と Implementation Start は別 GO）
+
+AUTO-UNTIL-GATE Policy v1（追加分類層・GitHub 公開前 STOP）: `docs/decisions/DEC-AA-003.md`（Accepted / LOCKED / Option A3-1；`AUTO_UNTIL_GATE_DISABLED`；`AUTO_UNTIL_GATE_ENABLED` と Implementation Start は別 GO）
 
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
@@ -98,6 +100,7 @@ Auto-Approval Policy v1（追加分類層・緩和なし）: `docs/decisions/DEC
 | 出力形式 | `.agents/skills/_shared/output-format.md` |
 | 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
 | Auto-Approval Policy v1 | `docs/decisions/DEC-AA-001.md` |
+| AUTO-UNTIL-GATE Policy v1 | `docs/decisions/DEC-AA-003.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -109,4 +112,5 @@ Auto-Approval Policy v1（追加分類層・緩和なし）: `docs/decisions/DEC
 - SharePoint / Entra ID / Microsoft 365 / 本番データの変更
 - DEC-AI-ORG-3 にない新権限の追加、禁止操作の緩和
 - Auto-Approval の有効化（`AUTO_APPROVAL_ENABLED`）。DEC-AA-1 Accepted でも別 Human Explicit GO が必要
-- Implementation Start（DEC-AA-1 を含む Policy Accepted では成立しない）
+- AUTO-UNTIL-GATE の有効化（`AUTO_UNTIL_GATE_ENABLED`）。DEC-AA-3 Accepted でも別 Human Explicit GO が必要
+- Implementation Start（DEC-AA-1 / DEC-AA-3 Policy Accepted では成立しない）

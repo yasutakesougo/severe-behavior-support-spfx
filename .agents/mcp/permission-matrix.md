@@ -4,6 +4,8 @@
 - 位置づけ: MCP / コネクタ利用時の**操作単位権限**の実行参照
 - 実装単位: AI-ORG-IMPL-4
 - 上位正本: `docs/decisions/DEC-AI-ORG-003.md`（DEC-AI-ORG-3）
+- Auto-Approval 追加分類: `docs/decisions/DEC-AA-001.md`（Option A AUTO のみ）
+- AUTO-UNTIL-GATE 追加分類: `docs/decisions/DEC-AA-003.md`（Option A3-1；local loop / GitHub 公開前 STOP；`AUTO_UNTIL_GATE_DISABLED`）
 - 配置根拠: `docs/decisions/ADR-AI-ORG-001.md`
 
 ## 重要な限定
@@ -115,6 +117,8 @@
 | 主題 | 正本 |
 |---|---|
 | 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
+| Auto-Approval v1 | `docs/decisions/DEC-AA-001.md` |
+| AUTO-UNTIL-GATE v1 | `docs/decisions/DEC-AA-003.md` |
 | Governance 入口 | `docs/process/ai-governance.md` |
 | Workflow 入口 | `docs/process/ai-workflow.md` |
 | Role 入口 | `docs/process/ai-role.md` |
