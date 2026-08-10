@@ -429,6 +429,15 @@ Order:
      Execution GO: GIVEN（Human process only）
      EG-1 Acceptance ≠ Human create
      Agent mutation: FORBIDDEN；Implementation/adapter: HOLD
+  36. Thirty-sixth residual: Issue Status Reconciliation（SELECTED）
+     selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
+     packet: issue-status-reconciliation-packet.md
+     assessment: issue-status-reconciliation-assessment.md
+     Close candidates: #5 / #10 / #11
+     Resync keep-open: #6 / #8
+     Continuity re-check: #4 / #9 / #12 / #15〜#19（no batch Close）
+     Backlog keep: #20以降 / UI系
+     Agent GitHub Issue mutation: FORBIDDEN
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -506,19 +515,31 @@ Thirty-fourth residual: CONSUMED — PX-1 authorization
   packet: decision-assessment-snapshot-column-px-packet.md
   acceptance: decision-assessment-snapshot-column-px-acceptance.md
   Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
-Thirty-fifth residual: CONSUMED — EG-1 Execution GO
+  Thirty-fifth residual: CONSUMED — EG-1 Execution GO
   packet: decision-assessment-snapshot-column-eg-packet.md
   acceptance: decision-assessment-snapshot-column-eg-acceptance.md
   Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
   Execution GO: GIVEN（Human process only）
   EG-1 Acceptance ≠ Human create
-Next residual: NOT SELECTED
-Issue Status Reconciliation: ASSESSED / independent next-unit candidate
+  36. Thirty-sixth residual: Issue Status Reconciliation（SELECTED）
+     selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
+     packet: issue-status-reconciliation-packet.md
+     assessment: issue-status-reconciliation-assessment.md
+     Phase ① Close candidates: #5 / #10 / #11
+     Phase ② resync: #6 / #8（KEEP OPEN）
+     Phase ③ continuity: #4 / #9 / #12 / #15〜#19（no batch Close）
+     Phase ④ backlog keep: #20以降 / UI系
+     Agent GitHub Issue mutation: FORBIDDEN
+     Human Issue Close / body patch: AUTHORIZED under packet Phases only
+Next residual after thirty-sixth process unit: NOT SELECTED（column Human create remains parallel）
+Issue Status Reconciliation: SELECTED（thirty-sixth）
   assessment: issue-status-reconciliation-assessment.md
+  packet: issue-status-reconciliation-packet.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
 Implementation Start: HOLD
 SharePoint schema/list/column change: FORBIDDEN
-GitHub Issue mutation / 一括 Close / 一括本文更新: FORBIDDEN
+GitHub Issue mutation by Agent / 一括 Close / 一括本文更新: FORBIDDEN
+Human Phase ①〜② Issue Close / body patch: AUTHORIZED under Reconciliation packet
 Deploy / real data: NO-GO
 List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY

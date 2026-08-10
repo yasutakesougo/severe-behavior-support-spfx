@@ -185,12 +185,14 @@ adapter / schema mapping implementation: HOLD
 Human create: separate next Human process（NOT started here）
 INTENDED ≠ CONFIRMED until create + VR-1
 
-Next substantive residual: NOT SELECTED by this Acceptance
-Candidates（separate units）:
+Later process residual: SELECTED as thirty-sixth — Issue Status Reconciliation
+  selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
+  packet: issue-status-reconciliation-packet.md
+Parallel Human process（not thirty-sixth）:
   Human create execution record / evidence
   VR-1 CN-1 re-observation after create
+Later candidates:
   CV extension（MAP-AS-009/010 / ENV）
-  Issue Status Reconciliation（#6 / #8 / #22）
 
 Ready: NOT RUN
 Merge: NOT RUN

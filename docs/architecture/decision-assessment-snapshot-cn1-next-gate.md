@@ -37,16 +37,17 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Deploy / real data | NO-GO |
 | Agent SharePoint mutation | FORBIDDEN |
 | SharePoint schema / list / column change | FORBIDDEN（CP-1） |
-| GitHub Issue mutation / 一括 Close / 一括本文更新 | FORBIDDEN |
+| GitHub Issue mutation by Agent / 一括 Close / 一括本文更新 | FORBIDDEN |
+| Human Phase ①〜② Issue Close / body patch | AUTHORIZED under thirty-sixth Reconciliation packet |
 
 ---
 
-## 2. Immediate candidates（NOT SELECTED）
+## 2. Immediate units
 
-| Order | Residual | Why |
+| Order | Residual | Status |
 |---|---|---|
-| 1 | Human create + VR-1 CN-1 re-observation | EG-1 GIVEN；create separate；then CONFIRMED |
-| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Issue Status Reconciliation（#5/#10/#11 Close；#6/#8 resync） | **SELECTED（thirty-sixth）** |
+| 2 | Human create + VR-1 CN-1 re-observation | parallel Human process（EG-1 GIVEN；create separate；then CONFIRMED） |
 
 ```text
 Active acceptance:
@@ -54,14 +55,18 @@ Active acceptance:
   Execution GO GIVEN（Human process only）
   EG-1 Acceptance ≠ Human create
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
-  Next residual: NOT SELECTED
+  Thirty-sixth residual: SELECTED — Issue Status Reconciliation
+    selection: decision-ilb-1-thirty-sixth-residual-issue-status-reconciliation-selection.md
+    packet: issue-status-reconciliation-packet.md
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START
   INTENDED ≠ CONFIRMED
   Agent column create = FORBIDDEN
   Implementation Start = HOLD
-  Agent mutation = FORBIDDEN
+  Agent SharePoint mutation = FORBIDDEN
+  Agent GitHub Issue mutation = FORBIDDEN
+  Human Phase ①〜② Issue Close / body patch = AUTHORIZED under Reconciliation packet
 ```
 
 ---
