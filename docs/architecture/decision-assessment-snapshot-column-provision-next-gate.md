@@ -1,13 +1,13 @@
 # Decision-AS-COLUMN-PROVISION-1 — Next Gate（after Acceptance）
 
-Status: COLUMN-PX-1 Accepted；EG-1 Execution GO path SELECTED / OPEN
+Status: COLUMN-EG-1 Accepted / LOCKED；next residual NOT SELECTED
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 Names Acceptance: [`decision-assessment-snapshot-column-names-acceptance.md`](./decision-assessment-snapshot-column-names-acceptance.md)
 Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`](./decision-assessment-snapshot-choice-options-acceptance.md)
 PX Acceptance: [`decision-assessment-snapshot-column-px-acceptance.md`](./decision-assessment-snapshot-column-px-acceptance.md)
-EG packet: [`decision-assessment-snapshot-column-eg-packet.md`](./decision-assessment-snapshot-column-eg-packet.md)
-EG judgment: [`decision-assessment-snapshot-column-eg-judgment.md`](./decision-assessment-snapshot-column-eg-judgment.md)
+EG Acceptance: [`decision-assessment-snapshot-column-eg-acceptance.md`](./decision-assessment-snapshot-column-eg-acceptance.md)
+EG IR: [`decision-assessment-snapshot-column-eg-independent-review.md`](./decision-assessment-snapshot-column-eg-independent-review.md)
 Selection: [`decision-ilb-1-thirty-fifth-residual-column-eg-selection.md`](./decision-ilb-1-thirty-fifth-residual-column-eg-selection.md)
 
 ---
@@ -16,58 +16,51 @@ Selection: [`decision-ilb-1-thirty-fifth-residual-column-eg-selection.md`](./dec
 
 | Item | Status |
 |---|---|
-| Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / SC-AS+VR-1+FG-1（PX via COLUMN-PX-1；EG via COLUMN-EG-1 OPEN） |
+| Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / SC-AS+VR-1+FG-1（PX/EG advanced via COLUMN-PX-1 / COLUMN-EG-1） |
 | Decision-AS-COLUMN-NAMES-1 | Accepted / LOCKED / NM-1 + CV-REQ + XB-1 |
 | Decision-AS-CHOICE-OPTIONS-1 | Accepted / LOCKED / CO-1 + CV-CHOICE-BOTH + XB-1 |
 | Decision-AS-COLUMN-PX-1 | Accepted / LOCKED / PX-1 + XB-1 + AP-1 |
-| Thirty-first〜thirty-fourth residual | CONSUMED |
-| Thirty-fifth residual | **SELECTED / OPEN**（EG-1 Execution GO path） |
-| Decision-AS-COLUMN-EG-1 | **OPEN / NOT ACCEPTED** |
-| EG-1 judgment | **READY**（採択可；Acceptance ではない） |
-| Stop point | `HUMAN_AS_COLUMN_EG_DECISION` |
+| Decision-AS-COLUMN-EG-1 | **Accepted / LOCKED / EG-1 + XB-1 + AP-1** |
+| Thirty-first〜thirty-fifth residual | **CONSUMED** |
 | Column creation authorization | PX-1 |
-| Explicit Execution GO | NOT GIVEN（until Human EG Decision） |
-| SharePoint column creation | **FORBIDDEN** |
+| Explicit Execution GO | **GIVEN（Human process only）** |
 | EG-1 Acceptance ≠ Human create | LOCKED separation |
+| Human create | AUTHORIZED / NOT STARTED by Acceptance |
+| Agent SharePoint mutation | FORBIDDEN |
 | Implementation Start | HOLD |
 | adapter / schema mapping implementation | HOLD |
-| INTENDED ≠ OBSERVED / CONFIRMED | LOCKED |
-| Agent SharePoint mutation | FORBIDDEN |
+| INTENDED ≠ OBSERVED / CONFIRMED | LOCKED（until create + VR-1） |
 | Deploy / real data | NO-GO |
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
-| Order | Residual | Why next |
+| Order | Candidate | Why |
 |---|---|---|
-| 1 | Decision-AS-COLUMN-EG-1（EG-1 path） | PX-1 Accepted；Execution GO still NOT GIVEN |
-| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Human create execution record / evidence | EG-1 GIVEN；create is separate Human process |
+| 2 | VR-1 CN-1 re-observation（after create） | CONFIRMED path |
+| 3 | CV extension（MAP-AS-009/010 / ENV） | CV-REQ OUT fields |
+| 4 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active next:
-  Decision-AS-COLUMN-EG-1 OPEN / NOT ACCEPTED
-  packet: decision-assessment-snapshot-column-eg-packet.md
-  judgment: decision-assessment-snapshot-column-eg-judgment.md（READY / EG-1 採択可）
-  Stop point: HUMAN_AS_COLUMN_EG_DECISION
-  EG-1 ≠ Agent may create ≠ Implementation Start
-  EG-1 Acceptance ≠ Human create（分離）
-  Awaiting: Human Acceptance（recommended EG-1+XB-1+AP-1）
+Next substantive residual: NOT SELECTED
+Do NOT auto-start Human create from docs Acceptance.
+Do NOT Agent-create columns.
 
 Still FORBIDDEN / HOLD:
-  column creation = FORBIDDEN（until EG-1 Accepted + separate Human create）
-  Execution GO = NOT GIVEN
+  Agent mutation = FORBIDDEN
   Implementation Start = HOLD
   adapter code = HOLD
-  Agent mutation = FORBIDDEN
   INTENDED ≠ CONFIRMED
+  Deploy / real data = NO-GO
 ```
 
 ---
 
 ## 3. Explicit non-claims
 
-- Opening COLUMN-EG-1 does **not** Accept EG-1 or start create.
-- Packet OPEN does **not** authorize Agent mutation or Implementation Start.
+- COLUMN-EG-1 Accepted does **not** complete Human create.
+- INTENDED values are **not** CONFIRMED.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

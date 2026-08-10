@@ -13,7 +13,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Kind: decision-review（EG-1 Execution GO 採択可否）
 Status: READY
 Findings: P0=0 / P1=0 / P2=0
-Human Decision: NOT YET（本文書 ≠ Acceptance）
+Human Decision: ACCEPTED afterward as EG-1 + XB-1 + AP-1（本文書自体は Acceptance ではない）
 Recommended Accept set（比較用）: EG-1 + XB-1 + AP-1
 Must keep: Agent mutation FORBIDDEN / Implementation HOLD / adapter HOLD
 Must separate: EG-1 Acceptance ≠ Human create execution
@@ -120,7 +120,7 @@ Meaning if Human Accepts EG-1 under this set:
 ## Approvals
 
 - 必要な承認: Human Acceptance of Decision-AS-COLUMN-EG-1
-- 承認状態: **NOT YET**
+- 承認状態: **Accepted** — see decision-assessment-snapshot-column-eg-acceptance.md
 - 本 decision-review: 比較用判定のみ
 - Human create: **separate later step**（not part of this judgment）
 
@@ -139,8 +139,8 @@ This judgment does NOT authorize:
 
 ## Next Actions
 
-1. Human Accepts **EG-1 + XB-1 + AP-1** — or declines with EG-HOLD
+1. Human Accepted **EG-1 + XB-1 + AP-1** — recorded in acceptance artifact
 2. Keep **EG-1 Acceptance ≠ Human create** separation
-3. After EG-1 Accepted: Human create（Agent FORBIDDEN）→ VR-1 CN-1 re-observation
+3. Next Human process: create columns（Agent FORBIDDEN）→ VR-1 CN-1 re-observation
 4. Keep Implementation / adapter HOLD unless separately decided
 5. Keep PR #192 as docs line；no Agent SharePoint touch

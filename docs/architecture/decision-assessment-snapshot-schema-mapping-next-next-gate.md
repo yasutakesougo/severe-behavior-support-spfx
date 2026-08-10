@@ -1,13 +1,13 @@
 # Decision-AS-SCHEMA-MAPPING-NEXT-1 — Next Gate（after Acceptance）
 
-Status: COLUMN-PX-1 Accepted；EG-1 Execution GO path SELECTED / OPEN
+Status: COLUMN-EG-1 Accepted / LOCKED；next residual NOT SELECTED
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](./decision-assessment-snapshot-schema-mapping-next-acceptance.md)
 Column Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 Names Acceptance: [`decision-assessment-snapshot-column-names-acceptance.md`](./decision-assessment-snapshot-column-names-acceptance.md)
 Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`](./decision-assessment-snapshot-choice-options-acceptance.md)
 PX Acceptance: [`decision-assessment-snapshot-column-px-acceptance.md`](./decision-assessment-snapshot-column-px-acceptance.md)
-EG packet: [`decision-assessment-snapshot-column-eg-packet.md`](./decision-assessment-snapshot-column-eg-packet.md)
+EG Acceptance: [`decision-assessment-snapshot-column-eg-acceptance.md`](./decision-assessment-snapshot-column-eg-acceptance.md)
 MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-sharepoint-mapping.md)
 
 ---
@@ -21,10 +21,10 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 | Decision-AS-COLUMN-NAMES-1 | **Accepted / LOCKED / NM-1+CV-REQ+XB-1** |
 | Decision-AS-CHOICE-OPTIONS-1 | **Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1** |
 | Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1+XB-1+AP-1** |
-| Twenty-ninth〜thirty-fourth | CONSUMED |
-| Thirty-fifth residual | **SELECTED / OPEN** |
-| Decision-AS-COLUMN-EG-1 | **OPEN / NOT ACCEPTED** |
-| Stop point | `HUMAN_AS_COLUMN_EG_DECISION` |
+| Decision-AS-COLUMN-EG-1 | **Accepted / LOCKED / EG-1+XB-1+AP-1** |
+| Twenty-ninth〜thirty-fifth | CONSUMED |
+| Next residual | **NOT SELECTED** |
+| Execution GO | GIVEN（Human process only；Acceptance≠create） |
 | Column creation authorization | PX-1（EG-HOLD；create FORBIDDEN） |
 | Choice options | ADOPTED / INTENDED（≠ CONFIRMED） |
 | CV-REQ intended names | ADOPTED / INTENDED（≠ CONFIRMED） |
@@ -39,18 +39,19 @@ MT-1 table: [`assessment-snapshot-sharepoint-mapping.md`](./assessment-snapshot-
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
 | Order | Candidate | Why |
 |---|---|---|
-| 1 | Decision-AS-COLUMN-EG-1（EG-1 path） | PX-1 Accepted；Execution GO still NOT GIVEN |
-| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | Human create execution record / evidence | EG-1 GIVEN；create is separate |
+| 2 | VR-1 CN-1 re-observation（after create） | CONFIRMED path |
+| 3 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Next substantive residual: Decision-AS-COLUMN-EG-1
-Stop point: HUMAN_AS_COLUMN_EG_DECISION
-EG-1 ≠ Agent may create ≠ Implementation Start
-column creation remains FORBIDDEN until EG-1 Accepted + Human create
+Next substantive residual: NOT SELECTED
+Execution GO GIVEN（Human process only）
+EG-1 Acceptance ≠ Human create
+Agent mutation FORBIDDEN；Implementation/adapter HOLD
 INTENDED ≠ CONFIRMED
 ```
 
@@ -58,6 +59,6 @@ INTENDED ≠ CONFIRMED
 
 ## 3. Explicit non-claims
 
-- Opening COLUMN-EG-1 does **not** Accept EG-1 or start create.
+- COLUMN-EG-1 Accepted does **not** complete Human create or CONFIRMED names.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

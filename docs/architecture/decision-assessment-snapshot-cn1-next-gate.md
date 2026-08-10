@@ -29,8 +29,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Decision-AS-CHOICE-OPTIONS-1 | **Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1** |
 | Thirty-fourth residual | **CONSUMED**（COLUMN-PX-1 Accepted） |
 | Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1+XB-1+AP-1** |
-| Thirty-fifth residual | **SELECTED / OPEN**（EG-1 Execution GO path） |
-| Decision-AS-COLUMN-EG-1 | OPEN / NOT ACCEPTED |
+| Thirty-fifth residual | **CONSUMED**（COLUMN-EG-1 Accepted） |
+| Decision-AS-COLUMN-EG-1 | **Accepted / LOCKED / EG-1+XB-1+AP-1** |
 | Decision-AS-COLUMN-NAMES-1 | **Accepted / LOCKED / NM-1+CV-REQ+XB-1** |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
@@ -41,26 +41,25 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
-| Order | Residual | Why next |
+| Order | Residual | Why |
 |---|---|---|
-| 1 | Decision-AS-COLUMN-EG-1（EG-1 path） | PX-1 Accepted；Execution GO still NOT GIVEN |
+| 1 | Human create + VR-1 CN-1 re-observation | EG-1 GIVEN；create separate；then CONFIRMED |
 | 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active next:
-  Decision-AS-COLUMN-EG-1 OPEN / NOT ACCEPTED
-  selection: decision-ilb-1-thirty-fifth-residual-column-eg-selection.md
-  packet: decision-assessment-snapshot-column-eg-packet.md
-  Stop point: HUMAN_AS_COLUMN_EG_DECISION
+Active acceptance:
+  Decision-AS-COLUMN-EG-1 = EG-1 + XB-1 + AP-1
+  Execution GO GIVEN（Human process only）
+  EG-1 Acceptance ≠ Human create
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
+  Next residual: NOT SELECTED
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START
   INTENDED ≠ CONFIRMED
-  custom column creation = FORBIDDEN
-  Execution GO = NOT GIVEN
+  Agent column create = FORBIDDEN
   Implementation Start = HOLD
   Agent mutation = FORBIDDEN
 ```

@@ -48,7 +48,7 @@ Thirty-first residual Decision: SELECTED / CONSUMED — Column provisioning（De
 Thirty-second residual Decision: SELECTED / CONSUMED — NM-1 intended names（Decision-AS-COLUMN-NAMES-1 Accepted / LOCKED / NM-1+CV-REQ+XB-1）
 Thirty-third residual Decision: SELECTED / CONSUMED — Choice options（Decision-AS-CHOICE-OPTIONS-1 Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1）
 Thirty-fourth residual Decision: SELECTED / CONSUMED — PX-1 authorization（Decision-AS-COLUMN-PX-1 Accepted / LOCKED / PX-1+XB-1+AP-1；EG-HOLD）
-Thirty-fifth residual Decision: SELECTED / OPEN — EG-1 Execution GO path（Decision-AS-COLUMN-EG-1 OPEN / NOT ACCEPTED）
+Thirty-fifth residual Decision: SELECTED / CONSUMED — EG-1 Execution GO（Decision-AS-COLUMN-EG-1 Accepted / LOCKED / EG-1+XB-1+AP-1；Acceptance≠Human create）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -158,12 +158,15 @@ Thirty-fourth residual: CONSUMED — PX-1 authorization
   IR: decision-assessment-snapshot-column-px-independent-review.md（PASS）
   Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
   EG-HOLD: MAINTAINED（until COLUMN-EG-1）
-Thirty-fifth residual: SELECTED / OPEN — EG-1 Execution GO path
+Thirty-fifth residual: CONSUMED — EG-1 Execution GO
   selection: decision-ilb-1-thirty-fifth-residual-column-eg-selection.md
   packet: decision-assessment-snapshot-column-eg-packet.md
-  Decision-AS-COLUMN-EG-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_COLUMN_EG_DECISION
-Next residual active: Decision-AS-COLUMN-EG-1
+  acceptance: decision-assessment-snapshot-column-eg-acceptance.md
+  IR: decision-assessment-snapshot-column-eg-independent-review.md（PASS）
+  Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
+  Execution GO: GIVEN（Human process only）
+  EG-1 Acceptance ≠ Human create
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
@@ -418,13 +421,14 @@ Order:
      Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
      EG-HOLD: MAINTAINED（until COLUMN-EG-1）
      column creation: FORBIDDEN（until EG-1+Human create）
-  35. Thirty-fifth residual: EG-1 Execution GO path（SELECTED / OPEN）
+  35. Thirty-fifth residual: EG-1 Execution GO（CONSUMED）
      selection: decision-ilb-1-thirty-fifth-residual-column-eg-selection.md
      packet: decision-assessment-snapshot-column-eg-packet.md
-     Decision-AS-COLUMN-EG-1: OPEN / NOT ACCEPTED
-     Stop point: HUMAN_AS_COLUMN_EG_DECISION
-     EG-1 ≠ Agent may create ≠ Implementation Start
-     column creation: FORBIDDEN until EG-1 Accepted + Human create
+     acceptance: decision-assessment-snapshot-column-eg-acceptance.md
+     Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
+     Execution GO: GIVEN（Human process only）
+     EG-1 Acceptance ≠ Human create
+     Agent mutation: FORBIDDEN；Implementation/adapter: HOLD
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -502,11 +506,13 @@ Thirty-fourth residual: CONSUMED — PX-1 authorization
   packet: decision-assessment-snapshot-column-px-packet.md
   acceptance: decision-assessment-snapshot-column-px-acceptance.md
   Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
-Thirty-fifth residual: SELECTED / OPEN — EG-1 Execution GO path
+Thirty-fifth residual: CONSUMED — EG-1 Execution GO
   packet: decision-assessment-snapshot-column-eg-packet.md
-  Decision-AS-COLUMN-EG-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_COLUMN_EG_DECISION
-Next residual active: Decision-AS-COLUMN-EG-1
+  acceptance: decision-assessment-snapshot-column-eg-acceptance.md
+  Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
+  Execution GO: GIVEN（Human process only）
+  EG-1 Acceptance ≠ Human create
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
