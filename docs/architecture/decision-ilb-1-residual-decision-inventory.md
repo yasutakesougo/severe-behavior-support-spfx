@@ -42,7 +42,7 @@ Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / �
 Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1；SupportPlans / AssessmentSnapshots）
 Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creation execution（Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1；Execution GO GIVEN；AI mutation FORBIDDEN）
 Twenty-eighth residual Decision: SELECTED / CONSUMED — CN-1 Internal Column Names observation（Decision-AS-CN1-OBSERVATION-1 CLOSED / CONSUMED；DEFAULT_COLUMNS_ONLY；custom = 0）
-Twenty-ninth residual Decision: SELECTED / OPEN — Post-CN-1 schema mapping / column path / Implementation Start gate（Decision-AS-SCHEMA-MAPPING-NEXT-1 packet pending）
+Twenty-ninth residual Decision: SELECTED / OPEN — Post-CN-1 schema mapping / column path / Implementation Start gate（Decision-AS-SCHEMA-MAPPING-NEXT-1 OPEN / NOT ACCEPTED；packet open）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -112,13 +112,16 @@ Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
 Independent Review #188: PASS
+PR #191: MERGED（merge 0738ea79…；content HEAD 819b0fe7…）
 PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
-Next gate: schema mapping / column path / Implementation Start boundary
+Next gate: Decision-AS-SCHEMA-MAPPING-NEXT-1（OPEN / NOT ACCEPTED）
   selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
   next-gate: decision-assessment-snapshot-cn1-next-gate.md
+  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
   prior CN-1 packet: decision-assessment-snapshot-cn1-observation-packet.md（CLOSED）
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
@@ -329,9 +332,12 @@ Order:
      Match-existing premise: NOT APPLICABLE / INVALIDATED
  29. Twenty-ninth residual: Post-CN-1 schema mapping / column path（SELECTED / OPEN）
      selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
-     packet: Decision-AS-SCHEMA-MAPPING-NEXT-1（pending open）
+     packet: decision-assessment-snapshot-schema-mapping-next-packet.md
+     Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
+     Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
      Implementation Start: HOLD
      adapter / schema mapping impl: HOLD（≠ mapping-complete）
+     SharePoint column creation: FORBIDDEN
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -383,13 +389,16 @@ Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
 Independent Review #188: PASS
+PR #191: MERGED（merge 0738ea79…；content HEAD 819b0fe7…）
 PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
 PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
-Next gate: schema mapping / column path / Implementation Start boundary
+Next gate: Decision-AS-SCHEMA-MAPPING-NEXT-1（OPEN / NOT ACCEPTED）
   selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
   next-gate: decision-assessment-snapshot-cn1-next-gate.md
+  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）

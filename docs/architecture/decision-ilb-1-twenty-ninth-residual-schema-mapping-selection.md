@@ -8,7 +8,9 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_TWENTY_NINTH_RESIDUAL_SELECTION
 Status: SELECTED / OPEN
 Selected unit: Post-CN-1 schema mapping / column path / Implementation Start gate
-Follow-up Decision / Packet ID: Decision-AS-SCHEMA-MAPPING-NEXT-1（OPEN packet pending）
+Follow-up Decision / Packet ID: Decision-AS-SCHEMA-MAPPING-NEXT-1
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
+  Status: OPEN / NOT ACCEPTED
 
 Locked basis（再 Decision しない）:
   Decision-AS-SP-PLACEMENT-1 = Accepted / LOCKED / SV-1 + LV-1 + CN-1 + SC-1
@@ -36,11 +38,18 @@ Current state:
 
 ```text
 SELECTED / OPEN:
-  Decision-AS-SCHEMA-MAPPING-NEXT-1（packet to open）
+  Decision-AS-SCHEMA-MAPPING-NEXT-1
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
+  Status: OPEN / NOT ACCEPTED
   Question:
     カスタム列 0 の実テナントに対し、
     schema mapping / column provisioning / Implementation Start を
     どの順序・境界で進めるか。
+  Compare axes:
+    MT — mapping table now
+    IN — intended Internal Names
+    CP — column provisioning path
+    XB — Implementation / adapter / Deploy boundary
 
 Facts that MUST remain visible:
   custom application columns = 0
@@ -72,16 +81,19 @@ Selection ≠ Acceptance ≠ Implementation Start。
 
 ## Compare axes for the OPEN packet（not Accepted here）
 
-次 packet で Human が選ぶ候補（本 Selection では Accepted にしない）:
+正本 packet:
+[`decision-assessment-snapshot-schema-mapping-next-packet.md`](./decision-assessment-snapshot-schema-mapping-next-packet.md)
 
-| Axis | Candidate meaning | Note |
+| Axis | Candidate IDs | Note |
 |---|---|---|
-| SM-1 | Logical mapping 表のみ更新（Internal Name = 未確認 / NOT PRESENT のまま） | LF-1 許容；Implementation は依然 HOLD |
-| SM-2 | Human-provided intended Internal Names を採択（作成前 INTENDED） | CN-1 再観測が後続必須；CONFIRMED 扱い禁止 |
-| SM-3 | Column provisioning Execution GO を先に置く | mutation は別 Human gate；Agent mutation FORBIDDEN |
-| SM-X | Implementation Start を本 unit で GO | NOT selectable while required columns NOT PRESENT |
+| MT | MT-1 / MT-2 / MT-HOLD / MT-X | mapping 表を今どう扱うか |
+| IN | IN-A / IN-B / IN-HOLD / IN-X | intended Internal Names を採択するか |
+| CP | CP-1 / CP-2 / CP-HOLD / CP-X | column provisioning GO を含めるか |
+| XB | XB-1（必須候補）/ XB-2 / XB-3 NOT selectable now | Implementation / adapter / Deploy 境界 |
 
 ```text
+Agent recommendation（比較用）:
+  MT-1 + IN-A + CP-1 + XB-1
 Packet MUST keep:
   XB — Implementation Start / adapter code / Deploy = separate
   CN-1 — created columns は再観測で確定；推論禁止
@@ -105,9 +117,11 @@ Issue Status Reconciliation:
 ```text
 Twenty-eighth residual: CONSUMED（CN-1 observation CLOSED）
 Twenty-ninth residual: SELECTED / OPEN
-  → open Decision-AS-SCHEMA-MAPPING-NEXT-1 packet
+  Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
   theme: schema mapping / column path / Implementation Start boundary
   fact: custom columns = 0；match-existing premise INVALIDATED
+  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
 
 Until packet Accepted + prerequisites met:
   SharePoint adapter / schema mapping impl = HOLD

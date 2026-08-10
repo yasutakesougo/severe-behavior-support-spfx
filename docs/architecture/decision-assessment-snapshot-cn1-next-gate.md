@@ -1,9 +1,10 @@
 # Decision-AS-CN1-OBSERVATION-1 — Next Gate（after CN-1 CLOSED）
 
-Status: CN-1 observation CONSUMED；next residual OPEN for selection
+Status: CN-1 observation CONSUMED；Decision-AS-SCHEMA-MAPPING-NEXT-1 OPEN
 Date: 2026-08-10
 Closure: [`decision-assessment-snapshot-cn1-closure-determination.md`](./decision-assessment-snapshot-cn1-closure-determination.md)
 Evidence: [`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](./decision-assessment-snapshot-cn1-readonly-observation-evidence.md)
+Packet: [`decision-assessment-snapshot-schema-mapping-next-packet.md`](./decision-assessment-snapshot-schema-mapping-next-packet.md)
 
 ---
 
@@ -11,9 +12,10 @@ Evidence: [`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](
 
 | Item | Status |
 |---|---|
+| PR #191 | **MERGED**（merge `0738ea79…`；content HEAD `819b0fe7…`） |
 | PR #188 | MERGED |
-| PR #187 | MERGED / Current SoT（pre-CN-1 docs） |
-| PR #190 | OPEN docs predecessor（selection / stop-point lock） |
+| PR #187 | MERGED |
+| PR #190 | superseded/contained by #191 path |
 | PR #189 | SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED） |
 | SV-1 / LV-1 | CONFIRMED |
 | VR-1 | PASS |
@@ -24,6 +26,7 @@ Evidence: [`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](
 | Result class | **DEFAULT_COLUMNS_ONLY** |
 | Match-existing-app-Internal-Names premise | **NOT APPLICABLE / INVALIDATED** |
 | App-field Internal Names CONFIRMED | **NONE**（not present） |
+| Decision-AS-SCHEMA-MAPPING-NEXT-1 | **OPEN / NOT ACCEPTED** |
 | Implementation Start | HOLD |
 | Deploy / real data | NO-GO |
 | Agent SharePoint mutation | FORBIDDEN |
@@ -36,13 +39,16 @@ Evidence: [`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](
 
 | Order | Residual | Why next |
 |---|---|---|
-| 1 | Schema mapping / column path / Implementation Start gate | CN-1 closed with custom columns = 0；mapping-complete ではない |
-| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt；CN-1 代替ではない |
+| 1 | Decision-AS-SCHEMA-MAPPING-NEXT-1（MT/IN/CP/XB） | CN-1 closed；custom columns = 0；mapping-complete ではない |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt；SM packet 代替ではない |
 
 ```text
-Active next substantive theme:
-  schema mapping / Implementation Start next-unit selection
+Active next substantive unit:
+  Decision-AS-SCHEMA-MAPPING-NEXT-1
   selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
+  Status: OPEN / NOT ACCEPTED
+  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
 
 Required facts for that unit:
   custom application columns = 0
@@ -72,6 +78,7 @@ NOT auto-started:
 | Agent SharePoint mutation | FORBIDDEN |
 | Placeholder XXXXX / YYYYY creation | FORBIDDEN |
 | Treating DEFAULT_COLUMNS_ONLY as mapping-complete | FORBIDDEN |
+| SharePoint column creation | FORBIDDEN |
 
 ---
 
@@ -79,6 +86,7 @@ NOT auto-started:
 
 - CN-1 CLOSED does **not** mean app Internal Names are CONFIRMED for adapter use.
 - DEFAULT_COLUMNS_ONLY does **not** authorize Implementation Start.
+- Opening SCHEMA-MAPPING-NEXT-1 packet does **not** Accept MT/IN/CP/XB.
 - Title Internal Name confirmation does **not** complete SupportPlan / AssessmentSnapshot mapping.
 - This Next Gate does **not** authorize Agent tenant mutation or column creation.
 - Ready / Merge live progress is not recorded here

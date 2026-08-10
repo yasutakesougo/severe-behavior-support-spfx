@@ -57,9 +57,12 @@ Twenty-eighth residual: CONSUMED
   decision-assessment-snapshot-cn1-closure-determination.md
 Twenty-ninth residual: SELECTED / OPEN
   decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
-  theme = schema mapping / column path / Implementation Start boundary
+  Decision-AS-SCHEMA-MAPPING-NEXT-1: OPEN / NOT ACCEPTED
+  packet: decision-assessment-snapshot-schema-mapping-next-packet.md
+  Agent recommendation（比較用）: MT-1 + IN-A + CP-1 + XB-1
 Next gate detail:
   decision-assessment-snapshot-cn1-next-gate.md
+PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:
   ASSESSED / independent next-unit candidate
