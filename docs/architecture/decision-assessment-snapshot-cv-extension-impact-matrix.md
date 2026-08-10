@@ -9,12 +9,19 @@ Acceptance:
 Packet（compare history）:
 [`decision-assessment-snapshot-cv-extension-packet.md`](./decision-assessment-snapshot-cv-extension-packet.md)
 
+MAP-AS-010 create + VR-1 evidence:
+[`decision-assessment-snapshot-map010-column-create-vr1-evidence.md`](./decision-assessment-snapshot-map010-column-create-vr1-evidence.md)
+
+mapping-complete determination:
+[`decision-assessment-snapshot-mapping-complete-determination.md`](./decision-assessment-snapshot-mapping-complete-determination.md)
+
 ```text
-Status: ACCEPTED dispositions recorded / mapping-complete NOT YET
-Baseline main: 4fc919f63539466eced1a6f6213512e586583de5
-PR: #208
-Human SharePoint create required now: NO
-Human SharePoint create required eventually: YES（MAP-AS-010；separate gates）
+Status: ACCEPTED dispositions recorded / mapping-complete PASS / COMPLETE
+Baseline main at closeout start:
+  5ddb05950a2123a1fb609698b9673102a6190721
+Human SharePoint create（MAP-AS-010）: COMPLETE
+VR-1（MAP-AS-010）: PASS
+column-ready（MAP-AS-010）: YES
 ```
 
 ## Mapping-complete disposition model（M-1-A LOCKED）
@@ -28,37 +35,41 @@ mapping-complete does NOT require every logical / DTO field
 to have a physical SharePoint column.
 
 Decision-AS-CV-EXTENSION-1 Accepted ≠ mapping-complete PASS
+（PASS is recorded separately via mapping-complete determination）
 ```
 
-## Impact matrix（post-Acceptance）
+## Impact matrix（post MAP-AS-010 VR-1 + determination）
 
 | Field | Current status | Accepted disposition | Physical column required? | Conversion Decision required? | Human create required? | VR-1 required? | Blocks mapping-complete? | Authority |
 |---|---|---|---|---|---|---|---|---|
 | MAP-AS-009 findingIds | EXPLICITLY OUT / 対象外 | X-1-B ACCEPTED | NO（v1） | NO | NO | NO | NO（disposition complete） | Entry #5；CV-EXTENSION-1 |
-| MAP-AS-010 supersedesSnapshotId | PERSISTED / NOT YET COLUMN-READY | X-2-A ACCEPTED（placement） | YES（eventually） | YES（later residual） | YES（later residual） | YES（later residual） | **YES**（not column-ready） | DEC-009；APP-SAVE；CV-EXTENSION-1 |
+| MAP-AS-010 supersedesSnapshotId | PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES | X-2-A + MAP010-COLUMN-1 ACCEPTED | YES（done） | YES（done；R-1-A / W-1-A） | YES（COMPLETE） | YES（PASS） | **NO** | DEC-009；APP-SAVE；CV-EXTENSION-1；MAP010-COLUMN-1；VR-1 evidence |
 | MAP-AS-ENV-001 schemaId | DERIVED | X-3-B ACCEPTED | NO | NO（no SP column） | NO | NO | NO（disposition complete） | SCHEMA-ID-1；CV-EXTENSION-1 |
 | MAP-AS-ENV-002 schemaVersion | DERIVED / readable-set / 1.0.0 | X-4-B ACCEPTED | NO | NO（no SP column） | NO | NO | NO（disposition complete） | SCHEMA-VERSION-1；DEC-6 VR-1；CV-EXTENSION-1 |
 | MAP-AS-ENV-003 dtoVersion | DERIVED / readable-set / 1.0.0 | X-5-B ACCEPTED | NO | NO（no SP column） | NO | NO | NO（disposition complete） | SCHEMA-VERSION-1；DEC-1；DEC-6 VR-1；CV-EXTENSION-1 |
 
 ```text
 Fields requiring physical SharePoint columns eventually:
-  MAP-AS-010 only
+  MAP-AS-010 only — COMPLETE / PRESENT / VR-1 PASS
 
 Fields with completed non-column dispositions:
   MAP-AS-009（EXPLICITLY OUT）
   MAP-AS-ENV-001 / 002 / 003（DERIVED）
 
-mapping-complete: NOT YET
-Remaining principal blocker:
-  MAP-AS-010 column contract / Human create / VR-1
+mapping-complete: PASS / COMPLETE
+Remaining principal blocker for mapping-complete: NONE
+P2-002 clear/omit transport API: OPEN / CARRY-FORWARD
+  mapping-complete blocker: NO
+  adapter Implementation Start blocker residual: YES（separate）
 ```
 
 ## Explicit non-claims
 
 ```text
-This matrix does NOT:
-  invent MAP-AS-010 Internal Name / type / codec
-  authorize SharePoint create now
-  claim mapping-complete PASS
-  authorize adapter / Implementation Start
+This matrix / mapping-complete PASS does NOT:
+  authorize SharePoint / M365 mutation
+  authorize adapter / DTO / schema wiring
+  authorize Implementation Start
+  close P2-002
+  authorize Deploy / real data
 ```

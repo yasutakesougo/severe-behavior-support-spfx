@@ -26,13 +26,20 @@ Prior disposition（LOCKED；再 Decision しない）:
   MAP-AS-010 = PERSISTED（Decision-AS-CV-EXTENSION-1 / X-2-A）
 
 Column contract: ACCEPTED / LOCKED
-Column-ready: NO
-Physical column: NOT PRESENT
-VR-1: NOT RUN
-SharePoint create: FORBIDDEN（this Acceptance）
-mapping-complete: NOT YET
+Column-ready: YES
+Physical column: PRESENT（isogo + honmoku）
+VR-1: PASS
+Human SharePoint create: COMPLETE（post-Acceptance physical path）
+Agent SharePoint mutation: 0
+mapping-complete: PASS / COMPLETE（see determination）
 adapter / Implementation Start: HOLD
+P2-002 clear/omit transport API: OPEN / CARRY-FORWARD
 Deploy / real data: NO-GO
+
+Post-create evidence:
+  decision-assessment-snapshot-map010-column-create-vr1-evidence.md
+mapping-complete determination:
+  decision-assessment-snapshot-mapping-complete-determination.md
 ```
 
 ## 1. Accepted contract summary
@@ -124,16 +131,21 @@ EM-1 / FR-1 mapping remains adapter responsibility at impl gate
 | correct-as-new-version intent / overwrite forbidden | application save（APP-SAVE / DEC-009） |
 | SP transport / exact clear-or-omit API | adapter（later） |
 
-## 7. Explicitly NOT complete
+## 7. Post-Acceptance physical path（living）
 
 ```text
-NOT claimed by this Acceptance:
-  physical column presence
-  VR-1 PASS
-  mapping-complete PASS
-  SharePoint create authorization
+Human SharePoint create: COMPLETE
+VR-1: PASS（Intent = Observed；Mismatch = 0；both sites）
+Physical column: PRESENT
+column-ready: YES
+mapping-complete: PASS / COMPLETE（M-1-A determination）
+
+Still NOT authorized by contract / evidence / determination alone:
   adapter Implementation Start
+  DTO / schema wiring
   P2-002 closure
+  Deploy / real data
+  Agent SharePoint mutation
 ```
 
 ## 8. Next
@@ -141,10 +153,12 @@ NOT claimed by this Acceptance:
 ```text
 Decision-AS-MAP010-COLUMN-1: Accepted / LOCKED
 MAP-AS-010 column contract: ACCEPTED / LOCKED
-MAP-AS-010 column-ready: NO
-mapping-complete: NOT YET
-Next gate（PR process）: HUMAN READY DECISION FOR PR #209
-After merge（future；not auto-started）:
-  Human SharePoint create becomes next candidate gate
-  then VR-1；then mapping-complete determination
+MAP-AS-010 column-ready: YES
+Physical column: PRESENT
+VR-1: PASS
+mapping-complete: PASS / COMPLETE
+P2-002: OPEN / CARRY-FORWARD（adapter impl gate）
+Still HOLD:
+  Implementation Start / adapter / DTO / schema
+  Deploy / real data
 ```
