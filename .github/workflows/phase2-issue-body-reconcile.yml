@@ -1,0 +1,34 @@
+name: phase2-issue-body-reconcile
+
+on:
+  push:
+    branches:
+      - cursor/phase2-issue-body-reconcile-7bcb
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  patch-issue-bodies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch Issue #6 and #8 bodies (Phase ② Human reconcile)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Updating issue #6..."
+          gh api --method PATCH "repos/${GITHUB_REPOSITORY}/issues/6" \
+            -f body="$(cat .github/reconcile/issue-6.md)" \
+            --jq '{number, state, updated_at}'
+          echo "Updating issue #8..."
+          gh api --method PATCH "repos/${GITHUB_REPOSITORY}/issues/8" \
+            -f body="$(cat .github/reconcile/issue-8.md)" \
+            --jq '{number, state, updated_at}'
+          echo "Verifying..."
+          gh api "repos/${GITHUB_REPOSITORY}/issues/6" --jq '{number, state, has_status:(.body|contains("Current status（reconciled 2026-08-10）"))}'
+          gh api "repos/${GITHUB_REPOSITORY}/issues/8" --jq '{number, state, has_status:(.body|contains("Current status（reconciled 2026-08-10）")), dec008_checked:(.body|contains("- [x] DEC-008 支援計画シートの作成者・独立最終承認者の境界")), deferred_old:(.body|contains("## DEC-008 支援計画シートの承認者"))}'
