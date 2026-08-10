@@ -41,8 +41,9 @@ Twenty-fourth residual Decision: SELECTED / CONSUMED — Pilot facility identity
 Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1）
 Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1；SupportPlans / AssessmentSnapshots）
 Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creation execution（Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1；Execution GO GIVEN；AI mutation FORBIDDEN）
-Twenty-eighth residual Decision: SELECTED / OPEN — CN-1 Internal Column Names confirmation（Decision-AS-CN1-OBSERVATION-1；read-only observation；mutation 0）
-Issue Status Reconciliation: ASSESSED / SCHEDULED after CN-1（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
+Twenty-eighth residual Decision: SELECTED / CONSUMED — CN-1 Internal Column Names observation（Decision-AS-CN1-OBSERVATION-1 CLOSED / CONSUMED；DEFAULT_COLUMNS_ONLY；custom = 0）
+Twenty-ninth residual Decision: SELECTED / OPEN — Post-CN-1 schema mapping / column path / Implementation Start gate（Decision-AS-SCHEMA-MAPPING-NEXT-1 packet pending）
+Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -71,16 +72,22 @@ PR #184: MERGED（expected head 84745355929c7e43dcc6c89dd00d29935f79034c / merge
 PR #185: MERGED（merge 1aef0d3971165f6504f7f13d6e68a51d7cfdaf61）
 DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-APP EVIDENCE / REFERENCE ONLY
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
-New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 OPEN
+New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 observation CLOSED
 Concrete Site strings: LOCKED / OBSERVED / CONFIRMED（isogo / honmoku）
 List names: LOCKED / OBSERVED / CONFIRMED（SupportPlans / AssessmentSnapshots）
-Internal Column Names: OPEN（IN-1）
+Internal Column Names: CLOSED observation / DEFAULT_COLUMNS_ONLY / custom = 0
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
 Site / List creation: COMPLETED（pilot Sites + Lists）
 Placeholder creation: FORBIDDEN
 SV-1 / LV-1: CONFIRMED（VR-1 PASS）
-Internal Column Names: OPEN（CN-1）
+Decision-AS-CN1-OBSERVATION-1: CLOSED / CONSUMED
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+  Result: DEFAULT_COLUMNS_ONLY
+  Custom application columns: 0 / NOT PRESENT
+  Match-existing-app-Internal-Names premise: NOT APPLICABLE / INVALIDATED
+  evidence: decision-assessment-snapshot-cn1-readonly-observation-evidence.md
+  closure: decision-assessment-snapshot-cn1-closure-determination.md
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
   磯子=isogo → /sites/severe-support-isogo
   本牧=honmoku → /sites/severe-support-honmoku
@@ -100,7 +107,7 @@ Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1
   SV-1: CONFIRMED
   LV-1: CONFIRMED
   VR-1: PASS
-  CN-1: OPEN
+  CN-1 observation: CLOSED / CONSUMED
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
@@ -108,14 +115,14 @@ Independent Review #188: PASS
 PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
-Next gate: CN-1（Internal Column Names 確認・確定）
-  selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
-  packet: decision-assessment-snapshot-cn1-observation-packet.md
-  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-  Evidence shape: Display Name → Internal Name → Column Type → List → Site
-Issue Status Reconciliation: ASSESSED / independent next-unit candidate after CN-1
+PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
+Next gate: schema mapping / column path / Implementation Start boundary
+  selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  next-gate: decision-assessment-snapshot-cn1-next-gate.md
+  prior CN-1 packet: decision-assessment-snapshot-cn1-observation-packet.md（CLOSED）
+Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
-SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
+SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
 Implementation Start: HOLD
 SharePoint schema/list/column change: FORBIDDEN
 GitHub Issue mutation / 一括 Close / 一括本文更新: FORBIDDEN
@@ -308,8 +315,23 @@ Order:
      SV-1: CONFIRMED
      LV-1: CONFIRMED
      VR-1: PASS
-     CN-1: OPEN
-     remaining examples: CN-1 / common-management naming / post-retention / DEC-015
+     CN-1 observation: CLOSED / CONSUMED（twenty-eighth）
+     remaining examples: schema mapping / column path / common-management naming / post-retention / DEC-015
+ 28. Twenty-eighth residual: CN-1 Internal Column Names observation（DONE / CONSUMED；Decision-AS-CN1-OBSERVATION-1 CLOSED / CONSUMED）
+     selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
+     packet: decision-assessment-snapshot-cn1-observation-packet.md
+     evidence: decision-assessment-snapshot-cn1-readonly-observation-evidence.md
+     closure: decision-assessment-snapshot-cn1-closure-determination.md
+     next gate: decision-assessment-snapshot-cn1-next-gate.md
+       = schema mapping / column path / Implementation Start boundary
+     Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+     Result: DEFAULT_COLUMNS_ONLY / custom application columns = 0
+     Match-existing premise: NOT APPLICABLE / INVALIDATED
+ 29. Twenty-ninth residual: Post-CN-1 schema mapping / column path（SELECTED / OPEN）
+     selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+     packet: Decision-AS-SCHEMA-MAPPING-NEXT-1（pending open）
+     Implementation Start: HOLD
+     adapter / schema mapping impl: HOLD（≠ mapping-complete）
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -332,14 +354,15 @@ Decision-AS-PILOT-FACILITY-IDENTITY-1: LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
 Application / adapter implementation: HOLD / DO NOT START
 SharePoint implementation: DO NOT START
 Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY
-New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 OPEN
+New SPFx deployment target: ORG TOPOLOGY LOCKED / Sites CREATED / Lists CREATED / CN-1 observation CLOSED
 Concrete Site strings: HUMAN-PROVIDED / OBSERVED / CONFIRMED（isogo / honmoku）
 List names: HUMAN-PROVIDED / OBSERVED / CONFIRMED（SupportPlans / AssessmentSnapshots）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
 Site / List creation: COMPLETED
 Placeholder creation: FORBIDDEN
 SV-1 / LV-1: CONFIRMED（VR-1 PASS）
-Internal Column Names: OPEN（CN-1）
+Internal Column Names: CLOSED observation / DEFAULT_COLUMNS_ONLY / custom = 0
+Decision-AS-CN1-OBSERVATION-1: CLOSED / CONSUMED
 Decision-AS-PILOT-LIST-OWNERSHIP-1: LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
@@ -355,7 +378,7 @@ Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
   SV-1: CONFIRMED
   LV-1: CONFIRMED
   VR-1: PASS
-  CN-1: OPEN
+  CN-1 observation: CLOSED / CONSUMED
   evidence: decision-assessment-snapshot-pilot-provision-vr1-evidence.md
   Independent Review: decision-assessment-snapshot-pr-187-independent-review.md（PASS）
 Independent Review #187: PASS
@@ -363,14 +386,13 @@ Independent Review #188: PASS
 PR #188: MERGED
 PR #187: MERGED / Current SoT
 PR #186: CLOSED / NOT MERGED / SUPERSEDED by PR #187
-Next gate: CN-1（Internal Column Names 確認・確定）
-  selection: decision-ilb-1-twenty-eighth-residual-cn1-selection.md
-  packet: decision-assessment-snapshot-cn1-observation-packet.md
-  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-  Evidence shape: Display Name → Internal Name → Column Type → List → Site
-Issue Status Reconciliation: ASSESSED / independent next-unit candidate after CN-1
+PR #189: SUPERSEDED for observation SoT（PARTIAL / UNOBSERVED）
+Next gate: schema mapping / column path / Implementation Start boundary
+  selection: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  next-gate: decision-assessment-snapshot-cn1-next-gate.md
+Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
-SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
+SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
 Implementation Start: HOLD
 SharePoint schema/list/column change: FORBIDDEN
 GitHub Issue mutation / 一括 Close / 一括本文更新: FORBIDDEN

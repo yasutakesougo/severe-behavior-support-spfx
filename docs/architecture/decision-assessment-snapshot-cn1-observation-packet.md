@@ -18,16 +18,19 @@ Depends on（再 Decision しない）:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-CN1-OBSERVATION-1
 Kind: Human Decision packet（observation → CONFIRMED / HOLD）
-Status: OPEN / NOT OBSERVED
-Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-Human Decision: NOT YET
+Status: CLOSED / CONSUMED
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+Human Decision: Observation COMPLETE（DEFAULT_COLUMNS_ONLY / custom = 0）
 Basis rule already Accepted:
   CN-1 — 実 Internal Column Name を確認して確定
          Display Name / TypeScript 名から推論しない
 Closure basis:
   Human read-only observation result for in-scope Sites/Lists
   = sole closure basis for CN-1
-  Until CN-1 closed → SharePoint adapter / schema mapping impl = DO NOT START
+Evidence:
+  decision-assessment-snapshot-cn1-readonly-observation-evidence.md
+Closure determination:
+  decision-assessment-snapshot-cn1-closure-determination.md
 
 Scope Sites（LOCKED / OBSERVED）:
   isogo  = https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
@@ -37,12 +40,17 @@ Scope Lists（LOCKED / OBSERVED）:
   SupportPlans
   AssessmentSnapshots
 
-CN-1: OPEN / NOT OBSERVED
+CN-1 observation: CLOSED / CONSUMED
+Result class: DEFAULT_COLUMNS_ONLY
+Custom application columns: 0 / NOT PRESENT
+Match-existing-app-Internal-Names premise: NOT APPLICABLE / INVALIDATED
+App-field Internal Names CONFIRMED for mapping: NONE
 Agent environment credentials: NONE（NO_SP_ENV）
 Mutation by Agent: FORBIDDEN
 Mutation by Human during this observation: 0
 Implementation Start: HOLD
-SharePoint adapter / schema mapping impl: HOLD until CN-1 closed
+SharePoint adapter / schema mapping impl: HOLD
+  （CN-1 closed ≠ mapping-complete ≠ Implementation Start）
 SharePoint schema / list / column change: FORBIDDEN
 GitHub Issue mutation（bulk close / bulk body update）: FORBIDDEN
 Deploy / real data: NO-GO
@@ -130,18 +138,26 @@ Do NOT step into:
 | XB-2 | observation と同時に custom columns を作成する | NOT SELECTED |
 | XB-3 | observation PASS を Implementation Start とみなす | NOT SELECTED |
 
-## 4. Observation table（empty until Human evidence）
+## 4. Observation table（Human evidence recorded）
 
 証跡列順 = Display Name → Internal Name → Column Type → List → Site
 
-| Display Name | Internal Name | Column Type | List | Site | Status |
-|---|---|---|---|---|---|
-| — | — | — | SupportPlans | isogo | NOT OBSERVED |
-| — | — | — | AssessmentSnapshots | isogo | NOT OBSERVED |
-| — | — | — | SupportPlans | honmoku | NOT OBSERVED |
-| — | — | — | AssessmentSnapshots | honmoku | NOT OBSERVED |
+正本 evidence:
+[`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](./decision-assessment-snapshot-cn1-readonly-observation-evidence.md)
+
+| List | Site | Observation | Custom columns | Result class |
+|---|---|---|---|---|
+| SupportPlans | isogo | CONFIRMED | 0 | DEFAULT_COLUMNS_ONLY |
+| AssessmentSnapshots | isogo | CONFIRMED | 0 | DEFAULT_COLUMNS_ONLY |
+| SupportPlans | honmoku | CONFIRMED | 0 | DEFAULT_COLUMNS_ONLY |
+| AssessmentSnapshots | honmoku | CONFIRMED | 0 | DEFAULT_COLUMNS_ONLY |
 
 ```text
+Human-attested Internal Name:
+  タイトル → Title
+Other observed Display Names only（Internal Name NOT EXPLICITLY ATTESTED）:
+  更新日時 / 登録日時 / 登録者 / 更新者
+Column Type: NOT PROVIDED by Human
 Do not pre-fill Internal Names from:
   sharepoint-contract-mapping.md Contract Field names
   TypeScript property names
@@ -180,18 +196,18 @@ Issue Status Reconciliation:
 ## 7. Next
 
 ```text
-Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-Decision-AS-CN1-OBSERVATION-1: OPEN / NOT OBSERVED
-Awaiting: Human read-only evidence shaped as
-  Display Name → Internal Name → Column Type → List → Site
-  Sites: isogo / honmoku
-  Lists: SupportPlans / AssessmentSnapshots
-  mutation = 0
-Until CN-1 closed:
-  adapter / schema mapping impl = HOLD
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+Decision-AS-CN1-OBSERVATION-1: CLOSED / CONSUMED
+Result: DEFAULT_COLUMNS_ONLY / custom application columns = 0
+Closure: decision-assessment-snapshot-cn1-closure-determination.md
+Next gate: decision-assessment-snapshot-cn1-next-gate.md
+Next residual: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  theme = schema mapping / column path / Implementation Start boundary
+Still HOLD:
+  adapter / schema mapping impl = HOLD（≠ mapping-complete）
   Implementation Start = HOLD
   SharePoint schema/list/column change = FORBIDDEN
   GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
-After CN-1 closed（separate unit candidate）:
-  Issue Status Reconciliation may be selected as next process unit
+Independent candidate:
+  Issue Status Reconciliation（not a substitute for column/mapping path）
 ```

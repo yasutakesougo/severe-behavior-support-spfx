@@ -6,9 +6,9 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_TWENTY_EIGHTH_RESIDUAL_SELECTION
-Status: SELECTED / OPEN
+Status: SELECTED / CONSUMED
 Selected unit: CN-1 Internal Column Names confirmation（read-only observation）
-Follow-up Decision / Packet ID: Decision-AS-CN1-OBSERVATION-1
+Follow-up Decision / Packet ID: Decision-AS-CN1-OBSERVATION-1 = CLOSED / CONSUMED
 
 Locked basis（再 Decision しない）:
   Decision-AS-SP-PLACEMENT-1 = Accepted / LOCKED / SV-1 + LV-1 + CN-1 + SC-1
@@ -26,9 +26,12 @@ Current state:
   Site / List creation = COMPLETED
   SV-1 / LV-1 = CONFIRMED
   VR-1 = PASS
-  CN-1 = OPEN / NOT OBSERVED
-  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-  SharePoint adapter / schema mapping impl = HOLD until CN-1 closed
+  CN-1 observation = CLOSED / CONSUMED
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+  Result class: DEFAULT_COLUMNS_ONLY
+  Custom application columns = 0 / NOT PRESENT
+  Match-existing-app-Internal-Names premise = NOT APPLICABLE / INVALIDATED
+  SharePoint adapter / schema mapping impl = HOLD（≠ mapping-complete）
   Implementation Start = HOLD
 ```
 
@@ -39,24 +42,25 @@ Current state:
 だけを次 substantive unit として選ぶ。
 
 ```text
-SELECTED / OPEN:
-  Decision-AS-CN1-OBSERVATION-1
-  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
+SELECTED / CONSUMED:
+  Decision-AS-CN1-OBSERVATION-1 = CLOSED / CONSUMED
+  Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
   Method: Human SharePoint UI / column settings read-only primary evidence
   Mutation: 0
   Evidence shape LOCK:
     Display Name → Internal Name → Column Type → List → Site
+  Evidence: decision-assessment-snapshot-cn1-readonly-observation-evidence.md
+  Closure: decision-assessment-snapshot-cn1-closure-determination.md
+  Result: DEFAULT_COLUMNS_ONLY / custom application columns = 0
   Internal Name invention: FORBIDDEN
   Display Name / TypeScript 名からの逆算: FORBIDDEN
   Values / row data / settings mutation: OUT OF SCOPE
 
-Closure basis:
-  Human observation result = CN-1 closure basis
-  Until CN-1 closed → adapter / schema mapping impl = DO NOT START
-
-Closes only when CONFIRMED:
-  observed Internal Column Names for in-scope Lists
-  （SupportPlans / AssessmentSnapshots × isogo / honmoku）
+Closure meaning:
+  observation residual closed with observed world-state
+  ≠ app-field Internal Names CONFIRMED for adapter mapping
+  ≠ mapping-complete
+  ≠ Implementation Start
 
 Still NOT authorized / FORBIDDEN now:
   Implementation Start（HOLD）
@@ -67,9 +71,10 @@ Still NOT authorized / FORBIDDEN now:
   SharePoint adapter / schema mapping implementation
   permissions / Entra / Graph / tenant mutation
   Deploy / real data
+  treating DEFAULT_COLUMNS_ONLY as mapping-complete
 ```
 
-Selection ≠ CN-1 CONFIRMED ≠ adapter start ≠ Implementation Start。
+Selection CONSUMED ≠ mapping-complete ≠ adapter start ≠ Implementation Start。
 
 ## Options considered（selection-time）
 
@@ -96,24 +101,21 @@ Issue Status Reconciliation:
 ## Next
 
 ```text
-Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-Selection OPEN → Decision-AS-CN1-OBSERVATION-1 packet
-  decision-assessment-snapshot-cn1-observation-packet.md
+Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+Twenty-eighth residual: CONSUMED
+Decision-AS-CN1-OBSERVATION-1: CLOSED / CONSUMED
+Next gate: decision-assessment-snapshot-cn1-next-gate.md
+Next residual: decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  SELECTED / OPEN
+  theme = schema mapping / column path / Implementation Start boundary
 
-Awaiting:
-  Human read-only column metadata observation
-  Sites: isogo / honmoku
-  Lists: SupportPlans / AssessmentSnapshots
-  Evidence: Display Name → Internal Name → Column Type → List → Site
-  mutation = 0
-
-Until CN-1 closed:
+Still HOLD:
   SharePoint adapter / schema mapping impl = HOLD
   Implementation Start = HOLD
   Deploy / real data = NO-GO
   SharePoint schema/list/column change = FORBIDDEN
   GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
 
-After CN-1 closed（independent next-unit candidate）:
+Independent next-unit candidate:
   Issue Status Reconciliation（Current/Gate/Dependency resync only）
 ```

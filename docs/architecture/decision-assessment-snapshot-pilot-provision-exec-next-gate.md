@@ -1,9 +1,11 @@
 # Decision-AS-PILOT-PROVISION-EXEC-1 — Next Gate
 
-Status: CONSUMED for Site/List evidence + Independent Review + PR #187 MERGED；OPEN for CN-1
+Status: CONSUMED for Site/List evidence + CN-1 observation；active next = schema mapping / column path
 Date: 2026-08-10
 Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)
 Evidence: [`decision-assessment-snapshot-pilot-provision-vr1-evidence.md`](./decision-assessment-snapshot-pilot-provision-vr1-evidence.md)
+CN-1 evidence: [`decision-assessment-snapshot-cn1-readonly-observation-evidence.md`](./decision-assessment-snapshot-cn1-readonly-observation-evidence.md)
+CN-1 closure: [`decision-assessment-snapshot-cn1-closure-determination.md`](./decision-assessment-snapshot-cn1-closure-determination.md)
 Independent Review #187: [`decision-assessment-snapshot-pr-187-independent-review.md`](./decision-assessment-snapshot-pr-187-independent-review.md)（PASS）
 Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-review.md`](./decision-assessment-snapshot-pr-188-independent-review.md)（PASS）
 
@@ -27,8 +29,11 @@ Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-revie
 | LV-1 | CONFIRMED |
 | VR-1 | PASS |
 | Independent Review #187 | PASS（P0=0 / P1=0 / P2=0） |
-| CN-1 / Internal Column Names | OPEN / NOT OBSERVED |
-| Stop point | `HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION` |
+| HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION | **COMPLETE** |
+| Decision-AS-CN1-OBSERVATION-1 | **CLOSED / CONSUMED** |
+| CN-1 result class | **DEFAULT_COLUMNS_ONLY** |
+| Custom application columns | **0 / NOT PRESENT** |
+| Match-existing-app-Internal-Names premise | **NOT APPLICABLE / INVALIDATED** |
 | Implementation Start | HOLD |
 | Deploy / real data | NO-GO |
 | Agent SharePoint mutation | FORBIDDEN（AP-1） |
@@ -41,32 +46,33 @@ Independent Review #188: [`decision-assessment-snapshot-pr-188-independent-revie
 
 | Order | Residual | Why next |
 |---|---|---|
-| 1 | Internal Column Names（CN-1）確認・確定 | Site/List は CONFIRMED；列 Internal Name は未観測 |
-| 2 | Issue Status Reconciliation（#6 / #8 / #22） | CN-1 後の process debt；Current/Gate/Dependency のみ |
-| 3 | 以降の mapping / adapter 実装判断 | CN-1 閉鎖後のみ |
+| 1 | Schema mapping / column path / Implementation Start gate | CN-1 closed；custom columns = 0；mapping-complete ではない |
+| 2 | Issue Status Reconciliation（#6 / #8 / #22） | process debt；Current/Gate/Dependency のみ |
 
 ```text
-Stop point: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION
-SELECTED / OPEN:
+Stop point（CN-1）: HUMAN_CN1_INTERNAL_NAME_READ_ONLY_OBSERVATION = COMPLETE
+Twenty-eighth residual: CONSUMED
   decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   decision-assessment-snapshot-cn1-observation-packet.md
-Evidence shape LOCK:
-  Display Name → Internal Name → Column Type → List → Site
-  Sites: isogo / honmoku
-  Lists: SupportPlans / AssessmentSnapshots
-  mutation = 0；values / settings mutation = OUT
+  decision-assessment-snapshot-cn1-closure-determination.md
+Twenty-ninth residual: SELECTED / OPEN
+  decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
+  theme = schema mapping / column path / Implementation Start boundary
+Next gate detail:
+  decision-assessment-snapshot-cn1-next-gate.md
 
 Issue Status Reconciliation:
-  ASSESSED / independent next-unit candidate after CN-1
+  ASSESSED / independent next-unit candidate
   issue-status-reconciliation-assessment.md
   close Issue ≠ body resync
 
-Until CN-1 is closed:
+Still HOLD:
   SharePoint adapter implementation = DO NOT START
-  schema mapping concrete Internal Names = DO NOT LOCK as CONFIRMED
+  schema mapping concrete Internal Names = DO NOT LOCK as CONFIRMED（none present）
   Implementation Start = HOLD
   SharePoint schema/list/column change = FORBIDDEN
   GitHub Issue mutation / 一括 Close / 一括本文更新 = FORBIDDEN
+  treating DEFAULT_COLUMNS_ONLY as mapping-complete = FORBIDDEN
 ```
 
 ---
@@ -75,8 +81,8 @@ Until CN-1 is closed:
 
 | Item | Status |
 |---|---|
-| Custom columns / Internal Names（CN-1） | OPEN / NOT OBSERVED |
-| SharePoint adapter / schema mapping impl | HOLD until CN-1 closed |
+| App-field Internal Names（mapping） | NOT PRESENT / HOLD |
+| SharePoint adapter / schema mapping impl | HOLD |
 | Permissions / Entra / Graph mutation | HOLD |
 | Implementation Start | HOLD |
 | Deploy / real data write | HOLD |
@@ -84,14 +90,15 @@ Until CN-1 is closed:
 | Agent SharePoint mutation | FORBIDDEN |
 | Placeholder XXXXX / YYYYY creation | FORBIDDEN |
 | PR #186 reopen / merge | NO-GO（SUPERSEDED） |
+| PR #189 observation SoT | SUPERSEDED（PARTIAL / UNOBSERVED） |
 
 ---
 
 ## 4. Explicit non-claims
 
-- VR-1 PASS does **not** confirm Internal Column Names.
-- SV-1 / LV-1 CONFIRMED does **not** start Implementation.
-- CN-1 OPEN does **not** authorize adapter / schema mapping code start.
+- VR-1 PASS does **not** confirm app-field Internal Names.
+- CN-1 CLOSED does **not** mean mapping-complete or Implementation Start.
+- DEFAULT_COLUMNS_ONLY does **not** authorize adapter / schema mapping code start.
 - This Next Gate does **not** authorize Agent tenant mutation.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.
