@@ -6,11 +6,13 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: ILB1_THIRTY_THIRD_RESIDUAL_SELECTION
-Status: SELECTED / OPEN
+Status: SELECTED / CONSUMED
 Selected unit: Choice options path（recordStatus / result）
 Follow-up Decision / Packet ID: Decision-AS-CHOICE-OPTIONS-1
   packet: decision-assessment-snapshot-choice-options-packet.md
-  Status: OPEN / NOT ACCEPTED
+  acceptance: decision-assessment-snapshot-choice-options-acceptance.md
+  IR: decision-assessment-snapshot-choice-options-independent-review.md
+  Status: Accepted / LOCKED / CO-1 + CV-CHOICE-BOTH + XB-1
 
 Locked basis（再 Decision しない）:
   Decision-AS-COLUMN-NAMES-1 = Accepted / LOCKED / NM-1 + CV-REQ + XB-1
@@ -19,10 +21,9 @@ Locked basis（再 Decision しない）:
   Decision-AS-SCHEMA-MAPPING-NEXT-1 = Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
   Decision-AS-CN1-OBSERVATION-1 = CLOSED / CONSUMED / DEFAULT_COLUMNS_ONLY
 
-Current state:
-  CV-REQ intended names = ADOPTED / INTENDED
-  recordStatus / result Column Type = 選択肢（INTENDED）
-  Choice option values = NOT locked
+Current state after CONSUMED:
+  Choice options（recordStatus / result）= ADOPTED / INTENDED
+  CONFIRMED Choice options = NOT YET
   Column creation = FORBIDDEN（PX-HOLD + EG-HOLD）
   Execution GO = NOT GIVEN
   Implementation Start = HOLD
@@ -35,39 +36,23 @@ Current state:
 **recordStatus / result の Choice option values** だけを次 unit として選ぶ。
 
 ```text
-SELECTED / OPEN:
+SELECTED / CONSUMED:
   Decision-AS-CHOICE-OPTIONS-1
-  Question:
-    recordStatus / result の Choice option（値 / 表示名）を
-    Human が明示採択するか。
-
-Facts that MUST remain visible:
-  Agent invents no Choice option values / labels
-  INTENDED ≠ OBSERVED / CONFIRMED
-  PX-HOLD + EG-HOLD remain
-  COLUMN-NAMES-1 CV-REQ names remain LOCKED
-  logical enum sets from MT-1 are compare material only
+  acceptance: decision-assessment-snapshot-choice-options-acceptance.md
+  Status: Accepted / LOCKED
+  Human Decision: CO-1 + CV-CHOICE-BOTH + XB-1
 
 Still NOT authorized / FORBIDDEN now:
-  inventing Choice option Display labels or stored values
+  treating INTENDED as OBSERVED / CONFIRMED
   SharePoint column create / rename / delete
-  treating INTENDED as CONFIRMED
-  Execution GO
+  Execution GO（EG-HOLD）
   Implementation Start
   adapter / schema mapping code start
   Agent tenant mutation
   Deploy / real data
-  PX-1 / EG-1 auto-start
 ```
 
-```text
-Packet purpose when OPEN:
-  Human が Choice option values を明示採択するための比較材料
-Agent: 候補整理のみ（発明・自動採択禁止）
-Choice options close only after Human adopts concrete option rows
-```
-
-Selection ≠ Acceptance of concrete options ≠ column creation GO ≠ Execution GO。
+Selection CONSUMED ≠ column creation GO ≠ Execution GO ≠ CONFIRMED。
 
 ## Options considered（selection-time）
 
@@ -82,13 +67,11 @@ Selection ≠ Acceptance of concrete options ≠ column creation GO ≠ Executio
 ## Next
 
 ```text
-Thirty-third residual: SELECTED / OPEN
-  → Decision-AS-CHOICE-OPTIONS-1 packet OPEN
-  decision-assessment-snapshot-choice-options-packet.md
-Awaiting: Human-provided Choice option values
-  or CO-HOLD continue
-Until Accepted with Human values:
-  SharePoint column creation = FORBIDDEN
-  Execution GO = NOT GIVEN
-  Implementation Start = HOLD
+Thirty-third residual: CONSUMED
+Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1 + CV-CHOICE-BOTH + XB-1
+Next substantive residual: NOT SELECTED
+Candidates（separate units）:
+  PX-1 / EG-1
+  CV extension（optional / DTO）
+  Issue Status Reconciliation（#6 / #8 / #22）
 ```

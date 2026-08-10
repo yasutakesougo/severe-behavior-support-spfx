@@ -25,8 +25,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
 | Thirty-second residual | **CONSUMED**（COLUMN-NAMES-1 Accepted） |
-| Thirty-third residual | **SELECTED / OPEN**（Choice options） |
-| Decision-AS-CHOICE-OPTIONS-1 | OPEN / NOT ACCEPTED |
+| Thirty-third residual | **CONSUMED**（CHOICE-OPTIONS-1 Accepted） |
+| Decision-AS-CHOICE-OPTIONS-1 | **Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1** |
 | Decision-AS-COLUMN-NAMES-1 | **Accepted / LOCKED / NM-1+CV-REQ+XB-1** |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
@@ -37,20 +37,18 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
-| Order | Residual | Why next |
+| Order | Residual | Why |
 |---|---|---|
-| 1 | Decision-AS-CHOICE-OPTIONS-1 | recordStatus / result Choice options |
+| 1 | PX-1 / EG-1 | names + Choice options Accepted；creation still HOLD |
 | 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active next:
-  Decision-AS-CHOICE-OPTIONS-1 OPEN / NOT ACCEPTED
-  selection: decision-ilb-1-thirty-third-residual-choice-options-selection.md
-  packet: decision-assessment-snapshot-choice-options-packet.md
-  Stop point: HUMAN_AS_CHOICE_OPTIONS_FILL
+Active acceptance:
+  Decision-AS-CHOICE-OPTIONS-1 = CO-1 + CV-CHOICE-BOTH + XB-1
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
+  Next residual: NOT SELECTED
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START
@@ -59,7 +57,6 @@ Still HOLD / FORBIDDEN:
   Execution GO = NOT GIVEN
   Implementation Start = HOLD
   Agent mutation = FORBIDDEN
-  Agent Choice option invention = FORBIDDEN
 ```
 
 ---

@@ -46,7 +46,7 @@ Twenty-ninth residual Decision: SELECTED / CONSUMED — Post-CN-1 schema mapping
 Thirtieth residual Decision: SELECTED / CONSUMED — MT-1 mapping-table docs update（assessment-snapshot-sharepoint-mapping.md；NOT mapping-complete）
 Thirty-first residual Decision: SELECTED / CONSUMED — Column provisioning（Decision-AS-COLUMN-PROVISION-1 Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1）
 Thirty-second residual Decision: SELECTED / CONSUMED — NM-1 intended names（Decision-AS-COLUMN-NAMES-1 Accepted / LOCKED / NM-1+CV-REQ+XB-1）
-Thirty-third residual Decision: SELECTED / OPEN — Choice options（Decision-AS-CHOICE-OPTIONS-1 OPEN / NOT ACCEPTED）
+Thirty-third residual Decision: SELECTED / CONSUMED — Choice options（Decision-AS-CHOICE-OPTIONS-1 Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -143,12 +143,13 @@ Thirty-second residual: CONSUMED — NM-1 intended names
   acceptance: decision-assessment-snapshot-column-names-acceptance.md
   IR: decision-assessment-snapshot-column-names-independent-review.md（PASS）
   Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
-Thirty-third residual: SELECTED / OPEN — Choice options
+Thirty-third residual: CONSUMED — Choice options
   selection: decision-ilb-1-thirty-third-residual-choice-options-selection.md
   packet: decision-assessment-snapshot-choice-options-packet.md
-  Decision-AS-CHOICE-OPTIONS-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_CHOICE_OPTIONS_FILL
-Next residual active: Decision-AS-CHOICE-OPTIONS-1
+  acceptance: decision-assessment-snapshot-choice-options-acceptance.md
+  IR: decision-assessment-snapshot-choice-options-independent-review.md（PASS）
+  Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
@@ -389,12 +390,12 @@ Order:
      Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
      INTENDED ≠ CONFIRMED
      column creation: FORBIDDEN（PX-HOLD+EG-HOLD）
-  33. Thirty-third residual: Choice options（SELECTED / OPEN）
+  33. Thirty-third residual: Choice options（CONSUMED）
      selection: decision-ilb-1-thirty-third-residual-choice-options-selection.md
      packet: decision-assessment-snapshot-choice-options-packet.md
-     Decision-AS-CHOICE-OPTIONS-1: OPEN / NOT ACCEPTED
-     Stop point: HUMAN_AS_CHOICE_OPTIONS_FILL
-     Agent Choice option invention: FORBIDDEN
+     acceptance: decision-assessment-snapshot-choice-options-acceptance.md
+     Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
+     INTENDED ≠ CONFIRMED
      column creation: FORBIDDEN（PX-HOLD+EG-HOLD）
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
@@ -465,11 +466,11 @@ Thirty-second residual: CONSUMED — NM-1 intended names
   packet: decision-assessment-snapshot-column-names-packet.md
   acceptance: decision-assessment-snapshot-column-names-acceptance.md
   Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
-Thirty-third residual: SELECTED / OPEN — Choice options
+Thirty-third residual: CONSUMED — Choice options
   packet: decision-assessment-snapshot-choice-options-packet.md
-  Decision-AS-CHOICE-OPTIONS-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_CHOICE_OPTIONS_FILL
-Next residual active: Decision-AS-CHOICE-OPTIONS-1
+  acceptance: decision-assessment-snapshot-choice-options-acceptance.md
+  Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）

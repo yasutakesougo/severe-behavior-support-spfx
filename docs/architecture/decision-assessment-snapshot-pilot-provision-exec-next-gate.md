@@ -64,9 +64,9 @@ Next gate detail:
   decision-assessment-snapshot-column-provision-next-gate.md
   Thirty-second residual: CONSUMED
   Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
-  Thirty-third residual: SELECTED / OPEN
-  Decision-AS-CHOICE-OPTIONS-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_CHOICE_OPTIONS_FILL
+  Thirty-third residual: CONSUMED
+  Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
+  Next residual: NOT SELECTED
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:
