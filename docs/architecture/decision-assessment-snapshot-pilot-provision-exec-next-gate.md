@@ -62,9 +62,9 @@ Twenty-ninth residual: CONSUMED
   IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
 Next gate detail:
   decision-assessment-snapshot-column-provision-next-gate.md
-  Thirty-second residual: SELECTED / OPEN
-  Decision-AS-COLUMN-NAMES-1: OPEN / NOT ACCEPTED（PARTIAL：CV-REQ Display+Type）
-  Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
+  Thirty-second residual: CONSUMED
+  Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
+  Next residual: NOT SELECTED
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:

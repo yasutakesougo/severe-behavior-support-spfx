@@ -50,7 +50,8 @@ LF-1 / MT-1 に従い、AssessmentSnapshot logical fields と persistence field 
 4. Contract / Domain 名と SP 列名を同一視しない
 5. Schema ID は SP List 名 / TS 型名と同一視しない
 6. DEFAULT_COLUMNS_ONLY ≠ mapping-complete
-7. INTENDED Internal Names は本表に書かない（IN-A）
+7. INTENDED Internal Names は本表に CONFIRMED として書かない（IN-A / VR-1）
+   CV-REQ INTENDED 正本 = Decision-AS-COLUMN-NAMES-1 Acceptance（≠ CONFIRMED）
 
 ## Failure Behavior（DEC-6 / adapter；再 Decision しない）
 

@@ -24,8 +24,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Result class | **DEFAULT_COLUMNS_ONLY** |
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
-| Thirty-second residual | **SELECTED / OPEN**（NM-1 intended names path） |
-| Decision-AS-COLUMN-NAMES-1 | OPEN / NOT ACCEPTED（PARTIAL：CV-REQ Display+Type） |
+| Thirty-second residual | **CONSUMED**（COLUMN-NAMES-1 Accepted） |
+| Decision-AS-COLUMN-NAMES-1 | **Accepted / LOCKED / NM-1+CV-REQ+XB-1** |
 | AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data | NO-GO |
@@ -35,28 +35,26 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
-| Order | Residual | Why next |
+| Order | Residual | Why |
 |---|---|---|
-| 1 | Decision-AS-COLUMN-NAMES-1（NM-1 path） | intended names Human fill |
+| 1 | PX-1 / EG-1 | names Accepted；creation still HOLD |
 | 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active next:
-  Decision-AS-COLUMN-NAMES-1 OPEN / NOT ACCEPTED（PARTIAL：CV-REQ Display+Type）
-  selection: decision-ilb-1-thirty-second-residual-column-names-selection.md
-  packet: decision-assessment-snapshot-column-names-packet.md
-  Stop point: HUMAN_AS_COLUMN_INTENDED_INTERNAL_NAMES_FILL
+Active acceptance:
+  Decision-AS-COLUMN-NAMES-1 = NM-1 + CV-REQ + XB-1
   next-gate: decision-assessment-snapshot-column-provision-next-gate.md
+  Next residual: NOT SELECTED
 
 Still HOLD / FORBIDDEN:
   SharePoint adapter implementation = DO NOT START
-  schema mapping concrete Internal Names = DO NOT LOCK as CONFIRMED
+  INTENDED ≠ CONFIRMED
   custom column creation = FORBIDDEN
+  Execution GO = NOT GIVEN
   Implementation Start = HOLD
   Agent mutation = FORBIDDEN
-  Agent Internal Name invention = FORBIDDEN
 ```
 
 ---
@@ -66,7 +64,7 @@ Still HOLD / FORBIDDEN:
 | Item | Status |
 |---|---|
 | App-field Internal Names as CONFIRMED mapping values | NOT PRESENT / HOLD |
-| Intended Internal Names | NOT ADOPTED（IN-A） |
+| Intended Internal Names（CV-REQ） | ADOPTED / INTENDED（COLUMN-NAMES-1；≠ CONFIRMED） |
 | SharePoint adapter / schema mapping impl | HOLD（XB-1） |
 | Permissions / Entra / Graph mutation | HOLD |
 | Implementation Start | HOLD（XB-1） |
