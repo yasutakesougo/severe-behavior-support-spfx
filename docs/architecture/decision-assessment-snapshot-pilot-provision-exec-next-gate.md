@@ -66,9 +66,10 @@ Next gate detail:
   Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
   Thirty-third residual: CONSUMED
   Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
-  Thirty-fourth residual: SELECTED / OPEN
-  Decision-AS-COLUMN-PX-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_COLUMN_PX_DECISION
+  Thirty-fourth residual: CONSUMED
+  Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
+  EG-HOLD: MAINTAINED
+  Next residual: NOT SELECTED
 PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:

@@ -13,7 +13,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Kind: decision-review（PX-1 authorization 採択可否）
 Status: READY
 Findings: P0=0 / P1=0 / P2=0
-Human Decision: NOT YET（本文書 ≠ Acceptance）
+Human Decision: ACCEPTED afterward as PX-1 + XB-1 + AP-1（本文書自体は Acceptance ではない）
 Recommended Accept set（比較用）: PX-1 + XB-1 + AP-1
 Must keep: EG-HOLD / Execution GO NOT GIVEN / Implementation HOLD / adapter HOLD
 ```
@@ -108,7 +108,7 @@ Meaning if Human Accepts PX-1 under this set:
 ## Approvals
 
 - 必要な承認: Human Acceptance of Decision-AS-COLUMN-PX-1
-- 承認状態: **NOT YET**
+- 承認状態: **Accepted** — see decision-assessment-snapshot-column-px-acceptance.md
 - 本 decision-review: 比較用判定のみ
 
 ## Explicit non-authorization
@@ -126,7 +126,7 @@ This judgment does NOT authorize:
 
 ## Next Actions
 
-1. Human Accepts **PX-1 + XB-1 + AP-1**（EG-HOLD 維持）— or declines with PX-HOLD
-2. Do **not** select EG-1 in the same unit
-3. After PX-1 Accepted: separate residual for EG-1 still required before Human create
-4. Keep PR #192 as docs line；no SharePoint touch
+1. Human Accepted **PX-1 + XB-1 + AP-1**（EG-HOLD 維持）— recorded in acceptance artifact
+2. EG-1 remains a separate residual before Human create
+3. Keep PR #192 as docs line；no SharePoint touch
+4. column creation / Execution GO / Implementation / adapter remain FORBIDDEN / HOLD

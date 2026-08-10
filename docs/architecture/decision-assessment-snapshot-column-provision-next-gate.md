@@ -1,13 +1,12 @@
 # Decision-AS-COLUMN-PROVISION-1 — Next Gate（after Acceptance）
 
-Status: CHOICE-OPTIONS-1 Accepted；PX-1 authorization path SELECTED / OPEN
+Status: COLUMN-PX-1 Accepted / LOCKED；next residual NOT SELECTED
 Date: 2026-08-10
 Acceptance: [`decision-assessment-snapshot-column-provision-acceptance.md`](./decision-assessment-snapshot-column-provision-acceptance.md)
 Names Acceptance: [`decision-assessment-snapshot-column-names-acceptance.md`](./decision-assessment-snapshot-column-names-acceptance.md)
 Choice Acceptance: [`decision-assessment-snapshot-choice-options-acceptance.md`](./decision-assessment-snapshot-choice-options-acceptance.md)
-Names packet: [`decision-assessment-snapshot-column-names-packet.md`](./decision-assessment-snapshot-column-names-packet.md)
-PX packet: [`decision-assessment-snapshot-column-px-packet.md`](./decision-assessment-snapshot-column-px-packet.md)
-PX judgment: [`decision-assessment-snapshot-column-px-judgment.md`](./decision-assessment-snapshot-column-px-judgment.md)
+PX Acceptance: [`decision-assessment-snapshot-column-px-acceptance.md`](./decision-assessment-snapshot-column-px-acceptance.md)
+PX IR: [`decision-assessment-snapshot-column-px-independent-review.md`](./decision-assessment-snapshot-column-px-independent-review.md)
 Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./decision-ilb-1-thirty-fourth-residual-column-px-selection.md)
 
 ---
@@ -16,17 +15,14 @@ Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./de
 
 | Item | Status |
 |---|---|
-| Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1 |
+| Decision-AS-COLUMN-PROVISION-1 | Accepted / LOCKED / SC-AS+EG-HOLD+VR-1+FG-1（PX advanced via COLUMN-PX-1） |
 | Decision-AS-COLUMN-NAMES-1 | Accepted / LOCKED / NM-1 + CV-REQ + XB-1 |
 | Decision-AS-CHOICE-OPTIONS-1 | Accepted / LOCKED / CO-1 + CV-CHOICE-BOTH + XB-1 |
-| Thirty-first〜thirty-third residual | CONSUMED |
-| Thirty-fourth residual | **SELECTED / OPEN**（PX-1 authorization path） |
-| Decision-AS-COLUMN-PX-1 | **OPEN / NOT ACCEPTED** |
-| PX-1 judgment | **READY**（採択可；Acceptance ではない） |
-| Stop point | `HUMAN_AS_COLUMN_PX_DECISION` |
-| Column creation authorization | PX-HOLD（awaiting Human PX Decision） |
-| Explicit Execution GO | NOT GIVEN（EG-HOLD；OUT of this packet） |
-| SharePoint column creation | **FORBIDDEN** |
+| Decision-AS-COLUMN-PX-1 | **Accepted / LOCKED / PX-1 + XB-1 + AP-1** |
+| Thirty-first〜thirty-fourth residual | **CONSUMED** |
+| Column creation authorization | **PX-1** |
+| Explicit Execution GO | **NOT GIVEN（EG-HOLD）** |
+| SharePoint column creation | **FORBIDDEN**（until EG-1 + Human create） |
 | Implementation Start | HOLD |
 | adapter / schema mapping implementation | HOLD |
 | INTENDED ≠ OBSERVED / CONFIRMED | LOCKED |
@@ -35,21 +31,17 @@ Selection: [`decision-ilb-1-thirty-fourth-residual-column-px-selection.md`](./de
 
 ---
 
-## 2. Immediate next OPEN residual（substantive）
+## 2. Immediate candidates（NOT SELECTED）
 
-| Order | Residual | Why next |
+| Order | Candidate | Why |
 |---|---|---|
-| 1 | Decision-AS-COLUMN-PX-1（PX-1 path） | creation authorization still HOLD |
-| 2 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
+| 1 | EG-1 Explicit Column Creation Execution GO | PX-1 Accepted；create still blocked by EG-HOLD |
+| 2 | CV extension（MAP-AS-009/010 / ENV） | CV-REQ OUT fields |
+| 3 | Issue Status Reconciliation（#6 / #8 / #22） | independent process debt |
 
 ```text
-Active next:
-  Decision-AS-COLUMN-PX-1 OPEN / NOT ACCEPTED
-  packet: decision-assessment-snapshot-column-px-packet.md
-  judgment: decision-assessment-snapshot-column-px-judgment.md（READY / PX-1 採択可）
-  Stop point: HUMAN_AS_COLUMN_PX_DECISION
-  PX-1 ≠ Execution GO ≠ Agent may create
-  Awaiting: Human Acceptance（recommended PX-1+XB-1+AP-1；EG-HOLD）
+Next substantive residual: NOT SELECTED
+Do NOT auto-start any candidate.
 
 Still FORBIDDEN / HOLD:
   column creation = FORBIDDEN
@@ -64,7 +56,7 @@ Still FORBIDDEN / HOLD:
 
 ## 3. Explicit non-claims
 
-- Opening COLUMN-PX-1 does **not** Accept PX-1.
-- Packet OPEN does **not** authorize column creation or Execution GO.
+- COLUMN-PX-1 Accepted does **not** grant Execution GO or create columns.
+- INTENDED values are **not** CONFIRMED.
 - Ready / Merge live progress is not recorded here
   （[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）.

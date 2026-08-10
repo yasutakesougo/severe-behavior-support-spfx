@@ -47,7 +47,7 @@ Thirtieth residual Decision: SELECTED / CONSUMED — MT-1 mapping-table docs upd
 Thirty-first residual Decision: SELECTED / CONSUMED — Column provisioning（Decision-AS-COLUMN-PROVISION-1 Accepted / LOCKED / NM-HOLD+SC-AS+PX-HOLD+EG-HOLD+VR-1+FG-1+XB-1+AP-1）
 Thirty-second residual Decision: SELECTED / CONSUMED — NM-1 intended names（Decision-AS-COLUMN-NAMES-1 Accepted / LOCKED / NM-1+CV-REQ+XB-1）
 Thirty-third residual Decision: SELECTED / CONSUMED — Choice options（Decision-AS-CHOICE-OPTIONS-1 Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1）
-Thirty-fourth residual Decision: SELECTED / OPEN — PX-1 authorization path（Decision-AS-COLUMN-PX-1 OPEN / NOT ACCEPTED）
+Thirty-fourth residual Decision: SELECTED / CONSUMED — PX-1 authorization（Decision-AS-COLUMN-PX-1 Accepted / LOCKED / PX-1+XB-1+AP-1；EG-HOLD）
 Issue Status Reconciliation: ASSESSED / independent candidate（#6/#8/#22 Current·Gate·Dependency resync；close ≠ body sync）
 FindingCode: HOLD
 A-5: HOLD
@@ -150,12 +150,14 @@ Thirty-third residual: CONSUMED — Choice options
   acceptance: decision-assessment-snapshot-choice-options-acceptance.md
   IR: decision-assessment-snapshot-choice-options-independent-review.md（PASS）
   Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
-Thirty-fourth residual: SELECTED / OPEN — PX-1 authorization path
+Thirty-fourth residual: CONSUMED — PX-1 authorization
   selection: decision-ilb-1-thirty-fourth-residual-column-px-selection.md
   packet: decision-assessment-snapshot-column-px-packet.md
-  Decision-AS-COLUMN-PX-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_COLUMN_PX_DECISION
-Next residual active: Decision-AS-COLUMN-PX-1
+  acceptance: decision-assessment-snapshot-column-px-acceptance.md
+  IR: decision-assessment-snapshot-column-px-independent-review.md（PASS）
+  Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
+  EG-HOLD: MAINTAINED
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
@@ -403,13 +405,13 @@ Order:
      Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
      INTENDED ≠ CONFIRMED
      column creation: FORBIDDEN（PX-HOLD+EG-HOLD）
-  34. Thirty-fourth residual: PX-1 authorization path（SELECTED / OPEN）
+  34. Thirty-fourth residual: PX-1 authorization（CONSUMED）
      selection: decision-ilb-1-thirty-fourth-residual-column-px-selection.md
      packet: decision-assessment-snapshot-column-px-packet.md
-     Decision-AS-COLUMN-PX-1: OPEN / NOT ACCEPTED
-     Stop point: HUMAN_AS_COLUMN_PX_DECISION
-     PX-1 ≠ Execution GO ≠ Agent may create
-     column creation: FORBIDDEN（until PX-1+EG-1+Human create）
+     acceptance: decision-assessment-snapshot-column-px-acceptance.md
+     Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
+     EG-HOLD: MAINTAINED
+     column creation: FORBIDDEN（until EG-1+Human create）
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -483,11 +485,12 @@ Thirty-third residual: CONSUMED — Choice options
   packet: decision-assessment-snapshot-choice-options-packet.md
   acceptance: decision-assessment-snapshot-choice-options-acceptance.md
   Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
-Thirty-fourth residual: SELECTED / OPEN — PX-1 authorization path
+Thirty-fourth residual: CONSUMED — PX-1 authorization
   packet: decision-assessment-snapshot-column-px-packet.md
-  Decision-AS-COLUMN-PX-1: OPEN / NOT ACCEPTED
-  Stop point: HUMAN_AS_COLUMN_PX_DECISION
-Next residual active: Decision-AS-COLUMN-PX-1
+  acceptance: decision-assessment-snapshot-column-px-acceptance.md
+  Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
+  EG-HOLD: MAINTAINED
+Next residual: NOT SELECTED
 Issue Status Reconciliation: ASSESSED / independent next-unit candidate
   assessment: issue-status-reconciliation-assessment.md
 SharePoint adapter / schema mapping impl: HOLD（≠ mapping-complete）
