@@ -61,6 +61,8 @@ Routine AUG v1 標準運用モデル（eligible slice のみ・Human Adoption �
 
 Process Optimization v1（risk classification / LOW auto-loop **定義採択**）: `docs/process/process-optimization-v1.md`（Accepted / LOCKED / Option POV1-A；LOW auto-loop DEFINED / NOT ENABLED；Authorization effect NONE；Merge = HUMAN-ONLY；permission expansion NONE）
 
+LOW-AUTO-PILOT-V1（pure-domain 限定 enablement Decision packet）: `docs/process/low-auto-pilot-v1.md`（READY_FOR_HUMAN_DECISION；LA1-A Option A — ACCEPT / HOLD；本 packet Authorization effect NONE；Implementation DO NOT START）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -107,6 +109,7 @@ Process Optimization v1（risk classification / LOW auto-loop **定義採択**�
 | AUTO-UNTIL-GATE Policy v1 | `docs/decisions/DEC-AA-003.md` |
 | Routine AUG v1 運用モデル | `docs/process/routine-aug-v1.md` |
 | Process Optimization v1（Accepted / NOT ENABLED） | `docs/process/process-optimization-v1.md` |
+| LOW-AUTO-PILOT-V1（Decision pending） | `docs/process/low-auto-pilot-v1.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -121,3 +124,4 @@ Process Optimization v1（risk classification / LOW auto-loop **定義採択**�
 - AUTO-UNTIL-GATE の有効化（`AUTO_UNTIL_GATE_ENABLED`）。DEC-AA-3 Accepted でも別 Human Explicit GO が必要
 - Implementation Start（DEC-AA-1 / DEC-AA-3 Policy Accepted では成立しない）
 - Process Optimization v1 の LOW auto-loop / Start / Ready / next-slice 自動候補の有効化（`docs/process/process-optimization-v1.md` Accepted / LOCKED でも Authorization effect NONE；別 Human Explicit GO が必要）
+- LOW-AUTO-PILOT-V1 の enable（`docs/process/low-auto-pilot-v1.md`）。LA1-A Option A の Human ACCEPT 前は NOT ENABLED；本入口は ACCEPT を自己成立させない
