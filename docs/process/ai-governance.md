@@ -53,6 +53,8 @@
 
 上位正本: `docs/decisions/DEC-AI-ORG-003.md`
 
+Auto-Approval Policy v1（追加分類層・緩和なし）: `docs/decisions/DEC-AA-001.md`（Accepted / LOCKED / Option A；kill switch = `AUTO_APPROVAL_DISABLED`；`AUTO_APPROVAL_ENABLED` と Implementation Start は別 GO）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -95,6 +97,7 @@
 | 共通判定 | `.agents/skills/_shared/judgement-rules.md` |
 | 出力形式 | `.agents/skills/_shared/output-format.md` |
 | 権限境界（上位） | `docs/decisions/DEC-AI-ORG-003.md` |
+| Auto-Approval Policy v1 | `docs/decisions/DEC-AA-001.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -105,3 +108,5 @@
 - Ready 化・マージそのもの（人の事前承認が別途必要）
 - SharePoint / Entra ID / Microsoft 365 / 本番データの変更
 - DEC-AI-ORG-3 にない新権限の追加、禁止操作の緩和
+- Auto-Approval の有効化（`AUTO_APPROVAL_ENABLED`）。DEC-AA-1 Accepted でも別 Human Explicit GO が必要
+- Implementation Start（DEC-AA-1 を含む Policy Accepted では成立しない）
