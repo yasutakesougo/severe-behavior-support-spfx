@@ -24,6 +24,8 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 | Result class | **DEFAULT_COLUMNS_ONLY** |
 | Decision-AS-SCHEMA-MAPPING-NEXT-1 | **Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1** |
 | Twenty-ninth residual | **CONSUMED** |
+| Thirtieth residual | **CONSUMED**（MT-1 mapping-table docs update） |
+| AssessmentSnapshot mapping table | UPDATED / NOT mapping-complete |
 | Implementation Start | HOLD（XB-1） |
 | Deploy / real data | NO-GO |
 | Agent SharePoint mutation | FORBIDDEN |
@@ -42,6 +44,7 @@ Acceptance: [`decision-assessment-snapshot-schema-mapping-next-acceptance.md`](.
 ```text
 Active acceptance:
   Decision-AS-SCHEMA-MAPPING-NEXT-1 = MT-1 + IN-A + CP-1 + XB-1
+  MT-1 table: assessment-snapshot-sharepoint-mapping.md（UPDATED / NOT mapping-complete）
   next-gate: decision-assessment-snapshot-schema-mapping-next-next-gate.md
 
 Still HOLD / FORBIDDEN:
