@@ -63,6 +63,8 @@ Process Optimization v1（risk classification / LOW auto-loop **定義採択**�
 
 LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low-auto-pilot-v1.md`（LA1-A Option A = ACCEPTED；Pilot policy ACCEPTED；Pilot execution NOT STARTED；Implementation DO NOT START YET；Ready/Merge HUMAN-ONLY；Ready auto NOT accepted）
 
+AUTONOMY-POLICY-V1（AUTO-1 / AI Development OS の機械判定可能な policy contract）: `docs/process/autonomy-policy-v1.md`（ACCEPTED / NOT ENABLED；Authorization effect NONE；UNKNOWN → DENY；Gateway に Ready / Merge executor なし）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -110,6 +112,7 @@ LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low
 | Routine AUG v1 運用モデル | `docs/process/routine-aug-v1.md` |
 | Process Optimization v1（Accepted / NOT ENABLED） | `docs/process/process-optimization-v1.md` |
 | LOW-AUTO-PILOT-V1（LA1-A ACCEPTED / execution NOT STARTED） | `docs/process/low-auto-pilot-v1.md` |
+| AUTONOMY-POLICY-V1（AUTO-1 ACCEPTED / NOT ENABLED） | `docs/process/autonomy-policy-v1.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -126,3 +129,6 @@ LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low
 - Process Optimization v1 の LOW auto-loop / Start / Ready / next-slice 自動候補の有効化（`docs/process/process-optimization-v1.md` Accepted / LOCKED でも Authorization effect NONE；別 Human Explicit GO が必要）
 - LOW-AUTO-PILOT-V1 の pilot execution / first-slice Start（`docs/process/low-auto-pilot-v1.md` LA1-A ACCEPTED でも Pilot execution = NOT STARTED；別 Human execution GO が必要）
 - LOW-AUTO-PILOT-V1 recording PR の Ready / Merge（Acceptance 単独では付与しない；Human Ready / Merge Decision が必要）
+- AUTONOMY-POLICY-V1 の enablement、Capability Registry / Task Packet / Action Gateway / execution backend の実装（AUTO-1 ACCEPTED でも Authorization effect NONE；別 unit / GO が必要）
+- AUTONOMY-POLICY-V1 を根拠とする Ready / Merge / Decision Acceptance、SharePoint / M365 / Entra / permission / secret / production deploy（Gateway executor を持たず、上位正本を緩和しない）
+- AssessmentSnapshot adapter EC-3 / EC-4 または Implementation Start の自動充足・迂回（法人アプリ lane の現行 Gate を維持）
