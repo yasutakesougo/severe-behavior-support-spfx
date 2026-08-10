@@ -152,6 +152,28 @@ missing or unknown risk  → DENY / UNKNOWN
 `MEDIUM` / `HIGH` を Human が扱う場合も Action Gateway の同一要求を
 override して実行させない。別 Human workflow と新しい Task Packet が必要である。
 
+Risk ordinal は `LOW = 1`、`MEDIUM = 2`、`HIGH = 3` とする。
+`contextualEscalators` は versioned `riskRuleSet` の次の canonical ID のみを使う。
+
+| Escalator ID | Minimum risk |
+|---|---|
+| `DEPENDENCY_CHANGE` | `MEDIUM` |
+| `CROSS_MODULE_INTEGRATION` | `MEDIUM` |
+| `ADAPTER_DTO_WIRING` | `MEDIUM` |
+| `SCHEMA_ADJACENT_CHANGE` | `MEDIUM` |
+| `NEW_BUSINESS_RULE` | `HIGH` |
+| `INSTITUTIONAL_INTERPRETATION` | `HIGH` |
+| `SECURITY_BOUNDARY_CHANGE` | `HIGH` |
+| `PERMISSION_OR_SECRET_CHANGE` | `HIGH` |
+| `PRODUCTION_DATA` | `HIGH` |
+| `DESTRUCTIVE_ACTION` | `HIGH` |
+| `PRODUCTION_DEPLOY` | `HIGH` |
+
+入力源は approved Task Packet、Capability Registry の immutable rule、
+preflight path/diff inventory とする。同じ変更に複数値がある場合は最大値を採用する。
+Agent 自身の risk label は authority にしない。rule set にない escalator、入力源不明、
+preflight と packet の不一致は `UNKNOWN` として DENY する。
+
 ## Initial capability policy
 
 ### AUTO_ALLOWED candidates fixed by AUTO-1
@@ -168,12 +190,18 @@ baseline、limits、idempotency、audit の条件付きである。
 | `commit.create` | `LOW` | packet scope 内。hook bypass、amend、保護 branch commit は含まない |
 | `branch.push` | `LOW` | 自 feature branch への通常 push のみ。force push / protected branch は含まない |
 | `pull_request.create_draft` | `LOW` | 自 branch から Draft のみ。Ready 化を含まない |
-| `pull_request.update_draft` | `LOW` | 同一 Draft の title / body / branch head 更新のみ。Ready 化を含まない |
+| `pull_request.update_draft` | `LOW` | 同一 Draft の title / body metadata 更新のみ。head 更新・Ready 化を含まない |
 | `ci.read` | `LOW` | CI status / logs の read-only |
 | `review.request` | `LOW` | 同一 Draft の Independent Review 要求のみ。Ready、Decision Accepted、review verdict の自己生成を含まない |
 
 `AUTO_ALLOWED` は **将来有効化時の policy classification** である。
 AUTO-1 時点では `NOT ENABLED` のため、全 capability の実行結果は DENY となる。
+
+さらに effective classification は全上位 authority との intersection（最も厳しい
+分類）で決める。現行 DEC-AA-003 の GitHub 公開前 STOP / external write
+permissions `NONE` が有効な間、`branch.push`、Draft PR create/update、
+`review.request` は effective `HUMAN_ONLY` である。上位正本を明示的に supersede
+する別 Human Decision なしに、AUTO-1 の target classification を適用しない。
 
 ### HUMAN_ONLY policy entries
 
@@ -181,10 +209,21 @@ AUTO-1 時点では `NOT ENABLED` のため、全 capability の実行結果は 
 
 | Operation ID | Classification |
 |---|---|
+| `implementation.start` | `HUMAN_ONLY` |
+| `task_packet.approve` | `HUMAN_ONLY` |
+| `autonomy_policy.enable` | `HUMAN_ONLY` |
+| `capability_registry.write` | `HUMAN_ONLY` |
+| `action_gateway.policy.write` | `HUMAN_ONLY` |
+| `issue.write` | `HUMAN_ONLY` |
+| `label.write` | `HUMAN_ONLY` |
+| `review.publish` | `HUMAN_ONLY` |
 | `pull_request.ready` | `HUMAN_ONLY` |
 | `pull_request.merge` | `HUMAN_ONLY` |
 | `decision.accept` | `HUMAN_ONLY` |
 | `decision.lock` | `HUMAN_ONLY` |
+| `branch.force_push_feature` | `HUMAN_ONLY` |
+| `deploy.validation` | `HUMAN_ONLY` |
+| `security_boundary.write` | `HUMAN_ONLY` |
 
 特に `pull_request.merge` は prompt 上の禁止だけに依存しない。
 
@@ -197,20 +236,38 @@ Human approval supplied to Gateway: MUST NOT create either route
 Human が別 workflow で merge を判断できることと、Gateway が merge capability を
 持たないことは両立する。
 
+Draft PR head の変更は `pull_request.update_draft` では実行しない。
+commit / ref / head mutation を含む Draft update は
+`DENY / POLICY_BLOCKED / DRAFT_HEAD_MUTATION` とし、head の変更は必ず
+`branch.push` として
+認可・`maxPushes` 計上・監査する。
+
 ### FORBIDDEN policy entries
 
 次は承認の有無にかかわらず Gateway で実行しない。
 
 | Operation ID | Classification |
 |---|---|
+| `branch.push_protected` | `FORBIDDEN` |
+| `branch.force_push_protected` | `FORBIDDEN` |
+| `sharepoint.app_catalog.write` | `FORBIDDEN` |
 | `sharepoint.schema.write` | `FORBIDDEN` |
+| `sharepoint.production.write` | `FORBIDDEN` |
 | `sharepoint.permission.write` | `FORBIDDEN` |
+| `microsoft365.write` | `FORBIDDEN` |
+| `entra.write` | `FORBIDDEN` |
 | `github.permission.write` | `FORBIDDEN` |
+| `secret.value.read` | `FORBIDDEN` |
 | `secret.write` | `FORBIDDEN` |
+| `production_data.read` | `FORBIDDEN` |
+| `production_data.write` | `FORBIDDEN` |
+| `data.physical_delete` | `FORBIDDEN` |
+| `notion.production.write` | `FORBIDDEN` |
 | `deploy.production` | `FORBIDDEN` |
 
-上記は最小 deny set である。未記載 operation は `UNKNOWN` であり、
-`AUTO_ALLOWED` へ推定しない。
+この表と HUMAN_ONLY 表は上位 authority deny table の canonical v1 projection
+である。Capability Registry は分類を緩和できない。未記載 operation は `UNKNOWN`
+であり、`AUTO_ALLOWED` へ推定しない。
 
 ## Required authorization context
 
@@ -222,12 +279,20 @@ policyVersion
 policyEnablementRef
 taskPacketId
 taskPacketVersion
+authorityRefs[]
+authoritySnapshotDigest
+implementationStartRef (mutation when applicable)
+unresolvedHolds[]
+autoApprovalState
+autoUntilGateState
+externalWritePermissions
 repository
 baseRef
 baselineSHA
 expectedHeadSHA (mutation / external write when applicable)
 capabilities[]
 risk
+riskRuleSet
 allowedPaths[]
 deniedPaths[]
 limits
@@ -240,6 +305,33 @@ expiresAt
 
 Agent は `policyEnablementRef`、Task Packet、approval、risk、limits、
 `allowedPaths` を自分で発行・拡張・更新してはならない。
+
+### Authority intersection
+
+`authorityRefs[]` は AUTO-1 より上位の Accepted / LOCKED authority と、その
+version / digest を列挙する。Gateway は immutable authority snapshot から
+operation classification、kill switch、HOLD、external write 境界を再計算する。
+
+```text
+effectiveClassification = strictest(
+  upperAuthorityClassifications,
+  AUTONOMY-POLICY-V1 classification,
+  Task Packet restriction
+)
+```
+
+- authority missing / stale / digest mismatch / conflict は
+  `DENY / POLICY_BLOCKED / AUTHORITY_CONFLICT`
+- mutation は exact-slice `implementationStartRef` が Accepted でなければ
+  `DENY / POLICY_BLOCKED / IMPLEMENTATION_START_REQUIRED`
+- `unresolvedHolds[]` が空でなければ
+  `DENY / POLICY_BLOCKED / UNRESOLVED_HOLD`
+- inherited kill switch が disabled なら
+  `DENY / POLICY_BLOCKED / POLICY_NOT_ENABLED`
+- external write は上位 authority の `externalWritePermissions` が対象 capability
+  を明示しなければ `DENY / POLICY_BLOCKED / EXTERNAL_WRITE_NOT_ALLOWED`
+- Policy enablement approval / Task Packet approval は上位 authority を
+  supersede しない
 
 ## Approval requirement
 
@@ -260,6 +352,10 @@ AUTO-1 Human Acceptance alone:
 approval の対象・操作・範囲・版が request と exact match しない場合、
 広い approval として解釈しない。
 
+approval issuer は trusted issuer registry に存在し、signature、issued-at、
+expiry、revocation state を検証できなければならない。issuer 不明、期限切れ、
+取消済みは、それぞれ canonical deny reason へ一意に mapping する。
+
 ## Baseline and head binding
 
 ### Baseline
@@ -267,7 +363,7 @@ approval の対象・操作・範囲・版が request と exact match しない�
 - `baselineSHA` は full commit SHA とする。
 - Task Packet 発行後は immutable とする。
 - `baseRef` の現在値が `baselineSHA` と一致しない場合は
-  `DENY / BASELINE_MOVED` とする。
+  `DENY / BASELINE_MOVED / BASELINE_MOVED` とする。
 - check は最初の mutation 前、および push / Draft PR create/update /
   review request の直前に再実行する。
 - Agent による自動 rebase、baseline 更新、approval 流用は禁止する。
@@ -275,27 +371,75 @@ approval の対象・操作・範囲・版が request と exact match しない�
 ### Mutable head
 
 - mutation / external write は直前状態を `expectedHeadSHA` に拘束する。
-- branch / Draft PR head が一致しない場合は `DENY / HEAD_MOVED` とする。
+- branch / Draft PR head が一致しない場合は
+  `DENY / HEAD_MOVED / HEAD_MOVED` とする。
 - 成功した mutation の result SHA を次 request の `expectedHeadSHA` として
   明示的に引き継ぐ。
 
 baseline は task の承認起点、expected head は task 内の逐次競合防止であり、
 相互に代替しない。
 
+## test.run sandbox
+
+`test.run` は shell command 文字列を直接受理しない。Task Packet approval に
+digest-bound された `commandManifest` を必須とする。
+
+```text
+executable path + executable digest
+argv[]
+cwd
+environment key allowlist + value digest
+readRoots[]
+writeRoots[]
+ephemeralWriteRoots[]
+network = DENY
+timeoutMs
+maxProcesses
+```
+
+- `cwd` / `readRoots` / `writeRoots` は repository 内の canonical path に限定する。
+- `writeRoots` は `allowedPaths` の subset とする。
+- secret / credential を ambient environment から継承しない。
+- `ephemeralWriteRoots` は packet 固有 sandbox 内に限定し、commit / push /
+  artifact publish の入力にしない。
+- outbound / inbound network、deploy、publish、package upload、外部 state mutation
+  を sandbox で拒否する。
+- executable / manifest digest、environment、filesystem policy を実行直前に検証する。
+- 実行前後に repository filesystem inventory を取得し、許可外 write または
+  inventory 不明を検出した場合は task を latch して次 action を DENY する。
+- OS-level sandbox で上記を強制できない backend は `test.run` adapter を
+  executable として登録しない。
+
+`test.run` が repository 外 write、許可外 write、network、secret inheritance を
+要求した場合は `DENY / POLICY_BLOCKED / TEST_SANDBOX_VIOLATION` とする。
+
 ## allowedPaths enforcement
 
 `code.edit` と、変更差分を外部反映する `commit.create` / `branch.push` /
-Draft PR 操作に適用する。
+Draft PR 操作、および `test.run.writeRoots` に適用する。
 
-1. path は repository-relative POSIX path へ正規化する。
-2. absolute path、`..` traversal、NUL、repository 外を拒否する。
-3. symlink は real path を解決し、repository / allowed root 外なら拒否する。
-4. create / modify / delete は対象 path が `allowedPaths` の少なくとも 1 条件に
+pattern grammar は glob / regex を使わず、次の 2 種類だけとする。
+
+```text
+exact file:     docs/process/example.md
+directory root: docs/process/
+```
+
+1. UTF-8 を NFC normalize し、`\` を拒否して repository-relative POSIX path とする。
+2. absolute path、empty segment、`.` / `..`、NUL、repository 外を拒否する。
+3. exact file は byte-for-byte exact match、directory root は末尾 `/` を含む
+   segment-prefix match とする。case-sensitive とする。
+4. case-insensitive filesystem でも Git index の canonical case と一致必須とし、
+   case collision は DENY。
+5. symlink は内部向けを含め mutation target として拒否する。
+6. hard link count が 1 でない既存 file は mutation target として拒否する。
+7. nested worktree、submodule 内容、submodule pointer mutation を拒否する。
+8. create / modify / delete は対象 path が `allowedPaths` の少なくとも 1 条件に
    match 必須。
-5. rename / move は source と destination の両方が match 必須。
-6. `deniedPaths` が match した場合は常に deny し、`allowedPaths` で上書きしない。
-7. generated file、lockfile、submodule pointer も暗黙許可しない。
-8. path 判定不能または差分 inventory 不完全は DENY。
+9. rename / move は source と destination の両方が match 必須。
+10. `deniedPaths` が match した場合は常に deny し、`allowedPaths` で上書きしない。
+11. generated file、lockfile も暗黙許可しない。
+12. path 判定不能、Unicode/case collision、diff inventory 不完全は DENY。
 
 結果:
 
@@ -323,12 +467,37 @@ Task Packet は全 limit を明示し、値は次の policy ceiling 以下でな
 Task Packet は ceiling より小さい値を設定できる。消費量は audit ledger から
 再計算可能でなければならない。超過前に DENY し、部分実行しない。
 
+limit ledger は Task Packet ごとの transactional store とする。各 action は
+side effect 前に compare-and-increment で capacity を atomic reserve し、
+成功時に commit、side effect 前の失敗時に rollback する。結果不明または
+side effect 後の audit failure は reservation を保持して task を latch する。
+並行 request が同じ残 capacity を共有して通過してはならない。
+
+counter semantics:
+
+| Counter | Canonical measurement |
+|---|---|
+| `maxRepairCycles` | verification failure 後に発行された unique `repairCycleId`。initial attempt は含めない |
+| `maxConcurrentExecutions` | unexpired execution lease の同時数 |
+| `maxBranchesCreated` | successful `branch.create` target の unique 数 |
+| `maxOpenDraftPullRequests` | task が作成し、close/convert されていない Draft 数 |
+| `maxCommits` | baseline descendant として task が作成した successful commit 数 |
+| `maxPushes` | successful remote ref update 数。retry replay は idempotency により再計上しない |
+| `maxChangedFiles` | `baselineSHA...expectedHeadSHA` cumulative diff の unique preimage / postimage path 数。rename は両 path を数える |
+| `maxChangedBytes` | cumulative diff の各 path について create/modify は postimage blob size、delete は preimage blob size、rename は大きい方を合計 |
+| `maxActionRequests` | valid task ID を持つ `REQUESTED` audit の数。DENY も含む |
+
+lease / reservation は期限を持つが、期限切れを成功・未実行の推測に使わない。
+idempotency ledger と result audit を照合できない reservation は Human review まで
+release しない。
+
 ## Idempotency
 
 - mutation / external write request は `idempotencyKey` 必須。
 - key scope は `policyVersion + taskPacketId + capability + target` とする。
 - 同じ key + 同じ canonical payload hash の再送は、前回結果を返して再実行しない。
-- 同じ key + 異なる payload hash は `DENY / IDEMPOTENCY_CONFLICT`。
+- 同じ key + 異なる payload hash は
+  `DENY / IDEMPOTENCY_CONFLICT / IDEMPOTENCY_CONFLICT`。
 - result 不明の timeout は成功・失敗を推測せず、audit ledger を照合するまで DENY。
 - adapter が idempotent execution を保証できない capability は Registry に
   executable として登録しない。
@@ -368,11 +537,18 @@ unredacted sensitive command output
 ```
 
 実行後に completion audit を保存できなかった場合は次 action を停止し、
-`AUDIT_INCOMPLETE` として Human review へ送る。audit 不能を成功扱いしない。
+`AUDIT_INCOMPLETE` として Human review へ送る。既に発生した side effect を
+authorization `DENY` に書き換えず、同じ idempotency key の自動 retry を禁止する。
+
+primary audit sink が request 受理時に unavailable の場合、Gateway は side effect
+なしで `DENY / AUDIT_UNAVAILABLE / AUDIT_UNAVAILABLE` を同期応答し、
+task-wide kill latch を立てる。
+secondary security telemetry への記録を試みるが、durable DENY audit を保存できない
+可能性は availability incident として明示する。audit 不可を理由に実行へ進まない。
 
 ## Gateway decision contract
 
-### Result
+### Authorization result
 
 ```text
 decision = ALLOW | DENY
@@ -385,18 +561,29 @@ code =
   | AUDIT_UNAVAILABLE
 
 reason =
-  UNKNOWN
+  REQUEST_INVALID
+  | UNKNOWN
   | POLICY_MISMATCH
   | POLICY_NOT_ENABLED
+  | AUTHORITY_CONFLICT
+  | IMPLEMENTATION_START_REQUIRED
+  | UNRESOLVED_HOLD
+  | EXTERNAL_WRITE_NOT_ALLOWED
   | CAPABILITY_UNAVAILABLE
   | RISK_NOT_ALLOWED
   | APPROVAL_REQUIRED
   | APPROVAL_INVALID
+  | ISSUER_UNTRUSTED
+  | APPROVAL_EXPIRED
+  | APPROVAL_REVOKED
+  | TARGET_MISMATCH
   | BASELINE_MOVED
   | HEAD_MOVED
   | HUMAN_ONLY
   | FORBIDDEN
   | OUT_OF_SCOPE
+  | TEST_SANDBOX_VIOLATION
+  | DRAFT_HEAD_MUTATION
   | LIMIT_EXCEEDED
   | IDEMPOTENCY_CONFLICT
   | AUDIT_UNAVAILABLE
@@ -409,34 +596,62 @@ reason から code への mapping は次で固定する。
 
 | Reason | Code |
 |---|---|
-| `UNKNOWN` / `POLICY_MISMATCH` / `POLICY_NOT_ENABLED` | `POLICY_BLOCKED` |
+| `REQUEST_INVALID` / `UNKNOWN` / `POLICY_MISMATCH` | `POLICY_BLOCKED` |
+| `POLICY_NOT_ENABLED` / `AUTHORITY_CONFLICT` | `POLICY_BLOCKED` |
+| `IMPLEMENTATION_START_REQUIRED` / `UNRESOLVED_HOLD` | `POLICY_BLOCKED` |
+| `EXTERNAL_WRITE_NOT_ALLOWED` | `POLICY_BLOCKED` |
 | `CAPABILITY_UNAVAILABLE` / `RISK_NOT_ALLOWED` | `POLICY_BLOCKED` |
 | `APPROVAL_REQUIRED` / `APPROVAL_INVALID` | `POLICY_BLOCKED` |
+| `ISSUER_UNTRUSTED` / `APPROVAL_EXPIRED` / `APPROVAL_REVOKED` | `POLICY_BLOCKED` |
+| `TARGET_MISMATCH` | `POLICY_BLOCKED` |
 | `HUMAN_ONLY` / `FORBIDDEN` / `OUT_OF_SCOPE` | `POLICY_BLOCKED` |
+| `TEST_SANDBOX_VIOLATION` / `DRAFT_HEAD_MUTATION` | `POLICY_BLOCKED` |
 | `BASELINE_MOVED` | `BASELINE_MOVED` |
 | `HEAD_MOVED` | `HEAD_MOVED` |
 | `LIMIT_EXCEEDED` | `LIMIT_EXCEEDED` |
 | `IDEMPOTENCY_CONFLICT` | `IDEMPOTENCY_CONFLICT` |
 | `AUDIT_UNAVAILABLE` | `AUDIT_UNAVAILABLE` |
 
+malformed field / unsupported enum / invalid digest or timestamp は `REQUEST_INVALID`、
+signature は valid だが issuer が trust registry にない場合は `ISSUER_UNTRUSTED`、
+期限切れは `APPROVAL_EXPIRED`、取消済みは `APPROVAL_REVOKED`、
+repository / operation / scope / version mismatch は `TARGET_MISMATCH` とする。
+
+### Execution result
+
+authorization `ALLOW` 後の backend execution は別 result とする。
+
+```text
+executionStatus =
+  SUCCEEDED
+  | FAILED
+  | UNKNOWN
+  | AUDIT_INCOMPLETE
+```
+
+`UNKNOWN` / `AUDIT_INCOMPLETE` は task-wide kill latch を立て、同一 action の
+自動 retry と後続 action を止める。既発生 side effect の有無を推測しない。
+
 ### Evaluation order
 
 ```text
-1. request fields and policy version valid?
+1. request fields, trust registry, and policy version valid?
 2. audit sink available and REQUESTED audit durable?
-3. operation known and classified?
-4. classification == AUTO_ALLOWED?
-5. executable capability adapter exists?
-6. policy enablement active?
-7. Task Packet allows capability and target?
-8. effective risk == LOW?
-9. approvals valid and exact?
-10. baseline and expected head match?
-11. paths within scope?
-12. limits available?
-13. idempotency valid?
-14. PREPARED audit durable?
-15. ALLOW
+3. upper authority snapshot valid and conflict-free?
+4. inherited kill switches / HOLD / Implementation Start permit?
+5. operation known and effective classification == AUTO_ALLOWED?
+6. executable capability adapter exists?
+7. policy enablement active?
+8. Task Packet allows capability and target?
+9. effective risk == LOW?
+10. approvals valid and exact?
+11. external write permission valid when applicable?
+12. baseline and expected head match?
+13. paths / command sandbox within scope?
+14. idempotency valid?
+15. limits atomically reserved?
+16. PREPARED audit durable?
+17. ALLOW
 ```
 
 各段階は前段を通過した場合のみ評価する。どこか 1 つでも false / missing /
@@ -463,9 +678,19 @@ unknown / conflicting なら実行せず DENY する。複数 deny reason が同
 unknown capability → DENY / POLICY_BLOCKED / UNKNOWN
 policy not enabled → DENY / POLICY_BLOCKED / POLICY_NOT_ENABLED
 missing approval → DENY / POLICY_BLOCKED / APPROVAL_REQUIRED
+missing / conflicting authority → DENY / POLICY_BLOCKED / AUTHORITY_CONFLICT
+missing exact-slice Implementation Start → DENY / POLICY_BLOCKED / IMPLEMENTATION_START_REQUIRED
+unresolved HOLD → DENY / POLICY_BLOCKED / UNRESOLVED_HOLD
+external write while upper authority says NONE → DENY / POLICY_BLOCKED / EXTERNAL_WRITE_NOT_ALLOWED
+test.run write/network outside sandbox → DENY / POLICY_BLOCKED / TEST_SANDBOX_VIOLATION
+Draft update containing head mutation → DENY / POLICY_BLOCKED / DRAFT_HEAD_MUTATION
 idempotency key collision → DENY / IDEMPOTENCY_CONFLICT / IDEMPOTENCY_CONFLICT
 audit sink unavailable → DENY / AUDIT_UNAVAILABLE / AUDIT_UNAVAILABLE
 ```
+
+HUMAN_ONLY / FORBIDDEN canonical v1 projection の全行について、
+table-driven negative test を生成し、Registry に executable adapter がないことと
+required classification / reason を照合する。
 
 5 件の core negative test が PASS しない限り、
 `LOW-AUTO-PILOT-V2` または同等 enablement へ進まない。

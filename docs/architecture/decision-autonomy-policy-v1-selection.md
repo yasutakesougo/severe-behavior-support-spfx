@@ -65,6 +65,8 @@ NONE
 - execution backend は抽象化し、AUTO-1 で SDK 言語を拘束しない
 - `AUTO_ALLOWED` initial set は read / scoped edit / test / feature branch /
   commit / normal push / Draft PR / CI read / review request
+- effective classification は上位 authority との intersection で最も厳しい分類を採用。
+  現行 DEC-AA-003 の external write `NONE` を supersede しない
 - automatic risk ceiling は `LOW`
 - `pull_request.ready` / `pull_request.merge` / `decision.accept` /
   `decision.lock` は Gateway executable route を持たない
@@ -72,6 +74,10 @@ NONE
   Gateway で `FORBIDDEN`
 - policy、Task Packet、approval、baseline、paths、limits、idempotency、audit の
   どれかが不明または不一致なら DENY
+- mutation は exact-slice Implementation Start、unresolved HOLD = 0、
+  inherited kill switches、authority snapshot の一致が必須
+- `test.run` は digest-bound command manifest と network-denied / write-scoped
+  sandbox が必須
 - `Policy Accepted ≠ Policy Enabled`
 
 ## Required negative contract outcomes
@@ -123,6 +129,8 @@ AUTO-1 Acceptance ≠ Ready / Merge
 - classification / risk / decision code / deny reason の enum が一意
 - initial allow / human-only / forbidden set が一意
 - baseline / expected head / allowedPaths / limits / idempotency が一意
+- authority intersection / exact-slice Start / inherited HOLD・kill switch が一意
+- test sandbox / path grammar / atomic limit ledger が一意
 - approval と audit の fail-closed requirement が一意
 - mandatory negative contract outcomes が一意
 - execution backend が SDK 言語非依存
