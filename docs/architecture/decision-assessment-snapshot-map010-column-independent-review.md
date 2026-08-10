@@ -1,10 +1,11 @@
-# Independent Review — Decision-AS-MAP010-COLUMN-1 Candidate
+# Independent Review — Decision-AS-MAP010-COLUMN-1 Acceptance
 
 この文書は、**Decision-AS-MAP010-COLUMN-1**
-（MAP-AS-010 supersedesSnapshotId Column Contract）
-**Candidate Packet / Contract** の Independent Review である。
-Human Acceptance / SharePoint create / VR-1 / mapping-complete /
-adapter Implementation Start の代替ではない。
+（N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1）
+Human Acceptance 記録の **Independent Review 正本**である。
+SharePoint create / VR-1 / mapping-complete / adapter Implementation Start の代替ではない。
+
+Candidate-era review evidence は本 Acceptance IR に統合・継承する。
 
 Skill basis: [`decision-review`](../../.agents/skills/decision-review/SKILL.md)
 
@@ -12,17 +13,23 @@ Skill basis: [`decision-review`](../../.agents/skills/decision-review/SKILL.md)
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Kind: Independent Review（docs-only candidate）
+Kind: Independent Review（docs-only Acceptance）
 Skill basis: decision-review
 Status: PASS
-Findings: P0=0 / P1=0 / P2=2
-Baseline main: 6124127ad306848ac890a673cc8b5c0dd4c57710
-Human Selection of unit: MAP-AS-010 Column Contract — SELECTED
-Human Acceptance: NOT YET
+Findings: P0=0 / P1=0 / P2=1
+Human Decision: N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
+PR: #209
 Reviewed artifacts:
-  decision-assessment-snapshot-map010-column-selection.md
-  decision-assessment-snapshot-map010-column-packet.md
-  assessment-snapshot-map010-column-contract.md
+  decision-assessment-snapshot-map010-column-acceptance.md
+  decision-assessment-snapshot-map010-column-packet.md（CONSUMED）
+  assessment-snapshot-map010-column-contract.md（ACCEPTED / LOCKED）
+  decision-assessment-snapshot-map010-column-selection.md（SELECTED / CONSUMED）
+  assessment-snapshot-sharepoint-mapping.md（MAP-AS-010 living sync）
+Living sync verified:
+  Internal Name / Display Name / Type / R-1-A / W-1-A recorded
+  Physical column remains NOT PRESENT
+  column-ready remains NO
+  mapping-complete remains NOT YET
 Ready: NOT RUN
 Merge: NOT RUN
 ```
@@ -34,33 +41,36 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 
 | Checkpoint | Result | Note |
 |---|---|---|
-| No duplicate Decision ownership | PASS | no prior MAP010-COLUMN Decision |
-| PERSISTED disposition not re-Decided | PASS | CV-EXTENSION-1 X-2-A cited |
-| Internal Name not silently Accepted | PASS | N-1-A CANDIDATE；DECISION_REQUIRED |
-| Display Name pattern shown | PASS | N-2-A tied to CV-REQ/DEC-009 vocabulary |
-| Column Type lossless/minimal | PASS | 1行テキスト；Note not forced |
-| optional ≠ required escalation | PASS | O-1-A absence success |
-| null/default coercion absent | PASS | forbidden |
-| empty/whitespace ambiguity addressed | PASS | fail-closed when present-invalid |
-| lossy conversion | NO | identity when present |
-| lineage semantic loss | NO as candidate | PERSISTED preserved；create later |
-| cross-record validation leakage | NO | domain/app ownership explicit |
-| adapter implementation leakage | NO | XB-1 |
-| SharePoint create leakage | NO | FORBIDDEN |
-| mapping-complete false PASS | NO | NOT YET explicit |
+| N-1-A supersedesSnapshotId exact | PASS | Acceptance + contract |
+| N-2-A 訂正元スナップショットID exact | PASS | |
+| T-1-A 1行テキスト | PASS | |
+| Requiredness OPTIONAL | PASS | not escalated |
+| O-1-A absence success / invalid present fail-closed | PASS | |
+| R-1-A identity when present | PASS | no trim |
+| W-1-A identity when present；undefined → absence semantic only | PASS | API mechanic deferred |
+| P2-001 CLOSED | PASS | Internal Name Accepted |
+| P2-002 OPEN / non-blocking | PASS | clear/omit API carry-forward |
+| No trim-to-accept | PASS | |
+| No null/default coercion | PASS | |
+| No optional→required escalation | PASS | |
+| No cross-record validation leakage | PASS | domain/app ownership retained |
+| No SharePoint API mechanic invented | PASS | W-1-A defers transport |
+| No SharePoint create | PASS | XB-1 FORBIDDEN |
+| No mapping-complete PASS | PASS | NOT YET；column-ready NO |
+| No adapter Implementation Start | PASS | HOLD |
 | Agent recommendation ≠ Acceptance | PASS | explicit |
 
 ## Findings
 
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
 |---|---|---|---|---|---|
-| P2-001 | P2 | OPEN | N-1-A Internal Name equals logical field id by CV-REQ pattern, but still requires Human Acceptance（NM-1 precedent；not auto-derived） | COLUMN-NAMES-1；packet N-1 | Human Acceptance on N-1 |
-| P2-002 | P2 | OPEN | W-1-A blank/null clear semantics leave exact SharePoint client clear/omit API to adapter impl gate | packet W-1-A；SP-ADAPTER CV-1 | Keep as post-Acceptance impl constraint；not Decision blocker |
+| P2-001 | P2 | **CLOSED** | Internal Name `supersedesSnapshotId` Human-Accepted（N-1-A） | Acceptance | CLOSED |
+| P2-002 | P2 | OPEN | exact SharePoint client clear/omit/null transport API remains adapter impl constraint | Acceptance W-1-A；XB-1 | Carry-forward；**Decision blocker: NO** |
 
 ```text
 P0 = 0
 P1 = 0
-P2 = 2
+P2 open = 1（P2-002 only）
 Independent Review: PASS
 ```
 
@@ -68,27 +78,29 @@ Independent Review: PASS
 
 ```text
 This IR does NOT authorize:
-  Human Acceptance of Decision-AS-MAP010-COLUMN-1
-  treating Agent recommendation as Accepted
+  Ready Decision / Merge
   SharePoint column create / mutation
   VR-1 execution
   mapping-complete PASS
-  adapter / DTO / schema wiring
+  adapter / schema / DTO wiring
   Implementation Start
   Deploy / real data
   Issue mutation
-  Ready / Merge
+  P2-002 closure
 ```
 
 ## Next
 
 ```text
-Independent Review: PASS（candidate）
-Decision-AS-MAP010-COLUMN-1: OPEN / NOT ACCEPTED
-Next gate: HUMAN ACCEPTANCE OF MAP-AS-010 COLUMN CONTRACT
+Independent Review: PASS
+Decision-AS-MAP010-COLUMN-1: Accepted / LOCKED
+  / N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
+MAP-AS-010 column contract: ACCEPTED / LOCKED
+MAP-AS-010 column-ready: NO
+mapping-complete: NOT YET
+Next gate: HUMAN READY DECISION FOR PR #209
 Still HOLD / FORBIDDEN:
   SharePoint create / VR-1
   Implementation Start / adapter
-  mapping-complete PASS
   Deploy / real data
 ```

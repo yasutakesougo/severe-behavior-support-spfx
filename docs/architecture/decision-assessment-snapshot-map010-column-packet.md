@@ -7,7 +7,10 @@ Read / Write conversion）についての比較用 Human Decision Packet であ�
 Selected via:
 [`decision-assessment-snapshot-map010-column-selection.md`](./decision-assessment-snapshot-map010-column-selection.md)
 
-Contract candidate:
+Acceptance 正本:
+[`decision-assessment-snapshot-map010-column-acceptance.md`](./decision-assessment-snapshot-map010-column-acceptance.md)
+
+Contract:
 [`assessment-snapshot-map010-column-contract.md`](./assessment-snapshot-map010-column-contract.md)
 
 IR:
@@ -29,18 +32,29 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-MAP010-COLUMN-1
-Kind: Human Decision packet（compare → OPEN）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Baseline main: 6124127ad306848ac890a673cc8b5c0dd4c57710
-Human Selection of unit: MAP-AS-010 Column Contract（SELECTED）
-Human Acceptance: NOT YET
+Human Selection of unit: MAP-AS-010 Column Contract（SELECTED / CONSUMED）
+Human Decision: N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
+Human Selected:
+  N-1 Internal Name:         N-1-A = supersedesSnapshotId
+  N-2 Display Name:          N-2-A = 訂正元スナップショットID
+  T-1 Column Type:           T-1-A = 1行テキスト（OPTIONAL）
+  O-1 Optional semantics:    O-1-A
+  R-1 Read Conversion:       R-1-A
+  W-1 Write Conversion:      W-1-A
+  Boundary:                  XB-1
+Accepted 正本:
+  decision-assessment-snapshot-map010-column-acceptance.md
 
 Agent recommendation（historical / NOT Acceptance）:
   N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
 
-Current boundary（unchanged by this OPEN packet）:
+Current boundary（unchanged by Acceptance for create / impl）:
   SharePoint column create = FORBIDDEN
   VR-1 for MAP-AS-010 = NOT RUN
+  MAP-AS-010 column-ready = NO
   mapping-complete = NOT YET
   adapter / Implementation Start = HOLD
   Deploy / real data = NO-GO
@@ -93,9 +107,9 @@ Classification: **DECISION_REQUIRED**（pattern-aligned；not uniquely Accepted�
 
 | ID | Internal Name | 結果 |
 |---|---|---|
-| **N-1-A** | `supersedesSnapshotId` | **Agent recommendation / CANDIDATE** |
-| N-1-HOLD | Internal Name 未決定 | available |
-| N-1-X | Human 明示の別値 | available |
+| **N-1-A** | `supersedesSnapshotId` | **SELECTED / Accepted** |
+| N-1-HOLD | Internal Name 未決定 | NOT SELECTED |
+| N-1-X | Human 明示の別値 | NOT SELECTED |
 
 ```text
 Why N-1-A is a valid candidate（not auto-Accepted）:
@@ -114,10 +128,10 @@ Classification: **DECISION_REQUIRED**
 
 | ID | Display Name | 根拠 / パターン | 結果 |
 |---|---|---|---|
-| **N-2-A** | 訂正元スナップショットID | CV-REQ Japanese descriptive labels；DEC-009「訂正」語彙；points to superseded prior snapshot | **Agent recommendation / CANDIDATE** |
-| N-2-B | 上位スナップショットID | shorter；weaker correction-semantics signal | available |
-| N-2-HOLD | Display Name 未決定 | — | available |
-| N-2-X | Human 明示 | — | available |
+| **N-2-A** | 訂正元スナップショットID | CV-REQ Japanese descriptive labels；DEC-009「訂正」語彙；points to superseded prior snapshot | **SELECTED / Accepted** |
+| N-2-B | 上位スナップショットID | shorter；weaker correction-semantics signal | NOT SELECTED |
+| N-2-HOLD | Display Name 未決定 | — | NOT SELECTED |
+| N-2-X | Human 明示 | — | NOT SELECTED |
 
 ```text
 Pattern authority:
@@ -133,10 +147,10 @@ Classification: **CANDIDATE**（strongly patterned on snapshotId）
 
 | ID | Column Type | 結果 |
 |---|---|---|
-| **T-1-A** | 1行テキスト | **Agent recommendation / CANDIDATE** |
-| T-1-B | 複数行テキスト / Note | NOT recommended（oversized；no array/JSON need） |
-| T-1-HOLD | type 未決定 | available |
-| T-1-X | Human 明示 | available |
+| **T-1-A** | 1行テキスト | **SELECTED / Accepted** |
+| T-1-B | 複数行テキスト / Note | NOT SELECTED（oversized；no array/JSON need） |
+| T-1-HOLD | type 未決定 | NOT SELECTED |
+| T-1-X | Human 明示 | NOT SELECTED |
 
 ```text
 Logical type = string?（optional single string id）
@@ -152,10 +166,10 @@ Logical requiredness: **OPTIONAL**
 
 | ID | absence / invalid semantics | 結果 |
 |---|---|---|
-| **O-1-A** | logical absence ↔ persistence blank/null/missing = success absent。present value must be non-empty string。empty/whitespace/null-as-present/non-string = fail-closed。no default synthesis | **Agent recommendation / CANDIDATE** |
-| O-1-B | empty string also treated as absence | NOT recommended（collapses invalid present with absence；ambiguity） |
-| O-1-HOLD | optional semantics 未決定 | available |
-| O-1-X | Human 明示 | available |
+| **O-1-A** | logical absence ↔ persistence blank/null/missing = success absent。present value must be non-empty string。empty/whitespace/null-as-present/non-string = fail-closed。no default synthesis | **SELECTED / Accepted** |
+| O-1-B | empty string also treated as absence | NOT SELECTED（collapses invalid present with absence；ambiguity） |
+| O-1-HOLD | optional semantics 未決定 | NOT SELECTED |
+| O-1-X | Human 明示 | NOT SELECTED |
 
 ```text
 Critical distinction（O-1-A）:
@@ -172,10 +186,10 @@ Classification: **CANDIDATE**（aligned to C-1-A + O-1-A）
 
 | ID | Read rule | 結果 |
 |---|---|---|
-| **R-1-A** | null/missing → undefined（absent）。valid non-empty string → string pass-through（no trim）。empty/whitespace/non-string → fail-closed。self-reference vs snapshotId NOT decided in column read alone | **Agent recommendation / CANDIDATE** |
-| R-1-B | empty → absent | NOT recommended with O-1-A |
-| R-1-HOLD | read 未決定 | available |
-| R-1-X | Human 明示 | available |
+| **R-1-A** | null/missing → undefined（absent）。valid non-empty string → string pass-through（no trim）。empty/whitespace/non-string → fail-closed。self-reference vs snapshotId NOT decided in column read alone | **SELECTED / Accepted** |
+| R-1-B | empty → absent | NOT SELECTED with O-1-A |
+| R-1-HOLD | read 未決定 | NOT SELECTED |
+| R-1-X | Human 明示 | NOT SELECTED |
 
 ### W-1 — Write Conversion
 
@@ -183,10 +197,10 @@ Classification: **CANDIDATE**
 
 | ID | Write rule | 結果 |
 |---|---|---|
-| **W-1-A** | undefined/absent → persistence blank/null（clear/omit）。valid non-empty string → Text pass-through（no trim）。empty/whitespace/null → fail-closed（validated domain should not emit） | **Agent recommendation / CANDIDATE** |
-| W-1-B | absent → omit only；never clear existing | available（needs stronger adapter clear policy；not required by SoT） |
-| W-1-HOLD | write 未決定 | available |
-| W-1-X | Human 明示 | available |
+| **W-1-A** | undefined/absent → persistence absence semantic（clear/omit/null deferred to adapter）。valid non-empty string → Text pass-through（no trim）。empty/whitespace/null → fail-closed（validated domain should not emit） | **SELECTED / Accepted** |
+| W-1-B | absent → omit only；never clear existing | NOT SELECTED |
+| W-1-HOLD | write 未決定 | NOT SELECTED |
+| W-1-X | Human 明示 | NOT SELECTED |
 
 ```text
 Write-clear representation（W-1-A）:
@@ -224,23 +238,17 @@ unless a later Accepted architecture explicitly requires it.
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | 本 Decision ≠ SharePoint create GO ≠ VR-1 PASS ≠ mapping-complete PASS ≠ adapter Implementation Start ≠ Deploy | **REQUIRED / CANDIDATE lock** |
+| **XB-1** | 本 Decision ≠ SharePoint create GO ≠ VR-1 PASS ≠ mapping-complete PASS ≠ adapter Implementation Start ≠ Deploy | **SELECTED / Accepted** |
 | XB-2 | Column contract Acceptance と同時に create / adapter start | NOT SELECTABLE |
 
-## 4. Agent recommendation（NOT Acceptance）
+## 4. Agent recommendation（historical；NOT Acceptance）
 
 ```text
-Agent recommendation:
+Agent recommendation（historical）:
   N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
 
-Meaning（candidate only）:
-  Internal Name = supersedesSnapshotId
-  Display Name = 訂正元スナップショットID
-  Column Type = 1行テキスト
-  Optional absence = blank/null/missing
-  Invalid present empty/whitespace = fail-closed
-  Read/Write = strict identity when present；no trim-to-accept
-  create / VR-1 / mapping-complete / adapter remain later gates
+Human Decision（Accepted / LOCKED）:
+  same set — see Acceptance 正本
 
 Agent recommendation alone is NOT Human Acceptance evidence.
 ```
@@ -248,37 +256,43 @@ Agent recommendation alone is NOT Human Acceptance evidence.
 ## 5. Mapping-complete impact
 
 ```text
-If this Decision Accepted:
+Decision Accepted:
   MAP-AS-010 disposition = PERSISTED（already）
-  column contract = Accepted
+  column contract = ACCEPTED / LOCKED
   physical column = still NOT PRESENT
   VR-1 = NOT RUN
+  column-ready = NO
 
 Therefore:
   mapping-complete = NOT YET
-  Human SharePoint create = NEXT CANDIDATE GATE（not this run）
+  Human SharePoint create = next candidate gate after PR Ready/Merge
+  （not authorized by this Acceptance）
 ```
 
 ## 6. Explicit OUT / non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
-  Human Acceptance by itself
-  treating Agent recommendation as Accepted
+This CONSUMED packet / Acceptance does NOT authorize:
   SharePoint column create / rename / delete
   VR-1 execution
   mapping-complete PASS
   adapter / DTO / schema wiring
   Issue mutation
-  Ready / Merge
+  Ready / Merge without separate Human authorization
   Deploy / real data
+  P2-002 closure
 ```
 
 ## 7. Next
 
 ```text
-Decision-AS-MAP010-COLUMN-1: OPEN / NOT ACCEPTED
-Next gate: HUMAN ACCEPTANCE OF MAP-AS-010 COLUMN CONTRACT
+Decision-AS-MAP010-COLUMN-1: Accepted / LOCKED
+  / N-1-A + N-2-A + T-1-A + O-1-A + R-1-A + W-1-A + XB-1
+Packet: CONSUMED
+MAP-AS-010 column contract: ACCEPTED / LOCKED
+MAP-AS-010 column-ready: NO
+mapping-complete: NOT YET
+Next gate: HUMAN READY DECISION FOR PR #209
 Still HOLD / FORBIDDEN:
   SharePoint create / VR-1
   Implementation Start / adapter
