@@ -216,7 +216,11 @@ Stop point（Human 2026-08-10）:
   do not auto-start #6 / #8 body updates
 
 When Human resumes:
-  Phase ② #6 / #8 resync（#8 remains OPEN as Decision Ledger）
+  Phase ② = #6 / #8 body Current-state reconciliation ONLY
+    draft: issue-status-reconciliation-resync-6-8.md
+    #8 remains OPEN as Decision Ledger
+    do not touch #20+ / UI / EG-1 Human create / Phase ③
+  then Phase ② read-back（#6 OPEN / #8 OPEN）
   then Phase ③ continuity re-check（no batch Close）
 
 Do not touch now:

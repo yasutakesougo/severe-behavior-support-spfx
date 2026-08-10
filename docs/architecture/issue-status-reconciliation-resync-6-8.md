@@ -9,11 +9,16 @@ Parent:
 ```text
 Status: READY for Human Phase ② / NOT STARTED
   （Phase ① → ①b = PASS；Human stopped before body updates）
-Both Issues: KEEP OPEN
+Scope: #6 and #8 Issue body Current-state reconciliation ONLY
+Both Issues: KEEP OPEN（#8 = Decision Ledger；must remain OPEN）
 Agent GitHub Issue mutation: FORBIDDEN
 Human body / Current / Gate / Dependency patch: AUTHORIZED（Human resume）
 Close #6 / #8: FORBIDDEN by this Phase
-Do not mix EG-1 Human create into this Phase
+Out of scope（do not touch）:
+  #20以降 / UI Issues（#68〜#71 / #125）
+  EG-1 Human create（parallel process）
+  Phase ③ continuity Issues（#4 / #9 / #12 / #15〜#19）
+  Implementation Start / SharePoint / adapter / Deploy
 ```
 
 ## Shared SoT freeze（at draft write-up）
@@ -72,9 +77,12 @@ Project location:
 
 Issue hygiene:
   Decision-ISSUE-STATUS-RECONCILE-1 SELECTED
-  Close candidates: #5 / #10 / #11（Phase ①）
+  Phase ① Close: #5 CLOSED/completed；#10 CLOSED/completed；#11 CLOSED/not_planned
+  Phase ①b: PASS
   This Issue (#6): KEEP OPEN as trial parent
   Decision ledger (#8): KEEP OPEN + reconcile（not Close）
+  Phase ② scope: #6 / #8 body Current-state only
+  Out of scope now: #20+ / UI / EG-1 Human create / Phase ③
 
 Do not use pre-CN-1 Issue body markers（Implemented:0 / 試験サイト未確定 /
 承認前 Gate など）as current project truth.
@@ -165,10 +173,19 @@ Do not:
 | 1 | Confirm Phase ① Close outcomes recorded | **DONE** |
 | 2 | Patch #6 Current status with draft above | NOT STARTED |
 | 3 | Patch #8 Current status / DEC-008 sync note | NOT STARTED |
-| 4 | Optionally sync other clearly Accepted DEC rows | NOT STARTED |
+| 4 | Optionally sync other clearly Accepted DEC rows | NOT STARTED（optional；not required to finish Phase ②） |
 | 5 | Leave #6 / #8 OPEN | required |
+| 6 | Read-back: #6 OPEN；#8 OPEN；no #20+ / UI / EG-1 touched | required before Phase ③ |
 
 ```text
+Phase ② success criteria:
+  #6 body Current status reconciled
+  #8 body Current status / sync note reconciled
+  #6 still OPEN
+  #8 still OPEN（Decision Ledger）
+  #20以降 / UI / EG-1 Human create untouched
+  Phase ③ not started yet
+
 #22 dependency STALE（prior assessment）is deferred to a later resync slice.
 It is Group C backlog，not Phase ② Close/ledger work.
 ```
