@@ -19,3 +19,5 @@ export * from "./ruleset-version";
 export * from "./review-cadence";
 export * from "./review-anchor";
 export * from "./review-notice";
+export * from "./review-monitoring-guidance";
+export * from "./retention-complete-deletion-prohibition";
