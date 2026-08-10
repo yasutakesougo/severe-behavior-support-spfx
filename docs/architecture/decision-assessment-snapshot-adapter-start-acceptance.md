@@ -73,5 +73,14 @@ Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Next substantive residual = EC-3 + EC-4 Decision
   adapter client / transport方式
   P2-002 exact clear / omit mechanics
+Candidate packet（NOT Acceptance；EC-3/EC-4 still NOT YET）:
+  decision-assessment-snapshot-adapter-ec3-ec4-selection.md
+  decision-assessment-snapshot-adapter-ec3-ec4-packet.md
+  decision-assessment-snapshot-adapter-ec3-transport-comparison.md
+  decision-assessment-snapshot-adapter-ec4-clear-omit-comparison.md
+  decision-assessment-snapshot-adapter-ec3-ec4-independent-review.md
+EC-3 = NOT YET
+EC-4 = NOT YET
+P2-002 = OPEN / CARRY-FORWARD
 Implementation Start remains HOLD until that residual is Accepted and verified.
 ```

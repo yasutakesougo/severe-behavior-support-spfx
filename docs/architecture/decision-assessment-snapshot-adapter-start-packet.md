@@ -101,4 +101,10 @@ Implementation Start = HOLD
 Next substantive residual = EC-3 + EC-4
   adapter client / transport方式
   P2-002 exact clear / omit mechanics
+Candidate（READY FOR HUMAN DECISION；≠ MET）:
+  Decision-AS-ADAPTER-EC3-EC4-1
+  decision-assessment-snapshot-adapter-ec3-ec4-packet.md
+EC-3 = NOT YET
+EC-4 = NOT YET
+P2-002 = OPEN / CARRY-FORWARD
 ```

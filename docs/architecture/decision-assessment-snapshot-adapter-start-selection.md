@@ -66,4 +66,7 @@ Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 P2-002 = OPEN / CARRY-FORWARD
 Implementation Start = HOLD
 Next substantive residual = adapter client / transport + P2-002 exact mechanics Decision
+Candidate packet = Decision-AS-ADAPTER-EC3-EC4-1（Human Decision pending）
+EC-3 = NOT YET
+EC-4 = NOT YET
 ```
