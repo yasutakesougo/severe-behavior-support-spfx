@@ -18,14 +18,13 @@ AcceptanceはAIS-1-Bを条件付きGOとしてLOCKしている。
 
 AcceptanceだけでImplementation Startへ進めていない。
 
-Living sync（post Decision-AS-ADAPTER-EC3-EC4-1）:
+Living sync（post Decision-AS-ADAPTER-IMPLEMENTATION-START-1）:
 
 ```text
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
 P2-002 = CLOSED
-Implementation Start = HOLD
-EC-5..EC-8 = still required
+Implementation Start = GO-SLICE-1
+Next = HUMAN READY DECISION FOR PR #214
 ```
 
 SharePoint / M365 mutation、Deploy、real dataを認可していない。
@@ -43,8 +42,9 @@ runtime dependency install を認可していない（DP-1-A）。
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
-Implementation Start = HOLD
-adapter code = NOT STARTED
+Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = ACCEPTED / LOCKED / GO-SLICE-1
+Implementation Start = GO-SLICE-1
+adapter code in PR #214 recording = NOT STARTED
 runtime dependency addition = NOT AUTHORIZED
 SharePoint / M365 mutation by Agent = 0
 Deploy = 0
@@ -55,5 +55,5 @@ Verdict:
 
 ```text
 PASS — ACCEPTANCE CONSISTENT（living sync）
-Next gate: AIS-1-B Implementation Start gate
+Next gate: HUMAN READY DECISION FOR PR #214
 ```

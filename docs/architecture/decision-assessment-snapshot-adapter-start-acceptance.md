@@ -50,15 +50,22 @@ EC-3 = MET
 EC-4 = MET
   Authority: same Acceptance（CO-1-A + SV-1-A）
   P2-002 clear/omit mechanics Accepted / verified（synthetic/local）
-EC-5..EC-8 = still required at Implementation Start gate（not waived）
+EC-5 = MET
+EC-6 = MET
+EC-7 = MET
+EC-8 = MET
+  Authority: AIS-1-B Implementation Start gate determination
+  Evidence: decision-assessment-snapshot-adapter-impl-start-gate.md
 ```
 
 AIS-1-B Acceptance 自体は EC-3 / EC-4 を満たさなかった。
 
 EC-3 / EC-4 の MET は Decision-AS-ADAPTER-EC3-EC4-1 Acceptance により記録する。
 
-したがって Implementation Start はなお HOLD である
-（EC-5..EC-8 + separate Implementation Start GO が必要）。
+EC-5..EC-8 の MET は Implementation Start gate determination により記録する。
+
+Living Implementation Start は Decision-AS-ADAPTER-IMPLEMENTATION-START-1 により
+GO-SLICE-1 である（本 AIS-1-B Acceptance ≠ GO）。
 
 ## P2-002
 
@@ -80,15 +87,20 @@ Accepted clear / omit（verbatim；再解釈しない）:
 ## Boundary
 
 ```text
-Implementation Start = HOLD
-adapter / DTO / schema code mutation = NOT AUTHORIZED
+Implementation Start = GO-SLICE-1
+  Authority: Decision-AS-ADAPTER-IMPLEMENTATION-START-1 Accepted / LOCKED
+adapter code in Acceptance recording PR #214 = NOT STARTED（docs-only）
 runtime dependency addition = NOT AUTHORIZED
-  （DP-1-A LOCKED by EC3-EC4-1；unchanged）
+  （DP-1-A LOCKED by EC3-EC4-1；GO-SLICE-1 LOCKED OUT）
 SharePoint / M365 / Entra mutation by Agent = FORBIDDEN
 Deploy / real data = NO-GO
 Issue mutation = NOT AUTHORIZED
 Ready / Merge = separate Human GO
 ```
+
+AIS-1-B Acceptance 自体は Implementation Start を GO にしなかった。
+
+GO-SLICE-1 は Decision-AS-ADAPTER-IMPLEMENTATION-START-1 Acceptance により記録する。
 
 ## Next
 
@@ -96,14 +108,18 @@ Ready / Merge = separate Human GO
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
   / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
-EC-1 = MET
-EC-2 = MET
-EC-3 = MET
-EC-4 = MET
+Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = ACCEPTED / LOCKED
+  / GO-SLICE-1
+EC-1..EC-8 = MET
 P2-002 = CLOSED
-Implementation Start = HOLD
-Next gate: AIS-1-B Implementation Start gate
-  （EC-5..EC-8 preserved；separate Human GO required）
+Implementation Start = GO-SLICE-1
+Next PR process gate: HUMAN READY DECISION FOR PR #214
+Next substantive code work（separate run）:
+  implement GO-SLICE-1 under LOCKED OUT / FORBIDDEN
+Acceptance 正本（Implementation Start）:
+  decision-assessment-snapshot-adapter-implementation-start-acceptance.md
+Gate determination:
+  decision-assessment-snapshot-adapter-impl-start-gate.md
 Acceptance 正本（EC-3/EC-4）:
   decision-assessment-snapshot-adapter-ec3-ec4-acceptance.md
 ```

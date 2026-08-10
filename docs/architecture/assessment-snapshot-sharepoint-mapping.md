@@ -64,12 +64,15 @@ Persistence placement（OBSERVED；再 Decision しない）:
   Evidence: decision-assessment-snapshot-column-create-vr1-evidence.md
           + decision-assessment-snapshot-map010-column-create-vr1-evidence.md
 
-Implementation Start: HOLD
-SharePoint adapter / schema mapping implementation: HOLD
+Implementation Start: GO-SLICE-1
+  Authority: Decision-AS-ADAPTER-IMPLEMENTATION-START-1 Accepted / LOCKED
+SharePoint adapter code in Acceptance recording PR: NOT STARTED（docs-only）
 Additional SharePoint column creation: FORBIDDEN without separate GO
 Internal Name invention: FORBIDDEN
 P2-002 clear/omit transport API: CLOSED
   Authority: Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A under TC-1-A
+live SharePoint tenant I/O: FORBIDDEN（GO-SLICE-1 LOCKED OUT）
+runtime dependency install: FORBIDDEN
 Deploy / real data: NO-GO
 ```
 
@@ -236,8 +239,11 @@ ENV-001〜003: DERIVED
 MAP-AS-010: PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 mapping-complete: PASS / COMPLETE
 P2-002: CLOSED（Decision-AS-ADAPTER-EC3-EC4-1 / CO-1-A）
-EC-3: MET / EC-4: MET（AIS-1-B）
-Next gate: AIS-1-B Implementation Start gate
-Still HOLD:
-  Implementation Start / adapter impl / Deploy
+EC-1..EC-8: MET（AIS-1-B）
+Implementation Start: GO-SLICE-1
+  Acceptance: decision-assessment-snapshot-adapter-implementation-start-acceptance.md
+Next PR process gate: HUMAN READY DECISION FOR PR #214
+Next code work（separate run）: implement GO-SLICE-1 under LOCKED OUT
+Still FORBIDDEN:
+  live tenant I/O / runtime dep install / Deploy / real data
 ```

@@ -21,16 +21,17 @@ candidate-era では P2-002 を勝手に Close していなかった。
 
 Agent recommendationのAIS-1-BはHuman Acceptanceと明確に分離されている。
 
-## Living status（post Decision-AS-ADAPTER-EC3-EC4-1）
+## Living status（post Decision-AS-ADAPTER-IMPLEMENTATION-START-1）
 
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
   / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
-EC-3 = MET
-EC-4 = MET
+Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = ACCEPTED / LOCKED / GO-SLICE-1
+EC-1..EC-8 = MET
 P2-002 = CLOSED
-Implementation Start = HOLD
+Implementation Start = GO-SLICE-1
+Next = HUMAN READY DECISION FOR PR #214
 ```
 
 Acceptance IR（AIS-1-B living）:
@@ -48,8 +49,8 @@ Acceptance IR（EC-3/EC-4）:
 ## Boundary check
 
 ```text
-Implementation Start = HOLD
-adapter code = NOT STARTED
+Implementation Start = GO-SLICE-1
+adapter code in PR #214 recording = NOT STARTED
 SharePoint / M365 mutation by Agent = 0
 Deploy = 0
 real data = NO-GO
@@ -59,5 +60,5 @@ Verdict:
 
 ```text
 PASS — historical candidate IR remains consistent
-Next gate: AIS-1-B Implementation Start gate
+Next gate: HUMAN READY DECISION FOR PR #214
 ```

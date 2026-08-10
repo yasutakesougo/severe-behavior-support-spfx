@@ -28,9 +28,10 @@ EC-3 / EC-4 residual:
   Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
     / TC-1-A + DP-1-A + CO-1-A + SV-1-A + XB-1
 Implementation Start:
-  HOLD until AIS-1-B Entry Criteria are satisfied and separate GO
-adapter / DTO / schema wiring:
-  HOLD
+  GO-SLICE-1
+  Authority: Decision-AS-ADAPTER-IMPLEMENTATION-START-1 Accepted / LOCKED
+adapter code in Acceptance recording PR:
+  NOT STARTED（docs-only）
 Deploy / real data:
   NO-GO
 SharePoint / M365 mutation by Agent:
@@ -46,13 +47,15 @@ MAP-AS-010 = PERSISTED / PRESENT / OBSERVED / CONFIRMED / column-ready YES
 ENV-001〜003 = DERIVED
 mapping-complete = PASS / COMPLETE
 P2-002 = CLOSED（Decision-AS-ADAPTER-EC3-EC4-1）
-EC-3 = MET
-EC-4 = MET
+EC-1..EC-8 = MET
+Implementation Start = GO-SLICE-1
 ```
 
 `mapping-complete` のPASSだけではImplementation Startを認可しない。
 
 EC-3 / EC-4 Acceptance だけでは Implementation Start を認可しない（XB-1）。
+
+GO-SLICE-1 は Decision-AS-ADAPTER-IMPLEMENTATION-START-1 により記録する。
 
 ## Selection meaning
 
@@ -69,10 +72,9 @@ EC-3 / EC-4 は Decision-AS-ADAPTER-EC3-EC4-1 により Accepted / MET。
 ```text
 Decision-AS-ADAPTER-START-1 = ACCEPTED / LOCKED as AIS-1-B
 Decision-AS-ADAPTER-EC3-EC4-1 = ACCEPTED / LOCKED
+Decision-AS-ADAPTER-IMPLEMENTATION-START-1 = ACCEPTED / LOCKED / GO-SLICE-1
 P2-002 = CLOSED
-EC-3 = MET
-EC-4 = MET
-Implementation Start = HOLD
-Next gate = AIS-1-B Implementation Start gate
-  （EC-5..EC-8 preserved；separate Human GO）
+EC-1..EC-8 = MET
+Implementation Start = GO-SLICE-1
+Next PR process gate = HUMAN READY DECISION FOR PR #214
 ```
