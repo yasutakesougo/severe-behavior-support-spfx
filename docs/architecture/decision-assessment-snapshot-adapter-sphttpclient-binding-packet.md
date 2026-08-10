@@ -8,11 +8,15 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-BINDING-1
 Kind: Prerequisite / sequencing Decision packet（docs-only）
-Status: PACKET / AWAITING HUMAN DECISION
+Status: CONSUMED（Human Decision Accepted / LOCKED / B1）
 Baseline main: fbf61635a0aaa4ead01c94e0efa70927bc1e2757
+Human Decision: ACCEPT B1
+PR: #220
 
 Selection:
   decision-assessment-snapshot-adapter-sphttpclient-binding-selection.md
+Acceptance:
+  decision-assessment-snapshot-adapter-sphttpclient-binding-acceptance.md
 IR:
   decision-assessment-snapshot-adapter-sphttpclient-binding-independent-review.md
 
@@ -23,11 +27,17 @@ Authority（再 Decision しない）:
   Decision-AS-ADAPTER-NEXT-SLICE-1 = ACCEPTED / LOCKED / ACCEPT A1
   IR-P2-001 = CLOSED / ACCEPTED RESIDUAL / NON-BLOCKING
 
-IR-P2-002: OPEN / CARRY-FORWARD（this packet）
-Implementation Start（binder code）: NOT AUTHORIZED by this packet
+Decision-AS-ADAPTER-SPHTTPCLIENT-BINDING-1:
+  ACCEPTED / LOCKED / B1 PREREQUISITE-FIRST
+
+IR-P2-002: OPEN / CARRY-FORWARD
+runtime dependency version: UNRESOLVED
+Implementation Start（binder code）: NOT AUTHORIZED
 runtime dependency install: NOT AUTHORIZED（DP-1-A）
+SPFx scaffold: NOT AUTHORIZED
 live SharePoint / M365 / Entra I/O: FORBIDDEN
 Deploy / real data: NO-GO
+Next gate: VERSION + SCAFFOLD/DEPENDENCY RESOLUTION
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -170,28 +180,31 @@ B3 cannot legitimately be selected now.
 | Live tenant write GO | NO | NO | not required for synthetic binder |
 | Deploy GO | NO | NO | not required for synthetic binder |
 
-## 6. Recommended gate ordering（do not collapse）
+## 6. LOCKED SAFE ORDER after ACCEPT B1（do not collapse）
 
 ```text
-Safe sequence（canonical）:
+LOCKED SAFE ORDER:
 
-1. Prerequisite Decision（this Decision packet / Human selection）
-2. SPFx scaffold + dependency version-resolution + install Human GO
-   （explicit；separate；exact @microsoft/sp-* version must be resolved first）
-3. Synthetic binder Implementation Start Human GO
-4. Binder implementation + synthetic/local tests
-5. Human Ready / Merge for binder slice
-6. Separate live-read verification Human GO
-7. Separate live-write / Deploy Human GO
+1. Resolve exact SPFx / @microsoft/sp-* package compatibility/version
+2. Human Decision for SPFx scaffold + dependency addition
+3. Human Implementation Start GO for synthetic SPHttpClient binder slice
+4. Implement binder + synthetic/local tests
+5. Independent Review
+6. Human Ready
+7. Human Merge
+8. Separate live-read verification GO
+9. Separate live-write / Deploy GO
 
 Gates MUST NOT be collapsed.
-Selecting this packet / B1 / B2 does NOT skip to steps 2–7.
+ACCEPT B1 completes only the prerequisite Decision selection.
+Steps 1–9 above remain unauthorized except as future ordered gates.
+Next gate now: VERSION + SCAFFOLD/DEPENDENCY RESOLUTION（step 1）.
 ```
 
 ```text
 Narrower sequence supported now?
-  Only step 1（prerequisite Decision recording）.
-  Steps 2+ remain unauthorized.
+  Prerequisite Decision = COMPLETE（ACCEPT B1）.
+  Next actionable gate = version resolution（still docs / Human；no install）.
   No canonical authority supports binder code before scaffold/dep GO.
 ```
 
@@ -206,11 +219,12 @@ Require version-resolution before any dependency installation GO.
 Do NOT infer that “SPFx 1.23.2” automatically grants package install.
 ```
 
-## 8. Authorization snapshot（now）
+## 8. Authorization snapshot（after ACCEPT B1）
 
 | Axis | Authorized now? |
 |---|---|
-| New Human Decision for this packet | **REQUIRED**（Human selection of B1/B2/B3） |
+| Prerequisite Decision（this Decision） | **COMPLETE** — ACCEPT B1 |
+| Runtime dependency version | **UNRESOLVED** |
 | Runtime dependency install | **NO** |
 | SPFx scaffold creation | **NO** |
 | Binder Implementation Start | **NO** |
@@ -218,6 +232,7 @@ Do NOT infer that “SPFx 1.23.2” automatically grants package install.
 | Live tenant write | **NO** |
 | Deploy / real data | **NO** |
 | Closing IR-P2-002 | **NO**（remains OPEN until concrete binder exists） |
+| Next gate | **VERSION + SCAFFOLD/DEPENDENCY RESOLUTION** |
 
 ## 9. FORBIDDEN in this packet / PR
 
