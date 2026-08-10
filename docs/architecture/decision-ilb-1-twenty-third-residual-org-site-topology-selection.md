@@ -103,17 +103,18 @@ Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-
   List B = AssessmentSnapshot
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
   SupportPlans / AssessmentSnapshots
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN
 Next Human gate: FIXED
-  EXPLICIT SITE/LIST CREATION EXECUTION
+  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Execution GO: NOT GIVEN / NO-GO
 
-Still HOLD / NO-GO:
-  Site / List creation（含む placeholder 作成）
-  PROVISION-EXEC Execution GO
+Still HOLD / NO-GO for Agent / AI procedure:
+  SharePoint tenant mutation by Agent
+  Placeholder creation
   Implementation Start
   SharePoint / adapter / application code
-  tenant mutation
   Schema / DTO code assignment
   FindingCode / A-5
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN

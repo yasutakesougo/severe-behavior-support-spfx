@@ -73,13 +73,15 @@ Selection CONSUMED → Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED
   List B = AssessmentSnapshots
 
 Next gate: FIXED
-  EXPLICIT SITE/LIST CREATION EXECUTION
-  → decision-assessment-snapshot-pilot-list-names-next-gate.md
-  Execution GO: NOT GIVEN / NO-GO
+  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+  Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED
+  Execution GO: GIVEN
+  AI SharePoint mutation: FORBIDDEN
 
-Still HOLD / NO-GO:
-  Site / List creation
+Still HOLD / NO-GO for Agent / AI procedure:
+  SharePoint tenant mutation by Agent
   Placeholder creation
   Implementation Start
-  tenant mutation
+  custom columns / permissions
 ```

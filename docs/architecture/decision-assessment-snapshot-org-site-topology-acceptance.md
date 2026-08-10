@@ -267,14 +267,18 @@ Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-
   List B = AssessmentSnapshot
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
   SupportPlans / AssessmentSnapshots
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003）
+Separate Human creation: AUTHORIZED / NOT STARTED
+SV-1 / LV-1: NOT CONFIRMED
 Next gate: FIXED
-  EXPLICIT SITE/LIST CREATION EXECUTION
+  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Execution GO: NOT GIVEN / NO-GO
 Common management Site name: NOT SELECTED / OPEN
-Site / List creation: NO-GO
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Placeholder creation: FORBIDDEN
-PROVISION-EXEC Execution GO: NOT GIVEN
+PROVISION-EXEC Execution GO: GIVEN（separate Human process；Agent mutation FORBIDDEN）
 New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START

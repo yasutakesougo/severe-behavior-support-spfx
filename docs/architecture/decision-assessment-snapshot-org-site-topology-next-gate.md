@@ -131,11 +131,11 @@ This next-gate definition alone does NOT:
   create Site / List / columns
   perform tenant mutation
   mark SV-1 / LV-1 CONFIRMED
-  authorize PROVISION-EXEC Execution GO
+  treat Execution GO as Agent SharePoint mutation permission
   start Implementation / SharePoint code / Deploy
 
-Identity / Site naming is Accepted / LOCKED.
-Creation remains a later Human execution gate after List names exist.
+Identity / List names / Provision Exec are Accepted / LOCKED.
+Actual creation is a separate Human process；Agent mutation remains FORBIDDEN.
 ```
 
 ## 7. Current state
@@ -143,17 +143,20 @@ Creation remains a later Human execution gate after List names exist.
 ```text
 Decision-AS-ORG-SITE-TOPOLOGY-1: Accepted / LOCKED / OT-1 + FS-1 + SP-1 + PP-1 + PH-1 + XB-1
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1 + FK-1 + SN-1 + LN-D + XB-1
-Active next gate: EXPLICIT SITE/LIST CREATION EXECUTION
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
   SupportPlans / AssessmentSnapshots
-Execution GO: NOT GIVEN / NO-GO
-Site / List creation: NO-GO
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN
+Active next gate: SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for explicit Site/List creation execution GO
-  auto-start: FORBIDDEN
+  waiting for separate Human creation + VR-1 evidence return
+  Agent auto-start: FORBIDDEN
 ```

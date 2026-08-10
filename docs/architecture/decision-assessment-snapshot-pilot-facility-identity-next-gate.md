@@ -45,11 +45,12 @@ Sequence:
   4. STOP（作成はさらに別 Human execution gate）
 
 Current step:
-  DONE through List names Accept
-  Active next = EXPLICIT SITE/LIST CREATION EXECUTION（NO-GO）
+  DONE through List names Accept + Provision Exec Accept
+  Active next = SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  Execution GO = GIVEN；Agent mutation = FORBIDDEN
 
-NOT next without explicit execution GO:
-  Site/List creation
+NOT next for Agent / AI procedure:
+  Site/List creation by Agent
   creating with XXXXX / YYYYY
 ```
 
@@ -74,7 +75,7 @@ Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
 ## 3. Out of scope（unchanged）
 
 ```text
-Site / List creation: NO-GO
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 custom columns: NO-GO
 Internal Column Names: OPEN / post-creation CN-1
 permissions / config: NO-GO
@@ -95,11 +96,11 @@ This next-gate definition alone does NOT:
   create Site / List / columns
   perform tenant mutation
   mark SV-1 / LV-1 CONFIRMED
-  authorize PROVISION-EXEC Execution GO
+  treat Execution GO as Agent SharePoint mutation permission
   start Implementation / SharePoint code / Deploy
 
-Requires separate explicit Human Decision for List names.
-Creation remains a later Human execution gate after List names exist.
+List names and Provision Exec are Accepted / LOCKED.
+Actual creation is a separate Human process；Agent mutation remains FORBIDDEN.
 ```
 
 ## 5. Current state
@@ -111,16 +112,18 @@ Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1 + VP-1 + EX-1 + NB-
   List B = AssessmentSnapshot
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
   SupportPlans / AssessmentSnapshots
-Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN
+Next gate: FIXED = SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Execution GO: NOT GIVEN / NO-GO
-Site / List creation: NO-GO
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
 Deploy / real data: NO-GO
 
 Current stop:
-  waiting for explicit Site/List creation execution GO
-  auto-start: FORBIDDEN
+  waiting for separate Human creation + VR-1 evidence return
+  Agent auto-start: FORBIDDEN
 ```

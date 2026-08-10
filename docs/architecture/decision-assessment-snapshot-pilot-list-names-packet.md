@@ -124,9 +124,12 @@ This packet / Acceptance does NOT authorize:
 ```text
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
   → decision-assessment-snapshot-pilot-list-names-acceptance.md
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN
 Next gate: FIXED
-  EXPLICIT SITE/LIST CREATION EXECUTION
-  Execution GO: NOT GIVEN / NO-GO
-Site / List creation: NO-GO
+  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+  → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Implementation Start: HOLD
 ```

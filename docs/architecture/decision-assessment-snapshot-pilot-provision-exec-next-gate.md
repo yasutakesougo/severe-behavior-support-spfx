@@ -1,112 +1,59 @@
-# Next gate — Explicit Site/List creation execution
+# Decision-AS-PILOT-PROVISION-EXEC-1 — Next Gate
 
-この文書は、**Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1** 後の
-次 Human gate を固定する正本である。
+Status: OPEN / BLOCKED awaiting Human separate creation process + VR-1 evidence return  
+Date: 2026-08-10  
+Base: Decision-AS-PILOT-PROVISION-EXEC-1 Acceptance (`PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1`)
 
-List names 正本:
-[`decision-assessment-snapshot-pilot-list-names-acceptance.md`](./decision-assessment-snapshot-pilot-list-names-acceptance.md)
+---
 
-Site identity 正本:
-[`decision-assessment-snapshot-pilot-facility-identity-acceptance.md`](./decision-assessment-snapshot-pilot-facility-identity-acceptance.md)
+## 1. What is now authorized
 
-Ownership 正本:
-[`decision-assessment-snapshot-pilot-list-ownership-acceptance.md`](./decision-assessment-snapshot-pilot-list-ownership-acceptance.md)
+| Item | Status |
+|---|---|
+| Execution GO for intended Site/List creation payload | GIVEN (`EG-1`) |
+| Intended Sites (`severe-support-isogo` / `severe-support-honmoku`) | AUTHORIZED for Human creation |
+| Intended Lists (`SupportPlans` / `AssessmentSnapshots` on each Site) | AUTHORIZED for Human creation |
+| Agent / AI foundation SharePoint mutation | Still FORBIDDEN (`AP-1` / DEC-AI-ORG-003) |
 
-```text
-repository: yasutakesougo/severe-behavior-support-spfx
-Kind: Next-gate definition（docs-only）
-Status: FIXED / NOT STARTED
-Authorization basis:
-  Decision-AS-PILOT-LIST-NAMES-1 = Accepted / LOCKED / LN-1 + XB-1
-  Decision-AS-PILOT-LIST-OWNERSHIP-1 = Accepted / LOCKED
-  Decision-AS-PILOT-FACILITY-IDENTITY-1 = Accepted / LOCKED
+---
 
-Next gate:
-  EXPLICIT SITE/LIST CREATION EXECUTION
+## 2. What Human/admin must do next (separate process)
 
-Execution GO: NOT GIVEN / NOT STARTED / NO-GO
-This document does NOT start tenant mutation.
-Naming Acceptance ≠ creation GO.
-```
+1. Create the two Sites with the LOCKED display names and URLs.
+2. On each Site, create Lists exactly named `SupportPlans` and `AssessmentSnapshots`.
+3. Do not create excluded Lists (`SBS_AUDIT_EVENTS`, DailyActivityRecords) as Assessment Snapshot pilot Lists.
+4. Capture VR-1 evidence (Site URL, Site title, List titles, timestamps / operator note).
+5. Return that evidence into the repository decision trail.
 
-Live gate（Ready / Merge / review 進行）は repository docs に書かない
-（[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
+Fail-closed (`FG-1`): stop on mismatch / conflict; no alternate names, overwrite, or blind retry.
 
-## 1. Fixed next gate
+---
 
-```text
-Next gate:
-  EXPLICIT SITE/LIST CREATION EXECUTION
+## 3. Immediate next OPEN residual after evidence return
 
-Requires separate explicit Human GO before any:
-  Site creation
-  List creation
-  tenant mutation
-```
+| Order | Residual | Why next |
+|---|---|---|
+| 1 | Site existence verification (SV-1) against intended | evidence-based CONFIRMED vs NOT CREATED |
+| 2 | List existence verification (LV-1) against intended names | evidence-based CONFIRMED vs NOT CREATED |
+| 3 | Only then: column Internal Names / schema (CN-1) | after real Lists exist and verify |
 
-## 2. Intended creation targets（LOCKED INTENDED；not created）
+---
 
-```text
-Pilot 1 Site:
-  強度行動障害支援 - 磯子活動ホーム
-  https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
+## 4. Still NO-GO / HOLD
 
-Pilot 2 Site:
-  強度行動障害支援 - 本牧活動ホーム
-  https://isogokatudouhome.sharepoint.com/sites/severe-support-honmoku
+| Item | Status |
+|---|---|
+| Custom columns / Internal Names (CN-1) | NO-GO until SV-1/LV-1 CONFIRMED |
+| Permissions / Entra / Graph mutation | HOLD |
+| Implementation Start | HOLD |
+| Deploy / real data write | HOLD |
+| Common-management site naming/creation | HOLD / later residual |
 
-Lists on each facility Site:
-  SupportPlans
-    → SupportPlan 正本 + SupportPlanVersion 同居
-  AssessmentSnapshots
-    → AssessmentSnapshot 正本
+---
 
-Status: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
-```
+## 5. Explicit non-claims
 
-## 3. Out of scope（unchanged）
-
-```text
-custom columns: NO-GO until separate gate
-Internal Column Names: OPEN / post-creation CN-1
-permissions / config: NO-GO
-Implementation Start: HOLD
-SharePoint application/adapter code: DO NOT START
-Deploy / real data: NO-GO
-Schema / DTO code assignment: HOLD
-FindingCode / A-5: HOLD
-post-retention deletion: OPEN / AUTO-START FORBIDDEN
-Common management site creation: 別 Human Decision
-XXXXX / YYYYY creation: FORBIDDEN
-```
-
-## 4. Explicit non-start
-
-```text
-This next-gate definition alone does NOT:
-  start Site / List creation
-  perform tenant mutation
-  mark SV-1 / LV-1 CONFIRMED
-  invent alternate names
-  create custom columns
-  start Implementation / SharePoint code / Deploy
-
-Requires separate explicit Human execution GO.
-```
-
-## 5. Current state
-
-```text
-Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
-Next gate: FIXED = EXPLICIT SITE/LIST CREATION EXECUTION
-Execution GO: NOT GIVEN / NOT STARTED / NO-GO
-Site / List creation: NO-GO
-Placeholder creation: FORBIDDEN
-Implementation Start: HOLD
-SharePoint implementation: DO NOT START
-Deploy / real data: NO-GO
-
-Current stop:
-  waiting for explicit Site/List creation execution GO
-  auto-start: FORBIDDEN
-```
+- This Next Gate does **not** claim Sites/Lists already exist.
+- This Next Gate does **not** authorize Agent to create SharePoint objects.
+- This Next Gate does **not** start Implementation.
+- Evidence return is required before CONFIRMED status.

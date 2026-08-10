@@ -40,6 +40,7 @@ Twenty-third residual Decision: SELECTED / CONSUMED — Multi-facility org site 
 Twenty-fourth residual Decision: SELECTED / CONSUMED — Pilot facility identity / Site naming（Decision-AS-PILOT-FACILITY-IDENTITY-1 Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1；List names DEFERRED）
 Twenty-fifth residual Decision: SELECTED / CONSUMED — Pilot List ownership / 正本責務（Decision-AS-PILOT-LIST-OWNERSHIP-1 Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1）
 Twenty-sixth residual Decision: SELECTED / CONSUMED — Pilot List names（Decision-AS-PILOT-LIST-NAMES-1 Accepted / LOCKED / LN-1+XB-1；SupportPlans / AssessmentSnapshots）
+Twenty-seventh residual Decision: SELECTED / CONSUMED — Pilot Site/List creation execution（Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1；Execution GO GIVEN；AI mutation FORBIDDEN）
 FindingCode: HOLD
 A-5: HOLD
 PR-J SharePoint / DTO / Schema code assignment: DO NOT START
@@ -70,11 +71,11 @@ DailyActivityRecords required-fields evidence: OBSERVED / CONFIRMED AS EXISTING-
 Observed existing environment: /sites/welfare + DailyActivityRecords（required 5）REFERENCE ONLY
 New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Concrete Site strings: LOCKED as HUMAN-PROVIDED / INTENDED（isogo / honmoku）
-List names: DEFERRED
+List names: LOCKED as HUMAN-PROVIDED / INTENDED（SupportPlans / AssessmentSnapshots）
 Internal Column Names: OPEN（IN-1）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED（B）
 Value Acceptance for /sites/welfare as new-SPFx target: NOT APPLICABLE
-Site / List creation: NO-GO
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Placeholder creation: FORBIDDEN
 Decision-AS-PILOT-FACILITY-IDENTITY-1: Accepted / LOCKED / PO-1+FK-1+SN-1+LN-D+XB-1
   磯子=isogo → /sites/severe-support-isogo
@@ -85,8 +86,12 @@ Decision-AS-PILOT-LIST-OWNERSHIP-1: Accepted / LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1+XB-1
   List A name = SupportPlans
   List B name = AssessmentSnapshots
-Next gate: EXPLICIT SITE/LIST CREATION EXECUTION
-Execution GO: NOT GIVEN / NO-GO
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
+  Execution GO: GIVEN
+  AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003）
+  Separate Human creation: AUTHORIZED / NOT STARTED
+  SV-1 / LV-1: NOT CONFIRMED
+Next gate: SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN
 ```
@@ -253,11 +258,22 @@ Order:
      packet: decision-assessment-snapshot-pilot-list-names-packet.md
      selection: decision-ilb-1-twenty-sixth-residual-pilot-list-names-selection.md
      next gate: decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-       = EXPLICIT SITE/LIST CREATION EXECUTION
+       = EXPLICIT SITE/LIST CREATION EXECUTION（CONSUMED via twenty-seventh）
      LOCKED INTENDED Lists:
        SupportPlans
        AssessmentSnapshots
-     Creation: NO-GO（XB-1）
+     Creation: authorized via twenty-seventh；NOT CREATED
+ 27. Twenty-seventh residual: Pilot Site/List creation execution（DONE / CONSUMED；Decision-AS-PILOT-PROVISION-EXEC-1 Accepted / LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1）
+     acceptance: decision-assessment-snapshot-pilot-provision-exec-acceptance.md
+     packet: decision-assessment-snapshot-pilot-provision-exec-packet.md
+     selection: decision-ilb-1-twenty-seventh-residual-pilot-provision-exec-selection.md
+     next gate: decision-assessment-snapshot-pilot-provision-exec-next-gate.md
+       = SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
+     Execution GO: GIVEN
+     AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003 / AP-1）
+     Separate Human creation: AUTHORIZED / NOT STARTED
+     SV-1 / LV-1: NOT CONFIRMED
+     remaining examples: VR-1 evidence / SV-1·LV-1 CONFIRMED / CN-1 / common-management naming / post-retention / DEC-015
 AS-EC-1 overall: MET / Accepted
 PR-J domain: IN PROGRESS（technical contract locked）
 Schema ID string: LOCKED = severe-behavior-support.assessment-snapshot.snapshot
@@ -282,17 +298,21 @@ SharePoint implementation: DO NOT START
 Observed existing environment: /sites/welfare + DailyActivityRecords required 5 = REFERENCE ONLY
 New SPFx deployment target: ORG TOPOLOGY LOCKED / NOT CREATED / HOLD
 Concrete Site strings: HUMAN-PROVIDED / INTENDED（isogo / honmoku）
-List names: DEFERRED
+List names: HUMAN-PROVIDED / INTENDED（SupportPlans / AssessmentSnapshots）
 Reuse existing /sites/welfare for new SPFx: NOT ADOPTED
-Site / List creation: NO-GO
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Placeholder creation: FORBIDDEN
 Decision-AS-PILOT-LIST-OWNERSHIP-1: LOCKED / LO-1+VP-1+EX-1+NB-1+XB-1
   List A = SupportPlan + SupportPlanVersion
   List B = AssessmentSnapshot
 Decision-AS-PILOT-LIST-NAMES-1: LOCKED / LN-1+XB-1
   SupportPlans / AssessmentSnapshots
-Next gate: EXPLICIT SITE/LIST CREATION EXECUTION
-Execution GO: NOT GIVEN / NO-GO
+Decision-AS-PILOT-PROVISION-EXEC-1: LOCKED / PX-1+VR-1+FG-1+XB-1+EG-1+AP-1
+  Execution GO: GIVEN
+  AI SharePoint mutation: FORBIDDEN
+  Separate Human creation: AUTHORIZED / NOT STARTED
+  SV-1 / LV-1: NOT CONFIRMED
+Next gate: SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
 List names: HUMAN-PROVIDED / INTENDED / NOT CREATED / NOT CONFIRMED
 Tenant confirmation execution: IN PROGRESS / READ-ONLY
 Post-retention deletion: OPEN / AUTO-START FORBIDDEN

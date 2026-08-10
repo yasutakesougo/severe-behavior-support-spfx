@@ -234,11 +234,15 @@ LOCKED ownership:
 Decision-AS-PILOT-LIST-NAMES-1: Accepted / LOCKED / LN-1 + XB-1
   List A = SupportPlans
   List B = AssessmentSnapshots
+Decision-AS-PILOT-PROVISION-EXEC-1: Accepted / LOCKED / PX-1 + VR-1 + FG-1 + XB-1 + EG-1 + AP-1
+Execution GO: GIVEN
+AI SharePoint mutation: FORBIDDEN（DEC-AI-ORG-003）
+Separate Human creation: AUTHORIZED / NOT STARTED
+SV-1 / LV-1: NOT CONFIRMED
 Next gate: FIXED
-  EXPLICIT SITE/LIST CREATION EXECUTION
+  SEPARATE HUMAN SITE/LIST CREATION + VR-1 EVIDENCE RETURN
   → decision-assessment-snapshot-pilot-provision-exec-next-gate.md
-Execution GO: NOT GIVEN / NO-GO
-Site / List creation: NO-GO
+Site / List creation: AUTHORIZED for Human separate process / NOT CREATED / Agent NO-GO
 Placeholder creation: FORBIDDEN
 Implementation Start: HOLD
 SharePoint implementation: DO NOT START
