@@ -63,6 +63,10 @@ Process Optimization v1（risk classification / LOW auto-loop **定義採択**�
 
 LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low-auto-pilot-v1.md`（LA1-A Option A = ACCEPTED；Pilot policy ACCEPTED；Pilot execution NOT STARTED；Implementation DO NOT START YET；Ready/Merge HUMAN-ONLY；Ready auto NOT accepted）
 
+AUTONOMY-POLICY-V1 / AUTO-1（capability / class / risk / baseline / path / limits / fail-closed / approval / audit の機械判定契約）: `docs/process/autonomy-policy-v1.md`（**CANDIDATE / NOT ACCEPTED**；Authorization effect NONE；Capability Registry と Action Gateway は NOT IMPLEMENTED；`AUTONOMY_GATEWAY_DISABLED`；`HUMAN_ONLY` / `FORBIDDEN` capability は実行経路を持たない）
+
+Development Lane Separation v1（LANE-APP / LANE-DEVOS の分離）: `docs/process/dev-lane-separation-v1.md`（rule = ACCEPTED / Human directive；encoding = CANDIDATE；LANE-DEVOS の進行は LANE-APP の gate を満たさない）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -110,6 +114,8 @@ LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low
 | Routine AUG v1 運用モデル | `docs/process/routine-aug-v1.md` |
 | Process Optimization v1（Accepted / NOT ENABLED） | `docs/process/process-optimization-v1.md` |
 | LOW-AUTO-PILOT-V1（LA1-A ACCEPTED / execution NOT STARTED） | `docs/process/low-auto-pilot-v1.md` |
+| AUTONOMY-POLICY-V1 / AUTO-1（CANDIDATE / NOT ACCEPTED） | `docs/process/autonomy-policy-v1.md` |
+| Development Lane Separation v1（rule ACCEPTED / encoding CANDIDATE） | `docs/process/dev-lane-separation-v1.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -126,3 +132,7 @@ LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low
 - Process Optimization v1 の LOW auto-loop / Start / Ready / next-slice 自動候補の有効化（`docs/process/process-optimization-v1.md` Accepted / LOCKED でも Authorization effect NONE；別 Human Explicit GO が必要）
 - LOW-AUTO-PILOT-V1 の pilot execution / first-slice Start（`docs/process/low-auto-pilot-v1.md` LA1-A ACCEPTED でも Pilot execution = NOT STARTED；別 Human execution GO が必要）
 - LOW-AUTO-PILOT-V1 recording PR の Ready / Merge（Acceptance 単独では付与しない；Human Ready / Merge Decision が必要）
+- AUTONOMY-POLICY-V1 / AUTO-1 の内容を Accepted として扱うこと（`docs/process/autonomy-policy-v1.md` は CANDIDATE / NOT ACCEPTED；Human Acceptance が必要）
+- Capability Registry / Task Packet Schema / Action Gateway / execution backend の実装（AUTO-1 candidate では認可しない）
+- Autonomy Gateway の有効化（`AUTONOMY_GATEWAY_ENABLED`）。AUTO-1 が Accepted になっても別 Human Explicit GO が必要
+- LANE-DEVOS（AI Development OS）の進行を LANE-APP（法人アプリ本体）の gate 充足として扱うこと（`docs/process/dev-lane-separation-v1.md` L-1 / L-2）
