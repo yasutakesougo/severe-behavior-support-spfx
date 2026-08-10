@@ -47,8 +47,9 @@ Issue Status Reconciliation: [`issue-status-reconciliation-packet.md`](./issue-s
 |---|---|---|
 | 1 | Issue Status Reconciliation Phase ②（#6/#8 body resync） | **SELECTED（thirty-sixth）** |
 | 2 | Decision-AS-CONVERSION-1（MAP-AS-001〜008 conversion） | **Accepted / LOCKED（CONSUMED）** |
-| 3 | CV extension（MAP-AS-009/010 / ENV） | NOT SELECTED |
-| 4 | mapping-complete determination | NOT SELECTED（≠ impl start） |
+| 3 | Decision-AS-CV-EXTENSION-1（009/010/ENV placement） | **Accepted / LOCKED（CONSUMED）** |
+| 4 | MAP-AS-010 column contract / create / VR-1 | NOT SELECTED（remaining mapping-complete blocker） |
+| 5 | mapping-complete determination | NOT SELECTED（≠ impl start；010 not column-ready） |
 
 ```text
 Thirty-sixth residual: SELECTED — Issue Status Reconciliation

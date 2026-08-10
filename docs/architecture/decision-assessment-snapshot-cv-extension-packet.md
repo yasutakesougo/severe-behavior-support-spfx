@@ -7,6 +7,9 @@
 Selected via:
 [`decision-assessment-snapshot-cv-extension-selection.md`](./decision-assessment-snapshot-cv-extension-selection.md)
 
+Accepted 正本:
+[`decision-assessment-snapshot-cv-extension-acceptance.md`](./decision-assessment-snapshot-cv-extension-acceptance.md)
+
 Impact matrix:
 [`decision-assessment-snapshot-cv-extension-impact-matrix.md`](./decision-assessment-snapshot-cv-extension-impact-matrix.md)
 
@@ -30,16 +33,26 @@ Depends on（再 Decision しない）:
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-CV-EXTENSION-1
-Kind: Human Decision packet（compare → OPEN）
-Status: OPEN / NOT ACCEPTED
+Kind: Human Decision packet（compare → CONSUMED）
+Status: CONSUMED（Human Decision Accepted / LOCKED）
 Baseline main: 4fc919f63539466eced1a6f6213512e586583de5
-Human Selection of unit: CV Extension Decision（SELECTED）
-Human Acceptance of axes: NOT YET
+Human Selection of unit: CV Extension Decision（SELECTED / CONSUMED）
+Human Decision: M-1-A + X-1-B + X-2-A + X-3-B + X-4-B + X-5-B + XB-1
+Human Selected:
+  M-1 disposition model:     M-1-A
+  X-1 findingIds:            X-1-B
+  X-2 supersedesSnapshotId:  X-2-A
+  X-3 schemaId:              X-3-B
+  X-4 schemaVersion:         X-4-B
+  X-5 dtoVersion:            X-5-B
+  Boundary:                  XB-1
+Accepted 正本:
+  decision-assessment-snapshot-cv-extension-acceptance.md
 
 Agent recommendation（historical / NOT Acceptance）:
   M-1-A + X-1-B + X-2-A + X-3-B + X-4-B + X-5-B + XB-1
 
-Current boundary（unchanged by this OPEN packet）:
+Current boundary（unchanged by Acceptance for implementation / create）:
   Implementation Start = HOLD
   adapter / schema / DTO wiring = HOLD
   SharePoint column create / mutation = FORBIDDEN
@@ -99,7 +112,7 @@ FORBIDDEN in this packet:
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **M-1-A** | mapping-complete は各 MT-1 row が Accepted disposition ∈ {PERSISTED, DERIVED, EXPLICITLY OUT/対象外} で一意に決まること。物理列必須ではない | **Agent recommendation / CANDIDATE** |
+| **M-1-A** | mapping-complete は各 MT-1 row が Accepted disposition ∈ {PERSISTED, DERIVED, EXPLICITLY OUT/対象外} で一意に決まること。物理列必須ではない | **SELECTED / Accepted** |
 | M-1-B | mapping-complete は logical/DTO field すべてに物理 SharePoint 列が存在すること | NOT recommended（MT-1 に 対象外 vocabulary あり；SYS-001 先例；VR-1 readable set と衝突しやすい） |
 | M-1-HOLD | disposition model 未決定 | available |
 | M-1-X | Human 明示 | available |
@@ -123,7 +136,7 @@ Classification: **OPTIONAL_EXPLICIT_OUT_CANDIDATE** / **DECISION_REQUIRED**
 | ID | 内容 | 結果 |
 |---|---|---|
 | X-1-A | v1 で persistence slot を採用する（naming/type は別 Decision） | available |
-| **X-1-B** | v1 で EXPLICITLY OUT / deferred（MT-1 Status=対象外）。domain OPTIONAL / NOT REQUIRED を維持 | **Agent recommendation / CANDIDATE** |
+| **X-1-B** | v1 で EXPLICITLY OUT / deferred（MT-1 Status=対象外）。domain OPTIONAL / NOT REQUIRED を維持 | **SELECTED / Accepted** |
 | X-1-HOLD | 情報不足 | NOT recommended as default（Entry #5 十分） |
 | X-1-X | Human 明示 | available |
 
@@ -148,7 +161,7 @@ Classification: **DECISION_REQUIRED**（lineage persistence）
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **X-2-A** | v1 persistence slot を採用する（naming/type は別 Decision）。correct-as-new-version の lineage link を SP に残す | **Agent recommendation / CANDIDATE** |
+| **X-2-A** | v1 persistence slot を採用する（naming/type は別 Decision）。correct-as-new-version の lineage link を SP に残す | **SELECTED / Accepted** |
 | X-2-B | v1 で EXPLICITLY OUT / deferred。lineage link は SP 非永続（別表現または非対応） | available（明示トレードオフ必要） |
 | X-2-HOLD | 情報不足 | available |
 | X-2-X | Human 明示 | available |
@@ -175,7 +188,7 @@ Classification: **DECISION_REQUIRED**
 | ID | 内容 | 結果 |
 |---|---|---|
 | X-3-A | per-item SharePoint column を採用（naming/type 別 Decision） | available |
-| **X-3-B** | physical column なし。DTO/adapter boundary で Accepted Schema ID constant を供給（DERIVED candidate） | **Agent recommendation / CANDIDATE** |
+| **X-3-B** | physical column なし。DTO/adapter boundary で Accepted Schema ID constant を供給（DERIVED） | **SELECTED / Accepted** |
 | X-3-HOLD | 情報不足 | available |
 | X-3-X | Human 明示 | available |
 
@@ -200,7 +213,7 @@ Classification: **DECISION_REQUIRED**
 | ID | 内容 | 結果 |
 |---|---|---|
 | X-4-A | per-item SharePoint column を採用（naming/type 別 Decision） | available |
-| **X-4-B** | physical column なし。DEC-6 VR-1「明示 readable set」/ DTO・adapter 供給 constant = `1.0.0` | **Agent recommendation / CANDIDATE** |
+| **X-4-B** | physical column なし。DEC-6 VR-1「明示 readable set」/ DTO・adapter 供給 constant = `1.0.0` | **SELECTED / Accepted** |
 | X-4-HOLD | 情報不足 | available |
 | X-4-X | Human 明示 | available |
 
@@ -223,7 +236,7 @@ Classification: **DECISION_REQUIRED**
 | ID | 内容 | 結果 |
 |---|---|---|
 | X-5-A | per-item SharePoint column を採用（naming/type 別 Decision） | available |
-| **X-5-B** | physical column なし。DEC-1 dtoVersion=schemaVersion；VR-1 readable set / DTO・adapter 供給 constant = `1.0.0` | **Agent recommendation / CANDIDATE** |
+| **X-5-B** | physical column なし。DEC-1 dtoVersion=schemaVersion；VR-1 readable set / DTO・adapter 供給 constant = `1.0.0` | **SELECTED / Accepted** |
 | X-5-HOLD | 情報不足 | available |
 | X-5-X | Human 明示 | available |
 
@@ -241,7 +254,7 @@ X-5-B pairs with X-4-B under VR-1 readable set；still a separate Decision axis.
 
 | ID | 内容 | 結果 |
 |---|---|---|
-| **XB-1** | 本 Decision ≠ naming Acceptance ≠ column create GO ≠ conversion codec lock ≠ adapter Implementation Start ≠ mapping-complete PASS ≠ Deploy | **REQUIRED / CANDIDATE lock** |
+| **XB-1** | 本 Decision ≠ naming Acceptance ≠ column create GO ≠ conversion codec lock ≠ adapter Implementation Start ≠ mapping-complete PASS ≠ Deploy | **SELECTED / Accepted** |
 | XB-2 | placement Acceptance と同時に create / adapter start | NOT SELECTABLE |
 
 ## 4. Agent recommendation（NOT Acceptance）
@@ -261,31 +274,29 @@ Meaning（candidate only）:
 Agent recommendation alone is NOT Human Acceptance evidence.
 ```
 
-## 5. Per-field classification summary（pre-Acceptance）
+## 5. Per-field classification summary（post-Acceptance）
 
-| Mapping ID | Classification | Recommended option |
-|---|---|---|
-| MAP-AS-009 | OPTIONAL_EXPLICIT_OUT_CANDIDATE | X-1-B |
-| MAP-AS-010 | DECISION_REQUIRED | X-2-A |
-| MAP-AS-ENV-001 | DECISION_REQUIRED | X-3-B |
-| MAP-AS-ENV-002 | DECISION_REQUIRED | X-4-B |
-| MAP-AS-ENV-003 | DECISION_REQUIRED | X-5-B |
-| M-1 model | DECISION_REQUIRED | M-1-A |
+| Mapping ID | Classification | Accepted option | Living disposition |
+|---|---|---|---|
+| MAP-AS-009 | EXPLICITLY OUT | X-1-B | 対象外 |
+| MAP-AS-010 | PERSISTED / NOT YET COLUMN-READY | X-2-A | PERSISTED placement only |
+| MAP-AS-ENV-001 | DERIVED | X-3-B | DTO/adapter constant |
+| MAP-AS-ENV-002 | DERIVED / readable-set | X-4-B | 1.0.0 |
+| MAP-AS-ENV-003 | DERIVED / readable-set | X-5-B | 1.0.0 |
+| M-1 model | LOCKED | M-1-A | disposition completeness |
 
 ```text
-No axis is ACCEPTED before Human Acceptance.
-No Internal Name / Column Type invented.
+Acceptance 正本: decision-assessment-snapshot-cv-extension-acceptance.md
+No Internal Name / Column Type invented for MAP-AS-010.
 ```
 
 ## 6. Explicit OUT / non-authorization
 
 ```text
-This OPEN packet does NOT authorize:
-  Human Acceptance by itself（Acceptance は別文書）
-  treating Agent recommendation as Accepted
+This CONSUMED packet / Acceptance does NOT authorize:
   Internal Name / Display Name / Column Type invention
   SharePoint column create / rename / delete
-  conversion codec invention for 009/010/ENV
+  conversion codec invention for MAP-AS-010
   mapping-complete PASS
   adapter / schema / DTO wiring
   Issue mutation
@@ -296,8 +307,12 @@ This OPEN packet does NOT authorize:
 ## 7. Next
 
 ```text
-Decision-AS-CV-EXTENSION-1: OPEN / NOT ACCEPTED
-Next gate: HUMAN ACCEPTANCE OF Decision-AS-CV-EXTENSION-1
+Decision-AS-CV-EXTENSION-1: Accepted / LOCKED
+  / M-1-A + X-1-B + X-2-A + X-3-B + X-4-B + X-5-B + XB-1
+  → decision-assessment-snapshot-cv-extension-acceptance.md
+mapping-complete: NOT YET
+Remaining principal blocker: MAP-AS-010 column contract / create / VR-1
+Next gate: HUMAN READY DECISION FOR PR #208
 Still HOLD / FORBIDDEN:
   Implementation Start / adapter / schema wiring
   SharePoint / M365 mutation
