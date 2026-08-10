@@ -188,8 +188,9 @@ Phase ② success criteria:
   #6 body Current status reconciled
   #8 body Current status / sync note reconciled
   #6 still OPEN
-  #8 still OPEN（Decision Ledger）
-  #20以降 / UI / EG-1 Human create untouched
+  #8 still OPEN（Decision Ledger；not Closed）
+  untouched: #4 / #9 / #12 / #15〜#19 / #20以降 / UI / EG-1 Human create
+  untouched: SharePoint / adapter / schema changes
   Phase ③ not started yet
 
 #22 dependency STALE（prior assessment）is deferred to a later resync slice.
