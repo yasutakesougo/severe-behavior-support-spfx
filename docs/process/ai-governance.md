@@ -63,6 +63,8 @@ Process Optimization v1（risk classification / LOW auto-loop **定義採択**�
 
 LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low-auto-pilot-v1.md`（LA1-A Option A = ACCEPTED；Pilot policy ACCEPTED；Pilot execution NOT STARTED；Implementation DO NOT START YET；Ready/Merge HUMAN-ONLY；Ready auto NOT accepted）
 
+AUTO-1 AUTONOMY-POLICY-V1（AI Development OS 自律実行ポリシー契約）: `docs/process/autonomy-policy-v1.md`（CANDIDATE / READY_FOR_HUMAN_ACCEPTANCE；推奨 Option AP1-A；Policy Accepted = NO；Implementation DO NOT START；Authorization effect NONE；Gateway に `pull_request.merge` を持たない設計；AssessmentSnapshot EC-3/EC-4 は別レーンで非スキップ；machine-readable = `docs/process/autonomy-policy-v1.json`）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -110,6 +112,8 @@ LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low
 | Routine AUG v1 運用モデル | `docs/process/routine-aug-v1.md` |
 | Process Optimization v1（Accepted / NOT ENABLED） | `docs/process/process-optimization-v1.md` |
 | LOW-AUTO-PILOT-V1（LA1-A ACCEPTED / execution NOT STARTED） | `docs/process/low-auto-pilot-v1.md` |
+| AUTO-1 AUTONOMY-POLICY-V1（CANDIDATE / AP1-A recommended） | `docs/process/autonomy-policy-v1.md` |
+| AUTO-1 machine-readable contract | `docs/process/autonomy-policy-v1.json` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -126,3 +130,6 @@ LOW-AUTO-PILOT-V1（pure-domain 限定 LOW auto-loop pilot）: `docs/process/low
 - Process Optimization v1 の LOW auto-loop / Start / Ready / next-slice 自動候補の有効化（`docs/process/process-optimization-v1.md` Accepted / LOCKED でも Authorization effect NONE；別 Human Explicit GO が必要）
 - LOW-AUTO-PILOT-V1 の pilot execution / first-slice Start（`docs/process/low-auto-pilot-v1.md` LA1-A ACCEPTED でも Pilot execution = NOT STARTED；別 Human execution GO が必要）
 - LOW-AUTO-PILOT-V1 recording PR の Ready / Merge（Acceptance 単独では付与しない；Human Ready / Merge Decision が必要）
+- AUTO-1 AUTONOMY-POLICY-V1 の Policy Accepted / Implementation Start / Capability Registry / Action Gateway / Cursor execution backend 実装（`docs/process/autonomy-policy-v1.md` Candidate でも Policy Accepted = NO；Human Option Acceptance と別 Implementation GO が必要）
+- AUTO-1 による AssessmentSnapshot EC-3 / EC-4 のスキップまたは adapter Implementation Start（レーン分離；Decision-AS-ADAPTER-START-1 / AIS-1-B の Entry Criteria は別レーンで維持）
+- Action Gateway への `pull_request.merge` / SharePoint schema write / Decision accept 等 FORBIDDEN・HUMAN_ONLY capability の搭載

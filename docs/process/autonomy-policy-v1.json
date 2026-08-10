@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://yasutakesougo.local/schemas/autonomy-policy-v1.json",
+  "title": "AUTONOMY-POLICY-V1",
+  "unit": "AUTO-1",
+  "policyVersion": "1.0.0-candidate",
+  "status": "CANDIDATE_READY_FOR_HUMAN_ACCEPTANCE",
+  "recommendedOption": "AP1-A",
+  "authorizationEffect": "NONE",
+  "permissionExpansion": "NONE",
+  "implementation": "DO_NOT_START",
+  "laneSeparation": {
+    "thisLane": "AI_DEVELOPMENT_OS",
+    "mustNotSkip": [
+      "AssessmentSnapshot EC-3 adapter client/transport Decision",
+      "AssessmentSnapshot EC-4 P2-002 clear/omit mechanics Decision"
+    ],
+    "corporateAppLaneCurrent": {
+      "decision": "Decision-AS-ADAPTER-START-1",
+      "humanDecision": "AIS-1-B",
+      "status": "ACCEPTED_LOCKED",
+      "implementationStart": "HOLD",
+      "nextResidual": "EC-3 + EC-4"
+    }
+  },
+  "executionBackend": {
+    "abstractName": "Cursor execution backend",
+    "languageBinding": "NONE_IN_AUTO_1",
+    "firstImplementationUnit": "AUTO-8",
+    "firstBackend": {
+      "name": "TypeScript SDK",
+      "package": "@cursor/sdk",
+      "status": "OFFICIALLY_CONFIRMED_CANDIDATE"
+    },
+    "nonBasis": [
+      "Python SDK (not confirmed in Cursor primary docs for AUTO-1)"
+    ]
+  },
+  "riskLevels": ["LOW", "MEDIUM", "HIGH"],
+  "unknownRisk": "DENY",
+  "capabilityClasses": ["AUTO_ALLOWED", "HUMAN_ONLY", "FORBIDDEN"],
+  "capabilities": [
+    { "id": "repo.read", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "code.edit", "class": "AUTO_ALLOWED", "riskMax": "LOW", "requiresAllowedPaths": true },
+    { "id": "test.run", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "branch.create", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "commit.create", "class": "AUTO_ALLOWED", "riskMax": "LOW", "requiresAllowedPaths": true },
+    { "id": "branch.push", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "pull_request.create_draft", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "pull_request.update_draft", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "ci.read", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "review.request", "class": "AUTO_ALLOWED", "riskMax": "LOW" },
+    { "id": "pull_request.ready", "class": "HUMAN_ONLY", "gatewayExpose": false },
+    { "id": "pull_request.merge", "class": "FORBIDDEN", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "decision.accept", "class": "HUMAN_ONLY", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "decision.lock", "class": "HUMAN_ONLY", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "sharepoint.schema.write", "class": "FORBIDDEN", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "sharepoint.permission.write", "class": "FORBIDDEN", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "github.permission.write", "class": "FORBIDDEN", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "secret.write", "class": "FORBIDDEN", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" },
+    { "id": "deploy.production", "class": "FORBIDDEN", "gatewayExpose": false, "denyReason": "POLICY_BLOCKED" }
+  ],
+  "gatewayExposeRule": {
+    "AUTO_ALLOWED": "may_expose_when_enabled_by_task_packet",
+    "HUMAN_ONLY": "must_not_expose_as_auto_capability",
+    "FORBIDDEN": "must_not_exist_on_gateway"
+  },
+  "capabilityDoesNotEqualAuthorization": true,
+  "denyReasonCodes": [
+    "UNKNOWN",
+    "POLICY_MISMATCH",
+    "BASELINE_MOVED",
+    "HUMAN_ONLY",
+    "OUT_OF_SCOPE",
+    "POLICY_BLOCKED"
+  ],
+  "decisionFlow": [
+    "capability_exists",
+    "task_packet_allows",
+    "risk_permits",
+    "approval_valid",
+    "baseline_matches",
+    "path_within_scope",
+    "idempotency_valid",
+    "ALLOW"
+  ],
+  "failClosed": {
+    "unknownCapability": "DENY",
+    "unknownRisk": "DENY",
+    "missingAllowedPathsOnMutation": "DENY",
+    "missingLimitsOnMutation": "DENY",
+    "ambiguousState": "DENY",
+    "unknownMapsTo": "DENY"
+  },
+  "baselineBinding": {
+    "required": true,
+    "field": "baselineSha",
+    "onMismatch": "BASELINE_MOVED"
+  },
+  "allowedPaths": {
+    "requiredFor": ["code.edit", "commit.create"],
+    "onOutside": "OUT_OF_SCOPE"
+  },
+  "limits": {
+    "maxRepairAttempts": 3,
+    "maxParallelTasks": 1,
+    "maxCommitsPerTask": "task_packet_required",
+    "maxFilesTouched": "task_packet_required",
+    "networkEgress": "deny_by_default",
+    "secretAccess": "FORBIDDEN"
+  },
+  "approval": {
+    "AUTO_ALLOWED": "task_packet_and_enablement",
+    "HUMAN_ONLY": "human_approval_bound_to_capability_target_baseline",
+    "FORBIDDEN": "still_DENY",
+    "ciPassIsNotApproval": true,
+    "independentReviewPassIsNotApproval": true,
+    "decisionAcceptedIsNotStart": true
+  },
+  "audit": {
+    "requiredFields": [
+      "timestamp",
+      "requestId",
+      "idempotencyKey",
+      "capability",
+      "taskId",
+      "baselineSha",
+      "risk",
+      "decision",
+      "reasonCode",
+      "actor",
+      "approver",
+      "paths",
+      "authorityReferences"
+    ],
+    "forbiddenToRecord": [
+      "secret_values",
+      "token_values",
+      "credential_values",
+      "production_pii",
+      "real_tenant_data"
+    ]
+  },
+  "negativeTestsBeforeLowAutoPilotV2": [
+    {
+      "id": "N1",
+      "requestCapability": "pull_request.merge",
+      "expectedDecision": "DENY",
+      "expectedReason": "POLICY_BLOCKED"
+    },
+    {
+      "id": "N2",
+      "requestCapability": "sharepoint.schema.write",
+      "expectedDecision": "DENY",
+      "expectedReason": "POLICY_BLOCKED"
+    },
+    {
+      "id": "N3",
+      "requestCapability": "decision.accept",
+      "expectedDecision": "DENY",
+      "expectedReasonOneOf": ["POLICY_BLOCKED", "HUMAN_ONLY"]
+    },
+    {
+      "id": "N4",
+      "requestCapability": "code.edit",
+      "condition": "path_outside_allowedPaths",
+      "expectedDecision": "DENY",
+      "expectedReason": "OUT_OF_SCOPE"
+    },
+    {
+      "id": "N5",
+      "requestCapability": "code.edit",
+      "condition": "stale_baselineSha",
+      "expectedDecision": "DENY",
+      "expectedReason": "BASELINE_MOVED"
+    }
+  ],
+  "nonClaims": [
+    "AUTO_ALLOWED_candidate_is_not_enabled",
+    "policy_accepted_is_not_implementation_start",
+    "prompt_text_is_not_enforcement",
+    "does_not_authorize_assessment_snapshot_adapter_start",
+    "does_not_rewrite_DEC_AA_or_Routine_AUG",
+    "does_not_grant_ready_or_merge"
+  ],
+  "nextUnits": [
+    "AUTO-2 Capability Registry",
+    "AUTO-3 Task Packet Schema",
+    "AUTO-4 Action Gateway contract",
+    "AUTO-8 Cursor execution backend"
+  ]
+}
