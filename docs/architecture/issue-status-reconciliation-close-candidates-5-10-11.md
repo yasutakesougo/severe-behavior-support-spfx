@@ -7,10 +7,12 @@ Parent:
 [`issue-status-reconciliation-packet.md`](./issue-status-reconciliation-packet.md)
 
 ```text
-Status: READY for Human Close confirmation
+Status: READY for Human Phase ① only
 Agent GitHub Issue mutation: FORBIDDEN
 Human Close: AUTHORIZED only after Human confirms each Issue
 Batch Close: FORBIDDEN（1 Issue = 1 confirmation）
+Immediate Human work: Close #5 / #10 / #11 per drafts below
+Do not start Phase ② / ③ / EG-1 create from this doc
 ```
 
 ## Shared SoT freeze（at draft write-up）
@@ -143,7 +145,7 @@ Current SoT tip: 658c790f34adb3489808121a72c6dcccbde97d2f
 
 ---
 
-## Human execution checklist
+## Human execution checklist（Phase ① → ①b）
 
 | Step | Action | Status |
 |---|---|---|
@@ -153,11 +155,31 @@ Current SoT tip: 658c790f34adb3489808121a72c6dcccbde97d2f
 | 4 | Post Close comment + Close #10 | Human |
 | 5 | Confirm #11 timeline superseded；keep #6 open | Human |
 | 6 | Post Close comment + Close #11 | Human |
-| 7 | Record results back into packet / next handoff | docs PR if needed |
+| 7 | **Read-back:** reopen list / issue pages；confirm #5 / #10 / #11 are CLOSED | Human |
+| 8 | **Read-back reason:** each Close reason reads as NOT_PLANNED or COMPLETED（superseded / consumed / timeline），not accidental | Human |
+| 9 | If 7–8 PASS → allow Phase ②；else fix / leave OPEN and stop | Human |
+| 10 | Record ①b result into docs / next handoff when convenient | docs PR if needed |
+
+### Intended Close reason mapping
+
+| Issue | Intended reason class | Meaning |
+|---|---|---|
+| #5 | COMPLETED / SUPERSEDED | Phase 0 boundary consumed by later Accepted SoT |
+| #10 | COMPLETED / SUPERSEDED | bootstrap（AGENTS / PR template / ADR path）passed |
+| #11 | NOT_PLANNED as pre-approval gate / SUPERSEDED timeline | pre-approval premise no longer matches history；#6 remains parent |
 
 ```text
 If Human rejects Close for any one Issue:
   leave that Issue OPEN
   add a short comment pointing to this doc
   do not batch-close the others as a substitute
+  Phase ①b = FAIL for the rejected Issue；do not start Phase ②
+
+Phase ①b PASS requires:
+  #5 CLOSED
+  #10 CLOSED
+  #11 CLOSED
+  #6 still OPEN
+  #8 still OPEN
+  no EG-1 / #20+ / UI mutation mixed into this step
 ```

@@ -13,12 +13,14 @@ Prior assessment:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-ISSUE-STATUS-RECONCILE-1
 Kind: Process packet（Human-executed Issue hygiene）
-Status: SELECTED / READY for Human Phase ①
+Status: SELECTED / READY for Human Phase ① only
 Assessment date: 2026-08-10
 Assessor: Human OPEN Issue triage + repository SoT
 Agent GitHub Issues API: 403（cannot read/write Issue bodies）
 Agent GitHub Issue mutation: FORBIDDEN
-Human GitHub Issue mutation: Phase ①〜② only（this packet）
+Human GitHub Issue mutation now: Phase ① Close #5 / #10 / #11 only
+Phase ②+: blocked until Phase ① read-back PASS
+EG-1 Human create: parallel process；do NOT mix with this packet
 
 Current SoT（durable）:
   main HEAD at packet write-up: 658c790f34adb3489808121a72c6dcccbde97d2f
@@ -138,14 +140,19 @@ Human 2026-08-10 triage。Agent は Issue body を API 取得できないため�
 
 | Order | Action | Gate |
 |---|---|---|
-| **①** | #5 / #10 / #11 の superseded 判定 → Close | Human Close comment + Close |
-| **②** | #6 / #8 の current-state reconciliation | Human body/Current patch；Close しない |
-| **③** | #4 / #9 / #12 / #15〜#19 の継続必要性再判定 | 判定記録のみ；一括 Close 禁止 |
-| **④** | #20以降 / UI系は原則バックログ維持 | mutation 不要 |
+| **①** | #5 / #10 / #11 を下書きどおり Human Close | 1 Issue = 1 confirmation；いまの唯一の具体作業 |
+| **①b** | Close 後 read-back | 3件とも CLOSED かつ理由が NOT_PLANNED or COMPLETED（superseded）として意図どおりか確認 |
+| **②** | #6 / #8 の current-state reconciliation | **①b PASS 後のみ**；#8 は Decision Ledger として OPEN 維持 |
+| **③** | #4 / #9 / #12 / #15〜#19 の個別再判定 | **② 後のみ**；一括 Close 禁止 |
+| **④** | #20以降 / UI系は原則バックログ維持 | **いま触らない**；mutation 不要 |
 
 ```text
 この順なら、28件を無理に減らすのではなく、
 「いま判断が必要な Issue」と「将来の実装 Issue」だけが残る。
+
+いま Human がやる具体作業:
+  Phase ① = #5 / #10 / #11 を下書きどおり Close することだけ。
+  Phase ② / ③ / EG-1 Human create / #20以降 は混ぜない。
 ```
 
 ## 5. Explicit non-authorization
@@ -169,29 +176,36 @@ This packet does NOT authorize:
 
 ```text
 AUTHORIZED for Human only（after reading Close/resync drafts）:
-  Phase ①: Close #5 / #10 / #11 if Human confirms superseded
-  Phase ②: Patch Current/Gate/Dependency（and DEC ledger sync）on #6 / #8
-  Phase ③: Record keep-open / later-close judgment for #4 / #9 / #12 / #15〜#19
-            without batch Close
+  Phase ① now: Close #5 / #10 / #11 if Human confirms superseded
+  Phase ①b: read-back 3 Issues = CLOSED with intended reason
+  Phase ② after ①b PASS: Patch Current/Gate/Dependency on #6 / #8；#8 KEEP OPEN
+  Phase ③ after ②: Record keep-open / later-close judgment for
+            #4 / #9 / #12 / #15〜#19 without batch Close
 
 FORBIDDEN for Agent:
   all GitHub Issue mutations
 
-FORBIDDEN still:
+FORBIDDEN still / do not mix now:
+  Phase ② / ③ before ①b PASS
+  touching #20以降 / UI Issues
+  EG-1 Human create inside this Reconciliation flow
   Implementation Start / adapter code / Deploy / tenant mutation
 ```
 
 ## 7. Next
 
 ```text
-Immediate Human unit: Phase ① Close candidates #5 / #10 / #11
-Then: Phase ② #6 / #8 resync
-Then: Phase ③ continuity re-check（no batch Close）
-Keep: Group C / D as backlog
+Immediate Human unit（only）:
+  Phase ① Close #5 / #10 / #11 per close-candidates draft
+  then Phase ①b read-back（3/3 CLOSED；reason intentional）
 
-Parallel（not this packet）:
-  Human create under EG-1
-  VR-1 CN-1 re-observation after create
+Blocked until ①b PASS:
+  Phase ② #6 / #8 resync（#8 remains OPEN as Decision Ledger）
+  Phase ③ continuity re-check（no batch Close）
+
+Do not touch now:
+  Group C / D（#20以降 / UI）
+  EG-1 Human create（parallel；separate）
 
 Stop / FORBIDDEN now for Agent:
   Issue mutation
