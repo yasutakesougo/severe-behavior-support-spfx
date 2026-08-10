@@ -55,11 +55,25 @@ Twenty-eighth residual: CONSUMED
   decision-ilb-1-twenty-eighth-residual-cn1-selection.md
   decision-assessment-snapshot-cn1-observation-packet.md
   decision-assessment-snapshot-cn1-closure-determination.md
-Twenty-ninth residual: SELECTED / OPEN
+Twenty-ninth residual: CONSUMED
   decision-ilb-1-twenty-ninth-residual-schema-mapping-selection.md
-  theme = schema mapping / column path / Implementation Start boundary
+  Decision-AS-SCHEMA-MAPPING-NEXT-1: Accepted / LOCKED / MT-1 + IN-A + CP-1 + XB-1
+  acceptance: decision-assessment-snapshot-schema-mapping-next-acceptance.md
+  IR: decision-assessment-snapshot-schema-mapping-next-independent-review.md（PASS）
 Next gate detail:
-  decision-assessment-snapshot-cn1-next-gate.md
+  decision-assessment-snapshot-column-provision-next-gate.md
+  Thirty-second residual: CONSUMED
+  Decision-AS-COLUMN-NAMES-1: Accepted / LOCKED / NM-1+CV-REQ+XB-1
+  Thirty-third residual: CONSUMED
+  Decision-AS-CHOICE-OPTIONS-1: Accepted / LOCKED / CO-1+CV-CHOICE-BOTH+XB-1
+  Thirty-fourth residual: CONSUMED
+  Decision-AS-COLUMN-PX-1: Accepted / LOCKED / PX-1+XB-1+AP-1
+  Thirty-fifth residual: CONSUMED
+  Decision-AS-COLUMN-EG-1: Accepted / LOCKED / EG-1+XB-1+AP-1
+  Execution GO: GIVEN（Human process only）
+  EG-1 Acceptance ≠ Human create
+  Next residual: NOT SELECTED
+PR #191: MERGED（merge 0738ea79…）
 
 Issue Status Reconciliation:
   ASSESSED / independent next-unit candidate
