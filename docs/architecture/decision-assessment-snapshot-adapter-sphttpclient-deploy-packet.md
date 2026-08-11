@@ -173,8 +173,10 @@ Still NOT AUTHORIZED by this GO:
   Ready / Merge auto-progress
   Agent Deploy
 
-Next substantive gate（separate Human Decision only）:
-  GO / NO-GO temporary scripting enablement on Tenant App Catalog
+Next substantive gate（separate Human Decision）:
+  Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
+  GO-DEPLOY-NOSCRIPT-TEMP
+  temporary scripting enablement on Tenant App Catalog
   solely to complete this scoped .sppkg Deploy
   If GO: enable → Deploy → confirm → restore = one set
 ```
