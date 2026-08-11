@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-AUD-08（復旧後の業務確認者）
 Human Decision: SELECT GOV-AUD-08（unit）
 Baseline tip: 07bc46950afc69362f97ffee2fe4817f153a3adb
-PR: pending
+PR: #261
 Selection: decision-gov-aud-08-post-recovery-confirmer-selection.md
 SELECT Acceptance: decision-gov-aud-08-post-recovery-confirmer-acceptance.md
 Decision Packet: decision-gov-aud-08-post-recovery-confirmer-decision-packet.md

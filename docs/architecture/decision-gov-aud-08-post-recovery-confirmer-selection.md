@@ -10,7 +10,7 @@ Kind: Human Selection（#19 residual / GOV-AUD-08）
 Status: SELECTED / LOCKED（unit GO boundary）
 Human Decision: SELECT GOV-AUD-08
 Date: 2026-08-11
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #261（Selection / Packet / SELECT Acceptance / IR only）
 
 Baseline:
   main tip = 07bc46950afc69362f97ffee2fe4817f153a3adb
