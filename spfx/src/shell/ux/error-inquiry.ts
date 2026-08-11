@@ -10,9 +10,9 @@ export type ShellErrorInquiryPresentation = Readonly<{
 
 /** Non-empty trimmed errorCode + correlationId required for the inquiry surface. */
 export function hasShellErrorInquiry(
-  inquiry: ShellErrorInquiryPresentation | undefined | null,
+  inquiry: ShellErrorInquiryPresentation | undefined,
 ): inquiry is ShellErrorInquiryPresentation {
-  if (!inquiry) {
+  if (inquiry === undefined) {
     return false;
   }
   return inquiry.errorCode.trim() !== "" && inquiry.correlationId.trim() !== "";
