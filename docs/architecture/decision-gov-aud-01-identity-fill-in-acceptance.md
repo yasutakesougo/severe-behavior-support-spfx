@@ -19,7 +19,7 @@ Status: Accepted / LOCKED（identity fill-in）
 Human Acceptance date: 2026-08-11
 Parent: GOV-AUD-01 Accepted / LOCKED / Option C（UNCHANGED）
 Baseline tip: c5ed0ed1311ebf4cb0cdb869790084ae0aadd495
-PR: （identity fill-in Packet / Acceptance / IR only）
+PR: #258（identity fill-in Packet / Acceptance / IR only）
 
 meeting_or_minutes_system_identity:
 - 支援計画アセスメント会議

@@ -68,16 +68,15 @@ INTENDED ≠ CONFIRMED
 ```text
 Parent track = SELECTED / LOCKED / MERGED（PR #255）
 Unit Selection = SELECTED / LOCKED / MERGED（PR #256）
-Option = Accepted / LOCKED / C
-identity fields = NOT YET PROVIDED
+Option = Accepted / LOCKED / C（PR #257 MERGED）
+identity fields = PROVIDED / LOCKED（Decision-GOV-AUD-01-IDENTITY-1）
 ```
 
 ## Next
 
 ```text
-1. Option C Acceptance PR: IR → Ready → Merge
-2. Human fill-in: meeting_or_minutes_system_identity / reference_id_meaning
-3. next residual SELECT = separate Human Decision
+1. identity fill-in PR: IR → Ready → Merge
+2. next residual SELECT = separate Human Decision
 ```
 
 ## Reference
@@ -85,4 +84,5 @@ identity fields = NOT YET PROVIDED
 - Selection: `decision-gov-aud-01-handoff-canonical-source-selection.md`
 - Decision Packet: `decision-gov-aud-01-handoff-canonical-source-decision-packet.md`
 - Option C Acceptance: `decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`
+- Identity fill-in: `decision-gov-aud-01-identity-fill-in-acceptance.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`
