@@ -50,7 +50,8 @@ GOV-RULE-05〜08: Accepted（該当分；08 = NOT ADOPTED）
 GOV-RULE-09 rule content owner: Accepted / LOCKED / Option B = 法人業務責任者
 GOV-RULE-10 change approver: Accepted / LOCKED / Option C
   = 業務責任者が内容確認し、法人管理者が承認
-GOV-RULE-11 / 12: OPEN / OUT
+GOV-RULE-11 value boundary: unit SELECTED / Fill-in NOT FILLED（別 Decision；本 packet OUT）
+GOV-RULE-12: OPEN / OUT
 GOV-STAFF / GOV-PERF: OPEN / OUT
 SharePoint / M365 / Deploy: NO-GO
 ```
