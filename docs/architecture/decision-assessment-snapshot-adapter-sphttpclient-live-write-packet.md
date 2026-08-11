@@ -91,11 +91,42 @@ Use a unique synthetic snapshotId, for example:
 snapshotId = LIVEWRITE-SYNTH-YYYYMMDD-HHMMSS
 ```
 
+### 5.0 Read-only PnP surface check（before any further POST）
+
+Human interim attempts（recorded in verification doc）:
+
+```text
+attempt 1 verbose POST = FAILED（type metadata not recognized）
+attempt 2 nometadata POST = FAILED（unexpected property 'Members'）
+actual $body2 Members = ABSENT
+itemId = NONE / residue = 0
+Binder defect = NOT CONCLUDED
+```
+
+Do **not** repeat POST until this read-only diagnostic is pasted:
+
+```powershell
+Get-Module PnP.PowerShell |
+  Select-Object Name, Version, Path
+
+$PSVersionTable.PSVersion
+
+Get-Command Invoke-PnPSPRestMethod -Syntax
+```
+
+Then issue **one** create request shaped to that installed PnP
+`Invoke-PnPSPRestMethod` surface（prefer explicit JSON string `-Content`
+if object/`hashtable` serialization is suspected; set `-Accept` /
+`-ContentType` per that version’s syntax）.
+
 ### 5.1 Create（binder-compatible verbose POST）
+
+Baseline shape（may be adjusted after §5.0 to match installed PnP）:
 
 ```powershell
 Connect-PnPOnline -Url "https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo" -Interactive
 
+# Prefer JSON string -Content to avoid hashtable reshape via -Content path
 $body = @{
   __metadata = @{ type = "SP.Data.AssessmentSnapshotsListItem" }
   snapshotId = "LIVEWRITE-SYNTH-REPLACE"
@@ -107,7 +138,7 @@ $body = @{
   periodEnd = "2026-01-31"
   inputFingerprint = "livewrite-synth-fp"
   supersedesSnapshotId = "LIVEWRITE-SYNTH-PRIOR"
-} | ConvertTo-Json -Depth 5
+} | ConvertTo-Json -Depth 5 -Compress
 
 $create = Invoke-PnPSPRestMethod -Method Post `
   -Url "/_api/web/lists/GetByTitle('AssessmentSnapshots')/items" `
@@ -117,6 +148,9 @@ $create = Invoke-PnPSPRestMethod -Method Post `
 $itemId = $create.d.Id
 $itemId
 ```
+
+Note: `__metadata.type` must be the list’s `ListItemEntityTypeFullName`
+（confirmed live-read: `SP.Data.AssessmentSnapshotsListItem`）.
 
 Read-back:
 

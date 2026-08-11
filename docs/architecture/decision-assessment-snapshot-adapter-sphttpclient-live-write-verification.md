@@ -10,6 +10,8 @@ Site: severe-support-isogo
 List: AssessmentSnapshots
 Deploy performed: 0
 real business data writes: 0
+itemId: NONE
+synthetic residue: 0
 ```
 
 ## Authority
@@ -20,46 +22,69 @@ Acceptance: decision-assessment-snapshot-adapter-sphttpclient-live-write-accepta
 Procedure: decision-assessment-snapshot-adapter-sphttpclient-live-write-packet.md §5
 Prerequisite:
   Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-READ-1 = PASS / VERIFIED
-```
-
-## Execution path lock（Human Choice A）
-
-```text
 Choice = A（LOCKED）
-
-Path:
-  Human executes authorized §5
-  → paste filled evidence block（chat or commit）
-  → Agent/Human records PASS/FAIL in this doc
-  → stop
-
-Rejected for this gate:
-  SPO_TENANT_ID / SPO_CLIENT_ID / SPO_CLIENT_SECRET
-  = do not add merely to unblock this agent
-  Choice B / Agent app-only execution = NOT SELECTED
 ```
 
-## Recording precedent（live-read）
+## Human interim execution（safe / residue 0）
 
 ```text
-Live-read PASS was recorded by Human commit:
-  4a76db5490ce223e22b01abf67f253566ab90487
-  Author: yasutakesougo
-  Message: docs(architecture): record live read-only verification PASS
+Choice A = LOCKED
+
+live write = NOT PASS
+
+attempt 1:
+  verbose POST = FAILED
+  reason = type metadata not recognized
+
+attempt 2:
+  nometadata POST = FAILED
+  reason = unexpected property 'Members'
+
+actual $body2:
+  Members = ABSENT
+  payload fields = EXPECTED
+
+Hypothesis（not binder verdict）:
+  PnP PowerShell -Content serialization may reshape hashtable/object
+  into a different JSON shape than the intended $body2.
+  Official Invoke-PnPSPRestMethod accepts object or string for -Content
+  and supports -Accept.
+  Microsoft REST verbose create expects ListItemEntityTypeFullName
+  as __metadata.type.
+
+itemId = NONE
+synthetic residue = 0
+Deploy = NOT AUTHORIZED
+Ready / Merge = HUMAN-ONLY
+
+Binder defect: NOT CONCLUDED
+Further POST: HOLD until PnP version / syntax confirmed（read-only）
 ```
 
-## Agent environment probe（not PASS evidence）
+## Next Human step（read-only diagnostic — no POST）
 
-```text
-Authenticated SharePoint session: ABSENT
-Unauthenticated GET: HTTP 403 UnauthorizedAccessException
-Filled §5 evidence payload: ABSENT
+Paste output of:
+
+```powershell
+Get-Module PnP.PowerShell |
+  Select-Object Name, Version, Path
+
+$PSVersionTable.PSVersion
+
+Get-Command Invoke-PnPSPRestMethod -Syntax
 ```
 
-## Required Human evidence（paste after §5）
+```text
+Agent VM: pwsh / PnP.PowerShell = ABSENT
+→ Human must run locally and paste the three outputs
+```
+
+After PnP version/syntax is known: one create request shaped to that installed PnP surface（not a POST retry storm）.
+
+## Required PASS evidence（after successful §5）
 
 ```text
-Tool: PnP PowerShell
+Tool: PnP PowerShell（version = <from diagnostic>）
 Mode: synthetic write + cleanup
 
 5.1 Create:
@@ -86,6 +111,7 @@ real business data writes: 0
 ```text
 live write = NOT PASS
 reason = §5 live-write evidence absent
+         （create attempts failed; no item created; residue = 0）
 
 Deploy = NOT AUTHORIZED
 Ready / Merge = HUMAN-ONLY

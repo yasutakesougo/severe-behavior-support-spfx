@@ -69,6 +69,14 @@ Choice A ≠ Choice B（Agent app-only）
 Choice = A（LOCKED）
 live write = NOT PASS
 reason = §5 live-write evidence absent
+         （attempt 1/2 create FAILED; itemId = NONE; residue = 0）
+
+attempt 1: verbose POST FAILED（type metadata not recognized）
+attempt 2: nometadata POST FAILED（unexpected property 'Members'）
+actual $body2 Members = ABSENT
+Binder defect = NOT CONCLUDED
+
+SPO_* secrets = NOT ADDED
 Deploy = NOT AUTHORIZED
 Ready / Merge = HUMAN-ONLY
 ```
@@ -76,9 +84,10 @@ Ready / Merge = HUMAN-ONLY
 ## Next
 
 ```text
-1. Human executes authorized packet §5
-2. Human pastes filled evidence block（chat or commit）
-3. Record PASS/FAIL in verification doc
-4. stop
-5. Deploy remains a later separate Human GO
+1. Human runs §5.0 read-only PnP version/syntax check（no POST）
+2. Paste Get-Module / PSVersion / Get-Command -Syntax outputs
+3. Then one create request shaped to installed PnP
+4. Complete MERGE null clear + cleanup；paste evidence
+5. Record PASS/FAIL；stop
+6. Deploy remains a later separate Human GO
 ```
