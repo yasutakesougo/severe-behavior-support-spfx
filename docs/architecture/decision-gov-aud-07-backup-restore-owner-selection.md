@@ -23,7 +23,8 @@ Candidate origin:
   #19 residual inventory row: GOV-AUD-07
   related ledger label: DEC-015（整合要；本 Selection では自動 Accepted しない）
 
-Option Acceptance: NOT SELECTED
+Option Acceptance: Accepted / LOCKED / Option A
+  （decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN
@@ -96,27 +97,34 @@ OUT:
 
 ```text
 Decision-GOV-AUD-07-SELECTION-1 = SELECTED / LOCKED
+Option A = Accepted / LOCKED（別 Acceptance）
 
 HOLD:
-  concrete Option A–D = NOT SELECTED
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
+  DEC-015 = NOT ACCEPTED
+  next residual = NOT SELECTED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human SELECT Option A–D or HOLD
-3. Option Acceptance / LOCKED for GOV-AUD-07 only
-4. DEC-015 ledger sync = separate if needed
-5. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #259 = MERGED
+  Human Option = A
+
+Current Option Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: DEC-015 ledger sync = separate if needed
+  3. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-aud-07-backup-restore-owner-acceptance.md`
 - Decision Packet: `decision-gov-aud-07-backup-restore-owner-decision-packet.md`
-- Independent Review: `decision-gov-aud-07-backup-restore-owner-independent-review.md`
+- Option A Acceptance: `decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md`
+- Independent Review（Selection）: `decision-gov-aud-07-backup-restore-owner-independent-review.md`
+- Independent Review（Option A）: `decision-gov-aud-07-backup-restore-owner-option-a-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19

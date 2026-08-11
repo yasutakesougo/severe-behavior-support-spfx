@@ -26,7 +26,8 @@ PR: #259（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-AUD-07 — バックアップ・復元の一次責任者
 
-Concrete Option A–D: NOT SELECTED
+Concrete Option A–D: Accepted / LOCKED / Option A
+  （decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -65,24 +66,27 @@ SELECT GOV-AUD-07 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-AUD-01 = COMPLETE（Option C + identity）
 Current residual unit = SELECTED / LOCKED（GOV-AUD-07）
-Option Acceptance = NOT SELECTED
+Option Acceptance = Accepted / LOCKED / Option A
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #259 = MERGED
+  Human Option = A
+
+Option Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for GOV-AUD-07 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-aud-07-backup-restore-owner-selection.md`
 - Decision Packet: `decision-gov-aud-07-backup-restore-owner-decision-packet.md`
+- Option A Acceptance: `decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md`
 - Independent Review: `decision-gov-aud-07-backup-restore-owner-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`
