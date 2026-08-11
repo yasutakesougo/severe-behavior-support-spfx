@@ -285,7 +285,9 @@ Issue #28 completion criteria beyond SHELL-UX-1 slice
 browser smoke（IR P2 on #235）= PASS / VERIFIED
   evidence: shell-ux-1-browser-smoke-p2-closeout.md
 Approval dependencies（#19 / #21）and broader shell acceptance tests
-next shell UX slice = Human selection required（not authorized here）
+next shell UX slice = SHELL-UX-2 SELECTED / Implementation Start NOT AUTHORIZED
+  evidence: decision-shell-ux-2-save-state-presentation-acceptance.md
+  PR: #237（Selection / Acceptance only）
 ```
 
 ### Why KEEP OPEN

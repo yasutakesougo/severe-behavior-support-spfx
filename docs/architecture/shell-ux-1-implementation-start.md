@@ -43,9 +43,10 @@ ABC / Observation / SupportPlan / Finding business screens
 未Acceptedの業務意味
 Ready / Merge auto-progress
 #22 adapter continuation
-next shell UX slice（NOT SELECTED）
-New Implementation Start（NOT AUTHORIZED by smoke closeout）
-#28 Issue Close（NOT AUTHORIZED by smoke closeout）
+next shell UX slice（SHELL-UX-2 SELECTED / Implementation Start NOT AUTHORIZED）
+  see decision-shell-ux-2-save-state-presentation-acceptance.md
+New Implementation Start for SHELL-UX-2（NOT AUTHORIZED by this Selection alone）
+#28 Issue Close（NOT AUTHORIZED）
 ```
 
 ## Delivered surface（code）
