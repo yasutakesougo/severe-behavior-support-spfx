@@ -21,6 +21,7 @@ Packet HEAD: 69c38bb028ca95b37ff089f64bf1f32ce9b3ac42
 Human Decision: V-1 + A + D-HOLD
 Human Acceptance date: 2026-08-11
 Candidate packet PR: #224
+PR: #225
 
 Selected set:
   V-1 — SPFx 1.23.2 exact release line

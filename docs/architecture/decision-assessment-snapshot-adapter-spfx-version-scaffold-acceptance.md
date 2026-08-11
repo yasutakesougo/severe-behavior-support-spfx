@@ -31,6 +31,7 @@ Human Acceptance date: 2026-08-11
 Baseline main: 51ca9f20f3bf6dd639d97b42b904845dbd9c0ca2
 Packet HEAD: 69c38bb028ca95b37ff089f64bf1f32ce9b3ac42
 Candidate packet PR: #224
+PR: #225
 
 Accepted options:
   V-1 — SPFx 1.23.2 exact release line

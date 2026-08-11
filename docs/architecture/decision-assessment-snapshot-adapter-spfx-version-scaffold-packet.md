@@ -9,6 +9,8 @@ Status: ACCEPTED / LOCKED
 Human Decision: V-1 + A + D-HOLD
 Human Acceptance date: 2026-08-11
 Baseline main: 51ca9f20f3bf6dd639d97b42b904845dbd9c0ca2
+Candidate packet PR: #224
+Acceptance PR: #225
 Kind: docs-only Decision Packet
 
 Accepted / LOCKED set:
