@@ -19,6 +19,7 @@ Human Decision: GO-DEPLOY-NOSCRIPT-TEMP
 Human Acceptance date: 2026-08-11
 Deploy HEAD: a0fc767c5df4349c43f8176e9a7388c33f45a167
 Deploy evidence: 6524785bc993a261f8f8cc2a3e2c4422b9291178
+PR: #233
 
 Authorized（one set）:
   temporary scripting enable on Tenant App Catalog only

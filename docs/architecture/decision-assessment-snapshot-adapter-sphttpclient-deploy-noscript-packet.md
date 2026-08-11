@@ -12,6 +12,7 @@ Status: GO RECEIVED / EXECUTION HOLD
 Human Decision: GO（temporary NoScript / scripting enable for Deploy）
 Deploy HEAD: a0fc767c5df4349c43f8176e9a7388c33f45a167
 Deploy evidence: 6524785bc993a261f8f8cc2a3e2c4422b9291178
+PR: #233
 Kind: temporary Tenant App Catalog scripting + Deploy + restore（one set）
 
 Ready / Merge: HUMAN-ONLY
