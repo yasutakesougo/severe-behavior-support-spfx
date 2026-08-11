@@ -10,6 +10,7 @@ Status: GO RECEIVED / EXECUTION HOLD
 Human Decision: GO（Deploy / App Catalog）
 Live-write HEAD: 93c119cbcb5db94ba1b28d0ef9ff53ce989d7971
 Live-write evidence: f8cc4ceb02b9c99643f48e333de66ab0bef8a4c0
+PR: #232
 Kind: Deploy authorization gate（pilot App Catalog）
 
 Ready / Merge: HUMAN-ONLY

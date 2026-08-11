@@ -20,6 +20,7 @@ Human Decision: GO-DEPLOY
 Human Acceptance date: 2026-08-11
 Live-write HEAD: 93c119cbcb5db94ba1b28d0ef9ff53ce989d7971
 Live-write evidence: f8cc4ceb02b9c99643f48e333de66ab0bef8a4c0
+PR: #232
 
 Authorized:
   Human Deploy of severe-behavior-support-spfx-shell.sppkg
