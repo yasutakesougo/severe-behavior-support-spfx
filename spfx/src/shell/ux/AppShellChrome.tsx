@@ -17,6 +17,7 @@ import {
   type ShellSiteOption,
   type ShellSiteSelection,
 } from "./site-selection";
+import { isShellPrimaryNavigationEnabled, SHELL_PRIMARY_NAV_ITEMS } from "./primary-navigation";
 import { SiteSelector } from "./SiteSelector";
 import { SiteUnselectedStop } from "./SiteUnselectedStop";
 import { StatusPanel } from "./StatusPanel";
@@ -76,7 +77,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const showPartialRetrieval =
     !unauthenticated && !siteBlocked && isPartialRetrievalViewMode(viewMode);
   const showReadyRegion = !unauthenticated && !siteBlocked && viewMode === "ready";
-  const navDisabled = unauthenticated || siteBlocked;
+  const navDisabled = !isShellPrimaryNavigationEnabled(viewMode, selection);
 
   return (
     <div
@@ -121,16 +122,22 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         )}
       </header>
 
-      <nav className={styles.shellNav} aria-label="シェル主要ナビゲーション">
-        <button type="button" className={styles.navButton} disabled={navDisabled}>
-          概要
-        </button>
-        <button type="button" className={styles.navButton} disabled={navDisabled}>
-          利用者
-        </button>
-        <button type="button" className={styles.navButton} disabled={navDisabled}>
-          記録
-        </button>
+      <nav
+        className={styles.shellNav}
+        aria-label="シェル主要ナビゲーション"
+        data-shell-ux="primary-navigation"
+      >
+        {SHELL_PRIMARY_NAV_ITEMS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={styles.navButton}
+            data-shell-ux-nav={item.id}
+            disabled={navDisabled}
+          >
+            {item.label}
+          </button>
+        ))}
       </nav>
 
       <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
