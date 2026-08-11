@@ -10,6 +10,7 @@ Kind: Human Selection（Issue #28 next slice / candidate C-B）
 Status: SELECTED / LOCKED（GO boundary）
 Human Decision: SELECT C-B / SHELL-UX-3
 Date: 2026-08-11
+PR: #240（Selection / Acceptance only）
 
 Baseline:
   main tip = 61a212a409b4134c802435226998753d1903ee1f

@@ -18,6 +18,7 @@ Human Decision: SELECT C-B / SHELL-UX-3
 Human Acceptance date: 2026-08-11
 Issue: #28
 Candidate: C-B
+PR: #240（Selection / Acceptance only）
 Baseline tip: 61a212a409b4134c802435226998753d1903ee1f
 
 Selected:
