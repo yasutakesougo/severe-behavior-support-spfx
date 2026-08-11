@@ -6,7 +6,6 @@
 Issue #19 所有の最小単位。
 GOV-AUD-07（バックアップ・復元の一次責任者）の再 Decision ではない。
 GOV-AUD-09（再開承認）/ 10（連絡経路）ではない。
-Accepted（Option）ではない。
 Agent が確認手順・再開条件を発明しない。
 Implementation Start ではない。
 
@@ -19,16 +18,17 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-AUD-08
 Kind: Human Decision packet（narrow）
-Status: OPEN / Option NOT SELECTED
+Status: Accepted / LOCKED / Option B
 Owner: Issue #19
-Selected via: Decision-GOV-AUD-08-SELECTION-1
+Selected via: Decision-GOV-AUD-08-SELECTION-1（PR #261 MERGED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし）
-Human Selected Option: NOT SELECTED
-Issue #19 design recommendation（non-binding）: B または C（復旧実施者と分離）
+Human Selected Option: B（業務責任者または指定確認者）
+Option Acceptance: decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md
+Issue #19 design recommendation（non-binding）: B または C（≠ Human Acceptance evidence）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -46,7 +46,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ```text
 GOV-AUD-01〜06（該当 Accepted 分）: LOCKED / unrelated
 GOV-AUD-07 primary backup/restore owner: Accepted / LOCKED / Option A = Microsoft 365管理者
-GOV-AUD-08 post-recovery confirmer: UNDECIDED（本 packet）
+GOV-AUD-08 post-recovery confirmer: Accepted / LOCKED / Option B = 業務責任者または指定確認者
 GOV-AUD-09 resume approver: OPEN / OUT
 GOV-AUD-10 incident contact path: OPEN / OUT
 DEC-015: OPEN / ledger alignment pending separate sync（本 packet OUT）
@@ -163,15 +163,15 @@ C. 事業所管理者
 D. その他（Human が明示）
 H. まだ決めない / HOLD
 
-答え: NOT SELECTED
+答え: B（Accepted / LOCKED）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A–D | Option Acceptance → confirmer LOCKED。手順/実装は別 GO |
-| H | Option HOLD。unit Selection は維持可 |
+| **B** | **Option Acceptance LOCKED（本 Decision）**。手順/実装は別 GO |
+| A / C / D / H | NOT SELECTED |
 
 維持:
 
@@ -188,4 +188,5 @@ next residual auto-select: FORBIDDEN
 
 - Selection: `decision-gov-aud-08-post-recovery-confirmer-selection.md`
 - SELECT Acceptance: `decision-gov-aud-08-post-recovery-confirmer-acceptance.md`
+- Option B Acceptance: `decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md`
 - Issue #19 GOV-AUD-08 source options A–D

@@ -26,7 +26,8 @@ PR: #261（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-AUD-08 — 復旧後の業務確認者
 
-Concrete Option A–D: NOT SELECTED
+Concrete Option A–D: Accepted / LOCKED / Option B
+  （decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -65,24 +66,27 @@ SELECT GOV-AUD-08 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-AUD-07 = COMPLETE（Option A / Microsoft 365管理者）
 Current residual unit = SELECTED / LOCKED（GOV-AUD-08）
-Option Acceptance = NOT SELECTED
+Option Acceptance = Accepted / LOCKED / Option B
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #261 = MERGED
+  Human Option = B
+
+Option Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for GOV-AUD-08 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-aud-08-post-recovery-confirmer-selection.md`
 - Decision Packet: `decision-gov-aud-08-post-recovery-confirmer-decision-packet.md`
+- Option B Acceptance: `decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md`
 - Independent Review: `decision-gov-aud-08-post-recovery-confirmer-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`
