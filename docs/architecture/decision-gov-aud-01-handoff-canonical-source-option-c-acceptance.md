@@ -22,7 +22,7 @@ Meaning:
   業務正本 = 既存会議・議事録側
   アプリは参照 ID と Handoff 状態（および受理済み契約の範囲）だけを保持
 Baseline tip: c34061c0095c172971ae07417db1acd93cc97fc5
-PR: （Option C Acceptance / Packet sync / IR）
+PR: #257（Option C Acceptance / Packet sync / IR）
 
 HUMAN-REQUIRED（本 Acceptance では発明しない / NOT YET PROVIDED）:
   meeting_or_minutes_system_identity: NOT YET PROVIDED
