@@ -52,7 +52,7 @@ Continuation / materialization PR stack:
   #225 Accepted/Locked recording（Draft）
   #226 dependency boundary start（Draft）
   #227 lockfile verification（Draft）
-  this unit: scaffold materialization + Heft verification
+  #228 scaffold materialization + Heft verification（Draft）
 
 npm install: RUN / PASS
   Node: v22.14.0
