@@ -85,4 +85,6 @@ Do not Close #28
 Do not continue #21 / #22
 Do not enable membership lookup or liveTenantIoAuthorized
 Do not auto-select other residual candidates
+next shell UX slice（SHELL-UX-4 / C-D SELECTED / Implementation Start NOT AUTHORIZED）
+  see decision-shell-ux-4-partial-retrieval-acceptance.md
 ```
