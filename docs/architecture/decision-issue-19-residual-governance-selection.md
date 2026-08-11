@@ -95,7 +95,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-AUD-01 | handoff の正本 | ORG_POLICY | **Accepted / LOCKED / Option C + identity fill-in LOCKED**（[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)） |
 | GOV-AUD-05 / DEC-012 post-retention deletion | 5年経過後の完全削除可否 | MIXED | OPEN / NOT SELECTED |
 | GOV-AUD-07 | バックアップ・復元の一次責任者 | ORG_POLICY | **Accepted / LOCKED / Option A**（[`decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md`](./decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md)；DEC-015 NOT ACCEPTED） |
-| GOV-AUD-08 | 復旧後の業務確認者 | ORG_POLICY | OPEN / NOT SELECTED |
+| GOV-AUD-08 | 復旧後の業務確認者 | ORG_POLICY | **unit SELECTED** / Option NOT SELECTED（[`decision-gov-aud-08-post-recovery-confirmer-selection.md`](./decision-gov-aud-08-post-recovery-confirmer-selection.md)） |
 | GOV-AUD-09 | 再開承認者 | ORG_POLICY | OPEN / NOT SELECTED |
 | GOV-AUD-10 | 重大障害時の連絡経路 | ORG_POLICY | OPEN / NOT SELECTED |
 | GOV-STAFF-01〜12 | 職員・利用者所属 / 資格 / 異動 | ORG_POLICY / MIXED / EVIDENCE_REQUIRED | OPEN / NOT SELECTED |
@@ -112,7 +112,8 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 Stale marker correction（docs truth）:
   「GOV-AUD-01〜10 = 正式回答待ち」は不正確。
   01 / 02 / 03 / 04 / 05(retention) / 06 / 07(Option A) は Accepted。
-  08〜10 および post-retention deletion が OPEN 残件。
+  GOV-AUD-08 = unit SELECTED / Option NOT SELECTED。
+  09〜10 および post-retention deletion が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -194,12 +195,13 @@ Consumed progression:
   GOV-AUD-01 identity fill-in = Accepted / LOCKED（PR #258 MERGED）
     （Decision-GOV-AUD-01-IDENTITY-1）
   GOV-AUD-07 unit SELECT = MERGED（PR #259）
-  GOV-AUD-07 Option A = Accepted / LOCKED
+  GOV-AUD-07 Option A = Accepted / LOCKED（PR #260 MERGED）
     （decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md）
+  Next residual unit SELECT = GOV-AUD-08（Decision-GOV-AUD-08-SELECTION-1）
 
 Next:
-  1. GOV-AUD-07 Option A Acceptance PR: IR → Human Ready → Human Merge
-  2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
+  1. GOV-AUD-08 Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human SELECT Option A–D or HOLD（Agent auto-select FORBIDDEN）
   3. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
   4. #19 Close は残件移管完了後の別 Human disposition
 ```
@@ -217,6 +219,13 @@ GOV-AUD-07 history:
 SELECT GOV-AUD-07 → Option A Accepted（Microsoft 365管理者）
 Acceptance: decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md
 DEC-015: NOT ACCEPTED
+```
+
+Current residual（unit）:
+
+```text
+SELECT GOV-AUD-08 — Option A/B/C/D/H NOT SELECTED
+Selection: decision-gov-aud-08-post-recovery-confirmer-selection.md
 ```
 
 ## Reference

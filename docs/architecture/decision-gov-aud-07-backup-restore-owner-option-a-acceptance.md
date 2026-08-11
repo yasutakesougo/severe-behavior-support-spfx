@@ -104,7 +104,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 |---|---|
 | Decision-GOV-AUD-07-SELECTION-1 | **UNCHANGED**（unit SELECTED / LOCKED） |
 | GOV-AUD-01〜06（該当 Accepted 分） | **UNCHANGED** |
-| GOV-AUD-08 / 09 / 10 | **OUT / NOT SELECTED** |
+| GOV-AUD-08 | **unit SELECTED** / Option NOT SELECTED（別 Decision；本 Acceptance から自動 SELECT しない） |
+| GOV-AUD-09 / 10 | **OUT / NOT SELECTED** |
 | DEC-015 | **NOT ACCEPTED**（整合要 / 別 sync） |
 | Option B / C / D / H | **NOT SELECTED** |
 | バックアップ実装 / tenant mutation | **HOLD / NOT STARTED** |
@@ -115,7 +116,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-AUD-07: Accepted / LOCKED / Option A
 DEC-015 ledger sync: separate if needed（NOT auto-Accepted）
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-AUD-08 unit SELECTED（Option NOT SELECTED；別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```

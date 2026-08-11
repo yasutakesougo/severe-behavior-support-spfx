@@ -75,7 +75,8 @@ Consumed on #19 path（do not re-Decision）:
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
-Current residual Option = CONSUMED（GOV-AUD-07 Accepted / Option A）
+Prior residual Option = CONSUMED（GOV-AUD-07 Accepted / Option A）
+Current residual unit = SELECTED / LOCKED（GOV-AUD-08；Option NOT SELECTED）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -88,11 +89,12 @@ Consumed:
   PR #257 GOV-AUD-01 Option C = MERGED
   PR #258 GOV-AUD-01 identity fill-in = MERGED
   PR #259 GOV-AUD-07 unit SELECT = MERGED
-  GOV-AUD-07 Option A = Accepted / LOCKED
+  PR #260 GOV-AUD-07 Option A = MERGED
+  GOV-AUD-08 unit SELECT = Decision-GOV-AUD-08-SELECTION-1（Option NOT SELECTED）
 
 Next:
-  1. GOV-AUD-07 Option A Acceptance PR: IR → Human Ready → Human Merge
-  2. After Merge: next residual SELECT one-by-one；no Agent auto-advance
+  1. GOV-AUD-08 Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human SELECT Option A–D or HOLD；no Agent auto-advance
   3. DEC-015 ledger sync remains separate / NOT auto-Accepted
   4. #19 Close remains later / separate Human disposition
 ```
