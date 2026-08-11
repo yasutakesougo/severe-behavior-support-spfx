@@ -13,6 +13,7 @@ Kind: Independent Review（docs-only identity fill-in recording）
 Unit: Decision-GOV-AUD-01-IDENTITY-1
 Parent: GOV-AUD-01 Accepted / LOCKED / Option C（PR #257）
 Baseline tip: c5ed0ed1311ebf4cb0cdb869790084ae0aadd495
+PR: #258（Draft）
 Packet: decision-gov-aud-01-identity-fill-in-packet.md
 Acceptance: decision-gov-aud-01-identity-fill-in-acceptance.md
 Status: PASS
