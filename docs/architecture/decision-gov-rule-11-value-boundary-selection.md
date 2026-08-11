@@ -26,7 +26,8 @@ Candidate origin:
   #19 residual inventory row: GOV-RULE-11〜12
   Binding before this Decision: NONE → unit now SELECTED by Human
 
-Fill-in Acceptance: NOT FILLED / NOT ACCEPTED
+Fill-in Acceptance: Accepted / LOCKED
+  （decision-gov-rule-11-value-boundary-fill-in-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent invent boundary classifications: FORBIDDEN
@@ -104,28 +105,34 @@ OUT:
 
 ```text
 Decision-GOV-RULE-11-SELECTION-1 = SELECTED / LOCKED
+Fill-in = Accepted / LOCKED（Decision-GOV-RULE-11-FILL-IN-1）
 
 HOLD:
-  fill-in 3 分類 = NOT FILLED / NOT ACCEPTED
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
+  next residual = NOT SELECTED
   GOV-RULE-12 = NOT SELECTED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human fill-in 3 分類 or HOLD
-3. Fill-in Acceptance / LOCKED for GOV-RULE-11 only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #270 = MERGED
+  Human Fill-in = Accepted
+
+Current Fill-in Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-rule-11-value-boundary-acceptance.md`
 - Decision Packet: `decision-gov-rule-11-value-boundary-decision-packet.md`
-- Independent Review: `decision-gov-rule-11-value-boundary-independent-review.md`
+- Fill-in Acceptance: `decision-gov-rule-11-value-boundary-fill-in-acceptance.md`
+- Independent Review（Selection）: `decision-gov-rule-11-value-boundary-independent-review.md`
+- Independent Review（Fill-in）: `decision-gov-rule-11-value-boundary-fill-in-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Prior unit: `decision-gov-rule-10-change-approver-option-c-acceptance.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
