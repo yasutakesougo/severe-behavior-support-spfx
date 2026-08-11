@@ -26,7 +26,8 @@ PR: #265（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-AUD-10 — 重大障害時の連絡経路
 
-Fill-in 5 項目: NOT FILLED / NOT ACCEPTED
+Fill-in 5 項目: Accepted / LOCKED（role names）
+  （decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -64,24 +65,27 @@ SELECT GOV-AUD-10 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-AUD-09 = COMPLETE（Option A / 事業所管理者）
 Current residual unit = SELECTED / LOCKED（GOV-AUD-10）
-Fill-in Acceptance = NOT FILLED / NOT ACCEPTED
+Fill-in Acceptance = Accepted / LOCKED（role names）
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #265 = MERGED
+  Human Fill-in = Accepted（role names）
+
+Fill-in Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human fill-in 5 項目 or HOLD
-  5. Fill-in Acceptance / LOCKED for GOV-AUD-10 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-aud-10-incident-contact-path-selection.md`
 - Decision Packet: `decision-gov-aud-10-incident-contact-path-decision-packet.md`
+- Fill-in Acceptance: `decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md`
 - Independent Review: `decision-gov-aud-10-incident-contact-path-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`

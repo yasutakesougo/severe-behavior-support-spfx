@@ -106,7 +106,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-AUD-01〜06（該当 Accepted 分） | **UNCHANGED** |
 | GOV-AUD-07 | **UNCHANGED**（Accepted / Option A = Microsoft 365管理者） |
 | GOV-AUD-08 | **UNCHANGED**（Accepted / Option B = 業務責任者または指定確認者） |
-| GOV-AUD-10 | **unit SELECTED** / Fill-in NOT ACCEPTED（別 Decision；本 Acceptance から自動 SELECT しない） |
+| GOV-AUD-10 | **Accepted / LOCKED（fill-in / role names）**（別 Decision；本 Acceptance から自動 SELECT しない） |
 | Option B / C / D / H | **NOT SELECTED** |
 | 再開手順 / tenant mutation | **HOLD / NOT STARTED** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -115,7 +115,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-AUD-09: Accepted / LOCKED / Option A
-next residual = GOV-AUD-10 unit SELECTED（Fill-in NOT ACCEPTED；別 Decision）
+GOV-AUD-10 = Accepted / LOCKED（fill-in / role names；別 Decision）
+next residual SELECT（one item；Agent auto-advance FORBIDDEN）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```

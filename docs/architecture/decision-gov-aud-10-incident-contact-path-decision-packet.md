@@ -5,7 +5,6 @@
 
 Issue #19 所有の最小単位。
 GOV-AUD-07 / 08 / 09 の再 Decision ではない。
-Accepted（fill-in）ではない。
 Agent が連絡先・経路・個人名を発明しない。
 Implementation Start ではない。
 
@@ -18,16 +17,17 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-AUD-10
 Kind: Human Decision packet（narrow / fill-in）
-Status: OPEN / Fill-in NOT ACCEPTED
+Status: Accepted / LOCKED（fill-in / role names）
 Owner: Issue #19
-Selected via: Decision-GOV-AUD-10-SELECTION-1
+Selected via: Decision-GOV-AUD-10-SELECTION-1（PR #265 MERGED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし / 値の発明禁止）
-Human Fill-in: NOT FILLED
-Issue #19 design recommendation（non-binding）: NONE recorded
+Human Fill-in: Accepted（role names；Decision-GOV-AUD-10-FILL-IN-1）
+Fill-in Acceptance: decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md
+Issue #19 design recommendation（non-binding）: prior role-name set（≠ Human Acceptance evidence）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -47,7 +47,7 @@ GOV-AUD-01〜06（該当 Accepted 分）: LOCKED / unrelated
 GOV-AUD-07 primary backup/restore owner: Accepted / LOCKED / Option A = Microsoft 365管理者
 GOV-AUD-08 post-recovery confirmer: Accepted / LOCKED / Option B = 業務責任者または指定確認者
 GOV-AUD-09 resume approver: Accepted / LOCKED / Option A = 事業所管理者
-GOV-AUD-10 incident contact path: UNDECIDED（本 packet / fill-in）
+GOV-AUD-10 incident contact path: Accepted / LOCKED（fill-in / role names）
 DEC-015: OPEN / ledger alignment pending separate sync（本 packet OUT）
 SharePoint / M365 / Deploy: NO-GO
 ```
@@ -133,25 +133,22 @@ Agent recommendation の欠如は Human Acceptance evidence ではない。
 問:
   重大障害時の連絡経路（5 項目）を定めますか？
 
-記入（Human）:
-  第一報: <NOT FILLED>
-  技術連絡: <NOT FILLED>
-  業務連絡: <NOT FILLED>
-  個人情報事故の連絡: <NOT FILLED>
-  再開判断: <NOT FILLED>
+記入（Human Accepted）:
+  第一報: 事業所管理者
+  技術連絡: Microsoft 365管理者
+  業務連絡: 業務責任者または指定確認者
+  個人情報事故の連絡: 法人管理者
+  再開判断: 事業所管理者
 
-または:
-  H. まだ決めない / HOLD
-
-答え: NOT FILLED / NOT ACCEPTED
+答え: Accepted / LOCKED（role names；Decision-GOV-AUD-10-FILL-IN-1）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| 5 項目 fill-in | Fill-in Acceptance → contact path LOCKED。実装は別 GO |
-| H | Fill-in HOLD。unit Selection は維持可 |
+| **5 項目 fill-in（role names）** | **Fill-in Acceptance LOCKED（本 Decision）**。個人連絡先/実装は別 GO |
+| H | NOT SELECTED |
 
 維持:
 
@@ -167,4 +164,5 @@ next residual auto-select: FORBIDDEN
 
 - Selection: `decision-gov-aud-10-incident-contact-path-selection.md`
 - SELECT Acceptance: `decision-gov-aud-10-incident-contact-path-acceptance.md`
+- Fill-in Acceptance: `decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md`
 - Issue #19 GOV-AUD-10 source fill-in fields
