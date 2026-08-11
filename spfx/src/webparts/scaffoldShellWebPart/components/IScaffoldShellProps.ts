@@ -1,8 +1,4 @@
-import type {
-  ShellSaveState,
-  ShellSiteLabelFixture,
-  ShellViewMode,
-} from "../../../shell/ux";
+import type { ShellSaveState, ShellSiteLabelFixture, ShellViewMode } from "../../../shell/ux";
 
 export interface IScaffoldShellProps {
   description: string;

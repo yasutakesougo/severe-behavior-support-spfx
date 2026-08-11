@@ -23,15 +23,8 @@ export type AppShellChromeProps = Readonly<{
  * No SharePoint REST, binder wiring, or authorization resolution.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
-  const {
-    demoMode,
-    currentSite,
-    saveState,
-    viewMode,
-    correlationId,
-    userDisplayName,
-    children,
-  } = props;
+  const { demoMode, currentSite, saveState, viewMode, correlationId, userDisplayName, children } =
+    props;
 
   return (
     <div className={styles.appShell} data-shell-ux="app-shell-chrome">

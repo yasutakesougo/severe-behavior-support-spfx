@@ -28,35 +28,21 @@ export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId })
 
   if (mode === "access_denied") {
     return (
-      <div
-        className={styles.statusPanel}
-        role="alert"
-        data-shell-ux="access-denied-panel"
-      >
+      <div className={styles.statusPanel} role="alert" data-shell-ux="access-denied-panel">
         <h2 className={styles.statusTitle}>アクセス不可</h2>
-        <p className={styles.statusBody}>
-          この画面を表示できません。個人情報は表示していません。
-        </p>
-        {correlationId ? (
-          <p className={styles.correlation}>相関ID: {correlationId}</p>
-        ) : null}
+        <p className={styles.statusBody}>この画面を表示できません。個人情報は表示していません。</p>
+        {correlationId ? <p className={styles.correlation}>相関ID: {correlationId}</p> : null}
       </div>
     );
   }
 
   return (
-    <div
-      className={styles.statusPanel}
-      role="alert"
-      data-shell-ux="retrieval-failed-panel"
-    >
+    <div className={styles.statusPanel} role="alert" data-shell-ux="retrieval-failed-panel">
       <h2 className={styles.statusTitle}>取得失敗</h2>
       <p className={styles.statusBody}>
         データを取得できませんでした。判定していない状態として扱います。
       </p>
-      {correlationId ? (
-        <p className={styles.correlation}>相関ID: {correlationId}</p>
-      ) : null}
+      {correlationId ? <p className={styles.correlation}>相関ID: {correlationId}</p> : null}
     </div>
   );
 };

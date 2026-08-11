@@ -1,8 +1,4 @@
-import {
-  SHELL_SAVE_STATES,
-  isShellSaveState,
-  labelForShellSaveState,
-} from "./save-state";
+import { SHELL_SAVE_STATES, isShellSaveState, labelForShellSaveState } from "./save-state";
 
 describe("SHELL-UX-1 save-state presentation", () => {
   it("exposes exactly five save states", () => {

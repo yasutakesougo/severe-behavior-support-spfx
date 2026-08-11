@@ -15,9 +15,5 @@ export {
   type ShellSaveState,
 } from "./save-state";
 export { SaveStateBadge, type SaveStateBadgeProps } from "./SaveStateBadge";
-export {
-  SHELL_VIEW_MODES,
-  isShellViewMode,
-  type ShellViewMode,
-} from "./shell-view-mode";
+export { SHELL_VIEW_MODES, isShellViewMode, type ShellViewMode } from "./shell-view-mode";
 export { StatusPanel, type StatusPanelProps } from "./StatusPanel";

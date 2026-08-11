@@ -3,12 +3,7 @@
  * Panels are display chrome only; no authorization or adapter semantics.
  */
 
-export const SHELL_VIEW_MODES = [
-  "ready",
-  "loading",
-  "access_denied",
-  "retrieval_failed",
-] as const;
+export const SHELL_VIEW_MODES = ["ready", "loading", "access_denied", "retrieval_failed"] as const;
 
 export type ShellViewMode = (typeof SHELL_VIEW_MODES)[number];
 
