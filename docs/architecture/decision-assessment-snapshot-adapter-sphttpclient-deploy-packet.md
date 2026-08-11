@@ -110,6 +110,9 @@ OUT:
   Agent-performed App Catalog upload
   Ready / Merge auto-progress
   treating Deploy PASS as Ready / Merge
+  Tenant App Catalog NoScript / scripting mutation（even temporary）
+    — requires separate Human GO / NO-GO
+  Add-PnPApp retry / -Force while BLOCKED_BY_NOSCRIPT_GUARD
   Entra ID / Microsoft 365 tenant setting changes
   list / column / site schema mutation
   real business AssessmentSnapshots data writes
