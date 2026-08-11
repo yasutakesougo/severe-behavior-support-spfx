@@ -26,7 +26,7 @@ PR: #255（Selection / Acceptance only）
 Selected:
   Issue #19 residual governance track
 
-First residual Decision inside #19: NOT SELECTED
+First residual Decision inside #19: SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 #22 adapter continuation: NOT AUTHORIZED
@@ -73,23 +73,22 @@ Consumed on #19 path（do not re-Decision）:
   GOV-AUD-02 / 03 / 04 / 05(retention prohibition) / 06
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
-First residual inside #19 = NOT SELECTED
+First residual inside #19 = SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
 ## Next
 
 ```text
-Strict order（Draft PR #255 mirror 前に first residual を開始しない）:
-  1. PR #255 Independent Review
-  2. Human Ready（HUMAN-ONLY）
-  3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT one first residual from Selection inventory
-     （Agent recommendation GOV-AUD-01 is non-binding）
-  5. Write Decision Packet for that residual only
-  6. Human Acceptance / LOCKED for that residual only
-  7. Repeat one-by-one；no Agent auto-advance
-  8. #19 Close remains later / separate Human disposition
+Consumed:
+  PR #255 Ready + Merge = COMPLETE
+  First residual unit = SELECT GOV-AUD-01
+
+Next:
+  1. GOV-AUD-01 Option A–D or HOLD（Decision Packet）
+  2. Option Acceptance / LOCKED for GOV-AUD-01 only
+  3. Repeat residual SELECT one-by-one；no Agent auto-advance
+  4. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference
