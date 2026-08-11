@@ -11,7 +11,7 @@ Kind: Human Selection（next substantive unit / Issue #19 track）
 Status: SELECTED / LOCKED（track GO boundary）
 Human Decision: SELECT #19 residual governance
 Date: 2026-08-11
-PR: （Selection / Acceptance only）
+PR: #255（Selection / Acceptance only）
 
 Baseline:
   main tip = c0e0a11e6c21bc0ac9faf0b98685d0871cadc40e

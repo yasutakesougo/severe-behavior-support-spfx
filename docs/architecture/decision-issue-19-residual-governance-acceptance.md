@@ -21,7 +21,7 @@ Human Decision: SELECT #19 residual governance
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: c0e0a11e6c21bc0ac9faf0b98685d0871cadc40e
-PR: （Selection / Acceptance only）
+PR: #255（Selection / Acceptance only）
 
 Selected:
   Issue #19 residual governance track
