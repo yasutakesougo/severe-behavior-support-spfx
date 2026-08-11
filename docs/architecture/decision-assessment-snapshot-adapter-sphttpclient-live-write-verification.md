@@ -47,15 +47,19 @@ SharePoint / Graph MCP: ABSENT
 tenant secrets in Agent env: ABSENT
 Unauthenticated GET: HTTP 403 UnauthorizedAccessException
 PR #231 comments with write evidence: none
-Env-setup external-action checkbox completions: 2
+Env-setup external-action checkbox completions: 3（ignored without payload）
 Filled §5 evidence payload visible to Agent: ABSENT
 Human commit of filled live-write verification: ABSENT
+Branch tip still Agent-authored（no yasutakesougo live-write evidence commit）
 ```
 
 ```text
 Checkbox complete ≠ filled evidence
 Checkbox complete ≠ Human commit
 Checkbox complete ≠ live-write PASS
+Next unblock paths:
+  A) Human paste/commit filled fields（mirror 4a76db5）
+  B) Inject SPO app-only secrets so Agent can execute §5
 ```
 
 ## Required Human evidence（fill + commit）
