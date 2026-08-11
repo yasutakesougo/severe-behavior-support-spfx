@@ -26,14 +26,15 @@ Authorized:
   severe-support-isogo / AssessmentSnapshots
   create + MERGE null clear + cleanup
 
-Execution status:
-  NOT STARTED / ENVIRONMENT BLOCKED in Agent VM
-  （no authenticated SharePoint session）
+Execution path:
+  Choice = A（LOCKED）
+  Human executes §5 → paste filled evidence → PASS/FAIL record → stop
 
 NOT AUTHORIZED:
   Deploy / App Catalog
   real business data writes
   Ready / Merge auto-progress
+  SPO_* secrets merely to unblock Agent
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -57,27 +58,27 @@ GO-LIVE-WRITE ≠ Deploy authorization
 GO-LIVE-WRITE ≠ Ready / Merge
 GO-LIVE-WRITE ≠ automatic Agent tenant login
 GO-LIVE-WRITE ≠ real business data authorization
+GO-LIVE-WRITE ≠ SPO secret injection requirement
 live read PASS ≠ live write PASS
+Choice A ≠ Choice B（Agent app-only）
 ```
 
 ## Current execution snapshot
 
 ```text
-Unauthenticated Agent probe: HTTP 403 UnauthorizedAccessException
-Re-probe after Human "go": still HTTP 403 / no tenant session
-Authenticated live-write evidence: ABSENT
-Verification verdict: NOT PASS / HOLD FOR HUMAN OR CREDENTIALED EXECUTION
-Deploy: NOT AUTHORIZED（write PASS prerequisite unmet）
+Choice = A（LOCKED）
+live write = NOT PASS
+reason = §5 live-write evidence absent
+Deploy = NOT AUTHORIZED
+Ready / Merge = HUMAN-ONLY
 ```
 
 ## Next
 
 ```text
-1. Human executes packet §5（synthetic + cleanup）
-2. Human fills + commits verification doc on branch
-   cursor/as-adapter-sphttpclient-live-write-a288
-   （same path as live-read PASS commit 4a76db5）
-   OR pastes filled fields in Agent chat
-3. Env-setup checkbox alone is insufficient
-4. Only after PASS: consider separate Human GO for Deploy
+1. Human executes authorized packet §5
+2. Human pastes filled evidence block（chat or commit）
+3. Record PASS/FAIL in verification doc
+4. stop
+5. Deploy remains a later separate Human GO
 ```

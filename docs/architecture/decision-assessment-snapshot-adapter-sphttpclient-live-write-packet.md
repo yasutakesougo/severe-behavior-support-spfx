@@ -6,10 +6,16 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1
-Status: GO RECEIVED / EXECUTION BLOCKED（no authenticated tenant session）
+Status: GO RECEIVED / EXECUTION HOLD（Choice A）
 Human Decision: GO（live write verification）
 Live-read HEAD: 4a76db5490ce223e22b01abf67f253566ab90487
 Kind: live write verification gate（synthetic item only）
+
+Execution path: Choice = A（LOCKED）
+  Human executes §5 → paste filled evidence → PASS/FAIL → stop
+
+SPO_TENANT_ID / SPO_CLIENT_ID / SPO_CLIENT_SECRET
+= do not add merely to unblock this agent
 
 Deploy: NOT AUTHORIZED
 Ready / Merge: HUMAN-ONLY
@@ -196,12 +202,22 @@ PASS requires all:
 
 ```text
 Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1
-= GO RECEIVED / EXECUTION HOLD
+= GO RECEIVED / EXECUTION HOLD（Choice A）
+
+live write = NOT PASS
+reason = §5 live-write evidence absent
 
 HOLD:
-  authenticated live-write execution evidence
+  Human §5 execution + pasted filled evidence block
+
+Next（only）:
+  Human executes authorized §5
+  → paste filled evidence block
+  → PASS/FAIL verification record
+  → stop
 
 Still NOT AUTHORIZED:
   Deploy
   Ready / Merge
+  SPO secrets merely to unblock Agent
 ```
