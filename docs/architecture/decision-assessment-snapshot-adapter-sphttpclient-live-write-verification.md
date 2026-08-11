@@ -40,20 +40,23 @@ Unauthenticated GET items $select binder surface:
   System.UnauthorizedAccessException
 
 PR #231 comments with write evidence: none
+External-action checkbox marked complete by Human: YES
+Filled §5 evidence payload visible to Agent: ABSENT
 ```
 
 This proves only that the Agent environment cannot complete live-write.
 It is **not** a live-write verification PASS or FAIL against authorized credentials.
 
 ```text
-Human "go" after GO-LIVE-WRITE recording ≠ agent tenant login
+External-action checkbox complete ≠ filled evidence payload
+External-action checkbox complete ≠ live-write PASS
 Human "go" ≠ Deploy authorization
 Human "go" ≠ Ready / Merge
 ```
 
 ## Required Human / credentialed evidence（pending）
 
-Paste/replace after execution:
+Paste/replace after execution（empty template is not PASS）:
 
 ```text
 Operator:
@@ -83,7 +86,8 @@ real business data writes: 0
 
 ```text
 live write verification = NOT PASS
-reason = ENVIRONMENT BLOCKED / awaiting Human or credentialed execution
+reason = evidence payload ABSENT after external-action checkbox
+         （Agent still HTTP 403 / no tenant session）
 
 Deploy = NOT AUTHORIZED
 Ready / Merge = HUMAN-ONLY
