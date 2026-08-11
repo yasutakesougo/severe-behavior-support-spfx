@@ -15,7 +15,7 @@ Acceptance: decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md
 Packet: decision-gov-aud-07-backup-restore-owner-decision-packet.md
 Parent unit Selection: Decision-GOV-AUD-07-SELECTION-1（PR #259 MERGED）
 Baseline tip: ac9dc9a86b471cb1bd480e0cc2f166aeedc59741
-PR: （Draft at IR write）
+PR: #260
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Option status: Accepted / LOCKED / A

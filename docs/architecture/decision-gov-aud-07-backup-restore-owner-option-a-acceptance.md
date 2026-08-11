@@ -21,7 +21,7 @@ Selected Option: A
 Meaning:
   バックアップ・復元の一次責任者 = Microsoft 365管理者
 Baseline tip: ac9dc9a86b471cb1bd480e0cc2f166aeedc59741
-PR: （Option A Acceptance / Packet sync / IR）
+PR: #260（Option A Acceptance / Packet sync / IR）
 
 Does NOT mean:
   バックアップ手順・ツール・頻度・保持期間の発明
