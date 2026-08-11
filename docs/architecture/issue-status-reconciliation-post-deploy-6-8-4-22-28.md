@@ -285,11 +285,13 @@ Issue #28 completion criteria beyond SHELL-UX-1 slice
 browser smoke（IR P2 on #235）= PASS / VERIFIED
   evidence: shell-ux-1-browser-smoke-p2-closeout.md
 Approval dependencies（#19 / #21）and broader shell acceptance tests
-SHELL-UX-2 = DELIVERED on tip `61a212a…`（PR #238）
-Close criteria assessment = FAIL / KEEP OPEN（PR #239；docs）
-next shell UX slice = C-B / SHELL-UX-3 SELECTED / Implementation Start NOT AUTHORIZED
-  evidence: decision-shell-ux-3-multi-site-selector-acceptance.md
+SHELL-UX-1 / 2 / 3 = DELIVERED on tip `be2af7c…`（PR #241）
+Close criteria reassessment = FAIL / KEEP OPEN
+  evidence: issue-28-close-criteria-reassessment.md
+  Decision-ISSUE-28-CLOSE-CRITERIA-REASSESSMENT-1 = SELECTED / LOCKED
+C-B / C-C = CONSUMED；residual C-A / C-D / C-E / C-F′ / C-G / C-H = NOT SELECTED
 #28 Close = NOT AUTHORIZED
+membershipLookupAuthorized = false
 ```
 
 ### Why KEEP OPEN
