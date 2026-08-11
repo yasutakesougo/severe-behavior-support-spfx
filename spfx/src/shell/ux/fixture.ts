@@ -24,6 +24,7 @@ export type ShellUxFixture = Readonly<{
   saveState: ShellSaveState;
   viewMode: ShellViewMode;
   correlationId: string;
+  errorCode: string;
   partialRetrieval: ShellPartialRetrievalPresentation;
 }>;
 
@@ -40,16 +41,20 @@ export const SHELL_UX_DEFAULT_FIXTURE: ShellUxFixture = {
   siteOptions: SHELL_SITE_OPTIONS,
   saveState: "unsaved",
   viewMode: "ready",
-  correlationId: "shell-ux-4-synth-corr",
+  correlationId: "shell-ux-5-synth-corr",
+  errorCode: "SHELL-UX-5-SYNTH-E001",
   partialRetrieval: SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
 };
 
 export const SHELL_UX_SLICE = {
-  id: "SHELL-UX-4",
+  id: "SHELL-UX-5",
   liveTenantIoAuthorized: false as const,
   sharePointRestAuthorized: false as const,
   binderHostWiringAuthorized: false as const,
   membershipLookupAuthorized: false as const,
   adapterFetchAuthorized: false as const,
   outcomeJudgmentAuthorized: false as const,
+  errorCodeGenerationAuthorized: false as const,
+  adapterFailureClassificationAuthorized: false as const,
+  telemetryBackendAuthorized: false as const,
 } as const;

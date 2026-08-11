@@ -16,5 +16,6 @@ export interface IScaffoldShellProps {
   saveState: ShellSaveState;
   viewMode: ShellViewMode;
   correlationId: string;
+  errorCode: string;
   partialRetrieval: ShellPartialRetrievalPresentation;
 }

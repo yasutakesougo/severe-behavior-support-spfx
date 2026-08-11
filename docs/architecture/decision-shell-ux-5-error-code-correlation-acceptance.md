@@ -25,7 +25,7 @@ Selected:
   Error-code + correlationId user-facing display
   （copy-friendly inquiry presentation）
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（separate；shell-ux-5-implementation-start.md）
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -62,8 +62,9 @@ error code + correlationId = presentation props only
 
 ```text
 Selection = SELECTED / LOCKED
-Implementation Start = NOT AUTHORIZED / HOLD
-code mutation for SHELL-UX-5 = 0
+Selection merge = 0e122228c9e47e398acc42cf0500b4a9fdb7e269（PR #246）
+Implementation Start = GO（separate；shell-ux-5-implementation-start.md）
+#28 Close = NOT AUTHORIZED
 other residual candidates C-A / C-F′ / C-G / C-H = NOT SELECTED
 C-B / C-C = CONSUMED（SHELL-UX-3）
 C-D = CONSUMED（SHELL-UX-4）
@@ -72,10 +73,10 @@ C-D = CONSUMED（SHELL-UX-4）
 ## Next
 
 ```text
-1. stop（Selection only）
-2. separate Human GO for Implementation Start（exact IN/OUT）
-3. only after Implementation Start GO: code + tests + browser smoke
-4. #28 Close remains later / separate
+1. Implementation Start GO recorded（shell-ux-5-implementation-start.md）
+2. deliver code + tests + browser smoke under exact IN/OUT
+3. #28 Close remains later / separate
+4. #246 merge ≠ Implementation Start（already separated）
 ```
 
 ## Reference

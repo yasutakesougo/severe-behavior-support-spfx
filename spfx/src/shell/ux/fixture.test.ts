@@ -29,13 +29,21 @@ describe("SHELL-UX fixture boundary", () => {
     expect(SHELL_UX_DEFAULT_FIXTURE.partialRetrieval).toEqual(SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE);
   });
 
-  it("does not authorize live I/O, REST, binder, membership, fetch, or judgment", () => {
-    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-4");
+  it("carries synthetic errorCode + correlationId for inquiry display", () => {
+    expect(SHELL_UX_DEFAULT_FIXTURE.errorCode).toBe("SHELL-UX-5-SYNTH-E001");
+    expect(SHELL_UX_DEFAULT_FIXTURE.correlationId).toBe("shell-ux-5-synth-corr");
+  });
+
+  it("does not authorize live I/O, REST, binder, membership, fetch, judgment, or generation", () => {
+    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-5");
     expect(SHELL_UX_SLICE.liveTenantIoAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.sharePointRestAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.binderHostWiringAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.membershipLookupAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.adapterFetchAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.outcomeJudgmentAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.errorCodeGenerationAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.adapterFailureClassificationAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.telemetryBackendAuthorized).toBe(false);
   });
 });

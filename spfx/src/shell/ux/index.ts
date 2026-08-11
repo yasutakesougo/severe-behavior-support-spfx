@@ -1,6 +1,12 @@
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
+export { ErrorInquiryDisplay, type ErrorInquiryDisplayProps } from "./ErrorInquiryDisplay";
+export {
+  formatShellErrorInquiryText,
+  hasShellErrorInquiry,
+  type ShellErrorInquiryPresentation,
+} from "./error-inquiry";
 export {
   SHELL_UX_DEFAULT_FIXTURE,
   SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,

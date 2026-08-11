@@ -25,6 +25,7 @@ export type AppShellChromeProps = Readonly<{
   saveState: ShellSaveState;
   viewMode: ShellViewMode;
   correlationId: string;
+  errorCode: string;
   userDisplayName: string;
   partialRetrieval?: ShellPartialRetrievalPresentation;
   onSiteSelectionChange?: (next: ShellSiteSelection) => void;
@@ -32,8 +33,8 @@ export type AppShellChromeProps = Readonly<{
 }>;
 
 /**
- * SHELL-UX presentation chrome（SHELL-UX-4 partial-retrieval boundary）.
- * No SharePoint REST, binder wiring, membership lookup, fetch, or outcome judgment.
+ * SHELL-UX presentation chrome（SHELL-UX-5 error-code + correlationId display）.
+ * No SharePoint REST, binder wiring, membership lookup, fetch, generation, or classification.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const {
@@ -43,6 +44,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     saveState,
     viewMode,
     correlationId,
+    errorCode,
     userDisplayName,
     partialRetrieval,
     onSiteSelectionChange,
@@ -122,9 +124,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               }
             }
             correlationId={correlationId}
+            errorCode={errorCode}
           />
         ) : (
-          <StatusPanel mode={viewMode} correlationId={correlationId} />
+          <StatusPanel mode={viewMode} correlationId={correlationId} errorCode={errorCode} />
         )}
         {showReadyRegion ? (
           <div className={styles.readyRegion} data-shell-ux="ready-region">

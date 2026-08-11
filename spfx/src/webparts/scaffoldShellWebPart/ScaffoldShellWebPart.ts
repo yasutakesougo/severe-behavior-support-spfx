@@ -37,6 +37,7 @@ export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffol
       saveState: fixture.saveState,
       viewMode: fixture.viewMode,
       correlationId: fixture.correlationId,
+      errorCode: fixture.errorCode,
       partialRetrieval: fixture.partialRetrieval,
     });
 

@@ -86,6 +86,5 @@ Do not Close #28
 Do not continue #21 / #22
 Do not implement fetch / judgment / count aggregation / retry
 Do not auto-select other residual candidates
-next shell UX slice（SHELL-UX-5 / C-E SELECTED / Implementation Start NOT AUTHORIZED）
-  see decision-shell-ux-5-error-code-correlation-acceptance.md
+next shell UX slice（SHELL-UX-5 / C-E Implementation Start GO；see shell-ux-5-implementation-start.md）
 ```

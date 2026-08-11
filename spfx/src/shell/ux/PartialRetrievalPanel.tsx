@@ -1,4 +1,6 @@
 import * as React from "react";
+import { ErrorInquiryDisplay } from "./ErrorInquiryDisplay";
+import { hasShellErrorInquiry, type ShellErrorInquiryPresentation } from "./error-inquiry";
 import {
   SHELL_PARTIAL_RETRIEVAL_WARNING,
   hasPartialRetrievalFailure,
@@ -9,6 +11,7 @@ import styles from "./ShellUx.module.scss";
 export type PartialRetrievalPanelProps = Readonly<{
   presentation: ShellPartialRetrievalPresentation;
   correlationId?: string;
+  errorCode?: string;
 }>;
 
 /**
@@ -18,7 +21,18 @@ export type PartialRetrievalPanelProps = Readonly<{
 export const PartialRetrievalPanel: React.FC<PartialRetrievalPanelProps> = ({
   presentation,
   correlationId,
+  errorCode,
 }) => {
+  const inquiry: ShellErrorInquiryPresentation | undefined =
+    errorCode !== undefined && correlationId !== undefined
+      ? { errorCode, correlationId }
+      : undefined;
+  const inquiryBlock = hasShellErrorInquiry(inquiry) ? (
+    <ErrorInquiryDisplay inquiry={inquiry} />
+  ) : correlationId ? (
+    <p className={styles.correlation}>相関ID: {correlationId}</p>
+  ) : null;
+
   if (!hasPartialRetrievalFailure(presentation)) {
     return (
       <div className={styles.statusPanel} role="alert" data-shell-ux="partial-retrieval-invalid">
@@ -76,7 +90,7 @@ export const PartialRetrievalPanel: React.FC<PartialRetrievalPanelProps> = ({
         </ul>
       </section>
 
-      {correlationId ? <p className={styles.correlation}>相関ID: {correlationId}</p> : null}
+      {inquiryBlock}
     </div>
   );
 };

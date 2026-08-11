@@ -42,6 +42,7 @@ ReactDOM.render(
       saveState={saveState}
       viewMode={viewMode}
       correlationId={SHELL_UX_DEFAULT_FIXTURE.correlationId}
+      errorCode={SHELL_UX_DEFAULT_FIXTURE.errorCode}
       userDisplayName="Smoke Operator"
     >
       <section data-shell-ux="shell-body">
