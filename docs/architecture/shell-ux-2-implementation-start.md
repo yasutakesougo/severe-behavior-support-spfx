@@ -87,4 +87,6 @@ Do not Close #28
 Do not continue #22
 Do not enable liveTenantIoAuthorized
 Do not invent save-outcome judgment
+next shell UX slice（SHELL-UX-3 / C-B SELECTED / Implementation Start NOT AUTHORIZED）
+  see decision-shell-ux-3-multi-site-selector-acceptance.md
 ```
