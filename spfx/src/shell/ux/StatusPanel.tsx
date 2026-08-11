@@ -8,7 +8,7 @@ export type StatusPanelProps = Readonly<{
 }>;
 
 export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId }) => {
-  if (mode === "ready") {
+  if (mode === "ready" || mode === "partial_retrieval_failed") {
     return null;
   }
 

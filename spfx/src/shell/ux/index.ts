@@ -3,10 +3,18 @@ export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
 export {
   SHELL_UX_DEFAULT_FIXTURE,
+  SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
   SHELL_UX_SLICE,
   type ShellSiteLabelFixture,
   type ShellUxFixture,
 } from "./fixture";
+export {
+  SHELL_PARTIAL_RETRIEVAL_WARNING,
+  hasPartialRetrievalFailure,
+  type ShellPartialRetrievalPresentation,
+  type ShellRetrievalItem,
+} from "./partial-retrieval";
+export { PartialRetrievalPanel, type PartialRetrievalPanelProps } from "./PartialRetrievalPanel";
 export {
   SHELL_SAVE_STATES,
   SHELL_SAVE_STATE_DESCRIPTIONS,
@@ -20,7 +28,12 @@ export {
 } from "./save-state";
 export { SaveStateBadge, type SaveStateBadgeProps } from "./SaveStateBadge";
 export { SaveStatePresentation, type SaveStatePresentationProps } from "./SaveStatePresentation";
-export { SHELL_VIEW_MODES, isShellViewMode, type ShellViewMode } from "./shell-view-mode";
+export {
+  SHELL_VIEW_MODES,
+  isPartialRetrievalViewMode,
+  isShellViewMode,
+  type ShellViewMode,
+} from "./shell-view-mode";
 export {
   SHELL_SITE_IDS,
   SHELL_SITE_OPTIONS,

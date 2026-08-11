@@ -1,9 +1,11 @@
 import * as React from "react";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
+import { PartialRetrievalPanel } from "./PartialRetrievalPanel";
+import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
 import type { ShellSaveState } from "./save-state";
-import type { ShellViewMode } from "./shell-view-mode";
+import { isPartialRetrievalViewMode, type ShellViewMode } from "./shell-view-mode";
 import {
   SHELL_SITE_OPTIONS,
   isSiteUnselected,
@@ -24,13 +26,14 @@ export type AppShellChromeProps = Readonly<{
   viewMode: ShellViewMode;
   correlationId: string;
   userDisplayName: string;
+  partialRetrieval?: ShellPartialRetrievalPresentation;
   onSiteSelectionChange?: (next: ShellSiteSelection) => void;
   children?: React.ReactNode;
 }>;
 
 /**
- * SHELL-UX presentation chrome（SHELL-UX-3 multi-site selector）.
- * No SharePoint REST, binder wiring, membership lookup, or authorization resolution.
+ * SHELL-UX presentation chrome（SHELL-UX-4 partial-retrieval boundary）.
+ * No SharePoint REST, binder wiring, membership lookup, fetch, or outcome judgment.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const {
@@ -41,6 +44,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     viewMode,
     correlationId,
     userDisplayName,
+    partialRetrieval,
     onSiteSelectionChange,
     children,
   } = props;
@@ -60,6 +64,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const siteBlocked = isSiteUnselected(selection);
   const selectedSite = !siteBlocked ? siteOptionForId(selection) : undefined;
+  const showPartialRetrieval = !siteBlocked && isPartialRetrievalViewMode(viewMode);
   const showReadyRegion = !siteBlocked && viewMode === "ready";
 
   return (
@@ -108,6 +113,16 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
         {siteBlocked ? (
           <SiteUnselectedStop />
+        ) : showPartialRetrieval ? (
+          <PartialRetrievalPanel
+            presentation={
+              partialRetrieval ?? {
+                succeededItems: [],
+                failedItems: [],
+              }
+            }
+            correlationId={correlationId}
+          />
         ) : (
           <StatusPanel mode={viewMode} correlationId={correlationId} />
         )}

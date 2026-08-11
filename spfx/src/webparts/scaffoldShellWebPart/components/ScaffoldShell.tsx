@@ -16,6 +16,7 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
       saveState,
       viewMode,
       correlationId,
+      partialRetrieval,
     } = this.props;
 
     return (
@@ -26,6 +27,7 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
         viewMode={viewMode}
         correlationId={correlationId}
         userDisplayName={userDisplayName}
+        partialRetrieval={partialRetrieval}
       >
         <section className={styles.scaffoldShell} data-shell-ux="shell-body">
           <h2 className={styles.bodyTitle}>{strings.ShellReadyTitle}</h2>

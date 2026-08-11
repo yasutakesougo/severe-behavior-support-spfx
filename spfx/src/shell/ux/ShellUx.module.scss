@@ -210,6 +210,40 @@
   display: block;
 }
 
+.partialRetrievalPanel {
+  padding: 1rem;
+  border: 2px solid #a4262c;
+  background: #fde7e9;
+}
+
+.partialRetrievalSection {
+  margin-top: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
+  background: #fff;
+}
+
+.partialRetrievalFailedSection {
+  border-color: #a4262c;
+  background: #fff5f6;
+}
+
+.partialRetrievalHeading {
+  margin: 0 0 0.4rem;
+  font-size: 0.95rem;
+}
+
+.partialRetrievalList {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.partialRetrievalEmpty {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
 /* Basic tablet / narrow layout affordance */
 @media (max-width: 768px) {
   .appShell {

@@ -1,4 +1,9 @@
-import type { ShellSaveState, ShellSiteSelection, ShellViewMode } from "../../../shell/ux";
+import type {
+  ShellPartialRetrievalPresentation,
+  ShellSaveState,
+  ShellSiteSelection,
+  ShellViewMode,
+} from "../../../shell/ux";
 
 export interface IScaffoldShellProps {
   description: string;
@@ -11,4 +16,5 @@ export interface IScaffoldShellProps {
   saveState: ShellSaveState;
   viewMode: ShellViewMode;
   correlationId: string;
+  partialRetrieval: ShellPartialRetrievalPresentation;
 }

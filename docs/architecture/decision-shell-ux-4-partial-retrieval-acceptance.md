@@ -24,7 +24,7 @@ Baseline tip: be2af7c22ceb3b28a6631196d69d3b5ba29214c7
 Selected:
   Partial-retrieval presentation boundary
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（separate；shell-ux-4-implementation-start.md）
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -61,8 +61,9 @@ SELECT C-D ≠ REST / binder / live I/O / retry
 
 ```text
 Selection = SELECTED / LOCKED
-Implementation Start = NOT AUTHORIZED / HOLD
-code mutation for SHELL-UX-4 = 0
+Selection merge = 23735d1a828068c6037d42222a27a80081e7f370（PR #243）
+Implementation Start = GO（separate；shell-ux-4-implementation-start.md）
+#28 Close = NOT AUTHORIZED
 other residual candidates C-A / C-E / C-F′ / C-G / C-H = NOT SELECTED
 C-B / C-C = CONSUMED（SHELL-UX-3）
 ```
@@ -70,10 +71,10 @@ C-B / C-C = CONSUMED（SHELL-UX-3）
 ## Next
 
 ```text
-1. stop（Selection only）
-2. separate Human GO for Implementation Start（exact IN/OUT）
-3. only after Implementation Start GO: code + tests + browser smoke
-4. #28 Close remains later / separate
+1. Implementation Start GO recorded（shell-ux-4-implementation-start.md）
+2. deliver code + tests + browser smoke under exact IN/OUT
+3. #28 Close remains later / separate
+4. #243 merge ≠ Implementation Start（already separated）
 ```
 
 ## Reference
