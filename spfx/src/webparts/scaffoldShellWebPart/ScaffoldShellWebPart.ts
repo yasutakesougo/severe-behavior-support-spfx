@@ -19,7 +19,7 @@ export interface IScaffoldShellWebPartProps {
 
 /**
  * SHELL-UX host.
- * Fixture-driven presentation only — no binder host wiring / live tenant I/O / membership lookup.
+ * Fixture-driven presentation only — no binder / live I/O / membership / adapter fetch.
  */
 export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffoldShellWebPartProps> {
   private _isDarkTheme: boolean = false;
@@ -37,6 +37,7 @@ export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffol
       saveState: fixture.saveState,
       viewMode: fixture.viewMode,
       correlationId: fixture.correlationId,
+      partialRetrieval: fixture.partialRetrieval,
     });
 
     ReactDom.render(element, this.domElement);

@@ -1,4 +1,9 @@
-import { SHELL_UX_DEFAULT_FIXTURE, SHELL_UX_SLICE } from "./fixture";
+import {
+  SHELL_UX_DEFAULT_FIXTURE,
+  SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
+  SHELL_UX_SLICE,
+} from "./fixture";
+import { hasPartialRetrievalFailure } from "./partial-retrieval";
 import { isShellSaveState } from "./save-state";
 import { isShellViewMode } from "./shell-view-mode";
 import { isShellSiteSelection, isSiteUnselected } from "./site-selection";
@@ -19,11 +24,18 @@ describe("SHELL-UX fixture boundary", () => {
     expect(isShellSiteSelection(SHELL_UX_DEFAULT_FIXTURE.siteSelection)).toBe(true);
   });
 
-  it("does not authorize live tenant I/O, REST, binder, or membership lookup", () => {
-    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-3");
+  it("keeps partial-retrieval fixture separated and failure-bearing", () => {
+    expect(hasPartialRetrievalFailure(SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE)).toBe(true);
+    expect(SHELL_UX_DEFAULT_FIXTURE.partialRetrieval).toEqual(SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE);
+  });
+
+  it("does not authorize live I/O, REST, binder, membership, fetch, or judgment", () => {
+    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-4");
     expect(SHELL_UX_SLICE.liveTenantIoAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.sharePointRestAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.binderHostWiringAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.membershipLookupAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.adapterFetchAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.outcomeJudgmentAuthorized).toBe(false);
   });
 });
