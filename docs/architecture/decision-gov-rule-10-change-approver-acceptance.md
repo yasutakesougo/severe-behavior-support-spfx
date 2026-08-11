@@ -23,7 +23,7 @@ Human Decision: SELECT GOV-RULE-10
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: 81d2995c245dc3c23fd388e9995e0045be5456bc
-PR: pending（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
+PR: #269（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
 
 Selected unit:
   GOV-RULE-10 — ルール変更の承認者

@@ -13,7 +13,7 @@ Unit: GOV-RULE-10（ルール変更の承認者）
 Human Decision: SELECT GOV-RULE-10 + Option C
   （業務責任者が内容確認し、法人管理者が承認）
 Baseline tip: 81d2995c245dc3c23fd388e9995e0045be5456bc
-PR: pending
+PR: #269
 Selection: decision-gov-rule-10-change-approver-selection.md
 SELECT Acceptance: decision-gov-rule-10-change-approver-acceptance.md
 Decision Packet: decision-gov-rule-10-change-approver-decision-packet.md

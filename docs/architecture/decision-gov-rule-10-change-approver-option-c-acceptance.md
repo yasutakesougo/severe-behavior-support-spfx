@@ -22,7 +22,7 @@ Meaning:
   ルール変更の承認 =
     業務責任者が内容確認し、法人管理者が承認
 Baseline tip: 81d2995c245dc3c23fd388e9995e0045be5456bc
-PR: pending（Selection / Option C Acceptance / Packet sync / IR）
+PR: #269（Selection / Option C Acceptance / Packet sync / IR）
 
 Does NOT mean:
   承認フロー画面・ワークフロー・チェックリストの発明
