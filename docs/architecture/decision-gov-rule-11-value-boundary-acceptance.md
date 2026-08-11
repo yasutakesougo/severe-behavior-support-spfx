@@ -23,7 +23,7 @@ Human Decision: SELECT GOV-RULE-11
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: f8718d8a057c8b1799a66512d1455a26140463f9
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #270（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-RULE-11 — 制度値と法人運用値の境界

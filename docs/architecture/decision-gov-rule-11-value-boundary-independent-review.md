@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-RULE-11（制度値と法人運用値の境界）
 Human Decision: SELECT GOV-RULE-11（unit）
 Baseline tip: f8718d8a057c8b1799a66512d1455a26140463f9
-PR: pending
+PR: #270
 Selection: decision-gov-rule-11-value-boundary-selection.md
 SELECT Acceptance: decision-gov-rule-11-value-boundary-acceptance.md
 Decision Packet: decision-gov-rule-11-value-boundary-decision-packet.md
