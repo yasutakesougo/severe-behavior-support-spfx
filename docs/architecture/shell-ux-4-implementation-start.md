@@ -3,11 +3,14 @@
 ```text
 Issue: #28
 Unit: SHELL-UX-4 / C-D — Partial-Retrieval Presentation Boundary
-Status: Implementation Start GO / IN PROGRESS
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: Decision-SHELL-UX-4-PARTIAL-RETRIEVAL-1 = SELECTED / LOCKED
 Selection merge: 23735d1a828068c6037d42222a27a80081e7f370（PR #243）
 Human Implementation Start: GO（2026-08-11）
 Independence: PASS（presentation-only；adapter fetch / judgment OUT）
+PR: #244
+Browser smoke: PASS / VERIFIED（shell-ux-4-browser-smoke.md）
+Heft test: 23 / 23 PASS
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -64,14 +67,16 @@ SHELL_UX_SLICE.outcomeJudgmentAuthorized = false
 partial_retrieval_failed ≠ retrieval_failed ≠ ready
 ```
 
-## Delivered surface（target）
+## Delivered surface
 
 ```text
 spfx/src/shell/ux/partial-retrieval.ts
 spfx/src/shell/ux/PartialRetrievalPanel.tsx
 spfx/src/shell/ux/shell-view-mode.ts（partial_retrieval_failed）
 spfx/src/shell/ux/AppShellChrome.tsx
+spfx/src/shell/ux/*.test.ts
 spfx/smoke/shell-ux-4/*
+docs/architecture/shell-ux-4-browser-smoke.md
 ```
 
 ## Stop / HOLD
