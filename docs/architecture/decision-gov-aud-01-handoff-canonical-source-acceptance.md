@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-AUD-01
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: 6949c5267c37e1ace16f2e6861bfdcec8db960a3
-PR: （Selection / Packet / SELECT Acceptance only）
+PR: #256（Selection / Packet / SELECT Acceptance only）
 
 Selected unit:
   GOV-AUD-01 — handoff の正本
