@@ -6,6 +6,7 @@ Decision: Decision-ISSUE-28-CLOSE-CRITERIA-REASSESSMENT-1 = SELECTED / LOCKED
 Human GO: #28 CLOSE-CRITERIA-REASSESSMENT = GO
 Date: 2026-08-11
 Baseline tip: be2af7c22ceb3b28a6631196d69d3b5ba29214c7（PR #241 on main）
+PR: #242（Reassessment docs only）
 Kind: read-only reassessment
 code mutation: 0
 #28 Close: NOT AUTHORIZED
