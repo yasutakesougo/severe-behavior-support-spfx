@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-RULE-09（ルール内容の責任者）
 Human Decision: SELECT GOV-RULE-09（unit）
 Baseline tip: a1f1e1da1b35a4ab18d16af4c6fa6ff215037307
-PR: pending
+PR: #267
 Selection: decision-gov-rule-09-rule-content-owner-selection.md
 SELECT Acceptance: decision-gov-rule-09-rule-content-owner-acceptance.md
 Decision Packet: decision-gov-rule-09-rule-content-owner-decision-packet.md
