@@ -18,6 +18,7 @@ Status: Accepted / LOCKED（GO boundary）
 Human Decision: GO-LIVE-READ-ONLY
 Human Acceptance date: 2026-08-11
 Binder HEAD: e52ad05cd5d8e2ec705034bb98cb22e9673dbf55
+PR: #230
 
 Authorized:
   live read-only verification against
