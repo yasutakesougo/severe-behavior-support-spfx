@@ -15,7 +15,7 @@ Acceptance: decision-gov-rule-11-value-boundary-fill-in-acceptance.md
 Packet: decision-gov-rule-11-value-boundary-decision-packet.md
 Parent unit Selection: Decision-GOV-RULE-11-SELECTION-1（PR #270 MERGED）
 Baseline tip: 1b03264ad8d109f05a93e3e4b02ba8c5b774fef4
-PR: pending
+PR: #271
 Status: PASS
 Findings: P0=0 / P1=0 / P2=3 OPEN
 Fill-in status: Accepted / LOCKED

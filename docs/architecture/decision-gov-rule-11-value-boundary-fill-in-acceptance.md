@@ -19,7 +19,7 @@ Status: Accepted / LOCKED（fill-in）
 Human Acceptance: Explicit ACCEPT GOV-RULE-11 fill-in on 2026-08-11
 Parent unit Selection: Decision-GOV-RULE-11-SELECTION-1（UNCHANGED）
 Baseline tip: 1b03264ad8d109f05a93e3e4b02ba8c5b774fef4
-PR: pending（Fill-in Acceptance / Packet sync / IR）
+PR: #271（Fill-in Acceptance / Packet sync / IR）
 
 Accepted classification（from Accepted GOV-RULE-05〜10 evidence only）:
   制度上固定し事業所変更不可: 現時点では確定なし
