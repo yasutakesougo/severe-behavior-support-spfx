@@ -27,7 +27,8 @@ Candidate origin:
   #19 residual inventory row: GOV-AUD-10
   Human Decision: SELECT GOV-AUD-10
 
-Fill-in Acceptance: NOT SELECTED（連絡経路の具体値は未記入）
+Fill-in Acceptance: Accepted / LOCKED（role names）
+  （decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent invent contact paths / names / numbers: FORBIDDEN
@@ -98,27 +99,34 @@ OUT:
 
 ```text
 Decision-GOV-AUD-10-SELECTION-1 = SELECTED / LOCKED
+Fill-in = Accepted / LOCKED（別 Acceptance；role names）
 
 HOLD:
-  fill-in values（5 項目）= NOT FILLED / NOT ACCEPTED
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
+  next residual = NOT SELECTED
+  personal contact details = NOT DEFINED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human fill-in 5 項目 or HOLD
-3. Fill-in Acceptance / LOCKED for GOV-AUD-10 only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #265 = MERGED
+  Human Fill-in = Accepted（role names）
+
+Current Fill-in Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-aud-10-incident-contact-path-acceptance.md`
 - Decision Packet: `decision-gov-aud-10-incident-contact-path-decision-packet.md`
-- Independent Review: `decision-gov-aud-10-incident-contact-path-independent-review.md`
+- Fill-in Acceptance: `decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md`
+- Independent Review（Selection）: `decision-gov-aud-10-incident-contact-path-independent-review.md`
+- Independent Review（Fill-in）: `decision-gov-aud-10-incident-contact-path-fill-in-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Prior unit: `decision-gov-aud-09-resume-approver-option-a-acceptance.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19

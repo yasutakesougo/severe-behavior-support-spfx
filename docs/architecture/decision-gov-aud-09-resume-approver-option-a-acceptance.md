@@ -115,7 +115,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-AUD-09: Accepted / LOCKED / Option A
-next residual = GOV-AUD-10 unit SELECTED（Fill-in NOT ACCEPTED；別 Decision）
+GOV-AUD-10 = Accepted / LOCKED（fill-in / role names；別 Decision）
+next residual SELECT（one item；Agent auto-advance FORBIDDEN）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
