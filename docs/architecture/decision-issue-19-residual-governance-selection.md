@@ -186,13 +186,17 @@ Still NOT AUTHORIZED:
 ## 9. Next（Human only）
 
 ```text
-1. Human SELECT 一件の first residual（推奨候補は非拘束）:
-   - GOV-AUD-01（handoff の正本）
-   - GOV-AUD-05/DEC-012 post-retention deletion
-   - その他 inventory 行のいずれか
-2. 選定残件の Decision Packet → Human Acceptance
-3. 1件完了ごとに次残件を Human SELECT（Agent auto-advance FORBIDDEN）
-4. #19 Close は残件移管完了後の別 Human disposition
+Strict order（Draft PR #255 mirror 前に first residual を開始しない）:
+  1. PR #255 Independent Review
+  2. Human Ready（HUMAN-ONLY）
+  3. Human Merge（HUMAN-ONLY） → main mirror
+  4. After Merge: Human SELECT 一件の first residual（推奨候補は非拘束）:
+       - GOV-AUD-01（handoff の正本）
+       - GOV-AUD-05/DEC-012 post-retention deletion
+       - その他 inventory 行のいずれか
+  5. 選定残件の Decision Packet → Human Acceptance
+  6. 1件完了ごとに次残件を Human SELECT（Agent auto-advance FORBIDDEN）
+  7. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 Agent recommendation（非拘束 / NOT Selection evidence）:

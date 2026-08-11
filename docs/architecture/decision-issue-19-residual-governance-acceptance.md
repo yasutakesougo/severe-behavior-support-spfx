@@ -80,12 +80,16 @@ First residual inside #19 = NOT SELECTED
 ## Next
 
 ```text
-1. Human SELECT one first residual from Selection inventory
-   （Agent recommendation GOV-AUD-01 is non-binding）
-2. Write Decision Packet for that residual only
-3. Human Acceptance / LOCKED for that residual only
-4. Repeat one-by-one；no Agent auto-advance
-5. #19 Close remains later / separate Human disposition
+Strict order（Draft PR #255 mirror 前に first residual を開始しない）:
+  1. PR #255 Independent Review
+  2. Human Ready（HUMAN-ONLY）
+  3. Human Merge（HUMAN-ONLY） → main mirror
+  4. After Merge: Human SELECT one first residual from Selection inventory
+     （Agent recommendation GOV-AUD-01 is non-binding）
+  5. Write Decision Packet for that residual only
+  6. Human Acceptance / LOCKED for that residual only
+  7. Repeat one-by-one；no Agent auto-advance
+  8. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference
