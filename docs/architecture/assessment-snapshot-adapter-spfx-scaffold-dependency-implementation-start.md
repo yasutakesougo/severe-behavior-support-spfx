@@ -37,6 +37,8 @@ The official SPFx 1.23.2 template inventory was used as the dependency source of
 ### Dependency install continuation（registry-reachable environment）
 
 ```text
+Continuation PR: #227
+Base Implementation Start PR: #226
 npm install: RUN / PASS
   environment: npm registry reachable
   packages added: 1382
