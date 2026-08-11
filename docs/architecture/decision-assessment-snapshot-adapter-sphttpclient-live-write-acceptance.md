@@ -73,7 +73,11 @@ Deploy: NOT AUTHORIZED（write PASS prerequisite unmet）
 ## Next
 
 ```text
-1. Human（or credentialed environment）executes packet §5
-2. Record verification evidence doc（PASS/FAIL）
-3. Only after PASS: consider separate Human GO for Deploy
+1. Human executes packet §5（synthetic + cleanup）
+2. Human fills + commits verification doc on branch
+   cursor/as-adapter-sphttpclient-live-write-a288
+   （same path as live-read PASS commit 4a76db5）
+   OR pastes filled fields in Agent chat
+3. Env-setup checkbox alone is insufficient
+4. Only after PASS: consider separate Human GO for Deploy
 ```
