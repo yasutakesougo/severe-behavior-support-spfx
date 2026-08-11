@@ -19,6 +19,7 @@ Status: Accepted / LOCKED（GO boundary）
 Human Decision: GO-LIVE-WRITE
 Human Acceptance date: 2026-08-11
 Live-read HEAD: 4a76db5490ce223e22b01abf67f253566ab90487
+PR: #231
 
 Authorized:
   synthetic live write verification on
