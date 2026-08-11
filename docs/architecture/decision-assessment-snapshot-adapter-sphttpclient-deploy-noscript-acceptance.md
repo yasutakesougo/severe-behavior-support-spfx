@@ -61,24 +61,40 @@ GO-DEPLOY-NOSCRIPT-TEMP ≠ Agent upload / Agent mutation
 prior GO-DEPLOY alone ≠ NoScript mutation authorization
 ```
 
-## Current execution snapshot
+## Execution result
 
 ```text
-Parent Deploy:
-  NOT PASS / BLOCKED_BY_NOSCRIPT_GUARD
-  NoScript mutation = 0
-  Tenant Deploy = NOT COMPLETED
+Human one-set execution = COMPLETE / PASS
 
-This GO:
-  Accepted / LOCKED（boundary）
-  execution = NOT STARTED / HOLD FOR HUMAN ONE-SET
+Baseline:
+  Tenant App Catalog DenyAddAndCustomizePages = Enabled
+
+Temporary enable:
+  DenyAddAndCustomizePages = Disabled
+
+Deploy:
+  Tenant Add-PnPApp -Publish -Overwrite = PASS
+  app title = severe-behavior-support-spfx-shell-client-side-solution
+  AppCatalogVersion = 1.0.0.0
+  Deployed = True
+
+Restore:
+  final DenyAddAndCustomizePages = Enabled
+  matches baseline = YES
+  RESTORE CONFIRMED = Enabled
+
+Permanent scripting leave-behind = 0
+Agent mutation / upload = 0
 ```
 
-## Next
+## Resulting gate state
 
 ```text
-1. Human runs packet §3 one set
-2. Paste evidence（chat or commit）
-3. Record PASS/FAIL on this verification + update parent Deploy verification
-4. stop（Ready / Merge remains separate）
+Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
+= PASS / VERIFIED
+
+Parent Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
+= PASS / VERIFIED
+
+Ready / Merge remains separate / HUMAN-ONLY
 ```
