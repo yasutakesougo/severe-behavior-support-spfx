@@ -30,7 +30,9 @@ export function isShellSiteSelection(value: string): value is ShellSiteSelection
   return value === SHELL_SITE_SELECTION_UNSELECTED || isShellSiteId(value);
 }
 
-export function isSiteUnselected(selection: ShellSiteSelection): boolean {
+export function isSiteUnselected(
+  selection: ShellSiteSelection,
+): selection is typeof SHELL_SITE_SELECTION_UNSELECTED {
   return selection === SHELL_SITE_SELECTION_UNSELECTED;
 }
 

@@ -3,11 +3,14 @@
 ```text
 Issue: #28
 Unit: SHELL-UX-3 / C-B — Display-only Multi-Site Selector
-Status: Implementation Start GO / IN PROGRESS
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: Decision-SHELL-UX-3-MULTI-SITE-SELECTOR-1 = SELECTED / LOCKED
 Selection merge: 205954111bf37c19e178bb2042864b86c176c270（PR #240）
 Human Implementation Start: GO（2026-08-11）
 Independence: PASS（presentation-only；membership OUT）
+PR: #241
+Browser smoke: PASS / VERIFIED（shell-ux-3-browser-smoke.md）
+Heft test: 19 / 19 PASS
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -63,14 +66,16 @@ SHELL_UX_SLICE.membershipLookupAuthorized = false
 未選択 = independent presentation state → stop chrome
 ```
 
-## Delivered surface（target）
+## Delivered surface
 
 ```text
 spfx/src/shell/ux/site-selection.ts
 spfx/src/shell/ux/SiteSelector.tsx
 spfx/src/shell/ux/SiteUnselectedStop.tsx
 spfx/src/shell/ux/AppShellChrome.tsx
+spfx/src/shell/ux/*.test.ts
 spfx/smoke/shell-ux-3/*
+docs/architecture/shell-ux-3-browser-smoke.md
 ```
 
 ## Stop / HOLD
