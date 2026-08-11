@@ -266,7 +266,7 @@ Issue 本文・コメント全文の再取得は未実施。
 | Observation OP-1/OP-2 | Accepted（ownership 表） | comment ID は ownership 表に未記載 |
 | Review due RD-1/RD-2 | Accepted（ownership 表） | comment ID は ownership 表に未記載 |
 | RuleSetVersion RSV-1〜4 | Accepted（ownership 表） | comment ID は ownership 表に未記載 |
-| Issue #19 / GOV-AUD residual governance | **track SELECTED**（[`decision-issue-19-residual-governance-selection.md`](./decision-issue-19-residual-governance-selection.md)）。**GOV-AUD-01 Accepted / Option C + identity LOCKED**（[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)）。02/03/04/05(retention)/06 Accepted；07〜10/post-retention OPEN | — |
+| Issue #19 / GOV-AUD residual governance | **track SELECTED**（[`decision-issue-19-residual-governance-selection.md`](./decision-issue-19-residual-governance-selection.md)）。**GOV-AUD-01 Accepted / Option C + identity LOCKED**（[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)）。02/03/04/05(retention)/06 Accepted；**GOV-AUD-07 unit SELECTED**（Option NOT SELECTED；[`decision-gov-aud-07-backup-restore-owner-selection.md`](./decision-gov-aud-07-backup-restore-owner-selection.md)）；08〜10/post-retention OPEN | — |
 | Issue #16 / #19 / GOV-RULE-06 | 見直し周期 practice cadence | **Accepted** [`decision-gov-rule-06-review-cadence-acceptance.md`](./decision-gov-rule-06-review-cadence-acceptance.md) / source review PASS / contract Accepted |
 | Issue #16 / #19 / GOV-RULE-05 | 見直し周期の基準日 | **Accepted** [`decision-gov-rule-05-review-anchor-acceptance.md`](./decision-gov-rule-05-review-anchor-acceptance.md) / [`review-anchor-contract.md`](./review-anchor-contract.md) |
 | Issue #8 / DEC-009 等 | Deferred 含む | — |

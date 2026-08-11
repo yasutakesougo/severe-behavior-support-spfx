@@ -84,11 +84,13 @@ Consumed:
   PR #255 Ready + Merge = COMPLETE
   PR #256 GOV-AUD-01 unit SELECT = MERGED
   PR #257 GOV-AUD-01 Option C = MERGED
-  GOV-AUD-01 identity fill-in = Accepted / LOCKED
+  PR #258 GOV-AUD-01 identity fill-in = MERGED
+  GOV-AUD-07 unit SELECT = Decision-GOV-AUD-07-SELECTION-1（Option NOT SELECTED）
 
 Next:
-  1. next residual SELECT one-by-one；no Agent auto-advance
-  2. #19 Close remains later / separate Human disposition
+  1. GOV-AUD-07 Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human SELECT Option A–D or HOLD；no Agent auto-advance
+  3. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference

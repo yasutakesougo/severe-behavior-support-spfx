@@ -94,7 +94,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 |---|---|---|---|
 | GOV-AUD-01 | handoff の正本 | ORG_POLICY | **Accepted / LOCKED / Option C + identity fill-in LOCKED**（[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)） |
 | GOV-AUD-05 / DEC-012 post-retention deletion | 5年経過後の完全削除可否 | MIXED | OPEN / NOT SELECTED |
-| GOV-AUD-07 | バックアップ・復元の一次責任者 | ORG_POLICY | OPEN / NOT SELECTED |
+| GOV-AUD-07 | バックアップ・復元の一次責任者 | ORG_POLICY | **unit SELECTED** / Option NOT SELECTED（[`decision-gov-aud-07-backup-restore-owner-selection.md`](./decision-gov-aud-07-backup-restore-owner-selection.md)） |
 | GOV-AUD-08 | 復旧後の業務確認者 | ORG_POLICY | OPEN / NOT SELECTED |
 | GOV-AUD-09 | 再開承認者 | ORG_POLICY | OPEN / NOT SELECTED |
 | GOV-AUD-10 | 重大障害時の連絡経路 | ORG_POLICY | OPEN / NOT SELECTED |
@@ -111,8 +111,9 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 ```text
 Stale marker correction（docs truth）:
   「GOV-AUD-01〜10 = 正式回答待ち」は不正確。
-  02 / 03 / 04 / 05(retention) / 06 は Accepted。
-  01 / 07〜10 および post-retention deletion が残件。
+  01 / 02 / 03 / 04 / 05(retention) / 06 は Accepted。
+  GOV-AUD-07 = unit SELECTED / Option NOT SELECTED。
+  08〜10 および post-retention deletion が OPEN 残件。
 ```
 
 ## 5. Authorized IN（Selection scope）
@@ -190,12 +191,14 @@ Consumed progression:
   PR #255 IR → Ready → Merge = COMPLETE
   First residual unit SELECT = GOV-AUD-01（PR #256 MERGED）
   GOV-AUD-01 Option C = Accepted / LOCKED（PR #257 MERGED）
-  GOV-AUD-01 identity fill-in = Accepted / LOCKED
+  GOV-AUD-01 identity fill-in = Accepted / LOCKED（PR #258 MERGED）
     （Decision-GOV-AUD-01-IDENTITY-1）
+  Next residual unit SELECT = GOV-AUD-07（Decision-GOV-AUD-07-SELECTION-1）
 
 Next:
-  1. 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
-  2. #19 Close は残件移管完了後の別 Human disposition
+  1. GOV-AUD-07 Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human SELECT Option A–D or HOLD（Agent auto-select FORBIDDEN）
+  3. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 First residual history（consumed）:
@@ -203,6 +206,13 @@ First residual history（consumed）:
 ```text
 SELECT GOV-AUD-01 → Option C Accepted → identity fill-in Accepted
 identity: decision-gov-aud-01-identity-fill-in-acceptance.md
+```
+
+Current residual（unit）:
+
+```text
+SELECT GOV-AUD-07 — Option A/B/C/D/H NOT SELECTED
+Selection: decision-gov-aud-07-backup-restore-owner-selection.md
 ```
 
 ## Reference
