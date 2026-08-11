@@ -92,4 +92,6 @@ Do not continue #21 / #22
 Do not implement error-code generation / failure classification / telemetry / retry
 Do not enable liveTenantIoAuthorized / REST / binder wiring
 Do not auto-select other residual candidates
+next shell UX slice（SHELL-UX-6 / C-A SELECTED / Implementation Start NOT AUTHORIZED）
+  see decision-shell-ux-6-unauthenticated-panel-acceptance.md
 ```
