@@ -77,12 +77,28 @@
   font-weight: 600;
 }
 
+.saveStatePresentation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  max-width: 18rem;
+}
+
 .saveStateBadge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
   border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+.saveStateDescription {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  text-align: right;
+  opacity: 0.9;
 }
 
 .saveState_unsaved {
@@ -165,6 +181,15 @@
   .brandRow {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .saveStatePresentation {
+    align-items: flex-start;
+    max-width: 100%;
+  }
+
+  .saveStateDescription {
+    text-align: left;
   }
 
   .navButton {

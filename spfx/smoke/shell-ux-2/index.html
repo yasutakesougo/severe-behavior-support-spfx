@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SHELL-UX-2 browser smoke</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "Hiragino Sans", sans-serif;
+        background: #f3f2f1;
+      }
+      .appShell {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .skipLink {
+        position: absolute;
+        left: -999px;
+      }
+      .skipLink:focus {
+        left: 8px;
+        top: 8px;
+        z-index: 10;
+        background: #fff;
+        padding: 8px;
+      }
+      .demoBanner {
+        background: #fff4ce;
+        border-bottom: 1px solid #f3d459;
+        padding: 8px 16px;
+        font-weight: 600;
+      }
+      .shellHeader {
+        background: #fff;
+        padding: 12px 16px;
+        border-bottom: 1px solid #edebe9;
+      }
+      .brandRow {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .productName {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+      }
+      .saveStatePresentation {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+        max-width: 18rem;
+      }
+      .saveStateBadge {
+        border-radius: 4px;
+        padding: 2px 8px;
+        background: #e1dfdd;
+        font-size: 0.85rem;
+      }
+      .saveStateDescription {
+        margin: 0;
+        font-size: 0.75rem;
+        text-align: right;
+      }
+      .currentSite {
+        margin-top: 8px;
+      }
+      .currentSiteLabel {
+        display: block;
+        color: #605e5c;
+        font-size: 0.75rem;
+      }
+      .userLine {
+        margin: 4px 0 0;
+        color: #323130;
+      }
+      .shellNav {
+        display: flex;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #faf9f8;
+        border-bottom: 1px solid #edebe9;
+      }
+      .navButton {
+        border: 1px solid #8a8886;
+        background: #fff;
+        padding: 6px 12px;
+        border-radius: 2px;
+      }
+      .navButton:focus {
+        outline: 2px solid #605e5c;
+        outline-offset: 2px;
+      }
+      .shellMain {
+        padding: 16px;
+      }
+      .statusPanel {
+        background: #fff;
+        border: 1px solid #c8c6c4;
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+      .readyRegion {
+        background: #fff;
+        border: 1px solid #edebe9;
+        padding: 16px;
+      }
+      @media (max-width: 768px) {
+        .brandRow {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .saveStatePresentation {
+          align-items: flex-start;
+          max-width: 100%;
+        }
+        .saveStateDescription {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./smoke-bundle.js"></script>
+  </body>
+</html>

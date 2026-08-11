@@ -23,7 +23,7 @@ SHELL-UX-1 closeout HEAD: 957fc67b051c176d1fac1bb7705562d6b32185c1
 Selected:
   SHELL-UX-2 — Save State Presentation
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（separate；shell-ux-2-implementation-start.md）
 #28 Close: NOT AUTHORIZED
 #22 adapter continuation: NOT AUTHORIZED
 ```
@@ -38,8 +38,8 @@ Human Decision: SELECT SHELL-UX-2
 Decision-SHELL-UX-2-SAVE-STATE-PRESENTATION-1: Accepted / LOCKED
 
 Meaning:
-  authorize the next #28 shell UX slice boundary now
-  keep Implementation Start as a later separate Human GO
+  authorize the next #28 shell UX slice boundary
+  Implementation Start is a separate Human GO（recorded in shell-ux-2-implementation-start.md）
 ```
 
 ## Boundary
@@ -57,17 +57,18 @@ SELECT SHELL-UX-2 ≠ save-outcome judgment logic
 
 ```text
 Selection = SELECTED / LOCKED
-Implementation Start = NOT AUTHORIZED / HOLD
-code mutation for SHELL-UX-2 = 0
+Selection merge = ec20c12cf4a897aa906faefd9da6515eaaf5a023（PR #237）
+Implementation Start = GO（separate Human GO；see shell-ux-2-implementation-start.md）
+#28 Close = NOT AUTHORIZED
 ```
 
 ## Next
 
 ```text
-1. stop（Selection only）
-2. separate Human GO for Implementation Start（exact IN/OUT）
-3. only after Implementation Start GO: code + tests + browser smoke
-4. #28 Close remains later / separate
+1. Implementation Start GO recorded（shell-ux-2-implementation-start.md）
+2. deliver code + tests + browser smoke under exact IN/OUT
+3. #28 Close remains later / separate
+4. #237 merge ≠ Implementation Start（already separated）
 ```
 
 ## Reference
