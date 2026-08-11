@@ -24,7 +24,7 @@ Baseline tip: 61a212a409b4134c802435226998753d1903ee1f
 Selected:
   Display-only multi-site selector + site-unselected stop chrome
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（separate；shell-ux-3-implementation-start.md）
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -61,18 +61,19 @@ SITE-ISG / SITE-HOM = display choices only
 
 ```text
 Selection = SELECTED / LOCKED
-Implementation Start = NOT AUTHORIZED / HOLD
-code mutation for SHELL-UX-3 = 0
+Selection merge = 205954111bf37c19e178bb2042864b86c176c270（PR #240）
+Implementation Start = GO（separate；shell-ux-3-implementation-start.md）
+#28 Close = NOT AUTHORIZED
 other residual candidates C-A / C-C〜C-H = NOT SELECTED
 ```
 
 ## Next
 
 ```text
-1. stop（Selection only）
-2. separate Human GO for Implementation Start（exact IN/OUT）
-3. only after Implementation Start GO: code + tests + browser smoke
-4. #28 Close remains later / separate
+1. Implementation Start GO recorded（shell-ux-3-implementation-start.md）
+2. deliver code + tests + browser smoke under exact IN/OUT
+3. #28 Close remains later / separate
+4. #240 merge ≠ Implementation Start（already separated）
 ```
 
 ## Reference
