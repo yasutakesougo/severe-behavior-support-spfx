@@ -16,6 +16,7 @@ Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-BINDER-IMPLEMENTATION-START-1
 Status: ACCEPTED / STARTED（docs + code slice）
 Human Decision: GO
 Kind: Binder Implementation Start（synthetic/local verification）
+PR: #229
 ```
 
 ## Authorized IN
