@@ -5,7 +5,6 @@
 
 Issue #19 所有の最小単位。
 GOV-RULE-10（変更承認）/ 11（境界）/ 12（訂正）ではない。
-Accepted（Option）ではない。
 Agent がルール本文・制度値を発明しない。
 Implementation Start ではない。
 
@@ -18,16 +17,17 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-RULE-09
 Kind: Human Decision packet（narrow）
-Status: OPEN / Option NOT SELECTED
+Status: Accepted / LOCKED / Option B
 Owner: Issue #19
-Selected via: Decision-GOV-RULE-09-SELECTION-1
+Selected via: Decision-GOV-RULE-09-SELECTION-1（PR #267 MERGED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし）
-Human Selected Option: NOT SELECTED
-Issue #19 design recommendation（non-binding）: B（法人業務責任者）
+Human Selected Option: B（法人業務責任者）
+Option Acceptance: decision-gov-rule-09-rule-content-owner-option-b-acceptance.md
+Issue #19 design recommendation（non-binding）: B（≠ Human Acceptance evidence）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -45,7 +45,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ```text
 GOV-AUD-01〜10: Accepted / LOCKED（cycle complete）
 GOV-RULE-05〜08: Accepted（該当分；08 = NOT ADOPTED）
-GOV-RULE-09 rule content owner: UNDECIDED（本 packet）
+GOV-RULE-09 rule content owner: Accepted / LOCKED / Option B = 法人業務責任者
 GOV-RULE-10 change approver: OPEN / OUT
 GOV-RULE-11 / 12: OPEN / OUT
 GOV-STAFF / GOV-PERF: OPEN / OUT
@@ -161,15 +161,15 @@ C. 開発担当
 D. その他（Human が明示）
 H. まだ決めない / HOLD
 
-答え: NOT SELECTED
+答え: B（Accepted / LOCKED）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A–D | Option Acceptance → owner LOCKED。ルール本文/実装は別 GO |
-| H | Option HOLD。unit Selection は維持可 |
+| **B** | **Option Acceptance LOCKED（本 Decision）**。ルール本文/実装は別 GO |
+| A / C / D / H | NOT SELECTED |
 
 維持:
 
@@ -185,4 +185,5 @@ next residual auto-select: FORBIDDEN
 
 - Selection: `decision-gov-rule-09-rule-content-owner-selection.md`
 - SELECT Acceptance: `decision-gov-rule-09-rule-content-owner-acceptance.md`
+- Option B Acceptance: `decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`
 - Issue #19 GOV-RULE-09 source options A–D

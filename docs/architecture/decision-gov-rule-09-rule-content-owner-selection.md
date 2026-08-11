@@ -25,7 +25,8 @@ Candidate origin:
   Prior non-binding recommendation: GOV-RULE-09 / Option tip B
   Binding before this Decision: NONE → unit now SELECTED by Human
 
-Option Acceptance: NOT SELECTED
+Option Acceptance: Accepted / LOCKED / Option B
+  （decision-gov-rule-09-rule-content-owner-option-b-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN
@@ -100,27 +101,33 @@ OUT:
 
 ```text
 Decision-GOV-RULE-09-SELECTION-1 = SELECTED / LOCKED
+Option B = Accepted / LOCKED（別 Acceptance）
 
 HOLD:
-  concrete Option A–D = NOT SELECTED
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
+  next residual = NOT SELECTED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human SELECT Option A–D or HOLD
-3. Option Acceptance / LOCKED for GOV-RULE-09 only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #267 = MERGED
+  Human Option = B
+
+Current Option Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-rule-09-rule-content-owner-acceptance.md`
 - Decision Packet: `decision-gov-rule-09-rule-content-owner-decision-packet.md`
-- Independent Review: `decision-gov-rule-09-rule-content-owner-independent-review.md`
+- Option B Acceptance: `decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`
+- Independent Review（Selection）: `decision-gov-rule-09-rule-content-owner-independent-review.md`
+- Independent Review（Option B）: `decision-gov-rule-09-rule-content-owner-option-b-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Prior cycle tip: `decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
