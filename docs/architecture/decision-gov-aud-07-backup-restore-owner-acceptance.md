@@ -21,7 +21,7 @@ Human Decision: SELECT GOV-AUD-07
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: c2199bdbf6e44854b9975b1b4aedbd05bd74affd
-PR: （Selection / Packet / SELECT Acceptance / IR only）
+PR: #259（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-AUD-07 — バックアップ・復元の一次責任者
