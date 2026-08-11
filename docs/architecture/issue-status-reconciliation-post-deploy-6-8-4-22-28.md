@@ -14,19 +14,37 @@ Kind: Status Reconciliation（Issue hygiene；not re-Decision）
 Status: EXECUTED（body Current-status patches + comments）
 Date: 2026-08-11
 Assessor: Agent read-only against origin/main + Accepted / LOCKED docs
-SoT tip: 1c24f3ebad3819b12cb8ee05f83c6ff558cfbf38
+Original SoT tip（reconciliation freeze）: 1c24f3ebad3819b12cb8ee05f83c6ff558cfbf38
+SoT tip（baseline refresh）: 30a1656416e83917b5bad08b0278037c02b8e0fe
 Close of any of the 5 Issues: FORBIDDEN
 SharePoint / M365 / Entra mutation by this packet: FORBIDDEN
 Implementation Start of unrelated backlog: NOT AUTHORIZED
 ```
 
+## Baseline refresh（PR #234）
+
+```text
+Purpose: rebase + tip sync only；not a new Status Reconciliation Decision
+Original freeze tip: 1c24f3ebad3819b12cb8ee05f83c6ff558cfbf38
+Current main tip: 30a1656416e83917b5bad08b0278037c02b8e0fe
+Tip advance since freeze: PR #235 squash merge
+  feat(spfx): SHELL-UX-1 presentation chrome (#28)
+
+Semantic outcome unchanged（diff 0 on Close / KEEP OPEN）:
+  #6 / #8 / #4 / #22 / #28 = KEEP OPEN
+  Deploy evidence HEAD unchanged: 7358a12160e4cf4835230df0b4fe64250d8f52f1
+  SharePoint / M365 / Entra mutation by this packet: FORBIDDEN
+  Ready / Merge of this PR: HUMAN-ONLY（Merge = separate GO）
+```
+
 ## Shared SoT freeze
 
 ```text
-main HEAD: 1c24f3ebad3819b12cb8ee05f83c6ff558cfbf38
+main HEAD: 30a1656416e83917b5bad08b0278037c02b8e0fe
 Deploy evidence HEAD: 7358a12160e4cf4835230df0b4fe64250d8f52f1
 Live-write evidence HEAD: f8cc4ceb02b9c99643f48e333de66ab0bef8a4c0
 Binder HEAD（referenced）: e52ad05cd5d8e2ec705034bb98cb22e9673dbf55
+SHELL-UX-1 merge（post-freeze tip advance）: 30a1656416e83917b5bad08b0278037c02b8e0fe
 
 AssessmentSnapshots column path（prior）:
   CN-1 CLOSED / CONSUMED / DEFAULT_COLUMNS_ONLY
@@ -66,6 +84,7 @@ Still true:
   Deploy PASS ≠ Ready / Merge
   Deploy PASS ≠ 3-month trial complete
   Deploy PASS ≠ production GO
+  SHELL-UX-1 Merge ≠ #28 Close
   real business data writes = NOT AUTHORIZED
   Entra / tenant config changes = NOT AUTHORIZED
 ```
@@ -75,11 +94,14 @@ Still true:
 ```text
 This reconciliation ≠ Close of #6 / #8 / #4 / #22 / #28
 This reconciliation ≠ #22 complete（AssessmentSnapshots binder path only advanced）
-This reconciliation ≠ #28 shell UX complete（scaffold / binder / package / Deploy only）
+This reconciliation ≠ #28 shell UX complete
+  （scaffold / binder / package / Deploy + SHELL-UX-1 presentation on main
+   still leave Issue completion criteria / approval deps open）
 This reconciliation ≠ #4 M365 env complete（App Catalog / Deploy slice only）
 This reconciliation ≠ #19 / #20 / #21 / #23 / #24 / #27 / #68–#71 Close
 This reconciliation ≠ Ready / Merge auto-progress
 This reconciliation ≠ additional SharePoint column creation
+Baseline tip refresh ≠ new Close / KEEP OPEN Decision
 ```
 
 ---
@@ -229,7 +251,7 @@ treating Deploy PASS as #22 Close = FORBIDDEN
 
 ### Recommendation
 
-**KEEP OPEN** + record scaffold / package / Deploy progress.
+**KEEP OPEN** + record scaffold / package / Deploy + SHELL-UX-1 presentation progress.
 
 ### Stale markers
 
@@ -246,27 +268,29 @@ Merge: NO-GO
 SPFx 1.23.2 exact isolated scaffold: DELIVERED（spfx/）
 Node 22 / React 17.0.1 / @microsoft/sp-* 1.23.2: LOCKED + materialised
 Heft build: PASS
-Jest: PASS（6 binder tests recorded in Deploy verification）
+Jest: PASS（binder + SHELL-UX-1 presentation tests on main）
 package-solution: PASS
 Tenant App Catalog Deploy: PASS / VERIFIED
+SHELL-UX-1 presentation chrome: MERGED on main（PR #235 → 30a1656）
+  demo banner / 保存5状態 / loading / access-denied / retrieval-failed
+  current-site label（display-only）/ PC・tablet / keyboard chrome
+  OUT held: REST / mapping / tenant / live R/W / binder host wiring = false
 ```
 
 ### Still OPEN / incomplete（Issue purpose）
 
 ```text
-共通アプリシェル UX:
-  SiteContext常時表示
-  アクセス不可 / 取得失敗共通境界
-  demoラベル
-  保存5状態共通部品
-  PC・タブレット / キーボード基盤
-業務固有ロジックを含まない shell 完了条件の残りチェック
+Issue #28 completion criteria beyond SHELL-UX-1 slice
+業務固有ロジックを含まない shell 完了の残り（Issue checkbox / acceptance）
+browser smoke（IR P2 on #235）未実施
+Approval dependencies（#19 / #21）and broader shell acceptance tests
+next shell UX slice = Human selection required（not authorized here）
 ```
 
 ### Why KEEP OPEN
 
-- Scaffold + binder + Deploy ≠ shell UX complete.
-- Approval dependencies (#19 / #21) and shell acceptance tests remain.
+- Scaffold + binder + Deploy + SHELL-UX-1 presentation ≠ Issue #28 Close.
+- Approval dependencies (#19 / #21) and remaining acceptance remain.
 
 ---
 
@@ -275,12 +299,13 @@ Tenant App Catalog Deploy: PASS / VERIFIED
 | Step | Action | Status |
 |---|---|---|
 | 1 | Freeze SoT tip `1c24f3e…` and Deploy evidence | **DONE** |
+| 1b | Baseline refresh tip → `30a1656…`（PR #235 on main） | **DONE**（docs tip sync；KEEP OPEN unchanged） |
 | 2 | Recommend KEEP OPEN for all 5 | **DONE** |
 | 3 | Patch #6 Current status / Gate | **DONE**（Issue body） |
 | 4 | Patch #8 Current status / Deploy path | **DONE**（Issue body） |
 | 5 | Patch #4 Current status（App Catalog / Deploy） | **DONE**（Issue body） |
 | 6 | Patch #22 Current status（binder / live / Deploy） | **DONE**（Issue body） |
-| 7 | Patch #28 Current status（scaffold / Deploy） | **DONE**（Issue body） |
+| 7 | Patch #28 Current status（scaffold / Deploy / SHELL-UX-1） | **DONE**（Issue body + tip sync） |
 | 8 | Leave all 5 OPEN | **required** |
 | 9 | Do not Close #219 / #19 / #20 / #21 / #23 / #24 / #27 / #68–#71 | **untouched** |
 
