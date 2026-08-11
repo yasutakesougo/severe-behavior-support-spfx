@@ -5,9 +5,16 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPFX-VERSION-SCAFFOLD-1
-Status: CANDIDATE / HUMAN DECISION REQUIRED
+Status: ACCEPTED / LOCKED
+Human Decision: V-1 + A + D-HOLD
+Human Acceptance date: 2026-08-11
 Baseline main: 51ca9f20f3bf6dd639d97b42b904845dbd9c0ca2
 Kind: docs-only Decision Packet
+
+Accepted / LOCKED set:
+  V-1 — SPFx 1.23.2 exact release line
+  A — isolated SPFx scaffold in dedicated subdirectory
+  D-HOLD — Decision only; no dependency/scaffold mutation in this unit
 
 Implementation Start: NOT AUTHORIZED
 package.json / lockfile mutation: 0 / FORBIDDEN IN THIS UNIT
@@ -17,7 +24,7 @@ live tenant I/O: 0 / FORBIDDEN
 SharePoint / M365 / Entra mutation: 0 / FORBIDDEN
 Deploy / real data: NO-GO
 
-Stop: HUMAN VERSION + SCAFFOLD/DEPENDENCY DECISION
+Stop: ACCEPTED / LOCKED RECORDING ONLY
 ```
 
 ## 1. Locked inputs
@@ -266,18 +273,27 @@ Ready / Merge
 AUTO-2 / Capability Registry work
 ```
 
-## 8. Stop condition
+## 8. Human Decision outcome（LOCKED）
 
 ```text
 Decision-AS-ADAPTER-SPFX-VERSION-SCAFFOLD-1
-= CANDIDATE / HUMAN DECISION REQUIRED
+= ACCEPTED / LOCKED / V-1 + A + D-HOLD
 
-Required Human Decision:
-  version + scaffold/dependency policy
+VERSION = LOCKED as V-1
+SCAFFOLD POLICY = LOCKED as A（isolated subdirectory）
+SCAFFOLD EXECUTION = NOT AUTHORIZED（D-HOLD）
+DEPENDENCY MUTATION = NOT AUTHORIZED（D-HOLD）
+BINDER IMPLEMENTATION START = NOT AUTHORIZED
 
-Until explicit Human Decision:
-  VERSION = NOT LOCKED
-  SCAFFOLD = NOT AUTHORIZED
-  DEPENDENCY MUTATION = NOT AUTHORIZED
-  BINDER IMPLEMENTATION START = NOT AUTHORIZED
+Next substantive unit（not started here）:
+  separate scaffold / dependency Implementation Start gate
 ```
+
+Selection:
+[`decision-assessment-snapshot-adapter-spfx-version-scaffold-selection.md`](./decision-assessment-snapshot-adapter-spfx-version-scaffold-selection.md)
+
+Acceptance:
+[`decision-assessment-snapshot-adapter-spfx-version-scaffold-acceptance.md`](./decision-assessment-snapshot-adapter-spfx-version-scaffold-acceptance.md)
+
+IR:
+[`decision-assessment-snapshot-adapter-spfx-version-scaffold-independent-review.md`](./decision-assessment-snapshot-adapter-spfx-version-scaffold-independent-review.md)
