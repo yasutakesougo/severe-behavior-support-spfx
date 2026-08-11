@@ -28,7 +28,8 @@ PR: #270（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-RULE-11 — 制度値と法人運用値の境界
 
-Fill-in 3 分類: NOT FILLED / NOT ACCEPTED
+Fill-in 3 分類: Accepted / LOCKED
+  （decision-gov-rule-11-value-boundary-fill-in-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -68,24 +69,27 @@ SELECT GOV-RULE-11 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-RULE-10 = COMPLETE（Option C）
 Current residual unit = SELECTED / LOCKED（GOV-RULE-11）
-Fill-in Acceptance = NOT FILLED / NOT ACCEPTED
+Fill-in Acceptance = Accepted / LOCKED
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #270 = MERGED
+  Human Fill-in = Accepted
+
+Fill-in Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human fill-in 3 分類 or HOLD
-  5. Fill-in Acceptance / LOCKED for GOV-RULE-11 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-rule-11-value-boundary-selection.md`
 - Decision Packet: `decision-gov-rule-11-value-boundary-decision-packet.md`
+- Fill-in Acceptance: `decision-gov-rule-11-value-boundary-fill-in-acceptance.md`
 - Independent Review: `decision-gov-rule-11-value-boundary-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`

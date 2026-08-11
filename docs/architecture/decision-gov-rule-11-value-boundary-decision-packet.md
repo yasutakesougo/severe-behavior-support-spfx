@@ -6,7 +6,6 @@
 Issue #19 所有の最小単位。
 GOV-RULE-09 / 10 の再 Decision ではない。
 GOV-RULE-12（訂正）ではない。
-Accepted（fill-in）ではない。
 Agent が制度値・運用値・事業所設定の分類を発明しない。
 Implementation Start ではない。
 
@@ -19,16 +18,18 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-RULE-11
 Kind: Human Decision packet（narrow / fill-in classification）
-Status: OPEN / Fill-in NOT FILLED
+Status: Accepted / LOCKED（fill-in）
 Owner: Issue #19
-Selected via: Decision-GOV-RULE-11-SELECTION-1
+Selected via: Decision-GOV-RULE-11-SELECTION-1（PR #270 MERGED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし / 分類の発明禁止）
-Human Fill-in: NOT FILLED / NOT ACCEPTED
+Human Fill-in: Accepted（Decision-GOV-RULE-11-FILL-IN-1）
+Fill-in Acceptance: decision-gov-rule-11-value-boundary-fill-in-acceptance.md
 Issue #19 design recommendation（non-binding）: NONE recorded
+Prior candidate: PREPARED / NON-BINDING（≠ Human Acceptance evidence）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -49,7 +50,7 @@ GOV-RULE-05〜08: Accepted（該当分；08 = NOT ADOPTED）
 GOV-RULE-09 rule content owner: Accepted / LOCKED / Option B = 法人業務責任者
 GOV-RULE-10 change approver: Accepted / LOCKED / Option C
   = 業務責任者が内容確認し、法人管理者が承認
-GOV-RULE-11 value boundary: UNDECIDED（本 packet / fill-in）
+GOV-RULE-11 value boundary: Accepted / LOCKED（fill-in；Decision-GOV-RULE-11-FILL-IN-1）
 GOV-RULE-12 past-version correction: OPEN / OUT
 GOV-STAFF / GOV-PERF: OPEN / OUT
 SharePoint / M365 / Deploy: NO-GO
@@ -137,21 +138,21 @@ Agent recommendation の欠如は Human Acceptance evidence ではない。
   制度値と法人運用値の境界（3 分類）をどう定めますか？
 
 Fill-in（Issue #19 原文）:
-  制度上固定し事業所変更不可: NOT FILLED
-  法人運用として変更可能: NOT FILLED
-  事業所設定として変更可能: NOT FILLED
+  制度上固定し事業所変更不可: 現時点では確定なし
+  法人運用として変更可能: GOV-RULE-05〜10 Accepted 論理（詳細は Fill-in Acceptance）
+  事業所設定として変更可能: 現時点では確定なし
 
 H. まだ決めない / HOLD
 
-答え: NOT FILLED / NOT ACCEPTED
+答え: Accepted / LOCKED（Decision-GOV-RULE-11-FILL-IN-1）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| Fill-in values | Fill-in Acceptance → boundary LOCKED。実装は別 GO |
-| H | Fill-in HOLD。unit Selection は維持可 |
+| **Fill-in** | **Fill-in Acceptance LOCKED（本 Decision）**。実装は別 GO |
+| H | NOT SELECTED |
 
 維持:
 
@@ -167,4 +168,5 @@ next residual auto-select: FORBIDDEN
 
 - Selection: `decision-gov-rule-11-value-boundary-selection.md`
 - SELECT Acceptance: `decision-gov-rule-11-value-boundary-acceptance.md`
+- Fill-in Acceptance: `decision-gov-rule-11-value-boundary-fill-in-acceptance.md`
 - Issue #19 GOV-RULE-11 source fill-in fields
