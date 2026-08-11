@@ -20,7 +20,6 @@ Issue: #28
 Candidate: C-E
 PR: #246（Selection / Acceptance only）
 Baseline tip: cc37cf0d7b71f9f5a8db57720e93f88a62050cad
-Selection tip: （updated after cite commit）
 
 Selected:
   Error-code + correlationId user-facing display
