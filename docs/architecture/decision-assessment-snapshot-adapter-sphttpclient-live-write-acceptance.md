@@ -64,8 +64,10 @@ live read PASS ≠ live write PASS
 
 ```text
 Unauthenticated Agent probe: HTTP 403 UnauthorizedAccessException
+Re-probe after Human "go": still HTTP 403 / no tenant session
 Authenticated live-write evidence: ABSENT
 Verification verdict: NOT PASS / HOLD FOR HUMAN OR CREDENTIALED EXECUTION
+Deploy: NOT AUTHORIZED（write PASS prerequisite unmet）
 ```
 
 ## Next
