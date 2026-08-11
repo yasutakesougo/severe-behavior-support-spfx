@@ -26,7 +26,7 @@ PR: #255（Selection / Acceptance only）
 Selected:
   Issue #19 residual governance track
 
-First residual Decision inside #19: SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
+First residual Decision inside #19: CONSUMED（GOV-AUD-01 Accepted / Option C）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 #22 adapter continuation: NOT AUTHORIZED
@@ -70,10 +70,10 @@ INTENDED ≠ CONFIRMED
 Selection = SELECTED / LOCKED
 Acceptance = Accepted / LOCKED（track boundary）
 Consumed on #19 path（do not re-Decision）:
-  GOV-AUD-02 / 03 / 04 / 05(retention prohibition) / 06
+  GOV-AUD-01（Option C） / 02 / 03 / 04 / 05(retention prohibition) / 06
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
-First residual inside #19 = SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
+First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -82,13 +82,13 @@ First residual inside #19 = SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
 ```text
 Consumed:
   PR #255 Ready + Merge = COMPLETE
-  First residual unit = SELECT GOV-AUD-01
+  PR #256 GOV-AUD-01 unit SELECT = MERGED
+  GOV-AUD-01 Option C = Accepted / LOCKED
 
 Next:
-  1. GOV-AUD-01 Option A–D or HOLD（Decision Packet）
-  2. Option Acceptance / LOCKED for GOV-AUD-01 only
-  3. Repeat residual SELECT one-by-one；no Agent auto-advance
-  4. #19 Close remains later / separate Human disposition
+  1. Human fill-in identity fields（system / reference_id_meaning）
+  2. next residual SELECT one-by-one；no Agent auto-advance
+  3. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference

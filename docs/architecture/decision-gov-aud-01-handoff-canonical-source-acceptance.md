@@ -27,7 +27,9 @@ PR: #256（Selection / Packet / SELECT Acceptance only）
 Selected unit:
   GOV-AUD-01 — handoff の正本
 
-Concrete Option A–D: NOT SELECTED
+Concrete Option: Accepted / LOCKED / C
+  （decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md）
+identity fields: NOT YET PROVIDED
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -64,25 +66,22 @@ INTENDED ≠ CONFIRMED
 
 ```text
 Parent track = SELECTED / LOCKED / MERGED（PR #255）
-First residual unit = SELECTED / LOCKED（GOV-AUD-01）
-Option Acceptance = NOT SELECTED
-other inventory residuals = NOT SELECTED
+Unit Selection = SELECTED / LOCKED / MERGED（PR #256）
+Option = Accepted / LOCKED / C
+identity fields = NOT YET PROVIDED
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
-  2. Human Ready（HUMAN-ONLY）
-  3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for GOV-AUD-01 only
-  6. Next residual SELECT = separate Human Decision
+1. Option C Acceptance PR: IR → Ready → Merge
+2. Human fill-in: meeting_or_minutes_system_identity / reference_id_meaning
+3. next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-aud-01-handoff-canonical-source-selection.md`
 - Decision Packet: `decision-gov-aud-01-handoff-canonical-source-decision-packet.md`
+- Option C Acceptance: `decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`

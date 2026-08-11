@@ -23,10 +23,12 @@ Candidate origin:
   Issue #19 §C GOV-AUD-01
   #19 residual inventory row: GOV-AUD-01
 
-Option Acceptance: NOT SELECTED（別 Human Decision）
+Option Acceptance: Accepted / LOCKED / Option C
+  （decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md）
+identity fields: NOT YET PROVIDED
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
-Agent auto-select Option A–D: FORBIDDEN
+Agent auto-select next residual: FORBIDDEN
 ```
 
 ## 1. Why this residual now
@@ -110,16 +112,22 @@ Still NOT AUTHORIZED:
 ## 8. Next（Human only）
 
 ```text
-1. PR Independent Review → Human Ready → Human Merge（本 Selection の mirror）
-2. Human SELECT one Option from Decision Packet（A–D or HOLD）
-3. Option Acceptance / LOCKED for GOV-AUD-01 only
-4. Next residual SELECT remains separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #256 MERGED
+  Option C Accepted / LOCKED
+
+Next:
+  1. Option C Acceptance recording PR: IR → Ready → Merge
+  2. Human fill-in identity fields
+  3. Next residual SELECT remains separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-aud-01-handoff-canonical-source-acceptance.md`
 - Decision Packet: `decision-gov-aud-01-handoff-canonical-source-decision-packet.md`
+- Option C Acceptance: `decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`
+- Option C IR: `decision-gov-aud-01-handoff-canonical-source-option-c-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
 - HO-1: `decision-ho-1-handoff-transition-ownership.md`
