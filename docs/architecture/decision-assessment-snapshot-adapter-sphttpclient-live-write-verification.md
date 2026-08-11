@@ -27,15 +27,29 @@ Prerequisite:
 ```text
 Authenticated SharePoint session: ABSENT
 pwsh / PnP.PowerShell / m365 CLI: ABSENT
+SharePoint / Graph MCP: ABSENT
+tenant secrets in Agent env: ABSENT
 
-Unauthenticated GET:
+Unauthenticated GET (initial + re-probe after Human "go"):
   https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/_api/web/lists/GetByTitle('AssessmentSnapshots')
   HTTP 403
   System.UnauthorizedAccessException
+
+Unauthenticated GET items $select binder surface:
+  HTTP 403
+  System.UnauthorizedAccessException
+
+PR #231 comments with write evidence: none
 ```
 
 This proves only that the Agent environment cannot complete live-write.
 It is **not** a live-write verification PASS or FAIL against authorized credentials.
+
+```text
+Human "go" after GO-LIVE-WRITE recording ≠ agent tenant login
+Human "go" ≠ Deploy authorization
+Human "go" ≠ Ready / Merge
+```
 
 ## Required Human / credentialed evidence（pending）
 
