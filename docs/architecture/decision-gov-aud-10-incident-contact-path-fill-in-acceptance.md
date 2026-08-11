@@ -130,13 +130,14 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | DEC-015 | **NOT ACCEPTED** |
 | 個人連絡先 / 手順書 / tenant mutation | **HOLD / NOT STARTED** |
 | FindingCode / A-5 / Implementation | **HOLD** |
-| next residual | **GOV-RULE-09 unit SELECTED** / Option NOT SELECTED（別 Decision） |
+| next residual | **GOV-RULE-09 Accepted / LOCKED / Option B**（別 Decision；本 Acceptance から自動 SELECT しない） |
 
 ## Next
 
 ```text
 GOV-AUD-10: Accepted / LOCKED（fill-in / role names）
-next residual = GOV-RULE-09 unit SELECTED（Option NOT SELECTED；別 Decision）
+GOV-RULE-09 = Accepted / LOCKED / Option B（別 Decision）
+next residual SELECT（one item；Agent auto-advance FORBIDDEN）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```

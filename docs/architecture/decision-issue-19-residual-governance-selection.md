@@ -101,7 +101,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-STAFF-01〜12 | 職員・利用者所属 / 資格 / 異動 | ORG_POLICY / MIXED / EVIDENCE_REQUIRED | OPEN / NOT SELECTED |
 | GOV-RULE-01 org reminder / trigger | 評価周期の法人通知・臨時確認 | MIXED（org part） | Proposed / NOT Accepted |
 | GOV-RULE-02〜04 | 観察期間起算・終了・必要件数 | EVIDENCE_REQUIRED / MIXED | OPEN / NOT SELECTED |
-| GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **unit SELECTED** / Option NOT SELECTED（[`decision-gov-rule-09-rule-content-owner-selection.md`](./decision-gov-rule-09-rule-content-owner-selection.md)） |
+| GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`](./decision-gov-rule-09-rule-content-owner-option-b-acceptance.md)） |
 | GOV-RULE-10〜12 | ルール変更承認・境界・訂正 | ORG_POLICY / MIXED | OPEN / NOT SELECTED |
 | DEC-003 org roles | 点数根拠登録・最終確認ロール | MIXED（org part） | Proposed / NOT Accepted |
 | DEC-006 concrete reason codes | 対象外理由コード | EVIDENCE_REQUIRED / MIXED | Deferred |
@@ -113,7 +113,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 Stale marker correction（docs truth）:
   「GOV-AUD-01〜10 = 正式回答待ち」は不正確。
   01 / 02 / 03 / 04 / 05(retention) / 06 / 07(Option A) / 08(Option B) / 09(Option A) / 10(fill-in) は Accepted。
-  GOV-RULE-09 = unit SELECTED / Option NOT SELECTED。
+  GOV-RULE-09 = Accepted / LOCKED / Option B（法人業務責任者）。
   GOV-RULE-10〜12 / GOV-STAFF / GOV-PERF / post-retention deletion が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
@@ -207,11 +207,13 @@ Consumed progression:
   GOV-AUD-10 unit SELECT = MERGED（PR #265）
   GOV-AUD-10 Fill-in = Accepted / LOCKED（role names；PR #266 MERGED）
     （decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md）
-  Next residual unit SELECT = GOV-RULE-09（Decision-GOV-RULE-09-SELECTION-1）
+  GOV-RULE-09 unit SELECT = MERGED（PR #267）
+  GOV-RULE-09 Option B = Accepted / LOCKED
+    （decision-gov-rule-09-rule-content-owner-option-b-acceptance.md）
 
 Next:
-  1. GOV-RULE-09 Selection PR: IR → Human Ready → Human Merge
-  2. After Merge: Human SELECT Option A–D or HOLD（Agent auto-select FORBIDDEN）
+  1. GOV-RULE-09 Option B Acceptance PR: IR → Human Ready → Human Merge
+  2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
   3. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
   4. #19 Close は残件移管完了後の別 Human disposition
 ```
@@ -256,11 +258,11 @@ Acceptance: decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md
 個人情報事故の連絡 = 法人管理者
 ```
 
-Current residual（unit）:
+GOV-RULE-09 history:
 
 ```text
-SELECT GOV-RULE-09 — Option A/B/C/D/H NOT SELECTED
-Selection: decision-gov-rule-09-rule-content-owner-selection.md
+SELECT GOV-RULE-09 → Option B Accepted（法人業務責任者）
+Acceptance: decision-gov-rule-09-rule-content-owner-option-b-acceptance.md
 ```
 
 ## Reference
