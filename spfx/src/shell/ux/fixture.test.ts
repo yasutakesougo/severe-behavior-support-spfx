@@ -15,7 +15,7 @@ describe("SHELL-UX-1 fixture boundary", () => {
   });
 
   it("does not authorize live tenant I/O, REST, or binder host wiring", () => {
-    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-1");
+    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-2");
     expect(SHELL_UX_SLICE.liveTenantIoAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.sharePointRestAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.binderHostWiringAuthorized).toBe(false);

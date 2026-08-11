@@ -2,7 +2,7 @@ import type { ShellSaveState } from "./save-state";
 import type { ShellViewMode } from "./shell-view-mode";
 
 /**
- * Display-only site label fixture for SHELL-UX-1.
+ * Display-only site label fixture for SHELL-UX.
  * Not SiteContext authorization truth (#21 OUT).
  */
 export type ShellSiteLabelFixture = Readonly<{
@@ -27,11 +27,11 @@ export const SHELL_UX_DEFAULT_FIXTURE: ShellUxFixture = {
   },
   saveState: "unsaved",
   viewMode: "ready",
-  correlationId: "shell-ux-1-synth-corr",
+  correlationId: "shell-ux-2-synth-corr",
 };
 
 export const SHELL_UX_SLICE = {
-  id: "SHELL-UX-1",
+  id: "SHELL-UX-2",
   liveTenantIoAuthorized: false as const,
   sharePointRestAuthorized: false as const,
   binderHostWiringAuthorized: false as const,

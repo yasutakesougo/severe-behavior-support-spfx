@@ -2,7 +2,7 @@ import * as React from "react";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
 import type { ShellSiteLabelFixture } from "./fixture";
-import { SaveStateBadge } from "./SaveStateBadge";
+import { SaveStatePresentation } from "./SaveStatePresentation";
 import type { ShellSaveState } from "./save-state";
 import type { ShellViewMode } from "./shell-view-mode";
 import { StatusPanel } from "./StatusPanel";
@@ -19,7 +19,7 @@ export type AppShellChromeProps = Readonly<{
 }>;
 
 /**
- * SHELL-UX-1 presentation chrome.
+ * SHELL-UX presentation chrome（SHELL-UX-2 save-state surface）.
  * No SharePoint REST, binder wiring, or authorization resolution.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
@@ -37,7 +37,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       <header className={styles.shellHeader} role="banner">
         <div className={styles.brandRow}>
           <p className={styles.productName}>強度行動障害支援（シェル表示）</p>
-          <SaveStateBadge state={saveState} />
+          <SaveStatePresentation state={saveState} />
         </div>
         <CurrentSiteLabel site={currentSite} />
         <p className={styles.userLine} data-shell-ux="user-display">
