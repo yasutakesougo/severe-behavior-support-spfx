@@ -282,7 +282,8 @@ SHELL-UX-1 presentation chrome: MERGED on main（PR #235 → 30a1656）
 ```text
 Issue #28 completion criteria beyond SHELL-UX-1 slice
 業務固有ロジックを含まない shell 完了の残り（Issue checkbox / acceptance）
-browser smoke（IR P2 on #235）未実施
+browser smoke（IR P2 on #235）= PASS / VERIFIED
+  evidence: shell-ux-1-browser-smoke-p2-closeout.md
 Approval dependencies（#19 / #21）and broader shell acceptance tests
 next shell UX slice = Human selection required（not authorized here）
 ```

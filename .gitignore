@@ -2,3 +2,5 @@ node_modules/
 coverage/
 dist/
 artifacts/
+spfx/smoke/**/smoke-bundle.js
+spfx/smoke/**/smoke-report.json
