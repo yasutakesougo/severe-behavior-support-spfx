@@ -21,7 +21,7 @@ Human Decision: SELECT GOV-AUD-10
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: 68a659e7d854b1b93064b95d1a0dd9568baf6b78
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #265（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-AUD-10 — 重大障害時の連絡経路

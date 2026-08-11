@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-AUD-10（重大障害時の連絡経路）
 Human Decision: SELECT GOV-AUD-10（unit）
 Baseline tip: 68a659e7d854b1b93064b95d1a0dd9568baf6b78
-PR: pending
+PR: #265
 Selection: decision-gov-aud-10-incident-contact-path-selection.md
 SELECT Acceptance: decision-gov-aud-10-incident-contact-path-acceptance.md
 Decision Packet: decision-gov-aud-10-incident-contact-path-decision-packet.md
