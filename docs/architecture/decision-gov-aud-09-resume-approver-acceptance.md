@@ -26,7 +26,8 @@ PR: #263（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-AUD-09 — 再開承認者
 
-Concrete Option A–D: NOT SELECTED
+Concrete Option A–D: Accepted / LOCKED / Option A
+  （decision-gov-aud-09-resume-approver-option-a-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -65,24 +66,27 @@ SELECT GOV-AUD-09 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-AUD-08 = COMPLETE（Option B / 業務責任者または指定確認者）
 Current residual unit = SELECTED / LOCKED（GOV-AUD-09）
-Option Acceptance = NOT SELECTED
+Option Acceptance = Accepted / LOCKED / Option A
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #263 = MERGED
+  Human Option = A
+
+Option Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for GOV-AUD-09 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-aud-09-resume-approver-selection.md`
 - Decision Packet: `decision-gov-aud-09-resume-approver-decision-packet.md`
+- Option A Acceptance: `decision-gov-aud-09-resume-approver-option-a-acceptance.md`
 - Independent Review: `decision-gov-aud-09-resume-approver-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`

@@ -26,7 +26,8 @@ Candidate origin:
   #19 residual inventory row: GOV-AUD-09
   Human Decision: GOV-AUD-09（next residual after GOV-AUD-08 Option B main mirror）
 
-Option Acceptance: NOT SELECTED
+Option Acceptance: Accepted / LOCKED / Option A
+  （decision-gov-aud-09-resume-approver-option-a-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN
@@ -98,27 +99,33 @@ OUT:
 
 ```text
 Decision-GOV-AUD-09-SELECTION-1 = SELECTED / LOCKED
+Option A = Accepted / LOCKED（別 Acceptance）
 
 HOLD:
-  concrete Option A–D = NOT SELECTED
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
+  next residual = NOT SELECTED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human SELECT Option A–D or HOLD
-3. Option Acceptance / LOCKED for GOV-AUD-09 only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #263 = MERGED
+  Human Option = A
+
+Current Option Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-aud-09-resume-approver-acceptance.md`
 - Decision Packet: `decision-gov-aud-09-resume-approver-decision-packet.md`
-- Independent Review: `decision-gov-aud-09-resume-approver-independent-review.md`
+- Option A Acceptance: `decision-gov-aud-09-resume-approver-option-a-acceptance.md`
+- Independent Review（Selection）: `decision-gov-aud-09-resume-approver-independent-review.md`
+- Independent Review（Option A）: `decision-gov-aud-09-resume-approver-option-a-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Prior unit: `decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
