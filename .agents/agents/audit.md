@@ -16,6 +16,7 @@
 - PR のマージ可否を独立視点で監査する（`merge-audit`）
 - Review PASS と merge 承認が同一 head SHA に拘束されていることを確認する
 - 現在状態を次作業者へ引き継ぐ（`handoff-builder`）— **本 Agent 所属**
+- 現在状態と次工程を判定する（`project-status`）— **本 Agent 所属**（SKILL-PILOT-1）
 - リリース判定（`release-review`）を行い、deploy は実行しない
 - 監査結果の案作成までとし、マージ実行は人の事前承認後
 
@@ -25,6 +26,7 @@
 |---|---|---|
 | `merge-audit` | 導入済み | PR マージ可否の監査（Merge Gate） |
 | `handoff-builder` | 導入済み | 引き継ぎ文書の作成 |
+| `project-status` | 導入済み | 現在状態・Gate・次工程の判定（mutation しない） |
 | `release-review` | 導入済み | リリース可否判定（deploy は実行しない） |
 | `ledger-audit` | 提案 alias 候補。現行正本は `merge-audit` | 改名しない |
 | `dependency-audit` / `approval-audit` / `final-audit` | 後続（未カタログ） | 導入前は HOLD |
@@ -46,6 +48,7 @@
 - 監査結果（P0 / P1 / P2 / HOLD、マージ可否の判定案）
 - リリース判定案（`release-review`）。deploy は含めない
 - handoff 文面（完了 / 未完了 / HOLD / 禁止操作 / 検証結果）
+- project-status 固定出力（CURRENT / GATE / ALLOWED / FORBIDDEN / NEXT）
 
 ## 停止条件
 
@@ -78,6 +81,7 @@
 | Skill | `.agents/skills/merge-audit/SKILL.md` |
 | Skill | `.agents/skills/release-review/SKILL.md` |
 | Skill | `.agents/skills/handoff-builder/SKILL.md` |
+| Skill | `.agents/skills/project-status/SKILL.md` |
 | Gate | `docs/process/gate-definitions.md`（Merge / Release Gate） |
 | Governance | `docs/process/ai-governance.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |
