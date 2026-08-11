@@ -70,10 +70,12 @@ INTENDED ≠ CONFIRMED
 Selection = SELECTED / LOCKED
 Acceptance = Accepted / LOCKED（track boundary）
 Consumed on #19 path（do not re-Decision）:
-  GOV-AUD-01（Option C） / 02 / 03 / 04 / 05(retention prohibition) / 06
+  GOV-AUD-01（Option C + identity） / 02 / 03 / 04 / 05(retention prohibition) / 06
+  GOV-AUD-07（Option A / Microsoft 365管理者；DEC-015 NOT ACCEPTED）
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
+Current residual Option = CONSUMED（GOV-AUD-07 Accepted / Option A）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
