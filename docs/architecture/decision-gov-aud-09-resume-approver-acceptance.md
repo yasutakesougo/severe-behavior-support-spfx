@@ -21,7 +21,7 @@ Human Decision: SELECT GOV-AUD-09
 Human Acceptance date: 2026-08-11
 Issue: #19
 Baseline tip: 5d5fa558ba650ffa4744d423a9b43fb13042dc0f
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #263（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-AUD-09 — 再開承認者

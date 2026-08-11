@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-AUD-09（再開承認者）
 Human Decision: SELECT GOV-AUD-09（unit）
 Baseline tip: 5d5fa558ba650ffa4744d423a9b43fb13042dc0f
-PR: pending
+PR: #263
 Selection: decision-gov-aud-09-resume-approver-selection.md
 SELECT Acceptance: decision-gov-aud-09-resume-approver-acceptance.md
 Decision Packet: decision-gov-aud-09-resume-approver-decision-packet.md
