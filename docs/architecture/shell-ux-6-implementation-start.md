@@ -3,12 +3,14 @@
 ```text
 Issue: #28
 Unit: SHELL-UX-6 / C-A — Unauthenticated Fail-Closed Presentation Panel
-Status: Implementation Start AUTHORIZED / IN PROGRESS
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: Decision-SHELL-UX-6-UNAUTHENTICATED-PANEL-1 = SELECTED / LOCKED
 Selection merge: 2f749b706e1b6730623981a1b5510b75c866ce01（PR #249）
 Human Implementation Start: GO（2026-08-11）
 Independence: PASS（presentation-only；auth judgment / Entra / redirect OUT）
-PR: （impl；number at create）
+PR: #250
+Browser smoke: PASS / VERIFIED（shell-ux-6-browser-smoke.md）
+Heft test: 29 / 29 PASS
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
