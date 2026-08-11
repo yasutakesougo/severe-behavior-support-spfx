@@ -38,7 +38,7 @@ ReactDOM.render(
   <div data-shell-ux="smoke-root" data-shell-ux-slice={SHELL_UX_SLICE.id}>
     <AppShellChrome
       demoMode={SHELL_UX_DEFAULT_FIXTURE.demoMode}
-      currentSite={SHELL_UX_DEFAULT_FIXTURE.currentSite}
+      siteSelection="SITE-ISG"
       saveState={saveState}
       viewMode={viewMode}
       correlationId={SHELL_UX_DEFAULT_FIXTURE.correlationId}

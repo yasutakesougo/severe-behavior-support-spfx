@@ -77,6 +77,44 @@
   font-weight: 600;
 }
 
+.siteSelector {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
+  min-width: 0;
+}
+
+.siteSelectorLegend {
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.siteSelectorOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.siteOption {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.siteOption input:focus {
+  outline: 2px solid "[theme:themePrimary, default: #03787c]";
+  outline-offset: 2px;
+}
+
+.navButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .saveStatePresentation {
   display: flex;
   flex-direction: column;
@@ -190,6 +228,11 @@
 
   .saveStateDescription {
     text-align: left;
+  }
+
+  .siteSelectorOptions {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .navButton {

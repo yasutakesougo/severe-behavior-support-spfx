@@ -18,8 +18,8 @@ export interface IScaffoldShellWebPartProps {
 }
 
 /**
- * SHELL-UX-1 host.
- * Fixture-driven presentation only — no binder host wiring / live tenant I/O.
+ * SHELL-UX host.
+ * Fixture-driven presentation only — no binder host wiring / live tenant I/O / membership lookup.
  */
 export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffoldShellWebPartProps> {
   private _isDarkTheme: boolean = false;
@@ -33,7 +33,7 @@ export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffol
       environmentMessage: this._environmentMessage,
       userDisplayName: this.context.pageContext.user.displayName,
       demoMode: fixture.demoMode,
-      currentSite: fixture.currentSite,
+      siteSelection: fixture.siteSelection,
       saveState: fixture.saveState,
       viewMode: fixture.viewMode,
       correlationId: fixture.correlationId,

@@ -12,7 +12,7 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
       environmentMessage,
       userDisplayName,
       demoMode,
-      currentSite,
+      siteSelection,
       saveState,
       viewMode,
       correlationId,
@@ -21,7 +21,7 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
     return (
       <AppShellChrome
         demoMode={demoMode}
-        currentSite={currentSite}
+        siteSelection={siteSelection}
         saveState={saveState}
         viewMode={viewMode}
         correlationId={correlationId}
