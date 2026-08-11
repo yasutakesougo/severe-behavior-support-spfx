@@ -147,10 +147,31 @@ PASS requires all:
 Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
 = GO RECEIVED / EXECUTION HOLD
 
-HOLD:
-  Human App Catalog Deploy evidence
+Deploy verification = NOT PASS
+HOLD = BLOCKED_BY_NOSCRIPT_GUARD
 
-Still NOT AUTHORIZED:
+Evidence HEAD: 6524785bc993a261f8f8cc2a3e2c4422b9291178
+
+Observed:
+  package build = PASS
+  Site App Catalog = NOT PRESENT
+  Tenant App Catalog = PRESENT
+  Tenant Deploy = NOT COMPLETED
+  NoScript mutation = 0
+  Agent App Catalog upload = 0
+
+Operator stop（correct）:
+  Add-PnPApp prompt to temporarily enable scripting = answered N
+  no Add-PnPApp retry
+  no -Force
+
+Still NOT AUTHORIZED by this GO:
+  Tenant App Catalog NoScript / scripting mutation
   Ready / Merge auto-progress
   Agent Deploy
+
+Next substantive gate（separate Human Decision only）:
+  GO / NO-GO temporary scripting enablement on Tenant App Catalog
+  solely to complete this scoped .sppkg Deploy
+  If GO: enable → Deploy → confirm → restore = one set
 ```
