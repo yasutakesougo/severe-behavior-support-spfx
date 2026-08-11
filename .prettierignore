@@ -5,3 +5,14 @@ artifacts
 package-lock.json
 *.md
 skills
+spfx/node_modules
+spfx/lib
+spfx/lib-commonjs
+spfx/lib-dts
+spfx/lib-esm
+spfx/release
+spfx/temp
+spfx/sharepoint
+spfx/jest-output
+spfx/.heft
+spfx/package-lock.json

@@ -1,6 +1,7 @@
 /**
  * Concrete AssessmentSnapshot repository over a synthetic SharePoint-shaped store.
- * GO-SLICE-1: no live SharePoint / M365 / Entra / Deploy I/O.
+ * Remains in-memory only — no live SharePoint / M365 / Entra / Deploy I/O.
+ * Concrete SPHttpClient binder lives under `spfx/` and is not invoked here.
  */
 
 import { validateAssessmentSnapshot } from "../../../domain/assessment-snapshot";

@@ -25,11 +25,14 @@ Included for toolchain verification:
 - minimal `ScaffoldShell` web part (template default; not binder logic)
 - `package.json` / lockfile for isolated dependency resolution
 
-`@microsoft/sp-http@1.23.2` is retained in dependencies for the future binder boundary.
-This directory does **not** implement AssessmentSnapshot binder logic, live HTTP calls,
-tenant I/O, or Deploy.
+`@microsoft/sp-http@1.23.2` is used by the concrete AssessmentSnapshot List Items binder:
+
+- `src/adapters/assessment-snapshot/sphttpclient-list-transport.ts`
+
+Synthetic/local Jest doubles verify REST request construction（including CL-1-B `null` clear）.
+This directory does **not** authorize live tenant I/O or Deploy.
 
 ## Verification
 
-See `docs/architecture/assessment-snapshot-adapter-spfx-scaffold-dependency-implementation-start.md`
-for the current install / Heft verification evidence.
+- Scaffold / dependency / Heft: `docs/architecture/assessment-snapshot-adapter-spfx-scaffold-dependency-implementation-start.md`
+- Binder Implementation Start: `docs/architecture/decision-assessment-snapshot-adapter-sphttpclient-binder-implementation-start.md`

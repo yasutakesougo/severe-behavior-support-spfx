@@ -105,17 +105,18 @@ heft package-solution --production: PASS
 
 Build outputs (`lib/`, `release/`, `sharepoint/solution/`, `*.sppkg`, `.heft/`) remain gitignored and are not treated as Deploy evidence.
 
-## Still forbidden in this slice
+## Still forbidden in the scaffold slice itself
 
-- AssessmentSnapshot binder implementation.
-- SPHttpClient calls from application/adapter code.
 - SharePoint / Microsoft 365 / Entra mutation.
 - tenant I/O.
 - Deploy of `.sppkg` / real data.
-- automatic Ready or Merge of #225 / #226 / #227 / this PR.
+- automatic Ready or Merge of #225 / #226 / #227 / #228.
 - root TypeScript / root package mutation.
 
-## Stop condition
+Binder Implementation Start is a **separate** Human GO recorded in
+`decision-assessment-snapshot-adapter-sphttpclient-binder-implementation-start.md`.
+
+## Stop condition（scaffold / dependency gate）
 
 ```text
 Advanced to PASS:
@@ -124,10 +125,7 @@ Advanced to PASS:
   official 1.23.2 scaffold materialization
   Heft build / test / package-solution verification
 
-HOLD remaining:
-  binder Implementation Start
-  SPHttpClient runtime binding
-  tenant I/O
-  Deploy
-  Ready / Merge（HUMAN-ONLY）
+Scaffold/dependency gate: COMPLETE for technical blocker purposes
+Next substantive gate after this stack:
+  Binder Implementation Start（separate Human GO）
 ```

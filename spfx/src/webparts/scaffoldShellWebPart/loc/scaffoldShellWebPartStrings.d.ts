@@ -25,7 +25,7 @@ declare interface IScaffoldShellWebPartStrings {
   LinkDeveloperCommunity: string;
 }
 
-declare module 'ScaffoldShellWebPartStrings' {
+declare module "ScaffoldShellWebPartStrings" {
   const strings: IScaffoldShellWebPartStrings;
   export = strings;
 }
