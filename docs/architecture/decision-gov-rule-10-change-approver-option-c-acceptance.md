@@ -111,7 +111,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-AUD-01〜10（該当 Accepted 分） | **UNCHANGED** |
 | GOV-RULE-05〜08 | **UNCHANGED** |
 | GOV-RULE-09 | **UNCHANGED**（Accepted / Option B = 法人業務責任者） |
-| GOV-RULE-11 / 12 | **OUT / NOT SELECTED** |
+| GOV-RULE-11 | **unit SELECTED** / Fill-in NOT FILLED（別 Decision；本 Acceptance から自動 SELECT しない） |
+| GOV-RULE-12 | **OUT / NOT SELECTED** |
 | Option A / B / D / H | **NOT SELECTED** |
 | 承認 UI / tenant mutation | **HOLD / NOT STARTED** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -120,7 +121,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-RULE-10: Accepted / LOCKED / Option C
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-RULE-11 unit SELECTED（Fill-in NOT FILLED；別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```

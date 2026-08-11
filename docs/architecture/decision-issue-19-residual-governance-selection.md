@@ -103,7 +103,8 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-RULE-02〜04 | 観察期間起算・終了・必要件数 | EVIDENCE_REQUIRED / MIXED | OPEN / NOT SELECTED |
 | GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`](./decision-gov-rule-09-rule-content-owner-option-b-acceptance.md)） |
 | GOV-RULE-10 | ルール変更の承認者 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-rule-10-change-approver-option-c-acceptance.md`](./decision-gov-rule-10-change-approver-option-c-acceptance.md)） |
-| GOV-RULE-11〜12 | 制度/運用境界・過去版訂正 | ORG_POLICY / MIXED | OPEN / NOT SELECTED |
+| GOV-RULE-11 | 制度値と法人運用値の境界 | ORG_POLICY / MIXED | **unit SELECTED** / Fill-in NOT FILLED（[`decision-gov-rule-11-value-boundary-selection.md`](./decision-gov-rule-11-value-boundary-selection.md)） |
+| GOV-RULE-12 | 過去ルール版の訂正 | ORG_POLICY / MIXED | OPEN / NOT SELECTED |
 | DEC-003 org roles | 点数根拠登録・最終確認ロール | MIXED（org part） | Proposed / NOT Accepted |
 | DEC-006 concrete reason codes | 対象外理由コード | EVIDENCE_REQUIRED / MIXED | Deferred |
 | DEC-007 org response roles | 算定不能時の法人対応ロール | MIXED（org part） | Proposed / NOT Accepted |
@@ -116,7 +117,8 @@ Stale marker correction（docs truth）:
   01 / 02 / 03 / 04 / 05(retention) / 06 / 07(Option A) / 08(Option B) / 09(Option A) / 10(fill-in) は Accepted。
   GOV-RULE-09 = Accepted / LOCKED / Option B（法人業務責任者）。
   GOV-RULE-10 = Accepted / LOCKED / Option C（業務責任者内容確認 + 法人管理者承認）。
-  GOV-RULE-11〜12 / GOV-STAFF / GOV-PERF / post-retention deletion が OPEN 残件。
+  GOV-RULE-11 = unit SELECTED / Fill-in NOT FILLED。
+  GOV-RULE-12 / GOV-STAFF / GOV-PERF / post-retention deletion が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -212,12 +214,13 @@ Consumed progression:
   GOV-RULE-09 unit SELECT = MERGED（PR #267）
   GOV-RULE-09 Option B = Accepted / LOCKED（PR #268 MERGED）
     （decision-gov-rule-09-rule-content-owner-option-b-acceptance.md）
-  GOV-RULE-10 unit SELECT + Option C = Accepted / LOCKED
+  GOV-RULE-10 unit SELECT + Option C = Accepted / LOCKED（PR #269 MERGED）
     （decision-gov-rule-10-change-approver-option-c-acceptance.md）
+  Next residual unit SELECT = GOV-RULE-11（Decision-GOV-RULE-11-SELECTION-1）
 
 Next:
-  1. GOV-RULE-10 Selection + Option C Acceptance PR: IR → Human Ready → Human Merge
-  2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
+  1. GOV-RULE-11 Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human fill-in 3 分類 or HOLD（Agent invent FORBIDDEN）
   3. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
   4. #19 Close は残件移管完了後の別 Human disposition
 ```
@@ -275,6 +278,13 @@ GOV-RULE-10 history:
 SELECT GOV-RULE-10 → Option C Accepted
   （業務責任者が内容確認し、法人管理者が承認）
 Acceptance: decision-gov-rule-10-change-approver-option-c-acceptance.md
+```
+
+Current residual（unit）:
+
+```text
+SELECT GOV-RULE-11 — Fill-in 3 分類 NOT FILLED / NOT ACCEPTED
+Selection: decision-gov-rule-11-value-boundary-selection.md
 ```
 
 ## Reference
