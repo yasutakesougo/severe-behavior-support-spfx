@@ -19,7 +19,7 @@ Status: Accepted / LOCKED（fill-in）
 Human Acceptance: Explicit ACCEPT GOV-AUD-10 fill-in on 2026-08-11
 Parent unit Selection: Decision-GOV-AUD-10-SELECTION-1（UNCHANGED）
 Baseline tip: 09a5da2f220bc747f7d99f08db3c214c24f2ba96
-PR: pending（Fill-in Acceptance / Packet sync / IR）
+PR: #266（Fill-in Acceptance / Packet sync / IR）
 
 Accepted values（role names only）:
   第一報: 事業所管理者

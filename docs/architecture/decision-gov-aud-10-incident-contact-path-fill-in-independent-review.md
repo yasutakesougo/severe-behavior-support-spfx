@@ -15,7 +15,7 @@ Acceptance: decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md
 Packet: decision-gov-aud-10-incident-contact-path-decision-packet.md
 Parent unit Selection: Decision-GOV-AUD-10-SELECTION-1（PR #265 MERGED）
 Baseline tip: 09a5da2f220bc747f7d99f08db3c214c24f2ba96
-PR: pending
+PR: #266
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Fill-in status: Accepted / LOCKED
