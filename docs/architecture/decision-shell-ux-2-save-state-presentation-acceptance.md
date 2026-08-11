@@ -17,6 +17,7 @@ Status: Accepted / LOCKED（Selection boundary）
 Human Decision: SELECT SHELL-UX-2
 Human Acceptance date: 2026-08-11
 Issue: #28
+PR: #237（Selection / Acceptance only）
 SHELL-UX-1 closeout HEAD: 957fc67b051c176d1fac1bb7705562d6b32185c1
 
 Selected:
@@ -68,3 +69,11 @@ code mutation for SHELL-UX-2 = 0
 3. only after Implementation Start GO: code + tests + browser smoke
 4. #28 Close remains later / separate
 ```
+
+## Reference
+
+- Selection: `decision-shell-ux-2-save-state-presentation-selection.md`
+- PR: #237（Selection / Acceptance only）
+- Prior closeout: `shell-ux-1-browser-smoke-p2-closeout.md`
+- Prior Implementation Start: `shell-ux-1-implementation-start.md`
+- Issue #28 remains OPEN; Close = NOT AUTHORIZED

@@ -10,6 +10,7 @@ Kind: Human Selection（Issue #28 next slice）
 Status: SELECTED / LOCKED（GO boundary）
 Human Decision: SELECT SHELL-UX-2
 Date: 2026-08-11
+PR: #237（Selection / Acceptance only）
 
 Baseline:
   SHELL-UX-1 repository closeout COMPLETE
@@ -115,3 +116,12 @@ Still NOT AUTHORIZED:
   #22 continuation
   live save / REST / binder wiring
 ```
+
+## Reference
+
+- Acceptance: `decision-shell-ux-2-save-state-presentation-acceptance.md`
+- PR: #237（Selection / Acceptance only）
+- Prior closeout: `shell-ux-1-browser-smoke-p2-closeout.md`
+- Prior Implementation Start: `shell-ux-1-implementation-start.md`
+- Issue #28 remains OPEN; Close = NOT AUTHORIZED
+- Next gate after Selection: Human GO for Implementation Start（separate）
