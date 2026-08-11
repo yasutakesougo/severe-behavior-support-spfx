@@ -288,8 +288,8 @@ Approval dependencies（#19 / #21）and broader shell acceptance tests
 SHELL-UX-1 / 2 / 3 / 4 / 5 = DELIVERED on tip `8fb0ef2…`（PR #248 reassessment on main）
 Close criteria reassessment-3 = FAIL / KEEP OPEN（PR #248）
   evidence: issue-28-close-criteria-reassessment-3.md
-next shell UX slice = C-A / SHELL-UX-6 SELECTED / Implementation Start NOT AUTHORIZED
-  evidence: decision-shell-ux-6-unauthenticated-panel-acceptance.md
+next shell UX slice = C-A / SHELL-UX-6 Implementation Start GO（in progress）
+  evidence: shell-ux-6-implementation-start.md
 residual STILL OPEN / NOT SELECTED = C-F′ / C-G / C-H
 C-B / C-C = CONSUMED（SHELL-UX-3）
 C-D = CONSUMED（SHELL-UX-4）
