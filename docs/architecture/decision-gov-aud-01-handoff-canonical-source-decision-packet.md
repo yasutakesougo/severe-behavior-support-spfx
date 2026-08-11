@@ -35,8 +35,11 @@ Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation（historical non-binding）: C（≠ Acceptance evidence）
 Human Selected Option: C
-meeting_or_minutes_system_identity: NOT YET PROVIDED
-reference_id_meaning: NOT YET PROVIDED
+meeting_or_minutes_system_identity:
+- 支援計画アセスメント会議
+- 支援計画モニタリング会議
+reference_id_meaning: 会議種別 + 開催日 + 利用者ID
+identity Decision: Decision-GOV-AUD-01-IDENTITY-1 Accepted / LOCKED
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -193,7 +196,7 @@ Meaning:
   業務正本 = 既存会議・議事録側
   アプリ = 参照 ID + Handoff 状態のみ
 Acceptance: decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md
-identity fields: NOT YET PROVIDED（Human fill-in；Agent 非発明）
+identity fields: PROVIDED / LOCKED（Decision-GOV-AUD-01-IDENTITY-1）
 ```
 
 ## 7. After Decision
@@ -202,7 +205,7 @@ identity fields: NOT YET PROVIDED（Human fill-in；Agent 非発明）
 |---|---|
 | A | （未選択） |
 | B | （未選択） |
-| **C（SELECTED）** | Option Acceptance 済み。identity fill-in → 外部連携実装は別 GO |
+| **C（SELECTED）** | Option Acceptance 済み。identity fill-in COMPLETE。物理形式 / 連携実装は別 GO |
 | D | （未選択） |
 | H | （未選択） |
 
@@ -214,7 +217,8 @@ Decision-HO-1 / HO-EDGE-1: UNCHANGED
 Implementation Start: DO NOT START from Option alone
 SharePoint / M365 / Deploy: NO-GO
 next residual auto-select: FORBIDDEN
-meeting_or_minutes_system_identity / reference_id_meaning: Human fill-in required
+identity: Decision-GOV-AUD-01-IDENTITY-1 Accepted / LOCKED
+physical ID format: OUT / NOT DECIDED
 ```
 
 ## Reference
@@ -223,4 +227,6 @@ meeting_or_minutes_system_identity / reference_id_meaning: Human fill-in require
 - SELECT Acceptance: `decision-gov-aud-01-handoff-canonical-source-acceptance.md`
 - Option C Acceptance: `decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`
 - Option C IR: `decision-gov-aud-01-handoff-canonical-source-option-c-independent-review.md`
+- Identity fill-in: `decision-gov-aud-01-identity-fill-in-acceptance.md`
+- Identity packet: `decision-gov-aud-01-identity-fill-in-packet.md`
 - Issue #19 GOV-AUD-01 source options A–D
