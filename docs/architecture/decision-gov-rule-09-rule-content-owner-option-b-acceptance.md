@@ -21,7 +21,7 @@ Selected Option: B
 Meaning:
   ルール内容の責任者 = 法人業務責任者
 Baseline tip: cf37d6c06c6bca2f8f9cc01a84eeafe7e8a2474c
-PR: pending（Option B Acceptance / Packet sync / IR）
+PR: #268（Option B Acceptance / Packet sync / IR）
 
 Does NOT mean:
   ルール本文・制度値・日数・通知経路の発明

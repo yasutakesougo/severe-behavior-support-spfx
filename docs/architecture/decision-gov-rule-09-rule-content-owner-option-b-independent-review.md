@@ -15,7 +15,7 @@ Acceptance: decision-gov-rule-09-rule-content-owner-option-b-acceptance.md
 Packet: decision-gov-rule-09-rule-content-owner-decision-packet.md
 Parent unit Selection: Decision-GOV-RULE-09-SELECTION-1（PR #267 MERGED）
 Baseline tip: cf37d6c06c6bca2f8f9cc01a84eeafe7e8a2474c
-PR: pending
+PR: #268
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Option status: Accepted / LOCKED / B
