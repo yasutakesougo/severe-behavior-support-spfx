@@ -1,31 +1,23 @@
 .scaffoldShell {
   overflow: hidden;
-  padding: 1em;
+  padding: 0.25rem 0;
   color: "[theme:bodyText, default: #323130]";
   color: var(--bodyText);
 }
 
-.welcome {
-  text-align: center;
+.bodyTitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
 }
 
-.welcomeImage {
-  width: 100%;
-  max-width: 420px;
+.bodyCopy {
+  margin: 0 0 0.75rem;
+  max-width: 42rem;
+  line-height: 1.5;
 }
 
-.links {
-  a {
-    text-decoration: none;
-    color: "[theme:link, default:#03787c]";
-    color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
-
-    &:hover {
-      text-decoration: underline;
-      color: "[theme:linkHovered, default: #014446]";
-      color: var(
-        --linkHovered
-      ); // note: CSS Custom Properties support is limited to modern browsers only
-    }
-  }
+.bodyMeta {
+  margin: 0.35rem 0 0;
+  font-size: 0.875rem;
+  opacity: 0.9;
 }

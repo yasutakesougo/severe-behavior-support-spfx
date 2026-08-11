@@ -26,5 +26,8 @@ define([], function () {
     LinkMarketplace: "Publish SharePoint Framework applications to the marketplace",
     LinkApiReference: "SharePoint Framework API reference",
     LinkDeveloperCommunity: "Microsoft 365 Developer Community",
+    ShellReadyTitle: "シェル表示の準備ができました",
+    ShellReadyDescription:
+      "SHELL-UX-1 は表示専用です。SharePoint REST・live 保存・認可判定は接続していません。",
   };
 });

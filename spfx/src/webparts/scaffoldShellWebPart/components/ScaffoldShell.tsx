@@ -1,74 +1,41 @@
 import * as React from "react";
-import styles from "./ScaffoldShell.module.scss";
+import { AppShellChrome } from "../../../shell/ux";
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
+import styles from "./ScaffoldShell.module.scss";
 import { escape } from "@microsoft/sp-lodash-subset";
 import * as strings from "ScaffoldShellWebPartStrings";
 
 export default class ScaffoldShell extends React.Component<IScaffoldShellProps> {
   public render(): React.ReactElement<IScaffoldShellProps> {
-    const { description, isDarkTheme, environmentMessage, userDisplayName } = this.props;
+    const {
+      description,
+      environmentMessage,
+      userDisplayName,
+      demoMode,
+      currentSite,
+      saveState,
+      viewMode,
+      correlationId,
+    } = this.props;
 
     return (
-      <section className={`${styles.scaffoldShell}`}>
-        <div className={styles.welcome}>
-          <img
-            alt=""
-            src={
-              isDarkTheme
-                ? require("../assets/welcome-dark.png")
-                : require("../assets/welcome-light.png")
-            }
-            className={styles.welcomeImage}
-          />
-          <h2>{strings.GreetingMessage.replace(/\{0\}/g, escape(userDisplayName))}</h2>
-          <div>{environmentMessage}</div>
-          <div>
+      <AppShellChrome
+        demoMode={demoMode}
+        currentSite={currentSite}
+        saveState={saveState}
+        viewMode={viewMode}
+        correlationId={correlationId}
+        userDisplayName={userDisplayName}
+      >
+        <section className={styles.scaffoldShell} data-shell-ux="shell-body">
+          <h2 className={styles.bodyTitle}>{strings.ShellReadyTitle}</h2>
+          <p className={styles.bodyCopy}>{strings.ShellReadyDescription}</p>
+          <p className={styles.bodyMeta}>
             {strings.PropertyValueLabel} <strong>{escape(description)}</strong>
-          </div>
-        </div>
-        <div>
-          <h3>{strings.WelcomeTitle}</h3>
-          <p>{strings.WelcomeDescription}</p>
-          <h4>{strings.LearnMoreHeading}</h4>
-          <ul className={styles.links}>
-            <li>
-              <a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">
-                {strings.LinkOverview}
-              </a>
-            </li>
-            <li>
-              <a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">
-                {strings.LinkMicrosoftGraph}
-              </a>
-            </li>
-            <li>
-              <a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">
-                {strings.LinkMicrosoftTeams}
-              </a>
-            </li>
-            <li>
-              <a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">
-                {strings.LinkVivaConnections}
-              </a>
-            </li>
-            <li>
-              <a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">
-                {strings.LinkMarketplace}
-              </a>
-            </li>
-            <li>
-              <a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">
-                {strings.LinkApiReference}
-              </a>
-            </li>
-            <li>
-              <a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">
-                {strings.LinkDeveloperCommunity}
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          </p>
+          <p className={styles.bodyMeta}>{escape(environmentMessage)}</p>
+        </section>
+      </AppShellChrome>
     );
   }
 }

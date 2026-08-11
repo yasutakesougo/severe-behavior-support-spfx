@@ -23,6 +23,8 @@ declare interface IScaffoldShellWebPartStrings {
   LinkMarketplace: string;
   LinkApiReference: string;
   LinkDeveloperCommunity: string;
+  ShellReadyTitle: string;
+  ShellReadyDescription: string;
 }
 
 declare module "ScaffoldShellWebPartStrings" {
