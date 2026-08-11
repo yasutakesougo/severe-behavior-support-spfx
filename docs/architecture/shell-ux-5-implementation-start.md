@@ -3,12 +3,14 @@
 ```text
 Issue: #28
 Unit: SHELL-UX-5 / C-E — Error-code + correlationId User-Facing Display
-Status: Implementation Start AUTHORIZED / IN PROGRESS
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: Decision-SHELL-UX-5-ERROR-CODE-CORRELATION-1 = SELECTED / LOCKED
 Selection merge: 0e122228c9e47e398acc42cf0500b4a9fdb7e269（PR #246）
 Human Implementation Start: GO（2026-08-11）
 Independence: PASS（presentation-only；generation / classification / telemetry OUT）
-PR: （impl；number at create）
+PR: #247
+Browser smoke: PASS / VERIFIED（shell-ux-5-browser-smoke.md）
+Heft test: 27 / 27 PASS
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
