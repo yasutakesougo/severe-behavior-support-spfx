@@ -21,7 +21,7 @@ Selected Option: A
 Meaning:
   再開承認者 = 事業所管理者
 Baseline tip: 9fe2589d08a608c9f25a3478af755528115b83f7
-PR: pending（Option A Acceptance / Packet sync / IR）
+PR: #264（Option A Acceptance / Packet sync / IR）
 
 Does NOT mean:
   再開手順・承認フロー・連絡経路の発明

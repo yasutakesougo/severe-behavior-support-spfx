@@ -15,7 +15,7 @@ Acceptance: decision-gov-aud-09-resume-approver-option-a-acceptance.md
 Packet: decision-gov-aud-09-resume-approver-decision-packet.md
 Parent unit Selection: Decision-GOV-AUD-09-SELECTION-1（PR #263 MERGED）
 Baseline tip: 9fe2589d08a608c9f25a3478af755528115b83f7
-PR: pending
+PR: #264
 Status: PASS
 Findings: P0=0 / P1=0 / P2=1 OPEN
 Option status: Accepted / LOCKED / A
