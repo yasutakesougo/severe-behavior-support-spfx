@@ -10,6 +10,7 @@ Gate: browser smoke（IR P2 on #235）closeout
 Human Selection: A GO
 Status: PASS / VERIFIED
 Date: 2026-08-11
+PR: #236
 Baseline merge: 1c24f3ebad3819b12cb8ee05f83c6ff558cfbf38
 SHELL-UX-1 code merge: 30a1656416e83917b5bad08b0278037c02b8e0fe（#235）
 SoT tip at selection: b10168a54d6d76a4702687d70947f19f63d3ccca
