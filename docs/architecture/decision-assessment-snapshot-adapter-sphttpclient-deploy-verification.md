@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
 Verification target: App Catalog Deploy of severe-behavior-support-spfx-shell.sppkg
-Verification status: NOT RUN / ENVIRONMENT BLOCKED
+Verification status: NOT PASS / BLOCKED_BY_NOSCRIPT_GUARD
 Date: 2026-08-11
 Pilot site: severe-support-isogo
 Agent App Catalog upload: 0
@@ -22,50 +22,81 @@ Prerequisites:
   Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1 = PASS / VERIFIED
 ```
 
-## Agent environment probe（not PASS evidence）
+## Human execution evidence
 
 ```text
-Authenticated SharePoint session: ABSENT
-Unauthenticated GET: HTTP 403 UnauthorizedAccessException
-SPO_* secrets: NOT ADDED（by prior Choice A lock）
-Agent App Catalog upload: NOT PERFORMED / FORBIDDEN for Agent on this gate
-```
+Operator: Human
+Date: 2026-08-11
+Tool: PnP.PowerShell 3.1.0 / PowerShell 7.5.3
+Node: v22.23.1
+npm: 10.9.8
 
-## Required Human Deploy evidence（pending）
-
-Paste/replace after execution:
-
-```text
-Operator:
-Date:
-Tool: PnP PowerShell / other
-PnP.PowerShell version:
-PowerShell version:
-
-Package:
-  path =
+Package build:
+  npm ci = PASS (warnings only)
+  npm run build = PASS
+  Jest = 6 passed / 0 failed
+  package-solution = ALL DONE
+  path = spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
+  file size = 38661 bytes
   name = severe-behavior-support-spfx-shell-client-side-solution
   id = 4342db47-21a3-4c48-aed1-ef615f55c404
   version = 1.0.0.0
 
-Catalog:
-  scope = Site / Tenant
-  site URL =
-  Add/Deploy result =
-  published / deployed confirmation =
+Catalog discovery:
+  Site Collection App Catalog = NOT PRESENT
+  Tenant App Catalog = PRESENT
+  URL = https://isogokatudouhome.sharepoint.com/sites/appcatalog
 
-Out-of-scope checks:
-  list/column schema mutation = 0
-  Entra / tenant config change = 0
-  real business AssessmentSnapshots writes = 0
-  Ready / Merge performed = 0
+Tenant deploy attempt:
+  command = Add-PnPApp -Scope Tenant -Publish -Overwrite
+  PnP guard = tenant appcatalog is a no-script site
+  prompt = temporarily enable scripting?
+  Human response = N / No
+  result = command cannot proceed while scripting is disabled
+
+NoScript mutation = 0
+App Catalog deploy completion = 0
+```
+
+## Boundary discovered
+
+```text
+GO-DEPLOY authorized Human .sppkg upload/deploy.
+It did not explicitly authorize changing the Tenant App Catalog site's
+NoScript / scripting setting, even temporarily.
+
+Therefore the operator correctly declined the prompt and stopped.
+
+Next substantive gate:
+  separate Human GO / NO-GO for temporary scripting enablement
+  on the Tenant App Catalog site solely to complete this scoped deploy.
+```
+
+## Out-of-scope checks
+
+```text
+Agent App Catalog upload = 0
+NoScript / scripting setting mutation = 0
+list / column schema mutation = 0
+Entra change = 0
+real business AssessmentSnapshots writes = 0
+Ready / Merge performed = 0
 ```
 
 ## Verdict（current）
 
 ```text
+Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
+= GO RECEIVED / EXECUTION HOLD
+
 Deploy verification = NOT PASS
-reason = ENVIRONMENT BLOCKED / awaiting Human App Catalog execution
+reason = Tenant App Catalog NoScript guard requires separate Human authorization
+
+package build = PASS
+Site Collection App Catalog = NOT PRESENT
+Tenant App Catalog = PRESENT
+Tenant deploy = NOT COMPLETED
+NoScript mutation = 0
 
 Ready / Merge = HUMAN-ONLY
 ```
