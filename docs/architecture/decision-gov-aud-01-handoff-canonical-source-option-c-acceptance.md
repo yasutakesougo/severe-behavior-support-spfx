@@ -24,9 +24,15 @@ Meaning:
 Baseline tip: c34061c0095c172971ae07417db1acd93cc97fc5
 PR: #257（Option C Acceptance / Packet sync / IR）
 
-HUMAN-REQUIRED（本 Acceptance では発明しない / NOT YET PROVIDED）:
-  meeting_or_minutes_system_identity: NOT YET PROVIDED
-  reference_id_meaning: NOT YET PROVIDED
+IDENTITY FILL-IN（別 Decision；Option C は UNCHANGED）:
+  Decision-GOV-AUD-01-IDENTITY-1
+  = Accepted / LOCKED
+  正本: decision-gov-aud-01-identity-fill-in-acceptance.md
+  meeting_or_minutes_system_identity:
+  - 支援計画アセスメント会議
+  - 支援計画モニタリング会議
+  reference_id_meaning:
+  会議種別 + 開催日 + 利用者ID
 
 Does NOT mean:
   外部システム API 実装 GO
@@ -62,13 +68,9 @@ Selected Option: C
 補足（Human 未記入 / Agent 非発明）:
 
 ```text
-meeting_or_minutes_system_identity:
-  NOT YET PROVIDED
-  （名称または公式識別子。Option C 採択後の Human 記入）
-
-reference_id_meaning:
-  NOT YET PROVIDED
-  （参照 ID が何を指すか。Option C 採択後の Human 記入）
+meeting_or_minutes_system_identity / reference_id_meaning:
+  PROVIDED via Decision-GOV-AUD-01-IDENTITY-1
+  （decision-gov-aud-01-identity-fill-in-acceptance.md）
 ```
 
 ```text
@@ -89,10 +91,13 @@ SoT model:
     （plus already-accepted transition / role contracts）
 
 Concrete identity fields:
-  meeting_or_minutes_system_identity = NOT YET PROVIDED
-  reference_id_meaning = NOT YET PROVIDED
-  MUST be Human-provided before any mapping / integration Implementation
-  Agent MUST NOT invent system name / URL / ID format
+  PROVIDED / LOCKED via Decision-GOV-AUD-01-IDENTITY-1
+  meeting_or_minutes_system_identity:
+  - 支援計画アセスメント会議
+  - 支援計画モニタリング会議
+  reference_id_meaning:
+  会議種別 + 開催日 + 利用者ID
+  physical ID format = OUT / NOT DECIDED here
 ```
 
 日本語正本:
@@ -104,11 +109,12 @@ Handoff の正本:
 アプリ:
   参照 ID と Handoff 状態だけを保持
 
-会議・議事録システムの識別:
-  NOT YET PROVIDED（Human 記入）
+会議・議事録の識別:
+  支援計画アセスメント会議
+  支援計画モニタリング会議
 
 参照 ID の意味:
-  NOT YET PROVIDED（Human 記入）
+  会議種別 + 開催日 + 利用者ID
 ```
 
 意味:
@@ -135,9 +141,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
   Deploy / real data
 ```
 
-将来、会議・議事録システムの識別および参照 ID 意味を Human が記入する場合は、
-**本 Option C を再オープンせず**、同一 Accepted モデルへの
-**Human-provided identity fill-in**（別 docs 追記または狭域 Decision）として記録する。
+Identity fill-in は **本 Option C を再オープンせず**、
+[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)
+として記録する。
 
 ## 既存契約との関係
 
@@ -148,6 +154,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-AUD-02 roles | **UNCHANGED** |
 | HandoffStatus vocabulary（#27） | **UNCHANGED** |
 | App as business SoT（Option A） | **NOT ADOPTED** |
+| Identity fill-in | **Decision-GOV-AUD-01-IDENTITY-1** |
 | External meeting API | **NOT STARTED** |
 | FindingCode / A-5 / Implementation | **HOLD** |
 
@@ -155,17 +162,10 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-AUD-01: Accepted / LOCKED / Option C
-Strict order for this recording PR:
-  1. Independent Review
-  2. Human Ready
-  3. Human Merge → main mirror
-
-After Merge（separate Human steps）:
-  - Human fill-in: meeting_or_minutes_system_identity
-  - Human fill-in: reference_id_meaning
-  - next residual SELECT（one item；Agent auto-advance FORBIDDEN）
-Implementation that depends on identity/ID meaning: HOLD until fill-in
+identity fill-in: Decision-GOV-AUD-01-IDENTITY-1（Accepted / LOCKED）
+physical ID format / Schema / connector: HOLD
+next residual SELECT（one item；Agent auto-advance FORBIDDEN）
 Issue #19 Close: NOT AUTHORIZED
 ```
 
-Agent は本 Acceptance を理由に外部連携実装・ID 体系発明・次 residual 自動 SELECT へ進まない。
+Agent は本 Acceptance を理由に外部連携実装・物理 ID 発明・次 residual 自動 SELECT へ進まない。

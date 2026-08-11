@@ -92,7 +92,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 
 | Residual ID | Topic | Class | Status |
 |---|---|---|---|
-| GOV-AUD-01 | handoff の正本 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`](./decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md)；identity NOT YET PROVIDED） |
+| GOV-AUD-01 | handoff の正本 | ORG_POLICY | **Accepted / LOCKED / Option C + identity fill-in LOCKED**（[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)） |
 | GOV-AUD-05 / DEC-012 post-retention deletion | 5年経過後の完全削除可否 | MIXED | OPEN / NOT SELECTED |
 | GOV-AUD-07 | バックアップ・復元の一次責任者 | ORG_POLICY | OPEN / NOT SELECTED |
 | GOV-AUD-08 | 復旧後の業務確認者 | ORG_POLICY | OPEN / NOT SELECTED |
@@ -189,20 +189,20 @@ Still NOT AUTHORIZED:
 Consumed progression:
   PR #255 IR → Ready → Merge = COMPLETE
   First residual unit SELECT = GOV-AUD-01（PR #256 MERGED）
-  GOV-AUD-01 Option C = Accepted / LOCKED
-    （identity fields NOT YET PROVIDED）
+  GOV-AUD-01 Option C = Accepted / LOCKED（PR #257 MERGED）
+  GOV-AUD-01 identity fill-in = Accepted / LOCKED
+    （Decision-GOV-AUD-01-IDENTITY-1）
 
 Next:
-  1. Human fill-in: meeting_or_minutes_system_identity / reference_id_meaning
-  2. 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
-  3. #19 Close は残件移管完了後の別 Human disposition
+  1. 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
+  2. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 First residual history（consumed）:
 
 ```text
-SELECT GOV-AUD-01 → Option C Accepted
-Acceptance: decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md
+SELECT GOV-AUD-01 → Option C Accepted → identity fill-in Accepted
+identity: decision-gov-aud-01-identity-fill-in-acceptance.md
 ```
 
 ## Reference

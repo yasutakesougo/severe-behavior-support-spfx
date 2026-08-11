@@ -29,7 +29,8 @@ Selected unit:
 
 Concrete Option: Accepted / LOCKED / C
   （decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md）
-identity fields: NOT YET PROVIDED
+identity fields: PROVIDED / LOCKED
+  （decision-gov-aud-01-identity-fill-in-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN

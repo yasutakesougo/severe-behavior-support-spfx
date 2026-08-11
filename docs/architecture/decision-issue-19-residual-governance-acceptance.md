@@ -83,12 +83,12 @@ First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Consumed:
   PR #255 Ready + Merge = COMPLETE
   PR #256 GOV-AUD-01 unit SELECT = MERGED
-  GOV-AUD-01 Option C = Accepted / LOCKED
+  PR #257 GOV-AUD-01 Option C = MERGED
+  GOV-AUD-01 identity fill-in = Accepted / LOCKED
 
 Next:
-  1. Human fill-in identity fields（system / reference_id_meaning）
-  2. next residual SELECT one-by-one；no Agent auto-advance
-  3. #19 Close remains later / separate Human disposition
+  1. next residual SELECT one-by-one；no Agent auto-advance
+  2. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference

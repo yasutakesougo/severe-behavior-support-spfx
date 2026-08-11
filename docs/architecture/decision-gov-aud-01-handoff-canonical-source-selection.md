@@ -25,7 +25,8 @@ Candidate origin:
 
 Option Acceptance: Accepted / LOCKED / Option C
   （decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md）
-identity fields: NOT YET PROVIDED
+identity fields: PROVIDED / LOCKED
+  （decision-gov-aud-01-identity-fill-in-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select next residual: FORBIDDEN
@@ -114,12 +115,11 @@ Still NOT AUTHORIZED:
 ```text
 Consumed:
   Unit Selection PR #256 MERGED
-  Option C Accepted / LOCKED
+  Option C Accepted / LOCKED（PR #257 MERGED）
+  identity fill-in Accepted / LOCKED
 
 Next:
-  1. Option C Acceptance recording PR: IR → Ready → Merge
-  2. Human fill-in identity fields
-  3. Next residual SELECT remains separate / Agent auto-advance FORBIDDEN
+  Next residual SELECT remains separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
@@ -128,6 +128,7 @@ Next:
 - Decision Packet: `decision-gov-aud-01-handoff-canonical-source-decision-packet.md`
 - Option C Acceptance: `decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`
 - Option C IR: `decision-gov-aud-01-handoff-canonical-source-option-c-independent-review.md`
+- Identity fill-in: `decision-gov-aud-01-identity-fill-in-acceptance.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
 - HO-1: `decision-ho-1-handoff-transition-ownership.md`
