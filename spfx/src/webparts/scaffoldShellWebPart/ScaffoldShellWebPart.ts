@@ -9,6 +9,7 @@ import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 import { IReadonlyTheme } from "@microsoft/sp-component-base";
 
 import * as strings from "ScaffoldShellWebPartStrings";
+import { SHELL_UX_DEFAULT_FIXTURE } from "../../shell/ux";
 import ScaffoldShell from "./components/ScaffoldShell";
 import { IScaffoldShellProps } from "./components/IScaffoldShellProps";
 
@@ -16,16 +17,26 @@ export interface IScaffoldShellWebPartProps {
   description: string;
 }
 
+/**
+ * SHELL-UX-1 host.
+ * Fixture-driven presentation only — no binder host wiring / live tenant I/O.
+ */
 export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffoldShellWebPartProps> {
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = "";
 
   public render(): void {
+    const fixture = SHELL_UX_DEFAULT_FIXTURE;
     const element: React.ReactElement<IScaffoldShellProps> = React.createElement(ScaffoldShell, {
       description: this.properties.description,
       isDarkTheme: this._isDarkTheme,
       environmentMessage: this._environmentMessage,
       userDisplayName: this.context.pageContext.user.displayName,
+      demoMode: fixture.demoMode,
+      currentSite: fixture.currentSite,
+      saveState: fixture.saveState,
+      viewMode: fixture.viewMode,
+      correlationId: fixture.correlationId,
     });
 
     ReactDom.render(element, this.domElement);
