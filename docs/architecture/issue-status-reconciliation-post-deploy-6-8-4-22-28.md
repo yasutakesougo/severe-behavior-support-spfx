@@ -287,6 +287,7 @@ browser smoke（IR P2 on #235）= PASS / VERIFIED
 Approval dependencies（#19 / #21）and broader shell acceptance tests
 next shell UX slice = SHELL-UX-2 SELECTED / Implementation Start NOT AUTHORIZED
   evidence: decision-shell-ux-2-save-state-presentation-acceptance.md
+  PR: #237（Selection / Acceptance only）
 ```
 
 ### Why KEEP OPEN
