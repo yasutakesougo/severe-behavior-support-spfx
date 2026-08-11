@@ -97,9 +97,9 @@ Ready / Merge = HUMAN-ONLY
 ## Next
 
 ```text
-1. stop — no Add-PnPApp retry / no -Force
-2. separate Human GO / NO-GO for temporary Tenant App Catalog
-   scripting enablement solely to complete this scoped .sppkg Deploy
-3. If GO: temporary enable → Deploy → confirm → restore = one set
-4. Ready / Merge remains separate
+1. stop under GO-DEPLOY alone — no Add-PnPApp retry / no -Force
+2. Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
+   = separate Human GO for temporary Tenant App Catalog scripting
+   enable → Deploy → confirm → restore（one set）
+3. Ready / Merge remains separate
 ```
