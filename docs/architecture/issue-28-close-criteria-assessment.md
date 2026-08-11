@@ -6,6 +6,7 @@ Decision: Decision-ISSUE-28-CLOSE-CRITERIA-ASSESSMENT-1 = SELECTED / LOCKED
 Human GO: #28 CLOSE-CRITERIA-ASSESSMENT = GO
 Date: 2026-08-11
 Baseline tip: 61a212a409b4134c802435226998753d1903ee1f（PR #238 on main）
+PR: #239（Assessment docs only）
 Kind: read-only reconciliation
 code mutation: 0
 #28 Close: NOT AUTHORIZED（this assessment does not Close）
