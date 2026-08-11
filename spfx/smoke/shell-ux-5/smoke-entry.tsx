@@ -1,6 +1,6 @@
 /**
- * SHELL-UX-4 browser smoke harness — synthetic fixture only.
- * No SharePoint REST / adapter fetch / outcome judgment / live I/O.
+ * SHELL-UX-5 browser smoke harness — synthetic fixture only.
+ * No SharePoint REST / error-code generation / failure classification / live I/O.
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
@@ -23,12 +23,12 @@ function parseParams(): {
   siteSelection: ShellSiteSelection;
 } {
   const params = new URLSearchParams(window.location.search);
-  const viewRaw = params.get("viewMode") ?? "partial_retrieval_failed";
+  const viewRaw = params.get("viewMode") ?? "retrieval_failed";
   const saveRaw = params.get("saveState") ?? SHELL_UX_DEFAULT_FIXTURE.saveState;
   const siteRaw = params.get("siteSelection") ?? "SITE-ISG";
   const viewMode = (SHELL_VIEW_MODES as readonly string[]).includes(viewRaw)
     ? (viewRaw as ShellViewMode)
-    : "partial_retrieval_failed";
+    : "retrieval_failed";
   const saveState = (SHELL_SAVE_STATES as readonly string[]).includes(saveRaw)
     ? (saveRaw as ShellSaveState)
     : SHELL_UX_DEFAULT_FIXTURE.saveState;
@@ -56,8 +56,8 @@ ReactDOM.render(
       partialRetrieval={SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE}
     >
       <section data-shell-ux="shell-body">
-        <h2>SHELL-UX-4 smoke ready body</h2>
-        <p>Should stay hidden under partial_retrieval_failed.</p>
+        <h2>SHELL-UX-5 smoke ready body</h2>
+        <p>Should stay hidden under retrieval_failed / access_denied.</p>
       </section>
     </AppShellChrome>
   </div>,

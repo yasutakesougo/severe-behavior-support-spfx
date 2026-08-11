@@ -1,16 +1,33 @@
 import * as React from "react";
+import { ErrorInquiryDisplay } from "./ErrorInquiryDisplay";
+import { hasShellErrorInquiry, type ShellErrorInquiryPresentation } from "./error-inquiry";
 import type { ShellViewMode } from "./shell-view-mode";
 import styles from "./ShellUx.module.scss";
 
 export type StatusPanelProps = Readonly<{
   mode: ShellViewMode;
   correlationId?: string;
+  errorCode?: string;
 }>;
 
-export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId }) => {
+/**
+ * Fail-closed status panels. SHELL-UX-5 adds error-code + correlation inquiry when props present.
+ */
+export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId, errorCode }) => {
   if (mode === "ready" || mode === "partial_retrieval_failed") {
     return null;
   }
+
+  const inquiry: ShellErrorInquiryPresentation | undefined =
+    errorCode !== undefined && correlationId !== undefined
+      ? { errorCode, correlationId }
+      : undefined;
+
+  const inquiryBlock = hasShellErrorInquiry(inquiry) ? (
+    <ErrorInquiryDisplay inquiry={inquiry} />
+  ) : correlationId ? (
+    <p className={styles.correlation}>相関ID: {correlationId}</p>
+  ) : null;
 
   if (mode === "loading") {
     return (
@@ -31,7 +48,7 @@ export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId })
       <div className={styles.statusPanel} role="alert" data-shell-ux="access-denied-panel">
         <h2 className={styles.statusTitle}>アクセス不可</h2>
         <p className={styles.statusBody}>この画面を表示できません。個人情報は表示していません。</p>
-        {correlationId ? <p className={styles.correlation}>相関ID: {correlationId}</p> : null}
+        {inquiryBlock}
       </div>
     );
   }
@@ -42,7 +59,7 @@ export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId })
       <p className={styles.statusBody}>
         データを取得できませんでした。判定していない状態として扱います。
       </p>
-      {correlationId ? <p className={styles.correlation}>相関ID: {correlationId}</p> : null}
+      {inquiryBlock}
     </div>
   );
 };

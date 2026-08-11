@@ -206,6 +206,86 @@
   opacity: 0.85;
 }
 
+.errorInquiry {
+  margin-top: 1rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
+  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+}
+
+.errorInquiryTitle {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.errorInquiryHint {
+  margin: 0 0 0.65rem;
+  font-size: 0.85rem;
+}
+
+.errorInquiryList {
+  margin: 0 0 0.75rem;
+}
+
+.errorInquiryRow {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 0.35rem;
+}
+
+.errorInquiryRow dt {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.errorInquiryRow dd {
+  margin: 0;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.errorInquiryLabel {
+  display: block;
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.errorInquiryText {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
+  background: #fff;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+.errorInquiryCopyButton {
+  border: 1px solid "[theme:neutralSecondary, default: #8a8886]";
+  background: "[theme:neutralLighter, default: #f3f2f1]";
+  padding: 0.4rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.errorInquiryCopyButton:focus {
+  outline: 2px solid "[theme:themePrimary, default: #03787c]";
+  outline-offset: 2px;
+}
+
+.errorInquiryStatus {
+  min-height: 1.25rem;
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+}
+
 .readyRegion {
   display: block;
 }
@@ -262,6 +342,10 @@
 
   .saveStateDescription {
     text-align: left;
+  }
+
+  .errorInquiryRow {
+    grid-template-columns: 1fr;
   }
 
   .siteSelectorOptions {

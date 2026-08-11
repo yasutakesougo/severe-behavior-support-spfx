@@ -16,6 +16,7 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
       saveState,
       viewMode,
       correlationId,
+      errorCode,
       partialRetrieval,
     } = this.props;
 
@@ -26,6 +27,7 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
         saveState={saveState}
         viewMode={viewMode}
         correlationId={correlationId}
+        errorCode={errorCode}
         userDisplayName={userDisplayName}
         partialRetrieval={partialRetrieval}
       >
