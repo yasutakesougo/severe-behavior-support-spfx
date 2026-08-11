@@ -3,22 +3,21 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": ">=22.14.0 <23.0.0"
+    "node": ">=22.14.0 < 23.0.0"
   },
   "scripts": {
-    "_phase:build": "heft run --only build -- --clean",
-    "_phase:package-solution": "heft run --only package-solution -- --clean",
-    "_phase:test": "heft run --only test -- --clean",
     "build": "heft test --clean --production && heft package-solution --production",
+    "start": "heft start --clean",
     "clean": "heft clean",
     "eject-webpack": "heft eject-webpack",
-    "start": "heft start --clean"
+    "_phase:build": "heft run --only build -- --clean",
+    "_phase:test": "heft run --only test -- --clean",
+    "_phase:package-solution": "heft run --only package-solution -- --clean"
   },
   "dependencies": {
-    "@microsoft/decorators": "1.23.2",
+    "@fluentui/react": "^8.106.4",
     "@microsoft/sp-component-base": "1.23.2",
     "@microsoft/sp-core-library": "1.23.2",
-    "@microsoft/sp-dialog": "1.23.2",
     "@microsoft/sp-http": "1.23.2",
     "@microsoft/sp-lodash-subset": "1.23.2",
     "@microsoft/sp-office-ui-fabric-core": "1.23.2",
@@ -36,9 +35,16 @@
     "@rushstack/eslint-config": "4.6.4",
     "@rushstack/heft": "^1.2.19",
     "@types/jest": "~30.0.0",
+    "@types/react": "17.0.45",
+    "@types/react-dom": "17.0.17",
     "@types/webpack-env": "~1.15.2",
     "@typescript-eslint/parser": "8.48.1",
     "eslint": "8.57.1",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "typescript": "~5.8.3"
+  },
+  "resolutions": {
+    "@types/react": "17.0.45"
   }
 }

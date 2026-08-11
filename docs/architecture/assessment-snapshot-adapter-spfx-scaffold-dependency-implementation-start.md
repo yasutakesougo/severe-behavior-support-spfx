@@ -4,105 +4,130 @@
 
 Human GO received for the separate scaffold / dependency Implementation Start gate following `Decision-AS-ADAPTER-SPFX-VERSION-SCAFFOLD-1 = ACCEPTED / LOCKED / V-1 + A + D-HOLD`.
 
+Subsequent Human GO received for **scaffold materialization + Heft build verification**.
+
 This record does not replace or impersonate a Human-authored GitHub authorization comment.
 
 ## Authorized scope
 
-This slice may establish the isolated `spfx/` dependency boundary required for a future SPFx scaffold.
+This slice may establish the isolated `spfx/` dependency boundary and materialize the official SPFx 1.23.2 Heft scaffold required before any binder work.
 
 The accepted constraints are:
 
 - SPFx `1.23.2` exact.
 - Node.js 22.
 - React and React DOM `17.0.1` exact.
-- SPFx-local TypeScript no later than 5.8; selected manifest value is `~5.8.3` to match the official 1.23.2 scaffold template.
+- SPFx-local TypeScript no later than 5.8; selected manifest value is `~5.8.3`.
 - Relevant `@microsoft/sp-*` packages are aligned to `1.23.2`.
 - Root TypeScript `5.9.2` is not changed.
 - The SPFx boundary is isolated in a dedicated subdirectory.
 
 ## Current implementation
 
-Created / updated:
+Created / updated under `spfx/`:
 
-- `spfx/package.json`
-- `spfx/package-lock.json`
-- `spfx/README.md`
+- official `webpart-react` scaffold files (`config/`, `src/`, `tsconfig.json`, etc.)
+- `package.json` / `package-lock.json`
+- `README.md`
+
+Scaffold generation method:
+
+```text
+tool: @microsoft/spfx-cli@0.1.0-pre.3
+template source: SharePoint/spfx templates/webpart-react
+template spfxVersion: 1.23.2
+template name: webpart-react
+component: Scaffold Shell（toolchain verification shell only）
+package-manager during create: none
+```
 
 No root dependency file is changed.
 
 ## Verification state
 
-The official SPFx 1.23.2 template inventory was used as the dependency source of truth for the Heft toolchain versions.
-
-### Dependency install continuation（registry-reachable environment）
+### Dependency install
 
 ```text
-Continuation PR: #227
-Base Implementation Start PR: #226
-npm install: RUN / PASS
-  environment: npm registry reachable
-  packages added: 1382
-  Node: v22.14.0
-  npm: 10.9.8
+Continuation / materialization PR stack:
+  #225 Accepted/Locked recording（Draft）
+  #226 dependency boundary start（Draft）
+  #227 lockfile verification（Draft）
+  this unit: scaffold materialization + Heft verification
 
-package-lock.json: GENERATED
+npm install: RUN / PASS
+  Node: v22.14.0
+  packages added after scaffold package.json: 1376
+
+package-lock.json: GENERATED / UPDATED
 dependency resolution: VERIFIED
   @microsoft/sp-http = 1.23.2
   @microsoft/sp-core-library = 1.23.2
   @microsoft/sp-webpart-base = 1.23.2
-  @microsoft/decorators = 1.23.2
   @microsoft/spfx-web-build-rig = 1.23.2
   react = 17.0.1
   react-dom = 17.0.1
   typescript = 5.8.3
-  @rushstack/heft = 1.2.22（requested ^1.2.19）
 
 root package.json mutation: 0
 root lockfile mutation: 0
 ```
 
-Known non-blocking install notes:
-
-- npm emitted peer-dependency warnings inside `@microsoft/spfx-web-build-rig@1.23.2` about nested `@rushstack/heft` vs plugin peer ranges. These originate from the Microsoft rig package graph and did not prevent install completion.
-
-### Still incomplete / HOLD
+### Scaffold materialization
 
 ```text
-SPFx CLI / generator: NOT RUN
-Heft build: NOT RUN / BLOCKED
-  missing: spfx/config/heft.json and remaining scaffold project files
-  observation: npx heft reports "File does not exist: /workspace/spfx/config/heft.json"
-
-scaffold verification: PARTIAL
-  PASS = isolated dependency boundary + lockfile resolution against V-1
-  HOLD = full Heft-based scaffold/toolchain project shape + build
+SPFx CLI / generator: RUN / PASS
+  @microsoft/spfx-cli create webpart-react from official 1.23.2 template
+config/rig.json: PRESENT
+config/heft.json: not required locally（rig-provided）
+tsconfig.json: PRESENT
+ScaffoldShell web part: PRESENT（template default；not binder）
 ```
 
-These HOLD items must not be treated as PASS.
+### Heft build verification
+
+```text
+heft run --only build -- --clean: PASS
+  TypeScript 5.8.3
+  ESLint 8.57.1
+  Webpack 5.105.4
+  duration ~3.8s
+
+heft test --clean: PASS
+  Jest 30.2.0
+  Successes: 0 / Failures: 0 / Total: 0
+  （no project tests in this scaffold shell）
+
+heft package-solution --production: PASS
+  local artifact only:
+    spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
+  Deploy: NOT RUN / NOT AUTHORIZED
+```
+
+Build outputs (`lib/`, `release/`, `sharepoint/solution/`, `*.sppkg`, `.heft/`) remain gitignored and are not treated as Deploy evidence.
 
 ## Still forbidden in this slice
 
 - AssessmentSnapshot binder implementation.
-- SPHttpClient calls.
+- SPHttpClient calls from application/adapter code.
 - SharePoint / Microsoft 365 / Entra mutation.
 - tenant I/O.
-- Deploy.
-- real data.
-- automatic Ready or Merge.
+- Deploy of `.sppkg` / real data.
+- automatic Ready or Merge of #225 / #226 / #227 / this PR.
 - root TypeScript / root package mutation.
 
 ## Stop condition
 
 ```text
-Advanced:
-  npm install
-  package-lock.json generation
-  dependency resolution verification against V-1 + A
+Advanced to PASS:
+  isolated dependency boundary
+  npm install + lockfile
+  official 1.23.2 scaffold materialization
+  Heft build / test / package-solution verification
 
 HOLD remaining:
-  SPFx CLI / generator execution
-  full scaffold project files（config/heft.json etc.）
-  Heft build verification
-
-A later binder Implementation Start remains a separate gate.
+  binder Implementation Start
+  SPHttpClient runtime binding
+  tenant I/O
+  Deploy
+  Ready / Merge（HUMAN-ONLY）
 ```
