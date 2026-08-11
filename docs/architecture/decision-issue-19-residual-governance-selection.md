@@ -92,7 +92,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 
 | Residual ID | Topic | Class | Status |
 |---|---|---|---|
-| GOV-AUD-01 | handoff の正本 | ORG_POLICY | OPEN / NOT SELECTED |
+| GOV-AUD-01 | handoff の正本 | ORG_POLICY | **unit SELECTED** / Option NOT SELECTED（[`decision-gov-aud-01-handoff-canonical-source-selection.md`](./decision-gov-aud-01-handoff-canonical-source-selection.md)） |
 | GOV-AUD-05 / DEC-012 post-retention deletion | 5年経過後の完全削除可否 | MIXED | OPEN / NOT SELECTED |
 | GOV-AUD-07 | バックアップ・復元の一次責任者 | ORG_POLICY | OPEN / NOT SELECTED |
 | GOV-AUD-08 | 復旧後の業務確認者 | ORG_POLICY | OPEN / NOT SELECTED |

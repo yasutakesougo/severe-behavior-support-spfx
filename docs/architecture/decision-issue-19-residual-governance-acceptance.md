@@ -26,7 +26,7 @@ PR: #255（Selection / Acceptance only）
 Selected:
   Issue #19 residual governance track
 
-First residual Decision inside #19: NOT SELECTED
+First residual Decision inside #19: SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 #22 adapter continuation: NOT AUTHORIZED
@@ -73,7 +73,7 @@ Consumed on #19 path（do not re-Decision）:
   GOV-AUD-02 / 03 / 04 / 05(retention prohibition) / 06
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
-First residual inside #19 = NOT SELECTED
+First residual inside #19 = SELECTED（GOV-AUD-01 unit；Option NOT SELECTED）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
