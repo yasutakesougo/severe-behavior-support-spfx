@@ -206,9 +206,15 @@ describe("AssessmentSnapshot synthetic repository — FR-1 / UP-1 / MAP-AS-010",
     assert.equal(forbidden.code, "PERSISTENCE_UNAVAILABLE");
   });
 
-  it("synthetic-only: host seam unbound; no live SPHttpClient", () => {
-    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.bindWhenAvailable, false);
+  it("synthetic-only: repository stays in-memory; seam points at spfx binder without live I/O", () => {
+    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.bindWhenAvailable, true);
     assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.kind, "spfx-sphttpclient-when-available");
+    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.liveTenantIoAuthorized, false);
+    assert.equal(
+      SPFX_SPHTTPCLIENT_HOST_SEAM.binderModule,
+      "spfx/src/adapters/assessment-snapshot/sphttpclient-list-transport.ts",
+    );
+    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.spHttpPackage, "@microsoft/sp-http@1.23.2");
   });
 
   it("correct-as-new-version creates new item; does not mutate prior final", async () => {

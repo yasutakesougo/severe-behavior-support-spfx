@@ -1,9 +1,12 @@
 /**
- * Transport host seam for SharePoint REST List Items（TC-1-A）.
+ * Transport host seam for SharePoint REST List Items（TC-1-A / TR-1-A）.
  *
- * Preferred host when available: SPFx SPHttpClient.
- * GO-SLICE-1: no @microsoft/sp-* install — this module defines the seam only.
- * Live tenant I/O is FORBIDDEN in this slice.
+ * Preferred host: SPFx SPHttpClient.
+ * Concrete binder lives in the isolated SPFx boundary:
+ *   spfx/src/adapters/assessment-snapshot/sphttpclient-list-transport.ts
+ *
+ * Root `src/` must not import `@microsoft/sp-*`.
+ * Live tenant I/O remains separately gated / FORBIDDEN without a live GO.
  */
 
 export type AssessmentSnapshotTransportFailure =
@@ -22,8 +25,8 @@ export type AssessmentSnapshotTransportReadResult =
   | Readonly<{ ok: false; failure: "NOT_FOUND" | AssessmentSnapshotTransportFailure }>;
 
 /**
- * Abstract transport. Implementations must not be added with live HTTP in GO-SLICE-1.
- * Synthetic tests use in-memory store / doubles only.
+ * Abstract transport. Synthetic GO-SLICE-1 repository does not use HTTP.
+ * Concrete SPHttpClient binder is implemented under `spfx/`.
  */
 export interface AssessmentSnapshotListTransport {
   createItem(
@@ -37,19 +40,24 @@ export interface AssessmentSnapshotListTransport {
 }
 
 /**
- * Marker documenting the future SPFx host binding.
- * Not an import of @microsoft/sp-http（FORBIDDEN / not installed）.
+ * Host seam marker for the SPFx SPHttpClient binder boundary.
  */
 export type SpfxSpHttpClientHostSeam = Readonly<{
   kind: "spfx-sphttpclient-when-available";
   /**
-   * When SPFx packages exist under a later authorized Decision,
-   * bind SPHttpClient here. GO-SLICE-1 does not provide a live binder.
+   * Concrete binder module exists under the isolated SPFx package.
+   * This does not authorize live tenant calls.
    */
-  bindWhenAvailable: false;
+  bindWhenAvailable: true;
+  binderModule: "spfx/src/adapters/assessment-snapshot/sphttpclient-list-transport.ts";
+  spHttpPackage: "@microsoft/sp-http@1.23.2";
+  liveTenantIoAuthorized: false;
 }>;
 
 export const SPFX_SPHTTPCLIENT_HOST_SEAM: SpfxSpHttpClientHostSeam = {
   kind: "spfx-sphttpclient-when-available",
-  bindWhenAvailable: false,
+  bindWhenAvailable: true,
+  binderModule: "spfx/src/adapters/assessment-snapshot/sphttpclient-list-transport.ts",
+  spHttpPackage: "@microsoft/sp-http@1.23.2",
+  liveTenantIoAuthorized: false,
 };
