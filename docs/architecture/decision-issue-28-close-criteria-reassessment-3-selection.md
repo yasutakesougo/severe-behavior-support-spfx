@@ -7,7 +7,7 @@ Kind: Human Selection（read-only Close criteria reassessment）
 Status: SELECTED / LOCKED
 Human Decision: #28 CLOSE-CRITERIA-REASSESSMENT-3 = GO
 Date: 2026-08-11
-PR: （docs only；number at create）
+PR: #248（docs only）
 
 Baseline tip:
   main = d2aefa129a175072858d6c12eaf7c2954932357e

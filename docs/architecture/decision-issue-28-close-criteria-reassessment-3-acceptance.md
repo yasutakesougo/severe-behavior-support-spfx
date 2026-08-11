@@ -12,7 +12,7 @@ Status: Accepted / LOCKED（Selection boundary）
 Human Decision: #28 CLOSE-CRITERIA-REASSESSMENT-3 = GO
 Human Acceptance date: 2026-08-11
 Baseline tip: d2aefa129a175072858d6c12eaf7c2954932357e
-PR: （docs only；number at create）
+PR: #248（docs only）
 
 Assessment kind: read-only
 #28 Close: NOT AUTHORIZED
