@@ -144,7 +144,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | Decision-HO-1 / HO-EDGE-1 | **UNCHANGED** |
 | GOV-AUD-02 | **UNCHANGED** |
 | 物理 ID / Schema / connector | **HOLD / NOT STARTED** |
-| next residual | **NOT SELECTED** |
+| next residual | **GOV-AUD-07 unit SELECTED**（Option NOT SELECTED；別 Decision） |
 
 ## Next
 
