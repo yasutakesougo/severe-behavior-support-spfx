@@ -46,7 +46,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 GOV-AUD-01〜10: Accepted / LOCKED（cycle complete）
 GOV-RULE-05〜08: Accepted（該当分；08 = NOT ADOPTED）
 GOV-RULE-09 rule content owner: Accepted / LOCKED / Option B = 法人業務責任者
-GOV-RULE-10 change approver: OPEN / OUT
+GOV-RULE-10 change approver: Accepted / LOCKED / Option C（別 Decision；本 packet OUT）
 GOV-RULE-11 / 12: OPEN / OUT
 GOV-STAFF / GOV-PERF: OPEN / OUT
 SharePoint / M365 / Deploy: NO-GO

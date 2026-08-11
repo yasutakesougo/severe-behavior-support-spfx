@@ -76,10 +76,11 @@ Consumed on #19 path（do not re-Decision）:
   GOV-AUD-09（Option A / 事業所管理者）
   GOV-AUD-10（fill-in / role names；Decision-GOV-AUD-10-FILL-IN-1）
   GOV-RULE-09（Option B / 法人業務責任者）
+  GOV-RULE-10（Option C / 業務責任者内容確認 + 法人管理者承認）
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
-Current residual Option = CONSUMED（GOV-RULE-09 Accepted / Option B）
+Current residual Option = CONSUMED（GOV-RULE-10 Accepted / Option C）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -100,10 +101,11 @@ Consumed:
   PR #265 GOV-AUD-10 unit SELECT = MERGED
   PR #266 GOV-AUD-10 Fill-in = MERGED
   PR #267 GOV-RULE-09 unit SELECT = MERGED
-  GOV-RULE-09 Option B = Accepted / LOCKED
+  PR #268 GOV-RULE-09 Option B = MERGED
+  GOV-RULE-10 unit SELECT + Option C = Accepted / LOCKED
 
 Next:
-  1. GOV-RULE-09 Option B Acceptance PR: IR → Human Ready → Human Merge
+  1. GOV-RULE-10 Selection + Option C Acceptance PR: IR → Human Ready → Human Merge
   2. After Merge: next residual SELECT one-by-one；no Agent auto-advance
   3. DEC-015 ledger sync remains separate / NOT auto-Accepted
   4. #19 Close remains later / separate Human disposition
