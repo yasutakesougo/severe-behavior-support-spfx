@@ -3,11 +3,14 @@
 ```text
 Issue: #28
 Unit: SHELL-UX-2 — Save State Presentation
-Status: Implementation Start GO / IN PROGRESS
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: Decision-SHELL-UX-2-SAVE-STATE-PRESENTATION-1 = SELECTED / LOCKED
 Selection merge: ec20c12cf4a897aa906faefd9da6515eaaf5a023（PR #237）
 Human Implementation Start: GO（2026-08-11）
 Independence: PASS（presentation-only）
+PR: #238
+Browser smoke: PASS / VERIFIED（shell-ux-2-browser-smoke.md）
+Heft test: 15 / 15 PASS
 #28 Close: NOT AUTHORIZED
 #22 adapter continuation: NOT AUTHORIZED
 ```
@@ -65,7 +68,7 @@ SHELL_UX_SLICE.binderHostWiringAuthorized = false
 保存結果不明 = independent presentation state（must not be collapsed）
 ```
 
-## Delivered surface（target）
+## Delivered surface
 
 ```text
 spfx/src/shell/ux/save-state.ts（descriptions + a11y helpers）
@@ -74,6 +77,7 @@ spfx/src/shell/ux/SaveStatePresentation.tsx（shared surface）
 spfx/src/shell/ux/AppShellChrome.tsx（wire presentation）
 spfx/src/shell/ux/*.test.ts
 spfx/smoke/shell-ux-2/*
+docs/architecture/shell-ux-2-browser-smoke.md
 ```
 
 ## Stop / HOLD
