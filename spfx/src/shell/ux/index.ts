@@ -38,6 +38,7 @@ export {
   SHELL_VIEW_MODES,
   isPartialRetrievalViewMode,
   isShellViewMode,
+  isUnauthenticatedViewMode,
   type ShellViewMode,
 } from "./shell-view-mode";
 export {
@@ -56,3 +57,9 @@ export {
 export { SiteSelector, type SiteSelectorProps } from "./SiteSelector";
 export { SiteUnselectedStop } from "./SiteUnselectedStop";
 export { StatusPanel, type StatusPanelProps } from "./StatusPanel";
+export {
+  SHELL_UNAUTHENTICATED_BODY,
+  SHELL_UNAUTHENTICATED_TITLE,
+  unauthenticatedCopyExcludesSensitiveTokens,
+} from "./unauthenticated";
+export { UnauthenticatedPanel } from "./UnauthenticatedPanel";

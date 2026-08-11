@@ -41,13 +41,13 @@ export const SHELL_UX_DEFAULT_FIXTURE: ShellUxFixture = {
   siteOptions: SHELL_SITE_OPTIONS,
   saveState: "unsaved",
   viewMode: "ready",
-  correlationId: "shell-ux-5-synth-corr",
-  errorCode: "SHELL-UX-5-SYNTH-E001",
+  correlationId: "shell-ux-6-synth-corr",
+  errorCode: "SHELL-UX-6-SYNTH-E001",
   partialRetrieval: SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
 };
 
 export const SHELL_UX_SLICE = {
-  id: "SHELL-UX-5",
+  id: "SHELL-UX-6",
   liveTenantIoAuthorized: false as const,
   sharePointRestAuthorized: false as const,
   binderHostWiringAuthorized: false as const,
@@ -57,4 +57,8 @@ export const SHELL_UX_SLICE = {
   errorCodeGenerationAuthorized: false as const,
   adapterFailureClassificationAuthorized: false as const,
   telemetryBackendAuthorized: false as const,
+  authJudgmentAuthorized: false as const,
+  entraTokenHandlingAuthorized: false as const,
+  roleResolutionAuthorized: false as const,
+  redirectSignInOrchestrationAuthorized: false as const,
 } as const;

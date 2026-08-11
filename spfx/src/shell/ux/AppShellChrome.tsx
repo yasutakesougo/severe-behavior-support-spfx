@@ -5,7 +5,11 @@ import { PartialRetrievalPanel } from "./PartialRetrievalPanel";
 import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
 import type { ShellSaveState } from "./save-state";
-import { isPartialRetrievalViewMode, type ShellViewMode } from "./shell-view-mode";
+import {
+  isPartialRetrievalViewMode,
+  isUnauthenticatedViewMode,
+  type ShellViewMode,
+} from "./shell-view-mode";
 import {
   SHELL_SITE_OPTIONS,
   isSiteUnselected,
@@ -16,6 +20,7 @@ import {
 import { SiteSelector } from "./SiteSelector";
 import { SiteUnselectedStop } from "./SiteUnselectedStop";
 import { StatusPanel } from "./StatusPanel";
+import { UnauthenticatedPanel } from "./UnauthenticatedPanel";
 import styles from "./ShellUx.module.scss";
 
 export type AppShellChromeProps = Readonly<{
@@ -33,8 +38,8 @@ export type AppShellChromeProps = Readonly<{
 }>;
 
 /**
- * SHELL-UX presentation chrome（SHELL-UX-5 error-code + correlationId display）.
- * No SharePoint REST, binder wiring, membership lookup, fetch, generation, or classification.
+ * SHELL-UX presentation chrome（SHELL-UX-6 unauthenticated fail-closed panel）.
+ * No SharePoint REST, binder, auth judgment, Entra, token, role, or redirect.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const {
@@ -64,13 +69,20 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
   };
 
-  const siteBlocked = isSiteUnselected(selection);
-  const selectedSite = !siteBlocked ? siteOptionForId(selection) : undefined;
-  const showPartialRetrieval = !siteBlocked && isPartialRetrievalViewMode(viewMode);
-  const showReadyRegion = !siteBlocked && viewMode === "ready";
+  const unauthenticated = isUnauthenticatedViewMode(viewMode);
+  const siteBlocked = !unauthenticated && isSiteUnselected(selection);
+  const selectedSite = !unauthenticated && !siteBlocked ? siteOptionForId(selection) : undefined;
+  const showPartialRetrieval =
+    !unauthenticated && !siteBlocked && isPartialRetrievalViewMode(viewMode);
+  const showReadyRegion = !unauthenticated && !siteBlocked && viewMode === "ready";
+  const navDisabled = unauthenticated || siteBlocked;
 
   return (
-    <div className={styles.appShell} data-shell-ux="app-shell-chrome">
+    <div
+      className={styles.appShell}
+      data-shell-ux="app-shell-chrome"
+      data-shell-ux-unauthenticated={unauthenticated ? "true" : "false"}
+    >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
       </a>
@@ -80,40 +92,50 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       <header className={styles.shellHeader} role="banner">
         <div className={styles.brandRow}>
           <p className={styles.productName}>強度行動障害支援（シェル表示）</p>
-          <SaveStatePresentation state={saveState} />
+          {!unauthenticated ? <SaveStatePresentation state={saveState} /> : null}
         </div>
-        <SiteSelector
-          selection={selection}
-          options={siteOptions}
-          onSelectionChange={handleSelectionChange}
-        />
-        {selectedSite ? (
-          <CurrentSiteLabel site={selectedSite} />
+        {!unauthenticated ? (
+          <>
+            <SiteSelector
+              selection={selection}
+              options={siteOptions}
+              onSelectionChange={handleSelectionChange}
+            />
+            {selectedSite ? (
+              <CurrentSiteLabel site={selectedSite} />
+            ) : (
+              <p className={styles.currentSite} data-shell-ux="current-site-unselected">
+                <span className={styles.currentSiteLabel}>現在の事業所（表示専用）</span>
+                <span className={styles.currentSiteValue}>未選択</span>
+              </p>
+            )}
+            <p className={styles.userLine} data-shell-ux="user-display">
+              表示名: {userDisplayName}
+            </p>
+          </>
         ) : (
-          <p className={styles.currentSite} data-shell-ux="current-site-unselected">
-            <span className={styles.currentSiteLabel}>現在の事業所（表示専用）</span>
-            <span className={styles.currentSiteValue}>未選択</span>
+          <p className={styles.userLine} data-shell-ux="user-display-suppressed">
+            表示名: （未認証のため非表示）
           </p>
         )}
-        <p className={styles.userLine} data-shell-ux="user-display">
-          表示名: {userDisplayName}
-        </p>
       </header>
 
       <nav className={styles.shellNav} aria-label="シェル主要ナビゲーション">
-        <button type="button" className={styles.navButton} disabled={siteBlocked}>
+        <button type="button" className={styles.navButton} disabled={navDisabled}>
           概要
         </button>
-        <button type="button" className={styles.navButton} disabled={siteBlocked}>
+        <button type="button" className={styles.navButton} disabled={navDisabled}>
           利用者
         </button>
-        <button type="button" className={styles.navButton} disabled={siteBlocked}>
+        <button type="button" className={styles.navButton} disabled={navDisabled}>
           記録
         </button>
       </nav>
 
       <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
-        {siteBlocked ? (
+        {unauthenticated ? (
+          <UnauthenticatedPanel />
+        ) : siteBlocked ? (
           <SiteUnselectedStop />
         ) : showPartialRetrieval ? (
           <PartialRetrievalPanel

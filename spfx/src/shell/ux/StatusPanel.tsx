@@ -14,7 +14,11 @@ export type StatusPanelProps = Readonly<{
  * Fail-closed status panels. SHELL-UX-5 adds error-code + correlation inquiry when props present.
  */
 export const StatusPanel: React.FC<StatusPanelProps> = ({ mode, correlationId, errorCode }) => {
-  if (mode === "ready" || mode === "partial_retrieval_failed") {
+  if (
+    mode === "ready" ||
+    mode === "partial_retrieval_failed" ||
+    mode === "unauthenticated"
+  ) {
     return null;
   }
 

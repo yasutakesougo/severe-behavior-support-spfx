@@ -5,7 +5,7 @@ import {
 } from "./fixture";
 import { hasPartialRetrievalFailure } from "./partial-retrieval";
 import { isShellSaveState } from "./save-state";
-import { isShellViewMode } from "./shell-view-mode";
+import { isShellViewMode, isUnauthenticatedViewMode } from "./shell-view-mode";
 import { isShellSiteSelection, isSiteUnselected } from "./site-selection";
 
 describe("SHELL-UX fixture boundary", () => {
@@ -22,6 +22,7 @@ describe("SHELL-UX fixture boundary", () => {
     expect(isShellSaveState(SHELL_UX_DEFAULT_FIXTURE.saveState)).toBe(true);
     expect(isShellViewMode(SHELL_UX_DEFAULT_FIXTURE.viewMode)).toBe(true);
     expect(isShellSiteSelection(SHELL_UX_DEFAULT_FIXTURE.siteSelection)).toBe(true);
+    expect(isUnauthenticatedViewMode("unauthenticated")).toBe(true);
   });
 
   it("keeps partial-retrieval fixture separated and failure-bearing", () => {
@@ -30,12 +31,12 @@ describe("SHELL-UX fixture boundary", () => {
   });
 
   it("carries synthetic errorCode + correlationId for inquiry display", () => {
-    expect(SHELL_UX_DEFAULT_FIXTURE.errorCode).toBe("SHELL-UX-5-SYNTH-E001");
-    expect(SHELL_UX_DEFAULT_FIXTURE.correlationId).toBe("shell-ux-5-synth-corr");
+    expect(SHELL_UX_DEFAULT_FIXTURE.errorCode).toBe("SHELL-UX-6-SYNTH-E001");
+    expect(SHELL_UX_DEFAULT_FIXTURE.correlationId).toBe("shell-ux-6-synth-corr");
   });
 
-  it("does not authorize live I/O, REST, binder, membership, fetch, judgment, or generation", () => {
-    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-5");
+  it("does not authorize live I/O, REST, binder, auth judgment, or redirect", () => {
+    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-6");
     expect(SHELL_UX_SLICE.liveTenantIoAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.sharePointRestAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.binderHostWiringAuthorized).toBe(false);
@@ -45,5 +46,9 @@ describe("SHELL-UX fixture boundary", () => {
     expect(SHELL_UX_SLICE.errorCodeGenerationAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.adapterFailureClassificationAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.telemetryBackendAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.authJudgmentAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.entraTokenHandlingAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.roleResolutionAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.redirectSignInOrchestrationAuthorized).toBe(false);
   });
 });

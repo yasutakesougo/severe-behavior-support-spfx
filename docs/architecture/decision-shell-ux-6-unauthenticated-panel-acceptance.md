@@ -24,7 +24,7 @@ Baseline tip: 8fb0ef22c2ba5e5be378410020597657d2af6fca
 Selected:
   Unauthenticated fail-closed presentation panel
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（separate；shell-ux-6-implementation-start.md）
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -61,8 +61,9 @@ fail-closed copy = presentation only
 
 ```text
 Selection = SELECTED / LOCKED
-Implementation Start = NOT AUTHORIZED / HOLD
-code mutation for SHELL-UX-6 = 0
+Selection merge = 2f749b706e1b6730623981a1b5510b75c866ce01（PR #249）
+Implementation Start = GO（separate；shell-ux-6-implementation-start.md）
+#28 Close = NOT AUTHORIZED
 other residual candidates C-F′ / C-G / C-H = NOT SELECTED
 C-B / C-C = CONSUMED（SHELL-UX-3）
 C-D = CONSUMED（SHELL-UX-4）
@@ -72,10 +73,10 @@ C-E = CONSUMED（SHELL-UX-5）
 ## Next
 
 ```text
-1. stop（Selection only）
-2. separate Human GO for Implementation Start（exact IN/OUT）
-3. only after Implementation Start GO: code + tests + browser smoke
-4. #28 Close remains later / separate
+1. Implementation Start GO recorded（shell-ux-6-implementation-start.md）
+2. deliver code + tests + browser smoke under exact IN/OUT
+3. #28 Close remains later / separate
+4. #249 merge ≠ Implementation Start（already separated）
 ```
 
 ## Reference

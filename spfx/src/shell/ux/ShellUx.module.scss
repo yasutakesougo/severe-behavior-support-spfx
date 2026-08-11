@@ -324,6 +324,18 @@
   opacity: 0.9;
 }
 
+.unauthenticatedPanel {
+  padding: 1rem;
+  border: 2px solid #a4262c;
+  background: #fde7e9;
+}
+
+.unauthenticatedNote {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 /* Basic tablet / narrow layout affordance */
 @media (max-width: 768px) {
   .appShell {
