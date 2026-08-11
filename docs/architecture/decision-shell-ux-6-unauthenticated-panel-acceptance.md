@@ -18,7 +18,7 @@ Human Decision: SELECT C-A / SHELL-UX-6
 Human Acceptance date: 2026-08-11
 Issue: #28
 Candidate: C-A
-PR: （Selection / Acceptance only；number at create）
+PR: #249（Selection / Acceptance only）
 Baseline tip: 8fb0ef22c2ba5e5be378410020597657d2af6fca
 
 Selected:
