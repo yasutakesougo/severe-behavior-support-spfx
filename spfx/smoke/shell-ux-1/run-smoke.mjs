@@ -25,7 +25,9 @@ const scssStubPlugin = {
       for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) {
         keys.add(match[1]);
       }
-      const entries = [...keys].map((k) => `  ${JSON.stringify(k)}: ${JSON.stringify(k)}`).join(",\n");
+      const entries = [...keys]
+        .map((k) => `  ${JSON.stringify(k)}: ${JSON.stringify(k)}`)
+        .join(",\n");
       return {
         contents: `export default {\n${entries}\n};`,
         loader: "js",
@@ -126,7 +128,7 @@ allPass =
     "loading",
     "viewMode=loading&saveState=saving",
     [...common, '[data-shell-ux="loading-panel"]'],
-    ['[data-shell-ux="ready-region"]']
+    ['[data-shell-ux="ready-region"]'],
   )) && allPass;
 
 allPass =
@@ -134,7 +136,7 @@ allPass =
     "access-denied",
     "viewMode=access_denied&saveState=save_failed",
     [...common, '[data-shell-ux="access-denied-panel"]'],
-    ['[data-shell-ux="ready-region"]']
+    ['[data-shell-ux="ready-region"]'],
   )) && allPass;
 
 allPass =
@@ -142,7 +144,7 @@ allPass =
     "retrieval-failed",
     "viewMode=retrieval_failed&saveState=save_outcome_unknown",
     [...common, '[data-shell-ux="retrieval-failed-panel"]'],
-    ['[data-shell-ux="ready-region"]']
+    ['[data-shell-ux="ready-region"]'],
   )) && allPass;
 
 // Keyboard focus affordance: skip link becomes focusable target

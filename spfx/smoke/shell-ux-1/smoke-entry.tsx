@@ -50,5 +50,5 @@ ReactDOM.render(
       </section>
     </AppShellChrome>
   </div>,
-  root
+  root,
 );
