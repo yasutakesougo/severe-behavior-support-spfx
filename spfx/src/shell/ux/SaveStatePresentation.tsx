@@ -1,9 +1,6 @@
 import * as React from "react";
 import { SaveStateBadge } from "./SaveStateBadge";
-import {
-  descriptionForShellSaveState,
-  type ShellSaveState,
-} from "./save-state";
+import { descriptionForShellSaveState, type ShellSaveState } from "./save-state";
 import styles from "./ShellUx.module.scss";
 
 export type SaveStatePresentationProps = Readonly<{
