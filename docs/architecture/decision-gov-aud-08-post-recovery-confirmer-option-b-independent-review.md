@@ -15,7 +15,7 @@ Acceptance: decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md
 Packet: decision-gov-aud-08-post-recovery-confirmer-decision-packet.md
 Parent unit Selection: Decision-GOV-AUD-08-SELECTION-1（PR #261 MERGED）
 Baseline tip: 952c82b00f56581b56e6ae5d4ed23c4150fbd394
-PR: pending
+PR: #262
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Option status: Accepted / LOCKED / B

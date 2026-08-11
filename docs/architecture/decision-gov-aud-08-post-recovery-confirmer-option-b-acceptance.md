@@ -21,7 +21,7 @@ Selected Option: B
 Meaning:
   復旧後の業務確認者 = 業務責任者または指定確認者
 Baseline tip: 952c82b00f56581b56e6ae5d4ed23c4150fbd394
-PR: pending（Option B Acceptance / Packet sync / IR）
+PR: #262（Option B Acceptance / Packet sync / IR）
 
 Does NOT mean:
   復旧確認手順・チェックリスト・再開条件の発明
