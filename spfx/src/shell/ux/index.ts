@@ -22,6 +22,11 @@ export {
 } from "./partial-retrieval";
 export { PartialRetrievalPanel, type PartialRetrievalPanelProps } from "./PartialRetrievalPanel";
 export {
+  isShellPrimaryNavigationEnabled,
+  SHELL_PRIMARY_NAV_ITEMS,
+  type ShellPrimaryNavigationId,
+} from "./primary-navigation";
+export {
   SHELL_SAVE_STATES,
   SHELL_SAVE_STATE_DESCRIPTIONS,
   SHELL_SAVE_STATE_LABELS,
