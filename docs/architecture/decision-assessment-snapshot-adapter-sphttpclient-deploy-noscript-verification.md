@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
 Verification target: temporary Tenant App Catalog scripting + scoped Deploy + restore
-Verification status: NOT RUN / ENVIRONMENT BLOCKED
+Verification status: PASS / VERIFIED
 Date: 2026-08-11
 Tenant App Catalog: https://isogokatudouhome.sharepoint.com/sites/appcatalog
 Agent mutation: 0
@@ -18,68 +18,99 @@ Human Decision: GO-DEPLOY-NOSCRIPT-TEMP
 Acceptance: decision-assessment-snapshot-adapter-sphttpclient-deploy-noscript-acceptance.md
 Procedure: decision-assessment-snapshot-adapter-sphttpclient-deploy-noscript-packet.md §3
 Parent:
-  Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1 = NOT PASS / BLOCKED_BY_NOSCRIPT_GUARD
+  Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
+  = GO RECEIVED / previously BLOCKED_BY_NOSCRIPT_GUARD
 ```
 
-## Agent environment probe（not PASS evidence）
+## Human one-set execution evidence
 
 ```text
-Authenticated SharePoint session: ABSENT
-Unauthenticated GET: HTTP 403
-SPO_* secrets: NOT ADDED
-Agent NoScript mutation: 0
-Agent App Catalog upload: 0
-```
+Operator: Human
+Date: 2026-08-11
+Tool: PnP.PowerShell 3.1.0 / PowerShell 7.5.3
 
-## Required Human one-set evidence（pending）
-
-Paste/replace after execution:
-
-```text
-Operator:
-Date:
-Tool: PnP PowerShell / other
-PnP.PowerShell version:
-PowerShell version:
+Package:
+  path = spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
+  generated from locked #232 worktree
+  size = 38661 bytes
+  solution name = severe-behavior-support-spfx-shell-client-side-solution
+  solution id / ProductId = 4342db47-21a3-4c48-aed1-ef615f55c404
+  version = 1.0.0.0
 
 3.1 Baseline:
-  DenyAddAndCustomizePages / NoScript =
-  recorded via =
+  Tenant App Catalog = https://isogokatudouhome.sharepoint.com/sites/appcatalog
+  DenyAddAndCustomizePages = Enabled
+  meaning = NoScript ON / scripting disabled
+
+Authentication note:
+  explicit Connect-PnPOnline to tenant admin with -ReturnConnection emitted:
+    "Please specify a valid client id for an Entra ID App Registration"
+    "Specified method is not supported"
+  Despite that connection attempt, the subsequent Get-PnPTenantSite / Set-PnPTenantSite
+  operations and read-backs completed successfully in the effective authenticated PnP context.
+  No Entra configuration change was performed.
 
 3.2 Temporary enable:
-  command =
-  DenyAddAndCustomizePages after enable =
+  Set-PnPTenantSite -DenyAddAndCustomizePages:$false = SUCCESS
+  read-back DenyAddAndCustomizePages = Disabled
+  target = Tenant App Catalog only
 
 3.3 Deploy:
-  package path =
   Add-PnPApp scope = Tenant
-  Publish = YES/NO
-  Overwrite = YES/NO
-  result =
-  confirmed app id =
-  confirmed app title =
-  deployed/published = YES/NO
+  Publish = YES
+  Overwrite = YES
+  package = severe-behavior-support-spfx-shell.sppkg
+  result = SUCCESS
+
+Deploy confirmation:
+  Get-PnPApp -Scope Tenant matched expected solution title
+  Id = 0d75630f-f757-45ec-b055-de53f1fd2476
+  AppCatalogVersion = 1.0.0.0
+  Deployed = True
+  IsClientSideSolution = True
+  Title = severe-behavior-support-spfx-shell-client-side-solution
+
+Identity note:
+  PnP Get-PnPApp.Id is the App Catalog app metadata identity and is not treated as
+  the SPFx package solution ProductId. The package ProductId remains the locked
+  package-solution.json solution id 4342db47-21a3-4c48-aed1-ef615f55c404.
 
 3.4 Restore:
-  command =
-  DenyAddAndCustomizePages after restore =
-  matches baseline = YES/NO
-
-Out-of-scope checks:
-  scripting enabled on other sites = 0
-  permanent leave-behind = 0 / NOT 0
-  Agent mutation = 0
-  Ready / Merge performed = 0
-  real business AssessmentSnapshots writes = 0
+  baseline = Enabled
+  Set-PnPTenantSite -DenyAddAndCustomizePages:$true = SUCCESS
+  final read-back DenyAddAndCustomizePages = Enabled
+  matches baseline = YES
+  terminal evidence = "RESTORE CONFIRMED: Enabled"
 ```
 
-## Verdict（current）
+## Out-of-scope checks
+
+```text
+scripting enabled on other sites = 0
+permanent scripting leave-behind = 0
+Agent NoScript mutation = 0
+Agent App Catalog upload = 0
+Entra configuration change = 0
+real business AssessmentSnapshots writes = 0
+Ready / Merge performed = 0
+```
+
+## Verdict
 
 ```text
 Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
-= GO RECEIVED / NOT PASS
-reason = awaiting Human one-set execution evidence
+= PASS / VERIFIED
 
-Parent Deploy = still NOT PASS until this set completes
+one-set:
+  baseline record = PASS
+  temporary enable = PASS
+  Tenant Add-PnPApp / Publish = PASS
+  deployed confirmation = PASS
+  restore baseline = PASS
+  final state = Enabled / baseline restored
+
+Parent Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
+= eligible for PASS / VERIFIED based on completed scoped deploy evidence
+
 Ready / Merge = HUMAN-ONLY
 ```
