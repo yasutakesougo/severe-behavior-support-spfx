@@ -108,7 +108,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | Decision-GOV-AUD-08-SELECTION-1 | **UNCHANGED**（unit SELECTED / LOCKED） |
 | GOV-AUD-01〜06（該当 Accepted 分） | **UNCHANGED** |
 | GOV-AUD-07 | **UNCHANGED**（Accepted / Option A = Microsoft 365管理者） |
-| GOV-AUD-09 | **unit SELECTED** / Option NOT SELECTED（別 Decision；本 Acceptance から自動 SELECT しない） |
+| GOV-AUD-09 | **Accepted / LOCKED / Option A**（別 Decision；本 Acceptance から自動 SELECT しない） |
 | GOV-AUD-10 | **OUT / NOT SELECTED** |
 | Option A / C / D / H | **NOT SELECTED** |
 | 確認手順 / tenant mutation | **HOLD / NOT STARTED** |
