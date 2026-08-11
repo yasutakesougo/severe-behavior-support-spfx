@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>C-G viewport browser smoke</title>
+    <style>
+      html,
+      body {
+        min-width: 0;
+        margin: 0;
+        font-family: "Segoe UI", "Hiragino Sans", sans-serif;
+        background: #f3f2f1;
+      }
+      .appShell {
+        min-height: 100vh;
+        min-width: 0;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding: 12px 16px 24px;
+      }
+      .skipLink {
+        position: absolute;
+        left: -9999px;
+      }
+      .skipLink:focus {
+        left: 8px;
+        top: 8px;
+        z-index: 10;
+        background: #fff;
+        padding: 8px;
+      }
+      .demoBanner {
+        background: #fff4ce;
+        border-bottom: 1px solid #f3d459;
+        padding: 8px 16px;
+        font-weight: 600;
+      }
+      .shellHeader {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding-bottom: 8px;
+        background: #fff;
+        border-bottom: 1px solid #edebe9;
+      }
+      .brandRow {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .productName {
+        min-width: 0;
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        overflow-wrap: anywhere;
+      }
+      .saveStatePresentation {
+        min-width: 0;
+        max-width: 100%;
+      }
+      .siteSelector {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .siteSelectorOptions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+      }
+      .siteOption {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+      }
+      .currentSite {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 12px;
+        align-items: baseline;
+        overflow-wrap: anywhere;
+      }
+      .userLine {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .shellNav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 8px 0;
+        background: #faf9f8;
+        border-bottom: 1px solid #edebe9;
+      }
+      .navButton {
+        min-height: 40px;
+        min-width: 72px;
+        max-width: 100%;
+        padding: 8px 14px;
+        border: 1px solid #8a8886;
+        background: #fff;
+        color: inherit;
+        cursor: pointer;
+      }
+      .navButton:focus {
+        outline: 3px solid #03787c;
+        outline-offset: 2px;
+      }
+      .shellMain {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 16px 0;
+        overflow-wrap: anywhere;
+      }
+      .readyRegion {
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+      }
+      .readyRegion,
+      .siteUnselectedStop,
+      .unauthenticatedPanel {
+        background: #fff;
+        border: 1px solid #edebe9;
+        padding: 16px;
+      }
+      @media (max-width: 768px) {
+        .brandRow {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .shellNav {
+          align-items: stretch;
+        }
+        .navButton {
+          flex: 1 1 30%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./smoke-bundle.js"></script>
+  </body>
+</html>

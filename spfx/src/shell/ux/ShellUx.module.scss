@@ -3,6 +3,8 @@
   flex-direction: column;
   gap: 0.75rem;
   min-height: 100%;
+  min-width: 0;
+  max-width: 100%;
   padding: 0.75rem 1rem 1.5rem;
   color: "[theme:bodyText, default: #323130]";
   color: var(--bodyText);
@@ -37,8 +39,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid "[theme:neutralLight, default: #edebe9]";
+  box-sizing: border-box;
 }
 
 .brandRow {
@@ -163,6 +168,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .navButton {
@@ -182,7 +190,11 @@
 
 .shellMain {
   flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
   outline: none;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .statusPanel {
@@ -288,6 +300,10 @@
 
 .readyRegion {
   display: block;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .partialRetrievalPanel {
