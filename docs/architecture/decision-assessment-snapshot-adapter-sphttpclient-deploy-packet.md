@@ -148,35 +148,26 @@ PASS requires all:
 
 ```text
 Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
-= GO RECEIVED / EXECUTION HOLD
+= PASS / VERIFIED
 
-Deploy verification = NOT PASS
-HOLD = BLOCKED_BY_NOSCRIPT_GUARD
-
-Evidence HEAD: 6524785bc993a261f8f8cc2a3e2c4422b9291178
+Completed via:
+  Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
+  = PASS / VERIFIED
+  Evidence HEAD: 7358a12160e4cf4835230df0b4fe64250d8f52f1
 
 Observed:
   package build = PASS
-  Site App Catalog = NOT PRESENT
-  Tenant App Catalog = PRESENT
-  Tenant Deploy = NOT COMPLETED
-  NoScript mutation = 0
+  Tenant App Catalog Deploy / Publish = PASS
+  AppCatalogVersion = 1.0.0.0
+  Deployed = True
+  NoScript baseline = Enabled
+  final NoScript = Enabled
+  RESTORE CONFIRMED = Enabled
+  permanent scripting leave-behind = 0
   Agent App Catalog upload = 0
+  Agent NoScript mutation = 0
 
-Operator stop（correct）:
-  Add-PnPApp prompt to temporarily enable scripting = answered N
-  no Add-PnPApp retry
-  no -Force
-
-Still NOT AUTHORIZED by this GO:
-  Tenant App Catalog NoScript / scripting mutation
+Still NOT AUTHORIZED:
   Ready / Merge auto-progress
-  Agent Deploy
-
-Next substantive gate（separate Human Decision）:
-  Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
-  GO-DEPLOY-NOSCRIPT-TEMP
-  temporary scripting enablement on Tenant App Catalog
-  solely to complete this scoped .sppkg Deploy
-  If GO: enable → Deploy → confirm → restore = one set
+  treating Deploy PASS as Ready / Merge
 ```

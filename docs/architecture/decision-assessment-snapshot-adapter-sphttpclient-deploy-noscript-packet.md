@@ -8,10 +8,11 @@ Tenant App Catalog の **一時 scripting 有効化 → scoped `.sppkg` Deploy �
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
-Status: GO RECEIVED / EXECUTION HOLD
+Status: PASS / VERIFIED（Human one-set complete）
 Human Decision: GO（temporary NoScript / scripting enable for Deploy）
 Deploy HEAD: a0fc767c5df4349c43f8176e9a7388c33f45a167
 Deploy evidence: 6524785bc993a261f8f8cc2a3e2c4422b9291178
+Evidence HEAD: 7358a12160e4cf4835230df0b4fe64250d8f52f1
 PR: #233
 Kind: temporary Tenant App Catalog scripting + Deploy + restore（one set）
 
@@ -177,14 +178,22 @@ PASS requires all:
 
 ```text
 Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
-= GO RECEIVED / EXECUTION HOLD
+= PASS / VERIFIED
 
-HOLD:
-  Human one-set execution evidence
-  （enable → Deploy → confirm → restore）
+Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
+= PASS / VERIFIED
+
+Evidence HEAD: 7358a12160e4cf4835230df0b4fe64250d8f52f1
+
+Completed one set:
+  enable → Tenant Add-PnPApp / Publish → confirm → restore
+
+final NoScript = Enabled
+RESTORE CONFIRMED = Enabled
+permanent scripting leave-behind = 0
+Agent mutation / upload = 0
 
 Still NOT AUTHORIZED:
   Ready / Merge auto-progress
-  Agent execution
-  permanent NoScript leave-behind
+  treating this GO as Ready / Merge
 ```

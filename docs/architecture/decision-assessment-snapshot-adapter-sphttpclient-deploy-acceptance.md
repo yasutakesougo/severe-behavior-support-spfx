@@ -34,15 +34,17 @@ Execution status:
   package build = PASS
   Site App Catalog = NOT PRESENT
   Tenant App Catalog = PRESENT
-  Tenant Deploy = NOT COMPLETED
-  NoScript mutation = 0
-  Deploy verification = NOT PASS / BLOCKED_BY_NOSCRIPT_GUARD
-  Evidence HEAD: 6524785bc993a261f8f8cc2a3e2c4422b9291178
+  Tenant Deploy / Publish = PASS / VERIFIED（via NoScript-temp one-set）
+  NoScript baseline restored = Enabled
+  permanent scripting leave-behind = 0
+  Agent App Catalog upload = 0
+  Deploy verification = PASS / VERIFIED
+  Evidence HEAD: 7358a12160e4cf4835230df0b4fe64250d8f52f1
 
 NOT AUTHORIZED:
   Ready / Merge auto-progress
   Agent App Catalog upload
-  Add-PnPApp retry / -Force under current HOLD
+  permanent NoScript leave-behind
   real business data writes
   Entra / tenant config changes
   SPO_* secrets merely to unblock Agent
@@ -81,15 +83,17 @@ Prerequisites:
   live write = PASS / VERIFIED
   synthetic residue = 0
 
-package build = PASS
-Site App Catalog = NOT PRESENT
-Tenant App Catalog = PRESENT
-Tenant Deploy = NOT COMPLETED
-NoScript mutation = 0
-Agent App Catalog upload = 0
+Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
+= PASS / VERIFIED
 
-Deploy verification = NOT PASS
-HOLD = BLOCKED_BY_NOSCRIPT_GUARD
+Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-1
+= PASS / VERIFIED
+
+package build = PASS
+Tenant App Catalog Deploy / Publish = PASS
+NoScript restore = PASS（final = Enabled）
+permanent scripting leave-behind = 0
+Agent App Catalog upload = 0
 
 Ready / Merge = HUMAN-ONLY
 ```
@@ -97,9 +101,7 @@ Ready / Merge = HUMAN-ONLY
 ## Next
 
 ```text
-1. stop under GO-DEPLOY alone — no Add-PnPApp retry / no -Force
-2. Decision-AS-ADAPTER-SPHTTPCLIENT-DEPLOY-NOSCRIPT-1
-   = separate Human GO for temporary Tenant App Catalog scripting
-   enable → Deploy → confirm → restore（one set）
-3. Ready / Merge remains separate
+1. stop
+2. Ready / Merge remains a later separate Human action
+3. This Deploy / NoScript GO does not authorize Ready / Merge
 ```
