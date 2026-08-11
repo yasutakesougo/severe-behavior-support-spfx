@@ -23,10 +23,12 @@ Candidate origin:
   Issue #19 §C GOV-AUD-01
   #19 residual inventory row: GOV-AUD-01
 
-Option Acceptance: NOT SELECTED（別 Human Decision）
+Option Acceptance: Accepted / LOCKED / Option C
+  （decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md）
+identity fields: NOT YET PROVIDED
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
-Agent auto-select Option A–D: FORBIDDEN
+Agent auto-select next residual: FORBIDDEN
 ```
 
 ## 1. Why this residual now

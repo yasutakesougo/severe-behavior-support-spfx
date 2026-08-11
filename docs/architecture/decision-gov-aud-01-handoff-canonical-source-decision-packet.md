@@ -19,9 +19,11 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-AUD-01
 Kind: Human Decision packet（narrow）
-Status: OPEN / Option NOT SELECTED
+Status: CONSUMED（Human Decision Accepted / Option C）
+Accepted 正本: decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md
+IR: decision-gov-aud-01-handoff-canonical-source-option-c-independent-review.md
 Owner: Issue #19
-Selected via: Decision-GOV-AUD-01-SELECTION-1（SELECT GOV-AUD-01）
+Selected via: Decision-GOV-AUD-01-SELECTION-1（SELECT GOV-AUD-01 / PR #256 MERGED）
 Related:
   decision-ho-1-handoff-transition-ownership.md
   handoff-status-transition.md
@@ -31,8 +33,10 @@ FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
-Agent recommendation: NONE（Binding 推薦なし）
-Human Selected Option: NOT SELECTED
+Agent recommendation（historical non-binding）: C（≠ Acceptance evidence）
+Human Selected Option: C
+meeting_or_minutes_system_identity: NOT YET PROVIDED
+reference_id_meaning: NOT YET PROVIDED
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -184,18 +188,23 @@ C. 既存会議を正本とし、アプリは ID と状態だけを保持
 D. その他（Human が明示）
 H. まだ決めない / HOLD
 
-答え: NOT SELECTED
+答え: C（2026-08-11）
+Meaning:
+  業務正本 = 既存会議・議事録側
+  アプリ = 参照 ID + Handoff 状態のみ
+Acceptance: decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md
+identity fields: NOT YET PROVIDED（Human fill-in；Agent 非発明）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A | Option Acceptance → app ledger SoT を LOCKED。Schema/実装は別 GO |
-| B | Option Acceptance → 対象システム識別を Human 記入。連携実装は別 GO |
-| C | Option Acceptance → 参照 ID 意味を Human 記入。外部連携実装は別 GO |
-| D | Option Acceptance → Human 記述の正本を LOCKED |
-| H | Option HOLD。unit Selection は維持可 |
+| A | （未選択） |
+| B | （未選択） |
+| **C（SELECTED）** | Option Acceptance 済み。identity fill-in → 外部連携実装は別 GO |
+| D | （未選択） |
+| H | （未選択） |
 
 維持:
 
@@ -205,10 +214,13 @@ Decision-HO-1 / HO-EDGE-1: UNCHANGED
 Implementation Start: DO NOT START from Option alone
 SharePoint / M365 / Deploy: NO-GO
 next residual auto-select: FORBIDDEN
+meeting_or_minutes_system_identity / reference_id_meaning: Human fill-in required
 ```
 
 ## Reference
 
 - Selection: `decision-gov-aud-01-handoff-canonical-source-selection.md`
 - SELECT Acceptance: `decision-gov-aud-01-handoff-canonical-source-acceptance.md`
+- Option C Acceptance: `decision-gov-aud-01-handoff-canonical-source-option-c-acceptance.md`
+- Option C IR: `decision-gov-aud-01-handoff-canonical-source-option-c-independent-review.md`
 - Issue #19 GOV-AUD-01 source options A–D
