@@ -186,26 +186,22 @@ Still NOT AUTHORIZED:
 ## 9. Next（Human only）
 
 ```text
-Strict order（Draft PR #255 mirror 前に first residual を開始しない）:
-  1. PR #255 Independent Review
-  2. Human Ready（HUMAN-ONLY）
-  3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT 一件の first residual（推奨候補は非拘束）:
-       - GOV-AUD-01（handoff の正本）
-       - GOV-AUD-05/DEC-012 post-retention deletion
-       - その他 inventory 行のいずれか
-  5. 選定残件の Decision Packet → Human Acceptance
-  6. 1件完了ごとに次残件を Human SELECT（Agent auto-advance FORBIDDEN）
-  7. #19 Close は残件移管完了後の別 Human disposition
+Consumed progression:
+  PR #255 IR → Ready → Merge = COMPLETE（main@6949c52…）
+  First residual unit SELECT = GOV-AUD-01（SELECTED / Option NOT SELECTED）
+
+Next（GOV-AUD-01 Option 後も一件ずつ）:
+  1. GOV-AUD-01 Option A–D or HOLD → Option Acceptance
+  2. 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
+  3. #19 Close は残件移管完了後の別 Human disposition
 ```
 
-Agent recommendation（非拘束 / NOT Selection evidence）:
+First residual recommendation history（consumed as Human SELECT）:
 
 ```text
-Recommended first candidate: GOV-AUD-01（handoff の正本）
-理由: GOV-AUD 残件の先頭、Decision-HO-1 / GOV-AUD-02 と分離済み、
-      保存・削除線（05/06）より独立して閉じやすい。
-This recommendation ≠ Human Selection.
+Recommended first candidate was GOV-AUD-01（handoff の正本）
+Human Decision: SELECT GOV-AUD-01
+Selection: decision-gov-aud-01-handoff-canonical-source-selection.md
 ```
 
 ## Reference
