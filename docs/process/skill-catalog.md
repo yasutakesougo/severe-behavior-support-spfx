@@ -50,8 +50,11 @@
 | [`merge-audit`](../../.agents/skills/merge-audit/SKILL.md) | 導入済み | Audit | `audit`（`review-pr` からの引き渡し可） | Skill 直接実行 | 対象なし（旧パスなし） | CI/テスト/承認証跡不足、P0/P1 残存 |
 | [`release-review`](../../.agents/skills/release-review/SKILL.md) | 導入済み | Audit | `release-check` | Skill 直接実行 | 対象なし | SHA/artifact/承認/ロールバック不足。deploy は実行しない |
 | [`handoff-builder`](../../.agents/skills/handoff-builder/SKILL.md) | 導入済み | **Audit** | `release-check` / `audit`（必要時） | Skill 直接実行 / `handoff:auto` | 対象なし（旧パスなし） | SHA / Issue / PR / 検証結果が不明 |
+| [`project-status`](../../.agents/skills/project-status/SKILL.md) | 導入済み | **Audit** | なし（直接実行 / 「進めて」時） | Skill 直接実行 | 対象なし（旧パスなし） | GitHub live state / Evidence 不足、Human 判断未解決、明示 GO なし mutation |
 
 `handoff-builder` の所属 Agent は **Audit** とする（AI-ORG-IMPL-2 維持）。
+
+`project-status` の所属 Agent は **Audit** とする（SKILL-PILOT-1）。状態判定・Gate・ALLOWED/FORBIDDEN の観測 Skill であり、正本は GitHub / Decision / Evidence のまま。
 
 ### 導入済み Skill の目的・入出力
 
@@ -70,6 +73,7 @@
 | `merge-audit` | PR のマージ可否を監査 | PR、差分、CI、レビュー状態 | 監査結果、マージ可否 | 実装後 |
 | `release-review` | リリース可否判定材料 | main SHA、artifact、承認 | Release Gate 判定 | リリース前 |
 | `handoff-builder` | 現在状態を次作業者へ引き継ぐ | repo 状態、SHA、Issue、PR、検証結果 | handoff 文面 | 節目ごと |
+| `project-status` | 現在状態と次工程を判定する | GitHub live state、Decision、Evidence、CI | CURRENT / GATE / ALLOWED / FORBIDDEN / NEXT | 「進めて」時・着手前 |
 
 ## 後続（カタログ掲載）
 
@@ -122,9 +126,9 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | Architecture | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
 | Implementation | `implementation-plan` |
 | Review | `implementation-review`, `contracts-review`, `test-review` |
-| Audit | `merge-audit`, `release-review`, `handoff-builder` |
+| Audit | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
 
-同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` は Audit のみ。
+同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` / `project-status` は Audit のみ。
 
 ## 旧 `skills/`
 
@@ -150,6 +154,7 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 8. 設計 Skill（`domain-design` / `sharepoint-design` / `schema-design` / `architecture-review`）
 9. 品質確認 Skill（`contracts-review` / `test-review`）
 10. リリース・運用 Skill（`release-review`）
+11. 状態判定 Skill（`project-status` / SKILL-PILOT-1）
 
 ## 関連ファイル
 
