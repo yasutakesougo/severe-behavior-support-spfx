@@ -22,9 +22,10 @@ The accepted constraints are:
 
 ## Current implementation
 
-Created:
+Created / updated:
 
 - `spfx/package.json`
+- `spfx/package-lock.json`
 - `spfx/README.md`
 
 No root dependency file is changed.
@@ -33,17 +34,49 @@ No root dependency file is changed.
 
 The official SPFx 1.23.2 template inventory was used as the dependency source of truth for the Heft toolchain versions.
 
-The current execution environment cannot reach the npm registry.
+### Dependency install continuation（registry-reachable environment）
 
-Therefore:
+```text
+npm install: RUN / PASS
+  environment: npm registry reachable
+  packages added: 1382
+  Node: v22.14.0
+  npm: 10.9.8
 
-- `npm install`: NOT RUN / ENVIRONMENT BLOCKED.
-- `package-lock.json`: NOT GENERATED.
-- dependency resolution: NOT VERIFIED.
-- Heft build: NOT RUN.
-- scaffold generator/CLI execution: NOT RUN.
+package-lock.json: GENERATED
+dependency resolution: VERIFIED
+  @microsoft/sp-http = 1.23.2
+  @microsoft/sp-core-library = 1.23.2
+  @microsoft/sp-webpart-base = 1.23.2
+  @microsoft/decorators = 1.23.2
+  @microsoft/spfx-web-build-rig = 1.23.2
+  react = 17.0.1
+  react-dom = 17.0.1
+  typescript = 5.8.3
+  @rushstack/heft = 1.2.22（requested ^1.2.19）
 
-These items remain open and must not be treated as PASS.
+root package.json mutation: 0
+root lockfile mutation: 0
+```
+
+Known non-blocking install notes:
+
+- npm emitted peer-dependency warnings inside `@microsoft/spfx-web-build-rig@1.23.2` about nested `@rushstack/heft` vs plugin peer ranges. These originate from the Microsoft rig package graph and did not prevent install completion.
+
+### Still incomplete / HOLD
+
+```text
+SPFx CLI / generator: NOT RUN
+Heft build: NOT RUN / BLOCKED
+  missing: spfx/config/heft.json and remaining scaffold project files
+  observation: npx heft reports "File does not exist: /workspace/spfx/config/heft.json"
+
+scaffold verification: PARTIAL
+  PASS = isolated dependency boundary + lockfile resolution against V-1
+  HOLD = full Heft-based scaffold/toolchain project shape + build
+```
+
+These HOLD items must not be treated as PASS.
 
 ## Still forbidden in this slice
 
@@ -54,9 +87,20 @@ These items remain open and must not be treated as PASS.
 - Deploy.
 - real data.
 - automatic Ready or Merge.
+- root TypeScript / root package mutation.
 
 ## Stop condition
 
-Stop at dependency-install / lockfile / scaffold verification evidence.
+```text
+Advanced:
+  npm install
+  package-lock.json generation
+  dependency resolution verification against V-1 + A
+
+HOLD remaining:
+  SPFx CLI / generator execution
+  full scaffold project files（config/heft.json etc.）
+  Heft build verification
 
 A later binder Implementation Start remains a separate gate.
+```
