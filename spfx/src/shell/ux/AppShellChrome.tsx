@@ -70,8 +70,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
-  const siteBlocked = !unauthenticated && isSiteUnselected(selection);
-  const selectedSite = !unauthenticated && !siteBlocked ? siteOptionForId(selection) : undefined;
+  const siteUnselected = isSiteUnselected(selection);
+  const siteBlocked = !unauthenticated && siteUnselected;
+  const selectedSite =
+    !unauthenticated && !siteUnselected ? siteOptionForId(selection) : undefined;
   const showPartialRetrieval =
     !unauthenticated && !siteBlocked && isPartialRetrievalViewMode(viewMode);
   const showReadyRegion = !unauthenticated && !siteBlocked && viewMode === "ready";
