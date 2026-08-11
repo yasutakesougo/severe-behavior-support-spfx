@@ -6,13 +6,14 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1
-Status: GO RECEIVED / EXECUTION HOLD（Choice A）
+Status: PASS / VERIFIED（Choice A / Human executed）
 Human Decision: GO（live write verification）
 Live-read HEAD: 4a76db5490ce223e22b01abf67f253566ab90487
+Live-write evidence HEAD: f8cc4ceb02b9c99643f48e333de66ab0bef8a4c0
 Kind: live write verification gate（synthetic item only）
 
 Execution path: Choice = A（LOCKED）
-  Human executes §5 → paste filled evidence → PASS/FAIL → stop
+  Human §5 = COMPLETE / PASS
 
 SPO_TENANT_ID / SPO_CLIENT_ID / SPO_CLIENT_SECRET
 = do not add merely to unblock this agent
@@ -217,7 +218,8 @@ Unauthenticated probe after live-read PASS recording:
 
 Therefore:
   live write execution by Agent = NOT RUN / ENVIRONMENT BLOCKED
-  live write verification = NOT PASS（pending Human or credentialed execution）
+  live write verification = completed by Human（Choice A）= PASS / VERIFIED
+  see verification evidence doc / HEAD f8cc4ce
 ```
 
 ## 7. Pass criteria（when executed）
@@ -236,22 +238,17 @@ PASS requires all:
 
 ```text
 Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1
-= GO RECEIVED / EXECUTION HOLD（Choice A）
+= PASS / VERIFIED
 
-live write = NOT PASS
-reason = §5 live-write evidence absent
-
-HOLD:
-  Human §5 execution + pasted filled evidence block
-
-Next（only）:
-  Human executes authorized §5
-  → paste filled evidence block
-  → PASS/FAIL verification record
-  → stop
+live read = PASS
+live write = PASS
+synthetic residue = 0
 
 Still NOT AUTHORIZED:
-  Deploy
+  Deploy / App Catalog
   Ready / Merge
   SPO secrets merely to unblock Agent
+
+Next gate（separate Human Decision only）:
+  Deploy GO / NO-GO
 ```

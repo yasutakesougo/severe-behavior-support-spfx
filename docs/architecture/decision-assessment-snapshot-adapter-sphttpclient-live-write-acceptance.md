@@ -28,7 +28,11 @@ Authorized:
 
 Execution path:
   Choice = A（LOCKED）
-  Human executes §5 → paste filled evidence → PASS/FAIL record → stop
+  Human §5 = COMPLETE
+
+Verification:
+  Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1 = PASS / VERIFIED
+  Evidence HEAD: f8cc4ceb02b9c99643f48e333de66ab0bef8a4c0
 
 NOT AUTHORIZED:
   Deploy / App Catalog
@@ -67,14 +71,14 @@ Choice A ≠ Choice B（Agent app-only）
 
 ```text
 Choice = A（LOCKED）
-live write = NOT PASS
-reason = §5 live-write evidence absent
-         （attempt 1/2 create FAILED; itemId = NONE; residue = 0）
 
-attempt 1: verbose POST FAILED（type metadata not recognized）
-attempt 2: nometadata POST FAILED（unexpected property 'Members'）
-actual $body2 Members = ABSENT
-Binder defect = NOT CONCLUDED
+Decision-AS-ADAPTER-SPHTTPCLIENT-LIVE-WRITE-1
+= PASS / VERIFIED
+
+live read = PASS
+live write = PASS
+synthetic residue = 0
+Binder defect = NOT CONCLUDED / no blocker from this live verification
 
 SPO_* secrets = NOT ADDED
 Deploy = NOT AUTHORIZED
@@ -84,10 +88,7 @@ Ready / Merge = HUMAN-ONLY
 ## Next
 
 ```text
-1. Human runs §5.0 read-only PnP version/syntax check（no POST）
-2. Paste Get-Module / PSVersion / Get-Command -Syntax outputs
-3. Then one create request shaped to installed PnP
-4. Complete MERGE null clear + cleanup；paste evidence
-5. Record PASS/FAIL；stop
-6. Deploy remains a later separate Human GO
+1. stop（live-write gate complete）
+2. Deploy / App Catalog = separate later Human GO only
+3. Ready / Merge = HUMAN-ONLY
 ```
