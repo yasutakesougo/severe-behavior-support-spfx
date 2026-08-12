@@ -40,6 +40,18 @@ export {
   type ShellDailyRecordIncompleteItem,
   type ShellDailyRecordRecentItem,
 } from "../records";
+export {
+  ReviewDueState,
+  DEMO_UX_6_SLICE,
+  DEMO_UX_REVIEW_DUE_FIXTURE,
+  reviewDueCopyIsFailClosed,
+  DEMO_REVIEW_DUE_PRESENTATION_NOTE,
+  DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
+  DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
+  type ReviewDueStateProps,
+  type ShellReviewDueStatePresentation,
+  type ShellReviewDueAttentionItem,
+} from "../review";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
