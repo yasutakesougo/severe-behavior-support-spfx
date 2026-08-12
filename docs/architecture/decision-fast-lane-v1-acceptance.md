@@ -63,6 +63,20 @@ FAST-LANE-V1 becomes ACTIVE only after this Acceptance and the governing policy 
 PR #296 merge itself remains HUMAN-ONLY.
 ```
 
+## Status authority after merge
+
+```text
+After this Acceptance is merged to main:
+  this Acceptance is authoritative for FAST-LANE-V1 enablement status.
+  CANDIDATE / NOT YET ACTIVE / NOT GRANTED markers preserved in the original
+  candidate policy or Selection packet are pre-Human-decision snapshot markers.
+  They do not override this Human Acceptance after merge.
+
+This precedence applies to status only.
+All stricter LOW / MEDIUM / LIVE boundaries, stop conditions, Human Merge rules,
+and non-authorizations in docs/process/fast-lane-v1.md remain fully binding.
+```
+
 ## Non-claims
 
 ```text
