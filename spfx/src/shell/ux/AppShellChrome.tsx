@@ -5,6 +5,11 @@ import {
   type ShellOverviewPresentation,
 } from "../dashboard";
 import {
+  DailyRecords,
+  DEMO_UX_DAILY_RECORD_FIXTURE,
+  type ShellDailyRecordPresentation,
+} from "../records";
+import {
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_USERS_FIXTURE,
@@ -63,6 +68,7 @@ export type AppShellChromeProps = Readonly<{
   usersPresentation?: ShellUsersPresentation;
   userDetailPresentation?: ShellUserDetailPresentation;
   supportPlanPresentation?: ShellSupportPlanPresentation;
+  dailyRecordPresentation?: ShellDailyRecordPresentation;
   children?: React.ReactNode;
 }>;
 
@@ -88,6 +94,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     usersPresentation = DEMO_UX_USERS_FIXTURE,
     userDetailPresentation = DEMO_UX_USER_DETAIL_FIXTURE,
     supportPlanPresentation = DEMO_UX_SUPPORT_PLAN_FIXTURE,
+    dailyRecordPresentation = DEMO_UX_DAILY_RECORD_FIXTURE,
     children,
   } = props;
 
@@ -321,11 +328,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   onUserDetailRequest={handleUserDetailRequest}
                 />
               )
+            ) : destination === "records" ? (
+              <DailyRecords presentation={dailyRecordPresentation} headingRef={destinationHeadingRef} />
             ) : (
-              <DestinationPlaceholder
-                destination={destination}
-                headingRef={destinationHeadingRef}
-              />
+              <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
             )}
             {children}
           </div>
