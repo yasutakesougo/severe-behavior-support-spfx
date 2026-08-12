@@ -235,7 +235,13 @@ allPass =
 
   const shot = path.join(artifactsDir, "keyboard-destination-traversal.png");
   await page.screenshot({ path: shot, fullPage: true });
-  checks.push({ name: "keyboard-destination-traversal", url, found: state, shot, pass: keyboardPass });
+  checks.push({
+    name: "keyboard-destination-traversal",
+    url,
+    found: state,
+    shot,
+    pass: keyboardPass,
+  });
   allPass = allPass && keyboardPass;
   await page.close();
 }

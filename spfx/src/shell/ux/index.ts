@@ -11,10 +11,7 @@ export {
   SHELL_DESTINATION_DISCONNECTED_NOTE,
   SHELL_DESTINATION_IDS,
 } from "./destination";
-export {
-  DestinationPlaceholder,
-  type DestinationPlaceholderProps,
-} from "./DestinationPlaceholder";
+export { DestinationPlaceholder, type DestinationPlaceholderProps } from "./DestinationPlaceholder";
 export { ErrorInquiryDisplay, type ErrorInquiryDisplayProps } from "./ErrorInquiryDisplay";
 export {
   formatShellErrorInquiryText,

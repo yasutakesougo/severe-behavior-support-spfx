@@ -1,7 +1,4 @@
-import {
-  SHELL_PRIMARY_NAV_ITEMS,
-  type ShellPrimaryNavigationId,
-} from "./primary-navigation";
+import { SHELL_PRIMARY_NAV_ITEMS, type ShellPrimaryNavigationId } from "./primary-navigation";
 
 /**
  * SHELL-UX-7 — presentation-only destination vocabulary and fail-closed copy.

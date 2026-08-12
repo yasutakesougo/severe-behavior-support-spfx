@@ -37,9 +37,7 @@ describe("SHELL-UX-7 destination presentation", () => {
     expect(destinationCopyIsFailClosed(combined)).toBe(true);
     expect(combined).toContain("業務データには接続されていません");
     expect(combined).toContain("利用可能な業務画面ではありません");
-    expect(destinationCopyIsFailClosed("利用可能です。業務データに接続されています。")).toBe(
-      false,
-    );
+    expect(destinationCopyIsFailClosed("利用可能です。業務データに接続されています。")).toBe(false);
   });
 
   it("does not invent Plans or Administration destinations", () => {
