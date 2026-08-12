@@ -93,7 +93,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | Residual ID | Topic | Class | Status |
 |---|---|---|---|
 | GOV-AUD-01 | handoff の正本 | ORG_POLICY | **Accepted / LOCKED / Option C + identity fill-in LOCKED**（[`decision-gov-aud-01-identity-fill-in-acceptance.md`](./decision-gov-aud-01-identity-fill-in-acceptance.md)） |
-| GOV-AUD-05 / DEC-012 post-retention deletion | 5年経過後の完全削除可否 | MIXED | OPEN / NOT SELECTED |
+| GOV-AUD-05 / DEC-012 post-retention deletion | 5年経過後の完全削除可否 | MIXED | **unit SELECTED** / Option NOT SELECTED（[`decision-gov-aud-05-dec-012-post-retention-deletion-selection.md`](./decision-gov-aud-05-dec-012-post-retention-deletion-selection.md)） |
 | GOV-AUD-07 | バックアップ・復元の一次責任者 | ORG_POLICY | **Accepted / LOCKED / Option A**（[`decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md`](./decision-gov-aud-07-backup-restore-owner-option-a-acceptance.md)；DEC-015 NOT ACCEPTED） |
 | GOV-AUD-08 | 復旧後の業務確認者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md`](./decision-gov-aud-08-post-recovery-confirmer-option-b-acceptance.md)） |
 | GOV-AUD-09 | 再開承認者 | ORG_POLICY | **Accepted / LOCKED / Option A**（[`decision-gov-aud-09-resume-approver-option-a-acceptance.md`](./decision-gov-aud-09-resume-approver-option-a-acceptance.md)） |
@@ -141,7 +141,8 @@ Stale marker correction（docs truth）:
   GOV-STAFF-07〜12 = Accepted / LOCKED（Decision-GOV-STAFF-06-12-BUNDLE-1）。
   GOV-RULE-01 = SELECTED / LOCKED / HOLD；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = SELECTED / LOCKED / HOLD。
   GOV-RULE-05〜12 = CONFIRMED / UNCHANGED。
-  GOV-PERF / post-retention deletion / GOV-RULE-01・04 HOLD 解除 が OPEN 残件。
+  post-retention deletion = unit SELECTED / Option NOT SELECTED。
+  GOV-PERF / GOV-RULE-01・04 HOLD 解除 が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -260,12 +261,13 @@ Consumed progression:
     （decision-gov-staff-06-qualification-training-master-owner-option-b-acceptance.md）
   GOV-STAFF-06〜12 bundle SELECT + Options = Accepted / LOCKED（PR #281 MERGED）
     （decision-gov-staff-06-12-qualification-training-bundle-option-acceptance.md）
-  GOV-RULE-01〜04 bundle SELECT + Options/HOLD = Accepted / LOCKED
+  GOV-RULE-01〜04 bundle SELECT + Options/HOLD = Accepted / LOCKED（PR #282 MERGED）
     （decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md）
+  Next residual unit SELECT = post-retention deletion（Decision-GOV-AUD-05-POST-RETENTION-SELECTION-1）
 
 Next:
-  1. GOV-RULE-01〜04 Bundle Acceptance PR: IR → Human Ready → Human Merge
-  2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
+  1. post-retention deletion Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human SELECT Option A–D or HOLD
   3. GOV-RULE-01 / 04 HOLD 解除 = separate（根拠資料後；NOT auto）
   4. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
   5. #19 Close は残件移管完了後の別 Human disposition
@@ -410,6 +412,13 @@ SELECT GOV-RULE-01〜04 bundle
   04 HOLD / VALUE NOT DETERMINED
   05〜12 CONFIRMED / UNCHANGED
 Acceptance: decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md
+```
+
+Current residual（unit）:
+
+```text
+SELECT post-retention deletion — Option A/B/C/D/H NOT SELECTED
+Selection: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
 ```
 
 ## Reference

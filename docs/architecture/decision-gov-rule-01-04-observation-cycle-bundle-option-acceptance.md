@@ -170,7 +170,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual: Human SELECTED post-retention deletion
+  unit SELECTED / Option NOT SELECTED
+  正本: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```

@@ -141,22 +141,22 @@ NOT derived / MUST NOT start from this Acceptance alone:
   SharePoint / M365 / Deploy / real data
 ```
 
-## Separate Decision（OPEN）
+## Separate Decision（unit SELECTED / Option NOT SELECTED）
 
 ```text
 ID（暫定ラベル）: GOV-AUD-05 / DEC-012 post-retention deletion permissibility
-Status: NOT SELECTED / NOT Accepted
+Status: unit SELECTED / Option NOT SELECTED / NOT Accepted
 Meaning to decide later:
   5年経過後に完全削除・物理削除を許可するか否か
-MUST NOT be auto-started from this Acceptance
+正本: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
+MUST NOT invent Option Acceptance / cleanup / purge from this Acceptance
 ```
 
 ## Next
 
 ```text
 GOV-AUD-05 / DEC-012 retention prohibition: Accepted / LOCKED / Option A
-Next after Merge:
-  FINAL CONSISTENT 同期（別 PR）または次残存 Decision の Human 選定
-  post-retention deletion: 別 Human Decision（OPEN）
+post-retention deletion: unit SELECTED / Option NOT SELECTED
+  Selection: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
 FindingCode / A-5 / Implementation: HOLD
 ```
