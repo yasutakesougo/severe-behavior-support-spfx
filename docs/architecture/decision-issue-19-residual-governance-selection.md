@@ -110,10 +110,10 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-STAFF-10 | 休職・長期不在・短期応援・派遣委託 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option C-based**（同上；全区分 C） |
 | GOV-STAFF-11 | 期限のない資格・研修 | ORG_POLICY | **Accepted / LOCKED / Option B**（同上；validTo/周期 NOT DETERMINED） |
 | GOV-STAFF-12 | 証跡欠損時の扱い | ORG_POLICY | **Accepted / LOCKED / Option C**（同上；missing / 算定不能 / 管理者確認待ち） |
-| GOV-RULE-01 | 行動関連点数の評価周期 | EVIDENCE_REQUIRED / MIXED | **SELECTED / LOCKED / HOLD**（[`decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md`](./decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md)；VALUE NOT DETERMINED） |
+| GOV-RULE-01 | 行動関連点数の評価周期 | EVIDENCE_REQUIRED / MIXED | **HOLD LIFT CANDIDATE**（Evidence Bundle SELECTED；≠ Accepted）[`decision-gov-rule-01-evaluation-cycle-evidence-packet.md`](./decision-gov-rule-01-evaluation-cycle-evidence-packet.md) |
 | GOV-RULE-02 | 観察期間の起算日 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option A**（同上 bundle；支援計画の有効開始日） |
 | GOV-RULE-03 | 観察期間の終了日 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option A**（同上 bundle；見直し実施日の前日） |
-| GOV-RULE-04 | 必要観察件数 | EVIDENCE_REQUIRED / MIXED | **SELECTED / LOCKED / HOLD**（同上 bundle；VALUE NOT DETERMINED） |
+| GOV-RULE-04 | 必要観察件数 | ORG_POLICY | **HOLD / UNCHANGED**（Evidence Bundle；件数 NOT DETERMINED）[`decision-gov-rule-04-observation-count-evidence-packet.md`](./decision-gov-rule-04-observation-count-evidence-packet.md) |
 | GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`](./decision-gov-rule-09-rule-content-owner-option-b-acceptance.md)） |
 | GOV-RULE-10 | ルール変更の承認者 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-rule-10-change-approver-option-c-acceptance.md`](./decision-gov-rule-10-change-approver-option-c-acceptance.md)） |
 | GOV-RULE-11 | 制度値と法人運用値の境界 | ORG_POLICY / MIXED | **Accepted / LOCKED（fill-in）**（[`decision-gov-rule-11-value-boundary-fill-in-acceptance.md`](./decision-gov-rule-11-value-boundary-fill-in-acceptance.md)） |
@@ -139,11 +139,11 @@ Stale marker correction（docs truth）:
   GOV-STAFF-05 = Accepted / LOCKED / Option C（記録時点 SiteId 維持 + 異動先は明示権限の範囲だけ）。
   GOV-STAFF-06 = Accepted / LOCKED / Option B（法人業務責任者；bundle CONFIRMED）。
   GOV-STAFF-07〜12 = Accepted / LOCKED（Decision-GOV-STAFF-06-12-BUNDLE-1）。
-  GOV-RULE-01 = SELECTED / LOCKED / HOLD；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = SELECTED / LOCKED / HOLD。
+  GOV-RULE-01 = HOLD LIFT CANDIDATE（Evidence Bundle；≠ Accepted）；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY）。
   GOV-RULE-05〜12 = CONFIRMED / UNCHANGED。
   post-retention deletion = Accepted / LOCKED / Option C（初期版は経過後完全削除機能なし）。
   GOV-PERF-01〜11 = SELECTED / LOCKED（PR #285）。HOLD resolution bundle SELECTED；解除 NOT PERFORMED。
-  GOV-RULE-01・04 HOLD 解除 / PERF HOLD 解除 Acceptance / DEC-015 が OPEN 残件。
+  GOV-RULE-01 Option Acceptance（lift）/ RULE-04 法人運用 Decision / PERF HOLD 解除 Acceptance / DEC-015 が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -269,15 +269,18 @@ Consumed progression:
     （decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md）
   GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED（PR #285）
     （decision-gov-perf-01-11-performance-bundle-option-acceptance.md）
-  GOV-PERF HOLD Resolution Bundle = SELECTED（PR #286）
+  GOV-PERF HOLD Resolution Bundle = MERGED（PR #286）
     （decision-gov-perf-hold-resolution-bundle-selection.md；02/06/07/08/09 HOLD UNCHANGED）
+  GOV-RULE-01 / 04 Evidence Bundle = SELECTED（PR pending）
+    （decision-gov-rule-01-04-evidence-bundle-selection.md；01 LIFT CANDIDATE；04 HOLD UNCHANGED）
 
 Next:
-  1. GOV-PERF HOLD Resolution Bundle PR: IR → Human Ready → Human Merge
-  2. After Merge: HOLD解除 Acceptance = separate Human Decision（NOT auto）
-  3. GOV-RULE-01 / 04 HOLD 解除 = separate（根拠資料後；NOT auto）
-  4. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
-  5. #19 Close は残件移管完了後の別 Human disposition
+  1. GOV-RULE-01 / 04 Evidence Bundle PR: IR → Human Ready → Human Merge
+  2. After Merge: RULE-01 Option Acceptance（lift）= separate / NOT auto
+  3. RULE-04 corporate ORG_POLICY Decision = separate / NOT auto
+  4. PERF HOLD 解除 Acceptance = separate / NOT auto
+  5. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
+  6. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 First residual history（consumed）:
@@ -435,13 +438,20 @@ GOV-PERF-01〜11 — Options/HOLD recorded（PR #285 MERGED）
 Acceptance: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
 ```
 
+Consumed residual（bundle）:
+
+```text
+GOV-PERF HOLD Resolution Bundle — PERF-02/06/07/08/09（PR #286 MERGED）
+Selection: decision-gov-perf-hold-resolution-bundle-selection.md
+```
+
 Current residual（bundle）:
 
 ```text
-SELECT GOV-PERF HOLD Resolution Bundle — PERF-02/06/07/08/09（PR #286）
-  Decision status: HOLD / UNCHANGED（解除 NOT PERFORMED）
-Selection: decision-gov-perf-hold-resolution-bundle-selection.md
-Evidence: decision-gov-perf-hold-resolution-evidence-inventory.md
+SELECT GOV-RULE-01 / 04 Evidence Bundle（PR pending）
+  GOV-RULE-01 = HOLD LIFT CANDIDATE（≠ Accepted）
+  GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY）
+Selection: decision-gov-rule-01-04-evidence-bundle-selection.md
 ```
 
 ## Reference

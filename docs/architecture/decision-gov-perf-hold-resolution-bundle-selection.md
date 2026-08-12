@@ -83,11 +83,11 @@ All five remain HOLD / UNCHANGED after this Selection
 ## 4. Next（Human only）
 
 ```text
-1. This PR IR → Human Ready → Human Merge
-2. After Merge: Human may SELECT concrete PERF-02 / 06 values
-   or provide trial-device/network evidence for 07 / 08 / 09
-3. HOLD解除 Acceptance = separate Human Decision
-4. next residual auto-select = FORBIDDEN
+This PR: MERGED（PR #286）
+next residual: Human SELECTED GOV-RULE-01 / 04 Evidence Bundle（PR pending）
+  正本: decision-gov-rule-01-04-evidence-bundle-selection.md
+PERF HOLD解除 Acceptance = separate Human Decision
+next residual auto-select = FORBIDDEN
 ```
 
 ## Reference

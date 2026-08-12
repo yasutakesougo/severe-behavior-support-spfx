@@ -15,16 +15,16 @@ Owner: Issue #19
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-GOV-RULE-01-04-OPTIONS-1
-Status: Accepted / LOCKED（02/03）；HOLD（01/04）
+Status: Accepted / LOCKED（02/03）；01 HOLD LIFT CANDIDATE；04 HOLD UNCHANGED
 Human Acceptance: Explicit Human GOV-RULE-01〜04 Options/HOLD on 2026-08-12
 Baseline tip: 7f4da32927392de3bc46b669016a73c404187756
 PR: #282（Selection / Option+HOLD Acceptance / Packet sync / IR）
 
 Accepted / HOLD:
-  GOV-RULE-01 = SELECTED / LOCKED / HOLD（VALUE NOT DETERMINED）
+  GOV-RULE-01 = HOLD LIFT CANDIDATE（Evidence Bundle；≠ Accepted — see decision-gov-rule-01-evaluation-cycle-evidence-packet.md）
   GOV-RULE-02 = ACCEPTED / LOCKED / Option A
   GOV-RULE-03 = ACCEPTED / LOCKED / Option A
-  GOV-RULE-04 = SELECTED / LOCKED / HOLD（VALUE NOT DETERMINED）
+  GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY — see decision-gov-rule-04-observation-count-evidence-packet.md）
   GOV-RULE-05〜12 = CONFIRMED / UNCHANGED
 
 Does NOT mean:
@@ -170,9 +170,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual: GOV-PERF-01〜11 bundle SELECTED / LOCKED（Options/HOLD；PR #285）
-  正本: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
-  further residual SELECT / RULE-01・04 HOLD解除: separate Human Decision
+next residual: GOV-RULE-01 / 04 Evidence Bundle SELECTED（PR pending）
+  正本: decision-gov-rule-01-04-evidence-bundle-selection.md
+  RULE-01 Option Acceptance / RULE-04 法人運用: separate Human Decision
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
