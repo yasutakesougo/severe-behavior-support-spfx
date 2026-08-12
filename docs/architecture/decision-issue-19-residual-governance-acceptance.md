@@ -91,8 +91,9 @@ Consumed on #19 path（do not re-Decision）:
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Prior residual Option = CONSUMED（GOV-RULE-01〜04 bundle recorded；01 LIFT CANDIDATE / 04 HOLD via Evidence Bundle）
-Prior residual = GOV-PERF HOLD Resolution（PR #286 MERGED）
-Current residual bundle = SELECTED / LOCKED（GOV-RULE-01/04 Evidence；01 LIFT CANDIDATE；04 HOLD UNCHANGED；PR #287）
+Prior residual = GOV-RULE-01/04 Evidence Bundle（PR #287 MERGED）
+Current residual unit = Accepted / LOCKED（GOV-RULE-01 Acceptance；PR pending）
+GOV-RULE-04 = HOLD / UNCHANGED
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -132,11 +133,12 @@ Consumed:
   PR #284 post-retention deletion Option C = MERGED
   PR #285 GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED
   PR #286 GOV-PERF HOLD Resolution Bundle = MERGED（解除 NOT PERFORMED）
-  GOV-RULE-01 / 04 Evidence Bundle = SELECTED（PR #287）
+  PR #287 GOV-RULE-01 / 04 Evidence Bundle = MERGED
+  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288）
 
 Next:
-  1. GOV-RULE-01 / 04 Evidence Bundle PR: IR → Human Ready → Human Merge
-  2. After Merge: RULE-01 Option Acceptance（lift）= separate / NOT auto
+  1. GOV-RULE-01 Acceptance PR: IR → Human Ready → Human Merge
+  2. After Merge: next residual SELECT（one item；NOT auto）
   3. RULE-04 corporate ORG_POLICY Decision = separate / NOT auto
   4. PERF HOLD 解除 Acceptance remains separate / NOT auto
   5. DEC-015 ledger sync remains separate / NOT auto-Accepted

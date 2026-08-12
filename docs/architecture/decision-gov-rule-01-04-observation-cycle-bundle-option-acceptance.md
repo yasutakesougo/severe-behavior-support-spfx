@@ -15,13 +15,13 @@ Owner: Issue #19
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-GOV-RULE-01-04-OPTIONS-1
-Status: Accepted / LOCKED（02/03）；01 HOLD LIFT CANDIDATE；04 HOLD UNCHANGED
+Status: Accepted / LOCKED（01/02/03）；04 HOLD UNCHANGED
 Human Acceptance: Explicit Human GOV-RULE-01〜04 Options/HOLD on 2026-08-12
 Baseline tip: 7f4da32927392de3bc46b669016a73c404187756
 PR: #282（Selection / Option+HOLD Acceptance / Packet sync / IR）
 
 Accepted / HOLD:
-  GOV-RULE-01 = HOLD LIFT CANDIDATE（Evidence Bundle；≠ Accepted — see decision-gov-rule-01-evaluation-cycle-evidence-packet.md）
+  GOV-RULE-01 = ACCEPTED / LOCKED（see decision-gov-rule-01-evaluation-cycle-acceptance.md；HOLD LIFTED）
   GOV-RULE-02 = ACCEPTED / LOCKED / Option A
   GOV-RULE-03 = ACCEPTED / LOCKED / Option A
   GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY — see decision-gov-rule-04-observation-count-evidence-packet.md）
@@ -59,24 +59,18 @@ Concrete values for 01/04 MUST NOT be invented from tips or silence.
 
 ## Accepted / HOLD 内容（単位別）
 
-### GOV-RULE-01 — HOLD / VALUE NOT DETERMINED
+### GOV-RULE-01 — Accepted / LOCKED（HOLD LIFTED）
 
 ```text
-GOV-RULE-01: SELECTED / LOCKED / HOLD
-行動関連点数の評価周期: VALUE NOT DETERMINED
-
-未確定:
-  周期
-  追加評価が必要な条件
-  根拠
-  決定者
+GOV-RULE-01: Accepted / LOCKED
+正本: decision-gov-rule-01-evaluation-cycle-acceptance.md
 ```
 
 意味:
 
-- unit は SELECTED だが、具体値は確定しない。
-- Agent は日数・月数・追加評価条件を発明しない。
-- 制度資料または法人の正式決定確認後、**別 Human Decision** で解除する。
+- アプリ独自の固定日数・固定月数による再採点周期を設定しない。
+- 正式な障害支援区分の認定・更新認定・変更認定に基づく有効期間を正本とする。
+- 3年は基本値；アプリ固定再評価周期としてハードコードしない。
 
 ### GOV-RULE-02 — Option A
 
@@ -170,9 +164,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual: GOV-RULE-01 / 04 Evidence Bundle SELECTED（PR #287）
-  正本: decision-gov-rule-01-04-evidence-bundle-selection.md
-  RULE-01 Option Acceptance / RULE-04 法人運用: separate Human Decision
+next residual: GOV-RULE-01 Acceptance（PR #288）
+  正本: decision-gov-rule-01-evaluation-cycle-acceptance.md
+  RULE-04 法人運用: separate Human Decision
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
