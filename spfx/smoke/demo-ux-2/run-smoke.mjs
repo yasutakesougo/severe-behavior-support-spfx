@@ -182,8 +182,11 @@ function assertUsersList(expectedRowColumns) {
   const horizontalOverflow =
     root.scrollWidth > root.clientWidth + 1 || body.scrollWidth > body.clientWidth + 1;
   const rightEdgeWithinViewport = tracked.every((rect) => rect.right <= viewportWidth + 1);
-  const filtersDisabled = filterChips.every(
-    (button) => button.disabled && button.getAttribute("aria-disabled") === "true",
+  const filtersEnabled = filterChips.length === 4 && filterChips.every((button) => !button.disabled);
+  const defaultChipSelected = filterChips.some(
+    (button) =>
+      button.getAttribute("data-demo-ux-filter") === "すべて" &&
+      button.getAttribute("aria-pressed") === "true",
   );
   const detailsDisabled = detailButtons.every(
     (button) => button.disabled && button.getAttribute("aria-disabled") === "true",
@@ -204,7 +207,8 @@ function assertUsersList(expectedRowColumns) {
       (summary?.textContent ?? "").includes("全8名") &&
       rows.length === 8 &&
       badges.length >= 8 &&
-      filtersDisabled &&
+      filtersEnabled &&
+      defaultChipSelected &&
       detailsDisabled &&
       Boolean(demo) &&
       Boolean(site) &&
@@ -403,7 +407,7 @@ const report = {
     authJudgmentAuthorized: false,
     liveUsersDataAuthorized: false,
     userDetailNavigationAuthorized: false,
-    filterExecutionAuthorized: false,
+    filterExecutionAuthorized: true,
   },
   allPass,
   checks,

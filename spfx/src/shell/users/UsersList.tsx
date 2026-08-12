@@ -1,9 +1,18 @@
 import * as React from "react";
 import {
   DEMO_USERS_DETAIL_DISABLED_NOTE,
-  DEMO_USERS_FILTER_DISABLED_NOTE,
+  DEMO_USERS_FILTER_EMPTY_NOTE,
+  DEMO_USERS_FILTER_NOTE,
   DEMO_USERS_PRESENTATION_NOTE,
 } from "./users-copy";
+import {
+  DEMO_UX_8_SLICE,
+  USERS_FILTER_CHIP_ALL,
+  USERS_FILTER_CHIP_LABELS,
+  filterUserRowsByStatusChip,
+  formatUsersFilterSummaryLabel,
+  type UsersFilterChipLabel,
+} from "./users-filter";
 import type { ShellUsersPresentation } from "./users-types";
 import styles from "./UsersUx.module.scss";
 
@@ -14,11 +23,10 @@ export type UsersListProps = Readonly<{
   onUserDetailRequest?: (userId: string) => void;
 }>;
 
-const FILTER_CHIP_LABELS = ["すべて", "要確認", "未記録", "期限接近"] as const;
-
 /**
  * DEMO-UX-2 users list presentation skeleton.
  * DEMO-UX-3 may opt one synthetic row into local presentation-only detail preview.
+ * DEMO-UX-8 enables synthetic client-side status filter chips.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -27,12 +35,19 @@ export const UsersList: React.FC<UsersListProps> = ({
   detailPreviewUserId,
   onUserDetailRequest,
 }) => {
-  const { summaryLabel, filterHint, rows } = presentation;
+  const { filterHint, rows } = presentation;
+  const [activeChip, setActiveChip] = React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
+  const visibleRows = filterUserRowsByStatusChip(rows, activeChip);
+  const summaryLabel = formatUsersFilterSummaryLabel(visibleRows.length, activeChip, rows.length);
+  const showEmptyNote = visibleRows.length === 0;
 
   return (
     <section
       className={styles.usersList}
       data-demo-ux="users-list"
+      data-demo-ux-8-slice={DEMO_UX_8_SLICE.id}
+      data-demo-ux-filter-chip={activeChip}
+      data-demo-ux-filter-count={String(visibleRows.length)}
       aria-labelledby="demo-ux-users-heading"
     >
       <h1
@@ -53,23 +68,38 @@ export const UsersList: React.FC<UsersListProps> = ({
         <p className={styles.summaryLabel} data-demo-ux="users-summary-label">
           {summaryLabel}
         </p>
-        <div className={styles.filterBar} data-demo-ux="users-filter-bar">
+        <div
+          className={styles.filterBar}
+          data-demo-ux="users-filter-bar"
+          role="group"
+          aria-label="利用者の状態で絞り込み"
+        >
           <p className={styles.filterHint} data-demo-ux="users-filter-hint">
             {filterHint}
           </p>
-          {FILTER_CHIP_LABELS.map((label) => (
-            <button
-              key={label}
-              type="button"
-              className={styles.filterButton}
-              disabled
-              aria-disabled="true"
-              data-demo-ux="users-filter-chip"
-              data-demo-ux-filter={label}
-            >
-              {label}
-            </button>
-          ))}
+          {USERS_FILTER_CHIP_LABELS.map((label) => {
+            const selected = label === activeChip;
+            return (
+              <button
+                key={label}
+                type="button"
+                className={
+                  selected
+                    ? `${styles.filterButton} ${styles.filterButtonSelected}`
+                    : styles.filterButton
+                }
+                aria-pressed={selected}
+                data-demo-ux="users-filter-chip"
+                data-demo-ux-filter={label}
+                data-demo-ux-filter-selected={selected ? "true" : "false"}
+                onClick={() => {
+                  setActiveChip(label);
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -77,8 +107,14 @@ export const UsersList: React.FC<UsersListProps> = ({
         {DEMO_USERS_DETAIL_DISABLED_NOTE}
       </p>
 
+      {showEmptyNote ? (
+        <p className={styles.sectionHint} data-demo-ux="users-filter-empty-note">
+          {DEMO_USERS_FILTER_EMPTY_NOTE}
+        </p>
+      ) : null}
+
       <ul className={styles.userRows} data-demo-ux="users-row-list">
-        {rows.map((row) => {
+        {visibleRows.map((row) => {
           const detailPreviewEnabled =
             Boolean(onUserDetailRequest) && row.id === detailPreviewUserId;
           return (
@@ -127,8 +163,8 @@ export const UsersList: React.FC<UsersListProps> = ({
           );
         })}
       </ul>
-      <p className={styles.sectionHint} data-demo-ux="users-filter-disabled-note">
-        {DEMO_USERS_FILTER_DISABLED_NOTE}
+      <p className={styles.sectionHint} data-demo-ux="users-filter-note">
+        {DEMO_USERS_FILTER_NOTE}
       </p>
     </section>
   );

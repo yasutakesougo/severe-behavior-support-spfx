@@ -10,7 +10,7 @@ Baseline main: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
 Predecessor: DEMO-UX-7 MERGED（PR #320 / merge 5655fc7；tip 1d7e9a733e03b1f8bffead2353b2209bd423f3df）
 Source feedback: RPF-003
 Follow-on queue（not this slice）: RPF-002
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（2026-08-12）— see demo-ux-8-implementation-start.md
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -24,9 +24,10 @@ Human は DEMO-UX-7（RPF-Q01 + RPF-001）Merge SUCCESS を確認し、予定ど
 本 Selection は **RPF-003 のみ** を SELECTED / LOCKED とする。
 
 ```text
-RPF-003 Implementation Start = NOT AUTHORIZED
+RPF-003 Implementation Start = GO（this follow-on docs + code on PR #321）
 RPF-002 Implementation Start = NOT AUTHORIZED
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
+Ready / Merge = NOT AUTHORIZED
 ```
 
 大規模ビジュアルデザイン改善は本 slice では行わない。
@@ -145,7 +146,8 @@ Selection GO ≠ Merge GO
 Selection GO ≠ #299 Close GO
 ```
 
-次の Human gate は `DEMO-UX-8 Implementation Start GO`（＝ RPF-003 Implementation Start）。
+Human gate `DEMO-UX-8 Implementation Start GO` は 2026-08-12 に受領済み。
+次の Human gate は Fresh Review / Ready（本sliceでは Ready を要求しない）。
 
 ## Evidence referenced
 

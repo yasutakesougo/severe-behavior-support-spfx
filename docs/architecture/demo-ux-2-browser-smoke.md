@@ -16,7 +16,7 @@ Parent: #299 RESPONSIBLE-PERSON-DEMO-V1
 #71 admin-ui: NOT AUTHORIZED
 liveUsersDataAuthorized: false
 userDetailNavigationAuthorized: false
-filterExecutionAuthorized: false
+filterExecutionAuthorized: true（DEMO-UX-8 synthetic filter）
 sharePointRestAuthorized: false
 binderHostWiringAuthorized: false
 authJudgmentAuthorized: false

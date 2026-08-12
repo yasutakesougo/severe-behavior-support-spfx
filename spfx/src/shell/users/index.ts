@@ -4,9 +4,25 @@ export { SupportPlan, type SupportPlanProps } from "./SupportPlan";
 export {
   DEMO_USERS_DETAIL_DISABLED_NOTE,
   DEMO_USERS_FILTER_DISABLED_NOTE,
+  DEMO_USERS_FILTER_EMPTY_NOTE,
+  DEMO_USERS_FILTER_NOTE,
   DEMO_USERS_PRESENTATION_NOTE,
   usersCopyIsFailClosed,
 } from "./users-copy";
+export {
+  DEMO_UX_8_SLICE,
+  USERS_FILTER_CHIP_ALL,
+  USERS_FILTER_CHIP_DUE_SOON,
+  USERS_FILTER_CHIP_LABELS,
+  USERS_FILTER_CHIP_NEEDS_REVIEW,
+  USERS_FILTER_CHIP_UNRECORDED,
+  filterUserRowsByStatusChip,
+  formatUsersFilterSummaryLabel,
+  isUsersFilterChipLabel,
+  matchKeyForUsersFilterChip,
+  type UsersFilterChipLabel,
+  type UsersFilterMatchKey,
+} from "./users-filter";
 export {
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
   DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,

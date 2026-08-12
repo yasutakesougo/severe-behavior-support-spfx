@@ -8,7 +8,7 @@ import type { ShellUsersPresentation } from "./users-types";
 /** Synthetic users list fixture for responsible-person review density checks. */
 export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
   summaryLabel: "全8名（合成データ）",
-  filterHint: "状態で絞り込み（表示専用）",
+  filterHint: "状態で絞り込み（合成データ）",
   rows: [
     {
       id: "user-a",
@@ -100,5 +100,6 @@ export const DEMO_UX_SLICE = {
   authJudgmentAuthorized: false as const,
   liveUsersDataAuthorized: false as const,
   userDetailNavigationAuthorized: false as const,
-  filterExecutionAuthorized: false as const,
+  /** DEMO-UX-8 authorizes synthetic client-side filter on this surface. */
+  filterExecutionAuthorized: true as const,
 } as const;
