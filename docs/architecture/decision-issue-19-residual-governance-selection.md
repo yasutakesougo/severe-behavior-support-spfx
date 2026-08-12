@@ -99,7 +99,8 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-AUD-09 | 再開承認者 | ORG_POLICY | **Accepted / LOCKED / Option A**（[`decision-gov-aud-09-resume-approver-option-a-acceptance.md`](./decision-gov-aud-09-resume-approver-option-a-acceptance.md)） |
 | GOV-AUD-10 | 重大障害時の連絡経路 | ORG_POLICY | **Accepted / LOCKED（fill-in / role names）**（[`decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md`](./decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md)） |
 | GOV-STAFF-01 | 異動・退職情報の確定者 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md`](./decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md)） |
-| GOV-STAFF-02〜12 | Entra削除 / 権限停止 / 異動台帳 / 資格 等 | ORG_POLICY / MIXED / EVIDENCE_REQUIRED | OPEN / NOT SELECTED |
+| GOV-STAFF-02 | Entra IDグループから削除する実施者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md`](./decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md)） |
+| GOV-STAFF-03〜12 | 権限停止 / 異動台帳 / 資格 等 | ORG_POLICY / MIXED / EVIDENCE_REQUIRED | OPEN / NOT SELECTED |
 | GOV-RULE-01 org reminder / trigger | 評価周期の法人通知・臨時確認 | MIXED（org part） | Proposed / NOT Accepted |
 | GOV-RULE-02〜04 | 観察期間起算・終了・必要件数 | EVIDENCE_REQUIRED / MIXED | OPEN / NOT SELECTED |
 | GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`](./decision-gov-rule-09-rule-content-owner-option-b-acceptance.md)） |
@@ -121,7 +122,8 @@ Stale marker correction（docs truth）:
   GOV-RULE-11 = Accepted / LOCKED（fill-in；法人運用=GOV-RULE-05〜10 / 制度固定・事業所=確定なし）。
   GOV-RULE-12 = Accepted / LOCKED / Option B（訂正版を新規作成し、旧版を保持）。
   GOV-STAFF-01 = Accepted / LOCKED / Option C（事業所管理者が起票し、法人担当が確定）。
-  GOV-STAFF-02〜12 / GOV-PERF / post-retention deletion が OPEN 残件。
+  GOV-STAFF-02 = Accepted / LOCKED / Option B（Microsoft 365管理者）。
+  GOV-STAFF-03〜12 / GOV-PERF / post-retention deletion が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -225,11 +227,13 @@ Consumed progression:
   GOV-RULE-12 unit SELECT = MERGED（PR #272）
   GOV-RULE-12 Option B = Accepted / LOCKED（PR #273 MERGED）
     （decision-gov-rule-12-version-correction-option-b-acceptance.md）
-  GOV-STAFF-01 unit SELECT + Option C = Accepted / LOCKED
+  GOV-STAFF-01 unit SELECT + Option C = Accepted / LOCKED（PR #274 MERGED）
     （decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md）
+  GOV-STAFF-02 unit SELECT + Option B = Accepted / LOCKED
+    （decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md）
 
 Next:
-  1. GOV-STAFF-01 Selection + Option C Acceptance PR: IR → Human Ready → Human Merge
+  1. GOV-STAFF-02 Selection + Option B Acceptance PR: IR → Human Ready → Human Merge
   2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
   3. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
   4. #19 Close は残件移管完了後の別 Human disposition
@@ -313,6 +317,13 @@ GOV-STAFF-01 history:
 SELECT GOV-STAFF-01 → Option C Accepted
   （事業所管理者が起票し、法人担当が確定）
 Acceptance: decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md
+```
+
+GOV-STAFF-02 history:
+
+```text
+SELECT GOV-STAFF-02 → Option B Accepted（Microsoft 365管理者）
+Acceptance: decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md
 ```
 
 ## Reference
