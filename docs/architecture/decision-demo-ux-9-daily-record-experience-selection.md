@@ -4,14 +4,14 @@
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-9 — Daily record experience cleanup
 Decision: Decision-DEMO-UX-9-DAILY-RECORD-EXPERIENCE-1
-Status: SELECTED / LOCKED
+Status: MERGED / COMPLETE
 Human Selection: GO（2026-08-12）
 Baseline main: aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9
 Predecessor: DEMO-UX-8 MERGED（PR #321 / merge aed5b05；tip fcd2d9c63696253e4d51aee5fdb8492174474dc4）
 Source feedback: RPF-002
-Follow-on queue（not this slice）: RPF-004 / RPF-005 / RPF-006（deferred）
+Follow-on queue: P2 backlog（RPF-004 / RPF-005 / RPF-006）— see flow-checkpoint.md
 Implementation Start: GO（2026-08-12）— see demo-ux-9-implementation-start.md
-Ready / Merge: NOT AUTHORIZED
+Merge: SUCCESS（PR #322 / 9dd43e285c09218531260ffb565cf906b2b09574）
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED

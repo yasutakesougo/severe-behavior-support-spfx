@@ -3,18 +3,21 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-9 — Daily record experience cleanup
-Status: Implementation COMPLETE + Verification PASS
+Status: MERGED / COMPLETE（PR #322 / 9dd43e285c09218531260ffb565cf906b2b09574）
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-9-DAILY-RECORD-EXPERIENCE-1 / PR #322）
 Human Implementation Start: GO（2026-08-12）
-Baseline main: aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9
+Human Merge: GO（2026-08-12）
+Baseline main at start: aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9
+Merge commit: 9dd43e285c09218531260ffb565cf906b2b09574
+Expected tip in merge: 2000b85f6911940d44720a2e559c76ee615354d3
 Branch: cursor/demo-ux-9-daily-record-experience-selection-3507
-PR: #322 OPEN / Draft
+PR: #322 MERGED
 Implementation verified HEAD: 564c1b731307d256c32b4eb86794939139f90e6e
 Selection: decision-demo-ux-9-daily-record-experience-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-9-browser-smoke.md）
 Heft test: 77 / 77 PASS
 Root test: 554 / 554 PASS
-Ready / Merge: NOT AUTHORIZED
+Next: flow checkpoint / P2 backlog or responsible-person re-review
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -97,38 +100,40 @@ SPFx Heft test: PASS（77 / 77）
 browser smoke demo-ux-9: PASS（8 / 8）
 ```
 
-## Gate state
+## Gate state（updated after Merge SUCCESS）
 
 ```text
 DEMO-UX-9 Implementation = COMPLETE
 Verification = PASS
-Human Ready = HOLD
-Human Merge = HOLD
-PR #322 = OPEN / Draft
+Human Merge = GO
+PR #322 = MERGED
+Merge commit = 9dd43e285c09218531260ffb565cf906b2b09574
+Expected tip in merge = 2000b85f6911940d44720a2e559c76ee615354d3
+DEMO-UX-9 = MERGED / COMPLETE
+Flow P1 queue（RPF-Q01/001/003/002）= COMPLETE
 ```
 
 Next:
 
 ```text
-1. Fresh Review / Human Ready Decision（separate）
+1. Human choice: responsible-person re-review OR one P2 Selection
+2. see responsible-person-demo-v1-flow-checkpoint.md
 ```
 
 Still NOT AUTHORIZED:
 
 ```text
-Ready
-Merge
 Deploy
 SharePoint write
 #299 Close
+P2 Implementation Start without Selection
 ```
 
 ## Non-claims
 
 ```text
-Implementation COMPLETE ≠ Ready GO
-Verification PASS ≠ Review PASS
-This completion ≠ Merge GO
-This completion ≠ #299 Close
-This completion ≠ Deploy / SharePoint write
+DEMO-UX-9 MERGED ≠ #299 Close
+DEMO-UX-9 MERGED ≠ Deploy / SharePoint write
+DEMO-UX-9 MERGED ≠ P2 Implementation Start
 ```
+
