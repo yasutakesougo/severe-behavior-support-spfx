@@ -1,0 +1,57 @@
+import type { ShellUserDetailPresentation } from "./user-detail-types";
+
+/** Synthetic user detail fixture for responsible-person review only. */
+export const DEMO_UX_USER_DETAIL_FIXTURE: ShellUserDetailPresentation = {
+  userId: "user-a",
+  personLabel: "Aさん",
+  planLabel: "支援計画",
+  planPeriodLabel: "2026/07/01–2026/09/30",
+  currentSupport: [
+    {
+      id: "environment",
+      label: "環境調整",
+      body: "活動の順序を視覚的に提示する合成表示例です。",
+    },
+    {
+      id: "communication",
+      label: "コミュニケーション",
+      body: "選択肢を短く提示して確認する合成表示例です。",
+    },
+    {
+      id: "behavior-response",
+      label: "行動発生時",
+      body: "刺激を減らし、安全を確認して待つ合成表示例です。",
+    },
+  ],
+  recentRecords: [
+    { id: "record-1", occurredAtLabel: "8/11 14:32", recordTypeLabel: "支援記録" },
+    { id: "record-2", occurredAtLabel: "8/10 10:15", recordTypeLabel: "支援記録" },
+  ],
+  evaluationSummary: "評価欄の情報量と配置を確認するための合成サンプルです。",
+  historySummary: "履歴欄の表示順を確認するための合成サンプルです。",
+  businessFacts: {
+    createdByLabel: "担当者A（合成）",
+    qualificationLabel: "実践研修修了者（合成表示）",
+    createdAtLabel: "2026/08/01（合成）",
+  },
+  systemState: {
+    saveStateLabel: "表示サンプル（live保存なし）",
+    lastUpdatedLabel: "2026/08/11 14:32（合成）",
+  },
+};
+
+export const DEMO_UX_3_SLICE = {
+  id: "DEMO-UX-3",
+  presentationOnly: true as const,
+  syntheticUserDetailNavigationAuthorized: true as const,
+  liveUserDetailNavigationAuthorized: false as const,
+  liveTenantIoAuthorized: false as const,
+  sharePointRestAuthorized: false as const,
+  binderHostWiringAuthorized: false as const,
+  adapterFetchAuthorized: false as const,
+  authJudgmentAuthorized: false as const,
+  liveUsersDataAuthorized: false as const,
+  planMutationAuthorized: false as const,
+  recordMutationAuthorized: false as const,
+  evaluationMutationAuthorized: false as const,
+} as const;
