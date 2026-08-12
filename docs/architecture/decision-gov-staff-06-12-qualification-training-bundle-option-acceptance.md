@@ -181,7 +181,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-STAFF-06〜12: Accepted / LOCKED（本 bundle）
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-RULE-01〜04 bundle（別 Decision；01/04 HOLD；02/03 Option A）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED

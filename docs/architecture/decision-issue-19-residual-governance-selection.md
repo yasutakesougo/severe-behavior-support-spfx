@@ -110,8 +110,10 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-STAFF-10 | 休職・長期不在・短期応援・派遣委託 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option C-based**（同上；全区分 C） |
 | GOV-STAFF-11 | 期限のない資格・研修 | ORG_POLICY | **Accepted / LOCKED / Option B**（同上；validTo/周期 NOT DETERMINED） |
 | GOV-STAFF-12 | 証跡欠損時の扱い | ORG_POLICY | **Accepted / LOCKED / Option C**（同上；missing / 算定不能 / 管理者確認待ち） |
-| GOV-RULE-01 org reminder / trigger | 評価周期の法人通知・臨時確認 | MIXED（org part） | Proposed / NOT Accepted |
-| GOV-RULE-02〜04 | 観察期間起算・終了・必要件数 | EVIDENCE_REQUIRED / MIXED | OPEN / NOT SELECTED |
+| GOV-RULE-01 | 行動関連点数の評価周期 | EVIDENCE_REQUIRED / MIXED | **SELECTED / LOCKED / HOLD**（[`decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md`](./decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md)；VALUE NOT DETERMINED） |
+| GOV-RULE-02 | 観察期間の起算日 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option A**（同上 bundle；支援計画の有効開始日） |
+| GOV-RULE-03 | 観察期間の終了日 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option A**（同上 bundle；見直し実施日の前日） |
+| GOV-RULE-04 | 必要観察件数 | EVIDENCE_REQUIRED / MIXED | **SELECTED / LOCKED / HOLD**（同上 bundle；VALUE NOT DETERMINED） |
 | GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`](./decision-gov-rule-09-rule-content-owner-option-b-acceptance.md)） |
 | GOV-RULE-10 | ルール変更の承認者 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-rule-10-change-approver-option-c-acceptance.md`](./decision-gov-rule-10-change-approver-option-c-acceptance.md)） |
 | GOV-RULE-11 | 制度値と法人運用値の境界 | ORG_POLICY / MIXED | **Accepted / LOCKED（fill-in）**（[`decision-gov-rule-11-value-boundary-fill-in-acceptance.md`](./decision-gov-rule-11-value-boundary-fill-in-acceptance.md)） |
@@ -137,7 +139,9 @@ Stale marker correction（docs truth）:
   GOV-STAFF-05 = Accepted / LOCKED / Option C（記録時点 SiteId 維持 + 異動先は明示権限の範囲だけ）。
   GOV-STAFF-06 = Accepted / LOCKED / Option B（法人業務責任者；bundle CONFIRMED）。
   GOV-STAFF-07〜12 = Accepted / LOCKED（Decision-GOV-STAFF-06-12-BUNDLE-1）。
-  GOV-PERF / post-retention deletion が OPEN 残件。
+  GOV-RULE-01 = SELECTED / LOCKED / HOLD；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = SELECTED / LOCKED / HOLD。
+  GOV-RULE-05〜12 = CONFIRMED / UNCHANGED。
+  GOV-PERF / post-retention deletion / GOV-RULE-01・04 HOLD 解除 が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -254,14 +258,17 @@ Consumed progression:
     （decision-gov-staff-05-post-transfer-past-record-access-option-c-acceptance.md）
   GOV-STAFF-06 unit SELECT + Option B = Accepted / LOCKED（PR #280 MERGED）
     （decision-gov-staff-06-qualification-training-master-owner-option-b-acceptance.md）
-  GOV-STAFF-06〜12 bundle SELECT + Options = Accepted / LOCKED
+  GOV-STAFF-06〜12 bundle SELECT + Options = Accepted / LOCKED（PR #281 MERGED）
     （decision-gov-staff-06-12-qualification-training-bundle-option-acceptance.md）
+  GOV-RULE-01〜04 bundle SELECT + Options/HOLD = Accepted / LOCKED
+    （decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md）
 
 Next:
-  1. GOV-STAFF-06〜12 Bundle Acceptance PR: IR → Human Ready → Human Merge
+  1. GOV-RULE-01〜04 Bundle Acceptance PR: IR → Human Ready → Human Merge
   2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
-  3. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
-  4. #19 Close は残件移管完了後の別 Human disposition
+  3. GOV-RULE-01 / 04 HOLD 解除 = separate（根拠資料後；NOT auto）
+  4. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
+  5. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 First residual history（consumed）:
@@ -391,6 +398,18 @@ SELECT GOV-STAFF-06〜12 bundle
   10 Option C-based（全区分 C）
   11 Option B / 12 Option C
 Acceptance: decision-gov-staff-06-12-qualification-training-bundle-option-acceptance.md
+```
+
+GOV-RULE-01〜04 bundle history:
+
+```text
+SELECT GOV-RULE-01〜04 bundle
+  01 HOLD / VALUE NOT DETERMINED
+  02 Option A（支援計画の有効開始日）
+  03 Option A（見直し実施日の前日）
+  04 HOLD / VALUE NOT DETERMINED
+  05〜12 CONFIRMED / UNCHANGED
+Acceptance: decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md
 ```
 
 ## Reference
