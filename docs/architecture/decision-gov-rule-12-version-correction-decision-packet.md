@@ -5,7 +5,6 @@
 
 Issue #19 所有の最小単位。
 GOV-RULE-09 / 10 / 11 の再 Decision ではない。
-Accepted（Option）ではない。
 Agent が訂正 UI・版管理実装・ルール本文を発明しない。
 Implementation Start ではない。
 
@@ -18,18 +17,17 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-RULE-12
 Kind: Human Decision packet（narrow）
-Status: OPEN / Option NOT SELECTED
+Status: Accepted / LOCKED / Option B
 Owner: Issue #19
-Selected via: Decision-GOV-RULE-12-SELECTION-1
+Selected via: Decision-GOV-RULE-12-SELECTION-1（PR #272 MERGED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし）
-Human Selected Option: NOT SELECTED
-Issue #19 design recommendation（non-binding）: B
-  （訂正版を新規作成し、旧版を保持）
-Option B status: SPECIFIED / NON-BINDING（≠ Human Acceptance evidence）
+Human Selected Option: B（訂正版を新規作成し、旧版を保持）
+Option Acceptance: decision-gov-rule-12-version-correction-option-b-acceptance.md
+Issue #19 design recommendation（non-binding）: B（≠ Human Acceptance evidence）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -50,7 +48,8 @@ GOV-RULE-05〜08: Accepted（該当分；08 = NOT ADOPTED）
 GOV-RULE-09 rule content owner: Accepted / LOCKED / Option B
 GOV-RULE-10 change approver: Accepted / LOCKED / Option C
 GOV-RULE-11 value boundary: Accepted / LOCKED（fill-in）
-GOV-RULE-12 past-version correction: UNDECIDED（本 packet）
+GOV-RULE-12 past-version correction: Accepted / LOCKED / Option B
+  = 訂正版を新規作成し、旧版を保持
 GOV-STAFF / GOV-PERF: OPEN / OUT
 SharePoint / M365 / Deploy: NO-GO
 ```
@@ -167,16 +166,15 @@ C. 過去版は訂正不可
 D. その他（Human が明示）
 H. まだ決めない / HOLD
 
-答え: NOT SELECTED
-Option B tip: SPECIFIED / NON-BINDING
+答え: B（Accepted / LOCKED）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A–D | Option Acceptance → correction policy LOCKED。実装は別 GO |
-| H | Option HOLD。unit Selection は維持可 |
+| **B** | **Option Acceptance LOCKED（本 Decision）**。実装は別 GO |
+| A / C / D / H | NOT SELECTED |
 
 維持:
 
@@ -185,11 +183,11 @@ GOV-RULE-05〜11 / GOV-AUD-01〜10: UNCHANGED
 Implementation Start: DO NOT START
 SharePoint / M365 / Deploy: NO-GO
 next residual auto-select: FORBIDDEN
-Option B tip-as-binding: FORBIDDEN until Option Acceptance
 ```
 
 ## Reference
 
 - Selection: `decision-gov-rule-12-version-correction-selection.md`
 - SELECT Acceptance: `decision-gov-rule-12-version-correction-acceptance.md`
+- Option B Acceptance: `decision-gov-rule-12-version-correction-option-b-acceptance.md`
 - Issue #19 GOV-RULE-12 source options A–D

@@ -28,12 +28,11 @@ PR: #272（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-RULE-12 — 過去ルール版の訂正
 
-Concrete Option A–D: NOT SELECTED
-Option B: SPECIFIED / NON-BINDING（≠ Accepted）
+Concrete Option A–D: Accepted / LOCKED / Option B
+  （decision-gov-rule-12-version-correction-option-b-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
-Agent auto-Accept Option B: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -68,25 +67,27 @@ SELECT GOV-RULE-12 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-RULE-11 = COMPLETE（fill-in）
 Current residual unit = SELECTED / LOCKED（GOV-RULE-12）
-Option Acceptance = NOT SELECTED
-Option B = SPECIFIED / NON-BINDING
+Option Acceptance = Accepted / LOCKED / Option B
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #272 = MERGED
+  Human Option = B
+
+Option Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for GOV-RULE-12 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-rule-12-version-correction-selection.md`
 - Decision Packet: `decision-gov-rule-12-version-correction-decision-packet.md`
+- Option B Acceptance: `decision-gov-rule-12-version-correction-option-b-acceptance.md`
 - Independent Review: `decision-gov-rule-12-version-correction-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`

@@ -162,7 +162,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-RULE-09 | **UNCHANGED**（Accepted / Option B） |
 | GOV-RULE-10 | **UNCHANGED**（Accepted / Option C） |
 | GOV-AUD-01〜10 | **UNCHANGED** |
-| GOV-RULE-12 | **unit SELECTED** / Option NOT SELECTED（別 Decision；Option B tip = NON-BINDING） |
+| GOV-RULE-12 | **Accepted / LOCKED / Option B**（別 Decision；本 Acceptance から自動 SELECT しない） |
 | 制度上固定 / 事業所設定 buckets | **EMPTY / 確定なし**（発明禁止） |
 | 設定 UI / tenant mutation | **HOLD / NOT STARTED** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -171,7 +171,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-RULE-11: Accepted / LOCKED（fill-in）
-next residual = GOV-RULE-12 unit SELECTED（Option NOT SELECTED；別 Decision）
+GOV-RULE-12 = Accepted / LOCKED / Option B（別 Decision）
+next residual SELECT（one item；Agent auto-advance FORBIDDEN）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
