@@ -134,7 +134,7 @@ Consumed:
   PR #285 GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED
   PR #286 GOV-PERF HOLD Resolution Bundle = MERGED（解除 NOT PERFORMED）
   PR #287 GOV-RULE-01 / 04 Evidence Bundle = MERGED
-  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR pending）
+  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288）
 
 Next:
   1. GOV-RULE-01 Acceptance PR: IR → Human Ready → Human Merge

@@ -15,7 +15,7 @@ Acceptance: decision-gov-rule-01-evaluation-cycle-acceptance.md
 Evidence Packet: decision-gov-rule-01-evaluation-cycle-evidence-packet.md
 Parent Evidence Bundle: Decision-GOV-RULE-01-04-EVIDENCE-1（PR #287 MERGED）
 Baseline tip: e8b2121c556216fa85a913bea37bf9080ac76180
-PR: pending
+PR: #288
 Status: PASS
 Findings: P0=0 / P1=0 / P2=3 OPEN
 Option status: Accepted / LOCKED

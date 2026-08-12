@@ -19,7 +19,7 @@ Status: Accepted / LOCKED
 Human Acceptance: Explicit Human ACCEPT GOV-RULE-01 on 2026-08-12
 HOLD: LIFTED（GOV-RULE-01 only）
 Baseline tip: e8b2121c556216fa85a913bea37bf9080ac76180
-PR: pending（Acceptance / sync / IR）
+PR: #288（Acceptance / sync / IR）
 
 Meaning:
   アプリ独自の固定日数・固定月数による再採点周期を設定しない

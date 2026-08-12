@@ -23,7 +23,7 @@ Baseline:
   GOV-PERF HOLD Resolution = PR #286 MERGED
 
 This bundle outcomes（NOT Option Acceptance）:
-  GOV-RULE-01 = Accepted / LOCKED（Acceptance PR pending）
+  GOV-RULE-01 = Accepted / LOCKED（Acceptance PR #288）
   GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY）
 
 NOT AUTHORIZED:
@@ -41,7 +41,7 @@ NOT AUTHORIZED:
 
 | ID | Topic | This bundle |
 |---|---|---|
-| GOV-RULE-01 | 行動関連点数の評価周期 | Evidence Packet + **Accepted / LOCKED**（Acceptance PR pending） |
+| GOV-RULE-01 | 行動関連点数の評価周期 | Evidence Packet + **Accepted / LOCKED**（Acceptance PR #288） |
 | GOV-RULE-04 | 必要観察件数 | Evidence Packet + **HOLD / UNCHANGED** |
 
 ```text
@@ -74,7 +74,7 @@ OUT:
 
 ```text
 This Evidence Bundle PR: MERGED（PR #287）
-GOV-RULE-01 Acceptance: separate PR pending
+GOV-RULE-01 Acceptance: PR #288
 GOV-RULE-04 remains HOLD until corporate ORG_POLICY Decision
 next residual auto-select = FORBIDDEN
 ```

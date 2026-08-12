@@ -273,7 +273,7 @@ Consumed progression:
     （decision-gov-perf-hold-resolution-bundle-selection.md；02/06/07/08/09 HOLD UNCHANGED）
   GOV-RULE-01 / 04 Evidence Bundle = MERGED（PR #287）
     （decision-gov-rule-01-04-evidence-bundle-selection.md）
-  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR pending）
+  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288）
     （decision-gov-rule-01-evaluation-cycle-acceptance.md；HOLD LIFTED）
 
 Next:
@@ -457,7 +457,7 @@ Selection: decision-gov-rule-01-04-evidence-bundle-selection.md
 Current residual（unit）:
 
 ```text
-ACCEPT GOV-RULE-01 — Accepted / LOCKED（PR pending）
+ACCEPT GOV-RULE-01 — Accepted / LOCKED（PR #288）
 Acceptance: decision-gov-rule-01-evaluation-cycle-acceptance.md
 GOV-RULE-04: HOLD / UNCHANGED
 ```
