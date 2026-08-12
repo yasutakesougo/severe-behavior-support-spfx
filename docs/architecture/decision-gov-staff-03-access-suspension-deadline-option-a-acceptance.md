@@ -23,7 +23,7 @@ Meaning:
     異動・退職の発効日時までに権限停止
 Baseline tip: 2f439bf6a8e72296ceafc5c0fc9340e3de918b29
 PR: #277（Option A Acceptance / Packet sync / IR）
-main mirror: NOT YET
+main mirror: MERGED（PR #277）
 
 Does NOT mean:
   権限停止自動化・ジョブ・日数変換の発明
@@ -88,7 +88,7 @@ Access suspension deadline:
 - 確定者（GOV-STAFF-01）・Entra 削除実施者（GOV-STAFF-02）は再 Decision しない。
 - 権限停止自動化・Entra mutation・日数発明・実装は本 Acceptance だけでは開始しない。
 - GOV-STAFF-04〜12 = NOT SELECTED。Issue #19 Close / Implementation Start = NOT AUTHORIZED。
-- main mirror = NOT YET（本 Acceptance PR の Human Merge 後）。
+- main mirror = MERGED（PR #277）。
 
 ## Acceptance boundary
 
@@ -112,7 +112,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-STAFF-01 | **UNCHANGED**（Accepted / Option C） |
 | GOV-STAFF-02 | **UNCHANGED**（Accepted / Option B） |
 | GOV-AUD-01〜10 / GOV-RULE-05〜12 | **UNCHANGED** |
-| GOV-STAFF-04〜12 | **OUT / NOT SELECTED** |
+| GOV-STAFF-04 | **Accepted / LOCKED / Option C**（別 Decision；専用の法人共通台帳。支援内容は保存しない） |
+| GOV-STAFF-05〜12 | **OUT / NOT SELECTED** |
 | Option B / C / D / H | **NOT SELECTED** |
 | Entra / M365 mutation | **HOLD / NOT STARTED / FORBIDDEN** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -121,12 +122,12 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-STAFF-03: Accepted / LOCKED / Option A
-main mirror: NOT YET（this Option A Acceptance PR）
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+main mirror: MERGED（PR #277）
+next residual = GOV-STAFF-04 Accepted / LOCKED / Option C（別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 Entra / M365 mutation: NOT AUTHORIZED
-GOV-STAFF-04〜12: NOT SELECTED
+GOV-STAFF-05〜12: NOT SELECTED
 ```
 
 Agent は本 Acceptance を理由に権限停止自動化・Entra mutation・GOV-STAFF-04+ 自動 SELECT・次 residual 自動 SELECT へ進まない。
