@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-STAFF-05
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 4c014dd696e5dbdc38d75f7e601e551cafcdd635
-PR: pending（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
+PR: #279（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
 
 Selected unit:
   GOV-STAFF-05 — 異動後の過去記録の閲覧範囲

@@ -23,7 +23,7 @@ Meaning:
     記録時点の SiteId を維持し、
     異動先の閲覧は明示権限がある範囲だけ
 Baseline tip: 4c014dd696e5dbdc38d75f7e601e551cafcdd635
-PR: pending（Selection / Option C Acceptance / Packet sync / IR）
+PR: #279（Selection / Option C Acceptance / Packet sync / IR）
 
 Does NOT mean:
   ACL / 権限付与 UI / SiteId マイグレーションの発明

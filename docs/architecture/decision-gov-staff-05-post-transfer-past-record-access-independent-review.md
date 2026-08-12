@@ -13,7 +13,7 @@ Unit: GOV-STAFF-05（異動後の過去記録の閲覧範囲）
 Human Decision: SELECT GOV-STAFF-05 + Option C
   （記録時点の SiteId を維持し、異動先の閲覧は明示権限がある範囲だけ）
 Baseline tip: 4c014dd696e5dbdc38d75f7e601e551cafcdd635
-PR: pending
+PR: #279
 Selection: decision-gov-staff-05-post-transfer-past-record-access-selection.md
 SELECT Acceptance: decision-gov-staff-05-post-transfer-past-record-access-acceptance.md
 Decision Packet: decision-gov-staff-05-post-transfer-past-record-access-decision-packet.md
