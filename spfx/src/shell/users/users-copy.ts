@@ -1,5 +1,5 @@
 /**
- * DEMO-UX-2 — fail-closed presentation copy.
+ * DEMO-UX-2 / DEMO-UX-3 — fail-closed presentation copy.
  */
 
 export const DEMO_USERS_PRESENTATION_NOTE =
@@ -9,7 +9,7 @@ export const DEMO_USERS_FILTER_DISABLED_NOTE =
   "絞り込みは表示専用のため操作できません。";
 
 export const DEMO_USERS_DETAIL_DISABLED_NOTE =
-  "詳細画面への遷移は接続されていません。";
+  "Aさんのみ合成データ内の詳細プレビューを表示できます。業務データの詳細画面には接続されていません。";
 
 /** Fail-closed copy must not claim usable business UI or live connection. */
 export function usersCopyIsFailClosed(text: string): boolean {
