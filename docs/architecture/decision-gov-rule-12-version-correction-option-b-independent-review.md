@@ -15,7 +15,7 @@ Acceptance: decision-gov-rule-12-version-correction-option-b-acceptance.md
 Packet: decision-gov-rule-12-version-correction-decision-packet.md
 Parent unit Selection: Decision-GOV-RULE-12-SELECTION-1（PR #272 MERGED）
 Baseline tip: f74eb8e981230b7eb2679e33d450d25e22125940
-PR: pending
+PR: #273
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Option status: Accepted / LOCKED / B

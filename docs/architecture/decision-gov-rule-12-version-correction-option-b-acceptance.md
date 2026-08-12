@@ -22,7 +22,7 @@ Meaning:
   過去ルール版の訂正 =
     訂正版を新規作成し、旧版を保持
 Baseline tip: f74eb8e981230b7eb2679e33d450d25e22125940
-PR: pending（Option B Acceptance / Packet sync / IR）
+PR: #273（Option B Acceptance / Packet sync / IR）
 
 Does NOT mean:
   訂正 UI・版管理スキーマ・監査ログ実装の発明
