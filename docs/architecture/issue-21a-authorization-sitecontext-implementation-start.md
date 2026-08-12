@@ -9,7 +9,7 @@ Selection / Acceptance / IR: MERGED via PR #292
 Independent Review: PASS（Independent = YES；P0=0 / P1=0；P2 OPEN non-blocking）
 Human Implementation Start: GO（2026-08-12）
 Baseline tip: 32f9da406bc13a18bc4ebbce20c36258282908e5
-PR: (this Implementation Draft PR)
+PR: #293（Implementation Draft；Ready / Merge = HUMAN-ONLY）
 Issue #21 Close: NOT AUTHORIZED
 #21-B auto-start: FORBIDDEN
 #22 adapter continuation: NOT AUTHORIZED
