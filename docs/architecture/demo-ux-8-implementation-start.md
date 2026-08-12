@@ -9,7 +9,7 @@ Human Implementation Start: GO（2026-08-12）
 Baseline main: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
 Branch: cursor/demo-ux-8-users-filter-selection-3507
 PR: #321 OPEN / Draft
-Implementation verified HEAD: （see tip after verification commit）
+Implementation verified HEAD: 6e82e1eef106cfbd7743d39eec1ee4380f69db76
 Selection: decision-demo-ux-8-users-list-status-filter-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-8-browser-smoke.md）
 Heft test: 74 / 74 PASS
