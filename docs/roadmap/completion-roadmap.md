@@ -26,22 +26,13 @@
 
 完全合成データのみを使用します。
 
-少なくとも次の画面と状態を、一連の流れとして確認できる状態を目標にします。
-
-- 概要ダッシュボード
-- 利用者一覧
-- 利用者詳細
-- 支援計画
-- 日々の記録
-- 見直し状況
-- 期限接近、確認待ちなどの状態表示
-- PC画面として一貫したデザイン
+少なくとも、概要ダッシュボード、利用者一覧、利用者詳細、支援計画、日々の記録、見直し状況、期限接近や確認待ちなどの状態表示を一連の流れとして確認できる状態を目標にします。
 
 責任者にPC画面を見せながら主要業務フローを説明できれば、このPhaseの目的を満たします。
 
 live SharePoint / Entraが未接続であることは画面または説明上で明示します。
 
-責任者レビューでは、用語、情報の優先順位、操作順序、不要情報、管理者に必要な情報を確認します。
+詳細な完了条件は [`responsible-person-demo-v1.md`](./responsible-person-demo-v1.md) を参照してください。
 
 Tracking: #299
 
@@ -49,15 +40,7 @@ Tracking: #299
 
 責任者レビュー後に固定した主要画面を、SharePoint / Entraの実環境境界へ接続します。
 
-主な対象は次のとおりです。
-
-- Accepted済みSharePoint列の実在確認
-- Internal Name、Column Type、Choice等の照合
-- binder / mapping
-- SharePoint read / write
-- error、unknown、permission failure時のfail-closed
-- Entra membershipからAuthorizationContextへの接続
-- role / site boundaryの実環境検証
+Accepted済みSharePoint列の実在確認、Internal Name / Column Type / Choice等の照合、binder / mapping、SharePoint read / write、fail-closed、Entra membershipからAuthorizationContextへの接続、role / site boundaryの実環境検証を進めます。
 
 テスト用SharePointデータで主要業務フローを一周できる状態を目標にします。
 
@@ -69,17 +52,7 @@ Tracking: #300
 
 同一SPFxアプリをIsogo / Honmokuの2事業所で再現し、事業所分離と現場条件を検証します。
 
-主な確認対象は次のとおりです。
-
-- 同一コードでの2事業所展開
-- SiteIdによる事業所分離
-- role / membership / SiteIdのE2E
-- 主要業務フローE2E
-- 実業務PC
-- 実ブラウザ
-- 実ネットワーク
-- performance baseline
-- 通信失敗、データなし、権限拒否、更新競合などの異常系
+同一コードでの2事業所展開、SiteIdによる事業所分離、role / membership / SiteIdのE2E、主要業務フローE2E、実業務PC、実ブラウザ、実ネットワーク、performance baseline、異常系を確認します。
 
 他事業所のデータへ意図せずアクセスできないことを確認します。
 
@@ -91,19 +64,7 @@ Tracking: #301
 
 2事業所パイロット後に、本番運用可能であることを確認します。
 
-主な確認対象は次のとおりです。
-
-- production build
-- security / authorization final verification
-- audit / retention evidence
-- accessibility verification
-- performance acceptance
-- deployment procedure
-- rollback procedure
-- Human Production GO
-- production deployment
-- production smoke
-- operational handoff
+production build、security / authorization、audit / retention、accessibility、performance、deployment、rollback、Human Production GO、production smoke、operational handoffを確認します。
 
 このPhaseの完了を全体100%とします。
 
@@ -113,9 +74,7 @@ Tracking: #301
 
 Tracking: #302
 
-## 推奨する実施順序
-
-次の順序で進めます。
+## 実施順序
 
 1. RESPONSIBLE-PERSON-DEMO-V1を完成させる。
 2. 責任者レビューを実施する。
@@ -127,17 +86,17 @@ Tracking: #302
 
 ## Governance boundary
 
-このロードマップは、既存の個別Decisionを上書きしません。
+このロードマップは既存の個別Decisionを上書きしません。
 
 各実装sliceは、既存のSelection、Acceptance、Independent Review、Implementation Start、Ready、Merge、Mutation GOなどのgateに従います。
 
 ロードマップ上で次Phaseになったことだけを理由に、未認可の実装や外部mutationを開始してはいけません。
 
+詳細は [`governance.md`](./governance.md) を参照してください。
+
 ## Tracking
 
 Parent roadmap: #298
-
-Phase issues:
 
 - #299 — RESPONSIBLE-PERSON-DEMO-V1
 - #300 — LIVE-SHAREPOINT-V1
