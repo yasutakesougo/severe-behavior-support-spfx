@@ -115,7 +115,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-AUD-05 / DEC-012 retention prohibition | **UNCHANGED**（Accepted / LOCKED / Option A） |
 | 自動完全/物理削除 after retention | **NOT ADOPTED / UNCHANGED** |
 | Option A / B / D / H | **NOT SELECTED** |
-| GOV-PERF / RULE-01・04 HOLD 解除 | **OUT / NOT SELECTED** |
+| GOV-PERF-01〜11 | **SELECTED / LOCKED（bundle；PR #285）** |
+| RULE-01・04 HOLD 解除 | **OUT / NOT SELECTED** |
 | SharePoint / M365 mutation / cleanup | **HOLD / NOT STARTED / FORBIDDEN** |
 | FindingCode / A-5 / Implementation | **HOLD** |
 
@@ -123,8 +124,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-AUD-05 / DEC-012 post-retention deletion: Accepted / LOCKED / Option C
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
-候補（NOT SELECTED）: GOV-PERF-01〜11 / RULE-01・04 HOLD 解除 / DEC-015 ledger sync
+next residual: Human SELECTED GOV-PERF-01〜11 bundle（PR #285）
+  正本: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
+GOV-RULE-01 / 04 HOLD 解除 / PERF HOLD 解除 / DEC-015: separate
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 SharePoint / M365 mutation / cleanup: NOT AUTHORIZED

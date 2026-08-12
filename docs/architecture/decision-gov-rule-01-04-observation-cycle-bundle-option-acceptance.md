@@ -162,7 +162,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | Decision-GOV-RULE-01-04-BUNDLE-1 | **UNCHANGED**（unit SELECTED / LOCKED；同一 PR） |
 | GOV-RULE-05〜12 | **CONFIRMED / UNCHANGED** |
 | GOV-STAFF-01〜12 / GOV-AUD-* | **UNCHANGED** |
-| GOV-PERF | **OUT / NOT SELECTED** |
+| GOV-PERF-01〜11 | **SELECTED / LOCKED（bundle；PR #285）** — 正本 [`decision-gov-perf-01-11-performance-bundle-option-acceptance.md`](./decision-gov-perf-01-11-performance-bundle-option-acceptance.md) |
 | SharePoint / schema / Implementation | **HOLD / FORBIDDEN** |
 
 ## Next
@@ -170,9 +170,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual: post-retention deletion Option C Accepted / LOCKED（PR #284）
-  正本: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
-  further residual SELECT: separate Human Decision
+next residual: GOV-PERF-01〜11 bundle SELECTED / LOCKED（Options/HOLD；PR #285）
+  正本: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
+  further residual SELECT / RULE-01・04 HOLD解除: separate Human Decision
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
