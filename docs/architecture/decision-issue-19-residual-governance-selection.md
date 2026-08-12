@@ -121,7 +121,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | DEC-003 org roles | 点数根拠登録・最終確認ロール | MIXED（org part） | Proposed / NOT Accepted |
 | DEC-006 concrete reason codes | 対象外理由コード | EVIDENCE_REQUIRED / MIXED | Deferred |
 | DEC-007 org response roles | 算定不能時の法人対応ロール | MIXED（org part） | Proposed / NOT Accepted |
-| GOV-PERF-01〜11 | 性能目標・測定条件 | ORG_POLICY | **SELECTED / LOCKED（bundle）** — 01A/03C/04C/05D/10A/11D Accepted；02/06/07/08/09 HOLD（[`decision-gov-perf-01-11-performance-bundle-option-acceptance.md`](./decision-gov-perf-01-11-performance-bundle-option-acceptance.md)） |
+| GOV-PERF-01〜11 | 性能目標・測定条件 | ORG_POLICY | **SELECTED / LOCKED（bundle；PR #285）** — 01A/03C/04C/05D/10A/11D Accepted；02/06/07/08/09 HOLD。HOLD resolution bundle **SELECTED**（[`decision-gov-perf-hold-resolution-bundle-selection.md`](./decision-gov-perf-hold-resolution-bundle-selection.md)；解除 NOT PERFORMED） |
 | DEC-015 | バックアップ・復元責任者（ledger） | ORG_POLICY | OPEN（GOV-AUD-07 と整合要） |
 
 ```text
@@ -142,8 +142,8 @@ Stale marker correction（docs truth）:
   GOV-RULE-01 = SELECTED / LOCKED / HOLD；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = SELECTED / LOCKED / HOLD。
   GOV-RULE-05〜12 = CONFIRMED / UNCHANGED。
   post-retention deletion = Accepted / LOCKED / Option C（初期版は経過後完全削除機能なし）。
-  GOV-PERF-01〜11 = SELECTED / LOCKED（bundle；02/06/07/08/09 HOLD）。
-  GOV-RULE-01・04 HOLD 解除 / PERF HOLD 解除 / DEC-015 が OPEN 残件。
+  GOV-PERF-01〜11 = SELECTED / LOCKED（PR #285）。HOLD resolution bundle SELECTED；解除 NOT PERFORMED。
+  GOV-RULE-01・04 HOLD 解除 / PERF HOLD 解除 Acceptance / DEC-015 が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -267,16 +267,17 @@ Consumed progression:
   post-retention deletion unit SELECT = PR #283 MERGED
   post-retention deletion Option C = Accepted / LOCKED（PR #284 MERGED）
     （decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md）
-  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = recorded（PR #285）
+  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED（PR #285）
     （decision-gov-perf-01-11-performance-bundle-option-acceptance.md）
+  GOV-PERF HOLD Resolution Bundle = SELECTED（PR #286）
+    （decision-gov-perf-hold-resolution-bundle-selection.md；02/06/07/08/09 HOLD UNCHANGED）
 
 Next:
-  1. GOV-PERF-01〜11 bundle PR: IR → Human Ready → Human Merge
-  2. After Merge: next residual SELECT（one item；Agent auto-advance FORBIDDEN）
-  3. GOV-PERF-02/06/07/08/09 HOLD 解除 = separate（evidence 後；NOT auto）
-  4. GOV-RULE-01 / 04 HOLD 解除 = separate（根拠資料後；NOT auto）
-  5. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
-  6. #19 Close は残件移管完了後の別 Human disposition
+  1. GOV-PERF HOLD Resolution Bundle PR: IR → Human Ready → Human Merge
+  2. After Merge: HOLD解除 Acceptance = separate Human Decision（NOT auto）
+  3. GOV-RULE-01 / 04 HOLD 解除 = separate（根拠資料後；NOT auto）
+  4. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
+  5. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 First residual history（consumed）:
@@ -427,13 +428,20 @@ post-retention deletion — Accepted / LOCKED / Option C（PR #284 MERGED）
 Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
 ```
 
+Consumed residual（bundle）:
+
+```text
+GOV-PERF-01〜11 — Options/HOLD recorded（PR #285 MERGED）
+Acceptance: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
+```
+
 Current residual（bundle）:
 
 ```text
-SELECT GOV-PERF-01〜11 bundle — Options/HOLD recorded（PR #285）
-  01A / 03C / 04C / 05D / 10A / 11D Accepted
-  02 / 06 / 07 / 08 / 09 HOLD
-Acceptance: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
+SELECT GOV-PERF HOLD Resolution Bundle — PERF-02/06/07/08/09（PR #286）
+  Decision status: HOLD / UNCHANGED（解除 NOT PERFORMED）
+Selection: decision-gov-perf-hold-resolution-bundle-selection.md
+Evidence: decision-gov-perf-hold-resolution-evidence-inventory.md
 ```
 
 ## Reference

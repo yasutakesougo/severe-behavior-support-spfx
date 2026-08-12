@@ -268,12 +268,13 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ## Next
 
 ```text
-GOV-PERF-01〜11 bundle: recorded
+GOV-PERF-01〜11 bundle: MERGED（PR #285）
   Accepted: 01A / 03C / 04C / 05D / 10A / 11D
-  HOLD: 02 / 06 / 07 / 08 / 09
-GOV-PERF HOLD 解除: separate Human Decision（evidence 後）
+  HOLD: 02 / 06 / 07 / 08 / 09（UNCHANGED）
+next residual: Human SELECTED GOV-PERF HOLD Resolution Bundle（PR #286）
+  正本: decision-gov-perf-hold-resolution-bundle-selection.md
+  HOLD解除 Acceptance: NOT PERFORMED
 GOV-RULE-01 / 04 HOLD 解除: separate
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start / performance test: NOT AUTHORIZED
 ```
