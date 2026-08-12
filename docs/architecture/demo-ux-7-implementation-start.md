@@ -9,7 +9,8 @@ Human Implementation Start: GO（2026-08-12）
 Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
 Branch: cursor/demo-ux-7-terminology-today-actions-selection-3507
 PR: #320 OPEN / Draft
-HEAD: 5747af43d705b647d6b23fb91f337e396896a365
+Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
+PR tip（incl. gate-state docs）: d0066e326631fee1743fd7116809ccb5fb2d1e17
 mergeable: true
 Browser smoke: PASS / VERIFIED（demo-ux-7-browser-smoke.md）
 Heft test: 70 / 70 PASS
@@ -104,7 +105,8 @@ browser smoke demo-ux-7: PASS（7 / 7）
 DEMO-UX-7 Implementation = COMPLETE
 Verification = PASS
 PR #320 = OPEN / Draft
-HEAD = 5747af43d705b647d6b23fb91f337e396896a365
+Implementation verified HEAD = 5747af43d705b647d6b23fb91f337e396896a365
+PR tip = d0066e326631fee1743fd7116809ccb5fb2d1e17
 mergeable = true
 Review PASS = ABSENT
 Human Ready = HOLD
