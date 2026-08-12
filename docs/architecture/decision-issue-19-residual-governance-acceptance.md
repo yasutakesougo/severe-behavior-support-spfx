@@ -81,7 +81,8 @@ Consumed on #19 path（do not re-Decision）:
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
-Current residual Option = CONSUMED（GOV-RULE-11 Fill-in Accepted）
+Prior residual Option = CONSUMED（GOV-RULE-11 Fill-in Accepted）
+Current residual unit = SELECTED / LOCKED（GOV-RULE-12；Option NOT SELECTED；Option B tip = NON-BINDING）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -105,11 +106,12 @@ Consumed:
   PR #268 GOV-RULE-09 Option B = MERGED
   PR #269 GOV-RULE-10 unit SELECT + Option C = MERGED
   PR #270 GOV-RULE-11 unit SELECT = MERGED
-  GOV-RULE-11 Fill-in = Accepted / LOCKED
+  PR #271 GOV-RULE-11 Fill-in = MERGED
+  GOV-RULE-12 unit SELECT = Decision-GOV-RULE-12-SELECTION-1（Option NOT SELECTED）
 
 Next:
-  1. GOV-RULE-11 Fill-in Acceptance PR: IR → Human Ready → Human Merge
-  2. After Merge: next residual SELECT one-by-one；no Agent auto-advance
+  1. GOV-RULE-12 Selection PR: IR → Human Ready → Human Merge
+  2. After Merge: Human SELECT Option A–D or HOLD；Option B tip ≠ Binding；no Agent auto-advance
   3. DEC-015 ledger sync remains separate / NOT auto-Accepted
   4. #19 Close remains later / separate Human disposition
 ```
