@@ -6,18 +6,21 @@ export type UserDetailProps = Readonly<{
   presentation: ShellUserDetailPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToUsers?: () => void;
+  onSupportPlanRequest?: () => void;
 }>;
 
 const USER_DETAIL_SECTION_LABELS = ["概要", "支援計画", "記録", "評価", "履歴"] as const;
 
 /**
  * DEMO-UX-3 user detail presentation skeleton.
+ * DEMO-UX-4 may opt the support-plan section into a synthetic local preview.
  * Synthetic fixture only — no live user, plan, record, auth, or adapter connection.
  */
 export const UserDetail: React.FC<UserDetailProps> = ({
   presentation,
   headingRef,
   onBackToUsers,
+  onSupportPlanRequest,
 }) => {
   const {
     personLabel,
@@ -64,15 +67,33 @@ export const UserDetail: React.FC<UserDetailProps> = ({
       </h1>
 
       <div className={styles.sectionTabs} aria-label="利用者詳細の表示順">
-        {USER_DETAIL_SECTION_LABELS.map((label, index) => (
-          <span
-            key={label}
-            className={index === 0 ? styles.sectionTabCurrent : styles.sectionTab}
-            data-demo-ux="user-detail-section-label"
-          >
-            {label}
-          </span>
-        ))}
+        {USER_DETAIL_SECTION_LABELS.map((label, index) => {
+          const planPreviewEnabled = label === "支援計画" && Boolean(onSupportPlanRequest);
+          if (planPreviewEnabled) {
+            return (
+              <button
+                key={label}
+                type="button"
+                className={index === 0 ? styles.sectionTabCurrent : styles.sectionTab}
+                data-demo-ux="user-detail-section-label"
+                data-demo-ux-plan-preview="true"
+                onClick={onSupportPlanRequest}
+              >
+                {label}
+              </button>
+            );
+          }
+          return (
+            <span
+              key={label}
+              className={index === 0 ? styles.sectionTabCurrent : styles.sectionTab}
+              data-demo-ux="user-detail-section-label"
+              data-demo-ux-plan-preview="false"
+            >
+              {label}
+            </span>
+          );
+        })}
       </div>
 
       <section className={styles.detailSection} aria-labelledby="demo-ux-current-support-heading">
@@ -93,6 +114,17 @@ export const UserDetail: React.FC<UserDetailProps> = ({
       <section className={styles.detailSection} aria-labelledby="demo-ux-plan-heading">
         <h2 id="demo-ux-plan-heading">支援計画</h2>
         <p>{planPeriodLabel}</p>
+        <button
+          type="button"
+          className={styles.backButton}
+          disabled={!onSupportPlanRequest}
+          aria-disabled={!onSupportPlanRequest ? "true" : undefined}
+          data-demo-ux="user-detail-open-plan"
+          data-demo-ux-plan-preview={onSupportPlanRequest ? "true" : "false"}
+          onClick={onSupportPlanRequest}
+        >
+          支援計画を表示
+        </button>
       </section>
 
       <section className={styles.detailSection} aria-labelledby="demo-ux-records-heading">
