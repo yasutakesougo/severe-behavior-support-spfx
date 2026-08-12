@@ -3,21 +3,21 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-7 — Terminology canon + Today-actions navigation
-Status: Implementation COMPLETE + Verification PASS / Review waiting
+Status: Implementation COMPLETE + Verification PASS + Fresh Review PASS / Ready HOLD
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-7-TERMINOLOGY-TODAY-ACTIONS-1 / PR #320）
 Human Implementation Start: GO（2026-08-12）
 Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
 Branch: cursor/demo-ux-7-terminology-today-actions-selection-3507
 PR: #320 OPEN / Draft
 Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
-PR tip（incl. gate-state docs）: d0066e326631fee1743fd7116809ccb5fb2d1e17
+Fresh Review: demo-ux-7-fresh-review.md
 mergeable: true
 Browser smoke: PASS / VERIFIED（demo-ux-7-browser-smoke.md）
 Heft test: 70 / 70 PASS
 Root test: 554 / 554 PASS
-Review PASS: ABSENT
-Human Ready: HOLD
-Reason: FRESH REVIEW REQUIRED
+Review PASS: PASS（P0=0 / P1=0）
+Human Ready: HOLD（separate Human Decision）
+Reason: AWAITING HUMAN READY DECISION
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -99,25 +99,24 @@ SPFx Heft test: PASS（70 / 70）
 browser smoke demo-ux-7: PASS（7 / 7）
 ```
 
-## Gate state（Human confirmed 2026-08-12）
+## Gate state（updated after Fresh Review）
 
 ```text
 DEMO-UX-7 Implementation = COMPLETE
 Verification = PASS
 PR #320 = OPEN / Draft
 Implementation verified HEAD = 5747af43d705b647d6b23fb91f337e396896a365
-PR tip = d0066e326631fee1743fd7116809ccb5fb2d1e17
 mergeable = true
-Review PASS = ABSENT
+Review PASS = PASS（P0=0 / P1=0）
 Human Ready = HOLD
-Reason = FRESH REVIEW REQUIRED
+Reason = AWAITING HUMAN READY DECISION
 ```
 
 Next:
 
 ```text
-1. Fresh Review（required: P0 = 0 / P1 = 0）
-2. After Review PASS → Human Ready Decision
+1. Fresh Review = PASS（complete）
+2. Human Ready Decision（GO / HOLD）— separate
 ```
 
 Still NOT AUTHORIZED:
