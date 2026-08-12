@@ -4,7 +4,14 @@ import {
   OverviewDashboard,
   type ShellOverviewPresentation,
 } from "../dashboard";
-import { DEMO_UX_USERS_FIXTURE, UsersList, type ShellUsersPresentation } from "../users";
+import {
+  DEMO_UX_USER_DETAIL_FIXTURE,
+  DEMO_UX_USERS_FIXTURE,
+  UserDetail,
+  UsersList,
+  type ShellUserDetailPresentation,
+  type ShellUsersPresentation,
+} from "../users";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
 import { DestinationPlaceholder } from "./DestinationPlaceholder";
@@ -51,11 +58,12 @@ export type AppShellChromeProps = Readonly<{
   onSelectedDestinationChange?: (next: ShellPrimaryNavigationId) => void;
   overviewPresentation?: ShellOverviewPresentation;
   usersPresentation?: ShellUsersPresentation;
+  userDetailPresentation?: ShellUserDetailPresentation;
   children?: React.ReactNode;
 }>;
 
 /**
- * SHELL-UX presentation chrome + DASHBOARD-UX-1 overview + DEMO-UX-2 users list skeletons.
+ * SHELL-UX presentation chrome + Phase 1 synthetic presentation slices.
  * No SharePoint REST, binder, auth judgment, Entra, token, role, or live business UI.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
@@ -74,6 +82,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     onSelectedDestinationChange,
     overviewPresentation = DASHBOARD_UX_OVERVIEW_FIXTURE,
     usersPresentation = DEMO_UX_USERS_FIXTURE,
+    userDetailPresentation = DEMO_UX_USER_DETAIL_FIXTURE,
     children,
   } = props;
 
@@ -81,6 +90,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [destination, setDestination] = React.useState<ShellPrimaryNavigationId>(
     selectedDestinationProp ?? SHELL_DEFAULT_DESTINATION,
   );
+  const [selectedUserDetailId, setSelectedUserDetailId] = React.useState<string | undefined>();
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
 
@@ -95,12 +105,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   }, [selectedDestinationProp]);
 
   React.useEffect(() => {
+    if (destination !== "users" && selectedUserDetailId !== undefined) {
+      setSelectedUserDetailId(undefined);
+    }
+  }, [destination, selectedUserDetailId]);
+
+  React.useEffect(() => {
     if (!shouldFocusDestinationRef.current) {
       return;
     }
     shouldFocusDestinationRef.current = false;
     destinationHeadingRef.current?.focus();
-  }, [destination]);
+  }, [destination, selectedUserDetailId]);
 
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
@@ -111,14 +127,33 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
     if (next === destination) {
+      if (next === "users" && selectedUserDetailId !== undefined) {
+        shouldFocusDestinationRef.current = true;
+        setSelectedUserDetailId(undefined);
+        return;
+      }
       destinationHeadingRef.current?.focus();
       return;
     }
     shouldFocusDestinationRef.current = true;
+    setSelectedUserDetailId(undefined);
     setDestination(next);
     if (onSelectedDestinationChange) {
       onSelectedDestinationChange(next);
     }
+  };
+
+  const handleUserDetailRequest = (userId: string): void => {
+    if (userId !== userDetailPresentation.userId) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSelectedUserDetailId(userId);
+  };
+
+  const handleBackToUsers = (): void => {
+    shouldFocusDestinationRef.current = true;
+    setSelectedUserDetailId(undefined);
   };
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
@@ -136,6 +171,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux="app-shell-chrome"
       data-shell-ux-unauthenticated={unauthenticated ? "true" : "false"}
       data-shell-ux-destination={destination}
+      data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
     >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
@@ -232,7 +268,20 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 headingRef={destinationHeadingRef}
               />
             ) : destination === "users" ? (
-              <UsersList presentation={usersPresentation} headingRef={destinationHeadingRef} />
+              selectedUserDetailId === userDetailPresentation.userId ? (
+                <UserDetail
+                  presentation={userDetailPresentation}
+                  headingRef={destinationHeadingRef}
+                  onBackToUsers={handleBackToUsers}
+                />
+              ) : (
+                <UsersList
+                  presentation={usersPresentation}
+                  headingRef={destinationHeadingRef}
+                  detailPreviewUserId={userDetailPresentation.userId}
+                  onUserDetailRequest={handleUserDetailRequest}
+                />
+              )
             ) : (
               <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
             )}
