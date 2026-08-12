@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-RULE-01〜04 bundle
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 7f4da32927392de3bc46b669016a73c404187756
-PR: pending（Selection / Packet / SELECT Acceptance / Option+HOLD Acceptance / IR）
+PR: #282（Selection / Packet / SELECT Acceptance / Option+HOLD Acceptance / IR）
 
 Selected:
   GOV-RULE-01〜04 observation/evaluation-cycle residual bundle

@@ -18,7 +18,7 @@ Decision ID: Decision-GOV-RULE-01-04-OPTIONS-1
 Status: Accepted / LOCKED（02/03）；HOLD（01/04）
 Human Acceptance: Explicit Human GOV-RULE-01〜04 Options/HOLD on 2026-08-12
 Baseline tip: 7f4da32927392de3bc46b669016a73c404187756
-PR: pending（Selection / Option+HOLD Acceptance / Packet sync / IR）
+PR: #282（Selection / Option+HOLD Acceptance / Packet sync / IR）
 
 Accepted / HOLD:
   GOV-RULE-01 = SELECTED / LOCKED / HOLD（VALUE NOT DETERMINED）

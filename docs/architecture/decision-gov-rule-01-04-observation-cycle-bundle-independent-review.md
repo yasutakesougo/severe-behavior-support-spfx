@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only bundle Selection + Option/HOLD Acceptance�
 Units: GOV-RULE-01〜04（05〜12 CONFIRMED）
 Human Decision: bundled SELECT；01/04 HOLD；02/03 Option A
 Baseline tip: 7f4da32927392de3bc46b669016a73c404187756
-PR: pending
+PR: #282
 Selection: decision-gov-rule-01-04-observation-cycle-bundle-selection.md
 SELECT Acceptance: decision-gov-rule-01-04-observation-cycle-bundle-acceptance.md
 Decision Packet: decision-gov-rule-01-04-observation-cycle-bundle-decision-packet.md
