@@ -13,7 +13,7 @@ Kind: Human Selection（#19 residual / GOV-STAFF-06）
 Status: SELECTED / LOCKED（unit GO boundary）
 Human Decision: SELECT GOV-STAFF-06
 Date: 2026-08-12
-PR: pending（Selection / Packet / SELECT Acceptance / Option B Acceptance / IR）
+PR: #280（Selection / Packet / SELECT Acceptance / Option B Acceptance / IR）
 
 Baseline:
   main tip = 28ab6c089c2e6383014c788f63c19601c14dcf9a

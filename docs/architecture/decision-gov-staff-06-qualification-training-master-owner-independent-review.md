@@ -12,7 +12,7 @@ Kind: Independent Review（docs-only Selection + Option Acceptance recording）
 Unit: GOV-STAFF-06（資格・研修マスターの正本管理者）
 Human Decision: SELECT GOV-STAFF-06 + Option B（法人業務責任者）
 Baseline tip: 28ab6c089c2e6383014c788f63c19601c14dcf9a
-PR: pending
+PR: #280
 Selection: decision-gov-staff-06-qualification-training-master-owner-selection.md
 SELECT Acceptance: decision-gov-staff-06-qualification-training-master-owner-acceptance.md
 Decision Packet: decision-gov-staff-06-qualification-training-master-owner-decision-packet.md

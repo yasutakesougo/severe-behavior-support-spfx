@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-STAFF-06
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 28ab6c089c2e6383014c788f63c19601c14dcf9a
-PR: pending（Selection / Packet / SELECT Acceptance / Option B Acceptance / IR）
+PR: #280（Selection / Packet / SELECT Acceptance / Option B Acceptance / IR）
 
 Selected unit:
   GOV-STAFF-06 — 資格・研修マスターの正本管理者

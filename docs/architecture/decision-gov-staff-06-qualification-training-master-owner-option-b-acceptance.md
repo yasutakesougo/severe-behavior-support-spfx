@@ -21,7 +21,7 @@ Selected Option: B
 Meaning:
   資格・研修マスターの正本管理者 = 法人業務責任者
 Baseline tip: 28ab6c089c2e6383014c788f63c19601c14dcf9a
-PR: pending（Selection / Option B Acceptance / Packet sync / IR）
+PR: #280（Selection / Option B Acceptance / Packet sync / IR）
 
 Does NOT mean:
   マスター UI・名簿・個人名の発明
