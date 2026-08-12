@@ -275,7 +275,7 @@ Consumed progression:
     （decision-gov-rule-01-04-evidence-bundle-selection.md）
   GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288 MERGED）
     （decision-gov-rule-01-evaluation-cycle-acceptance.md；HOLD LIFTED）
-  GOV-RULE-04 Acceptance = Accepted / LOCKED（PR pending）
+  GOV-RULE-04 Acceptance = Accepted / LOCKED（PR #289）
     （decision-gov-rule-04-observation-count-acceptance.md；HOLD LIFTED）
 
 Next:
@@ -465,7 +465,7 @@ Acceptance: decision-gov-rule-01-evaluation-cycle-acceptance.md
 Current residual（unit）:
 
 ```text
-ACCEPT GOV-RULE-04 — Accepted / LOCKED（PR pending）
+ACCEPT GOV-RULE-04 — Accepted / LOCKED（PR #289）
 Acceptance: decision-gov-rule-04-observation-count-acceptance.md
 minimumObservationCount = NOT FIXED
 ```

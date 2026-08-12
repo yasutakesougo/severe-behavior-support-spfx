@@ -17,7 +17,7 @@ PR: #287
 | Unit | Evidence conclusion | Decision status now | Next Human step |
 |---|---|---|---|
 | GOV-RULE-01 | アプリ独自固定周期で再採点しない。正式認定・更新・変更認定の有効期間に従う。3年は基本値であり固定再評価周期ではない | **Accepted / LOCKED** | HOLD LIFTED（Acceptance PR #288） |
-| GOV-RULE-04 | MHLW 一次資料から固定観察件数は導出不可。Human Accepted: NOT FIXED / 期間・数え方 LOCKED | **Accepted / LOCKED** | HOLD LIFTED（Acceptance PR pending） |
+| GOV-RULE-04 | MHLW 一次資料から固定観察件数は導出不可。Human Accepted: NOT FIXED / 期間・数え方 LOCKED | **Accepted / LOCKED** | HOLD LIFTED（Acceptance PR #289） |
 
 ## RULE-01 candidate fields → evidence link
 

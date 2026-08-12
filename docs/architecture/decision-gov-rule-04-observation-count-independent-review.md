@@ -17,7 +17,7 @@ Evidence Packet: decision-gov-rule-04-observation-count-evidence-packet.md
 Parent Evidence Bundle: Decision-GOV-RULE-01-04-EVIDENCE-1（PR #287 MERGED）
 Prior: GOV-RULE-01 Accepted（PR #288 MERGED）
 Baseline tip: 8ccf603e499b83e925f7d102b5c92003c40de215
-PR: pending
+PR: #289
 Status: PASS
 Findings: P0=0 / P1=0 / P2=4 OPEN
 Option status: Accepted / LOCKED

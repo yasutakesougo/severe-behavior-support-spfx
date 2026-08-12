@@ -135,7 +135,7 @@ Consumed:
   PR #286 GOV-PERF HOLD Resolution Bundle = MERGED（解除 NOT PERFORMED）
   PR #287 GOV-RULE-01 / 04 Evidence Bundle = MERGED
   PR #288 GOV-RULE-01 Acceptance = MERGED（HOLD LIFTED）
-  GOV-RULE-04 Acceptance = Accepted / LOCKED（PR pending）
+  GOV-RULE-04 Acceptance = Accepted / LOCKED（PR #289）
 
 Next:
   1. GOV-RULE-04 Acceptance PR: IR → Human Ready → Human Merge

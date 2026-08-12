@@ -160,7 +160,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual: GOV-RULE-04 Acceptance（PR pending）
+next residual: GOV-RULE-04 Acceptance（PR #289）
   正本: decision-gov-rule-04-observation-count-acceptance.md
   further residual SELECT: separate Human Decision
 Issue #19 Close: NOT AUTHORIZED

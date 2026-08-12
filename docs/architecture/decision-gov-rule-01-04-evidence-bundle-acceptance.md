@@ -29,10 +29,10 @@ Selected:
 
 After this Acceptance:
   GOV-RULE-01 = Accepted / LOCKED（Acceptance PR #288）
-  GOV-RULE-04 = Accepted / LOCKED（Acceptance PR pending）
+  GOV-RULE-04 = Accepted / LOCKED（Acceptance PR #289）
 
 GOV-RULE-01 Acceptance: PR #288
-GOV-RULE-04 Acceptance: separate PR pending
+GOV-RULE-04 Acceptance: PR #289
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -69,7 +69,7 @@ SELECT Evidence Bundle ≠ Issue #19 Close
 ```text
 This Evidence Bundle PR: MERGED（PR #287）
 GOV-RULE-01 Acceptance: MERGED（PR #288）
-GOV-RULE-04 Acceptance: separate PR pending
+GOV-RULE-04 Acceptance: PR #289
 ```
 
 ## Reference

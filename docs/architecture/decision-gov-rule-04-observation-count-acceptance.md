@@ -22,7 +22,7 @@ Status: Accepted / LOCKED
 Human Acceptance: Explicit Human ACCEPT GOV-RULE-04 on 2026-08-12
 HOLD: LIFTED（GOV-RULE-04 only）
 Baseline tip: 8ccf603e499b83e925f7d102b5c92003c40de215
-PR: pending（Acceptance / sync / IR）
+PR: #289（Acceptance / sync / IR）
 
 Meaning:
   minimumObservationCount = NOT FIXED（最低件数は設定しない）
