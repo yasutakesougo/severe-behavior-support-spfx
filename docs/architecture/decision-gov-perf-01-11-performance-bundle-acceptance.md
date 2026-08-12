@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-PERF-01〜11 bundle
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: f8202e6eb3731652a76b8af818d32c31b8ee9a5f
-PR: pending（Selection / Packet / SELECT Acceptance / Option+HOLD Acceptance / IR）
+PR: #285（Selection / Packet / SELECT Acceptance / Option+HOLD Acceptance / IR）
 
 Selected:
   GOV-PERF-01〜11 performance residual bundle

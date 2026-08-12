@@ -18,7 +18,7 @@ Decision ID: Decision-GOV-PERF-01-11-OPTIONS-1
 Status: Accepted / LOCKED（01A/03C/04C/05D/10A/11D）；HOLD（02/06/07/08/09）
 Human Acceptance: Explicit Human GOV-PERF-01〜11 Options/HOLD on 2026-08-12
 Baseline tip: f8202e6eb3731652a76b8af818d32c31b8ee9a5f
-PR: pending（Selection / Option+HOLD Acceptance / Packet sync / IR）
+PR: #285（Selection / Option+HOLD Acceptance / Packet sync / IR）
 
 Accepted / HOLD:
   GOV-PERF-01 = ACCEPTED / LOCKED / Option A

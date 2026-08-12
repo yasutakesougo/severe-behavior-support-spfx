@@ -267,7 +267,7 @@ Consumed progression:
   post-retention deletion unit SELECT = PR #283 MERGED
   post-retention deletion Option C = Accepted / LOCKED（PR #284 MERGED）
     （decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md）
-  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = recorded（PR pending）
+  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = recorded（PR #285）
     （decision-gov-perf-01-11-performance-bundle-option-acceptance.md）
 
 Next:
@@ -430,7 +430,7 @@ Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-accepta
 Current residual（bundle）:
 
 ```text
-SELECT GOV-PERF-01〜11 bundle — Options/HOLD recorded（PR pending）
+SELECT GOV-PERF-01〜11 bundle — Options/HOLD recorded（PR #285）
   01A / 03C / 04C / 05D / 10A / 11D Accepted
   02 / 06 / 07 / 08 / 09 HOLD
 Acceptance: decision-gov-perf-01-11-performance-bundle-option-acceptance.md

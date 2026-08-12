@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only bundle Selection + Option/HOLD Acceptance�
 Units: GOV-PERF-01〜11
 Human Decision: bundled SELECT；01A/03C/04C/05D/10A/11D Accepted；02/06/07/08/09 HOLD
 Baseline tip: f8202e6eb3731652a76b8af818d32c31b8ee9a5f
-PR: pending
+PR: #285
 Selection: decision-gov-perf-01-11-performance-bundle-selection.md
 SELECT Acceptance: decision-gov-perf-01-11-performance-bundle-acceptance.md
 Decision Packet: decision-gov-perf-01-11-performance-bundle-decision-packet.md

@@ -92,7 +92,7 @@ OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Prior residual Option = CONSUMED（GOV-RULE-01〜04 bundle recorded；01/04 HOLD open）
 Prior residual = post-retention deletion Accepted / LOCKED / Option C（PR #284 MERGED）
-Current residual bundle = SELECTED / LOCKED（GOV-PERF-01〜11；Options/HOLD recorded；PR pending）
+Current residual bundle = SELECTED / LOCKED（GOV-PERF-01〜11；Options/HOLD recorded；PR #285）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -130,7 +130,7 @@ Consumed:
   PR #282 GOV-RULE-01〜04 bundle SELECT + Options/HOLD = MERGED
   PR #283 post-retention deletion unit SELECT = MERGED
   PR #284 post-retention deletion Option C = MERGED
-  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = recorded（PR pending）
+  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = recorded（PR #285）
 
 Next:
   1. GOV-PERF-01〜11 bundle PR: IR → Human Ready → Human Merge

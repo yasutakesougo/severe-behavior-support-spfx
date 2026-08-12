@@ -14,7 +14,7 @@ Kind: Human Selection（#19 residual / GOV-PERF-01〜11 bundle）
 Status: SELECTED / LOCKED（bundle GO boundary）
 Human Decision: SELECT GOV-PERF-01〜11 bundle（Selection + Options/HOLD）
 Date: 2026-08-12
-PR: pending（Selection / Packet / SELECT Acceptance / Option+HOLD Acceptance / IR）
+PR: #285（Selection / Packet / SELECT Acceptance / Option+HOLD Acceptance / IR）
 
 Baseline:
   main tip = f8202e6eb3731652a76b8af818d32c31b8ee9a5f
