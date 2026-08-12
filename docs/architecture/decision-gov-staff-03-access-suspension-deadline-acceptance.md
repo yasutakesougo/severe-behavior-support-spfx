@@ -27,13 +27,13 @@ PR: #276（Selection / Packet / SELECT Acceptance / IR only）
 Selected unit:
   GOV-STAFF-03 — 権限停止期限
 
-Concrete Option A–D: NOT SELECTED
+Concrete Option A–D: Accepted / LOCKED / Option A
+  （decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md）
 Implementation Start: NOT AUTHORIZED
 Entra / M365 mutation: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
 GOV-STAFF-04〜12 auto-SELECT: FORBIDDEN
-Agent auto-Accept Option A–D: FORBIDDEN
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -68,24 +68,27 @@ SELECT GOV-STAFF-03 ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 GOV-STAFF-02 = COMPLETE（Option B）
 Current residual unit = SELECTED / LOCKED（GOV-STAFF-03）
-Option Acceptance = NOT SELECTED
+Option Acceptance = Accepted / LOCKED / Option A
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
+Consumed:
+  Unit Selection PR #276 = MERGED
+  Human Option = A
+
+Option Acceptance PR:
+  1. Independent Review
   2. Human Ready（HUMAN-ONLY）
   3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for GOV-STAFF-03 only
-  6. Next residual SELECT = separate Human Decision
+  4. After Merge: next residual SELECT = separate Human Decision
 ```
 
 ## Reference
 
 - Selection: `decision-gov-staff-03-access-suspension-deadline-selection.md`
 - Decision Packet: `decision-gov-staff-03-access-suspension-deadline-decision-packet.md`
+- Option A Acceptance: `decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md`
 - Independent Review: `decision-gov-staff-03-access-suspension-deadline-independent-review.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`
