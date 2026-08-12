@@ -28,10 +28,10 @@ Selected:
   GOV-RULE-01 / 04 Evidence Bundle（MHLW primary-source framed packets）
 
 After this Acceptance:
-  GOV-RULE-01 = HOLD LIFT CANDIDATE（≠ Accepted / LOCKED）
+  GOV-RULE-01 = Accepted / LOCKED（Acceptance PR pending）
   GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY）
 
-GOV-RULE-01 Option Acceptance: NOT SELECTED
+GOV-RULE-01 Acceptance: separate PR pending
 GOV-RULE-04 value Acceptance: NOT SELECTED
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
@@ -67,11 +67,9 @@ SELECT Evidence Bundle ≠ Issue #19 Close
 ## Next
 
 ```text
-1. This PR Independent Review
-2. Human Ready（HUMAN-ONLY）
-3. Human Merge（HUMAN-ONLY）
-4. After Merge: Human Option Acceptance for RULE-01（optional lift）
-5. RULE-04 corporate ORG_POLICY Decision = separate
+This Evidence Bundle PR: MERGED（PR #287）
+GOV-RULE-01 Acceptance: separate PR pending
+RULE-04 corporate ORG_POLICY Decision = separate
 ```
 
 ## Reference

@@ -3,8 +3,8 @@
 この文書は、**GOV-RULE-01**（行動関連点数の評価周期）の
 **Evidence Packet / Decision Packet candidate** である。
 
-**Accepted / LOCKED ではない。** HOLD LIFT CANDIDATE のみ。
-Human Option Acceptance を待つ。
+**Human Acceptance 済み（別文書）。** 本 Evidence Packet は根拠正本として維持する。
+Acceptance: [`decision-gov-rule-01-evaluation-cycle-acceptance.md`](./decision-gov-rule-01-evaluation-cycle-acceptance.md)
 
 Parent Selection:
 [`decision-gov-rule-01-04-evidence-bundle-selection.md`](./decision-gov-rule-01-04-evidence-bundle-selection.md)
@@ -13,7 +13,7 @@ Parent Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-RULE-01
 Kind: Evidence Packet + Decision Packet candidate
-Status: HOLD LIFT CANDIDATE（≠ Accepted / LOCKED）
+Status: Evidence COMPLETE → Acceptance = Accepted / LOCKED（separate doc）
 Prior status: SELECTED / LOCKED / HOLD（PR #282）
 Owner: Issue #19
 Agent recommendation: NONE（≠ Acceptance evidence）
@@ -53,7 +53,7 @@ IMPORTANT:
   短縮・変更認定を許容する
 ```
 
-## 3. Decision Packet candidate（NOT Accepted）
+## 3. Decision Packet（Accepted via separate Acceptance）
 
 ```text
 周期:
@@ -80,7 +80,6 @@ IMPORTANT:
 ```text
 3年をアプリの固定再評価周期としてハードコードする
 入力日・確認日・アプリ上の経過日数だけで新しい点数へ切り替える
-Agent による GOV-RULE-01 Accepted / LOCKED
 支援計画・観察記録実装変更 / SharePoint mutation
 Implementation Start
 ```
@@ -88,17 +87,13 @@ Implementation Start
 ## 5. HOLD lift assessment
 
 ```text
-GOV-RULE-01 = HOLD LIFT CANDIDATE
-
-Meaning:
-  Evidence は Human Option Acceptance に足りる候補材料を揃えた
-  Agent は Accepted / LOCKED へ変更しない
-  Human Option Acceptance / Decision を待つ
+GOV-RULE-01 = HOLD LIFTED via Human Acceptance
+Acceptance: decision-gov-rule-01-evaluation-cycle-acceptance.md
 ```
 
 ## 6. After this Packet
 
 ```text
-GOV-RULE-01 status: HOLD LIFT CANDIDATE（prior HOLD not lifted by Agent）
-Next: Human Option Acceptance（separate）or keep HOLD
+GOV-RULE-01 status: Accepted / LOCKED（Acceptance document）
+GOV-RULE-04: HOLD / UNCHANGED
 ```
