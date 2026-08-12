@@ -12,7 +12,7 @@ Unit: #21-A — Authorization / SiteContext Pure Contract Boundary
 Human Decision: SELECT #21-A — Authorization / SiteContext Pure Contract Boundary
 Decision ID: Decision-ISSUE-21A-AUTHORIZATION-SITECONTEXT-1
 Baseline tip: a21f5dc0acaa43f18ee6b4a10e1cd0f8ae6db3b4
-PR: (this Selection / Acceptance / Independence Review PR)
+PR: #292
 Selection: decision-issue-21a-authorization-sitecontext-selection.md
 SELECT Acceptance: decision-issue-21a-authorization-sitecontext-acceptance.md
 Status: PASS

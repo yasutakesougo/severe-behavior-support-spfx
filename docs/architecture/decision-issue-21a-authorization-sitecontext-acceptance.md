@@ -19,7 +19,7 @@ Status: Accepted / LOCKED（Selection boundary）
 Human Decision: SELECT #21-A — Authorization / SiteContext Pure Contract Boundary
 Human Acceptance date: 2026-08-12
 Issue: #21
-PR: (this Selection / Acceptance / Independence Review PR)
+PR: #292（Selection / Acceptance / Independence Review only）
 Baseline tip: a21f5dc0acaa43f18ee6b4a10e1cd0f8ae6db3b4
 
 Selected:
@@ -93,7 +93,7 @@ Issue #21 body tip / Implementation HOLD markers = STALE
 
 ```text
 Selection = SELECTED / LOCKED
-Selection docs PR = this draft（Ready / Merge = HUMAN-ONLY）
+Selection docs PR = #292（draft；Ready / Merge = HUMAN-ONLY）
 Independence Review = PASS（recorded；≠ Implementation Start）
 Implementation Start = NOT AUTHORIZED
 Issue #21 = OPEN / KEEP OPEN

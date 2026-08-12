@@ -11,7 +11,7 @@ Kind: Human Selection（Issue #21 next independently implementable slice）
 Status: SELECTED / LOCKED（GO boundary）
 Human Decision: SELECT #21-A — Authorization / SiteContext Pure Contract Boundary
 Date: 2026-08-12
-PR: (this Selection / Acceptance / Independence Review PR)
+PR: #292（Selection / Acceptance / Independence Review only）
 
 Baseline:
   main tip = a21f5dc0acaa43f18ee6b4a10e1cd0f8ae6db3b4
