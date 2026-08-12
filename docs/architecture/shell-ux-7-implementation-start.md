@@ -3,13 +3,15 @@
 ```text
 Issue: #28
 Unit: SHELL-UX-7 — Safe Navigation Destination Placeholders
-Status: Implementation Start AUTHORIZED（in progress → complete on delivery）
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: Decision-SHELL-UX-7-NAVIGATION-DESTINATION-PLACEHOLDERS-1 = Accepted / LOCKED
 Selection merge: b69740d04abcc5b21601e928b0b90980dbe5439b（PR #290）
 Human Implementation Start: GO（2026-08-12）
 Independence: PASS（Independent = YES；P0=0 / P1=0；P2 OPEN non-blocking）
 Baseline tip: b69740d04abcc5b21601e928b0b90980dbe5439b
-PR: TBD（implementation Draft）
+PR: #291（Draft；Ready / Merge = HUMAN-ONLY）
+Browser smoke: PASS / VERIFIED（shell-ux-7-browser-smoke.md）
+Heft test: 37 / 37 PASS
 #28 Close: NOT AUTHORIZED
 #21 authorization truth: OUT
 #22 adapter continuation: NOT AUTHORIZED
@@ -87,6 +89,18 @@ live data が存在するように見せない
 authorization 済みに見せない
 完成済み business UI に見せない
 current site / demo indication を消さない
+```
+
+## Delivered surface
+
+```text
+spfx/src/shell/ux/destination.ts
+spfx/src/shell/ux/DestinationPlaceholder.tsx
+spfx/src/shell/ux/AppShellChrome.tsx
+spfx/src/shell/ux/fixture.ts（SHELL-UX-7 slice flags）
+spfx/src/shell/ux/*.test.ts
+spfx/smoke/shell-ux-7/*
+docs/architecture/shell-ux-7-browser-smoke.md
 ```
 
 ## Stop / HOLD

@@ -86,14 +86,14 @@ const browser = await puppeteer.launch({
 
 const checks = [];
 
-async function smokeCase(name, query, assertFn, viewport) {
+async function smokeCase(name, query, assertFn, viewport, args = []) {
   const page = await browser.newPage();
   if (viewport) {
     await page.setViewport(viewport);
   }
   const url = `${base}/index.html?${query}`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  const found = await page.evaluate(assertFn);
+  const found = await page.evaluate(assertFn, ...args);
   const shot = path.join(artifactsDir, `${name}.png`);
   await page.screenshot({ path: shot, fullPage: true });
   const pass = Boolean(found.pass);
@@ -102,50 +102,48 @@ async function smokeCase(name, query, assertFn, viewport) {
   return pass;
 }
 
-function destinationAssertions(expectedId, expectedLabel) {
-  return () => {
-    const placeholder = document.querySelector('[data-shell-ux="destination-placeholder"]');
-    const heading = document.querySelector('[data-shell-ux="destination-heading"]');
-    const body = document.querySelector('[data-shell-ux="destination-disconnected-body"]');
-    const note = document.querySelector('[data-shell-ux="destination-disconnected-note"]');
-    const demo = document.querySelector('[data-shell-ux="demo-banner"]');
-    const site = document.querySelector('[data-shell-ux="current-site-label"]');
-    const selectedNav = document.querySelector(`[data-shell-ux-nav="${expectedId}"]`);
-    const selectedButtons = [...document.querySelectorAll('[data-shell-ux-nav-selected="true"]')];
-    const labels = [...document.querySelectorAll("[data-shell-ux-nav]")].map(
-      (el) => el.textContent?.trim() ?? "",
-    );
-    const text = document.body?.textContent ?? "";
-    const slice = document
-      .querySelector("[data-shell-ux-slice]")
-      ?.getAttribute("data-shell-ux-slice");
-    const noOverflow =
-      document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1;
-    return {
-      pass:
-        Boolean(placeholder) &&
-        placeholder?.getAttribute("data-shell-ux-destination") === expectedId &&
-        (heading?.textContent ?? "").trim() === expectedLabel &&
-        (body?.textContent ?? "").includes("業務データには接続されていません") &&
-        (note?.textContent ?? "").includes("利用可能な業務画面ではありません") &&
-        Boolean(demo) &&
-        Boolean(site) &&
-        selectedNav?.getAttribute("aria-current") === "page" &&
-        selectedButtons.length === 1 &&
-        selectedButtons[0]?.getAttribute("data-shell-ux-nav") === expectedId &&
-        labels.join("|") === "概要|利用者|記録" &&
-        !labels.includes("支援計画") &&
-        !labels.includes("管理") &&
-        !text.includes("利用可能です") &&
-        slice === "SHELL-UX-7" &&
-        noOverflow,
-      expectedId,
-      expectedLabel,
-      heading: heading?.textContent?.trim() ?? "",
-      labels,
-      slice,
+function assertDestination(expectedId, expectedLabel) {
+  const placeholder = document.querySelector('[data-shell-ux="destination-placeholder"]');
+  const heading = document.querySelector('[data-shell-ux="destination-heading"]');
+  const body = document.querySelector('[data-shell-ux="destination-disconnected-body"]');
+  const note = document.querySelector('[data-shell-ux="destination-disconnected-note"]');
+  const demo = document.querySelector('[data-shell-ux="demo-banner"]');
+  const site = document.querySelector('[data-shell-ux="current-site-label"]');
+  const selectedNav = document.querySelector(`[data-shell-ux-nav="${expectedId}"]`);
+  const selectedButtons = [...document.querySelectorAll('[data-shell-ux-nav-selected="true"]')];
+  const labels = [...document.querySelectorAll("[data-shell-ux-nav]")].map(
+    (el) => el.textContent?.trim() ?? "",
+  );
+  const text = document.body?.textContent ?? "";
+  const slice = document
+    .querySelector("[data-shell-ux-slice]")
+    ?.getAttribute("data-shell-ux-slice");
+  const noOverflow =
+    document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1;
+  return {
+    pass:
+      Boolean(placeholder) &&
+      placeholder?.getAttribute("data-shell-ux-destination") === expectedId &&
+      (heading?.textContent ?? "").trim() === expectedLabel &&
+      (body?.textContent ?? "").includes("業務データには接続されていません") &&
+      (note?.textContent ?? "").includes("利用可能な業務画面ではありません") &&
+      Boolean(demo) &&
+      Boolean(site) &&
+      selectedNav?.getAttribute("aria-current") === "page" &&
+      selectedButtons.length === 1 &&
+      selectedButtons[0]?.getAttribute("data-shell-ux-nav") === expectedId &&
+      labels.join("|") === "概要|利用者|記録" &&
+      labels.indexOf("支援計画") < 0 &&
+      labels.indexOf("管理") < 0 &&
+      text.indexOf("利用可能です") < 0 &&
+      slice === "SHELL-UX-7" &&
       noOverflow,
-    };
+    expectedId,
+    expectedLabel,
+    heading: heading?.textContent?.trim() ?? "",
+    labels,
+    slice,
+    noOverflow,
   };
 }
 
@@ -155,24 +153,27 @@ allPass =
   (await smokeCase(
     "desktop-overview",
     "viewMode=ready&siteSelection=SITE-ISG&destination=overview",
-    destinationAssertions("overview", "概要"),
+    assertDestination,
     { width: 1280, height: 900, deviceScaleFactor: 1 },
+    ["overview", "概要"],
   )) && allPass;
 
 allPass =
   (await smokeCase(
     "desktop-users",
     "viewMode=ready&siteSelection=SITE-ISG&destination=users",
-    destinationAssertions("users", "利用者"),
+    assertDestination,
     { width: 1280, height: 900, deviceScaleFactor: 1 },
+    ["users", "利用者"],
   )) && allPass;
 
 allPass =
   (await smokeCase(
     "desktop-records",
     "viewMode=ready&siteSelection=SITE-ISG&destination=records",
-    destinationAssertions("records", "記録"),
+    assertDestination,
     { width: 1280, height: 900, deviceScaleFactor: 1 },
+    ["records", "記録"],
   )) && allPass;
 
 // Keyboard-only destination traversal + focus movement
@@ -243,16 +244,18 @@ allPass =
   (await smokeCase(
     "tablet-users",
     "viewMode=ready&siteSelection=SITE-HOM&destination=users",
-    destinationAssertions("users", "利用者"),
+    assertDestination,
     { width: 768, height: 1024, deviceScaleFactor: 1 },
+    ["users", "利用者"],
   )) && allPass;
 
 allPass =
   (await smokeCase(
     "desktop-200-percent-equivalent",
     "viewMode=ready&siteSelection=SITE-ISG&destination=overview",
-    destinationAssertions("overview", "概要"),
+    assertDestination,
     { width: 640, height: 900, deviceScaleFactor: 2 },
+    ["overview", "概要"],
   )) && allPass;
 
 const report = {

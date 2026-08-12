@@ -20,7 +20,7 @@ export const SHELL_DESTINATION_DISCONNECTED_NOTE =
   "利用可能な業務画面ではありません。認証判定・実データ取得は行いません。";
 
 export function isShellPrimaryNavigationId(value: string): value is ShellPrimaryNavigationId {
-  return (SHELL_DESTINATION_IDS as readonly string[]).includes(value);
+  return (SHELL_DESTINATION_IDS as readonly string[]).indexOf(value) >= 0;
 }
 
 export function labelForShellDestination(id: ShellPrimaryNavigationId): string {
