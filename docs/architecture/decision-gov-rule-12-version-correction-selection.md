@@ -29,8 +29,9 @@ Candidate origin:
     （訂正版を新規作成し、旧版を保持）
   Binding before this Decision: NONE → unit now SELECTED by Human
 
-Option Acceptance: NOT SELECTED
-Option B status: SPECIFIED / NON-BINDING（≠ Accepted）
+Option Acceptance: Accepted / LOCKED / Option B
+  （decision-gov-rule-12-version-correction-option-b-acceptance.md）
+Option B status: Accepted / LOCKED（prior tip was NON-BINDING）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN
@@ -105,28 +106,33 @@ OUT:
 
 ```text
 Decision-GOV-RULE-12-SELECTION-1 = SELECTED / LOCKED
+Option B = Accepted / LOCKED（別 Acceptance）
 
 HOLD:
-  concrete Option A–D = NOT SELECTED
-  Option B = SPECIFIED / NON-BINDING（≠ Accepted）
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
+  next residual = NOT SELECTED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human SELECT Option A–D or HOLD
-3. Option Acceptance / LOCKED for GOV-RULE-12 only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #272 = MERGED
+  Human Option = B
+
+Current Option Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-rule-12-version-correction-acceptance.md`
 - Decision Packet: `decision-gov-rule-12-version-correction-decision-packet.md`
-- Independent Review: `decision-gov-rule-12-version-correction-independent-review.md`
+- Option B Acceptance: `decision-gov-rule-12-version-correction-option-b-acceptance.md`
+- Independent Review（Selection）: `decision-gov-rule-12-version-correction-independent-review.md`
+- Independent Review（Option B）: `decision-gov-rule-12-version-correction-option-b-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Prior unit: `decision-gov-rule-11-value-boundary-fill-in-acceptance.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
