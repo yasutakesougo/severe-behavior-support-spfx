@@ -86,9 +86,11 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
                 <span className={styles.statusBadge} data-demo-ux="review-status-label">
                   {item.reviewStatusLabel}
                 </span>
-                <span className={styles.dueBadge} data-demo-ux="due-state-label">
-                  {item.dueStateLabel}
-                </span>
+                {item.dueStateLabel ? (
+                  <span className={styles.dueBadge} data-demo-ux="due-state-label">
+                    {item.dueStateLabel}
+                  </span>
+                ) : null}
               </div>
             </li>
           ))}

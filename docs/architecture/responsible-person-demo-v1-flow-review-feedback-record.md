@@ -37,8 +37,8 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 
 | feedbackId | surface | classification | observation | requestedOutcome | status | followUp |
 |---|---|---|---|---|---|---|
-| RPF-Q01 | cross-cutting | QUESTION→SELECTED | 要確認/確認待ち/確認対象 と 期限間近/期限接近 が混在 | 用語正本を確定 | SELECTED | DEMO-UX-7 |
-| RPF-001 | overview | CHANGE | 今日やること CTA が無効で導線が途切れる | A→記録 / B→見直し / C→詳細へ遷移 | SELECTED | DEMO-UX-7 |
+| RPF-Q01 | cross-cutting | QUESTION→SELECTED | 要確認/確認待ち/確認対象 と 期限間近/期限接近 が混在 | 用語正本を確定 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-7 |
+| RPF-001 | overview | CHANGE | 今日やること CTA が無効で導線が途切れる | A→記録 / B→見直し / C→詳細へ遷移 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-7 |
 | RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | OPEN（queued） | after DEMO-UX-7 |
 | RPF-002 | daily-record | CHANGE | 入力欄は見えるが何もできない | 未記録選択→記録画面→入力イメージまで通す。実保存 HOLD | OPEN（queued） | after RPF-003 |
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | DEFERRED | after flow slices |
@@ -50,8 +50,8 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 
 | feedbackId | selected slice | IN / OUT reference | Implementation Start |
 |---|---|---|---|
-| RPF-Q01 | DEMO-UX-7 | `decision-demo-ux-7-terminology-today-actions-selection.md` | NOT AUTHORIZED |
-| RPF-001 | DEMO-UX-7 | same | NOT AUTHORIZED |
+| RPF-Q01 | DEMO-UX-7 | `decision-demo-ux-7-terminology-today-actions-selection.md` | GO（2026-08-12）/ COMPLETE |
+| RPF-001 | DEMO-UX-7 | same | GO（2026-08-12）/ COMPLETE |
 
 ## 5. Explicit non-claims
 

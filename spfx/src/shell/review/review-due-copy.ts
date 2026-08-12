@@ -9,7 +9,7 @@ export const DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE =
   "見直しの完了・更新・評価操作はこのデモでは実行できません。";
 
 export const DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE =
-  "期限接近・確認待ちは合成表示ラベルです。期限計算や業務判定は接続されていません。";
+  "期限接近・要確認は合成表示ラベルです。期限計算や業務判定は接続されていません。";
 
 /** Fail-closed copy must not claim usable business UI or live connection. */
 export function reviewDueCopyIsFailClosed(text: string): boolean {

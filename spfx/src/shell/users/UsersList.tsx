@@ -14,7 +14,7 @@ export type UsersListProps = Readonly<{
   onUserDetailRequest?: (userId: string) => void;
 }>;
 
-const FILTER_CHIP_LABELS = ["すべて", "要確認", "未記録", "期限間近"] as const;
+const FILTER_CHIP_LABELS = ["すべて", "要確認", "未記録", "期限接近"] as const;
 
 /**
  * DEMO-UX-2 users list presentation skeleton.

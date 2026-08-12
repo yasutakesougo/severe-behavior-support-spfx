@@ -26,7 +26,10 @@ describe("DEMO-UX-2 users list fixture boundary", () => {
     }
     expect(badgeLabels).toContain("要確認");
     expect(badgeLabels).toContain("未記録");
-    expect(badgeLabels).toContain("期限間近");
+    expect(badgeLabels).toContain("期限接近");
+    expect(badgeLabels).not.toContain("期限間近");
+    expect(badgeLabels).not.toContain("確認待ち");
+    expect(badgeLabels).not.toContain("確認対象");
     expect(badgeLabels).toContain("通常");
     expect(DEMO_UX_USERS_FIXTURE.rows[0]?.attentionNote).toBe("支援記録が未入力");
   });

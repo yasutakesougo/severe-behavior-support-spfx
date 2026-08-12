@@ -197,9 +197,11 @@ function assertReviewDueState(expectedStateColumns) {
       (calcNote?.textContent ?? "").includes("合成表示ラベル") &&
       items.length === 3 &&
       statusLabels.length === 3 &&
-      dueLabels.length === 3 &&
-      [...statusLabels].some((el) => (el.textContent ?? "").includes("確認待ち")) &&
-      [...dueLabels].some((el) => (el.textContent ?? "").includes("期限接近")) &&
+      dueLabels.length === 2 &&
+      [...statusLabels].every((el) => (el.textContent ?? "").includes("要確認")) &&
+      [...statusLabels].every((el) => !(el.textContent ?? "").includes("確認待ち")) &&
+      [...dueLabels].every((el) => (el.textContent ?? "").includes("期限接近")) &&
+      [...dueLabels].every((el) => !(el.textContent ?? "").includes("期限間近")) &&
       mutationButtons.length === 2 &&
       mutationButtons.every((button) => button.disabled) &&
       Boolean(back) &&

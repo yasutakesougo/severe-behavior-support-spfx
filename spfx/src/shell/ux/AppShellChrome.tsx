@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   DASHBOARD_UX_OVERVIEW_FIXTURE,
   OverviewDashboard,
+  type OverviewActionNavigationTarget,
   type ShellOverviewPresentation,
 } from "../dashboard";
 import {
@@ -16,6 +17,7 @@ import {
 } from "../review";
 import {
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
+  DEMO_UX_USER_DETAIL_C_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_USERS_FIXTURE,
   SupportPlan,
@@ -72,6 +74,8 @@ export type AppShellChromeProps = Readonly<{
   overviewPresentation?: ShellOverviewPresentation;
   usersPresentation?: ShellUsersPresentation;
   userDetailPresentation?: ShellUserDetailPresentation;
+  /** Additional synthetic detail fixtures (e.g. Cさん for DEMO-UX-7 today-action). */
+  additionalUserDetailPresentations?: readonly ShellUserDetailPresentation[];
   supportPlanPresentation?: ShellSupportPlanPresentation;
   dailyRecordPresentation?: ShellDailyRecordPresentation;
   reviewDueStatePresentation?: ShellReviewDueStatePresentation;
@@ -99,6 +103,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     overviewPresentation = DASHBOARD_UX_OVERVIEW_FIXTURE,
     usersPresentation = DEMO_UX_USERS_FIXTURE,
     userDetailPresentation = DEMO_UX_USER_DETAIL_FIXTURE,
+    additionalUserDetailPresentations = [DEMO_UX_USER_DETAIL_C_FIXTURE],
     supportPlanPresentation = DEMO_UX_SUPPORT_PLAN_FIXTURE,
     dailyRecordPresentation = DEMO_UX_DAILY_RECORD_FIXTURE,
     reviewDueStatePresentation = DEMO_UX_REVIEW_DUE_FIXTURE,
@@ -114,6 +119,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
+
+  const userDetailById = new Map<string, ShellUserDetailPresentation>();
+  userDetailById.set(userDetailPresentation.userId, userDetailPresentation);
+  for (const detail of additionalUserDetailPresentations) {
+    userDetailById.set(detail.userId, detail);
+  }
+  const selectedUserDetail = selectedUserDetailId
+    ? userDetailById.get(selectedUserDetailId)
+    : undefined;
 
   React.useEffect(() => {
     setSelection(siteSelection);
@@ -181,12 +195,44 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleUserDetailRequest = (userId: string): void => {
-    if (userId !== userDetailPresentation.userId) {
+    if (!userDetailById.has(userId)) {
       return;
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
     setSelectedUserDetailId(userId);
+  };
+
+  const handleTodayActionNavigate = (target: OverviewActionNavigationTarget): void => {
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    if (target.kind === "records") {
+      setSelectedUserDetailId(undefined);
+      setReviewDuePreviewOpen(false);
+      setDestination("records");
+      if (onSelectedDestinationChange) {
+        onSelectedDestinationChange("records");
+      }
+      return;
+    }
+    if (target.kind === "review_due") {
+      setSelectedUserDetailId(undefined);
+      setDestination("overview");
+      if (onSelectedDestinationChange) {
+        onSelectedDestinationChange("overview");
+      }
+      setReviewDuePreviewOpen(true);
+      return;
+    }
+    if (!userDetailById.has(target.userId)) {
+      return;
+    }
+    setReviewDuePreviewOpen(false);
+    setSelectedUserDetailId(target.userId);
+    setDestination("users");
+    if (onSelectedDestinationChange) {
+      onSelectedDestinationChange("users");
+    }
   };
 
   const handleBackToUsers = (): void => {
@@ -236,6 +282,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
       data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
+      data-demo-ux-7-today-nav="true"
     >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
@@ -338,12 +385,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   presentation={overviewPresentation}
                   headingRef={destinationHeadingRef}
                   onReviewDueStateRequest={handleReviewDueStateRequest}
+                  onTodayActionNavigate={handleTodayActionNavigate}
                 />
               )
             ) : destination === "users" ? (
-              selectedUserDetailId === userDetailPresentation.userId ? (
+              selectedUserDetail ? (
                 supportPlanPreviewOpen &&
-                supportPlanPresentation.userId === selectedUserDetailId ? (
+                supportPlanPresentation.userId === selectedUserDetail.userId ? (
                   <SupportPlan
                     presentation={supportPlanPresentation}
                     headingRef={destinationHeadingRef}
@@ -351,10 +399,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   />
                 ) : (
                   <UserDetail
-                    presentation={userDetailPresentation}
+                    presentation={selectedUserDetail}
                     headingRef={destinationHeadingRef}
                     onBackToUsers={handleBackToUsers}
-                    onSupportPlanRequest={handleSupportPlanRequest}
+                    onSupportPlanRequest={
+                      selectedUserDetail.userId === supportPlanPresentation.userId
+                        ? handleSupportPlanRequest
+                        : undefined
+                    }
                   />
                 )
               ) : (

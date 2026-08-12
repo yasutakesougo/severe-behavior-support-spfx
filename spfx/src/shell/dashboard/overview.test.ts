@@ -1,25 +1,44 @@
-import { DASHBOARD_OVERVIEW_PRESENTATION_NOTE, overviewCopyIsFailClosed } from "./overview-copy";
+import {
+  DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
+  DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
+  overviewCopyIsFailClosed,
+} from "./overview-copy";
 import { DASHBOARD_UX_OVERVIEW_FIXTURE, DASHBOARD_UX_SLICE } from "./overview-fixture";
+import {
+  SHELL_STATUS_LABEL_DUE_SOON,
+  SHELL_STATUS_LABEL_NEEDS_REVIEW,
+  SHELL_STATUS_LABEL_UNRECORDED,
+  isDeprecatedPrimaryStatusLabel,
+} from "../ux/status-labels";
 
 describe("DASHBOARD-UX-1 overview fixture boundary", () => {
-  it("uses synthetic KPI counts aligned with DESIGN-4 prototype", () => {
+  it("uses synthetic KPI counts with DEMO-UX-7 canonical labels", () => {
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.label)).toEqual([
       "今日の対象",
-      "要確認",
-      "未記録",
-      "期限間近",
+      SHELL_STATUS_LABEL_NEEDS_REVIEW,
+      SHELL_STATUS_LABEL_UNRECORDED,
+      SHELL_STATUS_LABEL_DUE_SOON,
     ]);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([12, 3, 2, 2]);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.every((card) => card.statusHint.length > 0)).toBe(
       true,
     );
+    expect(
+      DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.some((card) =>
+        isDeprecatedPrimaryStatusLabel(card.label),
+      ),
+    ).toBe(false);
   });
 
-  it("includes action and recent record rows without live identifiers", () => {
+  it("includes today-action navigation targets without authorizing save/live execution", () => {
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.actionItems).toHaveLength(3);
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.recentRecords).toHaveLength(2);
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.actionItems[0]?.personLabel).toBe("Aさん");
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.recentRecords[0]?.recordType).toBe("支援記録");
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.actionItems.map((item) => item.navigation)).toEqual([
+      { kind: "records" },
+      { kind: "review_due" },
+      { kind: "user_detail", userId: "user-c" },
+    ]);
+    expect(DASHBOARD_OVERVIEW_ACTION_NAV_NOTE).toContain("画面間移動のみ");
+    expect(DASHBOARD_OVERVIEW_ACTION_NAV_NOTE).toContain("保存");
   });
 
   it("keeps presentation copy fail-closed", () => {

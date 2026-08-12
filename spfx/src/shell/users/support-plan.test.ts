@@ -18,7 +18,8 @@ describe("DEMO-UX-4 support plan presentation boundary", () => {
   });
 
   it("keeps review status textual and separates business facts from system state", () => {
-    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).toContain("確認待ち");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).toContain("要確認");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).not.toContain("確認待ち");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.businessFacts.qualificationLabel).toContain("実践研修");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
   });

@@ -39,7 +39,7 @@ export const DEMO_UX_SUPPORT_PLAN_FIXTURE: ShellSupportPlanPresentation = {
   ],
   reviewStatus: {
     reviewDueLabel: "見直し期限: 2026/09/23",
-    reviewStatusLabel: "確認待ち（合成表示）",
+    reviewStatusLabel: "要確認（合成表示）",
     attentionNote: "期限接近のため、見直し状況の視認性を確認する合成サンプルです。",
   },
   businessFacts: {

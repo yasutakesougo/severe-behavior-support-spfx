@@ -13,11 +13,21 @@ export type OverviewKpiCard = Readonly<{
   statusHint: string;
 }>;
 
+/**
+ * DEMO-UX-7 presentation-only navigation from Overview today-actions.
+ * Synthetic local routing only — not save / SharePoint / live business execution.
+ */
+export type OverviewActionNavigationTarget =
+  | Readonly<{ kind: "records" }>
+  | Readonly<{ kind: "review_due" }>
+  | Readonly<{ kind: "user_detail"; userId: string }>;
+
 export type OverviewActionItem = Readonly<{
   id: string;
   personLabel: string;
   reason: string;
   actionLabel: string;
+  navigation?: OverviewActionNavigationTarget;
 }>;
 
 export type OverviewRecentRecord = Readonly<{

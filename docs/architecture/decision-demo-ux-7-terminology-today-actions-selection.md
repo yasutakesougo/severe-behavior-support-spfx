@@ -9,7 +9,7 @@ Human Selection: GO（2026-08-12）
 Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
 Source feedback: RPF-Q01 + RPF-001
 Follow-on queue（not this slice）: RPF-003 → RPF-002
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（2026-08-12）— see demo-ux-7-implementation-start.md
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -120,7 +120,8 @@ Selection GO ≠ Merge GO
 Selection GO ≠ #299 Close GO
 ```
 
-次の Human gate は `DEMO-UX-7 Implementation Start GO`。
+Human gate `DEMO-UX-7 Implementation Start GO` は 2026-08-12 に受領済み。
+次の Human gate は Verification / Ready（本sliceでは Ready を要求しない）。
 
 ## Evidence referenced
 

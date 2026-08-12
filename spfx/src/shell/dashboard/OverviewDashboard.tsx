@@ -1,29 +1,32 @@
 import * as React from "react";
 import {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
+  DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   DASHBOARD_OVERVIEW_KPI_NOTE,
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
 } from "./overview-copy";
-import type { ShellOverviewPresentation } from "./overview-types";
+import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "./overview-types";
 import styles from "./DashboardUx.module.scss";
 
 export type OverviewDashboardProps = Readonly<{
   presentation: ShellOverviewPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onReviewDueStateRequest?: () => void;
+  onTodayActionNavigate?: (target: OverviewActionNavigationTarget) => void;
 }>;
 
 /**
  * DASHBOARD-UX-1 overview presentation skeleton.
- * Synthetic fixture only — not connected business UI or live overview data.
- * DEMO-UX-6 may open a synthetic review/due-state preview from this surface.
+ * DEMO-UX-7 enables synthetic today-action navigation only — not save / live I/O.
  */
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   presentation,
   headingRef,
   onReviewDueStateRequest,
+  onTodayActionNavigate,
 }) => {
   const { kpiCards, actionItems, recentRecords } = presentation;
+  const todayActionNavEnabled = Boolean(onTodayActionNavigate);
 
   return (
     <section
@@ -75,7 +78,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           見直し状況
         </h2>
         <p className={styles.sectionHint} data-dashboard-ux="overview-review-due-note">
-          期限接近や確認待ちなどの状態表示を、合成データで確認できます。
+          期限接近や要確認などの状態表示を、合成データで確認できます。
         </p>
         <button
           type="button"
@@ -95,31 +98,46 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           今日やること
         </h2>
         <p className={styles.sectionHint} data-dashboard-ux="overview-action-note">
-          {DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE}
+          {todayActionNavEnabled
+            ? DASHBOARD_OVERVIEW_ACTION_NAV_NOTE
+            : DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE}
         </p>
         <ul className={styles.actionList} data-dashboard-ux="overview-action-list">
-          {actionItems.map((item) => (
-            <li
-              key={item.id}
-              className={styles.actionRow}
-              data-dashboard-ux="overview-action-item"
-              data-dashboard-ux-action-id={item.id}
-            >
-              <div className={styles.actionMain}>
-                <p className={styles.personLabel}>{item.personLabel}</p>
-                <p className={styles.reasonText}>{item.reason}</p>
-              </div>
-              <button
-                type="button"
-                className={styles.actionButton}
-                disabled
-                aria-disabled="true"
-                data-dashboard-ux="overview-action-button"
+          {actionItems.map((item) => {
+            const navigation = item.navigation;
+            const enabled = Boolean(todayActionNavEnabled && navigation);
+            return (
+              <li
+                key={item.id}
+                className={styles.actionRow}
+                data-dashboard-ux="overview-action-item"
+                data-dashboard-ux-action-id={item.id}
+                data-demo-ux-action-nav={navigation?.kind ?? "none"}
               >
-                {item.actionLabel}
-              </button>
-            </li>
-          ))}
+                <div className={styles.actionMain}>
+                  <p className={styles.personLabel}>{item.personLabel}</p>
+                  <p className={styles.reasonText}>{item.reason}</p>
+                </div>
+                <button
+                  type="button"
+                  className={styles.actionButton}
+                  disabled={!enabled}
+                  aria-disabled={!enabled ? "true" : undefined}
+                  data-dashboard-ux="overview-action-button"
+                  data-demo-ux="overview-today-action"
+                  data-demo-ux-today-action={item.id}
+                  data-demo-ux-today-action-enabled={enabled ? "true" : "false"}
+                  onClick={() => {
+                    if (enabled && navigation && onTodayActionNavigate) {
+                      onTodayActionNavigate(navigation);
+                    }
+                  }}
+                >
+                  {item.actionLabel}
+                </button>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
