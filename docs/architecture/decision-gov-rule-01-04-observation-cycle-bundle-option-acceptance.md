@@ -170,7 +170,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual: post-retention deletion Option C Accepted / LOCKED（PR pending）
+next residual: post-retention deletion Option C Accepted / LOCKED（PR #284）
   正本: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
   further residual SELECT: separate Human Decision
 Issue #19 Close: NOT AUTHORIZED

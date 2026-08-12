@@ -30,7 +30,7 @@ Candidate origin:
   Binding before this Decision: NONE（unit）→ now SELECTED by Human
   Prior automatic complete/physical deletion after retention: NOT ADOPTED（UNCHANGED）
 
-Option Acceptance: Accepted / LOCKED / Option C（separate PR pending）
+Option Acceptance: Accepted / LOCKED / Option C（PR #284）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN

@@ -15,7 +15,7 @@ Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-accepta
 Packet: decision-gov-aud-05-dec-012-post-retention-deletion-decision-packet.md
 Parent unit Selection: Decision-GOV-AUD-05-POST-RETENTION-SELECTION-1（PR #283 MERGED）
 Baseline tip: 74bdf0229f7e57c71146e872883223fbc62e33b8
-PR: pending
+PR: #284
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Option status: Accepted / LOCKED / C

@@ -29,7 +29,7 @@ Selected unit:
   GOV-AUD-05 / DEC-012 post-retention deletion
   （5年経過後の完全削除可否）
 
-Concrete Option: Accepted / LOCKED / Option C（separate PR pending）
+Concrete Option: Accepted / LOCKED / Option C（PR #284）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -69,14 +69,14 @@ SELECT post-retention ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 Retention prohibition = Accepted / LOCKED / Option A（UNCHANGED）
 Current residual unit = SELECTED / LOCKED（post-retention deletion）
-Option Acceptance = Accepted / LOCKED / Option C（separate PR pending）
+Option Acceptance = Accepted / LOCKED / Option C（PR #284）
 ```
 
 ## Next
 
 ```text
 Selection PR #283: MERGED
-Option C: Accepted / LOCKED（Option Acceptance PR pending）
+Option C: Accepted / LOCKED（PR #284）
 Next residual SELECT = separate Human Decision
 ```
 

@@ -91,7 +91,7 @@ Consumed on #19 path（do not re-Decision）:
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Prior residual Option = CONSUMED（GOV-RULE-01〜04 bundle recorded；01/04 HOLD open）
-Current residual unit = Accepted / LOCKED / Option C（post-retention deletion；PR pending）
+Current residual unit = Accepted / LOCKED / Option C（post-retention deletion；PR #284）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -128,7 +128,7 @@ Consumed:
   PR #281 GOV-STAFF-06〜12 bundle SELECT + Options = MERGED
   PR #282 GOV-RULE-01〜04 bundle SELECT + Options/HOLD = MERGED
   PR #283 post-retention deletion unit SELECT = MERGED
-  post-retention deletion Option C = Accepted / LOCKED（PR pending）
+  post-retention deletion Option C = Accepted / LOCKED（PR #284）
 
 Next:
   1. post-retention Option C Acceptance PR: IR → Human Ready → Human Merge

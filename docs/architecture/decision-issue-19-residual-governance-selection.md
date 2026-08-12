@@ -264,7 +264,7 @@ Consumed progression:
   GOV-RULE-01〜04 bundle SELECT + Options/HOLD = Accepted / LOCKED（PR #282 MERGED）
     （decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.md）
   post-retention deletion unit SELECT = PR #283 MERGED
-  post-retention deletion Option C = Accepted / LOCKED（PR pending）
+  post-retention deletion Option C = Accepted / LOCKED（PR #284）
     （decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md）
 
 Next:
@@ -419,7 +419,7 @@ Acceptance: decision-gov-rule-01-04-observation-cycle-bundle-option-acceptance.m
 Current residual（unit）:
 
 ```text
-post-retention deletion — Accepted / LOCKED / Option C（PR pending）
+post-retention deletion — Accepted / LOCKED / Option C（PR #284）
 Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
 next residual: NOT SELECTED
 ```

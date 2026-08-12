@@ -23,7 +23,7 @@ Meaning:
   初期版では経過後完全削除の機能自体を持たない
   （可否の実行面を実装しない）
 Baseline tip: 74bdf0229f7e57c71146e872883223fbc62e33b8
-PR: pending（Option C Acceptance / Packet sync / IR）
+PR: #284（Option C Acceptance / Packet sync / IR）
 
 Does NOT mean:
   経過後の完全削除を恒久的に「許可しない」と決めた（それは Option B）
