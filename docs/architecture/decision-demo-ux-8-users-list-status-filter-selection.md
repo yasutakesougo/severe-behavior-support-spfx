@@ -11,8 +11,8 @@ Predecessor: DEMO-UX-7 MERGED（PR #320 / merge 5655fc7；tip 1d7e9a733e03b1f8bf
 Source feedback: RPF-003
 Follow-on queue: RPF-002（DEMO-UX-9 Selection）
 Implementation Start: GO（2026-08-12）— see demo-ux-8-implementation-start.md
-Ready: GO — see demo-ux-8-fresh-review.md（Fresh Review PASS）/ Human Ready GO
-Merge: SUCCESS（PR #321 / aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9）
+Fresh Review: PASS — see demo-ux-8-fresh-review.md
+Ready / Merge: SUCCESS（PR #321 / aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9）
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED
