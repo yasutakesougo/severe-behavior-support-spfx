@@ -2,6 +2,7 @@ import type {
   ApprovedProcedureReference,
   AccessDecision,
   AuthenticatedIdentity,
+  AuthorizationContext,
   DeploymentContext,
   ExecutionRecord,
   LookupResult,
@@ -22,6 +23,15 @@ export interface AccessPolicy {
     context: DeploymentContext;
     identity: LookupResult<AuthenticatedIdentity>;
     requiredRoles: readonly Role[];
+  }): AccessDecision;
+}
+
+/** #21-A pure authorization port — no Graph / Entra / SharePoint I/O. */
+export interface AuthorizationAccessPolicy {
+  evaluate(input: {
+    authorization: LookupResult<AuthorizationContext>;
+    requiredRoles: readonly Role[];
+    context?: DeploymentContext;
   }): AccessDecision;
 }
 

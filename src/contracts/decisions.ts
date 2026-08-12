@@ -1,12 +1,18 @@
 import { validateDeploymentContext, validateExecutionRecord } from "./validation";
 import {
+  AUTHORIZED_SITE_IDS,
+  ASIA_TOKYO_TIME_ZONE,
   type AccessDecision,
   type AuthenticatedIdentity,
+  type AuthorizationContext,
+  type AuthorizedSiteId,
   type DeploymentContext,
   type ExecutionRecord,
   type ExecutionRecordLookupResults,
   type LookupResult,
   type Role,
+  type SiteContext,
+  type SiteMembership,
   type SubmissionDecision,
 } from "./types";
 
@@ -25,6 +31,34 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === "string" && value.trim().length > 0;
+
+export const isAuthorizedSiteId = (value: unknown): value is AuthorizedSiteId =>
+  typeof value === "string" && (AUTHORIZED_SITE_IDS as readonly string[]).includes(value);
+
+const isSiteMembershipShape = (value: unknown): value is SiteMembership => {
+  if (!isRecord(value)) return false;
+  if (!isAuthorizedSiteId(value.SiteId)) return false;
+  if (!Array.isArray(value.Roles)) return false;
+  // Role enum validity is enforced by evaluateAccess (UNKNOWN_ROLE); do not remap.
+  return value.Roles.every((role) => typeof role === "string");
+};
+
+const isSiteContext = (value: unknown): value is SiteContext => {
+  if (!isRecord(value)) return false;
+  if (!Array.isArray(value.Memberships)) return false;
+  if (!value.Memberships.every(isSiteMembershipShape)) return false;
+  if (value.SelectedSiteId !== null && typeof value.SelectedSiteId !== "string") return false;
+  return true;
+};
+
+const isAuthorizationContext = (value: unknown): value is AuthorizationContext => {
+  if (!isRecord(value)) return false;
+  if (!isNonEmptyString(value.Subject)) return false;
+  if (!isNonEmptyString(value.UserId)) return false;
+  if (!isNonEmptyString(value.OrganizationId)) return false;
+  if (!isSiteContext(value.SiteContext)) return false;
+  return true;
+};
 
 export const evaluateAccess = (input: {
   context: DeploymentContext;
@@ -66,6 +100,71 @@ export const evaluateAccess = (input: {
     return { decision: "DENY", reason: "ROLE_NOT_ALLOWED" };
   }
   return { decision: "ALLOW", reason: "ROLE_ALLOWED" };
+};
+
+/**
+ * #21-A Authorization / SiteContext pure contract.
+ * Resolves an authorized current site from explicit selection + memberships,
+ * then reuses evaluateAccess for role / org / site fail-closed checks.
+ *
+ * Never infers SelectedSiteId from membership array order or sole membership.
+ * Never infers roles from display name, email, URL, or SharePoint path.
+ */
+export const evaluateAuthorizationAccess = (input: {
+  authorization: LookupResult<AuthorizationContext>;
+  requiredRoles: readonly Role[];
+  context?: DeploymentContext;
+}): AccessDecision => {
+  if (input.authorization.status === "EMPTY") return { decision: "DENY", reason: "AUTH_EMPTY" };
+  if (input.authorization.status === "UNKNOWN") return { decision: "DENY", reason: "AUTH_UNKNOWN" };
+  if (input.authorization.status === "FETCH_FAILED")
+    return { decision: "DENY", reason: "AUTH_FETCH_FAILED" };
+
+  const raw: unknown = input.authorization.value;
+  if (!isAuthorizationContext(raw)) {
+    if (!isRecord(raw)) return { decision: "DENY", reason: "INVALID_IDENTITY" };
+    if (!isNonEmptyString(raw.Subject)) return { decision: "DENY", reason: "INVALID_IDENTITY" };
+    if (!isNonEmptyString(raw.UserId) || !isNonEmptyString(raw.OrganizationId)) {
+      return { decision: "DENY", reason: "INVALID_IDENTITY" };
+    }
+    return { decision: "DENY", reason: "INVALID_CONTEXT" };
+  }
+
+  const authorization = raw;
+  const selectedSiteId = authorization.SiteContext.SelectedSiteId;
+  if (selectedSiteId === null || selectedSiteId.trim().length === 0) {
+    return { decision: "DENY", reason: "SITE_SELECTION_REQUIRED" };
+  }
+  if (!isAuthorizedSiteId(selectedSiteId)) {
+    return { decision: "DENY", reason: "INVALID_CONTEXT" };
+  }
+
+  // Explicit membership match only — never Memberships[0] / array-order inference.
+  const membership = authorization.SiteContext.Memberships.find(
+    (item) => item.SiteId === selectedSiteId,
+  );
+  if (membership === undefined) {
+    return { decision: "DENY", reason: "SITE_NOT_IN_MEMBERSHIP" };
+  }
+
+  const deploymentContext: DeploymentContext = input.context ?? {
+    OrganizationId: authorization.OrganizationId,
+    SiteId: selectedSiteId,
+    TimeZone: ASIA_TOKYO_TIME_ZONE,
+  };
+
+  const identity: AuthenticatedIdentity = {
+    Subject: authorization.Subject,
+    OrganizationId: authorization.OrganizationId,
+    SiteId: selectedSiteId,
+    Roles: membership.Roles,
+  };
+
+  return evaluateAccess({
+    context: deploymentContext,
+    identity: { status: "FOUND", value: identity },
+    requiredRoles: input.requiredRoles,
+  });
 };
 
 const sameProcedure = (

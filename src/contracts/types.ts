@@ -12,6 +12,10 @@ export type Role =
   | "SYSTEM_ADMIN"
   | "VIEWER";
 
+/** Authorized SiteId tokens for #21-A synthetic / contract fixtures. */
+export const AUTHORIZED_SITE_IDS = ["SITE-ISG", "SITE-HOM"] as const;
+export type AuthorizedSiteId = (typeof AUTHORIZED_SITE_IDS)[number];
+
 export type DeploymentContext = Readonly<{
   OrganizationId: string;
   SiteId: string;
@@ -23,6 +27,36 @@ export type AuthenticatedIdentity = Readonly<{
   OrganizationId: string;
   SiteId: string;
   Roles: readonly Role[];
+}>;
+
+/**
+ * Site membership is independent of current selection.
+ * Roles are per-site; never inferred from display name / email / URL / path.
+ */
+export type SiteMembership = Readonly<{
+  SiteId: string;
+  Roles: readonly Role[];
+}>;
+
+/**
+ * SiteContext authorization truth (#21-A).
+ * SelectedSiteId must be explicit; never inferred from membership order.
+ */
+export type SiteContext = Readonly<{
+  Memberships: readonly SiteMembership[];
+  /** Explicit current site; null means unselected. */
+  SelectedSiteId: string | null;
+}>;
+
+/**
+ * AuthorizationContext (#21-A).
+ * UserId, SiteId, and OrganizationId remain distinct identifiers.
+ */
+export type AuthorizationContext = Readonly<{
+  Subject: string;
+  UserId: string;
+  OrganizationId: string;
+  SiteContext: SiteContext;
 }>;
 
 export type ApprovedProcedureReference = Readonly<{
@@ -77,6 +111,8 @@ export type AccessDecision =
         | "INVALID_IDENTITY"
         | "ORGANIZATION_MISMATCH"
         | "SITE_MISMATCH"
+        | "SITE_SELECTION_REQUIRED"
+        | "SITE_NOT_IN_MEMBERSHIP"
         | "NO_REQUIRED_ROLE"
         | "UNKNOWN_ROLE"
         | "ROLE_NOT_ALLOWED";

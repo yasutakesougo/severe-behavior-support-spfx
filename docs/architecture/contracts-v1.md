@@ -35,6 +35,30 @@ VIEWER
 
 未知のRoleはidentity側とrequiredRoles側のどちらに含まれる場合もfail-closedで拒否する。
 
+## Authorization / SiteContext（#21-A）
+
+`AuthorizationContext` / `SiteContext` は認可真理値の純契約である（#28 display-only とは分離）。
+
+```text
+AuthorizationContext:
+  Subject
+  UserId          （SiteId と分離）
+  OrganizationId
+  SiteContext:
+    Memberships[]  （SiteId + Roles；選択とは独立）
+    SelectedSiteId （明示選択のみ；null = 未選択）
+```
+
+規則:
+
+- 許可 SiteId token は `SITE-ISG` / `SITE-HOM` のみ（fixture / schema）。
+- `SelectedSiteId` を membership 配列順や先頭要素から推論しない。
+- 単一所属でも未選択なら `SITE_SELECTION_REQUIRED`。
+- 選択サイトが Memberships に無い場合は `SITE_NOT_IN_MEMBERSHIP`。
+- Role を display name / email / URL / SharePoint path から推論しない。
+- `evaluateAuthorizationAccess` はサイト解決後に既存 `evaluateAccess` を再利用する。
+- Graph / Entra / SharePoint I/O は含めない。
+
 ## 命名境界
 
 contractsで使用するTypeScriptプロパティ名は、JSON契約の正本として扱う。
