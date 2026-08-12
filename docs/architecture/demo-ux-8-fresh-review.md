@@ -10,10 +10,11 @@ PR tip HEAD: d248ea1f76d5f689e19ef993544336e0c6639772
 Selection: Decision-DEMO-UX-8-USERS-LIST-STATUS-FILTER-1
 Implementation Start: demo-ux-8-implementation-start.md
 Browser smoke: demo-ux-8-browser-smoke.md
-Status: PASS
+Status: PASS → predecessor MERGED / COMPLETE（PR #321 / aed5b05）
 Findings: P0 = 0 / P1 = 0 / P2 = 1 OPEN（non-blocking）
-Human Ready: NOT AUTHORIZED（separate gate）
-Merge / Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
+Human Ready: GO（merged）
+Merge: SUCCESS（aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9）
+Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
 RPF-002 Implementation Start: NOT AUTHORIZED
 ```
 
