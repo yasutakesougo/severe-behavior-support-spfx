@@ -9,7 +9,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Evidence → Decision traceability（docs-only）
 Bundle: GOV-RULE-01 / 04 Evidence Bundle
 Baseline tip: 9588805ba3b9683efb4a2db5472e5a595c3c0f6e
-PR: pending
+PR: #287
 ```
 
 ## Trace matrix

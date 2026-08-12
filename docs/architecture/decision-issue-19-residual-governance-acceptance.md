@@ -92,7 +92,7 @@ OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Prior residual Option = CONSUMED（GOV-RULE-01〜04 bundle recorded；01 LIFT CANDIDATE / 04 HOLD via Evidence Bundle）
 Prior residual = GOV-PERF HOLD Resolution（PR #286 MERGED）
-Current residual bundle = SELECTED / LOCKED（GOV-RULE-01/04 Evidence；01 LIFT CANDIDATE；04 HOLD UNCHANGED；PR pending）
+Current residual bundle = SELECTED / LOCKED（GOV-RULE-01/04 Evidence；01 LIFT CANDIDATE；04 HOLD UNCHANGED；PR #287）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -132,7 +132,7 @@ Consumed:
   PR #284 post-retention deletion Option C = MERGED
   PR #285 GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED
   PR #286 GOV-PERF HOLD Resolution Bundle = MERGED（解除 NOT PERFORMED）
-  GOV-RULE-01 / 04 Evidence Bundle = SELECTED（PR pending）
+  GOV-RULE-01 / 04 Evidence Bundle = SELECTED（PR #287）
 
 Next:
   1. GOV-RULE-01 / 04 Evidence Bundle PR: IR → Human Ready → Human Merge

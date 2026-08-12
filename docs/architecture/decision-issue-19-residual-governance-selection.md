@@ -271,7 +271,7 @@ Consumed progression:
     （decision-gov-perf-01-11-performance-bundle-option-acceptance.md）
   GOV-PERF HOLD Resolution Bundle = MERGED（PR #286）
     （decision-gov-perf-hold-resolution-bundle-selection.md；02/06/07/08/09 HOLD UNCHANGED）
-  GOV-RULE-01 / 04 Evidence Bundle = SELECTED（PR pending）
+  GOV-RULE-01 / 04 Evidence Bundle = SELECTED（PR #287）
     （decision-gov-rule-01-04-evidence-bundle-selection.md；01 LIFT CANDIDATE；04 HOLD UNCHANGED）
 
 Next:
@@ -448,7 +448,7 @@ Selection: decision-gov-perf-hold-resolution-bundle-selection.md
 Current residual（bundle）:
 
 ```text
-SELECT GOV-RULE-01 / 04 Evidence Bundle（PR pending）
+SELECT GOV-RULE-01 / 04 Evidence Bundle（PR #287）
   GOV-RULE-01 = HOLD LIFT CANDIDATE（≠ Accepted）
   GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY）
 Selection: decision-gov-rule-01-04-evidence-bundle-selection.md

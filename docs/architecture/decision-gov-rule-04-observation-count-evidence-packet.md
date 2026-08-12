@@ -19,7 +19,7 @@ Prior status: SELECTED / LOCKED / HOLD（PR #282）
 Owner: Issue #19
 Agent recommendation: NONE
 Count invention: FORBIDDEN
-PR: pending
+PR: #287
 ```
 
 ## 1. Evidence conclusion（Human Direction）

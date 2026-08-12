@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-RULE-01 / 04 Evidence Bundle
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 9588805ba3b9683efb4a2db5472e5a595c3c0f6e
-PR: pending
+PR: #287
 
 Selected:
   GOV-RULE-01 / 04 Evidence Bundle（MHLW primary-source framed packets）

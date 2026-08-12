@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Evidence Bundle）
 Units: GOV-RULE-01 / GOV-RULE-04
 Human Decision: SELECT GOV-RULE-01 / 04 Evidence Bundle
 Baseline tip: 9588805ba3b9683efb4a2db5472e5a595c3c0f6e
-PR: pending
+PR: #287
 Selection: decision-gov-rule-01-04-evidence-bundle-selection.md
 SELECT Acceptance: decision-gov-rule-01-04-evidence-bundle-acceptance.md
 RULE-01 Evidence: decision-gov-rule-01-evaluation-cycle-evidence-packet.md

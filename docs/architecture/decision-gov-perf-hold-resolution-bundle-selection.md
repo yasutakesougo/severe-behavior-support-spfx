@@ -84,7 +84,7 @@ All five remain HOLD / UNCHANGED after this Selection
 
 ```text
 This PR: MERGED（PR #286）
-next residual: Human SELECTED GOV-RULE-01 / 04 Evidence Bundle（PR pending）
+next residual: Human SELECTED GOV-RULE-01 / 04 Evidence Bundle（PR #287）
   正本: decision-gov-rule-01-04-evidence-bundle-selection.md
 PERF HOLD解除 Acceptance = separate Human Decision
 next residual auto-select = FORBIDDEN

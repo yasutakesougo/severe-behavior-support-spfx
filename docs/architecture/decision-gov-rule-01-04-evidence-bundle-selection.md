@@ -14,7 +14,7 @@ Kind: Human Selection（#19 residual / RULE-01/04 Evidence Bundle）
 Status: SELECTED / LOCKED（bundle GO boundary）
 Human Decision: SELECT GOV-RULE-01 / 04 Evidence Bundle
 Date: 2026-08-12
-PR: pending（Selection / Evidence Packets / traceability / IR）
+PR: #287（Selection / Evidence Packets / traceability / IR）
 
 Baseline:
   main tip = 9588805ba3b9683efb4a2db5472e5a595c3c0f6e
