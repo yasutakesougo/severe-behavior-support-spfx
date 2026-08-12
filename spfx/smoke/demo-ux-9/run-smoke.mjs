@@ -153,9 +153,13 @@ await runCase(
       const selected = document.querySelector(
         '[data-demo-ux-incomplete-id="incomplete-a"][data-demo-ux-incomplete-selected="true"]',
       );
-      const mutations = [...document.querySelectorAll('[data-demo-ux="daily-record-mutation-button"]')];
+      const mutations = [
+        ...document.querySelectorAll('[data-demo-ux="daily-record-mutation-button"]'),
+      ];
       const recent = document.querySelectorAll('[data-demo-ux="daily-record-recent-item"]');
-      const headings = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim() ?? "");
+      const headings = [...document.querySelectorAll("h2")].map(
+        (el) => el.textContent?.trim() ?? "",
+      );
       const text = document.body?.textContent ?? "";
       return {
         pass:
@@ -216,18 +220,15 @@ await runCase(
   `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=records`,
   async (page) => {
     const marker = "SMOKE_LOCAL_DRAFT_MARKER_NOT_PERSISTED";
-    await page.click('[data-demo-ux="daily-record-input-draft"]');
-    await page.evaluate((text) => {
+    await page.focus('[data-demo-ux="daily-record-input-draft"]');
+    await page.evaluate(() => {
       const draft = document.querySelector('[data-demo-ux="daily-record-input-draft"]');
       if (!(draft instanceof HTMLTextAreaElement)) {
         throw new Error("draft missing");
       }
-      const setter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value")
-        ?.set;
-      setter?.call(draft, text);
-      draft.dispatchEvent(new Event("input", { bubbles: true }));
-      draft.dispatchEvent(new Event("change", { bubbles: true }));
-    }, marker);
+      draft.select();
+    });
+    await page.keyboard.type(marker, { delay: 0 });
     const beforeLeave = await page.evaluate(() => {
       const draft = document.querySelector('[data-demo-ux="daily-record-input-draft"]');
       return draft instanceof HTMLTextAreaElement ? draft.value : "";
@@ -237,20 +238,26 @@ await runCase(
       Boolean(document.querySelector('[data-dashboard-ux="overview-dashboard"]')),
     );
     await page.click('[data-shell-ux-nav="records"]');
-    await page.waitForFunction(() => Boolean(document.querySelector('[data-demo-ux="daily-records"]')));
-    return page.evaluate((editedBefore, markerText) => {
-      const draft = document.querySelector('[data-demo-ux="daily-record-input-draft"]');
-      const value = draft instanceof HTMLTextAreaElement ? draft.value : "";
-      return {
-        pass:
-          editedBefore.includes(markerText) &&
-          !value.includes(markerText) &&
-          value.includes("Aさん") &&
-          value.includes("未保存"),
-        editedBefore: editedBefore.slice(0, 48),
-        afterReturn: value.slice(0, 48),
-      };
-    }, beforeLeave, marker);
+    await page.waitForFunction(() =>
+      Boolean(document.querySelector('[data-demo-ux="daily-records"]')),
+    );
+    return page.evaluate(
+      (editedBefore, markerText) => {
+        const draft = document.querySelector('[data-demo-ux="daily-record-input-draft"]');
+        const value = draft instanceof HTMLTextAreaElement ? draft.value : "";
+        return {
+          pass:
+            editedBefore.includes(markerText) &&
+            !value.includes(markerText) &&
+            value.includes("Aさん") &&
+            value.includes("未保存"),
+          editedBefore: editedBefore.slice(0, 48),
+          afterReturn: value.slice(0, 48),
+        };
+      },
+      beforeLeave,
+      marker,
+    );
   },
 );
 

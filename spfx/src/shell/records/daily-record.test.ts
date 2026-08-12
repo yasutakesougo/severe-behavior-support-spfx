@@ -61,9 +61,10 @@ describe("DEMO-UX-9 daily record experience", () => {
 
   it("resolves incomplete items by id without growing the fixture set", () => {
     expect(DEMO_UX_DAILY_RECORD_FIXTURE.incompleteItems).toHaveLength(2);
-    expect(findIncompleteItemById(DEMO_UX_DAILY_RECORD_FIXTURE.incompleteItems, "incomplete-a")?.personLabel).toBe(
-      "Aさん",
-    );
+    expect(
+      findIncompleteItemById(DEMO_UX_DAILY_RECORD_FIXTURE.incompleteItems, "incomplete-a")
+        ?.personLabel,
+    ).toBe("Aさん");
     expect(
       findIncompleteItemById(DEMO_UX_DAILY_RECORD_FIXTURE.incompleteItems, "missing"),
     ).toBeUndefined();

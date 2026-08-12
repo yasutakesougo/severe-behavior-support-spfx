@@ -24,14 +24,8 @@ export type DailyRecordsProps = Readonly<{
  * DEMO-UX-9 adds incomplete selection → local draft input image (no save).
  */
 export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headingRef }) => {
-  const {
-    heading,
-    inputPrompt,
-    incompleteItems,
-    recentRecords,
-    businessFacts,
-    systemState,
-  } = presentation;
+  const { heading, inputPrompt, incompleteItems, recentRecords, businessFacts, systemState } =
+    presentation;
 
   const defaultIncompleteId = incompleteItems[0]?.id;
   const [selectedIncompleteId, setSelectedIncompleteId] = React.useState<string | undefined>(
@@ -172,7 +166,11 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         </p>
         <ol className={styles.timeline} data-demo-ux="daily-record-recent-list">
           {recentRecords.map((record) => (
-            <li key={record.id} className={styles.timelineItem} data-demo-ux="daily-record-recent-item">
+            <li
+              key={record.id}
+              className={styles.timelineItem}
+              data-demo-ux="daily-record-recent-item"
+            >
               <div className={styles.recordMeta}>
                 <strong>{record.personLabel}</strong>
                 <span>{record.recordedAtLabel}</span>
