@@ -5,10 +5,13 @@ import {
   type ShellOverviewPresentation,
 } from "../dashboard";
 import {
+  DEMO_UX_SUPPORT_PLAN_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_USERS_FIXTURE,
+  SupportPlan,
   UserDetail,
   UsersList,
+  type ShellSupportPlanPresentation,
   type ShellUserDetailPresentation,
   type ShellUsersPresentation,
 } from "../users";
@@ -59,6 +62,7 @@ export type AppShellChromeProps = Readonly<{
   overviewPresentation?: ShellOverviewPresentation;
   usersPresentation?: ShellUsersPresentation;
   userDetailPresentation?: ShellUserDetailPresentation;
+  supportPlanPresentation?: ShellSupportPlanPresentation;
   children?: React.ReactNode;
 }>;
 
@@ -83,6 +87,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     overviewPresentation = DASHBOARD_UX_OVERVIEW_FIXTURE,
     usersPresentation = DEMO_UX_USERS_FIXTURE,
     userDetailPresentation = DEMO_UX_USER_DETAIL_FIXTURE,
+    supportPlanPresentation = DEMO_UX_SUPPORT_PLAN_FIXTURE,
     children,
   } = props;
 
@@ -91,6 +96,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     selectedDestinationProp ?? SHELL_DEFAULT_DESTINATION,
   );
   const [selectedUserDetailId, setSelectedUserDetailId] = React.useState<string | undefined>();
+  const [supportPlanPreviewOpen, setSupportPlanPreviewOpen] = React.useState(false);
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
 
@@ -105,10 +111,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   }, [selectedDestinationProp]);
 
   React.useEffect(() => {
-    if (destination !== "users" && selectedUserDetailId !== undefined) {
-      setSelectedUserDetailId(undefined);
+    if (destination !== "users") {
+      if (selectedUserDetailId !== undefined) {
+        setSelectedUserDetailId(undefined);
+      }
+      if (supportPlanPreviewOpen) {
+        setSupportPlanPreviewOpen(false);
+      }
     }
-  }, [destination, selectedUserDetailId]);
+  }, [destination, selectedUserDetailId, supportPlanPreviewOpen]);
 
   React.useEffect(() => {
     if (!shouldFocusDestinationRef.current) {
@@ -116,7 +127,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = false;
     destinationHeadingRef.current?.focus();
-  }, [destination, selectedUserDetailId]);
+  }, [destination, selectedUserDetailId, supportPlanPreviewOpen]);
 
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
@@ -127,8 +138,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
     if (next === destination) {
-      if (next === "users" && selectedUserDetailId !== undefined) {
+      if (next === "users" && (selectedUserDetailId !== undefined || supportPlanPreviewOpen)) {
         shouldFocusDestinationRef.current = true;
+        setSupportPlanPreviewOpen(false);
         setSelectedUserDetailId(undefined);
         return;
       }
@@ -136,6 +148,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
     setSelectedUserDetailId(undefined);
     setDestination(next);
     if (onSelectedDestinationChange) {
@@ -148,12 +161,27 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
     setSelectedUserDetailId(userId);
   };
 
   const handleBackToUsers = (): void => {
     shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
     setSelectedUserDetailId(undefined);
+  };
+
+  const handleSupportPlanRequest = (): void => {
+    if (selectedUserDetailId !== supportPlanPresentation.userId) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(true);
+  };
+
+  const handleBackToUserDetail = (): void => {
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
   };
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
@@ -172,6 +200,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-unauthenticated={unauthenticated ? "true" : "false"}
       data-shell-ux-destination={destination}
       data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
+      data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
     >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
@@ -269,11 +298,21 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               />
             ) : destination === "users" ? (
               selectedUserDetailId === userDetailPresentation.userId ? (
-                <UserDetail
-                  presentation={userDetailPresentation}
-                  headingRef={destinationHeadingRef}
-                  onBackToUsers={handleBackToUsers}
-                />
+                supportPlanPreviewOpen &&
+                supportPlanPresentation.userId === selectedUserDetailId ? (
+                  <SupportPlan
+                    presentation={supportPlanPresentation}
+                    headingRef={destinationHeadingRef}
+                    onBackToUserDetail={handleBackToUserDetail}
+                  />
+                ) : (
+                  <UserDetail
+                    presentation={userDetailPresentation}
+                    headingRef={destinationHeadingRef}
+                    onBackToUsers={handleBackToUsers}
+                    onSupportPlanRequest={handleSupportPlanRequest}
+                  />
+                )
               ) : (
                 <UsersList
                   presentation={usersPresentation}

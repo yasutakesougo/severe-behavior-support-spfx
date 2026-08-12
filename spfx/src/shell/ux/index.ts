@@ -12,14 +12,21 @@ export {
   DEMO_UX_USERS_FIXTURE,
   DEMO_UX_3_SLICE,
   DEMO_UX_USER_DETAIL_FIXTURE,
+  DEMO_UX_4_SLICE,
+  DEMO_UX_SUPPORT_PLAN_FIXTURE,
   UsersList,
   UserDetail,
+  SupportPlan,
   usersCopyIsFailClosed,
+  supportPlanCopyIsFailClosed,
   DEMO_USERS_PRESENTATION_NOTE,
+  DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
   type ShellUsersPresentation,
   type ShellUserDetailPresentation,
+  type ShellSupportPlanPresentation,
   type UsersListProps,
   type UserDetailProps,
+  type SupportPlanProps,
 } from "../users";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
