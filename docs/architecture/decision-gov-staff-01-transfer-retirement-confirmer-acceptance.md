@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-STAFF-01
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: befd8460d03e2085583a328882d60f045916ea8f
-PR: pending（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
+PR: #274（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
 
 Selected unit:
   GOV-STAFF-01 — 異動・退職情報の確定者

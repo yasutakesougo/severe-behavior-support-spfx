@@ -13,7 +13,7 @@ Unit: GOV-STAFF-01（異動・退職情報の確定者）
 Human Decision: SELECT GOV-STAFF-01 + Option C
   （事業所管理者が起票し、法人担当が確定）
 Baseline tip: befd8460d03e2085583a328882d60f045916ea8f
-PR: pending
+PR: #274
 Selection: decision-gov-staff-01-transfer-retirement-confirmer-selection.md
 SELECT Acceptance: decision-gov-staff-01-transfer-retirement-confirmer-acceptance.md
 Decision Packet: decision-gov-staff-01-transfer-retirement-confirmer-decision-packet.md

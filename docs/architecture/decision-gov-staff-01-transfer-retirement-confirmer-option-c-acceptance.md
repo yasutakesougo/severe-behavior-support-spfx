@@ -22,7 +22,7 @@ Meaning:
   異動・退職情報の確定 =
     事業所管理者が起票し、法人担当が確定
 Baseline tip: befd8460d03e2085583a328882d60f045916ea8f
-PR: pending（Selection / Option C Acceptance / Packet sync / IR）
+PR: #274（Selection / Option C Acceptance / Packet sync / IR）
 
 Does NOT mean:
   起票/確定 UI・ワークフロー・チェックリストの発明
