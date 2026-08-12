@@ -91,8 +91,8 @@ Consumed on #19 path（do not re-Decision）:
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Prior residual Option = CONSUMED（GOV-RULE-01〜04 bundle recorded；01/04 HOLD open）
-Prior residual = post-retention deletion Accepted / LOCKED / Option C（PR #284 MERGED）
-Current residual bundle = SELECTED / LOCKED（GOV-PERF-01〜11；Options/HOLD recorded；PR #285）
+Prior residual = GOV-PERF-01〜11 Options/HOLD（PR #285 MERGED）
+Current residual bundle = SELECTED / LOCKED（GOV-PERF HOLD Resolution；02/06/07/08/09 HOLD UNCHANGED；PR pending）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -130,15 +130,15 @@ Consumed:
   PR #282 GOV-RULE-01〜04 bundle SELECT + Options/HOLD = MERGED
   PR #283 post-retention deletion unit SELECT = MERGED
   PR #284 post-retention deletion Option C = MERGED
-  GOV-PERF-01〜11 bundle SELECT + Options/HOLD = recorded（PR #285）
+  PR #285 GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED
+  GOV-PERF HOLD Resolution Bundle = SELECTED（PR pending；解除 NOT PERFORMED）
 
 Next:
-  1. GOV-PERF-01〜11 bundle PR: IR → Human Ready → Human Merge
-  2. After Merge: next residual SELECT（one item；no Agent auto-advance）
-  3. GOV-PERF HOLD 解除（02/06/07/08/09） remains separate / NOT auto
-  4. GOV-RULE-01 / 04 HOLD 解除 remains separate / NOT auto
-  5. DEC-015 ledger sync remains separate / NOT auto-Accepted
-  6. #19 Close remains later / separate Human disposition
+  1. GOV-PERF HOLD Resolution Bundle PR: IR → Human Ready → Human Merge
+  2. After Merge: HOLD解除 Acceptance = separate / NOT auto
+  3. GOV-RULE-01 / 04 HOLD 解除 remains separate / NOT auto
+  4. DEC-015 ledger sync remains separate / NOT auto-Accepted
+  5. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference
