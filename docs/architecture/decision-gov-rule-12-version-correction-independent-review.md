@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-RULE-12（過去ルール版の訂正）
 Human Decision: SELECT GOV-RULE-12（unit）
 Baseline tip: fb71d4cec05f7d1edfb27c3aacb8a894b1dc5fc8
-PR: pending
+PR: #272
 Selection: decision-gov-rule-12-version-correction-selection.md
 SELECT Acceptance: decision-gov-rule-12-version-correction-acceptance.md
 Decision Packet: decision-gov-rule-12-version-correction-decision-packet.md

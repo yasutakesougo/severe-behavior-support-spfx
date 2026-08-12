@@ -23,7 +23,7 @@ Human Decision: SELECT GOV-RULE-12
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: fb71d4cec05f7d1edfb27c3aacb8a894b1dc5fc8
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #272（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-RULE-12 — 過去ルール版の訂正
