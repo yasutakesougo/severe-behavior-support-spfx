@@ -101,35 +101,30 @@ SPFx Heft test: PASS（70 / 70）
 browser smoke demo-ux-7: PASS（7 / 7）
 ```
 
-## Gate state（updated after Human Ready GO）
+## Gate state（updated after Merge SUCCESS）
 
 ```text
 DEMO-UX-7 Implementation = COMPLETE
 Verification = PASS
 Fresh Review = PASS（P0=0 / P1=0）
 Human Ready = GO
-PR #320 = OPEN / Ready for Review（draft=false）
-Implementation verified HEAD = 5747af43d705b647d6b23fb91f337e396896a365
-PR tip HEAD = d6b9b19801a78b79fc67872e7672bfedcb8310f4
-Note: tip contains docs-only commits after implementation HEAD; 5747af4 is ancestor
-mergeable = MERGEABLE
-mergeStateStatus = CLEAN
-CI = SUCCESS（Verify contracts, skills, and scope）
-submitted GitHub review objects = 0（Fresh Review evidence is docs artifact）
-Human Merge = HOLD
+Human Merge = GO
+PR #320 = MERGED
+Merge commit = 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
+Expected tip in merge = 1d7e9a733e03b1f8bffead2353b2209bd423f3df
+DEMO-UX-7 = MERGED / COMPLETE
 ```
 
 Next:
 
 ```text
-1. Ready = GO（complete）
-2. Human Merge Decision（GO / HOLD）— separate
+1. DEMO-UX-8 / RPF-003 Selection = SELECTED / LOCKED（this follow-on）
+2. DEMO-UX-8 Implementation Start = NOT AUTHORIZED（separate Human Decision）
 ```
 
 Still NOT AUTHORIZED:
 
 ```text
-Merge
 Deploy
 SharePoint write
 #299 Close
@@ -137,19 +132,17 @@ RPF-003 Implementation Start
 RPF-002 Implementation Start
 ```
 
-Next queue（after Merge of this slice, separately authorized）:
+Next queue:
 
 ```text
-RPF-003 → RPF-002
+DEMO-UX-8（RPF-003）→ RPF-002
 ```
 
 ## Non-claims
 
 ```text
-Implementation COMPLETE ≠ Ready GO
-Verification PASS ≠ Review PASS
-This completion ≠ Merge GO
+DEMO-UX-7 MERGED ≠ RPF-003 Implementation Start
+DEMO-UX-7 MERGED ≠ RPF-002 Implementation Start
 This completion ≠ #299 Close
-This completion ≠ RPF-003 / RPF-002 authorization
-DEMO-UX-7 is at the review gate, not blocked by missing implementation
+This completion ≠ Deploy / SharePoint write
 ```
