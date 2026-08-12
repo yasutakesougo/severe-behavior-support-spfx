@@ -9,6 +9,9 @@ Date: 2026-08-12
 Implementation Start: demo-ux-5-implementation-start.md
 Baseline tip: 88e9711（DEMO-UX-4 merge）
 PR: #310
+HEAD: 4c86906907ad4d27f45269f44e014fa174ad9b7f
+Contracts CI: SUCCESS（run 31593162681）
+Evidence Refresh: GO（2026-08-12）
 
 Parent: #299 RESPONSIBLE-PERSON-DEMO-V1
 

@@ -7,13 +7,16 @@ Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-5-DAILY-RECORD-PRESENTATION-1）
 Human Implementation Start: GO（2026-08-12）
 Human Verification: GO（2026-08-12）
+Human Verification Evidence Refresh: GO（2026-08-12）
 Depends on: DEMO-UX-4 MERGED / COMPLETE（PR #308）
 Baseline main: 88e9711ad015d7ed9dd73395506b81bf8cf2ed9e
 Selection commit: 41d6c26e528782e8cfcb198214b512f450716982（PR #309 branch）
 Branch: chatgpt/demo-ux-5-daily-record
 PR: #310
+HEAD: 4c86906907ad4d27f45269f44e014fa174ad9b7f
 Browser smoke: PASS / VERIFIED（demo-ux-5-browser-smoke.md）
 Heft test: 56 / 56 PASS
+Contracts CI: SUCCESS（run 31593162681）
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -25,7 +28,9 @@ Human instruction `DEMO-UX-5 Implementation Start GO` authorizes this presentati
 
 Human instruction `PR #310 Verification GO` authorizes local verification evidence recording for this Draft PR.
 
-Selection / Implementation Start / Verification do not authorize Ready, Merge, live I/O, record mutation, or Production deploy.
+Human instruction `PR #310 Verification Evidence Refresh GO` authorizes syncing PR body / evidence docs to the verified HEAD CI snapshot only.
+
+Selection / Implementation Start / Verification / Evidence Refresh do not authorize Ready, Merge, live I/O, record mutation, or Production deploy.
 
 ## Authorized IN
 
@@ -100,7 +105,10 @@ Unit test source: added
 Local Heft build/test: PASS（56 / 56）
 Browser smoke: PASS / VERIFIED（5 / 5）
 Format check: PASS
-GitHub CI contracts: PASS on head before verification commit（evaluate again after push）
+GitHub CI contracts: SUCCESS
+  HEAD: 4c86906907ad4d27f45269f44e014fa174ad9b7f
+  run: 31593162681
+Evidence Refresh: PR body synced to HEAD CI（P2 drift closed）
 ```
 
 ## Delivered surface
