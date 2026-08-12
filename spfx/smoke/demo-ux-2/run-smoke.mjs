@@ -16,16 +16,13 @@ const artifactsDir = "/opt/cursor/artifacts/demo-ux-2-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js");
-const puppeteerModule = await import(
-  "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
-);
+const puppeteerModule =
+  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js");
 const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs");
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 const compileScss =
-  sassModule.compile ??
-  sassModule.default?.compile ??
-  (await import("sass")).compile;
+  sassModule.compile ?? sassModule.default?.compile ?? (await import("sass")).compile;
 
 const shellUxScssPath = path.join(repoRoot, "src/shell/ux/ShellUx.module.scss");
 const dashboardUxScssPath = path.join(repoRoot, "src/shell/dashboard/DashboardUx.module.scss");
@@ -66,7 +63,8 @@ const productionCssChecks = {
   userRowDesktopColumns: cssRuleContains(productionCss, "userRow", [
     "grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;",
   ]),
-  userRowTabletStack: productionCss.includes("@media (max-width: 768px)") &&
+  userRowTabletStack:
+    productionCss.includes("@media (max-width: 768px)") &&
     /\.userRow\s*\{[^}]*grid-template-columns:\s*1fr;/s.test(productionCss),
 };
 
@@ -158,15 +156,14 @@ function assertUsersList(expectedRowColumns) {
   const placeholder = document.querySelector('[data-shell-ux="destination-placeholder"]');
   const overview = document.querySelector('[data-dashboard-ux="overview-dashboard"]');
   const text = document.body?.textContent ?? "";
-  const slice = document
-    .querySelector("[data-demo-ux-slice]")
-    ?.getAttribute("data-demo-ux-slice");
+  const slice = document.querySelector("[data-demo-ux-slice]")?.getAttribute("data-demo-ux-slice");
   const stylesheetLinks = [...document.querySelectorAll('link[rel="stylesheet"]')].map(
     (link) => link.getAttribute("href") ?? "",
   );
   const firstRow = document.querySelector('[data-demo-ux="users-row"]');
   const rowStyle = firstRow instanceof HTMLElement ? window.getComputedStyle(firstRow) : null;
-  const usersListStyle = usersList instanceof HTMLElement ? window.getComputedStyle(usersList) : null;
+  const usersListStyle =
+    usersList instanceof HTMLElement ? window.getComputedStyle(usersList) : null;
   const tracked = [usersList, ...document.querySelectorAll("[data-shell-ux-nav]")]
     .filter((element) => element instanceof HTMLElement)
     .map((element) => {
@@ -417,5 +414,7 @@ fs.writeFileSync(path.join(outDir, "smoke-report.json"), JSON.stringify(report, 
 await browser.close();
 server.close();
 
-console.log(JSON.stringify({ allPass, artifactsDir, cases: checks.length, productionCssChecks }, null, 2));
+console.log(
+  JSON.stringify({ allPass, artifactsDir, cases: checks.length, productionCssChecks }, null, 2),
+);
 process.exit(allPass ? 0 : 1);

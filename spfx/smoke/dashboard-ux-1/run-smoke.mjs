@@ -16,16 +16,13 @@ const artifactsDir = "/opt/cursor/artifacts/dashboard-ux-1-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js");
-const puppeteerModule = await import(
-  "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
-);
+const puppeteerModule =
+  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js");
 const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs");
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 const compileScss =
-  sassModule.compile ??
-  sassModule.default?.compile ??
-  (await import("sass")).compile;
+  sassModule.compile ?? sassModule.default?.compile ?? (await import("sass")).compile;
 
 const shellUxScssPath = path.join(repoRoot, "src/shell/ux/ShellUx.module.scss");
 const dashboardUxScssPath = path.join(repoRoot, "src/shell/dashboard/DashboardUx.module.scss");
@@ -60,11 +57,13 @@ const productionCssChecks = {
   kpiGridDesktopColumns: cssRuleContains(productionCss, "kpiGrid", [
     "grid-template-columns: repeat(4, minmax(0, 1fr));",
   ]),
-  kpiGridTabletColumns: productionCss.includes("@media (max-width: 768px)") &&
+  kpiGridTabletColumns:
+    productionCss.includes("@media (max-width: 768px)") &&
     /\.kpiGrid\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s.test(
       productionCss,
     ),
-  kpiGridNarrowColumns: productionCss.includes("@media (max-width: 480px)") &&
+  kpiGridNarrowColumns:
+    productionCss.includes("@media (max-width: 480px)") &&
     productionCss.includes("grid-template-columns: 1fr;"),
   overviewDashboardWidthSafety: cssRuleContains(productionCss, "overviewDashboard", [
     "min-width: 0;",
@@ -153,7 +152,9 @@ function assertOverviewDashboard(expectedColumns) {
   const kpiCards = document.querySelectorAll('[data-dashboard-ux="overview-kpi-card"]');
   const actionItems = document.querySelectorAll('[data-dashboard-ux="overview-action-item"]');
   const recentItems = document.querySelectorAll('[data-dashboard-ux="overview-recent-item"]');
-  const actionButtons = [...document.querySelectorAll('[data-dashboard-ux="overview-action-button"]')];
+  const actionButtons = [
+    ...document.querySelectorAll('[data-dashboard-ux="overview-action-button"]'),
+  ];
   const demo = document.querySelector('[data-shell-ux="demo-banner"]');
   const site = document.querySelector('[data-shell-ux="current-site-label"]');
   const selectedNav = document.querySelector('[data-shell-ux-nav="overview"]');
@@ -166,7 +167,8 @@ function assertOverviewDashboard(expectedColumns) {
     (link) => link.getAttribute("href") ?? "",
   );
   const kpiStyle = kpiGrid instanceof HTMLElement ? window.getComputedStyle(kpiGrid) : null;
-  const dashboardStyle = dashboard instanceof HTMLElement ? window.getComputedStyle(dashboard) : null;
+  const dashboardStyle =
+    dashboard instanceof HTMLElement ? window.getComputedStyle(dashboard) : null;
   const tracked = [dashboard, kpiGrid, ...document.querySelectorAll("[data-shell-ux-nav]")]
     .filter((element) => element instanceof HTMLElement)
     .map((element) => {
@@ -419,5 +421,7 @@ fs.writeFileSync(path.join(outDir, "smoke-report.json"), JSON.stringify(report, 
 await browser.close();
 server.close();
 
-console.log(JSON.stringify({ allPass, artifactsDir, cases: checks.length, productionCssChecks }, null, 2));
+console.log(
+  JSON.stringify({ allPass, artifactsDir, cases: checks.length, productionCssChecks }, null, 2),
+);
 process.exit(allPass ? 0 : 1);

@@ -10,15 +10,23 @@ import styles from "./UsersUx.module.scss";
 export type UsersListProps = Readonly<{
   presentation: ShellUsersPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
+  detailPreviewUserId?: string;
+  onUserDetailRequest?: (userId: string) => void;
 }>;
 
 const FILTER_CHIP_LABELS = ["すべて", "要確認", "未記録", "期限間近"] as const;
 
 /**
  * DEMO-UX-2 users list presentation skeleton.
- * Synthetic fixture only — not connected business UI or live users data.
+ * DEMO-UX-3 may opt one synthetic row into local presentation-only detail preview.
+ * No live user data or business navigation is connected here.
  */
-export const UsersList: React.FC<UsersListProps> = ({ presentation, headingRef }) => {
+export const UsersList: React.FC<UsersListProps> = ({
+  presentation,
+  headingRef,
+  detailPreviewUserId,
+  onUserDetailRequest,
+}) => {
   const { summaryLabel, filterHint, rows } = presentation;
 
   return (
@@ -70,44 +78,54 @@ export const UsersList: React.FC<UsersListProps> = ({ presentation, headingRef }
       </p>
 
       <ul className={styles.userRows} data-demo-ux="users-row-list">
-        {rows.map((row) => (
-          <li
-            key={row.id}
-            className={styles.userRow}
-            data-demo-ux="users-row"
-            data-demo-ux-user-id={row.id}
-          >
-            <div className={styles.userMain}>
-              <p className={styles.personLabel}>{row.personLabel}</p>
-              <ul className={styles.badgeList} aria-label={`${row.personLabel}の状態`}>
-                {row.statusBadges.map((badge) => (
-                  <li
-                    key={`${row.id}-${badge.id}`}
-                    className={styles.statusBadge}
-                    data-demo-ux="users-status-badge"
-                    data-demo-ux-status={badge.id}
-                  >
-                    {badge.label}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.userMeta}>
-              <p className={styles.planSummary}>{row.planSummary}</p>
-              <p className={styles.attentionNote}>{row.attentionNote}</p>
-              <p className={styles.lastRecordLabel}>{row.lastRecordLabel}</p>
-            </div>
-            <button
-              type="button"
-              className={styles.detailButton}
-              disabled
-              aria-disabled="true"
-              data-demo-ux="users-detail-button"
+        {rows.map((row) => {
+          const detailPreviewEnabled =
+            Boolean(onUserDetailRequest) && row.id === detailPreviewUserId;
+          return (
+            <li
+              key={row.id}
+              className={styles.userRow}
+              data-demo-ux="users-row"
+              data-demo-ux-user-id={row.id}
             >
-              {row.detailActionLabel}
-            </button>
-          </li>
-        ))}
+              <div className={styles.userMain}>
+                <p className={styles.personLabel}>{row.personLabel}</p>
+                <ul className={styles.badgeList} aria-label={`${row.personLabel}の状態`}>
+                  {row.statusBadges.map((badge) => (
+                    <li
+                      key={`${row.id}-${badge.id}`}
+                      className={styles.statusBadge}
+                      data-demo-ux="users-status-badge"
+                      data-demo-ux-status={badge.id}
+                    >
+                      {badge.label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className={styles.userMeta}>
+                <p className={styles.planSummary}>{row.planSummary}</p>
+                <p className={styles.attentionNote}>{row.attentionNote}</p>
+                <p className={styles.lastRecordLabel}>{row.lastRecordLabel}</p>
+              </div>
+              <button
+                type="button"
+                className={styles.detailButton}
+                disabled={!detailPreviewEnabled}
+                aria-disabled={!detailPreviewEnabled ? "true" : undefined}
+                data-demo-ux="users-detail-button"
+                data-demo-ux-detail-preview={detailPreviewEnabled ? "true" : "false"}
+                onClick={() => {
+                  if (detailPreviewEnabled && onUserDetailRequest) {
+                    onUserDetailRequest(row.id);
+                  }
+                }}
+              >
+                {row.detailActionLabel}
+              </button>
+            </li>
+          );
+        })}
       </ul>
       <p className={styles.sectionHint} data-demo-ux="users-filter-disabled-note">
         {DEMO_USERS_FILTER_DISABLED_NOTE}

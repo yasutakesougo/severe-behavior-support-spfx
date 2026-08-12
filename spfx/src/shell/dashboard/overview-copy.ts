@@ -5,8 +5,7 @@
 export const DASHBOARD_OVERVIEW_PRESENTATION_NOTE =
   "この画面は合成データによる表示確認用です。業務データには接続されていません。";
 
-export const DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE =
-  "表示専用のため操作は無効です。";
+export const DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE = "表示専用のため操作は無効です。";
 
 export const DASHBOARD_OVERVIEW_KPI_NOTE =
   "件数は合成データです。絞り込み遷移は接続されていません。";

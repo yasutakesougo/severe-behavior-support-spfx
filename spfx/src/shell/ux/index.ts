@@ -10,11 +10,16 @@ export {
 export {
   DEMO_UX_SLICE,
   DEMO_UX_USERS_FIXTURE,
+  DEMO_UX_3_SLICE,
+  DEMO_UX_USER_DETAIL_FIXTURE,
   UsersList,
+  UserDetail,
   usersCopyIsFailClosed,
   DEMO_USERS_PRESENTATION_NOTE,
   type ShellUsersPresentation,
+  type ShellUserDetailPresentation,
   type UsersListProps,
+  type UserDetailProps,
 } from "../users";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";

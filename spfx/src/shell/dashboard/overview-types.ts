@@ -3,11 +3,7 @@
  * Synthetic fixture shapes only — not live domain or adapter outcomes.
  */
 
-export type OverviewKpiCategory =
-  | "today_targets"
-  | "needs_review"
-  | "unrecorded"
-  | "deadline_near";
+export type OverviewKpiCategory = "today_targets" | "needs_review" | "unrecorded" | "deadline_near";
 
 export type OverviewKpiCard = Readonly<{
   id: OverviewKpiCategory;

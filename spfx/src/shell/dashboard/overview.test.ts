@@ -1,7 +1,4 @@
-import {
-  DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
-  overviewCopyIsFailClosed,
-} from "./overview-copy";
+import { DASHBOARD_OVERVIEW_PRESENTATION_NOTE, overviewCopyIsFailClosed } from "./overview-copy";
 import { DASHBOARD_UX_OVERVIEW_FIXTURE, DASHBOARD_UX_SLICE } from "./overview-fixture";
 
 describe("DASHBOARD-UX-1 overview fixture boundary", () => {
@@ -12,9 +9,7 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
       "未記録",
       "期限間近",
     ]);
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([
-      12, 3, 2, 2,
-    ]);
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([12, 3, 2, 2]);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.every((card) => card.statusHint.length > 0)).toBe(
       true,
     );

@@ -3,11 +3,7 @@
  * Synthetic fixture shapes only — not live domain or adapter outcomes.
  */
 
-export type UserListStatusCategory =
-  | "needs_review"
-  | "unrecorded"
-  | "deadline_near"
-  | "normal";
+export type UserListStatusCategory = "needs_review" | "unrecorded" | "deadline_near" | "normal";
 
 export type UserListStatusBadge = Readonly<{
   id: UserListStatusCategory;
