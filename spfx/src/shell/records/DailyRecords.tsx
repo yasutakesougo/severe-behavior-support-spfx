@@ -61,10 +61,20 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         </div>
         <p className={styles.mutationNote}>{DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE}</p>
         <div className={styles.actionRow}>
-          <button type="button" disabled aria-disabled="true">
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            data-demo-ux="daily-record-mutation-button"
+          >
             作成する
           </button>
-          <button type="button" disabled aria-disabled="true">
+          <button
+            type="button"
+            disabled
+            aria-disabled="true"
+            data-demo-ux="daily-record-mutation-button"
+          >
             保存する
           </button>
         </div>
