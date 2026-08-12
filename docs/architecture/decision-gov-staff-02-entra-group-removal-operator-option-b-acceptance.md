@@ -21,7 +21,7 @@ Selected Option: B
 Meaning:
   Entra IDグループから削除する実施者 = Microsoft 365管理者
 Baseline tip: 76563ce303c5ed4bd985c96d36d457257c18223f
-PR: pending（Selection / Option B Acceptance / Packet sync / IR）
+PR: #275（Selection / Option B Acceptance / Packet sync / IR）
 
 Does NOT mean:
   Entra ID / Microsoft 365 / SharePoint mutation GO

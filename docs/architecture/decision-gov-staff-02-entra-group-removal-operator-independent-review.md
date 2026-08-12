@@ -12,7 +12,7 @@ Kind: Independent Review（docs-only Selection + Option Acceptance recording）
 Unit: GOV-STAFF-02（Entra IDグループから削除する実施者）
 Human Decision: SELECT GOV-STAFF-02 + Option B（Microsoft 365管理者）
 Baseline tip: 76563ce303c5ed4bd985c96d36d457257c18223f
-PR: pending
+PR: #275
 Selection: decision-gov-staff-02-entra-group-removal-operator-selection.md
 SELECT Acceptance: decision-gov-staff-02-entra-group-removal-operator-acceptance.md
 Decision Packet: decision-gov-staff-02-entra-group-removal-operator-decision-packet.md

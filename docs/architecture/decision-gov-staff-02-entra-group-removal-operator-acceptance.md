@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-STAFF-02
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 76563ce303c5ed4bd985c96d36d457257c18223f
-PR: pending（Selection / Packet / SELECT Acceptance / Option B Acceptance / IR）
+PR: #275（Selection / Packet / SELECT Acceptance / Option B Acceptance / IR）
 
 Selected unit:
   GOV-STAFF-02 — Entra IDグループから削除する実施者
