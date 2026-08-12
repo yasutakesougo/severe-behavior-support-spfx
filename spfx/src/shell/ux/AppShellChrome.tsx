@@ -283,7 +283,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 />
               )
             ) : (
-              <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
+              <DestinationPlaceholder
+                destination={destination}
+                headingRef={destinationHeadingRef}
+              />
             )}
             {children}
           </div>

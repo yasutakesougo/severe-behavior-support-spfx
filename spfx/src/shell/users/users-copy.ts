@@ -5,8 +5,7 @@
 export const DEMO_USERS_PRESENTATION_NOTE =
   "この画面は合成データによる表示確認用です。業務データには接続されていません。";
 
-export const DEMO_USERS_FILTER_DISABLED_NOTE =
-  "絞り込みは表示専用のため操作できません。";
+export const DEMO_USERS_FILTER_DISABLED_NOTE = "絞り込みは表示専用のため操作できません。";
 
 export const DEMO_USERS_DETAIL_DISABLED_NOTE =
   "Aさんのみ合成データ内の詳細プレビューを表示できます。業務データの詳細画面には接続されていません。";

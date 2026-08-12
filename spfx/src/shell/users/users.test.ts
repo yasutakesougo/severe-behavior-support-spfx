@@ -1,7 +1,4 @@
-import {
-  DEMO_USERS_PRESENTATION_NOTE,
-  usersCopyIsFailClosed,
-} from "./users-copy";
+import { DEMO_USERS_PRESENTATION_NOTE, usersCopyIsFailClosed } from "./users-copy";
 import { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE } from "./users-fixture";
 
 describe("DEMO-UX-2 users list fixture boundary", () => {

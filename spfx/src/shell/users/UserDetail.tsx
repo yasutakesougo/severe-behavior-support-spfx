@@ -14,7 +14,11 @@ const USER_DETAIL_SECTION_LABELS = ["概要", "支援計画", "記録", "評価"
  * DEMO-UX-3 user detail presentation skeleton.
  * Synthetic fixture only — no live user, plan, record, auth, or adapter connection.
  */
-export const UserDetail: React.FC<UserDetailProps> = ({ presentation, headingRef, onBackToUsers }) => {
+export const UserDetail: React.FC<UserDetailProps> = ({
+  presentation,
+  headingRef,
+  onBackToUsers,
+}) => {
   const {
     personLabel,
     planLabel,
