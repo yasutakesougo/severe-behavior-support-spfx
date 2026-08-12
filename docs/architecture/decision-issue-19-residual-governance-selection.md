@@ -100,7 +100,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-AUD-10 | 重大障害時の連絡経路 | ORG_POLICY | **Accepted / LOCKED（fill-in / role names）**（[`decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md`](./decision-gov-aud-10-incident-contact-path-fill-in-acceptance.md)） |
 | GOV-STAFF-01 | 異動・退職情報の確定者 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md`](./decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md)） |
 | GOV-STAFF-02 | Entra IDグループから削除する実施者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md`](./decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md)） |
-| GOV-STAFF-03 | 権限停止期限 | ORG_POLICY | **unit SELECTED** / Option NOT SELECTED（[`decision-gov-staff-03-access-suspension-deadline-selection.md`](./decision-gov-staff-03-access-suspension-deadline-selection.md)；Option A tip = NON-BINDING） |
+| GOV-STAFF-03 | 権限停止期限 | ORG_POLICY | **Accepted / LOCKED / Option A**（[`decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md`](./decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md)） |
 | GOV-STAFF-04〜12 | 異動台帳 / 閲覧 / 資格 等 | ORG_POLICY / MIXED / EVIDENCE_REQUIRED | OPEN / NOT SELECTED |
 | GOV-RULE-01 org reminder / trigger | 評価周期の法人通知・臨時確認 | MIXED（org part） | Proposed / NOT Accepted |
 | GOV-RULE-02〜04 | 観察期間起算・終了・必要件数 | EVIDENCE_REQUIRED / MIXED | OPEN / NOT SELECTED |
@@ -124,7 +124,7 @@ Stale marker correction（docs truth）:
   GOV-RULE-12 = Accepted / LOCKED / Option B（訂正版を新規作成し、旧版を保持）。
   GOV-STAFF-01 = Accepted / LOCKED / Option C（事業所管理者が起票し、法人担当が確定）。
   GOV-STAFF-02 = Accepted / LOCKED / Option B（Microsoft 365管理者）。
-  GOV-STAFF-03 = unit SELECTED / Option NOT SELECTED（Option A tip = NON-BINDING）。
+  GOV-STAFF-03 = Accepted / LOCKED / Option A（異動・退職の発効日時までに権限停止）。
   GOV-STAFF-04〜12 / GOV-PERF / post-retention deletion が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
@@ -233,11 +233,13 @@ Consumed progression:
     （decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md）
   GOV-STAFF-02 unit SELECT + Option B = Accepted / LOCKED（PR #275 MERGED）
     （decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md）
-  Next residual unit SELECT = GOV-STAFF-03（Decision-GOV-STAFF-03-SELECTION-1）
+  GOV-STAFF-03 unit SELECT = MERGED（PR #276）
+  GOV-STAFF-03 Option A = Accepted / LOCKED
+    （decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md）
 
 Next:
-  1. GOV-STAFF-03 Selection PR: IR → Human Ready → Human Merge
-  2. After Merge: Human SELECT Option A–D or HOLD（Option A tip ≠ Binding）
+  1. GOV-STAFF-03 Option A Acceptance PR: IR → Human Ready → Human Merge
+  2. After Merge: 次残件を Human SELECT（Agent auto-advance FORBIDDEN）
   3. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
   4. #19 Close は残件移管完了後の別 Human disposition
 ```
@@ -329,12 +331,12 @@ SELECT GOV-STAFF-02 → Option B Accepted（Microsoft 365管理者）
 Acceptance: decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md
 ```
 
-Current residual（unit）:
+GOV-STAFF-03 history:
 
 ```text
-SELECT GOV-STAFF-03 — Option A/B/C/D/H NOT SELECTED
-Option A tip = SPECIFIED / NON-BINDING
-Selection: decision-gov-staff-03-access-suspension-deadline-selection.md
+SELECT GOV-STAFF-03 → Option A Accepted
+  （異動・退職の発効日時までに権限停止）
+Acceptance: decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md
 ```
 
 ## Reference

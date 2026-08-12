@@ -5,7 +5,6 @@
 
 Issue #19 所有の最小単位。
 GOV-STAFF-01 / 02 の再 Decision ではない。
-Accepted（Option）ではない。
 Agent が権限停止自動化・Entra mutation・日数を発明しない。
 Implementation Start ではない。
 
@@ -18,17 +17,17 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-STAFF-03
 Kind: Human Decision packet（narrow）
-Status: OPEN / Option NOT SELECTED
+Status: Accepted / LOCKED / Option A
 Owner: Issue #19
-Selected via: Decision-GOV-STAFF-03-SELECTION-1
+Selected via: Decision-GOV-STAFF-03-SELECTION-1（PR #276 MERGED）
 FindingCode: HOLD
 A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし）
-Human Selected Option: NOT SELECTED
-Issue #19 design recommendation（non-binding）: A
-  （異動・退職の発効日時まで）
+Human Selected Option: A（異動・退職の発効日時までに権限停止）
+Option Acceptance: decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md
+Issue #19 design recommendation（non-binding）: A（≠ Human Acceptance evidence）
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
@@ -46,7 +45,8 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 ```text
 GOV-STAFF-01 confirmer: Accepted / LOCKED / Option C
 GOV-STAFF-02 Entra removal operator: Accepted / LOCKED / Option B
-GOV-STAFF-03 access suspension deadline: UNDECIDED（本 packet）
+GOV-STAFF-03 access suspension deadline: Accepted / LOCKED / Option A
+  = 異動・退職の発効日時までに権限停止
 GOV-STAFF-04〜12: OPEN / OUT
 SharePoint / M365 / Entra / Deploy: NO-GO
 ```
@@ -148,15 +148,15 @@ C. 翌営業日まで
 D. その他（Human が明示）
 H. まだ決めない / HOLD
 
-答え: NOT SELECTED
+答え: A（Accepted / LOCKED）
 ```
 
 ## 7. After Decision
 
 | Selected | Next |
 |---|---|
-| A–D | Option Acceptance → deadline LOCKED。実装 / Entra mutation は別 GO |
-| H | Option HOLD。unit Selection は維持可 |
+| **A** | **Option Acceptance LOCKED（本 Decision）**。実装 / Entra mutation は別 GO |
+| B / C / D / H | NOT SELECTED |
 
 維持:
 
@@ -172,4 +172,5 @@ next residual auto-select: FORBIDDEN
 
 - Selection: `decision-gov-staff-03-access-suspension-deadline-selection.md`
 - SELECT Acceptance: `decision-gov-staff-03-access-suspension-deadline-acceptance.md`
+- Option A Acceptance: `decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md`
 - Issue #19 GOV-STAFF-03 source options A–D

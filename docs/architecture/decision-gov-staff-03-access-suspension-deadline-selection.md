@@ -26,7 +26,9 @@ Candidate origin:
   Prior non-binding recommendation: Option tip A
   Binding before this Decision: NONE → unit now SELECTED by Human
 
-Option Acceptance: NOT SELECTED
+Option Acceptance: Accepted / LOCKED / Option A
+  （decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md）
+Option A status: Accepted / LOCKED（prior tip was NON-BINDING）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN
@@ -101,29 +103,35 @@ OUT:
 
 ```text
 Decision-GOV-STAFF-03-SELECTION-1 = SELECTED / LOCKED
+Option A = Accepted / LOCKED（別 Acceptance）
 
 HOLD:
-  concrete Option A–D = NOT SELECTED
   Implementation Start = NOT AUTHORIZED
   Entra / M365 mutation = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
   GOV-STAFF-04〜12 = NOT SELECTED
+  next residual = NOT SELECTED
 ```
 
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human SELECT Option A–D or HOLD
-3. Option Acceptance / LOCKED for GOV-STAFF-03 only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+Consumed:
+  Unit Selection PR #276 = MERGED
+  Human Option = A
+
+Current Option Acceptance PR:
+  1. Independent Review → Human Ready → Human Merge
+  2. After Merge: Next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
 
 - SELECT Acceptance: `decision-gov-staff-03-access-suspension-deadline-acceptance.md`
 - Decision Packet: `decision-gov-staff-03-access-suspension-deadline-decision-packet.md`
-- Independent Review: `decision-gov-staff-03-access-suspension-deadline-independent-review.md`
+- Option A Acceptance: `decision-gov-staff-03-access-suspension-deadline-option-a-acceptance.md`
+- Independent Review（Selection）: `decision-gov-staff-03-access-suspension-deadline-independent-review.md`
+- Independent Review（Option A）: `decision-gov-staff-03-access-suspension-deadline-option-a-independent-review.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Prior unit: `decision-gov-staff-02-entra-group-removal-operator-option-b-acceptance.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19
