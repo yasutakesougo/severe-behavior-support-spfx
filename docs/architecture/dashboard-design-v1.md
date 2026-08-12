@@ -370,21 +370,18 @@ OUT:
 
 ## 14. 次の独立slice候補
 
-DESIGN-1〜4が人によりAcceptedされた後だけ、次のsliceを選択する。
+DESIGN-1〜4が人によりAcceptedされた後、`DASHBOARD-UX-1 / Overview presentation skeleton` が **SELECTED / LOCKED**（Issue #299）。
 
-候補は`DASHBOARD-UX-1 / Overview presentation skeleton`とする。
+Implementation Start は [`dashboard-ux-1-implementation-start.md`](./dashboard-ux-1-implementation-start.md) で別途 Human GO により認可される。
 
-この候補は未選択である。
-
-実装する場合は、既存`AppShellChrome`の`readyRegion`配下にprops / synthetic fixtureのみで表示する構成を第一候補とする。
-
-この記述はImplementation Startの認可ではない。
+実装は、既存`AppShellChrome`の`readyRegion`配下にprops / synthetic fixtureのみで表示する構成を第一候補とする。
 
 ## 15. Stop condition
 
 ```text
-DASHBOARD-DESIGN-V1 = REVIEWABLE
+DASHBOARD-DESIGN-V1 = REVIEWABLE / ACCEPTED
 DESIGN-1〜4 = documented
-Implementation Start = NOT AUTHORIZED
-Next Human gate = design acceptance / next slice selection
+DASHBOARD-UX-1 = SELECTED / LOCKED（Issue #299）
+Implementation Start = see dashboard-ux-1-implementation-start.md
+Next Human gate = browser smoke evidence / Draft PR review
 ```

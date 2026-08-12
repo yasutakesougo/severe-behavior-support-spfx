@@ -1,3 +1,12 @@
+export {
+  DASHBOARD_UX_OVERVIEW_FIXTURE,
+  DASHBOARD_UX_SLICE,
+  OverviewDashboard,
+  overviewCopyIsFailClosed,
+  DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
+  type OverviewDashboardProps,
+  type ShellOverviewPresentation,
+} from "../dashboard";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
