@@ -152,22 +152,3 @@ DEMO-UX-8 MERGED ≠ RPF-002 Implementation Start
 This completion ≠ #299 Close
 This completion ≠ Deploy / SharePoint write
 ```
-
-## StrReplace
-path
-/workspace/docs/architecture/demo-ux-8-fresh-review.md
-old_string
-Status: PASS
-Findings: P0 = 0 / P1 = 0 / P2 = 1 OPEN（non-blocking）
-Human Ready: NOT AUTHORIZED（separate gate）
-Merge / Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
-RPF-002 Implementation Start: NOT AUTHORIZED
-```
-new_string
-Status: PASS → predecessor MERGED / COMPLETE（PR #321 / aed5b05）
-Findings: P0 = 0 / P1 = 0 / P2 = 1 OPEN（non-blocking）
-Human Ready: GO（merged）
-Merge: SUCCESS（aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9）
-Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
-RPF-002 Implementation Start: NOT AUTHORIZED
-```
