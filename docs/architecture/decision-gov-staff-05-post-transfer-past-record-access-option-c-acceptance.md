@@ -114,7 +114,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-STAFF-01〜03 | **UNCHANGED** |
 | GOV-STAFF-04 | **UNCHANGED**（Accepted / Option C） |
 | GOV-AUD-01〜10 / GOV-RULE-05〜12 | **UNCHANGED** |
-| GOV-STAFF-06〜12 | **OUT / NOT SELECTED** |
+| GOV-STAFF-06 | **Accepted / LOCKED / Option B**（別 Decision；法人業務責任者） |
+| GOV-STAFF-07〜12 | **OUT / NOT SELECTED** |
 | Option A / B / D / H | **NOT SELECTED** |
 | SharePoint / M365 mutation | **HOLD / NOT STARTED / FORBIDDEN** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -123,11 +124,11 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-STAFF-05: Accepted / LOCKED / Option C
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-STAFF-06 Accepted / LOCKED / Option B（別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 SharePoint / M365 mutation: NOT AUTHORIZED
-GOV-STAFF-06〜12: NOT SELECTED
+GOV-STAFF-07〜12: NOT SELECTED
 ```
 
 Agent は本 Acceptance を理由に ACL/SiteId 発明・包括閲覧許可・GOV-STAFF-06+ 自動 SELECT・次 residual 自動 SELECT へ進まない。
