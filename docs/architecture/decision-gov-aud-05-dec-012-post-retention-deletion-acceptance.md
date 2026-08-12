@@ -29,7 +29,7 @@ Selected unit:
   GOV-AUD-05 / DEC-012 post-retention deletion
   （5年経過後の完全削除可否）
 
-Concrete Option A–D: NOT SELECTED
+Concrete Option: Accepted / LOCKED / Option C（PR #284）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Next residual auto-select: FORBIDDEN
@@ -69,19 +69,15 @@ SELECT post-retention ≠ Implementation Start
 Parent track = SELECTED / LOCKED / MERGED
 Retention prohibition = Accepted / LOCKED / Option A（UNCHANGED）
 Current residual unit = SELECTED / LOCKED（post-retention deletion）
-Option Acceptance = NOT SELECTED
+Option Acceptance = Accepted / LOCKED / Option C（PR #284）
 ```
 
 ## Next
 
 ```text
-Strict order:
-  1. This PR Independent Review
-  2. Human Ready（HUMAN-ONLY）
-  3. Human Merge（HUMAN-ONLY） → main mirror
-  4. After Merge: Human SELECT Option A–D or HOLD
-  5. Option Acceptance / LOCKED for post-retention deletion only
-  6. Next residual SELECT = separate Human Decision
+Selection PR #283: MERGED
+Option C: Accepted / LOCKED（PR #284）
+Next residual SELECT = separate Human Decision
 ```
 
 ## Reference
@@ -89,5 +85,6 @@ Strict order:
 - Selection: `decision-gov-aud-05-dec-012-post-retention-deletion-selection.md`
 - Decision Packet: `decision-gov-aud-05-dec-012-post-retention-deletion-decision-packet.md`
 - Independent Review: `decision-gov-aud-05-dec-012-post-retention-deletion-independent-review.md`
+- Option C Acceptance: `decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md`
 - Prior: `decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`
 - Parent: `decision-issue-19-residual-governance-selection.md`

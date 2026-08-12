@@ -17,7 +17,7 @@ Selection:
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: GOV-AUD-05 / DEC-012 post-retention deletion
 Kind: Human Decision packet（narrow）
-Status: OPEN / Option NOT SELECTED
+Status: Accepted / LOCKED / Option C
 Owner: Issue #19
 Selected via: Decision-GOV-AUD-05-POST-RETENTION-SELECTION-1
 FindingCode: HOLD
@@ -25,7 +25,7 @@ A-5: HOLD
 Implementation Start: HOLD
 Implementation auto-start: FORBIDDEN
 Agent recommendation: NONE（Binding 推薦なし）
-Human Selected Option: NOT SELECTED
+Human Selected Option: C
 Prior automatic complete deletion after retention: NOT ADOPTED（UNCHANGED）
 Prior automatic physical deletion execution: NOT ADOPTED（UNCHANGED）
 ```
@@ -46,7 +46,7 @@ Live gate（Ready / Merge / review 進行）は repository docs に書かない
 During retention (5 years): complete deletion PROHIBITED（Accepted / LOCKED）
 After retention automatic complete deletion: NOT ADOPTED（UNCHANGED）
 Automatic physical deletion execution: NOT ADOPTED（UNCHANGED）
-Post-retention deletion permissibility: UNDECIDED（本 packet）
+Post-retention deletion permissibility: Accepted / LOCKED / Option C
 SharePoint / cleanup job / Deploy: NO-GO
 ```
 
@@ -152,7 +152,10 @@ C. 初期版では経過後完全削除の機能自体を持たない
 D. その他（Human が明示）
 H. まだ決めない / HOLD
 
-答え: NOT SELECTED
+答え: C
+
+Human Acceptance date: 2026-08-12
+Option Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
 ```
 
 ## 7. After Decision
@@ -160,6 +163,7 @@ H. まだ決めない / HOLD
 | Selected | Next |
 |---|---|
 | A–D | Option Acceptance → permissibility LOCKED。実装 / cleanup は別 GO |
+| **C（採択済）** | **Accepted / LOCKED** — 初期版は経過後完全削除機能なし。cleanup / 実装は別 GO |
 | H | Option HOLD。unit Selection は維持可 |
 
 維持:
