@@ -6,12 +6,19 @@
 }
 
 .presentationNote,
-.mutationNote {
+.mutationNote,
+.sectionHint {
   margin: 0;
   padding: 12px 16px;
   border: 1px solid "[theme:neutralLight, default:#edebe9]";
   border-radius: 8px;
   background: "[theme:neutralLighterAlt, default:#faf9f8]";
+}
+
+.sectionHint {
+  margin: 0 0 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .section {
@@ -75,6 +82,12 @@
   list-style: none;
 }
 
+.cardItem {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .card,
 .timelineItem {
   min-width: 0;
@@ -85,9 +98,25 @@
 
 .card {
   display: flex;
+  width: 100%;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
+  text-align: left;
+  color: inherit;
+  background: "[theme:white, default:#ffffff]";
+  cursor: pointer;
+  font: inherit;
+}
+
+.card:focus {
+  outline: 2px solid "[theme:themePrimary, default: #03787c]";
+  outline-offset: 2px;
+}
+
+.cardSelected {
+  border-color: "[theme:themePrimary, default: #03787c]";
+  background: "[theme:themeLighter, default: #deecdc]";
 }
 
 .card p,

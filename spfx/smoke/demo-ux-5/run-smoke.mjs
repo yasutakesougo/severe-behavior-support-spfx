@@ -177,9 +177,9 @@ function assertDailyRecords(expectedStateColumns) {
   const text = body?.textContent ?? "";
   const headings = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim() ?? "");
   const orderOk =
-    headings.indexOf("記録入力") >= 0 &&
-    headings.indexOf("未完了確認") > headings.indexOf("記録入力") &&
-    headings.indexOf("最近の記録") > headings.indexOf("未完了確認") &&
+    headings.indexOf("未完了確認") >= 0 &&
+    headings.indexOf("記録入力イメージ") > headings.indexOf("未完了確認") &&
+    headings.indexOf("最近の記録") > headings.indexOf("記録入力イメージ") &&
     headings.indexOf("制度・業務情報（合成表示）") > headings.indexOf("最近の記録") &&
     headings.indexOf("システム状態") > headings.indexOf("最近の記録");
   return {
