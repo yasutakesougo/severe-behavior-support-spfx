@@ -18,7 +18,7 @@ Status: Accepted / LOCKED（Selection boundary）
 Human Decision: SELECT SHELL-UX-7
 Human Acceptance date: 2026-08-12
 Issue: #28
-PR: TBD（Selection / Acceptance / Independence Review only）
+PR: #290（Selection / Acceptance / Independence Review only）
 Baseline tip: bd5a6ae214c18137d095310106857fe298a448ef
 
 Selected:

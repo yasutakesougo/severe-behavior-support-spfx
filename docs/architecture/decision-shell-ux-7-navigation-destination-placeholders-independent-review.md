@@ -12,11 +12,11 @@ Unit: SHELL-UX-7 — Safe Navigation Destination Placeholders
 Human Decision: SELECT SHELL-UX-7
 Decision ID: Decision-SHELL-UX-7-NAVIGATION-DESTINATION-PLACEHOLDERS-1
 Baseline tip: bd5a6ae214c18137d095310106857fe298a448ef
-PR: TBD
+PR: #290
 Selection: decision-shell-ux-7-navigation-destination-placeholders-selection.md
 SELECT Acceptance: decision-shell-ux-7-navigation-destination-placeholders-acceptance.md
 Status: PASS
-Findings: P0=0 / P1=0 / P2=2 OPEN
+Findings: P0=0 / P1=0 / P2=1 OPEN
 Bundle status: SELECTED / LOCKED
 Implementation Start: NOT AUTHORIZED
 #28 Close: NOT AUTHORIZED
@@ -61,10 +61,10 @@ Authorization effect: NONE
 
 | Sev | ID | Status | Note |
 |---|---|---|---|
-| P2 | SUX7-P2-1 | **OPEN** | 自己参照 PR 番号は merge 前 TBD。NON_BLOCKING / EXPECTED_P2 |
+| P2 | SUX7-P2-1 | **CLOSED** | 自己参照 PR 番号を #290 へ反映 |
 | P2 | SUX7-P2-2 | **OPEN** | Issue #28 GitHub body SoT tip は live main `bd5a6ae` へ未反映。本 Decision docs では tip を更新済み。Issue body mutation は Human-only / 別工程 |
 
-P0 = 0 / P1 = 0
+P0 = 0 / P1 = 0 / P2 OPEN = 1
 
 ## Strict progression
 
