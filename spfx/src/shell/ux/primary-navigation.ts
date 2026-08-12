@@ -2,8 +2,8 @@ import { isUnauthenticatedViewMode, type ShellViewMode } from "./shell-view-mode
 import { isSiteUnselected, type ShellSiteSelection } from "./site-selection";
 
 /**
- * Presentation-only primary navigation vocabulary.
- * The items deliberately have no destinations or business handlers in this slice.
+ * Presentation-only primary navigation vocabulary（SHELL-UX-7 destination ids）.
+ * Locked labels only — no Plans / Administration expansion, no business handlers.
  */
 export const SHELL_PRIMARY_NAV_ITEMS = [
   { id: "overview", label: "概要" },

@@ -188,6 +188,45 @@
   outline-offset: 2px;
 }
 
+.navButtonSelected {
+  border-color: "[theme:themePrimary, default: #03787c]";
+  background: "[theme:themeLighter, default: #deecf9]";
+  font-weight: 700;
+}
+
+.destinationPlaceholder {
+  padding: 1rem;
+  border: 1px dashed "[theme:neutralTertiary, default: #a19f9d]";
+  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.destinationHeading {
+  margin: 0 0 0.65rem;
+  font-size: 1.25rem;
+  outline: none;
+}
+
+.destinationHeading:focus {
+  outline: 2px solid "[theme:themePrimary, default: #03787c]";
+  outline-offset: 2px;
+}
+
+.destinationBody {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.destinationNote {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .shellMain {
   flex: 1 1 auto;
   min-width: 0;

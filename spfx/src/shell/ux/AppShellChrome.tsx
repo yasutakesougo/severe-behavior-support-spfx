@@ -1,6 +1,8 @@
 import * as React from "react";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
+import { DestinationPlaceholder } from "./DestinationPlaceholder";
+import { SHELL_DEFAULT_DESTINATION } from "./destination";
 import { PartialRetrievalPanel } from "./PartialRetrievalPanel";
 import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
@@ -17,7 +19,11 @@ import {
   type ShellSiteOption,
   type ShellSiteSelection,
 } from "./site-selection";
-import { isShellPrimaryNavigationEnabled, SHELL_PRIMARY_NAV_ITEMS } from "./primary-navigation";
+import {
+  isShellPrimaryNavigationEnabled,
+  SHELL_PRIMARY_NAV_ITEMS,
+  type ShellPrimaryNavigationId,
+} from "./primary-navigation";
 import { SiteSelector } from "./SiteSelector";
 import { SiteUnselectedStop } from "./SiteUnselectedStop";
 import { StatusPanel } from "./StatusPanel";
@@ -34,13 +40,15 @@ export type AppShellChromeProps = Readonly<{
   errorCode: string;
   userDisplayName: string;
   partialRetrieval?: ShellPartialRetrievalPresentation;
+  selectedDestination?: ShellPrimaryNavigationId;
   onSiteSelectionChange?: (next: ShellSiteSelection) => void;
+  onSelectedDestinationChange?: (next: ShellPrimaryNavigationId) => void;
   children?: React.ReactNode;
 }>;
 
 /**
- * SHELL-UX presentation chrome（SHELL-UX-6 unauthenticated fail-closed panel）.
- * No SharePoint REST, binder, auth judgment, Entra, token, role, or redirect.
+ * SHELL-UX presentation chrome（SHELL-UX-7 destination placeholders）.
+ * No SharePoint REST, binder, auth judgment, Entra, token, role, or business UI.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const {
@@ -53,20 +61,53 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     errorCode,
     userDisplayName,
     partialRetrieval,
+    selectedDestination: selectedDestinationProp,
     onSiteSelectionChange,
+    onSelectedDestinationChange,
     children,
   } = props;
 
   const [selection, setSelection] = React.useState<ShellSiteSelection>(siteSelection);
+  const [destination, setDestination] = React.useState<ShellPrimaryNavigationId>(
+    selectedDestinationProp ?? SHELL_DEFAULT_DESTINATION,
+  );
+  const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
+  const shouldFocusDestinationRef = React.useRef(false);
 
   React.useEffect(() => {
     setSelection(siteSelection);
   }, [siteSelection]);
 
+  React.useEffect(() => {
+    if (selectedDestinationProp !== undefined) {
+      setDestination(selectedDestinationProp);
+    }
+  }, [selectedDestinationProp]);
+
+  React.useEffect(() => {
+    if (!shouldFocusDestinationRef.current) {
+      return;
+    }
+    shouldFocusDestinationRef.current = false;
+    destinationHeadingRef.current?.focus();
+  }, [destination]);
+
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
     if (onSiteSelectionChange) {
       onSiteSelectionChange(next);
+    }
+  };
+
+  const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
+    if (next === destination) {
+      destinationHeadingRef.current?.focus();
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setDestination(next);
+    if (onSelectedDestinationChange) {
+      onSelectedDestinationChange(next);
     }
   };
 
@@ -84,6 +125,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       className={styles.appShell}
       data-shell-ux="app-shell-chrome"
       data-shell-ux-unauthenticated={unauthenticated ? "true" : "false"}
+      data-shell-ux-destination={destination}
     >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
@@ -127,17 +169,30 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         aria-label="シェル主要ナビゲーション"
         data-shell-ux="primary-navigation"
       >
-        {SHELL_PRIMARY_NAV_ITEMS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            className={styles.navButton}
-            data-shell-ux-nav={item.id}
-            disabled={navDisabled}
-          >
-            {item.label}
-          </button>
-        ))}
+        {SHELL_PRIMARY_NAV_ITEMS.map((item) => {
+          const selected = item.id === destination;
+          const className = selected
+            ? `${styles.navButton} ${styles.navButtonSelected}`
+            : styles.navButton;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className={className}
+              data-shell-ux-nav={item.id}
+              data-shell-ux-nav-selected={selected ? "true" : "false"}
+              aria-current={selected ? "page" : undefined}
+              disabled={navDisabled}
+              onClick={() => {
+                if (!navDisabled) {
+                  handleDestinationChange(item.id);
+                }
+              }}
+            >
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
 
       <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
@@ -161,6 +216,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         )}
         {showReadyRegion ? (
           <div className={styles.readyRegion} data-shell-ux="ready-region">
+            <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
             {children}
           </div>
         ) : null}
