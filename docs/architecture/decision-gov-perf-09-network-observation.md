@@ -11,7 +11,7 @@ Kind: read-only observation
 Observation date: 2026-08-12
 Observer context: Cursor Cloud Agent VM
 Baseline tip: e64ad1d035d5e071841a5d19ced5f6e3c7abf407
-PR: pending
+PR: #286
 Mutation: NONE
 HOLD status: UNCHANGED
 Issue #19 temporary-outage tip: recommendation only / NOT Accepted here
