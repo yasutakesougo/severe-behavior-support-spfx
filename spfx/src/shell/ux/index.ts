@@ -1,6 +1,17 @@
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
+export {
+  destinationCopyIsFailClosed,
+  headingForShellDestination,
+  isShellPrimaryNavigationId,
+  labelForShellDestination,
+  SHELL_DEFAULT_DESTINATION,
+  SHELL_DESTINATION_DISCONNECTED_BODY,
+  SHELL_DESTINATION_DISCONNECTED_NOTE,
+  SHELL_DESTINATION_IDS,
+} from "./destination";
+export { DestinationPlaceholder, type DestinationPlaceholderProps } from "./DestinationPlaceholder";
 export { ErrorInquiryDisplay, type ErrorInquiryDisplayProps } from "./ErrorInquiryDisplay";
 export {
   formatShellErrorInquiryText,

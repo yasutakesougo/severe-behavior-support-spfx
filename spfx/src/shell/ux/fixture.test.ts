@@ -31,12 +31,16 @@ describe("SHELL-UX fixture boundary", () => {
   });
 
   it("carries synthetic errorCode + correlationId for inquiry display", () => {
-    expect(SHELL_UX_DEFAULT_FIXTURE.errorCode).toBe("SHELL-UX-6-SYNTH-E001");
-    expect(SHELL_UX_DEFAULT_FIXTURE.correlationId).toBe("shell-ux-6-synth-corr");
+    expect(SHELL_UX_DEFAULT_FIXTURE.errorCode).toBe("SHELL-UX-7-SYNTH-E001");
+    expect(SHELL_UX_DEFAULT_FIXTURE.correlationId).toBe("shell-ux-7-synth-corr");
   });
 
-  it("does not authorize live I/O, REST, binder, auth judgment, or redirect", () => {
-    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-6");
+  it("defaults selected destination to overview without business connection", () => {
+    expect(SHELL_UX_DEFAULT_FIXTURE.selectedDestination).toBe("overview");
+  });
+
+  it("does not authorize live I/O, REST, binder, auth judgment, or business destinations", () => {
+    expect(SHELL_UX_SLICE.id).toBe("SHELL-UX-7");
     expect(SHELL_UX_SLICE.liveTenantIoAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.sharePointRestAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.binderHostWiringAuthorized).toBe(false);
@@ -50,5 +54,7 @@ describe("SHELL-UX fixture boundary", () => {
     expect(SHELL_UX_SLICE.entraTokenHandlingAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.roleResolutionAuthorized).toBe(false);
     expect(SHELL_UX_SLICE.redirectSignInOrchestrationAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.businessDestinationAuthorized).toBe(false);
+    expect(SHELL_UX_SLICE.plansAdministrationNavExpansionAuthorized).toBe(false);
   });
 });

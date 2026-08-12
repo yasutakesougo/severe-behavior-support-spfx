@@ -1,7 +1,7 @@
 import { isShellPrimaryNavigationEnabled, SHELL_PRIMARY_NAV_ITEMS } from "./primary-navigation";
 
 describe("C-F′ primary navigation presentation", () => {
-  it("keeps the primary navigation order fixed and destination-free", () => {
+  it("keeps the primary navigation order fixed to SHELL-UX-7 vocabulary", () => {
     expect(SHELL_PRIMARY_NAV_ITEMS).toEqual([
       { id: "overview", label: "概要" },
       { id: "users", label: "利用者" },
