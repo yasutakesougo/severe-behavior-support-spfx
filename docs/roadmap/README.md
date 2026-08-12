@@ -2,6 +2,12 @@
 
 完成までの工程表は [`completion-roadmap.md`](./completion-roadmap.md) を参照してください。
 
+責任者レビュー可能版の完了条件は [`responsible-person-demo-v1.md`](./responsible-person-demo-v1.md) を参照してください。
+
+進捗率の読み方は [`completion-progress-model.md`](./completion-progress-model.md) を参照してください。
+
+Phase間の境界は [`phase-boundaries.md`](./phase-boundaries.md) を参照してください。
+
 Tracking parent: #298
 
 - #299 — RESPONSIBLE-PERSON-DEMO-V1
