@@ -10,15 +10,18 @@ import styles from "./DashboardUx.module.scss";
 export type OverviewDashboardProps = Readonly<{
   presentation: ShellOverviewPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
+  onReviewDueStateRequest?: () => void;
 }>;
 
 /**
  * DASHBOARD-UX-1 overview presentation skeleton.
  * Synthetic fixture only — not connected business UI or live overview data.
+ * DEMO-UX-6 may open a synthetic review/due-state preview from this surface.
  */
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   presentation,
   headingRef,
+  onReviewDueStateRequest,
 }) => {
   const { kpiCards, actionItems, recentRecords } = presentation;
 
@@ -65,6 +68,26 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className={styles.section} aria-labelledby="dashboard-ux-review-due-entry-heading">
+        <h2 id="dashboard-ux-review-due-entry-heading" className={styles.sectionHeading}>
+          見直し状況
+        </h2>
+        <p className={styles.sectionHint} data-dashboard-ux="overview-review-due-note">
+          期限接近や確認待ちなどの状態表示を、合成データで確認できます。
+        </p>
+        <button
+          type="button"
+          className={styles.actionButton}
+          disabled={!onReviewDueStateRequest}
+          aria-disabled={!onReviewDueStateRequest ? "true" : undefined}
+          data-demo-ux="overview-open-review-due"
+          data-demo-ux-review-due-preview={onReviewDueStateRequest ? "true" : "false"}
+          onClick={onReviewDueStateRequest}
+        >
+          見直し状況を表示
+        </button>
       </section>
 
       <section className={styles.section} aria-labelledby="dashboard-ux-actions-heading">
