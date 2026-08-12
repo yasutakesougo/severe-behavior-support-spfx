@@ -12,7 +12,7 @@ Unit: #21-B — Authorization Context Resolver Orchestration（synthetic）
 Human Decision: SELECT #21-B — Authorization Context Resolver Orchestration（synthetic）
 Decision ID: Decision-ISSUE-21B-AUTHORIZATION-RESOLVER-1
 Baseline tip: 40c21f4cc8a6e05a28387051dcec289f1bab7eca
-PR: (this Selection / Acceptance / Independence Review PR)
+PR: #294
 Selection: decision-issue-21b-authorization-resolver-selection.md
 SELECT Acceptance: decision-issue-21b-authorization-resolver-acceptance.md
 Status: PASS

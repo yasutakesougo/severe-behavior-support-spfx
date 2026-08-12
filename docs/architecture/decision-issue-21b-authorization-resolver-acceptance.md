@@ -19,7 +19,7 @@ Status: Accepted / LOCKED（Selection boundary）
 Human Decision: SELECT #21-B — Authorization Context Resolver Orchestration（synthetic）
 Human Acceptance date: 2026-08-12
 Issue: #21
-PR: (this Selection / Acceptance / Independence Review PR)
+PR: #294（Selection / Acceptance / Independence Review only）
 Baseline tip: 40c21f4cc8a6e05a28387051dcec289f1bab7eca
 
 Selected:
@@ -92,7 +92,7 @@ Issue #21 body tip / Implementation HOLD markers = STALE
 
 ```text
 Selection = SELECTED / LOCKED
-Selection docs PR = this draft（Ready / Merge = HUMAN-ONLY）
+Selection docs PR = #294（draft；Ready / Merge = HUMAN-ONLY）
 Independence Review = PASS（recorded；≠ Implementation Start）
 Implementation Start = NOT AUTHORIZED
 Issue #21 = OPEN / KEEP OPEN

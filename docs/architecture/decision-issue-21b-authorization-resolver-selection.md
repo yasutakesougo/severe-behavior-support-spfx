@@ -11,7 +11,7 @@ Kind: Human Selection（Issue #21 next independently implementable slice）
 Status: SELECTED / LOCKED（GO boundary）
 Human Decision: SELECT #21-B — Authorization Context Resolver Orchestration（synthetic）
 Date: 2026-08-12
-PR: (this Selection / Acceptance / Independence Review PR)
+PR: #294（Selection / Acceptance / Independence Review only）
 
 Baseline:
   main tip = 40c21f4cc8a6e05a28387051dcec289f1bab7eca
