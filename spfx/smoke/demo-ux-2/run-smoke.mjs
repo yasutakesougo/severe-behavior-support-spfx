@@ -182,7 +182,8 @@ function assertUsersList(expectedRowColumns) {
   const horizontalOverflow =
     root.scrollWidth > root.clientWidth + 1 || body.scrollWidth > body.clientWidth + 1;
   const rightEdgeWithinViewport = tracked.every((rect) => rect.right <= viewportWidth + 1);
-  const filtersEnabled = filterChips.length === 4 && filterChips.every((button) => !button.disabled);
+  const filtersEnabled =
+    filterChips.length === 4 && filterChips.every((button) => !button.disabled);
   const defaultChipSelected = filterChips.some(
     (button) =>
       button.getAttribute("data-demo-ux-filter") === "すべて" &&

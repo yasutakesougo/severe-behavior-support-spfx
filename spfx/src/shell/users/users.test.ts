@@ -55,7 +55,9 @@ describe("DEMO-UX-2 users list fixture boundary", () => {
     expect(usersCopyIsFailClosed("利用可能です。業務データに接続されています。")).toBe(false);
     expect(DEMO_USERS_FILTER_NOTE).toContain("合成データ内の状態で絞り込みできます");
     expect(DEMO_USERS_FILTER_NOTE).toContain("業務データの検索には接続されていません");
-    expect(DEMO_USERS_FILTER_EMPTY_NOTE).toContain("事業所に利用者がいないことを示すものではありません");
+    expect(DEMO_USERS_FILTER_EMPTY_NOTE).toContain(
+      "事業所に利用者がいないことを示すものではありません",
+    );
   });
 
   it("does not authorize live I/O, adapter fetch, auth judgment, or detail navigation", () => {
@@ -73,7 +75,7 @@ describe("DEMO-UX-2 users list fixture boundary", () => {
 
 describe("DEMO-UX-8 users list status filter", () => {
   it("locks chip match keys to badge.id categories", () => {
-    expect(matchKeyForUsersFilterChip(USERS_FILTER_CHIP_ALL)).toBeNull();
+    expect(matchKeyForUsersFilterChip(USERS_FILTER_CHIP_ALL)).toBeUndefined();
     expect(matchKeyForUsersFilterChip(USERS_FILTER_CHIP_NEEDS_REVIEW)).toBe("needs_review");
     expect(matchKeyForUsersFilterChip(USERS_FILTER_CHIP_UNRECORDED)).toBe("unrecorded");
     expect(matchKeyForUsersFilterChip(USERS_FILTER_CHIP_DUE_SOON)).toBe("deadline_near");

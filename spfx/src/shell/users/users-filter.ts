@@ -26,8 +26,8 @@ export type UsersFilterChipLabel = (typeof USERS_FILTER_CHIP_LABELS)[number];
 
 export type UsersFilterMatchKey = Exclude<UserListStatusCategory, "normal">;
 
-const CHIP_TO_MATCH_KEY: Readonly<Record<UsersFilterChipLabel, UsersFilterMatchKey | null>> = {
-  [USERS_FILTER_CHIP_ALL]: null,
+const CHIP_TO_MATCH_KEY: Readonly<Record<UsersFilterChipLabel, UsersFilterMatchKey | undefined>> = {
+  [USERS_FILTER_CHIP_ALL]: undefined,
   [USERS_FILTER_CHIP_NEEDS_REVIEW]: "needs_review",
   [USERS_FILTER_CHIP_UNRECORDED]: "unrecorded",
   [USERS_FILTER_CHIP_DUE_SOON]: "deadline_near",
@@ -39,7 +39,7 @@ export function isUsersFilterChipLabel(value: string): value is UsersFilterChipL
 
 export function matchKeyForUsersFilterChip(
   chip: UsersFilterChipLabel,
-): UsersFilterMatchKey | null {
+): UsersFilterMatchKey | undefined {
   return CHIP_TO_MATCH_KEY[chip];
 }
 
@@ -49,7 +49,7 @@ export function filterUserRowsByStatusChip(
   chip: UsersFilterChipLabel,
 ): readonly UserListRow[] {
   const matchKey = matchKeyForUsersFilterChip(chip);
-  if (matchKey === null) {
+  if (matchKey === undefined) {
     return rows;
   }
   return rows.filter((row) => row.statusBadges.some((badge) => badge.id === matchKey));
