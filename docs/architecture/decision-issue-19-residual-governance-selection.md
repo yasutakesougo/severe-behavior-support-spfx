@@ -113,7 +113,7 @@ Batch A-1 technical boundaries（DEC-005 Accepted 等）は維持する。
 | GOV-RULE-01 | 行動関連点数の評価周期 | EVIDENCE_REQUIRED / MIXED | **Accepted / LOCKED**（[`decision-gov-rule-01-evaluation-cycle-acceptance.md`](./decision-gov-rule-01-evaluation-cycle-acceptance.md)；HOLD LIFTED） |
 | GOV-RULE-02 | 観察期間の起算日 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option A**（同上 bundle；支援計画の有効開始日） |
 | GOV-RULE-03 | 観察期間の終了日 | ORG_POLICY / MIXED | **Accepted / LOCKED / Option A**（同上 bundle；見直し実施日の前日） |
-| GOV-RULE-04 | 必要観察件数 | ORG_POLICY | **HOLD / UNCHANGED**（Evidence Bundle；件数 NOT DETERMINED）[`decision-gov-rule-04-observation-count-evidence-packet.md`](./decision-gov-rule-04-observation-count-evidence-packet.md) |
+| GOV-RULE-04 | 必要観察件数 | ORG_POLICY | **Accepted / LOCKED**（[`decision-gov-rule-04-observation-count-acceptance.md`](./decision-gov-rule-04-observation-count-acceptance.md)；minimumObservationCount = NOT FIXED；HOLD LIFTED） |
 | GOV-RULE-09 | ルール内容の責任者 | ORG_POLICY | **Accepted / LOCKED / Option B**（[`decision-gov-rule-09-rule-content-owner-option-b-acceptance.md`](./decision-gov-rule-09-rule-content-owner-option-b-acceptance.md)） |
 | GOV-RULE-10 | ルール変更の承認者 | ORG_POLICY | **Accepted / LOCKED / Option C**（[`decision-gov-rule-10-change-approver-option-c-acceptance.md`](./decision-gov-rule-10-change-approver-option-c-acceptance.md)） |
 | GOV-RULE-11 | 制度値と法人運用値の境界 | ORG_POLICY / MIXED | **Accepted / LOCKED（fill-in）**（[`decision-gov-rule-11-value-boundary-fill-in-acceptance.md`](./decision-gov-rule-11-value-boundary-fill-in-acceptance.md)） |
@@ -139,11 +139,11 @@ Stale marker correction（docs truth）:
   GOV-STAFF-05 = Accepted / LOCKED / Option C（記録時点 SiteId 維持 + 異動先は明示権限の範囲だけ）。
   GOV-STAFF-06 = Accepted / LOCKED / Option B（法人業務責任者；bundle CONFIRMED）。
   GOV-STAFF-07〜12 = Accepted / LOCKED（Decision-GOV-STAFF-06-12-BUNDLE-1）。
-  GOV-RULE-01 = Accepted / LOCKED（HOLD LIFTED）；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY）。
+  GOV-RULE-01 = Accepted / LOCKED（HOLD LIFTED）；GOV-RULE-02/03 = Accepted / Option A；GOV-RULE-04 = Accepted / LOCKED（HOLD LIFTED；NOT FIXED）。
   GOV-RULE-05〜12 = CONFIRMED / UNCHANGED。
   post-retention deletion = Accepted / LOCKED / Option C（初期版は経過後完全削除機能なし）。
   GOV-PERF-01〜11 = SELECTED / LOCKED（PR #285）。HOLD resolution bundle SELECTED；解除 NOT PERFORMED。
-  RULE-04 法人運用 Decision / PERF HOLD 解除 Acceptance / DEC-015 が OPEN 残件。
+  PERF HOLD 解除 Acceptance / DEC-015 が OPEN 残件。
   DEC-015 = NOT ACCEPTED（GOV-AUD-07 と整合要 / 別 sync）。
 ```
 
@@ -273,16 +273,17 @@ Consumed progression:
     （decision-gov-perf-hold-resolution-bundle-selection.md；02/06/07/08/09 HOLD UNCHANGED）
   GOV-RULE-01 / 04 Evidence Bundle = MERGED（PR #287）
     （decision-gov-rule-01-04-evidence-bundle-selection.md）
-  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288）
+  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288 MERGED）
     （decision-gov-rule-01-evaluation-cycle-acceptance.md；HOLD LIFTED）
+  GOV-RULE-04 Acceptance = Accepted / LOCKED（PR #289）
+    （decision-gov-rule-04-observation-count-acceptance.md；HOLD LIFTED）
 
 Next:
-  1. GOV-RULE-01 Acceptance PR: IR → Human Ready → Human Merge
+  1. GOV-RULE-04 Acceptance PR: IR → Human Ready → Human Merge
   2. After Merge: next residual SELECT（one item；NOT auto）
-  3. RULE-04 corporate ORG_POLICY Decision = separate / NOT auto
-  4. PERF HOLD 解除 Acceptance = separate / NOT auto
-  5. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
-  6. #19 Close は残件移管完了後の別 Human disposition
+  3. PERF HOLD 解除 Acceptance = separate / NOT auto
+  4. DEC-015 ledger sync = separate if needed（NOT auto-Accepted）
+  5. #19 Close は残件移管完了後の別 Human disposition
 ```
 
 First residual history（consumed）:
@@ -454,12 +455,19 @@ GOV-RULE-01 / 04 Evidence Bundle（PR #287 MERGED）
 Selection: decision-gov-rule-01-04-evidence-bundle-selection.md
 ```
 
+Consumed residual（unit）:
+
+```text
+ACCEPT GOV-RULE-01 — Accepted / LOCKED（PR #288 MERGED）
+Acceptance: decision-gov-rule-01-evaluation-cycle-acceptance.md
+```
+
 Current residual（unit）:
 
 ```text
-ACCEPT GOV-RULE-01 — Accepted / LOCKED（PR #288）
-Acceptance: decision-gov-rule-01-evaluation-cycle-acceptance.md
-GOV-RULE-04: HOLD / UNCHANGED
+ACCEPT GOV-RULE-04 — Accepted / LOCKED（PR #289）
+Acceptance: decision-gov-rule-04-observation-count-acceptance.md
+minimumObservationCount = NOT FIXED
 ```
 
 ## Reference
