@@ -39,7 +39,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 |---|---|---|---|---|---|---|
 | RPF-Q01 | cross-cutting | QUESTION→SELECTED | 要確認/確認待ち/確認対象 と 期限間近/期限接近 が混在 | 用語正本を確定 | MERGED / COMPLETE（PR #320 / 5655fc7） | DEMO-UX-7 |
 | RPF-001 | overview | CHANGE | 今日やること CTA が無効で導線が途切れる | A→記録 / B→見直し / C→詳細へ遷移 | MERGED / COMPLETE（PR #320 / 5655fc7） | DEMO-UX-7 |
-| RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-8 |
+| RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | IMPLEMENTED（Fresh Review PASS；Ready未） | DEMO-UX-8 |
 | RPF-002 | daily-record | CHANGE | 入力欄は見えるが何もできない | 未記録選択→記録画面→入力イメージまで通す。実保存 HOLD | OPEN（queued） | after DEMO-UX-8 / RPF-003 |
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | DEFERRED | after flow slices |
 | RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | DEFERRED | after flow slices |

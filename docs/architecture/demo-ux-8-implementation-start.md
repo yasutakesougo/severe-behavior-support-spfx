@@ -3,18 +3,21 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-8 — Users list status filter
-Status: Implementation COMPLETE + Verification PASS
+Status: Implementation COMPLETE + Verification PASS + Fresh Review PASS
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-8-USERS-LIST-STATUS-FILTER-1 / PR #321）
 Human Implementation Start: GO（2026-08-12）
 Baseline main: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
 Branch: cursor/demo-ux-8-users-filter-selection-3507
 PR: #321 OPEN / Draft
 Implementation verified HEAD: 6e82e1eef106cfbd7743d39eec1ee4380f69db76
+PR tip HEAD: see PR #321 head（docs-only after Implementation verified HEAD）
 Selection: decision-demo-ux-8-users-list-status-filter-selection.md
+Fresh Review: PASS（demo-ux-8-fresh-review.md；P0=0 / P1=0）
 Browser smoke: PASS / VERIFIED（demo-ux-8-browser-smoke.md）
 Heft test: 74 / 74 PASS
 Root test: 554 / 554 PASS
-Ready / Merge: NOT AUTHORIZED
+Human Ready: HOLD（separate Human Decision）
+Human Merge: HOLD
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -110,21 +113,23 @@ SPFx Heft test: PASS（74 / 74）
 browser smoke demo-ux-8: PASS（8 / 8）
 ```
 
-## Gate state
+## Gate state（updated after Fresh Review PASS）
 
 ```text
 DEMO-UX-8 Implementation = COMPLETE
 Verification = PASS
+Fresh Review = PASS（P0=0 / P1=0 / P2=1 non-blocking）
 Human Ready = HOLD
 Human Merge = HOLD
 PR #321 = OPEN / Draft
+Implementation verified HEAD = 6e82e1eef106cfbd7743d39eec1ee4380f69db76
 ```
 
 Next:
 
 ```text
-1. Fresh Review / Human Ready Decision（separate）
-2. Merge Decision（separate）
+1. Fresh Review = PASS（complete）
+2. Human Ready Decision（GO / HOLD）— separate
 ```
 
 Still NOT AUTHORIZED:
@@ -143,6 +148,7 @@ RPF-002 Implementation Start
 ```text
 Implementation COMPLETE ≠ Ready GO
 Verification PASS ≠ Review PASS
+Fresh Review PASS ≠ Ready GO
 This completion ≠ Merge GO
 This completion ≠ #299 Close
 This completion ≠ RPF-002 authorization
