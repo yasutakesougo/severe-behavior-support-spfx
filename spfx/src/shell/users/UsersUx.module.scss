@@ -68,6 +68,18 @@
   color: inherit;
   font-size: 0.8rem;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.filterButton:focus {
+  outline: 2px solid "[theme:themePrimary, default: #03787c]";
+  outline-offset: 2px;
+}
+
+.filterButtonSelected {
+  border-color: "[theme:themePrimary, default: #03787c]";
+  background: "[theme:themeLighter, default: #deecdc]";
+  font-weight: 700;
 }
 
 .filterButton:disabled {

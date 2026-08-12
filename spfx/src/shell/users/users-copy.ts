@@ -1,14 +1,22 @@
 /**
- * DEMO-UX-2 / DEMO-UX-3 — fail-closed presentation copy.
+ * DEMO-UX-2 / DEMO-UX-3 / DEMO-UX-8 — fail-closed presentation copy.
  */
 
 export const DEMO_USERS_PRESENTATION_NOTE =
   "この画面は合成データによる表示確認用です。業務データには接続されていません。";
 
-export const DEMO_USERS_FILTER_DISABLED_NOTE = "絞り込みは表示専用のため操作できません。";
+/** DEMO-UX-8: filter is operable inside synthetic fixture only. */
+export const DEMO_USERS_FILTER_NOTE =
+  "合成データ内の状態で絞り込みできます。業務データの検索には接続されていません。";
+
+/** @deprecated Prefer DEMO_USERS_FILTER_NOTE after DEMO-UX-8. Kept for import compatibility. */
+export const DEMO_USERS_FILTER_DISABLED_NOTE = DEMO_USERS_FILTER_NOTE;
 
 export const DEMO_USERS_DETAIL_DISABLED_NOTE =
   "Aさんのみ合成データ内の詳細プレビューを表示できます。業務データの詳細画面には接続されていません。";
+
+export const DEMO_USERS_FILTER_EMPTY_NOTE =
+  "合成データ内に該当する利用者はありません。事業所に利用者がいないことを示すものではありません。";
 
 /** Fail-closed copy must not claim usable business UI or live connection. */
 export function usersCopyIsFailClosed(text: string): boolean {

@@ -78,7 +78,7 @@ DEMO_UX_SLICE.adapterFetchAuthorized = false
 DEMO_UX_SLICE.authJudgmentAuthorized = false
 DEMO_UX_SLICE.liveUsersDataAuthorized = false
 DEMO_UX_SLICE.userDetailNavigationAuthorized = false
-DEMO_UX_SLICE.filterExecutionAuthorized = false
+DEMO_UX_SLICE.filterExecutionAuthorized = true（updated by DEMO-UX-8）
 users list = presentation skeleton only（must not appear as connected business UI）
 records destination = SHELL-UX-7 placeholder unchanged
 ```

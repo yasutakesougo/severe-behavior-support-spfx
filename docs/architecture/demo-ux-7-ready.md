@@ -5,10 +5,12 @@ Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-7 — Terminology canon + Today-actions navigation
 PR: #320
 Human Ready Decision: GO（2026-08-12）
-Status: READY FOR REVIEW / Merge HOLD
+Status: MERGED / COMPLETE
 Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
 PR tip at Human Ready Decision: d6b9b19801a78b79fc67872e7672bfedcb8310f4
 PR tip after Ready evidence commit: 4d7c7109c749703528f2a7ba47957c1cca3ae682
+Merge: SUCCESS（PR #320 / 5655fc750ef9f4dfde37fdf12bf99b7e138d855e）
+Expected tip in merge: 1d7e9a733e03b1f8bffead2353b2209bd423f3df
 ```
 
 ## Basis
@@ -58,8 +60,17 @@ RPF-003 Implementation Start
 RPF-002 Implementation Start
 ```
 
+## Merge result
+
+```text
+Human Merge Decision = GO
+Merge = SUCCESS
+DEMO-UX-7 = MERGED / COMPLETE
+Next Selection = DEMO-UX-8 / RPF-003
+```
+
 ## Next gate
 
 ```text
-Human Merge Decision（GO / HOLD）
+DEMO-UX-8（RPF-003）Selection → separate Implementation Start Decision
 ```

@@ -3,24 +3,24 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-7 — Terminology canon + Today-actions navigation
-Status: Implementation COMPLETE + Verification PASS + Fresh Review PASS + Ready GO / Merge HOLD
+Status: MERGED / COMPLETE（PR #320 / 5655fc750ef9f4dfde37fdf12bf99b7e138d855e）
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-7-TERMINOLOGY-TODAY-ACTIONS-1 / PR #320）
 Human Implementation Start: GO（2026-08-12）
 Human Ready: GO（2026-08-12）
-Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
+Human Merge: GO（2026-08-12）
+Baseline main at start: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
+Merge commit: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
+Expected tip in merge: 1d7e9a733e03b1f8bffead2353b2209bd423f3df
 Branch: cursor/demo-ux-7-terminology-today-actions-selection-3507
-PR: #320 OPEN / Ready for Review（draft=false）
+PR: #320 MERGED
 Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
-PR tip HEAD: 4d7c7109c749703528f2a7ba47957c1cca3ae682
 Fresh Review: demo-ux-7-fresh-review.md
 Ready: demo-ux-7-ready.md
-mergeable: MERGEABLE / CLEAN
-CI: Contracts and Process CI = SUCCESS
 Browser smoke: PASS / VERIFIED（demo-ux-7-browser-smoke.md）
 Heft test: 70 / 70 PASS
 Root test: 554 / 554 PASS
 Review PASS: PASS（P0=0 / P1=0）
-Human Merge: HOLD（separate Human Decision）
+Next: DEMO-UX-8 / RPF-003 Selection
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -101,35 +101,30 @@ SPFx Heft test: PASS（70 / 70）
 browser smoke demo-ux-7: PASS（7 / 7）
 ```
 
-## Gate state（updated after Human Ready GO）
+## Gate state（updated after Merge SUCCESS）
 
 ```text
 DEMO-UX-7 Implementation = COMPLETE
 Verification = PASS
 Fresh Review = PASS（P0=0 / P1=0）
 Human Ready = GO
-PR #320 = OPEN / Ready for Review（draft=false）
-Implementation verified HEAD = 5747af43d705b647d6b23fb91f337e396896a365
-PR tip HEAD = d6b9b19801a78b79fc67872e7672bfedcb8310f4
-Note: tip contains docs-only commits after implementation HEAD; 5747af4 is ancestor
-mergeable = MERGEABLE
-mergeStateStatus = CLEAN
-CI = SUCCESS（Verify contracts, skills, and scope）
-submitted GitHub review objects = 0（Fresh Review evidence is docs artifact）
-Human Merge = HOLD
+Human Merge = GO
+PR #320 = MERGED
+Merge commit = 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
+Expected tip in merge = 1d7e9a733e03b1f8bffead2353b2209bd423f3df
+DEMO-UX-7 = MERGED / COMPLETE
 ```
 
 Next:
 
 ```text
-1. Ready = GO（complete）
-2. Human Merge Decision（GO / HOLD）— separate
+1. DEMO-UX-8 / RPF-003 Selection = SELECTED / LOCKED（this follow-on）
+2. DEMO-UX-8 Implementation Start = NOT AUTHORIZED（separate Human Decision）
 ```
 
 Still NOT AUTHORIZED:
 
 ```text
-Merge
 Deploy
 SharePoint write
 #299 Close
@@ -137,19 +132,17 @@ RPF-003 Implementation Start
 RPF-002 Implementation Start
 ```
 
-Next queue（after Merge of this slice, separately authorized）:
+Next queue:
 
 ```text
-RPF-003 → RPF-002
+DEMO-UX-8（RPF-003）→ RPF-002
 ```
 
 ## Non-claims
 
 ```text
-Implementation COMPLETE ≠ Ready GO
-Verification PASS ≠ Review PASS
-This completion ≠ Merge GO
+DEMO-UX-7 MERGED ≠ RPF-003 Implementation Start
+DEMO-UX-7 MERGED ≠ RPF-002 Implementation Start
 This completion ≠ #299 Close
-This completion ≠ RPF-003 / RPF-002 authorization
-DEMO-UX-7 is at the review gate, not blocked by missing implementation
+This completion ≠ Deploy / SharePoint write
 ```
