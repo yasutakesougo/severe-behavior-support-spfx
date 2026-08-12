@@ -4,13 +4,14 @@
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-7 — Terminology canon + Today-actions navigation
 Decision: Decision-DEMO-UX-7-TERMINOLOGY-TODAY-ACTIONS-1
-Status: SELECTED / LOCKED
+Status: MERGED / COMPLETE
 Human Selection: GO（2026-08-12）
 Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
 Source feedback: RPF-Q01 + RPF-001
-Follow-on queue（not this slice）: RPF-003 → RPF-002
+Follow-on queue: RPF-003（DEMO-UX-8 Selection）→ RPF-002
 Implementation Start: GO（2026-08-12）— see demo-ux-7-implementation-start.md
-Ready / Merge: NOT AUTHORIZED
+Ready: GO（2026-08-12）— see demo-ux-7-ready.md
+Merge: SUCCESS（PR #320 / 5655fc750ef9f4dfde37fdf12bf99b7e138d855e）
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED

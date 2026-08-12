@@ -37,10 +37,10 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 
 | feedbackId | surface | classification | observation | requestedOutcome | status | followUp |
 |---|---|---|---|---|---|---|
-| RPF-Q01 | cross-cutting | QUESTION→SELECTED | 要確認/確認待ち/確認対象 と 期限間近/期限接近 が混在 | 用語正本を確定 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-7 |
-| RPF-001 | overview | CHANGE | 今日やること CTA が無効で導線が途切れる | A→記録 / B→見直し / C→詳細へ遷移 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-7 |
-| RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | OPEN（queued） | after DEMO-UX-7 |
-| RPF-002 | daily-record | CHANGE | 入力欄は見えるが何もできない | 未記録選択→記録画面→入力イメージまで通す。実保存 HOLD | OPEN（queued） | after RPF-003 |
+| RPF-Q01 | cross-cutting | QUESTION→SELECTED | 要確認/確認待ち/確認対象 と 期限間近/期限接近 が混在 | 用語正本を確定 | MERGED / COMPLETE（PR #320 / 5655fc7） | DEMO-UX-7 |
+| RPF-001 | overview | CHANGE | 今日やること CTA が無効で導線が途切れる | A→記録 / B→見直し / C→詳細へ遷移 | MERGED / COMPLETE（PR #320 / 5655fc7） | DEMO-UX-7 |
+| RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | SELECTED / LOCKED（Implementation Start 未認可） | DEMO-UX-8 |
+| RPF-002 | daily-record | CHANGE | 入力欄は見えるが何もできない | 未記録選択→記録画面→入力イメージまで通す。実保存 HOLD | OPEN（queued） | after DEMO-UX-8 / RPF-003 |
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | DEFERRED | after flow slices |
 | RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | DEFERRED | after flow slices |
 | RPF-006 | review-status | CHANGE | Overview KPI と見直し件数の対応が弱い | 対応関係を明示 | DEFERRED | after flow slices |
@@ -50,15 +50,27 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 
 | feedbackId | selected slice | IN / OUT reference | Implementation Start |
 |---|---|---|---|
-| RPF-Q01 | DEMO-UX-7 | `decision-demo-ux-7-terminology-today-actions-selection.md` | GO（2026-08-12）/ COMPLETE |
-| RPF-001 | DEMO-UX-7 | same | GO（2026-08-12）/ COMPLETE |
+| RPF-Q01 | DEMO-UX-7 | `decision-demo-ux-7-terminology-today-actions-selection.md` | GO（2026-08-12）/ MERGED COMPLETE |
+| RPF-001 | DEMO-UX-7 | same | GO（2026-08-12）/ MERGED COMPLETE |
+| RPF-003 | DEMO-UX-8 | `decision-demo-ux-8-users-list-status-filter-selection.md` | NOT AUTHORIZED |
 
-## 5. Explicit non-claims
+## 5. Predecessor merge confirmation（DEMO-UX-7）
 
 ```text
-This record ≠ Implementation Start GO
-This record ≠ Ready / Merge GO
+PR #320 Merge = SUCCESS
+Merge commit = 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
+Expected HEAD guard tip = 1d7e9a733e03b1f8bffead2353b2209bd423f3df（ancestor match confirmed）
+DEMO-UX-7 = MERGED / COMPLETE
+```
+
+## 6. Explicit non-claims
+
+```text
+This record ≠ RPF-003 / DEMO-UX-8 Implementation Start GO
+This record ≠ RPF-002 Implementation Start GO
+This record ≠ Ready / Merge GO for DEMO-UX-8
 This record ≠ #299 Close
 This record ≠ visual redesign authorization
 This record ≠ SharePoint write authorization
+This record ≠ Deploy authorization
 ```

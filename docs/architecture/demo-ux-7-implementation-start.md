@@ -3,24 +3,24 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-7 — Terminology canon + Today-actions navigation
-Status: Implementation COMPLETE + Verification PASS + Fresh Review PASS + Ready GO / Merge HOLD
+Status: MERGED / COMPLETE（PR #320 / 5655fc750ef9f4dfde37fdf12bf99b7e138d855e）
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-7-TERMINOLOGY-TODAY-ACTIONS-1 / PR #320）
 Human Implementation Start: GO（2026-08-12）
 Human Ready: GO（2026-08-12）
-Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
+Human Merge: GO（2026-08-12）
+Baseline main at start: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
+Merge commit: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
+Expected tip in merge: 1d7e9a733e03b1f8bffead2353b2209bd423f3df
 Branch: cursor/demo-ux-7-terminology-today-actions-selection-3507
-PR: #320 OPEN / Ready for Review（draft=false）
+PR: #320 MERGED
 Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
-PR tip HEAD: 4d7c7109c749703528f2a7ba47957c1cca3ae682
 Fresh Review: demo-ux-7-fresh-review.md
 Ready: demo-ux-7-ready.md
-mergeable: MERGEABLE / CLEAN
-CI: Contracts and Process CI = SUCCESS
 Browser smoke: PASS / VERIFIED（demo-ux-7-browser-smoke.md）
 Heft test: 70 / 70 PASS
 Root test: 554 / 554 PASS
 Review PASS: PASS（P0=0 / P1=0）
-Human Merge: HOLD（separate Human Decision）
+Next: DEMO-UX-8 / RPF-003 Selection
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
