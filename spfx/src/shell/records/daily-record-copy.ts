@@ -6,7 +6,12 @@ export const DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE =
 
 export function dailyRecordCopyIsFailClosed(text: string): boolean {
   const lowered = text.toLowerCase();
-  const forbidden = ["利用可能です", "業務データに接続されています", "live sharepoint", "保存できます"];
+  const forbidden = [
+    "利用可能です",
+    "業務データに接続されています",
+    "live sharepoint",
+    "保存できます",
+  ];
   for (const token of forbidden) {
     if (lowered.indexOf(token.toLowerCase()) >= 0) {
       return false;
