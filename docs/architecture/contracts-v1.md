@@ -59,6 +59,36 @@ AuthorizationContext:
 - `evaluateAuthorizationAccess` はサイト解決後に既存 `evaluateAccess` を再利用する。
 - Graph / Entra / SharePoint I/O は含めない。
 
+## Authorization Context Resolver（#21-B）
+
+`composeAuthorizationContext` / `evaluateResolvedAuthorizationAccess` は、
+provider 結果を `AuthorizationContext` へ合成する純オーケストレーションである。
+
+```text
+AuthorizationPrincipal:
+  Subject
+  UserId
+  OrganizationId
+
+SiteMembershipProvider.resolveMemberships(principal)
+  → LookupResult<SiteMembership[]>
+
+composeAuthorizationContext:
+  principal LookupResult
+  + memberships LookupResult
+  + selectedSiteId（明示のみ）
+  → LookupResult<AuthorizationContext>
+```
+
+規則:
+
+- `SelectedSiteId` を membership 配列順や単一所属から推論しない。
+- provider の EMPTY / UNKNOWN / FETCH_FAILED を成功へ変換しない。
+- inactive / disabled は principal LookupResult 失敗へ写像する（AccountStatus 語彙を作らない）。
+- zero membership は認可しない（評価は `evaluateAuthorizationAccess` に委譲）。
+- `evaluateResolvedAuthorizationAccess` は合成後に `evaluateAuthorizationAccess` を再利用し、判定規則を再実装しない。
+- `InMemorySiteMembershipProvider` は合成 fixture 用 double であり、Graph / Entra / SharePoint I/O を持たない。
+
 ## 命名境界
 
 contractsで使用するTypeScriptプロパティ名は、JSON契約の正本として扱う。

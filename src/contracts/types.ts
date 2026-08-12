@@ -59,6 +59,16 @@ export type AuthorizationContext = Readonly<{
   SiteContext: SiteContext;
 }>;
 
+/**
+ * Authenticated principal for #21-B composition.
+ * Site selection and memberships are supplied separately — never inferred here.
+ */
+export type AuthorizationPrincipal = Readonly<{
+  Subject: string;
+  UserId: string;
+  OrganizationId: string;
+}>;
+
 export type ApprovedProcedureReference = Readonly<{
   ProcedureId: string;
   ProcedureVersion: string;
