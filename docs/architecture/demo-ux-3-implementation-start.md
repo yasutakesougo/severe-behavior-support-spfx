@@ -3,11 +3,15 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-3 — User detail presentation
-Status: Implementation Start AUTHORIZED / implementation in progress
+Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
 Human Selection: SELECTED / LOCKED（Issue #299 comment 5265051876）
 Human Implementation Start: GO（Issue #299 comment 5265139174 / 2026-08-12）
+Human Verification: GO（2026-08-12）
 Baseline main: 76b5fffe727dada2f708e9e7a67d566d8845059c
 Branch: chatgpt/demo-ux-3-user-detail
+PR: #306
+Browser smoke: PASS / VERIFIED（demo-ux-3-browser-smoke.md）
+Heft test: 48 / 48 PASS
 #299 Close: NOT AUTHORIZED
 #28 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
@@ -35,6 +39,7 @@ Aさんの合成詳細プレビュー
 既存 primary navigation / fail-closed / site selection / skip link の維持
 keyboard / focus / responsive / accessibility boundary の維持
 fixture-driven unit tests
+browser smoke evidence
 implementation-specific documentation
 ```
 
@@ -96,14 +101,24 @@ evaluationMutationAuthorized = false
 ## Verification state
 
 ```text
-Unit test source: added
-Browser smoke: NOT RUN in this ChatGPT connector session
-Heft build / test: NOT RUN locally
-Reason: local execution environment has no GitHub network checkout
-CI: evaluate after Draft PR creation
+Unit test: 48 / 48 PASS（heft）
+Browser smoke: PASS / VERIFIED（demo-ux-3-browser-smoke.md）
+Heft build: PASS
+Format check: PASS（prettier）
+CI Contracts and Process: evaluate after verification commit on Draft PR #306
 ```
 
-未実行の検証を PASS として扱わない。
+## Delivered surface
+
+```text
+spfx/src/shell/users/UserDetail.tsx
+spfx/src/shell/users/UserDetailUx.module.scss
+spfx/src/shell/users/user-detail-*
+spfx/src/shell/users/UsersList.tsx（Aさん preview opt-in）
+spfx/src/shell/ux/AppShellChrome.tsx（users detail local state）
+spfx/smoke/demo-ux-3/*
+docs/architecture/demo-ux-3-browser-smoke.md
+```
 
 ## Stop / HOLD
 
@@ -112,5 +127,5 @@ Do not Ready / Merge automatically
 Do not Close #299 / #28
 Do not enable live I/O / REST / binder wiring
 Do not implement plan / record / evaluation mutation
-STOP at Draft PR for CI and review
+STOP at Draft PR for review
 ```

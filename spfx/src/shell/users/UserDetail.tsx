@@ -58,6 +58,7 @@ export const UserDetail: React.FC<UserDetailProps> = ({
         ref={headingRef}
         tabIndex={-1}
         className={styles.userHeading}
+        data-demo-ux="user-detail-heading"
       >
         {personLabel}
       </h1>
