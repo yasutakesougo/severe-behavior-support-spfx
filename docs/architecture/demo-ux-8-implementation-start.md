@@ -9,8 +9,11 @@ Human Implementation Start: GO（2026-08-12）
 Baseline main: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
 Branch: cursor/demo-ux-8-users-filter-selection-3507
 PR: #321 OPEN / Draft
+Implementation verified HEAD: （see tip after verification commit）
 Selection: decision-demo-ux-8-users-list-status-filter-selection.md
-Browser smoke: demo-ux-8-browser-smoke.md
+Browser smoke: PASS / VERIFIED（demo-ux-8-browser-smoke.md）
+Heft test: 74 / 74 PASS
+Root test: 554 / 554 PASS
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
@@ -99,21 +102,40 @@ failClosedSemanticsChangeAuthorized = false
 ## Verification state
 
 ```text
-format:check: （pending run）
-lint: （pending run）
-typecheck: （pending run）
-root test: （pending run）
-SPFx Heft test: （pending run）
-browser smoke demo-ux-8: （pending run）
+format:check: PASS
+lint: PASS（root）
+typecheck: PASS（root）
+root test: PASS（554 / 554）
+SPFx Heft test: PASS（74 / 74）
+browser smoke demo-ux-8: PASS（8 / 8）
 ```
 
 ## Gate state
 
 ```text
-DEMO-UX-8 Implementation = COMPLETE（pending verification fill）
-Verification = pending
+DEMO-UX-8 Implementation = COMPLETE
+Verification = PASS
 Human Ready = HOLD
 Human Merge = HOLD
+PR #321 = OPEN / Draft
+```
+
+Next:
+
+```text
+1. Fresh Review / Human Ready Decision（separate）
+2. Merge Decision（separate）
+```
+
+Still NOT AUTHORIZED:
+
+```text
+Ready
+Merge
+Deploy
+SharePoint write
+#299 Close
+RPF-002 Implementation Start
 ```
 
 ## Non-claims
