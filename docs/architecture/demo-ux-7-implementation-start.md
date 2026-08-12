@@ -3,14 +3,20 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-7 — Terminology canon + Today-actions navigation
-Status: Implementation Start COMPLETE（presentation）+ browser smoke PASS
+Status: Implementation COMPLETE + Verification PASS / Review waiting
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-7-TERMINOLOGY-TODAY-ACTIONS-1 / PR #320）
 Human Implementation Start: GO（2026-08-12）
 Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
 Branch: cursor/demo-ux-7-terminology-today-actions-selection-3507
+PR: #320 OPEN / Draft
+HEAD: 5747af43d705b647d6b23fb91f337e396896a365
+mergeable: true
 Browser smoke: PASS / VERIFIED（demo-ux-7-browser-smoke.md）
 Heft test: 70 / 70 PASS
 Root test: 554 / 554 PASS
+Review PASS: ABSENT
+Human Ready: HOLD
+Reason: FRESH REVIEW REQUIRED
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -92,11 +98,49 @@ SPFx Heft test: PASS（70 / 70）
 browser smoke demo-ux-7: PASS（7 / 7）
 ```
 
+## Gate state（Human confirmed 2026-08-12）
+
+```text
+DEMO-UX-7 Implementation = COMPLETE
+Verification = PASS
+PR #320 = OPEN / Draft
+HEAD = 5747af43d705b647d6b23fb91f337e396896a365
+mergeable = true
+Review PASS = ABSENT
+Human Ready = HOLD
+Reason = FRESH REVIEW REQUIRED
+```
+
+Next:
+
+```text
+1. Fresh Review（required: P0 = 0 / P1 = 0）
+2. After Review PASS → Human Ready Decision
+```
+
+Still NOT AUTHORIZED:
+
+```text
+Ready
+Merge
+Deploy
+SharePoint write
+#299 Close
+```
+
+Next queue（after Ready/Merge of this slice, separately authorized）:
+
+```text
+RPF-003 → RPF-002
+```
+
 ## Non-claims
 
 ```text
-This completion ≠ Ready GO
+Implementation COMPLETE ≠ Ready GO
+Verification PASS ≠ Review PASS
 This completion ≠ Merge GO
 This completion ≠ #299 Close
 This completion ≠ RPF-003 / RPF-002 authorization
+DEMO-UX-7 is at the review gate, not blocked by missing implementation
 ```
