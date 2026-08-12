@@ -13,7 +13,7 @@ Unit: GOV-STAFF-04（利用者異動台帳の保存先）
 Human Decision: SELECT GOV-STAFF-04 + Option C
   （専用の法人共通台帳。支援内容は保存しない）
 Baseline tip: 46160fc524d9b13eb37a680d29017545b81cfeea
-PR: pending
+PR: #278
 Selection: decision-gov-staff-04-user-transfer-ledger-storage-selection.md
 SELECT Acceptance: decision-gov-staff-04-user-transfer-ledger-storage-acceptance.md
 Decision Packet: decision-gov-staff-04-user-transfer-ledger-storage-decision-packet.md

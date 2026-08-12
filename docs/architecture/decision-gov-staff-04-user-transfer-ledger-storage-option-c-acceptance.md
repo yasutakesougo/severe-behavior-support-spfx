@@ -22,7 +22,7 @@ Meaning:
   利用者異動台帳の保存先 =
     専用の法人共通台帳。支援内容は保存しない
 Baseline tip: 46160fc524d9b13eb37a680d29017545b81cfeea
-PR: pending（Selection / Option C Acceptance / Packet sync / IR）
+PR: #278（Selection / Option C Acceptance / Packet sync / IR）
 
 Does NOT mean:
   SharePoint サイト・リスト・台帳スキーマの発明
