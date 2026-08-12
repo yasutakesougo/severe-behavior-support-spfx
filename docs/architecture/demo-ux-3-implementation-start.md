@@ -105,7 +105,7 @@ Unit test: 48 / 48 PASS（heft）
 Browser smoke: PASS / VERIFIED（demo-ux-3-browser-smoke.md）
 Heft build: PASS
 Format check: PASS（prettier）
-CI Contracts and Process: evaluate after verification commit on Draft PR #306
+CI Contracts and Process: SUCCESS（run 31586474290 / verification commit 1d94b9c96a53c5f4e320e8476c69b518c8275aee）
 ```
 
 ## Delivered surface
