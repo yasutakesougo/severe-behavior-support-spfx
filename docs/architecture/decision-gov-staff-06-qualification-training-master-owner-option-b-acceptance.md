@@ -106,7 +106,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | Decision-GOV-STAFF-06-SELECTION-1 | **UNCHANGED**（unit SELECTED / LOCKED；同一 PR） |
 | GOV-STAFF-01〜05 | **UNCHANGED** |
 | GOV-AUD-01〜10 / GOV-RULE-05〜12 | **UNCHANGED** |
-| GOV-STAFF-07〜12 | **OUT / NOT SELECTED** |
+| GOV-STAFF-07〜12 | **Accepted / LOCKED（bundle Options；別 Decision）** |
 | Option A / C / D / H | **NOT SELECTED** |
 | SharePoint / M365 mutation | **HOLD / NOT STARTED / FORBIDDEN** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -115,11 +115,11 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-STAFF-06: Accepted / LOCKED / Option B
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-STAFF-06〜12 bundle Accepted（別 Decision；本 unit CONFIRMED）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 SharePoint / M365 mutation: NOT AUTHORIZED
-GOV-STAFF-07〜12: NOT SELECTED
+GOV-STAFF-07〜12: Accepted / LOCKED（bundle）
 ```
 
 Agent は本 Acceptance を理由にマスター UI 発明・個人名確定・GOV-STAFF-07+ 自動 SELECT・次 residual 自動 SELECT へ進まない。
