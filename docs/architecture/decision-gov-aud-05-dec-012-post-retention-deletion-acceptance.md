@@ -23,7 +23,7 @@ Human Decision: SELECT post-retention deletion residual
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 70213c78cda0882d9eb712938e51589e40d1061b
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #283（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-AUD-05 / DEC-012 post-retention deletion

@@ -15,7 +15,7 @@ Kind: Human Selection（#19 residual / post-retention deletion）
 Status: SELECTED / LOCKED（unit GO boundary）
 Human Decision: SELECT post-retention deletion residual
 Date: 2026-08-12
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #283（Selection / Packet / SELECT Acceptance / IR only）
 
 Baseline:
   main tip = 70213c78cda0882d9eb712938e51589e40d1061b

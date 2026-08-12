@@ -14,7 +14,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-AUD-05 / DEC-012 post-retention deletion
 Human Decision: SELECT post-retention deletion residual（unit）
 Baseline tip: 70213c78cda0882d9eb712938e51589e40d1061b
-PR: pending
+PR: #283
 Selection: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
 SELECT Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-acceptance.md
 Decision Packet: decision-gov-aud-05-dec-012-post-retention-deletion-decision-packet.md
