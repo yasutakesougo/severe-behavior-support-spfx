@@ -109,7 +109,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | Decision-GOV-STAFF-02-SELECTION-1 | **UNCHANGED**（unit SELECTED / LOCKED；同一 PR） |
 | GOV-STAFF-01 | **UNCHANGED**（Accepted / Option C） |
 | GOV-AUD-01〜10 / GOV-RULE-05〜12 | **UNCHANGED** |
-| GOV-STAFF-03〜12 | **OUT / NOT SELECTED** |
+| GOV-STAFF-03 | **unit SELECTED** / Option NOT SELECTED（別 Decision；Option A tip = NON-BINDING） |
+| GOV-STAFF-04〜12 | **OUT / NOT SELECTED** |
 | Option A / C / D / H | **NOT SELECTED** |
 | Entra / M365 mutation | **HOLD / NOT STARTED / FORBIDDEN** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -118,7 +119,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-STAFF-02: Accepted / LOCKED / Option B
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-STAFF-03 unit SELECTED（Option NOT SELECTED；別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 Entra / M365 mutation: NOT AUTHORIZED
