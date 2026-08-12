@@ -20,7 +20,7 @@ Human Decision: SELECT GOV-PERF HOLD Resolution Bundle
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: e64ad1d035d5e071841a5d19ced5f6e3c7abf407
-PR: pending
+PR: #286
 
 Selected:
   GOV-PERF-02 / 06 / 07 / 08 / 09 HOLD resolution materials bundle

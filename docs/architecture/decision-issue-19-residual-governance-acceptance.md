@@ -92,7 +92,7 @@ OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
 Prior residual Option = CONSUMED（GOV-RULE-01〜04 bundle recorded；01/04 HOLD open）
 Prior residual = GOV-PERF-01〜11 Options/HOLD（PR #285 MERGED）
-Current residual bundle = SELECTED / LOCKED（GOV-PERF HOLD Resolution；02/06/07/08/09 HOLD UNCHANGED；PR pending）
+Current residual bundle = SELECTED / LOCKED（GOV-PERF HOLD Resolution；02/06/07/08/09 HOLD UNCHANGED；PR #286）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 

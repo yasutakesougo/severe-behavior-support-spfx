@@ -271,7 +271,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 GOV-PERF-01〜11 bundle: MERGED（PR #285）
   Accepted: 01A / 03C / 04C / 05D / 10A / 11D
   HOLD: 02 / 06 / 07 / 08 / 09（UNCHANGED）
-next residual: Human SELECTED GOV-PERF HOLD Resolution Bundle（PR pending）
+next residual: Human SELECTED GOV-PERF HOLD Resolution Bundle（PR #286）
   正本: decision-gov-perf-hold-resolution-bundle-selection.md
   HOLD解除 Acceptance: NOT PERFORMED
 GOV-RULE-01 / 04 HOLD 解除: separate

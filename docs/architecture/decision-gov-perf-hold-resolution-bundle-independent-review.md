@@ -12,7 +12,7 @@ Kind: Independent Review（docs-only HOLD resolution materials）
 Units: GOV-PERF-02 / 06 / 07 / 08 / 09
 Human Decision: SELECT GOV-PERF HOLD Resolution Bundle
 Baseline tip: e64ad1d035d5e071841a5d19ced5f6e3c7abf407
-PR: pending
+PR: #286
 Selection: decision-gov-perf-hold-resolution-bundle-selection.md
 SELECT Acceptance: decision-gov-perf-hold-resolution-bundle-acceptance.md
 Evidence inventory: decision-gov-perf-hold-resolution-evidence-inventory.md

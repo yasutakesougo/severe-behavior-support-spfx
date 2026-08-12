@@ -10,7 +10,7 @@ Kind: Evidence inventory（docs-only）
 Bundle: GOV-PERF-02 / 06 / 07 / 08 / 09
 Baseline tip: e64ad1d035d5e071841a5d19ced5f6e3c7abf407
 Observation date: 2026-08-12
-PR: pending
+PR: #286
 Agent recommendation: NONE
 ```
 

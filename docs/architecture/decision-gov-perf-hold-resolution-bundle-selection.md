@@ -14,7 +14,7 @@ Kind: Human Selection（#19 residual / PERF HOLD resolution bundle）
 Status: SELECTED / LOCKED（bundle GO boundary）
 Human Decision: SELECT GOV-PERF HOLD Resolution Bundle
 Date: 2026-08-12
-PR: pending（Selection / evidence / packets / liftability / IR）
+PR: #286（Selection / evidence / packets / liftability / IR）
 
 Baseline:
   main tip = e64ad1d035d5e071841a5d19ced5f6e3c7abf407

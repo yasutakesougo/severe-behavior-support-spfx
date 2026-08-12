@@ -269,7 +269,7 @@ Consumed progression:
     （decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md）
   GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED（PR #285）
     （decision-gov-perf-01-11-performance-bundle-option-acceptance.md）
-  GOV-PERF HOLD Resolution Bundle = SELECTED（PR pending）
+  GOV-PERF HOLD Resolution Bundle = SELECTED（PR #286）
     （decision-gov-perf-hold-resolution-bundle-selection.md；02/06/07/08/09 HOLD UNCHANGED）
 
 Next:
@@ -438,7 +438,7 @@ Acceptance: decision-gov-perf-01-11-performance-bundle-option-acceptance.md
 Current residual（bundle）:
 
 ```text
-SELECT GOV-PERF HOLD Resolution Bundle — PERF-02/06/07/08/09（PR pending）
+SELECT GOV-PERF HOLD Resolution Bundle — PERF-02/06/07/08/09（PR #286）
   Decision status: HOLD / UNCHANGED（解除 NOT PERFORMED）
 Selection: decision-gov-perf-hold-resolution-bundle-selection.md
 Evidence: decision-gov-perf-hold-resolution-evidence-inventory.md
