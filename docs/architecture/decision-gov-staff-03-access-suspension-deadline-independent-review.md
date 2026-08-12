@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only Selection / Packet recording）
 Unit: GOV-STAFF-03（権限停止期限）
 Human Decision: SELECT GOV-STAFF-03（unit）
 Baseline tip: 5e246cd34a89c84ccf63d1f6917c66b69c2cd681
-PR: pending
+PR: #276
 Selection: decision-gov-staff-03-access-suspension-deadline-selection.md
 SELECT Acceptance: decision-gov-staff-03-access-suspension-deadline-acceptance.md
 Decision Packet: decision-gov-staff-03-access-suspension-deadline-decision-packet.md

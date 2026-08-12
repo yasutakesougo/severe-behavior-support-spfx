@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-STAFF-03
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 5e246cd34a89c84ccf63d1f6917c66b69c2cd681
-PR: pending（Selection / Packet / SELECT Acceptance / IR only）
+PR: #276（Selection / Packet / SELECT Acceptance / IR only）
 
 Selected unit:
   GOV-STAFF-03 — 権限停止期限
