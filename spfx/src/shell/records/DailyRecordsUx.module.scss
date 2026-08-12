@@ -1,0 +1,158 @@
+.dailyRecords {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.presentationNote,
+.mutationNote {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid "[theme:neutralLight, default:#edebe9]";
+  border-radius: 8px;
+  background: "[theme:neutralLighterAlt, default:#faf9f8]";
+}
+
+.section {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid "[theme:neutralLight, default:#edebe9]";
+  border-radius: 12px;
+  background: "[theme:white, default:#ffffff]";
+}
+
+.section h2,
+.statePanel h2 {
+  margin-top: 0;
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.inputGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.inputGrid input,
+.inputGrid textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.actionRow button {
+  min-height: 40px;
+  padding: 8px 16px;
+}
+
+.cardList,
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card,
+.timelineItem {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid "[theme:neutralLight, default:#edebe9]";
+  border-radius: 8px;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.card p,
+.timelineItem p {
+  margin: 6px 0 0;
+}
+
+.statusBadge {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  border: 1px solid "[theme:neutralSecondary, default:#605e5c]";
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.recordMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.stateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.statePanel {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid "[theme:neutralLight, default:#edebe9]";
+  border-radius: 12px;
+  background: "[theme:neutralLighterAlt, default:#faf9f8]";
+}
+
+.statePanel dl {
+  margin-bottom: 0;
+}
+
+.statePanel dl div {
+  display: grid;
+  grid-template-columns: minmax(88px, auto) minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.statePanel dt {
+  font-weight: 600;
+}
+
+.statePanel dd {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .inputGrid,
+  .stateGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fullWidth {
+    grid-column: auto;
+  }
+
+  .card {
+    flex-direction: column;
+  }
+}
