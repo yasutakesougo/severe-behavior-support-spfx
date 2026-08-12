@@ -111,7 +111,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | GOV-STAFF-02 | **UNCHANGED**（Accepted / Option B） |
 | GOV-STAFF-03 | **UNCHANGED**（Accepted / Option A） |
 | GOV-AUD-01〜10 / GOV-RULE-05〜12 | **UNCHANGED** |
-| GOV-STAFF-05〜12 | **OUT / NOT SELECTED** |
+| GOV-STAFF-05 | **Accepted / LOCKED / Option C**（別 Decision；記録時点 SiteId 維持 + 異動先は明示権限の範囲だけ） |
+| GOV-STAFF-06〜12 | **OUT / NOT SELECTED** |
 | Option A / B / D / H | **NOT SELECTED** |
 | SharePoint / M365 mutation | **HOLD / NOT STARTED / FORBIDDEN** |
 | FindingCode / A-5 / Implementation | **HOLD** |
@@ -120,11 +121,11 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-STAFF-04: Accepted / LOCKED / Option C
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-STAFF-05 Accepted / LOCKED / Option C（別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 SharePoint / M365 mutation: NOT AUTHORIZED
-GOV-STAFF-05〜12: NOT SELECTED
+GOV-STAFF-06〜12: NOT SELECTED
 ```
 
 Agent は本 Acceptance を理由にサイト/リスト発明・支援内容保存・GOV-STAFF-05+ 自動 SELECT・次 residual 自動 SELECT へ進まない。
