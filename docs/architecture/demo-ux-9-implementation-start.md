@@ -3,13 +3,17 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-9 — Daily record experience cleanup
-Status: Implementation COMPLETE + Verification pending
+Status: Implementation COMPLETE + Verification PASS
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-9-DAILY-RECORD-EXPERIENCE-1 / PR #322）
 Human Implementation Start: GO（2026-08-12）
 Baseline main: aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9
 Branch: cursor/demo-ux-9-daily-record-experience-selection-3507
 PR: #322 OPEN / Draft
+Implementation verified HEAD: 564c1b731307d256c32b4eb86794939139f90e6e
 Selection: decision-demo-ux-9-daily-record-experience-selection.md
+Browser smoke: PASS / VERIFIED（demo-ux-9-browser-smoke.md）
+Heft test: 77 / 77 PASS
+Root test: 554 / 554 PASS
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
@@ -85,21 +89,38 @@ recordCreationAuthorized = false
 ## Verification state
 
 ```text
-format:check: （pending run）
-lint: （pending run）
-typecheck: （pending run）
-root test: （pending run）
-SPFx Heft test: （pending run）
-browser smoke demo-ux-9: （pending run）
+format:check: PASS
+lint: PASS（root）
+typecheck: PASS（root）
+root test: PASS（554 / 554）
+SPFx Heft test: PASS（77 / 77）
+browser smoke demo-ux-9: PASS（8 / 8）
 ```
 
 ## Gate state
 
 ```text
-DEMO-UX-9 Implementation = COMPLETE（pending verification fill）
-Verification = pending
+DEMO-UX-9 Implementation = COMPLETE
+Verification = PASS
 Human Ready = HOLD
 Human Merge = HOLD
+PR #322 = OPEN / Draft
+```
+
+Next:
+
+```text
+1. Fresh Review / Human Ready Decision（separate）
+```
+
+Still NOT AUTHORIZED:
+
+```text
+Ready
+Merge
+Deploy
+SharePoint write
+#299 Close
 ```
 
 ## Non-claims
