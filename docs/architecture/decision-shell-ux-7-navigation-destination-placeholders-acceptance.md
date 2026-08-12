@@ -89,8 +89,8 @@ selected destination = visual + accessibility indication required
 
 ```text
 Selection = SELECTED / LOCKED
-Selection merge = NOT YET（docs PR in flight）
-Independence Review = after Selection / Acceptance 正本化
+Selection docs PR = #290（draft；Ready / Merge = HUMAN-ONLY）
+Independence Review = PASS（recorded；≠ Implementation Start）
 Implementation Start = NOT AUTHORIZED
 #28 = OPEN / KEEP OPEN
 Issue #28 SoT tip for this Decision = bd5a6ae214c18137d095310106857fe298a448ef
