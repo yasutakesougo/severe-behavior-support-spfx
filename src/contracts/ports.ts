@@ -3,10 +3,12 @@ import type {
   AccessDecision,
   AuthenticatedIdentity,
   AuthorizationContext,
+  AuthorizationPrincipal,
   DeploymentContext,
   ExecutionRecord,
   LookupResult,
   Role,
+  SiteMembership,
   WriteResult,
 } from "./types";
 
@@ -33,6 +35,26 @@ export interface AuthorizationAccessPolicy {
     requiredRoles: readonly Role[];
     context?: DeploymentContext;
   }): AccessDecision;
+}
+
+/**
+ * #21-B multi-site membership port.
+ * Must not force-fit single-site AuthenticatedIdentity alone.
+ * No Graph / Entra / SharePoint I/O in the port contract.
+ */
+export interface SiteMembershipProvider {
+  resolveMemberships(
+    principal: AuthorizationPrincipal,
+  ): Promise<LookupResult<readonly SiteMembership[]>>;
+}
+
+/** #21-B pure composer port — provider results → AuthorizationContext. */
+export interface AuthorizationContextResolver {
+  resolve(input: {
+    principal: LookupResult<AuthorizationPrincipal>;
+    memberships: LookupResult<readonly SiteMembership[]>;
+    selectedSiteId: string | null;
+  }): LookupResult<AuthorizationContext>;
 }
 
 export interface ApprovedProcedureProvider {
