@@ -12,13 +12,23 @@ describe("DEMO-UX-5 daily record presentation", () => {
   });
 
   it("separates business facts from system state", () => {
-    expect(DEMO_UX_DAILY_RECORD_FIXTURE.businessFacts.recordScopeLabel).toContain("合成表示");
-    expect(DEMO_UX_DAILY_RECORD_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
+    expect(
+      DEMO_UX_DAILY_RECORD_FIXTURE.businessFacts.recordScopeLabel,
+    ).toContain("合成表示");
+    expect(DEMO_UX_DAILY_RECORD_FIXTURE.systemState.saveStateLabel).toContain(
+      "live保存なし",
+    );
   });
 
   it("keeps fail-closed copy", () => {
-    expect(dailyRecordCopyIsFailClosed(DEMO_DAILY_RECORD_PRESENTATION_NOTE)).toBe(true);
-    expect(dailyRecordCopyIsFailClosed("利用可能です。業務データに接続されています。")).toBe(false);
+    expect(dailyRecordCopyIsFailClosed(DEMO_DAILY_RECORD_PRESENTATION_NOTE)).toBe(
+      true,
+    );
+    expect(
+      dailyRecordCopyIsFailClosed(
+        "利用可能です。業務データに接続されています。",
+      ),
+    ).toBe(false);
   });
 
   it("keeps live data and write flags off", () => {
