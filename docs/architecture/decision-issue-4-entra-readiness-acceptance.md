@@ -47,6 +47,20 @@ Explicitly NOT authorized by this Decision:
   Decision C Entra Mutation GO = NOT AUTHORIZED
 ```
 
+## Status authority after merge
+
+```text
+After this Acceptance is merged to main:
+  Decision-ISSUE-4-ENTRA-READINESS-1 = ACCEPTED / LOCKED for readiness only.
+  CANDIDATE / NOT YET ACCEPTED markers preserved in the original readiness packet
+  or Selection packet are pre-Human-decision snapshot markers.
+  They do not override this Acceptance after merge.
+
+This precedence applies to readiness status only.
+UNKNOWN group names, HOLD role-scope mappings, DEC-014 dependency,
+and all mutation prohibitions remain unchanged.
+```
+
 ## Remaining blockers before Decision C
 
 ```text
