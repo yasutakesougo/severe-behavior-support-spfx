@@ -1,0 +1,87 @@
+# GOV-STAFF-01 — 異動・退職情報の確定者 — Human Acceptance（SELECT）
+
+この文書は、**GOV-STAFF-01** に対する Human Selection（unit）の Acceptance 正本である。
+Option A–D の採択本文は Option C Acceptance を正本とする。
+
+Packet:
+[`decision-gov-staff-01-transfer-retirement-confirmer-selection.md`](./decision-gov-staff-01-transfer-retirement-confirmer-selection.md)
+
+Decision Packet:
+[`decision-gov-staff-01-transfer-retirement-confirmer-decision-packet.md`](./decision-gov-staff-01-transfer-retirement-confirmer-decision-packet.md)
+
+Depends on（再 Decision しない）:
+- [`decision-issue-19-residual-governance-acceptance.md`](./decision-issue-19-residual-governance-acceptance.md)
+- GOV-RULE-12 Accepted / LOCKED / Option B（PR #273 MERGED）
+- GOV-RULE-09〜11 / GOV-AUD-01〜10 / GOV-RULE-05〜08 Accepted（該当分）
+
+```text
+repository: yasutakesougo/severe-behavior-support-spfx
+Decision ID: Decision-GOV-STAFF-01-SELECTION-1
+Status: Accepted / LOCKED（Selection boundary / unit）
+Human Decision: SELECT GOV-STAFF-01
+Human Acceptance date: 2026-08-12
+Issue: #19
+Baseline tip: befd8460d03e2085583a328882d60f045916ea8f
+PR: #274（Selection / Packet / SELECT Acceptance / Option C Acceptance / IR）
+
+Selected unit:
+  GOV-STAFF-01 — 異動・退職情報の確定者
+
+Concrete Option A–D: Accepted / LOCKED / Option C
+  （decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md）
+Implementation Start: NOT AUTHORIZED
+Issue #19 Close: NOT AUTHORIZED
+Next residual auto-select: FORBIDDEN
+GOV-STAFF-02〜12 auto-SELECT: FORBIDDEN
+```
+
+Live gate（Ready / Merge / review 進行）は repository docs に書かない
+（[`self-referential-gate-policy.md`](../process/self-referential-gate-policy.md)）。
+
+## Human Acceptance（固定結論）
+
+```text
+Human Decision: SELECT GOV-STAFF-01
+Decision-GOV-STAFF-01-SELECTION-1: Accepted / LOCKED
+
+Meaning:
+  authorize GOV-STAFF-01 as the current residual Decision unit
+  record Option C Acceptance in the same Draft PR（Human Decision）
+  keep Implementation Start / Issue Close / GOV-STAFF-02+ unauthorized
+```
+
+## Boundary
+
+```text
+SELECT GOV-STAFF-01 ≠ invent transfer/retirement UI / Entra mutation
+SELECT GOV-STAFF-01 ≠ designate named individuals
+SELECT GOV-STAFF-01 ≠ GOV-STAFF-02〜12 SELECT
+SELECT GOV-STAFF-01 ≠ Issue #19 Close
+SELECT GOV-STAFF-01 ≠ Implementation Start
+```
+
+## Current execution snapshot
+
+```text
+Parent track = SELECTED / LOCKED / MERGED
+GOV-RULE-12 = COMPLETE（Option B）
+Current residual unit = SELECTED / LOCKED（GOV-STAFF-01）
+Option Acceptance = Accepted / LOCKED / Option C
+```
+
+## Next
+
+```text
+1. This PR Independent Review
+2. Human Ready（HUMAN-ONLY）
+3. Human Merge（HUMAN-ONLY） → main mirror
+4. After Merge: next residual SELECT = separate Human Decision
+```
+
+## Reference
+
+- Selection: `decision-gov-staff-01-transfer-retirement-confirmer-selection.md`
+- Decision Packet: `decision-gov-staff-01-transfer-retirement-confirmer-decision-packet.md`
+- Option C Acceptance: `decision-gov-staff-01-transfer-retirement-confirmer-option-c-acceptance.md`
+- Independent Review: `decision-gov-staff-01-transfer-retirement-confirmer-independent-review.md`
+- Parent: `decision-issue-19-residual-governance-selection.md`

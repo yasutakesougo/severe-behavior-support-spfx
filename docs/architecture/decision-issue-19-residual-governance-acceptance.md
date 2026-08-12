@@ -79,10 +79,11 @@ Consumed on #19 path（do not re-Decision）:
   GOV-RULE-10（Option C / 業務責任者内容確認 + 法人管理者承認）
   GOV-RULE-11（fill-in；Decision-GOV-RULE-11-FILL-IN-1）
   GOV-RULE-12（Option B / 訂正版を新規作成し、旧版を保持）
+  GOV-STAFF-01（Option C / 事業所管理者が起票し、法人担当が確定）
   DEC-009 / RD-3 / GOV-RULE-05 / 06 / 07 / 08
 OPEN residual inventory = see Selection §4
 First residual inside #19 = CONSUMED（GOV-AUD-01 Accepted / Option C）
-Current residual Option = CONSUMED（GOV-RULE-12 Accepted / Option B）
+Current residual Option = CONSUMED（GOV-STAFF-01 Accepted / Option C）
 #22 / #28 / Research v2 = NOT SELECTED
 ```
 
@@ -108,10 +109,11 @@ Consumed:
   PR #270 GOV-RULE-11 unit SELECT = MERGED
   PR #271 GOV-RULE-11 Fill-in = MERGED
   PR #272 GOV-RULE-12 unit SELECT = MERGED
-  GOV-RULE-12 Option B = Accepted / LOCKED
+  PR #273 GOV-RULE-12 Option B = MERGED
+  GOV-STAFF-01 unit SELECT + Option C = Accepted / LOCKED
 
 Next:
-  1. GOV-RULE-12 Option B Acceptance PR: IR → Human Ready → Human Merge
+  1. GOV-STAFF-01 Selection + Option C Acceptance PR: IR → Human Ready → Human Merge
   2. After Merge: next residual SELECT one-by-one；no Agent auto-advance
   3. DEC-015 ledger sync remains separate / NOT auto-Accepted
   4. #19 Close remains later / separate Human disposition

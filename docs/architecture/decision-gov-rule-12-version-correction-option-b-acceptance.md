@@ -114,7 +114,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-RULE-12: Accepted / LOCKED / Option B
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual = GOV-STAFF-01 Accepted / LOCKED / Option C（別 Decision）
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
