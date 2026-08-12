@@ -11,8 +11,9 @@ Baseline main: 677d35922d6ebc761a5977e861a2e8e4eff8e4a6
 Branch: cursor/demo-ux-7-terminology-today-actions-selection-3507
 PR: #320 OPEN / Ready for Review（draft=false）
 Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
-PR tip HEAD: d6b9b19801a78b79fc67872e7672bfedcb8310f4
+PR tip HEAD: 4d7c7109c749703528f2a7ba47957c1cca3ae682
 Fresh Review: demo-ux-7-fresh-review.md
+Ready: demo-ux-7-ready.md
 mergeable: MERGEABLE / CLEAN
 CI: Contracts and Process CI = SUCCESS
 Browser smoke: PASS / VERIFIED（demo-ux-7-browser-smoke.md）

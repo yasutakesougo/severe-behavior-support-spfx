@@ -7,7 +7,8 @@ PR: #320
 Human Ready Decision: GO（2026-08-12）
 Status: READY FOR REVIEW / Merge HOLD
 Implementation verified HEAD: 5747af43d705b647d6b23fb91f337e396896a365
-PR tip HEAD at Ready: d6b9b19801a78b79fc67872e7672bfedcb8310f4
+PR tip at Human Ready Decision: d6b9b19801a78b79fc67872e7672bfedcb8310f4
+PR tip after Ready evidence commit: 4d7c7109c749703528f2a7ba47957c1cca3ae682
 ```
 
 ## Basis
@@ -31,10 +32,13 @@ state = OPEN
 mergeable = MERGEABLE
 mergeStateStatus = CLEAN
 CI = SUCCESS（Contracts and Process CI / Verify contracts, skills, and scope）
+headRefOid = 4d7c7109c749703528f2a7ba47957c1cca3ae682
 Implementation verified HEAD is ancestor of tip = yes
-tip delta after 5747af4 = docs-only gate/review evidence commits
+tip delta after 5747af4 = docs-only gate/review/Ready evidence commits
 submitted GitHub pull_request reviews = 0
+reviewDecision = （empty）
 Fresh Review evidence = docs/architecture/demo-ux-7-fresh-review.md
+Ready evidence = docs/architecture/demo-ux-7-ready.md
 ```
 
 ## Authorized by this Decision
