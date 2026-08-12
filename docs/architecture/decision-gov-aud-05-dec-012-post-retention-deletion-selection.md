@@ -30,7 +30,7 @@ Candidate origin:
   Binding before this Decision: NONE（unit）→ now SELECTED by Human
   Prior automatic complete/physical deletion after retention: NOT ADOPTED（UNCHANGED）
 
-Option Acceptance: NOT SELECTED
+Option Acceptance: Accepted / LOCKED / Option C（separate PR pending）
 Implementation Start: NOT AUTHORIZED
 Issue #19 Close: NOT AUTHORIZED
 Agent auto-select Option A–D: FORBIDDEN
@@ -46,7 +46,7 @@ next residual after this unit: NOT SELECTED
 GOV-RULE-01〜04 bundle は COMPLETE（01/04 HOLD は別解除待ち）。
 Human が次残件として post-retention deletion residual を明示 SELECT した。
 保存期間中禁止（既 Accepted）と分離し、5年経過後の完全削除可否だけを扱う。
-Option は未採択のまま Human Acceptance 待ち。
+Option C = Accepted / LOCKED（初期版では経過後完全削除機能を持たない）。
 ```
 
 ## 2. Selected unit
@@ -63,7 +63,7 @@ Question:
 IN:
   post-retention deletion を current residual unit とする
   Decision Packet（Option A–D + HOLD）の docs 固定
-  Option 未採択のまま Human Acceptance 待ち
+  Option C Acceptance（別 PR）
   保存期間中禁止 Acceptance（Option A）との分離維持
   自動完全削除 / 自動物理削除 = NOT ADOPTED の維持（再 Decision しない）
 ```
@@ -105,9 +105,9 @@ OUT:
 
 ```text
 Decision-GOV-AUD-05-POST-RETENTION-SELECTION-1 = SELECTED / LOCKED
+Option C = Accepted / LOCKED（Option Acceptance PR）
 
 HOLD:
-  concrete Option A–D = NOT SELECTED
   Implementation Start = NOT AUTHORIZED
   Issue #19 Close = NOT AUTHORIZED
   cleanup / purge job = NOT AUTHORIZED
@@ -116,10 +116,8 @@ HOLD:
 ## 8. Next（Human only）
 
 ```text
-1. This PR Independent Review → Human Ready → Human Merge
-2. After Merge: Human SELECT Option A–D or HOLD
-3. Option Acceptance / LOCKED for post-retention deletion only
-4. Next residual SELECT = separate / Agent auto-advance FORBIDDEN
+1. Option C Acceptance PR: IR → Human Ready → Human Merge
+2. After Merge: next residual SELECT = separate / Agent auto-advance FORBIDDEN
 ```
 
 ## Reference
@@ -127,6 +125,8 @@ HOLD:
 - SELECT Acceptance: `decision-gov-aud-05-dec-012-post-retention-deletion-acceptance.md`
 - Decision Packet: `decision-gov-aud-05-dec-012-post-retention-deletion-decision-packet.md`
 - Independent Review: `decision-gov-aud-05-dec-012-post-retention-deletion-independent-review.md`
+- Option C Acceptance: `decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md`
+- Option C IR: `decision-gov-aud-05-dec-012-post-retention-deletion-option-c-independent-review.md`
 - Prior: `decision-gov-aud-05-dec-012-retention-delete-prohibition-acceptance.md`
 - Parent track: `decision-issue-19-residual-governance-selection.md`
 - Issue #19: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/19

@@ -141,22 +141,22 @@ NOT derived / MUST NOT start from this Acceptance alone:
   SharePoint / M365 / Deploy / real data
 ```
 
-## Separate Decision（unit SELECTED / Option NOT SELECTED）
+## Separate Decision（Accepted / LOCKED / Option C）
 
 ```text
 ID（暫定ラベル）: GOV-AUD-05 / DEC-012 post-retention deletion permissibility
-Status: unit SELECTED / Option NOT SELECTED / NOT Accepted
-Meaning to decide later:
-  5年経過後に完全削除・物理削除を許可するか否か
-正本: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
-MUST NOT invent Option Acceptance / cleanup / purge from this Acceptance
+Status: Accepted / LOCKED / Option C
+Meaning:
+  初期版では経過後完全削除の機能自体を持たない
+正本: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
+MUST NOT invent cleanup / purge / auto-delete from this or the Option C Acceptance
 ```
 
 ## Next
 
 ```text
 GOV-AUD-05 / DEC-012 retention prohibition: Accepted / LOCKED / Option A
-post-retention deletion: unit SELECTED / Option NOT SELECTED
-  Selection: decision-gov-aud-05-dec-012-post-retention-deletion-selection.md
+post-retention deletion: Accepted / LOCKED / Option C
+  Acceptance: decision-gov-aud-05-dec-012-post-retention-deletion-option-c-acceptance.md
 FindingCode / A-5 / Implementation: HOLD
 ```
