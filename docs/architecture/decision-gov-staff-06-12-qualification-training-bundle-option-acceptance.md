@@ -18,7 +18,7 @@ Decision ID: Decision-GOV-STAFF-06-12-OPTIONS-1
 Status: Accepted / LOCKED（bundle Options）
 Human Acceptance: Explicit Human GOV-STAFF-06〜12 Options on 2026-08-12
 Baseline tip: 48dd920ea8dbb740db68709e8139b519f554b042
-PR: pending（Selection / Option Acceptance / Packet sync / IR）
+PR: #281（Selection / Option Acceptance / Packet sync / IR）
 
 Accepted:
   GOV-STAFF-06 = ACCEPTED / LOCKED / Option B（CONFIRMED / UNCHANGED；PR #280）

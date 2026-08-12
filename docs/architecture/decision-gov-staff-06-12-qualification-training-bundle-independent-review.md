@@ -13,7 +13,7 @@ Kind: Independent Review（docs-only bundle Selection + Option Acceptance）
 Units: GOV-STAFF-06〜12
 Human Decision: bundled SELECT / ACCEPT（06 CONFIRMED；07〜12 new）
 Baseline tip: 48dd920ea8dbb740db68709e8139b519f554b042
-PR: pending
+PR: #281
 Selection: decision-gov-staff-06-12-qualification-training-bundle-selection.md
 SELECT Acceptance: decision-gov-staff-06-12-qualification-training-bundle-acceptance.md
 Decision Packet: decision-gov-staff-06-12-qualification-training-bundle-decision-packet.md

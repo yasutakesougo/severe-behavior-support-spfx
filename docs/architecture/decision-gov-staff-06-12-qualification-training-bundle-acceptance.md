@@ -22,7 +22,7 @@ Human Decision: SELECT GOV-STAFF-06〜12 bundle
 Human Acceptance date: 2026-08-12
 Issue: #19
 Baseline tip: 48dd920ea8dbb740db68709e8139b519f554b042
-PR: pending（Selection / Packet / SELECT Acceptance / Option Acceptance / IR）
+PR: #281（Selection / Packet / SELECT Acceptance / Option Acceptance / IR）
 
 Selected:
   GOV-STAFF-06〜12 qualification/training residual bundle
