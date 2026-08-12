@@ -214,7 +214,8 @@ function assertUsersList(expectedRowColumns) {
       text.indexOf("Aさん") >= 0 &&
       text.indexOf("要確認") >= 0 &&
       text.indexOf("未記録") >= 0 &&
-      text.indexOf("期限間近") >= 0 &&
+      text.indexOf("期限接近") >= 0 &&
+      text.indexOf("期限間近") < 0 &&
       text.indexOf("利用可能です") < 0 &&
       slice === "DEMO-UX-2" &&
       cssApplied &&

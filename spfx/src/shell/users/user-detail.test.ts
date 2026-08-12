@@ -1,4 +1,8 @@
-import { DEMO_UX_3_SLICE, DEMO_UX_USER_DETAIL_FIXTURE } from "./user-detail-fixture";
+import {
+  DEMO_UX_3_SLICE,
+  DEMO_UX_USER_DETAIL_C_FIXTURE,
+  DEMO_UX_USER_DETAIL_FIXTURE,
+} from "./user-detail-fixture";
 
 describe("DEMO-UX-3 user detail presentation boundary", () => {
   it("keeps the synthetic detail ordered around current support", () => {
@@ -10,6 +14,12 @@ describe("DEMO-UX-3 user detail presentation boundary", () => {
       "行動発生時",
     ]);
     expect(DEMO_UX_USER_DETAIL_FIXTURE.recentRecords).toHaveLength(2);
+  });
+
+  it("provides DEMO-UX-7 Cさん detail without live identifiers", () => {
+    expect(DEMO_UX_USER_DETAIL_C_FIXTURE.userId).toBe("user-c");
+    expect(DEMO_UX_USER_DETAIL_C_FIXTURE.personLabel).toBe("Cさん");
+    expect(DEMO_UX_USER_DETAIL_C_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
   });
 
   it("separates business facts from system state", () => {

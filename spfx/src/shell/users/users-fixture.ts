@@ -1,3 +1,8 @@
+import {
+  SHELL_STATUS_LABEL_DUE_SOON,
+  SHELL_STATUS_LABEL_NEEDS_REVIEW,
+  SHELL_STATUS_LABEL_UNRECORDED,
+} from "../ux/status-labels";
 import type { ShellUsersPresentation } from "./users-types";
 
 /** Synthetic users list fixture for responsible-person review density checks. */
@@ -9,8 +14,8 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
       id: "user-a",
       personLabel: "Aさん",
       statusBadges: [
-        { id: "unrecorded", label: "未記録" },
-        { id: "needs_review", label: "要確認" },
+        { id: "unrecorded", label: SHELL_STATUS_LABEL_UNRECORDED },
+        { id: "needs_review", label: SHELL_STATUS_LABEL_NEEDS_REVIEW },
       ],
       planSummary: "支援計画 2026/07/01–09/30",
       attentionNote: "支援記録が未入力",
@@ -20,7 +25,7 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
     {
       id: "user-b",
       personLabel: "Bさん",
-      statusBadges: [{ id: "deadline_near", label: "期限間近" }],
+      statusBadges: [{ id: "deadline_near", label: SHELL_STATUS_LABEL_DUE_SOON }],
       planSummary: "支援計画 2026/06/01–08/31",
       attentionNote: "見直しまで7日",
       lastRecordLabel: "最終記録: 8/11 09:20",
@@ -29,7 +34,7 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
     {
       id: "user-c",
       personLabel: "Cさん",
-      statusBadges: [{ id: "needs_review", label: "要確認" }],
+      statusBadges: [{ id: "needs_review", label: SHELL_STATUS_LABEL_NEEDS_REVIEW }],
       planSummary: "支援計画 2026/08/01–10/31",
       attentionNote: "新しい計画があります",
       lastRecordLabel: "最終記録: 8/09 16:40",
@@ -48,8 +53,8 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
       id: "user-e",
       personLabel: "Eさん",
       statusBadges: [
-        { id: "unrecorded", label: "未記録" },
-        { id: "deadline_near", label: "期限間近" },
+        { id: "unrecorded", label: SHELL_STATUS_LABEL_UNRECORDED },
+        { id: "deadline_near", label: SHELL_STATUS_LABEL_DUE_SOON },
       ],
       planSummary: "支援計画 2026/04/01–08/15",
       attentionNote: "本日の記録が未入力",
@@ -59,9 +64,9 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
     {
       id: "user-f",
       personLabel: "Fさん",
-      statusBadges: [{ id: "needs_review", label: "要確認" }],
+      statusBadges: [{ id: "needs_review", label: SHELL_STATUS_LABEL_NEEDS_REVIEW }],
       planSummary: "支援計画 2026/07/15–09/30",
-      attentionNote: "支援内容の確認待ち",
+      attentionNote: "支援内容の確認が必要",
       lastRecordLabel: "最終記録: 8/07 15:00",
       detailActionLabel: "詳細を見る",
     },
@@ -77,7 +82,7 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
     {
       id: "user-h",
       personLabel: "Hさん",
-      statusBadges: [{ id: "deadline_near", label: "期限間近" }],
+      statusBadges: [{ id: "deadline_near", label: SHELL_STATUS_LABEL_DUE_SOON }],
       planSummary: "支援計画 2026/03/01–08/20",
       attentionNote: "見直し期限が近い",
       lastRecordLabel: "最終記録: 8/06 14:10",

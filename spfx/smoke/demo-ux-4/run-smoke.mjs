@@ -197,7 +197,8 @@ function assertSupportPlan(expectedStateColumns) {
       !back?.disabled &&
       orderOk &&
       text.indexOf("環境調整") >= 0 &&
-      text.indexOf("確認待ち") >= 0 &&
+      text.indexOf("要確認") >= 0 &&
+      text.indexOf("確認待ち") < 0 &&
       text.indexOf("利用可能です") < 0 &&
       Boolean(demo) &&
       Boolean(site) &&

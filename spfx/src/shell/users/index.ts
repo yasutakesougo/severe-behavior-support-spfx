@@ -12,7 +12,11 @@ export {
   DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
   supportPlanCopyIsFailClosed,
 } from "./support-plan-copy";
-export { DEMO_UX_3_SLICE, DEMO_UX_USER_DETAIL_FIXTURE } from "./user-detail-fixture";
+export {
+  DEMO_UX_3_SLICE,
+  DEMO_UX_USER_DETAIL_C_FIXTURE,
+  DEMO_UX_USER_DETAIL_FIXTURE,
+} from "./user-detail-fixture";
 export { DEMO_UX_4_SLICE, DEMO_UX_SUPPORT_PLAN_FIXTURE } from "./support-plan-fixture";
 export type {
   ShellUserDetailPresentation,

@@ -11,6 +11,7 @@ export {
   DEMO_UX_SLICE,
   DEMO_UX_USERS_FIXTURE,
   DEMO_UX_3_SLICE,
+  DEMO_UX_USER_DETAIL_C_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_4_SLICE,
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
@@ -28,6 +29,15 @@ export {
   type UserDetailProps,
   type SupportPlanProps,
 } from "../users";
+export {
+  DEMO_UX_7_SLICE,
+  SHELL_STATUS_LABEL_DUE_SOON,
+  SHELL_STATUS_LABEL_NEEDS_REVIEW,
+  SHELL_STATUS_LABEL_UNRECORDED,
+  SHELL_STATUS_LABELS_DEPRECATED_PRIMARY,
+  isDeprecatedPrimaryStatusLabel,
+} from "./status-labels";
+export type { OverviewActionNavigationTarget } from "../dashboard";
 export {
   DailyRecords,
   DEMO_UX_5_SLICE,

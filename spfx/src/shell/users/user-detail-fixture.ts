@@ -40,6 +40,43 @@ export const DEMO_UX_USER_DETAIL_FIXTURE: ShellUserDetailPresentation = {
   },
 };
 
+/** Synthetic detail for DEMO-UX-7 today-action C「見る」→ 利用者詳細. */
+export const DEMO_UX_USER_DETAIL_C_FIXTURE: ShellUserDetailPresentation = {
+  userId: "user-c",
+  personLabel: "Cさん",
+  planLabel: "支援計画",
+  planPeriodLabel: "2026/08/01–2026/10/31",
+  currentSupport: [
+    {
+      id: "environment",
+      label: "環境調整",
+      body: "新しい計画の環境調整を確認する合成表示例です。",
+    },
+    {
+      id: "communication",
+      label: "コミュニケーション",
+      body: "短い選択肢で意思確認する合成表示例です。",
+    },
+    {
+      id: "behavior-response",
+      label: "行動発生時",
+      body: "安全を優先して待機する合成表示例です。",
+    },
+  ],
+  recentRecords: [{ id: "record-c1", occurredAtLabel: "8/09 16:40", recordTypeLabel: "支援記録" }],
+  evaluationSummary: "新しい計画の確認用に配置した評価欄の合成サンプルです。",
+  historySummary: "新しい計画確認用の履歴欄合成サンプルです。",
+  businessFacts: {
+    createdByLabel: "担当者C（合成）",
+    qualificationLabel: "実践研修修了者（合成表示）",
+    createdAtLabel: "2026/08/01（合成）",
+  },
+  systemState: {
+    saveStateLabel: "表示サンプル（live保存なし）",
+    lastUpdatedLabel: "2026/08/09 16:40（合成）",
+  },
+};
+
 export const DEMO_UX_3_SLICE = {
   id: "DEMO-UX-3",
   presentationOnly: true as const,

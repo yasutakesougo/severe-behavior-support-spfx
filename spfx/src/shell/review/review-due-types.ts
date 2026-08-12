@@ -8,7 +8,8 @@ export type ShellReviewDueAttentionItem = Readonly<{
   personLabel: string;
   subjectLabel: string;
   reviewStatusLabel: string;
-  dueStateLabel: string;
+  /** Optional when the item is attention-only without a due-soon label. */
+  dueStateLabel?: string;
   reasonLabel: string;
 }>;
 
