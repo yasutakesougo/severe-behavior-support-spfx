@@ -1,4 +1,15 @@
 export {
+  createAssessmentSnapshotReadIntegrationFromHost,
+  type CreateAssessmentSnapshotReadIntegrationFromHostOptions,
+} from "./read-integration.factory";
+export {
+  createAssessmentSnapshotReadIntegration,
+  type AssessmentSnapshotReadIntegration,
+  type AssessmentSnapshotReadModel,
+  type AssessmentSnapshotReadTransport,
+  type AssessmentSnapshotRuntimeReadResult,
+} from "./read-integration";
+export {
   createAssessmentSnapshotSpHttpClientTransportFromHost,
   type CreateAssessmentSnapshotSpHttpClientTransportFromHostOptions,
 } from "./sphttpclient-list-transport.factory";
