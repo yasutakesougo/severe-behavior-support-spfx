@@ -22,7 +22,7 @@ Meaning:
   権限停止期限 =
     異動・退職の発効日時までに権限停止
 Baseline tip: 2f439bf6a8e72296ceafc5c0fc9340e3de918b29
-PR: pending（Option A Acceptance / Packet sync / IR）
+PR: #277（Option A Acceptance / Packet sync / IR）
 main mirror: NOT YET
 
 Does NOT mean:

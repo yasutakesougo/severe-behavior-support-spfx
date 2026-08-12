@@ -15,7 +15,7 @@ Acceptance: decision-gov-staff-03-access-suspension-deadline-option-a-acceptance
 Packet: decision-gov-staff-03-access-suspension-deadline-decision-packet.md
 Parent unit Selection: Decision-GOV-STAFF-03-SELECTION-1（PR #276 MERGED）
 Baseline tip: 2f439bf6a8e72296ceafc5c0fc9340e3de918b29
-PR: pending
+PR: #277
 Status: PASS
 Findings: P0=0 / P1=0 / P2=2 OPEN
 Option status: Accepted / LOCKED / A
