@@ -133,7 +133,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 | Unit | Relation |
 |---|---|
 | GOV-RULE-02 / 03 Accepted Option A | **NO CONFLICT** / UNCHANGED |
-| GOV-RULE-04 HOLD / ORG_POLICY | **NO CONFLICT** / UNCHANGED |
+| GOV-RULE-04 Accepted / LOCKED（NOT FIXED） | **NO CONFLICT**（Acceptance PR pending） |
 | GOV-RULE-05〜12 | **NO CONFLICT** / UNCHANGED |
 | Evidence Bundle PR #287 | **ALIGNED**（candidate → Accepted） |
 | PERF-02/06/07/08/09 HOLD | **NO CONFLICT** / UNCHANGED |
@@ -145,7 +145,7 @@ NOT derived / MUST NOT start from this Acceptance alone:
 |---|---|
 | Decision-GOV-RULE-01-04-EVIDENCE-1 | **UNCHANGED**（Evidence Bundle SELECTED） |
 | GOV-RULE-01 | **Accepted / LOCKED**（HOLD LIFTED） |
-| GOV-RULE-04 | **HOLD / UNCHANGED** |
+| GOV-RULE-04 | **Accepted / LOCKED**（Acceptance PR pending） |
 | PERF HOLD Resolution | **UNCHANGED** |
 | Implementation / SharePoint | **HOLD / FORBIDDEN** |
 
@@ -153,8 +153,8 @@ NOT derived / MUST NOT start from this Acceptance alone:
 
 ```text
 GOV-RULE-01: Accepted / LOCKED
-GOV-RULE-04: HOLD / UNCHANGED
-next residual SELECT（one item；Agent auto-advance FORBIDDEN）
+next residual: Human SELECTED GOV-RULE-04 Acceptance（PR pending）
+  正本: decision-gov-rule-04-observation-count-acceptance.md
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```

@@ -134,15 +134,15 @@ Consumed:
   PR #285 GOV-PERF-01〜11 bundle SELECT + Options/HOLD = MERGED
   PR #286 GOV-PERF HOLD Resolution Bundle = MERGED（解除 NOT PERFORMED）
   PR #287 GOV-RULE-01 / 04 Evidence Bundle = MERGED
-  GOV-RULE-01 Acceptance = Accepted / LOCKED（PR #288）
+  PR #288 GOV-RULE-01 Acceptance = MERGED（HOLD LIFTED）
+  GOV-RULE-04 Acceptance = Accepted / LOCKED（PR pending）
 
 Next:
-  1. GOV-RULE-01 Acceptance PR: IR → Human Ready → Human Merge
+  1. GOV-RULE-04 Acceptance PR: IR → Human Ready → Human Merge
   2. After Merge: next residual SELECT（one item；NOT auto）
-  3. RULE-04 corporate ORG_POLICY Decision = separate / NOT auto
-  4. PERF HOLD 解除 Acceptance remains separate / NOT auto
-  5. DEC-015 ledger sync remains separate / NOT auto-Accepted
-  6. #19 Close remains later / separate Human disposition
+  3. PERF HOLD 解除 Acceptance remains separate / NOT auto
+  4. DEC-015 ledger sync remains separate / NOT auto-Accepted
+  5. #19 Close remains later / separate Human disposition
 ```
 
 ## Reference

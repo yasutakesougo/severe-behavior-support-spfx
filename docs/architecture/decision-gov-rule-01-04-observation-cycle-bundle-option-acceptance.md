@@ -15,7 +15,7 @@ Owner: Issue #19
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-GOV-RULE-01-04-OPTIONS-1
-Status: Accepted / LOCKED（01/02/03）；04 HOLD UNCHANGED
+Status: Accepted / LOCKED（01/02/03/04）
 Human Acceptance: Explicit Human GOV-RULE-01〜04 Options/HOLD on 2026-08-12
 Baseline tip: 7f4da32927392de3bc46b669016a73c404187756
 PR: #282（Selection / Option+HOLD Acceptance / Packet sync / IR）
@@ -24,12 +24,11 @@ Accepted / HOLD:
   GOV-RULE-01 = ACCEPTED / LOCKED（see decision-gov-rule-01-evaluation-cycle-acceptance.md；HOLD LIFTED）
   GOV-RULE-02 = ACCEPTED / LOCKED / Option A
   GOV-RULE-03 = ACCEPTED / LOCKED / Option A
-  GOV-RULE-04 = HOLD / UNCHANGED（ORG_POLICY — see decision-gov-rule-04-observation-count-evidence-packet.md）
+  GOV-RULE-04 = ACCEPTED / LOCKED（see decision-gov-rule-04-observation-count-acceptance.md；HOLD LIFTED）
   GOV-RULE-05〜12 = CONFIRMED / UNCHANGED
 
 Does NOT mean:
-  GOV-RULE-01 周期・条件の発明
-  GOV-RULE-04 件数・集計方式の発明
+  GOV-RULE-01 re-Decision
   GOV-RULE-05〜12 再 Decision
   HOLD 解除
   SharePoint / schema / UI / adapter / Implementation Start
@@ -100,24 +99,21 @@ GOV-RULE-03: Accepted / LOCKED / Option A
 - 時刻境界・タイムゾーン・SharePoint列型等は本 Decision では決定しない。
 - Option B（実施日を含む）/ C（固定期間末日）/ D（その他）は採択しない。
 
-### GOV-RULE-04 — HOLD / VALUE NOT DETERMINED
+### GOV-RULE-04 — Accepted / LOCKED（HOLD LIFTED）
 
 ```text
-GOV-RULE-04: SELECTED / LOCKED / HOLD
-必要観察件数: VALUE NOT DETERMINED
-
-未確定:
-  必要件数
-  対象期間
-  数え方
-  同日に複数記録がある場合の扱い
+GOV-RULE-04: Accepted / LOCKED
+minimumObservationCount = NOT FIXED
+正本: decision-gov-rule-04-observation-count-acceptance.md
 ```
 
 意味:
 
-- unit は SELECTED だが、具体値は確定しない。
-- 根拠なしに件数や集計方式を発明しない。
-- 制度資料または法人の正式運用決定確認後、**別 Human Decision** で確定する。
+- 最低件数は設定しない。件数不足 alone ≠ 見直し不成立・未完了・算定不能。
+- 対象期間 = 前回見直し〜今回見直し（初回は GOV-RULE-02 と整合；新起算日発明禁止）。
+- 1件 = 独立した事象・ケース（行数/送信数/追記回数ではない）。
+- 同日: 別ケース=別件；同一事象の追記/分割/重複=1件。
+- 閾値モデルは採用しない。
 
 ### GOV-RULE-05〜12 — CONFIRMED / UNCHANGED
 
@@ -164,9 +160,9 @@ NOT derived / MUST NOT start from this Acceptance alone:
 ```text
 GOV-RULE-01〜04 bundle: recorded（02/03 Accepted；01/04 HOLD）
 GOV-RULE-01 / 04 HOLD 解除: separate Human Decision
-next residual: GOV-RULE-01 Acceptance（PR #288）
-  正本: decision-gov-rule-01-evaluation-cycle-acceptance.md
-  RULE-04 法人運用: separate Human Decision
+next residual: GOV-RULE-04 Acceptance（PR pending）
+  正本: decision-gov-rule-04-observation-count-acceptance.md
+  further residual SELECT: separate Human Decision
 Issue #19 Close: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 ```
