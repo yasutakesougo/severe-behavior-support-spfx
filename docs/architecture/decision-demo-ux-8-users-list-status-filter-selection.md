@@ -4,14 +4,15 @@
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-8 — Users list status filter
 Decision: Decision-DEMO-UX-8-USERS-LIST-STATUS-FILTER-1
-Status: SELECTED / LOCKED
+Status: MERGED / COMPLETE
 Human Selection: GO（2026-08-12）
 Baseline main: 5655fc750ef9f4dfde37fdf12bf99b7e138d855e
 Predecessor: DEMO-UX-7 MERGED（PR #320 / merge 5655fc7；tip 1d7e9a733e03b1f8bffead2353b2209bd423f3df）
 Source feedback: RPF-003
-Follow-on queue（not this slice）: RPF-002
+Follow-on queue: RPF-002（DEMO-UX-9 Selection）
 Implementation Start: GO（2026-08-12）— see demo-ux-8-implementation-start.md
-Ready / Merge: NOT AUTHORIZED
+Ready: GO — see demo-ux-8-fresh-review.md（Fresh Review PASS）/ Human Ready GO
+Merge: SUCCESS（PR #321 / aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9）
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED
