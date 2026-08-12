@@ -7,6 +7,15 @@ export {
   type OverviewDashboardProps,
   type ShellOverviewPresentation,
 } from "../dashboard";
+export {
+  DEMO_UX_SLICE,
+  DEMO_UX_USERS_FIXTURE,
+  UsersList,
+  usersCopyIsFailClosed,
+  DEMO_USERS_PRESENTATION_NOTE,
+  type ShellUsersPresentation,
+  type UsersListProps,
+} from "../users";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";

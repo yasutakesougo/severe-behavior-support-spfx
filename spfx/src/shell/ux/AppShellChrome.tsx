@@ -4,6 +4,7 @@ import {
   OverviewDashboard,
   type ShellOverviewPresentation,
 } from "../dashboard";
+import { DEMO_UX_USERS_FIXTURE, UsersList, type ShellUsersPresentation } from "../users";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
 import { DestinationPlaceholder } from "./DestinationPlaceholder";
@@ -49,11 +50,12 @@ export type AppShellChromeProps = Readonly<{
   onSiteSelectionChange?: (next: ShellSiteSelection) => void;
   onSelectedDestinationChange?: (next: ShellPrimaryNavigationId) => void;
   overviewPresentation?: ShellOverviewPresentation;
+  usersPresentation?: ShellUsersPresentation;
   children?: React.ReactNode;
 }>;
 
 /**
- * SHELL-UX presentation chrome + DASHBOARD-UX-1 overview skeleton.
+ * SHELL-UX presentation chrome + DASHBOARD-UX-1 overview + DEMO-UX-2 users list skeletons.
  * No SharePoint REST, binder, auth judgment, Entra, token, role, or live business UI.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
@@ -71,6 +73,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     onSiteSelectionChange,
     onSelectedDestinationChange,
     overviewPresentation = DASHBOARD_UX_OVERVIEW_FIXTURE,
+    usersPresentation = DEMO_UX_USERS_FIXTURE,
     children,
   } = props;
 
@@ -228,6 +231,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 presentation={overviewPresentation}
                 headingRef={destinationHeadingRef}
               />
+            ) : destination === "users" ? (
+              <UsersList presentation={usersPresentation} headingRef={destinationHeadingRef} />
             ) : (
               <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
             )}
