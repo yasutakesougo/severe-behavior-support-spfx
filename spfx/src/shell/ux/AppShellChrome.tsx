@@ -1,4 +1,9 @@
 import * as React from "react";
+import {
+  DASHBOARD_UX_OVERVIEW_FIXTURE,
+  OverviewDashboard,
+  type ShellOverviewPresentation,
+} from "../dashboard";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
 import { DestinationPlaceholder } from "./DestinationPlaceholder";
@@ -43,12 +48,13 @@ export type AppShellChromeProps = Readonly<{
   selectedDestination?: ShellPrimaryNavigationId;
   onSiteSelectionChange?: (next: ShellSiteSelection) => void;
   onSelectedDestinationChange?: (next: ShellPrimaryNavigationId) => void;
+  overviewPresentation?: ShellOverviewPresentation;
   children?: React.ReactNode;
 }>;
 
 /**
- * SHELL-UX presentation chrome（SHELL-UX-7 destination placeholders）.
- * No SharePoint REST, binder, auth judgment, Entra, token, role, or business UI.
+ * SHELL-UX presentation chrome + DASHBOARD-UX-1 overview skeleton.
+ * No SharePoint REST, binder, auth judgment, Entra, token, role, or live business UI.
  */
 export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const {
@@ -64,6 +70,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     selectedDestination: selectedDestinationProp,
     onSiteSelectionChange,
     onSelectedDestinationChange,
+    overviewPresentation = DASHBOARD_UX_OVERVIEW_FIXTURE,
     children,
   } = props;
 
@@ -216,7 +223,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         )}
         {showReadyRegion ? (
           <div className={styles.readyRegion} data-shell-ux="ready-region">
-            <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
+            {destination === "overview" ? (
+              <OverviewDashboard
+                presentation={overviewPresentation}
+                headingRef={destinationHeadingRef}
+              />
+            ) : (
+              <DestinationPlaceholder destination={destination} headingRef={destinationHeadingRef} />
+            )}
             {children}
           </div>
         ) : null}
