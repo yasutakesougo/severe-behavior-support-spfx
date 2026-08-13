@@ -68,12 +68,14 @@ into the GitHub Issue body.
 2. Do **not** start Implementation without explicit Human GO on Issue C.
 3. Do **not** Deploy / SharePoint write / close related Issues.
 
-## Gate after filing
+## Current gate（Issue 未作成）
 
 ```text
 FIELD-WORKFLOW UI Issue C:
   設計境界確定済み
-  Issue 作成済み（番号を本 packet に追記）
+  Issue 作成のみ未反映（createIssue 403）
   Implementation HOLD
   Deploy / SharePoint / production write: NO-GO
 ```
+
+Issue 作成後は本 packet に Issue 番号を追記し、Implementation Start は別途 Human GO まで STOP。
