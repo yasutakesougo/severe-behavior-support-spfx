@@ -99,11 +99,16 @@ DADS-UX-5+
 ## 6. Verification (this PR)
 
 ```text
-format:check: (recorded after run)
-root lint / typecheck / unit: (recorded after run)
-check:a11y: (recorded after run；new Records gates)
-SPFx Heft test: (recorded after run)
-SPFx production build: (recorded after run)
-browser smoke: (recorded after run)
+HEAD: (tip after this evidence commit)
+Baseline main: 270400b964ff89543296be56265b8963ce0f5c64
+format:check: PASS
+root lint / typecheck / unit: PASS (557/557)
+check:contracts-boundaries / check:scope: PASS
+check:a11y: PASS（25 checks；A11Y-HD-05 / A11Y-RC-01 / A11Y-INV-10 / A11Y-INV-17-RC / A11Y-DIS-02 added）
+SPFx Heft test: PASS (125/125)
+SPFx production build + package-solution: PASS
+browser smoke PASS:
+  DEMO-UX-5 / DEMO-UX-9（Records）
+  DEMO-UX-7 / DEMO-UX-8 / DEMO-UX-11 / SHELL-UX-1
 Smoke expectations: NOT weakened
 ```
