@@ -201,9 +201,7 @@ for (const entry of SAVE_CASES) {
         const badge = document.querySelector('[data-shell-ux="save-state"]');
         const description = document.querySelector('[data-shell-ux="save-state-description"]');
         const progress = document.querySelector('[data-shell-ux="save-state-progress-cue"]');
-        const pauseNote = document.querySelector(
-          '[data-shell-ux="saving-interaction-pause-note"]',
-        );
+        const pauseNote = document.querySelector('[data-shell-ux="saving-interaction-pause-note"]');
         const ready = document.querySelector('[data-shell-ux="ready-region"]');
         const banner = document.querySelector('[data-shell-ux="demo-banner"]');
         const overview = document.querySelector('[data-dashboard-ux="overview-dashboard"]');
@@ -363,9 +361,7 @@ await runCase(
       const badge = document.querySelector('[data-shell-ux="save-state"]');
       const description = document.querySelector('[data-shell-ux="save-state-description"]');
       const progress = document.querySelector('[data-shell-ux="save-state-progress-cue"]');
-      const pauseNote = document.querySelector(
-        '[data-shell-ux="saving-interaction-pause-note"]',
-      );
+      const pauseNote = document.querySelector('[data-shell-ux="saving-interaction-pause-note"]');
       const text = `${badge?.textContent ?? ""}\n${description?.textContent ?? ""}`;
       return {
         pass:
@@ -389,9 +385,7 @@ await runCase(
       const badge = document.querySelector('[data-shell-ux="save-state"]');
       const description = document.querySelector('[data-shell-ux="save-state-description"]');
       const progress = document.querySelector('[data-shell-ux="save-state-progress-cue"]');
-      const pauseNote = document.querySelector(
-        '[data-shell-ux="saving-interaction-pause-note"]',
-      );
+      const pauseNote = document.querySelector('[data-shell-ux="saving-interaction-pause-note"]');
       const familyR = document.querySelector('[data-demo-ux="overview-kpi-family-r-note"]');
       return {
         pass:

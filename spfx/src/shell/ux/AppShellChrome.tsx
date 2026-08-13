@@ -303,8 +303,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const showPartialRetrieval =
     !unauthenticated && !siteBlocked && isPartialRetrievalViewMode(viewMode);
   const showReadyRegion = !unauthenticated && !siteBlocked && viewMode === "ready";
-  const navDisabled =
-    !isShellPrimaryNavigationEnabled(viewMode, selection) || interactionPaused;
+  const navDisabled = !isShellPrimaryNavigationEnabled(viewMode, selection) || interactionPaused;
 
   React.useEffect(() => {
     const node = readyRegionContentRef.current;
@@ -442,67 +441,65 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
             ) : null}
             <div
               ref={readyRegionContentRef}
-              className={
-                interactionPaused ? styles.readyRegionSavingPausedContent : undefined
-              }
+              className={interactionPaused ? styles.readyRegionSavingPausedContent : ""}
               data-shell-ux="ready-region-content"
             >
-            {destination === "overview" ? (
-              reviewDuePreviewOpen ? (
-                <ReviewDueState
-                  presentation={reviewDueStatePresentation}
-                  headingRef={destinationHeadingRef}
-                  onBackToOverview={handleBackToOverview}
-                />
-              ) : (
-                <OverviewDashboard
-                  presentation={overviewPresentation}
-                  headingRef={destinationHeadingRef}
-                  onReviewDueStateRequest={handleReviewDueStateRequest}
-                  onTodayActionNavigate={handleTodayActionNavigate}
-                />
-              )
-            ) : destination === "users" ? (
-              selectedUserDetail ? (
-                supportPlanPreviewOpen &&
-                supportPlanPresentation.userId === selectedUserDetail.userId ? (
-                  <SupportPlan
-                    presentation={supportPlanPresentation}
+              {destination === "overview" ? (
+                reviewDuePreviewOpen ? (
+                  <ReviewDueState
+                    presentation={reviewDueStatePresentation}
                     headingRef={destinationHeadingRef}
-                    onBackToUserDetail={handleBackToUserDetail}
+                    onBackToOverview={handleBackToOverview}
                   />
                 ) : (
-                  <UserDetail
-                    presentation={selectedUserDetail}
+                  <OverviewDashboard
+                    presentation={overviewPresentation}
                     headingRef={destinationHeadingRef}
-                    onBackToUsers={handleBackToUsers}
-                    onSupportPlanRequest={
-                      selectedUserDetail.userId === supportPlanPresentation.userId
-                        ? handleSupportPlanRequest
-                        : undefined
-                    }
+                    onReviewDueStateRequest={handleReviewDueStateRequest}
+                    onTodayActionNavigate={handleTodayActionNavigate}
                   />
                 )
-              ) : (
-                <UsersList
-                  presentation={usersPresentation}
+              ) : destination === "users" ? (
+                selectedUserDetail ? (
+                  supportPlanPreviewOpen &&
+                  supportPlanPresentation.userId === selectedUserDetail.userId ? (
+                    <SupportPlan
+                      presentation={supportPlanPresentation}
+                      headingRef={destinationHeadingRef}
+                      onBackToUserDetail={handleBackToUserDetail}
+                    />
+                  ) : (
+                    <UserDetail
+                      presentation={selectedUserDetail}
+                      headingRef={destinationHeadingRef}
+                      onBackToUsers={handleBackToUsers}
+                      onSupportPlanRequest={
+                        selectedUserDetail.userId === supportPlanPresentation.userId
+                          ? handleSupportPlanRequest
+                          : undefined
+                      }
+                    />
+                  )
+                ) : (
+                  <UsersList
+                    presentation={usersPresentation}
+                    headingRef={destinationHeadingRef}
+                    detailPreviewUserIds={detailPreviewUserIds}
+                    onUserDetailRequest={handleUserDetailRequest}
+                  />
+                )
+              ) : destination === "records" ? (
+                <DailyRecords
+                  presentation={dailyRecordPresentation}
                   headingRef={destinationHeadingRef}
-                  detailPreviewUserIds={detailPreviewUserIds}
-                  onUserDetailRequest={handleUserDetailRequest}
                 />
-              )
-            ) : destination === "records" ? (
-              <DailyRecords
-                presentation={dailyRecordPresentation}
-                headingRef={destinationHeadingRef}
-              />
-            ) : (
-              <DestinationPlaceholder
-                destination={destination}
-                headingRef={destinationHeadingRef}
-              />
-            )}
-            {children}
+              ) : (
+                <DestinationPlaceholder
+                  destination={destination}
+                  headingRef={destinationHeadingRef}
+                />
+              )}
+              {children}
             </div>
           </div>
         ) : null}

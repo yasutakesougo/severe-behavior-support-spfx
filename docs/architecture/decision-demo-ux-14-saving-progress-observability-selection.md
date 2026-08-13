@@ -226,7 +226,7 @@ Selection GO ≠ Merge GO
 Selection GO ≠ #299 Close GO
 ```
 
-次の Human gate は **DEMO-UX-14 Implementation Start GO** のみ。
+次の Human gate は **DEMO-UX-14 Ready GO**（別途）のみ。Implementation Start GO は本文書更新時点で受領済み。
 
 ## Evidence referenced
 
