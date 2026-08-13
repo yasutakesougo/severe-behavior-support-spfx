@@ -12,6 +12,7 @@ Branch: cursor/demo-ux-14-saving-progress-observability-selection-3507
 PR: #330（Draft）
 Selection: decision-demo-ux-14-saving-progress-observability-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-14-browser-smoke.md）
+Fresh Review: PASS（demo-ux-14-fresh-review.md；P0=0 / P1=0）
 Heft test: 104 / 104 PASS
 Root test: 554 / 554 PASS
 Ready / Merge: NOT AUTHORIZED
@@ -93,6 +94,7 @@ spfx/smoke/demo-ux-14/
 Selection = SELECTED / LOCKED
 Implementation Start = GO / COMPLETE
 Verification = PASS
+Fresh Review = PASS（P0=0 / P1=0；Ready NOT AUTHORIZED）
 Ready / Merge = NOT AUTHORIZED
 Deploy = NOT AUTHORIZED
 #299 Close = NOT AUTHORIZED
