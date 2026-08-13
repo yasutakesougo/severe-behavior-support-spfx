@@ -14,7 +14,7 @@
 4. Evidence First — 証跡がない事項を推測で補完しない
 5. Fail Closed — 権限マトリクス未記載の操作は禁止扱い（`docs/decisions/DEC-AI-ORG-003.md`）
 6. Read Only 工程では変更禁止 — 読取・監査工程で変更手順を実行しない
-7. Merge は人の事前承認必須 — Solo development（既定）では Fresh Review PASS / P0=0 / P1=0 / CI SUCCESS / HEAD unchanged / mergeable=clean / Human Merge GO。submitted GitHub Review PASS は非必須（`DEC-AI-ORG-003.md`）
+7. Fresh Review PASS なし Merge 禁止 — Solo development（既定）では Fresh Review PASS / P0=0 / P1=0 / CI SUCCESS / HEAD unchanged / mergeable=clean / 明示 Human Merge GO が必須。submitted GitHub Review PASS は非必須（`DEC-AI-ORG-003.md`）
 
 ## 判定語と重大度
 

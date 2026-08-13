@@ -92,8 +92,8 @@ const legacyScanRoots = [
 
 const approvalBoundaryRequiredPhrases = {
   ".agents/mcp/permission-matrix.md": ["人の事前承認", "禁止", "Fail Closed", "マージ", "deploy"],
-  "docs/process/ai-governance.md": ["レビュー PASS なし Merge 禁止", "人の事前承認"],
-  ".agents/agents/audit.md": ["Review PASS なし Merge", "マージ"],
+  "docs/process/ai-governance.md": ["Fresh Review PASS なし Merge 禁止", "人の事前承認"],
+  ".agents/agents/audit.md": ["Fresh Review PASS なし Merge", "マージ"],
 };
 
 const secretLikePatterns = [
