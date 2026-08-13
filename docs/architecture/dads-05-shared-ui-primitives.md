@@ -86,12 +86,29 @@ fail-closed / save 5-state / status labels unchanged
 ## 7. Verification (this PR)
 
 ```text
+HEAD: 4794db7a5567abbf2e93b2cea0034eb3e5144a91
+Baseline main: 00b00e123404f3f44b415edc059748781cde8842
 format:check: PASS
-root lint / typecheck / unit: PASS
+git diff --check origin/main...HEAD: PASS
+  (prior HOLD tip 1866e0b: trailing whitespace on Acceptance L80–84;
+   format-only fix in 4794db7 — no implementation change)
+GitHub CI (Contracts and Process CI): PASS
+  https://github.com/yasutakesougo/severe-behavior-support-spfx/actions/runs/31668992236
+root lint / typecheck / unit: PASS (554/554)
 SPFx Heft test: PASS (115/115)
 SPFx production build: PASS
 browser smoke PASS:
   DEMO-UX-14 / 13 / 9 / 8 / 7 / 5 / 3
   SHELL-UX-1
 Smoke expectations: NOT weakened
+```
+
+## 8. Fresh Review
+
+```text
+Prior: HOLD @ 1866e0b — P1 CI FAILURE (git diff --check trailing whitespace)
+Updated: PASS @ 4794db7 — P0=0 / P1=0
+Ready = NOT AUTHORIZED
+Merge = NOT AUTHORIZED
+Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
 ```
