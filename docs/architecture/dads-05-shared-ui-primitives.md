@@ -77,11 +77,11 @@ fail-closed / save 5-state / status labels unchanged
 
 ## 6. Acceptance
 
-1. Primitives registry + components exist and use DADS-04 tokens  
-2. INV-07 / INV-10 / INV-17 addressed via FIX primitives + minimal adoption  
-3. StatusPanel family remains KEEP  
-4. INV-19 / DADS-06 / DADS-UX-* still NOT AUTHORIZED  
-5. Verification PASS；no test weakening  
+1. Primitives registry + components exist and use DADS-04 tokens
+2. INV-07 / INV-10 / INV-17 addressed via FIX primitives + minimal adoption
+3. StatusPanel family remains KEEP
+4. INV-19 / DADS-06 / DADS-UX-* still NOT AUTHORIZED
+5. Verification PASS；no test weakening
 
 ## 7. Verification (this PR)
 
