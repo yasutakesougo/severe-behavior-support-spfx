@@ -180,12 +180,12 @@ Ready / Merge of implementation PR: HUMAN-ONLY
 
 ### Implementation stage（別 Human GO 後）
 
-- [ ] Users → 現在の支援手順 → 「この手順を記録」→ result 入力 → save が一連で動く（synthetic）
-- [ ] context 再選択なし / FW-05 付け替えなし / historical fail-closed
-- [ ] Review → ProcedureRecord → plan/version 追跡
-- [ ] ~390px + keyboard-only 主要操作
-- [ ] save_failed 入力保持 / save_outcome_unknown 即時再送禁止
-- [ ] DADS IA / 5-state / INV-07/10/17 維持
+- [x] Users → 現在の支援手順 → 「この手順を記録」→ result 入力 → save が一連で動く（synthetic）
+- [x] context 再選択なし / FW-05 付け替えなし / historical fail-closed
+- [x] Review → ProcedureRecord → plan/version 追跡
+- [x] ~390px + keyboard-only 主要操作
+- [x] save_failed 入力保持 / save_outcome_unknown 即時再送禁止
+- [x] DADS IA / 5-state / INV-07/10/17 維持
 
 ## 現在判定
 
@@ -194,11 +194,14 @@ Filing: COMPLETE（#356 OPEN）
 Design source: FIELD-WORKFLOW-1 assessment + A/B LOCKED contracts
 Design boundary: FIXED
 Implementation Start: AUTHORIZED（Human GO）
-Implementation: IN PROGRESS / PR field-workflow-ui
-Tests: SPFx Jest + ~390 browser smoke
+Implementation: MERGED（PR #357 → main 8173a4c…）
+Closeout: docs/architecture/field-workflow-1-closeout-acceptance.md
+#356 Close eligibility: YES（Human-only；Agent は close しない）
 Production: NO-GO
 SharePoint write: NO-GO
-Next: Human Ready / Merge of implementation PR（HUMAN-ONLY）
+Deploy / App Catalog: NO-GO
+#68 / #69 / #299 / #347 / #352 auto-close: NO-GO
+Next: Human Close #356（任意） / 次ゲートは明示選択
 ```
 
 ## 禁止

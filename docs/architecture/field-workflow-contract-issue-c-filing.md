@@ -74,7 +74,9 @@ FIELD-WORKFLOW UI Issue C:
   A/B 契約: MERGED
   UI 設計境界: FIXED
   Implementation Start: AUTHORIZED（Human GO）
-  Implementation PR: field-workflow-ui（Ready/Merge = HUMAN-ONLY）
+  Implementation: MERGED（PR #357）
+  Closeout packet: docs/architecture/field-workflow-1-closeout-acceptance.md
+  #356 Close eligibility: YES（Human-only）
   Deploy / SharePoint / M365 / Entra / production write: NO-GO
   #68 / #69 / #299 / #347 / #352 auto-close: NO-GO
 ```

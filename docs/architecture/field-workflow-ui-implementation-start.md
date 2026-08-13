@@ -1,12 +1,13 @@
 # FIELD-WORKFLOW UI (#356) — Implementation Start
 
-Status: **IMPLEMENTATION AUTHORIZED** (Human GO received 2026-08-13)
+Status: **IMPLEMENTATION MERGED** (PR #357 → main `8173a4c…`)
 
 ```text
 Issue: #356
 Decision: Issue #356 FIELD-WORKFLOW UI Implementation Start GO
-Target PR: field-workflow-ui
+Target PR: field-workflow-ui → MERGED as #357
 main baseline at GO: cfe09f4…（post #355） / A/B MERGED
+Closeout: docs/architecture/field-workflow-1-closeout-acceptance.md
 ```
 
 ## In scope

@@ -1,22 +1,29 @@
 # FIELD-WORKFLOW-1 — Assessment (read-only)
 
-Status: **HOLD — CONTRACT GAP**
+Status: **SUPERSEDED for acceptance** — see `docs/architecture/field-workflow-1-closeout-acceptance.md`
+
+```text
+Historical assessment status at PR #345: HOLD — CONTRACT GAP
+Closeout (post PR #357 / main 8173a4c…): ACCEPT — SYNTHETIC PATH COMPLETE
+This file remains the read-only gap analysis as of assessment day.
+Do not treat the HOLD recommendation below as current gate state.
+```
 
 Assessment date: 2026-08-13
 
 Baseline (VISUAL-ACCEPTANCE-1 ACCEPT/COMPLETE): `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`
 
-Observed live `origin/main`: `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`
+Observed live `origin/main` **at assessment time**: `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`
 
-Reconciliation: **match** — no rewind; assessment against current main = supplied SHA.
+Reconciliation（assessment day）: **match** — no rewind; assessment against then-current main = supplied SHA.
 
 Scope: 強度行動障害の支援計画シート → 支援手順 → 支援手順記録 → Review 材料。
 
 Out of scope: 生活介護個別支援計画、出欠、稼働率、請求、服薬、一般ケース記録、事故/ヒヤリハット、加算、計画相談、サービス等利用計画。
 
-Implementation in this slice: **STOP** (Human GO required for contract/domain).
+Implementation in this assessment slice: **STOP** (Human GO required for contract/domain) — **later authorized and MERGED** via #347/#352/#356 / PR #350/#354/#357.
 
-No Deploy / SharePoint / App Catalog / live schema / production write.
+No Deploy / SharePoint / App Catalog / live schema / production write（closeout でも NO-GO 維持）.
 
 ---
 
@@ -219,7 +226,7 @@ Related open UI issues (intent overlap, not auto-close):
 
 ---
 
-## 9. Recommendation
+## 9. Recommendation（assessment-day；historical）
 
 ```text
 B. HOLD — CONTRACT GAP
@@ -228,3 +235,5 @@ B. HOLD — CONTRACT GAP
 Also flag **DOMAIN DECISION REQUIRED** for procedure-body ownership and which record type is the 支援手順記録正本.
 
 Do **not** mark FIELD-WORKFLOW-1 UI-complete on presentation prototypes until binding contracts exist and FW-05 is test-enforced.
+
+**Post-merge note（2026-08-13）:** Contracts A/B and UI Issue C are MERGED（PR #350 / #354 / #357）. Current acceptance state is recorded in `docs/architecture/field-workflow-1-closeout-acceptance.md`（ACCEPT — SYNTHETIC PATH COMPLETE）. Deploy / SharePoint / production write remain separate gates.
