@@ -3,39 +3,34 @@
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-FIELD-WORKFLOW-CONTRACT-B-DOMAIN-1
-Kind: Human Selection packet（Issue #352 Domain Decisions）
-Status: READY FOR HUMAN SELECTION GO（NOT LOCKED）
+Kind: Human Selection packet（Issue #352 Domain Decisions）— candidate workbook
+Status: SUPERSEDED by Decision-FIELD-WORKFLOW-CONTRACT-B-PKG-1
+  canonical: docs/architecture/decision-field-workflow-contract-b-pkg-1-selection.md
+  Status there: SELECTED / LOCKED
 Issue: #352（契約 Issue B 正本）
 Date: 2026-08-13
 
-Upstream:
-  Issue A #347 / A2 SELECTED / LOCKED
-  SupportPlanVersionProcedureBinding MERGED（PR #350）
-  Issue B filing packet MERGED（PR #351）
-  Issue #352 body = filing packet full text
-
-Baseline main tip at packet creation:
-  7c11600（Merge PR #351）
-
-Recommended package ID: B-PKG-1（下記）
-Agent auto-select / auto-lock: FORBIDDEN
-Implementation Start: NOT AUTHORIZED
-FIELD-WORKFLOW UI / Deploy / SharePoint / #299 / #347 Close: NOT AUTHORIZED
+NOTE:
+  This packet recorded READY FOR HUMAN SELECTION GO candidates.
+  Human Selection GO accepted B-PKG-1 with amended Schema ID / result codes / clock rules.
+  Do not treat this workbook as the locked正本.
 ```
 
-## 0. How to lock
-
-Human が次のいずれかで Selection GO すること。
+## 0. Supersession
 
 ```text
-Issue #352 — Domain Decision Selection GO（B-PKG-1）
+LOCKED正本:
+  Decision-FIELD-WORKFLOW-CONTRACT-B-PKG-1
+  docs/architecture/decision-field-workflow-contract-b-pkg-1-selection.md
+
+This file remains as the pre-GO candidate workbook only.
 ```
 
-または個別 Decision 単位の明示 GO。
-
-GO 前は **NOT LOCKED**。本パケットは固定候補の整理であり、採択そのものではない。
-
 ---
+
+## Archived candidate workbook (pre-GO)
+
+The following sections preserve the pre-GO recommendation history.
 
 ## 1. Decision units（must fix）
 
