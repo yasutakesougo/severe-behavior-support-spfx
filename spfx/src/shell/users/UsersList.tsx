@@ -4,6 +4,7 @@ import {
   DEMO_UX_11_SLICE,
 } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_R_USERS_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
+import { DEMO_UX_13_SLICE, isSyntheticDetailPreviewEnabled } from "./detail-preview";
 import { DEMO_USERS_DETAIL_DISABLED_NOTE, DEMO_USERS_FILTER_EMPTY_NOTE } from "./users-copy";
 import {
   DEMO_UX_8_SLICE,
@@ -19,13 +20,14 @@ import styles from "./UsersUx.module.scss";
 export type UsersListProps = Readonly<{
   presentation: ShellUsersPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
-  detailPreviewUserId?: string;
+  /** DEMO-UX-13: userIds that have a synthetic detail fixture (sole enablement source). */
+  detailPreviewUserIds?: readonly string[];
   onUserDetailRequest?: (userId: string) => void;
 }>;
 
 /**
  * DEMO-UX-2 users list presentation skeleton.
- * DEMO-UX-3 may opt one synthetic row into local presentation-only detail preview.
+ * DEMO-UX-3 / DEMO-UX-13: synthetic detail preview when a fixture exists for the row.
  * DEMO-UX-8 enables synthetic client-side status filter chips.
  * DEMO-UX-11 removes duplicate screen-level synthetic band; filter hint is consolidated.
  * No live user data or business navigation is connected here.
@@ -33,7 +35,7 @@ export type UsersListProps = Readonly<{
 export const UsersList: React.FC<UsersListProps> = ({
   presentation,
   headingRef,
-  detailPreviewUserId,
+  detailPreviewUserIds,
   onUserDetailRequest,
 }) => {
   const { rows } = presentation;
@@ -49,6 +51,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-8-slice={DEMO_UX_8_SLICE.id}
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
+      data-demo-ux-13-slice={DEMO_UX_13_SLICE.id}
       data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
@@ -124,7 +127,8 @@ export const UsersList: React.FC<UsersListProps> = ({
       <ul className={styles.userRows} data-demo-ux="users-row-list">
         {visibleRows.map((row) => {
           const detailPreviewEnabled =
-            Boolean(onUserDetailRequest) && row.id === detailPreviewUserId;
+            Boolean(onUserDetailRequest) &&
+            isSyntheticDetailPreviewEnabled(row.id, detailPreviewUserIds);
           return (
             <li
               key={row.id}

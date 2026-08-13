@@ -10,7 +10,7 @@ Baseline main: 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
 Predecessor: DEMO-UX-12 MERGED（PR #326 / ea12849）+ closeout sync MERGED（PR #327 / 59c4a89）
 Source finding: DUX7-P2-1（DEMO-UX-7 Fresh Review P2）
 Follow-on queue（not this slice）: RPF-007
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（2026-08-13）— see demo-ux-13-implementation-start.md
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -24,7 +24,7 @@ Human は DEMO-UX-12 closeout（PR #327）Merge SUCCESS を確認し、次とし
 本 Selection は **DUX7-P2-1 のみ** を SELECTED / LOCKED とする。
 
 ```text
-DEMO-UX-13 Implementation Start = NOT AUTHORIZED（separate Human GO）
+DEMO-UX-13 Implementation Start = GO（this follow-on docs + code on PR #328）
 RPF-007 Implementation = NOT AUTHORIZED
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
 Ready / Merge = NOT AUTHORIZED
@@ -221,7 +221,8 @@ Selection GO ≠ Merge GO
 Selection GO ≠ #299 Close GO
 ```
 
-次の Human gate は **DEMO-UX-13 Implementation Start GO** のみ。
+Human gate `DEMO-UX-13 Implementation Start GO` は 2026-08-13 に受領済み。
+次の Human gate は Fresh Review / Ready（本 slice では Ready を要求しない）。
 
 ## Evidence referenced
 

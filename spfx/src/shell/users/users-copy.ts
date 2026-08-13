@@ -15,8 +15,12 @@ export const DEMO_USERS_FILTER_NOTE =
 /** @deprecated Prefer consolidated filter hint after DEMO-UX-11. Kept for import compatibility. */
 export const DEMO_USERS_FILTER_DISABLED_NOTE = DEMO_USERS_FILTER_NOTE;
 
+/**
+ * DEMO-UX-13: list detail opens only when a synthetic detail fixture exists for that user.
+ * Default fixtures: A / C. Not a live user-detail connection.
+ */
 export const DEMO_USERS_DETAIL_DISABLED_NOTE =
-  "Aさんのみ合成データ内の詳細プレビューを表示できます。業務データの詳細画面には接続されていません。";
+  "合成詳細プレビューがある利用者のみ一覧から表示できます（現在は Aさん・Cさん）。業務データの詳細画面には接続されていません。";
 
 export const DEMO_USERS_FILTER_EMPTY_NOTE =
   "合成データ内に該当する利用者はありません。事業所に利用者がいないことを示すものではありません。";

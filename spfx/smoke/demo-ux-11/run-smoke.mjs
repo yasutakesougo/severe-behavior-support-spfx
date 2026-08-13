@@ -194,7 +194,8 @@ await runCase(
           (hint?.textContent ?? "").indexOf("絞り込みできます") >= 0 &&
           (hint?.textContent ?? "").indexOf("業務検索には未接続") >= 0 &&
           (familyR?.textContent ?? "").indexOf("概要と同じ定義") >= 0 &&
-          (detail?.textContent ?? "").indexOf("Aさんのみ") >= 0,
+          (detail?.textContent ?? "").indexOf("合成詳細プレビューがある利用者のみ") >= 0 &&
+          (detail?.textContent ?? "").indexOf("業務データの詳細画面には接続されていません") >= 0,
         hint: hint?.textContent?.trim() ?? "",
       };
     }),

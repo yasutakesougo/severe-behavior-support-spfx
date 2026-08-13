@@ -2,6 +2,11 @@ export { UserDetail, type UserDetailProps } from "./UserDetail";
 export { UsersList, type UsersListProps } from "./UsersList";
 export { SupportPlan, type SupportPlanProps } from "./SupportPlan";
 export {
+  collectSyntheticDetailPreviewUserIds,
+  DEMO_UX_13_SLICE,
+  isSyntheticDetailPreviewEnabled,
+} from "./detail-preview";
+export {
   DEMO_USERS_DETAIL_DISABLED_NOTE,
   DEMO_USERS_FILTER_DISABLED_NOTE,
   DEMO_USERS_FILTER_EMPTY_NOTE,
