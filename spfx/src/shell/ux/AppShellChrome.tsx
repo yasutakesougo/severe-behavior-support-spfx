@@ -6,6 +6,12 @@ import {
   type ShellOverviewPresentation,
 } from "../dashboard";
 import {
+  CurrentProcedure,
+  FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+  ProcedureRecordForm,
+  type ShellProcedureWorkflowPresentation,
+} from "../procedure";
+import {
   DailyRecords,
   DEMO_UX_DAILY_RECORD_FIXTURE,
   type ShellDailyRecordPresentation,
@@ -85,6 +91,7 @@ export type AppShellChromeProps = Readonly<{
   supportPlanPresentation?: ShellSupportPlanPresentation;
   dailyRecordPresentation?: ShellDailyRecordPresentation;
   reviewDueStatePresentation?: ShellReviewDueStatePresentation;
+  procedureWorkflowPresentation?: ShellProcedureWorkflowPresentation;
   children?: React.ReactNode;
 }>;
 
@@ -113,6 +120,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     supportPlanPresentation = DEMO_UX_SUPPORT_PLAN_FIXTURE,
     dailyRecordPresentation = DEMO_UX_DAILY_RECORD_FIXTURE,
     reviewDueStatePresentation = DEMO_UX_REVIEW_DUE_FIXTURE,
+    procedureWorkflowPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE,
     children,
   } = props;
 
@@ -122,10 +130,17 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   );
   const [selectedUserDetailId, setSelectedUserDetailId] = React.useState<string | undefined>();
   const [supportPlanPreviewOpen, setSupportPlanPreviewOpen] = React.useState(false);
+  const [currentProcedureOpen, setCurrentProcedureOpen] = React.useState(false);
+  const [procedureRecordFormOpen, setProcedureRecordFormOpen] = React.useState(false);
+  const [procedureFlowSaveState, setProcedureFlowSaveState] = React.useState<
+    ShellSaveState | undefined
+  >();
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const readyRegionContentRef = React.useRef<HTMLDivElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
+
+  const effectiveSaveState = procedureFlowSaveState ?? saveState;
 
   const userDetailById = new Map<string, ShellUserDetailPresentation>();
   userDetailById.set(userDetailPresentation.userId, userDetailPresentation);
@@ -159,11 +174,28 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (supportPlanPreviewOpen) {
         setSupportPlanPreviewOpen(false);
       }
+      if (currentProcedureOpen) {
+        setCurrentProcedureOpen(false);
+      }
+      if (procedureRecordFormOpen) {
+        setProcedureRecordFormOpen(false);
+      }
+      if (procedureFlowSaveState !== undefined) {
+        setProcedureFlowSaveState(undefined);
+      }
     }
     if (destination !== "overview" && reviewDuePreviewOpen) {
       setReviewDuePreviewOpen(false);
     }
-  }, [destination, selectedUserDetailId, supportPlanPreviewOpen, reviewDuePreviewOpen]);
+  }, [
+    destination,
+    selectedUserDetailId,
+    supportPlanPreviewOpen,
+    currentProcedureOpen,
+    procedureRecordFormOpen,
+    procedureFlowSaveState,
+    reviewDuePreviewOpen,
+  ]);
 
   React.useEffect(() => {
     if (!shouldFocusDestinationRef.current) {
@@ -171,9 +203,16 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = false;
     destinationHeadingRef.current?.focus();
-  }, [destination, selectedUserDetailId, supportPlanPreviewOpen, reviewDuePreviewOpen]);
+  }, [
+    destination,
+    selectedUserDetailId,
+    supportPlanPreviewOpen,
+    currentProcedureOpen,
+    procedureRecordFormOpen,
+    reviewDuePreviewOpen,
+  ]);
 
-  const interactionPaused = isSavingInteractionPaused(saveState);
+  const interactionPaused = isSavingInteractionPaused(effectiveSaveState);
 
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
@@ -187,9 +226,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     if (next === destination) {
-      if (next === "users" && (selectedUserDetailId !== undefined || supportPlanPreviewOpen)) {
+      if (
+        next === "users" &&
+        (selectedUserDetailId !== undefined ||
+          supportPlanPreviewOpen ||
+          currentProcedureOpen ||
+          procedureRecordFormOpen)
+      ) {
         shouldFocusDestinationRef.current = true;
         setSupportPlanPreviewOpen(false);
+        setCurrentProcedureOpen(false);
+        setProcedureRecordFormOpen(false);
+        setProcedureFlowSaveState(undefined);
         setSelectedUserDetailId(undefined);
         return;
       }
@@ -203,6 +251,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
     setSelectedUserDetailId(undefined);
     setReviewDuePreviewOpen(false);
     setDestination(next);
@@ -217,6 +268,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
     setSelectedUserDetailId(userId);
   };
 
@@ -226,6 +280,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
     if (target.kind === "records") {
       setSelectedUserDetailId(undefined);
       setReviewDuePreviewOpen(false);
@@ -261,6 +318,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
     setSelectedUserDetailId(undefined);
   };
 
@@ -269,6 +329,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     shouldFocusDestinationRef.current = true;
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
     setSupportPlanPreviewOpen(true);
   };
 
@@ -278,6 +341,42 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
+  };
+
+  const handleCurrentProcedureRequest = (): void => {
+    if (
+      interactionPaused ||
+      !selectedUserDetailId ||
+      !procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
+    ) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
+    setCurrentProcedureOpen(true);
+  };
+
+  const handleRecordProcedureRequest = (): void => {
+    if (interactionPaused || !currentProcedureOpen || !selectedUserDetailId) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setProcedureRecordFormOpen(true);
+    setProcedureFlowSaveState("unsaved");
+  };
+
+  const handleBackToCurrentProcedure = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
   };
 
   const handleReviewDueStateRequest = (): void => {
@@ -295,6 +394,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setReviewDuePreviewOpen(false);
   };
+
+  const selectedCurrentProcedure = selectedUserDetailId
+    ? procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
+    : undefined;
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
   const siteUnselected = isSiteUnselected(selection);
@@ -325,10 +428,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-destination={destination}
       data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
       data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
+      data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
+      data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
       data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
       data-demo-ux-7-today-nav="true"
       data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
+      data-field-workflow-slice="FIELD-WORKFLOW-UI"
     >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
@@ -339,7 +445,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       <header className={styles.shellHeader} role="banner">
         <div className={styles.brandRow}>
           <p className={styles.productName}>強度行動障害支援（シェル表示）</p>
-          {!unauthenticated ? <SaveStatePresentation state={saveState} /> : null}
+          {!unauthenticated ? <SaveStatePresentation state={effectiveSaveState} /> : null}
         </div>
         {!unauthenticated ? (
           <>
@@ -450,6 +556,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     presentation={reviewDueStatePresentation}
                     headingRef={destinationHeadingRef}
                     onBackToOverview={handleBackToOverview}
+                    procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
                   />
                 ) : (
                   <OverviewDashboard
@@ -468,6 +575,21 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       headingRef={destinationHeadingRef}
                       onBackToUserDetail={handleBackToUserDetail}
                     />
+                  ) : procedureRecordFormOpen && selectedCurrentProcedure ? (
+                    <ProcedureRecordForm
+                      context={selectedCurrentProcedure.context}
+                      headingRef={destinationHeadingRef}
+                      defaultSaveOutcome={procedureWorkflowPresentation.defaultSaveOutcome}
+                      onBackToCurrentProcedure={handleBackToCurrentProcedure}
+                      onSaveStateChange={setProcedureFlowSaveState}
+                    />
+                  ) : currentProcedureOpen && selectedCurrentProcedure ? (
+                    <CurrentProcedure
+                      presentation={selectedCurrentProcedure}
+                      headingRef={destinationHeadingRef}
+                      onBackToUserDetail={handleBackToUserDetail}
+                      onRecordProcedureRequest={handleRecordProcedureRequest}
+                    />
                   ) : (
                     <UserDetail
                       presentation={selectedUserDetail}
@@ -476,6 +598,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       onSupportPlanRequest={
                         selectedUserDetail.userId === supportPlanPresentation.userId
                           ? handleSupportPlanRequest
+                          : undefined
+                      }
+                      onCurrentProcedureRequest={
+                        procedureWorkflowPresentation.currentByUserId[selectedUserDetail.userId]
+                          ? handleCurrentProcedureRequest
                           : undefined
                       }
                     />

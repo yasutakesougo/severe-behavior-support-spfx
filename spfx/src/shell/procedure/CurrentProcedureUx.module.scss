@@ -1,0 +1,144 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.currentProcedure {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  min-width: 0;
+  max-width: 100%;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+  box-sizing: border-box;
+}
+
+.topRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-3;
+  align-items: center;
+}
+
+.backButton,
+.primaryButton {
+  min-height: 2.25rem;
+  padding: 0.35rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.primaryButton {
+  font-weight: 700;
+  background: sbs.$color-surface-canvas;
+}
+
+.backButton:focus,
+.backButton:focus-visible,
+.primaryButton:focus,
+.primaryButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.backButton:disabled,
+.primaryButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.5rem;
+  outline: none;
+}
+
+.heading:focus,
+.heading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.prompt,
+.contextLine,
+.sectionHint {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.contextLine {
+  font-size: sbs.$font-size-200;
+}
+
+.section {
+  min-width: 0;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-canvas;
+}
+
+.section h2 {
+  margin: 0 0 sbs.$space-3;
+  font-size: 1.05rem;
+}
+
+.flowList {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
+  margin: 0;
+}
+
+.flowItem {
+  min-width: 0;
+  padding: sbs.$space-3;
+  background: sbs.$color-surface-subtle;
+}
+
+.flowItem dt {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+}
+
+.flowItem dd {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.flowItem ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-3;
+}
+
+@media (max-width: 390px) {
+  .currentProcedure {
+    padding: sbs.$space-3;
+  }
+
+  .section {
+    padding: sbs.$space-3;
+  }
+
+  .actionRow {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .backButton {
+    width: 100%;
+  }
+}

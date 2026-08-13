@@ -73,13 +73,8 @@ FIELD-WORKFLOW UI Issue C:
   Issue C Filing: COMPLETE（#356 OPEN）
   A/B 契約: MERGED
   UI 設計境界: FIXED
-  Implementation Start: HOLD / NO-GO
+  Implementation Start: AUTHORIZED（Human GO）
+  Implementation PR: field-workflow-ui（Ready/Merge = HUMAN-ONLY）
   Deploy / SharePoint / M365 / Entra / production write: NO-GO
   #68 / #69 / #299 / #347 / #352 auto-close: NO-GO
-```
-
-Next independent Human instruction (not authorized here):
-
-```text
-Issue #356 FIELD-WORKFLOW UI Implementation Start GO
 ```

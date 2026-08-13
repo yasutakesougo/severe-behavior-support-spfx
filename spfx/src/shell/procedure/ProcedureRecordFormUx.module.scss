@@ -1,0 +1,202 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.procedureRecordForm {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  min-width: 0;
+  max-width: 100%;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+  box-sizing: border-box;
+}
+
+.topRow,
+.actionRow,
+.outcomeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-3;
+  align-items: center;
+}
+
+.backButton,
+.saveButton,
+.outcomeButton {
+  min-height: 2.25rem;
+  padding: 0.35rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.saveButton {
+  font-weight: 700;
+}
+
+.backButton:focus,
+.backButton:focus-visible,
+.saveButton:focus,
+.saveButton:focus-visible,
+.outcomeButton:focus,
+.outcomeButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.backButton:disabled,
+.saveButton:disabled,
+.outcomeButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.heading {
+  margin: 0;
+  font-size: 1.5rem;
+  outline: none;
+}
+
+.heading:focus,
+.heading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.section {
+  min-width: 0;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-canvas;
+}
+
+.section h2 {
+  margin: 0 0 sbs.$space-3;
+  font-size: 1.05rem;
+}
+
+.contextLine,
+.hint,
+.statusNote {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.statusNote {
+  padding: sbs.$space-2 sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+}
+
+.resultList {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resultOption {
+  display: flex;
+  gap: sbs.$space-3;
+  align-items: flex-start;
+  min-width: 0;
+  padding: sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-subtle;
+}
+
+.resultOptionSelected {
+  border-color: sbs.$color-border-strong;
+  font-weight: 600;
+}
+
+/* Non-failure styling for all three results — no danger/error treatment. */
+.resultOption input {
+  margin-top: 0.2rem;
+}
+
+.resultLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.resultHint {
+  font-weight: 400;
+  font-size: sbs.$font-size-200;
+  line-height: 1.45;
+}
+
+.fieldGrid {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
+}
+
+.fieldGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 700;
+}
+
+.fieldGrid input,
+.fieldGrid textarea {
+  min-height: 2.25rem;
+  padding: 0.35rem sbs.$space-2;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  font: inherit;
+}
+
+.fieldGrid textarea {
+  min-height: 4.5rem;
+  resize: vertical;
+}
+
+.fieldGrid input:focus,
+.fieldGrid input:focus-visible,
+.fieldGrid textarea:focus,
+.fieldGrid textarea:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+@media (max-width: 390px) {
+  .procedureRecordForm {
+    padding: sbs.$space-3;
+  }
+
+  .section {
+    padding: sbs.$space-3;
+  }
+
+  .actionRow,
+  .outcomeRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .backButton,
+  .saveButton,
+  .outcomeButton {
+    width: 100%;
+  }
+}
