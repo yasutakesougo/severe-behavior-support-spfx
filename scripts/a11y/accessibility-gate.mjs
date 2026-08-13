@@ -487,6 +487,134 @@ export function runAccessibilityGate() {
     });
   }
 
+  // --- A11Y-HD-05: DailyRecords destination heading hierarchy (DADS-UX-4) ---
+  const recordsPathForHd = "spfx/src/shell/records/DailyRecords.tsx";
+  if (relExists(recordsPathForHd)) {
+    const src = read(recordsPathForHd);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasRecordsH1 = /<h1\b/.test(src) && src.includes("demo-ux-records-heading");
+    const sectionH2Count = (src.match(/<h2\b/g) || []).length;
+    const ok = h1Count === 1 && hasRecordsH1 && sectionH2Count >= 4;
+    push({
+      id: "A11Y-HD-05",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "DailyRecords keeps single h1 + section h2 hierarchy (DADS-UX-4)"
+        : "DailyRecords heading hierarchy regression (expect 1 h1 + section h2s)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-05",
+      severity: "blocking",
+      ok: false,
+      detail: `${recordsPathForHd} missing`,
+    });
+  }
+
+  // --- A11Y-RC-01: DailyRecords SCSS tokens + focus-visible ---
+  const recordsScssPath = "spfx/src/shell/records/DailyRecordsUx.module.scss";
+  if (relExists(recordsScssPath)) {
+    const css = read(recordsScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const ok = usesTokens && !hardcodedOutsideTheme && focusVisible;
+    push({
+      id: "A11Y-RC-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "DailyRecords SCSS uses DADS-04 tokens + focus-visible (no raw hex outside theme strings)"
+        : `DailyRecords SCSS presentation gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-RC-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${recordsScssPath} missing`,
+    });
+  }
+
+  // --- A11Y-INV-10: DailyRecords selection remains SingleSelectListbox (INV-10) ---
+  if (relExists(recordsPathForHd)) {
+    const src = read(recordsPathForHd);
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+    const usesListbox = /SingleSelectListbox/.test(code);
+    const noButtonOptionHybrid =
+      !/<button\b[^>]*\brole=["']option["']/i.test(code) &&
+      !/<button\b[\s\S]{0,800}?\brole=["']option["']/i.test(code);
+    const incompleteHook = /daily-record-incomplete-list/.test(code);
+    const ok = usesListbox && noButtonOptionHybrid && incompleteHook;
+    push({
+      id: "A11Y-INV-10",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "INV-10: DailyRecords incomplete select uses SingleSelectListbox (no button+option hybrid)"
+        : "INV-10 regression: DailyRecords must keep SingleSelectListbox selection semantics",
+    });
+  } else {
+    push({
+      id: "A11Y-INV-10",
+      severity: "blocking",
+      ok: false,
+      detail: `${recordsPathForHd} missing — INV-10 check cannot run`,
+    });
+  }
+
+  // --- A11Y-INV-17-RC: DailyRecords empty paths use EmptyNotice ---
+  if (relExists(recordsPathForHd)) {
+    const src = read(recordsPathForHd);
+    const usesEmpty = /EmptyNotice/.test(src);
+    const incompleteEmpty = /daily-record-incomplete-empty-note/.test(src);
+    const recentEmpty = /daily-record-recent-empty-note/.test(src);
+    const announceOn = /announce\b/.test(src);
+    const ok = usesEmpty && incompleteEmpty && recentEmpty && announceOn;
+    push({
+      id: "A11Y-INV-17-RC",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "INV-17: DailyRecords empty incomplete/recent use EmptyNotice with announce"
+        : "INV-17 regression: DailyRecords empty paths must use EmptyNotice status channel",
+    });
+  } else {
+    push({
+      id: "A11Y-INV-17-RC",
+      severity: "blocking",
+      ok: false,
+      detail: `${recordsPathForHd} missing — INV-17 Records check cannot run`,
+    });
+  }
+
+  // --- A11Y-DIS-02: DailyRecords disabled + aria-disabled ---
+  if (relExists(recordsPathForHd)) {
+    const src = read(recordsPathForHd);
+    const disabledButtons = (src.match(/(?<![\w-])disabled(?:=|\s|>)/g) || []).length;
+    const ariaDisabled = (src.match(/aria-disabled=/g) || []).length;
+    // Person input uses disabled + aria-disabled; mutation buttons likewise.
+    const ok = disabledButtons === 0 || ariaDisabled >= 2;
+    push({
+      id: "A11Y-DIS-02",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "DailyRecords disabled controls pair with aria-disabled"
+        : "DailyRecords disabled without matching aria-disabled",
+    });
+  } else {
+    push({
+      id: "A11Y-DIS-02",
+      severity: "blocking",
+      ok: false,
+      detail: `${recordsPathForHd} missing`,
+    });
+  }
+
   // --- A11Y-FV-01: focus tokens + selector mix advisory ---
   const semanticPath = "spfx/src/shell/tokens/semantic.ts";
   const scssFiles = listFilesRecursive("spfx/src/shell", [".scss"]);

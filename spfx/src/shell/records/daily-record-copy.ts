@@ -13,6 +13,19 @@ export const DEMO_DAILY_RECORD_DRAFT_HINT =
 export const DEMO_DAILY_RECORD_RECENT_HINT =
   "最近の記録は閲覧サンプルです。ここからは編集できません。";
 
+/**
+ * INV-17: incomplete zero-result only — not “all clear” business completion.
+ * Default synthetic fixture is non-empty; this copy is for empty presentation paths.
+ */
+export const DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE =
+  "表示する未完了確認はありません（合成データ）。業務上の未完了が無いことを示すものではありません。";
+
+/**
+ * INV-17: recent-records zero-result only — not live retrieval failure / facility-empty.
+ */
+export const DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE =
+  "表示する最近の記録はありません（合成データ）。業務データが空であることを示すものではありません。";
+
 export function dailyRecordCopyIsFailClosed(text: string): boolean {
   const lowered = text.toLowerCase();
   const forbidden = [

@@ -139,6 +139,48 @@ export const SBS_A11Y_RULE_CATALOG: readonly SbsA11yRule[] = [
     summary: "UsersList filter zero-result uses EmptyNotice announce (not failure/facility-empty)",
   },
   {
+    id: "A11Y-HD-05",
+    focus: "heading",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-09"],
+    summary: "DailyRecords keeps single h1 and section h2 hierarchy",
+  },
+  {
+    id: "A11Y-RC-01",
+    focus: "focus-visible",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-09", "INV-20", "INV-22"],
+    summary: "DailyRecords SCSS consumes DADS-04 tokens and exposes focus-visible",
+  },
+  {
+    id: "A11Y-INV-10",
+    focus: "primitive-semantics",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-10"],
+    summary:
+      "DailyRecords incomplete select stays SingleSelectListbox (no button+option hybrid)",
+  },
+  {
+    id: "A11Y-INV-17-RC",
+    focus: "live-status",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-17"],
+    summary:
+      "DailyRecords empty incomplete/recent paths use EmptyNotice announce (not failure/all-clear)",
+  },
+  {
+    id: "A11Y-DIS-02",
+    focus: "disabled",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-15", "INV-21"],
+    summary: "DailyRecords disabled controls expose aria-disabled with disabled",
+  },
+  {
     id: "A11Y-AN-01",
     focus: "accessible-name",
     severity: "blocking",

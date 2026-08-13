@@ -1,10 +1,12 @@
 import * as React from "react";
-import { SingleSelectListbox, StatusBadge } from "../primitives";
+import { EmptyNotice, SingleSelectListbox, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   DEMO_DAILY_RECORD_DRAFT_HINT,
+  DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE,
   DEMO_DAILY_RECORD_INCOMPLETE_HINT,
   DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE,
+  DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE,
   DEMO_DAILY_RECORD_RECENT_HINT,
 } from "./daily-record-copy";
 import {
@@ -24,6 +26,7 @@ export type DailyRecordsProps = Readonly<{
  * DEMO-UX-5 presentation-only daily record screen.
  * DEMO-UX-9 adds incomplete selection → local draft input image (no save).
  * DEMO-UX-11 removes duplicate screen-level synthetic band; mutation/draft boundaries remain.
+ * DADS-UX-4: presentation tokens/focus; INV-10 SingleSelectListbox; INV-17 EmptyNotice.
  */
 export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headingRef }) => {
   const { heading, inputPrompt, incompleteItems, recentRecords, businessFacts, systemState } =
@@ -45,6 +48,8 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
   };
 
   const selectedPersonLabel = selectedIncomplete?.personLabel ?? presentation.inputPersonLabel;
+  const showIncompleteEmpty = incompleteItems.length === 0;
+  const showRecentEmpty = recentRecords.length === 0;
 
   return (
     <section
@@ -59,6 +64,7 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         id="demo-ux-records-heading"
         ref={headingRef}
         tabIndex={-1}
+        className={styles.recordsHeading}
         data-demo-ux="daily-record-heading"
       >
         {heading}
@@ -69,27 +75,38 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         <p className={styles.sectionHint} data-demo-ux="daily-record-incomplete-hint">
           {DEMO_DAILY_RECORD_INCOMPLETE_HINT}
         </p>
-        <SingleSelectListbox
-          ariaLabel="未完了確認の対象選択"
-          className={styles.cardList}
-          listDataAttrs={{ "data-demo-ux": "daily-record-incomplete-list" }}
-          value={selectedIncompleteId}
-          onChange={selectIncomplete}
-          options={incompleteItems.map((item) => {
-            const selected = item.id === selectedIncompleteId;
-            return {
-              id: item.id,
-              label: item.personLabel,
-              description: item.reasonLabel,
-              trailing: <StatusBadge shape="pill" label={item.statusLabel} />,
-              dataAttrs: {
-                "data-demo-ux": "daily-record-incomplete-item",
-                "data-demo-ux-incomplete-id": item.id,
-                "data-demo-ux-incomplete-selected": selected ? "true" : "false",
-              },
-            };
-          })}
-        />
+        {showIncompleteEmpty ? (
+          // INV-17: incomplete zero-result only — not mutation failure / “all clear”.
+          <EmptyNotice
+            announce
+            className={styles.sectionHint}
+            dataAttrs={{ "data-demo-ux": "daily-record-incomplete-empty-note" }}
+          >
+            {DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE}
+          </EmptyNotice>
+        ) : (
+          // INV-10: SingleSelectListbox (listbox/option + keyboard); not button+option hybrid.
+          <SingleSelectListbox
+            ariaLabel="未完了確認の対象選択"
+            listDataAttrs={{ "data-demo-ux": "daily-record-incomplete-list" }}
+            value={selectedIncompleteId}
+            onChange={selectIncomplete}
+            options={incompleteItems.map((item) => {
+              const selected = item.id === selectedIncompleteId;
+              return {
+                id: item.id,
+                label: item.personLabel,
+                description: item.reasonLabel,
+                trailing: <StatusBadge shape="pill" label={item.statusLabel} />,
+                dataAttrs: {
+                  "data-demo-ux": "daily-record-incomplete-item",
+                  "data-demo-ux-incomplete-id": item.id,
+                  "data-demo-ux-incomplete-selected": selected ? "true" : "false",
+                },
+              };
+            })}
+          />
+        )}
       </section>
 
       <section className={styles.section} aria-labelledby="demo-ux-record-input-heading">
@@ -153,22 +170,33 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         <p className={styles.sectionHint} data-demo-ux="daily-record-recent-hint">
           {DEMO_DAILY_RECORD_RECENT_HINT}
         </p>
-        <ol className={styles.timeline} data-demo-ux="daily-record-recent-list">
-          {recentRecords.map((record) => (
-            <li
-              key={record.id}
-              className={styles.timelineItem}
-              data-demo-ux="daily-record-recent-item"
-            >
-              <div className={styles.recordMeta}>
-                <strong>{record.personLabel}</strong>
-                <span>{record.recordedAtLabel}</span>
-                <span>{record.recordTypeLabel}</span>
-              </div>
-              <p>{record.summary}</p>
-            </li>
-          ))}
-        </ol>
+        {showRecentEmpty ? (
+          // INV-17: recent zero-result only — not retrieval failure.
+          <EmptyNotice
+            announce
+            className={styles.sectionHint}
+            dataAttrs={{ "data-demo-ux": "daily-record-recent-empty-note" }}
+          >
+            {DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE}
+          </EmptyNotice>
+        ) : (
+          <ol className={styles.timeline} data-demo-ux="daily-record-recent-list">
+            {recentRecords.map((record) => (
+              <li
+                key={record.id}
+                className={styles.timelineItem}
+                data-demo-ux="daily-record-recent-item"
+              >
+                <div className={styles.recordMeta}>
+                  <strong>{record.personLabel}</strong>
+                  <span>{record.recordedAtLabel}</span>
+                  <span>{record.recordTypeLabel}</span>
+                </div>
+                <p>{record.summary}</p>
+              </li>
+            ))}
+          </ol>
+        )}
       </section>
 
       <div className={styles.stateGrid}>
