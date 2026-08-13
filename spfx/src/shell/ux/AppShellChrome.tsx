@@ -16,6 +16,7 @@ import {
   type ShellReviewDueStatePresentation,
 } from "../review";
 import {
+  collectSyntheticDetailPreviewUserIds,
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
   DEMO_UX_USER_DETAIL_C_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
@@ -125,6 +126,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   for (const detail of additionalUserDetailPresentations) {
     userDetailById.set(detail.userId, detail);
   }
+  /** DEMO-UX-13: list detail enablement follows fixture presence only. */
+  const detailPreviewUserIds = collectSyntheticDetailPreviewUserIds(
+    userDetailPresentation,
+    additionalUserDetailPresentations,
+  );
   const selectedUserDetail = selectedUserDetailId
     ? userDetailById.get(selectedUserDetailId)
     : undefined;
@@ -413,7 +419,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 <UsersList
                   presentation={usersPresentation}
                   headingRef={destinationHeadingRef}
-                  detailPreviewUserId={userDetailPresentation.userId}
+                  detailPreviewUserIds={detailPreviewUserIds}
                   onUserDetailRequest={handleUserDetailRequest}
                 />
               )

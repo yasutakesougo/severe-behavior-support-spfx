@@ -173,9 +173,10 @@ function assertUsersListWithPreview() {
     pass:
       Boolean(usersList) &&
       !detail &&
-      previewButtons.length === 1 &&
-      !previewButtons[0]?.disabled &&
-      disabledButtons.length === 7 &&
+      // DEMO-UX-13: fixture-backed previews (A + C) = 2 enabled; others remain disabled.
+      previewButtons.length === 2 &&
+      previewButtons.every((button) => !button.disabled) &&
+      disabledButtons.length === 6 &&
       disabledButtons.every((button) => button.disabled) &&
       Boolean(demo) &&
       Boolean(site) &&

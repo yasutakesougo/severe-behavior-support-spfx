@@ -57,6 +57,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-006 | DEMO-UX-10 | `decision-demo-ux-10-kpi-review-count-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 | RPF-004 | DEMO-UX-11 | `decision-demo-ux-11-demo-note-consolidation-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 | RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
+| DUX7-P2-1 | DEMO-UX-13 | `decision-demo-ux-13-detail-preview-expansion-selection.md` | GO（2026-08-13）/ COMPLETE（Ready HOLD） |
 
 ## 5. Predecessor merge confirmation
 
@@ -85,6 +86,15 @@ PR #326 Merge = SUCCESS
 Merge commit = ea12849f9b21b9a465b53c0e915167483ba83ad4
 Expected HEAD guard tip = 188f5b9ac5a60db37f2b22b24dba14a83e19a625（ancestor match confirmed）
 DEMO-UX-12 / RPF-005 = MERGED / COMPLETE
+```
+
+### DEMO-UX-12 closeout sync
+
+```text
+PR #327 Merge = SUCCESS
+Merge commit = 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
+Expected HEAD guard tip = 76ee13413de03311ca4e5b45b77c8d46ea1b5f62（ancestor match confirmed）
+DEMO-UX-12 closeout sync = COMPLETE
 ```
 
 ## 6. Explicit non-claims
