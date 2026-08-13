@@ -4,6 +4,7 @@
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-12 — Save badge hierarchy
 Status: Implementation COMPLETE + Verification PASS
+Implementation verified HEAD: bf600e567664ef47bfc19bf521b94a39ef9ae305
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-12-SAVE-BADGE-HIERARCHY-1 / PR #326）
 Human Implementation Start: GO（2026-08-13）
 Baseline main: 23bc67a7f2e0331146cb92d7ea27c63a02dcf122
