@@ -99,7 +99,7 @@ DADS-UX-5+
 ## 6. Verification (this PR)
 
 ```text
-HEAD: (tip after this evidence commit)
+HEAD: ce4be464288a10418fd34cc1a6e2ac51937c32a1
 Baseline main: 270400b964ff89543296be56265b8963ce0f5c64
 format:check: PASS
 root lint / typecheck / unit: PASS (557/557)
