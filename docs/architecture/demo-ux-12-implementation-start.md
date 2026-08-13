@@ -15,7 +15,7 @@ Browser smoke: PASS / VERIFIED（demo-ux-12-browser-smoke.md）
 Heft test: 92 / 92 PASS
 Root test: 554 / 554 PASS
 Ready: COMPLETE（Human Ready Decision GO / 2026-08-13；see demo-ux-12-ready.md）
-Merge: HOLD
+Merge: SUCCESS（PR #326 / ea12849f9b21b9a465b53c0e915167483ba83ad4）
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -99,7 +99,16 @@ Implementation Start = GO / COMPLETE
 Verification = PASS
 Fresh Review = PASS
 Ready = COMPLETE
-Merge = HOLD
+Merge = SUCCESS / MERGED COMPLETE
 Deploy = NOT AUTHORIZED
 #299 Close = NOT AUTHORIZED
+```
+
+## Predecessor merge confirmation（this slice）
+
+```text
+PR #326 Merge = SUCCESS
+Merge commit = ea12849f9b21b9a465b53c0e915167483ba83ad4
+Expected HEAD guard tip = 188f5b9ac5a60db37f2b22b24dba14a83e19a625（ancestor match confirmed）
+DEMO-UX-12 / RPF-005 = MERGED / COMPLETE
 ```

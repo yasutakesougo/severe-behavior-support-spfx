@@ -42,7 +42,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | MERGED / COMPLETE（PR #321 / aed5b05） | DEMO-UX-8 |
 | RPF-002 | daily-record | CHANGE | 入力欄は見えるが何もできない | 未記録選択→記録画面→入力イメージまで通す。実保存 HOLD | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-9 |
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-11 |
-| RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | IMPLEMENTED（Ready COMPLETE；Merge HOLD） | DEMO-UX-12 |
+| RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | MERGED / COMPLETE（PR #326 / ea12849） | DEMO-UX-12 |
 | RPF-006 | review-status | CHANGE | Overview KPI と見直し件数の対応が弱い | 対応関係を明示 | MERGED / COMPLETE（PR #324 / 012dc40） | DEMO-UX-10 |
 | RPF-007 | cross-cutting | CHANGE | 保存中の可観測性が弱い | 進行表示 | DEFERRED | later |
 
@@ -56,7 +56,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-002 | DEMO-UX-9 | `decision-demo-ux-9-daily-record-experience-selection.md` | GO（2026-08-12）/ COMPLETE（Ready HOLD） |
 | RPF-006 | DEMO-UX-10 | `decision-demo-ux-10-kpi-review-count-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 | RPF-004 | DEMO-UX-11 | `decision-demo-ux-11-demo-note-consolidation-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
-| RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | GO（2026-08-13）/ Ready COMPLETE（Merge HOLD） |
+| RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 
 ## 5. Predecessor merge confirmation
 
@@ -76,6 +76,15 @@ PR #321 Merge = SUCCESS
 Merge commit = aed5b05d16b8ae6c5733cbb2cf1163c502a70ee9
 Expected HEAD guard tip = fcd2d9c63696253e4d51aee5fdb8492174474dc4（ancestor match confirmed）
 DEMO-UX-8 = MERGED / COMPLETE
+```
+
+### DEMO-UX-12
+
+```text
+PR #326 Merge = SUCCESS
+Merge commit = ea12849f9b21b9a465b53c0e915167483ba83ad4
+Expected HEAD guard tip = 188f5b9ac5a60db37f2b22b24dba14a83e19a625（ancestor match confirmed）
+DEMO-UX-12 / RPF-005 = MERGED / COMPLETE
 ```
 
 ## 6. Explicit non-claims
