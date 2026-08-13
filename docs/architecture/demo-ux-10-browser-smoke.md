@@ -9,7 +9,7 @@ Harness: spfx/smoke/demo-ux-10/
 Port: 4192
 Artifacts: /opt/cursor/artifacts/demo-ux-10-browser-smoke/
 Result: 8 / 8 PASS
-Verified HEAD: (see demo-ux-10-implementation-start.md)
+Verified HEAD: 566c48ebd23e6ac8d892f7087577c92524279f50
 Ready / Merge: NOT AUTHORIZED
 ```
 

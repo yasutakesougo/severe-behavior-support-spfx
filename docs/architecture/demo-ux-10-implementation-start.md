@@ -9,7 +9,7 @@ Human Implementation Start: GO（2026-08-13）
 Baseline main: 9dd43e285c09218531260ffb565cf906b2b09574
 Branch: cursor/demo-ux-10-kpi-review-count-selection-3507
 PR: #324 OPEN / Draft
-Implementation verified HEAD: (updated on final verification commit)
+Implementation verified HEAD: 566c48ebd23e6ac8d892f7087577c92524279f50
 Selection: decision-demo-ux-10-kpi-review-count-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-10-browser-smoke.md）
 Heft test: 83 / 83 PASS
