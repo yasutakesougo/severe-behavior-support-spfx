@@ -615,6 +615,131 @@ export function runAccessibilityGate() {
     });
   }
 
+  // --- A11Y-HD-06: ReviewDueState destination heading hierarchy (DADS-UX-5) ---
+  const reviewPath = "spfx/src/shell/review/ReviewDueState.tsx";
+  if (relExists(reviewPath)) {
+    const src = read(reviewPath);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasReviewH1 = /<h1\b/.test(src) && src.includes("demo-ux-review-due-heading");
+    const sectionH2Count = (src.match(/<h2\b/g) || []).length;
+    const ok = h1Count === 1 && hasReviewH1 && sectionH2Count >= 4;
+    push({
+      id: "A11Y-HD-06",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "ReviewDueState keeps single h1 + section h2 hierarchy (DADS-UX-5)"
+        : "ReviewDueState heading hierarchy regression (expect 1 h1 + section h2s)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-06",
+      severity: "blocking",
+      ok: false,
+      detail: `${reviewPath} missing`,
+    });
+  }
+
+  // --- A11Y-RV-01: Review SCSS tokens + focus-visible ---
+  const reviewScssPath = "spfx/src/shell/review/ReviewDueStateUx.module.scss";
+  if (relExists(reviewScssPath)) {
+    const css = read(reviewScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const ok = usesTokens && !hardcodedOutsideTheme && focusVisible;
+    push({
+      id: "A11Y-RV-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "Review SCSS uses DADS-04 tokens + focus-visible (no raw hex outside theme strings)"
+        : `Review SCSS presentation gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-RV-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${reviewScssPath} missing`,
+    });
+  }
+
+  // --- A11Y-INV-13-RV: Review attention badges use StatusBadge label channel ---
+  if (relExists(reviewPath)) {
+    const src = read(reviewPath);
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+    const usesBadge = /StatusBadge/.test(code);
+    const softShape = /shape=["']soft["']/.test(code);
+    const statusHook = /review-status-label/.test(code);
+    const dueHook = /due-state-label/.test(code);
+    const ok = usesBadge && softShape && statusHook && dueHook;
+    push({
+      id: "A11Y-INV-13-RV",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "INV-13: ReviewDueState uses StatusBadge soft with label meaning hooks"
+        : "INV-13 regression: Review attention badges must use StatusBadge label channel",
+    });
+  } else {
+    push({
+      id: "A11Y-INV-13-RV",
+      severity: "blocking",
+      ok: false,
+      detail: `${reviewPath} missing — INV-13 Review check cannot run`,
+    });
+  }
+
+  // --- A11Y-INV-17-RV: Review attention empty uses EmptyNotice ---
+  if (relExists(reviewPath)) {
+    const src = read(reviewPath);
+    const usesEmpty = /EmptyNotice/.test(src);
+    const emptyHook = /review-due-attention-empty-note/.test(src);
+    const announceOn = /announce\b/.test(src);
+    const ok = usesEmpty && emptyHook && announceOn;
+    push({
+      id: "A11Y-INV-17-RV",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "INV-17: ReviewDueState attention zero-result uses EmptyNotice with announce"
+        : "INV-17 regression: Review attention empty must use EmptyNotice status channel",
+    });
+  } else {
+    push({
+      id: "A11Y-INV-17-RV",
+      severity: "blocking",
+      ok: false,
+      detail: `${reviewPath} missing — INV-17 Review check cannot run`,
+    });
+  }
+
+  // --- A11Y-DIS-03: ReviewDueState disabled + aria-disabled ---
+  if (relExists(reviewPath)) {
+    const src = read(reviewPath);
+    const disabledButtons = (src.match(/(?<![\w-])disabled(?:=|\s|>)/g) || []).length;
+    const ariaDisabled = (src.match(/aria-disabled=/g) || []).length;
+    const ok = disabledButtons === 0 || ariaDisabled >= disabledButtons;
+    push({
+      id: "A11Y-DIS-03",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "ReviewDueState disabled controls pair with aria-disabled"
+        : "ReviewDueState disabled without matching aria-disabled",
+    });
+  } else {
+    push({
+      id: "A11Y-DIS-03",
+      severity: "blocking",
+      ok: false,
+      detail: `${reviewPath} missing`,
+    });
+  }
+
   // --- A11Y-FV-01: focus tokens + selector mix advisory ---
   const semanticPath = "spfx/src/shell/tokens/semantic.ts";
   const scssFiles = listFilesRecursive("spfx/src/shell", [".scss"]);

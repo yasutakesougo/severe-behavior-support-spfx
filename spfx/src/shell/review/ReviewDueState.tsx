@@ -1,7 +1,9 @@
 import * as React from "react";
+import { EmptyNotice, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_A_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
+  DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE,
   DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
 } from "./review-due-copy";
@@ -18,6 +20,7 @@ export type ReviewDueStateProps = Readonly<{
  * DEMO-UX-6 presentation-only review status & due-state screen.
  * Synthetic fixture only — no due calculation, review mutation, or live I/O.
  * DEMO-UX-11 removes duplicate screen-level synthetic band; Family A / mutation remain.
+ * DADS-UX-5: presentation tokens/focus; StatusBadge soft; INV-17 EmptyNotice.
  */
 export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   presentation,
@@ -26,6 +29,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
 }) => {
   const { heading, summaryPrompt, attentionSummary, attentionItems, businessFacts, systemState } =
     presentation;
+  const showAttentionEmpty = attentionItems.length === 0;
 
   return (
     <section
@@ -52,6 +56,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         id="demo-ux-review-due-heading"
         ref={headingRef}
         tabIndex={-1}
+        className={styles.reviewHeading}
         data-demo-ux="review-due-heading"
       >
         {heading}
@@ -90,27 +95,43 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
 
       <section className={styles.section} aria-labelledby="demo-ux-review-attention-heading">
         <h2 id="demo-ux-review-attention-heading">確認が必要な対象</h2>
-        <ul className={styles.cardList} data-demo-ux="review-due-attention-list">
-          {attentionItems.map((item) => (
-            <li key={item.id} className={styles.card} data-demo-ux="review-due-attention-item">
-              <div className={styles.cardMain}>
-                <strong>{item.personLabel}</strong>
-                <p>{item.subjectLabel}</p>
-                <p>{item.reasonLabel}</p>
-              </div>
-              <div className={styles.badgeColumn}>
-                <span className={styles.statusBadge} data-demo-ux="review-status-label">
-                  {item.reviewStatusLabel}
-                </span>
-                {item.dueStateLabel ? (
-                  <span className={styles.dueBadge} data-demo-ux="due-state-label">
-                    {item.dueStateLabel}
-                  </span>
-                ) : null}
-              </div>
-            </li>
-          ))}
-        </ul>
+        {showAttentionEmpty ? (
+          // INV-17: attention zero-result only — not “all clear” / calculation failure.
+          <EmptyNotice
+            announce
+            className={styles.calculationNote}
+            dataAttrs={{ "data-demo-ux": "review-due-attention-empty-note" }}
+          >
+            {DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE}
+          </EmptyNotice>
+        ) : (
+          <ul className={styles.cardList} data-demo-ux="review-due-attention-list">
+            {attentionItems.map((item) => (
+              <li key={item.id} className={styles.card} data-demo-ux="review-due-attention-item">
+                <div className={styles.cardMain}>
+                  <strong>{item.personLabel}</strong>
+                  <p>{item.subjectLabel}</p>
+                  <p>{item.reasonLabel}</p>
+                </div>
+                <div className={styles.badgeColumn}>
+                  {/* INV-13: StatusBadge soft matches prior Review radius dialect; label = meaning. */}
+                  <StatusBadge
+                    shape="soft"
+                    label={item.reviewStatusLabel}
+                    dataAttrs={{ "data-demo-ux": "review-status-label" }}
+                  />
+                  {item.dueStateLabel ? (
+                    <StatusBadge
+                      shape="soft"
+                      label={item.dueStateLabel}
+                      dataAttrs={{ "data-demo-ux": "due-state-label" }}
+                    />
+                  ) : null}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section className={styles.section} aria-labelledby="demo-ux-review-mutation-heading">

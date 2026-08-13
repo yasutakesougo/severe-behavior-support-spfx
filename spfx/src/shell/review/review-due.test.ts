@@ -1,5 +1,9 @@
 import { buildAttentionSummaryFromItems } from "../ux/kpi-review-count";
-import { DEMO_REVIEW_DUE_PRESENTATION_NOTE, reviewDueCopyIsFailClosed } from "./review-due-copy";
+import {
+  DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE,
+  DEMO_REVIEW_DUE_PRESENTATION_NOTE,
+  reviewDueCopyIsFailClosed,
+} from "./review-due-copy";
 import { DEMO_UX_6_SLICE, DEMO_UX_REVIEW_DUE_FIXTURE } from "./review-due-fixture";
 
 describe("DEMO-UX-6 review status & due-state presentation", () => {
@@ -49,5 +53,25 @@ describe("DEMO-UX-6 review status & due-state presentation", () => {
     expect(DEMO_UX_6_SLICE.reviewMutationAuthorized).toBe(false);
     expect(DEMO_UX_6_SLICE.evaluationMutationAuthorized).toBe(false);
     expect(DEMO_UX_6_SLICE.govRuleDecisionAuthorized).toBe(false);
+  });
+});
+
+describe("DADS-UX-5 review due presentation contracts", () => {
+  it("keeps attention empty copy as zero-result (INV-17; not all-clear)", () => {
+    expect(DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE).toContain(
+      "表示する確認対象はありません（合成データ）",
+    );
+    expect(DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE).toContain(
+      "業務上の見直し対象が無いことを示すものではありません",
+    );
+  });
+
+  it("keeps Family A status vocabulary anchors for INV-11/12 regression", () => {
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionItems).toHaveLength(3);
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary.awaitingConfirmationCountLabel).toContain(
+      "要確認",
+    );
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary.dueSoonCountLabel).toContain("期限接近");
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
   });
 });
