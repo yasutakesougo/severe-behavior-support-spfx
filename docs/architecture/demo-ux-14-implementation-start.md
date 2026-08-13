@@ -3,7 +3,7 @@
 ```text
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-14 — Saving progress observability
-Status: Implementation COMPLETE + Verification PASS（pending evidence fill）
+Status: Implementation COMPLETE + Verification PASS
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-14-SAVING-PROGRESS-OBSERVABILITY-1 / PR #330）
 Human Implementation Start: GO（2026-08-13）
 Baseline main: b7897818ea3b334f5e6c2430e656c0bf3d2078f2
@@ -11,12 +11,31 @@ Selection tip: de4bb7a20614a39826a25120d6301af9d2e2d335
 Branch: cursor/demo-ux-14-saving-progress-observability-selection-3507
 PR: #330（Draft）
 Selection: decision-demo-ux-14-saving-progress-observability-selection.md
-Browser smoke: demo-ux-14-browser-smoke.md
+Browser smoke: PASS / VERIFIED（demo-ux-14-browser-smoke.md）
+Heft test: 104 / 104 PASS
+Root test: 554 / 554 PASS
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 ```
+
+## Verification state
+
+```text
+format:check: PASS
+lint: PASS（root）
+typecheck: PASS（root）
+root test: PASS（554 / 554）
+SPFx Heft test: PASS（104 / 104）
+browser smoke demo-ux-14: PASS（10 / 10）
+browser smoke shell-ux-2: PASS（7 / 7；regression）
+browser smoke demo-ux-12: PASS（9 / 9；hierarchy regression）
+```
+
+Depends on（再 Decision しない）:
+[`decision-demo-ux-14-saving-progress-observability-selection.md`](./decision-demo-ux-14-saving-progress-observability-selection.md)
+[`decision-demo-ux-12-save-badge-hierarchy-selection.md`](./decision-demo-ux-12-save-badge-hierarchy-selection.md)
 
 ## Authority
 
@@ -72,8 +91,8 @@ spfx/smoke/demo-ux-14/
 
 ```text
 Selection = SELECTED / LOCKED
-Implementation Start = GO / COMPLETE（this document）
-Verification = PASS（see verification block after CI run）
+Implementation Start = GO / COMPLETE
+Verification = PASS
 Ready / Merge = NOT AUTHORIZED
 Deploy = NOT AUTHORIZED
 #299 Close = NOT AUTHORIZED
