@@ -1,8 +1,5 @@
 export { CurrentProcedure, type CurrentProcedureProps } from "./CurrentProcedure";
-export {
-  ProcedureRecordForm,
-  type ProcedureRecordFormProps,
-} from "./ProcedureRecordForm";
+export { ProcedureRecordForm, type ProcedureRecordFormProps } from "./ProcedureRecordForm";
 export {
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE,

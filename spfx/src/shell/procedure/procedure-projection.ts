@@ -3,10 +3,7 @@
  * Never fall back to Active / newer planVersion.
  */
 
-import type {
-  HistoricalLookupStatus,
-  ShellProcedureReviewMaterial,
-} from "./procedure-types";
+import type { HistoricalLookupStatus, ShellProcedureReviewMaterial } from "./procedure-types";
 
 export type HistoricalProjectionView =
   | Readonly<{

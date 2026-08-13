@@ -50,12 +50,7 @@ export type ProcedureRecordDraft = Readonly<{
 export type SyntheticProcedureSaveOutcome = "saved" | "save_failed" | "save_outcome_unknown";
 
 export type HistoricalLookupStatus =
-  | "RESOLVED"
-  | "EMPTY"
-  | "UNKNOWN"
-  | "FETCH_FAILED"
-  | "VERSION_MISMATCH"
-  | "PLAN_MISMATCH";
+  "RESOLVED" | "EMPTY" | "UNKNOWN" | "FETCH_FAILED" | "VERSION_MISMATCH" | "PLAN_MISMATCH";
 
 export type ShellProcedureReviewMaterial = Readonly<{
   id: string;

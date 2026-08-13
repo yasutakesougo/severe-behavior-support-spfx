@@ -21,9 +21,7 @@ const puppeteerModule = await import(
   process.env.FW_PUPPETEER_PATH ??
     "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
 );
-const sassModule = await import(
-  process.env.FW_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs"
-);
+const sassModule = await import(process.env.FW_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs");
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 const compileScss =
@@ -202,9 +200,7 @@ try {
     detail: formAttrs,
   });
 
-  await page.click(
-    '[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"] input[type="radio"]',
-  );
+  await page.click('[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"] input[type="radio"]');
   await page.click('[data-field-workflow-outcome="save_failed"]');
   await page.click('[data-field-workflow="procedure-record-save"]');
   await page.waitForFunction(
@@ -274,15 +270,17 @@ try {
   }));
   checks.push({
     id: "fw07-review-v2-projection",
-    pass: reviewDetail.planVersion === "2" && reviewDetail.status === "RESOLVED" && reviewDetail.resolved,
+    pass:
+      reviewDetail.planVersion === "2" &&
+      reviewDetail.status === "RESOLVED" &&
+      reviewDetail.resolved,
     detail: reviewDetail,
   });
 
   await page.click('[data-field-workflow-material-id="proc-rec-unresolved-001"]');
   await page.waitForSelector('[data-field-workflow="review-projection-unresolved"]');
-  const unresolved = await page.$eval(
-    '[data-field-workflow="review-material-detail"]',
-    (el) => el.getAttribute("data-field-workflow-historical-status"),
+  const unresolved = await page.$eval('[data-field-workflow="review-material-detail"]', (el) =>
+    el.getAttribute("data-field-workflow-historical-status"),
   );
   checks.push({
     id: "fw05-historical-fail-closed",

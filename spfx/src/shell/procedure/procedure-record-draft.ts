@@ -10,9 +10,7 @@ import type {
   SyntheticProcedureSaveOutcome,
 } from "./procedure-types";
 
-export function createEmptyProcedureRecordDraft(
-  performedAtLocal?: string,
-): ProcedureRecordDraft {
+export function createEmptyProcedureRecordDraft(performedAtLocal?: string): ProcedureRecordDraft {
   return {
     result: undefined,
     performedAtLocal: performedAtLocal ?? defaultTokyoPerformedAtLocal(),
@@ -42,9 +40,7 @@ export function nextSaveStateForSyntheticOutcome(
   return outcome;
 }
 
-export function retainDraftAfterSaveFailed(
-  draft: ProcedureRecordDraft,
-): ProcedureRecordDraft {
+export function retainDraftAfterSaveFailed(draft: ProcedureRecordDraft): ProcedureRecordDraft {
   return {
     result: draft.result,
     performedAtLocal: draft.performedAtLocal,

@@ -213,7 +213,9 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
                   />
                   <span className={styles.resultLabel}>
                     <span>{labelForProcedureRecordResult(result)}</span>
-                    <span className={styles.resultHint}>{hintForProcedureRecordResult(result)}</span>
+                    <span className={styles.resultHint}>
+                      {hintForProcedureRecordResult(result)}
+                    </span>
                   </span>
                 </label>
               </li>

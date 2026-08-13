@@ -1,5 +1,8 @@
 import * as React from "react";
-import { FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE, FIELD_WORKFLOW_PRESENTATION_NOTE } from "./procedure-copy";
+import {
+  FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
+  FIELD_WORKFLOW_PRESENTATION_NOTE,
+} from "./procedure-copy";
 import { FIELD_WORKFLOW_UI_SLICE } from "./procedure-fixture";
 import type { ShellCurrentProcedurePresentation } from "./procedure-types";
 import styles from "./CurrentProcedureUx.module.scss";

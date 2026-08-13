@@ -50,9 +50,9 @@ describe("FIELD-WORKFLOW UI FW-05 historical projection", () => {
     expect(projection.status).toBe("RESOLVED");
     if (projection.status === "RESOLVED") {
       expect(projection.planVersion).toBe(2);
-      expect(projectionUsesRecordPlanVersion(FIELD_WORKFLOW_REVIEW_MATERIAL_V2, projection.planVersion)).toBe(
-        true,
-      );
+      expect(
+        projectionUsesRecordPlanVersion(FIELD_WORKFLOW_REVIEW_MATERIAL_V2, projection.planVersion),
+      ).toBe(true);
       expect(projection.supportMethods[0]).toContain("v2");
       expect(projection.supportMethods[0]).not.toContain("v3");
     }

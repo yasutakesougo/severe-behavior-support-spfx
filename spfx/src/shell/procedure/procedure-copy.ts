@@ -26,17 +26,14 @@ export const FIELD_WORKFLOW_SAVE_OUTCOME_UNKNOWN_NOTE =
 export const FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE =
   "計画・手順の文脈は引き継がれています。再選択は不要です。" as const;
 
-export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<
-  Record<ProcedureRecordResultValue, string>
-> = {
-  PERFORMED_AS_PLANNED: "手順どおり実施",
-  PERFORMED_WITH_ADAPTATION: "一部変更して実施",
-  NOT_PERFORMED: "実施できなかった",
-};
+export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<Record<ProcedureRecordResultValue, string>> =
+  {
+    PERFORMED_AS_PLANNED: "手順どおり実施",
+    PERFORMED_WITH_ADAPTATION: "一部変更して実施",
+    NOT_PERFORMED: "実施できなかった",
+  };
 
-export const PROCEDURE_RECORD_RESULT_HINTS: Readonly<
-  Record<ProcedureRecordResultValue, string>
-> = {
+export const PROCEDURE_RECORD_RESULT_HINTS: Readonly<Record<ProcedureRecordResultValue, string>> = {
   PERFORMED_AS_PLANNED: "計画どおり実施できた事実の記録です。",
   PERFORMED_WITH_ADAPTATION: "一部変更した事実の記録です。職員の失敗表示ではありません。",
   NOT_PERFORMED: "実施できなかった事実の記録です。職員の失敗表示ではありません。",
