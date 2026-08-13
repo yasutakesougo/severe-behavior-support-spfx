@@ -56,7 +56,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-002 | DEMO-UX-9 | `decision-demo-ux-9-daily-record-experience-selection.md` | GO（2026-08-12）/ COMPLETE（Ready HOLD） |
 | RPF-006 | DEMO-UX-10 | `decision-demo-ux-10-kpi-review-count-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 | RPF-004 | DEMO-UX-11 | `decision-demo-ux-11-demo-note-consolidation-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
-| RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | NOT AUTHORIZED（Selection only） |
+| RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | GO（2026-08-13）/ Implementation in progress |
 
 ## 5. Predecessor merge confirmation
 

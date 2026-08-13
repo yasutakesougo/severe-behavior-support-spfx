@@ -1,8 +1,11 @@
+import { DEMO_UX_12_SLICE } from "./save-badge-hierarchy";
 import {
   SHELL_SAVE_STATES,
   SHELL_SAVE_STATE_DESCRIPTIONS,
   ariaLiveForShellSaveState,
   descriptionForShellSaveState,
+  emphasisForShellSaveState,
+  isSaveStateDescriptionVisible,
   isShellSaveState,
   labelForShellSaveState,
 } from "./save-state";
@@ -58,5 +61,41 @@ describe("SHELL-UX save-state presentation", () => {
     expect(isShellSaveState("saved")).toBe(true);
     expect(isShellSaveState("demo")).toBe(false);
     expect(isShellSaveState("SUCCESS")).toBe(false);
+  });
+});
+
+describe("DEMO-UX-12 save badge hierarchy (RPF-005)", () => {
+  it("locks slice flags without authorizing save or live I/O", () => {
+    expect(DEMO_UX_12_SLICE.id).toBe("DEMO-UX-12");
+    expect(DEMO_UX_12_SLICE.presentationOnly).toBe(true);
+    expect(DEMO_UX_12_SLICE.saveBadgeHierarchyAuthorized).toBe(true);
+    expect(DEMO_UX_12_SLICE.saveStateSemanticsChangeAuthorized).toBe(false);
+    expect(DEMO_UX_12_SLICE.saveOutcomeUnknownNormalizationAuthorized).toBe(false);
+    expect(DEMO_UX_12_SLICE.saveProgressUiAuthorized).toBe(false);
+    expect(DEMO_UX_12_SLICE.saveMutationAuthorized).toBe(false);
+    expect(DEMO_UX_12_SLICE.sharePointWriteAuthorized).toBe(false);
+    expect(DEMO_UX_12_SLICE.liveTenantIoAuthorized).toBe(false);
+  });
+
+  it("marks saved and unsaved as QUIET", () => {
+    expect(emphasisForShellSaveState("saved")).toBe("quiet");
+    expect(emphasisForShellSaveState("unsaved")).toBe("quiet");
+    expect(isSaveStateDescriptionVisible("saved")).toBe(false);
+    expect(isSaveStateDescriptionVisible("unsaved")).toBe(false);
+  });
+
+  it("marks saving, save_failed, and save_outcome_unknown as EMPHASIZED", () => {
+    expect(emphasisForShellSaveState("saving")).toBe("emphasized");
+    expect(emphasisForShellSaveState("save_failed")).toBe("emphasized");
+    expect(emphasisForShellSaveState("save_outcome_unknown")).toBe("emphasized");
+    expect(isSaveStateDescriptionVisible("saving")).toBe(true);
+    expect(isSaveStateDescriptionVisible("save_failed")).toBe(true);
+    expect(isSaveStateDescriptionVisible("save_outcome_unknown")).toBe(true);
+  });
+
+  it("does not treat saving as saved success", () => {
+    expect(labelForShellSaveState("saving")).not.toBe(labelForShellSaveState("saved"));
+    expect(emphasisForShellSaveState("saving")).toBe("emphasized");
+    expect(emphasisForShellSaveState("saved")).toBe("quiet");
   });
 });
