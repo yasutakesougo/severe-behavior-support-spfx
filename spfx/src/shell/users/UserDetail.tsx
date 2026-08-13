@@ -67,8 +67,8 @@ export const UserDetail: React.FC<UserDetailProps> = ({
         {personLabel}
       </h1>
 
+      {/* INV-07 B: non-tab section-order labels via SectionLabelStrip (not ARIA tabs). */}
       <SectionLabelStrip
-        className={styles.sectionTabs}
         ariaLabel="利用者詳細の表示順"
         items={USER_DETAIL_SECTION_LABELS.map((label, index) => ({
           id: label,

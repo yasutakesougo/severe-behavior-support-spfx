@@ -43,3 +43,15 @@ describe("DEMO-UX-3 user detail presentation boundary", () => {
     expect(DEMO_UX_3_SLICE.evaluationMutationAuthorized).toBe(false);
   });
 });
+
+describe("DADS-UX-3 user detail presentation contracts", () => {
+  it("keeps business section meaning anchors for INV-07 regression", () => {
+    // Mirrored by A11Y-INV-07 / A11Y-HD-04 — section order / IA unchanged.
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.currentSupport.length).toBeGreaterThan(0);
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.recentRecords.length).toBeGreaterThan(0);
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.evaluationSummary.length).toBeGreaterThan(0);
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.historySummary.length).toBeGreaterThan(0);
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.businessFacts.createdByLabel.length).toBeGreaterThan(0);
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.systemState.saveStateLabel.length).toBeGreaterThan(0);
+  });
+});

@@ -120,7 +120,9 @@ export const UsersList: React.FC<UsersListProps> = ({
       </p>
 
       {showEmptyNote ? (
+        // INV-17: filter zero-result only — EmptyNotice status channel; not facility-empty / failure.
         <EmptyNotice
+          announce
           className={styles.sectionHint}
           dataAttrs={{ "data-demo-ux": "users-filter-empty-note" }}
         >

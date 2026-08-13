@@ -331,6 +331,162 @@ export function runAccessibilityGate() {
     });
   }
 
+  // --- A11Y-HD-03: Users list destination heading hierarchy (DADS-UX-3) ---
+  const usersListPath = "spfx/src/shell/users/UsersList.tsx";
+  if (relExists(usersListPath)) {
+    const src = read(usersListPath);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasUsersH1 = /<h1\b/.test(src) && src.includes("demo-ux-users-heading");
+    const noExtraHeading = (src.match(/<h[2-6]\b/g) || []).length === 0;
+    const ok = h1Count === 1 && hasUsersH1 && noExtraHeading;
+    push({
+      id: "A11Y-HD-03",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "UsersList keeps single h1 destination heading (DADS-UX-3)"
+        : "UsersList heading hierarchy regression (expect single h1, no h2–h6)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-03",
+      severity: "blocking",
+      ok: false,
+      detail: `${usersListPath} missing`,
+    });
+  }
+
+  // --- A11Y-HD-04: User detail destination heading hierarchy (DADS-UX-3) ---
+  const userDetailPath = "spfx/src/shell/users/UserDetail.tsx";
+  if (relExists(userDetailPath)) {
+    const src = read(userDetailPath);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasDetailH1 = /<h1\b/.test(src) && src.includes("demo-ux-user-detail-heading");
+    const sectionH2Count = (src.match(/<h2\b/g) || []).length;
+    const ok = h1Count === 1 && hasDetailH1 && sectionH2Count >= 5;
+    push({
+      id: "A11Y-HD-04",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "UserDetail keeps single h1 + section h2 hierarchy (DADS-UX-3)"
+        : "UserDetail heading hierarchy regression (expect 1 h1 + section h2s)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-04",
+      severity: "blocking",
+      ok: false,
+      detail: `${userDetailPath} missing`,
+    });
+  }
+
+  // --- A11Y-US-01: Users list SCSS tokens + focus-visible ---
+  const usersScssPath = "spfx/src/shell/users/UsersUx.module.scss";
+  if (relExists(usersScssPath)) {
+    const css = read(usersScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const ok = usesTokens && !hardcodedOutsideTheme && focusVisible;
+    push({
+      id: "A11Y-US-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "Users SCSS uses DADS-04 tokens + focus-visible (no raw hex outside theme strings)"
+        : `Users SCSS presentation gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-US-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${usersScssPath} missing`,
+    });
+  }
+
+  // --- A11Y-UD-01: User detail SCSS tokens + focus-visible ---
+  const userDetailScssPath = "spfx/src/shell/users/UserDetailUx.module.scss";
+  if (relExists(userDetailScssPath)) {
+    const css = read(userDetailScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const ok = usesTokens && !hardcodedOutsideTheme && focusVisible;
+    push({
+      id: "A11Y-UD-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "UserDetail SCSS uses DADS-04 tokens + focus-visible (no raw hex outside theme strings)"
+        : `UserDetail SCSS presentation gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-UD-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${userDetailScssPath} missing`,
+    });
+  }
+
+  // --- A11Y-INV-07: UserDetail section chrome remains non-tabs (INV-07 B) ---
+  if (relExists(userDetailPath)) {
+    const src = read(userDetailPath);
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+    const usesStrip = /SectionLabelStrip/.test(code);
+    const noTabRoles =
+      !code.includes("tablist") &&
+      !/role=["']tab["']/.test(code) &&
+      !/role=["']tabpanel["']/.test(code);
+    const planActionSeparate = /data-demo-ux=["']user-detail-open-plan["']/.test(code);
+    const ok = usesStrip && noTabRoles && planActionSeparate;
+    push({
+      id: "A11Y-INV-07",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "INV-07: UserDetail uses SectionLabelStrip (non-tabs); plan action remains separate"
+        : "INV-07 regression: UserDetail must keep SectionLabelStrip semantics (no fake tabs)",
+    });
+  } else {
+    push({
+      id: "A11Y-INV-07",
+      severity: "blocking",
+      ok: false,
+      detail: `${userDetailPath} missing — INV-07 check cannot run`,
+    });
+  }
+
+  // --- A11Y-INV-17: Users filter empty uses EmptyNotice status channel ---
+  if (relExists(usersListPath)) {
+    const src = read(usersListPath);
+    const usesEmpty = /EmptyNotice/.test(src);
+    const emptyHook = /users-filter-empty-note/.test(src);
+    const announceOn = /announce\b/.test(src);
+    const ok = usesEmpty && emptyHook && announceOn;
+    push({
+      id: "A11Y-INV-17",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "INV-17: UsersList filter zero-result uses EmptyNotice with announce"
+        : "INV-17 regression: UsersList empty filter must use EmptyNotice status channel",
+    });
+  } else {
+    push({
+      id: "A11Y-INV-17",
+      severity: "blocking",
+      ok: false,
+      detail: `${usersListPath} missing — INV-17 check cannot run`,
+    });
+  }
+
   // --- A11Y-FV-01: focus tokens + selector mix advisory ---
   const semanticPath = "spfx/src/shell/tokens/semantic.ts";
   const scssFiles = listFilesRecursive("spfx/src/shell", [".scss"]);

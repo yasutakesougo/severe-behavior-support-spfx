@@ -143,3 +143,17 @@ describe("DEMO-UX-8 users list status filter", () => {
     expect(DEMO_UX_8_SLICE.failClosedSemanticsChangeAuthorized).toBe(false);
   });
 });
+
+describe("DADS-UX-3 users list presentation contracts", () => {
+  it("keeps filter empty copy as zero-result (INV-17; not facility-empty)", () => {
+    expect(DEMO_USERS_FILTER_EMPTY_NOTE).toContain("合成データ内に該当する利用者はありません");
+    expect(DEMO_USERS_FILTER_EMPTY_NOTE).toContain(
+      "事業所に利用者がいないことを示すものではありません",
+    );
+  });
+
+  it("keeps Users fixture status vocabulary for ADAPT presentation (INV-05/12)", () => {
+    expect(DEMO_UX_USERS_FIXTURE.rows).toHaveLength(8);
+    expect(formatUsersFilterSummaryLabel(8, USERS_FILTER_CHIP_ALL, 8)).toBe("全8名（合成データ）");
+  });
+});
