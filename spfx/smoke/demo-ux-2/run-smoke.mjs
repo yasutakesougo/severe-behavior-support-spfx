@@ -204,7 +204,8 @@ function assertUsersList(expectedRowColumns) {
     pass:
       Boolean(usersList) &&
       (heading?.textContent ?? "").trim() === "利用者" &&
-      (note?.textContent ?? "").includes("業務データには接続されていません") &&
+      !note &&
+      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
       (summary?.textContent ?? "").includes("全8名") &&
       rows.length === 8 &&
       badges.length >= 8 &&

@@ -5,11 +5,14 @@
 export const DEMO_USERS_PRESENTATION_NOTE =
   "この画面は合成データによる表示確認用です。業務データには接続されていません。";
 
-/** DEMO-UX-8: filter is operable inside synthetic fixture only. */
+/**
+ * DEMO-UX-8 filter boundary copy.
+ * DEMO-UX-11: not rendered as a separate band; consolidated into Users filter hint.
+ */
 export const DEMO_USERS_FILTER_NOTE =
   "合成データ内の状態で絞り込みできます。業務データの検索には接続されていません。";
 
-/** @deprecated Prefer DEMO_USERS_FILTER_NOTE after DEMO-UX-8. Kept for import compatibility. */
+/** @deprecated Prefer consolidated filter hint after DEMO-UX-11. Kept for import compatibility. */
 export const DEMO_USERS_FILTER_DISABLED_NOTE = DEMO_USERS_FILTER_NOTE;
 
 export const DEMO_USERS_DETAIL_DISABLED_NOTE =

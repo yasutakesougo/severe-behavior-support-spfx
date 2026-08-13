@@ -54,6 +54,7 @@ export {
   countRowsWithBadgeId,
   formatAttentionSummaryCountLabel,
 } from "./kpi-review-count";
+export { DEMO_USERS_FILTER_HINT_CONSOLIDATED, DEMO_UX_11_SLICE } from "./demo-note-consolidation";
 export type { OverviewActionNavigationTarget } from "../dashboard";
 export {
   DailyRecords,

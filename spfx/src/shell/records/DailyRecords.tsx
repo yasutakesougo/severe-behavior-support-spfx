@@ -1,9 +1,9 @@
 import * as React from "react";
+import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   DEMO_DAILY_RECORD_DRAFT_HINT,
   DEMO_DAILY_RECORD_INCOMPLETE_HINT,
   DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE,
-  DEMO_DAILY_RECORD_PRESENTATION_NOTE,
   DEMO_DAILY_RECORD_RECENT_HINT,
 } from "./daily-record-copy";
 import {
@@ -22,6 +22,7 @@ export type DailyRecordsProps = Readonly<{
 /**
  * DEMO-UX-5 presentation-only daily record screen.
  * DEMO-UX-9 adds incomplete selection → local draft input image (no save).
+ * DEMO-UX-11 removes duplicate screen-level synthetic band; mutation/draft boundaries remain.
  */
 export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headingRef }) => {
   const { heading, inputPrompt, incompleteItems, recentRecords, businessFacts, systemState } =
@@ -49,12 +50,10 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
       className={styles.dailyRecords}
       data-demo-ux="daily-records"
       data-demo-ux-9-slice={DEMO_UX_9_SLICE.id}
+      data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-demo-ux-incomplete-selected={selectedIncompleteId ?? ""}
       aria-labelledby="demo-ux-records-heading"
     >
-      <p className={styles.presentationNote} data-demo-ux="daily-record-presentation-note">
-        {DEMO_DAILY_RECORD_PRESENTATION_NOTE}
-      </p>
       <h1
         id="demo-ux-records-heading"
         ref={headingRef}

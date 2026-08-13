@@ -23,7 +23,7 @@ export const DEMO_KPI_FAMILY_A_NOTE =
 
 /** Users filter: short Family R correspondence (does not claim Review equivalence). */
 export const DEMO_KPI_FAMILY_R_USERS_NOTE =
-  "件数は利用者一覧の状態バッジ件数（合成・名）。概要の要確認/未記録/期限接近と同じ定義です。見直し画面とは母集団が異なります。";
+  "状態バッジ件数（合成・名）。概要と同じ定義。見直し画面とは母集団が異なります。";
 
 export function countRowsWithBadgeId(
   rows: readonly Readonly<{ statusBadges: readonly Readonly<{ id: string }>[] }>[],

@@ -1,11 +1,10 @@
 import * as React from "react";
-import { DEMO_KPI_FAMILY_R_USERS_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
-  DEMO_USERS_DETAIL_DISABLED_NOTE,
-  DEMO_USERS_FILTER_EMPTY_NOTE,
-  DEMO_USERS_FILTER_NOTE,
-  DEMO_USERS_PRESENTATION_NOTE,
-} from "./users-copy";
+  DEMO_USERS_FILTER_HINT_CONSOLIDATED,
+  DEMO_UX_11_SLICE,
+} from "../ux/demo-note-consolidation";
+import { DEMO_KPI_FAMILY_R_USERS_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
+import { DEMO_USERS_DETAIL_DISABLED_NOTE, DEMO_USERS_FILTER_EMPTY_NOTE } from "./users-copy";
 import {
   DEMO_UX_8_SLICE,
   USERS_FILTER_CHIP_ALL,
@@ -28,6 +27,7 @@ export type UsersListProps = Readonly<{
  * DEMO-UX-2 users list presentation skeleton.
  * DEMO-UX-3 may opt one synthetic row into local presentation-only detail preview.
  * DEMO-UX-8 enables synthetic client-side status filter chips.
+ * DEMO-UX-11 removes duplicate screen-level synthetic band; filter hint is consolidated.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -36,7 +36,7 @@ export const UsersList: React.FC<UsersListProps> = ({
   detailPreviewUserId,
   onUserDetailRequest,
 }) => {
-  const { filterHint, rows } = presentation;
+  const { rows } = presentation;
   const [activeChip, setActiveChip] = React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
   const visibleRows = filterUserRowsByStatusChip(rows, activeChip);
   const summaryLabel = formatUsersFilterSummaryLabel(visibleRows.length, activeChip, rows.length);
@@ -48,6 +48,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux="users-list"
       data-demo-ux-8-slice={DEMO_UX_8_SLICE.id}
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
+      data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
@@ -63,12 +64,8 @@ export const UsersList: React.FC<UsersListProps> = ({
         利用者
       </h1>
 
-      <p className={styles.presentationNote} data-demo-ux="users-presentation-note">
-        {DEMO_USERS_PRESENTATION_NOTE}
-      </p>
-
       <p
-        className={styles.presentationNote}
+        className={styles.sectionHint}
         data-demo-ux="users-metric-family-r-note"
         data-demo-ux-metric-family="roster"
       >
@@ -86,7 +83,7 @@ export const UsersList: React.FC<UsersListProps> = ({
           aria-label="利用者の状態で絞り込み"
         >
           <p className={styles.filterHint} data-demo-ux="users-filter-hint">
-            {filterHint}
+            {DEMO_USERS_FILTER_HINT_CONSOLIDATED}
           </p>
           {USERS_FILTER_CHIP_LABELS.map((label) => {
             const selected = label === activeChip;
@@ -174,9 +171,6 @@ export const UsersList: React.FC<UsersListProps> = ({
           );
         })}
       </ul>
-      <p className={styles.sectionHint} data-demo-ux="users-filter-note">
-        {DEMO_USERS_FILTER_NOTE}
-      </p>
     </section>
   );
 };

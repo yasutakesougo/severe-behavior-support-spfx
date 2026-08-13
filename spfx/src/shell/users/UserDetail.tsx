@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import type { ShellUserDetailPresentation } from "./user-detail-types";
 import styles from "./UserDetailUx.module.scss";
 
@@ -15,6 +16,7 @@ const USER_DETAIL_SECTION_LABELS = ["概要", "支援計画", "記録", "評価"
  * DEMO-UX-3 user detail presentation skeleton.
  * DEMO-UX-4 may opt the support-plan section into a synthetic local preview.
  * Synthetic fixture only — no live user, plan, record, auth, or adapter connection.
+ * DEMO-UX-11 removes duplicate screen-level synthetic band (global DemoBanner remains).
  */
 export const UserDetail: React.FC<UserDetailProps> = ({
   presentation,
@@ -38,6 +40,7 @@ export const UserDetail: React.FC<UserDetailProps> = ({
     <section
       className={styles.userDetail}
       data-demo-ux="user-detail"
+      data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       aria-labelledby="demo-ux-user-detail-heading"
     >
       <div className={styles.topRow}>
@@ -51,9 +54,6 @@ export const UserDetail: React.FC<UserDetailProps> = ({
         >
           ← 利用者一覧
         </button>
-        <p className={styles.presentationNote} data-demo-ux="user-detail-presentation-note">
-          合成データによる表示確認用です。業務データ、保存、認証・認可には接続されていません。
-        </p>
       </div>
 
       <h1

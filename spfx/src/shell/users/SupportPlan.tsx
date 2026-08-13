@@ -1,8 +1,6 @@
 import * as React from "react";
-import {
-  DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
-  DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
-} from "./support-plan-copy";
+import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
+import { DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE } from "./support-plan-copy";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
 import styles from "./SupportPlanUx.module.scss";
 
@@ -17,6 +15,7 @@ const MUTATION_LABELS = ["作成する", "編集する", "保存する"] as cons
 /**
  * DEMO-UX-4 support plan presentation skeleton.
  * Synthetic fixture only — no live plan mutation, auth, or adapter connection.
+ * DEMO-UX-11 removes duplicate screen-level synthetic band; mutation boundary remains.
  */
 export const SupportPlan: React.FC<SupportPlanProps> = ({
   presentation,
@@ -39,6 +38,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     <section
       className={styles.supportPlan}
       data-demo-ux="support-plan"
+      data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       aria-labelledby="demo-ux-support-plan-heading"
     >
       <div className={styles.topRow}>
@@ -52,9 +52,6 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         >
           ← 利用者詳細
         </button>
-        <p className={styles.presentationNote} data-demo-ux="support-plan-presentation-note">
-          {DEMO_SUPPORT_PLAN_PRESENTATION_NOTE}
-        </p>
       </div>
 
       <h1
