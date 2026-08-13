@@ -96,7 +96,7 @@ DADS-UX-6+ / DADS-VERIFY
 ## 6. Verification (this PR)
 
 ```text
-HEAD: 7b1b928001454cbe487320a4b3fcbe43a41083c5
+HEAD: bd492b592a08e545649d0b9193cb63fd9470b752
 Baseline main: 0cd8a5710ac5748bce96cce310e2815cefe8f517
 format:check: PASS
 root lint / typecheck / unit: PASS (557/557)
