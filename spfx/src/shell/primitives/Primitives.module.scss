@@ -1,0 +1,108 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.statusBadge {
+  display: inline-block;
+  margin: 0;
+  padding: 0.15rem 0.45rem;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
+  font-size: sbs.$font-size-100;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.statusBadgeSquare {
+  border-radius: sbs.$radius-none;
+}
+
+.statusBadgeSoft {
+  border-radius: sbs.$radius-sm;
+}
+
+.statusBadgePill {
+  border-radius: sbs.$radius-pill;
+  border-color: sbs.$color-border-secondary;
+  padding: 4px 8px;
+}
+
+.emptyNotice {
+  margin: 0;
+  font-size: sbs.$font-size-200;
+  line-height: 1.4;
+}
+
+.sectionLabelStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-2;
+  border-bottom-width: sbs.$border-width-thin;
+  border-bottom-style: solid;
+  border-bottom-color: sbs.$color-border-subtle;
+  padding-bottom: sbs.$space-2;
+}
+
+.sectionLabel,
+.sectionLabelCurrent {
+  padding: 0.35rem 0.65rem;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  font-size: sbs.$font-size-200;
+  font: inherit;
+  color: inherit;
+  cursor: default;
+  background: sbs.$color-surface-muted;
+}
+
+.sectionLabelCurrent {
+  background: sbs.$color-surface-canvas;
+  font-weight: 700;
+  border-bottom-width: 3px;
+}
+
+.singleSelectList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.singleSelectOption {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+  padding: 16px;
+  text-align: left;
+  color: inherit;
+  background: sbs.$color-surface-canvas;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-md;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.singleSelectOption:focus {
+  @include sbs.focus-ring;
+}
+
+.singleSelectOptionSelected {
+  border-color: sbs.$color-focus-ring;
+  background: sbs.$color-surface-selected;
+}
+
+.singleSelectOptionBody {
+  min-width: 0;
+}
+
+.singleSelectOptionBody p {
+  margin: 6px 0 0;
+}

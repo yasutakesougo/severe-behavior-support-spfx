@@ -1,4 +1,5 @@
 import * as React from "react";
+import { SingleSelectListbox, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   DEMO_DAILY_RECORD_DRAFT_HINT,
@@ -68,38 +69,27 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         <p className={styles.sectionHint} data-demo-ux="daily-record-incomplete-hint">
           {DEMO_DAILY_RECORD_INCOMPLETE_HINT}
         </p>
-        <ul
+        <SingleSelectListbox
+          ariaLabel="未完了確認の対象選択"
           className={styles.cardList}
-          data-demo-ux="daily-record-incomplete-list"
-          role="listbox"
-          aria-label="未完了確認の対象選択"
-        >
-          {incompleteItems.map((item) => {
+          listDataAttrs={{ "data-demo-ux": "daily-record-incomplete-list" }}
+          value={selectedIncompleteId}
+          onChange={selectIncomplete}
+          options={incompleteItems.map((item) => {
             const selected = item.id === selectedIncompleteId;
-            return (
-              <li key={item.id} className={styles.cardItem}>
-                <button
-                  type="button"
-                  className={selected ? `${styles.card} ${styles.cardSelected}` : styles.card}
-                  role="option"
-                  aria-selected={selected}
-                  data-demo-ux="daily-record-incomplete-item"
-                  data-demo-ux-incomplete-id={item.id}
-                  data-demo-ux-incomplete-selected={selected ? "true" : "false"}
-                  onClick={() => {
-                    selectIncomplete(item.id);
-                  }}
-                >
-                  <div>
-                    <strong>{item.personLabel}</strong>
-                    <p>{item.reasonLabel}</p>
-                  </div>
-                  <span className={styles.statusBadge}>{item.statusLabel}</span>
-                </button>
-              </li>
-            );
+            return {
+              id: item.id,
+              label: item.personLabel,
+              description: item.reasonLabel,
+              trailing: <StatusBadge shape="pill" label={item.statusLabel} />,
+              dataAttrs: {
+                "data-demo-ux": "daily-record-incomplete-item",
+                "data-demo-ux-incomplete-id": item.id,
+                "data-demo-ux-incomplete-selected": selected ? "true" : "false",
+              },
+            };
           })}
-        </ul>
+        />
       </section>
 
       <section className={styles.section} aria-labelledby="demo-ux-record-input-heading">

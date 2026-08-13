@@ -1,4 +1,5 @@
 import * as React from "react";
+import { SectionLabelStrip } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import type { ShellUserDetailPresentation } from "./user-detail-types";
 import styles from "./UserDetailUx.module.scss";
@@ -66,35 +67,20 @@ export const UserDetail: React.FC<UserDetailProps> = ({
         {personLabel}
       </h1>
 
-      <div className={styles.sectionTabs} aria-label="利用者詳細の表示順">
-        {USER_DETAIL_SECTION_LABELS.map((label, index) => {
-          const planPreviewEnabled = label === "支援計画" && Boolean(onSupportPlanRequest);
-          if (planPreviewEnabled) {
-            return (
-              <button
-                key={label}
-                type="button"
-                className={index === 0 ? styles.sectionTabCurrent : styles.sectionTab}
-                data-demo-ux="user-detail-section-label"
-                data-demo-ux-plan-preview="true"
-                onClick={onSupportPlanRequest}
-              >
-                {label}
-              </button>
-            );
-          }
-          return (
-            <span
-              key={label}
-              className={index === 0 ? styles.sectionTabCurrent : styles.sectionTab}
-              data-demo-ux="user-detail-section-label"
-              data-demo-ux-plan-preview="false"
-            >
-              {label}
-            </span>
-          );
-        })}
-      </div>
+      <SectionLabelStrip
+        className={styles.sectionTabs}
+        ariaLabel="利用者詳細の表示順"
+        items={USER_DETAIL_SECTION_LABELS.map((label, index) => ({
+          id: label,
+          label,
+          current: index === 0,
+          dataAttrs: {
+            "data-demo-ux": "user-detail-section-label",
+            // Plan preview action remains the separate "支援計画を表示" button below (INV-07 B).
+            "data-demo-ux-plan-preview": "false",
+          },
+        }))}
+      />
 
       <section className={styles.detailSection} aria-labelledby="demo-ux-current-support-heading">
         <h2 id="demo-ux-current-support-heading">現在の支援</h2>

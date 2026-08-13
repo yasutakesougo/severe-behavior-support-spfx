@@ -1,4 +1,5 @@
 import * as React from "react";
+import { EmptyNotice, StatusBadge } from "../primitives";
 import {
   DEMO_USERS_FILTER_HINT_CONSOLIDATED,
   DEMO_UX_11_SLICE,
@@ -119,9 +120,12 @@ export const UsersList: React.FC<UsersListProps> = ({
       </p>
 
       {showEmptyNote ? (
-        <p className={styles.sectionHint} data-demo-ux="users-filter-empty-note">
+        <EmptyNotice
+          className={styles.sectionHint}
+          dataAttrs={{ "data-demo-ux": "users-filter-empty-note" }}
+        >
           {DEMO_USERS_FILTER_EMPTY_NOTE}
-        </p>
+        </EmptyNotice>
       ) : null}
 
       <ul className={styles.userRows} data-demo-ux="users-row-list">
@@ -140,14 +144,17 @@ export const UsersList: React.FC<UsersListProps> = ({
                 <p className={styles.personLabel}>{row.personLabel}</p>
                 <ul className={styles.badgeList} aria-label={`${row.personLabel}の状態`}>
                   {row.statusBadges.map((badge) => (
-                    <li
+                    <StatusBadge
                       key={`${row.id}-${badge.id}`}
-                      className={styles.statusBadge}
-                      data-demo-ux="users-status-badge"
-                      data-demo-ux-status={badge.id}
-                    >
-                      {badge.label}
-                    </li>
+                      as="li"
+                      shape="square"
+                      label={badge.label}
+                      statusId={badge.id}
+                      dataAttrs={{
+                        "data-demo-ux": "users-status-badge",
+                        "data-demo-ux-status": badge.id,
+                      }}
+                    />
                   ))}
                 </ul>
               </div>
