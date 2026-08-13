@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DEMO_KPI_FAMILY_A_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
   DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
@@ -29,6 +30,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
     <section
       className={styles.reviewDueState}
       data-demo-ux="review-due-state"
+      data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
       aria-labelledby="demo-ux-review-due-heading"
     >
       <div className={styles.topRow}>
@@ -62,11 +64,26 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         <p className={styles.calculationNote} data-demo-ux="review-due-calculation-note">
           {DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE}
         </p>
+        <p
+          className={styles.calculationNote}
+          data-demo-ux="review-due-family-a-note"
+          data-demo-ux-metric-family="attention"
+        >
+          {DEMO_KPI_FAMILY_A_NOTE}
+        </p>
         <ul className={styles.summaryList} data-demo-ux="review-due-summary-list">
-          <li className={styles.summaryCard} data-demo-ux="review-due-summary-awaiting">
+          <li
+            className={styles.summaryCard}
+            data-demo-ux="review-due-summary-awaiting"
+            data-demo-ux-metric-family="attention"
+          >
             {attentionSummary.awaitingConfirmationCountLabel}
           </li>
-          <li className={styles.summaryCard} data-demo-ux="review-due-summary-due-soon">
+          <li
+            className={styles.summaryCard}
+            data-demo-ux="review-due-summary-due-soon"
+            data-demo-ux-metric-family="attention"
+          >
             {attentionSummary.dueSoonCountLabel}
           </li>
         </ul>

@@ -1,3 +1,4 @@
+import { buildAttentionSummaryFromItems } from "../ux/kpi-review-count";
 import { DEMO_REVIEW_DUE_PRESENTATION_NOTE, reviewDueCopyIsFailClosed } from "./review-due-copy";
 import { DEMO_UX_6_SLICE, DEMO_UX_REVIEW_DUE_FIXTURE } from "./review-due-fixture";
 
@@ -16,6 +17,14 @@ describe("DEMO-UX-6 review status & due-state presentation", () => {
     expect(
       DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary.awaitingConfirmationCountLabel,
     ).not.toContain("確認待ち");
+    // DEMO-UX-10 Family A: summary derived from attentionItems (3 / 2)
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary).toEqual(
+      buildAttentionSummaryFromItems(DEMO_UX_REVIEW_DUE_FIXTURE.attentionItems),
+    );
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary.awaitingConfirmationCountLabel).toContain(
+      "3件",
+    );
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary.dueSoonCountLabel).toContain("2件");
   });
 
   it("separates business facts from system state", () => {

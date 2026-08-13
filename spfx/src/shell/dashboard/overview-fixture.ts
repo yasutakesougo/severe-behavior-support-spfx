@@ -3,29 +3,40 @@ import {
   SHELL_STATUS_LABEL_NEEDS_REVIEW,
   SHELL_STATUS_LABEL_UNRECORDED,
 } from "../ux/status-labels";
+import { countRowsWithBadgeId } from "../ux/kpi-review-count";
+import { DEMO_UX_USERS_FIXTURE } from "../users/users-fixture";
 import type { ShellOverviewPresentation } from "./overview-types";
 
-/** Synthetic overview fixture aligned with dashboard-design-v1 DESIGN-4 prototype. */
+const rosterRows = DEMO_UX_USERS_FIXTURE.rows;
+const rosterNeedsReviewCount = countRowsWithBadgeId(rosterRows, "needs_review");
+const rosterUnrecordedCount = countRowsWithBadgeId(rosterRows, "unrecorded");
+const rosterDeadlineNearCount = countRowsWithBadgeId(rosterRows, "deadline_near");
+
+/**
+ * Synthetic overview fixture.
+ * DEMO-UX-10: 要確認/未記録/期限接近 counts are Family R (same definition as Users filter).
+ * today_targets remains an independent overview card (not in RPF-006 correspondence).
+ */
 export const DASHBOARD_UX_OVERVIEW_FIXTURE: ShellOverviewPresentation = {
   kpiCards: [
     { id: "today_targets", label: "今日の対象", count: 12, statusHint: "本日の支援対象" },
     {
       id: "needs_review",
       label: SHELL_STATUS_LABEL_NEEDS_REVIEW,
-      count: 3,
-      statusHint: "確認が必要",
+      count: rosterNeedsReviewCount,
+      statusHint: "確認が必要（利用者一覧と同じ定義・名）",
     },
     {
       id: "unrecorded",
       label: SHELL_STATUS_LABEL_UNRECORDED,
-      count: 2,
-      statusHint: "記録未入力",
+      count: rosterUnrecordedCount,
+      statusHint: "記録未入力（利用者一覧と同じ定義・名）",
     },
     {
       id: "deadline_near",
       label: SHELL_STATUS_LABEL_DUE_SOON,
-      count: 2,
-      statusHint: "見直し期限が近い",
+      count: rosterDeadlineNearCount,
+      statusHint: "見直し期限が近い（利用者一覧と同じ定義・名）",
     },
   ],
   actionItems: [

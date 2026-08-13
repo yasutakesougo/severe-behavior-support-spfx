@@ -8,7 +8,7 @@ import type { ShellUsersPresentation } from "./users-types";
 /** Synthetic users list fixture for responsible-person review density checks. */
 export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
   summaryLabel: "全8名（合成データ）",
-  filterHint: "状態で絞り込み（合成データ）",
+  filterHint: "状態で絞り込み（合成データ・概要KPIと同じ定義）",
   rows: [
     {
       id: "user-a",

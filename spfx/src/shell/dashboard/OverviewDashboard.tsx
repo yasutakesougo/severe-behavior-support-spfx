@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DEMO_KPI_FAMILY_R_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
@@ -32,6 +33,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
     <section
       className={styles.overviewDashboard}
       data-dashboard-ux="overview-dashboard"
+      data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
       aria-labelledby="dashboard-ux-overview-heading"
     >
       <h1
@@ -55,21 +57,38 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         <p className={styles.sectionHint} data-dashboard-ux="overview-kpi-note">
           {DASHBOARD_OVERVIEW_KPI_NOTE}
         </p>
+        <p
+          className={styles.sectionHint}
+          data-demo-ux="overview-kpi-family-r-note"
+          data-demo-ux-metric-family="roster"
+        >
+          {DEMO_KPI_FAMILY_R_NOTE}
+        </p>
         <ul className={styles.kpiGrid} data-dashboard-ux="overview-kpi-grid">
-          {kpiCards.map((card) => (
-            <li
-              key={card.id}
-              className={styles.kpiCard}
-              data-dashboard-ux="overview-kpi-card"
-              data-dashboard-ux-kpi={card.id}
-            >
-              <p className={styles.kpiLabel}>{card.label}</p>
-              <p className={styles.kpiCount} aria-label={`${card.label} ${card.count}件`}>
-                {card.count}
-              </p>
-              <p className={styles.kpiHint}>{card.statusHint}</p>
-            </li>
-          ))}
+          {kpiCards.map((card) => {
+            const isRosterStatusCard =
+              card.id === "needs_review" || card.id === "unrecorded" || card.id === "deadline_near";
+            const countUnit = isRosterStatusCard ? "名" : "件";
+            return (
+              <li
+                key={card.id}
+                className={styles.kpiCard}
+                data-dashboard-ux="overview-kpi-card"
+                data-dashboard-ux-kpi={card.id}
+                data-demo-ux-metric-family={isRosterStatusCard ? "roster" : "overview_other"}
+                data-demo-ux-kpi-count={String(card.count)}
+              >
+                <p className={styles.kpiLabel}>{card.label}</p>
+                <p
+                  className={styles.kpiCount}
+                  aria-label={`${card.label} ${card.count}${countUnit}`}
+                >
+                  {card.count}
+                </p>
+                <p className={styles.kpiHint}>{card.statusHint}</p>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
