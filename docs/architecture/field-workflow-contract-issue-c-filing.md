@@ -1,8 +1,12 @@
 # FIELD-WORKFLOW — UI Issue C filing packet
 
-Status: **READY TO FILE** (GitHub Issue create blocked for this agent token)
+Status: **FILING COMPLETE**
 
 Filing date: 2026-08-13
+
+GitHub Issue: **#356** — OPEN  
+URL: https://github.com/yasutakesougo/severe-behavior-support-spfx/issues/356  
+Title match: CONFIRMED（filing packet と一致）
 
 Upstream:
 
@@ -15,20 +19,17 @@ This packet is **docs-only**. It does **not** authorize Implementation Start, De
 
 ---
 
-## Agent filing attempt
+## Agent filing attempt（historical）
 
 | Channel | Result |
 |---|---|
 | GitHub MCP `issue_write` | **403** Resource not accessible by personal access token |
 | `gh issue create` | **403** GraphQL: Resource not accessible by integration (`createIssue`) |
-
-Human action required: create the Issue below in `yasutakesougo/severe-behavior-support-spfx`, or grant the agent `issues: write`, then re-run filing.
-
-Suggested assignee: `@yasutakesougo`
+| Human paste-create | **COMPLETE** → Issue `#356` OPEN |
 
 ---
 
-## Paste-ready Issue
+## Filed Issue
 
 ### Title
 
@@ -38,13 +39,9 @@ ui: field-workflow presentation（FIELD-WORKFLOW UI Issue C / FW-01・02・03・
 
 ### Body source
 
-Copy the full contents of:
-
 `docs/architecture/field-workflow-contract-issue-c-body.md`
 
-into the GitHub Issue body.
-
-### Suggested assignee
+### Assignee
 
 `@yasutakesougo`
 
@@ -58,24 +55,31 @@ into the GitHub Issue body.
 | #69 recording-ui | ABC・観察保存 | related only / no auto-close |
 | #347 Contract A | plan↔procedure binding | upstream contract |
 | #352 Contract B | ProcedureRecord + result + clocks + FW-05 | upstream contract |
-| **Issue C (this)** | ProcedureRecord field presentation/flow | UI 正本 |
+| **#356 Issue C** | ProcedureRecord field presentation/flow | UI 正本 |
 
 ---
 
-## After GitHub Issue exists
+## After filing（STOP conditions）
 
-1. Record the new issue number on this packet.
-2. Do **not** start Implementation without explicit Human GO on Issue C.
+1. Issue number `#356` recorded on this packet. **DONE**
+2. Do **not** start Implementation without explicit Human GO on `#356`.
 3. Do **not** Deploy / SharePoint write / close related Issues.
+4. PR `#355` Ready / Merge は docs 正本反映の別ゲート（Implementation Start とは独立）。
 
-## Current gate（Issue 未作成）
+## Current gate
 
 ```text
 FIELD-WORKFLOW UI Issue C:
-  設計境界確定済み
-  Issue 作成のみ未反映（createIssue 403）
-  Implementation HOLD
-  Deploy / SharePoint / production write: NO-GO
+  Issue C Filing: COMPLETE（#356 OPEN）
+  A/B 契約: MERGED
+  UI 設計境界: FIXED
+  Implementation Start: HOLD / NO-GO
+  Deploy / SharePoint / M365 / Entra / production write: NO-GO
+  #68 / #69 / #299 / #347 / #352 auto-close: NO-GO
 ```
 
-Issue 作成後は本 packet に Issue 番号を追記し、Implementation Start は別途 Human GO まで STOP。
+Next independent Human instruction (not authorized here):
+
+```text
+Issue #356 FIELD-WORKFLOW UI Implementation Start GO
+```

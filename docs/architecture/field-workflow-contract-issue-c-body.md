@@ -173,10 +173,10 @@ Ready / Merge of implementation PR: HUMAN-ONLY
 
 ### Filing / design stage
 
-- [ ] 本 Issue が GitHub に存在する
-- [ ] A/B 正本参照と FW 範囲が文書化されている
-- [ ] #68 / #69 related-only / auto-close 禁止が明記されている
-- [ ] Implementation / Deploy / SharePoint に踏み込んでいない
+- [x] 本 Issue が GitHub に存在する（#356 OPEN）
+- [x] A/B 正本参照と FW 範囲が文書化されている
+- [x] #68 / #69 related-only / auto-close 禁止が明記されている
+- [x] Implementation / Deploy / SharePoint に踏み込んでいない
 
 ### Implementation stage（別 Human GO 後）
 
@@ -190,14 +190,14 @@ Ready / Merge of implementation PR: HUMAN-ONLY
 ## 現在判定
 
 ```text
-Filing: THIS ISSUE
+Filing: COMPLETE（#356 OPEN）
 Design source: FIELD-WORKFLOW-1 assessment + A/B LOCKED contracts
 Design boundary: FIXED
 Implementation: HOLD / NO-GO
 Tests executed: 0（Issue C）
 Production: NO-GO
 SharePoint write: NO-GO
-Next after this Issue exists: Human Implementation Start GO（別途）
+Next: Human 「Issue #356 FIELD-WORKFLOW UI Implementation Start GO」（別途・未受領）
 ```
 
 ## 禁止
