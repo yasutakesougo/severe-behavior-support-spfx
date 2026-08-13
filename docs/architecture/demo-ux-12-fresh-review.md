@@ -12,16 +12,17 @@ Implementation Start: demo-ux-12-implementation-start.md
 Browser smoke: demo-ux-12-browser-smoke.md
 Status: PASS
 Findings: P0 = 0 / P1 = 0 / P2 = 2 OPEN（non-blocking）
-Human Ready: NOT AUTHORIZED（separate Human gate）
+Human Ready: COMPLETE（see demo-ux-12-ready.md；2026-08-13）
 Merge / Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
 ```
 
 ## Authority
 
-Human instruction `DEMO-UX-12 Fresh Review GO` authorizes this review only.
+Human instruction `DEMO-UX-12 Fresh Review GO` authorized this review only.
+Human subsequently marked PR #326 Ready for Review; Merge remains HOLD.
 
 ```text
-Fresh Review PASS ≠ Human Ready GO
+Fresh Review PASS ≠ Human Ready GO（Ready now COMPLETE separately）
 Fresh Review PASS ≠ Merge GO
 Fresh Review PASS ≠ Deploy
 Fresh Review PASS ≠ SharePoint write
@@ -108,17 +109,17 @@ save / autosave / persisted draft / SharePoint write / live I/O remain OUT
 
 ```text
 1. This Fresh Review = PASS
-2. Human Ready Decision（HUMAN-ONLY）— HOLD until Human decides
-3. Human Merge（HUMAN-ONLY）— only after Ready GO
-4. Ready / Merge / Deploy / SharePoint write / #299 Close remain NOT AUTHORIZED by this review
+2. Human Ready Decision = COMPLETE（PR #326 Ready for Review）
+3. Human Merge（HUMAN-ONLY）— HOLD until Human Merge GO
+4. Deploy / SharePoint write / #299 Close remain NOT AUTHORIZED
 ```
 
 ## Non-claims
 
 ```text
-This review does not authorize Ready
-This review does not authorize Merge
+This review did not authorize Merge
 This review does not authorize Deploy
 This review does not authorize SharePoint mutation
 This review does not close #299
+Ready was authorized later by Human Ready Decision（demo-ux-12-ready.md）
 ```

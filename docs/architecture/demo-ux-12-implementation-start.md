@@ -14,7 +14,8 @@ Selection: decision-demo-ux-12-save-badge-hierarchy-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-12-browser-smoke.md）
 Heft test: 92 / 92 PASS
 Root test: 554 / 554 PASS
-Ready / Merge: NOT AUTHORIZED
+Ready: COMPLETE（Human Ready Decision GO / 2026-08-13；see demo-ux-12-ready.md）
+Merge: HOLD
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -96,8 +97,9 @@ spfx/smoke/demo-ux-12/
 Selection = SELECTED / LOCKED
 Implementation Start = GO / COMPLETE
 Verification = PASS
-Ready = NOT AUTHORIZED
-Merge = NOT AUTHORIZED
+Fresh Review = PASS
+Ready = COMPLETE
+Merge = HOLD
 Deploy = NOT AUTHORIZED
 #299 Close = NOT AUTHORIZED
 ```
