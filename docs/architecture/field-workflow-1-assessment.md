@@ -1,15 +1,21 @@
 # FIELD-WORKFLOW-1 — Assessment (read-only)
 
-Status: **HOLD — CONTRACT GAP**  
-Assessment date: 2026-08-13  
-Baseline (VISUAL-ACCEPTANCE-1 ACCEPT/COMPLETE): `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`  
-Observed live `origin/main`: `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`  
+Status: **HOLD — CONTRACT GAP**
+
+Assessment date: 2026-08-13
+
+Baseline (VISUAL-ACCEPTANCE-1 ACCEPT/COMPLETE): `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`
+
+Observed live `origin/main`: `709804548a42fc7bf3e3e6da3f24cfd57d4677f0`
+
 Reconciliation: **match** — no rewind; assessment against current main = supplied SHA.
 
-Scope: 強度行動障害の支援計画シート → 支援手順 → 支援手順記録 → Review 材料。  
+Scope: 強度行動障害の支援計画シート → 支援手順 → 支援手順記録 → Review 材料。
+
 Out of scope: 生活介護個別支援計画、出欠、稼働率、請求、服薬、一般ケース記録、事故/ヒヤリハット、加算、計画相談、サービス等利用計画。
 
-Implementation in this slice: **STOP** (Human GO required for contract/domain).  
+Implementation in this slice: **STOP** (Human GO required for contract/domain).
+
 No Deploy / SharePoint / App Catalog / live schema / production write.
 
 ---
@@ -130,7 +136,8 @@ Per FIELD-WORKFLOW-1 §16:
 
 ### Why presentation alone cannot claim success
 
-Success criteria require: 記録が正しい支援計画・手順に結び付く.  
+Success criteria require: 記録が正しい支援計画・手順に結び付く.
+
 UI preselection without durable binding would create a demo that **looks** like the flow while failing audit/review explainability (FW-04/FW-05). That violates “UIだけを完成扱いにしない”.
 
 ---
