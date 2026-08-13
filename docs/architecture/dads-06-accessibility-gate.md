@@ -111,15 +111,24 @@ smoke expectation weakening
 
 ## 6. Acceptance
 
-1. Rule catalog + static gate exist  
-2. DADS-05 primitive a11y contracts are blocking regressions  
-3. INV-19 is detectable as `known_gap`  
-4. CI runs `check:a11y`  
-5. Verification PASS；no smoke weakening  
-6. Ready / Merge remain separate Human gates  
+1. Rule catalog + static gate exist
+2. DADS-05 primitive a11y contracts are blocking regressions
+3. INV-19 is detectable as `known_gap`
+4. CI runs `check:a11y`
+5. Verification PASS；no smoke weakening
+6. Ready / Merge remain separate Human gates
 
 ## 7. Verification (this PR)
 
 ```text
-（filled after local verification）
+format:check: PASS
+root lint / typecheck / unit: PASS (557/557)
+check:a11y: PASS
+SPFx Heft test: PASS (119/119)
+SPFx production build: PASS
+browser smoke PASS:
+  DEMO-UX-5 / 3 / 7
+  SHELL-UX-1
+Smoke expectations: NOT weakened
+New runtime dependency: NONE
 ```
