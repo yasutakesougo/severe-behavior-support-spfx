@@ -8,7 +8,7 @@ import {
 describe("DADS-06 accessibility gate catalog", () => {
   it("keeps later / out-of-scope authorizations closed", () => {
     expect(SBS_A11Y_GATE_SLICE.screenMigrationAuthorized).toBe(false);
-    expect(SBS_A11Y_GATE_SLICE.inv19HeadingFixAuthorized).toBe(false);
+    expect(SBS_A11Y_GATE_SLICE.inv19HeadingFixAuthorized).toBe(true);
     expect(SBS_A11Y_GATE_SLICE.domainContractsMutationAuthorized).toBe(false);
     expect(SBS_A11Y_GATE_SLICE.sharePointWriteAuthorized).toBe(false);
     expect(SBS_A11Y_GATE_SLICE.deployAuthorized).toBe(false);
@@ -38,8 +38,8 @@ describe("DADS-06 accessibility gate catalog", () => {
     }
     const inv19 = SBS_A11Y_RULE_CATALOG.find((rule) => rule.inventoryRefs.indexOf("INV-19") >= 0);
     expect(inv19?.id).toBe("A11Y-HD-01");
-    expect(inv19?.severity).toBe("known_gap");
-    expect(inv19?.coverage).toBe("detect_only");
+    expect(inv19?.severity).toBe("blocking");
+    expect(inv19?.coverage).toBe("covered");
   });
 
   it("does not embed Domain status vocabulary in rule ids", () => {

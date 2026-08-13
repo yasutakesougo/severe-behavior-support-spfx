@@ -60,9 +60,11 @@ export function runAccessibilityGate() {
     });
   } else {
     const src = read(listboxPath);
-    const keys = ["ArrowDown", "ArrowUp", "Home", "End", "Enter", '" "'].every((k) =>
-      src.includes(k),
+    const keyCases = ["ArrowDown", "ArrowUp", "Home", "End", "Enter"].every((k) =>
+      new RegExp(`case\\s+["']${k}["']`).test(src),
     );
+    const spaceCase = /case\s+["'] ["']/.test(src) || /case\s+["']\\s["']/.test(src);
+    const keys = keyCases && spaceCase;
     push({
       id: "A11Y-KB-01",
       severity: "blocking",
@@ -71,11 +73,15 @@ export function runAccessibilityGate() {
         ? "SingleSelectListbox keyboard handlers present"
         : "SingleSelectListbox missing required keyboard handlers",
     });
-    const listboxOk =
-      src.includes('role="listbox"') &&
-      src.includes('role="option"') &&
-      !/role=["']option["'][\s\S]{0,80}<button/i.test(src) &&
-      !/<button[\s\S]{0,120}role=["']option["']/i.test(src);
+    const hasListbox = /role=["']listbox["']/.test(src);
+    const hasOption = /role=["']option["']/.test(src);
+    // Same-element or nearby host must not be <button role="option"> (INV-10 hybrid).
+    // Window is wide enough for real option attribute blocks (~350+ chars).
+    const buttonOptionHybrid =
+      /<button\b[^>]*\brole=["']option["']/i.test(src) ||
+      /<button\b[\s\S]{0,800}?\brole=["']option["']/i.test(src) ||
+      /role=["']option["'][\s\S]{0,200}?<button\b/i.test(src);
+    const listboxOk = hasListbox && hasOption && !buttonOptionHybrid;
     push({
       id: "A11Y-PRIM-01",
       severity: "blocking",
@@ -243,27 +249,31 @@ export function runAccessibilityGate() {
     });
   }
 
-  // --- A11Y-HD-01: INV-19 known gap must remain detectable ---
+  // --- A11Y-HD-01: INV-19 host heading pollution (blocking after DADS-UX-1) ---
   const scaffoldPath = "spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx";
   if (relExists(scaffoldPath)) {
     const src = read(scaffoldPath);
-    const hostH2 =
-      /<h2\b[^>]*className=\{styles\.bodyTitle\}/.test(src) ||
-      (/<h2\b/.test(src) && src.includes("ShellReadyTitle"));
+    const hostHeadingPollution =
+      /<h[1-6]\b[^>]*className=\{styles\.bodyTitle\}/.test(src) ||
+      (/<h[1-6]\b/.test(src) && src.includes("ShellReadyTitle"));
+    const hostStatusCopy =
+      /data-shell-ux=["']shell-host-status["']/.test(src) &&
+      /className=\{styles\.bodyTitle\}/.test(src) &&
+      !hostHeadingPollution;
     push({
       id: "A11Y-HD-01",
-      severity: "known_gap",
-      ok: hostH2,
-      detail: hostH2
-        ? "INV-19 detectable: ScaffoldShell host bodyTitle remains <h2> (fix NOT AUTHORIZED in DADS-06)"
-        : "INV-19 detection lost or host heading already changed — update known_gap expectation only with authorized fix",
+      severity: "blocking",
+      ok: hostStatusCopy,
+      detail: hostStatusCopy
+        ? "INV-19 resolved: ScaffoldShell host bodyTitle is non-heading (shell-host-status)"
+        : "INV-19 regression: ScaffoldShell host chrome must not use heading elements for bodyTitle",
     });
   } else {
     push({
       id: "A11Y-HD-01",
-      severity: "known_gap",
+      severity: "blocking",
       ok: false,
-      detail: `${scaffoldPath} missing — INV-19 detector cannot run`,
+      detail: `${scaffoldPath} missing — INV-19 host heading check cannot run`,
     });
   }
 
@@ -299,8 +309,11 @@ export function runAccessibilityGate() {
   const blockingFailed = findings.filter((f) => f.severity === "blocking" && !f.ok);
   const knownGapFailed = findings.filter((f) => f.severity === "known_gap" && !f.ok);
   const ok = blockingFailed.length === 0 && knownGapFailed.length === 0;
+  const knownGapCount = findings.filter((f) => f.severity === "known_gap").length;
   const summary = ok
-    ? `Accessibility Gate PASS (${findings.length} checks; blocking failures=0; known_gap detectable)`
+    ? `Accessibility Gate PASS (${findings.length} checks; blocking failures=0` +
+      (knownGapCount > 0 ? `; known_gap detectable` : ``) +
+      `)`
     : `Accessibility Gate FAIL (blocking=${blockingFailed.length}, known_gap_undetectable=${knownGapFailed.length})`;
 
   return { ok, findings, summary };

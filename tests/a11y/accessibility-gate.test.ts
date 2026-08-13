@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import fs from "node:fs";
 import test from "node:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const gateScript = path.join(repoRoot, "scripts/a11y/accessibility-gate.mjs");
+const scaffoldPath = path.join(
+  repoRoot,
+  "spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx",
+);
 
 function runGateProcess(): { status: number | null; stdout: string } {
   const result = spawnSync(process.execPath, [gateScript], {
@@ -15,16 +20,21 @@ function runGateProcess(): { status: number | null; stdout: string } {
   return { status: result.status, stdout: result.stdout ?? "" };
 }
 
-test("DADS-06 accessibility gate exits 0 on current shell baseline", () => {
+test("DADS-06/UX-1 accessibility gate exits 0 on current shell baseline", () => {
   const { status, stdout } = runGateProcess();
   assert.equal(status, 0, stdout);
   assert.match(stdout, /Accessibility Gate PASS/);
 });
 
-test("DADS-06 INV-19 remains detectable as known_gap", () => {
+test("DADS-UX-1 INV-19 host heading is resolved and A11Y-HD-01 is blocking PASS", () => {
   const { status, stdout } = runGateProcess();
   assert.equal(status, 0, stdout);
-  assert.match(stdout, /\[PASS\] A11Y-HD-01 \(known_gap\).*INV-19/);
+  assert.match(stdout, /\[PASS\] A11Y-HD-01 \(blocking\).*INV-19 resolved/);
+
+  const scaffold = fs.readFileSync(scaffoldPath, "utf8");
+  assert.match(scaffold, /data-shell-ux=["']shell-host-status["']/);
+  assert.doesNotMatch(scaffold, /<h[1-6]\b[^>]*className=\{styles\.bodyTitle\}/);
+  assert.doesNotMatch(scaffold, /<h[1-6]\b[\s\S]*ShellReadyTitle/);
 });
 
 test("DADS-06 blocking primitive checks are present", () => {
@@ -39,6 +49,7 @@ test("DADS-06 blocking primitive checks are present", () => {
     "A11Y-FL-01",
     "A11Y-DIS-01",
     "A11Y-DESC-01",
+    "A11Y-HD-01",
   ]) {
     assert.match(stdout, new RegExp(`\\[PASS\\] ${id}\\b`), stdout);
   }
