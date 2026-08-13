@@ -1,10 +1,9 @@
 import * as React from "react";
+import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_R_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
-  DASHBOARD_OVERVIEW_KPI_NOTE,
-  DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
 } from "./overview-copy";
 import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "./overview-types";
 import styles from "./DashboardUx.module.scss";
@@ -19,6 +18,7 @@ export type OverviewDashboardProps = Readonly<{
 /**
  * DASHBOARD-UX-1 overview presentation skeleton.
  * DEMO-UX-7 enables synthetic today-action navigation only — not save / live I/O.
+ * DEMO-UX-11 removes duplicate screen-level synthetic band (global DemoBanner remains).
  */
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   presentation,
@@ -34,6 +34,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
       className={styles.overviewDashboard}
       data-dashboard-ux="overview-dashboard"
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
+      data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       aria-labelledby="dashboard-ux-overview-heading"
     >
       <h1
@@ -46,17 +47,10 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         概要
       </h1>
 
-      <p className={styles.presentationNote} data-dashboard-ux="overview-presentation-note">
-        {DASHBOARD_OVERVIEW_PRESENTATION_NOTE}
-      </p>
-
       <section className={styles.section} aria-labelledby="dashboard-ux-kpi-heading">
         <h2 id="dashboard-ux-kpi-heading" className={styles.sectionHeading}>
           今日の支援状況
         </h2>
-        <p className={styles.sectionHint} data-dashboard-ux="overview-kpi-note">
-          {DASHBOARD_OVERVIEW_KPI_NOTE}
-        </p>
         <p
           className={styles.sectionHint}
           data-demo-ux="overview-kpi-family-r-note"
@@ -96,9 +90,6 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         <h2 id="dashboard-ux-review-due-entry-heading" className={styles.sectionHeading}>
           見直し状況
         </h2>
-        <p className={styles.sectionHint} data-dashboard-ux="overview-review-due-note">
-          期限接近や要確認などの状態表示を、合成データで確認できます。
-        </p>
         <button
           type="button"
           className={styles.actionButton}

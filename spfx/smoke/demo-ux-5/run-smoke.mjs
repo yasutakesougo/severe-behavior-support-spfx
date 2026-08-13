@@ -187,7 +187,8 @@ function assertDailyRecords(expectedStateColumns) {
       Boolean(records) &&
       !placeholder &&
       (heading?.textContent ?? "").trim() === "日々の記録" &&
-      (note?.textContent ?? "").includes("業務データには接続されていません") &&
+      !note &&
+      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
       incomplete.length === 2 &&
       recent.length === 3 &&
       mutationButtons.length === 2 &&

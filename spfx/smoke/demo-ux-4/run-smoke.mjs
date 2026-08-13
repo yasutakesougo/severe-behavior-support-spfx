@@ -188,7 +188,8 @@ function assertSupportPlan(expectedStateColumns) {
       Boolean(plan) &&
       !detail &&
       (heading?.textContent ?? "").trim() === "支援計画" &&
-      (note?.textContent ?? "").includes("業務データには接続されていません") &&
+      !note &&
+      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
       goals.length === 2 &&
       actions.length === 3 &&
       mutationButtons.length === 3 &&

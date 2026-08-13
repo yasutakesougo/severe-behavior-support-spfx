@@ -256,7 +256,8 @@ function assertUserDetail(expectedSupportColumns) {
     pass:
       Boolean(detail) &&
       !usersList &&
-      (note?.textContent ?? "").includes("業務データ") &&
+      !note &&
+      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
       Boolean(back) &&
       !back?.disabled &&
       sectionLabels.join("|") === "概要|支援計画|記録|評価|履歴" &&

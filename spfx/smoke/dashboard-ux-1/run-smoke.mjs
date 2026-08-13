@@ -201,7 +201,8 @@ function assertOverviewDashboard(expectedColumns) {
     pass:
       Boolean(dashboard) &&
       (heading?.textContent ?? "").trim() === "概要" &&
-      (note?.textContent ?? "").includes("業務データには接続されていません") &&
+      !note &&
+      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
       kpiCards.length === 4 &&
       actionItems.length === 3 &&
       recentItems.length === 2 &&

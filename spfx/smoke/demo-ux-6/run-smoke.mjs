@@ -193,7 +193,8 @@ function assertReviewDueState(expectedStateColumns) {
       Boolean(panel) &&
       !overview &&
       (heading?.textContent ?? "").trim() === "見直し状況" &&
-      (note?.textContent ?? "").includes("業務データには接続されていません") &&
+      !note &&
+      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
       (calcNote?.textContent ?? "").includes("合成表示ラベル") &&
       items.length === 3 &&
       statusLabels.length === 3 &&

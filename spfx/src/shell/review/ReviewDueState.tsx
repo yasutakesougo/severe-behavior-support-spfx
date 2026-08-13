@@ -1,9 +1,9 @@
 import * as React from "react";
+import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_A_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
   DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
-  DEMO_REVIEW_DUE_PRESENTATION_NOTE,
 } from "./review-due-copy";
 import type { ShellReviewDueStatePresentation } from "./review-due-types";
 import styles from "./ReviewDueStateUx.module.scss";
@@ -17,6 +17,7 @@ export type ReviewDueStateProps = Readonly<{
 /**
  * DEMO-UX-6 presentation-only review status & due-state screen.
  * Synthetic fixture only — no due calculation, review mutation, or live I/O.
+ * DEMO-UX-11 removes duplicate screen-level synthetic band; Family A / mutation remain.
  */
 export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   presentation,
@@ -31,6 +32,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
       className={styles.reviewDueState}
       data-demo-ux="review-due-state"
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
+      data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       aria-labelledby="demo-ux-review-due-heading"
     >
       <div className={styles.topRow}>
@@ -44,9 +46,6 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         >
           ← 概要
         </button>
-        <p className={styles.presentationNote} data-demo-ux="review-due-presentation-note">
-          {DEMO_REVIEW_DUE_PRESENTATION_NOTE}
-        </p>
       </div>
 
       <h1
@@ -116,7 +115,9 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
 
       <section className={styles.section} aria-labelledby="demo-ux-review-mutation-heading">
         <h2 id="demo-ux-review-mutation-heading">見直し操作（表示専用）</h2>
-        <p className={styles.mutationNote}>{DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE}</p>
+        <p className={styles.mutationNote} data-demo-ux="review-due-mutation-note">
+          {DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE}
+        </p>
         <div className={styles.actionRow}>
           <button
             type="button"
