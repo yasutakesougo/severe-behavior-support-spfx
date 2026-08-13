@@ -74,6 +74,22 @@ export const SBS_A11Y_RULE_CATALOG: readonly SbsA11yRule[] = [
       "Scaffold host bodyTitle must remain non-heading (DADS-UX-1 INV-19 resolved; regression blocking)",
   },
   {
+    id: "A11Y-HD-02",
+    focus: "heading",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-04"],
+    summary: "OverviewDashboard keeps single h1 and section h2 hierarchy",
+  },
+  {
+    id: "A11Y-OV-01",
+    focus: "focus-visible",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-04", "INV-20", "INV-22"],
+    summary: "Overview SCSS consumes DADS-04 tokens and exposes focus-visible",
+  },
+  {
     id: "A11Y-AN-01",
     focus: "accessible-name",
     severity: "blocking",

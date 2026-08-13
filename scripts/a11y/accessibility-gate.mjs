@@ -277,6 +277,60 @@ export function runAccessibilityGate() {
     });
   }
 
+  // --- A11Y-HD-02: Overview destination heading hierarchy (DADS-UX-2) ---
+  const overviewPath = "spfx/src/shell/dashboard/OverviewDashboard.tsx";
+  if (relExists(overviewPath)) {
+    const src = read(overviewPath);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasOverviewH1 = /<h1\b/.test(src) && src.includes("dashboard-ux-overview-heading");
+    const sectionH2Count = (src.match(/<h2\b/g) || []).length;
+    const noHostPollution = !src.includes("ShellReadyTitle") && !/<h2\b[^>]*bodyTitle/.test(src);
+    const ok = h1Count === 1 && hasOverviewH1 && sectionH2Count >= 3 && noHostPollution;
+    push({
+      id: "A11Y-HD-02",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "Overview keeps single h1 + section h2 hierarchy (DADS-UX-2)"
+        : "Overview heading hierarchy regression (expect 1 h1 + section h2s)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-02",
+      severity: "blocking",
+      ok: false,
+      detail: `${overviewPath} missing`,
+    });
+  }
+
+  // --- A11Y-OV-01: Overview SCSS uses tokens + focus-visible (presentation) ---
+  const overviewScssPath = "spfx/src/shell/dashboard/DashboardUx.module.scss";
+  if (relExists(overviewScssPath)) {
+    const css = read(overviewScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    // Allow theme default hex inside quoted SPFx theme strings only.
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const ok = usesTokens && !hardcodedOutsideTheme && focusVisible;
+    push({
+      id: "A11Y-OV-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "Overview SCSS uses DADS-04 tokens + focus-visible (no raw hex outside theme strings)"
+        : `Overview SCSS presentation gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-OV-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${overviewScssPath} missing`,
+    });
+  }
+
   // --- A11Y-FV-01: focus tokens + selector mix advisory ---
   const semanticPath = "spfx/src/shell/tokens/semantic.ts";
   const scssFiles = listFilesRecursive("spfx/src/shell", [".scss"]);

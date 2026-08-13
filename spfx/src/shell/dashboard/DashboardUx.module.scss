@@ -1,32 +1,41 @@
+@use "../tokens/sbs-tokens" as sbs;
+
 .overviewDashboard {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: sbs.$space-4;
   min-width: 0;
   max-width: 100%;
-  padding: 1rem;
-  border: 1px dashed "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
   box-sizing: border-box;
 }
 
 .overviewHeading {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: sbs.$font-size-500;
   outline: none;
 }
 
-.overviewHeading:focus {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+/* INV-03 KEEP: programmatic destination focus remains visible. */
+.overviewHeading:focus,
+.overviewHeading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .presentationNote {
   margin: 0;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #8a6116;
-  background: #fff4ce;
-  font-size: 0.875rem;
+  padding: sbs.$space-2 sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-feedback-warning-border;
+  background: sbs.$color-feedback-warning-bg;
+  color: sbs.$color-feedback-warning-fg;
+  font-size: sbs.$font-size-200;
   font-weight: 600;
   line-height: 1.45;
 }
@@ -34,26 +43,26 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: sbs.$space-3;
   min-width: 0;
 }
 
 .sectionHeading {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: sbs.$font-size-400;
   font-weight: 700;
 }
 
 .sectionHint {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: sbs.$font-size-100;
   opacity: 0.9;
 }
 
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
+  gap: sbs.$space-3;
   min-width: 0;
   padding: 0;
   margin: 0;
@@ -63,22 +72,26 @@
 .kpiCard {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: sbs.$space-1;
   min-height: 5rem;
-  padding: 0.75rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: #fff;
+  padding: sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
   box-sizing: border-box;
+  border-radius: sbs.$radius-none;
 }
 
 .kpiLabel {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: sbs.$font-size-200;
   font-weight: 600;
 }
 
 .kpiCount {
   margin: 0;
+  /* Display emphasis; no larger type token in DADS-04 catalog yet. */
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.1;
@@ -86,7 +99,7 @@
 
 .kpiHint {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: sbs.$font-size-100;
   line-height: 1.35;
 }
 
@@ -95,17 +108,21 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  border-top: 1px solid "[theme:neutralLight, default: #edebe9]";
+  border-top-width: sbs.$border-width-thin;
+  border-top-style: solid;
+  border-top-color: sbs.$color-border-subtle;
 }
 
 .actionRow,
 .recentRow {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.5rem 0.75rem;
+  gap: sbs.$space-2 sbs.$space-3;
   align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid "[theme:neutralLight, default: #edebe9]";
+  padding: sbs.$space-3 0;
+  border-bottom-width: sbs.$border-width-thin;
+  border-bottom-style: solid;
+  border-bottom-color: sbs.$color-border-subtle;
   min-width: 0;
 }
 
@@ -113,7 +130,7 @@
 .recentMain {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: sbs.$space-1;
   min-width: 0;
 }
 
@@ -125,18 +142,26 @@
 .reasonText,
 .recentMeta {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: sbs.$font-size-200;
   line-height: 1.4;
 }
 
 .actionButton {
   min-height: 2.25rem;
-  padding: 0.35rem 0.75rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighter, default: #f3f2f1]";
+  padding: 0.35rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-muted;
   color: inherit;
-  font-size: 0.875rem;
+  font-size: sbs.$font-size-200;
   white-space: nowrap;
+}
+
+.actionButton:focus,
+.actionButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .actionButton:disabled {
@@ -146,7 +171,7 @@
 
 @media (max-width: 768px) {
   .overviewDashboard {
-    padding: 0.75rem;
+    padding: sbs.$space-3;
   }
 
   .kpiGrid {

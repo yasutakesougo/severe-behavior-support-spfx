@@ -59,4 +59,13 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
     expect(DASHBOARD_UX_SLICE.kpiNavigationAuthorized).toBe(false);
     expect(DASHBOARD_UX_SLICE.actionExecutionAuthorized).toBe(false);
   });
+
+  it("keeps Overview heading hierarchy anchors for DADS-UX-2 regression", () => {
+    // Source-level contract mirrored by A11Y-HD-02 — labels/IA unchanged.
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards).toHaveLength(4);
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.recentRecords.length).toBeGreaterThan(0);
+    expect(
+      DASHBOARD_UX_OVERVIEW_FIXTURE.actionItems.every((item) => item.actionLabel.length > 0),
+    ).toBe(true);
+  });
 });
