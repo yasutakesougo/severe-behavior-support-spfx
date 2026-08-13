@@ -96,11 +96,19 @@ DADS-UX-6+ / DADS-VERIFY
 ## 6. Verification (this PR)
 
 ```text
-format:check: (recorded after run)
-root lint / typecheck / unit: (recorded after run)
-check:a11y: (recorded after run；new Review gates)
-SPFx Heft test: (recorded after run)
-SPFx production build: (recorded after run)
-browser smoke: (recorded after run)
+HEAD: 7b1b928001454cbe487320a4b3fcbe43a41083c5
+Baseline main: 0cd8a5710ac5748bce96cce310e2815cefe8f517
+format:check: PASS
+root lint / typecheck / unit: PASS (557/557)
+check:contracts-boundaries / check:scope: PASS
+check:a11y: PASS（30 checks；A11Y-HD-06 / A11Y-RV-01 / A11Y-INV-13-RV / A11Y-INV-17-RV / A11Y-DIS-03 added）
+SPFx Heft test: PASS (127/127)
+SPFx production build + package-solution: PASS
+browser smoke PASS:
+  DEMO-UX-6（Review）
+  DEMO-UX-7 / DEMO-UX-11 / SHELL-UX-1
+  DEMO-UX-10 review-family-a + overview-family-r PASS
+browser smoke KNOWN stale（pre-existing；Review token 起因ではない）:
+  DEMO-UX-10 users-family-r note phrase drift（expects older copy；counts PASS）
 Smoke expectations: NOT weakened
 ```
