@@ -83,15 +83,21 @@ PR をマージ候補へ進めてよいかを、実装者とは別視点で監�
 
 - 対象 PR と head SHA / base SHA が固定されている
 - 変更範囲と対象外変更が識別されている
-- CI 結果が記録されている
+- CI 結果が記録されている（SUCCESS）
 - 未実行テストがあれば理由が記録されている
 - `P0` が 0 件
 - `P1` が 0 件
 - 新規失敗が 0 件
-- 未解決レビューが 0 件
+- Fresh Review = PASS（Solo development 既定）
+- mergeable = clean
 - 必要な証跡が揃っている
-- 未解決レビューと `HOLD` が PASS 扱いされていない
-- 人による merge 承認要否が明示されている
+- `HOLD` が PASS 扱いされていない
+- 明示 Human Merge GO がある（expected head SHA 拘束）
+
+### Solo development（既定）— 非必須
+
+- submitted GitHub Review PASS は必須としない（正本: `docs/decisions/DEC-AI-ORG-003.md`）
+- Human が複数人レビューを要求した場合のみ、同一 head SHA の Review PASS を追加必須とする
 
 ### FAIL 条件
 
@@ -102,9 +108,10 @@ PR をマージ候補へ進めてよいかを、実装者とは別視点で監�
 
 ### HOLD 条件
 
-- 承認待ち
-- CI 未完了
-- 未解決レビューあり
+- Human Merge GO 待ち
+- CI 未完了 / 非 SUCCESS
+- Fresh Review 未完了 / 非 PASS
+- （複数人レビュー要求時）未解決レビューあり
 - 根拠不足で重大度を判定できない
 
 ### 判定

@@ -53,7 +53,8 @@
 ## 停止条件
 
 - 対象 PR / head SHA が不明
-- Review PASS が merge 対象 expected head SHA と不一致
+- Fresh Review が非 PASS、または対象 head SHA と不一致
+- （複数人レビュー要求時）Review PASS が merge 対象 expected head SHA と不一致
 - unresolved P0 / P1 が残っている
 - 承認証跡不足
 - `release-review` の証跡不足のままリリース完了を求められている
@@ -61,7 +62,7 @@
 
 ## 禁止
 
-- Review PASS なし Merge を認めること
+- Fresh Review PASS なし Merge を認めること
 - マージ・deploy・Ready 化の自動実行
 - SharePoint / Entra ID / Microsoft 365 / 本番データ変更
 - 監査工程でのコード変更手順の実行（Read Only 工程）
@@ -69,9 +70,10 @@
 
 ## Merge 可否の原則（DEC-AI-ORG-3 / Governance）
 
-- Review PASS なし Merge 禁止
+- Fresh Review PASS なし Merge 禁止（Solo development 既定）
+- submitted GitHub Review PASS は Solo development では非必須（Human が複数人レビューを要求した場合のみ必須）
 - PR マージは人の事前承認（repository、PR 番号、expected head SHA 拘束）
-- 同一 head SHA の Review PASS と unresolved P0/P1 = 0 が必須
+- Fresh Review PASS + CI SUCCESS + mergeable=clean + unresolved P0/P1 = 0 + Human Merge GO が必須
 - head / artifact / 環境 / 変更範囲の変化で承認は失効
 
 ## 関連正本

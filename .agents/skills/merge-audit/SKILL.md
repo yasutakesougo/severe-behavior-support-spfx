@@ -66,9 +66,9 @@
 
 ## 判定基準
 
-- `PASS`: Merge Gate の通過条件を満たし、`P0` が 0 件、`P1` が 0 件、新規失敗が 0 件、未解決レビューが 0 件、必要な証跡が揃い、人による merge 承認要否が明示されている
+- `PASS`: Merge Gate の通過条件を満たし、`P0` が 0 件、`P1` が 0 件、新規失敗が 0 件、Fresh Review PASS、CI SUCCESS、mergeable=clean、必要な証跡が揃い、明示 Human Merge GO がある。Solo development 既定では submitted GitHub Review PASS は非必須（`DEC-AI-ORG-003.md`）
 - `READY`: この Skill では原則使用しない。マージ候補の準備完了を補足する語としてのみ扱う
-- `HOLD`: 承認待ち、CI 未完了、証跡不足、未解決レビューあり
+- `HOLD`: Human Merge GO 待ち、CI 未完了、Fresh Review 未完了、証跡不足、（複数人レビュー要求時）未解決レビューあり
 - `FAIL`: `P0` または `P1` が 1 件以上ある、または新規重大不具合によりマージ不可
 - `NOT APPLICABLE`: PR を対象としない作業
 

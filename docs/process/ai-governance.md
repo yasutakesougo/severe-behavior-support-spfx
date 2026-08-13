@@ -14,7 +14,7 @@
 4. Evidence First — 証跡がない事項を推測で補完しない
 5. Fail Closed — 権限マトリクス未記載の操作は禁止扱い（`docs/decisions/DEC-AI-ORG-003.md`）
 6. Read Only 工程では変更禁止 — 読取・監査工程で変更手順を実行しない
-7. レビュー PASS なし Merge 禁止 — 同一 head SHA の Review PASS と人の事前承認が必須
+7. Fresh Review PASS なし Merge 禁止 — Solo development（既定）では Fresh Review PASS / P0=0 / P1=0 / CI SUCCESS / HEAD unchanged / mergeable=clean / 明示 Human Merge GO が必須。submitted GitHub Review PASS は非必須（`DEC-AI-ORG-003.md`）
 
 ## 判定語と重大度
 
@@ -81,7 +81,8 @@ AUTONOMY-POLICY-V1（AUTO-1 / AI Development OS の機械判定可能な policy 
 
 - 区分重複時は `禁止` > `人の事前承認` > `AI単独`
 - 人の承認は対象・操作・範囲・版に拘束する
-- head SHA / artifact / 環境 / 変更範囲が変わった場合、承認と Review PASS は失効する
+- head SHA / artifact / 環境 / 変更範囲が変わった場合、承認と（要求されている場合の）Review PASS は失効する
+- Solo development Merge Gate では submitted GitHub Review PASS を必須としない（Fresh Review + Human Merge GO で代替）
 - 実行参照が上位正本と矛盾する場合は DEC-AI-ORG-3 を優先する
 
 この基盤の手順として禁止する代表例:
