@@ -160,8 +160,7 @@ export const SBS_A11Y_RULE_CATALOG: readonly SbsA11yRule[] = [
     severity: "blocking",
     coverage: "covered",
     inventoryRefs: ["INV-10"],
-    summary:
-      "DailyRecords incomplete select stays SingleSelectListbox (no button+option hybrid)",
+    summary: "DailyRecords incomplete select stays SingleSelectListbox (no button+option hybrid)",
   },
   {
     id: "A11Y-INV-17-RC",
