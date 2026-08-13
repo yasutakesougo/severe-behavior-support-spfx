@@ -12,7 +12,7 @@ Source feedback: RPF-005
 Follow-on queue（not this slice）: DUX7-P2-1 / RPF-007
 Implementation Start: GO（2026-08-13）— see demo-ux-12-implementation-start.md
 Ready: COMPLETE（2026-08-13）— see demo-ux-12-ready.md
-Merge: HOLD
+Merge: SUCCESS（PR #326 / ea12849）— MERGED / COMPLETE
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED
@@ -25,10 +25,10 @@ Human は DEMO-UX-11（RPF-004）Merge SUCCESS を確認し、残り P2 の次�
 本 Selection は **RPF-005 のみ** を SELECTED / LOCKED とする。
 
 ```text
-DEMO-UX-12 Implementation Start = GO（this follow-on docs + code on PR #326）
-DEMO-UX-12 Ready = COMPLETE（PR #326 Ready for Review）
-DEMO-UX-12 Merge = HOLD
-DUX7-P2-1 / RPF-007 Implementation = NOT AUTHORIZED
+DEMO-UX-12 Implementation Start = GO
+DEMO-UX-12 Ready = COMPLETE
+DEMO-UX-12 Merge = SUCCESS / MERGED COMPLETE（PR #326 / ea12849）
+DUX7-P2-1 / RPF-007 Implementation = NOT AUTHORIZED（Selection required）
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
 ```
 

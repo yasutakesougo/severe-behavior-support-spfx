@@ -5,11 +5,12 @@ Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-12 — Save badge hierarchy
 PR: #326
 Human Ready Decision: GO（2026-08-13）
-Status: Ready COMPLETE / Merge HOLD
+Status: MERGED / COMPLETE
 Implementation verified HEAD: bf600e567664ef47bfc19bf521b94a39ef9ae305
 PR tip at Human Ready Decision: 8be6ed4d4f8cad461b392eba3ddf0f8f96a1b636
-PR tip after Ready evidence commit: 72f01aa2c52119364a022adfd69115089e99561c
-Merge: HOLD（not executed）
+PR tip after Ready evidence commit: 188f5b9ac5a60db37f2b22b24dba14a83e19a625
+Merge: SUCCESS（PR #326 / ea12849f9b21b9a465b53c0e915167483ba83ad4）
+Expected tip in merge: 188f5b9ac5a60db37f2b22b24dba14a83e19a625
 ```
 
 ## Basis
@@ -29,36 +30,72 @@ safety-boundary regression = none
 
 ```text
 isDraft = false
-state = OPEN
-mergeable = true
-mergeStateStatus = CLEAN（reported）
-headRefOid = 8be6ed4d4f8cad461b392eba3ddf0f8f96a1b636
+state = MERGED
+mergeable = n/a（merged）
+headRefOid at Ready = 8be6ed4d4f8cad461b392eba3ddf0f8f96a1b636
 Implementation verified HEAD is ancestor of tip = yes
-tip delta after bf600e5 = docs-only（pin / feedback / Fresh Review）
+tip delta after bf600e5 = docs-only（pin / feedback / Fresh Review / Ready）
 Fresh Review evidence = docs/architecture/demo-ux-12-fresh-review.md
 Ready evidence = docs/architecture/demo-ux-12-ready.md
 ```
 
-## Authorized by this Decision
+## Authorized by Human Ready Decision
 
 ```text
 Mark PR #326 Ready for Review
 ```
 
-## NOT AUTHORIZED
+## Merge result
 
 ```text
-Merge
+Human Merge Decision = GO
+Merge = SUCCESS
+DEMO-UX-12 / RPF-005 = MERGED / COMPLETE
+```
+
+## Still NOT AUTHORIZED
+
+```text
 Deploy
 SharePoint write
 #299 Close
 RPF-007 Implementation
-DUX7-P2-1 Implementation
+DUX7-P2-1 Implementation（Selection not yet authorized）
 ```
 
-## Next gate
+## Closeout PR #327 — Ready Decision
 
 ```text
-Human Merge Decision（HUMAN-ONLY）
-Merge remains HOLD until Human Merge GO
+PR: #327（docs-only merge closeout sync）
+Purpose: ledger / Ready / Selection / Implementation Start / Fresh Review 同期
+Human Ready Decision: GO（2026-08-13）
+Status: Ready COMPLETE / Merge HOLD
+PR tip at Human Ready Decision: 92293e942dc3bf072e59d167dc17da6f70a3b5b7
+Base main: ea12849f9b21b9a465b53c0e915167483ba83ad4
+Scope: docs/architecture only（no code）
+```
+
+### Authorized by this Closeout Ready Decision
+
+```text
+Mark PR #327 Ready for Review
+```
+
+### NOT AUTHORIZED by this Closeout Ready Decision
+
+```text
+Merge（PR #327）
+Deploy
+SharePoint write
+#299 Close
+DUX7-P2-1 Selection / Implementation
+RPF-007 Selection / Implementation
+```
+
+## Next candidates（not authorized）
+
+```text
+After PR #327 Merge（separate Human gate）:
+1. DUX7-P2-1 — 一覧詳細プレビュー拡張（Selection required）
+2. RPF-007 — 保存中の可観測性（P3-ish；Selection required）
 ```

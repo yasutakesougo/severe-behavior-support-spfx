@@ -13,17 +13,18 @@ Browser smoke: demo-ux-12-browser-smoke.md
 Status: PASS
 Findings: P0 = 0 / P1 = 0 / P2 = 2 OPEN（non-blocking）
 Human Ready: COMPLETE（see demo-ux-12-ready.md；2026-08-13）
-Merge / Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
+Merge: SUCCESS（PR #326 / ea12849；MERGED / COMPLETE）
+Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
 ```
 
 ## Authority
 
 Human instruction `DEMO-UX-12 Fresh Review GO` authorized this review only.
-Human subsequently marked PR #326 Ready for Review; Merge remains HOLD.
+Human subsequently Ready'd and Merged PR #326. Deploy / #299 Close remain unauthorized.
 
 ```text
-Fresh Review PASS ≠ Human Ready GO（Ready now COMPLETE separately）
-Fresh Review PASS ≠ Merge GO
+Fresh Review PASS ≠ Human Ready GO（Ready later COMPLETE）
+Fresh Review PASS ≠ Merge GO（Merge later SUCCESS）
 Fresh Review PASS ≠ Deploy
 Fresh Review PASS ≠ SharePoint write
 Fresh Review PASS ≠ #299 Close
@@ -109,17 +110,18 @@ save / autosave / persisted draft / SharePoint write / live I/O remain OUT
 
 ```text
 1. This Fresh Review = PASS
-2. Human Ready Decision = COMPLETE（PR #326 Ready for Review）
-3. Human Merge（HUMAN-ONLY）— HOLD until Human Merge GO
+2. Human Ready Decision = COMPLETE
+3. Human Merge = SUCCESS（PR #326 / ea12849）
 4. Deploy / SharePoint write / #299 Close remain NOT AUTHORIZED
+5. Next Selection candidates（unauthorized）: DUX7-P2-1 → RPF-007
 ```
 
 ## Non-claims
 
 ```text
-This review did not authorize Merge
+This review did not itself authorize Ready / Merge
 This review does not authorize Deploy
 This review does not authorize SharePoint mutation
 This review does not close #299
-Ready was authorized later by Human Ready Decision（demo-ux-12-ready.md）
+Ready / Merge were authorized later by Human decisions（demo-ux-12-ready.md）
 ```
