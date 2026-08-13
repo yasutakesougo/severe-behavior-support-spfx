@@ -82,3 +82,16 @@ fail-closed / save 5-state / status labels unchanged
 3. StatusPanel family remains KEEP  
 4. INV-19 / DADS-06 / DADS-UX-* still NOT AUTHORIZED  
 5. Verification PASS；no test weakening  
+
+## 7. Verification (this PR)
+
+```text
+format:check: PASS
+root lint / typecheck / unit: PASS
+SPFx Heft test: PASS (115/115)
+SPFx production build: PASS
+browser smoke PASS:
+  DEMO-UX-14 / 13 / 9 / 8 / 7 / 5 / 3
+  SHELL-UX-1
+Smoke expectations: NOT weakened
+```
