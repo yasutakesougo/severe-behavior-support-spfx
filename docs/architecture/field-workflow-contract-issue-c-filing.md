@@ -1,6 +1,6 @@
 # FIELD-WORKFLOW — UI Issue C filing packet
 
-Status: **FILING**（GitHub Issue create in progress）
+Status: **READY TO FILE** (GitHub Issue create blocked for this agent token)
 
 Filing date: 2026-08-13
 
@@ -12,6 +12,19 @@ Upstream:
 - observed `origin/main` tip at packet creation: `7c8880acccbecb4171c13dcbbe9454c3df13f505`
 
 This packet is **docs-only**. It does **not** authorize Implementation Start, Deploy, SharePoint write, or auto-close of `#68` / `#69` / `#299` / `#347` / `#352`.
+
+---
+
+## Agent filing attempt
+
+| Channel | Result |
+|---|---|
+| GitHub MCP `issue_write` | **403** Resource not accessible by personal access token |
+| `gh issue create` | **403** GraphQL: Resource not accessible by integration (`createIssue`) |
+
+Human action required: create the Issue below in `yasutakesougo/severe-behavior-support-spfx`, or grant the agent `issues: write`, then re-run filing.
+
+Suggested assignee: `@yasutakesougo`
 
 ---
 
