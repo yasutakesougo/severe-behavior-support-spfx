@@ -80,7 +80,8 @@ DTO Version:     = Schema Version = 1.0.0
 B-COMP-NEW — SELECT as first candidate
 ```
 
-**新規契約型 `ProcedureRecord` を導入する。**  
+**新規契約型 `ProcedureRecord` を導入する。**
+
 既存型を破壊的に拡張しない。意味・フィールド名は既存契約へ **整列（align）** する。
 
 | Existing | Relation under B-COMP-NEW |
