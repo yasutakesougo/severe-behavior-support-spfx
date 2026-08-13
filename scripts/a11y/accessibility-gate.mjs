@@ -740,6 +740,86 @@ export function runAccessibilityGate() {
     });
   }
 
+  // --- A11Y-HD-07: SupportPlan destination heading hierarchy (DADS-UX-6) ---
+  const supportPlanPath = "spfx/src/shell/users/SupportPlan.tsx";
+  if (relExists(supportPlanPath)) {
+    const src = read(supportPlanPath);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasPlanH1 = /<h1\b/.test(src) && src.includes("demo-ux-support-plan-heading");
+    const sectionH2Count = (src.match(/<h2\b/g) || []).length;
+    const ok = h1Count === 1 && hasPlanH1 && sectionH2Count >= 5;
+    push({
+      id: "A11Y-HD-07",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "SupportPlan keeps single h1 + section h2 hierarchy (DADS-UX-6)"
+        : "SupportPlan heading hierarchy regression (expect 1 h1 + section h2s)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-07",
+      severity: "blocking",
+      ok: false,
+      detail: `${supportPlanPath} missing`,
+    });
+  }
+
+  // --- A11Y-SP-01: SupportPlan SCSS tokens + focus-visible ---
+  const supportPlanScssPath = "spfx/src/shell/users/SupportPlanUx.module.scss";
+  if (relExists(supportPlanScssPath)) {
+    const css = read(supportPlanScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const headingFocusPair =
+      /\.planHeading:focus\b/.test(css) && /\.planHeading:focus-visible\b/.test(css);
+    const mutationFocus =
+      /\.mutationButton:focus\b/.test(css) && /\.mutationButton:focus-visible\b/.test(css);
+    const ok =
+      usesTokens && !hardcodedOutsideTheme && focusVisible && headingFocusPair && mutationFocus;
+    push({
+      id: "A11Y-SP-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "SupportPlan SCSS uses DADS-04 tokens + heading/mutation focus-visible (no raw hex outside theme strings)"
+        : `SupportPlan SCSS presentation gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, headingPair=${headingFocusPair}, mutationFocus=${mutationFocus}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-SP-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${supportPlanScssPath} missing`,
+    });
+  }
+
+  // --- A11Y-DIS-04: SupportPlan disabled + aria-disabled ---
+  if (relExists(supportPlanPath)) {
+    const src = read(supportPlanPath);
+    const disabledButtons = (src.match(/(?<![\w-])disabled(?:=|\s|>)/g) || []).length;
+    const ariaDisabled = (src.match(/aria-disabled=/g) || []).length;
+    const ok = disabledButtons === 0 || ariaDisabled >= disabledButtons;
+    push({
+      id: "A11Y-DIS-04",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "SupportPlan disabled controls pair with aria-disabled"
+        : "SupportPlan disabled without matching aria-disabled",
+    });
+  } else {
+    push({
+      id: "A11Y-DIS-04",
+      severity: "blocking",
+      ok: false,
+      detail: `${supportPlanPath} missing`,
+    });
+  }
+
   // --- A11Y-FV-01: focus tokens + selector mix advisory ---
   const semanticPath = "spfx/src/shell/tokens/semantic.ts";
   const scssFiles = listFilesRecursive("spfx/src/shell", [".scss"]);

@@ -16,6 +16,7 @@ const MUTATION_LABELS = ["作成する", "編集する", "保存する"] as cons
  * DEMO-UX-4 support plan presentation skeleton.
  * Synthetic fixture only — no live plan mutation, auth, or adapter connection.
  * DEMO-UX-11 removes duplicate screen-level synthetic band; mutation boundary remains.
+ * DADS-UX-6: presentation tokens/focus; INV-08 ADAPT presentation only.
  */
 export const SupportPlan: React.FC<SupportPlanProps> = ({
   presentation,

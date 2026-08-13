@@ -46,3 +46,13 @@ describe("DEMO-UX-4 support plan presentation boundary", () => {
     expect(DEMO_UX_4_SLICE.evaluationMutationAuthorized).toBe(false);
   });
 });
+
+describe("DADS-UX-6 support plan presentation contracts", () => {
+  it("keeps SupportPlan business/status anchors for INV-08 regression", () => {
+    // Mirrored by A11Y-HD-07 / A11Y-SP-01 — IA and vocabulary unchanged.
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.goals.length).toBeGreaterThan(0);
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.actionItems.length).toBeGreaterThan(0);
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).toContain("要確認");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
+  });
+});
