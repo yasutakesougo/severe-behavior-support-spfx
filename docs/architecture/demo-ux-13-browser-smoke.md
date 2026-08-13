@@ -9,6 +9,7 @@ Harness: spfx/smoke/demo-ux-13/
 Port: 4195
 Artifacts: /opt/cursor/artifacts/demo-ux-13-browser-smoke/
 Result: 7 / 7 PASS
+Verified HEAD: 7b8fa0b8a935415ddc1cd41c086c3148d2c8d9d8
 Ready / Merge: NOT AUTHORIZED
 ```
 

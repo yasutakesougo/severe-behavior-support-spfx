@@ -4,6 +4,7 @@
 Issue: #299（RESPONSIBLE-PERSON-DEMO-V1）
 Unit: DEMO-UX-13 — Users list detail-preview expansion
 Status: Implementation COMPLETE + Verification PASS
+Implementation verified HEAD: 7b8fa0b8a935415ddc1cd41c086c3148d2c8d9d8
 Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-13-DETAIL-PREVIEW-EXPANSION-1 / PR #328）
 Human Implementation Start: GO（2026-08-13）
 Baseline main: 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
