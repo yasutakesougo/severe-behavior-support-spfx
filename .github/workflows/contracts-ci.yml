@@ -16,6 +16,9 @@ on:
       - "docs/decisions/ADR-AI-ORG-*.md"
       - ".agents/**"
       - "scripts/**"
+      - "tests/a11y/**"
+      - "spfx/src/shell/**"
+      - "spfx/src/webparts/scaffoldShellWebPart/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -41,6 +44,9 @@ on:
       - "docs/decisions/ADR-AI-ORG-*.md"
       - ".agents/**"
       - "scripts/**"
+      - "tests/a11y/**"
+      - "spfx/src/shell/**"
+      - "spfx/src/webparts/scaffoldShellWebPart/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -114,6 +120,9 @@ jobs:
             export SCOPE_HEAD="${{ github.sha }}"
           fi
           npm run check:scope
+
+      - name: Accessibility Gate (DADS-06)
+        run: npm run check:a11y
 
       - name: Check changed lines
         shell: bash
