@@ -44,7 +44,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-11 |
 | RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | MERGED / COMPLETE（PR #326 / ea12849） | DEMO-UX-12 |
 | RPF-006 | review-status | CHANGE | Overview KPI と見直し件数の対応が弱い | 対応関係を明示 | MERGED / COMPLETE（PR #324 / 012dc40） | DEMO-UX-10 |
-| RPF-007 | cross-cutting | CHANGE | 保存中の可観測性が弱い | 進行表示 | DEFERRED（next candidate after DEMO-UX-13） | later |
+| RPF-007 | cross-cutting | CHANGE | 保存中の可観測性が弱い | 進行表示 | SELECTED / LOCKED（Selection） | DEMO-UX-14 |
 
 ## 4. Selected mapping
 
@@ -58,6 +58,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-004 | DEMO-UX-11 | `decision-demo-ux-11-demo-note-consolidation-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 | RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
 | DUX7-P2-1 | DEMO-UX-13 | `decision-demo-ux-13-detail-preview-expansion-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
+| RPF-007 | DEMO-UX-14 | `decision-demo-ux-14-saving-progress-observability-selection.md` | NOT AUTHORIZED（Selection only） |
 
 ## 5. Predecessor merge confirmation
 
@@ -104,6 +105,15 @@ PR #328 Merge = SUCCESS
 Merge commit = c92ca6c7d6ac67b68b0227738e8ce6df34d20297
 Expected HEAD guard tip = cf64104592131e7eae0610569e4208ac03e8d794（ancestor match confirmed）
 DEMO-UX-13 / DUX7-P2-1 = MERGED / COMPLETE
+```
+
+### DEMO-UX-13 closeout sync
+
+```text
+PR #329 Merge = SUCCESS
+Merge commit = b7897818ea3b334f5e6c2430e656c0bf3d2078f2
+Expected HEAD guard tip = f91b64470264f3e3810c6161b1b32497915d27f5（ancestor match confirmed）
+DEMO-UX-13 closeout sync = COMPLETE
 ```
 
 ## 6. Explicit non-claims

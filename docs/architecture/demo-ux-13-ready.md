@@ -40,5 +40,5 @@ RPF-007 Selection / Implementation
 ## Next candidate（not authorized）
 
 ```text
-RPF-007 — 保存中の可観測性（P3-ish；Selection required）
+RPF-007 / DEMO-UX-14 — Selection SELECTED / LOCKED（Implementation Start NOT AUTHORIZED）
 ```
