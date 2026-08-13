@@ -10,6 +10,7 @@ export * from "./observation-evidence";
 export * from "./support-plan";
 export * from "./support-plan-repository";
 export * from "./support-plan-version-procedure-binding";
+export * from "./procedure-record";
 export * from "./support-record-trace";
 export * from "./finding-audit";
 export * from "./audit-event-persistence";

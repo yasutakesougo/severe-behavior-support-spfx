@@ -118,6 +118,12 @@ SupportPlanVersionProcedureBinding（Issue #347 / Option A2 / Design-FIELD-WORKF
 severe-behavior-support.support-plan.version-procedure-binding @ 1.0.0
 ```
 
+ProcedureRecord（Issue #352 / Decision-FIELD-WORKFLOW-CONTRACT-B-PKG-1）:
+
+```text
+severe-behavior-support.procedure-record.record @ 1.0.0
+```
+
 AssessmentSnapshot系の正式値（Decision-AS-SCHEMA-ID-1 / Decision-AS-SCHEMA-VERSION-1）:
 
 ```text
