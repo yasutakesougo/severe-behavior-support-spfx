@@ -90,11 +90,16 @@ Users list/detail / Records / Review rework
 ## 6. Verification (this PR)
 
 ```text
-format:check: (recorded after run)
-root lint / typecheck / unit: (recorded after run)
-check:a11y: (recorded after run；new SupportPlan gates)
-SPFx Heft test: (recorded after run)
-SPFx production build: (recorded after run)
-browser smoke: (recorded after run)
+HEAD: 3fa3b1a00e17eb9027d586f04a881510fc358125
+Baseline main: ca372f8bd9e9dc51344ee97982630fa57ed3e975
+format:check: PASS
+root lint / typecheck / unit: PASS (557/557)
+check:contracts-boundaries / check:scope: PASS
+check:a11y: PASS（33 checks；A11Y-HD-07 / A11Y-SP-01 / A11Y-DIS-04 added）
+SPFx Heft test: PASS (128/128)
+SPFx production build + package-solution: PASS
+browser smoke PASS:
+  DEMO-UX-4（SupportPlan）
+  DEMO-UX-3 / DEMO-UX-11 / SHELL-UX-1
 Smoke expectations: NOT weakened
 ```
