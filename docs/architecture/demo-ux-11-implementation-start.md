@@ -9,7 +9,7 @@ Human Implementation Start: GO（2026-08-13）
 Baseline main: 012dc405bf9469d2c5bc1652ffc472782012db97
 Branch: cursor/demo-ux-11-demo-note-consolidation-selection-3507
 PR: #325 OPEN / Draft
-Implementation verified HEAD: (pin on verification commit)
+Implementation verified HEAD: 73ee88a8c43c7afab828ca99ef7a47cd37d91a46
 Selection: decision-demo-ux-11-demo-note-consolidation-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-11-browser-smoke.md）
 Heft test: 86 / 86 PASS
