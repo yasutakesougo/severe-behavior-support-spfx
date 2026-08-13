@@ -44,7 +44,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-11 |
 | RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | MERGED / COMPLETE（PR #326 / ea12849） | DEMO-UX-12 |
 | RPF-006 | review-status | CHANGE | Overview KPI と見直し件数の対応が弱い | 対応関係を明示 | MERGED / COMPLETE（PR #324 / 012dc40） | DEMO-UX-10 |
-| RPF-007 | cross-cutting | CHANGE | 保存中の可観測性が弱い | 進行表示 | DEFERRED | later |
+| RPF-007 | cross-cutting | CHANGE | 保存中の可観測性が弱い | 進行表示 | DEFERRED（next candidate after DEMO-UX-13） | later |
 
 ## 4. Selected mapping
 
@@ -95,6 +95,15 @@ PR #327 Merge = SUCCESS
 Merge commit = 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
 Expected HEAD guard tip = 76ee13413de03311ca4e5b45b77c8d46ea1b5f62（ancestor match confirmed）
 DEMO-UX-12 closeout sync = COMPLETE
+```
+
+### DEMO-UX-13
+
+```text
+PR #328 Merge = SUCCESS
+Merge commit = c92ca6c7d6ac67b68b0227738e8ce6df34d20297
+Expected HEAD guard tip = cf64104592131e7eae0610569e4208ac03e8d794（ancestor match confirmed）
+DEMO-UX-13 / DUX7-P2-1 = MERGED / COMPLETE
 ```
 
 ## 6. Explicit non-claims

@@ -71,7 +71,7 @@ Docs:
 
 | Sev | ID | Status | Note |
 |---|---|---|---|
-| P2 | DUX7-P2-1 | IMPLEMENTED（DEMO-UX-13；Ready HOLD） | Users list detail-preview enablement expanded to fixture-backed A+C；B/D–H remain disabled. Ready/Merge NOT AUTHORIZED. |
+| P2 | DUX7-P2-1 | MERGED / COMPLETE（DEMO-UX-13 / PR #328 / c92ca6c） | Users list detail-preview enablement expanded to fixture-backed A+C；B/D–H remain disabled. |
 | P2 | DUX7-P2-2 | OPEN | Internal KPI id remains `deadline_near` while visible label is `期限接近`. Non-user-facing naming drift only. |
 
 ```text
