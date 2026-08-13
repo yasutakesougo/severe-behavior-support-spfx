@@ -2,10 +2,7 @@ import { DASHBOARD_OVERVIEW_ACTION_NAV_NOTE } from "../dashboard/overview-copy";
 import { DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE } from "../records/daily-record-copy";
 import { DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE } from "../review/review-due-copy";
 import { DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE } from "../users/support-plan-copy";
-import {
-  DEMO_USERS_FILTER_HINT_CONSOLIDATED,
-  DEMO_UX_11_SLICE,
-} from "./demo-note-consolidation";
+import { DEMO_USERS_FILTER_HINT_CONSOLIDATED, DEMO_UX_11_SLICE } from "./demo-note-consolidation";
 import { DEMO_KPI_FAMILY_A_NOTE, DEMO_KPI_FAMILY_R_NOTE } from "./kpi-review-count";
 
 describe("DEMO-UX-11 DEMO note consolidation", () => {
