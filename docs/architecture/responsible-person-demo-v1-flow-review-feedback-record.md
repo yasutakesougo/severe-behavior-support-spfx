@@ -88,6 +88,15 @@ Expected HEAD guard tip = 188f5b9ac5a60db37f2b22b24dba14a83e19a625（ancestor ma
 DEMO-UX-12 / RPF-005 = MERGED / COMPLETE
 ```
 
+### DEMO-UX-12 closeout sync
+
+```text
+PR #327 Merge = SUCCESS
+Merge commit = 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
+Expected HEAD guard tip = 76ee13413de03311ca4e5b45b77c8d46ea1b5f62（ancestor match confirmed）
+DEMO-UX-12 closeout sync = COMPLETE
+```
+
 ## 6. Explicit non-claims
 
 ```text
