@@ -1,0 +1,118 @@
+// DADS-04 — corporate-app design tokens (SCSS intermediate layer).
+// Keep values aligned with raw.ts / semantic.ts.
+// Do not put Digital Agency Design System literals into React components.
+// SPFx theme strings are preserved for SharePoint theming (not CSS-var-wrapped).
+
+// --- Spacing ---
+$space-1: 0.25rem;
+$space-2: 0.5rem;
+$space-3: 0.75rem;
+$space-4: 1rem;
+$space-5: 1.5rem;
+
+// --- Typography ---
+$font-size-100: 0.75rem;
+$font-size-200: 0.875rem;
+$font-size-300: 0.95rem;
+$font-size-400: 1.1rem;
+$font-size-500: 1.25rem;
+
+// --- Radius (dialect catalog; migration not required this slice) ---
+$radius-none: 0;
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-pill: 999px;
+
+// --- Border ---
+$border-width-thin: 1px;
+$border-width-thick: 2px;
+
+// --- Focus (usable by :focus today and :focus-visible later) ---
+$focus-outline-width: 2px;
+$focus-outline-offset: 2px;
+$color-focus-ring: "[theme:themePrimary, default: #03787c]";
+
+// --- Text / surface (theme-aware where shell already used theme slots) ---
+$color-text-primary: "[theme:bodyText, default: #323130]";
+/// Hardcoded ink used by a few chrome surfaces that do not use SPFx theme strings today.
+$color-text-ink: #323130;
+$color-border-subtle: "[theme:neutralLight, default: #edebe9]";
+$color-border-strong: "[theme:neutralTertiary, default: #a19f9d]";
+$color-border-secondary: "[theme:neutralSecondary, default: #8a8886]";
+$color-surface-muted: "[theme:neutralLighter, default: #f3f2f1]";
+$color-surface-subtle: "[theme:neutralLighterAlt, default: #faf9f8]";
+$color-surface-selected: "[theme:themeLighter, default: #deecf9]";
+$color-surface-canvas: #fff;
+
+// --- Feedback presentation (not Domain status names) ---
+$color-feedback-info-fg: #004578;
+$color-feedback-info-border: #0078d4;
+$color-feedback-info-bg: #deecf9;
+$color-feedback-info-bg-subtle: #eff6fc;
+$color-feedback-info-bg-tint: #f3f9fd;
+
+$color-feedback-danger-fg: #a4262c;
+$color-feedback-danger-border: #a4262c;
+$color-feedback-danger-bg: #fde7e9;
+$color-feedback-danger-bg-subtle: #fff5f6;
+
+$color-feedback-warning-fg: #8a6116;
+$color-feedback-warning-border: #8a6116;
+$color-feedback-warning-bg: #fff4ce;
+
+$color-skip-link-bg: #111;
+$color-skip-link-fg: #fff;
+
+@mixin focus-ring {
+  // Do not interpolate theme strings — #{} strips required SPFx quotes.
+  outline: $focus-outline-width solid $color-focus-ring;
+  outline-offset: $focus-outline-offset;
+}
+
+/// Emit non-theme CSS custom properties on a root shell node.
+/// Theme-slot colors stay as SCSS theme strings so SPFx rewriting continues to work.
+@mixin emit-css-vars {
+  --sbs-space-1: #{$space-1};
+  --sbs-space-2: #{$space-2};
+  --sbs-space-3: #{$space-3};
+  --sbs-space-4: #{$space-4};
+  --sbs-space-5: #{$space-5};
+
+  --sbs-font-size-100: #{$font-size-100};
+  --sbs-font-size-200: #{$font-size-200};
+  --sbs-font-size-300: #{$font-size-300};
+  --sbs-font-size-400: #{$font-size-400};
+  --sbs-font-size-500: #{$font-size-500};
+
+  --sbs-radius-none: #{$radius-none};
+  --sbs-radius-sm: #{$radius-sm};
+  --sbs-radius-md: #{$radius-md};
+  --sbs-radius-lg: #{$radius-lg};
+  --sbs-radius-pill: #{$radius-pill};
+
+  --sbs-border-width-thin: #{$border-width-thin};
+  --sbs-border-width-thick: #{$border-width-thick};
+
+  --sbs-focus-outline-width: #{$focus-outline-width};
+  --sbs-focus-outline-offset: #{$focus-outline-offset};
+
+  --sbs-color-surface-canvas: #{$color-surface-canvas};
+  --sbs-color-skip-link-bg: #{$color-skip-link-bg};
+  --sbs-color-skip-link-fg: #{$color-skip-link-fg};
+
+  --sbs-color-feedback-info-fg: #{$color-feedback-info-fg};
+  --sbs-color-feedback-info-border: #{$color-feedback-info-border};
+  --sbs-color-feedback-info-bg: #{$color-feedback-info-bg};
+  --sbs-color-feedback-info-bg-subtle: #{$color-feedback-info-bg-subtle};
+  --sbs-color-feedback-info-bg-tint: #{$color-feedback-info-bg-tint};
+
+  --sbs-color-feedback-danger-fg: #{$color-feedback-danger-fg};
+  --sbs-color-feedback-danger-border: #{$color-feedback-danger-border};
+  --sbs-color-feedback-danger-bg: #{$color-feedback-danger-bg};
+  --sbs-color-feedback-danger-bg-subtle: #{$color-feedback-danger-bg-subtle};
+
+  --sbs-color-feedback-warning-fg: #{$color-feedback-warning-fg};
+  --sbs-color-feedback-warning-border: #{$color-feedback-warning-border};
+  --sbs-color-feedback-warning-bg: #{$color-feedback-warning-bg};
+}

@@ -1,12 +1,15 @@
+@use "../tokens/sbs-tokens" as sbs;
+
 .appShell {
+  @include sbs.emit-css-vars;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: sbs.$space-3;
   min-height: 100%;
   min-width: 0;
   max-width: 100%;
-  padding: 0.75rem 1rem 1.5rem;
-  color: "[theme:bodyText, default: #323130]";
+  padding: sbs.$space-3 sbs.$space-4 sbs.$space-5;
+  color: sbs.$color-text-primary;
   color: var(--bodyText);
   box-sizing: border-box;
 }
@@ -16,21 +19,21 @@
   left: -9999px;
   top: 0;
   z-index: 10;
-  padding: 0.5rem 0.75rem;
-  background: #111;
-  color: #fff;
+  padding: sbs.$space-2 sbs.$space-3;
+  background: sbs.$color-skip-link-bg;
+  color: sbs.$color-skip-link-fg;
 }
 
 .skipLink:focus {
-  left: 0.75rem;
-  top: 0.75rem;
+  left: sbs.$space-3;
+  top: sbs.$space-3;
 }
 
 .demoBanner {
-  padding: 0.5rem 0.75rem;
-  border: 2px solid #8a6116;
-  background: #fff4ce;
-  color: #323130;
+  padding: sbs.$space-2 sbs.$space-3;
+  border: sbs.$border-width-thick solid sbs.$color-feedback-warning-border;
+  background: sbs.$color-feedback-warning-bg;
+  color: sbs.$color-text-ink;
   font-weight: 700;
   text-align: center;
 }
@@ -38,11 +41,13 @@
 .shellHeader {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: sbs.$space-2;
   min-width: 0;
   max-width: 100%;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid "[theme:neutralLight, default: #edebe9]";
+  padding-bottom: sbs.$space-2;
+  border-bottom-width: sbs.$border-width-thin;
+  border-bottom-style: solid;
+  border-bottom-color: sbs.$color-border-subtle;
   box-sizing: border-box;
 }
 
@@ -51,29 +56,29 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: sbs.$space-2;
 }
 
 .productName {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: sbs.$font-size-500;
   font-weight: 700;
 }
 
 .userLine {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: sbs.$font-size-200;
 }
 
 .currentSite {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 0.75rem;
+  gap: 0.35rem sbs.$space-3;
   align-items: baseline;
 }
 
 .currentSiteLabel {
-  font-size: 0.75rem;
+  font-size: sbs.$font-size-100;
   text-transform: none;
   opacity: 0.85;
 }
@@ -84,21 +89,23 @@
 
 .siteSelector {
   margin: 0;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
+  padding: sbs.$space-2 sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
   min-width: 0;
 }
 
 .siteSelectorLegend {
-  padding: 0 0.25rem;
-  font-size: 0.75rem;
+  padding: 0 sbs.$space-1;
+  font-size: sbs.$font-size-100;
   font-weight: 600;
 }
 
 .siteSelectorOptions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
+  gap: sbs.$space-2 sbs.$space-4;
 }
 
 .siteOption {
@@ -106,13 +113,12 @@
   align-items: center;
   gap: 0.35rem;
   min-height: 2.25rem;
-  font-size: 0.875rem;
+  font-size: sbs.$font-size-200;
   cursor: pointer;
 }
 
 .siteOption input:focus {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+  @include sbs.focus-ring;
 }
 
 .navButton:disabled {
@@ -124,7 +130,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.25rem;
+  gap: sbs.$space-1;
   max-width: 18rem;
 }
 
@@ -139,7 +145,9 @@
 .saveStateBadge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
   font-size: 0.8rem;
   font-weight: 600;
 }
@@ -147,7 +155,7 @@
 /* DEMO-UX-12 / RPF-005: ready browsing stays subordinate to business content */
 .saveStateBadgeQuiet {
   padding: 0.1rem 0.35rem;
-  border-color: "[theme:neutralLight, default: #edebe9]";
+  border-color: sbs.$color-border-subtle;
   font-size: 0.72rem;
   font-weight: 400;
   color: "[theme:neutralSecondary, default: #605e5c]";
@@ -155,14 +163,14 @@
 
 .saveStateBadgeEmphasized {
   padding: 0.25rem 0.65rem;
-  border-width: 2px;
+  border-width: sbs.$border-width-thick;
   font-size: 0.85rem;
   font-weight: 700;
 }
 
 .saveStateDescription {
   margin: 0;
-  font-size: 0.75rem;
+  font-size: sbs.$font-size-100;
   line-height: 1.35;
   text-align: right;
   opacity: 0.9;
@@ -173,9 +181,9 @@
 }
 
 .saveState_saving {
-  background: #deecf9;
-  border-color: #0078d4;
-  color: #004578;
+  background: sbs.$color-feedback-info-bg;
+  border-color: sbs.$color-feedback-info-border;
+  color: sbs.$color-feedback-info-fg;
 }
 
 /* DEMO-UX-14 / RPF-007: saving-only progress cue (text + motion; reduced-motion safe) */
@@ -191,24 +199,24 @@
 .saveStateProgressTrack {
   display: block;
   width: 100%;
-  height: 0.25rem;
+  height: sbs.$space-1;
   overflow: hidden;
-  border: 1px solid #0078d4;
-  background: #eff6fc;
+  border: sbs.$border-width-thin solid sbs.$color-feedback-info-border;
+  background: sbs.$color-feedback-info-bg-subtle;
 }
 
 .saveStateProgressBar {
   display: block;
   width: 40%;
   height: 100%;
-  background: #0078d4;
+  background: sbs.$color-feedback-info-border;
   animation: saveStateProgressIndeterminate 1.25s ease-in-out infinite;
 }
 
 .saveStateProgressLabel {
   font-size: 0.7rem;
   font-weight: 600;
-  color: #004578;
+  color: sbs.$color-feedback-info-fg;
 }
 
 @keyframes saveStateProgressIndeterminate {
@@ -232,21 +240,21 @@
 }
 
 .saveState_save_failed {
-  background: #fde7e9;
-  border-color: #a4262c;
-  color: #a4262c;
+  background: sbs.$color-feedback-danger-bg;
+  border-color: sbs.$color-feedback-danger-border;
+  color: sbs.$color-feedback-danger-fg;
 }
 
 .saveState_save_outcome_unknown {
-  background: #fff4ce;
-  border-color: #8a6116;
-  color: #8a6116;
+  background: sbs.$color-feedback-warning-bg;
+  border-color: sbs.$color-feedback-warning-border;
+  color: sbs.$color-feedback-warning-fg;
 }
 
 .shellNav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: sbs.$space-2;
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -256,27 +264,30 @@
   min-height: 2.5rem;
   min-width: 4.5rem;
   padding: 0.4rem 0.85rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighter, default: #f3f2f1]";
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-muted;
   color: inherit;
   cursor: pointer;
 }
 
 .navButton:focus {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+  @include sbs.focus-ring;
 }
 
 .navButtonSelected {
-  border-color: "[theme:themePrimary, default: #03787c]";
-  background: "[theme:themeLighter, default: #deecf9]";
+  border-color: sbs.$color-focus-ring;
+  background: sbs.$color-surface-selected;
   font-weight: 700;
 }
 
 .destinationPlaceholder {
-  padding: 1rem;
-  border: 1px dashed "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
   min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
@@ -284,18 +295,17 @@
 
 .destinationHeading {
   margin: 0 0 0.65rem;
-  font-size: 1.25rem;
+  font-size: sbs.$font-size-500;
   outline: none;
 }
 
 .destinationHeading:focus {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+  @include sbs.focus-ring;
 }
 
 .destinationBody {
-  margin: 0 0 0.5rem;
-  font-size: 0.95rem;
+  margin: 0 0 sbs.$space-2;
+  font-size: sbs.$font-size-300;
   line-height: 1.45;
 }
 
@@ -316,14 +326,16 @@
 }
 
 .statusPanel {
-  padding: 1rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
 }
 
 .statusTitle {
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  margin: 0 0 sbs.$space-2;
+  font-size: sbs.$font-size-400;
 }
 
 .statusBody {
@@ -331,21 +343,23 @@
 }
 
 .correlation {
-  margin: 0.75rem 0 0;
+  margin: sbs.$space-3 0 0;
   font-size: 0.8rem;
   opacity: 0.85;
 }
 
 .errorInquiry {
-  margin-top: 1rem;
-  padding: 0.75rem 0.85rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  margin-top: sbs.$space-4;
+  padding: sbs.$space-3 0.85rem;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
 }
 
 .errorInquiryTitle {
   margin: 0 0 0.35rem;
-  font-size: 0.95rem;
+  font-size: sbs.$font-size-300;
 }
 
 .errorInquiryHint {
@@ -354,13 +368,13 @@
 }
 
 .errorInquiryList {
-  margin: 0 0 0.75rem;
+  margin: 0 0 sbs.$space-3;
 }
 
 .errorInquiryRow {
   display: grid;
   grid-template-columns: 7rem 1fr;
-  gap: 0.35rem 0.75rem;
+  gap: 0.35rem sbs.$space-3;
   margin: 0 0 0.35rem;
 }
 
@@ -379,7 +393,7 @@
 
 .errorInquiryLabel {
   display: block;
-  margin: 0 0 0.25rem;
+  margin: 0 0 sbs.$space-1;
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -388,26 +402,29 @@
   display: block;
   width: 100%;
   box-sizing: border-box;
-  margin: 0 0 0.5rem;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: #fff;
+  margin: 0 0 sbs.$space-2;
+  padding: sbs.$space-2 0.6rem;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
   font-family: Consolas, "Courier New", monospace;
   font-size: 0.85rem;
   resize: vertical;
 }
 
 .errorInquiryCopyButton {
-  border: 1px solid "[theme:neutralSecondary, default: #8a8886]";
-  background: "[theme:neutralLighter, default: #f3f2f1]";
-  padding: 0.4rem 0.75rem;
-  font-size: 0.875rem;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-secondary;
+  background: sbs.$color-surface-muted;
+  padding: 0.4rem sbs.$space-3;
+  font-size: sbs.$font-size-200;
   cursor: pointer;
 }
 
 .errorInquiryCopyButton:focus {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+  @include sbs.focus-ring;
 }
 
 .errorInquiryStatus {
@@ -426,17 +443,17 @@
 
 /* DEMO-UX-14 / RPF-007: saving-only interaction pause appearance */
 .readyRegionSavingPaused {
-  border: 1px dashed #0078d4;
-  padding: 0.65rem 0.75rem 0.85rem;
-  background: #f3f9fd;
+  border: sbs.$border-width-thin dashed sbs.$color-feedback-info-border;
+  padding: 0.65rem sbs.$space-3 0.85rem;
+  background: sbs.$color-feedback-info-bg-tint;
 }
 
 .savingInteractionPauseNote {
   margin: 0 0 0.65rem;
   padding: 0.45rem 0.55rem;
-  border: 1px solid #0078d4;
-  background: #deecf9;
-  color: #004578;
+  border: sbs.$border-width-thin solid sbs.$color-feedback-info-border;
+  background: sbs.$color-feedback-info-bg;
+  color: sbs.$color-feedback-info-fg;
   font-size: 0.85rem;
   font-weight: 600;
   line-height: 1.4;
@@ -449,26 +466,28 @@
 }
 
 .partialRetrievalPanel {
-  padding: 1rem;
-  border: 2px solid #a4262c;
-  background: #fde7e9;
+  padding: sbs.$space-4;
+  border: sbs.$border-width-thick solid sbs.$color-feedback-danger-border;
+  background: sbs.$color-feedback-danger-bg;
 }
 
 .partialRetrievalSection {
   margin-top: 0.85rem;
-  padding: 0.65rem 0.75rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: #fff;
+  padding: 0.65rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
 }
 
 .partialRetrievalFailedSection {
-  border-color: #a4262c;
-  background: #fff5f6;
+  border-color: sbs.$color-feedback-danger-border;
+  background: sbs.$color-feedback-danger-bg-subtle;
 }
 
 .partialRetrievalHeading {
   margin: 0 0 0.4rem;
-  font-size: 0.95rem;
+  font-size: sbs.$font-size-300;
 }
 
 .partialRetrievalList {
@@ -478,18 +497,18 @@
 
 .partialRetrievalEmpty {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: sbs.$font-size-200;
   opacity: 0.9;
 }
 
 .unauthenticatedPanel {
-  padding: 1rem;
-  border: 2px solid #a4262c;
-  background: #fde7e9;
+  padding: sbs.$space-4;
+  border: sbs.$border-width-thick solid sbs.$color-feedback-danger-border;
+  background: sbs.$color-feedback-danger-bg;
 }
 
 .unauthenticatedNote {
-  margin: 0.75rem 0 0;
+  margin: sbs.$space-3 0 0;
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -497,7 +516,7 @@
 /* Basic tablet / narrow layout affordance */
 @media (max-width: 768px) {
   .appShell {
-    padding: 0.5rem 0.75rem 1rem;
+    padding: sbs.$space-2 sbs.$space-3 sbs.$space-4;
   }
 
   .brandRow {
@@ -524,6 +543,6 @@
   }
 
   .navButton {
-    flex: 1 1 calc(33% - 0.5rem);
+    flex: 1 1 calc(33% - #{sbs.$space-2});
   }
 }
