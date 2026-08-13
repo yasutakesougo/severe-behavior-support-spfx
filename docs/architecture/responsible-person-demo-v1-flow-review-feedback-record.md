@@ -42,7 +42,7 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-003 | users | CHANGE | 状態フィルタが無効 | 合成データだけで絞り込み可能にする | MERGED / COMPLETE（PR #321 / aed5b05） | DEMO-UX-8 |
 | RPF-002 | daily-record | CHANGE | 入力欄は見えるが何もできない | 未記録選択→記録画面→入力イメージまで通す。実保存 HOLD | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-9 |
 | RPF-004 | cross-cutting | CHANGE | DEMO注記が多く業務情報が埋もれる | 注記集約 | IMPLEMENTED（verification PASS；Ready未） | DEMO-UX-11 |
-| RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | DEFERRED | after flow slices |
+| RPF-005 | cross-cutting | CHANGE | 保存バッジ常時強調 | 異常時のみ強調 | SELECTED / LOCKED（Selection） | DEMO-UX-12 |
 | RPF-006 | review-status | CHANGE | Overview KPI と見直し件数の対応が弱い | 対応関係を明示 | MERGED / COMPLETE（PR #324 / 012dc40） | DEMO-UX-10 |
 | RPF-007 | cross-cutting | CHANGE | 保存中の可観測性が弱い | 進行表示 | DEFERRED | later |
 
@@ -55,7 +55,8 @@ Human agreement: YES — next slice = RPF-Q01 + RPF-001
 | RPF-003 | DEMO-UX-8 | `decision-demo-ux-8-users-list-status-filter-selection.md` | GO（2026-08-12）/ MERGED COMPLETE |
 | RPF-002 | DEMO-UX-9 | `decision-demo-ux-9-daily-record-experience-selection.md` | GO（2026-08-12）/ COMPLETE（Ready HOLD） |
 | RPF-006 | DEMO-UX-10 | `decision-demo-ux-10-kpi-review-count-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
-| RPF-004 | DEMO-UX-11 | `decision-demo-ux-11-demo-note-consolidation-selection.md` | GO（2026-08-13）/ COMPLETE（Ready HOLD） |
+| RPF-004 | DEMO-UX-11 | `decision-demo-ux-11-demo-note-consolidation-selection.md` | GO（2026-08-13）/ MERGED COMPLETE |
+| RPF-005 | DEMO-UX-12 | `decision-demo-ux-12-save-badge-hierarchy-selection.md` | NOT AUTHORIZED（Selection only） |
 
 ## 5. Predecessor merge confirmation
 
