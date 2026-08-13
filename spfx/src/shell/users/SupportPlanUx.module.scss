@@ -1,36 +1,43 @@
+@use "../tokens/sbs-tokens" as sbs;
+
 .supportPlan {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: sbs.$space-4;
   min-width: 0;
   max-width: 100%;
-  padding: 1rem;
-  border: 1px dashed "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
   box-sizing: border-box;
 }
 
 .topRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: sbs.$space-3;
   align-items: center;
   justify-content: space-between;
 }
 
 .backButton {
   min-height: 2.25rem;
-  padding: 0.35rem 0.75rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:white, default: #ffffff]";
+  padding: 0.35rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
   color: inherit;
   font: inherit;
   cursor: pointer;
 }
 
+.backButton:focus,
 .backButton:focus-visible {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .backButton:disabled {
@@ -41,52 +48,62 @@
 .presentationNote {
   flex: 1 1 28rem;
   margin: 0;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #8a6116;
-  background: #fff4ce;
-  font-size: 0.875rem;
+  padding: sbs.$space-2 sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-feedback-warning-border;
+  background: sbs.$color-feedback-warning-bg;
+  color: sbs.$color-feedback-warning-fg;
+  font-size: sbs.$font-size-200;
   font-weight: 600;
   line-height: 1.45;
 }
 
 .planHeading {
   margin: 0;
+  /* Display emphasis; no larger type token in DADS-04 catalog yet. */
   font-size: 1.5rem;
   outline: none;
 }
 
-.planHeading:focus {
-  outline: 2px solid "[theme:themePrimary, default: #03787c]";
-  outline-offset: 2px;
+/* INV-03 KEEP: programmatic destination focus remains visible. */
+.planHeading:focus,
+.planHeading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .personSubheading {
   margin: 0;
+  /* Existing SupportPlan person subheading size; no 1rem type token in DADS-04 catalog. */
   font-size: 1rem;
   font-weight: 600;
 }
 
 .periodLabel {
   margin: 0;
-  font-size: 0.95rem;
+  font-size: sbs.$font-size-300;
 }
 
 .sectionHint {
   margin: 0;
-  font-size: 0.8rem;
+  font-size: sbs.$font-size-100;
   opacity: 0.9;
 }
 
 .detailSection {
   min-width: 0;
-  padding: 1rem;
-  border: 1px solid "[theme:neutralLight, default: #edebe9]";
-  background: "[theme:white, default: #ffffff]";
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-canvas;
 }
 
 .detailSection h2,
 .statePanel h2 {
-  margin: 0 0 0.75rem;
+  margin: 0 0 sbs.$space-3;
+  /* Section title; nearest catalog step is 1.1rem — keep existing 1.05rem. */
   font-size: 1.05rem;
 }
 
@@ -99,7 +116,7 @@
 .actionList {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: sbs.$space-3;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -108,8 +125,8 @@
 .goalItem,
 .actionItem {
   min-width: 0;
-  padding: 0.75rem;
-  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  padding: sbs.$space-3;
+  background: sbs.$color-surface-subtle;
 }
 
 .goalLabel,
@@ -138,16 +155,24 @@
 .mutationButtons {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: sbs.$space-2;
 }
 
 .mutationButton {
   min-height: 2.25rem;
-  padding: 0.35rem 0.75rem;
-  border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
-  background: "[theme:neutralLighter, default: #f3f2f1]";
+  padding: 0.35rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-muted;
   color: inherit;
-  font-size: 0.875rem;
+  font-size: sbs.$font-size-200;
+}
+
+.mutationButton:focus,
+.mutationButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .mutationButton:disabled {
@@ -158,27 +183,29 @@
 .stateGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: sbs.$space-4;
 }
 
 .statePanel {
   min-width: 0;
-  padding: 1rem;
-  border: 1px solid "[theme:neutralLight, default: #edebe9]";
-  background: "[theme:white, default: #ffffff]";
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-canvas;
 }
 
 .statePanel dl {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: sbs.$space-2;
   margin: 0;
 }
 
 .statePanel dl div {
   display: grid;
   grid-template-columns: minmax(5rem, 0.35fr) minmax(0, 1fr);
-  gap: 0.75rem;
+  gap: sbs.$space-3;
 }
 
 .statePanel dt {
@@ -191,7 +218,7 @@
 
 @media (max-width: 768px) {
   .supportPlan {
-    padding: 0.75rem;
+    padding: sbs.$space-3;
   }
 
   .stateGrid {
@@ -200,6 +227,6 @@
 
   .statePanel dl div {
     grid-template-columns: 1fr;
-    gap: 0.25rem;
+    gap: sbs.$space-1;
   }
 }
