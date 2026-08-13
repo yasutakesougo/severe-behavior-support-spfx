@@ -128,12 +128,36 @@
   max-width: 18rem;
 }
 
+.saveStatePresentationQuiet {
+  max-width: 10rem;
+}
+
+.saveStatePresentationEmphasized {
+  max-width: 18rem;
+}
+
 .saveStateBadge {
   display: inline-block;
   padding: 0.2rem 0.55rem;
   border: 1px solid "[theme:neutralTertiary, default: #a19f9d]";
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+/* DEMO-UX-12 / RPF-005: ready browsing stays subordinate to business content */
+.saveStateBadgeQuiet {
+  padding: 0.1rem 0.35rem;
+  border-color: "[theme:neutralLight, default: #edebe9]";
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: "[theme:neutralSecondary, default: #605e5c]";
+}
+
+.saveStateBadgeEmphasized {
+  padding: 0.25rem 0.65rem;
+  border-width: 2px;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .saveStateDescription {
@@ -145,23 +169,29 @@
 }
 
 .saveState_unsaved {
-  background: #f3f2f1;
+  background: transparent;
 }
 
 .saveState_saving {
   background: #deecf9;
+  border-color: #0078d4;
+  color: #004578;
 }
 
 .saveState_saved {
-  background: #dff6dd;
+  background: transparent;
 }
 
 .saveState_save_failed {
   background: #fde7e9;
+  border-color: #a4262c;
+  color: #a4262c;
 }
 
 .saveState_save_outcome_unknown {
   background: #fff4ce;
+  border-color: #8a6116;
+  color: #8a6116;
 }
 
 .shellNav {

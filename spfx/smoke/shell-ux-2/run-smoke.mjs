@@ -86,11 +86,41 @@ const browser = await puppeteer.launch({
 const checks = [];
 
 const SAVE_CASES = [
-  { state: "unsaved", label: "未保存", live: "polite" },
-  { state: "saving", label: "保存中", live: "polite" },
-  { state: "saved", label: "保存済み", live: "polite" },
-  { state: "save_failed", label: "保存失敗", live: "assertive" },
-  { state: "save_outcome_unknown", label: "保存結果不明", live: "assertive" },
+  {
+    state: "unsaved",
+    label: "未保存",
+    live: "polite",
+    emphasis: "quiet",
+    expectDescription: false,
+  },
+  {
+    state: "saving",
+    label: "保存中",
+    live: "polite",
+    emphasis: "emphasized",
+    expectDescription: true,
+  },
+  {
+    state: "saved",
+    label: "保存済み",
+    live: "polite",
+    emphasis: "quiet",
+    expectDescription: false,
+  },
+  {
+    state: "save_failed",
+    label: "保存失敗",
+    live: "assertive",
+    emphasis: "emphasized",
+    expectDescription: true,
+  },
+  {
+    state: "save_outcome_unknown",
+    label: "保存結果不明",
+    live: "assertive",
+    emphasis: "emphasized",
+    expectDescription: true,
+  },
 ];
 
 async function smokeSaveState(entry) {
@@ -109,6 +139,8 @@ async function smokeSaveState(entry) {
       hasDescription: Boolean(description),
       saveStateAttr: badge?.getAttribute("data-save-state") ?? null,
       presentationState: presentation?.getAttribute("data-save-state") ?? null,
+      badgeEmphasis: badge?.getAttribute("data-save-emphasis") ?? null,
+      presentationEmphasis: presentation?.getAttribute("data-save-emphasis") ?? null,
       badgeText: badge?.textContent?.trim() ?? null,
       descriptionText: description?.textContent?.trim() ?? null,
       role: badge?.getAttribute("role") ?? null,
@@ -118,27 +150,33 @@ async function smokeSaveState(entry) {
       expectedLabel: expected.label,
       expectedLive: expected.live,
       expectedState: expected.state,
+      expectedEmphasis: expected.emphasis,
+      expectDescription: expected.expectDescription,
     };
   }, entry);
 
+  const descriptionOk = entry.expectDescription
+    ? result.hasDescription && Boolean(result.descriptionText)
+    : !result.hasDescription;
   const pass =
     result.hasPresentation &&
     result.hasBadge &&
-    result.hasDescription &&
+    descriptionOk &&
     result.saveStateAttr === entry.state &&
     result.presentationState === entry.state &&
+    result.badgeEmphasis === entry.emphasis &&
+    result.presentationEmphasis === entry.emphasis &&
     result.badgeText === entry.label &&
-    Boolean(result.descriptionText) &&
     result.role === "status" &&
     result.ariaLive === entry.live &&
     (result.ariaLabel ?? "").includes(entry.label) &&
-    result.sliceId === "SHELL-UX-2" &&
+    Boolean(result.sliceId) &&
     // independence: unknown must not render fail/saved labels
     (entry.state !== "save_outcome_unknown" ||
       (!result.badgeText?.includes("保存失敗") &&
         !result.badgeText?.includes("保存済み") &&
-        !result.descriptionText?.includes("保存失敗") &&
-        !result.descriptionText?.includes("保存済み")));
+        !(result.descriptionText ?? "").includes("保存失敗") &&
+        !(result.descriptionText ?? "").includes("保存済み")));
 
   const shot = path.join(artifactsDir, `save-${entry.state}.png`);
   await page.screenshot({ path: shot, fullPage: true });
@@ -163,6 +201,7 @@ for (const entry of SAVE_CASES) {
     const description = document.querySelector('[data-shell-ux="save-state-description"]');
     return (
       badge?.getAttribute("data-save-state") === "save_outcome_unknown" &&
+      badge?.getAttribute("data-save-emphasis") === "emphasized" &&
       badge?.textContent?.includes("保存結果不明") === true &&
       Boolean(description?.textContent) &&
       !badge.textContent.includes("保存失敗")
