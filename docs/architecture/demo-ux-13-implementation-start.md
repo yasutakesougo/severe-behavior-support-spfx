@@ -9,12 +9,12 @@ Human Selection: SELECTED / LOCKED（Decision-DEMO-UX-13-DETAIL-PREVIEW-EXPANSIO
 Human Implementation Start: GO（2026-08-13）
 Baseline main: 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
 Branch: cursor/demo-ux-13-detail-preview-expansion-selection-3507
-PR: #328 OPEN / Draft
+PR: #328 MERGED
 Selection: decision-demo-ux-13-detail-preview-expansion-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-13-browser-smoke.md）
 Heft test: 98 / 98 PASS
 Root test: 554 / 554 PASS
-Ready / Merge: NOT AUTHORIZED
+Ready / Merge: SUCCESS（PR #328 / c92ca6c7d6ac67b68b0227738e8ce6df34d20297；see demo-ux-13-ready.md）
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -94,8 +94,16 @@ spfx/smoke/demo-ux-13/
 Selection = SELECTED / LOCKED
 Implementation Start = GO / COMPLETE
 Verification = PASS
-Ready = NOT AUTHORIZED
-Merge = NOT AUTHORIZED
+Ready / Merge = SUCCESS / MERGED COMPLETE
 Deploy = NOT AUTHORIZED
 #299 Close = NOT AUTHORIZED
+```
+
+## Predecessor merge confirmation（this slice）
+
+```text
+PR #328 Merge = SUCCESS
+Merge commit = c92ca6c7d6ac67b68b0227738e8ce6df34d20297
+Expected HEAD guard tip = cf64104592131e7eae0610569e4208ac03e8d794（ancestor match confirmed）
+DEMO-UX-13 / DUX7-P2-1 = MERGED / COMPLETE
 ```
