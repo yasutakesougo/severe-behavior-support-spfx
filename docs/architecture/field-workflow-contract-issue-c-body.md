@@ -158,7 +158,7 @@ Related (do not auto-close):
 - [x] FW-01/02/03/07/08/09 の担当範囲を固定
 - [x] save 5-state / fail-closed / INV-07/10/17 / DADS IA 維持を固定
 - [x] SharePoint / Deploy / production write = NO-GO を固定
-- [ ] Implementation Start は別途 Human GO まで HOLD
+- [x] Implementation Start Human GO 受領（#356）
 
 ## 実装開始条件（Human GO）
 
@@ -193,11 +193,12 @@ Ready / Merge of implementation PR: HUMAN-ONLY
 Filing: COMPLETE（#356 OPEN）
 Design source: FIELD-WORKFLOW-1 assessment + A/B LOCKED contracts
 Design boundary: FIXED
-Implementation: HOLD / NO-GO
-Tests executed: 0（Issue C）
+Implementation Start: AUTHORIZED（Human GO）
+Implementation: IN PROGRESS / PR field-workflow-ui
+Tests: SPFx Jest + ~390 browser smoke
 Production: NO-GO
 SharePoint write: NO-GO
-Next: Human 「Issue #356 FIELD-WORKFLOW UI Implementation Start GO」（別途・未受領）
+Next: Human Ready / Merge of implementation PR（HUMAN-ONLY）
 ```
 
 ## 禁止

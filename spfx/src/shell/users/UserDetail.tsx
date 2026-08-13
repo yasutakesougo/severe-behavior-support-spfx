@@ -9,6 +9,8 @@ export type UserDetailProps = Readonly<{
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToUsers?: () => void;
   onSupportPlanRequest?: () => void;
+  /** FIELD-WORKFLOW #356 — open current procedure summary (FW-01). */
+  onCurrentProcedureRequest?: () => void;
 }>;
 
 const USER_DETAIL_SECTION_LABELS = ["概要", "支援計画", "記録", "評価", "履歴"] as const;
@@ -24,6 +26,7 @@ export const UserDetail: React.FC<UserDetailProps> = ({
   headingRef,
   onBackToUsers,
   onSupportPlanRequest,
+  onCurrentProcedureRequest,
 }) => {
   const {
     personLabel,
@@ -95,6 +98,17 @@ export const UserDetail: React.FC<UserDetailProps> = ({
             </div>
           ))}
         </dl>
+        <button
+          type="button"
+          className={styles.backButton}
+          disabled={!onCurrentProcedureRequest}
+          aria-disabled={!onCurrentProcedureRequest ? "true" : undefined}
+          data-demo-ux="user-detail-open-current-procedure"
+          data-field-workflow="open-current-procedure"
+          onClick={onCurrentProcedureRequest}
+        >
+          現在の支援手順を確認
+        </button>
       </section>
 
       <section className={styles.detailSection} aria-labelledby="demo-ux-plan-heading">

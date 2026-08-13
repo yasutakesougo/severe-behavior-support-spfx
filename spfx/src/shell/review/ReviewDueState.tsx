@@ -1,5 +1,12 @@
 import * as React from "react";
 import { EmptyNotice, StatusBadge } from "../primitives";
+import {
+  FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE,
+  FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE,
+  labelForProcedureRecordResult,
+  resolveProcedureReviewProjection,
+  type ShellProcedureReviewMaterial,
+} from "../procedure";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_A_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
@@ -14,6 +21,8 @@ export type ReviewDueStateProps = Readonly<{
   presentation: ShellReviewDueStatePresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToOverview?: () => void;
+  /** FIELD-WORKFLOW #356 FW-07 materials (optional). */
+  procedureReviewMaterials?: readonly ShellProcedureReviewMaterial[];
 }>;
 
 /**
@@ -26,10 +35,16 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   presentation,
   headingRef,
   onBackToOverview,
+  procedureReviewMaterials = [],
 }) => {
   const { heading, summaryPrompt, attentionSummary, attentionItems, businessFacts, systemState } =
     presentation;
   const showAttentionEmpty = attentionItems.length === 0;
+  const [selectedMaterialId, setSelectedMaterialId] = React.useState<string | undefined>();
+  const selectedMaterial = procedureReviewMaterials.find((item) => item.id === selectedMaterialId);
+  const selectedProjection = selectedMaterial
+    ? resolveProcedureReviewProjection(selectedMaterial)
+    : undefined;
 
   return (
     <section
@@ -132,6 +147,100 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
             ))}
           </ul>
         )}
+      </section>
+
+      <section className={styles.section} aria-labelledby="field-workflow-review-materials-heading">
+        <h2 id="field-workflow-review-materials-heading">見直し材料（支援手順記録）</h2>
+        <p className={styles.calculationNote} data-field-workflow="review-no-auto-judge">
+          {FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE}
+        </p>
+        {procedureReviewMaterials.length === 0 ? (
+          <EmptyNotice
+            announce
+            className={styles.calculationNote}
+            dataAttrs={{ "data-field-workflow": "review-materials-empty" }}
+          >
+            表示できる支援手順記録の材料はありません（合成 0 件）。
+          </EmptyNotice>
+        ) : (
+          <ul className={styles.cardList} data-field-workflow="review-materials-list">
+            {procedureReviewMaterials.map((item) => (
+              <li key={item.id} className={styles.card} data-field-workflow="review-material-item">
+                <div className={styles.cardMain}>
+                  <strong>{item.personLabel}</strong>
+                  <p>{labelForProcedureRecordResult(item.result)}</p>
+                  <p>
+                    plan v{item.planVersion} / {item.performedAtLabel}
+                  </p>
+                </div>
+                <div className={styles.badgeColumn}>
+                  <StatusBadge
+                    shape="soft"
+                    label={labelForProcedureRecordResult(item.result)}
+                    dataAttrs={{
+                      "data-field-workflow": "review-material-result",
+                      "data-field-workflow-result": item.result,
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className={styles.backButton}
+                    data-field-workflow="review-material-open"
+                    data-field-workflow-material-id={item.id}
+                    onClick={() => {
+                      setSelectedMaterialId(item.id);
+                    }}
+                  >
+                    元記録を表示
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        {selectedMaterial && selectedProjection ? (
+          <div
+            className={styles.card}
+            data-field-workflow="review-material-detail"
+            data-field-workflow-material-id={selectedMaterial.id}
+            data-field-workflow-plan-version={String(selectedMaterial.planVersion)}
+            data-field-workflow-historical-status={selectedMaterial.historicalLookupStatus}
+          >
+            <h3>元 ProcedureRecord</h3>
+            <p>
+              result: {labelForProcedureRecordResult(selectedMaterial.result)}（失敗扱いしません）
+            </p>
+            <p>
+              planId / planVersion: {selectedMaterial.planId} / v{selectedMaterial.planVersion}
+            </p>
+            <p>
+              Procedure: {selectedMaterial.procedureId} / {selectedMaterial.procedureVersion}
+            </p>
+            <p>
+              performedAt / recordedAt: {selectedMaterial.performedAtLabel} /{" "}
+              {selectedMaterial.recordedAtLabel}
+            </p>
+            {selectedProjection.status === "RESOLVED" ? (
+              <div data-field-workflow="review-projection-resolved">
+                <p>歴史的 planVersion からの投影（最新版へ付け替えない）</p>
+                <ul>
+                  {selectedProjection.supportMethods.map((method) => (
+                    <li key={method}>{method}</li>
+                  ))}
+                </ul>
+                <ul>
+                  {selectedProjection.precautions.map((precaution) => (
+                    <li key={precaution}>{precaution}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p data-field-workflow="review-projection-unresolved">
+                {FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE}（理由: {selectedProjection.reason}）
+              </p>
+            )}
+          </div>
+        ) : null}
       </section>
 
       <section className={styles.section} aria-labelledby="demo-ux-review-mutation-heading">
