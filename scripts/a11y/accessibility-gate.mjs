@@ -438,12 +438,13 @@ export function runAccessibilityGate() {
   // --- A11Y-INV-07: UserDetail section chrome remains non-tabs (INV-07 B) ---
   if (relExists(userDetailPath)) {
     const src = read(userDetailPath);
-    const usesStrip = /SectionLabelStrip/.test(src);
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/.*$/gm, "");
+    const usesStrip = /SectionLabelStrip/.test(code);
     const noTabRoles =
-      !src.includes("tablist") &&
-      !/role=["']tab["']/.test(src) &&
-      !/role=["']tabpanel["']/.test(src);
-    const planActionSeparate = /data-demo-ux=["']user-detail-open-plan["']/.test(src);
+      !code.includes("tablist") &&
+      !/role=["']tab["']/.test(code) &&
+      !/role=["']tabpanel["']/.test(code);
+    const planActionSeparate = /data-demo-ux=["']user-detail-open-plan["']/.test(code);
     const ok = usesStrip && noTabRoles && planActionSeparate;
     push({
       id: "A11Y-INV-07",
