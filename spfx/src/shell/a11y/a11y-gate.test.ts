@@ -52,6 +52,12 @@ describe("DADS-06 accessibility gate catalog", () => {
     const inv17 = SBS_A11Y_RULE_CATALOG.find((rule) => rule.id === "A11Y-INV-17");
     expect(inv17?.severity).toBe("blocking");
     expect(inv17?.inventoryRefs.indexOf("INV-17")).toBeGreaterThanOrEqual(0);
+    const inv10 = SBS_A11Y_RULE_CATALOG.find((rule) => rule.id === "A11Y-INV-10");
+    expect(inv10?.severity).toBe("blocking");
+    expect(inv10?.inventoryRefs.indexOf("INV-10")).toBeGreaterThanOrEqual(0);
+    const recordsHeading = SBS_A11Y_RULE_CATALOG.find((rule) => rule.id === "A11Y-HD-05");
+    expect(recordsHeading?.severity).toBe("blocking");
+    expect(recordsHeading?.inventoryRefs.indexOf("INV-09")).toBeGreaterThanOrEqual(0);
   });
 
   it("does not embed Domain status vocabulary in rule ids", () => {

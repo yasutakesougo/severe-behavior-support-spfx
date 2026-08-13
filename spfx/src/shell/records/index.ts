@@ -2,9 +2,11 @@ export { DailyRecords } from "./DailyRecords";
 export type { DailyRecordsProps } from "./DailyRecords";
 export {
   DEMO_DAILY_RECORD_DRAFT_HINT,
+  DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE,
   DEMO_DAILY_RECORD_INCOMPLETE_HINT,
   DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE,
   DEMO_DAILY_RECORD_PRESENTATION_NOTE,
+  DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE,
   DEMO_DAILY_RECORD_RECENT_HINT,
   dailyRecordCopyIsFailClosed,
 } from "./daily-record-copy";

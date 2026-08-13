@@ -1,7 +1,9 @@
 import {
   DEMO_DAILY_RECORD_DRAFT_HINT,
+  DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE,
   DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE,
   DEMO_DAILY_RECORD_PRESENTATION_NOTE,
+  DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE,
   dailyRecordCopyIsFailClosed,
 } from "./daily-record-copy";
 import {
@@ -83,5 +85,31 @@ describe("DEMO-UX-9 daily record experience", () => {
     expect(DEMO_UX_9_SLICE.adapterFetchAuthorized).toBe(false);
     expect(DEMO_UX_9_SLICE.failClosedSemanticsChangeAuthorized).toBe(false);
     expect(DEMO_UX_9_SLICE.saveOutcomeUnknownNormalizationAuthorized).toBe(false);
+  });
+});
+
+describe("DADS-UX-4 daily record presentation contracts", () => {
+  it("keeps incomplete/recent empty copy as zero-result (INV-17; not all-clear)", () => {
+    expect(DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE).toContain(
+      "表示する未完了確認はありません（合成データ）",
+    );
+    expect(DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE).toContain(
+      "業務上の未完了が無いことを示すものではありません",
+    );
+    expect(DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE).toContain(
+      "表示する最近の記録はありません（合成データ）",
+    );
+    expect(DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE).toContain(
+      "業務データが空であることを示すものではありません",
+    );
+  });
+
+  it("keeps fixture selection/status anchors for INV-10 regression", () => {
+    // Mirrored by A11Y-INV-10 — selection meaning / status labels unchanged.
+    expect(DEMO_UX_DAILY_RECORD_FIXTURE.incompleteItems.map((item) => item.statusLabel)).toEqual([
+      "未記録",
+      "要確認",
+    ]);
+    expect(DEMO_UX_DAILY_RECORD_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
   });
 });

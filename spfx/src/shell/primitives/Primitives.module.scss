@@ -90,7 +90,8 @@
   box-sizing: border-box;
 }
 
-.singleSelectOption:focus {
+.singleSelectOption:focus,
+.singleSelectOption:focus-visible {
   @include sbs.focus-ring;
 }
 
