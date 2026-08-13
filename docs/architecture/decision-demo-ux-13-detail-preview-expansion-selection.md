@@ -11,7 +11,7 @@ Predecessor: DEMO-UX-12 MERGED（PR #326 / ea12849）+ closeout sync MERGED（PR
 Source finding: DUX7-P2-1（DEMO-UX-7 Fresh Review P2）
 Follow-on queue（not this slice）: RPF-007
 Implementation Start: GO（2026-08-13）— see demo-ux-13-implementation-start.md
-Ready / Merge: NOT AUTHORIZED
+Ready / Merge: SUCCESS（PR #328 / c92ca6c）— MERGED / COMPLETE
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED
@@ -24,10 +24,10 @@ Human は DEMO-UX-12 closeout（PR #327）Merge SUCCESS を確認し、次とし
 本 Selection は **DUX7-P2-1 のみ** を SELECTED / LOCKED とする。
 
 ```text
-DEMO-UX-13 Implementation Start = GO（this follow-on docs + code on PR #328）
-RPF-007 Implementation = NOT AUTHORIZED
+DEMO-UX-13 Implementation Start = GO
+DEMO-UX-13 Ready / Merge = SUCCESS / MERGED COMPLETE（PR #328 / c92ca6c）
+RPF-007 Implementation = NOT AUTHORIZED（Selection required）
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
-Ready / Merge = NOT AUTHORIZED
 ```
 
 大規模ビジュアル刷新・全利用者分の詳細 fixture 新造は行わない。
