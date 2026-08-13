@@ -43,6 +43,17 @@ export {
   SHELL_STATUS_LABELS_DEPRECATED_PRIMARY,
   isDeprecatedPrimaryStatusLabel,
 } from "./status-labels";
+export {
+  DEMO_KPI_FAMILY_A_NOTE,
+  DEMO_KPI_FAMILY_R_NOTE,
+  DEMO_KPI_FAMILY_R_USERS_NOTE,
+  DEMO_UX_10_SLICE,
+  buildAttentionSummaryFromItems,
+  countAttentionByDueState,
+  countAttentionByReviewStatus,
+  countRowsWithBadgeId,
+  formatAttentionSummaryCountLabel,
+} from "./kpi-review-count";
 export type { OverviewActionNavigationTarget } from "../dashboard";
 export {
   DailyRecords,

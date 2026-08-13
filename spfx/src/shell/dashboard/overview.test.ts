@@ -19,7 +19,8 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
       SHELL_STATUS_LABEL_UNRECORDED,
       SHELL_STATUS_LABEL_DUE_SOON,
     ]);
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([12, 3, 2, 2]);
+    // DEMO-UX-10 Family R: needs_review / unrecorded / deadline_near match Users filter (3/2/3)
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([12, 3, 2, 3]);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.every((card) => card.statusHint.length > 0)).toBe(
       true,
     );

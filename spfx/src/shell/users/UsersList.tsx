@@ -1,4 +1,5 @@
 import * as React from "react";
+import { DEMO_KPI_FAMILY_R_USERS_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
   DEMO_USERS_DETAIL_DISABLED_NOTE,
   DEMO_USERS_FILTER_EMPTY_NOTE,
@@ -46,6 +47,8 @@ export const UsersList: React.FC<UsersListProps> = ({
       className={styles.usersList}
       data-demo-ux="users-list"
       data-demo-ux-8-slice={DEMO_UX_8_SLICE.id}
+      data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
+      data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
       aria-labelledby="demo-ux-users-heading"
@@ -62,6 +65,14 @@ export const UsersList: React.FC<UsersListProps> = ({
 
       <p className={styles.presentationNote} data-demo-ux="users-presentation-note">
         {DEMO_USERS_PRESENTATION_NOTE}
+      </p>
+
+      <p
+        className={styles.presentationNote}
+        data-demo-ux="users-metric-family-r-note"
+        data-demo-ux-metric-family="roster"
+      >
+        {DEMO_KPI_FAMILY_R_USERS_NOTE}
       </p>
 
       <div className={styles.summaryRow}>
