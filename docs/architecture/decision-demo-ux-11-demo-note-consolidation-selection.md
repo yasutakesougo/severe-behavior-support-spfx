@@ -202,7 +202,7 @@ Layer 5 — Fail-closed（非間引き）
   access_denied / retrieval_failed / unselected / save_outcome_unknown
 ```
 
-視覚的な「黄色い注記ボックス」のデザインシステム刷新は OUT。  
+視覚的な「黄色い注記ボックス」のデザインシステム刷新は OUT。
 Implementation は既存スタイルクラスのまま、**表示する注記の数と文言重複**を減らす。
 
 ### 5. Explicit non-changes（safety meaning）
@@ -221,13 +221,13 @@ Family R / Family A の対応意味を消す = forbidden（DEMO-UX-10 回帰）
 
 ### RPF-004 — DEMO注記集約
 
-1. 上記 inventory / matrix / canonical placement に従い、ready 画面の **screen-level 合成帯を除去または非表示**する  
-2. Overview KPI 専用の同義セクション注記（SEC-OV-KPI）と見直し入口の同義注記（SEC-OV-REV）を除去または Family R へ統合する  
-3. Users の filter 案内を **1系統**に集約する（FILTER_NOTE と filterHint の重複解消）  
-4. Records / Review / Support plan の **mutation-boundary 注記は残す**  
-5. DEMO-UX-10 Family R / Family A 注記は残す（短文化は可、意味削除は不可）  
-6. fail-closed / unselected / save_outcome_unknown の説明は弱めない  
-7. 関連 unit/smoke の fail-closed・導線アサーションを更新し、安全境界回帰を防ぐ  
+1. 上記 inventory / matrix / canonical placement に従い、ready 画面の **screen-level 合成帯を除去または非表示**する
+2. Overview KPI 専用の同義セクション注記（SEC-OV-KPI）と見直し入口の同義注記（SEC-OV-REV）を除去または Family R へ統合する
+3. Users の filter 案内を **1系統**に集約する（FILTER_NOTE と filterHint の重複解消）
+4. Records / Review / Support plan の **mutation-boundary 注記は残す**
+5. DEMO-UX-10 Family R / Family A 注記は残す（短文化は可、意味削除は不可）
+6. fail-closed / unselected / save_outcome_unknown の説明は弱めない
+7. 関連 unit/smoke の fail-closed・導線アサーションを更新し、安全境界回帰を防ぐ
 
 文言の最終形は Implementation で固定してよい。分類と KEEP/REMOVE 方針は変更不可。
 
@@ -266,30 +266,30 @@ Implementation Start / Ready / Merge auto-advance = OUT
 
 Implementation Start 後の受入は次をすべて満たすこと。
 
-1. **Global 判別**  
+1. **Global 判別**
    `demoMode` 時、DemoBanner が常時表示され、合成 / 実データなし / live SharePoint なしが読める。
 
-2. **重複削減**  
-   Overview / Users / Records / Review の ready 表示で、screen-level「合成・業務データ未接続」帯が重畳しない（原則 0）。  
+2. **重複削減**
+   Overview / Users / Records / Review の ready 表示で、screen-level「合成・業務データ未接続」帯が重畳しない（原則 0）。
    同一画面で「合成です・未接続です」だけの注記が 3 段以上にならない。
 
-3. **必須境界残存**  
-   - Records: 実保存不可（mutation および/または draft hint）  
-   - Review / Support plan: 書込操作不可注記  
-   - Overview 今日やること: 移動のみ・保存なし  
-   - Users: 空フィルタ誤認防止、詳細プレビュー境界  
+3. **必須境界残存**
+   - Records: 実保存不可（mutation および/または draft hint）
+   - Review / Support plan: 書込操作不可注記
+   - Overview 今日やること: 移動のみ・保存なし
+   - Users: 空フィルタ誤認防止、詳細プレビュー境界
 
-4. **DEMO-UX-10 非回帰**  
+4. **DEMO-UX-10 非回帰**
    Family R / Family A の定義・非同等が説明可能（注記または同等の短文が残る）。件数対応（3/2/3 と Review 3/2）を壊さない。
 
-5. **安全非回帰**  
-   access_denied / unselected / save_outcome_unknown の意味と可視説明が維持される。  
+5. **安全非回帰**
+   access_denied / unselected / save_outcome_unknown の意味と可視説明が維持される。
    注記削減後も「実データに接続済み」「保存できる」と読めない。
 
-6. **導線非回帰**  
+6. **導線非回帰**
    DEMO-UX-7 / 8 / 9 の操作（A/B/C、フィルタ、draft discard）が維持される。
 
-7. **検証**  
+7. **検証**
    unit および browser smoke で、注記削減後も banner / mutation 境界 / fail-closed / UX-10 対応注記を確認する。
 
 ## Gate separation
@@ -302,7 +302,7 @@ Selection GO ≠ Merge GO
 Selection GO ≠ #299 Close GO
 ```
 
-Human gate `DEMO-UX-11 Implementation Start GO` は 2026-08-13 に受領済み。  
+Human gate `DEMO-UX-11 Implementation Start GO` は 2026-08-13 に受領済み。
 次の Human gate は Fresh Review / Ready（本sliceでは Ready を要求しない）。
 
 ## Evidence referenced
