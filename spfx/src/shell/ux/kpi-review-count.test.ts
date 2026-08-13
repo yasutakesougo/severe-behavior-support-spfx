@@ -89,7 +89,9 @@ describe("DEMO-UX-10 KPI / review count correspondence", () => {
     expect(DEMO_KPI_FAMILY_R_NOTE).toContain("見直し画面の件数とは母集団が異なります");
     expect(DEMO_KPI_FAMILY_A_NOTE).toContain("確認対象一覧と同じ母集団");
     expect(DEMO_KPI_FAMILY_A_NOTE).toContain("件");
-    expect(DEMO_KPI_FAMILY_A_NOTE).toContain("利用者一覧の要確認/期限接近件数とは対象者が異なります");
+    expect(DEMO_KPI_FAMILY_A_NOTE).toContain(
+      "利用者一覧の要確認/期限接近件数とは対象者が異なります",
+    );
     expect(DEMO_KPI_FAMILY_R_USERS_NOTE).toContain("概要の要確認/未記録/期限接近と同じ定義");
     expect(DEMO_KPI_FAMILY_R_NOTE).not.toContain("見直し画面の件数と同じ");
     expect(DEMO_KPI_FAMILY_A_NOTE).not.toContain("利用者一覧と同じ定義");

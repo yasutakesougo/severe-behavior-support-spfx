@@ -11,7 +11,7 @@ Predecessor: DEMO-UX-9 MERGED（PR #322 / merge 9dd43e2；tip family 2000b85）
 Source feedback: RPF-006
 Recheck evidence: /opt/cursor/artifacts/responsible-person-recheck-9dd43e2/
 Follow-on queue（not this slice）: RPF-004 / RPF-005 / DUX7-P2-1
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（2026-08-13）— see demo-ux-10-implementation-start.md
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -25,7 +25,7 @@ Human は RESPONSIBLE-PERSON-DEMO-V1 Recheck（main @ `9dd43e2`）後、残り P
 本 Selection は **RPF-006 のみ** を SELECTED / LOCKED とする。
 
 ```text
-DEMO-UX-10 Implementation Start = NOT AUTHORIZED
+DEMO-UX-10 Implementation Start = GO（this follow-on docs + code on PR #324）
 RPF-004 / RPF-005 / DUX7-P2-1 Implementation = NOT AUTHORIZED
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
 Ready / Merge = NOT AUTHORIZED
@@ -279,7 +279,8 @@ Selection GO ≠ Merge GO
 Selection GO ≠ #299 Close GO
 ```
 
-次の Human gate は `DEMO-UX-10 Implementation Start GO`。
+Human gate `DEMO-UX-10 Implementation Start GO` は 2026-08-13 に受領済み。  
+次の Human gate は Fresh Review / Ready（本sliceでは Ready を要求しない）。
 
 ## Evidence referenced
 

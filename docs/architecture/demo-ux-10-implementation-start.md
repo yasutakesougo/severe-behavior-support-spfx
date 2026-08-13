@@ -9,12 +9,26 @@ Human Implementation Start: GO（2026-08-13）
 Baseline main: 9dd43e285c09218531260ffb565cf906b2b09574
 Branch: cursor/demo-ux-10-kpi-review-count-selection-3507
 PR: #324 OPEN / Draft
+Implementation verified HEAD: (updated on final verification commit)
 Selection: decision-demo-ux-10-kpi-review-count-selection.md
 Browser smoke: PASS / VERIFIED（demo-ux-10-browser-smoke.md）
+Heft test: 83 / 83 PASS
+Root test: 554 / 554 PASS
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 SharePoint / Entra mutation: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
+```
+
+## Verification state
+
+```text
+format:check: PASS
+lint: PASS（root）
+typecheck: PASS（root）
+root test: PASS（554 / 554）
+SPFx Heft test: PASS（83 / 83）
+browser smoke demo-ux-10: PASS（8 / 8）
 ```
 
 Depends on（再 Decision しない）:

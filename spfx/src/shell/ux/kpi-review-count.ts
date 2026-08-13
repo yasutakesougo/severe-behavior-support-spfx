@@ -4,10 +4,7 @@
  * No live calculation, GOV-RULE, or business-rule inference.
  */
 
-import {
-  SHELL_STATUS_LABEL_DUE_SOON,
-  SHELL_STATUS_LABEL_NEEDS_REVIEW,
-} from "./status-labels";
+import { SHELL_STATUS_LABEL_DUE_SOON, SHELL_STATUS_LABEL_NEEDS_REVIEW } from "./status-labels";
 
 export type RosterStatusBadgeId = "needs_review" | "unrecorded" | "deadline_near";
 
