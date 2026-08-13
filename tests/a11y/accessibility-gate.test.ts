@@ -50,6 +50,8 @@ test("DADS-06 blocking primitive checks are present", () => {
     "A11Y-DIS-01",
     "A11Y-DESC-01",
     "A11Y-HD-01",
+    "A11Y-HD-02",
+    "A11Y-OV-01",
   ]) {
     assert.match(stdout, new RegExp(`\\[PASS\\] ${id}\\b`), stdout);
   }

@@ -16,9 +16,10 @@ export type OverviewDashboardProps = Readonly<{
 }>;
 
 /**
- * DASHBOARD-UX-1 overview presentation skeleton.
+ * DASHBOARD-UX-1 / DADS-UX-2 overview presentation skeleton.
  * DEMO-UX-7 enables synthetic today-action navigation only — not save / live I/O.
  * DEMO-UX-11 removes duplicate screen-level synthetic band (global DemoBanner remains).
+ * DADS-UX-2: presentation-only token/focus convergence — IA / status vocabulary UNCHANGED.
  */
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   presentation,

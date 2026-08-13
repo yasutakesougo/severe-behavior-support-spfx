@@ -40,6 +40,9 @@ describe("DADS-06 accessibility gate catalog", () => {
     expect(inv19?.id).toBe("A11Y-HD-01");
     expect(inv19?.severity).toBe("blocking");
     expect(inv19?.coverage).toBe("covered");
+    const overviewHeading = SBS_A11Y_RULE_CATALOG.find((rule) => rule.id === "A11Y-HD-02");
+    expect(overviewHeading?.severity).toBe("blocking");
+    expect(overviewHeading?.inventoryRefs.indexOf("INV-04")).toBeGreaterThanOrEqual(0);
   });
 
   it("does not embed Domain status vocabulary in rule ids", () => {
