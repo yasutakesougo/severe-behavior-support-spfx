@@ -30,7 +30,8 @@ export const SHELL_SAVE_STATE_LABELS: Readonly<Record<ShellSaveState, string>> =
  */
 export const SHELL_SAVE_STATE_DESCRIPTIONS: Readonly<Record<ShellSaveState, string>> = {
   unsaved: "まだ保存していません。",
-  saving: "保存処理を表示中です。",
+  saving:
+    "保存処理を表示中です。進行中のため主要操作を一時停止して表示しています（合成・実保存なし）。",
   saved: "保存済みとして表示しています。",
   save_failed: "保存失敗として表示しています。",
   save_outcome_unknown: "保存結果を確認できていません。成功・失敗のいずれにも丸めません。",

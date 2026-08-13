@@ -37,6 +37,11 @@ import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
 import type { ShellSaveState } from "./save-state";
 import {
+  DEMO_UX_14_SLICE,
+  SAVING_INTERACTION_PAUSE_NOTE,
+  isSavingInteractionPaused,
+} from "./saving-progress-observability";
+import {
   isPartialRetrievalViewMode,
   isUnauthenticatedViewMode,
   type ShellViewMode,
@@ -119,6 +124,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [supportPlanPreviewOpen, setSupportPlanPreviewOpen] = React.useState(false);
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
+  const readyRegionContentRef = React.useRef<HTMLDivElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
 
   const userDetailById = new Map<string, ShellUserDetailPresentation>();
@@ -167,6 +173,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     destinationHeadingRef.current?.focus();
   }, [destination, selectedUserDetailId, supportPlanPreviewOpen, reviewDuePreviewOpen]);
 
+  const interactionPaused = isSavingInteractionPaused(saveState);
+
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
     if (onSiteSelectionChange) {
@@ -175,6 +183,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
+    if (interactionPaused) {
+      return;
+    }
     if (next === destination) {
       if (next === "users" && (selectedUserDetailId !== undefined || supportPlanPreviewOpen)) {
         shouldFocusDestinationRef.current = true;
@@ -201,7 +212,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleUserDetailRequest = (userId: string): void => {
-    if (!userDetailById.has(userId)) {
+    if (interactionPaused || !userDetailById.has(userId)) {
       return;
     }
     shouldFocusDestinationRef.current = true;
@@ -210,6 +221,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleTodayActionNavigate = (target: OverviewActionNavigationTarget): void => {
+    if (interactionPaused) {
+      return;
+    }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
     if (target.kind === "records") {
@@ -242,13 +256,16 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleBackToUsers = (): void => {
+    if (interactionPaused) {
+      return;
+    }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
     setSelectedUserDetailId(undefined);
   };
 
   const handleSupportPlanRequest = (): void => {
-    if (selectedUserDetailId !== supportPlanPresentation.userId) {
+    if (interactionPaused || selectedUserDetailId !== supportPlanPresentation.userId) {
       return;
     }
     shouldFocusDestinationRef.current = true;
@@ -256,16 +273,25 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleBackToUserDetail = (): void => {
+    if (interactionPaused) {
+      return;
+    }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
   };
 
   const handleReviewDueStateRequest = (): void => {
+    if (interactionPaused) {
+      return;
+    }
     shouldFocusDestinationRef.current = true;
     setReviewDuePreviewOpen(true);
   };
 
   const handleBackToOverview = (): void => {
+    if (interactionPaused) {
+      return;
+    }
     shouldFocusDestinationRef.current = true;
     setReviewDuePreviewOpen(false);
   };
@@ -277,7 +303,20 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const showPartialRetrieval =
     !unauthenticated && !siteBlocked && isPartialRetrievalViewMode(viewMode);
   const showReadyRegion = !unauthenticated && !siteBlocked && viewMode === "ready";
-  const navDisabled = !isShellPrimaryNavigationEnabled(viewMode, selection);
+  const navDisabled =
+    !isShellPrimaryNavigationEnabled(viewMode, selection) || interactionPaused;
+
+  React.useEffect(() => {
+    const node = readyRegionContentRef.current;
+    if (!node) {
+      return;
+    }
+    if (interactionPaused) {
+      node.setAttribute("inert", "");
+    } else {
+      node.removeAttribute("inert");
+    }
+  }, [interactionPaused, showReadyRegion, destination]);
 
   return (
     <div
@@ -288,7 +327,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
       data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
+      data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
       data-demo-ux-7-today-nav="true"
+      data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
     >
       <a className={styles.skipLink} href="#shell-ux-main">
         メイン内容へスキップ
@@ -344,8 +385,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               className={className}
               data-shell-ux-nav={item.id}
               data-shell-ux-nav-selected={selected ? "true" : "false"}
+              data-shell-ux-nav-saving-paused={interactionPaused ? "true" : "false"}
               aria-current={selected ? "page" : undefined}
               disabled={navDisabled}
+              aria-disabled={navDisabled ? true : undefined}
               onClick={() => {
                 if (!navDisabled) {
                   handleDestinationChange(item.id);
@@ -378,7 +421,32 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
           <StatusPanel mode={viewMode} correlationId={correlationId} errorCode={errorCode} />
         )}
         {showReadyRegion ? (
-          <div className={styles.readyRegion} data-shell-ux="ready-region">
+          <div
+            className={
+              interactionPaused
+                ? `${styles.readyRegion} ${styles.readyRegionSavingPaused}`
+                : styles.readyRegion
+            }
+            data-shell-ux="ready-region"
+            data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
+            aria-busy={interactionPaused ? true : undefined}
+          >
+            {interactionPaused ? (
+              <p
+                className={styles.savingInteractionPauseNote}
+                data-shell-ux="saving-interaction-pause-note"
+                role="status"
+              >
+                {SAVING_INTERACTION_PAUSE_NOTE}
+              </p>
+            ) : null}
+            <div
+              ref={readyRegionContentRef}
+              className={
+                interactionPaused ? styles.readyRegionSavingPausedContent : undefined
+              }
+              data-shell-ux="ready-region-content"
+            >
             {destination === "overview" ? (
               reviewDuePreviewOpen ? (
                 <ReviewDueState
@@ -435,6 +503,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               />
             )}
             {children}
+            </div>
           </div>
         ) : null}
       </main>

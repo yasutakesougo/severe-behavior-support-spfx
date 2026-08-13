@@ -10,7 +10,7 @@ Baseline main: b7897818ea3b334f5e6c2430e656c0bf3d2078f2
 Predecessor: DEMO-UX-13 MERGED（PR #328 / c92ca6c）+ closeout sync MERGED（PR #329 / b789781）
 Source feedback: RPF-007（P3）
 Follow-on queue（not this slice）: none required（#299 remaining backlog may still include holdovers）
-Implementation Start: NOT AUTHORIZED
+Implementation Start: GO（2026-08-13）— see demo-ux-14-implementation-start.md
 Ready / Merge: NOT AUTHORIZED
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
@@ -24,7 +24,7 @@ Human は DEMO-UX-13 closeout（PR #329）Merge SUCCESS を確認し、次とし
 本 Selection は **RPF-007 のみ** を SELECTED / LOCKED とする。
 
 ```text
-DEMO-UX-14 Implementation Start = NOT AUTHORIZED（separate Human GO）
+DEMO-UX-14 Implementation Start = GO（2026-08-13）— see demo-ux-14-implementation-start.md
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
 Ready / Merge = NOT AUTHORIZED
 ```
