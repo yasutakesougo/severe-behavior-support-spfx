@@ -1,7 +1,9 @@
 # FIELD-WORKFLOW Contract Issue A — SupportPlanVersionProcedureBinding implementation boundary
 
-Status: GO-SLICE / HUMAN AUTHORIZED (Issue #347 契約実装 GO)  
-Human decision date: 2026-08-13  
+Status: GO-SLICE / HUMAN AUTHORIZED (Issue #347 契約実装 GO)
+
+Human decision date: 2026-08-13
+
 Source:
 - Issue #347
 - Decision-FIELD-WORKFLOW-CONTRACT-A-OPTION-A2-1 = SELECTED / LOCKED
