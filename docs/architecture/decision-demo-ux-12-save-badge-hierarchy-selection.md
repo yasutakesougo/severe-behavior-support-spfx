@@ -11,7 +11,8 @@ Predecessor: DEMO-UX-11 MERGED（PR #325 / merge 23bc67a；tip a816445 ancestor�
 Source feedback: RPF-005
 Follow-on queue（not this slice）: DUX7-P2-1 / RPF-007
 Implementation Start: GO（2026-08-13）— see demo-ux-12-implementation-start.md
-Ready / Merge: NOT AUTHORIZED
+Ready: COMPLETE（2026-08-13）— see demo-ux-12-ready.md
+Merge: HOLD
 #299 Close: NOT AUTHORIZED
 Production deploy: NOT AUTHORIZED
 SharePoint write: NOT AUTHORIZED
@@ -25,9 +26,10 @@ Human は DEMO-UX-11（RPF-004）Merge SUCCESS を確認し、残り P2 の次�
 
 ```text
 DEMO-UX-12 Implementation Start = GO（this follow-on docs + code on PR #326）
+DEMO-UX-12 Ready = COMPLETE（PR #326 Ready for Review）
+DEMO-UX-12 Merge = HOLD
 DUX7-P2-1 / RPF-007 Implementation = NOT AUTHORIZED
 Deploy / SharePoint write / #299 Close = NOT AUTHORIZED
-Ready / Merge = NOT AUTHORIZED
 ```
 
 大規模ビジュアルデザイン刷新は行わない。保存状態バッジ／説明の**強調階層**だけを直し、ready 閲覧時に業務情報より目立たないようにする。
