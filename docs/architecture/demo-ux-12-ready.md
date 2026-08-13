@@ -92,10 +92,19 @@ DUX7-P2-1 Selection / Implementation
 RPF-007 Selection / Implementation
 ```
 
-## Next candidates（not authorized）
+## Closeout PR #327 — Merge result
 
 ```text
-After PR #327 Merge（separate Human gate）:
-1. DUX7-P2-1 — 一覧詳細プレビュー拡張（Selection required）
-2. RPF-007 — 保存中の可観測性（P3-ish；Selection required）
+Human Merge Decision = GO
+Merge = SUCCESS
+Merge commit = 59c4a89b6378f6c9219fe351bfbdb795e11f65fb
+Expected tip = 76ee13413de03311ca4e5b45b77c8d46ea1b5f62（ancestor match confirmed）
+DEMO-UX-12 closeout sync = COMPLETE
+```
+
+## Next candidates
+
+```text
+1. DUX7-P2-1 / DEMO-UX-13 — Selection SELECTED / LOCKED（Implementation Start NOT AUTHORIZED）
+2. RPF-007 — 保存中の可観測性（P3-ish；Selection required；NOT AUTHORIZED）
 ```
