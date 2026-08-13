@@ -63,9 +63,39 @@ RPF-007 Implementation
 DUX7-P2-1 Implementation（Selection not yet authorized）
 ```
 
+## Closeout PR #327 — Ready Decision
+
+```text
+PR: #327（docs-only merge closeout sync）
+Purpose: ledger / Ready / Selection / Implementation Start / Fresh Review 同期
+Human Ready Decision: GO（2026-08-13）
+Status: Ready COMPLETE / Merge HOLD
+PR tip at Human Ready Decision: 92293e942dc3bf072e59d167dc17da6f70a3b5b7
+Base main: ea12849f9b21b9a465b53c0e915167483ba83ad4
+Scope: docs/architecture only（no code）
+```
+
+### Authorized by this Closeout Ready Decision
+
+```text
+Mark PR #327 Ready for Review
+```
+
+### NOT AUTHORIZED by this Closeout Ready Decision
+
+```text
+Merge（PR #327）
+Deploy
+SharePoint write
+#299 Close
+DUX7-P2-1 Selection / Implementation
+RPF-007 Selection / Implementation
+```
+
 ## Next candidates（not authorized）
 
 ```text
+After PR #327 Merge（separate Human gate）:
 1. DUX7-P2-1 — 一覧詳細プレビュー拡張（Selection required）
 2. RPF-007 — 保存中の可観測性（P3-ish；Selection required）
 ```
