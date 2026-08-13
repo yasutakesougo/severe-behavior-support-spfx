@@ -1,7 +1,9 @@
+@use "../tokens/sbs-tokens" as sbs;
+
 .reviewDueState {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: sbs.$space-5;
   min-width: 0;
   max-width: 100%;
 }
@@ -10,22 +12,47 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 12px;
+  gap: sbs.$space-3;
 }
 
 .backButton {
   min-height: 40px;
-  padding: 8px 12px;
+  padding: sbs.$space-2 sbs.$space-3;
+}
+
+.backButton:focus,
+.backButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.backButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.reviewHeading {
+  margin: 0;
+  outline: none;
+}
+
+/* INV-03 KEEP: programmatic destination focus remains visible. */
+.reviewHeading:focus,
+.reviewHeading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .presentationNote,
 .mutationNote,
 .calculationNote {
   margin: 0;
-  padding: 12px 16px;
-  border: 1px solid "[theme:neutralLight, default:#edebe9]";
-  border-radius: 8px;
-  background: "[theme:neutralLighterAlt, default:#faf9f8]";
+  padding: sbs.$space-3 sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-md;
+  background: sbs.$color-surface-subtle;
 }
 
 .presentationNote {
@@ -38,10 +65,13 @@
 
 .section {
   min-width: 0;
+  /* Existing Review panel padding dialect (20px); no exact DADS-04 space step. */
   padding: 20px;
-  border: 1px solid "[theme:neutralLight, default:#edebe9]";
-  border-radius: 12px;
-  background: "[theme:white, default:#ffffff]";
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-lg;
+  background: sbs.$color-surface-canvas;
 }
 
 .section h2,
@@ -53,8 +83,8 @@
 .cardList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin: 12px 0 0;
+  gap: sbs.$space-3;
+  margin: sbs.$space-3 0 0;
   padding: 0;
   list-style: none;
 }
@@ -62,15 +92,17 @@
 .summaryList {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: sbs.$space-3;
 }
 
 .summaryCard,
 .card {
   min-width: 0;
-  padding: 16px;
-  border: 1px solid "[theme:neutralLight, default:#edebe9]";
-  border-radius: 8px;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-md;
 }
 
 .summaryCard {
@@ -81,7 +113,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: sbs.$space-4;
 }
 
 .cardMain p {
@@ -92,42 +124,42 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 8px;
+  gap: sbs.$space-2;
   flex: 0 0 auto;
-}
-
-.statusBadge,
-.dueBadge {
-  padding: 4px 8px;
-  border: 1px solid "[theme:neutralSecondary, default:#605e5c]";
-  border-radius: 4px;
-  font-weight: 600;
 }
 
 .actionRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
+  gap: sbs.$space-2;
+  margin-top: sbs.$space-3;
 }
 
 .actionRow button {
   min-height: 40px;
-  padding: 8px 16px;
+  padding: sbs.$space-2 sbs.$space-4;
+}
+
+.actionRow button:focus,
+.actionRow button:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .stateGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: sbs.$space-4;
 }
 
 .statePanel {
   min-width: 0;
   padding: 20px;
-  border: 1px solid "[theme:neutralLight, default:#edebe9]";
-  border-radius: 12px;
-  background: "[theme:neutralLighterAlt, default:#faf9f8]";
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-lg;
+  background: sbs.$color-surface-subtle;
 }
 
 .statePanel dl {
@@ -137,8 +169,8 @@
 .statePanel dl div {
   display: grid;
   grid-template-columns: minmax(88px, auto) minmax(0, 1fr);
-  gap: 12px;
-  margin-top: 8px;
+  gap: sbs.$space-3;
+  margin-top: sbs.$space-2;
 }
 
 .statePanel dt {

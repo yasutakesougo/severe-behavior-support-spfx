@@ -1,6 +1,7 @@
 export { ReviewDueState } from "./ReviewDueState";
 export type { ReviewDueStateProps } from "./ReviewDueState";
 export {
+  DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE,
   DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_PRESENTATION_NOTE,
