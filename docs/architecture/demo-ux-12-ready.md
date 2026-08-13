@@ -8,6 +8,7 @@ Human Ready Decision: GO（2026-08-13）
 Status: Ready COMPLETE / Merge HOLD
 Implementation verified HEAD: bf600e567664ef47bfc19bf521b94a39ef9ae305
 PR tip at Human Ready Decision: 8be6ed4d4f8cad461b392eba3ddf0f8f96a1b636
+PR tip after Ready evidence commit: 72f01aa2c52119364a022adfd69115089e99561c
 Merge: HOLD（not executed）
 ```
 
