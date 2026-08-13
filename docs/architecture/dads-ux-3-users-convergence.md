@@ -100,11 +100,21 @@ SupportPlan nested restyle（optional later；not required for Users entry）
 ## 6. Verification (this PR)
 
 ```text
-format:check: (recorded after run)
-root lint / typecheck / unit: (recorded after run)
-check:a11y: (recorded after run；new Users gates)
-SPFx Heft test: (recorded after run)
-SPFx production build: (recorded after run)
-browser smoke: (recorded after run)
+HEAD: dfacca91414fa5fdca3ec841428fccd8e5968430
+Baseline main: 5775c55be0a9d9d9f76b30be236fdcb4fd9cb105
+format:check: PASS
+root lint / typecheck / unit: PASS (557/557)
+check:contracts-boundaries / check:scope: PASS
+check:a11y: PASS（20 checks；A11Y-HD-03/04, A11Y-US-01, A11Y-UD-01, A11Y-INV-07/17 added）
+SPFx Heft test: PASS (123/123)
+SPFx production build: PASS
+browser smoke PASS:
+  DEMO-UX-8 / DEMO-UX-3 / DEMO-UX-13（Users / User detail）
+  DEMO-UX-7 / DEMO-UX-11 / SHELL-UX-1
+  DEMO-UX-10 overview-family-r case PASS
+browser smoke KNOWN stale（pre-existing；Users token 起因ではない）:
+  DEMO-UX-2（expects all detail disabled + records placeholder；later DEMO-UX superseded）
+  dashboard-ux-1（expects disabled actions / users placeholder；later DEMO-UX superseded）
+  DEMO-UX-10 users-family-r note phrase drift（expects older copy；counts PASS）
 Smoke expectations: NOT weakened
 ```
