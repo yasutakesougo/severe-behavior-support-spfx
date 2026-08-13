@@ -98,4 +98,11 @@ describe("DEMO-UX-12 save badge hierarchy (RPF-005)", () => {
     expect(emphasisForShellSaveState("saving")).toBe("emphasized");
     expect(emphasisForShellSaveState("saved")).toBe("quiet");
   });
+
+  it("keeps saving description presentation-only and non-success", () => {
+    const saving = descriptionForShellSaveState("saving");
+    expect(saving).toContain("保存処理を表示中");
+    expect(saving).toContain("実保存なし");
+    expect(saving).not.toContain("保存済み");
+  });
 });

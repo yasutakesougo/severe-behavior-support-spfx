@@ -11,7 +11,7 @@ export const DEMO_UX_12_SLICE = {
   /** Visual/description hierarchy only — not outcome semantics. */
   saveStateSemanticsChangeAuthorized: false as const,
   saveOutcomeUnknownNormalizationAuthorized: false as const,
-  saveProgressUiAuthorized: false as const, // RPF-007 OUT
+  saveProgressUiAuthorized: false as const, // RPF-007 → DEMO-UX-14
   liveTenantIoAuthorized: false as const,
   sharePointRestAuthorized: false as const,
   sharePointWriteAuthorized: false as const,
