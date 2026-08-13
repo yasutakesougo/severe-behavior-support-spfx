@@ -61,10 +61,11 @@
 - 未記載操作は禁止とする（Fail Closed）
 - 区分が重複する場合は、`禁止` > `人の事前承認` > `AI単独` の順に厳しい区分を優先する
 - 「案作成（AI単独）」と「投稿・反映（人の事前承認）」を同一区分にしない
-- Review PASS なしの Merge は認めない（人の事前承認区分）
-- Review PASS は review 対象 head SHA に拘束する。merge 対象 expected head SHA と一致必須
+- Merge は人の事前承認区分とする（明示 Human Merge GO 必須）
+- **Solo development Merge Gate**（本リポジトリの既定運用）: submitted GitHub Review PASS は必須としない。代わりに Fresh Review PASS・P0=0・P1=0・CI SUCCESS・HEAD unchanged（承認時 expected head SHA 一致）・mergeable=clean・明示 Human Merge GO を必須とする
+- 複数人レビューが必要な場合（Human が submitted Review PASS を要求したとき）は、Review PASS を review 対象 head SHA に拘束し、merge 対象 expected head SHA と一致必須
 - 人の承認は、対象・操作・範囲・版に拘束する
-- 対象 SHA、artifact、環境、変更範囲のいずれかが変わった場合、既存承認および Review PASS は失効し `HOLD` へ戻す
+- 対象 SHA、artifact、環境、変更範囲のいずれかが変わった場合、既存承認および（要求されている場合の）Review PASS は失効し `HOLD` へ戻す
 - 現在の HOLD（実装未開始）と、本 DEC の恒久的な権限区分を混同しない
 - 本 DEC と既存正本が矛盾する場合、本 DEC を優先し、後続で既存正本を整合更新する
 
@@ -92,14 +93,40 @@
 
 | 操作 | 承認が拘束する対象 |
 |---|---|
-| PR マージ | repository、PR 番号、expected head SHA。同一 head SHA に対する Review PASS が存在すること。unresolved P0 = 0、unresolved P1 = 0 |
-| Review PASS | repository、PR 番号、review 対象 head SHA |
+| PR マージ | repository、PR 番号、expected head SHA。unresolved P0 = 0、unresolved P1 = 0。Solo development: Fresh Review PASS + CI SUCCESS + mergeable=clean + 明示 Human Merge GO（submitted GitHub Review PASS は非必須）。複数人レビュー要求時のみ同一 head SHA の Review PASS を追加必須 |
+| Review PASS | repository、PR 番号、review 対象 head SHA（複数人レビュー要求時） |
 | force-push（非保護の自 feature branch） | repository、branch 名、expected remote head SHA、force-push 理由 |
 | 承認済み検証環境への deploy | 対象環境、artifact 名、version または SHA |
 | Issue・PR・レビュー投稿 | repository、対象番号、投稿内容の範囲 |
 | 設定変更（別プロセスで扱う場合） | 対象リソース、変更項目、before / after |
 
-### Review PASS の有効条件
+### Solo development Merge Gate（既定）
+
+一人開発（sole human owner）では、submitted GitHub Review PASS を Merge の必須条件にしない。
+
+Required:
+
+```text
+Fresh Review = PASS
+P0 = 0
+P1 = 0
+CI = SUCCESS
+HEAD unchanged（Human Merge GO が拘束する expected head SHA と一致）
+mergeable = clean
+explicit Human Merge GO
+```
+
+Not required:
+
+```text
+submitted GitHub Review PASS
+```
+
+Fresh Review は実装者視点とは別に実施する品質監査（agent Fresh Review を含む）とし、結果と対象 head SHA を記録する。Human Merge GO は repository / PR 番号 / expected head SHA を拘束する。
+
+### Review PASS の有効条件（複数人レビュー要求時）
+
+Human が submitted Review PASS を要求した場合のみ適用する。
 
 - repository、PR 番号、review 対象 head SHA を記録する
 - Review PASS の head SHA は、merge 対象 expected head SHA と一致必須
@@ -110,8 +137,8 @@
 失効規則:
 
 - head SHA、artifact、対象環境、変更範囲のいずれかが承認時と異なる場合、既存承認は無効
-- Review PASS の head SHA が merge 対象 expected head SHA と一致しない場合、Review PASS およびマージ承認は無効
-- force-push により open PR の head が変わった場合、当該 PR の merge 承認および Review PASS は失効し、再レビューへ戻す
+- （Review PASS が要求されている場合）Review PASS の head SHA が merge 対象 expected head SHA と一致しない場合、Review PASS およびマージ承認は無効
+- force-push により open PR の head が変わった場合、当該 PR の merge 承認および（要求されている場合の）Review PASS は失効し、再レビューへ戻す
 - 無効化した操作は `HOLD` とし、再承認なしに進行しない
 
 ## 選択肢
@@ -146,7 +173,7 @@ Fail Closed と矛盾しやすく、本 DEC では採用しない。
 | PR レビューコメント案 | AI単独 | — |
 | PR レビュー投稿 | 人の事前承認 | repository、PR 番号、投稿内容の範囲を拘束 |
 | ラベル更新 | 人の事前承認 | repository、対象番号、ラベル範囲を拘束 |
-| PR マージ | 人の事前承認 | repository、PR 番号、expected head SHA を拘束。同一 head SHA に対する Review PASS が存在。unresolved P0 = 0、unresolved P1 = 0 |
+| PR マージ | 人の事前承認 | repository、PR 番号、expected head SHA を拘束。Solo development Merge Gate（Fresh Review PASS / P0=0 / P1=0 / CI SUCCESS / mergeable=clean / Human Merge GO）。submitted GitHub Review PASS は非必須。unresolved P0 = 0、unresolved P1 = 0 |
 | ローカルのコード・文書変更 | AI単独 | **実装開始承認済み**、かつ承認済み Issue の範囲内 |
 | ローカル検証（typecheck / test / build / diff 確認） | AI単独 | — |
 | git commit | AI単独 | 承認済み Issue の範囲内。保護ブランチへの直接 commit は禁止 |
@@ -181,7 +208,7 @@ AI 許可操作と人の承認境界は、操作単位の権限マトリクス�
 
 `main` / 保護ブランチへの直接 push および force-push、本番 deploy、SharePoint App Catalog 登録・更新、SharePoint / Entra ID / Microsoft 365 変更、本番データ変更、Notion 本番ページ更新は **禁止** とする。
 
-PR マージは、同一 head SHA に対する Review PASS（unresolved P0 / P1 = 0）と、expected head SHA 拘束の人の事前承認を必須とする。
+PR マージは、expected head SHA 拘束の人の事前承認（Human Merge GO）と unresolved P0 / P1 = 0 を必須とする。Solo development では Fresh Review PASS / CI SUCCESS / mergeable=clean を併せて必須とし、submitted GitHub Review PASS は必須としない。複数人レビューを Human が要求したときのみ、同一 head SHA の Review PASS を追加必須とする。
 
 本決定は、MCP 接続実装、認証設定、`.agents/mcp/` の作成、実装開始そのもの、ディレクトリ新設、既存正本移動を承認しない。
 
@@ -191,7 +218,8 @@ PR マージは、同一 head SHA に対する Review PASS（unresolved P0 / P1 
 - 現行プロセスが認めるローカル変更・検証を、Fail Closed 下でも実施可能にする
 - deploy を環境・成果物単位に分割し、SharePoint 配備との区分衝突を避ける
 - force-push を人の事前承認とし、他者 commit 上書きリスクを避ける
-- Review PASS と merge 承認を同一 head SHA に拘束し、古いレビュー結果の流用を防ぐ
+- merge 承認を expected head SHA に拘束し、古い承認の流用を防ぐ
+- 一人開発では submitted GitHub Review PASS を必須にすると運用が停滞するため、Fresh Review + Human Merge GO を正本化する
 - 選択肢 B / C は Fail Closed または実運用と合わない
 
 ## 承認記録
@@ -246,3 +274,4 @@ Decision Units が揃ったあとの実装着手は、別途「実装開始の�
 | P2-1 Notion 操作名に状態が混在 | `Notion 本番ページ更新` に改名し、区分を禁止に固定。行は 1 区分形式へ統一 |
 | 再レビュー P1-1 force-push 安全条件不足 | 非保護自 feature branch の force-push を **人の事前承認**（案A）へ変更 |
 | 再レビュー P1-2 Review PASS が head 非拘束 | Review PASS 有効条件を追加。PR マージは同一 head SHA の Review PASS + P0/P1 = 0 を必須化 |
+| Solo development Merge Gate（2026-08-13 / PR #335 運用是正） | 一人開発既定では submitted GitHub Review PASS を非必須化。Fresh Review PASS + P0/P1=0 + CI SUCCESS + HEAD unchanged + mergeable=clean + Human Merge GO を Merge Gate とする |

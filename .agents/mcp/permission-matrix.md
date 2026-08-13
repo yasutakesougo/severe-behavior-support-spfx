@@ -30,9 +30,10 @@
 - 未記載操作は **禁止**（Fail Closed）
 - 区分が重複する場合の優先順: `禁止` > `人の事前承認` > `AI単独`
 - 「案作成（AI単独）」と「投稿・反映（人の事前承認）」を同一区分にしない
-- Review PASS なしの Merge は認めない
+- Merge は人の事前承認（明示 Human Merge GO）必須。Solo development Merge Gate（既定）では submitted GitHub Review PASS は非必須
+- Solo development Merge Gate Required: Fresh Review PASS / P0=0 / P1=0 / CI SUCCESS / HEAD unchanged / mergeable=clean / Human Merge GO
 - 人の承認は対象・操作・範囲・版（head SHA / artifact / 環境）に拘束する
-- head SHA、artifact、環境、変更範囲のいずれかが変化した場合、既存承認および Review PASS は失効し `HOLD` へ戻す
+- head SHA、artifact、環境、変更範囲のいずれかが変化した場合、既存承認および（要求されている場合の）Review PASS は失効し `HOLD` へ戻す
 
 ## 操作単位マトリクス
 
@@ -51,7 +52,7 @@
 | review 投稿 | 人の事前承認 | repository、PR 番号、投稿内容の範囲を拘束 |
 | ラベル変更 | 人の事前承認 | repository、対象番号、ラベル範囲を拘束 |
 | Ready 化 | 人の事前承認 | repository、PR 番号、expected head SHA を拘束。DEC 上は PR 状態更新に相当 |
-| マージ | 人の事前承認 | repository、PR 番号、expected head SHA。同一 head SHA の Review PASS。unresolved P0 = 0、unresolved P1 = 0 |
+| マージ | 人の事前承認 | repository、PR 番号、expected head SHA。Solo development: Fresh Review PASS + CI SUCCESS + mergeable=clean + Human Merge GO（submitted GitHub Review PASS 非必須）。unresolved P0 = 0、unresolved P1 = 0 |
 
 ### Git / ローカル
 
