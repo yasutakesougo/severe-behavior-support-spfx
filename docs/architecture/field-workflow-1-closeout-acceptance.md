@@ -15,7 +15,8 @@ Contract B: PR #354 / Issue #352（OPEN — auto-close NO-GO）
 UI Issue C: #356（OPEN — close eligibility: YES / Human-only）
 ```
 
-Assessment baseline（PR #345）: `docs/architecture/field-workflow-1-assessment.md`  
+Assessment baseline（PR #345）: `docs/architecture/field-workflow-1-assessment.md`
+
 UI Implementation Start: `docs/architecture/field-workflow-ui-implementation-start.md`
 
 ---
@@ -113,7 +114,7 @@ ABC / Observation recording-ui（#69）
 |---|---|---|
 | root `npm test` | **PASS** | 578 / 0 |
 | ProcedureRecord + binding contracts（included in root suite） | **PASS** | includes FW05-HIST-01/02 |
-| FIELD-WORKFLOW UI unit (`procedure.test.ts`) | **PASS** | included via SPFx suite path in #357；shell unit logic covered in `spfx/src/shell/procedure/procedure.test.ts` |
+| FIELD-WORKFLOW UI unit (`procedure.test.ts`) | **PASS（#357 Heft）** | root `npm test` does **not** include `spfx/**`；unit covered by #357 SPFx Heft + closeout smoke/contracts re-run |
 | FIELD-WORKFLOW ~390 browser smoke（re-run） | **PASS** | all checks true；report `/opt/cursor/artifacts/field_workflow_closeout_smoke_report.json` |
 
 Smoke checks（re-run）：
