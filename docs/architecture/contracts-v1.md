@@ -112,6 +112,12 @@ severe-behavior-support.support-plan.plan @ 1.0.0
 severe-behavior-support.support-plan.plan-version @ 1.0.0
 ```
 
+SupportPlanVersionProcedureBinding（Issue #347 / Option A2 / Design-FIELD-WORKFLOW-CONTRACT-A-MIN-SHAPE-1）:
+
+```text
+severe-behavior-support.support-plan.version-procedure-binding @ 1.0.0
+```
+
 AssessmentSnapshot系の正式値（Decision-AS-SCHEMA-ID-1 / Decision-AS-SCHEMA-VERSION-1）:
 
 ```text
