@@ -121,10 +121,7 @@ export {
   SHELL_PRIMARY_NAV_ITEMS,
   type ShellPrimaryNavigationId,
 } from "./primary-navigation";
-export {
-  DEMO_UX_12_SLICE,
-  type ShellSaveStateEmphasis,
-} from "./save-badge-hierarchy";
+export { DEMO_UX_12_SLICE, type ShellSaveStateEmphasis } from "./save-badge-hierarchy";
 export {
   SHELL_SAVE_STATES,
   SHELL_SAVE_STATE_DESCRIPTIONS,

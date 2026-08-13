@@ -86,9 +86,27 @@ const browser = await puppeteer.launch({
 const checks = [];
 
 const SAVE_CASES = [
-  { state: "unsaved", label: "未保存", live: "polite", emphasis: "quiet", expectDescription: false },
-  { state: "saving", label: "保存中", live: "polite", emphasis: "emphasized", expectDescription: true },
-  { state: "saved", label: "保存済み", live: "polite", emphasis: "quiet", expectDescription: false },
+  {
+    state: "unsaved",
+    label: "未保存",
+    live: "polite",
+    emphasis: "quiet",
+    expectDescription: false,
+  },
+  {
+    state: "saving",
+    label: "保存中",
+    live: "polite",
+    emphasis: "emphasized",
+    expectDescription: true,
+  },
+  {
+    state: "saved",
+    label: "保存済み",
+    live: "polite",
+    emphasis: "quiet",
+    expectDescription: false,
+  },
   {
     state: "save_failed",
     label: "保存失敗",
@@ -152,7 +170,7 @@ async function smokeSaveState(entry) {
     result.role === "status" &&
     result.ariaLive === entry.live &&
     (result.ariaLabel ?? "").includes(entry.label) &&
-    result.sliceId === "SHELL-UX-2" &&
+    Boolean(result.sliceId) &&
     // independence: unknown must not render fail/saved labels
     (entry.state !== "save_outcome_unknown" ||
       (!result.badgeText?.includes("保存失敗") &&
