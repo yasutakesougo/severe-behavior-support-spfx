@@ -32,7 +32,13 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
         partialRetrieval={partialRetrieval}
       >
         <section className={styles.scaffoldShell} data-shell-ux="shell-body">
-          <h2 className={styles.bodyTitle}>{strings.ShellReadyTitle}</h2>
+          {/*
+            DADS-UX-1 / INV-19: host chrome must not use heading elements.
+            Destination screens own h1/h2; this is presentation-only status copy.
+          */}
+          <p className={styles.bodyTitle} data-shell-ux="shell-host-status">
+            {strings.ShellReadyTitle}
+          </p>
           <p className={styles.bodyCopy}>{strings.ShellReadyDescription}</p>
           <p className={styles.bodyMeta}>
             {strings.PropertyValueLabel} <strong>{escape(description)}</strong>

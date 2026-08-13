@@ -1,23 +1,28 @@
+@use "../../../shell/tokens/sbs-tokens" as sbs;
+
 .scaffoldShell {
   overflow: hidden;
-  padding: 0.25rem 0;
-  color: "[theme:bodyText, default: #323130]";
+  padding: sbs.$space-1 0;
+  color: sbs.$color-text-primary;
   color: var(--bodyText);
 }
 
 .bodyTitle {
-  margin: 0 0 0.5rem;
-  font-size: 1.15rem;
+  margin: 0 0 sbs.$space-2;
+  font-size: sbs.$font-size-400;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .bodyCopy {
-  margin: 0 0 0.75rem;
+  margin: 0 0 sbs.$space-3;
   max-width: 42rem;
+  font-size: sbs.$font-size-300;
   line-height: 1.5;
 }
 
 .bodyMeta {
-  margin: 0.35rem 0 0;
-  font-size: 0.875rem;
+  margin: sbs.$space-2 0 0;
+  font-size: sbs.$font-size-200;
   opacity: 0.9;
 }

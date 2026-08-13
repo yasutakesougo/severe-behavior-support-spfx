@@ -15,7 +15,7 @@ export const SBS_A11Y_GATE_SLICE = {
   id: "DADS-06",
   kind: "accessibility-gate" as const,
   screenMigrationAuthorized: false as const,
-  inv19HeadingFixAuthorized: false as const,
+  inv19HeadingFixAuthorized: true as const,
   domainContractsMutationAuthorized: false as const,
   sharePointWriteAuthorized: false as const,
   deployAuthorized: false as const,
@@ -67,10 +67,11 @@ export const SBS_A11Y_RULE_CATALOG: readonly SbsA11yRule[] = [
   {
     id: "A11Y-HD-01",
     focus: "heading",
-    severity: "known_gap",
-    coverage: "detect_only",
+    severity: "blocking",
+    coverage: "covered",
     inventoryRefs: ["INV-19"],
-    summary: "Scaffold host bodyTitle h2 remains detectable (INV-19); fix NOT AUTHORIZED here",
+    summary:
+      "Scaffold host bodyTitle must remain non-heading (DADS-UX-1 INV-19 resolved; regression blocking)",
   },
   {
     id: "A11Y-AN-01",

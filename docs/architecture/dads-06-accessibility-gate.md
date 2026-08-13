@@ -11,8 +11,9 @@ Authority:
   docs/architecture/dads-04-design-tokens.md
   docs/architecture/dads-05-shared-ui-primitives.md
 Baseline main: a973318f6efee95b91ce1801c79749d50fdca6b2
-Kind: test / CI gate（no screen migration）
-DADS-UX-* / INV-19 fix / Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
+Kind: test / CI gate（no screen migration in DADS-06 itself）
+INV-19 host heading fix: owned by DADS-UX-1（gate blocks regression）
+Deploy / SharePoint write / #299 Close: NOT AUTHORIZED
 New runtime dependency (axe-core 等): NOT introduced
 ```
 
@@ -71,7 +72,7 @@ Severities:
 
 | ID | Focus | Notes |
 |---|---|---|
-| A11Y-HD-01 | heading / INV-19 | Scaffold host `bodyTitle` `<h2>` must remain **detectable**. Fix = NOT AUTHORIZED（DADS-UX / separate GO） |
+| A11Y-HD-01 | heading / INV-19 | Scaffold host `bodyTitle` must be **non-heading**. Blocking after DADS-UX-1（was known_gap in DADS-06） |
 | A11Y-FV-01 | focus-visible | Focus tokens present；`:focus` / `:focus-visible` mix counted（mass rewrite OUT） |
 
 ### Deferred（not automated here）
@@ -100,8 +101,7 @@ Path triggers extended for:
 ## 5. Exact OUT
 
 ```text
-DADS-UX-* screen migration
-INV-19 heading fix implementation
+DADS-UX-* screen migration beyond shell host heading（DADS-UX-1 owns INV-19 fix）
 broad visual redesign
 Domain / Contracts / schema / permission / adapter
 Deploy / SharePoint write / #299 Close
@@ -113,7 +113,7 @@ smoke expectation weakening
 
 1. Rule catalog + static gate exist
 2. DADS-05 primitive a11y contracts are blocking regressions
-3. INV-19 is detectable as `known_gap`
+3. INV-19 host heading pollution is **blocking-prevented**（resolved by DADS-UX-1; see `dads-ux-1-shell-host-convergence.md`）
 4. CI runs `check:a11y`
 5. Verification PASS；no smoke weakening
 6. Ready / Merge remain separate Human gates
