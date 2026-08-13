@@ -71,7 +71,7 @@ Docs:
 
 | Sev | ID | Status | Note |
 |---|---|---|---|
-| P2 | DUX7-P2-1 | SELECTED（DEMO-UX-13） | Users list detail-preview enablement remains A-only；C detail is reachable from Overview today-action. Selected for DEMO-UX-13；Implementation Start NOT AUTHORIZED. |
+| P2 | DUX7-P2-1 | IMPLEMENTED（DEMO-UX-13；Ready HOLD） | Users list detail-preview enablement expanded to fixture-backed A+C；B/D–H remain disabled. Ready/Merge NOT AUTHORIZED. |
 | P2 | DUX7-P2-2 | OPEN | Internal KPI id remains `deadline_near` while visible label is `期限接近`. Non-user-facing naming drift only. |
 
 ```text
