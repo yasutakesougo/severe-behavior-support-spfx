@@ -105,7 +105,7 @@ Skill / Agent / Command の詳細:
 
 ## Security Scan との関係
 
-- 入口: `SECURITY.md`
+- 入口: `SECURITY.md`（**索引のみ**。独自ポリシー増殖地点にしない）
 - candidate ≠ verified ≠ fix authorization ≠ production GO
-- Deep Scan は準備後に repository-wide で一度。PR 単位は security-diff-scan
-- 未検証 finding の大量 Issue 化・自動修正はしない
+- Deep Scan は SECURITY-PREP Merge 後に repository-wide で一度。本入口 PR に混ぜない
+- PR 単位は security-diff-scan。未検証 finding の大量 Issue 化・自動修正はしない
