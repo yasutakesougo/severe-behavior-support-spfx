@@ -64,10 +64,32 @@ Result: EXECUTION HOLD — Human operator must run §4
 
 ## 4. Human operator procedure（authorized now）
 
-1. **Retain** previous known-good `.sppkg`（38661-byte / 2026-08-11）before overwrite.
-2. Confirm RC package sha256 = `c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec`.
-3. Connect（PnP）to Tenant App Catalog host / pilot context as local ops practice requires.
-4. Publish:
+```text
+Preferred: PC + PnP PowerShell（§4.A）
+Alternative: SharePoint 管理センター browser upload（§4.B；Safari / iPhone 可）
+Not required: PowerShell on iPhone
+```
+
+This Deploy includes overwrite of an existing app, retention of the prior 38661-byte package,
+prevention of swapping the new 116174-byte package, and rollback readiness.
+For a first-time operator, **PC is safer** than phone overwrite.
+
+Common preconditions（both paths）:
+
+1. **Retain** previous known-good `.sppkg`（38661-byte / 2026-08-11）in a **different name/folder** before overwrite.
+2. Confirm RC package size = `116174` and sha256 = `c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec`.
+3. If NoScript / scripting / enablement error appears: **STOP**. Do not force. Obtain separate DEPLOY-NOSCRIPT GO.
+4. After success: optional pilot page smoke；keep FIELD-WORKFLOW synthetic / fail-closed expectations.
+5. Record verification evidence（timestamp, operator, path used, size/sha256, enable/deploy confirmation）.
+
+Rollback if needed: `docs/architecture/release-readiness-1-rollback-runbook.md`.
+
+### 4.A Preferred — PC + PnP PowerShell
+
+PnP PowerShell targets Windows / Linux / macOS. Do not treat iPhone-native PowerShell as the primary path.
+
+1. Connect（PnP）to Tenant App Catalog host / pilot context as local ops practice requires.
+2. Publish:
 
 ```powershell
 Add-PnPApp -Path ".\sharepoint\solution\severe-behavior-support-spfx-shell.sppkg" `
@@ -76,8 +98,7 @@ Add-PnPApp -Path ".\sharepoint\solution\severe-behavior-support-spfx-shell.sppkg
   -Overwrite
 ```
 
-5. If NoScript / scripting guard blocks: **STOP**. Do not `-Force`. Obtain separate DEPLOY-NOSCRIPT GO.
-6. Verify:
+3. Verify:
 
 ```powershell
 Get-PnPApp -Scope Tenant |
@@ -88,10 +109,28 @@ Get-PnPApp -Scope Tenant |
 ```
 
 Expect Deployed = True；title/ProductId match；record AppCatalogVersion / PnP Id.
-7. Optional site smoke on pilot page；keep FIELD-WORKFLOW synthetic / fail-closed expectations.
-8. Record verification evidence（timestamp, operator, sha256, Get-PnPApp output, NoScript final state if touched）.
 
-Rollback if needed: `docs/architecture/release-readiness-1-rollback-runbook.md`.
+### 4.B Alternative — SharePoint 管理センター（browser / Safari）
+
+Microsoft’s Apps management UI allows uploading a `.sppkg` from the browser.
+If the RC `.sppkg` is in iPhone「ファイル」, Safari can upload it. This path is **authorized** by Deploy GO,
+but is **higher risk** for first-time overwrite than §4.A.
+
+1. Save the **new** `116174`-byte `.sppkg` into「ファイル」（or equivalent）.
+2. Keep the **old** `38661`-byte `.sppkg` under a different name/folder — do not overwrite the backup copy.
+3. Open SharePoint admin center in Safari（or desktop browser）.
+4. Navigate: その他の機能 → アプリ → 開く.
+5. アプリの管理 → アップロード.
+6. Select the **new** `.sppkg` only（confirm size/name before choosing）.
+7. Carefully confirm overwrite / enable dialogs for the existing shell app.
+8. If error or NoScript-related messaging appears: **中止 / STOP**. Do not retry blindly.
+9. Record that the admin-center path was used（device, browser, enable result）.
+
+```text
+§4.B ≠ permission to skip prior-package retention
+§4.B ≠ permission to ignore NoScript / enable failures
+§4.B ≠ Agent upload
+```
 
 ## 5. Gate board
 
@@ -107,7 +146,8 @@ Deploy verification evidence = NOT YET
 ## 6. Next
 
 ```text
-1. Human executes §4 Tenant App Catalog Overwrite
-2. Human（or follow-up Agent docs-only）records Deploy verification PASS/FAIL
-3. Do not treat Deploy GO alone as verification PASS
+1. Human executes Tenant App Catalog overwrite via §4.A（preferred）or §4.B（browser）
+2. Prefer PC for first overwrite; phone/Safari is possible but easier to mis-select package
+3. Human（or follow-up Agent docs-only）records Deploy verification PASS/FAIL
+4. Do not treat Deploy GO alone as verification PASS
 ```
