@@ -1,5 +1,6 @@
 /**
  * DADS-04 — raw token values (corporate-app baselines).
+ * VISUAL-POLISH-1 — additive extensions only (no renames).
  *
  * These mirror current DEMO-UX / SHELL-UX presentation defaults.
  * They are NOT Domain / Contracts vocabulary and NOT a mandate to
@@ -15,6 +16,8 @@ export const SBS_RAW_SPACE = {
   3: "0.75rem",
   4: "1rem",
   5: "1.5rem",
+  /** VP-1 additive — 32px at 16px root. */
+  6: "2rem",
 } as const;
 
 export const SBS_RAW_FONT_SIZE = {
@@ -23,6 +26,12 @@ export const SBS_RAW_FONT_SIZE = {
   300: "0.95rem",
   400: "1.1rem",
   500: "1.25rem",
+} as const;
+
+export const SBS_RAW_FONT_WEIGHT = {
+  regular: 400,
+  semibold: 600,
+  bold: 700,
 } as const;
 
 export const SBS_RAW_RADIUS = {
@@ -41,6 +50,12 @@ export const SBS_RAW_BORDER_WIDTH = {
 export const SBS_RAW_FOCUS = {
   outlineWidth: "2px",
   outlineOffset: "2px",
+} as const;
+
+export const SBS_RAW_ELEVATION = {
+  none: "none",
+  /** Subtle card / independent surface — not for every section. */
+  subtle: "0 1.6px 3.6px 0 rgba(0, 0, 0, 0.11), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.08)",
 } as const;
 
 /**
@@ -71,9 +86,15 @@ export const SBS_RAW_COLOR = {
   feedbackWarningFg: "#8a6116",
   feedbackWarningBorder: "#8a6116",
   feedbackWarningBg: "#fff4ce",
+  /** VP-1 additive — success presentation chrome only. */
+  feedbackSuccessFg: "#0b6a0b",
+  feedbackSuccessBorder: "#107c10",
+  feedbackSuccessBg: "#dff6dd",
 } as const;
 
 export type SbsRawSpaceKey = keyof typeof SBS_RAW_SPACE;
 export type SbsRawFontSizeKey = keyof typeof SBS_RAW_FONT_SIZE;
+export type SbsRawFontWeightKey = keyof typeof SBS_RAW_FONT_WEIGHT;
 export type SbsRawRadiusKey = keyof typeof SBS_RAW_RADIUS;
+export type SbsRawElevationKey = keyof typeof SBS_RAW_ELEVATION;
 export type SbsRawColorKey = keyof typeof SBS_RAW_COLOR;

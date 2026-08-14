@@ -1,14 +1,16 @@
 // DADS-04 — corporate-app design tokens (SCSS intermediate layer).
+// VISUAL-POLISH-1 — additive extensions (space.6, surface, elevation, typography roles, …).
 // Keep values aligned with raw.ts / semantic.ts.
 // Do not put Digital Agency Design System literals into React components.
 // SPFx theme strings are preserved for SharePoint theming (not CSS-var-wrapped).
 
-// --- Spacing ---
+// --- Spacing (4 / 8 / 12 / 16 / 24 / 32) ---
 $space-1: 0.25rem;
 $space-2: 0.5rem;
 $space-3: 0.75rem;
 $space-4: 1rem;
 $space-5: 1.5rem;
+$space-6: 2rem;
 
 // --- Typography ---
 $font-size-100: 0.75rem;
@@ -17,16 +19,40 @@ $font-size-300: 0.95rem;
 $font-size-400: 1.1rem;
 $font-size-500: 1.25rem;
 
+$font-weight-regular: 400;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+/// Semantic typography roles (VP-1 aliases onto existing scale)
+$font-size-page-title: $font-size-500;
+$font-size-section-title: $font-size-400;
+$font-size-body: $font-size-200;
+$font-size-meta: $font-size-100;
+$font-weight-page-title: $font-weight-semibold;
+$font-weight-section-title: $font-weight-semibold;
+$font-weight-body: $font-weight-regular;
+$font-weight-meta: $font-weight-regular;
+$line-height-page-title: 1.35;
+$line-height-section-title: 1.4;
+$line-height-body: 1.5;
+$line-height-meta: 1.4;
+
 // --- Radius (dialect catalog; migration not required this slice) ---
 $radius-none: 0;
 $radius-sm: 4px;
 $radius-md: 8px;
 $radius-lg: 12px;
 $radius-pill: 999px;
+$radius-small: $radius-sm;
+$radius-medium: $radius-md;
 
 // --- Border ---
 $border-width-thin: 1px;
 $border-width-thick: 2px;
+
+// --- Elevation (VP-1) ---
+$elevation-none: none;
+$elevation-subtle: 0 1.6px 3.6px 0 rgba(0, 0, 0, 0.11), 0 0.3px 0.9px 0 rgba(0, 0, 0, 0.08);
 
 // --- Focus (usable by :focus today and :focus-visible later) ---
 $focus-outline-width: 2px;
@@ -35,6 +61,8 @@ $color-focus-ring: "[theme:themePrimary, default: #03787c]";
 
 // --- Text / surface (theme-aware where shell already used theme slots) ---
 $color-text-primary: "[theme:bodyText, default: #323130]";
+$color-text-secondary: "[theme:neutralSecondary, default: #8a8886]";
+$color-text-disabled: "[theme:disabledBodyText, default: #a19f9d]";
 /// Hardcoded ink used by a few chrome surfaces that do not use SPFx theme strings today.
 $color-text-ink: #323130;
 $color-border-subtle: "[theme:neutralLight, default: #edebe9]";
@@ -44,6 +72,8 @@ $color-surface-muted: "[theme:neutralLighter, default: #f3f2f1]";
 $color-surface-subtle: "[theme:neutralLighterAlt, default: #faf9f8]";
 $color-surface-selected: "[theme:themeLighter, default: #deecf9]";
 $color-surface-canvas: #fff;
+$color-surface: #fff;
+$color-surface-hover: "[theme:neutralLighter, default: #f3f2f1]";
 
 // --- Feedback presentation (not Domain status names) ---
 $color-feedback-info-fg: #004578;
@@ -60,6 +90,10 @@ $color-feedback-danger-bg-subtle: #fff5f6;
 $color-feedback-warning-fg: #8a6116;
 $color-feedback-warning-border: #8a6116;
 $color-feedback-warning-bg: #fff4ce;
+
+$color-feedback-success-fg: #0b6a0b;
+$color-feedback-success-border: #107c10;
+$color-feedback-success-bg: #dff6dd;
 
 $color-skip-link-bg: #111;
 $color-skip-link-fg: #fff;
@@ -78,12 +112,22 @@ $color-skip-link-fg: #fff;
   --sbs-space-3: #{$space-3};
   --sbs-space-4: #{$space-4};
   --sbs-space-5: #{$space-5};
+  --sbs-space-6: #{$space-6};
 
   --sbs-font-size-100: #{$font-size-100};
   --sbs-font-size-200: #{$font-size-200};
   --sbs-font-size-300: #{$font-size-300};
   --sbs-font-size-400: #{$font-size-400};
   --sbs-font-size-500: #{$font-size-500};
+
+  --sbs-font-size-page-title: #{$font-size-page-title};
+  --sbs-font-size-section-title: #{$font-size-section-title};
+  --sbs-font-size-body: #{$font-size-body};
+  --sbs-font-size-meta: #{$font-size-meta};
+  --sbs-font-weight-page-title: #{$font-weight-page-title};
+  --sbs-font-weight-section-title: #{$font-weight-section-title};
+  --sbs-font-weight-body: #{$font-weight-body};
+  --sbs-font-weight-meta: #{$font-weight-meta};
 
   --sbs-radius-none: #{$radius-none};
   --sbs-radius-sm: #{$radius-sm};
@@ -94,10 +138,14 @@ $color-skip-link-fg: #fff;
   --sbs-border-width-thin: #{$border-width-thin};
   --sbs-border-width-thick: #{$border-width-thick};
 
+  --sbs-elevation-none: #{$elevation-none};
+  --sbs-elevation-subtle: #{$elevation-subtle};
+
   --sbs-focus-outline-width: #{$focus-outline-width};
   --sbs-focus-outline-offset: #{$focus-outline-offset};
 
   --sbs-color-surface-canvas: #{$color-surface-canvas};
+  --sbs-color-surface: #{$color-surface};
   --sbs-color-skip-link-bg: #{$color-skip-link-bg};
   --sbs-color-skip-link-fg: #{$color-skip-link-fg};
 
@@ -115,4 +163,8 @@ $color-skip-link-fg: #fff;
   --sbs-color-feedback-warning-fg: #{$color-feedback-warning-fg};
   --sbs-color-feedback-warning-border: #{$color-feedback-warning-border};
   --sbs-color-feedback-warning-bg: #{$color-feedback-warning-bg};
+
+  --sbs-color-feedback-success-fg: #{$color-feedback-success-fg};
+  --sbs-color-feedback-success-border: #{$color-feedback-success-border};
+  --sbs-color-feedback-success-bg: #{$color-feedback-success-bg};
 }
