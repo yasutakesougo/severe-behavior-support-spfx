@@ -101,7 +101,9 @@ Get-PnPApp -Scope Tenant |
 
 If Tenant NoScript / scripting guard blocks upload, **STOP**. Do not force. Separate Human GO is required（same family as historical DEPLOY-NOSCRIPT）.
 
-Optional removal of a broken app entry is **out of default path**. Prefer Overwrite re-publish of known-good. Removal/uninstall from sites requires explicit Human decision and is not required for package rollback credibility.
+Optional removal of a broken app entry is **out of default path**. Prefer Overwrite re-publish of known-good.
+**Do not delete** the App Catalog app to “reinstall” — existing instances can stop working.
+Removal/uninstall from sites requires explicit Human decision and is not required for package rollback credibility.
 
 ## 6. Expected effect on SharePoint data
 
