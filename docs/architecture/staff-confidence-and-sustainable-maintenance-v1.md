@@ -71,6 +71,7 @@ permission grant from this document: FORBIDDEN
 | 重大障害時の連絡役割名 | GOV-AUD-10（UNCHANGED） |
 | Finding の severity 語彙 | Decision-SEV-2-VOCAB（NOT ADOPTED） |
 | Human GO / mutation 境界 | DEC-AI-ORG-003 / permission-matrix |
+| 保守 MCP を採用する場合の安全境界 | [`maintenance-mcp-direction-v1.md`](./maintenance-mcp-direction-v1.md)（採用候補の境界のみ。実装開始ではない） |
 | Phase 2 / 3 / 4 の Issue 範囲 | #300 / #301 / #302（body UNCHANGED） |
 | 運用手順書一式の Issue 所有 | #30（本文書は横断原則。#30 Close しない） |
 
@@ -323,6 +324,7 @@ SC-05 は #23 の事業所分離安全境界および DEC-AI-ORG-003 の Human G
 |---|---|
 | GOV-AUD-10 | 連絡役割名 UNCHANGED（第一報=事業所管理者、技術連絡=Microsoft 365管理者、業務連絡=業務責任者または指定確認者、個人情報事故の連絡=法人管理者、再開判断=事業所管理者）。個人名・電話・メールは依然として定めない |
 | DEC-AI-ORG-003 / permission-matrix | mutation 区分 UNCHANGED。本文書は権限を増やさない |
+| MAINTENANCE-MCP-DIRECTION-V1 | 保守 MCP を採用する場合の安全境界（read-only first、LLM 非正本、mutationAuthorized=false）。MCP 実装開始ではない |
 | Decision-SEV-2-VOCAB | FindingSeverity NOT ADOPTED を維持。SC-03 / SC-04 の severity を発明して再導入しない |
 | LIVE-SP-1 / LIVE-SP-2 | read-only first と整合。live write / Deploy は別 Human GO のまま |
 | #23 | P0 安全受入の試験所有は #23 のまま。本文書は SC-05（別事業所の情報が見える疑い）を最重要安全試験として横断固定するだけ |
