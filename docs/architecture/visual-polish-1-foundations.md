@@ -101,8 +101,34 @@ SPFx 1.23.2 / React 17.0.1 / Fluent UI v8
 - [x] radius / elevation rules fixed
 - [x] action hierarchy fixed（presentation tokens）
 - [x] semantic status presentation fixed（aliases；labels unchanged）
-- [ ] existing verify suite re-run（see Draft PR Verification）
+- [x] existing verify suite re-run（see §7.1）
 - [x] no screen large re-layout
+
+### 7.1 Verification（this Draft PR）
+
+```text
+format:check PASS
+lint PASS
+typecheck PASS
+npm test PASS 578/578
+check:contracts-boundaries PASS
+check:scope PASS（origin/main...HEAD；7 files）
+check:a11y PASS（blocking=0）
+heft test PASS 145/145（includes tokens.test 14）
+heft test --production PASS 145/145
+package-solution --production PASS
+browser smoke（expectations NOT weakened）:
+  shell-ux-2 PASS（7 cases）
+  demo-ux-7 PASS（7/7）
+  demo-ux-12 PASS（9 cases；unknown ≠ failed）
+  demo-ux-14 PASS（10 cases；unknown non-collapse）
+```
+
+Pre-existing Heft lint warning（unchanged）:
+
+```text
+read-integration.ts:@rushstack/no-new-null — PRE-EXISTING
+```
 
 ## 8. Non-claims
 
