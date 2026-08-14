@@ -76,13 +76,39 @@ For a first-time operator, **PC is safer** than phone overwrite.
 
 Common preconditions（both paths）:
 
-1. **Retain** previous known-good `.sppkg`（38661-byte / 2026-08-11）in a **different name/folder** before overwrite.
+1. **Retain** previous known-good `.sppkg`（38661-byte / 2026-08-11）in a **different name/folder** before overwrite. Never delete this backup.
 2. Confirm RC package size = `116174` and sha256 = `c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec`.
-3. If NoScript / scripting / enablement error appears: **STOP**. Do not force. Obtain separate DEPLOY-NOSCRIPT GO.
-4. After success: optional pilot page smoke；keep FIELD-WORKFLOW synthetic / fail-closed expectations.
-5. Record verification evidence（timestamp, operator, path used, size/sha256, enable/deploy confirmation）.
+3. Both packages share version `1.0.0.0` / same ProductId — **do not identify by version or filename alone**. Prefer size（and sha256 on PC）.
+4. If NoScript / scripting / enablement error / unexpected warning appears: **STOP**. Do not force. Do not delete. Obtain separate DEPLOY-NOSCRIPT GO if needed.
+5. **Do not remove** the existing app from App Catalog to “reinstall”. Replacement/overwrite only. Deleting the catalog app can break existing instances.
+6. After success: optional pilot page smoke；keep FIELD-WORKFLOW synthetic / fail-closed expectations.
+7. Record verification evidence（timestamp, operator, path used, size/sha256, enable/deploy confirmation）.
 
-Rollback if needed: `docs/architecture/release-readiness-1-rollback-runbook.md`.
+Rollback if needed: re-upload/overwrite with the retained 38661-byte known-good `.sppkg` per
+`docs/architecture/release-readiness-1-rollback-runbook.md`.
+That path remains available **only if** the old package was kept.
+
+### 4.0 Mobile / Safari safety（when using §4.B）
+
+Phone Deploy is **許容範囲**, but the main risk is **file mix-up**, not the UI itself.
+If using iPhone / Safari today, obey all four:
+
+```text
+1. Keep old 38661 B forever under a different name/folder — never delete it for this run
+2. Select only the new package after confirming size = 116174 B
+3. Read overwrite / enable confirmation screens before confirming
+4. On error, NoScript, or unexpected warning: STOP immediately — no delete, no force, no blind retry
+```
+
+Today’s authorized phone scope:
+
+```text
+IN:  upload + overwrite / enable confirmation only（§4.B）
+OUT: App Catalog app deletion
+OUT: forced retry through NoScript / unexplained errors
+OUT: broader tenant changes
+If anything feels wrong: capture screenshot(s) and STOP for Human/Agent judgment before continuing
+```
 
 ### 4.A Preferred — PC + PnP PowerShell
 
@@ -129,6 +155,7 @@ but is **higher risk** for first-time overwrite than §4.A.
 ```text
 §4.B ≠ permission to skip prior-package retention
 §4.B ≠ permission to ignore NoScript / enable failures
+§4.B ≠ permission to delete the App Catalog app and re-add
 §4.B ≠ Agent upload
 ```
 
@@ -147,7 +174,9 @@ Deploy verification evidence = NOT YET
 
 ```text
 1. Human executes Tenant App Catalog overwrite via §4.A（preferred）or §4.B（browser）
-2. Prefer PC for first overwrite; phone/Safari is possible but easier to mis-select package
-3. Human（or follow-up Agent docs-only）records Deploy verification PASS/FAIL
-4. Do not treat Deploy GO alone as verification PASS
+2. Phone/Safari allowed under §4.0 four safety conditions；today = upload/overwrite only
+3. If discomfort / unexpected UI: screenshot + STOP for judgment
+4. Prefer PC when practical；rollback = overwrite with retained 38661 B package
+5. Human（or follow-up Agent docs-only）records Deploy verification PASS/FAIL
+6. Do not treat Deploy GO alone as verification PASS
 ```
