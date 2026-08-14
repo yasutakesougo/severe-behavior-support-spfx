@@ -17,14 +17,19 @@ Deploy: NOT PERFORMED
 
 | Label | SHA | Note |
 |---|---|---|
-| Observed `origin/main` | `8173a4c18f6ce85254467c67ce81b481a537a35d` | fetch 2026-08-14；tip = Merge #357 FIELD-WORKFLOW UI |
-| **Release Candidate（fixed）** | `8173a4c18f6ce85254467c67ce81b481a537a35d` | Human-fixed RC for this resume |
+| Observed repository `origin/main` | `5bc78cb77aeafa4e9877779813bd9423a018fb5f` | post-#360；tip = Merge VA-2 closeout（docs-only） |
+| **Application Release Candidate（fixed）** | `8173a4c18f6ce85254467c67ce81b481a537a35d` | Human-fixed deploy/package RC；Merge #357 FIELD-WORKFLOW UI |
 | VA-1 baseline | `709804548a42fc7bf3e3e6da3f24cfd57d4677f0` | DADS-VERIFY / VA-1 |
-| VA-2 accepted RC | `8173a4c18f6ce85254467c67ce81b481a537a35d` | FIELD-WORKFLOW targeted VA |
+| VA-2 accepted application RC | `8173a4c18f6ce85254467c67ce81b481a537a35d` | FIELD-WORKFLOW targeted VA |
 
 ```text
-RC == origin/main tip == VA-2 accepted RC
-Do not rewind to VA-1 baseline for deploy package selection
+Application RC == VA-2 accepted RC
+  = 8173a4c18f6ce85254467c67ce81b481a537a35d
+Repository main is newer only because #360 added docs-only VA-2 closeout evidence
+  = 5bc78cb77aeafa4e9877779813bd9423a018fb5f
+No application delta exists between RC 8173a4c… and current main.
+Do not treat repository main tip as the deploy package SHA.
+Do not rewind to VA-1 baseline for deploy package selection.
 ```
 
 ## 2. VA-2 evidence confirmation
@@ -167,8 +172,9 @@ Post-#357 scope drift: do not reopen from readiness；UI-POLISH / separate Close
 
 - 判定: **PASS**（Release Gate readiness；Deploy 実行は別 GO）
 - Gate: Release Gate
-- main SHA: `8173a4c18f6ce85254467c67ce81b481a537a35d`
-- artifact: `severe-behavior-support-spfx-shell.sppkg`（sha256 `c8850e73…`；116174 bytes）
+- repository main SHA: `5bc78cb77aeafa4e9877779813bd9423a018fb5f`（docs-only ahead of RC）
+- application RC SHA: `8173a4c18f6ce85254467c67ce81b481a537a35d`
+- artifact: `severe-behavior-support-spfx-shell.sppkg`（sha256 `c8850e73…`；116174 bytes；bound to application RC）
 
 ## Checklist
 
