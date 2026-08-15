@@ -105,3 +105,28 @@ export const DEMO_UX_SLICE = {
   /** DEMO-UX-8 authorizes synthetic client-side filter on this surface. */
   filterExecutionAuthorized: true as const,
 } as const;
+
+/**
+ * VISUAL-POLISH-3 — Users presentation-only boundary.
+ *
+ * The slice may adapt Users list and User Detail presentation, but it does not
+ * authorize business semantics, live data, permission changes, or mutations.
+ */
+export const VISUAL_POLISH_3_USERS_SLICE = {
+  id: "VISUAL-POLISH-3",
+  target: "Users",
+  presentationOnly: true as const,
+  businessMeaningChangeAuthorized: false as const,
+  statusVocabularyChangeAuthorized: false as const,
+  navigationSemanticsChangeAuthorized: false as const,
+  permissionsChangeAuthorized: false as const,
+  failClosedChangeAuthorized: false as const,
+  saveStateChangeAuthorized: false as const,
+  syntheticFixtureBoundaryPreserved: true as const,
+  liveUsersDataAuthorized: false as const,
+  sharePointWriteAuthorized: false as const,
+  recordsImplementationAuthorized: false as const,
+  reviewImplementationAuthorized: false as const,
+  supportPlanImplementationAuthorized: false as const,
+  deployAuthorized: false as const,
+} as const;

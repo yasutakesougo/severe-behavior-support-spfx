@@ -4,7 +4,7 @@ import {
   DEMO_USERS_PRESENTATION_NOTE,
   usersCopyIsFailClosed,
 } from "./users-copy";
-import { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE } from "./users-fixture";
+import { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE, VISUAL_POLISH_3_USERS_SLICE } from "./users-fixture";
 import {
   DEMO_UX_8_SLICE,
   USERS_FILTER_CHIP_ALL,
@@ -155,5 +155,26 @@ describe("DADS-UX-3 users list presentation contracts", () => {
   it("keeps Users fixture status vocabulary for ADAPT presentation (INV-05/12)", () => {
     expect(DEMO_UX_USERS_FIXTURE.rows).toHaveLength(8);
     expect(formatUsersFilterSummaryLabel(8, USERS_FILTER_CHIP_ALL, 8)).toBe("全8名（合成データ）");
+  });
+});
+
+describe("VISUAL-POLISH-3 Users presentation boundary", () => {
+  it("keeps Users polish presentation-only and downstream work closed", () => {
+    expect(VISUAL_POLISH_3_USERS_SLICE.id).toBe("VISUAL-POLISH-3");
+    expect(VISUAL_POLISH_3_USERS_SLICE.target).toBe("Users");
+    expect(VISUAL_POLISH_3_USERS_SLICE.presentationOnly).toBe(true);
+    expect(VISUAL_POLISH_3_USERS_SLICE.businessMeaningChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.statusVocabularyChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.navigationSemanticsChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.permissionsChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.failClosedChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.saveStateChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.syntheticFixtureBoundaryPreserved).toBe(true);
+    expect(VISUAL_POLISH_3_USERS_SLICE.liveUsersDataAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.sharePointWriteAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.recordsImplementationAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.reviewImplementationAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.supportPlanImplementationAuthorized).toBe(false);
+    expect(VISUAL_POLISH_3_USERS_SLICE.deployAuthorized).toBe(false);
   });
 });
