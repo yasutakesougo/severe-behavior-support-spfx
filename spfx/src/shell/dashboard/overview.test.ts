@@ -3,7 +3,11 @@ import {
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
   overviewCopyIsFailClosed,
 } from "./overview-copy";
-import { DASHBOARD_UX_OVERVIEW_FIXTURE, DASHBOARD_UX_SLICE } from "./overview-fixture";
+import {
+  DASHBOARD_UX_OVERVIEW_FIXTURE,
+  DASHBOARD_UX_SLICE,
+  VISUAL_POLISH_2_OVERVIEW_SLICE,
+} from "./overview-fixture";
 import {
   SHELL_STATUS_LABEL_DUE_SOON,
   SHELL_STATUS_LABEL_NEEDS_REVIEW,
@@ -67,5 +71,17 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
     expect(
       DASHBOARD_UX_OVERVIEW_FIXTURE.actionItems.every((item) => item.actionLabel.length > 0),
     ).toBe(true);
+  });
+
+  it("keeps VISUAL-POLISH-2 presentation boundaries closed", () => {
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.id).toBe("VISUAL-POLISH-2");
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.target).toBe("Overview");
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.presentationOnly).toBe(true);
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.statusVocabularyChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.saveStateChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.navigationSemanticsChangeAuthorized).toBe(false);
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.liveOverviewDataAuthorized).toBe(false);
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.sharePointWriteAuthorized).toBe(false);
+    expect(VISUAL_POLISH_2_OVERVIEW_SLICE.deployAuthorized).toBe(false);
   });
 });

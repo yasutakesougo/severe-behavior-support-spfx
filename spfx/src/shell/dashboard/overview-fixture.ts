@@ -89,3 +89,21 @@ export const DASHBOARD_UX_SLICE = {
   kpiNavigationAuthorized: false as const,
   actionExecutionAuthorized: false as const,
 } as const;
+
+/**
+ * VISUAL-POLISH-2 — Overview presentation-only boundary.
+ *
+ * The slice may adapt Overview presentation, but it does not authorize live
+ * data, business semantics, navigation changes, or external writes.
+ */
+export const VISUAL_POLISH_2_OVERVIEW_SLICE = {
+  id: "VISUAL-POLISH-2",
+  target: "Overview",
+  presentationOnly: true as const,
+  statusVocabularyChangeAuthorized: false as const,
+  saveStateChangeAuthorized: false as const,
+  navigationSemanticsChangeAuthorized: false as const,
+  liveOverviewDataAuthorized: false as const,
+  sharePointWriteAuthorized: false as const,
+  deployAuthorized: false as const,
+} as const;
