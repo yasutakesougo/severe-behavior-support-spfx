@@ -5,12 +5,13 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Kind: Fresh Review（docs-only amendment PR）
 Unit: VISUAL-POLISH — Agent Instruction amendment（DADS React Storybook Reference）
 PR: #371
-Reviewed HEAD: 247d5b03b82defc036d5b67733d7d49c04f1cd9f
+Reviewed substantive HEAD: 247d5b03b82defc036d5b67733d7d49c04f1cd9f
+Evidence commit HEAD（this Fresh Review record）: 445ffb4f01280507a3510f219df4fbe94915110a
 Authority doc: docs/architecture/visual-polish-agent-instruction-dads-react-reference.md
 Status: PASS / ACCEPT
 Findings: P0 = 0 / P1 = 0 / P2 = 0
 Observed PR state at review: OPEN / DRAFT / mergeable=true
-Human Ready: NOT AUTHORIZED（separate Human gate）
+Human Ready: NOT AUTHORIZED（separate Human gate；bind to current PR HEAD）
 Merge: NOT AUTHORIZED by this review alone（requires Human Ready → Human Merge GO）
 ```
 
