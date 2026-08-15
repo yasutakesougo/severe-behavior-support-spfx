@@ -112,7 +112,7 @@ lint PASS
 typecheck PASS
 npm test PASS 578/578
 check:contracts-boundaries PASS
-check:scope PASS（origin/main...HEAD；7 files）
+check:scope PASS（origin/main...HEAD；6 files）
 check:a11y PASS（blocking=0）
 heft test PASS 145/145（includes tokens.test 14）
 heft test --production PASS 145/145
