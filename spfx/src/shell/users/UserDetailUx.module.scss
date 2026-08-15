@@ -1,36 +1,42 @@
 @use "../tokens/sbs-tokens" as sbs;
 
+// VISUAL-POLISH-3 — User Detail presentation adopts VP-1 semantic roles.
+// SectionLabelStrip, IA, action semantics, and synthetic-only boundaries remain unchanged.
 .userDetail {
   display: flex;
   flex-direction: column;
-  gap: sbs.$space-4;
+  gap: sbs.$space-6;
   min-width: 0;
   max-width: 100%;
-  padding: sbs.$space-4;
+  padding: sbs.$space-6;
   border-width: sbs.$border-width-thin;
   border-style: dashed;
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-medium;
   box-sizing: border-box;
 }
 
 .topRow {
   display: flex;
   flex-wrap: wrap;
-  gap: sbs.$space-3;
+  gap: sbs.$space-4;
   align-items: center;
   justify-content: space-between;
 }
 
 .backButton {
   min-height: 2.25rem;
-  padding: 0.35rem sbs.$space-3;
+  padding: sbs.$space-2 sbs.$space-4;
   border-width: sbs.$border-width-thin;
   border-style: solid;
-  border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-canvas;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
   color: inherit;
   font: inherit;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
   cursor: pointer;
 }
 
@@ -40,8 +46,18 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
+.backButton:hover:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.backButton:active:not(:disabled) {
+  background: sbs.$color-surface-muted;
+}
+
 .backButton:disabled {
-  opacity: 0.65;
+  color: sbs.$color-text-disabled;
+  opacity: 1;
   cursor: not-allowed;
 }
 
@@ -54,15 +70,16 @@
   border-color: sbs.$color-feedback-warning-border;
   background: sbs.$color-feedback-warning-bg;
   color: sbs.$color-feedback-warning-fg;
-  font-size: sbs.$font-size-200;
-  font-weight: 600;
-  line-height: 1.45;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
 }
 
 .userHeading {
   margin: 0;
-  /* Display emphasis; no larger type token in DADS-04 catalog yet. */
-  font-size: 1.5rem;
+  font-size: sbs.$font-size-page-title;
+  font-weight: sbs.$font-weight-page-title;
+  line-height: sbs.$line-height-page-title;
   outline: none;
 }
 
@@ -79,29 +96,34 @@
   border-width: sbs.$border-width-thin;
   border-style: solid;
   border-color: sbs.$color-border-subtle;
-  background: sbs.$color-surface-canvas;
+  border-radius: sbs.$radius-medium;
+  background: sbs.$color-surface;
+  box-shadow: sbs.$elevation-subtle;
 }
 
 .detailSection h2,
 .statePanel h2 {
-  margin: 0 0 sbs.$space-3;
-  /* Section title; nearest catalog step is 1.1rem — keep existing 1.05rem. */
-  font-size: 1.05rem;
+  margin: 0 0 sbs.$space-4;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
 }
 
 .detailSection p {
   margin: 0;
-  line-height: 1.5;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
 }
 
 .planLabel {
-  margin-bottom: sbs.$space-3 !important;
-  font-weight: 700;
+  margin-bottom: sbs.$space-4 !important;
+  font-weight: sbs.$font-weight-semibold;
 }
 
 .planLabel span {
   margin-left: sbs.$space-2;
-  font-weight: 400;
+  color: sbs.$color-text-secondary;
+  font-weight: sbs.$font-weight-regular;
 }
 
 .supportList {
@@ -113,18 +135,21 @@
 
 .supportItem {
   min-width: 0;
-  padding: sbs.$space-3;
+  padding: sbs.$space-4;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
   background: sbs.$color-surface-subtle;
 }
 
 .supportItem dt {
-  margin: 0 0 0.35rem;
-  font-weight: 700;
+  margin: 0 0 sbs.$space-2;
+  font-weight: sbs.$font-weight-semibold;
 }
 
 .supportItem dd {
   margin: 0;
-  line-height: 1.5;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
 }
 
 .recordList {
@@ -139,11 +164,22 @@
 .recordList li {
   display: grid;
   grid-template-columns: minmax(7rem, auto) 1fr;
-  gap: sbs.$space-3;
-  padding-bottom: sbs.$space-2;
+  gap: sbs.$space-4;
+  padding-bottom: sbs.$space-3;
   border-bottom-width: sbs.$border-width-thin;
   border-bottom-style: solid;
   border-bottom-color: sbs.$color-border-subtle;
+}
+
+.recordList li span:first-child {
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
+}
+
+.recordList li span:last-child {
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
 }
 
 .stateGrid {
@@ -158,7 +194,9 @@
   border-width: sbs.$border-width-thin;
   border-style: solid;
   border-color: sbs.$color-border-subtle;
-  background: sbs.$color-surface-canvas;
+  border-radius: sbs.$radius-medium;
+  background: sbs.$color-surface;
+  box-shadow: sbs.$elevation-subtle;
 }
 
 .statePanel dl {
@@ -175,16 +213,18 @@
 }
 
 .statePanel dt {
-  font-weight: 700;
+  font-weight: sbs.$font-weight-semibold;
 }
 
 .statePanel dd {
   margin: 0;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
 }
 
 @media (max-width: 768px) {
   .userDetail {
-    padding: sbs.$space-3;
+    padding: sbs.$space-4;
   }
 
   .supportList,

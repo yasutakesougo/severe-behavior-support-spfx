@@ -54,7 +54,7 @@ export type {
   SupportPlanReviewStatus,
   SupportPlanSystemState,
 } from "./support-plan-types";
-export { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE } from "./users-fixture";
+export { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE, VISUAL_POLISH_3_USERS_SLICE } from "./users-fixture";
 export type {
   ShellUsersPresentation,
   UserListRow,
