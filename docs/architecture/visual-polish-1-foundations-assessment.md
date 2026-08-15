@@ -2,23 +2,28 @@
 
 ```text
 Unit: VISUAL-POLISH-1 — Foundations（Assessment / Plan only）
-Status: ASSESSMENT COMPLETE / Implementation NOT STARTED
-Date: 2026-08-14
+Status: ASSESSMENT COMPLETE / Fresh Review PASS（ACCEPT）
+  → READY FOR HUMAN READY → MERGE
+Date: 2026-08-14（freeze） / Convergence + Fresh Review: 2026-08-15
 Mode: docs-only freeze + gap analysis
+Fresh Review: docs/architecture/visual-polish-1-foundations-assessment-fresh-review.md
 Application mutation: 0
 External mutation: 0
 Deploy: NO-GO
 Implementation Start: NOT AUTHORIZED（requires separate Human GO）
+Human Ready / Merge: NOT AUTHORIZED by this document alone
 ```
 
 ## CURRENT
 
 ```text
-BASE SHA: 72cad1b3ad126e00531b4726079f248f53412cd0
-CURRENT MAIN: 72cad1b3ad126e00531b4726079f248f53412cd0
-  tip: Merge pull request #365 (STAFF-CONFIDENCE V1 docs)
-Open PRs at assessment:
-  #366 draft — docs(architecture): MAINTENANCE-MCP-DIRECTION-V1（unrelated）
+BASE SHA（assessment freeze）: 72cad1b3ad126e00531b4726079f248f53412cd0
+CURRENT MAIN（convergence 2026-08-15）: d1ede70226e0c09db3759b92bf64d2c65892c74a
+  tip: Merge pull request #371（DADS React Storybook agent-instruction reference）
+Related PR state at convergence:
+  #371 MERGED — Visual Polish agent instruction DADS React Storybook reference
+  #368 OPEN / DRAFT — VP-1 Foundations token extension（not authorized by this Assessment Merge）
+  #367 OPEN / DRAFT — this Assessment
 ```
 
 ### Application RC vs repository main
@@ -27,7 +32,7 @@ Open PRs at assessment:
 Application Release Candidate (VA-2 accepted / Deploy GO package):
   8173a4c18f6ce85254467c67ce81b481a537a35d
 Repository main tip:
-  72cad1b3ad126e00531b4726079f248f53412cd0
+  d1ede70226e0c09db3759b92bf64d2c65892c74a
 App delta 8173a4c… → main tip (spfx/src|src|tests): NONE（docs-only ahead）
 ```
 
@@ -46,6 +51,7 @@ Visual Polish must treat VA-2 accepted RC as the prior visual baseline and must 
 | `docs/architecture/dads-05-shared-ui-primitives.md` | Existing primitives |
 | `docs/architecture/dads-final-consistency-review.md` | DADS-VERIFY COMPLETE |
 | `docs/architecture/dads-existing-ui-inventory.md` | Inventory / KEEP–ADAPT–GAP |
+| `docs/architecture/visual-polish-agent-instruction-dads-react-reference.md` | `#371` MERGED；DADS React Storybook = Visual / Interaction / Accessibility Reference（依存ライブラリにしない） |
 
 ### Visual Acceptance state（CONFIRMED）
 
@@ -139,6 +145,7 @@ IN:
 8. Status presentation aliases: `neutral` / `attention` / `warning` / `danger` / `success` mapped to feedback tokens **without** renaming Domain / DEMO status labels
 9. Docs: VP-1 foundations acceptance notes；pin BASE SHA；Explicit OUT
 10. Tests: extend `tokens.test.ts`；re-run existing verify suite；no smoke expectation weakening
+11. Reference only（no dependency）: DADS React Storybook per `#371` agent-instruction amendment — do not add Tailwind / React 18 / `@digital-go-jp/*`
 
 OUT of VP-1:
 
@@ -248,12 +255,13 @@ none identified for Assessment scope
 ## RECOMMENDED IMPLEMENTATION SLICE
 
 ```text
-Single Draft PR: VISUAL-POLISH-1 Foundations
-Base: origin/main @ 72cad1b…（re-fetch at Implementation Start）
+Single Draft PR: VISUAL-POLISH-1 Foundations（see also open #368 — separate Ready/Merge）
+Base: re-fetch origin/main at Implementation Start（do not freeze to assessment BASE alone）
 Kind: additive tokens + docs + token tests
 DOM/IA: no Overview/Users restructure
 Consumer change: emit-css-vars / optional shared action mixins only
 Acceptance: VP-1 §11 checklist + existing verify suite green
+Storybook: visual reference only（#371）；no DADS React / Tailwind / React 18 dependency
 Then: Fresh Review → only after PASS, Human GO for VP-2 Overview
 ```
 
@@ -278,4 +286,5 @@ This Assessment ≠ Visual Acceptance for a new RC
 This Assessment ≠ Deploy GO
 This Assessment ≠ permission to mutate SharePoint / App Catalog
 This Assessment ≠ authorization to start VP-2 Overview
+This Assessment Merge ≠ #368 Merge / Ready
 ```
