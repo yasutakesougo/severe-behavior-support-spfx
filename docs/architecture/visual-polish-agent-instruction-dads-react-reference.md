@@ -23,7 +23,7 @@ Visual Polish のエージェント指示へ、次の **1 項目**を追加固�
 DADS React Storybook を Visual / Interaction / Accessibility Reference として照合する
 ```
 
-これは DADS-UX / Visual Polish の設計をひっくり返すものではない。  
+これは DADS-UX / Visual Polish の設計をひっくり返すものではない。
 これまで抽象的だった「DADS 準拠」を、公式 Storybook の具体的な画面状態と照合できる状態にする前進である。
 
 ```text
@@ -79,7 +79,7 @@ Agent Start / slice 実施時の読み順:
 
 ## 4. Why this separation
 
-公式 React サンプルは React 18 + Tailwind CSS 3 + TypeScript の参照実装であり、完成済みライブラリ配布ではない。  
+公式 React サンプルは React 18 + Tailwind CSS 3 + TypeScript の参照実装であり、完成済みライブラリ配布ではない。
 現行アプリは React 17 + Fluent UI v8 のため、DADS React を直接コピーすると依存が食い違う。
 
 したがって:
@@ -90,7 +90,7 @@ Agent Start / slice 実施時の読み順:
 SPFx 側で再現する
 ```
 
-DADS React コードスニペットは MIT License（編集・加工利用が前提）。  
+DADS React コードスニペットは MIT License（編集・加工利用が前提）。
 加工 UI の出典明記は公式注意上必須ではないが、本リポジトリでは参照 URL を docs / PR に残して追跡可能にする。
 
 ## 5. Explicit OUT
@@ -127,11 +127,11 @@ This Amendment ≠ rewrite of Decision-DADS-ADOPTION-V1
 
 ## 8. Acceptance（docs-only）
 
-1. §3 の必須チェック項目が文書化されている  
-2. 3 層モデル（Guideline / Storybook / Fluent v8+SCSS）が明示されている  
-3. DADS React を依存にしないこと、および技術基盤維持が明示されている  
-4. RC / Release / Deploy と分離していること  
-5. Application code mutation = 0  
+1. §3 の必須チェック項目が文書化されている
+2. 3 層モデル（Guideline / Storybook / Fluent v8+SCSS）が明示されている
+3. DADS React を依存にしないこと、および技術基盤維持が明示されている
+4. RC / Release / Deploy と分離していること
+5. Application code mutation = 0
 
 ## 9. Next
 
