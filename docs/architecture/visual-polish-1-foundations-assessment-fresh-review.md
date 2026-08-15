@@ -6,7 +6,7 @@ Kind: Fresh Review（docs-only Assessment PR）
 Unit: VISUAL-POLISH-1 — Foundations Assessment / Plan
 PR: #367
 Reviewed substantive HEAD（pre-convergence）: dae06ada1bb28ca0e563896b96b23f48edfa097b
-Convergence + Fresh Review evidence HEAD: （set on commit）
+Convergence + Fresh Review evidence HEAD: 8908494f7916751adc3e90afa6ced467c016de93
 Authority doc: docs/architecture/visual-polish-1-foundations-assessment.md
 Status: PASS / ACCEPT
 Findings: P0 = 0 / P1 = 0 / P2 = 3 OPEN（non-blocking；deferred beyond Assessment Merge）
