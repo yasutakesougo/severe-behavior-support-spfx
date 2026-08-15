@@ -3,7 +3,7 @@ import {
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_PRESENTATION_NOTE,
 } from "./procedure-copy";
-import { FIELD_WORKFLOW_UI_SLICE } from "./procedure-fixture";
+import { FIELD_WORKFLOW_UI_SLICE, VP4_WORKFLOW_SLICE } from "./procedure-fixture";
 import type { ShellCurrentProcedurePresentation } from "./procedure-types";
 import styles from "./CurrentProcedureUx.module.scss";
 
@@ -31,6 +31,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       className={styles.currentProcedure}
       data-field-workflow="current-procedure"
       data-field-workflow-slice={FIELD_WORKFLOW_UI_SLICE.id}
+      data-field-workflow-visual-polish={VP4_WORKFLOW_SLICE.id}
       data-field-workflow-user={context.userId}
       data-field-workflow-plan-id={context.planId}
       data-field-workflow-plan-version={String(context.planVersion)}
@@ -56,6 +57,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
         ref={headingRef}
         tabIndex={-1}
         className={styles.heading}
+        data-field-workflow-visual-role="page-title"
         data-field-workflow="current-procedure-heading"
       >
         {heading}
@@ -69,7 +71,12 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       </p>
 
       <section className={styles.section} aria-labelledby="field-workflow-procedure-flow-heading">
-        <h2 id="field-workflow-procedure-flow-heading">支援の流れ</h2>
+        <h2
+          id="field-workflow-procedure-flow-heading"
+          data-field-workflow-visual-role="section-title"
+        >
+          支援の流れ
+        </h2>
         <dl className={styles.flowList} data-field-workflow="procedure-flow">
           <div className={styles.flowItem}>
             <dt>場面</dt>
@@ -103,7 +110,9 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       </section>
 
       <section className={styles.section} aria-labelledby="field-workflow-record-cta-heading">
-        <h2 id="field-workflow-record-cta-heading">この手順を記録</h2>
+        <h2 id="field-workflow-record-cta-heading" data-field-workflow-visual-role="section-title">
+          この手順を記録
+        </h2>
         <p className={styles.sectionHint} data-field-workflow="context-handoff-note">
           {FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE}
         </p>

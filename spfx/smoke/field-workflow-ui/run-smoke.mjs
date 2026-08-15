@@ -181,6 +181,16 @@ try {
     detail: procedureAttrs,
   });
 
+  const procedureVisualPolish = await page.$eval(
+    '[data-field-workflow="current-procedure"]',
+    (el) => el.getAttribute("data-field-workflow-visual-polish"),
+  );
+  checks.push({
+    id: "vp4-current-procedure-visual-boundary",
+    pass: procedureVisualPolish === "VP-4-WORKFLOW",
+    detail: { procedureVisualPolish },
+  });
+
   await page.click('[data-field-workflow="record-procedure-cta"]');
   await page.waitForSelector('[data-field-workflow="procedure-record-form"]');
 
@@ -198,6 +208,15 @@ try {
       formAttrs.procedureId === "synthetic-procedure-p3" &&
       formAttrs.destination === "users",
     detail: formAttrs,
+  });
+
+  const formVisualPolish = await page.$eval('[data-field-workflow="procedure-record-form"]', (el) =>
+    el.getAttribute("data-field-workflow-visual-polish"),
+  );
+  checks.push({
+    id: "vp4-procedure-form-visual-boundary",
+    pass: formVisualPolish === "VP-4-WORKFLOW",
+    detail: { formVisualPolish },
   });
 
   await page.click('[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"] input[type="radio"]');

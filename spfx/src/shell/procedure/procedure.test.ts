@@ -3,6 +3,7 @@ import {
   FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
   FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
   FIELD_WORKFLOW_UI_SLICE,
+  VP4_WORKFLOW_SLICE,
   PROCEDURE_RECORD_RESULT_VALUES,
   applySyntheticProcedureRecordSave,
   canRetryProcedureRecordSave,
@@ -41,6 +42,26 @@ describe("FIELD-WORKFLOW UI (#356) presentation boundary", () => {
       expect(procedureResultCopyIsNonFailure(result)).toBe(true);
       expect(labelForProcedureRecordResult(result).length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("VP-4 Workflow presentation boundary", () => {
+  it("authorizes only Workflow visual polish and metadata", () => {
+    expect(VP4_WORKFLOW_SLICE.id).toBe("VP-4-WORKFLOW");
+    expect(VP4_WORKFLOW_SLICE.presentationOnly).toBe(true);
+    expect(VP4_WORKFLOW_SLICE.target).toBe("current-procedure-and-procedure-record-form");
+    expect(VP4_WORKFLOW_SLICE.visualPolishAuthorized).toBe(true);
+    expect(VP4_WORKFLOW_SLICE.workflowMetadataAuthorized).toBe(true);
+    expect(VP4_WORKFLOW_SLICE.reviewReferenceOnly).toBe(true);
+    expect(VP4_WORKFLOW_SLICE.reviewOutcomeRedesignAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.saveStateSemanticsChangeAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.saveOutcomeUnknownNormalizationAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.navigationSemanticsChangeAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.domainContractsMutationAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.permissionMutationAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.syntheticBoundaryChangeAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.liveTenantIoAuthorized).toBe(false);
+    expect(VP4_WORKFLOW_SLICE.deployAuthorized).toBe(false);
   });
 });
 

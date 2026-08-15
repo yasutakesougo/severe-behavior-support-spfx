@@ -82,3 +82,23 @@ export const FIELD_WORKFLOW_UI_SLICE = {
   productionWriteAuthorized: false as const,
   deployAuthorized: false as const,
 } as const;
+
+/** VP-4 Workflow — presentation-only polish for the existing field flow. */
+export const VP4_WORKFLOW_SLICE = {
+  id: "VP-4-WORKFLOW",
+  presentationOnly: true as const,
+  target: "current-procedure-and-procedure-record-form" as const,
+  visualPolishAuthorized: true as const,
+  workflowMetadataAuthorized: true as const,
+  reviewReferenceOnly: true as const,
+  reviewOutcomeRedesignAuthorized: false as const,
+  saveStateSemanticsChangeAuthorized: false as const,
+  saveOutcomeUnknownNormalizationAuthorized: false as const,
+  navigationSemanticsChangeAuthorized: false as const,
+  domainContractsMutationAuthorized: false as const,
+  permissionMutationAuthorized: false as const,
+  syntheticBoundaryChangeAuthorized: false as const,
+  liveTenantIoAuthorized: false as const,
+  sharePointWriteAuthorized: false as const,
+  deployAuthorized: false as const,
+} as const;
