@@ -7,11 +7,11 @@ Unit: VISUAL-POLISH-1 — Foundations Assessment / Plan
 PR: #367
 Reviewed substantive HEAD（pre-convergence）: dae06ada1bb28ca0e563896b96b23f48edfa097b
 Convergence commit: 8908494f7916751adc3e90afa6ced467c016de93
-Current PR HEAD（Ready 拘束用）: 077249856f2eb8bdf7b96c787018789d1e6f29c3
+Fresh Review target HEAD（evidence snapshot before this correction）: c90eca4f27170ef6a5b205a939c512ecf49fe1de
 Authority doc: docs/architecture/visual-polish-1-foundations-assessment.md
 Status: PASS / ACCEPT
 Findings: P0 = 0 / P1 = 0 / P2 = 3 OPEN（non-blocking；deferred beyond Assessment Merge）
-Observed PR state at review start: OPEN / DRAFT / mergeable=CLEAN / CI PASS
+Observed PR state at Fresh Review: OPEN / DRAFT / mergeable=MERGEABLE / CI PASS
 Human Ready: NOT AUTHORIZED（separate Human gate；bind to current PR HEAD）
 Merge: NOT AUTHORIZED by this review alone（requires Human Ready → Human Merge GO）
 ```
@@ -57,9 +57,11 @@ Assessment freeze BASE SHA `72cad1b…` retained as historical freeze marker（n
 ## Evidence inspected
 
 ```text
-PR #367 HEAD (start): dae06ada1bb28ca0e563896b96b23f48edfa097b
+PR #367 substantive HEAD（pre-convergence）: dae06ada1bb28ca0e563896b96b23f48edfa097b
+Convergence commit: 8908494f7916751adc3e90afa6ced467c016de93
+PR #367 Fresh Review target HEAD: c90eca4f27170ef6a5b205a939c512ecf49fe1de
 main tip: d1ede70226e0c09db3759b92bf64d2c65892c74a（#371 MERGED）
-CI: Contracts and Process CI SUCCESS（run 31803852397）
+CI: Contracts and Process CI SUCCESS（run 31889177992）
 Diff class: docs-only
 Related:
   #371 MERGED — Storybook agent-instruction reference
