@@ -13,6 +13,12 @@ External mutation: 0
 Deploy: NOT PERFORMED
 ```
 
+> **SUPERSEDED package authority (2026-08-15):**  
+> Package sha256 `c8850e73…` / size `116174` recorded below is **historical resume evidence only**.  
+> **RELEASE-ARTIFACT-AUTHORITY-1** → `ARTIFACT_NOT_REPRODUCIBLE` / Deploy **`EXECUTION_HOLD`**.  
+> Do **not** use `c885…`, `32ed…`, or `97b6…` as deployment artifact authority.  
+> See `docs/architecture/release-artifact-authority-1.md` and updated `release-readiness-1-deploy-go.md`.
+
 ## 1. Observed main / RC
 
 | Label | SHA | Note |
@@ -74,6 +80,7 @@ Accepted surfaces（cite closeout）: User Detail CTA, CurrentProcedure, Procedu
 ## 5. Package
 
 ```text
+HISTORICAL resume record（NOT AUTHORITATIVE for App Catalog upload）:
 path: spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
 name: severe-behavior-support-spfx-shell-client-side-solution
 id: 4342db47-21a3-4c48-aed1-ef615f55c404
@@ -82,6 +89,7 @@ size: 116174 bytes
 sha256: c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec
 RC SHA binding: 8173a4c18f6ce85254467c67ce81b481a537a35d
 Upload/Deploy by this unit: 0
+Authority after RELEASE-ARTIFACT-AUTHORITY-1: NONE（ARTIFACT_NOT_REPRODUCIBLE）
 ```
 
 Verification evidence（RC run；not re-uploaded）:
@@ -145,14 +153,14 @@ A ≠ automatic #299 changes
 ## 9. Exact next Human gate
 
 ```text
-Deploy GO for RC 8173a4c18f6ce85254467c67ce81b481a537a35d
-Package: severe-behavior-support-spfx-shell.sppkg
-  sha256 c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec
-  size 116174
-Retain previous known-good .sppkg（38661-byte / 2026-08-11）before overwrite
-Follow: decision-assessment-snapshot-adapter-sphttpclient-deploy-packet.md
-  + release-readiness-1-rollback-runbook.md
-If NoScript guard blocks: separate DEPLOY-NOSCRIPT Human GO（do not force）
+SUPERSEDED by RELEASE-ARTIFACT-AUTHORITY-1（2026-08-15）:
+  Deploy execution = EXECUTION_HOLD until package authority is established
+  Do not upload c885… / 32ed… / 97b6…
+Historical resume gate（for archive）was:
+  Deploy GO for RC 8173a4c… + package sha256 c8850e73… / size 116174
+Rollback retain（still current）:
+  known-good .sppkg size 38661 / sha256 456dfb62b15b9ea5e1ee51335e471aa8e6dabc00571d5bd8cd09ed737a34f6dd
+Authority: release-artifact-authority-1.md
 ```
 
 ## 10. #299 Close conditions（read-only）
@@ -174,7 +182,7 @@ Post-#357 scope drift: do not reopen from readiness；UI-POLISH / separate Close
 - Gate: Release Gate
 - repository main SHA: `5bc78cb77aeafa4e9877779813bd9423a018fb5f`（docs-only ahead of RC）
 - application RC SHA: `8173a4c18f6ce85254467c67ce81b481a537a35d`
-- artifact: `severe-behavior-support-spfx-shell.sppkg`（sha256 `c8850e73…`；116174 bytes；bound to application RC）
+- artifact: historical `c8850e73…` / 116174 — **NOT AUTHORITATIVE**（see RELEASE-ARTIFACT-AUTHORITY-1）
 
 ## Checklist
 
@@ -194,15 +202,16 @@ Post-#357 scope drift: do not reopen from readiness；UI-POLISH / separate Close
 
 ## HOLD
 
-- Readiness evidence: **なし**
-- Deploy execution approval: pending separate **Deploy GO**
+- Readiness evidence: **なし**（at resume time）
+- Deploy execution: **EXECUTION_HOLD**（`ARTIFACT_NOT_REPRODUCIBLE`）
 
 ## Approvals
 
-- 必要な承認: Human Deploy GO（RC SHA + package sha256/size bound）
-- 承認状態: **NOT YET**
+- 必要な承認: package artifact authority first；then Deploy GO rebound to authoritative sha256/size
+- 承認状態: Deploy GO historically received；**upload blocked** until authority
 
 ## Next Actions
 
-1. Human Deploy GO for RC `8173a4c…` / package sha256 `c8850e73…`（retain prior `.sppkg` first）
-2. Optional later: UI-POLISH slice for VA-2 residuals only
+1. Resolve RELEASE-ARTIFACT-AUTHORITY-1（deterministic rebuild **or** explicit Human byte-identity authority）
+2. Retain rollback `38661` / `456dfb62…`；do not App Catalog upload of non-authoritative packages
+3. Optional later: UI-POLISH slice for VA-2 residuals only

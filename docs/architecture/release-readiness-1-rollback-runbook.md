@@ -28,8 +28,11 @@ Agent App Catalog mutation = FORBIDDEN
 Authority: `docs/architecture/decision-assessment-snapshot-adapter-sphttpclient-deploy-verification.md`
 
 ```text
-path（build-time）: spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
+path（retained Human copy）:
+  /Users/yasutakesougo/severe-behavior-support-spfx-deploy232/spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
 size: 38661 bytes
+sha256: 456dfb62b15b9ea5e1ee51335e471aa8e6dabc00571d5bd8cd09ed737a34f6dd
+ZIP integrity: PASS（RELEASE-ARTIFACT-AUTHORITY-1）
 name: severe-behavior-support-spfx-shell-client-side-solution
 solution id / ProductId: 4342db47-21a3-4c48-aed1-ef615f55c404
 version: 1.0.0.0
@@ -41,13 +44,18 @@ Tenant App Catalog URL: https://isogokatudouhome.sharepoint.com/sites/appcatalog
 Pilot site context: https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo
 ```
 
-### 2.2 Release Candidate package（built from RC；not uploaded by this unit）
+### 2.2 Release Candidate package（NOT AUTHORITATIVE as of RELEASE-ARTIFACT-AUTHORITY-1）
 
 ```text
 RC SHA: 8173a4c18f6ce85254467c67ce81b481a537a35d
 path: spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
-size: 116174 bytes
-sha256: c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec
+Authority: NONE — ARTIFACT_NOT_REPRODUCIBLE
+Legacy agent reference（UNVERIFIED / NOT AUTHORITATIVE）:
+  size 116174 / sha256 c8850e735c6ecbbe16ca77b9aa81bc4028d8926a3ae722e5d28cacc091430fec
+2026-08-15 rebuild pair（NOT AUTHORITATIVE；byte mismatch）:
+  size 35947 / sha256 32ed5eafb59d1dcc1d44c89e0f5f34dc057569dded5d2b44b1f5724f24275746
+  size 35948 / sha256 97b6ec3ff3af4ab2b779988ae7dc4fffc31c933bda3ea9462ae030240135a7b9
+Evidence: docs/architecture/release-artifact-authority-1.md
 name: severe-behavior-support-spfx-shell-client-side-solution
 solution id / ProductId: 4342db47-21a3-4c48-aed1-ef615f55c404
 version: 1.0.0.0
@@ -122,6 +130,7 @@ Schema rollback is **NOT REQUIRED** for SPFx package rollback.
 ```text
 Default rollback path: NON-DESTRUCTIVE（Overwrite previous .sppkg）
 Forbidden without separate Human GO:
+  - App Catalog app deletion / delete-and-readd
   - list / item deletion
   - column removal
   - site deletion
