@@ -3,12 +3,16 @@
 ```text
 Unit: VISUAL-POLISH — Agent Instruction amendment
 Kind: docs-only / agent-instruction amendment
-Status: REVIEWABLE（Accepted / LOCKED ではない）
+Status: Fresh Review PASS / ACCEPT（PR #371）
+  → READY FOR HUMAN READY → MERGE
 Date: 2026-08-15
 Baseline main: fa76c11759e3b5ab79c8923bfbad00fe6e306010
+Reviewed HEAD: 247d5b03b82defc036d5b67733d7d49c04f1cd9f
+Fresh Review: docs/architecture/visual-polish-agent-instruction-dads-react-reference-fresh-review.md
 Application mutation: 0
 External mutation: 0
 Deploy: NO-GO
+Human Ready / Merge: NOT AUTHORIZED by this document alone
 ```
 
 ## 1. Purpose
@@ -132,7 +136,9 @@ This Amendment ≠ rewrite of Decision-DADS-ADOPTION-V1
 ## 9. Next
 
 ```text
-1. Draft PR → Human Fresh Review
-2. 後続 Visual Polish slice の起動文に §3 項目を含める
-3. VP-2+ Implementation Start は別 Human GO（本 docs 単独では開始しない）
+1. Fresh Review = PASS（see companion fresh-review doc）
+2. Human Ready → Human Merge of #371 only（docs amendment）
+3. #371 MERGE ≠ #367 / #368 MERGE ≠ VP-2 Start ≠ 新 RC ≠ Visual Acceptance ≠ Deploy GO
+4. Preferred later order: #367 Assessment → #368 Foundations → VP-2+
+5. 後続 Visual Polish slice の起動文に §3 項目を含める（#371 Merge 後）
 ```
