@@ -6,12 +6,13 @@ Kind: Fresh Review（docs-only Assessment PR）
 Unit: VISUAL-POLISH-1 — Foundations Assessment / Plan
 PR: #367
 Reviewed substantive HEAD（pre-convergence）: dae06ada1bb28ca0e563896b96b23f48edfa097b
-Convergence + Fresh Review evidence HEAD: 8908494f7916751adc3e90afa6ced467c016de93
+Convergence commit: 8908494f7916751adc3e90afa6ced467c016de93
+Current PR HEAD（Ready 拘束用）: 077249856f2eb8bdf7b96c787018789d1e6f29c3
 Authority doc: docs/architecture/visual-polish-1-foundations-assessment.md
 Status: PASS / ACCEPT
 Findings: P0 = 0 / P1 = 0 / P2 = 3 OPEN（non-blocking；deferred beyond Assessment Merge）
 Observed PR state at review start: OPEN / DRAFT / mergeable=CLEAN / CI PASS
-Human Ready: NOT AUTHORIZED（separate Human gate）
+Human Ready: NOT AUTHORIZED（separate Human gate；bind to current PR HEAD）
 Merge: NOT AUTHORIZED by this review alone（requires Human Ready → Human Merge GO）
 ```
 
