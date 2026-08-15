@@ -1,22 +1,27 @@
 @use "../tokens/sbs-tokens" as sbs;
 
+// VISUAL-POLISH-2 — Overview adopts VP-1 semantic roles and interaction states.
+// IA, status vocabulary, synthetic data, and navigation contracts are unchanged.
 .overviewDashboard {
   display: flex;
   flex-direction: column;
-  gap: sbs.$space-4;
+  gap: sbs.$space-6;
   min-width: 0;
   max-width: 100%;
-  padding: sbs.$space-4;
+  padding: sbs.$space-6;
   border-width: sbs.$border-width-thin;
   border-style: dashed;
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-medium;
   box-sizing: border-box;
 }
 
 .overviewHeading {
   margin: 0;
-  font-size: sbs.$font-size-500;
+  font-size: sbs.$font-size-page-title;
+  font-weight: sbs.$font-weight-page-title;
+  line-height: sbs.$line-height-page-title;
   outline: none;
 }
 
@@ -35,34 +40,37 @@
   border-color: sbs.$color-feedback-warning-border;
   background: sbs.$color-feedback-warning-bg;
   color: sbs.$color-feedback-warning-fg;
-  font-size: sbs.$font-size-200;
-  font-weight: 600;
-  line-height: 1.45;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: sbs.$space-3;
+  gap: sbs.$space-4;
   min-width: 0;
 }
 
 .sectionHeading {
   margin: 0;
-  font-size: sbs.$font-size-400;
-  font-weight: 700;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
 }
 
 .sectionHint {
   margin: 0;
-  font-size: sbs.$font-size-100;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
   opacity: 0.9;
 }
 
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: sbs.$space-3;
+  gap: sbs.$space-4;
   min-width: 0;
   padding: 0;
   margin: 0;
@@ -72,21 +80,23 @@
 .kpiCard {
   display: flex;
   flex-direction: column;
-  gap: sbs.$space-1;
+  gap: sbs.$space-2;
   min-height: 5rem;
-  padding: sbs.$space-3;
+  padding: sbs.$space-4;
   border-width: sbs.$border-width-thin;
   border-style: solid;
-  border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-canvas;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface;
+  border-radius: sbs.$radius-medium;
+  box-shadow: sbs.$elevation-subtle;
   box-sizing: border-box;
-  border-radius: sbs.$radius-none;
 }
 
 .kpiLabel {
   margin: 0;
-  font-size: sbs.$font-size-200;
-  font-weight: 600;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
 }
 
 .kpiCount {
@@ -99,8 +109,9 @@
 
 .kpiHint {
   margin: 0;
-  font-size: sbs.$font-size-100;
-  line-height: 1.35;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .actionList,
@@ -117,9 +128,9 @@
 .recentRow {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: sbs.$space-2 sbs.$space-3;
+  gap: sbs.$space-2 sbs.$space-4;
   align-items: center;
-  padding: sbs.$space-3 0;
+  padding: sbs.$space-4 0;
   border-bottom-width: sbs.$border-width-thin;
   border-bottom-style: solid;
   border-bottom-color: sbs.$color-border-subtle;
@@ -136,25 +147,33 @@
 
 .personLabel {
   margin: 0;
-  font-weight: 600;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
 }
 
 .reasonText,
 .recentMeta {
   margin: 0;
-  font-size: sbs.$font-size-200;
-  line-height: 1.4;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
+}
+
+.recentMeta {
+  color: sbs.$color-text-secondary;
 }
 
 .actionButton {
   min-height: 2.25rem;
-  padding: 0.35rem sbs.$space-3;
+  padding: sbs.$space-2 sbs.$space-4;
   border-width: sbs.$border-width-thin;
   border-style: solid;
-  border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-muted;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
   color: inherit;
-  font-size: sbs.$font-size-200;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
   white-space: nowrap;
 }
 
@@ -164,14 +183,24 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
+.actionButton:hover:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.actionButton:active:not(:disabled) {
+  background: sbs.$color-surface-muted;
+}
+
 .actionButton:disabled {
-  opacity: 0.65;
+  color: sbs.$color-text-disabled;
+  opacity: 1;
   cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
   .overviewDashboard {
-    padding: sbs.$space-3;
+    padding: sbs.$space-4;
   }
 
   .kpiGrid {
