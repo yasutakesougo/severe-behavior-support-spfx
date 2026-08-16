@@ -78,17 +78,22 @@ normal application runtime
 LIVE WRITE execution runner
   → purpose = procedure-record-first-create
   → humanLiveWriteGo = true
-  → exact main SHA（40 hex）
-  → exact test-only List GUID
-  → itemCount = 0
-  → logical SiteId（not a GUID）+ organizationId
+  → packet.expectedMainSha == runner-confirmed authoritative main SHA
+  → normalize(packet.listGuid)
+     == normalize(transport options.listGuid)
+     == binding.listGuid
+     == b971ff03-799e-41ac-b037-8becb9f4ff4b
+  → packet.organizationId == binding.organizationId
+  → packet.logicalSiteId == binding.siteId
+  → itemCount = 0（precheck evidence; not generic create()）
   → createProcedureRecordLiveWriteSpHttpClientTransport
   → createProcedureRecordLiveWriteExecutionRepository
   → reviewed create path
 ```
 
 Caller booleans (`itemCreateAuthorized`) cannot mint a token.
-Invalid packets return null / stay FORBIDDEN.
+Invalid or unbound packets return null / stay FORBIDDEN（POST = 0）.
+A 40-hex SHA that is not the runner-confirmed main SHA does not mint.
 
 Production write-related entry points are:
 

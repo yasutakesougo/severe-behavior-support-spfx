@@ -59,6 +59,8 @@ export {
   isProcedureRecordLiveWriteGoPacket,
   refuseUnauthorizedLiveCreate,
   type ProcedureRecordLiveWriteAuthorization,
+  type ProcedureRecordLiveWriteExecutionBinding,
+  type ProcedureRecordLiveWriteExecutionEvidence,
   type ProcedureRecordLiveWriteGoPacket,
 } from "./live-write-gate";
 export {

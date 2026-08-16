@@ -25,6 +25,8 @@ import { createSyntheticAuthorizedProcedureRecordRepository } from "./synthetic-
 const LOGICAL_SITE_ID = "test-only-procedure-record-logical-site-id";
 const ORGANIZATION_ID = "synthetic-org-001";
 const OTHER_LIST_GUID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+const SYNTHETIC_MAIN_SHA = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const OTHER_MAIN_SHA = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
 function schemaFields(): ObservedPhysicalField[] {
   const fields: ObservedPhysicalField[] = PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS.map(
@@ -277,15 +279,23 @@ describe("ProcedureRecord write-capable live repository", () => {
 
   it("rejects an incomplete Human GO packet and does not open create", () => {
     assert.equal(
-      createProcedureRecordLiveWriteAuthorizationFromGoPacket({
-        purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
-        humanLiveWriteGo: true,
-        expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
-        itemCount: 1,
-        logicalSiteId: LOGICAL_SITE_ID,
-        organizationId: ORGANIZATION_ID,
-      }),
+      createProcedureRecordLiveWriteAuthorizationFromGoPacket(
+        {
+          purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+          humanLiveWriteGo: true,
+          expectedMainSha: SYNTHETIC_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          itemCount: 1,
+          logicalSiteId: LOGICAL_SITE_ID,
+          organizationId: ORGANIZATION_ID,
+        },
+        {
+          authoritativeMainSha: SYNTHETIC_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          organizationId: ORGANIZATION_ID,
+          logicalSiteId: LOGICAL_SITE_ID,
+        },
+      ),
       null,
     );
     const binding = bindTestOnlyProvisionedProcedureRecordList({
@@ -295,10 +305,73 @@ describe("ProcedureRecord write-capable live repository", () => {
     assert.ok(binding);
     const { transport, calls } = createTransport();
     assert.equal(
-      createProcedureRecordLiveWriteExecutionRepository(binding, transport, {
-        itemCreateAuthorized: true,
-        liveTenantIoAuthorized: true,
-      }),
+      createProcedureRecordLiveWriteExecutionRepository(
+        binding,
+        transport,
+        {
+          itemCreateAuthorized: true,
+          liveTenantIoAuthorized: true,
+        },
+        { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
+      ),
+      null,
+    );
+    assert.equal(calls.createItem, 0);
+  });
+
+  it("does not mint capability when the GO packet SHA is not the execution main SHA", () => {
+    assert.equal(
+      createProcedureRecordLiveWriteAuthorizationFromGoPacket(
+        {
+          purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+          humanLiveWriteGo: true,
+          expectedMainSha: SYNTHETIC_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          itemCount: 0,
+          logicalSiteId: LOGICAL_SITE_ID,
+          organizationId: ORGANIZATION_ID,
+        },
+        {
+          authoritativeMainSha: OTHER_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          organizationId: ORGANIZATION_ID,
+          logicalSiteId: LOGICAL_SITE_ID,
+        },
+      ),
+      null,
+    );
+  });
+
+  it("does not open execution repository when binding organizationId or SiteId differ from the packet", () => {
+    const packet: ProcedureRecordLiveWriteGoPacket = {
+      purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+      humanLiveWriteGo: true,
+      expectedMainSha: SYNTHETIC_MAIN_SHA,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      itemCount: 0,
+      logicalSiteId: LOGICAL_SITE_ID,
+      organizationId: ORGANIZATION_ID,
+    };
+    const evidence = { authoritativeMainSha: SYNTHETIC_MAIN_SHA };
+    const otherOrg = bindProcedureRecordList({
+      organizationId: "other-org-001",
+      siteId: LOGICAL_SITE_ID,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+    });
+    const otherSite = bindProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: "other-logical-site-id",
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+    });
+    assert.ok(otherOrg);
+    assert.ok(otherSite);
+    const { transport, calls } = createTransport();
+    assert.equal(
+      createProcedureRecordLiveWriteExecutionRepository(otherOrg, transport, packet, evidence),
+      null,
+    );
+    assert.equal(
+      createProcedureRecordLiveWriteExecutionRepository(otherSite, transport, packet, evidence),
       null,
     );
     assert.equal(calls.createItem, 0);
@@ -314,7 +387,7 @@ describe("ProcedureRecord write-capable live repository", () => {
     const packet: ProcedureRecordLiveWriteGoPacket = {
       purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
       humanLiveWriteGo: true,
-      expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      expectedMainSha: SYNTHETIC_MAIN_SHA,
       listGuid: `{${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID.toUpperCase()}}`,
       itemCount: 0,
       logicalSiteId: LOGICAL_SITE_ID,
@@ -324,6 +397,7 @@ describe("ProcedureRecord write-capable live repository", () => {
       binding,
       transport,
       packet,
+      { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
     );
     assert.ok(repository);
     const record = createSyntheticProcedureRecord({

@@ -176,16 +176,24 @@ export function createProcedureRecordSpHttpClientTransport(
 
 /**
  * LIVE WRITE execution boundary. A valid Human GO packet mints run-scoped
- * authorization for this transport instance. Invalid packets stay FORBIDDEN.
- * Does not itself perform live tenant I/O.
+ * authorization only when packet SHA and List GUID equal this transport target.
+ * Invalid or unbound packets stay FORBIDDEN. Does not itself perform live tenant I/O.
  */
 export function createProcedureRecordLiveWriteSpHttpClientTransport(
   options: CreateProcedureRecordSpHttpClientTransportOptions,
   packet: unknown,
+  execution: unknown,
 ): ProcedureRecordLiveListTransport {
+  const authoritativeMainSha =
+    typeof execution === "object" && execution && "authoritativeMainSha" in execution
+      ? (execution as { authoritativeMainSha?: unknown }).authoritativeMainSha
+      : undefined;
   return createBoundProcedureRecordSpHttpClientTransport(
     options,
-    createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket(packet),
+    createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket(packet, {
+      authoritativeMainSha: typeof authoritativeMainSha === "string" ? authoritativeMainSha : "",
+      listGuid: options.listGuid,
+    }),
   );
 }
 

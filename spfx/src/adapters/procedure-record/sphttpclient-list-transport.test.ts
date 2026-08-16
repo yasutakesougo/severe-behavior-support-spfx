@@ -19,6 +19,9 @@ type MockCall = Readonly<{
 
 const SYNTHETIC_CONFIGURATION = { kind: "synthetic-sphttpclient-v1" };
 const SYNTHETIC_WEB = "https://synthetic.example.invalid/sites/severe-support-procedurerecord-test";
+const SYNTHETIC_MAIN_SHA = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const OTHER_MAIN_SHA = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+const OTHER_LIST_GUID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 
 function createMockClient(handler: {
   get?: (url: string) => Promise<{
@@ -286,12 +289,13 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
       {
         purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
         humanLiveWriteGo: true,
-        expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        expectedMainSha: SYNTHETIC_MAIN_SHA,
         listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
         itemCount: 1,
         logicalSiteId: "test-only-procedure-record-logical-site-id",
         organizationId: "synthetic-org-001",
       },
+      { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
     );
     await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
       ok: false,
@@ -319,12 +323,13 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
       {
         purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
         humanLiveWriteGo: true,
-        expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        expectedMainSha: SYNTHETIC_MAIN_SHA,
         listGuid: `{${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID.toUpperCase()}}`,
         itemCount: 0,
         logicalSiteId: "test-only-procedure-record-logical-site-id",
         organizationId: "synthetic-org-001",
       },
+      { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
     );
     const result = await transport.createItem({
       prRecordId: "synth-record",
@@ -345,6 +350,74 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
     expect(body.__metadata?.type).toBe(PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE);
     expect(body.prRecordId).toBe("synth-record");
     expect("Title" in body).toBe(false);
+  });
+
+  it("createItem: valid-looking packet with a different transport List GUID does not POST", async () => {
+    const { client, calls } = createMockClient({
+      post: async () => ({
+        ok: true,
+        status: 201,
+        json: async () => ({ d: { Id: 1 } }),
+      }),
+    });
+    const transport = createProcedureRecordLiveWriteSpHttpClientTransport(
+      {
+        spHttpClient: client,
+        configuration: SYNTHETIC_CONFIGURATION,
+        webAbsoluteUrl: SYNTHETIC_WEB,
+        listGuid: OTHER_LIST_GUID,
+        listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
+      },
+      {
+        purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+        humanLiveWriteGo: true,
+        expectedMainSha: SYNTHETIC_MAIN_SHA,
+        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+        itemCount: 0,
+        logicalSiteId: "test-only-procedure-record-logical-site-id",
+        organizationId: "synthetic-org-001",
+      },
+      { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
+    );
+    await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
+      ok: false,
+      failure: "FORBIDDEN",
+    });
+    expect(calls).toHaveLength(0);
+  });
+
+  it("createItem: 40-hex but wrong main SHA does not POST", async () => {
+    const { client, calls } = createMockClient({
+      post: async () => ({
+        ok: true,
+        status: 201,
+        json: async () => ({ d: { Id: 1 } }),
+      }),
+    });
+    const transport = createProcedureRecordLiveWriteSpHttpClientTransport(
+      {
+        spHttpClient: client,
+        configuration: SYNTHETIC_CONFIGURATION,
+        webAbsoluteUrl: SYNTHETIC_WEB,
+        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+        listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
+      },
+      {
+        purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+        humanLiveWriteGo: true,
+        expectedMainSha: SYNTHETIC_MAIN_SHA,
+        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+        itemCount: 0,
+        logicalSiteId: "test-only-procedure-record-logical-site-id",
+        organizationId: "synthetic-org-001",
+      },
+      { authoritativeMainSha: OTHER_MAIN_SHA },
+    );
+    await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
+      ok: false,
+      failure: "FORBIDDEN",
+    });
+    expect(calls).toHaveLength(0);
   });
 });
 

@@ -32,10 +32,13 @@ describe("ProcedureRecord production export surface", () => {
     assert.equal(procedureRecord.createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(procedureRecord.isProcedureRecordLiveWriteAuthorized(), false);
     assert.equal(
-      procedureRecord.createProcedureRecordLiveWriteAuthorizationFromGoPacket({
-        itemCreateAuthorized: true,
-        liveTenantIoAuthorized: true,
-      }),
+      procedureRecord.createProcedureRecordLiveWriteAuthorizationFromGoPacket(
+        {
+          itemCreateAuthorized: true,
+          liveTenantIoAuthorized: true,
+        },
+        { authoritativeMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+      ),
       null,
     );
   });
@@ -64,8 +67,10 @@ describe("ProcedureRecord production export surface", () => {
     const spfxGate = source("spfx/src/adapters/procedure-record/live-write-gate.ts");
     assert.equal(rootGate.includes("export const PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
     assert.equal(spfxGate.includes("export const SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
-    assert.equal(rootGate.includes("purpose !== PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE"), true);
-    assert.equal(spfxGate.includes("purpose !== PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE"), true);
+    assert.equal(rootGate.includes("packetSha !== executionSha"), true);
+    assert.equal(spfxGate.includes("packetSha !== executionSha"), true);
+    assert.equal(rootGate.includes("binding.organizationId !== packet.organizationId"), true);
+    assert.equal(rootGate.includes("binding.logicalSiteId !== packet.logicalSiteId"), true);
     assert.equal(rootGate.includes("packet.itemCount !== 0"), true);
     assert.equal(spfxGate.includes("packet.itemCount !== 0"), true);
     assert.equal(rootGate.includes("procedure-record-first-create"), true);
@@ -79,11 +84,12 @@ describe("ProcedureRecord production export surface", () => {
       repository.includes("createProcedureRecordLiveWriteAuthorizationFromGoPacket"),
       true,
     );
-    assert.equal(repository.includes("transport.createItem"), true);
+    assert.equal(repository.includes("logicalSiteId: binding.siteId"), true);
     assert.equal(
       transport.includes("createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket"),
       true,
     );
+    assert.equal(transport.includes("listGuid: options.listGuid"), true);
     assert.equal(transport.includes("export async function postProcedureRecordCreateItem"), false);
     assert.equal(transport.includes("async function postProcedureRecordCreateItem"), true);
     assert.equal(

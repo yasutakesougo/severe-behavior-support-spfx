@@ -251,15 +251,25 @@ export function createProcedureRecordRepository(
 
 /**
  * LIVE WRITE execution boundary. A valid Human GO packet mints run-scoped
- * authorization for this repository instance. Invalid packets return null.
- * Does not perform SharePoint I/O.
+ * authorization only when packet SHA, List GUID, and site binding match.
+ * Invalid or unbound packets return null. Does not perform SharePoint I/O.
  */
 export function createProcedureRecordLiveWriteExecutionRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
   packet: unknown,
+  execution: unknown,
 ): ProcedureRecordListRepository | null {
-  const authorization = createProcedureRecordLiveWriteAuthorizationFromGoPacket(packet);
+  const authoritativeMainSha =
+    typeof execution === "object" && execution && "authoritativeMainSha" in execution
+      ? (execution as { authoritativeMainSha?: unknown }).authoritativeMainSha
+      : undefined;
+  const authorization = createProcedureRecordLiveWriteAuthorizationFromGoPacket(packet, {
+    authoritativeMainSha: typeof authoritativeMainSha === "string" ? authoritativeMainSha : "",
+    listGuid: binding.listGuid,
+    organizationId: binding.organizationId,
+    logicalSiteId: binding.siteId,
+  });
   if (authorization === null) {
     return null;
   }

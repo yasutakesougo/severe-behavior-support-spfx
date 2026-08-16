@@ -1,8 +1,8 @@
 /**
  * SPFx copy of the ProcedureRecord LIVE WRITE execution gate.
  * Packet rules must stay aligned with root live-write-gate.ts.
- * Default runtime cannot mint a capability. This module is not an index export
- * except through the dedicated live-write transport factory.
+ * Packet List GUID and expectedMainSha must equal the transport target
+ * and the runner-confirmed main SHA. Opening does not add POST code.
  */
 
 export const PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE = "procedure-record-first-create" as const;
@@ -21,6 +21,11 @@ export type ProcedureRecordLiveWriteGoPacket = Readonly<{
   organizationId: string;
 }>;
 
+export type ProcedureRecordLiveWriteTransportExecutionBinding = Readonly<{
+  authoritativeMainSha: string;
+  listGuid: string;
+}>;
+
 const LIVE_WRITE_AUTHORIZATION_BRAND: unique symbol = Symbol(
   "spfx-procedure-record-live-write-authorization",
 );
@@ -35,6 +40,11 @@ function normalizeListGuid(value: string): string | undefined {
     .replace(/^\{|\}$/g, "")
     .toLowerCase();
   return GUID_RE.test(normalized) ? normalized : undefined;
+}
+
+function normalizeMainSha(value: string): string | undefined {
+  const normalized = value.trim().toLowerCase();
+  return MAIN_SHA_RE.test(normalized) ? normalized : undefined;
 }
 
 export function isSpfxProcedureRecordLiveWriteAuthorization(
@@ -61,7 +71,7 @@ export function isSpfxProcedureRecordLiveWriteGoPacket(
   if (packet.humanLiveWriteGo !== true) {
     return false;
   }
-  if (typeof packet.expectedMainSha !== "string" || !MAIN_SHA_RE.test(packet.expectedMainSha)) {
+  if (typeof packet.expectedMainSha !== "string" || !normalizeMainSha(packet.expectedMainSha)) {
     return false;
   }
   const listGuid =
@@ -84,14 +94,39 @@ export function isSpfxProcedureRecordLiveWriteGoPacket(
   return true;
 }
 
+function isBoundTransportExecution(
+  packet: ProcedureRecordLiveWriteGoPacket,
+  execution: unknown,
+): boolean {
+  if (typeof execution !== "object" || !execution) {
+    return false;
+  }
+  const binding = execution as Partial<ProcedureRecordLiveWriteTransportExecutionBinding>;
+  if (typeof binding.authoritativeMainSha !== "string" || typeof binding.listGuid !== "string") {
+    return false;
+  }
+  const packetSha = normalizeMainSha(packet.expectedMainSha);
+  const executionSha = normalizeMainSha(binding.authoritativeMainSha);
+  if (packetSha === undefined || executionSha === undefined || packetSha !== executionSha) {
+    return false;
+  }
+  const packetListGuid = normalizeListGuid(packet.listGuid);
+  const executionListGuid = normalizeListGuid(binding.listGuid);
+  return packetListGuid === EXPECTED_LIST_GUID && executionListGuid === EXPECTED_LIST_GUID;
+}
+
 /**
  * Run-scoped mint for the LIVE WRITE execution runner.
- * Returns undefined unless the exact Human GO packet is valid.
+ * Returns undefined unless the packet SHA and List GUID equal the transport target.
  */
 export function createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket(
   packet: unknown,
+  execution: unknown,
 ): SpfxProcedureRecordLiveWriteAuthorization | undefined {
-  if (!isSpfxProcedureRecordLiveWriteGoPacket(packet)) {
+  if (
+    !isSpfxProcedureRecordLiveWriteGoPacket(packet) ||
+    !isBoundTransportExecution(packet, execution)
+  ) {
     return undefined;
   }
   return { [LIVE_WRITE_AUTHORIZATION_BRAND]: true };

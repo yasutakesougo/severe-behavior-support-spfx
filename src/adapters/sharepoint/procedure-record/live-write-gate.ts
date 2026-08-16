@@ -1,7 +1,7 @@
 /**
  * LIVE WRITE remains a later Human GO.
- * Default runtime cannot mint a capability. A valid Human GO packet is the
- * only run-scoped input that opens the reviewed create path.
+ * Default runtime cannot mint a capability. A valid Human GO packet must
+ * match the execution SHA, List GUID, and site binding before minting.
  * Callers cannot assign production flags. Opening does not add POST code.
  */
 
@@ -23,6 +23,17 @@ export type ProcedureRecordLiveWriteGoPacket = Readonly<{
   organizationId: string;
 }>;
 
+export type ProcedureRecordLiveWriteExecutionBinding = Readonly<{
+  authoritativeMainSha: string;
+  listGuid: string;
+  organizationId: string;
+  logicalSiteId: string;
+}>;
+
+export type ProcedureRecordLiveWriteExecutionEvidence = Readonly<{
+  authoritativeMainSha: string;
+}>;
+
 const LIVE_WRITE_AUTHORIZATION_BRAND: unique symbol = Symbol(
   "procedure-record-live-write-authorization",
 );
@@ -37,7 +48,7 @@ export function refuseUnauthorizedLiveCreate(): ProcedureRecordCreateAttempt {
 
 /**
  * Process-wide default remains closed. Run-scoped capability lives on the
- * LIVE WRITE execution repository constructed from a valid GO packet.
+ * LIVE WRITE execution repository constructed from a bound GO packet.
  */
 export function isProcedureRecordLiveWriteAuthorized(): boolean {
   return false;
@@ -54,6 +65,11 @@ export function isProcedureRecordLiveWriteAuthorization(
   );
 }
 
+function normalizeMainSha(value: string): string | undefined {
+  const normalized = value.trim().toLowerCase();
+  return MAIN_SHA_RE.test(normalized) ? normalized : undefined;
+}
+
 export function isProcedureRecordLiveWriteGoPacket(
   value: unknown,
 ): value is ProcedureRecordLiveWriteGoPacket {
@@ -67,7 +83,7 @@ export function isProcedureRecordLiveWriteGoPacket(
   if (packet.humanLiveWriteGo !== true) {
     return false;
   }
-  if (typeof packet.expectedMainSha !== "string" || !MAIN_SHA_RE.test(packet.expectedMainSha)) {
+  if (typeof packet.expectedMainSha !== "string" || !normalizeMainSha(packet.expectedMainSha)) {
     return false;
   }
   const listGuid = normalizeSharePointGuid(
@@ -91,6 +107,41 @@ export function isProcedureRecordLiveWriteGoPacket(
   return true;
 }
 
+function isBoundLiveWriteExecution(
+  packet: ProcedureRecordLiveWriteGoPacket,
+  execution: unknown,
+): boolean {
+  if (typeof execution !== "object" || !execution) {
+    return false;
+  }
+  const binding = execution as Partial<ProcedureRecordLiveWriteExecutionBinding>;
+  if (typeof binding.authoritativeMainSha !== "string") {
+    return false;
+  }
+  const packetSha = normalizeMainSha(packet.expectedMainSha);
+  const executionSha = normalizeMainSha(binding.authoritativeMainSha);
+  if (packetSha === undefined || executionSha === undefined || packetSha !== executionSha) {
+    return false;
+  }
+  const packetListGuid = normalizeSharePointGuid(packet.listGuid);
+  const executionListGuid = normalizeSharePointGuid(
+    typeof binding.listGuid === "string" ? binding.listGuid : "",
+  );
+  if (
+    packetListGuid !== PROCEDURE_RECORD_TEST_ONLY_LIST_GUID ||
+    executionListGuid !== PROCEDURE_RECORD_TEST_ONLY_LIST_GUID
+  ) {
+    return false;
+  }
+  if (binding.organizationId !== packet.organizationId) {
+    return false;
+  }
+  if (binding.logicalSiteId !== packet.logicalSiteId) {
+    return false;
+  }
+  return true;
+}
+
 /**
  * Default mint. Always null. Normal application runtime has no capability.
  */
@@ -100,12 +151,16 @@ export function createProcedureRecordLiveWriteAuthorization(): ProcedureRecordLi
 
 /**
  * Run-scoped mint for the LIVE WRITE execution runner.
- * Requires the exact Human GO packet; caller booleans are not sufficient.
+ * Packet fields must equal the execution SHA, List GUID, and site binding.
  */
 export function createProcedureRecordLiveWriteAuthorizationFromGoPacket(
   packet: unknown,
+  execution: unknown,
 ): ProcedureRecordLiveWriteAuthorization | null {
-  if (!isProcedureRecordLiveWriteGoPacket(packet)) {
+  if (
+    !isProcedureRecordLiveWriteGoPacket(packet) ||
+    !isBoundLiveWriteExecution(packet, execution)
+  ) {
     return null;
   }
   return { [LIVE_WRITE_AUTHORIZATION_BRAND]: true };
