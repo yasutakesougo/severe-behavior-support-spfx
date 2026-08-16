@@ -14,6 +14,7 @@ class FakeProcedureRecordPort implements ProcedureRecordPersistencePort {
   readonly byRecord = new Map<string, ProcedureRecord>();
   readonly byIdem = new Map<string, ProcedureRecord>();
   lookupMode: "ok" | "unknown" | "fetch_failed" = "ok";
+  fetchFailedCode = "TRANSPORT_ERROR";
   createMode: "created" | "definite" | "indeterminate" | "created_without_readback" = "created";
   createCalls = 0;
 
@@ -46,7 +47,7 @@ class FakeProcedureRecordPort implements ProcedureRecordPersistencePort {
       return { status: "UNKNOWN", reason: "INDETERMINATE" };
     }
     if (this.lookupMode === "fetch_failed") {
-      return { status: "FETCH_FAILED", code: "SYNTHETIC" };
+      return { status: "FETCH_FAILED", code: this.fetchFailedCode };
     }
     const found = kind === "record" ? this.byRecord.get(token) : this.byIdem.get(token);
     if (found === undefined) {
@@ -91,12 +92,35 @@ describe("persistProcedureRecord — D5/D8/D9", () => {
     assert.equal(port.createCalls, 0);
   });
 
-  it("maps FETCH_FAILED lookup to save_outcome_unknown and does not create", async () => {
+  it("maps transport FETCH_FAILED lookup to save_outcome_unknown and does not create", async () => {
     const port = new FakeProcedureRecordPort();
     port.lookupMode = "fetch_failed";
+    port.fetchFailedCode = "TRANSPORT_ERROR";
     assert.equal(
       await persistProcedureRecord(createSyntheticProcedureRecord(), port),
       "save_outcome_unknown",
+    );
+    assert.equal(port.createCalls, 0);
+  });
+
+  it("maps MALFORMED_PHYSICAL lookup to save_failed and does not create", async () => {
+    const port = new FakeProcedureRecordPort();
+    port.lookupMode = "fetch_failed";
+    port.fetchFailedCode = "MALFORMED_PHYSICAL";
+    assert.equal(
+      await persistProcedureRecord(createSyntheticProcedureRecord(), port),
+      "save_failed",
+    );
+    assert.equal(port.createCalls, 0);
+  });
+
+  it("maps MULTI_MATCH lookup to save_failed and does not create", async () => {
+    const port = new FakeProcedureRecordPort();
+    port.lookupMode = "fetch_failed";
+    port.fetchFailedCode = "MULTI_MATCH";
+    assert.equal(
+      await persistProcedureRecord(createSyntheticProcedureRecord(), port),
+      "save_failed",
     );
     assert.equal(port.createCalls, 0);
   });

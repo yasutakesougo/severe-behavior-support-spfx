@@ -87,11 +87,11 @@ describe("ProcedureRecord synthetic adapter — LOOKUP-B / PR-MAP-NAMES-1", () =
     assert.notEqual(repositoryLookupKey(), PROCEDURE_RECORD_LIST_DISPLAY_NAME);
   });
 
-  it("does not create when List GUID config is missing", async () => {
+  it("maps missing List GUID config to save_failed and does not create", async () => {
     const { repository, store } = createHarness(syntheticBinding({ listGuid: "   " }));
     assert.equal(
       await persistProcedureRecord(createSyntheticProcedureRecord(), repository),
-      "save_outcome_unknown",
+      "save_failed",
     );
     assert.equal(store.snapshotRows().length, 0);
   });
@@ -130,6 +130,46 @@ describe("ProcedureRecord synthetic adapter — LOOKUP-B / PR-MAP-NAMES-1", () =
     store.forceInsert({ ...encoded.row, prResult: "FAILED" });
     const lookup = await repository.findByRecordId(createSyntheticProcedureRecord().RecordId);
     assert.equal(lookup.status, "FETCH_FAILED");
+    if (lookup.status === "FETCH_FAILED") {
+      assert.equal(lookup.code, "MALFORMED_PHYSICAL");
+    }
+  });
+
+  it("maps malformed physical lookup through persistProcedureRecord to save_failed without create", async () => {
+    const { repository, store } = createHarness();
+    const record = createSyntheticProcedureRecord();
+    const encoded = encodePhysicalRow(record);
+    assert.equal(encoded.ok, true);
+    if (!encoded.ok) {
+      return;
+    }
+    store.forceInsert({ ...encoded.row, prResult: "FAILED" });
+    assert.equal(await persistProcedureRecord(record, repository), "save_failed");
+    assert.equal(store.snapshotRows().length, 1);
+  });
+
+  it("maps multi-match lookup through persistProcedureRecord to save_failed without create", async () => {
+    const { repository, store } = createHarness();
+    const record = createSyntheticProcedureRecord();
+    const encoded = encodePhysicalRow(record);
+    assert.equal(encoded.ok, true);
+    if (!encoded.ok) {
+      return;
+    }
+    store.forceInsert(encoded.row);
+    store.forceInsert(encoded.row);
+    assert.equal(await persistProcedureRecord(record, repository), "save_failed");
+    assert.equal(store.snapshotRows().length, 2);
+  });
+
+  it("maps transport lookup failure through persistProcedureRecord to save_outcome_unknown without create", async () => {
+    const { repository, store } = createHarness();
+    store.setMode("transport_error");
+    assert.equal(
+      await persistProcedureRecord(createSyntheticProcedureRecord(), repository),
+      "save_outcome_unknown",
+    );
+    assert.equal(store.snapshotRows().length, 0);
   });
 
   it("fail-closes when a later DERIVED column disagrees with constants", async () => {

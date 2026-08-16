@@ -33,7 +33,23 @@ export type ProcedureRecordLookupClassification =
   | Readonly<{ kind: "ACCEPT_NEW" }>
   | Readonly<{ kind: "REPLAY"; persisted: ProcedureRecord }>
   | Readonly<{ kind: "CONFLICT" }>
+  | Readonly<{ kind: "DEFINITE_FAILURE" }>
   | Readonly<{ kind: "LOOKUP_UNAVAILABLE"; reason: "UNKNOWN" | "FETCH_FAILED" }>;
+
+/** D9: schema / identity / configuration failures are definite, not unknown. */
+export const DEFINITE_LOOKUP_FAILURE_CODES = [
+  "MALFORMED_PHYSICAL",
+  "MULTI_MATCH",
+  "SITE_BINDING_MISMATCH",
+  "LIST_BINDING_MISSING",
+  "INVALID_LOOKUP_RESULT",
+] as const;
+
+export type DefiniteLookupFailureCode = (typeof DEFINITE_LOOKUP_FAILURE_CODES)[number];
+
+export function isDefiniteLookupFailureCode(code: string): code is DefiniteLookupFailureCode {
+  return (DEFINITE_LOOKUP_FAILURE_CODES as readonly string[]).includes(code);
+}
 
 const IMMUTABLE_CONTEXT_FIELDS = [
   "OrganizationId",
@@ -107,16 +123,33 @@ async function performLookup(
   }
 }
 
+function isDefiniteLookupFailure(result: LookupResult<ProcedureRecord>): boolean {
+  return result.status === "FETCH_FAILED" && isDefiniteLookupFailureCode(result.code);
+}
+
+function isIndeterminateLookupFailure(result: LookupResult<ProcedureRecord>): boolean {
+  if (result.status === "UNKNOWN") {
+    return true;
+  }
+  return result.status === "FETCH_FAILED" && !isDefiniteLookupFailureCode(result.code);
+}
+
 export function classifyProcedureRecordLookups(
   incoming: ProcedureRecord,
   byRecordId: LookupResult<ProcedureRecord>,
   byIdempotencyKey: LookupResult<ProcedureRecord>,
 ): ProcedureRecordLookupClassification {
-  if (byRecordId.status === "FETCH_FAILED" || byIdempotencyKey.status === "FETCH_FAILED") {
-    return { kind: "LOOKUP_UNAVAILABLE", reason: "FETCH_FAILED" };
+  if (isDefiniteLookupFailure(byRecordId) || isDefiniteLookupFailure(byIdempotencyKey)) {
+    return { kind: "DEFINITE_FAILURE" };
   }
-  if (byRecordId.status === "UNKNOWN" || byIdempotencyKey.status === "UNKNOWN") {
-    return { kind: "LOOKUP_UNAVAILABLE", reason: "UNKNOWN" };
+  if (isIndeterminateLookupFailure(byRecordId) || isIndeterminateLookupFailure(byIdempotencyKey)) {
+    return {
+      kind: "LOOKUP_UNAVAILABLE",
+      reason:
+        byRecordId.status === "UNKNOWN" || byIdempotencyKey.status === "UNKNOWN"
+          ? "UNKNOWN"
+          : "FETCH_FAILED",
+    };
   }
 
   if (byRecordId.status === "EMPTY" && byIdempotencyKey.status === "EMPTY") {
@@ -158,6 +191,9 @@ async function savedAfterGetByRecordId(
   port: ProcedureRecordPersistencePort,
 ): Promise<ProcedureRecordSaveOutcome> {
   const readBack = await performLookup(() => port.findByRecordId(incoming.RecordId));
+  if (isDefiniteLookupFailure(readBack)) {
+    return "save_failed";
+  }
   if (readBack.status === "UNKNOWN" || readBack.status === "FETCH_FAILED") {
     return "save_outcome_unknown";
   }
@@ -182,7 +218,7 @@ async function reconcileAfterUnknown(
   if (classified.kind === "REPLAY") {
     return savedAfterGetByRecordId(incoming, port);
   }
-  if (classified.kind === "CONFLICT") {
+  if (classified.kind === "CONFLICT" || classified.kind === "DEFINITE_FAILURE") {
     return "save_failed";
   }
   return "save_outcome_unknown";
@@ -210,7 +246,7 @@ export async function persistProcedureRecord(
   if (classified.kind === "LOOKUP_UNAVAILABLE") {
     return "save_outcome_unknown";
   }
-  if (classified.kind === "CONFLICT") {
+  if (classified.kind === "CONFLICT" || classified.kind === "DEFINITE_FAILURE") {
     return "save_failed";
   }
   if (classified.kind === "REPLAY") {
