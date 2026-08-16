@@ -42,7 +42,7 @@
 - Skill 正本パス `.agents/skills/severe-behavior-cycle-review/SKILL.md` を参照する
 - 貼り付け実行時は `master-prompt.md` を冒頭固定文として使う
 - 判定語は `.agents/skills/_shared/judgement-rules.md` を参照する
-- `SupportPlan == 生活介護計画` と推論しない（HD-RA-04）
+- `SupportPlan == 生活介護計画` と推論しない（HD-RA-04）。`SupportPlan == 支援計画シート等` とも同一視しない
 - 利用者分類の入口は `docs/process/ai-role.md`（管理者 / サービス管理責任者 / 支援員）
 - 明示 Human GO なしの SharePoint / 本番 mutation は行わない
 
@@ -71,7 +71,7 @@
 - 「3ヶ月に1回程度」の見直し目安を追跡できるか。90日変換や hard overdue を発明していないか
 - 古い版の黙った最新版付け替えが起きないか
 - fail-closed: 取得失敗・欠損・未認証を「問題なし」と出していないか
-- 各項目の根拠が4視点のどれか（または Accepted Decision）として区別されているか
+- 各項目の根拠が4視点のどれか（または Accepted Decision）として区別されているか。Accepted Decision を、制度要件明示なしに「法令上必要」へ昇格していないか。fail-closed は SECURITY / SAFETY / APP_SPEC
 
 ## 停止条件
 
@@ -134,7 +134,7 @@ Skill 判定語:
 - `NOT ASSESSED` / `OUT OF SCOPE` / `NOT SPECIFIED` / `UNKNOWN` / `確認不能` / `未指定` を `FAIL` へ変換すること
 - `HOLD` を `PASS` / `READY` と同義に扱うこと
 - 生活介護全業務・国保連・家族ポータル・医療機関ログイン・BCP・バックアップ UI・一般の個別支援計画欠如を減点すること
-- `SupportPlan` を生活介護計画と同一視すること
+- `SupportPlan` を生活介護計画、または支援計画シート等と同一視すること
 - 週次観察の自動違反判定や「3ヶ月 = 90日」変換を発明すること
 - 実在個人情報をテストデータとして新規入力すること
 - トークン / Cookie / Secret / 個人情報を証跡へ転記すること
