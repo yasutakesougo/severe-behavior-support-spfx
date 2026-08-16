@@ -3,9 +3,10 @@ import { describe, it } from "node:test";
 import {
   bindProcedureRecordList,
   bindTestOnlyProvisionedProcedureRecordList,
+  createProcedureRecordLiveWriteAuthorization,
+  isProcedureRecordLiveWriteAuthorized,
   isUsableLiveListBinding,
   PROCEDURE_RECORD_LIST_DISPLAY_NAME,
-  PROCEDURE_RECORD_LIVE_WRITE_GATE,
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   PROCEDURE_RECORD_TEST_ONLY_WEB_SERVER_RELATIVE_URL,
   procedureRecordSiteIdToListGuidMap,
@@ -74,7 +75,7 @@ describe("ProcedureRecord LOOKUP-B live binding", () => {
     });
     assert.ok(binding);
     assert.equal(binding?.listGuid, PROCEDURE_RECORD_TEST_ONLY_LIST_GUID);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized, false);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
   });
 });

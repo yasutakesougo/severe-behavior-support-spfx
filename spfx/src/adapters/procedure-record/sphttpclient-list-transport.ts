@@ -2,12 +2,23 @@
  * Concrete ProcedureRecord List transport via SPFx SPHttpClient.
  *
  * LOOKUP-B: addresses the list by GUID, never by Display Name / GetByTitle.
- * This slice is read-only: schema GET + item GET. Item create is absent.
+ * CREATE-ONLY: createItem exists; updateItem is absent.
+ *
+ * Production createItem POSTs only when a LIVE WRITE execution transport
+ * was constructed with a valid Human GO packet. The reviewed POST helper
+ * is module-private and requires a runtime-valid authorization token.
+ * Host factory and default constructor do not accept write flags or packets.
  *
  * Live tenant I/O is NOT authorized by constructing this binder alone.
  */
 
+import {
+  createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  isSpfxProcedureRecordLiveWriteAuthorization,
+  type SpfxProcedureRecordLiveWriteAuthorization,
+} from "./live-write-gate";
 import type {
+  ProcedureRecordItemCreateResult,
   ProcedureRecordItemReadResult,
   ProcedureRecordLiveListTransport,
   ProcedureRecordObservedField,
@@ -17,6 +28,7 @@ import type {
 } from "./transport-types";
 
 export const PROCEDURE_RECORD_TEST_ONLY_LIST_GUID = "b971ff03-799e-41ac-b037-8becb9f4ff4b" as const;
+export const PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE = "SP.Data.ListListItem" as const;
 
 export type ProcedureRecordSpHttpRequestOptions = {
   headers?: Record<string, string>;
@@ -47,6 +59,7 @@ export type CreateProcedureRecordSpHttpClientTransportOptions = Readonly<{
   configuration: unknown;
   webAbsoluteUrl: string;
   listGuid: string;
+  listItemEntityTypeFullName?: string;
 }>;
 
 // EditFormat is provisioning-time (Dropdown); not a runtime physical invariant.
@@ -105,8 +118,88 @@ export function procedureRecordListApiUrl(
   return `${trimTrailingSlash(webAbsoluteUrl)}/_api/web/lists(guid'${guid}')`;
 }
 
+type PostProcedureRecordCreateItemInput = Readonly<{
+  authorization: unknown;
+  spHttpClient: ProcedureRecordSpHttpClient;
+  configuration: unknown;
+  listApiUrl: string;
+  listItemEntityTypeFullName: string;
+  fields: Readonly<Record<string, unknown>>;
+}>;
+
+/**
+ * Reviewed CREATE-ONLY POST against lists(guid'...')/items.
+ * Module-private. createItem reaches this only with a runtime-valid
+ * run-scoped authorization token. Not a module export.
+ */
+async function postProcedureRecordCreateItem(
+  input: PostProcedureRecordCreateItemInput,
+): Promise<ProcedureRecordItemCreateResult> {
+  if (!isSpfxProcedureRecordLiveWriteAuthorization(input.authorization)) {
+    return { ok: false, failure: "FORBIDDEN" };
+  }
+  const entityType = input.listItemEntityTypeFullName.trim();
+  if (entityType.length === 0) {
+    return { ok: false, failure: "TRANSPORT_ERROR" };
+  }
+  try {
+    const response = await input.spHttpClient.post(
+      `${input.listApiUrl}/items`,
+      input.configuration,
+      {
+        headers: {
+          Accept: "application/json;odata=verbose",
+          "Content-Type": "application/json;odata=verbose",
+          "odata-version": "3.0",
+        },
+        body: JSON.stringify(withVerboseMetadata(input.fields, entityType)),
+      },
+    );
+    if (!response.ok) {
+      return { ok: false, failure: mapStatusFailure(response.status) };
+    }
+    const listItemId = readListItemId(await response.json());
+    if (listItemId === undefined) {
+      return { ok: false, failure: "TRANSPORT_ERROR" };
+    }
+    return { ok: true, listItemId };
+  } catch {
+    return { ok: false, failure: "TRANSPORT_ERROR" };
+  }
+}
+
 export function createProcedureRecordSpHttpClientTransport(
   options: CreateProcedureRecordSpHttpClientTransportOptions,
+): ProcedureRecordLiveListTransport {
+  return createBoundProcedureRecordSpHttpClientTransport(options, undefined);
+}
+
+/**
+ * LIVE WRITE execution boundary. A valid Human GO packet mints run-scoped
+ * authorization only when packet SHA and List GUID equal this transport target.
+ * Invalid or unbound packets stay FORBIDDEN. Does not itself perform live tenant I/O.
+ */
+export function createProcedureRecordLiveWriteSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+  packet: unknown,
+  execution: unknown,
+): ProcedureRecordLiveListTransport {
+  const authoritativeMainSha =
+    typeof execution === "object" && execution && "authoritativeMainSha" in execution
+      ? (execution as { authoritativeMainSha?: unknown }).authoritativeMainSha
+      : undefined;
+  return createBoundProcedureRecordSpHttpClientTransport(
+    options,
+    createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket(packet, {
+      authoritativeMainSha: typeof authoritativeMainSha === "string" ? authoritativeMainSha : "",
+      listGuid: options.listGuid,
+    }),
+  );
+}
+
+function createBoundProcedureRecordSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+  authorization: SpfxProcedureRecordLiveWriteAuthorization | undefined,
 ): ProcedureRecordLiveListTransport {
   const client = options.spHttpClient;
   const configuration = options.configuration;
@@ -177,6 +270,25 @@ export function createProcedureRecordSpHttpClientTransport(
     return { ok: true, rows };
   }
 
+  async function createItem(
+    fields: Readonly<Record<string, unknown>>,
+  ): Promise<ProcedureRecordItemCreateResult> {
+    if (!isSpfxProcedureRecordLiveWriteAuthorization(authorization)) {
+      return { ok: false, failure: "FORBIDDEN" };
+    }
+    if (listApiUrl === undefined) {
+      return { ok: false, failure: "TRANSPORT_ERROR" };
+    }
+    return postProcedureRecordCreateItem({
+      authorization,
+      spHttpClient: client,
+      configuration,
+      listApiUrl,
+      listItemEntityTypeFullName: options.listItemEntityTypeFullName ?? "",
+      fields,
+    });
+  }
+
   return {
     targetListGuid: normalizeProcedureRecordListGuid(options.listGuid) ?? "",
     getSchema,
@@ -186,7 +298,40 @@ export function createProcedureRecordSpHttpClientTransport(
     findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult> {
       return findByFilter("prIdempotencyKey", idempotencyKey);
     },
+    createItem,
   };
+}
+
+function withVerboseMetadata(
+  fields: Readonly<Record<string, unknown>>,
+  entityType: string,
+): Record<string, unknown> {
+  const body: Record<string, unknown> = {
+    __metadata: { type: entityType },
+  };
+  for (const key of Object.keys(fields)) {
+    body[key] = fields[key];
+  }
+  return body;
+}
+
+function readListItemId(payload: unknown): number | undefined {
+  if (!payload || typeof payload !== "object") {
+    return undefined;
+  }
+  const root = payload as Record<string, unknown>;
+  if (root.d && typeof root.d === "object") {
+    return readIdFromRow(root.d as Record<string, unknown>);
+  }
+  return readIdFromRow(root);
+}
+
+function readIdFromRow(row: Readonly<Record<string, unknown>>): number | undefined {
+  const raw = row.Id ?? row.ID ?? row.id;
+  if (typeof raw === "number" && Number.isInteger(raw) && raw > 0) {
+    return raw;
+  }
+  return undefined;
 }
 
 function mapStatusFailure(status: number): ProcedureRecordTransportFailure {

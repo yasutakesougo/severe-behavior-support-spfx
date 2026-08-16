@@ -3,21 +3,30 @@ import { describe, it } from "node:test";
 import {
   bindProcedureRecordList,
   bindTestOnlyProvisionedProcedureRecordList,
+  createProcedureRecordLiveWriteAuthorization,
+  createProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  createProcedureRecordLiveWriteExecutionRepository,
+  createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
+  isProcedureRecordLiveWriteAuthorized,
   PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS,
   PROCEDURE_RECORD_LIST_DISPLAY_NAME,
-  PROCEDURE_RECORD_LIVE_WRITE_GATE,
+  PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
   PROCEDURE_RECORD_PR_RESULT_CHOICES,
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   type ObservedPhysicalField,
   type ProcedureRecordLiveListTransport,
+  type ProcedureRecordLiveWriteGoPacket,
 } from "../../../../src/adapters/sharepoint/procedure-record";
 import { persistProcedureRecord } from "../../../../src/domain/procedure-record-persistence";
 import { createSyntheticProcedureRecord } from "../../../domain/procedure-record-fixtures";
+import { createSyntheticAuthorizedProcedureRecordRepository } from "./synthetic-authorized-repository";
 
 const LOGICAL_SITE_ID = "test-only-procedure-record-logical-site-id";
 const ORGANIZATION_ID = "synthetic-org-001";
 const OTHER_LIST_GUID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+const SYNTHETIC_MAIN_SHA = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const OTHER_MAIN_SHA = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
 function schemaFields(): ObservedPhysicalField[] {
   const fields: ObservedPhysicalField[] = PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS.map(
@@ -60,14 +69,20 @@ function schemaFields(): ObservedPhysicalField[] {
 function createTransport(
   overrides?: Partial<ProcedureRecordLiveListTransport> & {
     rows?: readonly Readonly<Record<string, unknown>>[];
+    itemCount?: number;
   },
 ): {
   transport: ProcedureRecordLiveListTransport;
-  calls: { getSchema: number; findByRecordId: number; findByIdempotencyKey: number };
+  calls: {
+    getSchema: number;
+    findByRecordId: number;
+    findByIdempotencyKey: number;
+    createItem: number;
+  };
 } {
-  const { rows: overrideRows, ...transportOverrides } = overrides ?? {};
-  const rows = overrideRows ?? [];
-  const calls = { getSchema: 0, findByRecordId: 0, findByIdempotencyKey: 0 };
+  const { rows: overrideRows, itemCount = 0, ...transportOverrides } = overrides ?? {};
+  let rows: Readonly<Record<string, unknown>>[] = [...(overrideRows ?? [])];
+  const calls = { getSchema: 0, findByRecordId: 0, findByIdempotencyKey: 0, createItem: 0 };
   const transport: ProcedureRecordLiveListTransport = {
     targetListGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
     async getSchema() {
@@ -77,7 +92,7 @@ function createTransport(
         list: {
           Id: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
           Title: PROCEDURE_RECORD_LIST_DISPLAY_NAME,
-          ItemCount: 0,
+          ItemCount: itemCount,
         },
         fields: schemaFields(),
       };
@@ -90,54 +105,67 @@ function createTransport(
       calls.findByIdempotencyKey += 1;
       return { ok: true, rows };
     },
+    async createItem(fields) {
+      calls.createItem += 1;
+      const encoded = {
+        Id: 1,
+        ...fields,
+      };
+      rows = [encoded];
+      return { ok: true, listItemId: 1 };
+    },
     ...transportOverrides,
   };
   return { transport, calls };
 }
 
-describe("ProcedureRecord read-only live repository", () => {
+describe("ProcedureRecord write-capable live repository", () => {
   it("verifies the bound physical schema without creating items", async () => {
     const binding = bindTestOnlyProvisionedProcedureRecordList({
       organizationId: ORGANIZATION_ID,
       siteId: LOGICAL_SITE_ID,
     });
     assert.ok(binding);
-    const { transport } = createTransport();
+    const { transport, calls } = createTransport();
     const repository = createReadOnlyProcedureRecordRepository(binding, transport);
     assert.deepEqual(await repository.verifyPhysicalSchema(), { ok: true });
     assert.equal(repository.liveWriteAuthorized, false);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
+    assert.equal(calls.createItem, 0);
   });
 
-  it("maps empty dual lookup through persistProcedureRecord to save_failed without create", async () => {
+  it("maps empty dual lookup through persistProcedureRecord to save_failed without createItem", async () => {
     const binding = bindTestOnlyProvisionedProcedureRecordList({
       organizationId: ORGANIZATION_ID,
       siteId: LOGICAL_SITE_ID,
     });
     assert.ok(binding);
-    const { transport } = createTransport();
+    const { transport, calls } = createTransport();
     const repository = createReadOnlyProcedureRecordRepository(binding, transport);
     const record = createSyntheticProcedureRecord({
       OrganizationId: ORGANIZATION_ID,
       SiteId: LOGICAL_SITE_ID,
     });
     assert.equal(await persistProcedureRecord(record, repository), "save_failed");
-    assert.equal("createItem" in transport, false);
+    assert.equal(calls.createItem, 0);
+    assert.equal("updateItem" in transport, false);
   });
 
-  it("returns EMPTY for missing items and refuses create directly", async () => {
+  it("returns EMPTY for missing items and refuses create when the production gate is closed", async () => {
     const binding = bindTestOnlyProvisionedProcedureRecordList({
       organizationId: ORGANIZATION_ID,
       siteId: LOGICAL_SITE_ID,
     });
     assert.ok(binding);
-    const { transport } = createTransport();
+    const { transport, calls } = createTransport();
     const repository = createReadOnlyProcedureRecordRepository(binding, transport);
     const lookup = await repository.findByRecordId("pr-missing");
     assert.equal(lookup.status, "EMPTY");
     assert.deepEqual(await repository.create(createSyntheticProcedureRecord()), {
       status: "DEFINITE_FAILURE",
     });
+    assert.equal(calls.createItem, 0);
   });
 
   it("fail-closes when binding.listGuid is not the transport target List GUID", async () => {
@@ -170,5 +198,217 @@ describe("ProcedureRecord read-only live repository", () => {
     assert.equal(calls.getSchema, 0);
     assert.equal(calls.findByRecordId, 0);
     assert.equal(calls.findByIdempotencyKey, 0);
+    assert.equal(calls.createItem, 0);
+  });
+
+  it("authorized create still fail-closes on LOOKUP-B GUID mismatch without I/O", async () => {
+    const binding = bindProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+      listGuid: OTHER_LIST_GUID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    const repository = createSyntheticAuthorizedProcedureRecordRepository(binding, transport);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+    });
+    assert.deepEqual(await repository.create(record), { status: "DEFINITE_FAILURE" });
+    assert.equal(calls.getSchema, 0);
+    assert.equal(calls.createItem, 0);
+  });
+
+  it("does not reject a distinct ProcedureRecord because ItemCount is not 0", async () => {
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport({ itemCount: 1 });
+    const repository = createSyntheticAuthorizedProcedureRecordRepository(binding, transport);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+      RecordId: "synthetic-procedure-record-002",
+      IdempotencyKey: "synthetic-procedure-idempotency-002",
+    });
+    assert.deepEqual(await repository.create(record), { status: "CREATED" });
+    assert.equal(calls.getSchema, 1);
+    assert.equal(calls.createItem, 1);
+  });
+
+  it("authorized synthetic create persists through GET-by-RecordId as saved", async () => {
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    const repository = createSyntheticAuthorizedProcedureRecordRepository(binding, transport);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+    });
+    assert.equal(repository.liveWriteAuthorized, true);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
+    assert.equal(await persistProcedureRecord(record, repository), "saved");
+    assert.equal(calls.createItem, 1);
+    assert.equal(calls.getSchema, 1);
+  });
+
+  it("production repository stays closed and does not accept a caller write gate", async () => {
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    const repository = createProcedureRecordRepository(binding, transport);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+    });
+    assert.equal(repository.liveWriteAuthorized, false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
+    assert.deepEqual(await repository.create(record), { status: "DEFINITE_FAILURE" });
+    assert.equal(calls.createItem, 0);
+    assert.equal(calls.getSchema, 0);
+  });
+
+  it("rejects an incomplete Human GO packet and does not open create", () => {
+    assert.equal(
+      createProcedureRecordLiveWriteAuthorizationFromGoPacket(
+        {
+          purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+          humanLiveWriteGo: true,
+          expectedMainSha: SYNTHETIC_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          itemCount: 1,
+          logicalSiteId: LOGICAL_SITE_ID,
+          organizationId: ORGANIZATION_ID,
+        },
+        {
+          authoritativeMainSha: SYNTHETIC_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          organizationId: ORGANIZATION_ID,
+          logicalSiteId: LOGICAL_SITE_ID,
+        },
+      ),
+      null,
+    );
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    assert.equal(
+      createProcedureRecordLiveWriteExecutionRepository(
+        binding,
+        transport,
+        {
+          itemCreateAuthorized: true,
+          liveTenantIoAuthorized: true,
+        },
+        { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
+      ),
+      null,
+    );
+    assert.equal(calls.createItem, 0);
+  });
+
+  it("does not mint capability when the GO packet SHA is not the execution main SHA", () => {
+    assert.equal(
+      createProcedureRecordLiveWriteAuthorizationFromGoPacket(
+        {
+          purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+          humanLiveWriteGo: true,
+          expectedMainSha: SYNTHETIC_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          itemCount: 0,
+          logicalSiteId: LOGICAL_SITE_ID,
+          organizationId: ORGANIZATION_ID,
+        },
+        {
+          authoritativeMainSha: OTHER_MAIN_SHA,
+          listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+          organizationId: ORGANIZATION_ID,
+          logicalSiteId: LOGICAL_SITE_ID,
+        },
+      ),
+      null,
+    );
+  });
+
+  it("does not open execution repository when binding organizationId or SiteId differ from the packet", () => {
+    const packet: ProcedureRecordLiveWriteGoPacket = {
+      purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+      humanLiveWriteGo: true,
+      expectedMainSha: SYNTHETIC_MAIN_SHA,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      itemCount: 0,
+      logicalSiteId: LOGICAL_SITE_ID,
+      organizationId: ORGANIZATION_ID,
+    };
+    const evidence = { authoritativeMainSha: SYNTHETIC_MAIN_SHA };
+    const otherOrg = bindProcedureRecordList({
+      organizationId: "other-org-001",
+      siteId: LOGICAL_SITE_ID,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+    });
+    const otherSite = bindProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: "other-logical-site-id",
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+    });
+    assert.ok(otherOrg);
+    assert.ok(otherSite);
+    const { transport, calls } = createTransport();
+    assert.equal(
+      createProcedureRecordLiveWriteExecutionRepository(otherOrg, transport, packet, evidence),
+      null,
+    );
+    assert.equal(
+      createProcedureRecordLiveWriteExecutionRepository(otherSite, transport, packet, evidence),
+      null,
+    );
+    assert.equal(calls.createItem, 0);
+  });
+
+  it("opens run-scoped create from a valid Human GO packet without flipping process-wide authorization", async () => {
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    const packet: ProcedureRecordLiveWriteGoPacket = {
+      purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+      humanLiveWriteGo: true,
+      expectedMainSha: SYNTHETIC_MAIN_SHA,
+      listGuid: `{${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID.toUpperCase()}}`,
+      itemCount: 0,
+      logicalSiteId: LOGICAL_SITE_ID,
+      organizationId: ORGANIZATION_ID,
+    };
+    const repository = createProcedureRecordLiveWriteExecutionRepository(
+      binding,
+      transport,
+      packet,
+      { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
+    );
+    assert.ok(repository);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+    });
+    assert.equal(repository.liveWriteAuthorized, true);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
+    assert.equal(await persistProcedureRecord(record, repository), "saved");
+    assert.equal(calls.createItem, 1);
+    assert.equal(calls.getSchema, 1);
   });
 });

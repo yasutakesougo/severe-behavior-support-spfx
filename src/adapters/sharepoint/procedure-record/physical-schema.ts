@@ -3,6 +3,7 @@
  * Canonical: PR-MAP-NAMES-1 + TITLE-NONE + unique pair observed at provisioning COMPLETE.
  *
  * This verifies REST field descriptors. It does not create items.
+ * ItemCount=0 is a LIVE WRITE execution precheck, not a generic create() invariant.
  *
  * prResult EditFormat / Dropdown is a provisioning-time UI selection, not a
  * runtime physical invariant. Runtime checks are Choice tokens, FillInChoice=false,
@@ -124,9 +125,6 @@ export function verifyProcedureRecordPhysicalSchema(
   if (list.Title !== "支援手順実施記録") {
     reasons.push("list-display-name-mismatch");
   }
-  if (list.ItemCount !== 0) {
-    reasons.push("item-count-not-zero");
-  }
 
   for (const expected of PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS) {
     const actual = fieldByInternalName(fields, expected.InternalName);
@@ -226,6 +224,19 @@ export function verifyProcedureRecordPhysicalSchema(
 
   if (reasons.length > 0) {
     return { ok: false, reasons };
+  }
+  return { ok: true };
+}
+
+/**
+ * First-write precondition: the bound List must still be empty.
+ * Not part of ongoing physical schema verification after a LIVE WRITE.
+ */
+export function verifyProcedureRecordPreWriteEmpty(
+  list: ObservedListIdentity,
+): ProcedureRecordSchemaVerification {
+  if (list.ItemCount !== 0) {
+    return { ok: false, reasons: ["item-count-not-zero"] };
   }
   return { ok: true };
 }

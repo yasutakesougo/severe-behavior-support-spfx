@@ -5,7 +5,7 @@
  *   spfx/src/adapters/procedure-record/sphttpclient-list-transport.ts
  *
  * Root `src/` must not import `@microsoft/sp-*`.
- * Live tenant I/O and item create remain separately gated / FORBIDDEN.
+ * Live tenant POST remains separately gated / FORBIDDEN without a LIVE WRITE GO.
  */
 
 import type { ObservedListIdentity, ObservedPhysicalField } from "./physical-schema";
@@ -24,15 +24,21 @@ export type ProcedureRecordItemReadResult =
   | Readonly<{ ok: true; rows: readonly Readonly<Record<string, unknown>>[] }>
   | Readonly<{ ok: false; failure: ProcedureRecordTransportFailure }>;
 
+export type ProcedureRecordItemCreateResult =
+  | Readonly<{ ok: true; listItemId: number }>
+  | Readonly<{ ok: false; failure: ProcedureRecordTransportFailure }>;
+
 /**
- * Read-only live transport. Item create is intentionally absent.
- * targetListGuid is the List GUID this transport actually addresses (LOOKUP-B).
+ * LOOKUP-B live transport. CREATE-ONLY write surface; updateItem is absent.
+ * targetListGuid is the List GUID this transport actually addresses.
+ * Constructing the transport does not authorize live tenant POST.
  */
 export interface ProcedureRecordLiveListTransport {
   readonly targetListGuid: string;
   getSchema(): Promise<ProcedureRecordSchemaReadResult>;
   findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult>;
   findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult>;
+  createItem(fields: Readonly<Record<string, unknown>>): Promise<ProcedureRecordItemCreateResult>;
 }
 
 export type SpfxSpHttpClientHostSeam = Readonly<{

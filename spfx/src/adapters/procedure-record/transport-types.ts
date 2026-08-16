@@ -37,9 +37,14 @@ export type ProcedureRecordItemReadResult =
   | Readonly<{ ok: true; rows: readonly Readonly<Record<string, unknown>>[] }>
   | Readonly<{ ok: false; failure: ProcedureRecordTransportFailure }>;
 
+export type ProcedureRecordItemCreateResult =
+  | Readonly<{ ok: true; listItemId: number }>
+  | Readonly<{ ok: false; failure: ProcedureRecordTransportFailure }>;
+
 export interface ProcedureRecordLiveListTransport {
   readonly targetListGuid: string;
   getSchema(): Promise<ProcedureRecordSchemaReadResult>;
   findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult>;
   findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult>;
+  createItem(fields: Readonly<Record<string, unknown>>): Promise<ProcedureRecordItemCreateResult>;
 }

@@ -1,6 +1,6 @@
 /**
  * ProcedureRecord persistence port bound to a live List GUID transport.
- * CREATE-ONLY domain port is implemented as fail-closed: create never writes.
+ * CREATE-ONLY. Production create() is fail-closed until the production gate opens.
  */
 
 import type { LookupResult } from "../../../contracts/types";
@@ -15,23 +15,33 @@ import {
   normalizeSharePointGuid,
   type ProcedureRecordListBinding,
 } from "./list-binding";
-import { refuseUnauthorizedLiveCreate } from "./live-write-gate";
+import {
+  createProcedureRecordLiveWriteAuthorization,
+  createProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  isProcedureRecordLiveWriteAuthorization,
+  refuseUnauthorizedLiveCreate,
+  type ProcedureRecordLiveWriteAuthorization,
+} from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
 import {
   verifyProcedureRecordPhysicalSchema,
   type ProcedureRecordSchemaVerification,
 } from "./physical-schema";
+import { buildCreateItemFields } from "./rest-body";
 import type {
   ProcedureRecordItemReadResult,
   ProcedureRecordLiveListTransport,
 } from "./transport-seam";
 
-export type ReadOnlyProcedureRecordRepository = ProcedureRecordPersistencePort &
+export type ProcedureRecordListRepository = ProcedureRecordPersistencePort &
   Readonly<{
     binding: ProcedureRecordListBinding;
-    liveWriteAuthorized: false;
+    liveWriteAuthorized: boolean;
     verifyPhysicalSchema(): Promise<ProcedureRecordSchemaVerification>;
   }>;
+
+/** @deprecated Use ProcedureRecordListRepository. Production wiring remains fail-closed. */
+export type ReadOnlyProcedureRecordRepository = ProcedureRecordListRepository;
 
 const PHYSICAL_KEYS = [
   "prRecordId",
@@ -120,10 +130,18 @@ function listBindingMatchesTransport(
   return bindingGuid !== null && targetGuid !== null && bindingGuid === targetGuid;
 }
 
-export function createReadOnlyProcedureRecordRepository(
+function mapCreateFailure(failure: "FORBIDDEN" | "TRANSPORT_ERROR"): ProcedureRecordCreateAttempt {
+  if (failure === "FORBIDDEN") {
+    return { status: "DEFINITE_FAILURE" };
+  }
+  return { status: "INDETERMINATE" };
+}
+
+function createBoundProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
-): ReadOnlyProcedureRecordRepository {
+  authorization: ProcedureRecordLiveWriteAuthorization | null,
+): ProcedureRecordListRepository {
   async function lookup(
     query: (token: string) => Promise<ProcedureRecordItemReadResult>,
     token: string,
@@ -143,7 +161,7 @@ export function createReadOnlyProcedureRecordRepository(
 
   return {
     binding,
-    liveWriteAuthorized: false,
+    liveWriteAuthorized: authorization !== null,
 
     async findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>> {
       return lookup((token) => transport.findByRecordId(token), recordId);
@@ -153,8 +171,47 @@ export function createReadOnlyProcedureRecordRepository(
       return lookup((token) => transport.findByIdempotencyKey(token), idempotencyKey);
     },
 
-    async create(): Promise<ProcedureRecordCreateAttempt> {
-      return refuseUnauthorizedLiveCreate();
+    async create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt> {
+      if (!isProcedureRecordLiveWriteAuthorization(authorization)) {
+        return refuseUnauthorizedLiveCreate();
+      }
+      if (!isUsableLiveListBinding(binding)) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+      if (!listBindingMatchesTransport(binding, transport)) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+      if (record.OrganizationId !== binding.organizationId || record.SiteId !== binding.siteId) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+
+      try {
+        const schema = await transport.getSchema();
+        if (!schema.ok) {
+          return mapCreateFailure(schema.failure);
+        }
+        const physical = verifyProcedureRecordPhysicalSchema(
+          binding.listGuid,
+          schema.list,
+          schema.fields,
+        );
+        if (!physical.ok) {
+          return { status: "DEFINITE_FAILURE" };
+        }
+
+        const prepared = buildCreateItemFields(record);
+        if (!prepared.ok) {
+          return { status: "DEFINITE_FAILURE" };
+        }
+
+        const created = await transport.createItem(prepared.fields);
+        if (!created.ok) {
+          return mapCreateFailure(created.failure);
+        }
+        return { status: "CREATED" };
+      } catch {
+        return { status: "INDETERMINATE" };
+      }
     },
 
     async verifyPhysicalSchema(): Promise<ProcedureRecordSchemaVerification> {
@@ -175,4 +232,53 @@ export function createReadOnlyProcedureRecordRepository(
       }
     },
   };
+}
+
+/**
+ * Production wiring. Callers cannot pass a write-authorization flag.
+ * Normal application runtime has no GO packet, so create() stays closed.
+ */
+export function createProcedureRecordRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+): ProcedureRecordListRepository {
+  return createBoundProcedureRecordRepository(
+    binding,
+    transport,
+    createProcedureRecordLiveWriteAuthorization(),
+  );
+}
+
+/**
+ * LIVE WRITE execution boundary. A valid Human GO packet mints run-scoped
+ * authorization only when packet SHA, List GUID, and site binding match.
+ * Invalid or unbound packets return null. Does not perform SharePoint I/O.
+ */
+export function createProcedureRecordLiveWriteExecutionRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+  packet: unknown,
+  execution: unknown,
+): ProcedureRecordListRepository | null {
+  const authoritativeMainSha =
+    typeof execution === "object" && execution && "authoritativeMainSha" in execution
+      ? (execution as { authoritativeMainSha?: unknown }).authoritativeMainSha
+      : undefined;
+  const authorization = createProcedureRecordLiveWriteAuthorizationFromGoPacket(packet, {
+    authoritativeMainSha: typeof authoritativeMainSha === "string" ? authoritativeMainSha : "",
+    listGuid: binding.listGuid,
+    organizationId: binding.organizationId,
+    logicalSiteId: binding.siteId,
+  });
+  if (authorization === null) {
+    return null;
+  }
+  return createBoundProcedureRecordRepository(binding, transport, authorization);
+}
+
+export function createReadOnlyProcedureRecordRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+): ProcedureRecordListRepository {
+  return createProcedureRecordRepository(binding, transport);
 }

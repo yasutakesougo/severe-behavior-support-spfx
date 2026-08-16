@@ -1,8 +1,8 @@
 /**
  * Production wiring helper for the ProcedureRecord SPHttpClient binder.
  *
- * Does not itself perform tenant I/O. Item create is not exposed.
- * Callers still need a separate live GO before invoking GET against a real site.
+ * Does not itself perform tenant I/O. Does not accept write-authorization flags
+ * or a Human GO packet. Live POST uses the dedicated LIVE WRITE transport.
  */
 
 import { SPHttpClient } from "@microsoft/sp-http";
@@ -13,20 +13,22 @@ import {
 } from "./sphttpclient-list-transport";
 import type { ProcedureRecordLiveListTransport } from "./transport-types";
 
-export type CreateProcedureRecordSpHttpClientTransportFromHostOptions = Omit<
-  CreateProcedureRecordSpHttpClientTransportOptions,
-  "configuration" | "spHttpClient"
-> &
-  Readonly<{
-    spHttpClient: SPHttpClient;
-  }>;
+export type CreateProcedureRecordSpHttpClientTransportFromHostOptions = Readonly<{
+  spHttpClient: SPHttpClient;
+  webAbsoluteUrl: string;
+  listGuid: string;
+  listItemEntityTypeFullName?: string;
+}>;
 
 export function createProcedureRecordSpHttpClientTransportFromHost(
   options: CreateProcedureRecordSpHttpClientTransportFromHostOptions,
 ): ProcedureRecordLiveListTransport {
-  return createProcedureRecordSpHttpClientTransport({
-    ...options,
+  const productionOptions: CreateProcedureRecordSpHttpClientTransportOptions = {
     spHttpClient: options.spHttpClient,
     configuration: SPHttpClient.configurations.v1,
-  });
+    webAbsoluteUrl: options.webAbsoluteUrl,
+    listGuid: options.listGuid,
+    listItemEntityTypeFullName: options.listItemEntityTypeFullName,
+  };
+  return createProcedureRecordSpHttpClientTransport(productionOptions);
 }
