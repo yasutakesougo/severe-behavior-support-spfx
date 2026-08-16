@@ -19,6 +19,12 @@ Canonical on GitHub main:
   scoped ACCEPTED / LOCKED policy is canonical on origin/main
   DEFERRED items remain NOT LOCKED
 
+Related later Decision:
+  Decision-PROCEDURE-RECORD-MAPPING-1
+  ACCEPTED / LOCKED（scoped）
+  canonical on main since eaa517ea3ee28fe4797f51259331aa1ee8c947cd
+  Internal Names / Display Names / Types are no longer deferred here
+
 Requested basis:
   main @ 487bb2ac1d8eb20aff5f30111d5c64facfa1cdb9
 Design basis:
@@ -80,10 +86,14 @@ Still OPEN / DEFERRED（must not be closed by Selection or this scoped Acceptanc
 SUPPORTER read scope
   assigned users only vs all users on the selected site
 ProcedureRecord statutory retention years
-concrete Internal Names / Display Names
 SharePoint group / Role binding
 test-only site identity（name / URL）
 ```
+
+Later closed outside this Decision:
+  Internal Names / Display Names / Types
+  → Decision-PROCEDURE-RECORD-MAPPING-1 ACCEPTED / LOCKED（scoped）
+    canonical on main since eaa517ea3ee28fe4797f51259331aa1ee8c947cd
 
 ## Human Acceptance record
 
@@ -125,10 +135,16 @@ DEFERRED / NOT LOCKED:
 SUPPORTER read:
   assigned users only vs site-wide
 ProcedureRecord retention years
-concrete Internal Names / Display Names
 SharePoint group / Role binding
 test-only site identity
+concrete provisioned List GUID values
+actual physical provisioning state
+provisioned unique/index objects
 ```
+
+Later closed outside this Decision:
+  Internal Names / Display Names / Types
+  → Decision-PROCEDURE-RECORD-MAPPING-1
 
 Explicit OUT（unchanged by Acceptance）:
 
@@ -150,7 +166,9 @@ This Acceptance recording creates a new commit. The Fresh Review bound to
 
 This document records Human Selection and scoped Acceptance of persistence
 **policy** for ProcedureRecord v1.
-It does not invent Internal Names, List display names, site URLs, or Entra group IDs.
+It does not invent site URLs, Entra group IDs, or provisioned List GUIDs.
+Internal Names / Display Names / Types were later LOCKED by
+Decision-PROCEDURE-RECORD-MAPPING-1.
 ACCEPTED / LOCKED applies only to the scope listed above.
 DEFERRED items are not LOCKED.
 
@@ -176,10 +194,7 @@ adapter implementation, live item create, Ready, or Merge.
 Judgement units **not** closed by this Acceptance:
 
 ```text
-List display name / List internal identity
-column Display Name / Internal Name / Column Type concrete values
-  except D4 clock encoding policy = ISO string（A）LOCKED
-  concrete Internal Name strings remain unconfirmed
+concrete provisioned List GUID values
 indexes as provisioned objects
 Entra / SharePoint group object IDs
 SUPPORTER read = assigned users only vs all users on site
@@ -188,8 +203,12 @@ test-only site name / URL
 list/column/site provisioning
 adapter Implementation Start
 LIVE WRITE
-Ready / Merge
 ```
+
+Later closed outside this Decision:
+  List Display Name / Internal Names / column Types
+  → Decision-PROCEDURE-RECORD-MAPPING-1 ACCEPTED / LOCKED（scoped）
+    canonical on main since eaa517ea3ee28fe4797f51259331aa1ee8c947cd
 
 ## 2. Accepted package — PR-PERS-PKG-1
 
@@ -222,7 +241,9 @@ Not selected:
 | PR-TOPO-HUB | one List on the common management site | NOT SELECTED |
 | PR-TOPO-MIX | columns on AssessmentSnapshots or other live lists | NOT SELECTED |
 
-Concrete site URL / List name: **still not in this Decision**.
+Concrete site URL: **still not in this Decision**.
+List Display Name / Internal Names / Types: later LOCKED by
+Decision-PROCEDURE-RECORD-MAPPING-1.
 
 ### D2 — Procedure representation（ACCEPTED / LOCKED）
 
@@ -250,14 +271,16 @@ Why:
 SELECTED:
   Contract / Domain names ≠ SharePoint Internal Names
   Display Name / Internal Name / Column Type live in mapping SoT
-    （sharepoint-contract-mapping family；Status 確定 only after later Decision）
+    （sharepoint-contract-mapping family）
   schemaId / schemaVersion / dtoVersion / TimeZone MAY be DERIVED
     （no per-item column required）
   Title is not identity canonical
     （optional operational copy of RecordId does not make Title = RecordId）
 ```
 
-This unit still does **not** confirm any Internal Name string.
+Concrete Internal Name / Display Name / Type strings are not invented here.
+They were later LOCKED by Decision-PROCEDURE-RECORD-MAPPING-1
+（canonical on main since eaa517ea3ee28fe4797f51259331aa1ee8c947cd）.
 
 TimeZone derived value, if used, remains `Asia/Tokyo` as in the logical contract.
 
@@ -280,7 +303,8 @@ B is not judged false；it is not the v1 selection
 LocalDate remains the Asia/Tokyo calendar day of `performedAt` and must match on read.
 That rule is already LOCKED in B-PKG-1；this unit only chose persistence encoding of the two clocks.
 
-Concrete Internal Name / Display Name for those string columns remain unconfirmed.
+Clock column Internal Names / Display Names were later LOCKED by
+Decision-PROCEDURE-RECORD-MAPPING-1（D4=A remains ISO string encoding）.
 
 ### D5 — Identity / idempotency（ACCEPTED / LOCKED）
 
@@ -482,7 +506,7 @@ test-only site identity remains OPEN.
 |---|---|---|
 | D1 | dedicated List on facility site | hub List；mix into existing lists |
 | D2 | flatten 3 Procedure fields | JSON blob；flatten+blob |
-| D3 | mapping SoT；DERIVED envelope/TimeZone；Title ≠ identity | copy Domain names to Internal Names；concrete names still OPEN |
+| D3 | mapping SoT；DERIVED envelope/TimeZone；Title ≠ identity | names/types later LOCKED by Decision-PROCEDURE-RECORD-MAPPING-1 |
 | D4 | **A ISO string** | B SharePoint DateTime |
 | D5 | site-List unique RecordId + IdempotencyKey；dual lookup | AuditEvent uniqueness copy；fingerprint unique；skip lookup |
 | D6 | CREATE-ONLY | update-in-place；logical delete；supersede in v1 |
@@ -499,7 +523,8 @@ ProcedureRecord logical 1.0.0 redesign
 procedure body persistence（A1）
 AssessmentSnapshots / SupportPlans / AuditEvent / AbcRecord / ExecutionRecord reuse
 List / column / site create or rename
-Internal Name invention as confirmed values
+Internal Name invention in this persistence packet
+  （names/types later LOCKED by Decision-PROCEDURE-RECORD-MAPPING-1）
 adapter implementation
 SPFx UI change
 Deploy / App Catalog
@@ -545,9 +570,14 @@ DEFERRED items are NOT LOCKED
 canonical on origin/main since 406a2c3cf16f03b57884fd33e495756eacaff86b
 D7 caseload NOT LOCKED
 D10 retention years DEFERRED
-concrete Internal Names / Display Names unconfirmed
 SharePoint group / Role binding unknown
 test-only site identity unknown
+concrete List GUID UNKNOWN
+actual physical provisioning state NOT CLAIMED
+provisioned unique/index objects NOT CLAIMED
+Internal Names / Display Names:
+  LOCKED by Decision-PROCEDURE-RECORD-MAPPING-1
+  canonical on main since eaa517ea3ee28fe4797f51259331aa1ee8c947cd
 Implementation Start = NOT AUTHORIZED
 SharePoint provisioning = NOT AUTHORIZED
 LIVE WRITE = NOT AUTHORIZED
@@ -559,20 +589,28 @@ PR #380 Ready / Merge = DONE
 
 ```text
 1. DONE — Human Selection: PR-PERS-PKG-1 + D4=A
-2. DONE — Decision Fresh Review on d50db082…（now expired）
-3. DONE — Human Acceptance / LOCK GO for scoped policy
-4. Final Decision Fresh Review on the Acceptance recording HEAD
-5. DONE — Ready Gate（PR #380）
-6. DONE — Merge（PR #380 → main @ 406a2c3cf16f03b57884fd33e495756eacaff86b）
-7. Separate mapping Decision for concrete Display / Internal / Type
-   （clock encoding policy already LOCKED as ISO string）
-8. Separate Human GO for List / column provisioning
-9. Separate Human GO for adapter Implementation Start
-   （create + dual lookup + GET-by-RecordId；no update/delete）
+2. DONE — Decision Fresh Review
+3. DONE — Human Acceptance / LOCK
+4. DONE — Final Decision Fresh Review
+5. DONE — Ready Gate / PR #380
+6. DONE — Merge PR #380
+   canonical persistence Decision on main since
+   406a2c3cf16f03b57884fd33e495756eacaff86b
+7. DONE — physical mapping Decision
+   Decision-PROCEDURE-RECORD-MAPPING-1
+   canonical on main:
+   eaa517ea3ee28fe4797f51259331aa1ee8c947cd
+   status:
+   ACCEPTED / LOCKED（scoped）
+8. Separate Human Provisioning GO
+   NOT GIVEN
+9. Separate adapter Implementation Start GO
+   NOT GIVEN
 10. Separate Human LIVE WRITE GO
-   （synthetic, test-only site, 1 item, Review read-back）
-11. Only after 10: reassess LIVE_PERSISTENCE in severe-behavior-cycle-review
+    NOT GIVEN
+11. Only after LIVE validation:
+    reassess LIVE_PERSISTENCE
 ```
 
-PR #380 Merge does not start steps 7–10.
+PR #380 / #382 Merge does not start steps 8–10.
 Acceptance / LOCK of scoped policy does not start provisioning, adapter, LIVE WRITE, or Deploy.
