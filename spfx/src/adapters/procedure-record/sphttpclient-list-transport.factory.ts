@@ -1,8 +1,8 @@
 /**
  * Production wiring helper for the ProcedureRecord SPHttpClient binder.
  *
- * Does not itself perform tenant I/O. Does not accept write-authorization flags.
- * Live POST still requires Human LIVE WRITE GO to mint run-scoped authorization.
+ * Does not itself perform tenant I/O. Does not accept write-authorization flags
+ * or a Human GO packet. Live POST uses the dedicated LIVE WRITE transport.
  */
 
 import { SPHttpClient } from "@microsoft/sp-http";

@@ -4,15 +4,19 @@ import {
   bindProcedureRecordList,
   bindTestOnlyProvisionedProcedureRecordList,
   createProcedureRecordLiveWriteAuthorization,
+  createProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  createProcedureRecordLiveWriteExecutionRepository,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
   isProcedureRecordLiveWriteAuthorized,
   PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS,
   PROCEDURE_RECORD_LIST_DISPLAY_NAME,
+  PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
   PROCEDURE_RECORD_PR_RESULT_CHOICES,
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   type ObservedPhysicalField,
   type ProcedureRecordLiveListTransport,
+  type ProcedureRecordLiveWriteGoPacket,
 } from "../../../../src/adapters/sharepoint/procedure-record";
 import { persistProcedureRecord } from "../../../../src/domain/procedure-record-persistence";
 import { createSyntheticProcedureRecord } from "../../../domain/procedure-record-fixtures";
@@ -269,5 +273,68 @@ describe("ProcedureRecord write-capable live repository", () => {
     assert.deepEqual(await repository.create(record), { status: "DEFINITE_FAILURE" });
     assert.equal(calls.createItem, 0);
     assert.equal(calls.getSchema, 0);
+  });
+
+  it("rejects an incomplete Human GO packet and does not open create", () => {
+    assert.equal(
+      createProcedureRecordLiveWriteAuthorizationFromGoPacket({
+        purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+        humanLiveWriteGo: true,
+        expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+        itemCount: 1,
+        logicalSiteId: LOGICAL_SITE_ID,
+        organizationId: ORGANIZATION_ID,
+      }),
+      null,
+    );
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    assert.equal(
+      createProcedureRecordLiveWriteExecutionRepository(binding, transport, {
+        itemCreateAuthorized: true,
+        liveTenantIoAuthorized: true,
+      }),
+      null,
+    );
+    assert.equal(calls.createItem, 0);
+  });
+
+  it("opens run-scoped create from a valid Human GO packet without flipping process-wide authorization", async () => {
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    const packet: ProcedureRecordLiveWriteGoPacket = {
+      purpose: PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+      humanLiveWriteGo: true,
+      expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      listGuid: `{${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID.toUpperCase()}}`,
+      itemCount: 0,
+      logicalSiteId: LOGICAL_SITE_ID,
+      organizationId: ORGANIZATION_ID,
+    };
+    const repository = createProcedureRecordLiveWriteExecutionRepository(
+      binding,
+      transport,
+      packet,
+    );
+    assert.ok(repository);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+    });
+    assert.equal(repository.liveWriteAuthorized, true);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
+    assert.equal(await persistProcedureRecord(record, repository), "saved");
+    assert.equal(calls.createItem, 1);
+    assert.equal(calls.getSchema, 1);
   });
 });

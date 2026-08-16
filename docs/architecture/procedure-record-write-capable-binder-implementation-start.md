@@ -54,40 +54,58 @@ Ready / Merge auto-progress
 re-exporting test-only write seams from production index
 ```
 
-## Production execution gate（remain closed）
+## Production execution gate（remain closed for normal runtime）
 
 ```text
-private ITEM_CREATE_AUTHORIZED = false
-private LIVE_TENANT_IO_AUTHORIZED = false
-（root live-write-gate.ts と SPFx live-write-gate.ts で同一。export しない）
-SPFX_SPHTTPCLIENT_HOST_SEAM.liveWriteAuthorized = false
 createProcedureRecordLiveWriteAuthorization() → null
 isProcedureRecordLiveWriteAuthorized() → false
-unauthorized create() → DEFINITE_FAILURE（createItem I/O = 0）
-unauthorized transport.createItem() → FORBIDDEN（POST = 0）
+createProcedureRecordRepository → create() DEFINITE_FAILURE（createItem I/O = 0）
+createProcedureRecordSpHttpClientTransport / FromHost
+  → createItem FORBIDDEN（POST = 0）
 postProcedureRecordCreateItem is module-private and requires a runtime-valid token
 updateItem remains absent
+SPFX_SPHTTPCLIENT_HOST_SEAM.liveWriteAuthorized = false
 ```
 
-Before Human LIVE WRITE GO, production POST is impossible. After explicit
-Human LIVE WRITE GO, opening both private production flags mints run-scoped
-authorization and the already-reviewed POST path becomes reachable. That
-authorization change is not a new POST implementation. Callers cannot import
-or assign the gate flags, and cannot call the POST helper without a minted
-token.
+Human GO 後は、追加の POST 実装なしで、LIVE WRITE execution runner が
+exact GO packet から run-scoped capability を mint する。
+
+```text
+normal application runtime
+  → no packet
+  → POST impossible
+
+LIVE WRITE execution runner
+  → purpose = procedure-record-first-create
+  → humanLiveWriteGo = true
+  → exact main SHA（40 hex）
+  → exact test-only List GUID
+  → itemCount = 0
+  → logical SiteId（not a GUID）+ organizationId
+  → createProcedureRecordLiveWriteSpHttpClientTransport
+  → createProcedureRecordLiveWriteExecutionRepository
+  → reviewed create path
+```
+
+Caller booleans (`itemCreateAuthorized`) cannot mint a token.
+Invalid packets return null / stay FORBIDDEN.
 
 Production write-related entry points are:
 
 ```text
 createProcedureRecordRepository
+createProcedureRecordLiveWriteExecutionRepository
 createProcedureRecordSpHttpClientTransport
+createProcedureRecordLiveWriteSpHttpClientTransport
 createProcedureRecordSpHttpClientTransportFromHost
 createProcedureRecordLiveWriteAuthorization
+createProcedureRecordLiveWriteAuthorizationFromGoPacket
 isProcedureRecordLiveWriteAuthorized
 ```
 
 `createSyntheticAuthorizedProcedureRecordRepository` remains under `tests/`
 only. `postProcedureRecordCreateItem` is not a module export.
+`createProcedureRecordSpHttpClientTransportFromHost` does not accept a packet.
 
 ## Next gates（separate Human GO each）
 

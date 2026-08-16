@@ -17,8 +17,10 @@ import {
 } from "./list-binding";
 import {
   createProcedureRecordLiveWriteAuthorization,
-  isProcedureRecordLiveWriteAuthorized,
+  createProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  isProcedureRecordLiveWriteAuthorization,
   refuseUnauthorizedLiveCreate,
+  type ProcedureRecordLiveWriteAuthorization,
 } from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
 import {
@@ -138,6 +140,7 @@ function mapCreateFailure(failure: "FORBIDDEN" | "TRANSPORT_ERROR"): ProcedureRe
 function createBoundProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
+  authorization: ProcedureRecordLiveWriteAuthorization | null,
 ): ProcedureRecordListRepository {
   async function lookup(
     query: (token: string) => Promise<ProcedureRecordItemReadResult>,
@@ -158,7 +161,7 @@ function createBoundProcedureRecordRepository(
 
   return {
     binding,
-    liveWriteAuthorized: isProcedureRecordLiveWriteAuthorized(),
+    liveWriteAuthorized: authorization !== null,
 
     async findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>> {
       return lookup((token) => transport.findByRecordId(token), recordId);
@@ -169,8 +172,7 @@ function createBoundProcedureRecordRepository(
     },
 
     async create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt> {
-      const authorization = createProcedureRecordLiveWriteAuthorization();
-      if (authorization === null) {
+      if (!isProcedureRecordLiveWriteAuthorization(authorization)) {
         return refuseUnauthorizedLiveCreate();
       }
       if (!isUsableLiveListBinding(binding)) {
@@ -234,14 +236,34 @@ function createBoundProcedureRecordRepository(
 
 /**
  * Production wiring. Callers cannot pass a write-authorization flag.
- * Create reaches transport.createItem only after Human LIVE WRITE GO mints
- * run-scoped authorization from the production gate.
+ * Normal application runtime has no GO packet, so create() stays closed.
  */
 export function createProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
 ): ProcedureRecordListRepository {
-  return createBoundProcedureRecordRepository(binding, transport);
+  return createBoundProcedureRecordRepository(
+    binding,
+    transport,
+    createProcedureRecordLiveWriteAuthorization(),
+  );
+}
+
+/**
+ * LIVE WRITE execution boundary. A valid Human GO packet mints run-scoped
+ * authorization for this repository instance. Invalid packets return null.
+ * Does not perform SharePoint I/O.
+ */
+export function createProcedureRecordLiveWriteExecutionRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+  packet: unknown,
+): ProcedureRecordListRepository | null {
+  const authorization = createProcedureRecordLiveWriteAuthorizationFromGoPacket(packet);
+  if (authorization === null) {
+    return null;
+  }
+  return createBoundProcedureRecordRepository(binding, transport, authorization);
 }
 
 export function createReadOnlyProcedureRecordRepository(

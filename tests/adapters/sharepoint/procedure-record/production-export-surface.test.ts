@@ -11,15 +11,6 @@ function source(relativeFromRepoRoot: string): string {
   return readFileSync(join(here, "../../../../", relativeFromRepoRoot), "utf8");
 }
 
-function readPrivateFlag(
-  sourceText: string,
-  name: "ITEM_CREATE_AUTHORIZED" | "LIVE_TENANT_IO_AUTHORIZED",
-): string {
-  const match = sourceText.match(new RegExp(`const ${name}: boolean = (true|false);`));
-  assert.ok(match, `missing private flag ${name}`);
-  return match[1];
-}
-
 describe("ProcedureRecord production export surface", () => {
   it("does not export test-only write seams or POST helper", () => {
     assert.equal("createSyntheticAuthorizedProcedureRecordRepository" in procedureRecord, false);
@@ -29,57 +20,70 @@ describe("ProcedureRecord production export surface", () => {
     assert.equal("isProcedureRecordItemCreateAuthorized" in procedureRecord, false);
     assert.equal(typeof procedureRecord.createProcedureRecordRepository, "function");
     assert.equal(typeof procedureRecord.createReadOnlyProcedureRecordRepository, "function");
+    assert.equal(
+      typeof procedureRecord.createProcedureRecordLiveWriteExecutionRepository,
+      "function",
+    );
     assert.equal(typeof procedureRecord.createProcedureRecordLiveWriteAuthorization, "function");
-    assert.equal(typeof procedureRecord.isProcedureRecordLiveWriteAuthorized, "function");
+    assert.equal(
+      typeof procedureRecord.createProcedureRecordLiveWriteAuthorizationFromGoPacket,
+      "function",
+    );
     assert.equal(procedureRecord.createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(procedureRecord.isProcedureRecordLiveWriteAuthorized(), false);
     assert.equal(
-      procedureRecord.isProcedureRecordLiveWriteAuthorization({
+      procedureRecord.createProcedureRecordLiveWriteAuthorizationFromGoPacket({
         itemCreateAuthorized: true,
         liveTenantIoAuthorized: true,
       }),
-      false,
+      null,
     );
   });
 
-  it("does not export the SPFx POST helper or execution gate from production index source", () => {
+  it("does not export the SPFx POST helper or mint from production index source", () => {
     const spfxIndex = source("spfx/src/adapters/procedure-record/index.ts");
     assert.equal(spfxIndex.includes("createSyntheticProcedureRecordSpHttpClientTransport"), false);
     assert.equal(spfxIndex.includes("postProcedureRecordCreateItem"), false);
-    assert.equal(spfxIndex.includes("createSpfxProcedureRecordLiveWriteAuthorization"), false);
+    assert.equal(
+      spfxIndex.includes("createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket"),
+      false,
+    );
     assert.equal(spfxIndex.includes("SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
     assert.equal(spfxIndex.includes("createProcedureRecordSpHttpClientTransportFromHost"), true);
-    assert.equal(spfxIndex.includes("createProcedureRecordSpHttpClientTransport"), true);
+    assert.equal(spfxIndex.includes("createProcedureRecordLiveWriteSpHttpClientTransport"), true);
     const factory = source(
       "spfx/src/adapters/procedure-record/sphttpclient-list-transport.factory.ts",
     );
     assert.equal(factory.includes("itemCreateAuthorized"), false);
     assert.equal(factory.includes("liveTenantIoAuthorized"), false);
+    assert.equal(factory.includes("createProcedureRecordLiveWriteSpHttpClientTransport"), false);
   });
 
-  it("keeps private execution flags closed, aligned, and unexported", () => {
+  it("keeps GO packet rules aligned and does not export mutable gate flags", () => {
     const rootGate = source("src/adapters/sharepoint/procedure-record/live-write-gate.ts");
     const spfxGate = source("spfx/src/adapters/procedure-record/live-write-gate.ts");
     assert.equal(rootGate.includes("export const PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
     assert.equal(spfxGate.includes("export const SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
-    assert.equal(readPrivateFlag(rootGate, "ITEM_CREATE_AUTHORIZED"), "false");
-    assert.equal(readPrivateFlag(rootGate, "LIVE_TENANT_IO_AUTHORIZED"), "false");
-    assert.equal(
-      readPrivateFlag(rootGate, "ITEM_CREATE_AUTHORIZED"),
-      readPrivateFlag(spfxGate, "ITEM_CREATE_AUTHORIZED"),
-    );
-    assert.equal(
-      readPrivateFlag(rootGate, "LIVE_TENANT_IO_AUTHORIZED"),
-      readPrivateFlag(spfxGate, "LIVE_TENANT_IO_AUTHORIZED"),
-    );
+    assert.equal(rootGate.includes("purpose !== PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE"), true);
+    assert.equal(spfxGate.includes("purpose !== PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE"), true);
+    assert.equal(rootGate.includes("packet.itemCount !== 0"), true);
+    assert.equal(spfxGate.includes("packet.itemCount !== 0"), true);
+    assert.equal(rootGate.includes("procedure-record-first-create"), true);
+    assert.equal(spfxGate.includes("procedure-record-first-create"), true);
   });
 
   it("keeps the reviewed POST helper module-private and authorization-gated", () => {
     const repository = source("src/adapters/sharepoint/procedure-record/read-only-repository.ts");
     const transport = source("spfx/src/adapters/procedure-record/sphttpclient-list-transport.ts");
-    assert.equal(repository.includes("createProcedureRecordLiveWriteAuthorization"), true);
+    assert.equal(
+      repository.includes("createProcedureRecordLiveWriteAuthorizationFromGoPacket"),
+      true,
+    );
     assert.equal(repository.includes("transport.createItem"), true);
-    assert.equal(transport.includes("createSpfxProcedureRecordLiveWriteAuthorization"), true);
+    assert.equal(
+      transport.includes("createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket"),
+      true,
+    );
     assert.equal(transport.includes("export async function postProcedureRecordCreateItem"), false);
     assert.equal(transport.includes("async function postProcedureRecordCreateItem"), true);
     assert.equal(

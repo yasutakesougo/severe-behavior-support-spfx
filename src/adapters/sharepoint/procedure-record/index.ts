@@ -51,11 +51,15 @@ export {
   type SpfxSpHttpClientHostSeam,
 } from "./transport-seam";
 export {
+  PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
   createProcedureRecordLiveWriteAuthorization,
+  createProcedureRecordLiveWriteAuthorizationFromGoPacket,
   isProcedureRecordLiveWriteAuthorization,
   isProcedureRecordLiveWriteAuthorized,
+  isProcedureRecordLiveWriteGoPacket,
   refuseUnauthorizedLiveCreate,
   type ProcedureRecordLiveWriteAuthorization,
+  type ProcedureRecordLiveWriteGoPacket,
 } from "./live-write-gate";
 export {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
@@ -75,6 +79,7 @@ export {
   type ProcedureRecordSchemaVerification,
 } from "./physical-schema";
 export {
+  createProcedureRecordLiveWriteExecutionRepository,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
   type ProcedureRecordListRepository,

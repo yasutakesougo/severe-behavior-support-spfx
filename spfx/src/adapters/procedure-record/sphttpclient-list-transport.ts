@@ -4,16 +4,18 @@
  * LOOKUP-B: addresses the list by GUID, never by Display Name / GetByTitle.
  * CREATE-ONLY: createItem exists; updateItem is absent.
  *
- * Production createItem POSTs only after Human LIVE WRITE GO opens the
- * execution gate. The reviewed POST helper is module-private and requires
- * a runtime-valid authorization token. Callers cannot pass write flags.
+ * Production createItem POSTs only when a LIVE WRITE execution transport
+ * was constructed with a valid Human GO packet. The reviewed POST helper
+ * is module-private and requires a runtime-valid authorization token.
+ * Host factory and default constructor do not accept write flags or packets.
  *
  * Live tenant I/O is NOT authorized by constructing this binder alone.
  */
 
 import {
-  createSpfxProcedureRecordLiveWriteAuthorization,
+  createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket,
   isSpfxProcedureRecordLiveWriteAuthorization,
+  type SpfxProcedureRecordLiveWriteAuthorization,
 } from "./live-write-gate";
 import type {
   ProcedureRecordItemCreateResult,
@@ -169,6 +171,28 @@ async function postProcedureRecordCreateItem(
 export function createProcedureRecordSpHttpClientTransport(
   options: CreateProcedureRecordSpHttpClientTransportOptions,
 ): ProcedureRecordLiveListTransport {
+  return createBoundProcedureRecordSpHttpClientTransport(options, undefined);
+}
+
+/**
+ * LIVE WRITE execution boundary. A valid Human GO packet mints run-scoped
+ * authorization for this transport instance. Invalid packets stay FORBIDDEN.
+ * Does not itself perform live tenant I/O.
+ */
+export function createProcedureRecordLiveWriteSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+  packet: unknown,
+): ProcedureRecordLiveListTransport {
+  return createBoundProcedureRecordSpHttpClientTransport(
+    options,
+    createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket(packet),
+  );
+}
+
+function createBoundProcedureRecordSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+  authorization: SpfxProcedureRecordLiveWriteAuthorization | undefined,
+): ProcedureRecordLiveListTransport {
   const client = options.spHttpClient;
   const configuration = options.configuration;
   const listApiUrl = procedureRecordListApiUrl(options.webAbsoluteUrl, options.listGuid);
@@ -241,8 +265,7 @@ export function createProcedureRecordSpHttpClientTransport(
   async function createItem(
     fields: Readonly<Record<string, unknown>>,
   ): Promise<ProcedureRecordItemCreateResult> {
-    const authorization = createSpfxProcedureRecordLiveWriteAuthorization();
-    if (authorization === undefined) {
+    if (!isSpfxProcedureRecordLiveWriteAuthorization(authorization)) {
       return { ok: false, failure: "FORBIDDEN" };
     }
     if (listApiUrl === undefined) {
