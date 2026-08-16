@@ -6,10 +6,9 @@ import {
   createProcedureRecordLiveWriteAuthorization,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
-  isProcedureRecordItemCreateAuthorized,
+  isProcedureRecordLiveWriteAuthorized,
   PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS,
   PROCEDURE_RECORD_LIST_DISPLAY_NAME,
-  PROCEDURE_RECORD_LIVE_WRITE_GATE,
   PROCEDURE_RECORD_PR_RESULT_CHOICES,
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   type ObservedPhysicalField,
@@ -125,16 +124,7 @@ describe("ProcedureRecord write-capable live repository", () => {
     const repository = createReadOnlyProcedureRecordRepository(binding, transport);
     assert.deepEqual(await repository.verifyPhysicalSchema(), { ok: true });
     assert.equal(repository.liveWriteAuthorized, false);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized, false);
-    assert.equal(
-      isProcedureRecordItemCreateAuthorized({
-        itemCreateAuthorized: true,
-        liveTenantIoAuthorized: false,
-      }),
-      false,
-    );
-    assert.equal(isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE), false);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
     assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(calls.createItem, 0);
   });
@@ -255,8 +245,8 @@ describe("ProcedureRecord write-capable live repository", () => {
       SiteId: LOGICAL_SITE_ID,
     });
     assert.equal(repository.liveWriteAuthorized, true);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
-    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized, false);
+    assert.equal(isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(await persistProcedureRecord(record, repository), "saved");
     assert.equal(calls.createItem, 1);
     assert.equal(calls.getSchema, 1);

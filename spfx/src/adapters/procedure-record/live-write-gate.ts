@@ -1,9 +1,12 @@
 /**
  * SPFx copy of the ProcedureRecord LIVE WRITE execution gate.
- * Must stay aligned with PROCEDURE_RECORD_LIVE_WRITE_GATE in root src/.
- * Callers cannot pass write flags into the host factory.
+ * Private flags must stay aligned with root live-write-gate.ts.
+ * Callers cannot read or assign the flags. This module is not an index export.
  * Opening both flags does not add POST code; it unlocks the reviewed path.
  */
+
+const ITEM_CREATE_AUTHORIZED: boolean = false;
+const LIVE_TENANT_IO_AUTHORIZED: boolean = false;
 
 const LIVE_WRITE_AUTHORIZATION_BRAND: unique symbol = Symbol(
   "spfx-procedure-record-live-write-authorization",
@@ -13,28 +16,28 @@ export type SpfxProcedureRecordLiveWriteAuthorization = Readonly<{
   readonly [LIVE_WRITE_AUTHORIZATION_BRAND]: true;
 }>;
 
-export const SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE: {
-  itemCreateAuthorized: boolean;
-  liveTenantIoAuthorized: boolean;
-} = {
-  itemCreateAuthorized: false,
-  liveTenantIoAuthorized: false,
-};
+function isProductionLiveWriteOpen(): boolean {
+  return ITEM_CREATE_AUTHORIZED === true && LIVE_TENANT_IO_AUTHORIZED === true;
+}
 
-export function isSpfxProcedureRecordItemCreateAuthorized(): boolean {
+export function isSpfxProcedureRecordLiveWriteAuthorization(
+  value: unknown,
+): value is SpfxProcedureRecordLiveWriteAuthorization {
+  if (typeof value !== "object" || !value) {
+    return false;
+  }
   return (
-    SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized === true &&
-    SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized === true
+    (value as { [LIVE_WRITE_AUTHORIZATION_BRAND]?: true })[LIVE_WRITE_AUTHORIZATION_BRAND] === true
   );
 }
 
 /**
  * Run-scoped token for the reviewed SPFx POST path.
- * Returns undefined until Human LIVE WRITE GO opens both production flags.
+ * Returns undefined until Human LIVE WRITE GO opens both private production flags.
  */
 export function createSpfxProcedureRecordLiveWriteAuthorization():
   SpfxProcedureRecordLiveWriteAuthorization | undefined {
-  if (!isSpfxProcedureRecordItemCreateAuthorized()) {
+  if (!isProductionLiveWriteOpen()) {
     return undefined;
   }
   return { [LIVE_WRITE_AUTHORIZATION_BRAND]: true };

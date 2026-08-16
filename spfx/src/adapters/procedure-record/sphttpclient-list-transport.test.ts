@@ -2,12 +2,10 @@ import {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   createProcedureRecordSpHttpClientTransport,
-  postProcedureRecordCreateItem,
   procedureRecordListApiUrl,
   type ProcedureRecordSpHttpClient,
 } from "./sphttpclient-list-transport";
 import * as procedureRecordTransport from "./sphttpclient-list-transport";
-import { createSpfxProcedureRecordLiveWriteAuthorization } from "./live-write-gate";
 
 type MockCall = Readonly<{
   method: "get" | "post";
@@ -245,51 +243,26 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
     expect(calls).toHaveLength(0);
   });
 
-  it("createItem: remains FORBIDDEN while the execution gate cannot mint authorization", () => {
-    expect(createSpfxProcedureRecordLiveWriteAuthorization()).toBeUndefined();
-  });
-
-  it("postProcedureRecordCreateItem: reviewed POST goes to lists(guid)/items with observed entity type", async () => {
+  it("createItem: remains FORBIDDEN while private execution flags cannot mint authorization", async () => {
     const { client, calls } = createMockClient({
       post: async () => ({
         ok: true,
         status: 201,
-        json: async () => ({ d: { Id: 7 } }),
+        json: async () => ({ d: { Id: 1 } }),
       }),
     });
-    const listApiUrl = procedureRecordListApiUrl(
-      SYNTHETIC_WEB,
-      PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
-    );
-    expect(listApiUrl).toBeDefined();
-    if (listApiUrl === undefined) {
-      return;
-    }
-    const result = await postProcedureRecordCreateItem({
+    const transport = createProcedureRecordSpHttpClientTransport({
       spHttpClient: client,
       configuration: SYNTHETIC_CONFIGURATION,
-      listApiUrl,
+      webAbsoluteUrl: SYNTHETIC_WEB,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
       listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
-      fields: {
-        prRecordId: "synth-record",
-        prIdempotencyKey: "synth-key",
-      },
     });
-    expect(result).toEqual({ ok: true, listItemId: 7 });
-    expect(calls).toHaveLength(1);
-    expect(calls[0].method).toBe("post");
-    expect(calls[0].url).toBe(
-      `${SYNTHETIC_WEB}/_api/web/lists(guid'${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID}')/items`,
-    );
-    expect(calls[0].url).not.toContain("GetByTitle");
-    const body = JSON.parse(calls[0].body ?? "{}") as {
-      __metadata?: { type?: string };
-      Title?: unknown;
-      prRecordId?: string;
-    };
-    expect(body.__metadata?.type).toBe(PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE);
-    expect(body.prRecordId).toBe("synth-record");
-    expect("Title" in body).toBe(false);
+    await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
+      ok: false,
+      failure: "FORBIDDEN",
+    });
+    expect(calls).toHaveLength(0);
   });
 });
 
@@ -302,6 +275,6 @@ describe("ProcedureRecord production export surface", () => {
       false,
     );
     expect(typeof createProcedureRecordSpHttpClientTransport).toBe("function");
-    expect(typeof postProcedureRecordCreateItem).toBe("function");
+    expect("postProcedureRecordCreateItem" in procedureRecordTransport).toBe(false);
   });
 });

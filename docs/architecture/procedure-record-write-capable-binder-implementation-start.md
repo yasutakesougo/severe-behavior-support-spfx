@@ -57,36 +57,37 @@ re-exporting test-only write seams from production index
 ## Production execution gate（remain closed）
 
 ```text
-PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized = false
-PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized = false
-SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized = false
-SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized = false
+private ITEM_CREATE_AUTHORIZED = false
+private LIVE_TENANT_IO_AUTHORIZED = false
+（root live-write-gate.ts と SPFx live-write-gate.ts で同一。export しない）
 SPFX_SPHTTPCLIENT_HOST_SEAM.liveWriteAuthorized = false
 createProcedureRecordLiveWriteAuthorization() → null
-createSpfxProcedureRecordLiveWriteAuthorization() → undefined
+isProcedureRecordLiveWriteAuthorized() → false
 unauthorized create() → DEFINITE_FAILURE（createItem I/O = 0）
 unauthorized transport.createItem() → FORBIDDEN（POST = 0）
+postProcedureRecordCreateItem is module-private and requires a runtime-valid token
 updateItem remains absent
 ```
 
 Before Human LIVE WRITE GO, production POST is impossible. After explicit
-Human LIVE WRITE GO, opening both production flags mints run-scoped
+Human LIVE WRITE GO, opening both private production flags mints run-scoped
 authorization and the already-reviewed POST path becomes reachable. That
-authorization change is not a new POST implementation.
+authorization change is not a new POST implementation. Callers cannot import
+or assign the gate flags, and cannot call the POST helper without a minted
+token.
 
-Tests may call `postProcedureRecordCreateItem` from the transport module.
-That helper is not a production package export. Production write-related
-entry points are:
+Production write-related entry points are:
 
 ```text
 createProcedureRecordRepository
 createProcedureRecordSpHttpClientTransport
 createProcedureRecordSpHttpClientTransportFromHost
 createProcedureRecordLiveWriteAuthorization
+isProcedureRecordLiveWriteAuthorized
 ```
 
 `createSyntheticAuthorizedProcedureRecordRepository` remains under `tests/`
-only.
+only. `postProcedureRecordCreateItem` is not a module export.
 
 ## Next gates（separate Human GO each）
 

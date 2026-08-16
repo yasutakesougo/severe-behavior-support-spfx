@@ -11,15 +11,35 @@ function source(relativeFromRepoRoot: string): string {
   return readFileSync(join(here, "../../../../", relativeFromRepoRoot), "utf8");
 }
 
+function readPrivateFlag(
+  sourceText: string,
+  name: "ITEM_CREATE_AUTHORIZED" | "LIVE_TENANT_IO_AUTHORIZED",
+): string {
+  const match = sourceText.match(new RegExp(`const ${name}: boolean = (true|false);`));
+  assert.ok(match, `missing private flag ${name}`);
+  return match[1];
+}
+
 describe("ProcedureRecord production export surface", () => {
-  it("does not export test-only write seams", () => {
+  it("does not export test-only write seams or POST helper", () => {
     assert.equal("createSyntheticAuthorizedProcedureRecordRepository" in procedureRecord, false);
     assert.equal("createSyntheticProcedureRecordSpHttpClientTransport" in procedureRecord, false);
     assert.equal("postProcedureRecordCreateItem" in procedureRecord, false);
+    assert.equal("PROCEDURE_RECORD_LIVE_WRITE_GATE" in procedureRecord, false);
+    assert.equal("isProcedureRecordItemCreateAuthorized" in procedureRecord, false);
     assert.equal(typeof procedureRecord.createProcedureRecordRepository, "function");
     assert.equal(typeof procedureRecord.createReadOnlyProcedureRecordRepository, "function");
     assert.equal(typeof procedureRecord.createProcedureRecordLiveWriteAuthorization, "function");
+    assert.equal(typeof procedureRecord.isProcedureRecordLiveWriteAuthorized, "function");
     assert.equal(procedureRecord.createProcedureRecordLiveWriteAuthorization(), null);
+    assert.equal(procedureRecord.isProcedureRecordLiveWriteAuthorized(), false);
+    assert.equal(
+      procedureRecord.isProcedureRecordLiveWriteAuthorization({
+        itemCreateAuthorized: true,
+        liveTenantIoAuthorized: true,
+      }),
+      false,
+    );
   });
 
   it("does not export the SPFx POST helper or execution gate from production index source", () => {
@@ -37,27 +57,37 @@ describe("ProcedureRecord production export surface", () => {
     assert.equal(factory.includes("liveTenantIoAuthorized"), false);
   });
 
-  it("keeps both production execution gates closed and aligned", () => {
+  it("keeps private execution flags closed, aligned, and unexported", () => {
     const rootGate = source("src/adapters/sharepoint/procedure-record/live-write-gate.ts");
     const spfxGate = source("spfx/src/adapters/procedure-record/live-write-gate.ts");
-    assert.equal(rootGate.includes("itemCreateAuthorized: false"), true);
-    assert.equal(rootGate.includes("liveTenantIoAuthorized: false"), true);
-    assert.equal(spfxGate.includes("itemCreateAuthorized: false"), true);
-    assert.equal(spfxGate.includes("liveTenantIoAuthorized: false"), true);
-    assert.equal(rootGate.includes("itemCreateAuthorized: true"), false);
-    assert.equal(spfxGate.includes("itemCreateAuthorized: true"), false);
-    assert.equal(procedureRecord.PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
-    assert.equal(procedureRecord.PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized, false);
+    assert.equal(rootGate.includes("export const PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
+    assert.equal(spfxGate.includes("export const SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
+    assert.equal(readPrivateFlag(rootGate, "ITEM_CREATE_AUTHORIZED"), "false");
+    assert.equal(readPrivateFlag(rootGate, "LIVE_TENANT_IO_AUTHORIZED"), "false");
+    assert.equal(
+      readPrivateFlag(rootGate, "ITEM_CREATE_AUTHORIZED"),
+      readPrivateFlag(spfxGate, "ITEM_CREATE_AUTHORIZED"),
+    );
+    assert.equal(
+      readPrivateFlag(rootGate, "LIVE_TENANT_IO_AUTHORIZED"),
+      readPrivateFlag(spfxGate, "LIVE_TENANT_IO_AUTHORIZED"),
+    );
   });
 
-  it("wires production create to mint authorization then reach the reviewed POST helper", () => {
+  it("keeps the reviewed POST helper module-private and authorization-gated", () => {
     const repository = source("src/adapters/sharepoint/procedure-record/read-only-repository.ts");
     const transport = source("spfx/src/adapters/procedure-record/sphttpclient-list-transport.ts");
     assert.equal(repository.includes("createProcedureRecordLiveWriteAuthorization"), true);
     assert.equal(repository.includes("transport.createItem"), true);
     assert.equal(transport.includes("createSpfxProcedureRecordLiveWriteAuthorization"), true);
-    assert.equal(transport.includes("postProcedureRecordCreateItem"), true);
+    assert.equal(transport.includes("export async function postProcedureRecordCreateItem"), false);
+    assert.equal(transport.includes("async function postProcedureRecordCreateItem"), true);
+    assert.equal(
+      transport.includes("isSpfxProcedureRecordLiveWriteAuthorization(input.authorization)"),
+      true,
+    );
     assert.equal(transport.includes("${input.listApiUrl}/items"), true);
+    assert.equal(transport.includes('Accept: "application/json;odata=verbose"'), true);
     assert.equal(transport.includes("/lists/GetByTitle"), false);
   });
 });

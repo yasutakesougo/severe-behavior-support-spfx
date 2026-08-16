@@ -5,13 +5,16 @@
  * CREATE-ONLY: createItem exists; updateItem is absent.
  *
  * Production createItem POSTs only after Human LIVE WRITE GO opens the
- * execution gate. Callers cannot pass write flags into the constructor.
- * The reviewed POST helper is not a production index export.
+ * execution gate. The reviewed POST helper is module-private and requires
+ * a runtime-valid authorization token. Callers cannot pass write flags.
  *
  * Live tenant I/O is NOT authorized by constructing this binder alone.
  */
 
-import { createSpfxProcedureRecordLiveWriteAuthorization } from "./live-write-gate";
+import {
+  createSpfxProcedureRecordLiveWriteAuthorization,
+  isSpfxProcedureRecordLiveWriteAuthorization,
+} from "./live-write-gate";
 import type {
   ProcedureRecordItemCreateResult,
   ProcedureRecordItemReadResult,
@@ -113,7 +116,8 @@ export function procedureRecordListApiUrl(
   return `${trimTrailingSlash(webAbsoluteUrl)}/_api/web/lists(guid'${guid}')`;
 }
 
-export type PostProcedureRecordCreateItemInput = Readonly<{
+type PostProcedureRecordCreateItemInput = Readonly<{
+  authorization: unknown;
   spHttpClient: ProcedureRecordSpHttpClient;
   configuration: unknown;
   listApiUrl: string;
@@ -123,12 +127,15 @@ export type PostProcedureRecordCreateItemInput = Readonly<{
 
 /**
  * Reviewed CREATE-ONLY POST against lists(guid'...')/items.
- * Production createItem reaches this only after the execution gate mints
- * run-scoped authorization. This helper is not re-exported from index.ts.
+ * Module-private. createItem reaches this only with a runtime-valid
+ * run-scoped authorization token. Not a module export.
  */
-export async function postProcedureRecordCreateItem(
+async function postProcedureRecordCreateItem(
   input: PostProcedureRecordCreateItemInput,
 ): Promise<ProcedureRecordItemCreateResult> {
+  if (!isSpfxProcedureRecordLiveWriteAuthorization(input.authorization)) {
+    return { ok: false, failure: "FORBIDDEN" };
+  }
   const entityType = input.listItemEntityTypeFullName.trim();
   if (entityType.length === 0) {
     return { ok: false, failure: "TRANSPORT_ERROR" };
@@ -242,6 +249,7 @@ export function createProcedureRecordSpHttpClientTransport(
       return { ok: false, failure: "TRANSPORT_ERROR" };
     }
     return postProcedureRecordCreateItem({
+      authorization,
       spHttpClient: client,
       configuration,
       listApiUrl,

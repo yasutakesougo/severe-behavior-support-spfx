@@ -17,8 +17,7 @@ import {
 } from "./list-binding";
 import {
   createProcedureRecordLiveWriteAuthorization,
-  isProcedureRecordItemCreateAuthorized,
-  PROCEDURE_RECORD_LIVE_WRITE_GATE,
+  isProcedureRecordLiveWriteAuthorized,
   refuseUnauthorizedLiveCreate,
 } from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
@@ -159,7 +158,7 @@ function createBoundProcedureRecordRepository(
 
   return {
     binding,
-    liveWriteAuthorized: isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE),
+    liveWriteAuthorized: isProcedureRecordLiveWriteAuthorized(),
 
     async findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>> {
       return lookup((token) => transport.findByRecordId(token), recordId);

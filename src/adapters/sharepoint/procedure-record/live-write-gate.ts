@@ -1,20 +1,13 @@
 /**
  * LIVE WRITE remains a later Human GO.
- * Production constants are the execution gate. Callers cannot override them.
+ * Gate flags are module-private. Callers cannot read or assign them.
  * Opening both flags does not add POST code; it unlocks the reviewed path.
  */
 
 import type { ProcedureRecordCreateAttempt } from "../../../domain/procedure-record-persistence";
 
-export type ProcedureRecordWriteGate = Readonly<{
-  itemCreateAuthorized: boolean;
-  liveTenantIoAuthorized: boolean;
-}>;
-
-export const PROCEDURE_RECORD_LIVE_WRITE_GATE: ProcedureRecordWriteGate = {
-  itemCreateAuthorized: false,
-  liveTenantIoAuthorized: false,
-};
+const ITEM_CREATE_AUTHORIZED: boolean = false;
+const LIVE_TENANT_IO_AUTHORIZED: boolean = false;
 
 const LIVE_WRITE_AUTHORIZATION_BRAND: unique symbol = Symbol(
   "procedure-record-live-write-authorization",
@@ -28,21 +21,32 @@ export function refuseUnauthorizedLiveCreate(): ProcedureRecordCreateAttempt {
   return { status: "DEFINITE_FAILURE" };
 }
 
-/**
- * Production live create requires both flags.
- * itemCreateAuthorized alone is not sufficient.
- */
-export function isProcedureRecordItemCreateAuthorized(gate: ProcedureRecordWriteGate): boolean {
-  return gate.itemCreateAuthorized === true && gate.liveTenantIoAuthorized === true;
+function isProductionLiveWriteOpen(): boolean {
+  return ITEM_CREATE_AUTHORIZED === true && LIVE_TENANT_IO_AUTHORIZED === true;
+}
+
+export function isProcedureRecordLiveWriteAuthorized(): boolean {
+  return isProductionLiveWriteOpen();
+}
+
+export function isProcedureRecordLiveWriteAuthorization(
+  value: unknown,
+): value is ProcedureRecordLiveWriteAuthorization {
+  if (typeof value !== "object" || !value) {
+    return false;
+  }
+  return (
+    (value as { [LIVE_WRITE_AUTHORIZATION_BRAND]?: true })[LIVE_WRITE_AUTHORIZATION_BRAND] === true
+  );
 }
 
 /**
  * Run-scoped token for the reviewed POST path.
- * Returns null until Human LIVE WRITE GO opens both production flags.
+ * Returns null until Human LIVE WRITE GO opens both private production flags.
  * The token cannot be forged from caller booleans.
  */
 export function createProcedureRecordLiveWriteAuthorization(): ProcedureRecordLiveWriteAuthorization | null {
-  if (!isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE)) {
+  if (!isProductionLiveWriteOpen()) {
     return null;
   }
   return { [LIVE_WRITE_AUTHORIZATION_BRAND]: true };
