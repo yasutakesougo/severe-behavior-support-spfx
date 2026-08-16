@@ -38,6 +38,7 @@ export type ProcedureRecordItemReadResult =
   | Readonly<{ ok: false; failure: ProcedureRecordTransportFailure }>;
 
 export interface ProcedureRecordLiveListTransport {
+  readonly targetListGuid: string;
   getSchema(): Promise<ProcedureRecordSchemaReadResult>;
   findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult>;
   findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult>;

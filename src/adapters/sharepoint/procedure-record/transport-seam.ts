@@ -26,8 +26,10 @@ export type ProcedureRecordItemReadResult =
 
 /**
  * Read-only live transport. Item create is intentionally absent.
+ * targetListGuid is the List GUID this transport actually addresses (LOOKUP-B).
  */
 export interface ProcedureRecordLiveListTransport {
+  readonly targetListGuid: string;
   getSchema(): Promise<ProcedureRecordSchemaReadResult>;
   findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult>;
   findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult>;

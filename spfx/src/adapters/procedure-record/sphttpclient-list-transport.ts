@@ -49,6 +49,7 @@ export type CreateProcedureRecordSpHttpClientTransportOptions = Readonly<{
   listGuid: string;
 }>;
 
+// EditFormat is provisioning-time (Dropdown); not a runtime physical invariant.
 const FIELD_SELECT = [
   "InternalName",
   "StaticName",
@@ -177,6 +178,7 @@ export function createProcedureRecordSpHttpClientTransport(
   }
 
   return {
+    targetListGuid: normalizeProcedureRecordListGuid(options.listGuid) ?? "",
     getSchema,
     findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult> {
       return findByFilter("prRecordId", recordId);

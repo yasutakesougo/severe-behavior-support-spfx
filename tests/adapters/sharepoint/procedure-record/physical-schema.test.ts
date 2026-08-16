@@ -58,7 +58,11 @@ function observedList(): ObservedListIdentity {
 
 describe("ProcedureRecord physical schema verification", () => {
   it("accepts the provisioning-complete REST observation", () => {
-    const result = verifyProcedureRecordPhysicalSchema(observedList(), observedCompleteFields());
+    const result = verifyProcedureRecordPhysicalSchema(
+      PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      observedList(),
+      observedCompleteFields(),
+    );
     assert.deepEqual(result, { ok: true });
   });
 
@@ -79,7 +83,11 @@ describe("ProcedureRecord physical schema verification", () => {
       EnforceUniqueValues: false,
       Indexed: false,
     });
-    const result = verifyProcedureRecordPhysicalSchema({ ...observedList(), ItemCount: 1 }, fields);
+    const result = verifyProcedureRecordPhysicalSchema(
+      PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      { ...observedList(), ItemCount: 1 },
+      fields,
+    );
     assert.equal(result.ok, false);
     if (result.ok) {
       return;
@@ -104,11 +112,28 @@ describe("ProcedureRecord physical schema verification", () => {
           }
         : field,
     );
-    const result = verifyProcedureRecordPhysicalSchema(observedList(), fields);
+    const result = verifyProcedureRecordPhysicalSchema(
+      PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      observedList(),
+      fields,
+    );
     assert.equal(result.ok, false);
     if (result.ok) {
       return;
     }
     assert.ok(result.reasons.includes("choices:prResult"));
+  });
+
+  it("rejects observed List Id that does not match the expected binding GUID", () => {
+    const result = verifyProcedureRecordPhysicalSchema(
+      "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      observedList(),
+      observedCompleteFields(),
+    );
+    assert.equal(result.ok, false);
+    if (result.ok) {
+      return;
+    }
+    assert.ok(result.reasons.includes("list-guid-mismatch"));
   });
 });

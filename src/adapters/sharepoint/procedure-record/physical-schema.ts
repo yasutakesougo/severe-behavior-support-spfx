@@ -3,12 +3,15 @@
  * Canonical: PR-MAP-NAMES-1 + TITLE-NONE + unique pair observed at provisioning COMPLETE.
  *
  * This verifies REST field descriptors. It does not create items.
+ *
+ * prResult EditFormat / Dropdown is a provisioning-time UI selection, not a
+ * runtime physical invariant. Runtime checks are Choice tokens, FillInChoice=false,
+ * and empty DefaultValue. FIELD_SELECT does not include EditFormat.
  */
 
 import { PROCEDURE_RECORD_RESULTS } from "../../../domain/procedure-record";
 import { normalizeSharePointGuid } from "./list-binding";
 import { PROCEDURE_RECORD_PHYSICAL_COLUMNS } from "./physical-columns";
-import { PROCEDURE_RECORD_TEST_ONLY_LIST_GUID } from "./test-only-provisioned-list";
 
 export const PROCEDURE_RECORD_PR_RESULT_CHOICES = PROCEDURE_RECORD_RESULTS;
 
@@ -108,12 +111,14 @@ function sameChoices(actual: readonly string[] | undefined, expected: readonly s
 }
 
 export function verifyProcedureRecordPhysicalSchema(
+  expectedListGuid: string,
   list: ObservedListIdentity,
   fields: readonly ObservedPhysicalField[],
 ): ProcedureRecordSchemaVerification {
   const reasons: string[] = [];
   const listGuid = normalizeSharePointGuid(list.Id);
-  if (listGuid !== PROCEDURE_RECORD_TEST_ONLY_LIST_GUID) {
+  const expectedGuid = normalizeSharePointGuid(expectedListGuid);
+  if (expectedGuid === null || listGuid !== expectedGuid) {
     reasons.push("list-guid-mismatch");
   }
   if (list.Title !== "支援手順実施記録") {

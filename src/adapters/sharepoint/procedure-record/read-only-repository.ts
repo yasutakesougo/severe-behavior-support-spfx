@@ -10,7 +10,11 @@ import type {
 } from "../../../domain/procedure-record-persistence";
 import type { ProcedureRecord } from "../../../domain/procedure-record";
 import { decodePhysicalRow } from "./conversion";
-import { isUsableLiveListBinding, type ProcedureRecordListBinding } from "./list-binding";
+import {
+  isUsableLiveListBinding,
+  normalizeSharePointGuid,
+  type ProcedureRecordListBinding,
+} from "./list-binding";
 import { refuseUnauthorizedLiveCreate } from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
 import {
@@ -107,6 +111,15 @@ function classifyRows(
   return { status: "FOUND", value: decoded.record };
 }
 
+function listBindingMatchesTransport(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+): boolean {
+  const bindingGuid = normalizeSharePointGuid(binding.listGuid);
+  const targetGuid = normalizeSharePointGuid(transport.targetListGuid);
+  return bindingGuid !== null && targetGuid !== null && bindingGuid === targetGuid;
+}
+
 export function createReadOnlyProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
@@ -117,6 +130,9 @@ export function createReadOnlyProcedureRecordRepository(
   ): Promise<LookupResult<ProcedureRecord>> {
     if (!isUsableLiveListBinding(binding)) {
       return { status: "FETCH_FAILED", code: "LIST_BINDING_MISSING" };
+    }
+    if (!listBindingMatchesTransport(binding, transport)) {
+      return { status: "FETCH_FAILED", code: "LIST_BINDING_MISMATCH" };
     }
     try {
       return classifyRows(binding, await query(token));
@@ -145,12 +161,15 @@ export function createReadOnlyProcedureRecordRepository(
       if (!isUsableLiveListBinding(binding)) {
         return { ok: false, reasons: ["list-binding-missing"] };
       }
+      if (!listBindingMatchesTransport(binding, transport)) {
+        return { ok: false, reasons: ["transport-target-mismatch"] };
+      }
       try {
         const schema = await transport.getSchema();
         if (!schema.ok) {
           return { ok: false, reasons: [`transport:${schema.failure}`] };
         }
-        return verifyProcedureRecordPhysicalSchema(schema.list, schema.fields);
+        return verifyProcedureRecordPhysicalSchema(binding.listGuid, schema.list, schema.fields);
       } catch {
         return { ok: false, reasons: ["transport:TRANSPORT_ERROR"] };
       }

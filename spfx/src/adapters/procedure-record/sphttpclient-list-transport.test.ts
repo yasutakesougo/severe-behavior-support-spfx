@@ -78,6 +78,23 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / read-only）", () => 
     expect(url).not.toContain("支援手順実施記録");
   });
 
+  it("exposes the normalized constructor GUID as targetListGuid", () => {
+    const { client } = createMockClient({
+      get: async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({ value: [] }),
+      }),
+    });
+    const transport = createProcedureRecordSpHttpClientTransport({
+      spHttpClient: client,
+      configuration: SYNTHETIC_CONFIGURATION,
+      webAbsoluteUrl: SYNTHETIC_WEB,
+      listGuid: `{${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID.toUpperCase()}}`,
+    });
+    expect(transport.targetListGuid).toBe(PROCEDURE_RECORD_TEST_ONLY_LIST_GUID);
+  });
+
   it("getSchema: GET list + fields by GUID with nometadata", async () => {
     const { client, calls } = createMockClient({
       get: async (url) => {

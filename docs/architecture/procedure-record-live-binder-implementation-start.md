@@ -17,12 +17,16 @@ create, LIVE WRITE, Deploy, or M365 / Entra mutation.
 ```text
 LOOKUP-B:
   logical SiteId  →  adapter configuration  →  provisioned List GUID
+  → transport.targetListGuid  →  observed list.Id
 Observed List GUID:
   {b971ff03-799e-41ac-b037-8becb9f4ff4b}
 Display Name 支援手順実施記録 = label only
 web URL /sites/severe-support-procedurerecord-test = operational path only
 physical SharePoint Site ID ≠ logical SiteId
 logical SiteId remains caller-supplied at bind time
+binding.listGuid must equal transport.targetListGuid
+  mismatch → LIST_BINDING_MISMATCH / transport-target-mismatch
+  lookup and schema GET do not proceed
 ```
 
 ## Authorized IN
@@ -55,6 +59,9 @@ SPFX_SPHTTPCLIENT_HOST_SEAM.liveWriteAuthorized = false
 read-only repository create() → DEFINITE_FAILURE
 SPHttpClient transport has no createItem / updateItem
 ItemCount must remain 0
+prResult EditFormat / Dropdown = provisioning-time selection
+runtime physical invariant = Choice tokens + FillInChoice=false + DefaultValue empty
+FIELD_SELECT does not include EditFormat
 ```
 
 ## Next gates（separate Human GO each）
