@@ -14,9 +14,10 @@ reviewed HEAD（Fresh Review PASS；expired by this Acceptance recording）:
 Unit: PROCEDURE-RECORD-PERSISTENCE-DECISION-1
 
 Canonical on GitHub main:
-  NOT CLAIMED until Merge
-  this document records scoped ACCEPTED / LOCKED policy
-  it is not origin/main SoT until merged
+  YES
+  main since 406a2c3cf16f03b57884fd33e495756eacaff86b
+  scoped ACCEPTED / LOCKED policy is canonical on origin/main
+  DEFERRED items remain NOT LOCKED
 
 Requested basis:
   main @ 487bb2ac1d8eb20aff5f30111d5c64facfa1cdb9
@@ -529,18 +530,19 @@ DEC-1 Schema ID ≠ List name ≠ TypeScript type name
 | F-001 | P2 | ACCEPTED RECORDED | D4=A ACCEPTED / LOCKED；B remains v1 not-selected |
 | F-002 | P2 | OPEN | SUPPORTER read caseload vs site-wide remains NOT LOCKED |
 | F-003 | P2 | OPEN | ProcedureRecord retention years remain DEFERRED |
-| F-004 | P2 | OPEN | document is scoped ACCEPTED / LOCKED；not yet SoT on origin/main until Merge |
+| F-004 | P2 | CLOSED | merge-after metadata stale；canonical on main since 406a2c3cf16f03b57884fd33e495756eacaff86b |
 
 P0 / P1: none.
 These P2 rows are deferred / state-tracking items. They are not Acceptance blockers.
-HOLD continues for Ready / Merge / implementation / provisioning / LIVE WRITE / Deploy.
+HOLD continues for implementation / provisioning / LIVE WRITE / Deploy.
+F-004 is closed as merge-after state-sync only. It is not a mapping Decision.
 
 ## 7. HOLD
 
 ```text
 Status = ACCEPTED / LOCKED（scoped）
 DEFERRED items are NOT LOCKED
-this file ≠ origin/main SoT until Merge
+canonical on origin/main since 406a2c3cf16f03b57884fd33e495756eacaff86b
 D7 caseload NOT LOCKED
 D10 retention years DEFERRED
 concrete Internal Names / Display Names unconfirmed
@@ -550,8 +552,7 @@ Implementation Start = NOT AUTHORIZED
 SharePoint provisioning = NOT AUTHORIZED
 LIVE WRITE = NOT AUTHORIZED
 Deploy = NOT AUTHORIZED
-Ready / Merge = NOT AUTHORIZED
-d50db082… Fresh Review = EXPIRED（this recording changes HEAD）
+PR #380 Ready / Merge = DONE
 ```
 
 ## 8. Next gates（policy order only；not live PR gates）
@@ -561,8 +562,8 @@ d50db082… Fresh Review = EXPIRED（this recording changes HEAD）
 2. DONE — Decision Fresh Review on d50db082…（now expired）
 3. DONE — Human Acceptance / LOCK GO for scoped policy
 4. Final Decision Fresh Review on the Acceptance recording HEAD
-5. Ready Gate（separate Human GO；not given）
-6. Merge Audit / Human Merge GO（separate；not given）
+5. DONE — Ready Gate（PR #380）
+6. DONE — Merge（PR #380 → main @ 406a2c3cf16f03b57884fd33e495756eacaff86b）
 7. Separate mapping Decision for concrete Display / Internal / Type
    （clock encoding policy already LOCKED as ISO string）
 8. Separate Human GO for List / column provisioning
@@ -573,5 +574,5 @@ d50db082… Fresh Review = EXPIRED（this recording changes HEAD）
 11. Only after 10: reassess LIVE_PERSISTENCE in severe-behavior-cycle-review
 ```
 
-Step 3 does not start steps 5–10.
-Acceptance / LOCK of scoped policy does not start provisioning, adapter, LIVE WRITE, Ready, or Merge.
+PR #380 Merge does not start steps 7–10.
+Acceptance / LOCK of scoped policy does not start provisioning, adapter, LIVE WRITE, or Deploy.
