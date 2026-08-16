@@ -46,7 +46,5 @@ export interface ProcedureRecordLiveListTransport {
   getSchema(): Promise<ProcedureRecordSchemaReadResult>;
   findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult>;
   findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult>;
-  createItem(
-    fields: Readonly<Record<string, unknown>>,
-  ): Promise<ProcedureRecordItemCreateResult>;
+  createItem(fields: Readonly<Record<string, unknown>>): Promise<ProcedureRecordItemCreateResult>;
 }

@@ -3,7 +3,8 @@
  *
  * LOOKUP-B: addresses the list by GUID, never by Display Name / GetByTitle.
  * CREATE-ONLY: createItem exists; updateItem is absent.
- * Production itemCreateAuthorized defaults to false: createItem does not POST.
+ * Production createItem never POSTs. Synthetic tests use
+ * createSyntheticProcedureRecordSpHttpClientTransport.
  *
  * Live tenant I/O is NOT authorized by constructing this binder alone.
  */
@@ -51,7 +52,6 @@ export type CreateProcedureRecordSpHttpClientTransportOptions = Readonly<{
   webAbsoluteUrl: string;
   listGuid: string;
   listItemEntityTypeFullName?: string;
-  itemCreateAuthorized?: boolean;
 }>;
 
 // EditFormat is provisioning-time (Dropdown); not a runtime physical invariant.
@@ -112,6 +112,23 @@ export function procedureRecordListApiUrl(
 
 export function createProcedureRecordSpHttpClientTransport(
   options: CreateProcedureRecordSpHttpClientTransportOptions,
+): ProcedureRecordLiveListTransport {
+  return bindProcedureRecordSpHttpClientTransport(options, false);
+}
+
+/**
+ * Test-only POST-shaped seam against synthetic doubles.
+ * Must not be used by production host wiring.
+ */
+export function createSyntheticProcedureRecordSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+): ProcedureRecordLiveListTransport {
+  return bindProcedureRecordSpHttpClientTransport(options, true);
+}
+
+function bindProcedureRecordSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+  allowSyntheticPost: boolean,
 ): ProcedureRecordLiveListTransport {
   const client = options.spHttpClient;
   const configuration = options.configuration;
@@ -185,7 +202,7 @@ export function createProcedureRecordSpHttpClientTransport(
   async function createItem(
     fields: Readonly<Record<string, unknown>>,
   ): Promise<ProcedureRecordItemCreateResult> {
-    if (options.itemCreateAuthorized !== true) {
+    if (!allowSyntheticPost) {
       return { ok: false, failure: "FORBIDDEN" };
     }
     const entityType = options.listItemEntityTypeFullName?.trim() ?? "";

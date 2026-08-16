@@ -52,6 +52,7 @@ export {
 } from "./transport-seam";
 export {
   PROCEDURE_RECORD_LIVE_WRITE_GATE,
+  isProcedureRecordItemCreateAuthorized,
   refuseUnauthorizedLiveCreate,
   type ProcedureRecordWriteGate,
 } from "./live-write-gate";
@@ -75,6 +76,7 @@ export {
 export {
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
+  createSyntheticAuthorizedProcedureRecordRepository,
   type ProcedureRecordListRepository,
   type ReadOnlyProcedureRecordRepository,
 } from "./read-only-repository";

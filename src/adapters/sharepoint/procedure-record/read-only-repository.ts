@@ -1,7 +1,7 @@
 /**
  * ProcedureRecord persistence port bound to a live List GUID transport.
- * CREATE-ONLY. Production write gate stays closed; tests may pass a local true gate
- * against synthetic doubles. Live tenant POST is not authorized by this module.
+ * CREATE-ONLY. Production create() is fail-closed.
+ * Synthetic tests use createSyntheticAuthorizedProcedureRecordRepository only.
  */
 
 import type { LookupResult } from "../../../contracts/types";
@@ -20,12 +20,10 @@ import {
   isProcedureRecordItemCreateAuthorized,
   PROCEDURE_RECORD_LIVE_WRITE_GATE,
   refuseUnauthorizedLiveCreate,
-  type ProcedureRecordWriteGate,
 } from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
 import {
   verifyProcedureRecordPhysicalSchema,
-  verifyProcedureRecordPreWriteEmpty,
   type ProcedureRecordSchemaVerification,
 } from "./physical-schema";
 import { buildCreateItemFields } from "./rest-body";
@@ -138,10 +136,10 @@ function mapCreateFailure(failure: "FORBIDDEN" | "TRANSPORT_ERROR"): ProcedureRe
   return { status: "INDETERMINATE" };
 }
 
-export function createProcedureRecordRepository(
+function createBoundProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
-  writeGate: ProcedureRecordWriteGate = PROCEDURE_RECORD_LIVE_WRITE_GATE,
+  allowCreate: boolean,
 ): ProcedureRecordListRepository {
   async function lookup(
     query: (token: string) => Promise<ProcedureRecordItemReadResult>,
@@ -162,7 +160,7 @@ export function createProcedureRecordRepository(
 
   return {
     binding,
-    liveWriteAuthorized: isProcedureRecordItemCreateAuthorized(writeGate),
+    liveWriteAuthorized: allowCreate,
 
     async findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>> {
       return lookup((token) => transport.findByRecordId(token), recordId);
@@ -173,7 +171,7 @@ export function createProcedureRecordRepository(
     },
 
     async create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt> {
-      if (!isProcedureRecordItemCreateAuthorized(writeGate)) {
+      if (!allowCreate) {
         return refuseUnauthorizedLiveCreate();
       }
       if (!isUsableLiveListBinding(binding)) {
@@ -197,10 +195,6 @@ export function createProcedureRecordRepository(
           schema.fields,
         );
         if (!physical.ok) {
-          return { status: "DEFINITE_FAILURE" };
-        }
-        const empty = verifyProcedureRecordPreWriteEmpty(schema.list);
-        if (!empty.ok) {
           return { status: "DEFINITE_FAILURE" };
         }
 
@@ -239,9 +233,36 @@ export function createProcedureRecordRepository(
   };
 }
 
+/**
+ * Production wiring. Callers cannot pass a write-authorization flag.
+ * Create is allowed only if PROCEDURE_RECORD_LIVE_WRITE_GATE is fully open.
+ */
+export function createProcedureRecordRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+): ProcedureRecordListRepository {
+  return createBoundProcedureRecordRepository(
+    binding,
+    transport,
+    isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE),
+  );
+}
+
 export function createReadOnlyProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
 ): ProcedureRecordListRepository {
-  return createProcedureRecordRepository(binding, transport, PROCEDURE_RECORD_LIVE_WRITE_GATE);
+  return createProcedureRecordRepository(binding, transport);
+}
+
+/**
+ * Test-only write seam against synthetic doubles.
+ * Does not flip PROCEDURE_RECORD_LIVE_WRITE_GATE and must not be used by
+ * production host wiring.
+ */
+export function createSyntheticAuthorizedProcedureRecordRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+): ProcedureRecordListRepository {
+  return createBoundProcedureRecordRepository(binding, transport, true);
 }

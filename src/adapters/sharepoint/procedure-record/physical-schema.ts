@@ -3,7 +3,7 @@
  * Canonical: PR-MAP-NAMES-1 + TITLE-NONE + unique pair observed at provisioning COMPLETE.
  *
  * This verifies REST field descriptors. It does not create items.
- * ItemCount=0 is a pre-write check, not a post-write runtime invariant.
+ * ItemCount=0 is a LIVE WRITE execution precheck, not a generic create() invariant.
  *
  * prResult EditFormat / Dropdown is a provisioning-time UI selection, not a
  * runtime physical invariant. Runtime checks are Choice tokens, FillInChoice=false,

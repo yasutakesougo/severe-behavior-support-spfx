@@ -6,6 +6,7 @@ export {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   createProcedureRecordSpHttpClientTransport,
+  createSyntheticProcedureRecordSpHttpClientTransport,
   normalizeProcedureRecordListGuid,
   procedureRecordListApiUrl,
   type CreateProcedureRecordSpHttpClientTransportOptions,

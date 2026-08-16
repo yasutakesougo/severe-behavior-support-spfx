@@ -2,6 +2,7 @@ import {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   createProcedureRecordSpHttpClientTransport,
+  createSyntheticProcedureRecordSpHttpClientTransport,
   procedureRecordListApiUrl,
   type ProcedureRecordSpHttpClient,
 } from "./sphttpclient-list-transport";
@@ -152,9 +153,10 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
     ).toBe(true);
     expect("createItem" in transport).toBe(true);
     expect("updateItem" in transport).toBe(false);
-    await expect(
-      transport.createItem({ prRecordId: "synth" }),
-    ).resolves.toEqual({ ok: false, failure: "FORBIDDEN" });
+    await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
+      ok: false,
+      failure: "FORBIDDEN",
+    });
     expect(calls.every((call) => call.method === "get")).toBe(true);
   });
 
@@ -216,7 +218,7 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
     expect(calls[0].method).toBe("get");
   });
 
-  it("createItem: unauthorized transport does not POST", async () => {
+  it("createItem: production transport does not POST even if caller passes itemCreateAuthorized", async () => {
     const { client, calls } = createMockClient({
       post: async () => ({
         ok: true,
@@ -224,13 +226,16 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
         json: async () => ({ d: { Id: 1 } }),
       }),
     });
-    const transport = createProcedureRecordSpHttpClientTransport({
+    const options = {
       spHttpClient: client,
       configuration: SYNTHETIC_CONFIGURATION,
       webAbsoluteUrl: SYNTHETIC_WEB,
       listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
       listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
-    });
+      itemCreateAuthorized: true,
+      liveTenantIoAuthorized: false,
+    };
+    const transport = createProcedureRecordSpHttpClientTransport(options);
     await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
       ok: false,
       failure: "FORBIDDEN",
@@ -238,7 +243,7 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
     expect(calls).toHaveLength(0);
   });
 
-  it("createItem: authorized synthetic POST uses lists(guid)/items and observed entity type", async () => {
+  it("createItem: synthetic-test seam POSTs to lists(guid)/items with observed entity type", async () => {
     const { client, calls } = createMockClient({
       post: async () => ({
         ok: true,
@@ -246,13 +251,12 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
         json: async () => ({ d: { Id: 7 } }),
       }),
     });
-    const transport = createProcedureRecordSpHttpClientTransport({
+    const transport = createSyntheticProcedureRecordSpHttpClientTransport({
       spHttpClient: client,
       configuration: SYNTHETIC_CONFIGURATION,
       webAbsoluteUrl: SYNTHETIC_WEB,
       listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
       listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
-      itemCreateAuthorized: true,
     });
     const result = await transport.createItem({
       prRecordId: "synth-record",

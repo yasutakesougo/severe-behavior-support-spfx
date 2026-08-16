@@ -34,7 +34,7 @@ physical SharePoint Site ID ≠ logical SiteId
 CREATE-ONLY createItem on ProcedureRecordLiveListTransport
 SPHttpClient POST shape against lists(guid'...')/items（synthetic doubles only）
 gate-aware repository create()
-ItemCount=0 moved to pre-write check（not a post-write runtime schema invariant）
+ItemCount=0 is LIVE WRITE execution precheck only（not generic create()）
 unit / heft tests with synthetic doubles
 ```
 
@@ -62,9 +62,16 @@ unauthorized create() → DEFINITE_FAILURE（createItem I/O = 0）
 updateItem remains absent
 ```
 
-Tests may pass a **local** `{ itemCreateAuthorized: true }` gate into the
-repository / transport to exercise the create path against doubles. That does
-not change the production constants and does not authorize live tenant I/O.
+Tests use an internal **synthetic-test-only** write seam. Callers cannot pass
+`itemCreateAuthorized: true` into production repository or SPFx host factory.
+`itemCreateAuthorized` alone never authorizes live POST; production
+`liveTenantIoAuthorized` stays false.
+
+```text
+production path: closed gate → POST impossible
+synthetic tests: createSyntheticAuthorizedProcedureRecordRepository
+  / createSyntheticProcedureRecordSpHttpClientTransport
+```
 
 ## Next gates（separate Human GO each）
 

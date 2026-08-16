@@ -1,7 +1,7 @@
 /**
  * Production wiring helper for the ProcedureRecord SPHttpClient binder.
  *
- * Does not itself perform tenant I/O. itemCreateAuthorized defaults to false.
+ * Does not itself perform tenant I/O. Does not accept write-authorization flags.
  * Live POST still requires a separate Human LIVE WRITE GO.
  */
 
@@ -13,20 +13,22 @@ import {
 } from "./sphttpclient-list-transport";
 import type { ProcedureRecordLiveListTransport } from "./transport-types";
 
-export type CreateProcedureRecordSpHttpClientTransportFromHostOptions = Omit<
-  CreateProcedureRecordSpHttpClientTransportOptions,
-  "configuration" | "spHttpClient"
-> &
-  Readonly<{
-    spHttpClient: SPHttpClient;
-  }>;
+export type CreateProcedureRecordSpHttpClientTransportFromHostOptions = Readonly<{
+  spHttpClient: SPHttpClient;
+  webAbsoluteUrl: string;
+  listGuid: string;
+  listItemEntityTypeFullName?: string;
+}>;
 
 export function createProcedureRecordSpHttpClientTransportFromHost(
   options: CreateProcedureRecordSpHttpClientTransportFromHostOptions,
 ): ProcedureRecordLiveListTransport {
-  return createProcedureRecordSpHttpClientTransport({
-    ...options,
+  const productionOptions: CreateProcedureRecordSpHttpClientTransportOptions = {
     spHttpClient: options.spHttpClient,
     configuration: SPHttpClient.configurations.v1,
-  });
+    webAbsoluteUrl: options.webAbsoluteUrl,
+    listGuid: options.listGuid,
+    listItemEntityTypeFullName: options.listItemEntityTypeFullName,
+  };
+  return createProcedureRecordSpHttpClientTransport(productionOptions);
 }

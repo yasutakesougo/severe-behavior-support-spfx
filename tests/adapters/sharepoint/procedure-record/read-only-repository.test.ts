@@ -5,6 +5,8 @@ import {
   bindTestOnlyProvisionedProcedureRecordList,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
+  createSyntheticAuthorizedProcedureRecordRepository,
+  isProcedureRecordItemCreateAuthorized,
   PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS,
   PROCEDURE_RECORD_LIST_DISPLAY_NAME,
   PROCEDURE_RECORD_LIVE_WRITE_GATE,
@@ -123,6 +125,15 @@ describe("ProcedureRecord write-capable live repository", () => {
     assert.deepEqual(await repository.verifyPhysicalSchema(), { ok: true });
     assert.equal(repository.liveWriteAuthorized, false);
     assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
+    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized, false);
+    assert.equal(
+      isProcedureRecordItemCreateAuthorized({
+        itemCreateAuthorized: true,
+        liveTenantIoAuthorized: false,
+      }),
+      false,
+    );
+    assert.equal(isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE), false);
     assert.equal(calls.createItem, 0);
   });
 
@@ -200,10 +211,7 @@ describe("ProcedureRecord write-capable live repository", () => {
     });
     assert.ok(binding);
     const { transport, calls } = createTransport();
-    const repository = createProcedureRecordRepository(binding, transport, {
-      itemCreateAuthorized: true,
-      liveTenantIoAuthorized: false,
-    });
+    const repository = createSyntheticAuthorizedProcedureRecordRepository(binding, transport);
     const record = createSyntheticProcedureRecord({
       OrganizationId: ORGANIZATION_ID,
       SiteId: LOGICAL_SITE_ID,
@@ -213,24 +221,23 @@ describe("ProcedureRecord write-capable live repository", () => {
     assert.equal(calls.createItem, 0);
   });
 
-  it("authorized create is DEFINITE_FAILURE when ItemCount is not 0", async () => {
+  it("does not reject a distinct ProcedureRecord because ItemCount is not 0", async () => {
     const binding = bindTestOnlyProvisionedProcedureRecordList({
       organizationId: ORGANIZATION_ID,
       siteId: LOGICAL_SITE_ID,
     });
     assert.ok(binding);
     const { transport, calls } = createTransport({ itemCount: 1 });
-    const repository = createProcedureRecordRepository(binding, transport, {
-      itemCreateAuthorized: true,
-      liveTenantIoAuthorized: false,
-    });
+    const repository = createSyntheticAuthorizedProcedureRecordRepository(binding, transport);
     const record = createSyntheticProcedureRecord({
       OrganizationId: ORGANIZATION_ID,
       SiteId: LOGICAL_SITE_ID,
+      RecordId: "synthetic-procedure-record-002",
+      IdempotencyKey: "synthetic-procedure-idempotency-002",
     });
-    assert.deepEqual(await repository.create(record), { status: "DEFINITE_FAILURE" });
+    assert.deepEqual(await repository.create(record), { status: "CREATED" });
     assert.equal(calls.getSchema, 1);
-    assert.equal(calls.createItem, 0);
+    assert.equal(calls.createItem, 1);
   });
 
   it("authorized synthetic create persists through GET-by-RecordId as saved", async () => {
@@ -240,18 +247,34 @@ describe("ProcedureRecord write-capable live repository", () => {
     });
     assert.ok(binding);
     const { transport, calls } = createTransport();
-    const repository = createProcedureRecordRepository(binding, transport, {
-      itemCreateAuthorized: true,
-      liveTenantIoAuthorized: false,
-    });
+    const repository = createSyntheticAuthorizedProcedureRecordRepository(binding, transport);
     const record = createSyntheticProcedureRecord({
       OrganizationId: ORGANIZATION_ID,
       SiteId: LOGICAL_SITE_ID,
     });
     assert.equal(repository.liveWriteAuthorized, true);
     assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized, false);
+    assert.equal(PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized, false);
     assert.equal(await persistProcedureRecord(record, repository), "saved");
     assert.equal(calls.createItem, 1);
     assert.equal(calls.getSchema, 1);
+  });
+
+  it("production repository stays closed and does not accept a caller write gate", async () => {
+    const binding = bindTestOnlyProvisionedProcedureRecordList({
+      organizationId: ORGANIZATION_ID,
+      siteId: LOGICAL_SITE_ID,
+    });
+    assert.ok(binding);
+    const { transport, calls } = createTransport();
+    const repository = createProcedureRecordRepository(binding, transport);
+    const record = createSyntheticProcedureRecord({
+      OrganizationId: ORGANIZATION_ID,
+      SiteId: LOGICAL_SITE_ID,
+    });
+    assert.equal(repository.liveWriteAuthorized, false);
+    assert.deepEqual(await repository.create(record), { status: "DEFINITE_FAILURE" });
+    assert.equal(calls.createItem, 0);
+    assert.equal(calls.getSchema, 0);
   });
 });
