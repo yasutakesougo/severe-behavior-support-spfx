@@ -68,3 +68,28 @@ export const DEMO_UX_6_SLICE = {
   evaluationMutationAuthorized: false as const,
   govRuleDecisionAuthorized: false as const,
 } as const;
+
+/** VP-5 Review — presentation-only polish for the review evidence boundary. */
+export const VP5_REVIEW_SLICE = {
+  id: "VP-5-REVIEW",
+  target: "review" as const,
+  presentationOnly: true as const,
+  visualPolishAuthorized: true as const,
+  reviewPresentationBoundaryMetadataAuthorized: true as const,
+  reviewDueStatePresentationAuthorized: true as const,
+  historicalUnresolvedPresentationAuthorized: true as const,
+  regressionTestsAuthorized: true as const,
+  reviewAutoJudgeAuthorized: false as const,
+  reviewOutcomeSemanticsChangeAuthorized: false as const,
+  completeReviewMutationAuthorized: false as const,
+  statusVocabularyChangeAuthorized: false as const,
+  navigationSemanticsChangeAuthorized: false as const,
+  domainContractsMutationAuthorized: false as const,
+  permissionMutationAuthorized: false as const,
+  syntheticBoundaryChangeAuthorized: false as const,
+  liveTenantIoAuthorized: false as const,
+  sharePointWriteAuthorized: false as const,
+  visualAcceptanceAuthorized: false as const,
+  deployAuthorized: false as const,
+  externalMutationAuthorized: false as const,
+} as const;

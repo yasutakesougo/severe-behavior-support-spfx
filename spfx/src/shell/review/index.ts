@@ -7,7 +7,11 @@ export {
   DEMO_REVIEW_DUE_PRESENTATION_NOTE,
   reviewDueCopyIsFailClosed,
 } from "./review-due-copy";
-export { DEMO_UX_6_SLICE, DEMO_UX_REVIEW_DUE_FIXTURE } from "./review-due-fixture";
+export {
+  DEMO_UX_6_SLICE,
+  DEMO_UX_REVIEW_DUE_FIXTURE,
+  VP5_REVIEW_SLICE,
+} from "./review-due-fixture";
 export type {
   ShellReviewDueAttentionItem,
   ShellReviewDueStatePresentation,

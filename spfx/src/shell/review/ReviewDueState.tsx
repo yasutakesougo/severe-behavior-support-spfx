@@ -14,6 +14,7 @@ import {
   DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
 } from "./review-due-copy";
+import { VP5_REVIEW_SLICE } from "./review-due-fixture";
 import type { ShellReviewDueStatePresentation } from "./review-due-types";
 import styles from "./ReviewDueStateUx.module.scss";
 
@@ -52,6 +53,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
       data-demo-ux="review-due-state"
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
+      data-review-visual-polish={VP5_REVIEW_SLICE.id}
       aria-labelledby="demo-ux-review-due-heading"
     >
       <div className={styles.topRow}>
@@ -72,14 +74,27 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         ref={headingRef}
         tabIndex={-1}
         className={styles.reviewHeading}
+        data-review-visual-role="page-title"
         data-demo-ux="review-due-heading"
       >
         {heading}
       </h1>
       <p className={styles.summaryPrompt}>{summaryPrompt}</p>
 
-      <section className={styles.section} aria-labelledby="demo-ux-review-summary-heading">
-        <h2 id="demo-ux-review-summary-heading">見直し・期限の要約</h2>
+      <section
+        className={`${styles.section} ${styles.resultSection}`}
+        data-review-visual-surface="result"
+        aria-labelledby="demo-ux-review-summary-heading"
+      >
+        <div className={styles.sectionHeader}>
+          <div>
+            <p className={styles.sectionKicker}>見直し結果（表示）</p>
+            <h2 id="demo-ux-review-summary-heading" data-review-visual-role="section-title">
+              見直し・期限の要約
+            </h2>
+          </div>
+          <span className={styles.boundaryTag}>表示専用</span>
+        </div>
         <p className={styles.calculationNote} data-demo-ux="review-due-calculation-note">
           {DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE}
         </p>
@@ -108,8 +123,20 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         </ul>
       </section>
 
-      <section className={styles.section} aria-labelledby="demo-ux-review-attention-heading">
-        <h2 id="demo-ux-review-attention-heading">確認が必要な対象</h2>
+      <section
+        className={`${styles.section} ${styles.resultSection}`}
+        data-review-visual-surface="result"
+        aria-labelledby="demo-ux-review-attention-heading"
+      >
+        <div className={styles.sectionHeader}>
+          <div>
+            <p className={styles.sectionKicker}>見直し結果（表示）</p>
+            <h2 id="demo-ux-review-attention-heading" data-review-visual-role="section-title">
+              確認が必要な対象
+            </h2>
+          </div>
+          <span className={styles.boundaryTag}>表示専用</span>
+        </div>
         {showAttentionEmpty ? (
           // INV-17: attention zero-result only — not “all clear” / calculation failure.
           <EmptyNotice
@@ -133,12 +160,14 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
                   <StatusBadge
                     shape="soft"
                     label={item.reviewStatusLabel}
+                    className={styles.reviewStatusBadge}
                     dataAttrs={{ "data-demo-ux": "review-status-label" }}
                   />
                   {item.dueStateLabel ? (
                     <StatusBadge
                       shape="soft"
                       label={item.dueStateLabel}
+                      className={styles.dueStateBadge}
                       dataAttrs={{ "data-demo-ux": "due-state-label" }}
                     />
                   ) : null}
@@ -149,8 +178,24 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         )}
       </section>
 
-      <section className={styles.section} aria-labelledby="field-workflow-review-materials-heading">
-        <h2 id="field-workflow-review-materials-heading">見直し材料（支援手順記録）</h2>
+      <section
+        className={`${styles.section} ${styles.materialsSection}`}
+        data-review-visual-surface="materials"
+        data-field-workflow="review-materials-section"
+        aria-labelledby="field-workflow-review-materials-heading"
+      >
+        <div className={styles.sectionHeader}>
+          <div>
+            <p className={styles.sectionKicker}>見直し材料</p>
+            <h2
+              id="field-workflow-review-materials-heading"
+              data-review-visual-role="section-title"
+            >
+              見直し材料（支援手順記録）
+            </h2>
+          </div>
+          <span className={styles.boundaryTag}>記録された事実</span>
+        </div>
         <p className={styles.calculationNote} data-field-workflow="review-no-auto-judge">
           {FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE}
         </p>
@@ -164,49 +209,85 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
           </EmptyNotice>
         ) : (
           <ul className={styles.cardList} data-field-workflow="review-materials-list">
-            {procedureReviewMaterials.map((item) => (
-              <li key={item.id} className={styles.card} data-field-workflow="review-material-item">
-                <div className={styles.cardMain}>
-                  <strong>{item.personLabel}</strong>
-                  <p>{labelForProcedureRecordResult(item.result)}</p>
-                  <p>
-                    plan v{item.planVersion} / {item.performedAtLabel}
-                  </p>
-                </div>
-                <div className={styles.badgeColumn}>
-                  <StatusBadge
-                    shape="soft"
-                    label={labelForProcedureRecordResult(item.result)}
-                    dataAttrs={{
-                      "data-field-workflow": "review-material-result",
-                      "data-field-workflow-result": item.result,
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className={styles.backButton}
-                    data-field-workflow="review-material-open"
-                    data-field-workflow-material-id={item.id}
-                    onClick={() => {
-                      setSelectedMaterialId(item.id);
-                    }}
-                  >
-                    元記録を表示
-                  </button>
-                </div>
-              </li>
-            ))}
+            {procedureReviewMaterials.map((item) => {
+              const isHistoricalResolved = item.historicalLookupStatus === "RESOLVED";
+              return (
+                <li
+                  key={item.id}
+                  className={`${styles.card} ${styles.materialCard} ${
+                    isHistoricalResolved
+                      ? styles.materialCardResolved
+                      : styles.materialCardUnresolved
+                  }`}
+                  data-field-workflow="review-material-item"
+                  data-review-visual-material-state={
+                    isHistoricalResolved ? "historical-resolved" : "historical-unresolved"
+                  }
+                >
+                  <div className={styles.cardMain}>
+                    <div className={styles.materialHeading}>
+                      <strong>{item.personLabel}</strong>
+                      <span
+                        className={
+                          isHistoricalResolved
+                            ? `${styles.referenceState} ${styles.referenceStateResolved}`
+                            : `${styles.referenceState} ${styles.referenceStateUnresolved}`
+                        }
+                        data-review-visual-reference-state={
+                          isHistoricalResolved ? "resolved" : "unresolved"
+                        }
+                      >
+                        {isHistoricalResolved ? "履歴参照あり" : "履歴参照未解決"}
+                      </span>
+                    </div>
+                    <p className={styles.materialResult}>
+                      {labelForProcedureRecordResult(item.result)}
+                    </p>
+                    <p className={styles.cardMeta}>
+                      plan v{item.planVersion} / {item.performedAtLabel}
+                    </p>
+                  </div>
+                  <div className={styles.badgeColumn}>
+                    <StatusBadge
+                      shape="soft"
+                      label={labelForProcedureRecordResult(item.result)}
+                      className={styles.materialResultBadge}
+                      dataAttrs={{
+                        "data-field-workflow": "review-material-result",
+                        "data-field-workflow-result": item.result,
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className={styles.detailButton}
+                      data-field-workflow="review-material-open"
+                      data-field-workflow-material-id={item.id}
+                      onClick={() => {
+                        setSelectedMaterialId(item.id);
+                      }}
+                    >
+                      元記録を表示
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         )}
         {selectedMaterial && selectedProjection ? (
           <div
-            className={styles.card}
+            className={`${styles.card} ${styles.materialDetail}`}
             data-field-workflow="review-material-detail"
             data-field-workflow-material-id={selectedMaterial.id}
             data-field-workflow-plan-version={String(selectedMaterial.planVersion)}
             data-field-workflow-historical-status={selectedMaterial.historicalLookupStatus}
+            data-review-visual-detail-state={
+              selectedProjection.status === "RESOLVED"
+                ? "historical-resolved"
+                : "historical-unresolved"
+            }
           >
-            <h3>元 ProcedureRecord</h3>
+            <h3 data-review-visual-role="detail-title">元 ProcedureRecord</h3>
             <p>
               result: {labelForProcedureRecordResult(selectedMaterial.result)}（失敗扱いしません）
             </p>
@@ -243,8 +324,14 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         ) : null}
       </section>
 
-      <section className={styles.section} aria-labelledby="demo-ux-review-mutation-heading">
-        <h2 id="demo-ux-review-mutation-heading">見直し操作（表示専用）</h2>
+      <section
+        className={`${styles.section} ${styles.readonlySection}`}
+        data-review-visual-surface="reference-only-actions"
+        aria-labelledby="demo-ux-review-mutation-heading"
+      >
+        <h2 id="demo-ux-review-mutation-heading" data-review-visual-role="section-title">
+          見直し操作（表示専用）
+        </h2>
         <p className={styles.mutationNote} data-demo-ux="review-due-mutation-note">
           {DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE}
         </p>
@@ -270,7 +357,9 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
 
       <div className={styles.stateGrid}>
         <section className={styles.statePanel} aria-labelledby="demo-ux-review-business-heading">
-          <h2 id="demo-ux-review-business-heading">制度・業務情報（合成表示）</h2>
+          <h2 id="demo-ux-review-business-heading" data-review-visual-role="section-title">
+            制度・業務情報（合成表示）
+          </h2>
           <dl>
             <div>
               <dt>対象範囲</dt>
@@ -283,7 +372,9 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
           </dl>
         </section>
         <section className={styles.statePanel} aria-labelledby="demo-ux-review-system-heading">
-          <h2 id="demo-ux-review-system-heading">システム状態</h2>
+          <h2 id="demo-ux-review-system-heading" data-review-visual-role="section-title">
+            システム状態
+          </h2>
           <dl>
             <div>
               <dt>保存状態</dt>
