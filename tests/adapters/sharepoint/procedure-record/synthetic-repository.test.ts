@@ -216,7 +216,12 @@ describe("ProcedureRecord synthetic adapter — LOOKUP-B / PR-MAP-NAMES-1", () =
   it("does not authorize live tenant I/O or expose update/delete", () => {
     const { repository } = createHarness();
     assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.liveTenantIoAuthorized, false);
-    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.bindWhenAvailable, false);
+    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.liveWriteAuthorized, false);
+    assert.equal(SPFX_SPHTTPCLIENT_HOST_SEAM.bindWhenAvailable, true);
+    assert.equal(
+      SPFX_SPHTTPCLIENT_HOST_SEAM.binderModule,
+      "spfx/src/adapters/procedure-record/sphttpclient-list-transport.ts",
+    );
     assert.equal("update" in repository, false);
     assert.equal("delete" in repository, false);
   });
