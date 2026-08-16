@@ -14,6 +14,7 @@ class FakeProcedureRecordPort implements ProcedureRecordPersistencePort {
   readonly byRecord = new Map<string, ProcedureRecord>();
   readonly byIdem = new Map<string, ProcedureRecord>();
   lookupMode: "ok" | "unknown" | "fetch_failed" = "ok";
+  unknownReason: "NOT_AUTHENTICATED" | "NOT_AUTHORIZED" | "INDETERMINATE" = "INDETERMINATE";
   fetchFailedCode = "TRANSPORT_ERROR";
   createMode: "created" | "definite" | "indeterminate" | "created_without_readback" = "created";
   createCalls = 0;
@@ -44,7 +45,7 @@ class FakeProcedureRecordPort implements ProcedureRecordPersistencePort {
 
   private lookup(kind: "record" | "idem", token: string): LookupResult<ProcedureRecord> {
     if (this.lookupMode === "unknown") {
-      return { status: "UNKNOWN", reason: "INDETERMINATE" };
+      return { status: "UNKNOWN", reason: this.unknownReason };
     }
     if (this.lookupMode === "fetch_failed") {
       return { status: "FETCH_FAILED", code: this.fetchFailedCode };
@@ -82,12 +83,35 @@ describe("persistProcedureRecord — D5/D8/D9", () => {
     assert.equal(await persistProcedureRecord(record, port), "saved");
   });
 
-  it("maps UNKNOWN lookup to save_outcome_unknown and does not create", async () => {
+  it("maps UNKNOWN / INDETERMINATE lookup to save_outcome_unknown and does not create", async () => {
     const port = new FakeProcedureRecordPort();
     port.lookupMode = "unknown";
+    port.unknownReason = "INDETERMINATE";
     assert.equal(
       await persistProcedureRecord(createSyntheticProcedureRecord(), port),
       "save_outcome_unknown",
+    );
+    assert.equal(port.createCalls, 0);
+  });
+
+  it("maps UNKNOWN / NOT_AUTHORIZED lookup to save_failed and does not create", async () => {
+    const port = new FakeProcedureRecordPort();
+    port.lookupMode = "unknown";
+    port.unknownReason = "NOT_AUTHORIZED";
+    assert.equal(
+      await persistProcedureRecord(createSyntheticProcedureRecord(), port),
+      "save_failed",
+    );
+    assert.equal(port.createCalls, 0);
+  });
+
+  it("maps UNKNOWN / NOT_AUTHENTICATED lookup to save_failed and does not create", async () => {
+    const port = new FakeProcedureRecordPort();
+    port.lookupMode = "unknown";
+    port.unknownReason = "NOT_AUTHENTICATED";
+    assert.equal(
+      await persistProcedureRecord(createSyntheticProcedureRecord(), port),
+      "save_failed",
     );
     assert.equal(port.createCalls, 0);
   });

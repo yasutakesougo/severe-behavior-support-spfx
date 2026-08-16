@@ -110,12 +110,12 @@ describe("ProcedureRecord synthetic adapter — LOOKUP-B / PR-MAP-NAMES-1", () =
     assert.equal(store.snapshotRows().length, 1);
   });
 
-  it("maps lookup UNKNOWN to save_outcome_unknown without create", async () => {
+  it("maps synthetic store forbidden through persistProcedureRecord to save_failed without create", async () => {
     const { repository, store } = createHarness();
     store.setMode("forbidden");
     assert.equal(
       await persistProcedureRecord(createSyntheticProcedureRecord(), repository),
-      "save_outcome_unknown",
+      "save_failed",
     );
     assert.equal(store.snapshotRows().length, 0);
   });

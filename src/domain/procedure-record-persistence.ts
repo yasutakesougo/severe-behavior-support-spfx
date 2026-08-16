@@ -124,12 +124,15 @@ async function performLookup(
 }
 
 function isDefiniteLookupFailure(result: LookupResult<ProcedureRecord>): boolean {
+  if (result.status === "UNKNOWN") {
+    return result.reason === "NOT_AUTHORIZED" || result.reason === "NOT_AUTHENTICATED";
+  }
   return result.status === "FETCH_FAILED" && isDefiniteLookupFailureCode(result.code);
 }
 
 function isIndeterminateLookupFailure(result: LookupResult<ProcedureRecord>): boolean {
   if (result.status === "UNKNOWN") {
-    return true;
+    return result.reason === "INDETERMINATE";
   }
   return result.status === "FETCH_FAILED" && !isDefiniteLookupFailureCode(result.code);
 }
