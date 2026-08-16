@@ -1,18 +1,22 @@
-# ProcedureRecord Persistence v1 — Human Selection Packet
+# ProcedureRecord Persistence v1 — Human Selection + Acceptance
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-PROCEDURE-RECORD-PERSISTENCE-1
-Kind: Human Selection packet（ProcedureRecord persistence v1）
-Status: SELECTED / NOT ACCEPTED / NOT LOCKED
-Human Decision: SELECT PR-PERS-PKG-1 + D4 = A
-Human Selection date: 2026-08-16
+Kind: Human Selection + scoped Acceptance（ProcedureRecord persistence v1）
+Status: ACCEPTED / LOCKED（scoped；DEFERRED items are NOT LOCKED）
+Human Selection: SELECT PR-PERS-PKG-1 + D4 = A（2026-08-16）
+Human Acceptance: ACCEPT / LOCK PR-PERS-PKG-1 + D4 = A（2026-08-16）
+Acceptance unit: PROCEDURE-RECORD-PERSISTENCE-ACCEPTANCE-1
+PR: #380
+reviewed HEAD（Fresh Review PASS；expired by this Acceptance recording）:
+  d50db082fc47f9cb6241169eb925c56924988166
 Unit: PROCEDURE-RECORD-PERSISTENCE-DECISION-1
 
 Canonical on GitHub main:
-  NOT CLAIMED
-  this file is a Selection record only
-  it is not the Accepted / LOCKED SoT on origin/main
+  NOT CLAIMED until Merge
+  this document records scoped ACCEPTED / LOCKED policy
+  it is not origin/main SoT until merged
 
 Requested basis:
   main @ 487bb2ac1d8eb20aff5f30111d5c64facfa1cdb9
@@ -23,15 +27,15 @@ Logical contract（do not redesign）:
   src/domain/procedure-record.ts
   schema: severe-behavior-support.procedure-record.record @ 1.0.0
 
-Selection ≠ Acceptance
-Selection ≠ LOCK
-Selection ≠ Implementation Start
-Selection ≠ SharePoint List / column / site create GO
-Selection ≠ adapter code GO
-Selection ≠ SPFx change GO
-Selection ≠ LIVE WRITE GO
-Selection ≠ Deploy / App Catalog / M365 / Entra mutation
-Agent auto-select: FORBIDDEN（this Selection is Human GO）
+Acceptance / LOCK of this scoped policy
+  ≠ Implementation Start
+  ≠ SharePoint List / column / site create GO
+  ≠ adapter code GO
+  ≠ SPFx change GO
+  ≠ LIVE WRITE GO
+  ≠ Deploy / App Catalog / M365 / Entra mutation
+  ≠ Ready / Merge GO
+Agent auto-accept: FORBIDDEN（this Acceptance is Human GO）
 ```
 
 ## Human Selection record
@@ -69,7 +73,7 @@ PR-PERS-PKG-1
 D4 = A / ISO DateTime string
 ```
 
-Still OPEN / DEFERRED（must not be closed by this Selection）:
+Still OPEN / DEFERRED（must not be closed by Selection or this scoped Acceptance）:
 
 ```text
 SUPPORTER read scope
@@ -80,47 +84,100 @@ SharePoint group / Role binding
 test-only site identity（name / URL）
 ```
 
-## 0. How to read this packet
-
-This document records Human Selection of persistence **policy** for ProcedureRecord v1.
-It does not invent Internal Names, List display names, site URLs, or Entra group IDs.
-SELECTED here is not Accepted and not LOCKED.
-
-A later Acceptance / LOCK, if given, must bind:
+## Human Acceptance record
 
 ```text
-Decision ID
-selected package / clock option
-head SHA of the Acceptance recording
-what remains OPEN / DEFERRED
-what remains OUT
+PROCEDURE-RECORD-PERSISTENCE-ACCEPTANCE-1
+
+repository:
+  yasutakesougo/severe-behavior-support-spfx
+PR:
+  #380
+reviewed HEAD:
+  d50db082fc47f9cb6241169eb925c56924988166
+Human Decision:
+  ACCEPT / LOCK PR-PERS-PKG-1
+  D4 = A / ISO DateTime string
 ```
 
-This Selection still does **not** authorize tenant mutation,
-adapter implementation, or live item create.
+ACCEPTED / LOCKED scope:
 
-## 1. Decision units after Selection
+```text
+D1 Storage topology
+D2 Procedure representation
+D3 Physical mapping policy
+D4 = A / ISO DateTime string
+D5 Identity / idempotency
+D6 Mutation policy（CREATE-ONLY）
+D7 create + selected-site boundary only
+D8 Read-back / persistence success
+D9 Save outcome
+D10:
+  v1 adapter deleteなし
+  facility business Listへのtest write禁止
+D11 LIVE validation boundary
+```
 
-| ID | Unit | After Human Selection |
+DEFERRED / NOT LOCKED:
+
+```text
+SUPPORTER read:
+  assigned users only vs site-wide
+ProcedureRecord retention years
+concrete Internal Names / Display Names
+SharePoint group / Role binding
+test-only site identity
+```
+
+Explicit OUT（unchanged by Acceptance）:
+
+```text
+adapter implementation
+List / column / site provisioning
+SharePoint item create/update/delete
+SPFx modification
+LIVE WRITE
+Deploy / App Catalog
+M365 / Entra mutation
+Ready / Merge
+```
+
+This Acceptance recording creates a new commit. The Fresh Review bound to
+`d50db082fc47f9cb6241169eb925c56924988166` is therefore expired.
+
+## 0. How to read this packet
+
+This document records Human Selection and scoped Acceptance of persistence
+**policy** for ProcedureRecord v1.
+It does not invent Internal Names, List display names, site URLs, or Entra group IDs.
+ACCEPTED / LOCKED applies only to the scope listed above.
+DEFERRED items are not LOCKED.
+
+This Acceptance still does **not** authorize tenant mutation,
+adapter implementation, live item create, Ready, or Merge.
+
+## 1. Decision units after scoped Acceptance
+
+| ID | Unit | After Human Acceptance |
 |---|---|---|
-| D1 | Storage topology | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D2 | Procedure representation | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D3 | Physical mapping policy | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D4 | Clock representation | **A SELECTED** / B NOT SELECTED（NOT ACCEPTED / NOT LOCKED） |
-| D5 | Identity / idempotency | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D6 | Mutation policy | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D7 | Permission model | Partial SELECT；caseload **OPEN** |
-| D8 | Read-back / persistence success | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D9 | Save outcome | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
-| D10 | Retention / test cleanup | Partial SELECT；retention years **DEFERRED** |
-| D11 | LIVE validation boundary | SELECTED in PR-PERS-PKG-1（NOT ACCEPTED / NOT LOCKED） |
+| D1 | Storage topology | ACCEPTED / LOCKED |
+| D2 | Procedure representation | ACCEPTED / LOCKED |
+| D3 | Physical mapping policy | ACCEPTED / LOCKED |
+| D4 | Clock representation | **A ACCEPTED / LOCKED** / B NOT SELECTED |
+| D5 | Identity / idempotency | ACCEPTED / LOCKED |
+| D6 | Mutation policy | ACCEPTED / LOCKED |
+| D7 | Permission model | Partial LOCK：create + site boundary **LOCKED**；caseload **NOT LOCKED** |
+| D8 | Read-back / persistence success | ACCEPTED / LOCKED |
+| D9 | Save outcome | ACCEPTED / LOCKED |
+| D10 | Retention / test cleanup | Partial LOCK：no adapter delete + no facility-list test write **LOCKED**；years **NOT LOCKED** |
+| D11 | LIVE validation boundary | ACCEPTED / LOCKED |
 
-Judgement units **not** closed by this Selection:
+Judgement units **not** closed by this Acceptance:
 
 ```text
 List display name / List internal identity
 column Display Name / Internal Name / Column Type concrete values
-  except D4 clock encoding policy = ISO string（A）
+  except D4 clock encoding policy = ISO string（A）LOCKED
   concrete Internal Name strings remain unconfirmed
 indexes as provisioned objects
 Entra / SharePoint group object IDs
@@ -130,14 +187,15 @@ test-only site name / URL
 list/column/site provisioning
 adapter Implementation Start
 LIVE WRITE
-Acceptance / LOCK
+Ready / Merge
 ```
 
-## 2. Selected package — PR-PERS-PKG-1
+## 2. Accepted package — PR-PERS-PKG-1
 
-Human SELECT. Not Accepted. Not LOCKED.
+Human SELECT then ACCEPT / LOCK（scoped）.
+DEFERRED items below are not LOCKED.
 
-### D1 — Storage topology（SELECTED）
+### D1 — Storage topology（ACCEPTED / LOCKED）
 
 ```text
 SELECTED:
@@ -165,7 +223,7 @@ Not selected:
 
 Concrete site URL / List name: **still not in this Decision**.
 
-### D2 — Procedure representation（SELECTED）
+### D2 — Procedure representation（ACCEPTED / LOCKED）
 
 ```text
 SELECTED flatten columns:
@@ -185,7 +243,7 @@ Why:
 
 `ApprovalState` remains `APPROVED` only. Other values on read = malformed / fail-closed.
 
-### D3 — Physical mapping policy（SELECTED）
+### D3 — Physical mapping policy（ACCEPTED / LOCKED）
 
 ```text
 SELECTED:
@@ -202,12 +260,12 @@ This unit still does **not** confirm any Internal Name string.
 
 TimeZone derived value, if used, remains `Asia/Tokyo` as in the logical contract.
 
-### D4 — Clock representation（A SELECTED）
+### D4 — Clock representation（A ACCEPTED / LOCKED）
 
 | Option | Meaning | Result |
 |---|---|---|
-| **A** | `performedAt` / `recordedAt` = ISO DateTime **string** columns | **SELECTED**（NOT ACCEPTED / NOT LOCKED） |
-| **B** | SharePoint DateTime columns | **NOT SELECTED** |
+| **A** | `performedAt` / `recordedAt` = ISO DateTime **string** columns | **ACCEPTED / LOCKED** |
+| **B** | SharePoint DateTime columns | **NOT SELECTED**（v1 non-choice；not judged false） |
 
 Human reason（v1 choice）:
 
@@ -223,7 +281,7 @@ That rule is already LOCKED in B-PKG-1；this unit only chose persistence encodi
 
 Concrete Internal Name / Display Name for those string columns remain unconfirmed.
 
-### D5 — Identity / idempotency（SELECTED）
+### D5 — Identity / idempotency（ACCEPTED / LOCKED）
 
 ```text
 SELECTED:
@@ -247,7 +305,7 @@ ProcedureRecord uniqueness space = **that facility List**.
 SharePoint unique columns, if later provisioned, are defense in depth only.
 They do not replace dual lookup.
 
-### D6 — Mutation policy（SELECTED）
+### D6 — Mutation policy（ACCEPTED / LOCKED）
 
 ```text
 ProcedureRecord v1 = CREATE-ONLY
@@ -261,9 +319,9 @@ If correction is needed later, that is a separate Decision and a schema change.
 
 Adapter v1 has no update method and no delete method.
 
-### D7 — Permission model（partial SELECT）
+### D7 — Permission model（partial LOCK）
 
-SELECTED:
+ACCEPTED / LOCKED:
 
 ```text
 create:
@@ -276,9 +334,10 @@ management read candidates:
   SITE_ADMIN
   SERVICE_MANAGER
   PLANNER
+  （role names are candidates；group binding is NOT LOCKED）
 ```
 
-OPEN / not decided by this Selection:
+DEFERRED / NOT LOCKED:
 
 ```text
 SUPPORTER read =
@@ -301,7 +360,7 @@ Logical roles remain the contracts-v1 seven roles.
 GOV-AUD-04（logical-delete role = application OUT）is not reopened.
 This packet does not invent a ProcedureRecord delete role.
 
-### D8 — Read-back / persistence success（SELECTED）
+### D8 — Read-back / persistence success（ACCEPTED / LOCKED）
 
 `saved` requires all of:
 
@@ -322,7 +381,7 @@ SharePoint HTTP create success alone MUST NOT be mapped to `saved`.
 SharePoint item numeric Id is not RecordId.
 
 Without GET-by-RecordId, LIVE persistence is not READY.
-This Selection does not implement that path.
+This Acceptance does not implement that path.
 
 Review trace（policy only）:
 
@@ -333,7 +392,7 @@ Review reaches the original record by RecordId
 historical planVersion is not rebound to Active
 ```
 
-### D9 — Save outcome（SELECTED）
+### D9 — Save outcome（ACCEPTED / LOCKED）
 
 Persistence adapter results:
 
@@ -370,9 +429,9 @@ Timeout / partial response / indeterminate HTTP map to `save_outcome_unknown`, n
 
 ERROR must not become a successful empty result（DEC-7）.
 
-### D10 — Retention / test cleanup（partial SELECT）
+### D10 — Retention / test cleanup（partial LOCK）
 
-SELECTED / operational prohibition:
+ACCEPTED / LOCKED:
 
 ```text
 v1 adapter has no delete
@@ -388,7 +447,7 @@ cleanup = Human-controlled disposal of that test site as a whole
 item Recycle / Delete on facility lists = not the cleanup procedure
 ```
 
-DEFERRED / HOLD（not closed by this Selection）:
+DEFERRED / NOT LOCKED:
 
 ```text
 statutory retention years for ProcedureRecord itself
@@ -400,7 +459,7 @@ says otherwise.
 
 Until that Decision exists, do not design item purge jobs for ProcedureRecord.
 
-### D11 — LIVE validation boundary（SELECTED）
+### D11 — LIVE validation boundary（ACCEPTED / LOCKED）
 
 ```text
 fully synthetic / fictional data only
@@ -416,7 +475,7 @@ This unit describes the **future** live-test fence.
 It does not authorize the test.
 test-only site identity remains OPEN.
 
-## 3. Options matrix after Selection
+## 3. Options matrix after scoped Acceptance
 
 | Unit | Selected | Not selected / still open |
 |---|---|---|
@@ -448,7 +507,7 @@ production item create / update / delete
 physical deletion runbooks for facility data
 LIVE WRITE
 Issue auto-close
-Acceptance / LOCK by this recording alone
+Ready / Merge
 ```
 
 ## 5. Upstream locks this packet must not reopen
@@ -463,24 +522,26 @@ DEC-7 failure ≠ empty success
 DEC-1 Schema ID ≠ List name ≠ TypeScript type name
 ```
 
-## 6. Findings after Selection
+## 6. Findings after scoped Acceptance
 
 | ID | Severity | State | Content |
 |---|---|---|---|
-| F-001 | P2 | SELECTION RECORDED | D4=A selected；still NOT ACCEPTED / NOT LOCKED |
-| F-002 | P2 | OPEN | SUPPORTER read caseload vs site-wide remains OPEN |
+| F-001 | P2 | ACCEPTED RECORDED | D4=A ACCEPTED / LOCKED；B remains v1 not-selected |
+| F-002 | P2 | OPEN | SUPPORTER read caseload vs site-wide remains NOT LOCKED |
 | F-003 | P2 | OPEN | ProcedureRecord retention years remain DEFERRED |
-| F-004 | P2 | OPEN | this file is not Accepted SoT on GitHub main |
+| F-004 | P2 | OPEN | document is scoped ACCEPTED / LOCKED；not yet SoT on origin/main until Merge |
 
 P0 / P1: none.
-HOLD continues because Acceptance / LOCK has not been given.
+These P2 rows are deferred / state-tracking items. They are not Acceptance blockers.
+HOLD continues for Ready / Merge / implementation / provisioning / LIVE WRITE / Deploy.
 
 ## 7. HOLD
 
 ```text
-Status = SELECTED / NOT ACCEPTED / NOT LOCKED
-this working-tree file ≠ origin/main Accepted SoT
-D7 caseload OPEN
+Status = ACCEPTED / LOCKED（scoped）
+DEFERRED items are NOT LOCKED
+this file ≠ origin/main SoT until Merge
+D7 caseload NOT LOCKED
 D10 retention years DEFERRED
 concrete Internal Names / Display Names unconfirmed
 SharePoint group / Role binding unknown
@@ -489,24 +550,28 @@ Implementation Start = NOT AUTHORIZED
 SharePoint provisioning = NOT AUTHORIZED
 LIVE WRITE = NOT AUTHORIZED
 Deploy = NOT AUTHORIZED
+Ready / Merge = NOT AUTHORIZED
+d50db082… Fresh Review = EXPIRED（this recording changes HEAD）
 ```
 
 ## 8. Next gates（policy order only；not live PR gates）
 
 ```text
 1. DONE — Human Selection: PR-PERS-PKG-1 + D4=A
-2. Decision Fresh Review of this Selection record
-3. Human Acceptance / LOCK Gate（separate）
-   still does not start List create / adapter / LIVE WRITE
-4. Separate mapping Decision for concrete Display / Internal / Type
-   （clock encoding policy already selected as ISO string）
-5. Separate Human GO for List / column provisioning
-6. Separate Human GO for adapter Implementation Start
+2. DONE — Decision Fresh Review on d50db082…（now expired）
+3. DONE — Human Acceptance / LOCK GO for scoped policy
+4. Final Decision Fresh Review on the Acceptance recording HEAD
+5. Ready Gate（separate Human GO；not given）
+6. Merge Audit / Human Merge GO（separate；not given）
+7. Separate mapping Decision for concrete Display / Internal / Type
+   （clock encoding policy already LOCKED as ISO string）
+8. Separate Human GO for List / column provisioning
+9. Separate Human GO for adapter Implementation Start
    （create + dual lookup + GET-by-RecordId；no update/delete）
-7. Separate Human LIVE WRITE GO
+10. Separate Human LIVE WRITE GO
    （synthetic, test-only site, 1 item, Review read-back）
-8. Only after 7: reassess LIVE_PERSISTENCE in severe-behavior-cycle-review
+11. Only after 10: reassess LIVE_PERSISTENCE in severe-behavior-cycle-review
 ```
 
-Step 1 does not start steps 3–7.
-Step 3 Acceptance / LOCK, if given later, still does not start steps 5–7.
+Step 3 does not start steps 5–10.
+Acceptance / LOCK of scoped policy does not start provisioning, adapter, LIVE WRITE, Ready, or Merge.
