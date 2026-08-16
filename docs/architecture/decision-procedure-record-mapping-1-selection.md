@@ -53,8 +53,8 @@ Human Selection must bind:
 ```text
 Decision ID
 name package and/or amended per-row names
-list lookup strategy
-Title option
+list lookup strategy（GUID vs Title vs URL）
+Title option including Required / adapter write
 DERIVED reconstruction
 head SHA of the Selection recording
 ```
@@ -80,11 +80,23 @@ First candidate package. Human has not selected it.
 List Display Name first candidate:
   支援手順実施記録
 
-stable list identity / adapter lookup:
-  LOOKUP-B — adapter uses provision-time configured identity
-              （List GUID or server-relative URL stored in adapter config）
-  Display Name is not the lookup key
-  Schema ID is not the List name
+stable list identity / adapter lookup first candidate:
+  LOOKUP-B — per-site provisioned List GUID
+             stored / resolved from adapter configuration
+             SiteId → List GUID
+
+List Display Name:
+  not the lookup key
+
+server-relative List URL:
+  NOT first as identity
+  may be used later only as endpoint-construction information
+  that is a separate concern from List identity
+
+Concrete GUID values:
+  provisioning-time
+  UNKNOWN in this Decision
+  this packet does not invent or confirm a GUID
 ```
 
 Not selected as first:
@@ -92,10 +104,8 @@ Not selected as first:
 | ID | Meaning | Why not first |
 |---|---|---|
 | LOOKUP-A | lookup by List Title / Display Name | rename breaks adapter |
+| LOOKUP-B-URL | List identity = server-relative URL | leaves GUID vs URL open in the adapter |
 | LOOKUP-AS | reuse AssessmentSnapshots list | FORBIDDEN by persistence Decision |
-
-Concrete GUID / site URL / Title as observed in tenant: **not in this Decision**.
-Those values appear only at provisioning, which remains NO-GO.
 
 ### M2 / M3 / M4 — Column mapping（CANDIDATE / NOT CONFIRMED）
 
@@ -141,7 +151,7 @@ or replace the whole set. Until Human SELECT, every name cell remains
 | MAP-PR-ENV-001 | schemaId | DERIVED | 列なし | — | DTO必須 | — | 定数 | 書かない |
 | MAP-PR-ENV-002 | schemaVersion | DERIVED | 列なし | — | DTO必須 | — | `1.0.0` | 書かない |
 | MAP-PR-ENV-003 | dtoVersion | DERIVED | 列なし | — | DTO必須 | — | `1.0.0` | 書かない |
-| MAP-PR-SYS-001 | Title | タイトル（標準列） | `Title` | タイトル | SP default | 対象外 | identity に使わない | M6 を見よ |
+| MAP-PR-SYS-001 | Title | タイトル（標準列） | `Title` | タイトル | optional / non-required 候補 | 対象外 | 契約値として読まない | 書かない（M6） |
 
 Missing required field / unknown result token / non-APPROVED ApprovalState /
 non-integer planVersion / clock order violation / conversion failure:
@@ -192,10 +202,22 @@ If a later physical column exists and disagrees with the constants:
 
 | Option | Meaning | This packet |
 |---|---|---|
-| **TITLE-NONE** | do not copy RecordId into Title；Title is unused app identity | **first candidate** |
+| **TITLE-NONE** | Title is not app identity；adapter does not write Title；provisioning sets Title optional / non-required；normal app read does not treat Title as a contract value | **first candidate** |
 | TITLE-COPY | write RecordId into Title for ops scan；Title still is not identity | alternative |
 
+TITLE-NONE first-candidate detail:
+
+```text
+Title is not app identity
+adapter does not write Title
+provisioning: Title = optional / non-required
+normal app read does not read Title as a contract value
+MAP-PR-001 prRecordId remains the identity canonical
+no dual representation of RecordId in Title
+```
+
 Either option keeps MAP-PR-001 as the identity canonical.
+TITLE-COPY would still forbid treating Title as RecordId on read.
 
 ## 3. Explicit OUT
 
@@ -205,7 +227,8 @@ Role / group binding
 test-only site identity
 retention years
 List / column / site create or rename
-observed tenant Internal Names
+actual provisioned List GUID
+server-relative List URL as identity
 adapter implementation
 SPFx change
 LIVE WRITE
@@ -235,7 +258,7 @@ DEC-7 failure ≠ empty success
 | ID | Severity | State | Content |
 |---|---|---|---|
 | F-MAP-001 | P2 | OPEN | Internal Names are candidates only until Human SELECT |
-| F-MAP-002 | P2 | OPEN | List GUID / URL remain provisioning-time |
+| F-MAP-002 | P2 | OPEN | Concrete List GUID values remain provisioning-time UNKNOWN |
 | F-MAP-003 | P2 | OPEN | TITLE-NONE vs TITLE-COPY still requires Human SELECT |
 
 P0 / P1: none.
@@ -255,9 +278,14 @@ LIVE WRITE = NOT AUTHORIZED
 
 ```text
 1. Human Selection on PR-MAP-PKG-1
-   - SELECT or amend List Display Name + LOOKUP-B/A
+   - SELECT List Display Name + LOOKUP-B（per-site List GUID）or an alternative
    - SELECT PR-MAP-NAMES-1 or a complete replacement table
-   - SELECT TITLE-NONE or TITLE-COPY
+   - SELECT TITLE-NONE（including Title required=false / no adapter write）or TITLE-COPY
+2. Decision Fresh Review on the Selection recording HEAD
+3. Human Acceptance / LOCK of mapping only
+4. Separate provisioning GO
+5. Separate adapter Implementation Start GO
+6. Separate LIVE WRITE GO
 2. Decision Fresh Review on the Selection recording HEAD
 3. Human Acceptance / LOCK of mapping only
 4. Separate provisioning GO
