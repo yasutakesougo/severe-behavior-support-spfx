@@ -6,8 +6,10 @@ Unit: PROCEDURE-RECORD-WRITE-CAPABLE-BINDER-1
 Kind: Human Implementation Start GO（write-capable binder / no live POST）
 Human Implementation Start: GO（2026-08-16）
 LIVE WRITE PRECONDITION REVIEW: PASS
-Decision state: READY_FOR_HUMAN_LIVE_WRITE_DECISION
-Human LIVE WRITE GO: NOT GIVEN
+Decision state: FIRST_LIVE_WRITE_COMPLETE
+Human LIVE WRITE GO: CONSUMED（2026-08-17；one synthetic CREATE → saved）
+Evidence: procedure-record-first-live-write-execution-evidence.md
+Closeout: procedure-record-first-live-write-closeout.md
 ```
 
 This Human GO authorizes making the ProcedureRecord binder **write-capable in
@@ -116,10 +118,14 @@ only. `postProcedureRecordCreateItem` is not a module export.
 
 ```text
 Independent Review / Human Ready / Human Merge
+  CONSUMED（PR #386 MERGED）
 LIVE WRITE execution precheck
-  main SHA / List GUID / ItemCount=0 re-observe
-  logical SiteId / synthetic payload / gate state
+  CONSUMED
 Human LIVE WRITE GO
-  → first synthetic ProcedureRecord create
-    persistProcedureRecord: create → GET-by-RecordId → saved
+  CONSUMED / CLOSED
+  first synthetic ProcedureRecord create → GET-by-RecordId → saved
+
+This unit does not authorize:
+  second CREATE / retry POST / update / delete
+  production binding / Deploy / App Catalog
 ```
