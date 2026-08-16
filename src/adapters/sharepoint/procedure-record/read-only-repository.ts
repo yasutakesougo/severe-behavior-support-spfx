@@ -1,6 +1,7 @@
 /**
  * ProcedureRecord persistence port bound to a live List GUID transport.
- * CREATE-ONLY domain port is implemented as fail-closed: create never writes.
+ * CREATE-ONLY. Production write gate stays closed; tests may pass a local true gate
+ * against synthetic doubles. Live tenant POST is not authorized by this module.
  */
 
 import type { LookupResult } from "../../../contracts/types";
@@ -15,23 +16,33 @@ import {
   normalizeSharePointGuid,
   type ProcedureRecordListBinding,
 } from "./list-binding";
-import { refuseUnauthorizedLiveCreate } from "./live-write-gate";
+import {
+  isProcedureRecordItemCreateAuthorized,
+  PROCEDURE_RECORD_LIVE_WRITE_GATE,
+  refuseUnauthorizedLiveCreate,
+  type ProcedureRecordWriteGate,
+} from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
 import {
   verifyProcedureRecordPhysicalSchema,
+  verifyProcedureRecordPreWriteEmpty,
   type ProcedureRecordSchemaVerification,
 } from "./physical-schema";
+import { buildCreateItemFields } from "./rest-body";
 import type {
   ProcedureRecordItemReadResult,
   ProcedureRecordLiveListTransport,
 } from "./transport-seam";
 
-export type ReadOnlyProcedureRecordRepository = ProcedureRecordPersistencePort &
+export type ProcedureRecordListRepository = ProcedureRecordPersistencePort &
   Readonly<{
     binding: ProcedureRecordListBinding;
-    liveWriteAuthorized: false;
+    liveWriteAuthorized: boolean;
     verifyPhysicalSchema(): Promise<ProcedureRecordSchemaVerification>;
   }>;
+
+/** @deprecated Use ProcedureRecordListRepository. Production wiring remains fail-closed. */
+export type ReadOnlyProcedureRecordRepository = ProcedureRecordListRepository;
 
 const PHYSICAL_KEYS = [
   "prRecordId",
@@ -120,10 +131,18 @@ function listBindingMatchesTransport(
   return bindingGuid !== null && targetGuid !== null && bindingGuid === targetGuid;
 }
 
-export function createReadOnlyProcedureRecordRepository(
+function mapCreateFailure(failure: "FORBIDDEN" | "TRANSPORT_ERROR"): ProcedureRecordCreateAttempt {
+  if (failure === "FORBIDDEN") {
+    return { status: "DEFINITE_FAILURE" };
+  }
+  return { status: "INDETERMINATE" };
+}
+
+export function createProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
-): ReadOnlyProcedureRecordRepository {
+  writeGate: ProcedureRecordWriteGate = PROCEDURE_RECORD_LIVE_WRITE_GATE,
+): ProcedureRecordListRepository {
   async function lookup(
     query: (token: string) => Promise<ProcedureRecordItemReadResult>,
     token: string,
@@ -143,7 +162,7 @@ export function createReadOnlyProcedureRecordRepository(
 
   return {
     binding,
-    liveWriteAuthorized: false,
+    liveWriteAuthorized: isProcedureRecordItemCreateAuthorized(writeGate),
 
     async findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>> {
       return lookup((token) => transport.findByRecordId(token), recordId);
@@ -153,8 +172,51 @@ export function createReadOnlyProcedureRecordRepository(
       return lookup((token) => transport.findByIdempotencyKey(token), idempotencyKey);
     },
 
-    async create(): Promise<ProcedureRecordCreateAttempt> {
-      return refuseUnauthorizedLiveCreate();
+    async create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt> {
+      if (!isProcedureRecordItemCreateAuthorized(writeGate)) {
+        return refuseUnauthorizedLiveCreate();
+      }
+      if (!isUsableLiveListBinding(binding)) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+      if (!listBindingMatchesTransport(binding, transport)) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+      if (record.OrganizationId !== binding.organizationId || record.SiteId !== binding.siteId) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+
+      try {
+        const schema = await transport.getSchema();
+        if (!schema.ok) {
+          return mapCreateFailure(schema.failure);
+        }
+        const physical = verifyProcedureRecordPhysicalSchema(
+          binding.listGuid,
+          schema.list,
+          schema.fields,
+        );
+        if (!physical.ok) {
+          return { status: "DEFINITE_FAILURE" };
+        }
+        const empty = verifyProcedureRecordPreWriteEmpty(schema.list);
+        if (!empty.ok) {
+          return { status: "DEFINITE_FAILURE" };
+        }
+
+        const prepared = buildCreateItemFields(record);
+        if (!prepared.ok) {
+          return { status: "DEFINITE_FAILURE" };
+        }
+
+        const created = await transport.createItem(prepared.fields);
+        if (!created.ok) {
+          return mapCreateFailure(created.failure);
+        }
+        return { status: "CREATED" };
+      } catch {
+        return { status: "INDETERMINATE" };
+      }
     },
 
     async verifyPhysicalSchema(): Promise<ProcedureRecordSchemaVerification> {
@@ -175,4 +237,11 @@ export function createReadOnlyProcedureRecordRepository(
       }
     },
   };
+}
+
+export function createReadOnlyProcedureRecordRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+): ProcedureRecordListRepository {
+  return createProcedureRecordRepository(binding, transport, PROCEDURE_RECORD_LIVE_WRITE_GATE);
 }

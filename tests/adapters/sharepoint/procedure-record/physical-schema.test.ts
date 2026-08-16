@@ -6,6 +6,7 @@ import {
   PROCEDURE_RECORD_PR_RESULT_CHOICES,
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   verifyProcedureRecordPhysicalSchema,
+  verifyProcedureRecordPreWriteEmpty,
   type ObservedListIdentity,
   type ObservedPhysicalField,
 } from "../../../../src/adapters/sharepoint/procedure-record";
@@ -66,7 +67,7 @@ describe("ProcedureRecord physical schema verification", () => {
     assert.deepEqual(result, { ok: true });
   });
 
-  it("rejects Title Required, extra unique/index, forbidden columns, and ItemCount", () => {
+  it("rejects Title Required, extra unique/index, and forbidden columns", () => {
     const fields = observedCompleteFields().map((field) => {
       if (field.InternalName === "Title") {
         return { ...field, Required: true };
@@ -95,7 +96,22 @@ describe("ProcedureRecord physical schema verification", () => {
     assert.ok(result.reasons.includes("required:Title"));
     assert.ok(result.reasons.includes("forbidden-column:schemaId"));
     assert.ok(result.reasons.includes("extra-index:prUserId"));
-    assert.ok(result.reasons.includes("item-count-not-zero"));
+    assert.equal(result.reasons.includes("item-count-not-zero"), false);
+  });
+
+  it("accepts ItemCount > 0 as runtime schema and rejects it only as pre-write", () => {
+    const schema = verifyProcedureRecordPhysicalSchema(
+      PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      { ...observedList(), ItemCount: 1 },
+      observedCompleteFields(),
+    );
+    assert.deepEqual(schema, { ok: true });
+    const preWrite = verifyProcedureRecordPreWriteEmpty({ ...observedList(), ItemCount: 1 });
+    assert.equal(preWrite.ok, false);
+    if (!preWrite.ok) {
+      assert.ok(preWrite.reasons.includes("item-count-not-zero"));
+    }
+    assert.deepEqual(verifyProcedureRecordPreWriteEmpty(observedList()), { ok: true });
   });
 
   it("rejects prResult choice drift", () => {

@@ -14,6 +14,12 @@ import { PROCEDURE_RECORD_LIST_DISPLAY_NAME } from "./physical-columns";
 export const PROCEDURE_RECORD_TEST_ONLY_LIST_GUID = "b971ff03-799e-41ac-b037-8becb9f4ff4b" as const;
 
 /**
+ * Observed ListItemEntityTypeFullName. Write-time REST fact, not List identity.
+ * Internal list name is List; Display Name is not used to derive this.
+ */
+export const PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE = "SP.Data.ListListItem" as const;
+
+/**
  * Operational web path of the Human-chosen test-only site.
  * Not List identity. Not logical SiteId.
  */
@@ -23,6 +29,7 @@ export const PROCEDURE_RECORD_TEST_ONLY_WEB_SERVER_RELATIVE_URL =
 export const PROCEDURE_RECORD_TEST_ONLY_PROVISIONED_LIST = {
   kind: "test-only-provisioned-list",
   listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+  listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   webServerRelativeUrl: PROCEDURE_RECORD_TEST_ONLY_WEB_SERVER_RELATIVE_URL,
   listDisplayName: PROCEDURE_RECORD_LIST_DISPLAY_NAME,
   logicalSiteId: "caller-supplied",

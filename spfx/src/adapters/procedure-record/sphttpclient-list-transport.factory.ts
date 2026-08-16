@@ -1,8 +1,8 @@
 /**
  * Production wiring helper for the ProcedureRecord SPHttpClient binder.
  *
- * Does not itself perform tenant I/O. Item create is not exposed.
- * Callers still need a separate live GO before invoking GET against a real site.
+ * Does not itself perform tenant I/O. itemCreateAuthorized defaults to false.
+ * Live POST still requires a separate Human LIVE WRITE GO.
  */
 
 import { SPHttpClient } from "@microsoft/sp-http";

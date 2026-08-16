@@ -1,5 +1,6 @@
 import {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+  PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   createProcedureRecordSpHttpClientTransport,
   procedureRecordListApiUrl,
   type ProcedureRecordSpHttpClient,
@@ -65,7 +66,7 @@ function createMockClient(handler: {
   return { client, calls };
 }
 
-describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / read-only）", () => {
+describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () => {
   it("addresses the list by GUID and never GetByTitle", () => {
     const url = procedureRecordListApiUrl(
       `${SYNTHETIC_WEB}/`,
@@ -149,8 +150,12 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / read-only）", () => 
         call.url.includes(`lists(guid'${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID}')`),
       ),
     ).toBe(true);
-    expect("createItem" in transport).toBe(false);
+    expect("createItem" in transport).toBe(true);
     expect("updateItem" in transport).toBe(false);
+    await expect(
+      transport.createItem({ prRecordId: "synth" }),
+    ).resolves.toEqual({ ok: false, failure: "FORBIDDEN" });
+    expect(calls.every((call) => call.method === "get")).toBe(true);
   });
 
   it("findByRecordId: filters prRecordId and maps 403 to FORBIDDEN", async () => {
@@ -209,5 +214,65 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / read-only）", () => 
     expect(calls).toHaveLength(1);
     expect(calls[0].url.startsWith("https://synthetic.example.invalid/")).toBe(true);
     expect(calls[0].method).toBe("get");
+  });
+
+  it("createItem: unauthorized transport does not POST", async () => {
+    const { client, calls } = createMockClient({
+      post: async () => ({
+        ok: true,
+        status: 201,
+        json: async () => ({ d: { Id: 1 } }),
+      }),
+    });
+    const transport = createProcedureRecordSpHttpClientTransport({
+      spHttpClient: client,
+      configuration: SYNTHETIC_CONFIGURATION,
+      webAbsoluteUrl: SYNTHETIC_WEB,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
+    });
+    await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
+      ok: false,
+      failure: "FORBIDDEN",
+    });
+    expect(calls).toHaveLength(0);
+  });
+
+  it("createItem: authorized synthetic POST uses lists(guid)/items and observed entity type", async () => {
+    const { client, calls } = createMockClient({
+      post: async () => ({
+        ok: true,
+        status: 201,
+        json: async () => ({ d: { Id: 7 } }),
+      }),
+    });
+    const transport = createProcedureRecordSpHttpClientTransport({
+      spHttpClient: client,
+      configuration: SYNTHETIC_CONFIGURATION,
+      webAbsoluteUrl: SYNTHETIC_WEB,
+      listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+      listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
+      itemCreateAuthorized: true,
+    });
+    const result = await transport.createItem({
+      prRecordId: "synth-record",
+      prIdempotencyKey: "synth-key",
+    });
+    expect(result).toEqual({ ok: true, listItemId: 7 });
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe("post");
+    expect(calls[0].url).toBe(
+      `${SYNTHETIC_WEB}/_api/web/lists(guid'${PROCEDURE_RECORD_TEST_ONLY_LIST_GUID}')/items`,
+    );
+    expect(calls[0].url).not.toContain("GetByTitle");
+    const body = JSON.parse(calls[0].body ?? "{}") as {
+      __metadata?: { type?: string };
+      Title?: unknown;
+      prRecordId?: string;
+    };
+    expect(body.__metadata?.type).toBe(PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE);
+    expect(body.prRecordId).toBe("synth-record");
+    expect("Title" in body).toBe(false);
+    expect("updateItem" in transport).toBe(false);
   });
 });

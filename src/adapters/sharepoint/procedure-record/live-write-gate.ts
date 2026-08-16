@@ -1,14 +1,24 @@
 /**
- * LIVE WRITE remains a later Human GO. This binder slice must not create items.
+ * LIVE WRITE remains a later Human GO.
+ * This slice may implement createItem, but production constants stay closed.
  */
 
 import type { ProcedureRecordCreateAttempt } from "../../../domain/procedure-record-persistence";
 
-export const PROCEDURE_RECORD_LIVE_WRITE_GATE = {
+export type ProcedureRecordWriteGate = Readonly<{
+  itemCreateAuthorized: boolean;
+  liveTenantIoAuthorized: boolean;
+}>;
+
+export const PROCEDURE_RECORD_LIVE_WRITE_GATE: ProcedureRecordWriteGate = {
   itemCreateAuthorized: false,
   liveTenantIoAuthorized: false,
-} as const;
+};
 
 export function refuseUnauthorizedLiveCreate(): ProcedureRecordCreateAttempt {
   return { status: "DEFINITE_FAILURE" };
+}
+
+export function isProcedureRecordItemCreateAuthorized(gate: ProcedureRecordWriteGate): boolean {
+  return gate.itemCreateAuthorized === true;
 }

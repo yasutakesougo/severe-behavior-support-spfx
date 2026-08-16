@@ -2,12 +2,14 @@
  * Concrete ProcedureRecord List transport via SPFx SPHttpClient.
  *
  * LOOKUP-B: addresses the list by GUID, never by Display Name / GetByTitle.
- * This slice is read-only: schema GET + item GET. Item create is absent.
+ * CREATE-ONLY: createItem exists; updateItem is absent.
+ * Production itemCreateAuthorized defaults to false: createItem does not POST.
  *
  * Live tenant I/O is NOT authorized by constructing this binder alone.
  */
 
 import type {
+  ProcedureRecordItemCreateResult,
   ProcedureRecordItemReadResult,
   ProcedureRecordLiveListTransport,
   ProcedureRecordObservedField,
@@ -17,6 +19,7 @@ import type {
 } from "./transport-types";
 
 export const PROCEDURE_RECORD_TEST_ONLY_LIST_GUID = "b971ff03-799e-41ac-b037-8becb9f4ff4b" as const;
+export const PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE = "SP.Data.ListListItem" as const;
 
 export type ProcedureRecordSpHttpRequestOptions = {
   headers?: Record<string, string>;
@@ -47,6 +50,8 @@ export type CreateProcedureRecordSpHttpClientTransportOptions = Readonly<{
   configuration: unknown;
   webAbsoluteUrl: string;
   listGuid: string;
+  listItemEntityTypeFullName?: string;
+  itemCreateAuthorized?: boolean;
 }>;
 
 // EditFormat is provisioning-time (Dropdown); not a runtime physical invariant.
@@ -177,6 +182,34 @@ export function createProcedureRecordSpHttpClientTransport(
     return { ok: true, rows };
   }
 
+  async function createItem(
+    fields: Readonly<Record<string, unknown>>,
+  ): Promise<ProcedureRecordItemCreateResult> {
+    if (options.itemCreateAuthorized !== true) {
+      return { ok: false, failure: "FORBIDDEN" };
+    }
+    const entityType = options.listItemEntityTypeFullName?.trim() ?? "";
+    if (listApiUrl === undefined || entityType.length === 0) {
+      return { ok: false, failure: "TRANSPORT_ERROR" };
+    }
+    try {
+      const response = await client.post(`${listApiUrl}/items`, configuration, {
+        headers: writeHeaders(),
+        body: JSON.stringify(withVerboseMetadata(fields, entityType)),
+      });
+      if (!response.ok) {
+        return { ok: false, failure: mapStatusFailure(response.status) };
+      }
+      const listItemId = readListItemId(await response.json());
+      if (listItemId === undefined) {
+        return { ok: false, failure: "TRANSPORT_ERROR" };
+      }
+      return { ok: true, listItemId };
+    } catch {
+      return { ok: false, failure: "TRANSPORT_ERROR" };
+    }
+  }
+
   return {
     targetListGuid: normalizeProcedureRecordListGuid(options.listGuid) ?? "",
     getSchema,
@@ -186,6 +219,7 @@ export function createProcedureRecordSpHttpClientTransport(
     findByIdempotencyKey(idempotencyKey: string): Promise<ProcedureRecordItemReadResult> {
       return findByFilter("prIdempotencyKey", idempotencyKey);
     },
+    createItem,
   };
 }
 
@@ -194,6 +228,46 @@ function mapStatusFailure(status: number): ProcedureRecordTransportFailure {
     return "FORBIDDEN";
   }
   return "TRANSPORT_ERROR";
+}
+
+function writeHeaders(): Record<string, string> {
+  return {
+    Accept: "application/json;odata=verbose",
+    "Content-Type": "application/json;odata=verbose",
+    "odata-version": "3.0",
+  };
+}
+
+function withVerboseMetadata(
+  fields: Readonly<Record<string, unknown>>,
+  entityType: string,
+): Record<string, unknown> {
+  const body: Record<string, unknown> = {
+    __metadata: { type: entityType },
+  };
+  for (const key of Object.keys(fields)) {
+    body[key] = fields[key];
+  }
+  return body;
+}
+
+function readListItemId(payload: unknown): number | undefined {
+  if (!payload || typeof payload !== "object") {
+    return undefined;
+  }
+  const root = payload as Record<string, unknown>;
+  if (root.d && typeof root.d === "object") {
+    return readIdFromRow(root.d as Record<string, unknown>);
+  }
+  return readIdFromRow(root);
+}
+
+function readIdFromRow(row: Readonly<Record<string, unknown>>): number | undefined {
+  const raw = row.Id ?? row.ID ?? row.id;
+  if (typeof raw === "number" && Number.isInteger(raw) && raw > 0) {
+    return raw;
+  }
+  return undefined;
 }
 
 function trimTrailingSlash(url: string): string {

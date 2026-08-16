@@ -43,15 +43,21 @@ export {
 export { buildCreateItemFields, type RestBodyBuildResult } from "./rest-body";
 export {
   SPFX_SPHTTPCLIENT_HOST_SEAM,
+  type ProcedureRecordItemCreateResult,
   type ProcedureRecordItemReadResult,
   type ProcedureRecordLiveListTransport,
   type ProcedureRecordSchemaReadResult,
   type ProcedureRecordTransportFailure,
   type SpfxSpHttpClientHostSeam,
 } from "./transport-seam";
-export { PROCEDURE_RECORD_LIVE_WRITE_GATE, refuseUnauthorizedLiveCreate } from "./live-write-gate";
+export {
+  PROCEDURE_RECORD_LIVE_WRITE_GATE,
+  refuseUnauthorizedLiveCreate,
+  type ProcedureRecordWriteGate,
+} from "./live-write-gate";
 export {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+  PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   PROCEDURE_RECORD_TEST_ONLY_PROVISIONED_LIST,
   PROCEDURE_RECORD_TEST_ONLY_WEB_SERVER_RELATIVE_URL,
 } from "./test-only-provisioned-list";
@@ -61,12 +67,15 @@ export {
   PROCEDURE_RECORD_INDEX_CANDIDATE_COLUMNS,
   PROCEDURE_RECORD_PR_RESULT_CHOICES,
   verifyProcedureRecordPhysicalSchema,
+  verifyProcedureRecordPreWriteEmpty,
   type ObservedListIdentity,
   type ObservedPhysicalField,
   type ProcedureRecordSchemaVerification,
 } from "./physical-schema";
 export {
+  createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
+  type ProcedureRecordListRepository,
   type ReadOnlyProcedureRecordRepository,
 } from "./read-only-repository";
 export {
