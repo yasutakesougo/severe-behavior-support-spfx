@@ -33,7 +33,7 @@
 
 - 対象ビルドまたはスモーク URL（未指定なら `NOT SPECIFIED`）
 - 操作可能な端末（未検証端末は「未検証」）
-- 合成テストデータのみ（実在個人情報の新規入力は禁止）
+- 合成テストデータのみ（完全合成 / 架空 fixture。production-derived の匿名化データは使わない）
 - Accepted / LOCKED Decision と architecture 正本
 - ハーネス境界（`presentationOnly`、live I/O 可否）
 
@@ -98,10 +98,10 @@
 
 Skill 判定語:
 
-- `PASS`: サイクル P0 が 0 件。in-scope assessed 項目に未解決の項目 FAIL（P0 相当）がない。証跡がある。総合点は参考
+- `PASS`: unresolved P0 = 0、unresolved P1 = 0、必要な証跡がある。総合点は参考。P1 が残る状態を PASS にしない
 - `READY`: この Skill では原則使用しない
-- `HOLD`: ハーネス制約や未指定入力により、サイクル P0 を確定できない。証跡不足。`NOT ASSESSED` が中心
-- `FAIL`: 製品スコープ内のサイクル P0 が 1 件以上。または取得失敗を問題なしと表示する
+- `HOLD`: ハーネス制約や未指定入力により、P0 / P1 を確定できない。証跡不足。`NOT ASSESSED` が中心
+- `FAIL`: 製品スコープ内の unresolved P0 が 1 件以上、または unresolved P1 が 1 件以上。または取得失敗を問題なしと表示する
 - `NOT APPLICABLE`: 強度行動障害支援サイクルのレビュー対象ではない
 
 重大度:
@@ -136,7 +136,7 @@ Skill 判定語:
 - 生活介護全業務・国保連・家族ポータル・医療機関ログイン・BCP・バックアップ UI・一般の個別支援計画欠如を減点すること
 - `SupportPlan` を生活介護計画、または支援計画シート等と同一視すること
 - 週次観察の自動違反判定や「3ヶ月 = 90日」変換を発明すること
-- 実在個人情報をテストデータとして新規入力すること
+- 実在個人情報、または production-derived の匿名化データをテストデータとして使うこと
 - トークン / Cookie / Secret / 個人情報を証跡へ転記すること
 
 ## 出力形式
@@ -152,7 +152,7 @@ Skill 判定語:
 - P0: なし / あり（ID）
 
 ## SCORE
-- in-scope assessed only:
+- in-scope assessed only: xx / 100 (normalized; assessed weight yy)
 - excluded: OUT OF SCOPE n, NOT ASSESSED n, NOT SPECIFIED n
 
 ## Summary

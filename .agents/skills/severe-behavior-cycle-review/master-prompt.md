@@ -96,7 +96,8 @@ NOT ASSESSED / UNKNOWN / 確認不能 を合格にも FAIL にもしない。
 | OUT_OF_SCOPE | OUT OF SCOPE | 分母から除外 |
 
 実在する利用者の個人情報をテスト目的で新規入力しない。
-匿名化済みまたは架空データのみを使う。
+完全合成 / 架空 fixture のみを使う。
+production-derived の匿名化データは、browser smoke および本レビューのテストデータとして使わない。
 スクリーンショットに個人情報がある場合はマスキングする。
 token / Cookie / Secret を証跡へ転記しない。
 
@@ -149,8 +150,17 @@ token / Cookie / Secret を証跡へ転記しない。
 | OUT OF SCOPE | 製品責務外 | 分母から除外 |
 | NOT SPECIFIED | 依頼入力が未指定で評価不能 | 分母から除外 |
 
-領域点 = 配点 ×（その領域の assessed 項目の平均係数）。
-assessed 項目が 0 なら、その領域は SCORE に入れず excluded に数える。
+領域係数 = その領域の assessed 項目の平均係数。
+assessed 項目が 0 の領域は、numerator と denominator の両方から除外する。
+
+```text
+normalized score =
+100 × Σ(assessed domain weight × domain coefficient)
+    / Σ(assessed domain weight)
+```
+
+出力は `normalized / 100` とし、assessed weight 合計を併記する。
+除外した領域の配点を残したまま `/ 100` と書いてはならない。
 
 ---
 
@@ -187,7 +197,8 @@ OUT OF SCOPE の欠如はここに入れない。
 
 ## 観察手順
 
-合成データのみ。可能なら架空の「Aさん」または同等ラベルを開く。
+合成データのみ（完全合成 / 架空 fixture）。可能なら架空の「Aさん」または同等ラベルを開く。
+production-derived の匿名化データは使わない。
 
 ```text
 利用者一覧 → 対象者詳細
@@ -289,7 +300,7 @@ CYCLE
 P0: なし / あり（ID）
 
 SCORE
-in-scope assessed only: xx / 100
+in-scope assessed only: xx / 100 (normalized; assessed weight yy)
 excluded: OUT OF SCOPE n, NOT ASSESSED n, NOT SPECIFIED n
 
 その後、6領域の表。
