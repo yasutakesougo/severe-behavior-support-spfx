@@ -5,9 +5,16 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-PROCEDURE-RECORD-MAPPING-1
 Unit: PROCEDURE-RECORD-MAPPING-DECISION-1
 Kind: Human Selection packet（physical mapping only）
-Status: DRAFT / NOT SELECTED / NOT ACCEPTED / NOT LOCKED
-Human Decision: NOT GIVEN
-Date: 2026-08-16
+Status: SELECTED / NOT ACCEPTED / NOT LOCKED
+Human Selection: SELECT PR-MAP-PKG-1
+  + LOOKUP-B / per-site List GUID
+  + PR-MAP-NAMES-1
+  + TITLE-NONE
+Human Selection date: 2026-08-16
+Human Selection unit: PROCEDURE-RECORD-MAPPING-SELECTION-1
+PR: #382
+reviewed HEAD（pre-recording；expired by this commit）:
+  3f591733cfa09c299a7e61f8e27b4b1c1756d3c4
 
 Upstream canonical:
   Decision-PROCEDURE-RECORD-PERSISTENCE-1
@@ -18,118 +25,108 @@ Upstream canonical:
   Title is not identity already LOCKED as policy
   DERIVED envelope / TimeZone already allowed as policy
 
-This packet ≠ Internal Name 確定 until Human SELECT
+Selection ≠ Acceptance
+Selection ≠ LOCK
+Selection ≠ provisioning GO
+Selection ≠ adapter Implementation Start
+Selection ≠ LIVE WRITE
+Selection ≠ Deploy / App Catalog / M365 / Entra
+Selection ≠ Ready / Merge
 This packet ≠ AssessmentSnapshot name copy
-This packet ≠ contract field auto-generated as 確定
-This packet ≠ provisioning GO
-This packet ≠ adapter Implementation Start
-This packet ≠ LIVE WRITE
-This packet ≠ Deploy / App Catalog / M365 / Entra
-Agent auto-select: FORBIDDEN
+This packet ≠ invented concrete List GUID
+Agent auto-select: FORBIDDEN（this Selection is Human GO）
 ```
 
-## 0. How to read this packet
-
-This Decision, if later SELECTED / ACCEPTED, closes **physical mapping policy and Human-selected names/types** for ProcedureRecord v1.
-
-It does not close:
+## Human Selection record
 
 ```text
-SUPPORTER read scope
-Role / group binding
-test-only site identity
-ProcedureRecord retention years
-List / column / site provisioning
-adapter implementation
-LIVE WRITE
+PROCEDURE-RECORD-MAPPING-SELECTION-1
+
+repository:
+  yasutakesougo/severe-behavior-support-spfx
+PR:
+  #382
+expected HEAD before this recording:
+  3f591733cfa09c299a7e61f8e27b4b1c1756d3c4
+Human Selection GO: YES
+
+SELECT:
+  PR-MAP-PKG-1
+  M1 List Display Name = 支援手順実施記録
+  M1 lookup = LOOKUP-B / per-site List GUID
+  M2/M3/M4 = PR-MAP-NAMES-1
+  M3 clocks = D4=A ISO DateTime string columns
+  M4 Procedure flatten
+  M5 DERIVED
+  M6 TITLE-NONE
 ```
 
-Internal Name / Display Name / List identity strings in this file are
-**candidates for Human Selection**. They are not confirmed, not observed,
-and not copied from AssessmentSnapshots.
-
-Human Selection must bind:
+### M1 SELECTED
 
 ```text
-Decision ID
-name package and/or amended per-row names
-list lookup strategy（GUID vs Title vs URL）
-Title option including Required / adapter write
-DERIVED reconstruction
-head SHA of the Selection recording
-```
-
-## 1. Units to SELECT
-
-| ID | Unit |
-|---|---|
-| M1 | ProcedureRecord List Display Name + adapter lookup strategy |
-| M2 | Physical columns: Display Name, Internal Name, Type, Required, unique/index, conversions |
-| M3 | D4=A assignment: performedAt / recordedAt as ISO DateTime **string** columns |
-| M4 | Flatten: ProcedureId / ProcedureVersion / ApprovalState as separate columns |
-| M5 | DERIVED reconstruction: schemaId / schemaVersion / dtoVersion / TimeZone |
-| M6 | Title: not identity；whether to copy RecordId |
-
-## 2. Recommended package — PR-MAP-PKG-1
-
-First candidate package. Human has not selected it.
-
-### M1 — List identity（CANDIDATE）
-
-```text
-List Display Name first candidate:
+List Display Name:
   支援手順実施記録
 
-stable list identity / adapter lookup first candidate:
-  LOOKUP-B — per-site provisioned List GUID
-             stored / resolved from adapter configuration
-             SiteId → List GUID
-
-List Display Name:
-  not the lookup key
-
-server-relative List URL:
-  NOT first as identity
-  may be used later only as endpoint-construction information
-  that is a separate concern from List identity
-
-Concrete GUID values:
-  provisioning-time
-  UNKNOWN in this Decision
-  this packet does not invent or confirm a GUID
+LOOKUP-B:
+  stable identity = per-site provisioned List GUID
+  adapter config: SiteId → List GUID
+  Display Name is not the lookup key
+  server-relative URL is not List identity
+  concrete GUID values remain provisioning-time UNKNOWN
+  this Selection does not invent a GUID
 ```
 
-Not selected as first:
+NOT SELECTED:
 
-| ID | Meaning | Why not first |
+| ID | Meaning | Result |
 |---|---|---|
-| LOOKUP-A | lookup by List Title / Display Name | rename breaks adapter |
-| LOOKUP-B-URL | List identity = server-relative URL | leaves GUID vs URL open in the adapter |
-| LOOKUP-AS | reuse AssessmentSnapshots list | FORBIDDEN by persistence Decision |
+| LOOKUP-A | lookup by List Title / Display Name | NOT SELECTED |
+| LOOKUP-B-URL | List identity = server-relative URL | NOT SELECTED |
+| LOOKUP-AS | reuse AssessmentSnapshots list | NOT SELECTED |
 
-### M2 / M3 / M4 — Column mapping（CANDIDATE / NOT CONFIRMED）
+### M2 / M3 / M4 SELECTED — PR-MAP-NAMES-1
 
-Rules:
+Human-selected Internal Names:
 
 ```text
-Contract / Domain name ≠ Internal Name unless Human explicitly SELECTS that
-Do not copy AssessmentSnapshot Internal Names
-Do not treat agent-invented strings as 確定
-Type for performedAt / recordedAt = 1行テキスト（D4=A LOCKED）
-Procedure reference = flatten 3 columns（persistence Decision LOCKED）
-No procedure body column
-No JSON blob of Procedure
+prRecordId
+prIdempotencyKey
+prPayloadFingerprint
+prOrganizationId
+prSiteId
+prUserId
+prProcedureId
+prProcedureVersion
+prApprovalState
+prLocalDate
+prPlanId
+prPlanVersion
+prResult
+prPerformedAt
+prRecordedAt
+prRecordedBy
 ```
 
-First-candidate **name package** `PR-MAP-NAMES-1`（NOT CONFIRMED）:
+Display Names / Type / Required / unique-index / read-write conversion:
+current packet table → SELECT.
 
-Display Names are Japanese operational labels.
-Internal Names are `pr`-prefixed tokens so they are not Domain PascalCase
-and not AssessmentSnapshot names. Human may SELECT this package, amend rows,
-or replace the whole set. Until Human SELECT, every name cell remains
-`HUMAN-SELECT / NOT CONFIRMED`.
+RecordId unique. IdempotencyKey unique. PayloadFingerprint non-unique.
 
-| Mapping ID | Contract field | Display Name candidate | Internal Name candidate | Type candidate | Required | Unique / index candidate | Read | Write |
+D4=A:
+
+```text
+performedAt / recordedAt = 1行テキスト / ISO DateTime string
+```
+
+Procedure flatten:
+
+```text
+ProcedureId / ProcedureVersion / ApprovalState = separate columns
+Procedure body column = NOT SELECTED
+Procedure JSON blob = NOT SELECTED
+```
+
+| Mapping ID | Contract field | Display Name | Internal Name | Type | Required | Unique / index | Read | Write |
 |---|---|---|---|---|---|---|---|---|
 | MAP-PR-001 | RecordId | 実施記録ID | `prRecordId` | 1行テキスト | 必須 | unique | trim 後非空 | 非空のまま |
 | MAP-PR-002 | IdempotencyKey | 冪等キー | `prIdempotencyKey` | 1行テキスト | 必須 | unique | 非空 | 非空のまま |
@@ -151,13 +148,15 @@ or replace the whole set. Until Human SELECT, every name cell remains
 | MAP-PR-ENV-001 | schemaId | DERIVED | 列なし | — | DTO必須 | — | 定数 | 書かない |
 | MAP-PR-ENV-002 | schemaVersion | DERIVED | 列なし | — | DTO必須 | — | `1.0.0` | 書かない |
 | MAP-PR-ENV-003 | dtoVersion | DERIVED | 列なし | — | DTO必須 | — | `1.0.0` | 書かない |
-| MAP-PR-SYS-001 | Title | タイトル（標準列） | `Title` | タイトル | optional / non-required 候補 | 対象外 | 契約値として読まない | 書かない（M6） |
+| MAP-PR-SYS-001 | Title | タイトル（標準列） | `Title` | タイトル | optional / non-required | 対象外 | 契約値として読まない | 書かない（TITLE-NONE） |
+
+These names/types are **SELECTED**, not ACCEPTED / LOCKED.
 
 Missing required field / unknown result token / non-APPROVED ApprovalState /
 non-integer planVersion / clock order violation / conversion failure:
 fail-closed. Do not convert ERROR into successful empty.
 
-Choice values for `result`（if Human SELECTS 選択肢）must equal:
+Choice values for `result` must equal:
 
 ```text
 PERFORMED_AS_PLANNED
@@ -167,26 +166,26 @@ NOT_PERFORMED
 
 Do not map these to FAILED / error / save_failed.
 
-Name-package alternatives（not first）:
+Name-package alternatives:
 
-| ID | Meaning | Result in this draft |
+| ID | Meaning | Result |
 |---|---|---|
-| PR-MAP-NAMES-1 | `pr*` Internal Names + Japanese Display Names above | **first candidate** |
-| PR-MAP-NAMES-CONTRACT | Internal Name = contract field string | not first；Human may still SELECT |
-| PR-MAP-NAMES-AS-COPY | copy AssessmentSnapshot names | **reject** |
-| PR-MAP-NAMES-CUSTOM | Human-supplied complete table | acceptable if every row is filled |
+| PR-MAP-NAMES-1 | `pr*` Internal Names + Japanese Display Names above | **SELECTED** |
+| PR-MAP-NAMES-CONTRACT | Internal Name = contract field string | NOT SELECTED |
+| PR-MAP-NAMES-AS-COPY | copy AssessmentSnapshot names | NOT SELECTED |
+| PR-MAP-NAMES-CUSTOM | Human-supplied complete table | NOT SELECTED |
 
-### M5 — DERIVED reconstruction（CANDIDATE）
+### M5 SELECTED — DERIVED
 
 ```text
-No per-item columns for:
+no per-item columns:
   schemaId
   schemaVersion
   dtoVersion
   TimeZone
 
-Read reconstruction:
-  schemaId     = severe-behavior-support.procedure-record.record
+read reconstruction:
+  schemaId      = severe-behavior-support.procedure-record.record
   schemaVersion = 1.0.0
   dtoVersion    = 1.0.0
   TimeZone      = Asia/Tokyo
@@ -198,32 +197,74 @@ If a later physical column exists and disagrees with the constants:
   fail-closed（do not ignore mismatch）
 ```
 
-### M6 — Title（Selection required）
+### M6 SELECTED — TITLE-NONE
 
-| Option | Meaning | This packet |
+| Option | Meaning | Result |
 |---|---|---|
-| **TITLE-NONE** | Title is not app identity；adapter does not write Title；provisioning sets Title optional / non-required；normal app read does not treat Title as a contract value | **first candidate** |
-| TITLE-COPY | write RecordId into Title for ops scan；Title still is not identity | alternative |
-
-TITLE-NONE first-candidate detail:
+| **TITLE-NONE** | Title is not app identity；adapter does not write Title；provisioning sets Title optional / non-required；normal app read does not treat Title as a contract value | **SELECTED** |
+| TITLE-COPY | write RecordId into Title for ops scan | **NOT SELECTED**（v1 non-choice；not judged false） |
 
 ```text
 Title is not app identity
 adapter does not write Title
-provisioning: Title = optional / non-required
-normal app read does not read Title as a contract value
-MAP-PR-001 prRecordId remains the identity canonical
+provisioning policy = optional / non-required
+normal app read does not treat Title as a contract value
+prRecordId remains identity canonical
 no dual representation of RecordId in Title
 ```
 
-Either option keeps MAP-PR-001 as the identity canonical.
-TITLE-COPY would still forbid treating Title as RecordId on read.
+## 0. How to read this packet
+
+This document records Human Selection of physical mapping for ProcedureRecord v1.
+SELECTED here is not Accepted and not LOCKED.
+
+It does not close:
+
+```text
+SUPPORTER read scope
+SharePoint group / Role binding
+test-only site identity
+ProcedureRecord retention years
+concrete provisioned List GUID values
+provisioning execution
+adapter implementation
+LIVE WRITE
+```
+
+This Selection still does **not** authorize tenant mutation,
+adapter implementation, live item create, Ready, or Merge.
+
+## 1. Decision units after Selection
+
+| ID | Unit | After Human Selection |
+|---|---|---|
+| M1 | List Display Name + lookup | SELECTED（LOOKUP-B / GUID；concrete GUID UNKNOWN） |
+| M2 | Physical columns | SELECTED（PR-MAP-NAMES-1） |
+| M3 | D4=A clock columns | SELECTED |
+| M4 | Procedure flatten | SELECTED |
+| M5 | DERIVED reconstruction | SELECTED |
+| M6 | Title | TITLE-NONE SELECTED |
+
+## 2. Selected package — PR-MAP-PKG-1
+
+Human SELECT. Not Accepted. Not LOCKED.
+
+Rules maintained:
+
+```text
+Contract / Domain name ≠ Internal Name unless Human SELECTS that
+Do not copy AssessmentSnapshot Internal Names
+Type for performedAt / recordedAt = 1行テキスト（D4=A）
+Procedure reference = flatten 3 columns
+No procedure body column
+No JSON blob of Procedure
+```
 
 ## 3. Explicit OUT
 
 ```text
 SUPPORTER read scope
-Role / group binding
+SharePoint group / Role binding
 test-only site identity
 retention years
 List / column / site create or rename
@@ -231,12 +272,16 @@ actual provisioned List GUID
 server-relative List URL as identity
 adapter implementation
 SPFx change
+SharePoint item write
 LIVE WRITE
 Deploy / App Catalog
 M365 / Entra mutation
+Ready / Merge
+Acceptance / LOCK by this recording alone
 ProcedureRecord 1.0.0 redesign
 procedure body persistence
 mixing into AssessmentSnapshots / SupportPlans / AuditEvent lists
+#381 modification
 ```
 
 ## 4. Upstream locks this packet must not reopen
@@ -253,39 +298,35 @@ DEC-1 Schema ID ≠ List name ≠ TypeScript type name
 DEC-7 failure ≠ empty success
 ```
 
-## 5. Findings
+## 5. Findings after Selection
 
 | ID | Severity | State | Content |
 |---|---|---|---|
-| F-MAP-001 | P2 | OPEN | Internal Names are candidates only until Human SELECT |
+| F-MAP-001 | P2 | SELECTION RECORDED | PR-MAP-NAMES-1 Internal Names SELECTED；still NOT ACCEPTED / NOT LOCKED |
 | F-MAP-002 | P2 | OPEN | Concrete List GUID values remain provisioning-time UNKNOWN |
-| F-MAP-003 | P2 | OPEN | TITLE-NONE vs TITLE-COPY still requires Human SELECT |
+| F-MAP-003 | P2 | SELECTION RECORDED | TITLE-NONE SELECTED；TITLE-COPY is v1 not-selected |
+| F-MAP-004 | P2 | CLOSED | Next gates steps 2–6 duplicate removed at Selection recording |
 
 P0 / P1: none.
-HOLD because Human Selection has not been given.
+HOLD continues because Acceptance / LOCK has not been given.
 
 ## 6. HOLD
 
 ```text
-Status = DRAFT / NOT SELECTED / NOT ACCEPTED / NOT LOCKED
-PR-MAP-NAMES-1 is a candidate set, not 確定
+Status = SELECTED / NOT ACCEPTED / NOT LOCKED
+concrete List GUID UNKNOWN
 Implementation Start = NOT AUTHORIZED
 Provisioning = NOT AUTHORIZED
 LIVE WRITE = NOT AUTHORIZED
+Ready / Merge = NOT AUTHORIZED
+Acceptance / LOCK = NOT AUTHORIZED
+3f591733… candidate HEAD = EXPIRED by this recording
 ```
 
 ## 7. Next gates
 
 ```text
-1. Human Selection on PR-MAP-PKG-1
-   - SELECT List Display Name + LOOKUP-B（per-site List GUID）or an alternative
-   - SELECT PR-MAP-NAMES-1 or a complete replacement table
-   - SELECT TITLE-NONE（including Title required=false / no adapter write）or TITLE-COPY
-2. Decision Fresh Review on the Selection recording HEAD
-3. Human Acceptance / LOCK of mapping only
-4. Separate provisioning GO
-5. Separate adapter Implementation Start GO
-6. Separate LIVE WRITE GO
+1. DONE — Human Selection on PR-MAP-PKG-1
 2. Decision Fresh Review on the Selection recording HEAD
 3. Human Acceptance / LOCK of mapping only
 4. Separate provisioning GO
@@ -293,4 +334,5 @@ LIVE WRITE = NOT AUTHORIZED
 6. Separate LIVE WRITE GO
 ```
 
-Selecting step 1 does not start steps 4–6.
+Selecting step 1 does not start steps 3–6.
+Acceptance / LOCK, if given later, still does not start steps 4–6.
