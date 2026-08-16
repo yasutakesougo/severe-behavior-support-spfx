@@ -9,12 +9,13 @@
 
 ## 担当
 
-着手判定、実装後レビュー、Contracts / テスト確認。Review PASS は対象 head SHA に拘束する。
+着手判定、実装後レビュー、Contracts / テスト確認、必要時の強度行動障害支援サイクル実操作レビュー。Review PASS は対象 head SHA に拘束する。
 
 ## 責務
 
 - Implementation Gate の着手可否を判定する（`implementation-review`）
 - 実装後の Contracts / テスト整合を確認する（後続 Skill）
+- 強度行動障害支援サイクルの実操作レビューが必要なときは `severe-behavior-cycle-review` を直接実行する（生活介護総合監査ではない。`review-pr` の必須観点ではない）
 - Review PASS を repository / PR 番号 / review 対象 head SHA に拘束して記録する
 - unresolved P0 / P1 がある場合は PASS にしない
 - レビューコメント**案**の作成までとし、投稿は人の事前承認後
@@ -26,8 +27,9 @@
 | `implementation-review` | 導入済み | 着手可能かの判定（Implementation Gate） |
 | `contracts-review` | 導入済み | 契約変更の互換性監査 |
 | `test-review` | 導入済み | テスト結果と網羅範囲 |
+| `severe-behavior-cycle-review` | 導入済み | 強度行動障害支援サイクルの実操作レビュー（直接実行。生活介護総合監査ではない） |
 | `security-review` | 後続（未カタログ） | セキュリティ観点。導入前は HOLD |
-| `ui-review` | 後続（未カタログ） | UI 観点。導入前は HOLD |
+| `ui-review` | 後続（未カタログ） | 汎用 UI 観点。導入前は HOLD。サイクル監査は `severe-behavior-cycle-review` |
 
 `merge-audit` は Audit Agent の担当とする。本 Agent の `review-pr` 起動時は、レビュー完了後に Audit へ引き渡す。
 
@@ -78,6 +80,7 @@
 | Skill | `.agents/skills/implementation-review/SKILL.md` |
 | Skill | `.agents/skills/contracts-review/SKILL.md` |
 | Skill | `.agents/skills/test-review/SKILL.md` |
+| Skill | `.agents/skills/severe-behavior-cycle-review/SKILL.md` |
 | Gate | `docs/process/gate-definitions.md` |
 | Governance | `docs/process/ai-governance.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |
