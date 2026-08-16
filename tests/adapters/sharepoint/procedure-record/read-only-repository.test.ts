@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   bindProcedureRecordList,
   bindTestOnlyProvisionedProcedureRecordList,
+  createProcedureRecordLiveWriteAuthorization,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
   isProcedureRecordItemCreateAuthorized,
@@ -134,6 +135,7 @@ describe("ProcedureRecord write-capable live repository", () => {
       false,
     );
     assert.equal(isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE), false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(calls.createItem, 0);
   });
 
@@ -273,6 +275,7 @@ describe("ProcedureRecord write-capable live repository", () => {
       SiteId: LOGICAL_SITE_ID,
     });
     assert.equal(repository.liveWriteAuthorized, false);
+    assert.equal(createProcedureRecordLiveWriteAuthorization(), null);
     assert.deepEqual(await repository.create(record), { status: "DEFINITE_FAILURE" });
     assert.equal(calls.createItem, 0);
     assert.equal(calls.getSchema, 0);

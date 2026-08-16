@@ -3,11 +3,15 @@
  *
  * LOOKUP-B: addresses the list by GUID, never by Display Name / GetByTitle.
  * CREATE-ONLY: createItem exists; updateItem is absent.
- * Production createItem never POSTs. POST-shaped doubles live in tests only.
+ *
+ * Production createItem POSTs only after Human LIVE WRITE GO opens the
+ * execution gate. Callers cannot pass write flags into the constructor.
+ * The reviewed POST helper is not a production index export.
  *
  * Live tenant I/O is NOT authorized by constructing this binder alone.
  */
 
+import { createSpfxProcedureRecordLiveWriteAuthorization } from "./live-write-gate";
 import type {
   ProcedureRecordItemCreateResult,
   ProcedureRecordItemReadResult,
@@ -109,6 +113,52 @@ export function procedureRecordListApiUrl(
   return `${trimTrailingSlash(webAbsoluteUrl)}/_api/web/lists(guid'${guid}')`;
 }
 
+export type PostProcedureRecordCreateItemInput = Readonly<{
+  spHttpClient: ProcedureRecordSpHttpClient;
+  configuration: unknown;
+  listApiUrl: string;
+  listItemEntityTypeFullName: string;
+  fields: Readonly<Record<string, unknown>>;
+}>;
+
+/**
+ * Reviewed CREATE-ONLY POST against lists(guid'...')/items.
+ * Production createItem reaches this only after the execution gate mints
+ * run-scoped authorization. This helper is not re-exported from index.ts.
+ */
+export async function postProcedureRecordCreateItem(
+  input: PostProcedureRecordCreateItemInput,
+): Promise<ProcedureRecordItemCreateResult> {
+  const entityType = input.listItemEntityTypeFullName.trim();
+  if (entityType.length === 0) {
+    return { ok: false, failure: "TRANSPORT_ERROR" };
+  }
+  try {
+    const response = await input.spHttpClient.post(
+      `${input.listApiUrl}/items`,
+      input.configuration,
+      {
+        headers: {
+          Accept: "application/json;odata=verbose",
+          "Content-Type": "application/json;odata=verbose",
+          "odata-version": "3.0",
+        },
+        body: JSON.stringify(withVerboseMetadata(input.fields, entityType)),
+      },
+    );
+    if (!response.ok) {
+      return { ok: false, failure: mapStatusFailure(response.status) };
+    }
+    const listItemId = readListItemId(await response.json());
+    if (listItemId === undefined) {
+      return { ok: false, failure: "TRANSPORT_ERROR" };
+    }
+    return { ok: true, listItemId };
+  } catch {
+    return { ok: false, failure: "TRANSPORT_ERROR" };
+  }
+}
+
 export function createProcedureRecordSpHttpClientTransport(
   options: CreateProcedureRecordSpHttpClientTransportOptions,
 ): ProcedureRecordLiveListTransport {
@@ -181,8 +231,23 @@ export function createProcedureRecordSpHttpClientTransport(
     return { ok: true, rows };
   }
 
-  async function createItem(): Promise<ProcedureRecordItemCreateResult> {
-    return { ok: false, failure: "FORBIDDEN" };
+  async function createItem(
+    fields: Readonly<Record<string, unknown>>,
+  ): Promise<ProcedureRecordItemCreateResult> {
+    const authorization = createSpfxProcedureRecordLiveWriteAuthorization();
+    if (authorization === undefined) {
+      return { ok: false, failure: "FORBIDDEN" };
+    }
+    if (listApiUrl === undefined) {
+      return { ok: false, failure: "TRANSPORT_ERROR" };
+    }
+    return postProcedureRecordCreateItem({
+      spHttpClient: client,
+      configuration,
+      listApiUrl,
+      listItemEntityTypeFullName: options.listItemEntityTypeFullName ?? "",
+      fields,
+    });
   }
 
   return {
@@ -196,6 +261,38 @@ export function createProcedureRecordSpHttpClientTransport(
     },
     createItem,
   };
+}
+
+function withVerboseMetadata(
+  fields: Readonly<Record<string, unknown>>,
+  entityType: string,
+): Record<string, unknown> {
+  const body: Record<string, unknown> = {
+    __metadata: { type: entityType },
+  };
+  for (const key of Object.keys(fields)) {
+    body[key] = fields[key];
+  }
+  return body;
+}
+
+function readListItemId(payload: unknown): number | undefined {
+  if (!payload || typeof payload !== "object") {
+    return undefined;
+  }
+  const root = payload as Record<string, unknown>;
+  if (root.d && typeof root.d === "object") {
+    return readIdFromRow(root.d as Record<string, unknown>);
+  }
+  return readIdFromRow(root);
+}
+
+function readIdFromRow(row: Readonly<Record<string, unknown>>): number | undefined {
+  const raw = row.Id ?? row.ID ?? row.id;
+  if (typeof raw === "number" && Number.isInteger(raw) && raw > 0) {
+    return raw;
+  }
+  return undefined;
 }
 
 function mapStatusFailure(status: number): ProcedureRecordTransportFailure {

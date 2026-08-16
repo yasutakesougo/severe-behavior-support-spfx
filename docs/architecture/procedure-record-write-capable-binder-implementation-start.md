@@ -32,7 +32,8 @@ physical SharePoint Site ID ≠ logical SiteId
 
 ```text
 CREATE-ONLY createItem on ProcedureRecordLiveListTransport
-SPHttpClient POST shape against lists(guid'...')/items（synthetic doubles only）
+reviewed SPHttpClient POST against lists(guid'...')/items
+execution gate: GO 前は POST 不可能 / GO 後は追加コード変更なしで到達可能
 gate-aware repository create()
 ItemCount=0 is LIVE WRITE execution precheck only（not generic create()）
 unit / heft tests with synthetic doubles
@@ -50,26 +51,42 @@ updateItem / MERGE / delete
 Deploy / App Catalog
 Entra / M365 mutation
 Ready / Merge auto-progress
+re-exporting test-only write seams from production index
 ```
 
-## Production gates（remain closed）
+## Production execution gate（remain closed）
 
 ```text
 PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized = false
 PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized = false
+SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE.itemCreateAuthorized = false
+SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE.liveTenantIoAuthorized = false
 SPFX_SPHTTPCLIENT_HOST_SEAM.liveWriteAuthorized = false
+createProcedureRecordLiveWriteAuthorization() → null
+createSpfxProcedureRecordLiveWriteAuthorization() → undefined
 unauthorized create() → DEFINITE_FAILURE（createItem I/O = 0）
+unauthorized transport.createItem() → FORBIDDEN（POST = 0）
 updateItem remains absent
 ```
 
-Tests use helpers under `tests/` and `*.test.ts` only. Those names are not
-production package exports. Production write-related entry points are:
+Before Human LIVE WRITE GO, production POST is impossible. After explicit
+Human LIVE WRITE GO, opening both production flags mints run-scoped
+authorization and the already-reviewed POST path becomes reachable. That
+authorization change is not a new POST implementation.
+
+Tests may call `postProcedureRecordCreateItem` from the transport module.
+That helper is not a production package export. Production write-related
+entry points are:
 
 ```text
 createProcedureRecordRepository
 createProcedureRecordSpHttpClientTransport
 createProcedureRecordSpHttpClientTransportFromHost
+createProcedureRecordLiveWriteAuthorization
 ```
+
+`createSyntheticAuthorizedProcedureRecordRepository` remains under `tests/`
+only.
 
 ## Next gates（separate Human GO each）
 

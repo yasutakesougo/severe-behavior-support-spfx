@@ -16,6 +16,7 @@ import {
   type ProcedureRecordListBinding,
 } from "./list-binding";
 import {
+  createProcedureRecordLiveWriteAuthorization,
   isProcedureRecordItemCreateAuthorized,
   PROCEDURE_RECORD_LIVE_WRITE_GATE,
   refuseUnauthorizedLiveCreate,
@@ -138,7 +139,6 @@ function mapCreateFailure(failure: "FORBIDDEN" | "TRANSPORT_ERROR"): ProcedureRe
 function createBoundProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
-  allowCreate: boolean,
 ): ProcedureRecordListRepository {
   async function lookup(
     query: (token: string) => Promise<ProcedureRecordItemReadResult>,
@@ -159,7 +159,7 @@ function createBoundProcedureRecordRepository(
 
   return {
     binding,
-    liveWriteAuthorized: allowCreate,
+    liveWriteAuthorized: isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE),
 
     async findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>> {
       return lookup((token) => transport.findByRecordId(token), recordId);
@@ -170,7 +170,8 @@ function createBoundProcedureRecordRepository(
     },
 
     async create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt> {
-      if (!allowCreate) {
+      const authorization = createProcedureRecordLiveWriteAuthorization();
+      if (authorization === null) {
         return refuseUnauthorizedLiveCreate();
       }
       if (!isUsableLiveListBinding(binding)) {
@@ -234,17 +235,14 @@ function createBoundProcedureRecordRepository(
 
 /**
  * Production wiring. Callers cannot pass a write-authorization flag.
- * Create is allowed only if PROCEDURE_RECORD_LIVE_WRITE_GATE is fully open.
+ * Create reaches transport.createItem only after Human LIVE WRITE GO mints
+ * run-scoped authorization from the production gate.
  */
 export function createProcedureRecordRepository(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordLiveListTransport,
 ): ProcedureRecordListRepository {
-  return createBoundProcedureRecordRepository(
-    binding,
-    transport,
-    isProcedureRecordItemCreateAuthorized(PROCEDURE_RECORD_LIVE_WRITE_GATE),
-  );
+  return createBoundProcedureRecordRepository(binding, transport);
 }
 
 export function createReadOnlyProcedureRecordRepository(
