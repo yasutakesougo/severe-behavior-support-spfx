@@ -8,9 +8,11 @@
   max-width: 100%;
   padding: sbs.$space-4;
   border-width: sbs.$border-width-thin;
-  border-style: dashed;
+  border-style: solid;
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-md;
+  box-shadow: sbs.$elevation-subtle;
   box-sizing: border-box;
 }
 
@@ -32,11 +34,37 @@
   color: inherit;
   font: inherit;
   cursor: pointer;
+  border-radius: sbs.$radius-sm;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.backButton {
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-canvas;
+  color: sbs.$color-text-secondary;
 }
 
 .primaryButton {
-  font-weight: 700;
-  background: sbs.$color-surface-canvas;
+  font-weight: sbs.$font-weight-semibold;
+  background: sbs.$color-focus-ring;
+  color: sbs.$color-surface-canvas;
+}
+
+.backButton:hover:not(:disabled),
+.backButton:active:not(:disabled) {
+  background: sbs.$color-surface-hover;
+  border-color: sbs.$color-border-strong;
+}
+
+.primaryButton:hover:not(:disabled) {
+  box-shadow: sbs.$elevation-subtle;
+}
+
+.primaryButton:active:not(:disabled) {
+  box-shadow: none;
 }
 
 .backButton:focus,
@@ -49,13 +77,18 @@
 
 .backButton:disabled,
 .primaryButton:disabled {
-  opacity: 0.65;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-muted;
+  color: sbs.$color-text-disabled;
+  opacity: 1;
   cursor: not-allowed;
 }
 
 .heading {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: sbs.$font-size-page-title;
+  font-weight: sbs.$font-weight-page-title;
+  line-height: sbs.$line-height-page-title;
   outline: none;
 }
 
@@ -83,11 +116,14 @@
   border-style: solid;
   border-color: sbs.$color-border-subtle;
   background: sbs.$color-surface-canvas;
+  border-radius: sbs.$radius-sm;
 }
 
 .section h2 {
   margin: 0 0 sbs.$space-3;
-  font-size: 1.05rem;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
 }
 
 .flowList {
@@ -101,6 +137,7 @@
   min-width: 0;
   padding: sbs.$space-3;
   background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-sm;
 }
 
 .flowItem dt {

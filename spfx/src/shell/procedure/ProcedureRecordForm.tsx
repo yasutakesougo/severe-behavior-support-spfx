@@ -12,7 +12,7 @@ import {
   hintForProcedureRecordResult,
   labelForProcedureRecordResult,
 } from "./procedure-copy";
-import { FIELD_WORKFLOW_UI_SLICE } from "./procedure-fixture";
+import { FIELD_WORKFLOW_UI_SLICE, VP4_WORKFLOW_SLICE } from "./procedure-fixture";
 import {
   applySyntheticProcedureRecordSave,
   canRetryProcedureRecordSave,
@@ -129,6 +129,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       className={styles.procedureRecordForm}
       data-field-workflow="procedure-record-form"
       data-field-workflow-slice={FIELD_WORKFLOW_UI_SLICE.id}
+      data-field-workflow-visual-polish={VP4_WORKFLOW_SLICE.id}
       data-field-workflow-user={context.userId}
       data-field-workflow-plan-id={context.planId}
       data-field-workflow-plan-version={String(context.planVersion)}
@@ -155,6 +156,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         ref={headingRef}
         tabIndex={-1}
         className={styles.heading}
+        data-field-workflow-visual-role="page-title"
         data-field-workflow="procedure-record-heading"
       >
         支援手順の記録
@@ -170,7 +172,9 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       </p>
 
       <section className={styles.section} aria-labelledby="field-workflow-binding-heading">
-        <h2 id="field-workflow-binding-heading">引き継いだ文脈</h2>
+        <h2 id="field-workflow-binding-heading" data-field-workflow-visual-role="section-title">
+          引き継いだ文脈
+        </h2>
         <dl className={styles.contextLine} data-field-workflow="binding-context">
           <div>
             planId / planVersion: {context.planId} / v{context.planVersion}
@@ -182,7 +186,9 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       </section>
 
       <section className={styles.section} aria-labelledby="field-workflow-result-heading">
-        <h2 id="field-workflow-result-heading">実施結果</h2>
+        <h2 id="field-workflow-result-heading" data-field-workflow-visual-role="section-title">
+          実施結果
+        </h2>
         <ul className={styles.resultList} role="radiogroup" aria-label="実施結果">
           {PROCEDURE_RECORD_RESULT_VALUES.map((result) => {
             const selected = draft.result === result;
@@ -225,7 +231,9 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       </section>
 
       <section className={styles.section} aria-labelledby="field-workflow-clocks-heading">
-        <h2 id="field-workflow-clocks-heading">実施時刻</h2>
+        <h2 id="field-workflow-clocks-heading" data-field-workflow-visual-role="section-title">
+          実施時刻
+        </h2>
         <div className={styles.fieldGrid}>
           <label>
             performedAt（Asia/Tokyo）
@@ -262,7 +270,9 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       </section>
 
       <section className={styles.section} aria-labelledby="field-workflow-save-heading">
-        <h2 id="field-workflow-save-heading">保存</h2>
+        <h2 id="field-workflow-save-heading" data-field-workflow-visual-role="section-title">
+          保存
+        </h2>
         <p
           className={styles.statusNote}
           role="status"
