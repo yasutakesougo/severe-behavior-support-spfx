@@ -1,20 +1,22 @@
-# ProcedureRecord Physical Mapping v1 — Human Selection Packet
+# ProcedureRecord Physical Mapping v1 — Human Selection + Acceptance
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-PROCEDURE-RECORD-MAPPING-1
 Unit: PROCEDURE-RECORD-MAPPING-DECISION-1
-Kind: Human Selection packet（physical mapping only）
-Status: SELECTED / NOT ACCEPTED / NOT LOCKED
+Kind: Human Selection + scoped Acceptance（physical mapping only）
+Status: ACCEPTED / LOCKED（scoped；DEFERRED items are NOT LOCKED）
 Human Selection: SELECT PR-MAP-PKG-1
   + LOOKUP-B / per-site List GUID
   + PR-MAP-NAMES-1
   + TITLE-NONE
-Human Selection date: 2026-08-16
+  （2026-08-16）
+Human Acceptance: ACCEPT / LOCK PR-MAP-PKG-1（2026-08-16）
 Human Selection unit: PROCEDURE-RECORD-MAPPING-SELECTION-1
+Acceptance unit: PROCEDURE-RECORD-MAPPING-ACCEPTANCE-1
 PR: #382
-reviewed HEAD（pre-recording；expired by this commit）:
-  3f591733cfa09c299a7e61f8e27b4b1c1756d3c4
+reviewed HEAD（Fresh Review PASS；expired by this Acceptance recording）:
+  cabe944425d19a0a282b1c35a220384817d05ae8
 
 Upstream canonical:
   Decision-PROCEDURE-RECORD-PERSISTENCE-1
@@ -25,16 +27,22 @@ Upstream canonical:
   Title is not identity already LOCKED as policy
   DERIVED envelope / TimeZone already allowed as policy
 
-Selection ≠ Acceptance
-Selection ≠ LOCK
-Selection ≠ provisioning GO
-Selection ≠ adapter Implementation Start
-Selection ≠ LIVE WRITE
-Selection ≠ Deploy / App Catalog / M365 / Entra
-Selection ≠ Ready / Merge
+Acceptance / LOCK of this scoped mapping
+  ≠ Implementation Start
+  ≠ adapter code GO
+  ≠ SPFx change GO
+  ≠ List / column / site provisioning
+  ≠ creation of actual List GUID
+  ≠ SharePoint permissions mutation
+  ≠ SharePoint item write
+  ≠ LIVE WRITE
+  ≠ Ready / Merge
+  ≠ Deploy / App Catalog / M365 / Entra mutation
+  ≠ #381 modification
 This packet ≠ AssessmentSnapshot name copy
 This packet ≠ invented concrete List GUID
-Agent auto-select: FORBIDDEN（this Selection is Human GO）
+This packet ≠ provisioned unique/index objects observed
+Agent auto-accept: FORBIDDEN（this Acceptance is Human GO）
 ```
 
 ## Human Selection record
@@ -61,7 +69,67 @@ SELECT:
   M6 TITLE-NONE
 ```
 
-### M1 SELECTED
+## Human Acceptance record
+
+```text
+PROCEDURE-RECORD-MAPPING-ACCEPTANCE-1
+
+repository:
+  yasutakesougo/severe-behavior-support-spfx
+PR:
+  #382
+reviewed HEAD:
+  cabe944425d19a0a282b1c35a220384817d05ae8
+Fresh Review:
+  PASS @ cabe944425d19a0a282b1c35a220384817d05ae8
+Human Decision:
+  ACCEPT / LOCK Decision-PROCEDURE-RECORD-MAPPING-1
+  PR-MAP-PKG-1
+```
+
+ACCEPTED / LOCKED scope:
+
+```text
+M1 List Display Name = 支援手順実施記録
+M1 LOOKUP-B
+  stable identity = per-site provisioned List GUID
+  adapter configuration boundary = SiteId → List GUID
+  Display Name is NOT lookup key
+  server-relative URL is NOT List identity
+  concrete GUID values remain provisioning-time UNKNOWN
+M2 PR-MAP-NAMES-1
+  Display Names / Internal Names / Types / Required / conversions LOCKED
+  RecordId unique requirement
+  IdempotencyKey unique requirement
+  PayloadFingerprint non-unique
+  unique/index here = mapping requirement
+  ≠ provisioned SharePoint unique constraints / indexes observed
+M3 D4=A
+  performedAt / recordedAt = 1行テキスト / ISO DateTime string
+M4 Procedure flatten
+  ProcedureId / ProcedureVersion / ApprovalState = separate columns
+  Procedure body column = NOT ADOPTED
+  Procedure JSON blob = NOT ADOPTED
+M5 DERIVED reconstruction
+M6 TITLE-NONE
+```
+
+DEFERRED / NOT LOCKED:
+
+```text
+concrete provisioned List GUID values
+SUPPORTER read scope
+SharePoint group / Role binding
+test-only site identity
+ProcedureRecord retention years
+actual physical provisioning state
+provisioned unique/index objects
+```
+
+This Acceptance recording creates a new commit. The Fresh Review bound to
+`cabe944425d19a0a282b1c35a220384817d05ae8` is therefore expired.
+
+### M1 ACCEPTED / LOCKED
 
 ```text
 List Display Name:
@@ -84,7 +152,7 @@ NOT SELECTED:
 | LOOKUP-B-URL | List identity = server-relative URL | NOT SELECTED |
 | LOOKUP-AS | reuse AssessmentSnapshots list | NOT SELECTED |
 
-### M2 / M3 / M4 SELECTED — PR-MAP-NAMES-1
+### M2 / M3 / M4 ACCEPTED / LOCKED — PR-MAP-NAMES-1
 
 Human-selected Internal Names:
 
@@ -108,7 +176,7 @@ prRecordedBy
 ```
 
 Display Names / Type / Required / unique-index / read-write conversion:
-current packet table → SELECT.
+current packet table → ACCEPT / LOCK as mapping requirements.
 
 RecordId unique. IdempotencyKey unique. PayloadFingerprint non-unique.
 
@@ -122,8 +190,8 @@ Procedure flatten:
 
 ```text
 ProcedureId / ProcedureVersion / ApprovalState = separate columns
-Procedure body column = NOT SELECTED
-Procedure JSON blob = NOT SELECTED
+Procedure body column = NOT ADOPTED
+Procedure JSON blob = NOT ADOPTED
 ```
 
 | Mapping ID | Contract field | Display Name | Internal Name | Type | Required | Unique / index | Read | Write |
@@ -150,7 +218,9 @@ Procedure JSON blob = NOT SELECTED
 | MAP-PR-ENV-003 | dtoVersion | DERIVED | 列なし | — | DTO必須 | — | `1.0.0` | 書かない |
 | MAP-PR-SYS-001 | Title | タイトル（標準列） | `Title` | タイトル | optional / non-required | 対象外 | 契約値として読まない | 書かない（TITLE-NONE） |
 
-These names/types are **SELECTED**, not ACCEPTED / LOCKED.
+These names/types/conversions are **ACCEPTED / LOCKED** as mapping requirements.
+They do **not** claim that physical SharePoint indexes or unique constraints
+have been provisioned or observed.
 
 Missing required field / unknown result token / non-APPROVED ApprovalState /
 non-integer planVersion / clock order violation / conversion failure:
@@ -170,12 +240,12 @@ Name-package alternatives:
 
 | ID | Meaning | Result |
 |---|---|---|
-| PR-MAP-NAMES-1 | `pr*` Internal Names + Japanese Display Names above | **SELECTED** |
+| PR-MAP-NAMES-1 | `pr*` Internal Names + Japanese Display Names above | **ACCEPTED / LOCKED** |
 | PR-MAP-NAMES-CONTRACT | Internal Name = contract field string | NOT SELECTED |
 | PR-MAP-NAMES-AS-COPY | copy AssessmentSnapshot names | NOT SELECTED |
 | PR-MAP-NAMES-CUSTOM | Human-supplied complete table | NOT SELECTED |
 
-### M5 SELECTED — DERIVED
+### M5 ACCEPTED / LOCKED — DERIVED
 
 ```text
 no per-item columns:
@@ -197,11 +267,11 @@ If a later physical column exists and disagrees with the constants:
   fail-closed（do not ignore mismatch）
 ```
 
-### M6 SELECTED — TITLE-NONE
+### M6 ACCEPTED / LOCKED — TITLE-NONE
 
 | Option | Meaning | Result |
 |---|---|---|
-| **TITLE-NONE** | Title is not app identity；adapter does not write Title；provisioning sets Title optional / non-required；normal app read does not treat Title as a contract value | **SELECTED** |
+| **TITLE-NONE** | Title is not app identity；adapter does not write Title；provisioning sets Title optional / non-required；normal app read does not treat Title as a contract value | **ACCEPTED / LOCKED** |
 | TITLE-COPY | write RecordId into Title for ops scan | **NOT SELECTED**（v1 non-choice；not judged false） |
 
 ```text
@@ -215,39 +285,32 @@ no dual representation of RecordId in Title
 
 ## 0. How to read this packet
 
-This document records Human Selection of physical mapping for ProcedureRecord v1.
-SELECTED here is not Accepted and not LOCKED.
+This document records Human Selection and scoped Acceptance of physical mapping
+for ProcedureRecord v1.
+ACCEPTED / LOCKED applies only to the mapping scope listed above.
+DEFERRED items are not LOCKED.
 
-It does not close:
+Unique / index rows are **mapping requirements**. They do not mean SharePoint
+unique constraints or indexes have been provisioned or observed.
 
-```text
-SUPPORTER read scope
-SharePoint group / Role binding
-test-only site identity
-ProcedureRecord retention years
-concrete provisioned List GUID values
-provisioning execution
-adapter implementation
-LIVE WRITE
-```
-
-This Selection still does **not** authorize tenant mutation,
+This Acceptance still does **not** authorize tenant mutation,
 adapter implementation, live item create, Ready, or Merge.
 
-## 1. Decision units after Selection
+## 1. Decision units after scoped Acceptance
 
-| ID | Unit | After Human Selection |
+| ID | Unit | After Human Acceptance |
 |---|---|---|
-| M1 | List Display Name + lookup | SELECTED（LOOKUP-B / GUID；concrete GUID UNKNOWN） |
-| M2 | Physical columns | SELECTED（PR-MAP-NAMES-1） |
-| M3 | D4=A clock columns | SELECTED |
-| M4 | Procedure flatten | SELECTED |
-| M5 | DERIVED reconstruction | SELECTED |
-| M6 | Title | TITLE-NONE SELECTED |
+| M1 | List Display Name + lookup | ACCEPTED / LOCKED（LOOKUP-B / GUID；concrete GUID UNKNOWN） |
+| M2 | Physical columns | ACCEPTED / LOCKED（PR-MAP-NAMES-1） |
+| M3 | D4=A clock columns | ACCEPTED / LOCKED |
+| M4 | Procedure flatten | ACCEPTED / LOCKED |
+| M5 | DERIVED reconstruction | ACCEPTED / LOCKED |
+| M6 | Title | TITLE-NONE ACCEPTED / LOCKED |
 
-## 2. Selected package — PR-MAP-PKG-1
+## 2. Accepted package — PR-MAP-PKG-1
 
-Human SELECT. Not Accepted. Not LOCKED.
+Human SELECT then ACCEPT / LOCK（scoped mapping only）.
+DEFERRED items below are not LOCKED.
 
 Rules maintained:
 
@@ -277,7 +340,9 @@ LIVE WRITE
 Deploy / App Catalog
 M365 / Entra mutation
 Ready / Merge
-Acceptance / LOCK by this recording alone
+Implementation Start
+actual physical provisioning state
+provisioned unique/index objects
 ProcedureRecord 1.0.0 redesign
 procedure body persistence
 mixing into AssessmentSnapshots / SupportPlans / AuditEvent lists
@@ -298,41 +363,45 @@ DEC-1 Schema ID ≠ List name ≠ TypeScript type name
 DEC-7 failure ≠ empty success
 ```
 
-## 5. Findings after Selection
+## 5. Findings after scoped Acceptance
 
 | ID | Severity | State | Content |
 |---|---|---|---|
-| F-MAP-001 | P2 | SELECTION RECORDED | PR-MAP-NAMES-1 Internal Names SELECTED；still NOT ACCEPTED / NOT LOCKED |
+| F-MAP-001 | P2 | ACCEPTED RECORDED | PR-MAP-NAMES-1 mapping names/types LOCKED；not provisioned |
 | F-MAP-002 | P2 | OPEN | Concrete List GUID values remain provisioning-time UNKNOWN |
-| F-MAP-003 | P2 | SELECTION RECORDED | TITLE-NONE SELECTED；TITLE-COPY is v1 not-selected |
+| F-MAP-003 | P2 | ACCEPTED RECORDED | TITLE-NONE ACCEPTED / LOCKED；TITLE-COPY is v1 not-selected |
 | F-MAP-004 | P2 | CLOSED | Next gates steps 2–6 duplicate removed at Selection recording |
 
 P0 / P1: none.
-HOLD continues because Acceptance / LOCK has not been given.
+These P2 rows are deferred / state-tracking items. They are not Acceptance blockers.
+HOLD continues for Ready / Merge / implementation / provisioning / LIVE WRITE / Deploy.
 
 ## 6. HOLD
 
 ```text
-Status = SELECTED / NOT ACCEPTED / NOT LOCKED
+Status = ACCEPTED / LOCKED（scoped mapping）
+DEFERRED items are NOT LOCKED
 concrete List GUID UNKNOWN
+provisioned unique/index objects NOT CLAIMED
 Implementation Start = NOT AUTHORIZED
 Provisioning = NOT AUTHORIZED
 LIVE WRITE = NOT AUTHORIZED
 Ready / Merge = NOT AUTHORIZED
-Acceptance / LOCK = NOT AUTHORIZED
-3f591733… candidate HEAD = EXPIRED by this recording
+cabe944425d19a0a282b1c35a220384817d05ae8 Fresh Review = EXPIRED（this recording changes HEAD）
 ```
 
 ## 7. Next gates
 
 ```text
 1. DONE — Human Selection on PR-MAP-PKG-1
-2. Decision Fresh Review on the Selection recording HEAD
-3. Human Acceptance / LOCK of mapping only
-4. Separate provisioning GO
-5. Separate adapter Implementation Start GO
-6. Separate LIVE WRITE GO
+2. DONE — Decision Fresh Review on cabe944425d19a0a282b1c35a220384817d05ae8（now expired）
+3. DONE — Human Acceptance / LOCK of mapping only
+4. Final Decision Fresh Review on the Acceptance recording HEAD
+5. Ready Gate（separate Human GO；not given）
+6. Separate provisioning GO
+7. Separate adapter Implementation Start GO
+8. Separate LIVE WRITE GO
 ```
 
-Selecting step 1 does not start steps 3–6.
-Acceptance / LOCK, if given later, still does not start steps 4–6.
+Step 3 does not start steps 5–8.
+Acceptance / LOCK of scoped mapping does not start provisioning, adapter, LIVE WRITE, Ready, or Merge.
