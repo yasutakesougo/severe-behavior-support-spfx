@@ -14,7 +14,12 @@ export {
   type ProcedureRecordDerivedEnvelope,
 } from "./derived-envelope";
 export {
+  bindProcedureRecordList,
+  bindTestOnlyProvisionedProcedureRecordList,
   isUsableListBinding,
+  isUsableLiveListBinding,
+  normalizeSharePointGuid,
+  procedureRecordSiteIdToListGuidMap,
   resolveProcedureRecordListGuid,
   type ProcedureRecordListBinding,
 } from "./list-binding";
@@ -36,7 +41,34 @@ export {
   encodeResult,
 } from "./conversion";
 export { buildCreateItemFields, type RestBodyBuildResult } from "./rest-body";
-export { SPFX_SPHTTPCLIENT_HOST_SEAM, type SpfxSpHttpClientHostSeam } from "./transport-seam";
+export {
+  SPFX_SPHTTPCLIENT_HOST_SEAM,
+  type ProcedureRecordItemReadResult,
+  type ProcedureRecordLiveListTransport,
+  type ProcedureRecordSchemaReadResult,
+  type ProcedureRecordTransportFailure,
+  type SpfxSpHttpClientHostSeam,
+} from "./transport-seam";
+export { PROCEDURE_RECORD_LIVE_WRITE_GATE, refuseUnauthorizedLiveCreate } from "./live-write-gate";
+export {
+  PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+  PROCEDURE_RECORD_TEST_ONLY_PROVISIONED_LIST,
+  PROCEDURE_RECORD_TEST_ONLY_WEB_SERVER_RELATIVE_URL,
+} from "./test-only-provisioned-list";
+export {
+  PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS,
+  PROCEDURE_RECORD_FORBIDDEN_COLUMN_INTERNAL_NAMES,
+  PROCEDURE_RECORD_INDEX_CANDIDATE_COLUMNS,
+  PROCEDURE_RECORD_PR_RESULT_CHOICES,
+  verifyProcedureRecordPhysicalSchema,
+  type ObservedListIdentity,
+  type ObservedPhysicalField,
+  type ProcedureRecordSchemaVerification,
+} from "./physical-schema";
+export {
+  createReadOnlyProcedureRecordRepository,
+  type ReadOnlyProcedureRecordRepository,
+} from "./read-only-repository";
 export {
   SyntheticProcedureRecordListStore,
   type SyntheticInsertResult,
