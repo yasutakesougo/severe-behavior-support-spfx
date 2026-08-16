@@ -138,7 +138,7 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 | Agent | 正本 | 担当 | 現行で使える Skill |
 |---|---|---|---|
 | Audit | `.agents/agents/audit.md` | マージ監査・状態判定・引き継ぎ・リリース判定 | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
-| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認 | `implementation-review`, `contracts-review`, `test-review` |
+| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認・サイクル実操作レビュー | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review` |
 | Requirements | `.agents/agents/requirements.md` | 要件整理・DEC・Requirement ID | `requirements-review`, `decision-review` |
 | Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
 | Implementation | `.agents/agents/implementation.md` | 実装計画・Issue・PR・承認後実装 | `implementation-plan` |
