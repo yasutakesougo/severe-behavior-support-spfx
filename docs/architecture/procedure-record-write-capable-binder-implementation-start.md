@@ -62,15 +62,13 @@ unauthorized create() → DEFINITE_FAILURE（createItem I/O = 0）
 updateItem remains absent
 ```
 
-Tests use an internal **synthetic-test-only** write seam. Callers cannot pass
-`itemCreateAuthorized: true` into production repository or SPFx host factory.
-`itemCreateAuthorized` alone never authorizes live POST; production
-`liveTenantIoAuthorized` stays false.
+Tests use helpers under `tests/` and `*.test.ts` only. Those names are not
+production package exports. Production write-related entry points are:
 
 ```text
-production path: closed gate → POST impossible
-synthetic tests: createSyntheticAuthorizedProcedureRecordRepository
-  / createSyntheticProcedureRecordSpHttpClientTransport
+createProcedureRecordRepository
+createProcedureRecordSpHttpClientTransport
+createProcedureRecordSpHttpClientTransportFromHost
 ```
 
 ## Next gates（separate Human GO each）

@@ -1,7 +1,6 @@
 /**
  * ProcedureRecord persistence port bound to a live List GUID transport.
- * CREATE-ONLY. Production create() is fail-closed.
- * Synthetic tests use createSyntheticAuthorizedProcedureRecordRepository only.
+ * CREATE-ONLY. Production create() is fail-closed until the production gate opens.
  */
 
 import type { LookupResult } from "../../../contracts/types";
@@ -253,16 +252,4 @@ export function createReadOnlyProcedureRecordRepository(
   transport: ProcedureRecordLiveListTransport,
 ): ProcedureRecordListRepository {
   return createProcedureRecordRepository(binding, transport);
-}
-
-/**
- * Test-only write seam against synthetic doubles.
- * Does not flip PROCEDURE_RECORD_LIVE_WRITE_GATE and must not be used by
- * production host wiring.
- */
-export function createSyntheticAuthorizedProcedureRecordRepository(
-  binding: ProcedureRecordListBinding,
-  transport: ProcedureRecordLiveListTransport,
-): ProcedureRecordListRepository {
-  return createBoundProcedureRecordRepository(binding, transport, true);
 }

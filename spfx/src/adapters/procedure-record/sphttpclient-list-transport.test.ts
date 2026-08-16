@@ -2,10 +2,12 @@ import {
   PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
   PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
   createProcedureRecordSpHttpClientTransport,
-  createSyntheticProcedureRecordSpHttpClientTransport,
   procedureRecordListApiUrl,
+  type CreateProcedureRecordSpHttpClientTransportOptions,
   type ProcedureRecordSpHttpClient,
 } from "./sphttpclient-list-transport";
+import * as procedureRecordTransport from "./sphttpclient-list-transport";
+import type { ProcedureRecordLiveListTransport } from "./transport-types";
 
 type MockCall = Readonly<{
   method: "get" | "post";
@@ -65,6 +67,54 @@ function createMockClient(handler: {
     },
   };
   return { client, calls };
+}
+
+function createSyntheticProcedureRecordSpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+): ProcedureRecordLiveListTransport {
+  const production = createProcedureRecordSpHttpClientTransport(options);
+  const listApiUrl = procedureRecordListApiUrl(options.webAbsoluteUrl, options.listGuid);
+  const entityType = options.listItemEntityTypeFullName?.trim() ?? "";
+  return {
+    ...production,
+    async createItem(fields) {
+      if (listApiUrl === undefined || entityType.length === 0) {
+        return { ok: false, failure: "TRANSPORT_ERROR" };
+      }
+      try {
+        const response = await options.spHttpClient.post(
+          `${listApiUrl}/items`,
+          options.configuration,
+          {
+            headers: {
+              Accept: "application/json;odata=verbose",
+              "Content-Type": "application/json;odata=verbose",
+              "odata-version": "3.0",
+            },
+            body: JSON.stringify({
+              __metadata: { type: entityType },
+              ...fields,
+            }),
+          },
+        );
+        if (!response.ok) {
+          return {
+            ok: false,
+            failure:
+              response.status === 401 || response.status === 403 ? "FORBIDDEN" : "TRANSPORT_ERROR",
+          };
+        }
+        const payload = (await response.json()) as { d?: { Id?: number }; Id?: number };
+        const listItemId = payload.d?.Id ?? payload.Id;
+        if (typeof listItemId !== "number" || !Number.isInteger(listItemId) || listItemId <= 0) {
+          return { ok: false, failure: "TRANSPORT_ERROR" };
+        }
+        return { ok: true, listItemId };
+      } catch {
+        return { ok: false, failure: "TRANSPORT_ERROR" };
+      }
+    },
+  };
 }
 
 describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () => {
@@ -278,5 +328,17 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
     expect(body.prRecordId).toBe("synth-record");
     expect("Title" in body).toBe(false);
     expect("updateItem" in transport).toBe(false);
+  });
+});
+
+describe("ProcedureRecord production export surface", () => {
+  it("does not export test-only write seams from the transport module", () => {
+    expect("createSyntheticProcedureRecordSpHttpClientTransport" in procedureRecordTransport).toBe(
+      false,
+    );
+    expect("createSyntheticAuthorizedProcedureRecordRepository" in procedureRecordTransport).toBe(
+      false,
+    );
+    expect(typeof createProcedureRecordSpHttpClientTransport).toBe("function");
   });
 });

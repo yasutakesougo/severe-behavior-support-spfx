@@ -76,7 +76,6 @@ export {
 export {
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
-  createSyntheticAuthorizedProcedureRecordRepository,
   type ProcedureRecordListRepository,
   type ReadOnlyProcedureRecordRepository,
 } from "./read-only-repository";

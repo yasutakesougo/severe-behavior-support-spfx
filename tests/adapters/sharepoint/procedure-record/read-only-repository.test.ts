@@ -5,7 +5,6 @@ import {
   bindTestOnlyProvisionedProcedureRecordList,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,
-  createSyntheticAuthorizedProcedureRecordRepository,
   isProcedureRecordItemCreateAuthorized,
   PROCEDURE_RECORD_EXPECTED_PR_TEXT_COLUMNS,
   PROCEDURE_RECORD_LIST_DISPLAY_NAME,
@@ -17,6 +16,7 @@ import {
 } from "../../../../src/adapters/sharepoint/procedure-record";
 import { persistProcedureRecord } from "../../../../src/domain/procedure-record-persistence";
 import { createSyntheticProcedureRecord } from "../../../domain/procedure-record-fixtures";
+import { createSyntheticAuthorizedProcedureRecordRepository } from "./synthetic-authorized-repository";
 
 const LOGICAL_SITE_ID = "test-only-procedure-record-logical-site-id";
 const ORGANIZATION_ID = "synthetic-org-001";
