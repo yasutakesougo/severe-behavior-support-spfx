@@ -44,6 +44,7 @@ const expectedInstalledSkills = [
   "implementation-review",
   "contracts-review",
   "test-review",
+  "severe-behavior-cycle-review",
   "merge-audit",
   "release-review",
   "handoff-builder",

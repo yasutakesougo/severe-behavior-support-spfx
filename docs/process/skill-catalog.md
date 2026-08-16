@@ -47,6 +47,7 @@
 | [`implementation-review`](../../.agents/skills/implementation-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし（旧パスなし） | 計画・証跡不足、head SHA 不明 |
 | [`contracts-review`](../../.agents/skills/contracts-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし | 契約テスト / boundaries 証跡不足 |
 | [`test-review`](../../.agents/skills/test-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし | テスト結果不明、新規/既知失敗を区別不能 |
+| [`severe-behavior-cycle-review`](../../.agents/skills/severe-behavior-cycle-review/SKILL.md) | 導入済み | Review | なし（直接実行。`review-pr` 時は任意） | Skill 直接実行 | 対象なし（旧パスなし） | 対象ハーネス不明、実在個人情報の新規入力が求められる、未確認を FAIL へ変換するよう求められている |
 | [`merge-audit`](../../.agents/skills/merge-audit/SKILL.md) | 導入済み | Audit | `audit`（`review-pr` からの引き渡し可） | Skill 直接実行 | 対象なし（旧パスなし） | CI/テスト/承認証跡不足、P0/P1 残存 |
 | [`release-review`](../../.agents/skills/release-review/SKILL.md) | 導入済み | Audit | `release-check` | Skill 直接実行 | 対象なし | SHA/artifact/承認/ロールバック不足。deploy は実行しない |
 | [`handoff-builder`](../../.agents/skills/handoff-builder/SKILL.md) | 導入済み | **Audit** | `release-check` / `audit`（必要時） | Skill 直接実行 / `handoff:auto` | 対象なし（旧パスなし） | SHA / Issue / PR / 検証結果が不明 |
@@ -70,6 +71,7 @@
 | `implementation-review` | 着手可能かを判定 | 要件、DEC、設計、Contracts、計画 | Gate 判定、ブロッカー | 実装直前 |
 | `contracts-review` | 契約互換と境界を監査 | PR、差分、契約テスト | 互換判定、Findings | 実装後 |
 | `test-review` | テスト結果と網羅を監査 | PR、テスト結果 | 失敗分類、Findings | 実装後 |
+| `severe-behavior-cycle-review` | 強度行動障害支援サイクルの実操作レビュー | スモーク/ビルド、合成データ、Decision | CYCLE 要約、in-scope 点、Findings | サイクル監査時（直接実行） |
 | `merge-audit` | PR のマージ可否を監査 | PR、差分、CI、レビュー状態 | 監査結果、マージ可否 | 実装後 |
 | `release-review` | リリース可否判定材料 | main SHA、artifact、承認 | Release Gate 判定 | リリース前 |
 | `handoff-builder` | 現在状態を次作業者へ引き継ぐ | repo 状態、SHA、Issue、PR、検証結果 | handoff 文面 | 節目ごと |
@@ -125,7 +127,7 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | Requirements | `requirements-review`, `decision-review` |
 | Architecture | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
 | Implementation | `implementation-plan` |
-| Review | `implementation-review`, `contracts-review`, `test-review` |
+| Review | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review` |
 | Audit | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
 
 同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` / `project-status` は Audit のみ。
@@ -153,8 +155,9 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 7. `decision-review`
 8. 設計 Skill（`domain-design` / `sharepoint-design` / `schema-design` / `architecture-review`）
 9. 品質確認 Skill（`contracts-review` / `test-review`）
-10. リリース・運用 Skill（`release-review`）
-11. 状態判定 Skill（`project-status` / SKILL-PILOT-1）
+10. サイクル実操作レビュー（`severe-behavior-cycle-review`）
+11. リリース・運用 Skill（`release-review`）
+12. 状態判定 Skill（`project-status` / SKILL-PILOT-1）
 
 ## 関連ファイル
 
