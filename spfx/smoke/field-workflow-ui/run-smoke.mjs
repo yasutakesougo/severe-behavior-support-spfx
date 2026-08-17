@@ -11,7 +11,8 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, "../..");
 const outDir = __dirname;
-const artifactsDir = "/opt/cursor/artifacts/field-workflow-ui-browser-smoke";
+const artifactsDir =
+  process.env.FW_ARTIFACTS_DIR ?? "/opt/cursor/artifacts/field-workflow-ui-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const esbuildModule = await import(
@@ -126,6 +127,22 @@ const browser = await puppeteer.launch({
 });
 
 const checks = [];
+const liveWriteRequests = [];
+
+function isSharePointOrGraphRequest(url) {
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    const pathname = parsed.pathname.toLowerCase();
+    return (
+      host.includes("sharepoint.com") ||
+      host.includes("graph.microsoft.com") ||
+      pathname.includes("/_api/")
+    );
+  } catch {
+    return false;
+  }
+}
 
 async function openPage(query) {
   const page = await browser.newPage();
@@ -144,6 +161,12 @@ async function openPage(query) {
       errors.push(`console: ${text}`);
     }
   });
+  page.on("request", (request) => {
+    const url = request.url();
+    if (isSharePointOrGraphRequest(url)) {
+      liveWriteRequests.push({ url, method: request.method() });
+    }
+  });
   page.on("requestfailed", (request) => {
     const url = request.url();
     if (url.includes("favicon")) {
@@ -154,6 +177,21 @@ async function openPage(query) {
   return { page, errors };
 }
 
+async function clickVisible(page, selector) {
+  await page.waitForSelector(selector);
+  const clicked = await page.$eval(selector, (el) => {
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+    if (!(el instanceof HTMLElement) || el.getClientRects().length === 0) {
+      return false;
+    }
+    el.click();
+    return true;
+  });
+  if (!clicked) {
+    throw new Error(`clickVisible: ${selector} was not an HTMLElement with a layout box`);
+  }
+}
+
 try {
   checks.push({ id: "css-390-media", pass: has390Media });
 
@@ -162,9 +200,9 @@ try {
   );
   checks.push({ id: "no-page-errors-initial", pass: errors.length === 0, detail: errors });
 
-  await page.click('[data-demo-ux-detail-preview="true"]');
+  await clickVisible(page, '[data-demo-ux-detail-preview="true"]');
   await page.waitForSelector('[data-demo-ux="user-detail"]');
-  await page.click('[data-field-workflow="open-current-procedure"]');
+  await clickVisible(page, '[data-field-workflow="open-current-procedure"]');
   await page.waitForSelector('[data-field-workflow="current-procedure"]');
 
   const procedureAttrs = await page.$eval('[data-field-workflow="current-procedure"]', (el) => ({
@@ -191,7 +229,7 @@ try {
     detail: { procedureVisualPolish },
   });
 
-  await page.click('[data-field-workflow="record-procedure-cta"]');
+  await clickVisible(page, '[data-field-workflow="record-procedure-cta"]');
   await page.waitForSelector('[data-field-workflow="procedure-record-form"]');
 
   const formAttrs = await page.$eval('[data-field-workflow="procedure-record-form"]', (el) => ({
@@ -219,45 +257,61 @@ try {
     detail: { formVisualPolish },
   });
 
-  await page.click('[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"] input[type="radio"]');
-  await page.click('[data-field-workflow-outcome="save_failed"]');
-  await page.click('[data-field-workflow="procedure-record-save"]');
+  const saveCta = await page.$eval('[data-field-workflow="procedure-record-save"]', (el) =>
+    (el.textContent ?? "").trim(),
+  );
+  checks.push({
+    id: "kp-save-cta-label",
+    pass: saveCta === "記録を保存",
+    detail: { saveCta },
+  });
+
+  await clickVisible(
+    page,
+    '[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"] input[type="radio"]',
+  );
+  await clickVisible(page, '[data-field-workflow="procedure-record-save"]');
   await page.waitForFunction(
     () =>
       document
         .querySelector('[data-field-workflow="procedure-record-form"]')
         ?.getAttribute("data-field-workflow-save-state") === "save_failed",
   );
-  const failedNote = await page.$eval(
-    '[data-field-workflow="procedure-record-note"]',
-    (el) => el.value,
-  );
   const failedSelected = await page.$eval(
     '[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"]',
     (el) => el.getAttribute("data-field-workflow-result-selected"),
   );
+  const savePath = await page.$eval('[data-field-workflow="procedure-record-form"]', (el) =>
+    el.getAttribute("data-field-workflow-save-path"),
+  );
+  const syntheticOutcomeCount = await page.$$eval(
+    '[data-field-workflow="synthetic-outcome"]',
+    (els) => els.length,
+  );
   checks.push({
     id: "fw09-save-failed-retains-input",
     pass: failedSelected === "true",
-    detail: { failedNote, failedSelected },
+    detail: { failedSelected },
+  });
+  checks.push({
+    id: "kp-persist-path-connected",
+    pass: savePath === "persistProcedureRecord",
+    detail: { savePath },
+  });
+  checks.push({
+    id: "kp-synthetic-success-removed",
+    pass: syntheticOutcomeCount === 0,
+    detail: { syntheticOutcomeCount },
   });
 
-  await page.click('[data-field-workflow-outcome="save_outcome_unknown"]');
-  await page.click('[data-field-workflow="procedure-record-save"]');
-  await page.waitForFunction(
-    () =>
-      document
-        .querySelector('[data-field-workflow="procedure-record-form"]')
-        ?.getAttribute("data-field-workflow-save-state") === "save_outcome_unknown",
-  );
-  const unknownSaveDisabled = await page.$eval(
-    '[data-field-workflow="procedure-record-save"]',
-    (el) => el.disabled,
-  );
+  const retryEnabled = await page.waitForFunction(() => {
+    const button = document.querySelector('[data-field-workflow="procedure-record-save"]');
+    return button instanceof HTMLButtonElement && button.disabled === false;
+  });
   checks.push({
-    id: "fw09-save-outcome-unknown-blocks-retry",
-    pass: unknownSaveDisabled === true,
-    detail: { unknownSaveDisabled },
+    id: "fw09-save-failed-allows-retry",
+    pass: Boolean(retryEnabled),
+    detail: { retryEnabled: true },
   });
 
   await page.keyboard.press("Tab");
@@ -278,9 +332,9 @@ try {
     `${base}/?viewMode=ready&siteSelection=SITE-ISG&destination=overview&saveState=unsaved`,
     { waitUntil: "networkidle0" },
   );
-  await page.click('[data-demo-ux="overview-open-review-due"]');
+  await clickVisible(page, '[data-demo-ux="overview-open-review-due"]');
   await page.waitForSelector('[data-demo-ux="review-due-state"]');
-  await page.click('[data-field-workflow-material-id="proc-rec-v2-001"]');
+  await clickVisible(page, '[data-field-workflow-material-id="proc-rec-v2-001"]');
   await page.waitForSelector('[data-field-workflow="review-material-detail"]');
   const reviewDetail = await page.$eval('[data-field-workflow="review-material-detail"]', (el) => ({
     planVersion: el.getAttribute("data-field-workflow-plan-version"),
@@ -296,7 +350,7 @@ try {
     detail: reviewDetail,
   });
 
-  await page.click('[data-field-workflow-material-id="proc-rec-unresolved-001"]');
+  await clickVisible(page, '[data-field-workflow-material-id="proc-rec-unresolved-001"]');
   await page.waitForSelector('[data-field-workflow="review-projection-unresolved"]');
   const unresolved = await page.$eval('[data-field-workflow="review-material-detail"]', (el) =>
     el.getAttribute("data-field-workflow-historical-status"),
@@ -310,6 +364,12 @@ try {
   await page.screenshot({
     path: path.join(artifactsDir, "field_workflow_review_materials.png"),
     fullPage: true,
+  });
+
+  checks.push({
+    id: "kp-sharepoint-requests-none",
+    pass: liveWriteRequests.length === 0,
+    detail: { liveWriteRequests },
   });
 } finally {
   await browser.close();

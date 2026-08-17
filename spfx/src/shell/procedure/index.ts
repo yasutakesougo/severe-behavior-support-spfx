@@ -17,6 +17,7 @@ export {
 export {
   FIELD_WORKFLOW_CURRENT_USER_A,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+  FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
   FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
   FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
   FIELD_WORKFLOW_UI_SLICE,
@@ -28,14 +29,18 @@ export {
   type HistoricalProjectionView,
 } from "./procedure-projection";
 export {
-  applySyntheticProcedureRecordSave,
   canRetryProcedureRecordSave,
   createEmptyProcedureRecordDraft,
+  createProcedureRecordSaveInFlightGuard,
   defaultTokyoPerformedAtLocal,
   isProcedureRecordDraftReadyToSave,
-  nextSaveStateForSyntheticOutcome,
   retainDraftAfterSaveFailed,
 } from "./procedure-record-draft";
+export {
+  buildStaffProcedureRecordCreateInput,
+  persistStaffProcedureRecordFromForm,
+  STAFF_PROCEDURE_RECORD_LIVE_WRITE_HOLD_PORT,
+} from "./procedure-record-persist";
 export type {
   CurrentProcedureProjection,
   HistoricalLookupStatus,
@@ -46,6 +51,5 @@ export type {
   ShellCurrentProcedurePresentation,
   ShellProcedureReviewMaterial,
   ShellProcedureWorkflowPresentation,
-  SyntheticProcedureSaveOutcome,
 } from "./procedure-types";
 export { PROCEDURE_RECORD_RESULT_VALUES } from "./procedure-types";

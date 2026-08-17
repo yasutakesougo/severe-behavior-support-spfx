@@ -9,7 +9,7 @@ export const FIELD_WORKFLOW_PRESENTATION_NOTE =
   "FIELD-WORKFLOW 合成表示です。live SharePoint 保存・Deploy は行いません。" as const;
 
 export const FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE =
-  "合成保存経路のみ。SharePoint / adapter / 本番書き込みは無効です。" as const;
+  "保存は既存 ProcedureRecord persistence へ接続します。live SharePoint WRITE は未許可です。成功表示は persist 確認後のみです。" as const;
 
 export const FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE =
   "実施時点の計画版を解決できません。最新版への付け替えはしません（fail-closed）。" as const;

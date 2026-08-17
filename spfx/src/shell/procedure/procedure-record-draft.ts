@@ -1,14 +1,10 @@
 /**
- * FIELD-WORKFLOW UI (#356) — ProcedureRecord draft + synthetic save transitions (FW-09).
+ * FIELD-WORKFLOW UI (#356) — ProcedureRecord draft + persist save transitions.
+ * Synthetic success is not part of the staff save path (KIOSK-SPFX-PERSISTENCE-1).
  */
 
 import type { ShellSaveState } from "../ux/save-state";
-import type {
-  ProcedureBindingContext,
-  ProcedureRecordDraft,
-  ProcedureRecordResultValue,
-  SyntheticProcedureSaveOutcome,
-} from "./procedure-types";
+import type { ProcedureRecordDraft } from "./procedure-types";
 
 export function createEmptyProcedureRecordDraft(performedAtLocal?: string): ProcedureRecordDraft {
   return {
@@ -34,12 +30,6 @@ export function canRetryProcedureRecordSave(saveState: ShellSaveState): boolean 
   return true;
 }
 
-export function nextSaveStateForSyntheticOutcome(
-  outcome: SyntheticProcedureSaveOutcome,
-): ShellSaveState {
-  return outcome;
-}
-
 export function retainDraftAfterSaveFailed(draft: ProcedureRecordDraft): ProcedureRecordDraft {
   return {
     result: draft.result,
@@ -48,37 +38,26 @@ export function retainDraftAfterSaveFailed(draft: ProcedureRecordDraft): Procedu
   };
 }
 
-export type ProcedureRecordSaveRequest = Readonly<{
-  context: ProcedureBindingContext;
-  draft: ProcedureRecordDraft;
-  outcome: SyntheticProcedureSaveOutcome;
+export type ProcedureRecordSaveInFlightGuard = Readonly<{
+  tryBegin: () => boolean;
+  end: () => void;
+  isInFlight: () => boolean;
 }>;
 
-export type ProcedureRecordSaveResult = Readonly<{
-  saveState: ShellSaveState;
-  draft: ProcedureRecordDraft;
-  /** Frozen binding echoed back — must match request context (no rebind to Active). */
-  context: ProcedureBindingContext;
-  result: ProcedureRecordResultValue | undefined;
-}>;
-
-/**
- * Synthetic save path. Never writes SharePoint.
- * save_failed retains draft; save_outcome_unknown keeps draft and blocks immediate retry via canRetry.
- */
-export function applySyntheticProcedureRecordSave(
-  request: ProcedureRecordSaveRequest,
-): ProcedureRecordSaveResult {
-  const saveState = nextSaveStateForSyntheticOutcome(request.outcome);
-  const draft =
-    saveState === "save_failed" || saveState === "save_outcome_unknown" || saveState === "saved"
-      ? retainDraftAfterSaveFailed(request.draft)
-      : request.draft;
-
+/** UI-side duplicate-click guard. Persistence idempotency remains on persistProcedureRecord. */
+export function createProcedureRecordSaveInFlightGuard(): ProcedureRecordSaveInFlightGuard {
+  let inFlight = false;
   return {
-    saveState,
-    draft,
-    context: request.context,
-    result: request.draft.result,
+    tryBegin: (): boolean => {
+      if (inFlight) {
+        return false;
+      }
+      inFlight = true;
+      return true;
+    },
+    end: (): void => {
+      inFlight = false;
+    },
+    isInFlight: (): boolean => inFlight,
   };
 }

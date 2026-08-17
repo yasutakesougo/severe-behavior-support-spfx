@@ -12,19 +12,29 @@ import {
   hintForProcedureRecordResult,
   labelForProcedureRecordResult,
 } from "./procedure-copy";
-import { FIELD_WORKFLOW_UI_SLICE, VP4_WORKFLOW_SLICE } from "./procedure-fixture";
 import {
-  applySyntheticProcedureRecordSave,
+  FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
+  FIELD_WORKFLOW_UI_SLICE,
+  VP4_WORKFLOW_SLICE,
+} from "./procedure-fixture";
+import {
+  buildStaffProcedureRecordCreateInput,
+  nowAsiaTokyoIsoDateTime,
+  persistStaffProcedureRecordFromForm,
+  STAFF_PROCEDURE_RECORD_LIVE_WRITE_HOLD_PORT,
+  type ProcedureRecordPersistencePort,
+} from "./procedure-record-persist";
+import {
   canRetryProcedureRecordSave,
   createEmptyProcedureRecordDraft,
+  createProcedureRecordSaveInFlightGuard,
   isProcedureRecordDraftReadyToSave,
+  retainDraftAfterSaveFailed,
 } from "./procedure-record-draft";
 import {
   PROCEDURE_RECORD_RESULT_VALUES,
   type ProcedureBindingContext,
   type ProcedureRecordDraft,
-  type ProcedureRecordResultValue,
-  type SyntheticProcedureSaveOutcome,
 } from "./procedure-types";
 import styles from "./ProcedureRecordFormUx.module.scss";
 
@@ -33,21 +43,25 @@ export type ProcedureRecordFormProps = Readonly<{
   headingRef?: React.Ref<HTMLHeadingElement>;
   initialDraft?: ProcedureRecordDraft;
   initialSaveState?: ShellSaveState;
-  defaultSaveOutcome?: SyntheticProcedureSaveOutcome;
+  recordedBy?: string;
+  persistPort?: ProcedureRecordPersistencePort;
+  nowIso?: () => string | undefined;
   onBackToCurrentProcedure?: () => void;
   onSaveStateChange?: (state: ShellSaveState) => void;
 }>;
 
 /**
- * FIELD-WORKFLOW FW-03 / FW-09 — result-centric ProcedureRecord input + synthetic save.
- * Context is inherited (FW-02). Adaptation / not-performed are not failure chrome.
+ * FIELD-WORKFLOW FW-03 / FW-09 — result-centric ProcedureRecord input.
+ * Save goes through persistProcedureRecord. LIVE WRITE remains HOLD.
  */
 export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   context,
   headingRef,
   initialDraft,
   initialSaveState = "unsaved",
-  defaultSaveOutcome = "saved",
+  recordedBy = FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
+  persistPort = STAFF_PROCEDURE_RECORD_LIVE_WRITE_HOLD_PORT,
+  nowIso = (): string | undefined => nowAsiaTokyoIsoDateTime() ?? undefined,
   onBackToCurrentProcedure,
   onSaveStateChange,
 }) => {
@@ -55,8 +69,8 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
     () => initialDraft ?? createEmptyProcedureRecordDraft(),
   );
   const [saveState, setSaveState] = React.useState<ShellSaveState>(initialSaveState);
-  const [saveOutcome, setSaveOutcome] =
-    React.useState<SyntheticProcedureSaveOutcome>(defaultSaveOutcome);
+  const saveInFlight = React.useRef(createProcedureRecordSaveInFlightGuard());
+  const frozenRecordedAtRef = React.useRef<string | undefined>(undefined);
 
   const setSaveStateAndNotify = (next: ShellSaveState): void => {
     setSaveState(next);
@@ -65,10 +79,15 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
     }
   };
 
-  const selectResult = (result: ProcedureRecordResultValue): void => {
-    if (saveState === "saving" || saveState === "saved" || saveState === "save_outcome_unknown") {
+  const unlockForEdit = (): boolean => {
+    return saveState !== "saving" && saveState !== "saved" && saveState !== "save_outcome_unknown";
+  };
+
+  const selectResult = (result: ProcedureRecordDraft["result"]): void => {
+    if (!unlockForEdit() || result === undefined) {
       return;
     }
+    frozenRecordedAtRef.current = undefined;
     setDraft((prev) => ({ ...prev, result }));
     if (saveState === "save_failed") {
       setSaveStateAndNotify("unsaved");
@@ -76,9 +95,10 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   };
 
   const updatePerformedAt = (value: string): void => {
-    if (saveState === "saving" || saveState === "saved" || saveState === "save_outcome_unknown") {
+    if (!unlockForEdit()) {
       return;
     }
+    frozenRecordedAtRef.current = undefined;
     setDraft((prev) => ({ ...prev, performedAtLocal: value }));
     if (saveState === "save_failed") {
       setSaveStateAndNotify("unsaved");
@@ -86,7 +106,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   };
 
   const updateNote = (value: string): void => {
-    if (saveState === "saving" || saveState === "saved" || saveState === "save_outcome_unknown") {
+    if (!unlockForEdit()) {
       return;
     }
     setDraft((prev) => ({ ...prev, note: value }));
@@ -96,26 +116,54 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   };
 
   const handleSave = (): void => {
-    if (!FIELD_WORKFLOW_UI_SLICE.syntheticProcedureRecordSaveAuthorized) {
+    if (!FIELD_WORKFLOW_UI_SLICE.procedureRecordPersistAuthorized) {
       return;
     }
     if (!isProcedureRecordDraftReadyToSave(draft) || !canRetryProcedureRecordSave(saveState)) {
       return;
     }
+    if (!saveInFlight.current.tryBegin()) {
+      return;
+    }
+
     setSaveStateAndNotify("saving");
-    const result = applySyntheticProcedureRecordSave({
-      context,
-      draft,
-      outcome: saveOutcome,
-    });
-    setDraft(result.draft);
-    setSaveStateAndNotify(result.saveState);
+
+    const runSave = async (): Promise<void> => {
+      try {
+        const clock = frozenRecordedAtRef.current ?? nowIso() ?? "";
+        if (clock.length > 0 && frozenRecordedAtRef.current === undefined) {
+          frozenRecordedAtRef.current = clock;
+        }
+        const result = await persistStaffProcedureRecordFromForm(
+          buildStaffProcedureRecordCreateInput({
+            context,
+            draft,
+            recordedBy,
+            recordedAtIso: frozenRecordedAtRef.current,
+            nowIso: clock,
+          }),
+          persistPort,
+        );
+        setDraft(retainDraftAfterSaveFailed(draft));
+        saveInFlight.current.end();
+        setSaveStateAndNotify(result.saveState);
+      } catch {
+        setDraft(retainDraftAfterSaveFailed(draft));
+        saveInFlight.current.end();
+        setSaveStateAndNotify("save_failed");
+      }
+    };
+    runSave().then(
+      () => undefined,
+      () => undefined,
+    );
   };
 
   const saveEnabled =
-    FIELD_WORKFLOW_UI_SLICE.syntheticProcedureRecordSaveAuthorized &&
+    FIELD_WORKFLOW_UI_SLICE.procedureRecordPersistAuthorized &&
     isProcedureRecordDraftReadyToSave(draft) &&
-    canRetryProcedureRecordSave(saveState);
+    canRetryProcedureRecordSave(saveState) &&
+    !saveInFlight.current.isInFlight();
 
   const statusNote =
     saveState === "save_failed"
@@ -128,6 +176,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
     <section
       className={styles.procedureRecordForm}
       data-field-workflow="procedure-record-form"
+      data-field-workflow-save-path="persistProcedureRecord"
       data-field-workflow-slice={FIELD_WORKFLOW_UI_SLICE.id}
       data-field-workflow-visual-polish={VP4_WORKFLOW_SLICE.id}
       data-field-workflow-user={context.userId}
@@ -281,30 +330,6 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         >
           {labelForShellSaveState(saveState)} — {statusNote}
         </p>
-        <div className={styles.outcomeRow} data-field-workflow="synthetic-outcome-controls">
-          {(
-            [
-              ["saved", "合成: 成功"],
-              ["save_failed", "合成: 保存失敗"],
-              ["save_outcome_unknown", "合成: 結果不明"],
-            ] as const
-          ).map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              className={styles.outcomeButton}
-              data-field-workflow="synthetic-outcome"
-              data-field-workflow-outcome={value}
-              data-field-workflow-outcome-selected={saveOutcome === value ? "true" : "false"}
-              disabled={saveState === "saving" || saveState === "save_outcome_unknown"}
-              onClick={() => {
-                setSaveOutcome(value);
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
         <div className={styles.actionRow}>
           <button
             type="button"
@@ -314,7 +339,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
             aria-disabled={!saveEnabled ? "true" : undefined}
             onClick={handleSave}
           >
-            記録を保存（合成）
+            記録を保存
           </button>
         </div>
       </section>
