@@ -13,8 +13,11 @@
  */
 
 import {
+  createSpfxProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket,
   createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  isSpfxProcedureRecordKioskLiveVerifyGoPacket,
   isSpfxProcedureRecordLiveWriteAuthorization,
+  type ProcedureRecordKioskLiveVerifyGoPacket,
   type SpfxProcedureRecordLiveWriteAuthorization,
 } from "./live-write-gate";
 import type {
@@ -197,9 +200,80 @@ export function createProcedureRecordLiveWriteSpHttpClientTransport(
   );
 }
 
+type KioskPhysicalIdentityLock = Readonly<{
+  recordId: string;
+  idempotencyKey: string;
+  payloadFingerprint: string;
+  organizationId: string;
+  logicalSiteId: string;
+}>;
+
+function readExecutionString(execution: unknown, key: string): string {
+  if (typeof execution !== "object" || !execution || !(key in execution)) {
+    return "";
+  }
+  const value = (execution as Record<string, unknown>)[key];
+  return typeof value === "string" ? value : "";
+}
+
+function physicalFieldsMatchKioskLock(
+  fields: Readonly<Record<string, unknown>>,
+  lock: KioskPhysicalIdentityLock,
+): boolean {
+  return (
+    typeof fields.prRecordId === "string" &&
+    fields.prRecordId.trim().toLowerCase() === lock.recordId &&
+    typeof fields.prIdempotencyKey === "string" &&
+    fields.prIdempotencyKey.trim().toLowerCase() === lock.idempotencyKey &&
+    typeof fields.prPayloadFingerprint === "string" &&
+    fields.prPayloadFingerprint.trim().toLowerCase() === lock.payloadFingerprint &&
+    fields.prOrganizationId === lock.organizationId &&
+    fields.prSiteId === lock.logicalSiteId
+  );
+}
+
+function kioskPhysicalIdentityLockFromPacket(
+  packet: ProcedureRecordKioskLiveVerifyGoPacket,
+): KioskPhysicalIdentityLock {
+  return {
+    recordId: packet.recordId.trim().toLowerCase(),
+    idempotencyKey: packet.idempotencyKey.trim().toLowerCase(),
+    payloadFingerprint: packet.payloadFingerprint.trim().toLowerCase(),
+    organizationId: packet.organizationId,
+    logicalSiteId: packet.logicalSiteId,
+  };
+}
+
+/**
+ * KIOSK-SPFX-PERSISTENCE-LIVE-VERIFY-1 execution boundary.
+ * Uses the Kiosk mint only. Invalid packets stay FORBIDDEN.
+ * createItem also refuses physical fields that do not match the locked packet.
+ */
+export function createProcedureRecordKioskLiveVerifySpHttpClientTransport(
+  options: CreateProcedureRecordSpHttpClientTransportOptions,
+  packet: unknown,
+  execution: unknown,
+): ProcedureRecordLiveListTransport {
+  const authorization = createSpfxProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket(packet, {
+    authoritativeMainSha: readExecutionString(execution, "authoritativeMainSha"),
+    listGuid: options.listGuid,
+    organizationId: readExecutionString(execution, "organizationId"),
+    logicalSiteId: readExecutionString(execution, "logicalSiteId"),
+    recordId: readExecutionString(execution, "recordId"),
+    idempotencyKey: readExecutionString(execution, "idempotencyKey"),
+    payloadFingerprint: readExecutionString(execution, "payloadFingerprint"),
+  });
+  const identityLock =
+    authorization !== undefined && isSpfxProcedureRecordKioskLiveVerifyGoPacket(packet)
+      ? kioskPhysicalIdentityLockFromPacket(packet)
+      : undefined;
+  return createBoundProcedureRecordSpHttpClientTransport(options, authorization, identityLock);
+}
+
 function createBoundProcedureRecordSpHttpClientTransport(
   options: CreateProcedureRecordSpHttpClientTransportOptions,
   authorization: SpfxProcedureRecordLiveWriteAuthorization | undefined,
+  identityLock?: KioskPhysicalIdentityLock,
 ): ProcedureRecordLiveListTransport {
   const client = options.spHttpClient;
   const configuration = options.configuration;
@@ -274,6 +348,9 @@ function createBoundProcedureRecordSpHttpClientTransport(
     fields: Readonly<Record<string, unknown>>,
   ): Promise<ProcedureRecordItemCreateResult> {
     if (!isSpfxProcedureRecordLiveWriteAuthorization(authorization)) {
+      return { ok: false, failure: "FORBIDDEN" };
+    }
+    if (identityLock !== undefined && !physicalFieldsMatchKioskLock(fields, identityLock)) {
       return { ok: false, failure: "FORBIDDEN" };
     }
     if (listApiUrl === undefined) {

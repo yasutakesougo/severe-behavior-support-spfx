@@ -8,7 +8,12 @@ import type {
   ProcedureRecordCreateAttempt,
   ProcedureRecordPersistencePort,
 } from "../../../domain/procedure-record-persistence";
-import type { ProcedureRecord } from "../../../domain/procedure-record";
+import {
+  computeProcedureRecordPayloadFingerprint,
+  mintProcedureRecordIdentity,
+  procedureRecordFingerprintMaterial,
+  type ProcedureRecord,
+} from "../../../domain/procedure-record";
 import { decodePhysicalRow } from "./conversion";
 import {
   isUsableLiveListBinding,
@@ -16,10 +21,13 @@ import {
   type ProcedureRecordListBinding,
 } from "./list-binding";
 import {
+  createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket,
   createProcedureRecordLiveWriteAuthorization,
   createProcedureRecordLiveWriteAuthorizationFromGoPacket,
+  isProcedureRecordKioskLiveVerifyGoPacket,
   isProcedureRecordLiveWriteAuthorization,
   refuseUnauthorizedLiveCreate,
+  type ProcedureRecordKioskLiveVerifyGoPacket,
   type ProcedureRecordLiveWriteAuthorization,
 } from "./live-write-gate";
 import type { ProcedureRecordPhysicalRow } from "./physical-columns";
@@ -274,6 +282,119 @@ export function createProcedureRecordLiveWriteExecutionRepository(
     return null;
   }
   return createBoundProcedureRecordRepository(binding, transport, authorization);
+}
+
+const IDENTITY_DIGEST_RE = /^[0-9a-f]{64}$/;
+
+function readExecutionString(execution: unknown, key: string): string {
+  if (typeof execution !== "object" || !execution || !(key in execution)) {
+    return "";
+  }
+  const value = (execution as Record<string, unknown>)[key];
+  return typeof value === "string" ? value : "";
+}
+
+function normalizeIdentityDigest(value: string): string | undefined {
+  const normalized = value.trim().toLowerCase();
+  return IDENTITY_DIGEST_RE.test(normalized) ? normalized : undefined;
+}
+
+/**
+ * Packet strings, actual record strings, and canonical recomputation must
+ * all agree before a Kiosk repository may call createItem.
+ */
+function kioskLiveVerifyRecordMatchesLockedPacket(
+  record: ProcedureRecord,
+  packet: ProcedureRecordKioskLiveVerifyGoPacket,
+): boolean {
+  if (record.OrganizationId !== packet.organizationId) {
+    return false;
+  }
+  if (record.SiteId !== packet.logicalSiteId) {
+    return false;
+  }
+
+  const packetRecordId = normalizeIdentityDigest(packet.recordId);
+  const packetIdempotencyKey = normalizeIdentityDigest(packet.idempotencyKey);
+  const packetFingerprint = normalizeIdentityDigest(packet.payloadFingerprint);
+  const recordRecordId = normalizeIdentityDigest(record.RecordId);
+  const recordIdempotencyKey = normalizeIdentityDigest(record.IdempotencyKey);
+  const recordFingerprint = normalizeIdentityDigest(record.PayloadFingerprint);
+  if (
+    packetRecordId === undefined ||
+    packetIdempotencyKey === undefined ||
+    packetFingerprint === undefined ||
+    packetRecordId !== recordRecordId ||
+    packetIdempotencyKey !== recordIdempotencyKey ||
+    packetFingerprint !== recordFingerprint
+  ) {
+    return false;
+  }
+
+  const recomputedFingerprint = computeProcedureRecordPayloadFingerprint(
+    procedureRecordFingerprintMaterial(record),
+  );
+  if (recomputedFingerprint !== recordFingerprint || recomputedFingerprint !== packetFingerprint) {
+    return false;
+  }
+
+  const minted = mintProcedureRecordIdentity({
+    OrganizationId: record.OrganizationId,
+    SiteId: record.SiteId,
+    UserId: record.UserId,
+    planId: record.planId,
+    planVersion: record.planVersion,
+    ProcedureId: record.Procedure.ProcedureId,
+    ProcedureVersion: record.Procedure.ProcedureVersion,
+    result: record.result,
+    performedAt: record.performedAt,
+    recordedAt: record.recordedAt,
+    recordedBy: record.recordedBy,
+  });
+  return (
+    minted.RecordId === recordRecordId &&
+    minted.RecordId === packetRecordId &&
+    minted.IdempotencyKey === recordIdempotencyKey &&
+    minted.IdempotencyKey === packetIdempotencyKey
+  );
+}
+
+/**
+ * KIOSK-SPFX-PERSISTENCE-LIVE-VERIFY-1 execution boundary.
+ * Uses the Kiosk mint only. Invalid or unbound packets return null.
+ * create() refuses records that do not recompute to the locked identities.
+ */
+export function createProcedureRecordKioskLiveVerifyExecutionRepository(
+  binding: ProcedureRecordListBinding,
+  transport: ProcedureRecordLiveListTransport,
+  packet: unknown,
+  execution: unknown,
+): ProcedureRecordListRepository | null {
+  if (!isProcedureRecordKioskLiveVerifyGoPacket(packet)) {
+    return null;
+  }
+  const authorization = createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket(packet, {
+    authoritativeMainSha: readExecutionString(execution, "authoritativeMainSha"),
+    listGuid: binding.listGuid,
+    organizationId: binding.organizationId,
+    logicalSiteId: binding.siteId,
+    recordId: readExecutionString(execution, "recordId"),
+    idempotencyKey: readExecutionString(execution, "idempotencyKey"),
+    payloadFingerprint: readExecutionString(execution, "payloadFingerprint"),
+  });
+  if (authorization === null) {
+    return null;
+  }
+  const inner = createBoundProcedureRecordRepository(binding, transport, authorization);
+  return {
+    ...inner,
+    async create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt> {
+      if (!kioskLiveVerifyRecordMatchesLockedPacket(record, packet)) {
+        return { status: "DEFINITE_FAILURE" };
+      }
+      return inner.create(record);
+    },
+  };
 }
 
 export function createReadOnlyProcedureRecordRepository(
