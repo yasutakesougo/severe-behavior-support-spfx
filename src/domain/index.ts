@@ -28,3 +28,4 @@ export * from "./review-notice";
 export * from "./review-monitoring-guidance";
 export * from "./retention-complete-deletion-prohibition";
 export * from "./kiosk-contract";
+export * from "./kiosk-today-support-read-model";

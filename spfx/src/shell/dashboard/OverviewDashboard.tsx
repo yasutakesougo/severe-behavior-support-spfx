@@ -9,11 +9,17 @@ import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "
 import { SemanticIcon } from "../primitives";
 import styles from "./DashboardUx.module.scss";
 
+import type { TodaySupportItem } from "../../sbs-domain/kiosk-read-model.bundle";
+import { TodaySupportDayBoard } from "./TodaySupportDayBoard";
+
 export type OverviewDashboardProps = Readonly<{
   presentation: ShellOverviewPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
+  todaySupportItems?: readonly TodaySupportItem[];
+  selectedOccurrenceId?: string;
   onReviewDueStateRequest?: () => void;
   onTodayActionNavigate?: (target: OverviewActionNavigationTarget) => void;
+  onSelectOccurrence?: (occurrenceId: string) => void;
 }>;
 
 /**
@@ -25,8 +31,11 @@ export type OverviewDashboardProps = Readonly<{
 export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   presentation,
   headingRef,
+  todaySupportItems,
+  selectedOccurrenceId,
   onReviewDueStateRequest,
   onTodayActionNavigate,
+  onSelectOccurrence,
 }) => {
   const { kpiCards, actionItems, recentRecords } = presentation;
   const todayActionNavEnabled = Boolean(onTodayActionNavigate);
@@ -48,6 +57,23 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
       >
         概要
       </h1>
+
+      {todaySupportItems && todaySupportItems.length > 0 ? (
+        <section
+          className={styles.section}
+          aria-labelledby="dashboard-ux-today-support-heading"
+          data-kiosk-ux="today-support-primary"
+        >
+          <h2 id="dashboard-ux-today-support-heading" className={styles.sectionHeading}>
+            今日の支援（本日の予定・時系列）
+          </h2>
+          <TodaySupportDayBoard
+            items={todaySupportItems}
+            selectedOccurrenceId={selectedOccurrenceId}
+            onSelectOccurrence={onSelectOccurrence}
+          />
+        </section>
+      ) : null}
 
       <section className={styles.section} aria-labelledby="dashboard-ux-kpi-heading">
         <h2 id="dashboard-ux-kpi-heading" className={styles.sectionHeading}>

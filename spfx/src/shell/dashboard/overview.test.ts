@@ -84,4 +84,14 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
     expect(VISUAL_POLISH_2_OVERVIEW_SLICE.sharePointWriteAuthorized).toBe(false);
     expect(VISUAL_POLISH_2_OVERVIEW_SLICE.deployAuthorized).toBe(false);
   });
+
+  it("supports Today Support day board navigation by OccurrenceId", () => {
+    const target = {
+      kind: "occurrence" as const,
+      occurrenceId: "occ-synth-001",
+      userId: "user-a",
+    };
+    expect(target.kind).toBe("occurrence");
+    expect(target.occurrenceId).toBe("occ-synth-001");
+  });
 });

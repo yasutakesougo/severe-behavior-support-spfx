@@ -1,4 +1,5 @@
 import * as React from "react";
+import { StatusBadge } from "../primitives";
 import {
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_PRESENTATION_NOTE,
@@ -10,6 +11,7 @@ import styles from "./CurrentProcedureUx.module.scss";
 export type CurrentProcedureProps = Readonly<{
   presentation: ShellCurrentProcedurePresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
+  backLabel?: string;
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
 }>;
@@ -21,10 +23,12 @@ export type CurrentProcedureProps = Readonly<{
 export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   presentation,
   headingRef,
+  backLabel = "← 利用者詳細",
   onBackToUserDetail,
   onRecordProcedureRequest,
 }) => {
-  const { heading, summaryPrompt, context, projection } = presentation;
+  const { heading, summaryPrompt, context, projection, canStartProcedureRecord } = presentation;
+  const recordCtaEnabled = canStartProcedureRecord && Boolean(onRecordProcedureRequest);
 
   return (
     <section
@@ -37,6 +41,9 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       data-field-workflow-plan-version={String(context.planVersion)}
       data-field-workflow-procedure-id={context.procedureId}
       data-field-workflow-procedure-version={context.procedureVersion}
+      data-field-workflow-occurrence-id={context.occurrenceId ?? ""}
+      data-kiosk-occurrence-status={presentation.occurrenceStatus ?? ""}
+      data-kiosk-can-start-record={canStartProcedureRecord ? "true" : "false"}
       aria-labelledby="field-workflow-current-procedure-heading"
     >
       <div className={styles.topRow}>
@@ -47,8 +54,9 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           disabled={!onBackToUserDetail}
           aria-disabled={!onBackToUserDetail ? "true" : undefined}
           data-field-workflow="current-procedure-back"
+          data-kiosk-ux="current-procedure-back"
         >
-          ← 利用者詳細
+          {backLabel}
         </button>
       </div>
 
@@ -66,6 +74,20 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       <p className={styles.contextLine} data-field-workflow="current-procedure-person">
         {context.personLabel} / {context.planPeriodLabel}
       </p>
+      {presentation.occurrenceStatus ? (
+        <p className={styles.contextLine} data-kiosk-ux="occurrence-status-text">
+          状態:{" "}
+          <StatusBadge
+            shape={
+              presentation.occurrenceStatus === "取消済み" ||
+              presentation.occurrenceStatus === "記録済み"
+                ? "soft"
+                : "pill"
+            }
+            label={presentation.occurrenceStatus}
+          />
+        </p>
+      ) : null}
       <p className={styles.sectionHint} data-field-workflow="presentation-note">
         {FIELD_WORKFLOW_PRESENTATION_NOTE}
       </p>
@@ -120,10 +142,15 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           <button
             type="button"
             className={styles.primaryButton}
-            onClick={onRecordProcedureRequest}
-            disabled={!onRecordProcedureRequest}
-            aria-disabled={!onRecordProcedureRequest ? "true" : undefined}
+            onClick={() => {
+              if (recordCtaEnabled && onRecordProcedureRequest) {
+                onRecordProcedureRequest();
+              }
+            }}
+            disabled={!recordCtaEnabled}
+            aria-disabled={!recordCtaEnabled ? "true" : undefined}
             data-field-workflow="record-procedure-cta"
+            data-kiosk-can-start-record={canStartProcedureRecord ? "true" : "false"}
           >
             この手順を記録
           </button>

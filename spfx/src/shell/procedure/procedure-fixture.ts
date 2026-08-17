@@ -25,6 +25,7 @@ export const FIELD_WORKFLOW_CURRENT_USER_A: ShellCurrentProcedurePresentation = 
     avoidLabels: ["突然大きな声で急かす", "身体を引っ張る"],
     noteLabel: "周囲の音が大きいときは別室も検討する（合成補足）。",
   },
+  canStartProcedureRecord: true,
 };
 
 /** Historical v2 ProcedureRecord material — must stay on v2 after v3 Active (FW05-HIST-01). */

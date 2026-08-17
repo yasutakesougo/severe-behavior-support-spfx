@@ -20,7 +20,8 @@ export type OverviewKpiCard = Readonly<{
 export type OverviewActionNavigationTarget =
   | Readonly<{ kind: "records" }>
   | Readonly<{ kind: "review_due" }>
-  | Readonly<{ kind: "user_detail"; userId: string }>;
+  | Readonly<{ kind: "user_detail"; userId: string }>
+  | Readonly<{ kind: "occurrence"; occurrenceId: string; userId: string }>;
 
 export type OverviewActionItem = Readonly<{
   id: string;
