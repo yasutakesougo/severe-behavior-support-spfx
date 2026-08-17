@@ -29,10 +29,24 @@ describe("ProcedureRecord production export surface", () => {
       typeof procedureRecord.createProcedureRecordLiveWriteAuthorizationFromGoPacket,
       "function",
     );
+    assert.equal(
+      typeof procedureRecord.createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket,
+      "function",
+    );
     assert.equal(procedureRecord.createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(procedureRecord.isProcedureRecordLiveWriteAuthorized(), false);
     assert.equal(
       procedureRecord.createProcedureRecordLiveWriteAuthorizationFromGoPacket(
+        {
+          itemCreateAuthorized: true,
+          liveTenantIoAuthorized: true,
+        },
+        { authoritativeMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+      ),
+      null,
+    );
+    assert.equal(
+      procedureRecord.createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket(
         {
           itemCreateAuthorized: true,
           liveTenantIoAuthorized: true,
@@ -49,6 +63,10 @@ describe("ProcedureRecord production export surface", () => {
     assert.equal(spfxIndex.includes("postProcedureRecordCreateItem"), false);
     assert.equal(
       spfxIndex.includes("createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket"),
+      false,
+    );
+    assert.equal(
+      spfxIndex.includes("createSpfxProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket"),
       false,
     );
     assert.equal(spfxIndex.includes("SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
@@ -75,6 +93,17 @@ describe("ProcedureRecord production export surface", () => {
     assert.equal(spfxGate.includes("packet.itemCount !== 0"), true);
     assert.equal(rootGate.includes("procedure-record-first-create"), true);
     assert.equal(spfxGate.includes("procedure-record-first-create"), true);
+    assert.equal(rootGate.includes("kiosk-spfx-persistence-live-verify-1"), true);
+    assert.equal(spfxGate.includes("kiosk-spfx-persistence-live-verify-1"), true);
+    assert.equal(
+      rootGate.includes("createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket"),
+      true,
+    );
+    assert.equal(
+      spfxGate.includes("createSpfxProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket"),
+      true,
+    );
+    assert.equal(rootGate.includes("export const PROCEDURE_RECORD_KIOSK_LIVE_VERIFY_GATE"), false);
   });
 
   it("keeps the reviewed POST helper module-private and authorization-gated", () => {

@@ -7,7 +7,11 @@ import {
   type ProcedureRecordSpHttpClient,
 } from "./sphttpclient-list-transport";
 import * as procedureRecordTransport from "./sphttpclient-list-transport";
-import { PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE } from "./live-write-gate";
+import {
+  PROCEDURE_RECORD_KIOSK_LIVE_VERIFY_GO_PURPOSE,
+  PROCEDURE_RECORD_KIOSK_LIVE_VERIFY_MUTATION_BUDGET,
+  PROCEDURE_RECORD_LIVE_WRITE_GO_PURPOSE,
+} from "./live-write-gate";
 
 type MockCall = Readonly<{
   method: "get" | "post";
@@ -412,6 +416,43 @@ describe("ProcedureRecord SPHttpClient binder（LOOKUP-B / CREATE-ONLY）", () =
         organizationId: "synthetic-org-001",
       },
       { authoritativeMainSha: OTHER_MAIN_SHA },
+    );
+    await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
+      ok: false,
+      failure: "FORBIDDEN",
+    });
+    expect(calls).toHaveLength(0);
+  });
+
+  it("createItem: Kiosk live-verify packet does not open first-create transport POST", async () => {
+    const { client, calls } = createMockClient({
+      post: async () => ({
+        ok: true,
+        status: 201,
+        json: async () => ({ d: { Id: 1 } }),
+      }),
+    });
+    const transport = createProcedureRecordLiveWriteSpHttpClientTransport(
+      {
+        spHttpClient: client,
+        configuration: SYNTHETIC_CONFIGURATION,
+        webAbsoluteUrl: SYNTHETIC_WEB,
+        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+        listItemEntityTypeFullName: PROCEDURE_RECORD_TEST_ONLY_LIST_ITEM_ENTITY_TYPE,
+      },
+      {
+        purpose: PROCEDURE_RECORD_KIOSK_LIVE_VERIFY_GO_PURPOSE,
+        humanLiveWriteGo: true,
+        expectedMainSha: SYNTHETIC_MAIN_SHA,
+        listGuid: PROCEDURE_RECORD_TEST_ONLY_LIST_GUID,
+        logicalSiteId: "test-only-procedure-record-logical-site-id",
+        organizationId: "synthetic-org-001",
+        recordId: "1111111111111111111111111111111111111111111111111111111111111111",
+        idempotencyKey: "2222222222222222222222222222222222222222222222222222222222222222",
+        payloadFingerprint: "3333333333333333333333333333333333333333333333333333333333333333",
+        mutationBudget: PROCEDURE_RECORD_KIOSK_LIVE_VERIFY_MUTATION_BUDGET,
+      },
+      { authoritativeMainSha: SYNTHETIC_MAIN_SHA },
     );
     await expect(transport.createItem({ prRecordId: "synth" })).resolves.toEqual({
       ok: false,
