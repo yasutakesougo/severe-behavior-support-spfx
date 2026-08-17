@@ -6,6 +6,7 @@ export const DEMO_UX_SUPPORT_PLAN_FIXTURE: ShellSupportPlanPresentation = {
   personLabel: "Aさん",
   planTitle: "支援計画",
   planPeriodLabel: "2026/07/01–2026/09/30",
+  planLifecycleLabel: "現行版（合成）",
   summary:
     "現在有効な支援の方針と具体的な対応を一覧で確認するための合成計画です。分析グラフは主目的にしません。",
   goals: [

@@ -46,6 +46,16 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       data-kiosk-can-start-record={canStartProcedureRecord ? "true" : "false"}
       aria-labelledby="field-workflow-current-procedure-heading"
     >
+      <h1
+        id="field-workflow-current-procedure-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className={styles.heading}
+        data-field-workflow-visual-role="page-title"
+        data-field-workflow="current-procedure-heading"
+      >
+        {heading}
+      </h1>
       <div className={styles.topRow}>
         <button
           type="button"
@@ -59,17 +69,6 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           {backLabel}
         </button>
       </div>
-
-      <h1
-        id="field-workflow-current-procedure-heading"
-        ref={headingRef}
-        tabIndex={-1}
-        className={styles.heading}
-        data-field-workflow-visual-role="page-title"
-        data-field-workflow="current-procedure-heading"
-      >
-        {heading}
-      </h1>
       <p className={styles.prompt}>{summaryPrompt}</p>
       <p className={styles.contextLine} data-field-workflow="current-procedure-person">
         {context.personLabel} / {context.planPeriodLabel}

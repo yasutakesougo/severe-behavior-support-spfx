@@ -8,6 +8,9 @@ export const DEMO_REVIEW_DUE_PRESENTATION_NOTE =
 export const DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE =
   "見直しの完了・更新・評価操作はこのデモでは実行できません。";
 
+export const DEMO_REVIEW_DUE_ADMIN_READ_NOTE =
+  "見直し状況の確認専用です。完了・評価更新の操作はありません。承認権限は追加しません。";
+
 export const DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE =
   "期限接近・要確認は合成表示ラベルです。期限計算や業務判定は接続されていません。";
 

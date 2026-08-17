@@ -15,6 +15,7 @@
 }
 
 .topRow {
+  order: -1;
   display: flex;
   flex-wrap: wrap;
   gap: sbs.$space-3;
@@ -47,8 +48,10 @@
 
 .headingTitleRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: sbs.$space-2;
+  min-width: 0;
 }
 
 .titleIcon {
@@ -91,6 +94,8 @@
   /* Display emphasis; no larger type token in DADS-04 catalog yet. */
   font-size: 1.5rem;
   outline: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 /* INV-03 KEEP: programmatic destination focus remains visible. */
@@ -125,6 +130,7 @@
   border-style: solid;
   border-color: sbs.$color-border-subtle;
   background: sbs.$color-surface-canvas;
+  overflow-wrap: anywhere;
 }
 
 .detailSection h2,
@@ -255,5 +261,15 @@
   .statePanel dl div {
     grid-template-columns: 1fr;
     gap: sbs.$space-1;
+  }
+}
+
+@media (max-width: 390px) {
+  .mutationButtons {
+    flex-direction: column;
+  }
+
+  .mutationButton {
+    width: 100%;
   }
 }

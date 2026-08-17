@@ -14,6 +14,7 @@ import {
   SHELL_STATUS_LABEL_UNRECORDED,
   isDeprecatedPrimaryStatusLabel,
 } from "../ux/status-labels";
+import { kpiSectionHeadingForRole, overviewSectionOrderForRole } from "../ux/presentation-role";
 
 describe("DASHBOARD-UX-1 overview fixture boundary", () => {
   it("uses synthetic KPI counts with DEMO-UX-7 canonical labels", () => {
@@ -93,5 +94,19 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
     };
     expect(target.kind).toBe("occurrence");
     expect(target.occurrenceId).toBe("occ-synth-001");
+  });
+});
+
+describe("VP-G Overview presentationRole entry", () => {
+  it("keeps FIELD_STAFF Today Support first and does not add destinations", () => {
+    expect(overviewSectionOrderForRole("FIELD_STAFF")[0]).toBe("todaySupport");
+    expect(kpiSectionHeadingForRole("FIELD_STAFF")).toBe("今日の支援状況");
+  });
+
+  it("puts review/plan first for PLANNER and ops/read first for ADMIN_AUDIT", () => {
+    expect(overviewSectionOrderForRole("PLANNER")[0]).toBe("reviewDue");
+    expect(overviewSectionOrderForRole("ADMIN_AUDIT")[0]).toBe("kpi");
+    expect(kpiSectionHeadingForRole("PLANNER")).toBe("計画・見直しの状況");
+    expect(kpiSectionHeadingForRole("ADMIN_AUDIT")).toBe("運用状況");
   });
 });

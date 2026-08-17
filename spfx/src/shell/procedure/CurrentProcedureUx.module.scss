@@ -16,6 +16,7 @@
 }
 
 .topRow {
+  order: -1;
   display: flex;
   flex-wrap: wrap;
   gap: sbs.$space-3;
@@ -91,6 +92,7 @@
   font-weight: sbs.$font-weight-page-title;
   line-height: sbs.$line-height-page-title;
   outline: none;
+  overflow-wrap: anywhere;
 }
 
 .heading:focus,

@@ -189,6 +189,16 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       data-field-workflow-save-state={saveState}
       aria-labelledby="field-workflow-procedure-record-heading"
     >
+      <h1
+        id="field-workflow-procedure-record-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className={styles.heading}
+        data-field-workflow-visual-role="page-title"
+        data-field-workflow="procedure-record-heading"
+      >
+        支援手順の記録
+      </h1>
       <div className={styles.topRow}>
         <button
           type="button"
@@ -201,17 +211,6 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
           ← 現在の支援手順
         </button>
       </div>
-
-      <h1
-        id="field-workflow-procedure-record-heading"
-        ref={headingRef}
-        tabIndex={-1}
-        className={styles.heading}
-        data-field-workflow-visual-role="page-title"
-        data-field-workflow="procedure-record-heading"
-      >
-        支援手順の記録
-      </h1>
       <p className={styles.contextLine} data-field-workflow="procedure-record-person">
         {context.personLabel}
       </p>

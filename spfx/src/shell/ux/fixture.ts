@@ -1,6 +1,7 @@
 import { SHELL_DEFAULT_DESTINATION } from "./destination";
 import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import type { ShellPrimaryNavigationId } from "./primary-navigation";
+import { SHELL_DEFAULT_PRESENTATION_ROLE, type ShellPresentationRole } from "./presentation-role";
 import type { ShellSaveState } from "./save-state";
 import type { ShellViewMode } from "./shell-view-mode";
 import {
@@ -26,6 +27,8 @@ export type ShellUxFixture = Readonly<{
   saveState: ShellSaveState;
   viewMode: ShellViewMode;
   selectedDestination: ShellPrimaryNavigationId;
+  /** Synthetic VP-G entry emphasis only — not Entra / DEC-014 role resolution. */
+  presentationRole: ShellPresentationRole;
   correlationId: string;
   errorCode: string;
   partialRetrieval: ShellPartialRetrievalPresentation;
@@ -45,6 +48,7 @@ export const SHELL_UX_DEFAULT_FIXTURE: ShellUxFixture = {
   saveState: "unsaved",
   viewMode: "ready",
   selectedDestination: SHELL_DEFAULT_DESTINATION,
+  presentationRole: SHELL_DEFAULT_PRESENTATION_ROLE,
   correlationId: "shell-ux-7-synth-corr",
   errorCode: "SHELL-UX-7-SYNTH-E001",
   partialRetrieval: SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,

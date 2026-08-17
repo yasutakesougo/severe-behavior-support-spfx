@@ -18,11 +18,19 @@
 }
 
 .topRow {
+  order: -1;
   display: flex;
   flex-wrap: wrap;
   gap: sbs.$space-4;
   align-items: center;
   justify-content: space-between;
+}
+
+.sectionHint {
+  margin: 0;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .backButton {
@@ -81,6 +89,7 @@
   font-weight: sbs.$font-weight-page-title;
   line-height: sbs.$line-height-page-title;
   outline: none;
+  overflow-wrap: anywhere;
 }
 
 /* INV-03 KEEP: programmatic destination focus remains visible. */
@@ -99,6 +108,7 @@
   border-radius: sbs.$radius-medium;
   background: sbs.$color-surface;
   box-shadow: sbs.$elevation-subtle;
+  overflow-wrap: anywhere;
 }
 
 .detailSection h2,
@@ -236,5 +246,11 @@
   .statePanel dl div {
     grid-template-columns: 1fr;
     gap: sbs.$space-1;
+  }
+}
+
+@media (max-width: 390px) {
+  .userDetail {
+    padding: sbs.$space-3;
   }
 }

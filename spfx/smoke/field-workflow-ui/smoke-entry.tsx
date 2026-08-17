@@ -14,6 +14,8 @@ import {
   SHELL_VIEW_MODES,
   isShellPrimaryNavigationId,
   isShellSiteSelection,
+  parseShellPresentationRole,
+  type ShellPresentationRole,
   type ShellPrimaryNavigationId,
   type ShellSaveState,
   type ShellSiteSelection,
@@ -26,6 +28,7 @@ function parseParams(): {
   saveState: ShellSaveState;
   siteSelection: ShellSiteSelection;
   selectedDestination: ShellPrimaryNavigationId;
+  presentationRole: ShellPresentationRole;
 } {
   const params = new URLSearchParams(window.location.search);
   const viewRaw = params.get("viewMode") ?? "ready";
@@ -40,7 +43,13 @@ function parseParams(): {
     : "unsaved";
   const siteSelection = isShellSiteSelection(siteRaw) ? siteRaw : "SITE-ISG";
   const selectedDestination = isShellPrimaryNavigationId(destRaw) ? destRaw : "users";
-  return { viewMode, saveState, siteSelection, selectedDestination };
+  return {
+    viewMode,
+    saveState,
+    siteSelection,
+    selectedDestination,
+    presentationRole: parseShellPresentationRole(params.get("presentationRole") ?? undefined),
+  };
 }
 
 const SmokeApp: React.FC = () => {
@@ -65,6 +74,7 @@ const SmokeApp: React.FC = () => {
         errorCode={SHELL_UX_DEFAULT_FIXTURE.errorCode}
         userDisplayName="Field Workflow Smoke Synthetic"
         partialRetrieval={SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE}
+        presentationRole={initial.presentationRole}
       />
     </div>
   );

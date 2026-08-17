@@ -37,6 +37,8 @@ export type ShellSupportPlanPresentation = Readonly<{
   personLabel: string;
   planTitle: string;
   planPeriodLabel: string;
+  /** Presentation-only current vs historical distinction. Not a lifecycle mutation. */
+  planLifecycleLabel: string;
   summary: string;
   goals: readonly SupportPlanGoal[];
   actionItems: readonly SupportPlanActionItem[];

@@ -172,6 +172,23 @@ export {
   SHELL_PRIMARY_NAV_ITEMS,
   type ShellPrimaryNavigationId,
 } from "./primary-navigation";
+export {
+  isAdminAuditPresentationRole,
+  isShellPresentationRole,
+  kpiSectionHeadingForRole,
+  overviewSectionOrderForRole,
+  parseShellPresentationRole,
+  SHELL_DEFAULT_PRESENTATION_ROLE,
+  SHELL_PRESENTATION_ROLE_HINTS,
+  SHELL_PRESENTATION_ROLES,
+  supportPlanBlockOrderForRole,
+  userDetailSectionOrderForRole,
+  userDetailStripLabelsForRole,
+  type OverviewSectionKey,
+  type ShellPresentationRole,
+  type SupportPlanBlockKey,
+  type UserDetailSectionKey,
+} from "./presentation-role";
 export { DEMO_UX_12_SLICE, type ShellSaveStateEmphasis } from "./save-badge-hierarchy";
 export {
   DEMO_UX_14_SLICE,

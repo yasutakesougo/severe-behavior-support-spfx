@@ -10,6 +10,7 @@
 }
 
 .topRow {
+  order: -1;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
@@ -56,6 +57,7 @@
   font-weight: sbs.$font-weight-page-title;
   line-height: sbs.$line-height-page-title;
   outline: none;
+  overflow-wrap: anywhere;
 }
 
 /* INV-03 KEEP: programmatic destination focus remains visible. */
