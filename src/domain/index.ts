@@ -27,3 +27,4 @@ export * from "./review-anchor";
 export * from "./review-notice";
 export * from "./review-monitoring-guidance";
 export * from "./retention-complete-deletion-prohibition";
+export * from "./kiosk-contract";

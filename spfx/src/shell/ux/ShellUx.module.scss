@@ -112,7 +112,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  min-height: 2.25rem;
+  min-height: 2.75rem; /* ~44px touch target */
   font-size: sbs.$font-size-200;
   cursor: pointer;
 }
@@ -261,9 +261,9 @@
 }
 
 .navButton {
-  min-height: 2.5rem;
+  min-height: 2.75rem; /* ~44px touch target */
   min-width: 4.5rem;
-  padding: 0.4rem 0.85rem;
+  padding: 0.45rem 1rem;
   border-width: sbs.$border-width-thin;
   border-style: solid;
   border-color: sbs.$color-border-strong;

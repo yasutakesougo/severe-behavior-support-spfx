@@ -17,3 +17,10 @@ export {
   type SingleSelectOption,
 } from "./SingleSelectListbox";
 export { StatusBadge, type StatusBadgeProps, type StatusBadgeShape } from "./StatusBadge";
+export {
+  SemanticIcon,
+  CANONICAL_SEMANTIC_ICON_KEYS,
+  isCanonicalSemanticIconKey,
+  type CanonicalSemanticIconKey,
+  type SemanticIconProps,
+} from "./SemanticIcon";
