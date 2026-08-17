@@ -184,6 +184,21 @@ describe("FIELD-WORKFLOW UI persist save (KIOSK-SPFX-PERSISTENCE-1)", () => {
     expect(context.planVersion).toBe(3);
     expect(context.planId).toBe("synthetic-plan-001");
   });
+
+  it("VP-F: CREATE input stays without OccurrenceId", () => {
+    const input = buildStaffProcedureRecordCreateInput({
+      context: { ...context, occurrenceId: "synthetic-occurrence-must-not-bind" },
+      draft: {
+        result: "PERFORMED_AS_PLANNED",
+        performedAtLocal: "2026-08-13T14:05",
+        note: "",
+      },
+      recordedBy: FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
+      nowIso: "2026-08-13T14:10:00+09:00",
+    });
+    expect("OccurrenceId" in input).toBe(false);
+    expect("occurrenceId" in input).toBe(false);
+  });
 });
 
 describe("Kiosk Today Support synthetic fixture (read-model only)", () => {

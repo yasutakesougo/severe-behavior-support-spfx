@@ -1,4 +1,5 @@
 import * as React from "react";
+import { SaveStateBadge } from "../ux/SaveStateBadge";
 import {
   descriptionForShellSaveState,
   labelForShellSaveState,
@@ -186,7 +187,6 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       data-field-workflow-procedure-version={context.procedureVersion}
       data-field-workflow-occurrence-id={context.occurrenceId ?? ""}
       data-field-workflow-save-state={saveState}
-
       aria-labelledby="field-workflow-procedure-record-heading"
     >
       <div className={styles.topRow}>
@@ -233,6 +233,11 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
           <div>
             ProcedureId / Version: {context.procedureId} / {context.procedureVersion}
           </div>
+          {context.occurrenceId ? (
+            <div data-field-workflow="binding-occurrence-id">
+              OccurrenceId: {context.occurrenceId}
+            </div>
+          ) : null}
         </dl>
       </section>
 
@@ -287,7 +292,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         </h2>
         <div className={styles.fieldGrid}>
           <label>
-            performedAt（Asia/Tokyo）
+            実施時刻（Asia/Tokyo）
             <input
               type="datetime-local"
               value={draft.performedAtLocal}
@@ -324,14 +329,16 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         <h2 id="field-workflow-save-heading" data-field-workflow-visual-role="section-title">
           保存
         </h2>
-        <p
-          className={styles.statusNote}
-          role="status"
+        <div
+          className={styles.saveStatusBlock}
           data-field-workflow="save-status"
           data-field-workflow-save-state={saveState}
         >
-          {labelForShellSaveState(saveState)} — {statusNote}
-        </p>
+          <SaveStateBadge state={saveState} />
+          <p className={styles.statusNote} role="status">
+            {labelForShellSaveState(saveState)} — {statusNote}
+          </p>
+        </div>
         <div className={styles.actionRow}>
           <button
             type="button"

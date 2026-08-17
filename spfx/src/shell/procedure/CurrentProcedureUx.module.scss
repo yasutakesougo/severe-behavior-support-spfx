@@ -8,11 +8,10 @@
   max-width: 100%;
   padding: sbs.$space-4;
   border-width: sbs.$border-width-thin;
-  border-style: solid;
+  border-style: dashed;
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-subtle;
-  border-radius: sbs.$radius-md;
-  box-shadow: sbs.$elevation-subtle;
+  border-radius: sbs.$radius-medium;
   box-sizing: border-box;
 }
 
@@ -23,60 +22,62 @@
   align-items: center;
 }
 
-.backButton,
-.primaryButton {
-  min-height: 2.25rem;
-  padding: 0.35rem sbs.$space-3;
+.currentProcedure .backButton,
+.currentProcedure .primaryButton {
+  min-height: 3rem;
+  padding: sbs.$space-3 sbs.$space-5;
   border-width: sbs.$border-width-thin;
   border-style: solid;
   border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-canvas;
+  background: sbs.$color-surface;
   color: inherit;
   font: inherit;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
   cursor: pointer;
-  border-radius: sbs.$radius-sm;
+  border-radius: sbs.$radius-medium;
   transition:
     background-color 120ms ease,
     border-color 120ms ease,
     box-shadow 120ms ease;
 }
 
-.backButton {
+.currentProcedure .backButton {
   border-color: sbs.$color-border-subtle;
-  background: sbs.$color-surface-canvas;
+  background: sbs.$color-surface;
   color: sbs.$color-text-secondary;
 }
 
-.primaryButton {
+.currentProcedure .primaryButton {
   font-weight: sbs.$font-weight-semibold;
   background: sbs.$color-focus-ring;
   color: sbs.$color-surface-canvas;
 }
 
-.backButton:hover:not(:disabled),
-.backButton:active:not(:disabled) {
+.currentProcedure .backButton:hover:not(:disabled),
+.currentProcedure .backButton:active:not(:disabled) {
   background: sbs.$color-surface-hover;
   border-color: sbs.$color-border-strong;
 }
 
-.primaryButton:hover:not(:disabled) {
+.currentProcedure .primaryButton:hover:not(:disabled) {
   box-shadow: sbs.$elevation-subtle;
 }
 
-.primaryButton:active:not(:disabled) {
+.currentProcedure .primaryButton:active:not(:disabled) {
   box-shadow: none;
 }
 
-.backButton:focus,
-.backButton:focus-visible,
-.primaryButton:focus,
-.primaryButton:focus-visible {
+.currentProcedure .backButton:focus,
+.currentProcedure .backButton:focus-visible,
+.currentProcedure .primaryButton:focus,
+.currentProcedure .primaryButton:focus-visible {
   outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
   outline-offset: sbs.$focus-outline-offset;
 }
 
-.backButton:disabled,
-.primaryButton:disabled {
+.currentProcedure .backButton:disabled,
+.currentProcedure .primaryButton:disabled {
   border-color: sbs.$color-border-subtle;
   background: sbs.$color-surface-muted;
   color: sbs.$color-text-disabled;
@@ -102,25 +103,28 @@
 .contextLine,
 .sectionHint {
   margin: 0;
-  line-height: 1.5;
+  line-height: sbs.$line-height-body;
+}
+
+.sectionHint {
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .contextLine {
-  font-size: sbs.$font-size-200;
+  font-size: sbs.$font-size-body;
 }
 
 .section {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
   min-width: 0;
-  padding: sbs.$space-4;
-  border-width: sbs.$border-width-thin;
-  border-style: solid;
-  border-color: sbs.$color-border-subtle;
-  background: sbs.$color-surface-canvas;
-  border-radius: sbs.$radius-sm;
 }
 
 .section h2 {
-  margin: 0 0 sbs.$space-3;
+  margin: 0;
   font-size: sbs.$font-size-section-title;
   font-weight: sbs.$font-weight-section-title;
   line-height: sbs.$line-height-section-title;
@@ -135,24 +139,24 @@
 
 .flowItem {
   min-width: 0;
-  padding: sbs.$space-3;
-  background: sbs.$color-surface-subtle;
-  border-radius: sbs.$radius-sm;
 }
 
 .flowItem dt {
-  margin: 0 0 0.35rem;
-  font-weight: 700;
+  margin: 0 0 sbs.$space-1;
+  font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-semibold;
+  color: sbs.$color-text-secondary;
 }
 
 .flowItem dd {
   margin: 0;
-  line-height: 1.5;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
 }
 
 .flowItem ul {
   margin: 0;
-  padding-left: 1.25rem;
+  padding-left: sbs.$space-5;
 }
 
 .actionRow {
@@ -161,21 +165,19 @@
   gap: sbs.$space-3;
 }
 
-@media (max-width: 390px) {
-  .currentProcedure {
-    padding: sbs.$space-3;
-  }
-
-  .section {
-    padding: sbs.$space-3;
-  }
-
+@media (max-width: 768px) {
   .actionRow {
     flex-direction: column;
   }
 
-  .primaryButton,
-  .backButton {
+  .currentProcedure .primaryButton,
+  .currentProcedure .backButton {
     width: 100%;
+  }
+}
+
+@media (max-width: 390px) {
+  .currentProcedure {
+    padding: sbs.$space-3;
   }
 }

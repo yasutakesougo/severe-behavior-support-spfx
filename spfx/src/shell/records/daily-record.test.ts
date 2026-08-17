@@ -4,6 +4,7 @@ import {
   DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE,
   DEMO_DAILY_RECORD_PRESENTATION_NOTE,
   DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE,
+  DEMO_DAILY_RECORD_RECENT_HINT,
   dailyRecordCopyIsFailClosed,
 } from "./daily-record-copy";
 import {
@@ -111,5 +112,25 @@ describe("DADS-UX-4 daily record presentation contracts", () => {
       "要確認",
     ]);
     expect(DEMO_UX_DAILY_RECORD_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
+  });
+});
+
+describe("VP-F Records presentation boundary", () => {
+  it("keeps recent items as daily-note samples, not procedure results or observation chips", () => {
+    const types = DEMO_UX_DAILY_RECORD_FIXTURE.recentRecords.map((item) => item.recordTypeLabel);
+    expect(types.every((label) => label === "日々の記録（合成）")).toBe(true);
+    expect(DEMO_DAILY_RECORD_RECENT_HINT).toContain("手順の実施結果");
+    expect(DEMO_DAILY_RECORD_RECENT_HINT).toContain("経過観察チップではありません");
+    for (const label of types) {
+      expect(label).not.toContain("PERFORMED_AS_PLANNED");
+      expect(label).not.toContain("様子");
+      expect(label).not.toContain("経過観察");
+    }
+  });
+
+  it("does not enable mutation or live write", () => {
+    expect(DEMO_UX_5_SLICE.recordMutationAuthorized).toBe(false);
+    expect(DEMO_UX_5_SLICE.liveTenantIoAuthorized).toBe(false);
+    expect(DEMO_UX_5_SLICE.sharePointRestAuthorized).toBe(false);
   });
 });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { EmptyNotice, SingleSelectListbox, StatusBadge } from "../primitives";
+import { EmptyNotice, SemanticIcon, SingleSelectListbox, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   DEMO_DAILY_RECORD_DRAFT_HINT,
@@ -27,6 +27,7 @@ export type DailyRecordsProps = Readonly<{
  * DEMO-UX-9 adds incomplete selection → local draft input image (no save).
  * DEMO-UX-11 removes duplicate screen-level synthetic band; mutation/draft boundaries remain.
  * DADS-UX-4: presentation tokens/focus; INV-10 SingleSelectListbox; INV-17 EmptyNotice.
+ * VP-F: Visual Polish foundations + kiosk visual alignment; no mutation / LIVE WRITE.
  */
 export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headingRef }) => {
   const { heading, inputPrompt, incompleteItems, recentRecords, businessFacts, systemState } =
@@ -60,18 +61,23 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
       data-demo-ux-incomplete-selected={selectedIncompleteId ?? ""}
       aria-labelledby="demo-ux-records-heading"
     >
-      <h1
-        id="demo-ux-records-heading"
-        ref={headingRef}
-        tabIndex={-1}
-        className={styles.recordsHeading}
-        data-demo-ux="daily-record-heading"
-      >
-        {heading}
-      </h1>
+      <div className={styles.headingTitleRow}>
+        <SemanticIcon name="record" size={28} className={styles.titleIcon} />
+        <h1
+          id="demo-ux-records-heading"
+          ref={headingRef}
+          tabIndex={-1}
+          className={styles.recordsHeading}
+          data-demo-ux="daily-record-heading"
+        >
+          {heading}
+        </h1>
+      </div>
 
       <section className={styles.section} aria-labelledby="demo-ux-record-incomplete-heading">
-        <h2 id="demo-ux-record-incomplete-heading">未完了確認</h2>
+        <h2 id="demo-ux-record-incomplete-heading" className={styles.sectionHeading}>
+          未完了確認
+        </h2>
         <p className={styles.sectionHint} data-demo-ux="daily-record-incomplete-hint">
           {DEMO_DAILY_RECORD_INCOMPLETE_HINT}
         </p>
@@ -79,7 +85,6 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
           // INV-17: incomplete zero-result only — not mutation failure / “all clear”.
           <EmptyNotice
             announce
-            className={styles.sectionHint}
             dataAttrs={{ "data-demo-ux": "daily-record-incomplete-empty-note" }}
           >
             {DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE}
@@ -110,8 +115,10 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
       </section>
 
       <section className={styles.section} aria-labelledby="demo-ux-record-input-heading">
-        <h2 id="demo-ux-record-input-heading">記録入力イメージ</h2>
-        <p>{inputPrompt}</p>
+        <h2 id="demo-ux-record-input-heading" className={styles.sectionHeading}>
+          記録入力イメージ
+        </h2>
+        <p className={styles.inputPrompt}>{inputPrompt}</p>
         <p className={styles.sectionHint} data-demo-ux="daily-record-draft-hint">
           {DEMO_DAILY_RECORD_DRAFT_HINT}
         </p>
@@ -166,17 +173,15 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
       </section>
 
       <section className={styles.section} aria-labelledby="demo-ux-record-recent-heading">
-        <h2 id="demo-ux-record-recent-heading">最近の記録</h2>
+        <h2 id="demo-ux-record-recent-heading" className={styles.sectionHeading}>
+          最近の記録
+        </h2>
         <p className={styles.sectionHint} data-demo-ux="daily-record-recent-hint">
           {DEMO_DAILY_RECORD_RECENT_HINT}
         </p>
         {showRecentEmpty ? (
           // INV-17: recent zero-result only — not retrieval failure.
-          <EmptyNotice
-            announce
-            className={styles.sectionHint}
-            dataAttrs={{ "data-demo-ux": "daily-record-recent-empty-note" }}
-          >
+          <EmptyNotice announce dataAttrs={{ "data-demo-ux": "daily-record-recent-empty-note" }}>
             {DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE}
           </EmptyNotice>
         ) : (
@@ -188,11 +193,11 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
                 data-demo-ux="daily-record-recent-item"
               >
                 <div className={styles.recordMeta}>
-                  <strong>{record.personLabel}</strong>
-                  <span>{record.recordedAtLabel}</span>
-                  <span>{record.recordTypeLabel}</span>
+                  <span className={styles.recordPerson}>{record.personLabel}</span>
+                  <span className={styles.recordTime}>{record.recordedAtLabel}</span>
+                  <span className={styles.recordType}>{record.recordTypeLabel}</span>
                 </div>
-                <p>{record.summary}</p>
+                <p className={styles.recordSummary}>{record.summary}</p>
               </li>
             ))}
           </ol>
@@ -201,7 +206,9 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
 
       <div className={styles.stateGrid}>
         <section className={styles.statePanel} aria-labelledby="demo-ux-record-business-heading">
-          <h2 id="demo-ux-record-business-heading">制度・業務情報（合成表示）</h2>
+          <h2 id="demo-ux-record-business-heading" className={styles.sectionHeading}>
+            制度・業務情報（合成表示）
+          </h2>
           <dl>
             <div>
               <dt>記録対象</dt>
@@ -214,7 +221,9 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
           </dl>
         </section>
         <section className={styles.statePanel} aria-labelledby="demo-ux-record-system-heading">
-          <h2 id="demo-ux-record-system-heading">システム状態</h2>
+          <h2 id="demo-ux-record-system-heading" className={styles.sectionHeading}>
+            システム状態
+          </h2>
           <dl>
             <div>
               <dt>保存状態</dt>
