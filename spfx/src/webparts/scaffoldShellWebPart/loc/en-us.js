@@ -1,8 +1,8 @@
 define([], function () {
   return {
-    PropertyPaneDescription: "Description",
-    BasicGroupName: "Group Name",
-    DescriptionFieldLabel: "Description Field",
+    PropertyPaneDescription: "Web パーツの設定",
+    BasicGroupName: "基本",
+    DescriptionFieldLabel: "説明",
     AppLocalEnvironmentSharePoint:
       "The app is running on your local environment as SharePoint web part",
     AppLocalEnvironmentTeams: "The app is running on your local environment as Microsoft Teams app",
@@ -14,7 +14,7 @@ define([], function () {
     AppOutlookEnvironment: "The app is running in Outlook",
     UnknownEnvironment: "The app is running in an unknown environment",
     GreetingMessage: "Well done, {0}!",
-    PropertyValueLabel: "Web part property value:",
+    PropertyValueLabel: "説明:",
     WelcomeTitle: "Welcome to SharePoint Framework!",
     WelcomeDescription:
       "The SharePoint Framework (SPFx) is an extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It's the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.",

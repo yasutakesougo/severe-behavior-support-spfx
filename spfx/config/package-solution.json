@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "Isolated SPFx 1.23.2 scaffold shell for toolchain verification"
+        "default": "強度行動障害支援の計画・手順・記録・見直しを支援する SharePoint アプリ"
       },
       "longDescription": {
-        "default": "Isolated SPFx 1.23.2 scaffold shell for toolchain verification"
+        "default": "強度行動障害支援における支援計画、今日の支援手順、記録、見直しを、役割と端末に応じて一つの SharePoint Framework アプリで支援します。"
       },
       "screenshotPaths": [],
       "videoUrl": "",

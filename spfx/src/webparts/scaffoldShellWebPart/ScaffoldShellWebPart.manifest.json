@@ -19,11 +19,13 @@
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
       "group": { "default": "Advanced" },
-      "title": { "default": "Scaffold Shell Web Part" },
-      "description": { "default": "Scaffold Shell Web Part Description" },
+      "title": { "default": "強度行動障害支援" },
+      "description": {
+        "default": "強度行動障害支援の計画・手順・記録・見直しを支援する SharePoint アプリ"
+      },
       "officeFabricIconFontName": "Page",
       "properties": {
-        "description": "Scaffold Shell Web Part"
+        "description": "強度行動障害支援"
       }
     }
   ]
