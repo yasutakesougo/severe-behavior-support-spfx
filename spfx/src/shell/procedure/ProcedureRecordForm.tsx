@@ -145,12 +145,12 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
           persistPort,
         );
         setDraft(retainDraftAfterSaveFailed(draft));
+        saveInFlight.current.end();
         setSaveStateAndNotify(result.saveState);
       } catch {
         setDraft(retainDraftAfterSaveFailed(draft));
-        setSaveStateAndNotify("save_failed");
-      } finally {
         saveInFlight.current.end();
+        setSaveStateAndNotify("save_failed");
       }
     };
     runSave().then(

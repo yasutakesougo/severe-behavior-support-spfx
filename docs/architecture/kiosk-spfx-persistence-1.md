@@ -1,7 +1,7 @@
 # KIOSK-SPFX-PERSISTENCE-1
 
-Status: **IMPLEMENTATION START RECORDED**  
-Date: 2026-08-17  
+Status: **IMPLEMENTATION START RECORDED**
+Date: 2026-08-17
 Kind: Staff ProcedureRecord CREATE wiring (no live SharePoint write)
 
 ```text
@@ -13,8 +13,8 @@ Domain vocabulary change: NOT AUTHORIZED
 Deploy: NOT AUTHORIZED
 ```
 
-Basis: `643a0d9d8b5c2ddd971b62f1d6fde4aba46ae34c`  
-Precheck: [`kiosk-spfx-persistence-precheck-1.md`](./kiosk-spfx-persistence-precheck-1.md)  
+Basis: `643a0d9d8b5c2ddd971b62f1d6fde4aba46ae34c`
+Precheck: [`kiosk-spfx-persistence-precheck-1.md`](./kiosk-spfx-persistence-precheck-1.md)
 Decision reused: CREATE_READY_WITH_CODE_GAP
 
 ---
@@ -124,5 +124,18 @@ npm run format:check: PASS
 npm run check:contracts-boundaries: PASS
 cd spfx && npx heft test --clean: 164 pass / 0 fail
   (pre-existing lint warning: assessment-snapshot read-integration @rushstack/no-new-null)
+git diff --check origin/main...HEAD: PASS after trailing-space removal
 SharePoint REST: not executed
+
+Browser smoke (real Chrome, synthetic fixture):
+  node spfx/smoke/field-workflow-ui/run-smoke.mjs
+  Chrome: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome
+  artifacts: /tmp/cursor/artifacts/field-workflow-ui-browser-smoke/
+  pass: true
+  kp-save-cta-label: 記録を保存
+  kp-synthetic-success-removed: syntheticOutcomeCount 0
+  kp-persist-path-connected: persistProcedureRecord
+  fw09-save-failed-retains-input: PASS
+  fw09-save-failed-allows-retry: PASS
+  kp-sharepoint-requests-none: liveWriteRequests []
 ```

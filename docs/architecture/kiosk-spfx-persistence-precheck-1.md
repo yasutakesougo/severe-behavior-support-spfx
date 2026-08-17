@@ -1,10 +1,10 @@
 # KIOSK-SPFX-PERSISTENCE-PRECHECK-1
 
-Status: **READ-ONLY PRECHECK**  
-Date: 2026-08-17  
-Kind: ProcedureRecord CREATE sufficiency against existing domain + existing schema  
-Mutation: **NONE**  
-Implementation: **NONE**  
+Status: **READ-ONLY PRECHECK**
+Date: 2026-08-17
+Kind: ProcedureRecord CREATE sufficiency against existing domain + existing schema
+Mutation: **NONE**
+Implementation: **NONE**
 Live write this unit: **NONE**
 
 ```text
@@ -15,7 +15,7 @@ NO commit / push / PR / deploy
 NO SharePoint / M365 / Entra mutation
 ```
 
-Upstream plan: [`kiosk-spfx-convergence-plan-1.md`](./kiosk-spfx-convergence-plan-1.md)  
+Upstream plan: [`kiosk-spfx-convergence-plan-1.md`](./kiosk-spfx-convergence-plan-1.md)
 P0 in scope: KGAP-025 (kiosk replacement blocker — staff save synthetic)
 
 OUT of this precheck: daily slot schema, Legacy chips, D6 cancel/update/delete, ABC, kiosk UI, navigation, history, auto-refresh.
@@ -296,7 +296,7 @@ PASS  — domain persist + adapter CREATE mapping
 BLOCKED — staff synthetic success display (CODE GAP to remove when wiring live CREATE)
 ```
 
-Overall for this CREATE precheck (can existing persist be fail-closed): **PASS**.  
+Overall for this CREATE precheck (can existing persist be fail-closed): **PASS**.
 KGAP-025 remains because the staff path is the synthetic one.
 
 ---
