@@ -127,8 +127,11 @@ export const UserDetail: React.FC<UserDetailProps> = ({
         </button>
       </section>
 
-      <section className={styles.detailSection} aria-labelledby="demo-ux-records-heading">
-        <h2 id="demo-ux-records-heading">最近の記録</h2>
+      <section
+        className={styles.detailSection}
+        aria-labelledby="demo-ux-user-detail-recent-records-heading"
+      >
+        <h2 id="demo-ux-user-detail-recent-records-heading">最近の記録</h2>
         <ul className={styles.recordList}>
           {recentRecords.map((record) => (
             <li key={record.id}>

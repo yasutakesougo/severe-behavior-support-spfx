@@ -11,7 +11,7 @@ export const DEMO_DAILY_RECORD_DRAFT_HINT =
   "入力イメージはローカルの一時編集です。画面を離れると破棄され、業務データへは保存されません。";
 
 export const DEMO_DAILY_RECORD_RECENT_HINT =
-  "最近の記録は閲覧サンプルです。ここからは編集できません。";
+  "最近の記録は日々の記録の閲覧サンプルです。手順の実施結果（3値）や経過観察チップではありません。ここからは編集できません。";
 
 /**
  * INV-17: incomplete zero-result only — not “all clear” business completion.
