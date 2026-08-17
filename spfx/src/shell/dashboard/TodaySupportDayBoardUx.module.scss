@@ -1,0 +1,154 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  min-width: 0;
+  width: 100%;
+}
+
+.emptyContainer {
+  padding: sbs.$space-6;
+  text-align: center;
+  background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-medium;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+}
+
+.emptyText {
+  margin: 0;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-body;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.itemCard {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
+  padding: sbs.$space-4;
+  background: sbs.$color-surface;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-medium;
+  box-shadow: sbs.$elevation-subtle;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.itemCardSelected {
+  border-color: sbs.$color-focus-ring;
+  box-shadow: 0 0 0 2px sbs.$color-focus-ring;
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: sbs.$space-3;
+  flex-wrap: wrap;
+}
+
+.timeTag {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: sbs.$color-text-primary;
+  background: sbs.$color-surface-subtle;
+  padding: sbs.$space-1 sbs.$space-3;
+  border-radius: sbs.$radius-small;
+}
+
+.personTag {
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  color: sbs.$color-text-primary;
+}
+
+.statusWrap {
+  margin-left: auto;
+}
+
+.itemBody {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-1;
+}
+
+.activityTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-section-title;
+  color: sbs.$color-text-primary;
+}
+
+.procedureMeta {
+  margin: 0;
+  font-size: sbs.$font-size-meta;
+  color: sbs.$color-text-secondary;
+}
+
+.observationSummary {
+  margin-top: sbs.$space-2;
+  padding: sbs.$space-2 sbs.$space-3;
+  background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-small;
+  border-left: 3px solid sbs.$color-border-strong;
+  font-size: sbs.$font-size-meta;
+}
+
+.obsLine {
+  margin: 0;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.obsMemo {
+  margin: sbs.$space-1 0 0 0;
+  color: sbs.$color-text-secondary;
+}
+
+.itemActionRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: sbs.$space-2;
+}
+
+/* Tablet / Touch target requirement: min-height 48px (3rem) */
+.tapButton {
+  min-height: 3rem;
+  min-width: 10rem;
+  padding: sbs.$space-3 sbs.$space-5;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  border-radius: sbs.$radius-medium;
+  border: sbs.$border-width-thin solid sbs.$color-border-strong;
+  background: sbs.$color-surface;
+  color: sbs.$color-text-primary;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.tapButton:hover {
+  background: sbs.$color-surface-hover;
+}
+
+.tapButton:focus,
+.tapButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+@media (max-width: 768px) {
+  .tapButton {
+    width: 100%;
+  }
+}

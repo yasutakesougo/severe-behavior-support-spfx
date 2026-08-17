@@ -184,7 +184,9 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       data-field-workflow-plan-version={String(context.planVersion)}
       data-field-workflow-procedure-id={context.procedureId}
       data-field-workflow-procedure-version={context.procedureVersion}
+      data-field-workflow-occurrence-id={context.occurrenceId ?? ""}
       data-field-workflow-save-state={saveState}
+
       aria-labelledby="field-workflow-procedure-record-heading"
     >
       <div className={styles.topRow}>

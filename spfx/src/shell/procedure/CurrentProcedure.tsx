@@ -10,6 +10,7 @@ import styles from "./CurrentProcedureUx.module.scss";
 export type CurrentProcedureProps = Readonly<{
   presentation: ShellCurrentProcedurePresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
+  backLabel?: string;
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
 }>;
@@ -21,6 +22,7 @@ export type CurrentProcedureProps = Readonly<{
 export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   presentation,
   headingRef,
+  backLabel = "← 利用者詳細",
   onBackToUserDetail,
   onRecordProcedureRequest,
 }) => {
@@ -37,6 +39,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
       data-field-workflow-plan-version={String(context.planVersion)}
       data-field-workflow-procedure-id={context.procedureId}
       data-field-workflow-procedure-version={context.procedureVersion}
+      data-field-workflow-occurrence-id={context.occurrenceId ?? ""}
       aria-labelledby="field-workflow-current-procedure-heading"
     >
       <div className={styles.topRow}>
@@ -47,8 +50,9 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           disabled={!onBackToUserDetail}
           aria-disabled={!onBackToUserDetail ? "true" : undefined}
           data-field-workflow="current-procedure-back"
+          data-kiosk-ux="current-procedure-back"
         >
-          ← 利用者詳細
+          {backLabel}
         </button>
       </div>
 

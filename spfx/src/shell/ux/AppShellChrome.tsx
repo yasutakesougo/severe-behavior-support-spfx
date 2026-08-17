@@ -8,6 +8,7 @@ import {
 import {
   CurrentProcedure,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+  getKioskSyntheticTodaySupportItems,
   ProcedureRecordForm,
   type ShellProcedureWorkflowPresentation,
 } from "../procedure";
@@ -136,6 +137,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     ShellSaveState | undefined
   >();
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
+  const [selectedOccurrenceId, setSelectedOccurrenceId] = React.useState<string | undefined>();
+  const [occurrenceFlowFromOverview, setOccurrenceFlowFromOverview] = React.useState(false);
+  const todaySupportItems = React.useMemo(() => getKioskSyntheticTodaySupportItems(), []);
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const readyRegionContentRef = React.useRef<HTMLDivElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
@@ -183,6 +187,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (procedureFlowSaveState !== undefined) {
         setProcedureFlowSaveState(undefined);
       }
+      if (occurrenceFlowFromOverview) {
+        setOccurrenceFlowFromOverview(false);
+      }
     }
     if (destination !== "overview" && reviewDuePreviewOpen) {
       setReviewDuePreviewOpen(false);
@@ -195,6 +202,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     procedureRecordFormOpen,
     procedureFlowSaveState,
     reviewDuePreviewOpen,
+    occurrenceFlowFromOverview,
   ]);
 
   React.useEffect(() => {
@@ -280,12 +288,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
-    setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
     if (target.kind === "records") {
       setSelectedUserDetailId(undefined);
       setReviewDuePreviewOpen(false);
+      setCurrentProcedureOpen(false);
+      setOccurrenceFlowFromOverview(false);
       setDestination("records");
       if (onSelectedDestinationChange) {
         onSelectedDestinationChange("records");
@@ -294,6 +303,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     if (target.kind === "review_due") {
       setSelectedUserDetailId(undefined);
+      setCurrentProcedureOpen(false);
+      setOccurrenceFlowFromOverview(false);
       setDestination("overview");
       if (onSelectedDestinationChange) {
         onSelectedDestinationChange("overview");
@@ -301,10 +312,27 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setReviewDuePreviewOpen(true);
       return;
     }
+    if (target.kind === "occurrence") {
+      if (!userDetailById.has(target.userId)) {
+        return;
+      }
+      setReviewDuePreviewOpen(false);
+      setSelectedOccurrenceId(target.occurrenceId);
+      setSelectedUserDetailId(target.userId);
+      setOccurrenceFlowFromOverview(true);
+      setCurrentProcedureOpen(true);
+      setDestination("users");
+      if (onSelectedDestinationChange) {
+        onSelectedDestinationChange("users");
+      }
+      return;
+    }
     if (!userDetailById.has(target.userId)) {
       return;
     }
     setReviewDuePreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setOccurrenceFlowFromOverview(false);
     setSelectedUserDetailId(target.userId);
     setDestination("users");
     if (onSelectedDestinationChange) {
@@ -358,7 +386,25 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
+    setOccurrenceFlowFromOverview(false);
     setCurrentProcedureOpen(true);
+  };
+
+  const handleBackToTodaySupport = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
+    setOccurrenceFlowFromOverview(false);
+    setSelectedUserDetailId(undefined);
+    setDestination("overview");
+    if (onSelectedDestinationChange) {
+      onSelectedDestinationChange("overview");
+    }
   };
 
   const handleRecordProcedureRequest = (): void => {
@@ -395,9 +441,30 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setReviewDuePreviewOpen(false);
   };
 
-  const selectedCurrentProcedure = selectedUserDetailId
+  const selectedOccurrenceItem = selectedOccurrenceId
+    ? todaySupportItems.find((item) => item.occurrenceId === selectedOccurrenceId)
+    : undefined;
+
+  const selectedCurrentProcedureBase = selectedUserDetailId
     ? procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
     : undefined;
+
+  const selectedCurrentProcedure =
+    selectedCurrentProcedureBase && occurrenceFlowFromOverview && selectedOccurrenceItem
+      ? {
+          ...selectedCurrentProcedureBase,
+          context: {
+            ...selectedCurrentProcedureBase.context,
+            occurrenceId: selectedOccurrenceItem.occurrenceId,
+            userId: selectedOccurrenceItem.userId,
+            personLabel: selectedOccurrenceItem.personLabel,
+            procedureId: selectedOccurrenceItem.procedure.ProcedureId,
+            procedureVersion: selectedOccurrenceItem.procedure.ProcedureVersion,
+            planId: selectedOccurrenceItem.planId,
+            planVersion: selectedOccurrenceItem.planVersion,
+          },
+        }
+      : selectedCurrentProcedureBase;
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
   const siteUnselected = isSiteUnselected(selection);
@@ -431,6 +498,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
       data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
+      data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
+      data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
       data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
       data-demo-ux-7-today-nav="true"
       data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
@@ -562,8 +631,21 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   <OverviewDashboard
                     presentation={overviewPresentation}
                     headingRef={destinationHeadingRef}
+                    todaySupportItems={todaySupportItems}
+                    selectedOccurrenceId={selectedOccurrenceId}
                     onReviewDueStateRequest={handleReviewDueStateRequest}
                     onTodayActionNavigate={handleTodayActionNavigate}
+                    onSelectOccurrence={(occId) => {
+                      const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
+                      if (!item) {
+                        return;
+                      }
+                      handleTodayActionNavigate({
+                        kind: "occurrence",
+                        occurrenceId: occId,
+                        userId: item.userId,
+                      });
+                    }}
                   />
                 )
               ) : destination === "users" ? (
@@ -586,7 +668,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     <CurrentProcedure
                       presentation={selectedCurrentProcedure}
                       headingRef={destinationHeadingRef}
-                      onBackToUserDetail={handleBackToUserDetail}
+                      backLabel={occurrenceFlowFromOverview ? "← 今日の支援" : "← 利用者詳細"}
+                      onBackToUserDetail={
+                        occurrenceFlowFromOverview
+                          ? handleBackToTodaySupport
+                          : handleBackToUserDetail
+                      }
                       onRecordProcedureRequest={handleRecordProcedureRequest}
                     />
                   ) : (

@@ -16,6 +16,7 @@ import {
   procedureResultCopyIsNonFailure,
   projectionUsesRecordPlanVersion,
   resolveProcedureReviewProjection,
+  getKioskSyntheticTodaySupportItems,
 } from "./index";
 
 beforeAll(() => {
@@ -178,5 +179,21 @@ describe("FIELD-WORKFLOW UI persist save (KIOSK-SPFX-PERSISTENCE-1)", () => {
     expect(result.persistCalled).toBe(true);
     expect(context.planVersion).toBe(3);
     expect(context.planId).toBe("synthetic-plan-001");
+  });
+});
+
+describe("Kiosk Today Support synthetic fixture (read-model only)", () => {
+  it("projects unique OccurrenceIds and staff-facing statuses", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const occurrenceIds = items.map((item) => item.occurrenceId);
+    expect(items.length).toBe(4);
+    expect(new Set(occurrenceIds).size).toBe(4);
+    expect(occurrenceIds[0].length).toBe(64);
+    expect(items.map((item) => item.effectiveStatus)).toEqual([
+      "未実施",
+      "記録済み",
+      "取消済み",
+      "未実施",
+    ]);
   });
 });

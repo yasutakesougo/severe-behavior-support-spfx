@@ -23,6 +23,7 @@ export {
   FIELD_WORKFLOW_UI_SLICE,
   VP4_WORKFLOW_SLICE,
 } from "./procedure-fixture";
+export { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
 export {
   projectionUsesRecordPlanVersion,
   resolveProcedureReviewProjection,

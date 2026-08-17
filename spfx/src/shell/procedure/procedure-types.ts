@@ -24,6 +24,7 @@ export type ProcedureBindingContext = Readonly<{
   procedureId: string;
   procedureVersion: string;
   planPeriodLabel: string;
+  occurrenceId?: string;
 }>;
 
 /** A2 presentation projection — 場面→実施→避ける→補足 (body outside contracts). */

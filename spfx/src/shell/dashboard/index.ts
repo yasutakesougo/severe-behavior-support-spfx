@@ -1,4 +1,5 @@
 export { OverviewDashboard, type OverviewDashboardProps } from "./OverviewDashboard";
+export { TodaySupportDayBoard, type TodaySupportDayBoardProps } from "./TodaySupportDayBoard";
 export {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
