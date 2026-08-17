@@ -4,16 +4,42 @@ import type { TodaySupportItem } from "../../sbs-domain/kiosk-read-model.bundle"
 import { StatusBadge } from "../primitives";
 import styles from "./TodaySupportDayBoardUx.module.scss";
 
+export type TodaySupportOccurrenceCtaMode = "field" | "confirm";
+
+export function todaySupportOccurrenceActionLabel(
+  effectiveStatus: string,
+  occurrenceCtaMode: TodaySupportOccurrenceCtaMode = "field",
+): string {
+  const fieldActionLabel =
+    effectiveStatus === "記録済み"
+      ? "記録を確認・再表示"
+      : effectiveStatus === "取消済み"
+        ? "取消詳細を表示"
+        : effectiveStatus === "確認が必要"
+          ? "確認が必要なため詳細のみ"
+          : "この予定を記録 / 手順表示";
+  if (occurrenceCtaMode === "confirm" && effectiveStatus === "未実施") {
+    return "予定を確認";
+  }
+  return fieldActionLabel;
+}
+
 export type TodaySupportDayBoardProps = Readonly<{
   items: readonly TodaySupportItem[];
   selectedOccurrenceId?: string;
   onSelectOccurrence?: (occurrenceId: string) => void;
+  /** ADMIN_AUDIT: confirm-oriented labels; FIELD_STAFF/PLANNER keep record CTAs. */
+  occurrenceCtaMode?: TodaySupportOccurrenceCtaMode;
+  /** PLANNER/ADMIN desktop: two-column board. FIELD_STAFF stays one column. */
+  denseDesktopLayout?: boolean;
 }>;
 
 export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
   items,
   selectedOccurrenceId,
   onSelectOccurrence,
+  occurrenceCtaMode = "field",
+  denseDesktopLayout = false,
 }) => {
   if (items.length === 0) {
     return (
@@ -25,21 +51,20 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
 
   return (
     <section className={styles.container} aria-label="本日の支援予定（時系列）">
-      <ul className={styles.list} data-kiosk-ux="today-support-list">
+      <ul
+        className={denseDesktopLayout ? `${styles.list} ${styles.listDesktopDense}` : styles.list}
+        data-kiosk-ux="today-support-list"
+      >
         {items.map((item) => {
           const isSelected = item.occurrenceId === selectedOccurrenceId;
           const badgeLabel = item.effectiveStatus;
           const badgeSoft =
             item.effectiveStatus === "取消済み" || item.effectiveStatus === "記録済み";
 
-          const actionLabel =
-            item.effectiveStatus === "記録済み"
-              ? "記録を確認・再表示"
-              : item.effectiveStatus === "取消済み"
-                ? "取消詳細を表示"
-                : item.effectiveStatus === "確認が必要"
-                  ? "確認が必要なため詳細のみ"
-                  : "この予定を記録 / 手順表示";
+          const actionLabel = todaySupportOccurrenceActionLabel(
+            item.effectiveStatus,
+            occurrenceCtaMode,
+          );
 
           return (
             <li
@@ -86,7 +111,11 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
               <div className={styles.itemActionRow}>
                 <button
                   type="button"
-                  className={styles.tapButton}
+                  className={
+                    occurrenceCtaMode === "confirm"
+                      ? `${styles.tapButton} ${styles.tapButtonQuiet}`
+                      : styles.tapButton
+                  }
                   data-kiosk-ux="tap-occurrence-button"
                   data-kiosk-target-occurrence-id={item.occurrenceId}
                   data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}

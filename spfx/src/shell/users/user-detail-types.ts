@@ -31,6 +31,8 @@ export type ShellUserDetailPresentation = Readonly<{
   personLabel: string;
   planLabel: string;
   planPeriodLabel: string;
+  /** Presentation-only current vs historical distinction. Not a lifecycle mutation. */
+  planLifecycleLabel: string;
   currentSupport: readonly UserDetailSupportItem[];
   recentRecords: readonly UserDetailRecentRecord[];
   evaluationSummary: string;

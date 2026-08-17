@@ -23,6 +23,10 @@
   align-items: center;
 }
 
+.topRow {
+  order: -1;
+}
+
 .procedureRecordForm .backButton,
 .procedureRecordForm .saveButton {
   min-height: 3rem;
@@ -93,6 +97,7 @@
   font-weight: sbs.$font-weight-page-title;
   line-height: sbs.$line-height-page-title;
   outline: none;
+  overflow-wrap: anywhere;
 }
 
 .heading:focus,

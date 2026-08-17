@@ -1,6 +1,7 @@
 import { buildAttentionSummaryFromItems } from "../ux/kpi-review-count";
 import { FIELD_WORKFLOW_PROCEDURE_FIXTURE } from "../procedure";
 import {
+  DEMO_REVIEW_DUE_ADMIN_READ_NOTE,
   DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE,
   DEMO_REVIEW_DUE_PRESENTATION_NOTE,
   reviewDueCopyIsFailClosed,
@@ -44,6 +45,7 @@ describe("DEMO-UX-6 review status & due-state presentation", () => {
   it("keeps fail-closed copy", () => {
     expect(reviewDueCopyIsFailClosed(DEMO_REVIEW_DUE_PRESENTATION_NOTE)).toBe(true);
     expect(reviewDueCopyIsFailClosed("利用可能です。業務データに接続されています。")).toBe(false);
+    expect(DEMO_REVIEW_DUE_ADMIN_READ_NOTE).toContain("承認権限は追加しません");
   });
 
   it("keeps live data, calculation, and write flags off", () => {

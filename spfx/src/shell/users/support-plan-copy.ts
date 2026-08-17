@@ -8,6 +8,9 @@ export const DEMO_SUPPORT_PLAN_PRESENTATION_NOTE =
 export const DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE =
   "作成・編集・保存は接続されていません。表示専用です。";
 
+export const DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE =
+  "計画の確認専用です。作成・編集・保存操作はありません。承認・変更権限は追加しません。";
+
 /** Fail-closed copy must not claim usable business UI or live connection. */
 export function supportPlanCopyIsFailClosed(text: string): boolean {
   const lowered = text.toLowerCase();

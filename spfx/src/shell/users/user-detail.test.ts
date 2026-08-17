@@ -51,6 +51,8 @@ describe("DADS-UX-3 user detail presentation contracts", () => {
     expect(DEMO_UX_USER_DETAIL_FIXTURE.recentRecords.length).toBeGreaterThan(0);
     expect(DEMO_UX_USER_DETAIL_FIXTURE.evaluationSummary.length).toBeGreaterThan(0);
     expect(DEMO_UX_USER_DETAIL_FIXTURE.historySummary.length).toBeGreaterThan(0);
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.planLifecycleLabel).toContain("現行版");
+    expect(DEMO_UX_USER_DETAIL_FIXTURE.historySummary).toContain("過去版");
     expect(DEMO_UX_USER_DETAIL_FIXTURE.businessFacts.createdByLabel.length).toBeGreaterThan(0);
     expect(DEMO_UX_USER_DETAIL_FIXTURE.systemState.saveStateLabel.length).toBeGreaterThan(0);
   });

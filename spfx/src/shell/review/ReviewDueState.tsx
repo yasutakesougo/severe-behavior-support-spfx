@@ -10,9 +10,15 @@ import {
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_A_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import {
+  SHELL_DEFAULT_PRESENTATION_ROLE,
+  isAdminAuditPresentationRole,
+  type ShellPresentationRole,
+} from "../ux/presentation-role";
+import {
   DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE,
   DEMO_REVIEW_DUE_CALCULATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
+  DEMO_REVIEW_DUE_ADMIN_READ_NOTE,
 } from "./review-due-copy";
 import { VP5_REVIEW_SLICE } from "./review-due-fixture";
 import type { ShellReviewDueStatePresentation } from "./review-due-types";
@@ -24,6 +30,7 @@ export type ReviewDueStateProps = Readonly<{
   onBackToOverview?: () => void;
   /** FIELD-WORKFLOW #356 FW-07 materials (optional). */
   procedureReviewMaterials?: readonly ShellProcedureReviewMaterial[];
+  presentationRole?: ShellPresentationRole;
 }>;
 
 /**
@@ -37,10 +44,12 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   headingRef,
   onBackToOverview,
   procedureReviewMaterials = [],
+  presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
   const { heading, summaryPrompt, attentionSummary, attentionItems, businessFacts, systemState } =
     presentation;
   const showAttentionEmpty = attentionItems.length === 0;
+  const adminRead = isAdminAuditPresentationRole(presentationRole);
   const [selectedMaterialId, setSelectedMaterialId] = React.useState<string | undefined>();
   const selectedMaterial = procedureReviewMaterials.find((item) => item.id === selectedMaterialId);
   const selectedProjection = selectedMaterial
@@ -54,8 +63,19 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-review-visual-polish={VP5_REVIEW_SLICE.id}
+      data-presentation-role={presentationRole}
       aria-labelledby="demo-ux-review-due-heading"
     >
+      <h1
+        id="demo-ux-review-due-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className={styles.reviewHeading}
+        data-review-visual-role="page-title"
+        data-demo-ux="review-due-heading"
+      >
+        {heading}
+      </h1>
       <div className={styles.topRow}>
         <button
           type="button"
@@ -68,17 +88,6 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
           ← 概要
         </button>
       </div>
-
-      <h1
-        id="demo-ux-review-due-heading"
-        ref={headingRef}
-        tabIndex={-1}
-        className={styles.reviewHeading}
-        data-review-visual-role="page-title"
-        data-demo-ux="review-due-heading"
-      >
-        {heading}
-      </h1>
       <p className={styles.summaryPrompt}>{summaryPrompt}</p>
 
       <section
@@ -330,29 +339,37 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         aria-labelledby="demo-ux-review-mutation-heading"
       >
         <h2 id="demo-ux-review-mutation-heading" data-review-visual-role="section-title">
-          見直し操作（表示専用）
+          {adminRead ? "確認（読み取り専用）" : "見直し操作（表示専用）"}
         </h2>
-        <p className={styles.mutationNote} data-demo-ux="review-due-mutation-note">
-          {DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE}
-        </p>
-        <div className={styles.actionRow}>
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            data-demo-ux="review-due-mutation-button"
-          >
-            見直しを完了する
-          </button>
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            data-demo-ux="review-due-mutation-button"
-          >
-            評価を更新する
-          </button>
-        </div>
+        {adminRead ? (
+          <p className={styles.mutationNote} data-demo-ux="review-due-admin-read-note">
+            {DEMO_REVIEW_DUE_ADMIN_READ_NOTE}
+          </p>
+        ) : (
+          <>
+            <p className={styles.mutationNote} data-demo-ux="review-due-mutation-note">
+              {DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE}
+            </p>
+            <div className={styles.actionRow}>
+              <button
+                type="button"
+                disabled
+                aria-disabled="true"
+                data-demo-ux="review-due-mutation-button"
+              >
+                見直しを完了する
+              </button>
+              <button
+                type="button"
+                disabled
+                aria-disabled="true"
+                data-demo-ux="review-due-mutation-button"
+              >
+                評価を更新する
+              </button>
+            </div>
+          </>
+        )}
       </section>
 
       <div className={styles.stateGrid}>

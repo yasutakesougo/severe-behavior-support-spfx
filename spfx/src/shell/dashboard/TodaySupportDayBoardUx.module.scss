@@ -31,16 +31,29 @@
   list-style: none;
 }
 
+@media (min-width: 769px) {
+  .listDesktopDense {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .listDesktopDense > * {
+    min-width: 0;
+  }
+}
+
 .itemCard {
   display: flex;
   flex-direction: column;
   gap: sbs.$space-3;
+  min-width: 0;
   padding: sbs.$space-4;
   background: sbs.$color-surface;
   border: sbs.$border-width-thin solid sbs.$color-border-subtle;
   border-radius: sbs.$radius-medium;
   box-shadow: sbs.$elevation-subtle;
   box-sizing: border-box;
+  overflow-wrap: anywhere;
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -147,8 +160,22 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
+.tapButtonQuiet {
+  background: sbs.$color-surface;
+  color: sbs.$color-text-secondary;
+  border-color: sbs.$color-border-subtle;
+  font-weight: sbs.$font-weight-body;
+}
+
 @media (max-width: 768px) {
   .tapButton {
     width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 390px) {
+  .itemCard {
+    padding: sbs.$space-3;
   }
 }

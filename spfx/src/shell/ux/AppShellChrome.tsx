@@ -44,6 +44,7 @@ import { SHELL_DEFAULT_DESTINATION } from "./destination";
 import { PartialRetrievalPanel } from "./PartialRetrievalPanel";
 import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
+import { SHELL_DEFAULT_PRESENTATION_ROLE, type ShellPresentationRole } from "./presentation-role";
 import type { ShellSaveState } from "./save-state";
 import {
   DEMO_UX_14_SLICE,
@@ -95,6 +96,8 @@ export type AppShellChromeProps = Readonly<{
   dailyRecordPresentation?: ShellDailyRecordPresentation;
   reviewDueStatePresentation?: ShellReviewDueStatePresentation;
   procedureWorkflowPresentation?: ShellProcedureWorkflowPresentation;
+  /** Synthetic VP-G entry emphasis. Not Entra / roleResolutionAuthorized. */
+  presentationRole?: ShellPresentationRole;
   children?: React.ReactNode;
 }>;
 
@@ -124,6 +127,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     dailyRecordPresentation = DEMO_UX_DAILY_RECORD_FIXTURE,
     reviewDueStatePresentation = DEMO_UX_REVIEW_DUE_FIXTURE,
     procedureWorkflowPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+    presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
     children,
   } = props;
 
@@ -511,6 +515,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
       data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
       data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
+      data-shell-ux-presentation-role={presentationRole}
       data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
       data-demo-ux-7-today-nav="true"
       data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
@@ -637,6 +642,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     headingRef={destinationHeadingRef}
                     onBackToOverview={handleBackToOverview}
                     procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
+                    presentationRole={presentationRole}
                   />
                 ) : (
                   <OverviewDashboard
@@ -646,6 +652,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     selectedOccurrenceId={selectedOccurrenceId}
                     onReviewDueStateRequest={handleReviewDueStateRequest}
                     onTodayActionNavigate={handleTodayActionNavigate}
+                    presentationRole={presentationRole}
                     onSelectOccurrence={(occId) => {
                       const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
                       if (!item) {
@@ -667,6 +674,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       presentation={supportPlanPresentation}
                       headingRef={destinationHeadingRef}
                       onBackToUserDetail={handleBackToUserDetail}
+                      presentationRole={presentationRole}
                     />
                   ) : procedureRecordFormOpen &&
                     selectedCurrentProcedure &&
@@ -697,6 +705,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     <UserDetail
                       presentation={selectedUserDetail}
                       headingRef={destinationHeadingRef}
+                      presentationRole={presentationRole}
                       onBackToUsers={handleBackToUsers}
                       onSupportPlanRequest={
                         selectedUserDetail.userId === supportPlanPresentation.userId

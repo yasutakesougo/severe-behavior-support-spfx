@@ -6,6 +6,7 @@ export const DEMO_UX_USER_DETAIL_FIXTURE: ShellUserDetailPresentation = {
   personLabel: "Aさん",
   planLabel: "支援計画",
   planPeriodLabel: "2026/07/01–2026/09/30",
+  planLifecycleLabel: "現行版（合成）",
   currentSupport: [
     {
       id: "environment",
@@ -27,8 +28,10 @@ export const DEMO_UX_USER_DETAIL_FIXTURE: ShellUserDetailPresentation = {
     { id: "record-1", occurredAtLabel: "8/11 14:32", recordTypeLabel: "支援記録" },
     { id: "record-2", occurredAtLabel: "8/10 10:15", recordTypeLabel: "支援記録" },
   ],
-  evaluationSummary: "評価欄の情報量と配置を確認するための合成サンプルです。",
-  historySummary: "履歴欄の表示順を確認するための合成サンプルです。",
+  evaluationSummary:
+    "評価（アセスメント）欄の情報量と配置を確認するための合成サンプルです。計画表示の前に確認する想定です。",
+  historySummary:
+    "過去版・履歴の合成表示です。現行計画は支援計画欄です。ここから計画を切り替えません。",
   businessFacts: {
     createdByLabel: "担当者A（合成）",
     qualificationLabel: "実践研修修了者（合成表示）",
@@ -46,6 +49,7 @@ export const DEMO_UX_USER_DETAIL_C_FIXTURE: ShellUserDetailPresentation = {
   personLabel: "Cさん",
   planLabel: "支援計画",
   planPeriodLabel: "2026/08/01–2026/10/31",
+  planLifecycleLabel: "現行版（合成）",
   currentSupport: [
     {
       id: "environment",
@@ -65,7 +69,8 @@ export const DEMO_UX_USER_DETAIL_C_FIXTURE: ShellUserDetailPresentation = {
   ],
   recentRecords: [{ id: "record-c1", occurredAtLabel: "8/09 16:40", recordTypeLabel: "支援記録" }],
   evaluationSummary: "新しい計画の確認用に配置した評価欄の合成サンプルです。",
-  historySummary: "新しい計画確認用の履歴欄合成サンプルです。",
+  historySummary:
+    "過去版・履歴の合成表示です。現行計画は支援計画欄です。ここから計画を切り替えません。",
   businessFacts: {
     createdByLabel: "担当者C（合成）",
     qualificationLabel: "実践研修修了者（合成表示）",

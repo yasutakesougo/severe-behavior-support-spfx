@@ -37,6 +37,7 @@ describe("SHELL-UX fixture boundary", () => {
 
   it("defaults selected destination to overview without business connection", () => {
     expect(SHELL_UX_DEFAULT_FIXTURE.selectedDestination).toBe("overview");
+    expect(SHELL_UX_DEFAULT_FIXTURE.presentationRole).toBe("FIELD_STAFF");
   });
 
   it("does not authorize live I/O, REST, binder, auth judgment, or business destinations", () => {

@@ -1,4 +1,5 @@
 import {
+  DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
   supportPlanCopyIsFailClosed,
 } from "./support-plan-copy";
@@ -22,6 +23,8 @@ describe("DEMO-UX-4 support plan presentation boundary", () => {
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).not.toContain("確認待ち");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.businessFacts.qualificationLabel).toContain("実践研修");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.systemState.saveStateLabel).toContain("live保存なし");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.planLifecycleLabel).toContain("現行版");
+    expect(DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE).toContain("承認・変更権限は追加しません");
   });
 
   it("keeps presentation copy fail-closed", () => {
