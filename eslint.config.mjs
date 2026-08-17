@@ -35,8 +35,5 @@ export default tseslint.config(
       },
       sourceType: "module",
     },
-    rules: {
-      "@typescript-eslint/no-require-imports": "off",
-    },
   },
 );
