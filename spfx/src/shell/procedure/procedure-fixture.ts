@@ -62,15 +62,18 @@ export const FIELD_WORKFLOW_PROCEDURE_FIXTURE: ShellProcedureWorkflowPresentatio
     "user-a": FIELD_WORKFLOW_CURRENT_USER_A,
   },
   reviewMaterials: [FIELD_WORKFLOW_REVIEW_MATERIAL_V2, FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED],
-  defaultSaveOutcome: "saved",
 };
+
+/** Staff recorder subject — not the supported person's UserId or display name. */
+export const FIELD_WORKFLOW_RECORDER_SUBJECT_ID = "synthetic-subject-001" as const;
 
 export const FIELD_WORKFLOW_UI_SLICE = {
   id: "FIELD-WORKFLOW-UI",
   issue: "#356",
   presentationOnly: true as const,
   syntheticProcedureWorkflowAuthorized: true as const,
-  syntheticProcedureRecordSaveAuthorized: true as const,
+  syntheticProcedureRecordSaveAuthorized: false as const,
+  procedureRecordPersistAuthorized: true as const,
   liveTenantIoAuthorized: false as const,
   sharePointRestAuthorized: false as const,
   binderHostWiringAuthorized: false as const,

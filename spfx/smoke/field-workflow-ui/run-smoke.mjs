@@ -220,7 +220,6 @@ try {
   });
 
   await page.click('[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"] input[type="radio"]');
-  await page.click('[data-field-workflow-outcome="save_failed"]');
   await page.click('[data-field-workflow="procedure-record-save"]');
   await page.waitForFunction(
     () =>
@@ -228,36 +227,41 @@ try {
         .querySelector('[data-field-workflow="procedure-record-form"]')
         ?.getAttribute("data-field-workflow-save-state") === "save_failed",
   );
-  const failedNote = await page.$eval(
-    '[data-field-workflow="procedure-record-note"]',
-    (el) => el.value,
-  );
   const failedSelected = await page.$eval(
     '[data-field-workflow-result="PERFORMED_WITH_ADAPTATION"]',
     (el) => el.getAttribute("data-field-workflow-result-selected"),
   );
+  const savePath = await page.$eval('[data-field-workflow="procedure-record-form"]', (el) =>
+    el.getAttribute("data-field-workflow-save-path"),
+  );
+  const syntheticOutcomeCount = await page.$$eval(
+    '[data-field-workflow="synthetic-outcome"]',
+    (els) => els.length,
+  );
   checks.push({
     id: "fw09-save-failed-retains-input",
     pass: failedSelected === "true",
-    detail: { failedNote, failedSelected },
+    detail: { failedSelected },
+  });
+  checks.push({
+    id: "kp-persist-path-connected",
+    pass: savePath === "persistProcedureRecord",
+    detail: { savePath },
+  });
+  checks.push({
+    id: "kp-synthetic-success-removed",
+    pass: syntheticOutcomeCount === 0,
+    detail: { syntheticOutcomeCount },
   });
 
-  await page.click('[data-field-workflow-outcome="save_outcome_unknown"]');
-  await page.click('[data-field-workflow="procedure-record-save"]');
-  await page.waitForFunction(
-    () =>
-      document
-        .querySelector('[data-field-workflow="procedure-record-form"]')
-        ?.getAttribute("data-field-workflow-save-state") === "save_outcome_unknown",
-  );
-  const unknownSaveDisabled = await page.$eval(
+  const retryEnabled = await page.$eval(
     '[data-field-workflow="procedure-record-save"]',
-    (el) => el.disabled,
+    (el) => el.disabled === false,
   );
   checks.push({
-    id: "fw09-save-outcome-unknown-blocks-retry",
-    pass: unknownSaveDisabled === true,
-    detail: { unknownSaveDisabled },
+    id: "fw09-save-failed-allows-retry",
+    pass: retryEnabled === true,
+    detail: { retryEnabled },
   });
 
   await page.keyboard.press("Tab");

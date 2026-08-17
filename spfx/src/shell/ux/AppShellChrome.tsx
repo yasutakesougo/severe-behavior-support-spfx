@@ -579,7 +579,6 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     <ProcedureRecordForm
                       context={selectedCurrentProcedure.context}
                       headingRef={destinationHeadingRef}
-                      defaultSaveOutcome={procedureWorkflowPresentation.defaultSaveOutcome}
                       onBackToCurrentProcedure={handleBackToCurrentProcedure}
                       onSaveStateChange={setProcedureFlowSaveState}
                     />

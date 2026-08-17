@@ -47,8 +47,6 @@ export type ProcedureRecordDraft = Readonly<{
   note: string;
 }>;
 
-export type SyntheticProcedureSaveOutcome = "saved" | "save_failed" | "save_outcome_unknown";
-
 export type HistoricalLookupStatus =
   "RESOLVED" | "EMPTY" | "UNKNOWN" | "FETCH_FAILED" | "VERSION_MISMATCH" | "PLAN_MISMATCH";
 
@@ -74,8 +72,6 @@ export type ShellProcedureWorkflowPresentation = Readonly<{
   currentByUserId: Readonly<Record<string, ShellCurrentProcedurePresentation>>;
   /** Review materials (FW-07) — may include historical v2 while Active is v3. */
   reviewMaterials: readonly ShellProcedureReviewMaterial[];
-  /** Synthetic save outcome controls for demo/smoke (not live I/O). */
-  defaultSaveOutcome: SyntheticProcedureSaveOutcome;
 }>;
 
 export type ProcedureRecordFormSaveSnapshot = Readonly<{

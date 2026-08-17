@@ -29,6 +29,18 @@ export interface ProcedureRecordPersistencePort {
   create(record: ProcedureRecord): Promise<ProcedureRecordCreateAttempt>;
 }
 
+/**
+ * LIVE WRITE HOLD default. Dual lookup is EMPTY; create is DEFINITE_FAILURE.
+ * persistProcedureRecord therefore returns save_failed. No SharePoint I/O.
+ */
+export function createLiveWriteHoldProcedureRecordPersistencePort(): ProcedureRecordPersistencePort {
+  return {
+    findByRecordId: async () => ({ status: "EMPTY" }),
+    findByIdempotencyKey: async () => ({ status: "EMPTY" }),
+    create: async () => ({ status: "DEFINITE_FAILURE" }),
+  };
+}
+
 export type ProcedureRecordLookupClassification =
   | Readonly<{ kind: "ACCEPT_NEW" }>
   | Readonly<{ kind: "REPLAY"; persisted: ProcedureRecord }>

@@ -1,27 +1,40 @@
 import {
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+  FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
   FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
   FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
   FIELD_WORKFLOW_UI_SLICE,
   VP4_WORKFLOW_SLICE,
   PROCEDURE_RECORD_RESULT_VALUES,
-  applySyntheticProcedureRecordSave,
+  buildStaffProcedureRecordCreateInput,
   canRetryProcedureRecordSave,
   createEmptyProcedureRecordDraft,
+  createProcedureRecordSaveInFlightGuard,
   isProcedureRecordDraftReadyToSave,
   labelForProcedureRecordResult,
+  persistStaffProcedureRecordFromForm,
   procedureResultCopyIsNonFailure,
   projectionUsesRecordPlanVersion,
   resolveProcedureReviewProjection,
 } from "./index";
 
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // Jest jsdom may omit TextEncoder; SHA-256 uses it. SPFx/browser have it.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
+
 describe("FIELD-WORKFLOW UI (#356) presentation boundary", () => {
-  it("authorizes only synthetic procedure workflow / save", () => {
+  it("authorizes persist save and forbids synthetic success / live write", () => {
     expect(FIELD_WORKFLOW_UI_SLICE.id).toBe("FIELD-WORKFLOW-UI");
     expect(FIELD_WORKFLOW_UI_SLICE.issue).toBe("#356");
-    expect(FIELD_WORKFLOW_UI_SLICE.presentationOnly).toBe(true);
     expect(FIELD_WORKFLOW_UI_SLICE.syntheticProcedureWorkflowAuthorized).toBe(true);
-    expect(FIELD_WORKFLOW_UI_SLICE.syntheticProcedureRecordSaveAuthorized).toBe(true);
+    expect(FIELD_WORKFLOW_UI_SLICE.syntheticProcedureRecordSaveAuthorized).toBe(false);
+    expect(FIELD_WORKFLOW_UI_SLICE.procedureRecordPersistAuthorized).toBe(true);
     expect(FIELD_WORKFLOW_UI_SLICE.sharePointRestAuthorized).toBe(false);
     expect(FIELD_WORKFLOW_UI_SLICE.productionWriteAuthorized).toBe(false);
     expect(FIELD_WORKFLOW_UI_SLICE.deployAuthorized).toBe(false);
@@ -89,7 +102,7 @@ describe("FIELD-WORKFLOW UI FW-05 historical projection", () => {
   });
 });
 
-describe("FIELD-WORKFLOW UI FW-09 synthetic save", () => {
+describe("FIELD-WORKFLOW UI persist save (KIOSK-SPFX-PERSISTENCE-1)", () => {
   const context = FIELD_WORKFLOW_PROCEDURE_FIXTURE.currentByUserId["user-a"].context;
 
   it("requires result before save", () => {
@@ -103,52 +116,67 @@ describe("FIELD-WORKFLOW UI FW-09 synthetic save", () => {
     ).toBe(true);
   });
 
-  it("retains draft on save_failed and allows retry", () => {
+  it("PERSIST-05: staff save uses persistProcedureRecord, not synthetic success", async () => {
     const draft = {
       result: "PERFORMED_WITH_ADAPTATION" as const,
       performedAtLocal: "2026-08-13T14:05",
       note: "keep-me",
     };
-    const result = applySyntheticProcedureRecordSave({
-      context,
-      draft,
-      outcome: "save_failed",
-    });
+    const result = await persistStaffProcedureRecordFromForm(
+      buildStaffProcedureRecordCreateInput({
+        context,
+        draft,
+        recordedBy: FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
+        nowIso: "2026-08-13T14:10:00+09:00",
+      }),
+    );
+    expect(result.persistCalled).toBe(true);
+    expect(result.saveState).not.toBe("saved");
     expect(result.saveState).toBe("save_failed");
-    expect(result.draft.note).toBe("keep-me");
-    expect(result.draft.result).toBe("PERFORMED_WITH_ADAPTATION");
-    expect(result.context.planVersion).toBe(context.planVersion);
     expect(canRetryProcedureRecordSave(result.saveState)).toBe(true);
   });
 
-  it("blocks immediate retry on save_outcome_unknown", () => {
-    const draft = {
-      result: "NOT_PERFORMED" as const,
-      performedAtLocal: "2026-08-13T14:05",
-      note: "unknown-path",
-    };
-    const result = applySyntheticProcedureRecordSave({
-      context,
-      draft,
-      outcome: "save_outcome_unknown",
-    });
-    expect(result.saveState).toBe("save_outcome_unknown");
-    expect(result.draft.note).toBe("unknown-path");
-    expect(canRetryProcedureRecordSave(result.saveState)).toBe(false);
+  it("PERSIST-06: in-flight guard rejects a second begin", () => {
+    const guard = createProcedureRecordSaveInFlightGuard();
+    expect(guard.tryBegin()).toBe(true);
+    expect(guard.tryBegin()).toBe(false);
+    expect(guard.isInFlight()).toBe(true);
+    guard.end();
+    expect(guard.tryBegin()).toBe(true);
   });
 
-  it("does not rebind saved context to a different plan version", () => {
-    const result = applySyntheticProcedureRecordSave({
-      context,
-      draft: {
-        result: "PERFORMED_AS_PLANNED",
-        performedAtLocal: "2026-08-13T14:05",
-        note: "",
-      },
-      outcome: "saved",
-    });
-    expect(result.context.planId).toBe(context.planId);
-    expect(result.context.planVersion).toBe(context.planVersion);
-    expect(result.context.procedureId).toBe(context.procedureId);
+  it("PERSIST-08: missing recordedBy is fail-closed", async () => {
+    const result = await persistStaffProcedureRecordFromForm(
+      buildStaffProcedureRecordCreateInput({
+        context,
+        draft: {
+          result: "NOT_PERFORMED",
+          performedAtLocal: "2026-08-13T14:05",
+          note: "",
+        },
+        recordedBy: "",
+        nowIso: "2026-08-13T14:10:00+09:00",
+      }),
+    );
+    expect(result.persistCalled).toBe(false);
+    expect(result.saveState).toBe("save_failed");
+  });
+
+  it("does not rebind saved context to a different plan version", async () => {
+    const result = await persistStaffProcedureRecordFromForm(
+      buildStaffProcedureRecordCreateInput({
+        context,
+        draft: {
+          result: "PERFORMED_AS_PLANNED",
+          performedAtLocal: "2026-08-13T14:05",
+          note: "",
+        },
+        recordedBy: FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
+        nowIso: "2026-08-13T14:10:00+09:00",
+      }),
+    );
+    expect(result.persistCalled).toBe(true);
+    expect(context.planVersion).toBe(3);
+    expect(context.planId).toBe("synthetic-plan-001");
   });
 });

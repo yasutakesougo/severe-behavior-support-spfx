@@ -8,6 +8,7 @@ import type { SupportPlanVersion } from "./support-plan";
 import { toAsiaTokyoCalendarDay } from "./support-plan";
 import type { SupportPlanVersionProcedureBinding } from "./support-plan-version-procedure-binding";
 import type { SupportRecordTraceRef } from "./support-record-trace";
+import { sha256Hex } from "./sha256";
 import { isNonEmptyString, isRecord, isValidIsoDateTime } from "./validation";
 
 /**
@@ -120,6 +121,71 @@ export function procedureRecordFingerprintMaterial(
     performedAt: record.performedAt,
     recordedAt: record.recordedAt,
     recordedBy: record.recordedBy,
+  };
+}
+
+/** Same unit-separator framing as FindingIdentity (opaque digest; not a new vocabulary). */
+export const PROCEDURE_RECORD_IDENTITY_SEPARATOR = "\u001f";
+
+export function computeProcedureRecordPayloadFingerprint(
+  material: ProcedureRecordFingerprintMaterial,
+): string {
+  return sha256Hex(
+    [
+      material.planId,
+      String(material.planVersion),
+      material.ProcedureId,
+      material.ProcedureVersion,
+      material.result,
+      material.performedAt,
+      material.recordedAt,
+      material.recordedBy,
+    ].join(PROCEDURE_RECORD_IDENTITY_SEPARATOR),
+  );
+}
+
+export type ProcedureRecordIdentityMintInput = Readonly<{
+  OrganizationId: string;
+  SiteId: string;
+  UserId: string;
+  planId: string;
+  planVersion: number;
+  ProcedureId: string;
+  ProcedureVersion: string;
+  result: ProcedureRecordResult;
+  performedAt: string;
+  recordedAt: string;
+  recordedBy: string;
+}>;
+
+/**
+ * Deterministic RecordId / IdempotencyKey for one CREATE payload.
+ * Retry of the same payload reuses the same keys (persist dual-lookup REPLAY).
+ */
+export function mintProcedureRecordIdentity(
+  input: ProcedureRecordIdentityMintInput,
+): Readonly<{ RecordId: string; IdempotencyKey: string }> {
+  const material = [
+    input.OrganizationId,
+    input.SiteId,
+    input.UserId,
+    input.planId,
+    String(input.planVersion),
+    input.ProcedureId,
+    input.ProcedureVersion,
+    input.result,
+    input.performedAt,
+    input.recordedAt,
+    input.recordedBy,
+  ].join(PROCEDURE_RECORD_IDENTITY_SEPARATOR);
+
+  return {
+    RecordId: sha256Hex(
+      `procedure-record.record-id${PROCEDURE_RECORD_IDENTITY_SEPARATOR}${material}`,
+    ),
+    IdempotencyKey: sha256Hex(
+      `procedure-record.idempotency-key${PROCEDURE_RECORD_IDENTITY_SEPARATOR}${material}`,
+    ),
   };
 }
 

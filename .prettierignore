@@ -16,6 +16,7 @@ spfx/sharepoint
 spfx/jest-output
 spfx/.heft
 spfx/package-lock.json
+spfx/src/sbs-domain/staff-persist.bundle.js
 spfx/smoke/**/smoke-bundle.js
 spfx/smoke/**/smoke-production.css
 spfx/smoke/**/smoke-report.json
