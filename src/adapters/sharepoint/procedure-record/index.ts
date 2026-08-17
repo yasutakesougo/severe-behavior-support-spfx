@@ -88,6 +88,7 @@ export {
   type ProcedureRecordSchemaVerification,
 } from "./physical-schema";
 export {
+  createProcedureRecordKioskLiveVerifyExecutionRepository,
   createProcedureRecordLiveWriteExecutionRepository,
   createProcedureRecordRepository,
   createReadOnlyProcedureRecordRepository,

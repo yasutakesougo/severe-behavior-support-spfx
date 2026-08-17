@@ -33,6 +33,10 @@ describe("ProcedureRecord production export surface", () => {
       typeof procedureRecord.createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket,
       "function",
     );
+    assert.equal(
+      typeof procedureRecord.createProcedureRecordKioskLiveVerifyExecutionRepository,
+      "function",
+    );
     assert.equal(procedureRecord.createProcedureRecordLiveWriteAuthorization(), null);
     assert.equal(procedureRecord.isProcedureRecordLiveWriteAuthorized(), false);
     assert.equal(
@@ -72,12 +76,20 @@ describe("ProcedureRecord production export surface", () => {
     assert.equal(spfxIndex.includes("SPFX_PROCEDURE_RECORD_LIVE_WRITE_GATE"), false);
     assert.equal(spfxIndex.includes("createProcedureRecordSpHttpClientTransportFromHost"), true);
     assert.equal(spfxIndex.includes("createProcedureRecordLiveWriteSpHttpClientTransport"), true);
+    assert.equal(
+      spfxIndex.includes("createProcedureRecordKioskLiveVerifySpHttpClientTransport"),
+      false,
+    );
     const factory = source(
       "spfx/src/adapters/procedure-record/sphttpclient-list-transport.factory.ts",
     );
     assert.equal(factory.includes("itemCreateAuthorized"), false);
     assert.equal(factory.includes("liveTenantIoAuthorized"), false);
     assert.equal(factory.includes("createProcedureRecordLiveWriteSpHttpClientTransport"), false);
+    assert.equal(
+      factory.includes("createProcedureRecordKioskLiveVerifySpHttpClientTransport"),
+      false,
+    );
   });
 
   it("keeps GO packet rules aligned and does not export mutable gate flags", () => {
@@ -113,9 +125,21 @@ describe("ProcedureRecord production export surface", () => {
       repository.includes("createProcedureRecordLiveWriteAuthorizationFromGoPacket"),
       true,
     );
+    assert.equal(
+      repository.includes("createProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket"),
+      true,
+    );
     assert.equal(repository.includes("logicalSiteId: binding.siteId"), true);
     assert.equal(
       transport.includes("createSpfxProcedureRecordLiveWriteAuthorizationFromGoPacket"),
+      true,
+    );
+    assert.equal(
+      transport.includes("createSpfxProcedureRecordKioskLiveVerifyAuthorizationFromGoPacket"),
+      true,
+    );
+    assert.equal(
+      transport.includes("createProcedureRecordKioskLiveVerifySpHttpClientTransport"),
       true,
     );
     assert.equal(transport.includes("listGuid: options.listGuid"), true);
