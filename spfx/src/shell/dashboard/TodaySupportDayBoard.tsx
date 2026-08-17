@@ -32,6 +32,15 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
           const badgeSoft =
             item.effectiveStatus === "取消済み" || item.effectiveStatus === "記録済み";
 
+          const actionLabel =
+            item.effectiveStatus === "記録済み"
+              ? "記録を確認・再表示"
+              : item.effectiveStatus === "取消済み"
+                ? "取消詳細を表示"
+                : item.effectiveStatus === "確認が必要"
+                  ? "確認が必要なため詳細のみ"
+                  : "この予定を記録 / 手順表示";
+
           return (
             <li
               key={item.occurrenceId}
@@ -43,6 +52,7 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
               data-kiosk-schedule-item-id={item.scheduleItemId}
               data-kiosk-procedure-id={item.procedure.ProcedureId}
               data-kiosk-status={item.effectiveStatus}
+              data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
               data-kiosk-selected={isSelected ? "true" : "false"}
             >
               <div className={styles.itemHeader}>
@@ -79,17 +89,14 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
                   className={styles.tapButton}
                   data-kiosk-ux="tap-occurrence-button"
                   data-kiosk-target-occurrence-id={item.occurrenceId}
+                  data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
                   onClick={() => {
                     if (onSelectOccurrence) {
                       onSelectOccurrence(item.occurrenceId);
                     }
                   }}
                 >
-                  {item.effectiveStatus === "記録済み"
-                    ? "記録を確認・再表示"
-                    : item.effectiveStatus === "取消済み"
-                      ? "取消詳細を表示"
-                      : "この予定を記録 / 手順表示"}
+                  {actionLabel}
                 </button>
               </div>
             </li>

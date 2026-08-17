@@ -262,6 +262,71 @@ async function screenshot(page, name) {
   return shot;
 }
 
+async function focusKey(page) {
+  return page.evaluate(() => {
+    const el = document.activeElement;
+    return `${el?.tagName}:${el?.id ?? ""}:${el?.getAttribute("data-field-workflow") ?? ""}:${el?.getAttribute("data-kiosk-ux") ?? ""}`;
+  });
+}
+
+async function assertRecordFormBlockedForStatus(page, status) {
+  await page.click(`[data-kiosk-status="${status}"] [data-kiosk-ux="tap-occurrence-button"]`);
+  await page.waitForSelector('[data-field-workflow="current-procedure"]', {
+    timeout: 8000,
+  });
+  const before = await page.evaluate((expectedStatus) => {
+    const procedure = document.querySelector('[data-field-workflow="current-procedure"]');
+    const statusText = document.querySelector('[data-kiosk-ux="occurrence-status-text"]');
+    const cta = document.querySelector('[data-field-workflow="record-procedure-cta"]');
+    const form = document.querySelector('[data-field-workflow="procedure-record-form"]');
+    return {
+      procedurePresent: Boolean(procedure),
+      occurrenceStatus: procedure?.getAttribute("data-kiosk-occurrence-status") ?? "",
+      canStart: procedure?.getAttribute("data-kiosk-can-start-record") ?? "",
+      statusText: (statusText?.textContent ?? "").replace(/\s+/g, " ").trim(),
+      expectedStatus,
+      ctaDisabled: cta instanceof HTMLButtonElement ? cta.disabled : true,
+      ctaAriaDisabled: cta?.getAttribute("aria-disabled") ?? "",
+      ctaCanStart: cta?.getAttribute("data-kiosk-can-start-record") ?? "",
+      formPresent: Boolean(form),
+    };
+  }, status);
+
+  const cta = await page.$('[data-field-workflow="record-procedure-cta"]');
+  let clickReachedDisabledControl = false;
+  if (cta) {
+    try {
+      await cta.click({ delay: 20 });
+      clickReachedDisabledControl = true;
+    } catch {
+      clickReachedDisabledControl = false;
+    }
+  }
+  const formAfterNormalAction = await page.evaluate(() =>
+    Boolean(document.querySelector('[data-field-workflow="procedure-record-form"]')),
+  );
+
+  await screenshot(page, `occurrence-${status}-current-procedure`);
+  await page.click('[data-field-workflow="current-procedure-back"]');
+  await page.waitForSelector('[data-kiosk-ux="today-support-list"]', { timeout: 8000 });
+
+  return {
+    ...before,
+    clickReachedDisabledControl,
+    formAfterNormalAction,
+    blocked:
+      before.procedurePresent &&
+      before.occurrenceStatus === status &&
+      before.statusText.includes(status) &&
+      before.canStart === "false" &&
+      before.ctaDisabled &&
+      before.ctaAriaDisabled === "true" &&
+      before.ctaCanStart === "false" &&
+      before.formPresent === false &&
+      formAfterNormalAction === false,
+  };
+}
+
 try {
   const readyQuery = "viewMode=ready&siteSelection=SITE-ISG&destination=overview&saveState=unsaved";
 
@@ -395,20 +460,25 @@ try {
     );
     await screenshot(page, "keyboard-occurrence-rebrowse");
 
-    const trapProbe = await page.evaluate(async () => {
-      const seen = new Set();
-      let stuck = false;
-      for (let index = 0; index < 12; index += 1) {
-        const active = document.activeElement;
-        const key = `${active?.tagName}:${active?.getAttribute("data-field-workflow") ?? ""}:${index}`;
-        if (seen.has(key) && index > 2) {
-          stuck = true;
-          break;
-        }
-        seen.add(active?.tagName ?? "");
-      }
-      return { stuck: false, note: "activation path returned without trapping" };
-    });
+    const forwardKeys = [];
+    for (let index = 0; index < 16; index += 1) {
+      await page.keyboard.press("Tab");
+      forwardKeys.push(await focusKey(page));
+    }
+    const uniqueForward = new Set(forwardKeys);
+    const afterForward = forwardKeys[forwardKeys.length - 1];
+    await page.keyboard.down("Shift");
+    await page.keyboard.press("Tab");
+    await page.keyboard.up("Shift");
+    const afterShift = await focusKey(page);
+    const trapProbe = {
+      uniqueForwardCount: uniqueForward.size,
+      movedForward: uniqueForward.size > 1,
+      shiftTabMoved: afterShift !== afterForward,
+      afterForward,
+      afterShift,
+      forwardKeys,
+    };
 
     record("keyboard-visible-focus", occurrenceFocus.visible && recordCtaFocus.visible, {
       occurrenceFocus,
@@ -429,10 +499,14 @@ try {
         rebrowseTab,
       },
     );
-    record("keyboard-no-trap", trapProbe.stuck === false && overviewAfterReturn.overviewPresent, {
-      trapProbe,
-      overviewAfterReturn,
-    });
+    record(
+      "keyboard-no-trap",
+      trapProbe.movedForward && trapProbe.shiftTabMoved && overviewAfterReturn.overviewPresent,
+      {
+        trapProbe,
+        overviewAfterReturn,
+      },
+    );
     record(
       "occurrence-id-round-trip",
       firstOccurrenceId.length > 0 &&
@@ -451,6 +525,86 @@ try {
       },
     );
     record("keyboard-page-errors", errors.length === 0, { errors });
+    await page.close();
+  }
+
+  {
+    const { page, errors } = await openPage(readyQuery, {
+      width: 768,
+      height: 1024,
+      deviceScaleFactor: 1,
+    });
+    const unrecorded = await page.evaluate(() => {
+      const item = document.querySelector(
+        '[data-kiosk-status="未実施"][data-kiosk-can-start-record="true"]',
+      );
+      const button = item?.querySelector('[data-kiosk-ux="tap-occurrence-button"]');
+      return {
+        present: Boolean(item),
+        canStart: item?.getAttribute("data-kiosk-can-start-record") ?? "",
+        actionLabel: (button?.textContent ?? "").trim(),
+      };
+    });
+    await page.click(
+      '[data-kiosk-status="未実施"][data-kiosk-can-start-record="true"] [data-kiosk-ux="tap-occurrence-button"]',
+    );
+    await page.waitForSelector('[data-field-workflow="current-procedure"]', { timeout: 8000 });
+    const unrecordedProcedure = await page.evaluate(() => {
+      const procedure = document.querySelector('[data-field-workflow="current-procedure"]');
+      const cta = document.querySelector('[data-field-workflow="record-procedure-cta"]');
+      return {
+        status: procedure?.getAttribute("data-kiosk-occurrence-status") ?? "",
+        statusText: (
+          document.querySelector('[data-kiosk-ux="occurrence-status-text"]')?.textContent ?? ""
+        )
+          .replace(/\s+/g, " ")
+          .trim(),
+        canStart: procedure?.getAttribute("data-kiosk-can-start-record") ?? "",
+        ctaDisabled: cta instanceof HTMLButtonElement ? cta.disabled : true,
+      };
+    });
+    await page.click('[data-field-workflow="record-procedure-cta"]');
+    await page.waitForSelector('[data-field-workflow="procedure-record-form"]', { timeout: 8000 });
+    const unrecordedFormPresent = await page.evaluate(() =>
+      Boolean(document.querySelector('[data-field-workflow="procedure-record-form"]')),
+    );
+    await screenshot(page, "occurrence-unrecorded-record-form");
+    record(
+      "unrecorded-record-action",
+      errors.length === 0 &&
+        unrecorded.present &&
+        unrecorded.canStart === "true" &&
+        unrecordedProcedure.status === "未実施" &&
+        unrecordedProcedure.statusText.includes("未実施") &&
+        unrecordedProcedure.canStart === "true" &&
+        unrecordedProcedure.ctaDisabled === false &&
+        unrecordedFormPresent,
+      { errors, unrecorded, unrecordedProcedure, unrecordedFormPresent },
+    );
+    await page.close();
+  }
+
+  {
+    const { page, errors } = await openPage(readyQuery, {
+      width: 768,
+      height: 1024,
+      deviceScaleFactor: 1,
+    });
+    const recorded = await assertRecordFormBlockedForStatus(page, "記録済み");
+    const cancelled = await assertRecordFormBlockedForStatus(page, "取消済み");
+    const conflict = await assertRecordFormBlockedForStatus(page, "確認が必要");
+    record("recorded-fresh-record-prevention", errors.length === 0 && recorded.blocked, {
+      errors,
+      recorded,
+    });
+    record("cancelled-record-prevention", errors.length === 0 && cancelled.blocked, {
+      errors,
+      cancelled,
+    });
+    record("conflict-record-prevention", errors.length === 0 && conflict.blocked, {
+      errors,
+      conflict,
+    });
     await page.close();
   }
 

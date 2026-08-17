@@ -40,7 +40,35 @@ export type ShellCurrentProcedurePresentation = Readonly<{
   projection: CurrentProcedureProjection;
   heading: string;
   summaryPrompt: string;
+  /**
+   * Authoritative create-record eligibility. False for 記録済み / 取消済み / 確認が必要.
+   * User-detail path without an occurrence keeps true (existing FIELD-WORKFLOW).
+   */
+  canStartProcedureRecord: boolean;
+  occurrenceStatus?: "未実施" | "記録済み" | "取消済み" | "確認が必要";
 }>;
+
+export function isProcedureRecordStartAllowed(
+  presentation: Pick<ShellCurrentProcedurePresentation, "canStartProcedureRecord"> | undefined,
+): boolean {
+  return presentation?.canStartProcedureRecord === true;
+}
+
+/**
+ * Handler-level fail-closed gate. Must stay false even if invoked unexpectedly
+ * for 記録済み / 取消済み / 確認が必要.
+ */
+export function canInvokeProcedureRecordStart(input: {
+  interactionPaused: boolean;
+  currentProcedureOpen: boolean;
+  selectedUserDetailId?: string;
+  presentation?: Pick<ShellCurrentProcedurePresentation, "canStartProcedureRecord">;
+}): boolean {
+  if (input.interactionPaused || !input.currentProcedureOpen || !input.selectedUserDetailId) {
+    return false;
+  }
+  return isProcedureRecordStartAllowed(input.presentation);
+}
 
 export type ProcedureRecordDraft = Readonly<{
   result: ProcedureRecordResultValue | undefined;

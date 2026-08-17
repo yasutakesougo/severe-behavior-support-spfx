@@ -109,6 +109,7 @@ export type TodaySupportItem = Readonly<{
   planId: string;
   planVersion: number;
   effectiveStatus: StaffOccurrenceStatus;
+  canStartProcedureRecord: boolean;
   rawResolverResult: OccurrenceResolverResult;
   boundRecord?: ProcedureRecord;
   observation?: ProcedureObservation;
@@ -125,6 +126,8 @@ export type BuildTodaySupportReadModelInput = Readonly<{
   lifecycleEvents: readonly ProcedureRecordLifecycleEvent[];
   observations: readonly ProcedureObservation[];
 }>;
+
+export function canStartProcedureRecordForStatus(status: StaffOccurrenceStatus): boolean;
 
 export function buildTodaySupportReadModel(
   input: BuildTodaySupportReadModelInput,

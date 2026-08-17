@@ -13,9 +13,17 @@ import type { ProcedureRecord } from "./procedure-record";
 
 /**
  * Staff-facing occurrence status as required by Kiosk contract.
- * Exactly 3 staff-facing states (no invented states).
+ * 3 normal staff-facing states plus the fail-closed 確認が必要 presentation state.
  */
 export type StaffOccurrenceStatus = "未実施" | "記録済み" | "取消済み" | "確認が必要";
+
+/**
+ * Authoritative recording eligibility. Only 未実施 may start a new ProcedureRecord.
+ * 記録済み / 取消済み / 確認が必要 must not enter the create-record flow.
+ */
+export function canStartProcedureRecordForStatus(status: StaffOccurrenceStatus): boolean {
+  return status === "未実施";
+}
 
 export type TodaySupportItem = Readonly<{
   occurrenceId: string;
@@ -30,6 +38,7 @@ export type TodaySupportItem = Readonly<{
   planId: string;
   planVersion: number;
   effectiveStatus: StaffOccurrenceStatus;
+  canStartProcedureRecord: boolean;
   rawResolverResult: OccurrenceResolverResult;
   boundRecord?: ProcedureRecord;
   observation?: ProcedureObservation;
@@ -146,6 +155,7 @@ export function buildTodaySupportReadModel(
       planId: sch.planId,
       planVersion: sch.planVersion,
       effectiveStatus,
+      canStartProcedureRecord: canStartProcedureRecordForStatus(effectiveStatus),
       rawResolverResult: resolverResult,
       boundRecord,
       observation: obs,

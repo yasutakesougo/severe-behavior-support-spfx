@@ -23,6 +23,7 @@ export {
 } from "./kiosk-contract";
 export {
   buildTodaySupportReadModel,
+  canStartProcedureRecordForStatus,
   type BuildTodaySupportReadModelInput,
   type StaffOccurrenceStatus,
   type TodaySupportItem,

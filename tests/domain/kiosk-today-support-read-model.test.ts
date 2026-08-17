@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import type { LocalDate } from "../../src/contracts/types";
 import {
   buildTodaySupportReadModel,
+  canStartProcedureRecordForStatus,
   type BuildTodaySupportReadModelInput,
 } from "../../src/domain/kiosk-today-support-read-model";
 import {
@@ -173,18 +174,21 @@ describe("Kiosk Today Support Read Model Domain Unit", () => {
     // Item 1: Recorded
     assert.equal(items[0].occurrenceId, occ1Id);
     assert.equal(items[0].effectiveStatus, "記録済み");
+    assert.equal(items[0].canStartProcedureRecord, false);
     assert.equal(items[0].boundRecord?.RecordId, record1.RecordId);
     assert.equal(items[0].observation?.condition, "落ち着いていた");
 
     // Item 2: Unrecorded
     assert.equal(items[1].occurrenceId, occ2Id);
     assert.equal(items[1].effectiveStatus, "未実施");
+    assert.equal(items[1].canStartProcedureRecord, true);
     assert.equal(items[1].observation, undefined);
 
     // Item 3: Repeated procedureId, distinct OccurrenceId!
     assert.equal(items[2].occurrenceId, occ3Id);
     assert.notEqual(items[2].occurrenceId, items[0].occurrenceId);
     assert.equal(items[2].effectiveStatus, "未実施");
+    assert.equal(items[2].canStartProcedureRecord, true);
   });
 
   it("correctly resolves 取消済み state when CANCEL lifecycle event is present", () => {
@@ -203,6 +207,7 @@ describe("Kiosk Today Support Read Model Domain Unit", () => {
     const items = buildTodaySupportReadModel(input);
     assert.equal(items.length, 1);
     assert.equal(items[0].effectiveStatus, "取消済み");
+    assert.equal(items[0].canStartProcedureRecord, false);
     assert.equal(items[0].boundRecord?.RecordId, record1.RecordId);
   });
 
@@ -233,7 +238,15 @@ describe("Kiosk Today Support Read Model Domain Unit", () => {
     const items = buildTodaySupportReadModel(input);
     assert.equal(items.length, 1);
     assert.equal(items[0].effectiveStatus, "確認が必要");
+    assert.equal(items[0].canStartProcedureRecord, false);
     assert.equal(items[0].rawResolverResult.status, "CONFLICT");
+  });
+
+  it("authorizes ProcedureRecord creation only for 未実施", () => {
+    assert.equal(canStartProcedureRecordForStatus("未実施"), true);
+    assert.equal(canStartProcedureRecordForStatus("記録済み"), false);
+    assert.equal(canStartProcedureRecordForStatus("取消済み"), false);
+    assert.equal(canStartProcedureRecordForStatus("確認が必要"), false);
   });
 });
 
@@ -243,6 +256,11 @@ describe("Kiosk Today Support SPFx entry (read-only)", () => {
     assert.equal(typeof entry.buildTodaySupportReadModel, "function");
     assert.equal(typeof entry.mintOccurrenceId, "function");
     assert.equal(typeof entry.mintLifecycleEventIdentity, "function");
+    assert.equal(typeof entry.canStartProcedureRecordForStatus, "function");
+    assert.equal(entry.canStartProcedureRecordForStatus("未実施"), true);
+    assert.equal(entry.canStartProcedureRecordForStatus("記録済み"), false);
+    assert.equal(entry.canStartProcedureRecordForStatus("取消済み"), false);
+    assert.equal(entry.canStartProcedureRecordForStatus("確認が必要"), false);
     assert.equal("persistProcedureRecord" in entry, false);
     assert.equal("persistStaffProcedureRecord" in entry, false);
     assert.equal("createLiveWriteHoldProcedureRecordPersistencePort" in entry, false);

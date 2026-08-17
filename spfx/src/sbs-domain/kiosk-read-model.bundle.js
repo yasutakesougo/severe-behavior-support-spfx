@@ -21,6 +21,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var kiosk_today_support_spfx_entry_exports = {};
 __export(kiosk_today_support_spfx_entry_exports, {
   buildTodaySupportReadModel: () => buildTodaySupportReadModel,
+  canStartProcedureRecordForStatus: () => canStartProcedureRecordForStatus,
   mintLifecycleEventIdentity: () => mintLifecycleEventIdentity,
   mintOccurrenceId: () => mintOccurrenceId
 });
@@ -338,6 +339,9 @@ function resolveEffectiveOccurrenceState(boundRecordIds, events) {
 }
 
 // src/domain/kiosk-today-support-read-model.ts
+function canStartProcedureRecordForStatus(status) {
+  return status === "\u672A\u5B9F\u65BD";
+}
 function buildTodaySupportReadModel(input) {
   var _a, _b;
   const {
@@ -413,6 +417,7 @@ function buildTodaySupportReadModel(input) {
       planId: sch.planId,
       planVersion: sch.planVersion,
       effectiveStatus,
+      canStartProcedureRecord: canStartProcedureRecordForStatus(effectiveStatus),
       rawResolverResult: resolverResult,
       boundRecord,
       observation: obs

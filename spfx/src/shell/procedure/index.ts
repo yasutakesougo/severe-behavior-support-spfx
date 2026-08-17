@@ -53,4 +53,8 @@ export type {
   ShellProcedureReviewMaterial,
   ShellProcedureWorkflowPresentation,
 } from "./procedure-types";
-export { PROCEDURE_RECORD_RESULT_VALUES } from "./procedure-types";
+export {
+  canInvokeProcedureRecordStart,
+  isProcedureRecordStartAllowed,
+  PROCEDURE_RECORD_RESULT_VALUES,
+} from "./procedure-types";

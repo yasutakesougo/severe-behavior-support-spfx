@@ -16,7 +16,9 @@ import {
   procedureResultCopyIsNonFailure,
   projectionUsesRecordPlanVersion,
   resolveProcedureReviewProjection,
+  canInvokeProcedureRecordStart,
   getKioskSyntheticTodaySupportItems,
+  isProcedureRecordStartAllowed,
 } from "./index";
 
 beforeAll(() => {
@@ -49,6 +51,8 @@ describe("FIELD-WORKFLOW UI (#356) presentation boundary", () => {
     expect(current.projection.noteLabel.length).toBeGreaterThan(0);
     expect(current.context.planVersion).toBe(3);
     expect(current.context.procedureId).toBe("synthetic-procedure-p3");
+    expect(current.canStartProcedureRecord).toBe(true);
+    expect(isProcedureRecordStartAllowed(current)).toBe(true);
   });
 
   it("keeps result vocabulary factual (non-failure copy)", () => {
@@ -186,14 +190,84 @@ describe("Kiosk Today Support synthetic fixture (read-model only)", () => {
   it("projects unique OccurrenceIds and staff-facing statuses", () => {
     const items = getKioskSyntheticTodaySupportItems();
     const occurrenceIds = items.map((item) => item.occurrenceId);
-    expect(items.length).toBe(4);
-    expect(new Set(occurrenceIds).size).toBe(4);
+    expect(items.length).toBe(5);
+    expect(new Set(occurrenceIds).size).toBe(5);
     expect(occurrenceIds[0].length).toBe(64);
     expect(items.map((item) => item.effectiveStatus)).toEqual([
       "未実施",
       "記録済み",
       "取消済み",
       "未実施",
+      "確認が必要",
     ]);
+  });
+
+  it("keeps repeated ProcedureIds as distinct occurrences", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const lunch = items.filter((item) => item.procedure.ProcedureId === "proc-lunch");
+    expect(lunch).toHaveLength(2);
+    expect(lunch[0].occurrenceId).not.toBe(lunch[1].occurrenceId);
+    expect(lunch.map((item) => item.effectiveStatus)).toEqual(["記録済み", "未実施"]);
+  });
+
+  it("keeps observation on the recorded occurrence only", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み");
+    expect(recorded?.observation?.condition).toBe("落ち着いていた");
+    expect(items.filter((item) => item.observation)).toHaveLength(1);
+  });
+
+  it("authorizes record CTA only for 未実施 and fail-closes other states", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const unrecorded = items.filter((item) => item.effectiveStatus === "未実施");
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み");
+    const cancelled = items.find((item) => item.effectiveStatus === "取消済み");
+    const conflict = items.find((item) => item.effectiveStatus === "確認が必要");
+
+    expect(unrecorded.length).toBeGreaterThan(0);
+    expect(unrecorded.every((item) => item.canStartProcedureRecord)).toBe(true);
+    expect(unrecorded.every((item) => isProcedureRecordStartAllowed(item))).toBe(true);
+    expect(recorded?.canStartProcedureRecord).toBe(false);
+    expect(cancelled?.canStartProcedureRecord).toBe(false);
+    expect(conflict?.canStartProcedureRecord).toBe(false);
+    expect(
+      items
+        .filter((item) => item.effectiveStatus !== "未実施")
+        .every((item) => !item.canStartProcedureRecord),
+    ).toBe(true);
+  });
+
+  it("blocks ProcedureRecordForm open at the handler even if invoked unexpectedly", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み");
+    const cancelled = items.find((item) => item.effectiveStatus === "取消済み");
+    const conflict = items.find((item) => item.effectiveStatus === "確認が必要");
+    const unrecorded = items.find((item) => item.effectiveStatus === "未実施");
+
+    const openAttempt = (
+      item: NonNullable<typeof recorded>,
+      extra?: { interactionPaused?: boolean; currentProcedureOpen?: boolean },
+    ): boolean =>
+      canInvokeProcedureRecordStart({
+        interactionPaused: extra?.interactionPaused ?? false,
+        currentProcedureOpen: extra?.currentProcedureOpen ?? true,
+        selectedUserDetailId: "user-a",
+        presentation: { canStartProcedureRecord: item.canStartProcedureRecord },
+      });
+
+    expect(openAttempt(unrecorded!)).toBe(true);
+    expect(openAttempt(recorded!)).toBe(false);
+    expect(openAttempt(cancelled!)).toBe(false);
+    expect(openAttempt(conflict!)).toBe(false);
+    expect(openAttempt(unrecorded!, { interactionPaused: true })).toBe(false);
+    expect(openAttempt(unrecorded!, { currentProcedureOpen: false })).toBe(false);
+    expect(
+      canInvokeProcedureRecordStart({
+        interactionPaused: false,
+        currentProcedureOpen: true,
+        selectedUserDetailId: "user-a",
+        presentation: undefined,
+      }),
+    ).toBe(false);
   });
 });

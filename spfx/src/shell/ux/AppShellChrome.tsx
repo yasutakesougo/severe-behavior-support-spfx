@@ -8,7 +8,9 @@ import {
 import {
   CurrentProcedure,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+  canInvokeProcedureRecordStart,
   getKioskSyntheticTodaySupportItems,
+  isProcedureRecordStartAllowed,
   ProcedureRecordForm,
   type ShellProcedureWorkflowPresentation,
 } from "../procedure";
@@ -407,8 +409,42 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
   };
 
+  const selectedOccurrenceItem = selectedOccurrenceId
+    ? todaySupportItems.find((item) => item.occurrenceId === selectedOccurrenceId)
+    : undefined;
+
+  const selectedCurrentProcedureBase = selectedUserDetailId
+    ? procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
+    : undefined;
+
+  const selectedCurrentProcedure =
+    selectedCurrentProcedureBase && occurrenceFlowFromOverview && selectedOccurrenceItem
+      ? {
+          ...selectedCurrentProcedureBase,
+          canStartProcedureRecord: selectedOccurrenceItem.canStartProcedureRecord,
+          occurrenceStatus: selectedOccurrenceItem.effectiveStatus,
+          context: {
+            ...selectedCurrentProcedureBase.context,
+            occurrenceId: selectedOccurrenceItem.occurrenceId,
+            userId: selectedOccurrenceItem.userId,
+            personLabel: selectedOccurrenceItem.personLabel,
+            procedureId: selectedOccurrenceItem.procedure.ProcedureId,
+            procedureVersion: selectedOccurrenceItem.procedure.ProcedureVersion,
+            planId: selectedOccurrenceItem.planId,
+            planVersion: selectedOccurrenceItem.planVersion,
+          },
+        }
+      : selectedCurrentProcedureBase;
+
   const handleRecordProcedureRequest = (): void => {
-    if (interactionPaused || !currentProcedureOpen || !selectedUserDetailId) {
+    if (
+      !canInvokeProcedureRecordStart({
+        interactionPaused,
+        currentProcedureOpen,
+        selectedUserDetailId,
+        presentation: selectedCurrentProcedure,
+      })
+    ) {
       return;
     }
     shouldFocusDestinationRef.current = true;
@@ -440,31 +476,6 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setReviewDuePreviewOpen(false);
   };
-
-  const selectedOccurrenceItem = selectedOccurrenceId
-    ? todaySupportItems.find((item) => item.occurrenceId === selectedOccurrenceId)
-    : undefined;
-
-  const selectedCurrentProcedureBase = selectedUserDetailId
-    ? procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
-    : undefined;
-
-  const selectedCurrentProcedure =
-    selectedCurrentProcedureBase && occurrenceFlowFromOverview && selectedOccurrenceItem
-      ? {
-          ...selectedCurrentProcedureBase,
-          context: {
-            ...selectedCurrentProcedureBase.context,
-            occurrenceId: selectedOccurrenceItem.occurrenceId,
-            userId: selectedOccurrenceItem.userId,
-            personLabel: selectedOccurrenceItem.personLabel,
-            procedureId: selectedOccurrenceItem.procedure.ProcedureId,
-            procedureVersion: selectedOccurrenceItem.procedure.ProcedureVersion,
-            planId: selectedOccurrenceItem.planId,
-            planVersion: selectedOccurrenceItem.planVersion,
-          },
-        }
-      : selectedCurrentProcedureBase;
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
   const siteUnselected = isSiteUnselected(selection);
@@ -657,7 +668,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       headingRef={destinationHeadingRef}
                       onBackToUserDetail={handleBackToUserDetail}
                     />
-                  ) : procedureRecordFormOpen && selectedCurrentProcedure ? (
+                  ) : procedureRecordFormOpen &&
+                    selectedCurrentProcedure &&
+                    isProcedureRecordStartAllowed(selectedCurrentProcedure) ? (
                     <ProcedureRecordForm
                       context={selectedCurrentProcedure.context}
                       headingRef={destinationHeadingRef}
@@ -674,7 +687,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                           ? handleBackToTodaySupport
                           : handleBackToUserDetail
                       }
-                      onRecordProcedureRequest={handleRecordProcedureRequest}
+                      onRecordProcedureRequest={
+                        isProcedureRecordStartAllowed(selectedCurrentProcedure)
+                          ? handleRecordProcedureRequest
+                          : undefined
+                      }
                     />
                   ) : (
                     <UserDetail
