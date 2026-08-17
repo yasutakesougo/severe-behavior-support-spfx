@@ -77,7 +77,7 @@
 }
 
 .filterButton {
-  min-height: 2.25rem;
+  min-height: 2.75rem; /* ~44px touch target */
   padding: sbs.$space-2 sbs.$space-4;
   border-width: sbs.$border-width-thin;
   border-style: solid;
@@ -204,7 +204,7 @@
 }
 
 .detailButton {
-  min-height: 2.25rem;
+  min-height: 2.75rem; /* ~44px touch target */
   padding: sbs.$space-2 sbs.$space-4;
   border-width: sbs.$border-width-thin;
   border-style: solid;

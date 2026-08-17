@@ -6,6 +6,7 @@ import {
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
 } from "./overview-copy";
 import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "./overview-types";
+import { SemanticIcon } from "../primitives";
 import styles from "./DashboardUx.module.scss";
 
 export type OverviewDashboardProps = Readonly<{
@@ -64,6 +65,17 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
             const isRosterStatusCard =
               card.id === "needs_review" || card.id === "unrecorded" || card.id === "deadline_near";
             const countUnit = isRosterStatusCard ? "名" : "件";
+            const semanticIconName =
+              card.id === "today_targets"
+                ? "todaySupport"
+                : card.id === "unrecorded"
+                  ? "record"
+                  : card.id === "deadline_near"
+                    ? "monitoring"
+                    : card.id === "needs_review"
+                      ? "supportPlan"
+                      : undefined;
+
             return (
               <li
                 key={card.id}
@@ -73,7 +85,12 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                 data-demo-ux-metric-family={isRosterStatusCard ? "roster" : "overview_other"}
                 data-demo-ux-kpi-count={String(card.count)}
               >
-                <p className={styles.kpiLabel}>{card.label}</p>
+                <div className={styles.kpiHeaderRow}>
+                  <p className={styles.kpiLabel}>{card.label}</p>
+                  {semanticIconName ? (
+                    <SemanticIcon name={semanticIconName} size={20} className={styles.kpiIcon} />
+                  ) : null}
+                </div>
                 <p
                   className={styles.kpiCount}
                   aria-label={`${card.label} ${card.count}${countUnit}`}
@@ -117,6 +134,15 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           {actionItems.map((item) => {
             const navigation = item.navigation;
             const enabled = Boolean(todayActionNavEnabled && navigation);
+            const actionSemanticIcon =
+              navigation?.kind === "records"
+                ? "record"
+                : navigation?.kind === "review_due"
+                  ? "monitoring"
+                  : navigation?.kind === "user_detail"
+                    ? "supportPlan"
+                    : undefined;
+
             return (
               <li
                 key={item.id}
@@ -126,7 +152,16 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                 data-demo-ux-action-nav={navigation?.kind ?? "none"}
               >
                 <div className={styles.actionMain}>
-                  <p className={styles.personLabel}>{item.personLabel}</p>
+                  <div className={styles.personRow}>
+                    {actionSemanticIcon ? (
+                      <SemanticIcon
+                        name={actionSemanticIcon}
+                        size={18}
+                        className={styles.actionIcon}
+                      />
+                    ) : null}
+                    <p className={styles.personLabel}>{item.personLabel}</p>
+                  </div>
                   <p className={styles.reasonText}>{item.reason}</p>
                 </div>
                 <button

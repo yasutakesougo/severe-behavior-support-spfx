@@ -2,6 +2,7 @@ import * as React from "react";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import { DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE } from "./support-plan-copy";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
+import { SemanticIcon } from "../primitives";
 import styles from "./SupportPlanUx.module.scss";
 
 export type SupportPlanProps = Readonly<{
@@ -55,15 +56,18 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         </button>
       </div>
 
-      <h1
-        id="demo-ux-support-plan-heading"
-        ref={headingRef}
-        tabIndex={-1}
-        className={styles.planHeading}
-        data-demo-ux="support-plan-heading"
-      >
-        {planTitle}
-      </h1>
+      <div className={styles.headingTitleRow}>
+        <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
+        <h1
+          id="demo-ux-support-plan-heading"
+          ref={headingRef}
+          tabIndex={-1}
+          className={styles.planHeading}
+          data-demo-ux="support-plan-heading"
+        >
+          {planTitle}
+        </h1>
+      </div>
       <p className={styles.personSubheading} data-demo-ux="support-plan-person">
         {personLabel}
       </p>
@@ -101,7 +105,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       </section>
 
       <section className={styles.detailSection} aria-labelledby="demo-ux-plan-review-heading">
-        <h2 id="demo-ux-plan-review-heading">見直し状況</h2>
+        <div className={styles.sectionHeaderWithIcon}>
+          <SemanticIcon name="monitoring" size={20} className={styles.sectionHeaderIcon} />
+          <h2 id="demo-ux-plan-review-heading">見直し状況</h2>
+        </div>
         <div className={styles.reviewPanel} data-demo-ux="support-plan-review">
           <p className={styles.reviewStatus}>{reviewStatus.reviewStatusLabel}</p>
           <p>{reviewStatus.reviewDueLabel}</p>

@@ -92,6 +92,13 @@
   box-sizing: border-box;
 }
 
+.kpiHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: sbs.$space-2;
+}
+
 .kpiLabel {
   margin: 0;
   font-size: sbs.$font-size-body;
@@ -99,9 +106,24 @@
   line-height: sbs.$line-height-body;
 }
 
+.kpiIcon {
+  color: sbs.$color-text-secondary;
+  flex-shrink: 0;
+}
+
+.personRow {
+  display: flex;
+  align-items: center;
+  gap: sbs.$space-2;
+}
+
+.actionIcon {
+  color: sbs.$color-text-secondary;
+  flex-shrink: 0;
+}
+
 .kpiCount {
   margin: 0;
-  /* Display emphasis; no larger type token in DADS-04 catalog yet. */
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.1;
