@@ -7,6 +7,11 @@
 [`security-deep-scan-current-sha-2.md`](./security-deep-scan-current-sha-2.md)
 は Deep Scan closeout 正本である。本記録はそれを再解釈しない。
 
+後続の Binding Decision 記録（この closeout を書き換えない）:
+[`spfx-production-binding-decision-1.md`](./spfx-production-binding-decision-1.md)
+（basis `8f13cd9…` / Option A KEEP unbound）。
+RG-BIND / next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-RELEASE-ARTIFACT-AUTHORITY-1
