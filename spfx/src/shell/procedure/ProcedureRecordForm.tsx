@@ -40,6 +40,7 @@ import {
   PROCEDURE_RECORD_RESULT_VALUES,
   type ProcedureBindingContext,
   type ProcedureRecordDraft,
+  type ProcedureRecordFormSaveSnapshot,
 } from "./procedure-types";
 import styles from "./ProcedureRecordFormUx.module.scss";
 
@@ -53,6 +54,9 @@ export type ProcedureRecordFormProps = Readonly<{
   nowIso?: () => string | undefined;
   onBackToCurrentProcedure?: () => void;
   onSaveStateChange?: (state: ShellSaveState) => void;
+  onDraftSnapshotChange?: (snapshot: ProcedureRecordFormSaveSnapshot) => void;
+  /** Unit 6: session-local draft resume is chrome-owned; form only reflects the flag. */
+  draftResumeAuthorized?: boolean;
   /** Unit 3: occurrence navigation only when a concrete OccurrenceId is already in context. */
   nextOccurrenceNavigationAuthorized?: boolean;
   todaySupportItems?: readonly NextActionableOccurrenceItem[];
@@ -74,6 +78,8 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   nowIso = (): string | undefined => nowAsiaTokyoIsoDateTime() ?? undefined,
   onBackToCurrentProcedure,
   onSaveStateChange,
+  onDraftSnapshotChange,
+  draftResumeAuthorized = false,
   nextOccurrenceNavigationAuthorized = false,
   todaySupportItems,
   onNextActionableOccurrence,
@@ -86,11 +92,25 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   const saveInFlight = React.useRef(createProcedureRecordSaveInFlightGuard());
   const frozenRecordedAtRef = React.useRef<string | undefined>(undefined);
 
-  const setSaveStateAndNotify = (next: ShellSaveState): void => {
+  const emitSnapshot = (nextDraft: ProcedureRecordDraft, nextSave: ShellSaveState): void => {
+    if (onDraftSnapshotChange) {
+      onDraftSnapshotChange({
+        saveState: nextSave,
+        draft: nextDraft,
+        context,
+      });
+    }
+  };
+
+  const setSaveStateAndNotify = (
+    next: ShellSaveState,
+    nextDraft: ProcedureRecordDraft = draft,
+  ): void => {
     setSaveState(next);
     if (onSaveStateChange) {
       onSaveStateChange(next);
     }
+    emitSnapshot(nextDraft, next);
   };
 
   const unlockForEdit = (): boolean => {
@@ -102,10 +122,13 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       return;
     }
     frozenRecordedAtRef.current = undefined;
-    setDraft((prev) => ({ ...prev, result }));
+    const nextDraft = { ...draft, result };
+    setDraft(nextDraft);
     if (saveState === "save_failed") {
-      setSaveStateAndNotify("unsaved");
+      setSaveStateAndNotify("unsaved", nextDraft);
+      return;
     }
+    emitSnapshot(nextDraft, saveState);
   };
 
   const updatePerformedAt = (value: string): void => {
@@ -113,20 +136,26 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       return;
     }
     frozenRecordedAtRef.current = undefined;
-    setDraft((prev) => ({ ...prev, performedAtLocal: value }));
+    const nextDraft = { ...draft, performedAtLocal: value };
+    setDraft(nextDraft);
     if (saveState === "save_failed") {
-      setSaveStateAndNotify("unsaved");
+      setSaveStateAndNotify("unsaved", nextDraft);
+      return;
     }
+    emitSnapshot(nextDraft, saveState);
   };
 
   const updateNote = (value: string): void => {
     if (!unlockForEdit()) {
       return;
     }
-    setDraft((prev) => ({ ...prev, note: value }));
+    const nextDraft = { ...draft, note: value };
+    setDraft(nextDraft);
     if (saveState === "save_failed") {
-      setSaveStateAndNotify("unsaved");
+      setSaveStateAndNotify("unsaved", nextDraft);
+      return;
     }
+    emitSnapshot(nextDraft, saveState);
   };
 
   const handleSave = (): void => {
@@ -158,13 +187,15 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
           }),
           persistPort,
         );
-        setDraft(retainDraftAfterSaveFailed(draft));
+        const retained = retainDraftAfterSaveFailed(draft);
+        setDraft(retained);
         saveInFlight.current.end();
-        setSaveStateAndNotify(result.saveState);
+        setSaveStateAndNotify(result.saveState, retained);
       } catch {
-        setDraft(retainDraftAfterSaveFailed(draft));
+        const retained = retainDraftAfterSaveFailed(draft);
+        setDraft(retained);
         saveInFlight.current.end();
-        setSaveStateAndNotify("save_failed");
+        setSaveStateAndNotify("save_failed", retained);
       }
     };
     runSave().then(
@@ -207,6 +238,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       data-field-workflow-procedure-version={context.procedureVersion}
       data-field-workflow-occurrence-id={context.occurrenceId ?? ""}
       data-field-workflow-save-state={saveState}
+      data-field-staff-draft-resume={draftResumeAuthorized ? "true" : "false"}
       aria-labelledby="field-workflow-procedure-record-heading"
     >
       <h1

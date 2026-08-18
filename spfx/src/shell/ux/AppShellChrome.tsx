@@ -13,6 +13,7 @@ import {
   isProcedureRecordStartAllowed,
   ProcedureRecordForm,
   selectNextActionableOccurrence,
+  type ProcedureRecordFormSaveSnapshot,
   type ShellProcedureWorkflowPresentation,
 } from "../procedure";
 import {
@@ -39,12 +40,18 @@ import {
   rememberUsersFilterChip,
   rememberUsersFocusOrigin,
   rememberUserSessionSaveState,
+  rememberUserSessionDraft,
+  discardAllUserSessionDrafts,
+  forgetUserSessionDraft,
+  resolveProcedureRecordResume,
+  snapshotForUser,
   shouldRetainUsersListRestore,
   USERS_FILTER_CHIP_ALL,
   type ShellSupportPlanPresentation,
   type ShellUserDetailPresentation,
   type ShellUsersPresentation,
   type UsersFilterChipLabel,
+  type UsersSessionDraftByUserId,
   type UsersSessionSaveStateByUserId,
 } from "../users";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
@@ -154,6 +161,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   >();
   const [sessionSaveStateByUserId, setSessionSaveStateByUserId] =
     React.useState<UsersSessionSaveStateByUserId>({});
+  const [sessionDraftByUserId, setSessionDraftByUserId] = React.useState<UsersSessionDraftByUserId>(
+    {},
+  );
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const [selectedOccurrenceId, setSelectedOccurrenceId] = React.useState<string | undefined>();
   const [occurrenceFlowFromOverview, setOccurrenceFlowFromOverview] = React.useState(false);
@@ -202,6 +212,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   React.useEffect(() => {
     setSelection(siteSelection);
     setSessionSaveStateByUserId({});
+    setSessionDraftByUserId(discardAllUserSessionDrafts());
     discardUsersListRestoreState();
   }, [siteSelection]);
 
@@ -231,6 +242,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (Object.keys(sessionSaveStateByUserId).length > 0) {
         setSessionSaveStateByUserId({});
       }
+      if (Object.keys(sessionDraftByUserId).length > 0) {
+        setSessionDraftByUserId(discardAllUserSessionDrafts());
+      }
       if (occurrenceFlowFromOverview) {
         setOccurrenceFlowFromOverview(false);
       }
@@ -255,6 +269,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     procedureRecordFormOpen,
     procedureFlowSaveState,
     sessionSaveStateByUserId,
+    sessionDraftByUserId,
     reviewDuePreviewOpen,
     occurrenceFlowFromOverview,
     usersFilterChip,
@@ -286,6 +301,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
     setSessionSaveStateByUserId({});
+    setSessionDraftByUserId(discardAllUserSessionDrafts());
     discardUsersListRestoreState();
     if (onSiteSelectionChange) {
       onSiteSelectionChange(next);
@@ -296,6 +312,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(state);
     setSessionSaveStateByUserId((prev) =>
       rememberUserSessionSaveState(prev, selectedUserDetailId, state),
+    );
+  };
+
+  const handleProcedureDraftSnapshotChange = (snapshot: ProcedureRecordFormSaveSnapshot): void => {
+    if (!FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized) {
+      return;
+    }
+    setSessionDraftByUserId((prev) =>
+      rememberUserSessionDraft(prev, selectedUserDetailId, snapshot),
     );
   };
 
@@ -506,6 +531,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         }
       : selectedCurrentProcedureBase;
 
+  const procedureRecordResume = selectedCurrentProcedure
+    ? resolveProcedureRecordResume({
+        authorized: FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized,
+        snapshot: snapshotForUser(sessionDraftByUserId, selectedUserDetailId),
+        currentContext: selectedCurrentProcedure.context,
+      })
+    : undefined;
+
   const handleRecordProcedureRequest = (): void => {
     if (
       !canInvokeProcedureRecordStart({
@@ -518,8 +551,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     shouldFocusDestinationRef.current = true;
+    if (
+      FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized &&
+      snapshotForUser(sessionDraftByUserId, selectedUserDetailId) &&
+      procedureRecordResume &&
+      !procedureRecordResume.resumed
+    ) {
+      setSessionDraftByUserId((prev) => forgetUserSessionDraft(prev, selectedUserDetailId));
+    }
     setProcedureRecordFormOpen(true);
-    setProcedureFlowSaveState("unsaved");
+    setProcedureFlowSaveState(
+      procedureRecordResume?.resumed ? procedureRecordResume.saveState : "unsaved",
+    );
   };
 
   const handleBackToCurrentProcedure = (): void => {
@@ -775,8 +818,16 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     <ProcedureRecordForm
                       context={selectedCurrentProcedure.context}
                       headingRef={destinationHeadingRef}
+                      initialDraft={
+                        procedureRecordResume?.resumed ? procedureRecordResume.draft : undefined
+                      }
+                      initialSaveState={procedureRecordResume?.saveState ?? "unsaved"}
                       onBackToCurrentProcedure={handleBackToCurrentProcedure}
                       onSaveStateChange={handleProcedureFlowSaveStateChange}
+                      onDraftSnapshotChange={handleProcedureDraftSnapshotChange}
+                      draftResumeAuthorized={
+                        FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized
+                      }
                       nextOccurrenceNavigationAuthorized={
                         FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized &&
                         occurrenceFlowFromOverview

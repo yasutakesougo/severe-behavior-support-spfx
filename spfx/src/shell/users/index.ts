@@ -37,6 +37,19 @@ export {
   type UsersListRestoreTarget,
 } from "./users-list-restore";
 export {
+  discardAllUserSessionDrafts,
+  forgetUserSessionDraft,
+  isResumeWorthyDraft,
+  isResumeWorthySnapshot,
+  procedureBindingContextsMatch,
+  rememberUserSessionDraft,
+  resolveProcedureRecordResume,
+  snapshotForUser,
+  USERS_SESSION_DRAFT_RESUME_EMPTY,
+  type ProcedureRecordResume,
+  type UsersSessionDraftByUserId,
+} from "./users-session-draft-resume";
+export {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
   USERS_SESSION_SAVE_OVERLAY_STATES,
   ariaLabelForUsersSessionSaveOverlay,
