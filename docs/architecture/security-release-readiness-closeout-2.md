@@ -8,6 +8,10 @@
 は basis `93305a44…` の **HISTORICAL** closeout である。現行 main の
 release authority ではない。
 
+後続の Deep Scan 記録（この closeout を書き換えない）:
+[`security-deep-scan-current-sha-2.md`](./security-deep-scan-current-sha-2.md)
+（scan-target `8a5056c…`）。U2 / next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SECURITY-RELEASE-READINESS-CLOSEOUT-2
