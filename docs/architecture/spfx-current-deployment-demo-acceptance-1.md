@@ -13,6 +13,11 @@ smoke を再実行しない。
 は歴史的 FIELD_STAFF Artifact A 受入である。現行 catalog `1.0.0.1` の
 authority ではない。
 
+後続の artifact drift assessment 記録（この closeout を書き換えない）:
+[`spfx-current-deployment-artifact-drift-assessment-1.md`](./spfx-current-deployment-artifact-drift-assessment-1.md)
+（basis `e8af916…` / CLASSIFIED deployed artifact drift）。
+next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-CURRENT-DEPLOYMENT-DEMO-ACCEPTANCE-1
