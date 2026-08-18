@@ -80,7 +80,15 @@ export function isPlanningPcPresentationRole(role: ShellPresentationRole): boole
 }
 
 export type SupportPlanBlockKey =
-  "summary" | "goals" | "actions" | "review" | "procedures" | "records" | "versions" | "mutation";
+  | "summary"
+  | "goals"
+  | "actions"
+  | "review"
+  | "procedures"
+  | "records"
+  | "versions"
+  | "nextVersion"
+  | "mutation";
 
 export function supportPlanBlockOrderForRole(
   role: ShellPresentationRole,
@@ -92,6 +100,7 @@ export function supportPlanBlockOrderForRole(
       "procedures",
       "records",
       "versions",
+      "nextVersion",
       "goals",
       "actions",
       "mutation",

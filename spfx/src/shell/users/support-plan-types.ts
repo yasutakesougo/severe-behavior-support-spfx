@@ -43,6 +43,8 @@ export type SupportPlanVersionEntry = Readonly<{
   lifecycleLabel: string;
   isCurrent: boolean;
   summary: string;
+  supportMethods: readonly string[];
+  precautions: readonly string[];
 }>;
 
 export type SupportPlanCurrentProcedureSummary = Readonly<{
@@ -75,4 +77,6 @@ export type ShellSupportPlanPresentation = Readonly<{
   versions: readonly SupportPlanVersionEntry[];
   currentProcedures: readonly SupportPlanCurrentProcedureSummary[];
   recentProcedureRecords: readonly ShellProcedureReviewMaterial[];
+  /** Presentation-only. Not a persisted Draft / next SupportPlanVersion. */
+  conceptualNextVersion: number;
 }>;

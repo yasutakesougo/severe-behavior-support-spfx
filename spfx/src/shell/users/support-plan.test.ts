@@ -4,6 +4,10 @@ import {
   SUPPORT_PLAN_ACTIVE_STATUS_LABEL,
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
   SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
+  SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA,
+  SUPPORT_PLAN_NEXT_VERSION_CTA,
+  SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE,
+  SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE,
   supportPlanCopyAvoidsFinalApprovalMeaning,
   supportPlanCopyIsFailClosed,
 } from "./support-plan-copy";
@@ -11,6 +15,7 @@ import {
   DEMO_UX_4_SLICE,
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
   PLANNING_PC_DEMO_1_SLICE,
+  SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
 import { supportPlanBlockOrderForRole } from "../ux/presentation-role";
 
@@ -129,6 +134,8 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     expect(supportPlanBlockOrderForRole("PLANNER")).toContain("procedures");
     expect(supportPlanBlockOrderForRole("PLANNER")).toContain("records");
     expect(supportPlanBlockOrderForRole("PLANNER")).toContain("versions");
+    expect(supportPlanBlockOrderForRole("PLANNER")).toContain("nextVersion");
+    expect(supportPlanBlockOrderForRole("FIELD_STAFF")).not.toContain("nextVersion");
   });
 
   it("does not authorize schema change, live write, or review-due origin", () => {
@@ -142,5 +149,43 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     expect(PLANNING_PC_DEMO_1_SLICE.liveWriteAuthorized).toBe(false);
     expect(PLANNING_PC_DEMO_1_SLICE.deployAuthorized).toBe(false);
     expect(PLANNING_PC_DEMO_1_SLICE.liveTenantIoAuthorized).toBe(false);
+  });
+});
+
+describe("SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1", () => {
+  it("compares past v2 methods with current v3 without retargeting records", () => {
+    const current = DEMO_UX_SUPPORT_PLAN_FIXTURE.versions.find((entry) => entry.version === 3);
+    const pastV2 = DEMO_UX_SUPPORT_PLAN_FIXTURE.versions.find((entry) => entry.version === 2);
+    expect(current?.isCurrent).toBe(true);
+    expect(pastV2?.isCurrent).toBe(false);
+    expect(pastV2?.supportMethods).toEqual(["synthetic v2 method — photo card then wait"]);
+    expect(current?.supportMethods).toEqual(
+      DEMO_UX_SUPPORT_PLAN_FIXTURE.currentProcedures[0]?.performLabels,
+    );
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.recentProcedureRecords[0]?.planVersion).toBe(2);
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.conceptualNextVersion).toBe(4);
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.conceptualNextVersion).toBeGreaterThan(
+      DEMO_UX_SUPPORT_PLAN_FIXTURE.currentVersion,
+    );
+  });
+
+  it("presents next-version concept without persistence or final-approval meaning", () => {
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.id).toBe(
+      "SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1",
+    );
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.presentationOnly).toBe(true);
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.syntheticNextVersionConceptAuthorized).toBe(
+      true,
+    );
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.versionPersistenceAuthorized).toBe(false);
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.draftWorkflowAuthorized).toBe(false);
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.planMutationAuthorized).toBe(false);
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.schemaChangeAuthorized).toBe(false);
+    expect(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.liveWriteAuthorized).toBe(false);
+    expect(SUPPORT_PLAN_NEXT_VERSION_CTA).toContain("表示専用");
+    expect(SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA).toContain("次の版");
+    expect(SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE).toContain("無効にしません");
+    expect(SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE).toContain("無効にしません");
+    expect(supportPlanCopyAvoidsFinalApprovalMeaning(SUPPORT_PLAN_NEXT_VERSION_CTA)).toBe(true);
   });
 });

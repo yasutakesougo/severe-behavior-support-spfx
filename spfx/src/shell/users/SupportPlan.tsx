@@ -14,14 +14,24 @@ import {
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
   SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING,
   SUPPORT_PLAN_HISTORICAL_RECORD_NOTE,
+  SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE,
+  SUPPORT_PLAN_NEXT_VERSION_CTA,
+  SUPPORT_PLAN_NEXT_VERSION_HEADING,
+  SUPPORT_PLAN_NEXT_VERSION_NOTE,
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
+  SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE,
   SUPPORT_PLAN_PAST_VERSION_READONLY_NOTE,
   SUPPORT_PLAN_RECENT_RECORDS_HEADING,
   SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
   SUPPORT_PLAN_REVIEW_MATERIALS_NOTE,
+  SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE,
+  SUPPORT_PLAN_VERSION_COMPARE_HEADING,
   SUPPORT_PLAN_VERSIONS_HEADING,
 } from "./support-plan-copy";
-import { PLANNING_PC_DEMO_1_SLICE } from "./support-plan-fixture";
+import {
+  PLANNING_PC_DEMO_1_SLICE,
+  SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
+} from "./support-plan-fixture";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
 import { SemanticIcon } from "../primitives";
 import styles from "./SupportPlanUx.module.scss";
@@ -31,6 +41,7 @@ export type SupportPlanProps = Readonly<{
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToUserDetail?: () => void;
   onReviewMaterialsRequest?: () => void;
+  nextVersionConceptHighlighted?: boolean;
   presentationRole?: ShellPresentationRole;
 }>;
 
@@ -46,6 +57,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   headingRef,
   onBackToUserDetail,
   onReviewMaterialsRequest,
+  nextVersionConceptHighlighted = false,
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
   const {
@@ -65,11 +77,13 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     versions,
     currentProcedures,
     recentProcedureRecords,
+    conceptualNextVersion,
   } = presentation;
   const adminRead = isAdminAuditPresentationRole(presentationRole);
   const planningPc = isPlanningPcPresentationRole(presentationRole);
   const [selectedVersion, setSelectedVersion] = React.useState(currentVersion);
   const selectedVersionEntry = versions.find((entry) => entry.version === selectedVersion);
+  const currentVersionEntry = versions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
   const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
 
@@ -226,8 +240,88 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           </p>
           <p>{selectedVersionEntry.createdAtLabel}</p>
           <p>{selectedVersionEntry.summary}</p>
+          {!selectedIsCurrent && currentVersionEntry ? (
+            <div
+              className={styles.versionCompare}
+              data-review-new-version="version-compare"
+              data-review-new-version-selected={String(selectedVersionEntry.version)}
+            >
+              <p className={styles.graphLabel}>{SUPPORT_PLAN_VERSION_COMPARE_HEADING}</p>
+              <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
+              <div className={styles.versionCompareGrid}>
+                <div data-review-new-version="compare-past">
+                  <p className={styles.graphLabel}>過去版 {selectedVersionEntry.version}</p>
+                  <p className={styles.sectionHint}>実施する支援</p>
+                  <ul>
+                    {selectedVersionEntry.supportMethods.map((label) => (
+                      <li key={`past-method-${label}`}>{label}</li>
+                    ))}
+                  </ul>
+                  <p className={styles.sectionHint}>避ける対応</p>
+                  <ul>
+                    {selectedVersionEntry.precautions.map((label) => (
+                      <li key={`past-precaution-${label}`}>{label}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div data-review-new-version="compare-current">
+                  <p className={styles.graphLabel}>
+                    現行版 {currentVersionEntry.version}（適用中）
+                  </p>
+                  <p className={styles.sectionHint}>実施する支援</p>
+                  <ul>
+                    {currentVersionEntry.supportMethods.map((label) => (
+                      <li key={`current-method-${label}`}>{label}</li>
+                    ))}
+                  </ul>
+                  <p className={styles.sectionHint}>避ける対応</p>
+                  <ul>
+                    {currentVersionEntry.precautions.map((label) => (
+                      <li key={`current-precaution-${label}`}>{label}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : null}
+    </section>
+  );
+
+  const nextVersionBlock = (
+    <section
+      className={styles.detailSection}
+      aria-labelledby="review-new-version-next-heading"
+      data-review-new-version="next-version-concept"
+      data-review-new-version-highlighted={nextVersionConceptHighlighted ? "true" : "false"}
+    >
+      <h2 id="review-new-version-next-heading">{SUPPORT_PLAN_NEXT_VERSION_HEADING}</h2>
+      <p className={styles.sectionHint} data-review-new-version="immutability-note">
+        {SUPPORT_PLAN_NEXT_VERSION_NOTE}
+      </p>
+      <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
+      <p data-review-new-version="next-version-number">
+        現行は版 {currentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion} です。
+      </p>
+      <p className={styles.sectionHint} data-review-new-version="observation-not-invalidating">
+        {SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE}
+      </p>
+      <p className={styles.sectionHint} data-review-new-version="overdue-not-invalidating">
+        {SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE}
+      </p>
+      {adminRead ? null : (
+        <button
+          type="button"
+          className={styles.mutationButton}
+          disabled
+          aria-disabled="true"
+          data-demo-ux="support-plan-mutation-button"
+          data-review-new-version="create-cta"
+        >
+          {SUPPORT_PLAN_NEXT_VERSION_CTA}
+        </button>
+      )}
     </section>
   );
 
@@ -272,6 +366,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     procedures: proceduresBlock,
     records: recordsBlock,
     versions: versionsBlock,
+    nextVersion: nextVersionBlock,
     mutation: mutationBlock,
   };
 
@@ -281,6 +376,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       data-demo-ux="support-plan"
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
+      data-review-new-version-demo-slice={SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.id}
       data-planning-pc-plan-id={planId}
       data-planning-pc-current-version={String(currentVersion)}
       data-planning-pc-status={presentation.statusCode}

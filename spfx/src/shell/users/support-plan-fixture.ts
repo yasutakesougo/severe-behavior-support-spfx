@@ -2,10 +2,7 @@ import {
   FIELD_WORKFLOW_CURRENT_USER_A,
   FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
 } from "../procedure/procedure-fixture";
-import {
-  SUPPORT_PLAN_ACTIVE_STATUS_LABEL,
-  SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
-} from "./support-plan-copy";
+import { SUPPORT_PLAN_ACTIVE_STATUS_LABEL } from "./support-plan-copy";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
 
 /** Synthetic support plan fixture for responsible-person review + Planning PC graph. */
@@ -72,6 +69,8 @@ export const DEMO_UX_SUPPORT_PLAN_FIXTURE: ShellSupportPlanPresentation = {
       lifecycleLabel: "現行版",
       isCurrent: true,
       summary: "現行の適用中版です。現場支援で使う手順は v3 に結び付きます。",
+      supportMethods: [...FIELD_WORKFLOW_CURRENT_USER_A.projection.performLabels],
+      precautions: [...FIELD_WORKFLOW_CURRENT_USER_A.projection.avoidLabels],
     },
     {
       version: 2,
@@ -79,6 +78,8 @@ export const DEMO_UX_SUPPORT_PLAN_FIXTURE: ShellSupportPlanPresentation = {
       lifecycleLabel: "過去版（読み取り専用）",
       isCurrent: false,
       summary: "過去版。この版に結び付いた記録は v3 へ付け替えません。",
+      supportMethods: [...(FIELD_WORKFLOW_REVIEW_MATERIAL_V2.projectedSupportMethods ?? [])],
+      precautions: [...(FIELD_WORKFLOW_REVIEW_MATERIAL_V2.projectedPrecautions ?? [])],
     },
     {
       version: 1,
@@ -86,6 +87,8 @@ export const DEMO_UX_SUPPORT_PLAN_FIXTURE: ShellSupportPlanPresentation = {
       lifecycleLabel: "過去版（読み取り専用）",
       isCurrent: false,
       summary: "最初の合成版です。現行としては編集できません。",
+      supportMethods: ["synthetic v1 method"],
+      precautions: ["synthetic v1 precaution"],
     },
   ],
   currentProcedures: [
@@ -99,6 +102,7 @@ export const DEMO_UX_SUPPORT_PLAN_FIXTURE: ShellSupportPlanPresentation = {
     },
   ],
   recentProcedureRecords: [FIELD_WORKFLOW_REVIEW_MATERIAL_V2],
+  conceptualNextVersion: 4,
 };
 
 export const DEMO_UX_4_SLICE = {
@@ -140,4 +144,20 @@ export const PLANNING_PC_DEMO_1_SLICE = {
   deployAuthorized: false as const,
 } as const;
 
-export const PLANNING_PC_NOT_FINAL_APPROVAL_NOTE = SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE;
+export const SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE = {
+  id: "SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1",
+  presentationOnly: true as const,
+  syntheticNextVersionConceptAuthorized: true as const,
+  versionComparisonAuthorized: true as const,
+  versionPersistenceAuthorized: false as const,
+  draftWorkflowAuthorized: false as const,
+  planMutationAuthorized: false as const,
+  schemaChangeAuthorized: false as const,
+  approvedByRenameAuthorized: false as const,
+  reviewDueOriginAuthorized: false as const,
+  observationPlanVersionContractAuthorized: false as const,
+  liveWriteAuthorized: false as const,
+  liveTenantIoAuthorized: false as const,
+  sharePointRestAuthorized: false as const,
+  deployAuthorized: false as const,
+} as const;

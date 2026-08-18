@@ -167,6 +167,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   );
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const [reviewFromSupportPlan, setReviewFromSupportPlan] = React.useState(false);
+  const [nextVersionConceptFromReview, setNextVersionConceptFromReview] = React.useState(false);
   const [selectedOccurrenceId, setSelectedOccurrenceId] = React.useState<string | undefined>();
   const [occurrenceFlowFromOverview, setOccurrenceFlowFromOverview] = React.useState(false);
   const [usersFilterChip, setUsersFilterChip] =
@@ -265,6 +266,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     if (destination !== "users" && reviewFromSupportPlan) {
       setReviewFromSupportPlan(false);
+      setNextVersionConceptFromReview(false);
       if (reviewDuePreviewOpen) {
         setReviewDuePreviewOpen(false);
       }
@@ -489,6 +491,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
+    setNextVersionConceptFromReview(false);
   };
 
   const handleCurrentProcedureRequest = (): void => {
@@ -637,6 +640,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setReviewFromSupportPlan(true);
     setReviewDuePreviewOpen(true);
+    setNextVersionConceptFromReview(false);
   };
 
   const handleBackToSupportPlanFromReview = (): void => {
@@ -648,6 +652,16 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setReviewFromSupportPlan(false);
   };
 
+  const handleNextVersionConceptFromReview = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
+    setNextVersionConceptFromReview(true);
+  };
+
   const handleBackToOverview = (): void => {
     if (interactionPaused) {
       return;
@@ -655,6 +669,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
+    setNextVersionConceptFromReview(false);
   };
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
@@ -690,6 +705,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
       data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
+      data-review-new-version-from-review={nextVersionConceptFromReview ? "true" : "false"}
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
       data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
       data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
@@ -852,6 +868,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       headingRef={destinationHeadingRef}
                       backLabel="← 支援計画"
                       onBackToOverview={handleBackToSupportPlanFromReview}
+                      onNextVersionConceptRequest={handleNextVersionConceptFromReview}
                       procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
                       presentationRole={presentationRole}
                     />
@@ -862,6 +879,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       headingRef={destinationHeadingRef}
                       onBackToUserDetail={handleBackToUserDetail}
                       onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
+                      nextVersionConceptHighlighted={nextVersionConceptFromReview}
                       presentationRole={presentationRole}
                     />
                   ) : procedureRecordFormOpen &&

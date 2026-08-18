@@ -102,6 +102,7 @@ export {
   SUPPORT_PLAN_ACTIVE_STATUS_LABEL,
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
   SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
+  SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA,
   supportPlanCopyAvoidsFinalApprovalMeaning,
   supportPlanCopyIsFailClosed,
 } from "./support-plan-copy";
@@ -114,6 +115,7 @@ export {
   DEMO_UX_4_SLICE,
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
   PLANNING_PC_DEMO_1_SLICE,
+  SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
 export type {
   ShellUserDetailPresentation,

@@ -138,6 +138,10 @@
   overflow-wrap: anywhere;
 }
 
+.detailSection[data-review-new-version-highlighted="true"] {
+  border-color: sbs.$color-border-strong;
+}
+
 .detailSection h2,
 .statePanel h2 {
   margin: 0 0 sbs.$space-3;
@@ -274,6 +278,19 @@
   margin-top: sbs.$space-3;
 }
 
+.versionCompare {
+  margin-top: sbs.$space-3;
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
+}
+
+.versionCompareGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: sbs.$space-3;
+}
+
 .stateGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -316,6 +333,10 @@
   }
 
   .stateGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .versionCompareGrid {
     grid-template-columns: 1fr;
   }
 
