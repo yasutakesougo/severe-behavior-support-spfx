@@ -19,6 +19,7 @@ import {
   formatUsersFilterSummaryLabel,
   type UsersFilterChipLabel,
 } from "./users-filter";
+import { presentUsersListCompact } from "./users-list-compact";
 import { rememberUsersFilterChip, resolveUsersListRestoreTarget } from "./users-list-restore";
 import type { ShellUsersPresentation } from "./users-types";
 import {
@@ -66,6 +67,7 @@ export type UsersListProps = Readonly<{
  * DEMO-UX-11 removes duplicate screen-level synthetic band; filter hint is consolidated.
  * FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2: session-local save-state overlay on each row.
  * Unit 4: session-local filter / scroll / focus restore after explicit return to this list.
+ * Unit 5: compact tablet density at ≤768px. Desktop 3-col and filter meaning stay unchanged.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -82,6 +84,12 @@ export const UsersList: React.FC<UsersListProps> = ({
 }) => {
   const { rows } = presentation;
   const restoreAuthorized = FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized;
+  const compact = presentUsersListCompact(
+    FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized,
+  );
+  const listClassName = compact.classNameModifier
+    ? `${styles.usersList} ${styles.usersListCompact}`
+    : styles.usersList;
   const [localChip, setLocalChip] = React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
   const activeChip =
     restoreAuthorized && filterChip !== undefined ? rememberUsersFilterChip(filterChip) : localChip;
@@ -145,7 +153,7 @@ export const UsersList: React.FC<UsersListProps> = ({
 
   return (
     <section
-      className={styles.usersList}
+      className={listClassName}
       data-demo-ux="users-list"
       data-demo-ux-8-slice={DEMO_UX_8_SLICE.id}
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
@@ -156,6 +164,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
       data-field-staff-users-restore={restoreAuthorized ? "true" : "false"}
+      data-field-staff-users-compact={compact.dataAttr}
       aria-labelledby="demo-ux-users-heading"
     >
       <h1

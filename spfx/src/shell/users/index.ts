@@ -17,6 +17,14 @@ export {
   usersCopyIsFailClosed,
 } from "./users-copy";
 export {
+  presentUsersListCompact,
+  USERS_LIST_COMPACT_CLASS,
+  USERS_LIST_COMPACT_DENSITY,
+  USERS_LIST_COMPACT_TABLET_MAX_WIDTH_PX,
+  USERS_LIST_TOUCH_TARGET_MIN_HEIGHT,
+  type UsersListCompactPresentation,
+} from "./users-list-compact";
+export {
   discardUsersListRestore,
   rememberUsersFilterChip,
   rememberUsersFocusOrigin,
