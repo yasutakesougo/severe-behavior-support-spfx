@@ -13,7 +13,7 @@ export const FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE = {
   sessionSaveStateCardOverlayAuthorized: true as const,
   nextActionableOccurrenceAuthorized: true as const,
   nextUnrecordedUserAuthorized: false as const,
-  listScrollRestoreAuthorized: false as const,
+  listScrollRestoreAuthorized: true as const,
   compactTabletUsersAuthorized: false as const,
   perUserDraftResumeAuthorized: false as const,
   liveSavedCompletionOnCardsAuthorized: false as const,
