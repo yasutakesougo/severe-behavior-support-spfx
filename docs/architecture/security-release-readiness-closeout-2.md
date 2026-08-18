@@ -12,6 +12,10 @@ release authority ではない。
 [`security-deep-scan-current-sha-2.md`](./security-deep-scan-current-sha-2.md)
 （scan-target `8a5056c…`）。U2 / next-gate 文言は本記録時点の snapshot である。
 
+後続の Artifact Authority 記録（この closeout を書き換えない）:
+[`spfx-release-artifact-authority-1.md`](./spfx-release-artifact-authority-1.md)
+（basis `c100c43…`）。U3 / RG1 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SECURITY-RELEASE-READINESS-CLOSEOUT-2
