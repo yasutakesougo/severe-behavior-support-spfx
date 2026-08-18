@@ -99,6 +99,10 @@ export {
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
+  SUPPORT_PLAN_ACTIVE_STATUS_LABEL,
+  SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
+  SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
+  supportPlanCopyAvoidsFinalApprovalMeaning,
   supportPlanCopyIsFailClosed,
 } from "./support-plan-copy";
 export {
@@ -106,7 +110,7 @@ export {
   DEMO_UX_USER_DETAIL_C_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
 } from "./user-detail-fixture";
-export { DEMO_UX_4_SLICE, DEMO_UX_SUPPORT_PLAN_FIXTURE } from "./support-plan-fixture";
+export { DEMO_UX_4_SLICE, DEMO_UX_SUPPORT_PLAN_FIXTURE, PLANNING_PC_DEMO_1_SLICE } from "./support-plan-fixture";
 export type {
   ShellUserDetailPresentation,
   UserDetailBusinessFacts,
@@ -118,9 +122,11 @@ export type {
   ShellSupportPlanPresentation,
   SupportPlanActionItem,
   SupportPlanBusinessFacts,
+  SupportPlanCurrentProcedureSummary,
   SupportPlanGoal,
   SupportPlanReviewStatus,
   SupportPlanSystemState,
+  SupportPlanVersionEntry,
 } from "./support-plan-types";
 export { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE, VISUAL_POLISH_3_USERS_SLICE } from "./users-fixture";
 export type {

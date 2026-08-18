@@ -17,6 +17,7 @@ export {
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_4_SLICE,
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
+  PLANNING_PC_DEMO_1_SLICE,
   UsersList,
   UserDetail,
   SupportPlan,
@@ -178,6 +179,7 @@ export {
 } from "./primary-navigation";
 export {
   isAdminAuditPresentationRole,
+  isPlanningPcPresentationRole,
   isShellPresentationRole,
   kpiSectionHeadingForRole,
   overviewSectionOrderForRole,

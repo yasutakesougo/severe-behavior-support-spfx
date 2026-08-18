@@ -28,6 +28,7 @@ export type ReviewDueStateProps = Readonly<{
   presentation: ShellReviewDueStatePresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToOverview?: () => void;
+  backLabel?: string;
   /** FIELD-WORKFLOW #356 FW-07 materials (optional). */
   procedureReviewMaterials?: readonly ShellProcedureReviewMaterial[];
   presentationRole?: ShellPresentationRole;
@@ -43,6 +44,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   presentation,
   headingRef,
   onBackToOverview,
+  backLabel = "← 概要",
   procedureReviewMaterials = [],
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
@@ -85,7 +87,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
           aria-disabled={!onBackToOverview ? "true" : undefined}
           data-demo-ux="review-due-back"
         >
-          ← 概要
+          {backLabel}
         </button>
       </div>
       <p className={styles.summaryPrompt}>{summaryPrompt}</p>

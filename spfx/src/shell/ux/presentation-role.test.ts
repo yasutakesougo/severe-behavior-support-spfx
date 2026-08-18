@@ -1,5 +1,6 @@
 import {
   isAdminAuditPresentationRole,
+  isPlanningPcPresentationRole,
   isShellPresentationRole,
   kpiSectionHeadingForRole,
   overviewSectionOrderForRole,
@@ -38,6 +39,9 @@ describe("VP-G synthetic presentationRole", () => {
     expect(kpiSectionHeadingForRole("ADMIN_AUDIT")).toBe("運用状況");
     expect(isAdminAuditPresentationRole("ADMIN_AUDIT")).toBe(true);
     expect(isAdminAuditPresentationRole("PLANNER")).toBe(false);
+    expect(isPlanningPcPresentationRole("PLANNER")).toBe(true);
+    expect(isPlanningPcPresentationRole("ADMIN_AUDIT")).toBe(true);
+    expect(isPlanningPcPresentationRole("FIELD_STAFF")).toBe(false);
   });
 
   it("keeps FIELD_STAFF UserDetail strip/order for DEMO-UX-3, planner path starts at 評価", () => {
@@ -57,9 +61,22 @@ describe("VP-G synthetic presentationRole", () => {
     expect(supportPlanBlockOrderForRole("FIELD_STAFF")[0]).toBe("summary");
     expect(supportPlanBlockOrderForRole("FIELD_STAFF")[3]).toBe("review");
     expect(supportPlanBlockOrderForRole("PLANNER")[1]).toBe("review");
+    expect(supportPlanBlockOrderForRole("PLANNER")).toEqual([
+      "summary",
+      "review",
+      "procedures",
+      "records",
+      "versions",
+      "goals",
+      "actions",
+      "mutation",
+    ]);
     expect(supportPlanBlockOrderForRole("ADMIN_AUDIT")).toEqual([
       "summary",
       "review",
+      "procedures",
+      "records",
+      "versions",
       "goals",
       "actions",
       "mutation",
