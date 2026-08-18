@@ -19,6 +19,19 @@ This packet is **docs-only**. It does **not** authorize Skill implementation, ES
 
 ---
 
+## Agent filing attempt
+
+| Channel | Result |
+|---|---|
+| GitHub MCP `issue_write` | **403** Resource not accessible by personal access token |
+| `gh issue create` | not attempted（MCP と同 token 想定） |
+
+Human action required: create the Issue below in `yasutakesougo/severe-behavior-support-spfx`, or grant the agent `issues: write`, then record the issue number in this packet.
+
+Suggested assignee: `@yasutakesougo`
+
+---
+
 ## Rationale（1 paragraph）
 
 一般的な Token 同期パイプラインより、本プロジェクトでは **業務意味の UI 表現ズレ**（status vocabulary / save 5-state / procedure binding / role entry 等）が先に危険。1 人開発中心の体制では SaaS を増やしすぎず、repository SSOT + Agent Skills + deterministic test が最も費用対効果が高い。本 Issue はその設計境界を固定する。
