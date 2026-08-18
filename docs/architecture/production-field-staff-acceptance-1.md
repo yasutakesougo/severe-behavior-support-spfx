@@ -136,5 +136,10 @@ authoritative implementation main:
 closeout merge:
   8a060213bd0291fea9ecd305f36087b8d23acdbb
 Implementation in this predecessor closeout: NO
-Unit 7 / next polish slice: not started by this document
+Unit 7: NOT STARTED
+Human-selected next slice: FIELD-STAFF-NEXT-UNRECORDED-USER-1
+Selection: B / UX-P1-3
+Selection SSOT:
+  decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md
+Implementation Start: NOT AUTHORIZED by this document
 ```

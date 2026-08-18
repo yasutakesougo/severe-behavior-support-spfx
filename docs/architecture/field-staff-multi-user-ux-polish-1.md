@@ -35,6 +35,8 @@ This closeout: != LIVE WRITE GO
 This closeout: != Deploy / App Catalog GO
 This closeout: != Unit 7 start
 This closeout: != next-slice Implementation Start
+Successor selection: FIELD-STAFF-NEXT-UNRECORDED-USER-1
+Successor Implementation Start: NOT AUTHORIZED
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -219,8 +221,13 @@ Residual simulation gaps in §4 are **out of slice**, not new P0/P1 defects.
 ## 9. Next gate
 
 ```text
-Next gate identity: none started
-Human-selected next slice / Unit 7: not granted by this acceptance
+Next slice identity: FIELD-STAFF-NEXT-UNRECORDED-USER-1
+Human selection: SELECTED / B / UX-P1-3
+Selection SSOT:
+  decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md
+Implementation Start: NOT AUTHORIZED
+Unit 7: NOT STARTED / not this slice
+UX-P1-2 / UX-P2-5 expansion / UX-P2-7: NOT SELECTED
 Production-host re-acceptance: not started by this acceptance
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -231,7 +238,8 @@ ACCEPT / PASS は次を許可しない:
 ```text
 ACCEPT / PASS != Unit 7 start
 ACCEPT / PASS != remaining-gap implementation
-ACCEPT / PASS != UX-P1-2 / UX-P1-3 / UX-P2-5 expansion / UX-P2-7
+ACCEPT / PASS != UX-P1-3 Implementation Start
+ACCEPT / PASS != UX-P1-2 / UX-P2-5 expansion / UX-P2-7
 ACCEPT / PASS != rewrite PARTIAL or OUT OF SCOPE as PASS / CLOSED
 ACCEPT / PASS != LIVE WRITE GO
 ACCEPT / PASS != Deploy GO
@@ -239,16 +247,20 @@ ACCEPT / PASS != production-host re-acceptance
 ACCEPT / PASS != Full Application Acceptance
 ```
 
+Human が UX-P1-3 を次 exact-slice に選んだことは、本 closeout の
+Implementation Start ではない。OUT OF SCOPE 分類は変えない。
+
 ## 10. STOP
 
 ```text
 This recording is documentation / Human Acceptance evidence only.
 Do not start Unit 7.
 Do not implement remaining slice flags.
+Do not treat B selection as Implementation Start.
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.
 Do not close Issues from this document.
-Wait for a separate Human GO.
+Wait for a separate Human Implementation Start GO.
 CURRENT ACTION: STOP
 ```

@@ -103,13 +103,21 @@ authoritative implementation main:
 closeout merge:
   8a060213bd0291fea9ecd305f36087b8d23acdbb
 Implementation in this simulation closeout: NO
-Unit 7 / next polish slice: not started by this document
+Unit 7: NOT STARTED
+Human-selected next slice: FIELD-STAFF-NEXT-UNRECORDED-USER-1
+Selection: B / UX-P1-3
+Selection SSOT:
+  decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md
+Implementation Start: NOT AUTHORIZED by this document
 ```
 
 Historical design targets recorded here remain observations.
 Which gaps this polish slice addressed vs left out of scope is recorded in
 [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md).
 Do not rewrite §4 UX gaps as if they were never observed.
+UX-P1-3 is Human-selected as the next exact-slice identity
+([`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md));
+that selection does not close the historical gap row or authorize implementation.
 
 Expected future design targets (design only; not authorized here):
 
