@@ -12,6 +12,11 @@ Human SELECT **Option A — KEEP unbound** である。
 [`spfx-release-artifact-reproducibility-1.md`](./spfx-release-artifact-reproducibility-1.md)
 （basis `1fedeba…`）。RG-REPRO は本記録時点では Binding ゲート対象外である。
 
+後続の fixture-only Deploy 記録（この closeout を書き換えない）:
+[`spfx-fixture-only-deploy-1.md`](./spfx-fixture-only-deploy-1.md)
+（basis `f622fcd…` / Option A KEEP CURRENT DEPLOYMENT）。
+Deploy / App Catalog snapshot は本記録時点のものである。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-PRODUCTION-BINDING-DECISION-1

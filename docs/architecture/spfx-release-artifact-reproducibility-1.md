@@ -8,6 +8,11 @@ recorded authority を BUILD 2 に差し替えない。
 [`spfx-release-artifact-authority-1.md`](./spfx-release-artifact-authority-1.md)
 は Artifact Authority closeout 正本である。本記録はそれを再解釈しない。
 
+後続の fixture-only Deploy 記録（この closeout を書き換えない）:
+[`spfx-fixture-only-deploy-1.md`](./spfx-fixture-only-deploy-1.md)
+（basis `f622fcd…` / Option A KEEP CURRENT DEPLOYMENT）。
+next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-RELEASE-ARTIFACT-REPRODUCIBILITY-1
