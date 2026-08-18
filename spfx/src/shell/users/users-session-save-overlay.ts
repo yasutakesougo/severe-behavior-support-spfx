@@ -11,6 +11,7 @@ export const FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE = {
   presentationOnly: true as const,
   parameterizedDetailCopyAuthorized: true as const,
   sessionSaveStateCardOverlayAuthorized: true as const,
+  nextActionableOccurrenceAuthorized: true as const,
   nextUnrecordedUserAuthorized: false as const,
   listScrollRestoreAuthorized: false as const,
   compactTabletUsersAuthorized: false as const,

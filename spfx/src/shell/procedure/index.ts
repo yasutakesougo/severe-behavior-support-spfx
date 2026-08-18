@@ -25,6 +25,21 @@ export {
 } from "./procedure-fixture";
 export { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
 export {
+  FIELD_WORKFLOW_NEXT_OCCURRENCE_UNKNOWN_REASON,
+  FIELD_WORKFLOW_NEXT_OCCURRENCE_UNSAVED_REASON,
+  FIELD_WORKFLOW_RETURN_TO_TODAY_SUPPORT_LABEL,
+  isCreateActionableOccurrence,
+  isNextActionableOccurrenceNavigationEnabled,
+  labelForNextActionableOccurrenceCta,
+  presentNextActionableOccurrenceCta,
+  resolveNextActionableOccurrenceNavigation,
+  selectNextActionableOccurrence,
+  type NextActionableOccurrence,
+  type NextActionableOccurrenceCtaPresentation,
+  type NextActionableOccurrenceItem,
+  type NextActionableOccurrenceNavigation,
+} from "./next-actionable-occurrence";
+export {
   projectionUsesRecordPlanVersion,
   resolveProcedureReviewProjection,
   type HistoricalProjectionView,
