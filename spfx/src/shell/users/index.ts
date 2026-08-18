@@ -17,6 +17,17 @@ export {
   usersCopyIsFailClosed,
 } from "./users-copy";
 export {
+  FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
+  USERS_SESSION_SAVE_OVERLAY_STATES,
+  ariaLabelForUsersSessionSaveOverlay,
+  overlayForUserId,
+  overlayForUserSessionSaveState,
+  rememberUserSessionSaveState,
+  type UsersSessionSaveOverlay,
+  type UsersSessionSaveOverlayState,
+  type UsersSessionSaveStateByUserId,
+} from "./users-session-save-overlay";
+export {
   DEMO_UX_8_SLICE,
   USERS_FILTER_CHIP_ALL,
   USERS_FILTER_CHIP_DUE_SOON,

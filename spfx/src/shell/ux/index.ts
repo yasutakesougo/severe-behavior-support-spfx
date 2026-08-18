@@ -31,6 +31,9 @@ export {
   filterUserRowsByStatusChip,
   formatUsersFilterSummaryLabel,
   USERS_FILTER_CHIP_LABELS,
+  FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
+  overlayForUserSessionSaveState,
+  rememberUserSessionSaveState,
   type ShellUsersPresentation,
   type ShellUserDetailPresentation,
   type ShellSupportPlanPresentation,
@@ -38,6 +41,7 @@ export {
   type UserDetailProps,
   type SupportPlanProps,
   type UsersFilterChipLabel,
+  type UsersSessionSaveStateByUserId,
 } from "../users";
 export {
   DEMO_UX_7_SLICE,

@@ -153,11 +153,54 @@
   min-width: 0;
 }
 
+.personRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: sbs.$space-2;
+  min-width: 0;
+}
+
 .personLabel {
   margin: 0;
   font-size: sbs.$font-size-body;
   font-weight: sbs.$font-weight-semibold;
   line-height: sbs.$line-height-body;
+}
+
+.sessionSaveState {
+  display: inline-block;
+  padding: sbs.$space-1 sbs.$space-2;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
+  font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-meta;
+}
+
+.sessionSaveState_unsaved {
+  background: sbs.$color-surface;
+}
+
+.sessionSaveState_saving {
+  background: sbs.$color-feedback-info-bg;
+  border-color: sbs.$color-feedback-info-border;
+  color: sbs.$color-feedback-info-fg;
+}
+
+.sessionSaveState_save_failed {
+  background: sbs.$color-feedback-danger-bg;
+  border-color: sbs.$color-feedback-danger-border;
+  color: sbs.$color-feedback-danger-fg;
+}
+
+.sessionSaveState_save_outcome_unknown {
+  background: sbs.$color-feedback-warning-bg;
+  border-color: sbs.$color-feedback-warning-border;
+  color: sbs.$color-feedback-warning-fg;
 }
 
 .badgeList {
