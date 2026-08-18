@@ -16,8 +16,9 @@
     "check:scope": "node scripts/ci/check-scope.mjs",
     "check:a11y": "node scripts/ci/check-accessibility-gate.mjs",
     "verify:skills": "node scripts/verify-skills.mjs",
+    "verify:ui-catalog": "node scripts/verify-ui-catalog.mjs",
     "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries",
-    "verify:ci": "npm run verify:skills && npm run lint && npm run format:check && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:scope && npm run check:a11y",
+    "verify:ci": "npm run verify:skills && npm run verify:ui-catalog && npm run lint && npm run format:check && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:scope && npm run check:a11y",
     "handoff:auto": "node scripts/auto-handoff.mjs"
   },
   "devDependencies": {

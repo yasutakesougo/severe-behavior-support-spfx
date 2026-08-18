@@ -105,6 +105,7 @@ const readyApproved = process.env.HANDOFF_READY_APPROVED === "1";
 
 const verifications = [
   ["verify:skills", npmRun("verify:skills")],
+  ["verify:ui-catalog", npmRun("verify:ui-catalog")],
   ["lint", npmRun("lint")],
   ["format:check", npmRun("format:check")],
   ["typecheck", npmRun("typecheck")],
