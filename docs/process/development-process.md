@@ -153,7 +153,7 @@ Skill 文書内でこれらを自動実行する手順を書いてはいけま�
 ```
 
 `design-implementation` は後続。当面は `implementation-plan` に内包する。
-Component Catalog 未着地でも primitives / DADS-03 を暫定正本として実行する。
+Component Catalog v1（`docs/architecture/ui-component-catalog-v1.md`）を component usage の正本とする。未掲載は GAP / HOLD。
 
 ## 初回導入の最小実用セット
 

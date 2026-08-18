@@ -17,7 +17,7 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 - 対象 screen / slice / Issue
 - `docs/architecture/` 該当文書（DADS-03 Style Guide、DADS-UX、Visual Polish 等）
 - Domain / Contracts 該当語彙
-- Component Catalog（あれば）。未整備なら既存 primitives を暫定参照
+- Component Catalog v1（`docs/architecture/ui-component-catalog-v1.md`）。該当 entry が無ければ GAP / HOLD
 - 既存 components / tests / smoke / a11y gate
 - （任意）Figma MCP — layout / component / variables / screen reference
 
@@ -32,7 +32,7 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 1. 対象 screen / 利用者入口（現場職員 / 計画担当者等）を固定する
 2. 関係する Domain / Contracts 語彙を列挙する（status、save 5-state、procedure binding 等）
 3. Visual Principles（DADS-03 / DADS-04）と既存 screen pattern を読む
-4. Component Catalog または `spfx/src/shell/primitives/` で表現候補を探す
+4. Component Catalog v1 で表現候補を探す。未掲載なら GAP / HOLD（勝手に新 primitive を増やさない）
 5. 任意で Figma から visual intent のみ取得する（コード化しない）
 6. Figma intent を repository domain semantics と照合する
 7. 既存 component で表現可能か、GAP / 新 primitive 要否を判定する
@@ -59,7 +59,7 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 
 - `PASS`: この Skill では原則使用しない。Gate 通過は後続 Skill で扱う
 - `READY`: domain semantics、visual intent、component mapping、対象外が揃い、`implementation-plan` へ渡せる
-- `HOLD`: Catalog 未整備、意味 Decision 不足、Figma と repository の不一致が未解消
+- `HOLD`: 該当 Catalog entry 不足、意味 Decision 不足、Figma と repository の不一致が未解消
 - `FAIL`: P0 / P1 の意味破壊（語彙丸め、fail-closed 無視、権限を UI だけに置く）がある。P2 は記録のうえで後続可
 - `NOT APPLICABLE`: UI / presentation 変更がない
 

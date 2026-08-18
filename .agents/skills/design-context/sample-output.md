@@ -16,7 +16,7 @@
 
 ## Component Mapping
 - 既存で表現可能: `StatusBadge`（label channel）、既存 SupportPlan IA KEEP
-- GAP: Component Catalog v1 未着地。暫定は DADS-05 primitives
+- GAP: なし（Catalog v1 の StatusBadge / SupportPlan IA KEEP）
 - 禁止 substitution: color-only status、EmptyNotice を failure panel に流用
 
 ## Findings
@@ -33,4 +33,4 @@
 
 ## Next Actions
 1. `implementation-plan` へ presentation-only 境界を渡す
-2. Catalog 未着地は UI-AGENT-IMPL-2 として記録する
+2. Catalog v1 の StatusBadge / EmptyNotice 規則を `implementation-plan` へ渡す
