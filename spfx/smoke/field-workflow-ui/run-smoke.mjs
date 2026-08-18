@@ -334,7 +334,7 @@ try {
   );
   await clickVisible(page, '[data-demo-ux="overview-open-review-due"]');
   await page.waitForSelector('[data-demo-ux="review-due-state"]');
-  await clickVisible(page, '[data-field-workflow-material-id="proc-rec-v2-001"]');
+  await clickVisible(page, '[data-field-workflow-material-id="synthetic-proc-rec-v2-001"]');
   await page.waitForSelector('[data-field-workflow="review-material-detail"]');
   const reviewDetail = await page.$eval('[data-field-workflow="review-material-detail"]', (el) => ({
     planVersion: el.getAttribute("data-field-workflow-plan-version"),

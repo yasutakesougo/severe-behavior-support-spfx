@@ -104,7 +104,9 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     );
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.currentProcedures[0]?.planVersion).toBe(3);
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.recentProcedureRecords[0]?.planVersion).toBe(2);
-    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.recentProcedureRecords[0]?.id).toBe("proc-rec-v2-001");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.recentProcedureRecords[0]?.id).toBe(
+      "synthetic-proc-rec-v2-001",
+    );
   });
 
   it("lists past versions as read-only and keeps mutation unauthorized", () => {

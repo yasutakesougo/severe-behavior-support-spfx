@@ -25,7 +25,7 @@ Field-workflow (`FIELD-WORKFLOW-UI`) と同一キーで結合する。label-only
 | Past versions | `1`, `2`（読み取り専用） |
 | Current procedure | `synthetic-procedure-p3` / `synthetic-procedure-p3-v1` |
 | Historical procedure | `synthetic-procedure-p2` / `synthetic-procedure-p2-v1` |
-| Historical record | `proc-rec-v2-001` bound to planVersion **2** |
+| Historical record | `synthetic-proc-rec-v2-001` bound to planVersion **2** |
 
 ## Graph
 
@@ -34,7 +34,7 @@ SupportPlan (Active, currentVersion=3)
   ├── SupportPlanVersion v1 (historical)
   ├── SupportPlanVersion v2 (historical)
   │     ├── Binding → Procedure p2
-  │     └── ProcedureRecord proc-rec-v2-001 (planVersion=2, frozen)
+  │     └── ProcedureRecord synthetic-proc-rec-v2-001 (planVersion=2, frozen)
   └── SupportPlanVersion v3 (current)
         └── Binding → Procedure p3 (current A2 projection)
 ```

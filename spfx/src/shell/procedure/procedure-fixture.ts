@@ -30,7 +30,7 @@ export const FIELD_WORKFLOW_CURRENT_USER_A: ShellCurrentProcedurePresentation = 
 
 /** Historical v2 ProcedureRecord material — must stay on v2 after v3 Active (FW05-HIST-01). */
 export const FIELD_WORKFLOW_REVIEW_MATERIAL_V2: ShellProcedureReviewMaterial = {
-  id: "proc-rec-v2-001",
+  id: "synthetic-proc-rec-v2-001",
   personLabel: "Aさん",
   result: "PERFORMED_WITH_ADAPTATION",
   performedAtLabel: "2026/08/12 14:05",

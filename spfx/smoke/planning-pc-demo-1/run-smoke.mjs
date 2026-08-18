@@ -165,7 +165,7 @@ function assertPlannerSupportPlan() {
       headings.includes("最近の支援手順記録") &&
       headings.includes("過去の版") &&
       text.indexOf("環境調整") >= 0 &&
-      text.indexOf("proc-rec-v2-001") < 0 &&
+      text.indexOf("synthetic-proc-rec-v2-001") < 0 &&
       text.indexOf("計画版 2") >= 0 &&
       forbidden.every((token) => text.indexOf(token) < 0),
     statusText: status?.textContent ?? "",

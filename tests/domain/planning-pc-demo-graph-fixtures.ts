@@ -114,7 +114,7 @@ export function createPlanningPcDemoHistoricalProcedureRecord(
 ): ProcedureRecord {
   return createSyntheticProcedureRecord({
     ...DEMO_SCOPE,
-    RecordId: "proc-rec-v2-001",
+    RecordId: "synthetic-proc-rec-v2-001",
     planId: PLANNING_PC_DEMO_PLAN_ID,
     planVersion: 2,
     Procedure: {
