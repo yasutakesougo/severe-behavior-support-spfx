@@ -119,6 +119,9 @@ describe("VP-5 Review presentation boundary", () => {
       "FETCH_FAILED",
     ]);
     expect(materials.map(({ planVersion }) => planVersion)).toEqual([2, 2]);
-    expect(materials.map(({ id }) => id)).toEqual(["proc-rec-v2-001", "proc-rec-unresolved-001"]);
+    expect(materials.map(({ id }) => id)).toEqual([
+      "synthetic-proc-rec-v2-001",
+      "proc-rec-unresolved-001",
+    ]);
   });
 });

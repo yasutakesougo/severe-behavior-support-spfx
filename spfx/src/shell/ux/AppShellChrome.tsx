@@ -33,6 +33,7 @@ import {
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_USERS_FIXTURE,
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
+  PLANNING_PC_DEMO_1_SLICE,
   SupportPlan,
   UserDetail,
   UsersList,
@@ -165,6 +166,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     {},
   );
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
+  const [reviewFromSupportPlan, setReviewFromSupportPlan] = React.useState(false);
   const [selectedOccurrenceId, setSelectedOccurrenceId] = React.useState<string | undefined>();
   const [occurrenceFlowFromOverview, setOccurrenceFlowFromOverview] = React.useState(false);
   const [usersFilterChip, setUsersFilterChip] =
@@ -258,8 +260,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         }
       }
     }
-    if (destination !== "overview" && reviewDuePreviewOpen) {
+    if (destination !== "overview" && reviewDuePreviewOpen && !reviewFromSupportPlan) {
       setReviewDuePreviewOpen(false);
+    }
+    if (destination !== "users" && reviewFromSupportPlan) {
+      setReviewFromSupportPlan(false);
+      if (reviewDuePreviewOpen) {
+        setReviewDuePreviewOpen(false);
+      }
     }
   }, [
     destination,
@@ -271,6 +279,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     sessionSaveStateByUserId,
     sessionDraftByUserId,
     reviewDuePreviewOpen,
+    reviewFromSupportPlan,
     occurrenceFlowFromOverview,
     usersFilterChip,
     usersFocusOriginUserId,
@@ -293,6 +302,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     currentProcedureOpen,
     procedureRecordFormOpen,
     reviewDuePreviewOpen,
+    reviewFromSupportPlan,
     restoreUsersList,
   ]);
 
@@ -334,12 +344,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         (selectedUserDetailId !== undefined ||
           supportPlanPreviewOpen ||
           currentProcedureOpen ||
-          procedureRecordFormOpen)
+          procedureRecordFormOpen ||
+          reviewFromSupportPlan)
       ) {
         setSupportPlanPreviewOpen(false);
         setCurrentProcedureOpen(false);
         setProcedureRecordFormOpen(false);
         setProcedureFlowSaveState(undefined);
+        setReviewDuePreviewOpen(false);
+        setReviewFromSupportPlan(false);
         setSelectedUserDetailId(undefined);
         requestUsersListRestore();
         return;
@@ -359,6 +372,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(undefined);
     setSelectedUserDetailId(undefined);
     setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
     setDestination(next);
     if (onSelectedDestinationChange) {
       onSelectedDestinationChange(next);
@@ -446,6 +460,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
     setSelectedUserDetailId(undefined);
   };
 
@@ -457,6 +473,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
     setSupportPlanPreviewOpen(true);
   };
 
@@ -469,6 +487,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
   };
 
   const handleCurrentProcedureRequest = (): void => {
@@ -606,7 +626,26 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     shouldFocusDestinationRef.current = true;
+    setReviewFromSupportPlan(false);
     setReviewDuePreviewOpen(true);
+  };
+
+  const handleReviewMaterialsFromPlan = (): void => {
+    if (interactionPaused || !supportPlanPreviewOpen) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setReviewFromSupportPlan(true);
+    setReviewDuePreviewOpen(true);
+  };
+
+  const handleBackToSupportPlanFromReview = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
   };
 
   const handleBackToOverview = (): void => {
@@ -615,6 +654,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
   };
 
   const unauthenticated = isUnauthenticatedViewMode(viewMode);
@@ -649,6 +689,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
       data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
+      data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
+      data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
       data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
       data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
       data-shell-ux-presentation-role={presentationRole}
@@ -804,12 +846,22 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 )
               ) : destination === "users" ? (
                 selectedUserDetail ? (
-                  supportPlanPreviewOpen &&
-                  supportPlanPresentation.userId === selectedUserDetail.userId ? (
+                  reviewDuePreviewOpen && reviewFromSupportPlan ? (
+                    <ReviewDueState
+                      presentation={reviewDueStatePresentation}
+                      headingRef={destinationHeadingRef}
+                      backLabel="← 支援計画"
+                      onBackToOverview={handleBackToSupportPlanFromReview}
+                      procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
+                      presentationRole={presentationRole}
+                    />
+                  ) : supportPlanPreviewOpen &&
+                    supportPlanPresentation.userId === selectedUserDetail.userId ? (
                     <SupportPlan
                       presentation={supportPlanPresentation}
                       headingRef={destinationHeadingRef}
                       onBackToUserDetail={handleBackToUserDetail}
+                      onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
                       presentationRole={presentationRole}
                     />
                   ) : procedureRecordFormOpen &&

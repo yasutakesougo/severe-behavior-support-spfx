@@ -3,14 +3,25 @@ import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   SHELL_DEFAULT_PRESENTATION_ROLE,
   isAdminAuditPresentationRole,
+  isPlanningPcPresentationRole,
   supportPlanBlockOrderForRole,
   type ShellPresentationRole,
   type SupportPlanBlockKey,
 } from "../ux/presentation-role";
+import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
 import {
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
+  SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING,
+  SUPPORT_PLAN_HISTORICAL_RECORD_NOTE,
+  SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
+  SUPPORT_PLAN_PAST_VERSION_READONLY_NOTE,
+  SUPPORT_PLAN_RECENT_RECORDS_HEADING,
+  SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
+  SUPPORT_PLAN_REVIEW_MATERIALS_NOTE,
+  SUPPORT_PLAN_VERSIONS_HEADING,
 } from "./support-plan-copy";
+import { PLANNING_PC_DEMO_1_SLICE } from "./support-plan-fixture";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
 import { SemanticIcon } from "../primitives";
 import styles from "./SupportPlanUx.module.scss";
@@ -19,20 +30,22 @@ export type SupportPlanProps = Readonly<{
   presentation: ShellSupportPlanPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToUserDetail?: () => void;
+  onReviewMaterialsRequest?: () => void;
   presentationRole?: ShellPresentationRole;
 }>;
 
 const MUTATION_LABELS = ["作成する", "編集する", "保存する"] as const;
 
 /**
- * DEMO-UX-4 support plan presentation skeleton.
+ * DEMO-UX-4 support plan presentation skeleton + PLANNING-PC-DEMO-1 graph.
  * Synthetic fixture only — no live plan mutation, auth, or adapter connection.
- * VP-G: PLANNER monitoring prominence; ADMIN_AUDIT read-oriented mutation chrome.
+ * VP-G / PLANNER: monitoring prominence + procedures / records / versions.
  */
 export const SupportPlan: React.FC<SupportPlanProps> = ({
   presentation,
   headingRef,
   onBackToUserDetail,
+  onReviewMaterialsRequest,
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
   const {
@@ -40,14 +53,25 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     planTitle,
     planPeriodLabel,
     planLifecycleLabel,
+    planId,
+    currentVersion,
+    statusLabel,
     summary,
     goals,
     actionItems,
     reviewStatus,
     businessFacts,
     systemState,
+    versions,
+    currentProcedures,
+    recentProcedureRecords,
   } = presentation;
   const adminRead = isAdminAuditPresentationRole(presentationRole);
+  const planningPc = isPlanningPcPresentationRole(presentationRole);
+  const [selectedVersion, setSelectedVersion] = React.useState(currentVersion);
+  const selectedVersionEntry = versions.find((entry) => entry.version === selectedVersion);
+  const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
+  const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
 
   const summaryBlock = (
     <section className={styles.detailSection} aria-labelledby="demo-ux-plan-summary-heading">
@@ -94,7 +118,116 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         <p className={styles.reviewStatus}>{reviewStatus.reviewStatusLabel}</p>
         <p>{reviewStatus.reviewDueLabel}</p>
         <p>{reviewStatus.attentionNote}</p>
+        {planningPc ? (
+          <>
+            <p className={styles.sectionHint} data-planning-pc="review-note">
+              {SUPPORT_PLAN_REVIEW_MATERIALS_NOTE}
+            </p>
+            <button
+              type="button"
+              className={styles.reviewMaterialsButton}
+              onClick={onReviewMaterialsRequest}
+              disabled={!reviewCtaEnabled}
+              aria-disabled={!reviewCtaEnabled ? "true" : undefined}
+              data-demo-ux="support-plan-review-cta"
+              data-planning-pc="review-cta"
+            >
+              {SUPPORT_PLAN_REVIEW_MATERIALS_CTA}
+            </button>
+          </>
+        ) : null}
       </div>
+    </section>
+  );
+
+  const proceduresBlock = (
+    <section className={styles.detailSection} aria-labelledby="planning-pc-plan-procedures-heading">
+      <h2 id="planning-pc-plan-procedures-heading">{SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING}</h2>
+      <ul className={styles.graphList} data-planning-pc="current-procedures">
+        {currentProcedures.map((procedure) => (
+          <li
+            key={`${procedure.procedureId}:${procedure.procedureVersion}`}
+            className={styles.graphItem}
+          >
+            <p className={styles.graphLabel}>
+              {procedure.sceneLabel}
+              <span className={styles.graphMeta}> / 版 {procedure.planVersion}</span>
+            </p>
+            <p className={styles.sectionHint}>実施する支援</p>
+            <ul>
+              {procedure.performLabels.map((label) => (
+                <li key={label}>{label}</li>
+              ))}
+            </ul>
+            <p className={styles.sectionHint}>避ける対応</p>
+            <ul>
+              {procedure.avoidLabels.map((label) => (
+                <li key={label}>{label}</li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+
+  const recordsBlock = (
+    <section className={styles.detailSection} aria-labelledby="planning-pc-plan-records-heading">
+      <h2 id="planning-pc-plan-records-heading">{SUPPORT_PLAN_RECENT_RECORDS_HEADING}</h2>
+      <p className={styles.sectionHint} data-planning-pc="historical-record-note">
+        {SUPPORT_PLAN_HISTORICAL_RECORD_NOTE}
+      </p>
+      <ul className={styles.graphList} data-planning-pc="recent-records">
+        {recentProcedureRecords.map((record) => (
+          <li key={record.id} className={styles.graphItem} data-planning-pc-record-id={record.id}>
+            <p className={styles.graphLabel}>{labelForProcedureRecordResult(record.result)}</p>
+            <p>
+              {record.performedAtLabel} / 計画版 {record.planVersion}
+            </p>
+            <p className={styles.sectionHint}>
+              {record.personLabel} · {record.procedureId}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+
+  const versionsBlock = (
+    <section className={styles.detailSection} aria-labelledby="planning-pc-plan-versions-heading">
+      <h2 id="planning-pc-plan-versions-heading">{SUPPORT_PLAN_VERSIONS_HEADING}</h2>
+      <p className={styles.sectionHint} data-planning-pc="past-version-note">
+        {SUPPORT_PLAN_PAST_VERSION_READONLY_NOTE}
+      </p>
+      <ul className={styles.versionList} data-planning-pc="version-list">
+        {versions.map((entry) => (
+          <li key={entry.version}>
+            <button
+              type="button"
+              className={styles.versionButton}
+              data-planning-pc-version={String(entry.version)}
+              data-planning-pc-version-current={entry.isCurrent ? "true" : "false"}
+              aria-pressed={selectedVersion === entry.version}
+              onClick={() => {
+                setSelectedVersion(entry.version);
+              }}
+            >
+              版 {entry.version} · {entry.lifecycleLabel}
+            </button>
+          </li>
+        ))}
+      </ul>
+      {selectedVersionEntry ? (
+        <div className={styles.versionDetail} data-planning-pc="version-detail">
+          <p className={styles.graphLabel}>
+            {selectedIsCurrent
+              ? `現行版 ${selectedVersionEntry.version}`
+              : `過去版 ${selectedVersionEntry.version}（読み取り専用）`}
+          </p>
+          <p>{selectedVersionEntry.createdAtLabel}</p>
+          <p>{selectedVersionEntry.summary}</p>
+        </div>
+      ) : null}
     </section>
   );
 
@@ -136,6 +269,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     goals: goalsBlock,
     actions: actionsBlock,
     review: reviewBlock,
+    procedures: proceduresBlock,
+    records: recordsBlock,
+    versions: versionsBlock,
     mutation: mutationBlock,
   };
 
@@ -144,6 +280,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       className={styles.supportPlan}
       data-demo-ux="support-plan"
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
+      data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
+      data-planning-pc-plan-id={planId}
+      data-planning-pc-current-version={String(currentVersion)}
+      data-planning-pc-status={presentation.statusCode}
       data-presentation-role={presentationRole}
       aria-labelledby="demo-ux-support-plan-heading"
     >
@@ -180,6 +320,23 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       <p className={styles.periodLabel} data-demo-ux="support-plan-lifecycle">
         {planLifecycleLabel}
       </p>
+      <p
+        className={styles.statusLabel}
+        data-demo-ux="support-plan-status"
+        data-planning-pc="status"
+      >
+        {statusLabel}
+      </p>
+      <p
+        className={styles.periodLabel}
+        data-demo-ux="support-plan-version"
+        data-planning-pc="version"
+      >
+        版 {currentVersion}
+      </p>
+      <p className={styles.sectionHint} data-planning-pc="not-final-approval">
+        {SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE}
+      </p>
 
       {supportPlanBlockOrderForRole(presentationRole).map((key) => (
         <React.Fragment key={key}>{blockByKey[key]}</React.Fragment>
@@ -203,6 +360,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             <div>
               <dt>作成日</dt>
               <dd>{businessFacts.createdAtLabel}</dd>
+            </div>
+            <div>
+              <dt>適用開始</dt>
+              <dd data-planning-pc="applied-from">{businessFacts.appliedFromLabel}</dd>
             </div>
           </dl>
         </section>

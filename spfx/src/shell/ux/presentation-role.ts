@@ -75,13 +75,27 @@ export function kpiSectionHeadingForRole(role: ShellPresentationRole): string {
   return "今日の支援状況";
 }
 
-export type SupportPlanBlockKey = "summary" | "goals" | "actions" | "review" | "mutation";
+export function isPlanningPcPresentationRole(role: ShellPresentationRole): boolean {
+  return role === "PLANNER" || role === "ADMIN_AUDIT";
+}
+
+export type SupportPlanBlockKey =
+  "summary" | "goals" | "actions" | "review" | "procedures" | "records" | "versions" | "mutation";
 
 export function supportPlanBlockOrderForRole(
   role: ShellPresentationRole,
 ): readonly SupportPlanBlockKey[] {
-  if (role === "PLANNER" || role === "ADMIN_AUDIT") {
-    return ["summary", "review", "goals", "actions", "mutation"];
+  if (isPlanningPcPresentationRole(role)) {
+    return [
+      "summary",
+      "review",
+      "procedures",
+      "records",
+      "versions",
+      "goals",
+      "actions",
+      "mutation",
+    ];
   }
   return ["summary", "goals", "actions", "review", "mutation"];
 }

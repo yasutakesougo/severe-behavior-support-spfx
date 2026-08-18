@@ -112,9 +112,14 @@
   font-weight: 600;
 }
 
-.periodLabel {
+.periodLabel,
+.statusLabel {
   margin: 0;
   font-size: sbs.$font-size-300;
+}
+
+.statusLabel {
+  font-weight: 700;
 }
 
 .sectionHint {
@@ -211,6 +216,62 @@
 .mutationButton:disabled {
   opacity: 0.65;
   cursor: not-allowed;
+}
+
+.reviewMaterialsButton,
+.versionButton {
+  min-height: 2.75rem;
+  padding: 0.45rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.reviewMaterialsButton:focus,
+.reviewMaterialsButton:focus-visible,
+.versionButton:focus,
+.versionButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.reviewMaterialsButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.graphList,
+.versionList {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
+  margin: sbs.$space-3 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.graphItem,
+.versionDetail {
+  min-width: 0;
+  padding: sbs.$space-3;
+  background: sbs.$color-surface-subtle;
+}
+
+.graphLabel {
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+}
+
+.graphMeta {
+  font-weight: 500;
+}
+
+.versionDetail {
+  margin-top: sbs.$space-3;
 }
 
 .stateGrid {
