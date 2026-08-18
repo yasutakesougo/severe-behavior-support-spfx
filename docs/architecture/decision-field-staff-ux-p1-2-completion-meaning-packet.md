@@ -12,6 +12,7 @@ Implementation Start ではない。
 flag flip ではない。
 Agent が M1 / M2 / M4 を自動選定しない。
 M3（live persisted completion）は本 ballot に載せない。
+Human が M2 を選んだあとも、本 packet は歴史的 ballot として残す。
 
 判断単位は 1 件だけである:
 
@@ -23,13 +24,16 @@ M3（live persisted completion）は本 ballot に載せない。
 repository: yasutakesougo/severe-behavior-support-spfx
 Decision ID: Decision-FIELD-STAFF-UX-P1-2-COMPLETION-MEANING-1
 Kind: Human Decision packet
-Status: OPEN / UNCONSUMED
+Status: CONSUMED（Human Selected Option M2 — synthetic recorded-for-today）
 Slice identity: FIELD-STAFF-COMPLETION-ON-CARDS-1
 Depends on:
   FIELD-STAFF-COMPLETION-ON-CARDS-1 SELECTED / LOCKED
   PR #416 MERGED
-  authoritative main: ffef32b62035fdbe0f8a833806e536c328a9d4c2
-Human meaning Decision: NOT SELECTED
+  PR #417 MERGED
+  authoritative main: 68fcb7fdb845b006be51bb0c3542240445bbcdd1
+Human meaning Decision: SELECTED / M2
+Selection record:
+  decision-field-staff-ux-p1-2-completion-meaning-selection.md
 Implementation Start: NOT AUTHORIZED
 flag flip: NOT AUTHORIZED
 Unit 7: NOT STARTED
@@ -43,6 +47,7 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 
 上位入口:
 
+- [`decision-field-staff-ux-p1-2-completion-meaning-selection.md`](./decision-field-staff-ux-p1-2-completion-meaning-selection.md)
 - [`decision-field-staff-ux-p1-2-completion-on-cards-selection.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection.md)
 - [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)
 - [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)
@@ -52,7 +57,7 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 
 ```text
 FIELD-STAFF-COMPLETION-ON-CARDS-1: SELECTED / LOCKED
-Completion-meaning Decision: NOT ACCEPTED
+Completion-meaning Decision: SELECTED / M2
 Implementation Start: NOT AUTHORIZED
 Unit 2 overlay: saved hides; 保存済み / 記録済み / 完了 は visible overlay 禁止
 unrecorded badges (static): user-a / user-e
@@ -69,7 +74,7 @@ Production-host save under HOLD: 未保存 → 保存中 → 保存失敗
 
 ## 2. Options
 
-いずれも未選定。本 packet は Accepted にしない。
+いずれも未選定だった ballot を、Human M2 GO が CONSUME する。
 
 ### Option M1 — session `saved` 表示 — NOT SELECTED
 
@@ -92,7 +97,7 @@ Conflict if copy uses 保存済み:
   Unit 2 overlay tests forbid persistence-success wording
 ```
 
-### Option M2 — synthetic recorded-for-today — NOT SELECTED
+### Option M2 — synthetic recorded-for-today — SELECTED
 
 ```text
 Source: DEMO_UX_USERS_FIXTURE projection
@@ -146,21 +151,24 @@ next-unrecorded CTA が動く。それは別 Human GO である。
 ## 4. Human Selection
 
 ```text
-Selected: NOT SELECTED
-Human meaning Decision: WAIT
+Selected: M2
+synthetic recorded-for-today
+Human Decision: M2 GO 2026-08-18
+Selection record: decision-field-staff-ux-p1-2-completion-meaning-selection.md
+Implementation Start: NOT AUTHORIZED
 Agent auto-select: FORBIDDEN
 ```
 
 ## 5. Stop condition
 
 ```text
-This packet is OPEN / UNCONSUMED.
-Do not auto-select M1 / M2 / M4.
+This packet is CONSUMED by the meaning selection record.
+Do not auto-select M1 / M4.
 Do not put M3 on this ballot.
 Do not start Implementation.
 Do not flip remaining flags.
 Do not mark UX-P1-2 or UX-P1-3 residual CLOSED.
 Do not enable LIVE WRITE.
 Do not rewrite POLISH-1 / Simulation historical observations.
-Wait for a separate Human GO that names exactly one of M1 / M2 / M4.
+Implementation Start is a separate Human GO bound to M2 only.
 ```

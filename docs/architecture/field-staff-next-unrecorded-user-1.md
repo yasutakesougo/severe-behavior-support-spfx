@@ -49,6 +49,8 @@ Remaining-gap selection SSOT:
   decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 Completion-meaning packet:
   decision-field-staff-ux-p1-2-completion-meaning-packet.md
+Completion-meaning selection SSOT:
+  decision-field-staff-ux-p1-2-completion-meaning-selection.md
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -215,10 +217,12 @@ Human selection: SELECTED / A / UX-P1-2
 Selection SSOT:
   decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 Implementation Start: NOT AUTHORIZED
-Completion-meaning Decision: NOT ACCEPTED
+Completion-meaning Decision: SELECTED / LOCKED / M2
 Meaning packet:
   decision-field-staff-ux-p1-2-completion-meaning-packet.md
-Meaning packet status: OPEN / UNCONSUMED
+Meaning packet status: CONSUMED
+Meaning selection SSOT:
+  decision-field-staff-ux-p1-2-completion-meaning-selection.md
 C UX-P2-5: NOT SELECTED
 D UX-P2-7: NOT SELECTED
 E defer: NOT SELECTED
@@ -256,7 +260,9 @@ Successor remaining-gap selection SSOT:
   decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 Completion-meaning packet:
   decision-field-staff-ux-p1-2-completion-meaning-packet.md
-Do not treat this closeout as that meaning Decision.
+Completion-meaning selection SSOT:
+  decision-field-staff-ux-p1-2-completion-meaning-selection.md
+Do not treat this closeout as that meaning Decision or Implementation Start.
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.
