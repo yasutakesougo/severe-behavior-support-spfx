@@ -1,6 +1,6 @@
 # UI-AGENT-SYSTEM-V1 — Design Issue filing packet
 
-Status: **READY TO FILE**
+Status: **READY TO FILE** (GitHub Issue create blocked for this agent token)
 
 Filing date: 2026-08-18
 
