@@ -32,6 +32,9 @@ Agent auto-select: FORBIDDEN（this Selection is Human）
 
 Implementation Start: NOT AUTHORIZED
 Completion-meaning Decision: NOT ACCEPTED
+Meaning packet:
+  decision-field-staff-ux-p1-2-completion-meaning-packet.md
+Meaning packet status: OPEN / UNCONSUMED
 Unit 7: NOT STARTED / not this slice
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -191,9 +194,11 @@ Still NOT AUTHORIZED:
 ## 9. Next gate
 
 ```text
-Next gate: Human Implementation Start GO
-Prerequisite: completion meaning without LIVE WRITE
-  must be bound by that Start GO and/or a separate Human Decision
+Next gate: Human completion-meaning Decision
+Meaning packet:
+  decision-field-staff-ux-p1-2-completion-meaning-packet.md
+Status: OPEN / UNCONSUMED
+Options: M1 / M2 / M4（M3 not on ballot）
 This Selection ≠ Implementation Start
 This Selection ≠ meaning Decision Accepted
 This Selection ≠ flag flip
@@ -202,6 +207,7 @@ This Selection ≠ flag flip
 ## Reference
 
 - Packet: [`decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md)
+- Completion-meaning packet: [`decision-field-staff-ux-p1-2-completion-meaning-packet.md`](./decision-field-staff-ux-p1-2-completion-meaning-packet.md)
 - Predecessor B selection: [`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)
 - Predecessor closeout: [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)
 - POLISH-1: [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)
