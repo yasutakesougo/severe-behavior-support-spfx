@@ -2,11 +2,11 @@
 
 Status: **ADDITIVE**（Schema 1.0.0 非変更）
 
-Slice: `PLANNING-PC-DEMO-1`  
-Human GO: existing Schema 1.0.0 only  
+Slice: `PLANNING-PC-DEMO-1`
+Human GO: existing Schema 1.0.0 only
 Baseline main: `dfb580bb71ebd4ffb5cdbe7733b3005e8fc3082c`
 
-SPFx isolated boundary: shell presentation fixtures do **not** import `src/domain`.  
+SPFx isolated boundary: shell presentation fixtures do **not** import `src/domain`.
 Root tests validate the same identity graph with existing Schema 1.0.0 validators.
 
 ## Identity join
@@ -52,7 +52,7 @@ FW-05: v2 ProcedureRecord は v3 Active へ付け替えない。
 | 過去版 | synthetic v1 / v2 labels |
 | 見直し導線 | nested ReviewDueState materials（計算なし） |
 
-`approvedBy` / `approvedAt` は Active 必須のため **domain fixture に保持**する。  
+`approvedBy` / `approvedAt` は Active 必須のため **domain fixture に保持**する。
 画面には「最終承認者」「承認済み」を出さない。適用開始の意味だけを見せる。
 
 ## Files
