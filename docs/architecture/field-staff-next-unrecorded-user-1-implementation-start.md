@@ -16,7 +16,12 @@ Human Implementation Start: GO 2026-08-18
 Authority: Decision-FIELD-STAFF-UX-P1-3-NEXT-UNRECORDED-USER-1
 Base SHA: d154fe7d1317efcbed180c96affa23611c810c18
 Selection HEAD: 8c9493d5ce39975c1ef080214066fa2842525eab
-PR #413: selection-only; Ready / Merge remain Human-only
+PR #413: MERGED / CLOSED（selection-only ancestor）
+PR #414: MERGED / CLOSED
+Implementation HEAD: 35445aa4e5dea17f578f26289672d901843e8b3a
+authoritative main: 5b5496c9e31cd0c57ca12c5b0464b315e7f7f62b
+Closeout SSOT: field-staff-next-unrecorded-user-1.md
+UX-P1-3 residual classification overall: NOT CLOSED
 LIVE WRITE: HOLD
 Deploy: HOLD
 Issue mutation: NOT AUTHORIZED
@@ -30,7 +35,9 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 ```text
 Selection SELECTED / LOCKED ≠ Implementation Start
 Human Implementation Start GO authorizes this unit only.
-#413 Ready / Merge is a separate Human-only gate.
+#413 / #414 Ready / Merge were separate Human-only gates.
+Closeout SSOT:
+  field-staff-next-unrecorded-user-1.md
 ```
 
 ## Authorized IN
@@ -102,6 +109,7 @@ Do not open ProcedureRecord from this CTA.
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not close Issues.
-Ready / Merge remain Human-only.
+Do not mark UX-P1-3 residual CLOSED.
+Closeout SSOT: field-staff-next-unrecorded-user-1.md
 Browser smoke: ENVIRONMENT LIMITATION is an inherited P2.
 ```
