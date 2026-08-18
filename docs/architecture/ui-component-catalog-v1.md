@@ -23,7 +23,7 @@ Storybook / Chromatic / Tokens Studio / Figma MCP / ESLint rules / Deploy: NOT A
 Domain / Contracts          ← 何を意味するか
 Visual Principles（DADS-03） ← どう見えるか・操作するか（原則）
 Component Catalog（本文書）  ← どの component で表現するか
-Screen Patterns             ← どの screen 骨格か（IMPL-4）
+Screen Templates             ← どの screen 骨格か（`docs/architecture/ui-screen-templates-v1.md`）
 ```
 
 Storybook を新 SSOT にしない。必要なら後続で Catalog の実行可能ビューアにする。
@@ -425,7 +425,7 @@ INV-15 / INV-16 / INV-24 KEEP。
 ```text
 新 React primitive の抽出（UserSummary / ProcedureSummary の CONSOLIDATE は後続）
 Storybook / Chromatic
-Screen template / generator（IMPL-4）
+generator / Plop / React 共通 layout 抽出
 Figma MCP / Token 同期
 Domain / Contracts / SharePoint 意味変更
 Deploy / Visual Acceptance / #299 Close
@@ -435,7 +435,8 @@ Deploy / Visual Acceptance / #299 Close
 
 ```text
 npm run verify:ui-catalog
+npm run verify:ui-templates
 npm run lint:ui-sem
 ```
 
-UI-SEM-01..05 の正本は `docs/architecture/ui-agent-impl-3-eslint-ui-sem.md`。Catalog は component usage SSOT、ESLint は forbidden substitution の決定論ゲート。
+UI-SEM-01..05 の正本は `docs/architecture/ui-agent-impl-3-eslint-ui-sem.md`。Screen Templates の正本は `docs/architecture/ui-screen-templates-v1.md`。Catalog は component usage SSOT、Templates は screen 骨格 SSOT、ESLint は forbidden substitution の決定論ゲート。
