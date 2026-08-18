@@ -20,7 +20,21 @@ import {
   type UsersFilterChipLabel,
 } from "./users-filter";
 import type { ShellUsersPresentation } from "./users-types";
+import {
+  FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
+  ariaLabelForUsersSessionSaveOverlay,
+  overlayForUserId,
+  type UsersSessionSaveOverlayState,
+  type UsersSessionSaveStateByUserId,
+} from "./users-session-save-overlay";
 import styles from "./UsersUx.module.scss";
+
+const SESSION_SAVE_STATE_CLASS: Readonly<Record<UsersSessionSaveOverlayState, string>> = {
+  unsaved: styles.sessionSaveState_unsaved,
+  saving: styles.sessionSaveState_saving,
+  save_failed: styles.sessionSaveState_save_failed,
+  save_outcome_unknown: styles.sessionSaveState_save_outcome_unknown,
+};
 
 export type UsersListProps = Readonly<{
   presentation: ShellUsersPresentation;
@@ -28,6 +42,11 @@ export type UsersListProps = Readonly<{
   /** DEMO-UX-13: userIds that have a synthetic detail fixture (sole enablement source). */
   detailPreviewUserIds?: readonly string[];
   onUserDetailRequest?: (userId: string) => void;
+  /**
+   * FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2: per-user ProcedureRecord session save-state.
+   * Not the chrome fixture saveState (smoke default may be `saved`).
+   */
+  sessionSaveStateByUserId?: UsersSessionSaveStateByUserId;
 }>;
 
 /**
@@ -35,6 +54,7 @@ export type UsersListProps = Readonly<{
  * DEMO-UX-3 / DEMO-UX-13: synthetic detail preview when a fixture exists for the row.
  * DEMO-UX-8 enables synthetic client-side status filter chips.
  * DEMO-UX-11 removes duplicate screen-level synthetic band; filter hint is consolidated.
+ * FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2: session-local save-state overlay on each row.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -42,6 +62,7 @@ export const UsersList: React.FC<UsersListProps> = ({
   headingRef,
   detailPreviewUserIds,
   onUserDetailRequest,
+  sessionSaveStateByUserId,
 }) => {
   const { rows } = presentation;
   const [activeChip, setActiveChip] = React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
@@ -60,6 +81,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-10-slice={DEMO_UX_10_SLICE.id}
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-demo-ux-13-slice={DEMO_UX_13_SLICE.id}
+      data-field-staff-mux-polish-1-slice={FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.id}
       data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
@@ -142,6 +164,11 @@ export const UsersList: React.FC<UsersListProps> = ({
           const detailPreviewEnabled =
             Boolean(onUserDetailRequest) &&
             isSyntheticDetailPreviewEnabled(row.id, detailPreviewUserIds);
+          const sessionOverlay = overlayForUserId(row.id, sessionSaveStateByUserId);
+          const sessionOverlayAriaLabel = ariaLabelForUsersSessionSaveOverlay(
+            row.personLabel,
+            sessionOverlay,
+          );
           return (
             <li
               key={row.id}
@@ -150,7 +177,21 @@ export const UsersList: React.FC<UsersListProps> = ({
               data-demo-ux-user-id={row.id}
             >
               <div className={styles.userMain}>
-                <p className={styles.personLabel}>{row.personLabel}</p>
+                <div className={styles.personRow}>
+                  <p className={styles.personLabel}>{row.personLabel}</p>
+                  {sessionOverlay.visible ? (
+                    <span
+                      className={`${styles.sessionSaveState} ${
+                        SESSION_SAVE_STATE_CLASS[sessionOverlay.state]
+                      }`}
+                      data-demo-ux="users-session-save-state"
+                      data-demo-ux-session-save-state={sessionOverlay.state}
+                      aria-label={sessionOverlayAriaLabel}
+                    >
+                      {sessionOverlay.label}
+                    </span>
+                  ) : null}
+                </div>
                 <ul className={styles.badgeList} aria-label={`${row.personLabel}の状態`}>
                   {row.statusBadges.map((badge) => (
                     <StatusBadge

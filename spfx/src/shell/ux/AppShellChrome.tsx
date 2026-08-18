@@ -33,9 +33,11 @@ import {
   SupportPlan,
   UserDetail,
   UsersList,
+  rememberUserSessionSaveState,
   type ShellSupportPlanPresentation,
   type ShellUserDetailPresentation,
   type ShellUsersPresentation,
+  type UsersSessionSaveStateByUserId,
 } from "../users";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
@@ -142,6 +144,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [procedureFlowSaveState, setProcedureFlowSaveState] = React.useState<
     ShellSaveState | undefined
   >();
+  const [sessionSaveStateByUserId, setSessionSaveStateByUserId] =
+    React.useState<UsersSessionSaveStateByUserId>({});
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const [selectedOccurrenceId, setSelectedOccurrenceId] = React.useState<string | undefined>();
   const [occurrenceFlowFromOverview, setOccurrenceFlowFromOverview] = React.useState(false);
@@ -168,6 +172,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   React.useEffect(() => {
     setSelection(siteSelection);
+    setSessionSaveStateByUserId({});
   }, [siteSelection]);
 
   React.useEffect(() => {
@@ -193,6 +198,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (procedureFlowSaveState !== undefined) {
         setProcedureFlowSaveState(undefined);
       }
+      if (Object.keys(sessionSaveStateByUserId).length > 0) {
+        setSessionSaveStateByUserId({});
+      }
       if (occurrenceFlowFromOverview) {
         setOccurrenceFlowFromOverview(false);
       }
@@ -207,6 +215,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     currentProcedureOpen,
     procedureRecordFormOpen,
     procedureFlowSaveState,
+    sessionSaveStateByUserId,
     reviewDuePreviewOpen,
     occurrenceFlowFromOverview,
   ]);
@@ -230,9 +239,17 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
+    setSessionSaveStateByUserId({});
     if (onSiteSelectionChange) {
       onSiteSelectionChange(next);
     }
+  };
+
+  const handleProcedureFlowSaveStateChange = (state: ShellSaveState): void => {
+    setProcedureFlowSaveState(state);
+    setSessionSaveStateByUserId((prev) =>
+      rememberUserSessionSaveState(prev, selectedUserDetailId, state),
+    );
   };
 
   const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
@@ -683,7 +700,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       context={selectedCurrentProcedure.context}
                       headingRef={destinationHeadingRef}
                       onBackToCurrentProcedure={handleBackToCurrentProcedure}
-                      onSaveStateChange={setProcedureFlowSaveState}
+                      onSaveStateChange={handleProcedureFlowSaveStateChange}
                     />
                   ) : currentProcedureOpen && selectedCurrentProcedure ? (
                     <CurrentProcedure
@@ -725,6 +742,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     headingRef={destinationHeadingRef}
                     detailPreviewUserIds={detailPreviewUserIds}
                     onUserDetailRequest={handleUserDetailRequest}
+                    sessionSaveStateByUserId={sessionSaveStateByUserId}
                   />
                 )
               ) : destination === "records" ? (

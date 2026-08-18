@@ -198,6 +198,36 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 1 users detail copy", () => {
   });
 });
 
+describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2 users list overlay boundary", () => {
+  it("keeps 未記録 filter membership and fixture-derived labels unchanged", () => {
+    expect(
+      filterUserRowsByStatusChip(DEMO_UX_USERS_FIXTURE.rows, USERS_FILTER_CHIP_UNRECORDED).map(
+        (row) => row.id,
+      ),
+    ).toEqual(["user-a", "user-e"]);
+    expect(DEMO_UX_USERS_FIXTURE.rows.map((row) => row.personLabel)).toEqual([
+      "Aさん",
+      "Bさん",
+      "Cさん",
+      "Dさん",
+      "Eさん",
+      "Fさん",
+      "Gさん",
+      "Hさん",
+    ]);
+    expect(
+      DEMO_UX_USERS_FIXTURE.rows.some((row) =>
+        row.statusBadges.some((badge) => badge.label === "未記録"),
+      ),
+    ).toBe(true);
+    expect(
+      DEMO_UX_USERS_FIXTURE.rows.some((row) =>
+        row.statusBadges.some((badge) => badge.label === "未保存"),
+      ),
+    ).toBe(false);
+  });
+});
+
 describe("VISUAL-POLISH-3 Users presentation boundary", () => {
   it("keeps Users polish presentation-only and downstream work closed", () => {
     expect(VISUAL_POLISH_3_USERS_SLICE.id).toBe("VISUAL-POLISH-3");
