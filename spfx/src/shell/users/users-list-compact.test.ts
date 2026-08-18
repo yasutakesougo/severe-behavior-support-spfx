@@ -8,10 +8,7 @@ import {
   USERS_FILTER_CHIP_UNRECORDED,
   filterUserRowsByStatusChip,
 } from "./users-filter";
-import {
-  resolveUsersListRestoreTarget,
-  shouldRetainUsersListRestore,
-} from "./users-list-restore";
+import { resolveUsersListRestoreTarget, shouldRetainUsersListRestore } from "./users-list-restore";
 import {
   USERS_LIST_COMPACT_CLASS,
   USERS_LIST_COMPACT_DENSITY,
@@ -57,9 +54,8 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 5 compact tablet density", () 
       classNameModifier: USERS_LIST_COMPACT_CLASS,
     });
     expect(
-      presentUsersListCompact(
-        FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized,
-      ).dataAttr,
+      presentUsersListCompact(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized)
+        .dataAttr,
     ).toBe("true");
   });
 
