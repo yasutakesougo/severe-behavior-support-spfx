@@ -47,6 +47,8 @@ UX-P1-3 residual classification overall: NOT CLOSED
 Remaining-gap successor: FIELD-STAFF-COMPLETION-ON-CARDS-1
 Remaining-gap selection SSOT:
   decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+Completion-meaning packet:
+  decision-field-staff-ux-p1-2-completion-meaning-packet.md
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -214,6 +216,9 @@ Selection SSOT:
   decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 Implementation Start: NOT AUTHORIZED
 Completion-meaning Decision: NOT ACCEPTED
+Meaning packet:
+  decision-field-staff-ux-p1-2-completion-meaning-packet.md
+Meaning packet status: OPEN / UNCONSUMED
 C UX-P2-5: NOT SELECTED
 D UX-P2-7: NOT SELECTED
 E defer: NOT SELECTED
@@ -249,6 +254,9 @@ Do not start Unit 7 from this closeout.
 Do not treat this closeout as FIELD-STAFF-COMPLETION-ON-CARDS-1 Implementation Start.
 Successor remaining-gap selection SSOT:
   decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+Completion-meaning packet:
+  decision-field-staff-ux-p1-2-completion-meaning-packet.md
+Do not treat this closeout as that meaning Decision.
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.
