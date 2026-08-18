@@ -21,6 +21,10 @@ import {
 } from "./users-filter";
 import { presentUsersListCompact } from "./users-list-compact";
 import { rememberUsersFilterChip, resolveUsersListRestoreTarget } from "./users-list-restore";
+import {
+  FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE,
+  presentNextUnrecordedUserCta,
+} from "./next-unrecorded-user";
 import type { ShellUsersPresentation } from "./users-types";
 import {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
@@ -68,6 +72,7 @@ export type UsersListProps = Readonly<{
  * FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2: session-local save-state overlay on each row.
  * Unit 4: session-local filter / scroll / focus restore after explicit return to this list.
  * Unit 5: compact tablet density at ≤768px. Desktop 3-col and filter meaning stay unchanged.
+ * FIELD-STAFF-NEXT-UNRECORDED-USER-1: next fixture-unrecorded row assist after list origin.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -84,6 +89,9 @@ export const UsersList: React.FC<UsersListProps> = ({
 }) => {
   const { rows } = presentation;
   const restoreAuthorized = FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized;
+  const nextUnrecordedAuthorized =
+    FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized &&
+    FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE.nextUnrecordedUserAuthorized;
   const compact = presentUsersListCompact(
     FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized,
   );
@@ -100,6 +108,12 @@ export const UsersList: React.FC<UsersListProps> = ({
   const detailPreviewNote = formatUsersDetailPreviewNote(
     personLabelsForDetailPreview(rows, detailPreviewUserIds),
   );
+  const nextUnrecordedCta = presentNextUnrecordedUserCta({
+    authorized: nextUnrecordedAuthorized,
+    currentUserId: restoreOriginUserId,
+    visibleRows,
+    detailEnabledUserIds: detailPreviewUserIds ?? [],
+  });
 
   const selectChip = (chip: UsersFilterChipLabel): void => {
     if (restoreAuthorized && onFilterChipChange) {
@@ -107,6 +121,26 @@ export const UsersList: React.FC<UsersListProps> = ({
       return;
     }
     setLocalChip(chip);
+  };
+
+  const focusVisibleUserRow = (userId: string): void => {
+    const row = listRef.current?.querySelector(
+      `[data-demo-ux-user-id="${userId}"]`,
+    ) as HTMLElement | null;
+    if (!row) {
+      const heading = headingRef && "current" in headingRef ? headingRef.current : undefined;
+      heading?.focus();
+      return;
+    }
+    row.scrollIntoView({ block: "nearest", inline: "nearest" });
+    const button = row.querySelector(
+      '[data-demo-ux="users-detail-button"]',
+    ) as HTMLButtonElement | null;
+    if (button && !button.disabled) {
+      button.focus();
+      return;
+    }
+    row.focus();
   };
 
   React.useLayoutEffect(() => {
@@ -160,6 +194,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-demo-ux-13-slice={DEMO_UX_13_SLICE.id}
       data-field-staff-mux-polish-1-slice={FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.id}
+      data-field-staff-next-unrecorded-user-1-slice={FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE.id}
       data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
@@ -228,6 +263,38 @@ export const UsersList: React.FC<UsersListProps> = ({
         {detailPreviewNote}
       </p>
 
+      {nextUnrecordedCta.visible ? (
+        <div className={styles.nextUnrecordedRow}>
+          <button
+            type="button"
+            className={styles.nextUnrecordedButton}
+            data-field-staff="next-unrecorded-user"
+            data-field-staff-next-unrecorded-action={nextUnrecordedCta.action}
+            data-field-staff-next-unrecorded-user-id={nextUnrecordedCta.nextUserId ?? ""}
+            disabled={!nextUnrecordedCta.enabled}
+            aria-disabled={!nextUnrecordedCta.enabled ? "true" : undefined}
+            aria-describedby={nextUnrecordedCta.reason ? nextUnrecordedCta.reasonId : undefined}
+            onClick={() => {
+              if (!nextUnrecordedCta.enabled || !nextUnrecordedCta.nextUserId) {
+                return;
+              }
+              if (nextUnrecordedCta.action === "user_detail" && onUserDetailRequest) {
+                onUserDetailRequest(nextUnrecordedCta.nextUserId);
+                return;
+              }
+              focusVisibleUserRow(nextUnrecordedCta.nextUserId);
+            }}
+          >
+            {nextUnrecordedCta.label}
+          </button>
+          {nextUnrecordedCta.reason ? (
+            <p id={nextUnrecordedCta.reasonId} className={styles.sectionHint}>
+              {nextUnrecordedCta.reason}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
       {showEmptyNote ? (
         // INV-17: filter zero-result only — EmptyNotice status channel; not facility-empty / failure.
         <EmptyNotice
@@ -255,6 +322,7 @@ export const UsersList: React.FC<UsersListProps> = ({
               className={styles.userRow}
               data-demo-ux="users-row"
               data-demo-ux-user-id={row.id}
+              tabIndex={-1}
             >
               <div className={styles.userMain}>
                 <div className={styles.personRow}>

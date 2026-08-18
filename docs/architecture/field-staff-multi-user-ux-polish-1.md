@@ -36,7 +36,7 @@ This closeout: != Deploy / App Catalog GO
 This closeout: != Unit 7 start
 This closeout: != next-slice Implementation Start
 Successor selection: FIELD-STAFF-NEXT-UNRECORDED-USER-1
-Successor Implementation Start: NOT AUTHORIZED
+Successor Implementation Start: recorded separately
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -225,7 +225,10 @@ Next slice identity: FIELD-STAFF-NEXT-UNRECORDED-USER-1
 Human selection: SELECTED / B / UX-P1-3
 Selection SSOT:
   decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md
-Implementation Start: NOT AUTHORIZED
+Implementation Start: recorded separately
+Start SSOT:
+  field-staff-next-unrecorded-user-1-implementation-start.md
+This closeout: != Implementation Start
 Unit 7: NOT STARTED / not this slice
 UX-P1-2 / UX-P2-5 expansion / UX-P2-7: NOT SELECTED
 Production-host re-acceptance: not started by this acceptance
@@ -247,20 +250,19 @@ ACCEPT / PASS != production-host re-acceptance
 ACCEPT / PASS != Full Application Acceptance
 ```
 
-Human が UX-P1-3 を次 exact-slice に選んだことは、本 closeout の
-Implementation Start ではない。OUT OF SCOPE 分類は変えない。
+Human が UX-P1-3 を次 exact-slice に選んだこと、および successor Implementation Start は、
+本 closeout の ACCEPT ではない。OUT OF SCOPE 分類は変えない。
 
 ## 10. STOP
 
 ```text
-This recording is documentation / Human Acceptance evidence only.
-Do not start Unit 7.
-Do not implement remaining slice flags.
-Do not treat B selection as Implementation Start.
+This recording is POLISH-1 Human Acceptance evidence only.
+Do not start Unit 7 from this closeout.
+Do not rewrite PARTIAL / OUT OF SCOPE as PASS / CLOSED.
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.
 Do not close Issues from this document.
-Wait for a separate Human Implementation Start GO.
-CURRENT ACTION: STOP
+Successor Start SSOT:
+  field-staff-next-unrecorded-user-1-implementation-start.md
 ```

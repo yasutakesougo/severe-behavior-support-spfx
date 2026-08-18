@@ -52,7 +52,7 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 6 per-user draft resume", () =
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized).toBe(true);
-    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(false);
+    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.saveStateSemanticsChangeAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.savingPauseRemovalAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.liveSavedCompletionOnCardsAuthorized).toBe(

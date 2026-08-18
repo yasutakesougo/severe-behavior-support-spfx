@@ -108,7 +108,10 @@ Human-selected next slice: FIELD-STAFF-NEXT-UNRECORDED-USER-1
 Selection: B / UX-P1-3
 Selection SSOT:
   decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md
-Implementation Start: NOT AUTHORIZED by this document
+Implementation Start: recorded separately
+Start SSOT:
+  field-staff-next-unrecorded-user-1-implementation-start.md
+This simulation closeout: != Implementation Start
 ```
 
 Historical design targets recorded here remain observations.
@@ -116,8 +119,10 @@ Which gaps this polish slice addressed vs left out of scope is recorded in
 [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md).
 Do not rewrite §4 UX gaps as if they were never observed.
 UX-P1-3 is Human-selected as the next exact-slice identity
-([`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md));
-that selection does not close the historical gap row or authorize implementation.
+([`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)).
+Implementation Start is recorded in
+[`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md).
+Do not treat this simulation closeout as that Start.
 
 Expected future design targets (design only; not authorized here):
 

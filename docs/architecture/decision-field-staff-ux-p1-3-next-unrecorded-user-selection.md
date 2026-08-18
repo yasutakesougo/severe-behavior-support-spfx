@@ -23,7 +23,8 @@ Acceptance HEAD: bffe65ff1f4179d64faa5fef18d151e53c294d35
 Prior A recommendation: NOT A SELECTION
 Agent auto-select: FORBIDDEN（this Selection is Human）
 
-Implementation Start: NOT AUTHORIZED（separate Human GO）
+Implementation Start: AUTHORIZED（separate Human GO 2026-08-18）
+Start SSOT: field-staff-next-unrecorded-user-1-implementation-start.md
 Unit 7: NOT STARTED / not this slice
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -104,13 +105,14 @@ OUT:
 
 C1 / C2 は C 未選定のため切らない。
 
-## 6. Flag boundary（unchanged until Implementation Start）
+## 6. Flag boundary
 
 [`users-session-save-overlay.ts`](../../spfx/src/shell/users/users-session-save-overlay.ts)
-の `FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE` は本選定では変更しない。
+の `FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE` は選定時点では変更しない。
+Implementation Start 後に `nextUnrecordedUserAuthorized` のみ true。
 
 ```text
-nextUnrecordedUserAuthorized: false
+nextUnrecordedUserAuthorized: true（Implementation Start 後）
 liveSavedCompletionOnCardsAuthorized: false
 syntheticRecordedForTodayAuthorized: false
 unrecordedBadgeMutationAuthorized: false
@@ -141,16 +143,15 @@ This selection != 18-user catalog
 Decision-FIELD-STAFF-UX-P1-3-NEXT-UNRECORDED-USER-1
 = SELECTED / LOCKED
 
-HOLD:
-  Implementation Start = separate Human GO
-  exact unit + base SHA d154fe7d… + allowed paths + tests + stop gate
+Implementation Start:
+  field-staff-next-unrecorded-user-1-implementation-start.md
 
 Still NOT AUTHORIZED:
-  code implementation
-  remaining-flag flip
+  listToRecordFastPath / badge / KPI mutation
   Unit 7
   LIVE WRITE / Deploy
   A / C / D / E as selected
+  Ready / Merge auto-progress
 ```
 
 ## Reference
@@ -158,4 +159,5 @@ Still NOT AUTHORIZED:
 - Packet: [`decision-field-staff-ux-p1-3-next-unrecorded-user-selection-packet.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection-packet.md)
 - Predecessor closeout: [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)
 - Simulation gaps: [`field-staff-multi-user-ux-simulation-1.md`](./field-staff-multi-user-ux-simulation-1.md)
-- Next gate after Selection: Human GO for Implementation Start（separate）
+- Next gate after Selection: Implementation Start recorded in
+  [`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md)

@@ -141,5 +141,8 @@ Human-selected next slice: FIELD-STAFF-NEXT-UNRECORDED-USER-1
 Selection: B / UX-P1-3
 Selection SSOT:
   decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md
-Implementation Start: NOT AUTHORIZED by this document
+Implementation Start: recorded separately
+Start SSOT:
+  field-staff-next-unrecorded-user-1-implementation-start.md
+This predecessor closeout: != Implementation Start
 ```

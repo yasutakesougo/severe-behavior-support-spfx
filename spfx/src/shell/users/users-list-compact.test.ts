@@ -28,7 +28,7 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 5 compact tablet density", () 
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized).toBe(true);
-    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(false);
+    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.eightUserDetailCatalogAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.procedureFixtureExpansionAuthorized).toBe(

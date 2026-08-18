@@ -61,6 +61,19 @@ export {
   type UsersSessionSaveStateByUserId,
 } from "./users-session-save-overlay";
 export {
+  FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE,
+  FIELD_STAFF_NEXT_UNRECORDED_USER_CTA_PREFIX,
+  FIELD_STAFF_NEXT_UNRECORDED_USER_NONE_REASON,
+  isUnrecordedUserRow,
+  labelForNextUnrecordedUserCta,
+  presentNextUnrecordedUserCta,
+  resolveNextUnrecordedUserAction,
+  selectNextUnrecordedUser,
+  type NextUnrecordedUser,
+  type NextUnrecordedUserAction,
+  type NextUnrecordedUserCtaPresentation,
+} from "./next-unrecorded-user";
+export {
   DEMO_UX_8_SLICE,
   USERS_FILTER_CHIP_ALL,
   USERS_FILTER_CHIP_DUE_SOON,
