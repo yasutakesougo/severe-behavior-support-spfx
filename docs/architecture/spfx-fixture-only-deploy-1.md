@@ -11,6 +11,11 @@ Human SELECT **Option A — KEEP CURRENT DEPLOYMENT** である。
 [`spfx-production-binding-decision-1.md`](./spfx-production-binding-decision-1.md)
 は Production Binding Decision closeout 正本である。本記録はそれを再解釈しない。
 
+後続の current-deployment demo acceptance 記録（この closeout を書き換えない）:
+[`spfx-current-deployment-demo-acceptance-1.md`](./spfx-current-deployment-demo-acceptance-1.md)
+（basis `8cc1d53…` / ACCEPT CURRENT FIXTURE DEMO SCOPE）。
+next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-FIXTURE-ONLY-DEPLOY-1
