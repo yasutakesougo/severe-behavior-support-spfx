@@ -8,6 +8,10 @@ Human SELECT **Option A — KEEP unbound** である。
 [`spfx-release-artifact-authority-1.md`](./spfx-release-artifact-authority-1.md)
 は Artifact Authority closeout 正本である。本記録はそれを再解釈しない。
 
+後続の Artifact Reproducibility 記録（この closeout を書き換えない）:
+[`spfx-release-artifact-reproducibility-1.md`](./spfx-release-artifact-reproducibility-1.md)
+（basis `1fedeba…`）。RG-REPRO は本記録時点では Binding ゲート対象外である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-PRODUCTION-BINDING-DECISION-1
