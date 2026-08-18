@@ -159,9 +159,13 @@ Still NOT AUTHORIZED:
   listToRecordFastPath / badge / KPI mutation
   Unit 7
   LIVE WRITE / Deploy
-  A / C / D / E as selected
+  C / D / E as selected in this ballot
   rewrite residual CLOSED
   Ready / Merge auto-progress
+
+Remaining-gap A is a later ballot:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+This B ballot does not authorize that Start.
 ```
 
 ## Reference
@@ -171,3 +175,4 @@ Still NOT AUTHORIZED:
 - Simulation gaps: [`field-staff-multi-user-ux-simulation-1.md`](./field-staff-multi-user-ux-simulation-1.md)
 - Implementation Start: [`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md)
 - Successor closeout: [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)
+- Remaining-gap A selection: [`decision-field-staff-ux-p1-2-completion-on-cards-selection.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection.md)

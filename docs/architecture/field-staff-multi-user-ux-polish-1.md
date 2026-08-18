@@ -40,6 +40,9 @@ Successor Implementation Start: recorded separately
 Successor closeout SSOT:
   field-staff-next-unrecorded-user-1.md
 Successor implementation: MERGED（PR #414）
+Remaining-gap successor: FIELD-STAFF-COMPLETION-ON-CARDS-1
+Remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -246,7 +249,13 @@ This closeout: != Implementation Start
 This closeout: != UX-P1-3 residual CLOSED
 POLISH-1 historical UX-P1-3: OUT OF SCOPE（§4 unchanged）
 Unit 7: NOT STARTED / not this slice
-UX-P1-2 / UX-P2-5 expansion / UX-P2-7: NOT SELECTED
+Human-selected remaining-gap slice: FIELD-STAFF-COMPLETION-ON-CARDS-1
+Selection: A / UX-P1-2
+Remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+This closeout: != that Implementation Start
+UX-P2-5 expansion / UX-P2-7: NOT SELECTED
+POLISH-1 historical UX-P1-2: OUT OF SCOPE（§4 unchanged）
 Production-host re-acceptance: not started by this acceptance
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -269,6 +278,8 @@ ACCEPT / PASS != Full Application Acceptance
 Human が UX-P1-3 を次 exact-slice に選んだこと、successor Implementation Start、
 および successor IMPLEMENTED / MERGED は、本 closeout の ACCEPT ではない。
 OUT OF SCOPE 分類は変えない。UX-P1-3 residual classification overall は NOT CLOSED。
+Human が UX-P1-2 をその次の remaining-gap exact-slice に選んだことも、
+本 closeout の ACCEPT ではない。UX-P1-2 OUT OF SCOPE 分類は変えない。
 
 ## 10. STOP
 
@@ -284,4 +295,6 @@ Successor Start SSOT:
   field-staff-next-unrecorded-user-1-implementation-start.md
 Successor closeout SSOT:
   field-staff-next-unrecorded-user-1.md
+Remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 ```

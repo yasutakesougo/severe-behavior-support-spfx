@@ -152,4 +152,9 @@ authoritative successor main:
   5b5496c9e31cd0c57ca12c5b0464b315e7f7f62b
 This predecessor closeout: != Implementation Start
 This predecessor closeout: != UX-P1-3 residual CLOSED
+Human-selected remaining-gap slice: FIELD-STAFF-COMPLETION-ON-CARDS-1
+Selection: A / UX-P1-2
+Remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+This predecessor closeout: != that Implementation Start
 ```

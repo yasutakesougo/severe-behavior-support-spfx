@@ -119,6 +119,12 @@ authoritative successor main:
   5b5496c9e31cd0c57ca12c5b0464b315e7f7f62b
 This simulation closeout: != Implementation Start
 This simulation closeout: != UX-P1-3 residual CLOSED
+Human-selected remaining-gap slice: FIELD-STAFF-COMPLETION-ON-CARDS-1
+Selection: A / UX-P1-2
+Remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+This simulation closeout: != that Implementation Start
+This simulation closeout: != UX-P1-2 residual CLOSED
 ```
 
 Historical design targets recorded here remain observations.
@@ -131,8 +137,10 @@ Implementation Start is recorded in
 [`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md).
 Successor IMPLEMENTED / MERGED is recorded in
 [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md).
+Remaining-gap A / UX-P1-2 is recorded in
+[`decision-field-staff-ux-p1-2-completion-on-cards-selection.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection.md).
 Do not treat this simulation closeout as that Start or as residual CLOSED.
-Do not rewrite §4 UX-P1-3 as if it were never observed.
+Do not rewrite §4 UX-P1-2 or UX-P1-3 as if they were never observed.
 
 Expected future design targets (design only; not authorized here):
 
