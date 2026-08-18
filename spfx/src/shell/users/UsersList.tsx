@@ -25,6 +25,11 @@ import {
   FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE,
   presentNextUnrecordedUserCta,
 } from "./next-unrecorded-user";
+import {
+  FIELD_STAFF_COMPLETION_ON_CARDS_1_SLICE,
+  ariaLabelForSyntheticRecordedForToday,
+  presentSyntheticRecordedForToday,
+} from "./synthetic-recorded-for-today";
 import type { ShellUsersPresentation } from "./users-types";
 import {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
@@ -73,6 +78,7 @@ export type UsersListProps = Readonly<{
  * Unit 4: session-local filter / scroll / focus restore after explicit return to this list.
  * Unit 5: compact tablet density at ≤768px. Desktop 3-col and filter meaning stay unchanged.
  * FIELD-STAFF-NEXT-UNRECORDED-USER-1: next fixture-unrecorded row assist after list origin.
+ * FIELD-STAFF-COMPLETION-ON-CARDS-1: M2 synthetic recorded-for-today, separate from session overlay.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -92,6 +98,9 @@ export const UsersList: React.FC<UsersListProps> = ({
   const nextUnrecordedAuthorized =
     FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized &&
     FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE.nextUnrecordedUserAuthorized;
+  const syntheticRecordedForTodayAuthorized =
+    FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.syntheticRecordedForTodayAuthorized &&
+    FIELD_STAFF_COMPLETION_ON_CARDS_1_SLICE.syntheticRecordedForTodayAuthorized;
   const compact = presentUsersListCompact(
     FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized,
   );
@@ -195,6 +204,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-13-slice={DEMO_UX_13_SLICE.id}
       data-field-staff-mux-polish-1-slice={FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.id}
       data-field-staff-next-unrecorded-user-1-slice={FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE.id}
+      data-field-staff-completion-on-cards-1-slice={FIELD_STAFF_COMPLETION_ON_CARDS_1_SLICE.id}
       data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
@@ -316,6 +326,14 @@ export const UsersList: React.FC<UsersListProps> = ({
             row.personLabel,
             sessionOverlay,
           );
+          const recordedForToday = presentSyntheticRecordedForToday({
+            authorized: syntheticRecordedForTodayAuthorized,
+            userId: row.id,
+          });
+          const recordedForTodayAriaLabel = ariaLabelForSyntheticRecordedForToday(
+            row.personLabel,
+            recordedForToday,
+          );
           return (
             <li
               key={row.id}
@@ -337,6 +355,16 @@ export const UsersList: React.FC<UsersListProps> = ({
                       aria-label={sessionOverlayAriaLabel}
                     >
                       {sessionOverlay.label}
+                    </span>
+                  ) : null}
+                  {recordedForToday.visible ? (
+                    <span
+                      className={styles.syntheticRecordedForToday}
+                      data-field-staff="synthetic-recorded-for-today"
+                      data-field-staff-synthetic-recorded-for-today="true"
+                      aria-label={recordedForTodayAriaLabel}
+                    >
+                      {recordedForToday.label}
                     </span>
                   ) : null}
                 </div>
