@@ -67,6 +67,8 @@ FAST-LANE-V1（standing LOW execution lane candidate）: `docs/process/fast-lane
 
 AUTONOMY-POLICY-V1（AUTO-1 / AI Development OS の機械判定可能な policy contract）: `docs/process/autonomy-policy-v1.md`（ACCEPTED / NOT ENABLED；Authorization effect NONE；UNKNOWN → DENY；Gateway に Ready / Merge executor なし）
 
+ORIGIN-EVALUATION-1（GitHub authoritative / Origin shadow evaluation）: `docs/architecture/origin-evaluation-1.md`（REVIEWABLE / READY FOR HUMAN ACCEPTANCE；Authorization effect NONE；Origin enablement / mirror / Detach NOT AUTHORIZED；GitHub 放棄しない）
+
 実行参照（操作単位マトリクス）: `.agents/mcp/permission-matrix.md`
 
 区分:
@@ -117,6 +119,7 @@ AUTONOMY-POLICY-V1（AUTO-1 / AI Development OS の機械判定可能な policy 
 | LOW-AUTO-PILOT-V1（LA1-A ACCEPTED / execution NOT STARTED） | `docs/process/low-auto-pilot-v1.md` |
 | FAST-LANE-V1（CANDIDATE / NOT YET ACTIVE） | `docs/process/fast-lane-v1.md` |
 | AUTONOMY-POLICY-V1（AUTO-1 ACCEPTED / NOT ENABLED） | `docs/process/autonomy-policy-v1.md` |
+| ORIGIN-EVALUATION-1（GitHub SSOT / Origin shadow；ACCEPT 前） | `docs/architecture/origin-evaluation-1.md` |
 | MCP 権限実行参照 | `.agents/mcp/permission-matrix.md` |
 
 ## 本入口が承認しないこと
@@ -138,3 +141,4 @@ AUTONOMY-POLICY-V1（AUTO-1 / AI Development OS の機械判定可能な policy 
 - AUTONOMY-POLICY-V1 の enablement、Capability Registry / Task Packet / Action Gateway / execution backend の実装（AUTO-1 ACCEPTED でも Authorization effect NONE；別 unit / GO が必要）
 - AUTONOMY-POLICY-V1 を根拠とする Ready / Merge / Decision Acceptance、SharePoint / M365 / Entra / permission / secret / production deploy（Gateway executor を持たず、上位正本を緩和しない）
 - AssessmentSnapshot adapter EC-3 / EC-4 または Implementation Start の自動充足・迂回（法人アプリ lane の現行 Gate を維持）
+- ORIGIN-EVALUATION-1 の Origin enablement / GitHub→Origin mirror / Detach from GitHub / Origin merge / GitHub 放棄（`docs/architecture/origin-evaluation-1.md` は REVIEWABLE。ACCEPT 後も有効化は別 Human Explicit GO。DEC-AI-ORG-3 を緩和しない）

@@ -139,5 +139,6 @@ Background Agent 実行が完了とみなせる条件:
 | Workflow | `docs/process/ai-workflow.md` |
 | 自己参照 Gate 方針 | `docs/process/self-referential-gate-policy.md` |
 | Cursor Agent Adapter | `.agents/commands/adapters/cursor-agent.md` |
+| Origin 評価（GitHub SSOT） | `docs/architecture/origin-evaluation-1.md` |
 | handoff-builder | `.agents/skills/handoff-builder/SKILL.md` |
 | auto-handoff | `scripts/auto-handoff.mjs` |
