@@ -13,6 +13,7 @@ import {
 import {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
+  formatTodaySupportBoardDisclaimer,
 } from "./overview-copy";
 import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "./overview-types";
 import { SemanticIcon } from "../primitives";
@@ -65,6 +66,9 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
         <h2 id="dashboard-ux-today-support-heading" className={styles.sectionHeading}>
           今日の支援（本日の予定・時系列）
         </h2>
+        <p className={styles.sectionHint} data-kiosk-ux="today-support-list-separation-note">
+          {formatTodaySupportBoardDisclaimer(todaySupportItems.map((item) => item.personLabel))}
+        </p>
         <TodaySupportDayBoard
           items={todaySupportItems}
           selectedOccurrenceId={selectedOccurrenceId}

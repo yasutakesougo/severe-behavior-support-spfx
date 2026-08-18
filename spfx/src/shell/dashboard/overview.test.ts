@@ -1,6 +1,7 @@
 import {
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
+  formatTodaySupportBoardDisclaimer,
   overviewCopyIsFailClosed,
 } from "./overview-copy";
 import {
@@ -94,6 +95,27 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
     };
     expect(target.kind).toBe("occurrence");
     expect(target.occurrenceId).toBe("occ-synth-001");
+  });
+});
+
+describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 1 today-support disclaimer", () => {
+  it("keeps the day board a separate synthetic context from the Users roster", () => {
+    const generic = formatTodaySupportBoardDisclaimer([]);
+    expect(overviewCopyIsFailClosed(generic)).toBe(true);
+    expect(generic).toContain("合成の日次ボード");
+    expect(generic).toContain("利用者一覧の対象者集合とは別です");
+    expect(generic).toContain("業務データには接続されていません");
+    expect(generic).not.toContain("Aさん");
+    expect(generic).not.toContain("保存済み");
+    expect(generic).not.toContain("記録済み");
+  });
+
+  it("uses first-seen person labels from items instead of hardcoded names", () => {
+    const note = formatTodaySupportBoardDisclaimer(["Aさん", "Aさん", "Bさん"]);
+    expect(note).toContain("表示中の予定は Aさん・Bさん");
+    expect(note).toContain("利用者一覧の対象者集合とは別です");
+    expect(overviewCopyIsFailClosed(note)).toBe(true);
+    expect(note).not.toContain("live");
   });
 });
 
