@@ -24,7 +24,8 @@ Depends on:
   PR #412 MERGED
   authoritative main: d154fe7d1317efcbed180c96affa23611c810c18
 Prior A recommendation: NOT A SELECTION
-Implementation Start: HOLD / NOT AUTHORIZED
+Implementation Start: AUTHORIZED
+Start SSOT: field-staff-next-unrecorded-user-1-implementation-start.md
 Unit 7: NOT STARTED
 LIVE WRITE: HOLD
 Selected exact-slice: SELECTED / B — UX-P1-3
@@ -116,7 +117,7 @@ Selected: B
 UX-P1-3 次の未記録利用者
 Slice identity: FIELD-STAFF-NEXT-UNRECORDED-USER-1
 Human Decision: B GO 2026-08-18
-Implementation Start: NOT AUTHORIZED by this packet
+Implementation Start: recorded in field-staff-next-unrecorded-user-1-implementation-start.md
 ```
 
 ## 4. Stop condition
@@ -125,7 +126,6 @@ Implementation Start: NOT AUTHORIZED by this packet
 This packet is CONSUMED by the selection record.
 Do not auto-select A / C / D / E.
 Do not start Unit 7.
-Do not flip remaining slice flags.
 Do not enable LIVE WRITE.
-Wait for a separate Human Implementation Start GO.
+Implementation Start is recorded separately.
 ```
