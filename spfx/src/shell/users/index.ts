@@ -17,6 +17,18 @@ export {
   usersCopyIsFailClosed,
 } from "./users-copy";
 export {
+  discardUsersListRestore,
+  rememberUsersFilterChip,
+  rememberUsersFocusOrigin,
+  resolveUsersListRestoreTarget,
+  shouldRetainUsersListRestore,
+  USERS_LIST_RESTORE_DEFAULT_CHIP,
+  USERS_LIST_RESTORE_DISCARDED,
+  type UsersListRestoreFocusKind,
+  type UsersListRestoreState,
+  type UsersListRestoreTarget,
+} from "./users-list-restore";
+export {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
   USERS_SESSION_SAVE_OVERLAY_STATES,
   ariaLabelForUsersSessionSaveOverlay,

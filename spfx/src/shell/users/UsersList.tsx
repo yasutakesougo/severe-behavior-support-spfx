@@ -19,6 +19,7 @@ import {
   formatUsersFilterSummaryLabel,
   type UsersFilterChipLabel,
 } from "./users-filter";
+import { rememberUsersFilterChip, resolveUsersListRestoreTarget } from "./users-list-restore";
 import type { ShellUsersPresentation } from "./users-types";
 import {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
@@ -47,6 +48,15 @@ export type UsersListProps = Readonly<{
    * Not the chrome fixture saveState (smoke default may be `saved`).
    */
   sessionSaveStateByUserId?: UsersSessionSaveStateByUserId;
+  /**
+   * FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 4: chrome-owned presentation filter.
+   * Survives UsersList unmount while destination stays `users`.
+   */
+  filterChip?: UsersFilterChipLabel;
+  onFilterChipChange?: (chip: UsersFilterChipLabel) => void;
+  restoreOriginUserId?: string;
+  restoreListRequested?: boolean;
+  onRestoreListConsumed?: () => void;
 }>;
 
 /**
@@ -55,6 +65,7 @@ export type UsersListProps = Readonly<{
  * DEMO-UX-8 enables synthetic client-side status filter chips.
  * DEMO-UX-11 removes duplicate screen-level synthetic band; filter hint is consolidated.
  * FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2: session-local save-state overlay on each row.
+ * Unit 4: session-local filter / scroll / focus restore after explicit return to this list.
  * No live user data or business navigation is connected here.
  */
 export const UsersList: React.FC<UsersListProps> = ({
@@ -63,15 +74,74 @@ export const UsersList: React.FC<UsersListProps> = ({
   detailPreviewUserIds,
   onUserDetailRequest,
   sessionSaveStateByUserId,
+  filterChip,
+  onFilterChipChange,
+  restoreOriginUserId,
+  restoreListRequested = false,
+  onRestoreListConsumed,
 }) => {
   const { rows } = presentation;
-  const [activeChip, setActiveChip] = React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
+  const restoreAuthorized = FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized;
+  const [localChip, setLocalChip] = React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
+  const activeChip =
+    restoreAuthorized && filterChip !== undefined ? rememberUsersFilterChip(filterChip) : localChip;
+  const listRef = React.useRef<HTMLUListElement>(null);
   const visibleRows = filterUserRowsByStatusChip(rows, activeChip);
   const summaryLabel = formatUsersFilterSummaryLabel(visibleRows.length, activeChip, rows.length);
   const showEmptyNote = visibleRows.length === 0;
   const detailPreviewNote = formatUsersDetailPreviewNote(
     personLabelsForDetailPreview(rows, detailPreviewUserIds),
   );
+
+  const selectChip = (chip: UsersFilterChipLabel): void => {
+    if (restoreAuthorized && onFilterChipChange) {
+      onFilterChipChange(rememberUsersFilterChip(chip));
+      return;
+    }
+    setLocalChip(chip);
+  };
+
+  React.useLayoutEffect(() => {
+    if (!restoreListRequested) {
+      return;
+    }
+    if (!restoreAuthorized) {
+      if (onRestoreListConsumed) {
+        onRestoreListConsumed();
+      }
+      return;
+    }
+    const target = resolveUsersListRestoreTarget({
+      authorized: true,
+      restoreRequested: true,
+      originUserId: restoreOriginUserId,
+      visibleUserIds: visibleRows.map((row) => row.id),
+      detailEnabledUserIds: detailPreviewUserIds ?? [],
+    });
+    if (target.kind === "detail-button" && target.userId) {
+      const row = listRef.current?.querySelector(
+        `[data-demo-ux-user-id="${target.userId}"]`,
+      ) as HTMLElement | null;
+      const button = row?.querySelector(
+        '[data-demo-ux="users-detail-button"]',
+      ) as HTMLButtonElement | null;
+      if (button && !button.disabled) {
+        row?.scrollIntoView({ block: "nearest", inline: "nearest" });
+        button.focus();
+      } else {
+        const heading = headingRef && "current" in headingRef ? headingRef.current : undefined;
+        heading?.focus();
+      }
+    } else {
+      const heading = headingRef && "current" in headingRef ? headingRef.current : undefined;
+      heading?.focus();
+    }
+    if (onRestoreListConsumed) {
+      onRestoreListConsumed();
+    }
+    // Restore once per explicit return. Chip/rows are already from this render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Gate: no timeout; consume ends the request.
+  }, [restoreAuthorized, restoreListRequested, restoreOriginUserId]);
 
   return (
     <section
@@ -85,6 +155,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-metric-family="roster"
       data-demo-ux-filter-chip={activeChip}
       data-demo-ux-filter-count={String(visibleRows.length)}
+      data-field-staff-users-restore={restoreAuthorized ? "true" : "false"}
       aria-labelledby="demo-ux-users-heading"
     >
       <h1
@@ -134,7 +205,7 @@ export const UsersList: React.FC<UsersListProps> = ({
                 data-demo-ux-filter={label}
                 data-demo-ux-filter-selected={selected ? "true" : "false"}
                 onClick={() => {
-                  setActiveChip(label);
+                  selectChip(label);
                 }}
               >
                 {label}
@@ -159,7 +230,7 @@ export const UsersList: React.FC<UsersListProps> = ({
         </EmptyNotice>
       ) : null}
 
-      <ul className={styles.userRows} data-demo-ux="users-row-list">
+      <ul ref={listRef} className={styles.userRows} data-demo-ux="users-row-list">
         {visibleRows.map((row) => {
           const detailPreviewEnabled =
             Boolean(onUserDetailRequest) &&

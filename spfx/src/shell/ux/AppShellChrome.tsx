@@ -35,10 +35,16 @@ import {
   SupportPlan,
   UserDetail,
   UsersList,
+  discardUsersListRestore,
+  rememberUsersFilterChip,
+  rememberUsersFocusOrigin,
   rememberUserSessionSaveState,
+  shouldRetainUsersListRestore,
+  USERS_FILTER_CHIP_ALL,
   type ShellSupportPlanPresentation,
   type ShellUserDetailPresentation,
   type ShellUsersPresentation,
+  type UsersFilterChipLabel,
   type UsersSessionSaveStateByUserId,
 } from "../users";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
@@ -151,6 +157,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [reviewDuePreviewOpen, setReviewDuePreviewOpen] = React.useState(false);
   const [selectedOccurrenceId, setSelectedOccurrenceId] = React.useState<string | undefined>();
   const [occurrenceFlowFromOverview, setOccurrenceFlowFromOverview] = React.useState(false);
+  const [usersFilterChip, setUsersFilterChip] =
+    React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
+  const [usersFocusOriginUserId, setUsersFocusOriginUserId] = React.useState<string | undefined>();
+  const [restoreUsersList, setRestoreUsersList] = React.useState(false);
   const todaySupportItems = React.useMemo(() => getKioskSyntheticTodaySupportItems(), []);
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const readyRegionContentRef = React.useRef<HTMLDivElement>(null);
@@ -172,9 +182,27 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     ? userDetailById.get(selectedUserDetailId)
     : undefined;
 
+  const discardUsersListRestoreState = (): void => {
+    const discarded = discardUsersListRestore();
+    setUsersFilterChip(discarded.filterChip);
+    setUsersFocusOriginUserId(discarded.originUserId);
+    setRestoreUsersList(false);
+  };
+
+  const requestUsersListRestore = (): void => {
+    if (!FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized) {
+      shouldFocusDestinationRef.current = true;
+      setRestoreUsersList(false);
+      return;
+    }
+    shouldFocusDestinationRef.current = false;
+    setRestoreUsersList(true);
+  };
+
   React.useEffect(() => {
     setSelection(siteSelection);
     setSessionSaveStateByUserId({});
+    discardUsersListRestoreState();
   }, [siteSelection]);
 
   React.useEffect(() => {
@@ -206,6 +234,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (occurrenceFlowFromOverview) {
         setOccurrenceFlowFromOverview(false);
       }
+      if (!shouldRetainUsersListRestore(destination)) {
+        if (
+          usersFilterChip !== USERS_FILTER_CHIP_ALL ||
+          usersFocusOriginUserId !== undefined ||
+          restoreUsersList
+        ) {
+          discardUsersListRestoreState();
+        }
+      }
     }
     if (destination !== "overview" && reviewDuePreviewOpen) {
       setReviewDuePreviewOpen(false);
@@ -220,9 +257,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     sessionSaveStateByUserId,
     reviewDuePreviewOpen,
     occurrenceFlowFromOverview,
+    usersFilterChip,
+    usersFocusOriginUserId,
+    restoreUsersList,
   ]);
 
   React.useEffect(() => {
+    if (restoreUsersList) {
+      return;
+    }
     if (!shouldFocusDestinationRef.current) {
       return;
     }
@@ -235,6 +278,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     currentProcedureOpen,
     procedureRecordFormOpen,
     reviewDuePreviewOpen,
+    restoreUsersList,
   ]);
 
   const interactionPaused = isSavingInteractionPaused(effectiveSaveState);
@@ -242,6 +286,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const handleSelectionChange = (next: ShellSiteSelection): void => {
     setSelection(next);
     setSessionSaveStateByUserId({});
+    discardUsersListRestoreState();
     if (onSiteSelectionChange) {
       onSiteSelectionChange(next);
     }
@@ -266,12 +311,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
           currentProcedureOpen ||
           procedureRecordFormOpen)
       ) {
-        shouldFocusDestinationRef.current = true;
         setSupportPlanPreviewOpen(false);
         setCurrentProcedureOpen(false);
         setProcedureRecordFormOpen(false);
         setProcedureFlowSaveState(undefined);
         setSelectedUserDetailId(undefined);
+        requestUsersListRestore();
         return;
       }
       if (next === "overview" && reviewDuePreviewOpen) {
@@ -304,6 +349,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
+    setUsersFocusOriginUserId(rememberUsersFocusOrigin(userId));
+    setRestoreUsersList(false);
     setSelectedUserDetailId(userId);
   };
 
@@ -369,7 +416,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     if (interactionPaused) {
       return;
     }
-    shouldFocusDestinationRef.current = true;
+    requestUsersListRestore();
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
@@ -779,6 +826,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     detailPreviewUserIds={detailPreviewUserIds}
                     onUserDetailRequest={handleUserDetailRequest}
                     sessionSaveStateByUserId={sessionSaveStateByUserId}
+                    filterChip={usersFilterChip}
+                    onFilterChipChange={(chip) => {
+                      setUsersFilterChip(rememberUsersFilterChip(chip));
+                    }}
+                    restoreOriginUserId={usersFocusOriginUserId}
+                    restoreListRequested={restoreUsersList}
+                    onRestoreListConsumed={() => {
+                      setRestoreUsersList(false);
+                    }}
                   />
                 )
               ) : destination === "records" ? (
