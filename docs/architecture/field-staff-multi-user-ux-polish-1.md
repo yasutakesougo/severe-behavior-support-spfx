@@ -13,14 +13,19 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: FIELD-STAFF-MULTI-USER-UX-POLISH-1
 Kind: FIELD_STAFF multi-user recording workbench polish（presentation-only）
-Status: IMPLEMENTATION COMPLETE / READY FOR HUMAN ACCEPTANCE
-authoritative main:
+Status: IMPLEMENTATION COMPLETE / ACCEPT / PASS
+Date: 2026-08-18
+Human confirmation: received（Human Acceptance GO；ACCEPT / PASS）
+authoritative implementation main:
   acaae9d3ac0bb261a9dee42590138fdba04805c0
+closeout merge / main at acceptance recording:
+  8a060213bd0291fea9ecd305f36087b8d23acdbb
 Unit 6 expected HEAD:
   df7f8b089cc7b49c949320e8ec6615f0dd2b1c74
-Unit 6 merge commit / new main:
+Unit 6 merge commit:
   acaae9d3ac0bb261a9dee42590138fdba04805c0
 PR #410: MERGED / CLOSED
+PR #411: MERGED / CLOSED
 LIVE WRITE: HOLD
 Production data write: NOT AUTHORIZED
 Redeploy: NONE
@@ -39,13 +44,13 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 
 ```text
 FIELD-STAFF-MULTI-USER-UX-POLISH-1:
-IMPLEMENTATION COMPLETE / READY FOR HUMAN ACCEPTANCE
+IMPLEMENTATION COMPLETE / ACCEPT / PASS
 
 Units 1–6:
 COMPLETE / MERGED
 
 Human slice ACCEPT / PASS:
-NOT RECORDED HERE
+RECORDED — Human Acceptance GO 2026-08-18
 
 Production acceptance:
 NOT CLAIMED
@@ -55,10 +60,16 @@ HOLD
 
 Browser smoke:
 NOT EXECUTED — ENVIRONMENT LIMITATION
+
+Gap classification:
+UNCHANGED
 ```
 
-実装完了は GitHub live state（PR #405–#410 MERGED、main `acaae9d3…`）で CONFIRMED である。
-slice 全体の Human ACCEPT / PASS は本記録では確定しない。本 Gate は受入判定材料を固定する。
+実装完了は GitHub live state（PR #405–#410 MERGED、implementation main `acaae9d3…`）で CONFIRMED である。
+Closeout 文書は PR #411 MERGED（`8a06021…`）で CONFIRMED である。
+Human Acceptance GO により slice ACCEPT / PASS を記録する。
+PARTIAL / OUT OF SCOPE を PASS / CLOSED に書き換えない。
+本番ホスト再受入・Full Application Acceptance・LIVE WRITE は主張しない。
 
 ## 2. Completed units（authoritative）
 
@@ -208,29 +219,30 @@ Residual simulation gaps in §4 are **out of slice**, not new P0/P1 defects.
 ## 9. Next gate
 
 ```text
-Next gate identity: Human ACCEPTANCE of FIELD-STAFF-MULTI-USER-UX-POLISH-1
-Status at this recording: READY FOR HUMAN ACCEPTANCE
-Human Start GO for Unit 7 / next polish slice: not granted by this closeout
-Production-host re-acceptance: not started by this closeout
+Next gate identity: none started
+Human-selected next slice / Unit 7: not granted by this acceptance
+Production-host re-acceptance: not started by this acceptance
 LIVE WRITE: HOLD
 Deploy: HOLD
 ```
 
-Human ACCEPT / PASS があっても、本記録だけでは次を許可しない:
+ACCEPT / PASS は次を許可しない:
 
 ```text
-IMPLEMENTATION COMPLETE != Unit 7 start
-IMPLEMENTATION COMPLETE != LIVE WRITE GO
-IMPLEMENTATION COMPLETE != Deploy GO
-IMPLEMENTATION COMPLETE != production-host re-acceptance
-IMPLEMENTATION COMPLETE != Full Application Acceptance
-READY FOR HUMAN ACCEPTANCE != ACCEPT / PASS
+ACCEPT / PASS != Unit 7 start
+ACCEPT / PASS != remaining-gap implementation
+ACCEPT / PASS != UX-P1-2 / UX-P1-3 / UX-P2-5 expansion / UX-P2-7
+ACCEPT / PASS != rewrite PARTIAL or OUT OF SCOPE as PASS / CLOSED
+ACCEPT / PASS != LIVE WRITE GO
+ACCEPT / PASS != Deploy GO
+ACCEPT / PASS != production-host re-acceptance
+ACCEPT / PASS != Full Application Acceptance
 ```
 
 ## 10. STOP
 
 ```text
-This closeout is documentation / evidence recording only.
+This recording is documentation / Human Acceptance evidence only.
 Do not start Unit 7.
 Do not implement remaining slice flags.
 Do not enable LIVE WRITE.

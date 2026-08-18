@@ -128,10 +128,13 @@ FORBIDDEN
 
 ```text
 Next gate: FIELD-STAFF-MULTI-USER-UX-POLISH-1
-Status: IMPLEMENTATION COMPLETE / READY FOR HUMAN ACCEPTANCE
+Status: IMPLEMENTATION COMPLETE / ACCEPT / PASS
 SSOT: field-staff-multi-user-ux-polish-1.md
-authoritative main after Unit 6:
+Human confirmation: Human Acceptance GO 2026-08-18
+authoritative implementation main:
   acaae9d3ac0bb261a9dee42590138fdba04805c0
+closeout merge:
+  8a060213bd0291fea9ecd305f36087b8d23acdbb
 Implementation in this predecessor closeout: NO
 Unit 7 / next polish slice: not started by this document
 ```
