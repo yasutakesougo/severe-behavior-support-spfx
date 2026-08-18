@@ -128,7 +128,10 @@ FORBIDDEN
 
 ```text
 Next gate: FIELD-STAFF-MULTI-USER-UX-POLISH-1
-Status: PLAN NOT STARTED
-Purpose: design the improved FIELD_STAFF multi-user recording workbench
-Implementation in this closeout: NO
+Status: IMPLEMENTATION COMPLETE / READY FOR HUMAN ACCEPTANCE
+SSOT: field-staff-multi-user-ux-polish-1.md
+authoritative main after Unit 6:
+  acaae9d3ac0bb261a9dee42590138fdba04805c0
+Implementation in this predecessor closeout: NO
+Unit 7 / next polish slice: not started by this document
 ```

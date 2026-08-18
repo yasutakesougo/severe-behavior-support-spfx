@@ -95,10 +95,18 @@ Do not treat this approximate count as a formal performance metric.
 
 ```text
 Next gate: FIELD-STAFF-MULTI-USER-UX-POLISH-1
-Status: PLAN NOT STARTED
-Purpose: design the improved FIELD_STAFF multi-user recording workbench
-Implementation in this closeout: NO
+Status: IMPLEMENTATION COMPLETE / READY FOR HUMAN ACCEPTANCE
+SSOT: field-staff-multi-user-ux-polish-1.md
+authoritative main after Unit 6:
+  acaae9d3ac0bb261a9dee42590138fdba04805c0
+Implementation in this simulation closeout: NO
+Unit 7 / next polish slice: not started by this document
 ```
+
+Historical design targets recorded here remain observations.
+Which gaps this polish slice addressed vs left out of scope is recorded in
+[`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md).
+Do not rewrite §4 UX gaps as if they were never observed.
 
 Expected future design targets (design only; not authorized here):
 
