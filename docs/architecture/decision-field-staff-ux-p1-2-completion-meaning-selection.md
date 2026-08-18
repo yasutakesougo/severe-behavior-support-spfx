@@ -10,7 +10,8 @@ Slice selection:
 [`decision-field-staff-ux-p1-2-completion-on-cards-selection.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection.md)
 
 POLISH-1 の再オープンではない。Unit 7 ではない。
-Implementation Start ではない。flag flip ではない。
+本文書は meaning Selection の正本である。Implementation Start 記録は
+[`field-staff-completion-on-cards-1-implementation-start.md`](./field-staff-completion-on-cards-1-implementation-start.md)。
 M3 を ballot に載せない。LIVE WRITE を有効化しない。
 
 ```text
@@ -26,9 +27,10 @@ PR #417: MERGED / CLOSED
 Packet HEAD: 8b16ccb8217cd91acfb19de7f014af859cf9576a
 Agent auto-select: FORBIDDEN（this Selection is Human）
 
-Implementation Start: NOT AUTHORIZED
-flag flip: NOT AUTHORIZED
-syntheticRecordedForTodayAuthorized: false（Start 後まで）
+Implementation Start: AUTHORIZED（Human GO 2026-08-18; M2 only）
+Start record: field-staff-completion-on-cards-1-implementation-start.md
+flag flip: syntheticRecordedForTodayAuthorized true only
+syntheticRecordedForTodayAuthorized: true（this Start）
 Unit 7: NOT STARTED / not this slice
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -58,8 +60,8 @@ session saved overlay（M1）でも live persist（M3）でもない。
 ```text
 M2 / synthetic recorded-for-today
 Source: DEMO_UX_USERS_FIXTURE projection
-Candidate flag after Implementation Start:
-  syntheticRecordedForTodayAuthorized
+Authorized flag after Implementation Start:
+  syntheticRecordedForTodayAuthorized = true
 ```
 
 ## 3. Authorized IN（Selection scope only）
@@ -73,15 +75,14 @@ IN:
   session-local / presentation-only
   LIVE WRITE を前提にしない
   Unit 2 overlay（saved を隠す）との分離を維持する
-  将来の unit tests / a11y（Implementation Start 後）
+  unit tests / a11y（Implementation Start 後）
 ```
 
 ## 4. Explicit OUT / FORBIDDEN
 
 ```text
 OUT:
-  Implementation Start（this Selection alone）
-  syntheticRecordedForTodayAuthorized = true（flag flip は Start 後）
+  Ready / Merge auto-progress
   liveSavedCompletionOnCardsAuthorized = true
   unrecordedBadgeMutationAuthorized
   kpiFamilyRRecountAuthorized
@@ -111,10 +112,10 @@ OUT:
 ## 6. Flag boundary
 
 [`users-session-save-overlay.ts`](../../spfx/src/shell/users/users-session-save-overlay.ts)
-は選定時点では変更しない。Implementation Start 後に
-`syntheticRecordedForTodayAuthorized` のみ true にする。
+の選定時点（main `68fcb7f…`）では変更しない。
+Implementation Start はこの flag のみ true にする。
 
-Current main `68fcb7f…`（do not change in this Selection）:
+Selection-time main `68fcb7f…`:
 
 ```text
 nextUnrecordedUserAuthorized: true（already merged; not this slice）
@@ -130,6 +131,13 @@ savingPauseRemovalAuthorized: false
 liveTenantIoAuthorized: false
 sharePointWriteAuthorized: false
 deployAuthorized: false
+```
+
+After this Implementation Start:
+
+```text
+syntheticRecordedForTodayAuthorized: true
+all other remaining flags above: unchanged
 ```
 
 ## 7. Fixture / coverage limit（do not hide）
@@ -152,10 +160,10 @@ Coverage residual:
 Decision-FIELD-STAFF-UX-P1-2-COMPLETION-MEANING-1
 = SELECTED / LOCKED / M2
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: AUTHORIZED（M2 only）
 
 Still NOT AUTHORIZED:
-  any remaining-flag flip
+  remaining-flag flips other than syntheticRecordedForTodayAuthorized
   unrecordedBadgeMutation / kpiFamilyRRecount
   Unit 7
   LIVE WRITE / Deploy
@@ -167,15 +175,18 @@ Still NOT AUTHORIZED:
 ## 9. Next gate
 
 ```text
-Next gate: Human Implementation Start GO
+Next Human-only gates: Ready, then Merge
 Bound to: M2 synthetic recorded-for-today only
-This meaning Selection ≠ Implementation Start
-This meaning Selection ≠ flag flip
+This meaning Selection ≠ Ready
+This meaning Selection ≠ Merge
+Start record:
+  field-staff-completion-on-cards-1-implementation-start.md
 ```
 
 ## Reference
 
 - Packet: [`decision-field-staff-ux-p1-2-completion-meaning-packet.md`](./decision-field-staff-ux-p1-2-completion-meaning-packet.md)
 - Slice selection: [`decision-field-staff-ux-p1-2-completion-on-cards-selection.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection.md)
+- Implementation Start: [`field-staff-completion-on-cards-1-implementation-start.md`](./field-staff-completion-on-cards-1-implementation-start.md)
 - POLISH-1: [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)
 - Simulation gaps: [`field-staff-multi-user-ux-simulation-1.md`](./field-staff-multi-user-ux-simulation-1.md)

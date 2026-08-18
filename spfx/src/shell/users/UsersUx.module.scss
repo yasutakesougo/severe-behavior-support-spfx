@@ -210,6 +210,21 @@
   color: sbs.$color-feedback-warning-fg;
 }
 
+/* M2 synthetic recorded-for-today: dashed/synthetic channel, not persistence success. */
+.syntheticRecordedForToday {
+  display: inline-block;
+  padding: sbs.$space-1 sbs.$space-2;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface-subtle;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-meta;
+}
+
 .badgeList {
   display: flex;
   flex-wrap: wrap;

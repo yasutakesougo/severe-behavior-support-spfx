@@ -8,8 +8,9 @@ Decision packet:
 [`decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md)
 
 POLISH-1 の再オープンではない。Unit 7 ではない。
-Implementation Start ではない。
-完了意味は後続 Human M2 GO で記録する（本文書の slice Selection ではない）。
+本文書は slice Selection の正本である。Implementation Start 記録は
+[`field-staff-completion-on-cards-1-implementation-start.md`](./field-staff-completion-on-cards-1-implementation-start.md)。
+完了意味は Human M2 GO で SELECTED / LOCKED である。
 
 先行 B 投票
 （[`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)）
@@ -30,7 +31,8 @@ Closeout HEAD: c993f5da117e44cf12b530dc5572ca71a6aaac90
 Predecessor B ballot: HISTORICAL / CONSUMED
 Agent auto-select: FORBIDDEN（this Selection is Human）
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: AUTHORIZED（Human GO 2026-08-18; M2 only）
+Start record: field-staff-completion-on-cards-1-implementation-start.md
 Completion-meaning Decision: SELECTED / LOCKED / M2
 Meaning packet:
   decision-field-staff-ux-p1-2-completion-meaning-packet.md
@@ -83,18 +85,17 @@ IN:
   session-local / presentation-only
   LIVE WRITE を前提にしない
   Unit 2 overlay（saved を隠す）との分離を維持する
-  完了意味の定義は Implementation Start 前の別 Human GO
-  将来の unit tests / a11y（Implementation Start 後）
+  完了意味の定義は Implementation Start 前の別 Human GO（SELECTED / LOCKED / M2）
+  unit tests / a11y（Implementation Start 後）
 ```
 
 ## 4. Explicit OUT / FORBIDDEN
 
 ```text
 OUT:
-  Implementation Start（this Selection alone）
-  completion-meaning Decision Accepted
-  liveSavedCompletionOnCardsAuthorized = true（flag flip は Start 後）
-  syntheticRecordedForTodayAuthorized = true
+  Ready / Merge auto-progress
+  completion-meaning Decision reopen
+  liveSavedCompletionOnCardsAuthorized = true
   unrecordedBadgeMutationAuthorized = true
   kpiFamilyRRecountAuthorized = true
   saveStateSemanticsChangeAuthorized
@@ -114,12 +115,13 @@ OUT:
   Issue close / Ready / Merge auto-progress
 ```
 
-本 Selection は次の意味を切らない（Start 前の別 Human GO）:
+本 Selection は次の意味を切らない（meaning Selection が M2 を切った）:
 
 ```text
 NOT PICKED HERE:
   live saved completion vs synthetic recorded-for-today
     vs session saved overlay のどれを「完了」とみなすか
+    → meaning Selection が M2 を SELECTED にした
   unrecorded バッジを mutation するか
   Family R KPI を recount するか
   保存済み / 記録済み / 完了 のどの文言を使うか（persistence 主張は禁止）
@@ -141,9 +143,9 @@ C1 / C2 は C 未選定のため切らない。
 
 [`users-session-save-overlay.ts`](../../spfx/src/shell/users/users-session-save-overlay.ts)
 の `FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE` は選定時点では変更しない。
-Implementation Start 後も、Human が意味と flag を拘束するまで flip しない。
+Implementation Start は `syntheticRecordedForTodayAuthorized` のみ true にする。
 
-Current main `73ab70e…`（do not change in this Selection）:
+Selection-time main `73ab70e…`:
 
 ```text
 nextUnrecordedUserAuthorized: true（already merged; not this slice）
@@ -159,6 +161,13 @@ savingPauseRemovalAuthorized: false
 liveTenantIoAuthorized: false
 sharePointWriteAuthorized: false
 deployAuthorized: false
+```
+
+After this Implementation Start:
+
+```text
+syntheticRecordedForTodayAuthorized: true
+all other remaining flags above: unchanged
 ```
 
 ## 7. Fixture / coverage limit（do not hide）
@@ -180,11 +189,11 @@ This selection != badge / KPI mutation
 Decision-FIELD-STAFF-UX-P1-2-COMPLETION-ON-CARDS-1
 = SELECTED / LOCKED
 
-Implementation Start: NOT AUTHORIZED
+Implementation Start: AUTHORIZED（M2 only）
 Completion-meaning Decision: SELECTED / LOCKED / M2
 
 Still NOT AUTHORIZED:
-  any remaining-flag flip
+  remaining-flag flips other than syntheticRecordedForTodayAuthorized
   unrecordedBadgeMutation / kpiFamilyRRecount
   Unit 7
   LIVE WRITE / Deploy
@@ -196,12 +205,14 @@ Still NOT AUTHORIZED:
 ## 9. Next gate
 
 ```text
-Next gate: Human Implementation Start GO
+Next Human-only gates: Ready, then Merge
 Bound to: M2 synthetic recorded-for-today
 Meaning selection SSOT:
   decision-field-staff-ux-p1-2-completion-meaning-selection.md
-This Selection ≠ Implementation Start
-This Selection ≠ flag flip
+Start record:
+  field-staff-completion-on-cards-1-implementation-start.md
+This Selection ≠ Ready
+This Selection ≠ Merge
 ```
 
 ## Reference
@@ -209,6 +220,7 @@ This Selection ≠ flag flip
 - Packet: [`decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md)
 - Completion-meaning packet: [`decision-field-staff-ux-p1-2-completion-meaning-packet.md`](./decision-field-staff-ux-p1-2-completion-meaning-packet.md)
 - Completion-meaning selection: [`decision-field-staff-ux-p1-2-completion-meaning-selection.md`](./decision-field-staff-ux-p1-2-completion-meaning-selection.md)
+- Implementation Start: [`field-staff-completion-on-cards-1-implementation-start.md`](./field-staff-completion-on-cards-1-implementation-start.md)
 - Predecessor B selection: [`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)
 - Predecessor closeout: [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)
 - POLISH-1: [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)

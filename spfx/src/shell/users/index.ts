@@ -61,6 +61,14 @@ export {
   type UsersSessionSaveStateByUserId,
 } from "./users-session-save-overlay";
 export {
+  FIELD_STAFF_COMPLETION_ON_CARDS_1_SLICE,
+  SYNTHETIC_RECORDED_FOR_TODAY_LABEL,
+  ariaLabelForSyntheticRecordedForToday,
+  isFixtureUnrecordedUserId,
+  presentSyntheticRecordedForToday,
+  type SyntheticRecordedForTodayPresentation,
+} from "./synthetic-recorded-for-today";
+export {
   FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE,
   FIELD_STAFF_NEXT_UNRECORDED_USER_CTA_PREFIX,
   FIELD_STAFF_NEXT_UNRECORDED_USER_NONE_REASON,

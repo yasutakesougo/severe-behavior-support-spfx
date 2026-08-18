@@ -17,7 +17,7 @@ export const FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE = {
   compactTabletUsersAuthorized: true as const,
   perUserDraftResumeAuthorized: true as const,
   liveSavedCompletionOnCardsAuthorized: false as const,
-  syntheticRecordedForTodayAuthorized: false as const,
+  syntheticRecordedForTodayAuthorized: true as const,
   unrecordedBadgeMutationAuthorized: false as const,
   kpiFamilyRRecountAuthorized: false as const,
   eightUserDetailCatalogAuthorized: false as const,
