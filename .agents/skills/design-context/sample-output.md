@@ -19,6 +19,11 @@
 - GAP: なし（Catalog v1 の StatusBadge / SupportPlan IA KEEP）
 - 禁止 substitution: color-only status、EmptyNotice を failure panel に流用
 
+## Screen Template
+- primary: PlanDocument
+- compose: DestinationDetail（UserDetail から手オフ）
+- GAP: なし
+
 ## Findings
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
 |---|---|---|---|---|---|
@@ -33,4 +38,4 @@
 
 ## Next Actions
 1. `implementation-plan` へ presentation-only 境界を渡す
-2. Catalog v1 の StatusBadge / EmptyNotice 規則を `implementation-plan` へ渡す
+2. Catalog v1 の StatusBadge / EmptyNotice 規則と PlanDocument template を `implementation-plan` へ渡す

@@ -27,8 +27,8 @@ This packet is **docs-only**. It does **not** authorize ESLint rule implementati
 
 UI-AGENT-IMPL-1: **#425 MERGED**（`design-context` / `design-review`）。
 UI-AGENT-IMPL-2: **#426 MERGED**（Component Catalog v1）。
-UI-AGENT-IMPL-3: ESLint UI semantic rules（this PR / Implementation Start）。
-UI-AGENT-IMPL-4: Screen template / pattern docs（次 slice）。
+UI-AGENT-IMPL-3: **#427 MERGED**（ESLint UI semantic rules）。
+UI-AGENT-IMPL-4: Screen template / pattern docs（this PR / Implementation Start）。
 Issue 番号未着でも設計正本は main の本文書群を使う。
 
 ---

@@ -587,6 +587,7 @@ if (await exists(packageJsonAbsolutePath)) {
   for (const scriptName of [
     "verify:skills",
     "verify:ui-catalog",
+    "verify:ui-templates",
     "lint:ui-sem",
     "typecheck",
     "test",
@@ -608,6 +609,7 @@ if (await exists(workflowAbsolutePath)) {
   for (const phrase of [
     "npm run verify:skills",
     "npm run verify:ui-catalog",
+    "npm run verify:ui-templates",
     "npm run lint:ui-sem",
     "npm run typecheck",
     "npm test",

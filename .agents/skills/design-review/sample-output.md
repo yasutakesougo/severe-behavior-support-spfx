@@ -8,6 +8,7 @@
 ## UI Diff
 - surfaces: SupportPlan
 - primitives: 既存 `StatusBadge` label channel KEEP。新 primitive なし
+- template: PlanDocument KEEP
 
 ## Contract Fit
 - vocabulary: 「要確認」text channel 維持。未記録と非混同
@@ -20,6 +21,7 @@
 - smoke: PASS（DEMO-UX SupportPlan hooks）
 - semantic tests: PASS（既存 presentation fixtures）
 - lint:ui-sem: PASS
+- verify:ui-templates: PASS
 
 ## Findings
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
@@ -35,4 +37,4 @@
 
 ## Next Actions
 1. `merge-audit` へ証跡を渡す
-2. Catalog v1 の SupportPlan KEEP 規則を `merge-audit` へ渡す
+2. Catalog v1 の SupportPlan KEEP 規則と PlanDocument template を `merge-audit` へ渡す
