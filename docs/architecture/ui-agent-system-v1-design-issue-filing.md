@@ -1,10 +1,18 @@
 # UI-AGENT-SYSTEM-V1 — Design Issue filing packet
 
-Status: **READY TO FILE** (GitHub Issue create blocked for this agent token)
+Status: **FILED BLOCKED** (this agent token cannot create GitHub Issues)
 
 Filing date: 2026-08-18
 
 Program: **UI-AGENT-SYSTEM-V1**（Product UI Contract + Agent Skills + Deterministic Gates）
+
+Design docs landed:
+
+```text
+PR #424: MERGED
+Design HEAD: 2f3167612728d16a6ce61a3637bf3fcea85c4790
+merge commit (then current main): f25e8e29b32971dce93c4d223e06d42586a41b73
+```
 
 Authority upstream:
 
@@ -15,7 +23,9 @@ docs/process/skill-catalog.md
 docs/architecture/contracts-v1.md
 ```
 
-This packet is **docs-only**. It does **not** authorize Skill implementation, ESLint rule implementation, Storybook, Figma MCP connection, Deploy, SharePoint write, Visual Acceptance, or #299 Close.
+This packet is **docs-only**. It does **not** authorize ESLint rule implementation, Storybook, Figma MCP connection, Deploy, SharePoint write, Visual Acceptance, or #299 Close.
+
+UI-AGENT-IMPL-1 Skill 導入は **別 PR**（Human GO: Issue 起票後に IMPL-1 へ進む）。Issue 番号未着でも設計正本は main の本文書群を使う。
 
 ---
 
@@ -24,11 +34,15 @@ This packet is **docs-only**. It does **not** authorize Skill implementation, ES
 | Channel | Result |
 |---|---|
 | GitHub MCP `issue_write` | **403** Resource not accessible by personal access token |
-| `gh issue create` | not attempted（MCP と同 token 想定） |
+| `gh issue create` | **403** GraphQL: Resource not accessible by integration (`createIssue`) |
 
-Human action required: create the Issue below in `yasutakesougo/severe-behavior-support-spfx`, or grant the agent `issues: write`, then record the issue number in this packet.
+Human action required: Cursor 側 GitHub 接続の `create_issue` で下記 Issue を作成し、番号を本 packet に追記する。
+
+Suggested labels: `documentation`, `enhancement`（repo に `design` / `architecture` ラベルは未作成）
 
 Suggested assignee: `@yasutakesougo`
+
+GitHub Issue number: **未採番**
 
 ---
 
@@ -52,19 +66,21 @@ Copy the full contents of:
 
 `docs/architecture/ui-agent-system-v1-design-issue-body.md`
 
-into the GitHub Issue body.
+into the GitHub Issue body. Prepend:
 
-Suggested labels: `design`, `architecture`, `agent`, `ui`
-
-Suggested assignee: `@yasutakesougo`
+```text
+Design PR: #424 MERGED
+Design HEAD: 2f3167612728d16a6ce61a3637bf3fcea85c4790
+merge commit: f25e8e29b32971dce93c4d223e06d42586a41b73
+```
 
 ---
 
 ## After GitHub Issue exists
 
-1. Record the new issue number in a follow-up comment on this filing packet or a tiny docs amendment.
-2. Do **not** start Skill / ESLint / Storybook implementation without explicit Human GO on UI-AGENT-IMPL-* slices.
-3. Use this design as the foundation for Visual Polish and Support Plan UI follow-on work.
+1. Record the new issue number in this packet.
+2. UI-AGENT-IMPL-1 は `design-context` + `design-review` に限定する。
+3. Catalog / ESLint / Storybook は別 GO。
 
 ---
 
