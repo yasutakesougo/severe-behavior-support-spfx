@@ -6,6 +6,10 @@ import {
   type ShellSaveState,
 } from "../ux/save-state";
 import {
+  presentNextActionableOccurrenceCta,
+  type NextActionableOccurrenceItem,
+} from "./next-actionable-occurrence";
+import {
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE,
   FIELD_WORKFLOW_SAVE_FAILED_RETAIN_NOTE,
@@ -49,6 +53,11 @@ export type ProcedureRecordFormProps = Readonly<{
   nowIso?: () => string | undefined;
   onBackToCurrentProcedure?: () => void;
   onSaveStateChange?: (state: ShellSaveState) => void;
+  /** Unit 3: occurrence navigation only when a concrete OccurrenceId is already in context. */
+  nextOccurrenceNavigationAuthorized?: boolean;
+  todaySupportItems?: readonly NextActionableOccurrenceItem[];
+  onNextActionableOccurrence?: () => void;
+  onReturnToTodaySupportDayBoard?: () => void;
 }>;
 
 /**
@@ -65,6 +74,10 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
   nowIso = (): string | undefined => nowAsiaTokyoIsoDateTime() ?? undefined,
   onBackToCurrentProcedure,
   onSaveStateChange,
+  nextOccurrenceNavigationAuthorized = false,
+  todaySupportItems,
+  onNextActionableOccurrence,
+  onReturnToTodaySupportDayBoard,
 }) => {
   const [draft, setDraft] = React.useState<ProcedureRecordDraft>(
     () => initialDraft ?? createEmptyProcedureRecordDraft(),
@@ -165,6 +178,13 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
     isProcedureRecordDraftReadyToSave(draft) &&
     canRetryProcedureRecordSave(saveState) &&
     !saveInFlight.current.isInFlight();
+
+  const nextOccurrenceCta = presentNextActionableOccurrenceCta({
+    authorized: nextOccurrenceNavigationAuthorized,
+    occurrenceId: context.occurrenceId,
+    saveState,
+    items: todaySupportItems ?? [],
+  });
 
   const statusNote =
     saveState === "save_failed"
@@ -349,7 +369,44 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
           >
             記録を保存
           </button>
+          {nextOccurrenceCta.visible ? (
+            <button
+              type="button"
+              className={styles.nextOccurrenceButton}
+              data-field-workflow="next-actionable-occurrence"
+              data-field-workflow-next-action={nextOccurrenceCta.action}
+              data-field-workflow-next-occurrence-id={nextOccurrenceCta.nextOccurrenceId ?? ""}
+              disabled={!nextOccurrenceCta.enabled}
+              aria-disabled={!nextOccurrenceCta.enabled ? "true" : undefined}
+              aria-describedby={nextOccurrenceCta.reason ? nextOccurrenceCta.reasonId : undefined}
+              onClick={() => {
+                if (!nextOccurrenceCta.enabled) {
+                  return;
+                }
+                if (
+                  nextOccurrenceCta.action === "current_procedure" &&
+                  onNextActionableOccurrence
+                ) {
+                  onNextActionableOccurrence();
+                  return;
+                }
+                if (
+                  nextOccurrenceCta.action === "today_support_day_board" &&
+                  onReturnToTodaySupportDayBoard
+                ) {
+                  onReturnToTodaySupportDayBoard();
+                }
+              }}
+            >
+              {nextOccurrenceCta.label}
+            </button>
+          ) : null}
         </div>
+        {nextOccurrenceCta.visible && nextOccurrenceCta.reason ? (
+          <p id={nextOccurrenceCta.reasonId} className={styles.hint}>
+            {nextOccurrenceCta.reason}
+          </p>
+        ) : null}
       </section>
     </section>
   );

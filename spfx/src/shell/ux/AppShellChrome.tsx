@@ -12,6 +12,7 @@ import {
   getKioskSyntheticTodaySupportItems,
   isProcedureRecordStartAllowed,
   ProcedureRecordForm,
+  selectNextActionableOccurrence,
   type ShellProcedureWorkflowPresentation,
 } from "../procedure";
 import {
@@ -30,6 +31,7 @@ import {
   DEMO_UX_USER_DETAIL_C_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
   DEMO_UX_USERS_FIXTURE,
+  FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
   SupportPlan,
   UserDetail,
   UsersList,
@@ -482,6 +484,33 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(undefined);
   };
 
+  const handleNextActionableOccurrence = (): void => {
+    if (
+      interactionPaused ||
+      !FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized ||
+      !occurrenceFlowFromOverview ||
+      !selectedOccurrenceId
+    ) {
+      return;
+    }
+    const next = selectNextActionableOccurrence(todaySupportItems, selectedOccurrenceId);
+    if (!next) {
+      handleBackToTodaySupport();
+      return;
+    }
+    if (!userDetailById.has(next.userId)) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
+    setSupportPlanPreviewOpen(false);
+    setSelectedOccurrenceId(next.occurrenceId);
+    setSelectedUserDetailId(next.userId);
+    setOccurrenceFlowFromOverview(true);
+    setCurrentProcedureOpen(true);
+  };
+
   const handleReviewDueStateRequest = (): void => {
     if (interactionPaused) {
       return;
@@ -701,6 +730,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       headingRef={destinationHeadingRef}
                       onBackToCurrentProcedure={handleBackToCurrentProcedure}
                       onSaveStateChange={handleProcedureFlowSaveStateChange}
+                      nextOccurrenceNavigationAuthorized={
+                        FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized &&
+                        occurrenceFlowFromOverview
+                      }
+                      todaySupportItems={occurrenceFlowFromOverview ? todaySupportItems : undefined}
+                      onNextActionableOccurrence={handleNextActionableOccurrence}
+                      onReturnToTodaySupportDayBoard={handleBackToTodaySupport}
                     />
                   ) : currentProcedureOpen && selectedCurrentProcedure ? (
                     <CurrentProcedure

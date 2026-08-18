@@ -28,7 +28,8 @@
 }
 
 .procedureRecordForm .backButton,
-.procedureRecordForm .saveButton {
+.procedureRecordForm .saveButton,
+.procedureRecordForm .nextOccurrenceButton {
   min-height: 3rem;
   padding: sbs.$space-3 sbs.$space-5;
   border-width: sbs.$border-width-thin;
@@ -60,8 +61,14 @@
   color: sbs.$color-surface-canvas;
 }
 
+.procedureRecordForm .nextOccurrenceButton {
+  font-weight: sbs.$font-weight-semibold;
+}
+
 .procedureRecordForm .backButton:hover:not(:disabled),
-.procedureRecordForm .backButton:active:not(:disabled) {
+.procedureRecordForm .backButton:active:not(:disabled),
+.procedureRecordForm .nextOccurrenceButton:hover:not(:disabled),
+.procedureRecordForm .nextOccurrenceButton:active:not(:disabled) {
   background: sbs.$color-surface-hover;
   border-color: sbs.$color-border-strong;
 }
@@ -77,13 +84,16 @@
 .procedureRecordForm .backButton:focus,
 .procedureRecordForm .backButton:focus-visible,
 .procedureRecordForm .saveButton:focus,
-.procedureRecordForm .saveButton:focus-visible {
+.procedureRecordForm .saveButton:focus-visible,
+.procedureRecordForm .nextOccurrenceButton:focus,
+.procedureRecordForm .nextOccurrenceButton:focus-visible {
   outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
   outline-offset: sbs.$focus-outline-offset;
 }
 
 .procedureRecordForm .backButton:disabled,
-.procedureRecordForm .saveButton:disabled {
+.procedureRecordForm .saveButton:disabled,
+.procedureRecordForm .nextOccurrenceButton:disabled {
   border-color: sbs.$color-border-subtle;
   background: sbs.$color-surface-muted;
   color: sbs.$color-text-disabled;
@@ -270,7 +280,8 @@
   }
 
   .procedureRecordForm .backButton,
-  .procedureRecordForm .saveButton {
+  .procedureRecordForm .saveButton,
+  .procedureRecordForm .nextOccurrenceButton {
     width: 100%;
   }
 }
