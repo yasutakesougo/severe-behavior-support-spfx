@@ -133,6 +133,28 @@ Skill 文書内でこれらを自動実行する手順を書いてはいけま�
 /handoff-builder
 ```
 
+## UI slice additional skills（UI-AGENT-SYSTEM-V1）
+
+標準順は変更しない。UI / presentation 変更を含む slice では、次を**追加**する。非 UI 変更では各 Skill が `NOT APPLICABLE` を出してよい。
+
+```text
+/architecture-review
+  ↓
+/design-context          （UI slice のみ。Figma は intent 参照。コード化しない）
+  ↓
+/implementation-plan
+  ↓
+...
+/test-review
+  ↓
+/design-review           （UI 差分時。architecture-review を置換しない）
+  ↓
+/merge-audit
+```
+
+`design-implementation` は後続。当面は `implementation-plan` に内包する。
+Component Catalog 未着地でも primitives / DADS-03 を暫定正本として実行する。
+
 ## 初回導入の最小実用セット
 
 初回導入では次の 4 Skill を優先します。

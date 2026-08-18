@@ -15,6 +15,7 @@
 
 - Implementation Gate の着手可否を判定する（`implementation-review`）
 - 実装後の Contracts / テスト整合を確認する（後続 Skill）
+- UI / presentation 差分があるときは `design-review` で Product UI Contract を監査する
 - 強度行動障害支援サイクルの実操作レビューが必要なときは `severe-behavior-cycle-review` を直接実行する（生活介護総合監査ではない。`review-pr` の必須観点ではない）
 - Review PASS を repository / PR 番号 / review 対象 head SHA に拘束して記録する
 - unresolved P0 / P1 がある場合は PASS にしない
@@ -28,8 +29,9 @@
 | `contracts-review` | 導入済み | 契約変更の互換性監査 |
 | `test-review` | 導入済み | テスト結果と網羅範囲 |
 | `severe-behavior-cycle-review` | 導入済み | 強度行動障害支援サイクルの実操作レビュー（直接実行。生活介護総合監査ではない） |
+| `design-review` | 導入済み | Product UI Contract（Catalog / semantic UI / a11y meaning）。UI 差分時 |
 | `security-review` | 後続（未カタログ） | セキュリティ観点。導入前は HOLD |
-| `ui-review` | 後続（未カタログ） | 汎用 UI 観点。導入前は HOLD。サイクル監査は `severe-behavior-cycle-review` |
+| `ui-review` | 後続（未カタログ） | 汎用 UI 観点。導入前は HOLD。Product UI Contract は `design-review`。サイクル監査は `severe-behavior-cycle-review` |
 
 `merge-audit` は Audit Agent の担当とする。本 Agent の `review-pr` 起動時は、レビュー完了後に Audit へ引き渡す。
 
@@ -81,6 +83,7 @@
 | Skill | `.agents/skills/contracts-review/SKILL.md` |
 | Skill | `.agents/skills/test-review/SKILL.md` |
 | Skill | `.agents/skills/severe-behavior-cycle-review/SKILL.md` |
+| Skill | `.agents/skills/design-review/SKILL.md` |
 | Gate | `docs/process/gate-definitions.md` |
 | Governance | `docs/process/ai-governance.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |

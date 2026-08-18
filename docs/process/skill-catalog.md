@@ -43,6 +43,8 @@
 | [`sharepoint-design`](../../.agents/skills/sharepoint-design/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 対象なし | 権限・分離未定義。本番変更手順を含めない |
 | [`schema-design`](../../.agents/skills/schema-design/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 対象なし | 未入力表現・互換方針が未定義 |
 | [`architecture-review`](../../.agents/skills/architecture-review/SKILL.md) | 導入済み | Architecture | なし（Workflow 工程） | Skill 直接実行 | 参照専用（旧 `skills/design-review/`） | Architecture Gate 未充足 |
+| [`design-context`](../../.agents/skills/design-context/SKILL.md) | 導入済み | Architecture | なし（UI slice 工程） | Skill 直接実行 | 対象なし（旧パスなし） | Domain 意味未決、Figma コード化要求、UI 対象なのに repository 正本が参照できない |
+| [`design-review`](../../.agents/skills/design-review/SKILL.md) | 導入済み | Review | `review-pr`（UI 差分時） | Skill 直接実行 | 新設。旧 `skills/design-review/` とは別（旧パスは実行正本にしない） | head SHA 不明、UI 証跡不足、Domain 意味変更を本 Skill で確定するよう求められている |
 | [`implementation-plan`](../../.agents/skills/implementation-plan/SKILL.md) | 導入済み | Implementation | なし（Workflow 工程） | Skill 直接実行 | 対象なし（旧パスなし） | 要件・DEC・設計・対象外が揃わない場合 |
 | [`implementation-review`](../../.agents/skills/implementation-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし（旧パスなし） | 計画・証跡不足、head SHA 不明 |
 | [`contracts-review`](../../.agents/skills/contracts-review/SKILL.md) | 導入済み | Review | `review-pr` | Skill 直接実行 | 対象なし | 契約テスト / boundaries 証跡不足 |
@@ -67,6 +69,8 @@
 | `sharepoint-design` | List/権限設計（実変更なし） | Domain/Contracts、権限 | 対応表草稿、対象外 | 設計 |
 | `schema-design` | Schema/DTO/列挙/未入力を設計 | Domain、Contracts | Schema 設計草稿 | 設計 |
 | `architecture-review` | Architecture Gate 判定材料 | 設計一式、Gate 定義 | Gate 判定、Findings | 設計後 |
+| `design-context` | UI 作業前に domain semantics と visual intent を照合する | slice、Contracts、DADS、primitives、任意 Figma intent | mapping、GAP、HOLD、implementation-plan 引き渡し | UI 設計後・実装計画前 |
+| `design-review` | Product UI Contract 適合を監査する | PR、UI 差分、Catalog/primitives、a11y/smoke | Gate 判定、Findings | UI 実装後（`review-pr`） |
 | `implementation-plan` | Issue/PR/テストへ分割 | 要件、DEC、設計、制約 | 実装目的、分割、HOLD | 実装前 |
 | `implementation-review` | 着手可能かを判定 | 要件、DEC、設計、Contracts、計画 | Gate 判定、ブロッカー | 実装直前 |
 | `contracts-review` | 契約互換と境界を監査 | PR、差分、契約テスト | 互換判定、Findings | 実装後 |
@@ -97,7 +101,8 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | `pr-builder` | 後続 | Implementation | なし | 当面は `implementation-plan` に内包 | 対象なし | 分割要否は後続判断 |
 | `test-plan` | 後続 | Implementation | なし | 当面は `implementation-plan` に内包 | 対象なし | 分割要否は後続判断 |
 | `security-review` | 後続 | Review | `review-pr` | HOLD | 対象なし | 未導入 |
-| `ui-review` | 後続 | Review | `review-pr` | HOLD | 対象なし | 未導入 |
+| `ui-review` | 後続 | Review | `review-pr` | HOLD | 対象なし | 未導入。Product UI Contract 監査は導入済み `design-review`。本候補は汎用 UI 観点の分割要否が未決 |
+| `design-implementation` | 後続 | Implementation（候補） | なし | HOLD | 対象なし | 未導入。当面は `implementation-plan` に内包 |
 | `dependency-audit` | 後続 | Audit | `audit` | HOLD | 対象なし | 未導入 |
 | `approval-audit` | 後続 | Audit | `audit` | HOLD | 対象なし | 未導入 |
 | `final-audit` | 後続 | Audit | `audit` | HOLD | 対象なし | 未導入 |
@@ -114,7 +119,7 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | Logical Command | 起動 Agent | Skill Fallback（正） |
 |---|---|---|
 | `new-feature` | Requirements | `requirements-review` / `decision-review` |
-| `review-pr` | Review（→ Audit） | `implementation-review` / `contracts-review` / `test-review`。必要時 `merge-audit` |
+| `review-pr` | Review（→ Audit） | `implementation-review` / `contracts-review` / `test-review`。UI 差分時 `design-review`。必要時 `merge-audit` |
 | `audit` | Audit | `merge-audit`（必要時 `handoff-builder`） |
 | `release-check` | Audit | `release-review` + `handoff-builder` |
 
@@ -125,9 +130,9 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | Agent | 導入済み Skill |
 |---|---|
 | Requirements | `requirements-review`, `decision-review` |
-| Architecture | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
+| Architecture | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review`, `design-context` |
 | Implementation | `implementation-plan` |
-| Review | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review` |
+| Review | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review`, `design-review` |
 | Audit | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
 
 同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` / `project-status` は Audit のみ。
@@ -139,7 +144,7 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | 旧パス | 移行判断 |
 |---|---|
 | `skills/requirements-review/` | 移行済み（実行正本は `.agents/skills/requirements-review/`。旧パスは参照専用として残置可） |
-| `skills/design-review/` | 参照専用（`architecture-review` 導入時の参考。実行正本にしない） |
+| `skills/design-review/` | 参照専用（`architecture-review` 導入時の参考。実行正本にしない。新設 `design-review` は `.agents/skills/design-review/`） |
 | 上記以外 | 対象 0 件。新規作成禁止 |
 
 旧パスは実行正本ではない。
@@ -154,7 +159,9 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 6. `requirements-review`
 7. `decision-review`
 8. 設計 Skill（`domain-design` / `sharepoint-design` / `schema-design` / `architecture-review`）
+8a. UI 設計 Skill（`design-context`。UI slice のみ）
 9. 品質確認 Skill（`contracts-review` / `test-review`）
+9a. UI 品質確認 Skill（`design-review`。UI 差分時）
 10. サイクル実操作レビュー（`severe-behavior-cycle-review`）
 11. リリース・運用 Skill（`release-review`）
 12. 状態判定 Skill（`project-status` / SKILL-PILOT-1）

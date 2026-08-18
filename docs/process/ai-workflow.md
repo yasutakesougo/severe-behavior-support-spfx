@@ -52,6 +52,8 @@
 
 Human Approval と Merge は人の事前承認が必須である。Review PASS なしの Merge は禁止する。
 
+UI / presentation 変更を含む slice では、標準順に `design-context`（architecture-review の後）と `design-review`（test-review の後）を追加する。詳細は `docs/process/development-process.md`。
+
 ## 概念レイヤー対応表（非正本）
 
 次の図は Role / Governance 理解用の概念レイヤー対応であり、**実行順序の正本ではない**。
@@ -60,11 +62,11 @@ Human Approval と Merge は人の事前承認が必須である。Review PASS �
 Requirements / DEC
   ↔ requirements-review, decision-review 等
 Architecture / ADR
-  ↔ domain-design, sharepoint-design, schema-design, architecture-review 等
+  ↔ domain-design, sharepoint-design, schema-design, architecture-review, design-context 等
 Implementation Plan / Issue / Implementation
   ↔ implementation-plan, implementation-review, 実装
 Review / Contracts / Security / Audit
-  ↔ contracts-review, test-review, merge-audit 等
+  ↔ contracts-review, test-review, design-review, merge-audit 等
   （Security は独立工程ではなく、品質・監査確認の概念要素）
 Human Approval / Merge / Release
   ↔ 人による merge 承認, release-review, handoff-builder
@@ -138,9 +140,9 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 | Agent | 正本 | 担当 | 現行で使える Skill |
 |---|---|---|---|
 | Audit | `.agents/agents/audit.md` | マージ監査・状態判定・引き継ぎ・リリース判定 | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
-| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認・サイクル実操作レビュー | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review` |
+| Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認・サイクル実操作レビュー・UI Contract | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review`, `design-review` |
 | Requirements | `.agents/agents/requirements.md` | 要件整理・DEC・Requirement ID | `requirements-review`, `decision-review` |
-| Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review` |
+| Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint / UI context | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review`, `design-context` |
 | Implementation | `.agents/agents/implementation.md` | 実装計画・Issue・PR・承認後実装 | `implementation-plan` |
 
 `handoff-builder` / `project-status` の所属 Agent は **Audit** とする。

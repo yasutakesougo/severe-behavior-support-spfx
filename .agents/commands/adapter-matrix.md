@@ -20,7 +20,7 @@
 | Logical Command | 正本 | 起動 Agent | Codex Adapter | Cursor Agent Adapter | Cursor CLI Adapter | Skill Fallback |
 |---|---|---|---|---|---|---|
 | `new-feature` | `.agents/commands/new-feature.md` | Requirements | `/new-feature`（`.agents/commands/adapters/codex.md`） | `.agents/commands/adapters/cursor-agent.md` | `.agents/commands/adapters/cursor-cli.md` | `requirements-review` / `decision-review` |
-| `review-pr` | `.agents/commands/review-pr.md` | Review（→ Audit） | `/review-pr`（`.agents/commands/adapters/codex.md`） | `.agents/commands/adapters/cursor-agent.md` | `.agents/commands/adapters/cursor-cli.md` | `implementation-review` / `contracts-review` / `test-review` / 必要時 `merge-audit` |
+| `review-pr` | `.agents/commands/review-pr.md` | Review（→ Audit） | `/review-pr`（`.agents/commands/adapters/codex.md`） | `.agents/commands/adapters/cursor-agent.md` | `.agents/commands/adapters/cursor-cli.md` | `implementation-review` / `contracts-review` / `test-review` / UI 差分時 `design-review` / 必要時 `merge-audit` |
 | `audit` | `.agents/commands/audit.md` | Audit | `/audit`（`.agents/commands/adapters/codex.md`） | `.agents/commands/adapters/cursor-agent.md` | `.agents/commands/adapters/cursor-cli.md` | `merge-audit`（必要時 `handoff-builder`） |
 | `release-check` | `.agents/commands/release-check.md` | Audit | `/release-check`（`.agents/commands/adapters/codex.md`） | `.agents/commands/adapters/cursor-agent.md` | `.agents/commands/adapters/cursor-cli.md` | `release-review` + `handoff-builder` |
 

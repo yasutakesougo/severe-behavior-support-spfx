@@ -40,6 +40,8 @@ const expectedInstalledSkills = [
   "sharepoint-design",
   "schema-design",
   "architecture-review",
+  "design-context",
+  "design-review",
   "implementation-plan",
   "implementation-review",
   "contracts-review",
