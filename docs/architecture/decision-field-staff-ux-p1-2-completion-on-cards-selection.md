@@ -9,7 +9,7 @@ Decision packet:
 
 POLISH-1 の再オープンではない。Unit 7 ではない。
 Implementation Start ではない。
-完了意味の新 Decision を Accepted にはしない。
+完了意味は後続 Human M2 GO で記録する（本文書の slice Selection ではない）。
 
 先行 B 投票
 （[`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)）
@@ -31,10 +31,12 @@ Predecessor B ballot: HISTORICAL / CONSUMED
 Agent auto-select: FORBIDDEN（this Selection is Human）
 
 Implementation Start: NOT AUTHORIZED
-Completion-meaning Decision: NOT ACCEPTED
+Completion-meaning Decision: SELECTED / LOCKED / M2
 Meaning packet:
   decision-field-staff-ux-p1-2-completion-meaning-packet.md
-Meaning packet status: OPEN / UNCONSUMED
+Meaning packet status: CONSUMED
+Meaning selection SSOT:
+  decision-field-staff-ux-p1-2-completion-meaning-selection.md
 Unit 7: NOT STARTED / not this slice
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -179,7 +181,7 @@ Decision-FIELD-STAFF-UX-P1-2-COMPLETION-ON-CARDS-1
 = SELECTED / LOCKED
 
 Implementation Start: NOT AUTHORIZED
-Completion-meaning Decision: NOT ACCEPTED
+Completion-meaning Decision: SELECTED / LOCKED / M2
 
 Still NOT AUTHORIZED:
   any remaining-flag flip
@@ -194,13 +196,11 @@ Still NOT AUTHORIZED:
 ## 9. Next gate
 
 ```text
-Next gate: Human completion-meaning Decision
-Meaning packet:
-  decision-field-staff-ux-p1-2-completion-meaning-packet.md
-Status: OPEN / UNCONSUMED
-Options: M1 / M2 / M4（M3 not on ballot）
+Next gate: Human Implementation Start GO
+Bound to: M2 synthetic recorded-for-today
+Meaning selection SSOT:
+  decision-field-staff-ux-p1-2-completion-meaning-selection.md
 This Selection ≠ Implementation Start
-This Selection ≠ meaning Decision Accepted
 This Selection ≠ flag flip
 ```
 
@@ -208,6 +208,7 @@ This Selection ≠ flag flip
 
 - Packet: [`decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md`](./decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md)
 - Completion-meaning packet: [`decision-field-staff-ux-p1-2-completion-meaning-packet.md`](./decision-field-staff-ux-p1-2-completion-meaning-packet.md)
+- Completion-meaning selection: [`decision-field-staff-ux-p1-2-completion-meaning-selection.md`](./decision-field-staff-ux-p1-2-completion-meaning-selection.md)
 - Predecessor B selection: [`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)
 - Predecessor closeout: [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)
 - POLISH-1: [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)
