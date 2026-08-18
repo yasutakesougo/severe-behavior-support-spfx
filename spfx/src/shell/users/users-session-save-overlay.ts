@@ -50,8 +50,7 @@ export type UsersSessionSaveOverlayVisible = Readonly<{
 }>;
 
 export type UsersSessionSaveOverlay =
-  | UsersSessionSaveOverlayHidden
-  | UsersSessionSaveOverlayVisible;
+  UsersSessionSaveOverlayHidden | UsersSessionSaveOverlayVisible;
 
 export type UsersSessionSaveStateByUserId = Readonly<Record<string, ShellSaveState>>;
 

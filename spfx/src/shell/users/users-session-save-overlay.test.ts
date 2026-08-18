@@ -1,9 +1,6 @@
 import { SHELL_SAVE_STATE_LABELS, SHELL_SAVE_STATES } from "../ux/save-state";
 import { DEMO_UX_USERS_FIXTURE } from "./users-fixture";
-import {
-  USERS_FILTER_CHIP_UNRECORDED,
-  filterUserRowsByStatusChip,
-} from "./users-filter";
+import { USERS_FILTER_CHIP_UNRECORDED, filterUserRowsByStatusChip } from "./users-filter";
 import {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
   USERS_SESSION_SAVE_OVERLAY_STATES,
@@ -24,9 +21,7 @@ const PERSISTENCE_SUCCESS_WORDING = [
 
 describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2 session save overlay", () => {
   it("authorizes card overlay only and keeps later units / live write closed", () => {
-    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.id).toBe(
-      "FIELD-STAFF-MULTI-USER-UX-POLISH-1",
-    );
+    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.id).toBe("FIELD-STAFF-MULTI-USER-UX-POLISH-1");
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.presentationOnly).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.sessionSaveStateCardOverlayAuthorized).toBe(
       true,
@@ -34,12 +29,8 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2 session save overlay", () =>
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.liveSavedCompletionOnCardsAuthorized).toBe(
       false,
     );
-    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.unrecordedBadgeMutationAuthorized).toBe(
-      false,
-    );
-    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.saveStateSemanticsChangeAuthorized).toBe(
-      false,
-    );
+    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.unrecordedBadgeMutationAuthorized).toBe(false);
+    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.saveStateSemanticsChangeAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.listScrollRestoreAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.compactTabletUsersAuthorized).toBe(false);
