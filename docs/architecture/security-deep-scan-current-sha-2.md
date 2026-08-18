@@ -8,6 +8,10 @@
 は scan-target `93305a44…` の **HISTORICAL** closeout である。現行 main の
 Deep Scan authority ではない。
 
+後続の Artifact Authority 記録（この closeout を書き換えない）:
+[`spfx-release-artifact-authority-1.md`](./spfx-release-artifact-authority-1.md)
+（basis `c100c43…`）。U3 / next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SECURITY-DEEP-SCAN-CURRENT-SHA-2
