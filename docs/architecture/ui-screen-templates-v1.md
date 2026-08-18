@@ -453,10 +453,17 @@ section
     目標 / 支援内容 / 見直し
     現在の支援手順（ProcedureSummary 参照。計画本体に埋め込んで同一視しない）
     過去版 / 最近の記録（historical。Current と混ぜない）
+    現行版と過去版の比較?（optional。historical vs current。過去版を Current にしない）
+    次の版の考え方?（optional。概念表示。persistence しない）
   mutation disabled + aria-disabled
 ```
 
 presentationRole は block 順のみ変更できる。計画 destination を変えない。UserDetail 配下の nested surface であり、primary nav 項目にしない。
+
+Optional presentation slots（SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1 で merged 済み。新 primitive ではない）:
+
+- current vs historical version comparison — 現行版と過去版の並置。過去版は read-only。historical ProcedureRecord は実施時点の planVersion に残る
+- next-version concept — 「次の版の考え方」概念表示。作成 CTA は disabled。永続版を増やさない
 
 #### Catalog slots
 
@@ -483,12 +490,15 @@ presentationRole は block 順のみ変更できる。計画 destination を変�
 #### Smoke hooks
 
 - `data-demo-ux="support-plan"` 一式
-- demo-ux-4 / planning-pc-demo-1 smokes
+- `data-review-new-version="version-compare"` / `data-review-new-version="next-version-concept"`
+- demo-ux-4 / planning-pc-demo-1 / support-plan-review-new-version-demo-1 smokes
 
 #### Good examples
 
 - 「現在の支援手順」section と計画目標 list を分ける
 - 過去版に read-only 注記を出し、編集ボタンを aria-disabled にする
+- 現行版と過去版の比較を optional slot として出し、過去版を CurrentProcedure にしない
+- 「次の版の考え方」を概念表示にし、作成 CTA を disabled のままにする
 
 #### Bad examples
 

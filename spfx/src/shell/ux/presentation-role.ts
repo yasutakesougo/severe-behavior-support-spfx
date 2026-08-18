@@ -28,6 +28,22 @@ export const SHELL_PRESENTATION_ROLE_HINTS: Readonly<Record<ShellPresentationRol
   ADMIN_AUDIT: "運用状況と記録の確認専用です（合成表示）。編集権限は追加しません。",
 };
 
+/** DEMO-only entrance labels. Not authorization display names. */
+export const SHELL_PRESENTATION_ROLE_ENTRY_LABELS: Readonly<Record<ShellPresentationRole, string>> =
+  {
+    FIELD_STAFF: "現場職員",
+    PLANNER: "計画担当",
+    ADMIN_AUDIT: "運用確認",
+  };
+
+export const SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS: Readonly<
+  Record<ShellPresentationRole, string>
+> = {
+  FIELD_STAFF: "Tablet / 今日の支援・記録",
+  PLANNER: "PC / Assessment → Plan → Monitoring",
+  ADMIN_AUDIT: "PC / 運用状況・制度適合確認",
+};
+
 export type OverviewSectionKey = "todaySupport" | "kpi" | "reviewDue" | "actions" | "recent";
 
 export function overviewSectionOrderForRole(

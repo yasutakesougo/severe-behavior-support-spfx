@@ -121,6 +121,59 @@
   @include sbs.focus-ring;
 }
 
+.demoRoleEntry {
+  margin: 0;
+  padding: sbs.$space-2 sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.demoRoleEntryLegend {
+  padding: 0 sbs.$space-1;
+  font-size: sbs.$font-size-100;
+  font-weight: 600;
+}
+
+.demoRoleEntryHint {
+  margin: 0 0 sbs.$space-2;
+  font-size: sbs.$font-size-100;
+  line-height: 1.35;
+  opacity: 0.9;
+}
+
+.demoRoleEntryOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-2 sbs.$space-3;
+  min-width: 0;
+}
+
+.demoRoleOption {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  min-height: 2.75rem; /* ~44px touch target */
+  min-width: 0;
+  font-size: sbs.$font-size-200;
+  cursor: pointer;
+}
+
+.demoRoleOptionDirection {
+  display: block;
+  font-size: sbs.$font-size-100;
+  font-weight: 400;
+  opacity: 0.85;
+  overflow-wrap: anywhere;
+}
+
+.demoRoleOption input:focus {
+  @include sbs.focus-ring;
+}
+
 .navButton:disabled {
   opacity: 0.55;
   cursor: not-allowed;
@@ -544,5 +597,41 @@
 
   .navButton {
     flex: 1 1 calc(33% - #{sbs.$space-2});
+  }
+}
+
+@media (max-width: 390px) {
+  .appShell {
+    gap: sbs.$space-2;
+    padding: sbs.$space-1 sbs.$space-2 sbs.$space-3;
+  }
+
+  .demoBanner {
+    padding: sbs.$space-1 sbs.$space-2;
+    font-size: sbs.$font-size-100;
+  }
+
+  .shellHeader {
+    gap: sbs.$space-1;
+  }
+
+  .productName {
+    font-size: sbs.$font-size-400;
+  }
+
+  .siteSelector,
+  .demoRoleEntry {
+    padding: sbs.$space-1 sbs.$space-2;
+  }
+
+  .siteSelectorOptions,
+  .demoRoleEntryOptions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: sbs.$space-1 sbs.$space-2;
+  }
+
+  .userLine {
+    font-size: sbs.$font-size-100;
   }
 }

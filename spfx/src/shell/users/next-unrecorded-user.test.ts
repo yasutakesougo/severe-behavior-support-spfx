@@ -15,6 +15,7 @@ import {
   labelForNextUnrecordedUserCta,
   presentNextUnrecordedUserCta,
   resolveNextUnrecordedUserAction,
+  selectFirstUnrecordedUser,
   selectNextUnrecordedUser,
 } from "./next-unrecorded-user";
 
@@ -78,6 +79,10 @@ describe("FIELD-STAFF-NEXT-UNRECORDED-USER-1 next unrecorded user", () => {
     });
     expect(selectNextUnrecordedUser(rows, "user-e")).toBeUndefined();
     expect(selectNextUnrecordedUser(rows, "user-h")).toBeUndefined();
+    expect(selectFirstUnrecordedUser(rows)).toEqual({
+      userId: "user-a",
+      personLabel: "Aさん",
+    });
   });
 
   it("fails closed for missing / unknown origin and for filtered-out next row", () => {
@@ -123,7 +128,7 @@ describe("FIELD-STAFF-NEXT-UNRECORDED-USER-1 next unrecorded user", () => {
     expect(nextOccurrence?.userId).toBe(first?.userId);
   });
 
-  it("hides the CTA without origin or authorization, and fail-closes when no next row", () => {
+  it("hides the CTA without authorization, fail-closes when no next row, and shows first unrecorded on first list entry", () => {
     expect(
       presentNextUnrecordedUserCta({
         authorized: false,
@@ -132,14 +137,21 @@ describe("FIELD-STAFF-NEXT-UNRECORDED-USER-1 next unrecorded user", () => {
         detailEnabledUserIds: ["user-a"],
       }),
     ).toEqual({ visible: false });
-    expect(
-      presentNextUnrecordedUserCta({
-        authorized: true,
-        currentUserId: undefined,
-        visibleRows: rows,
-        detailEnabledUserIds: ["user-a"],
-      }),
-    ).toEqual({ visible: false });
+    expect(selectNextUnrecordedUser(rows, undefined)).toBeUndefined();
+    const firstEntry = presentNextUnrecordedUserCta({
+      authorized: true,
+      currentUserId: undefined,
+      visibleRows: rows,
+      detailEnabledUserIds: ["user-a", "user-c"],
+    });
+    expect(firstEntry).toEqual({
+      visible: true,
+      enabled: true,
+      label: "次の未記録の利用者: Aさん",
+      reasonId: "field-staff-next-unrecorded-user-reason",
+      action: "user_detail",
+      nextUserId: "user-a",
+    });
     const none = presentNextUnrecordedUserCta({
       authorized: true,
       currentUserId: "user-e",
@@ -175,6 +187,22 @@ describe("FIELD-STAFF-NEXT-UNRECORDED-USER-1 next unrecorded user", () => {
     expect(labelForNextUnrecordedUserCta({ userId: "user-e", personLabel: "Eさん" })).toBe(
       "次の未記録の利用者: Eさん",
     );
+  });
+
+  it("uses the existing user_detail identity on first list entry and does not invent an occurrence fast-path", () => {
+    const first = presentNextUnrecordedUserCta({
+      authorized: true,
+      currentUserId: undefined,
+      visibleRows: rows,
+      detailEnabledUserIds: ["user-a", "user-c"],
+    });
+    expect(first.visible).toBe(true);
+    if (first.visible) {
+      expect(first.action).toBe("user_detail");
+      expect(first.nextUserId).toBe("user-a");
+      expect(first.label).toContain(FIELD_STAFF_NEXT_UNRECORDED_USER_CTA_PREFIX);
+    }
+    expect(FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE.listToRecordFastPathAuthorized).toBe(false);
   });
 
   it("does not claim persistence success or completion in CTA copy", () => {

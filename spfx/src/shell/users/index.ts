@@ -76,6 +76,7 @@ export {
   labelForNextUnrecordedUserCta,
   presentNextUnrecordedUserCta,
   resolveNextUnrecordedUserAction,
+  selectFirstUnrecordedUser,
   selectNextUnrecordedUser,
   type NextUnrecordedUser,
   type NextUnrecordedUserAction,

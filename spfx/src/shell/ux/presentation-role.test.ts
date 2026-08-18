@@ -6,6 +6,8 @@ import {
   overviewSectionOrderForRole,
   parseShellPresentationRole,
   SHELL_DEFAULT_PRESENTATION_ROLE,
+  SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS,
+  SHELL_PRESENTATION_ROLE_ENTRY_LABELS,
   SHELL_PRESENTATION_ROLE_HINTS,
   supportPlanBlockOrderForRole,
   userDetailSectionOrderForRole,
@@ -25,6 +27,12 @@ describe("VP-G synthetic presentationRole", () => {
     expect(parseShellPresentationRole("SUPPORTER")).toBe("FIELD_STAFF");
     expect(SHELL_PRESENTATION_ROLE_HINTS.FIELD_STAFF).toContain("認証ロール判定はありません");
     expect(SHELL_PRESENTATION_ROLE_HINTS.ADMIN_AUDIT).toContain("編集権限は追加しません");
+    expect(SHELL_PRESENTATION_ROLE_ENTRY_LABELS.FIELD_STAFF).toBe("現場職員");
+    expect(SHELL_PRESENTATION_ROLE_ENTRY_LABELS.PLANNER).toBe("計画担当");
+    expect(SHELL_PRESENTATION_ROLE_ENTRY_LABELS.ADMIN_AUDIT).toBe("運用確認");
+    expect(SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS.FIELD_STAFF).toContain("Tablet");
+    expect(SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS.PLANNER).toContain("PC");
+    expect(SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS.ADMIN_AUDIT).toContain("運用状況");
   });
 
   it("keeps FIELD_STAFF Overview order with Today Support first", () => {

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { SaveStateBadge } from "../ux/SaveStateBadge";
+import { DEMO_LIVE_WRITE_HOLD_SAVE_NOTE, demoHoldSaveStatusNote } from "../ux/demo-save-hold-copy";
 import {
   descriptionForShellSaveState,
   labelForShellSaveState,
@@ -217,12 +218,18 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
     items: todaySupportItems ?? [],
   });
 
+  const liveWriteHold = persistPort === STAFF_PROCEDURE_RECORD_LIVE_WRITE_HOLD_PORT;
+  const holdSaveNote = demoHoldSaveStatusNote(saveState, liveWriteHold);
   const statusNote =
-    saveState === "save_failed"
+    holdSaveNote ??
+    (saveState === "save_failed"
       ? FIELD_WORKFLOW_SAVE_FAILED_RETAIN_NOTE
       : saveState === "save_outcome_unknown"
         ? FIELD_WORKFLOW_SAVE_OUTCOME_UNKNOWN_NOTE
-        : descriptionForShellSaveState(saveState);
+        : descriptionForShellSaveState(saveState));
+  const mutationBoundaryNote = liveWriteHold
+    ? DEMO_LIVE_WRITE_HOLD_SAVE_NOTE
+    : FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE;
 
   return (
     <section
@@ -238,6 +245,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
       data-field-workflow-procedure-version={context.procedureVersion}
       data-field-workflow-occurrence-id={context.occurrenceId ?? ""}
       data-field-workflow-save-state={saveState}
+      data-field-workflow-demo-save-hold={liveWriteHold ? "true" : "false"}
       data-field-staff-draft-resume={draftResumeAuthorized ? "true" : "false"}
       aria-labelledby="field-workflow-procedure-record-heading"
     >
@@ -270,7 +278,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         {FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE}
       </p>
       <p className={styles.hint} data-field-workflow="mutation-boundary-note">
-        {FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE}
+        {mutationBoundaryNote}
       </p>
 
       <section className={styles.section} aria-labelledby="field-workflow-binding-heading">
@@ -384,6 +392,7 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
           className={styles.saveStatusBlock}
           data-field-workflow="save-status"
           data-field-workflow-save-state={saveState}
+          data-field-workflow-demo-save-hold={liveWriteHold ? "true" : "false"}
         >
           <SaveStateBadge state={saveState} />
           <p className={styles.statusNote} role="status">
