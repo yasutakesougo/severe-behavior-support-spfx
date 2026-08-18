@@ -144,6 +144,13 @@
   border-bottom-style: solid;
   border-bottom-color: sbs.$color-border-subtle;
   min-width: 0;
+  outline: none;
+}
+
+.userRow:focus,
+.userRow:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .userMain {
@@ -282,6 +289,50 @@
   cursor: not-allowed;
 }
 
+.nextUnrecordedRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: sbs.$space-2;
+  min-width: 0;
+}
+
+.nextUnrecordedButton {
+  min-height: 2.75rem; /* ~44px touch target */
+  padding: sbs.$space-2 sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
+  color: inherit;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+  cursor: pointer;
+}
+
+.nextUnrecordedButton:focus,
+.nextUnrecordedButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.nextUnrecordedButton:hover:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.nextUnrecordedButton:active:not(:disabled) {
+  background: sbs.$color-surface-muted;
+}
+
+.nextUnrecordedButton:disabled {
+  color: sbs.$color-text-disabled;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .usersList {
     padding: sbs.$space-4;
@@ -325,7 +376,8 @@
     }
 
     .filterButton,
-    .detailButton {
+    .detailButton,
+    .nextUnrecordedButton {
       min-height: 2.75rem; /* ~44px touch target — do not shrink with density */
     }
   }

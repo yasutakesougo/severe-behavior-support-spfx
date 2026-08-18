@@ -54,9 +54,9 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 3 next actionable occurrence",
     return found;
   };
 
-  it("authorizes occurrence navigation only and keeps user-level next / live write closed", () => {
+  it("authorizes occurrence navigation only and keeps live write / record fast-path closed", () => {
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized).toBe(true);
-    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(false);
+    expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextUnrecordedUserAuthorized).toBe(true);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.unrecordedBadgeMutationAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.kpiFamilyRRecountAuthorized).toBe(false);
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.procedureFixtureExpansionAuthorized).toBe(
