@@ -25,6 +25,11 @@ Agent auto-select: FORBIDDEN（this Selection is Human）
 
 Implementation Start: AUTHORIZED（separate Human GO 2026-08-18）
 Start SSOT: field-staff-next-unrecorded-user-1-implementation-start.md
+Implementation: MERGED（PR #414）
+Implementation HEAD: 35445aa4e5dea17f578f26289672d901843e8b3a
+authoritative main: 5b5496c9e31cd0c57ca12c5b0464b315e7f7f62b
+Closeout SSOT: field-staff-next-unrecorded-user-1.md
+UX-P1-3 residual classification overall: NOT CLOSED
 Unit 7: NOT STARTED / not this slice
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -145,12 +150,17 @@ Decision-FIELD-STAFF-UX-P1-3-NEXT-UNRECORDED-USER-1
 
 Implementation Start:
   field-staff-next-unrecorded-user-1-implementation-start.md
+Closeout SSOT:
+  field-staff-next-unrecorded-user-1.md
+PR #414: MERGED / CLOSED
+UX-P1-3 residual classification overall: NOT CLOSED
 
 Still NOT AUTHORIZED:
   listToRecordFastPath / badge / KPI mutation
   Unit 7
   LIVE WRITE / Deploy
   A / C / D / E as selected
+  rewrite residual CLOSED
   Ready / Merge auto-progress
 ```
 
@@ -159,5 +169,5 @@ Still NOT AUTHORIZED:
 - Packet: [`decision-field-staff-ux-p1-3-next-unrecorded-user-selection-packet.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection-packet.md)
 - Predecessor closeout: [`field-staff-multi-user-ux-polish-1.md`](./field-staff-multi-user-ux-polish-1.md)
 - Simulation gaps: [`field-staff-multi-user-ux-simulation-1.md`](./field-staff-multi-user-ux-simulation-1.md)
-- Next gate after Selection: Implementation Start recorded in
-  [`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md)
+- Implementation Start: [`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md)
+- Successor closeout: [`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)

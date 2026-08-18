@@ -26,6 +26,9 @@ Depends on:
 Prior A recommendation: NOT A SELECTION
 Implementation Start: AUTHORIZED
 Start SSOT: field-staff-next-unrecorded-user-1-implementation-start.md
+Implementation: MERGED（PR #414）
+Closeout SSOT: field-staff-next-unrecorded-user-1.md
+UX-P1-3 residual classification overall: NOT CLOSED
 Unit 7: NOT STARTED
 LIVE WRITE: HOLD
 Selected exact-slice: SELECTED / B — UX-P1-3
@@ -118,6 +121,9 @@ UX-P1-3 次の未記録利用者
 Slice identity: FIELD-STAFF-NEXT-UNRECORDED-USER-1
 Human Decision: B GO 2026-08-18
 Implementation Start: recorded in field-staff-next-unrecorded-user-1-implementation-start.md
+Closeout SSOT: field-staff-next-unrecorded-user-1.md
+PR #414: MERGED / CLOSED
+UX-P1-3 residual classification overall: NOT CLOSED
 ```
 
 ## 4. Stop condition
@@ -128,4 +134,6 @@ Do not auto-select A / C / D / E.
 Do not start Unit 7.
 Do not enable LIVE WRITE.
 Implementation Start is recorded separately.
+Successor closeout is recorded in field-staff-next-unrecorded-user-1.md.
+Do not mark UX-P1-3 residual CLOSED.
 ```

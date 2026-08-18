@@ -37,6 +37,9 @@ This closeout: != Unit 7 start
 This closeout: != next-slice Implementation Start
 Successor selection: FIELD-STAFF-NEXT-UNRECORDED-USER-1
 Successor Implementation Start: recorded separately
+Successor closeout SSOT:
+  field-staff-next-unrecorded-user-1.md
+Successor implementation: MERGED（PR #414）
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -155,6 +158,11 @@ Unit 2 overlay と Unit 3 next-occurrence は simulation 文面の P1/P2 一覧�
 ## 5. Remaining slice flags（still false）
 
 Do not treat these as Unit 6 defects. They stay unauthorized until a separate Human-selected slice.
+This §5 list is the POLISH-1-era remaining-flag snapshot. Do not rewrite it.
+Successor FIELD-STAFF-NEXT-UNRECORDED-USER-1 later set `nextUnrecordedUserAuthorized` true
+on main `5b5496c…`（[`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md)）.
+That successor fact does not change the UX-P1-3 OUT OF SCOPE row in §4,
+and does not close residual classification overall.
 
 ```text
 nextUnrecordedUserAuthorized: false
@@ -228,7 +236,15 @@ Selection SSOT:
 Implementation Start: recorded separately
 Start SSOT:
   field-staff-next-unrecorded-user-1-implementation-start.md
+Successor closeout SSOT:
+  field-staff-next-unrecorded-user-1.md
+Successor status: IMPLEMENTATION COMPLETE / MERGED
+PR #414: MERGED / CLOSED
+authoritative successor main:
+  5b5496c9e31cd0c57ca12c5b0464b315e7f7f62b
 This closeout: != Implementation Start
+This closeout: != UX-P1-3 residual CLOSED
+POLISH-1 historical UX-P1-3: OUT OF SCOPE（§4 unchanged）
 Unit 7: NOT STARTED / not this slice
 UX-P1-2 / UX-P2-5 expansion / UX-P2-7: NOT SELECTED
 Production-host re-acceptance: not started by this acceptance
@@ -250,8 +266,9 @@ ACCEPT / PASS != production-host re-acceptance
 ACCEPT / PASS != Full Application Acceptance
 ```
 
-Human が UX-P1-3 を次 exact-slice に選んだこと、および successor Implementation Start は、
-本 closeout の ACCEPT ではない。OUT OF SCOPE 分類は変えない。
+Human が UX-P1-3 を次 exact-slice に選んだこと、successor Implementation Start、
+および successor IMPLEMENTED / MERGED は、本 closeout の ACCEPT ではない。
+OUT OF SCOPE 分類は変えない。UX-P1-3 residual classification overall は NOT CLOSED。
 
 ## 10. STOP
 
@@ -265,4 +282,6 @@ Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.
 Do not close Issues from this document.
 Successor Start SSOT:
   field-staff-next-unrecorded-user-1-implementation-start.md
+Successor closeout SSOT:
+  field-staff-next-unrecorded-user-1.md
 ```

@@ -111,7 +111,14 @@ Selection SSOT:
 Implementation Start: recorded separately
 Start SSOT:
   field-staff-next-unrecorded-user-1-implementation-start.md
+Successor closeout SSOT:
+  field-staff-next-unrecorded-user-1.md
+Successor status: IMPLEMENTATION COMPLETE / MERGED
+PR #414: MERGED / CLOSED
+authoritative successor main:
+  5b5496c9e31cd0c57ca12c5b0464b315e7f7f62b
 This simulation closeout: != Implementation Start
+This simulation closeout: != UX-P1-3 residual CLOSED
 ```
 
 Historical design targets recorded here remain observations.
@@ -122,7 +129,10 @@ UX-P1-3 is Human-selected as the next exact-slice identity
 ([`decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md`](./decision-field-staff-ux-p1-3-next-unrecorded-user-selection.md)).
 Implementation Start is recorded in
 [`field-staff-next-unrecorded-user-1-implementation-start.md`](./field-staff-next-unrecorded-user-1-implementation-start.md).
-Do not treat this simulation closeout as that Start.
+Successor IMPLEMENTED / MERGED is recorded in
+[`field-staff-next-unrecorded-user-1.md`](./field-staff-next-unrecorded-user-1.md).
+Do not treat this simulation closeout as that Start or as residual CLOSED.
+Do not rewrite §4 UX-P1-3 as if it were never observed.
 
 Expected future design targets (design only; not authorized here):
 
