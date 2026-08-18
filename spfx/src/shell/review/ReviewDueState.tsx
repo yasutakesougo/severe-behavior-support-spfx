@@ -20,6 +20,7 @@ import {
   DEMO_REVIEW_DUE_MUTATION_DISABLED_NOTE,
   DEMO_REVIEW_DUE_ADMIN_READ_NOTE,
 } from "./review-due-copy";
+import { SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA } from "../users/support-plan-copy";
 import { VP5_REVIEW_SLICE } from "./review-due-fixture";
 import type { ShellReviewDueStatePresentation } from "./review-due-types";
 import styles from "./ReviewDueStateUx.module.scss";
@@ -29,6 +30,8 @@ export type ReviewDueStateProps = Readonly<{
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToOverview?: () => void;
   backLabel?: string;
+  /** SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1: presentation-only return to next-version concept. */
+  onNextVersionConceptRequest?: () => void;
   /** FIELD-WORKFLOW #356 FW-07 materials (optional). */
   procedureReviewMaterials?: readonly ShellProcedureReviewMaterial[];
   presentationRole?: ShellPresentationRole;
@@ -45,6 +48,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   headingRef,
   onBackToOverview,
   backLabel = "← 概要",
+  onNextVersionConceptRequest,
   procedureReviewMaterials = [],
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
@@ -332,6 +336,18 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
               </p>
             )}
           </div>
+        ) : null}
+        {onNextVersionConceptRequest ? (
+          <p>
+            <button
+              type="button"
+              className={styles.detailButton}
+              onClick={onNextVersionConceptRequest}
+              data-review-new-version="from-review-cta"
+            >
+              {SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA}
+            </button>
+          </p>
         ) : null}
       </section>
 

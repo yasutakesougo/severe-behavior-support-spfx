@@ -34,6 +34,26 @@ export const SUPPORT_PLAN_RECENT_RECORDS_HEADING = "最近の支援手順記録"
 
 export const SUPPORT_PLAN_VERSIONS_HEADING = "過去の版";
 
+export const SUPPORT_PLAN_VERSION_COMPARE_HEADING = "現在版と過去版の比較";
+
+export const SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE =
+  "計画は上書きせず、版を重ねます。現場記録は実施時点の計画版に残ります。";
+
+export const SUPPORT_PLAN_NEXT_VERSION_HEADING = "次の版の考え方";
+
+export const SUPPORT_PLAN_NEXT_VERSION_NOTE =
+  "次回の変更は新しい版を作ります。現行の適用中版は残します。作成・保存は接続されていません。";
+
+export const SUPPORT_PLAN_NEXT_VERSION_CTA = "次の版を作る（表示専用）";
+
+export const SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA = "次の版の考え方を見る";
+
+export const SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE =
+  "観察の不足だけでは、この計画を無効にしません。";
+
+export const SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE =
+  "見直し期限の超過だけでは、この計画を無効にしません。";
+
 export const SUPPORT_PLAN_FORBIDDEN_STATUS_TOKENS = ["最終承認者", "承認済み"] as const;
 
 /** Fail-closed copy must not claim usable business UI or live connection. */
