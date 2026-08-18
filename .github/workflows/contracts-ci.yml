@@ -90,6 +90,9 @@ jobs:
       - name: Verify UI catalog
         run: npm run verify:ui-catalog
 
+      - name: Lint UI semantic rules
+        run: npm run lint:ui-sem
+
       - name: Lint
         run: npm run lint
 

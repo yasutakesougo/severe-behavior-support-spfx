@@ -168,8 +168,8 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 
 ## 関連ファイル
 
-- 検証スクリプト: `scripts/verify-skills.mjs` / `scripts/verify-ui-catalog.mjs`
-- 実行コマンド: `npm run verify:skills` / `npm run verify:ui-catalog`
+- 検証スクリプト: `scripts/verify-skills.mjs` / `scripts/verify-ui-catalog.mjs` / `scripts/ui-sem/run.mjs`
+- 実行コマンド: `npm run verify:skills` / `npm run verify:ui-catalog` / `npm run lint:ui-sem`
 - CI 一括: `npm run verify:ci`
 - 移行 ledger: `docs/process/skill-migration-ledger.md`
 - scope check: `npm run check:scope`
@@ -181,7 +181,7 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 - 導入済み Skills / Skill Catalog / Skill Migration Ledger（directory・カタログ「導入済み」も**完全一致**）
 - MCP Permission Matrix
 - Background Agent 実行契約
-- CI（verify:skills / verify:ui-catalog / typecheck / tests / contracts-boundaries / scope check）
+- CI（verify:skills / verify:ui-catalog / lint:ui-sem / typecheck / tests / contracts-boundaries / scope check）
 - 必須ファイル欠落、旧 `skills/` への新規実行参照、存在しない Skill の「導入済み」扱い
 - 許可集合外の extra Agent / Logical Command / 導入済み Skill / Tool Adapter
 - `handoff-builder` の Audit 所属、正本参照切れ

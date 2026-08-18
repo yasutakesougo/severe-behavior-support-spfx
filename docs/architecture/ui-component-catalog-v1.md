@@ -425,7 +425,6 @@ INV-15 / INV-16 / INV-24 KEEP。
 ```text
 新 React primitive の抽出（UserSummary / ProcedureSummary の CONSOLIDATE は後続）
 Storybook / Chromatic
-ESLint UI-SEM-* 実装（IMPL-3）
 Screen template / generator（IMPL-4）
 Figma MCP / Token 同期
 Domain / Contracts / SharePoint 意味変更
@@ -436,4 +435,7 @@ Deploy / Visual Acceptance / #299 Close
 
 ```text
 npm run verify:ui-catalog
+npm run lint:ui-sem
 ```
+
+UI-SEM-01..05 の正本は `docs/architecture/ui-agent-impl-3-eslint-ui-sem.md`。Catalog は component usage SSOT、ESLint は forbidden substitution の決定論ゲート。

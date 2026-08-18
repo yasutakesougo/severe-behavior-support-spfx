@@ -26,7 +26,9 @@ docs/architecture/contracts-v1.md
 This packet is **docs-only**. It does **not** authorize ESLint rule implementation, Storybook, Figma MCP connection, Deploy, SharePoint write, Visual Acceptance, or #299 Close.
 
 UI-AGENT-IMPL-1: **#425 MERGED**（`design-context` / `design-review`）。
-UI-AGENT-IMPL-2: Component Catalog v1（本追跡の次 slice）。
+UI-AGENT-IMPL-2: **#426 MERGED**（Component Catalog v1）。
+UI-AGENT-IMPL-3: ESLint UI semantic rules（this PR / Implementation Start）。
+UI-AGENT-IMPL-4: Screen template / pattern docs（次 slice）。
 Issue 番号未着でも設計正本は main の本文書群を使う。
 
 ---
