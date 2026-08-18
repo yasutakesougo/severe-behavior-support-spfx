@@ -55,6 +55,7 @@ EmptyNotice の fail-closed 検出は静的 JSX テキストが対象。定数�
 - `eslint.ui-sem.config.mjs`
 - `npm run lint:ui-sem`
 - `tests/ui-sem/ui-sem-rules.test.ts`
+- `tsconfig.json`（`allowJs` + `scripts/ui-sem/plugin.mjs` を tests から import するため）
 - CI / verify:ci / auto-handoff 配線
 
 ## 4. Explicit OUT

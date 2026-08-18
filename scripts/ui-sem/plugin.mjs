@@ -145,6 +145,7 @@ export const checkScssRawHex = (relativePath, source) => {
   return findings;
 };
 
+/** @type {import("eslint").Rule.RuleModule} */
 const statusBadgeLabelRule = {
   meta: {
     type: "problem",
@@ -175,6 +176,7 @@ const statusBadgeLabelRule = {
   },
 };
 
+/** @type {import("eslint").Rule.RuleModule} */
 const emptyNoticeNotFailClosedRule = {
   meta: {
     type: "problem",
@@ -216,6 +218,7 @@ const emptyNoticeNotFailClosedRule = {
   },
 };
 
+/** @type {import("eslint").Rule.RuleModule} */
 const saveStateVocabularyRule = {
   meta: {
     type: "problem",
@@ -263,6 +266,7 @@ const saveStateVocabularyRule = {
   },
 };
 
+/** @type {import("eslint").Rule.RuleModule} */
 const noRawHexRule = {
   meta: {
     type: "problem",
@@ -314,6 +318,7 @@ const noRawHexRule = {
   },
 };
 
+/** @type {import("eslint").Rule.RuleModule} */
 const presentationRoleNotNavRule = {
   meta: {
     type: "problem",
