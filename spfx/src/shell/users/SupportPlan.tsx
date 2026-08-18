@@ -145,13 +145,13 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       <h2 id="planning-pc-plan-procedures-heading">{SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING}</h2>
       <ul className={styles.graphList} data-planning-pc="current-procedures">
         {currentProcedures.map((procedure) => (
-          <li key={`${procedure.procedureId}:${procedure.procedureVersion}`} className={styles.graphItem}>
+          <li
+            key={`${procedure.procedureId}:${procedure.procedureVersion}`}
+            className={styles.graphItem}
+          >
             <p className={styles.graphLabel}>
               {procedure.sceneLabel}
-              <span className={styles.graphMeta}>
-                {" "}
-                / 版 {procedure.planVersion}
-              </span>
+              <span className={styles.graphMeta}> / 版 {procedure.planVersion}</span>
             </p>
             <p className={styles.sectionHint}>実施する支援</p>
             <ul>
@@ -320,10 +320,18 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       <p className={styles.periodLabel} data-demo-ux="support-plan-lifecycle">
         {planLifecycleLabel}
       </p>
-      <p className={styles.statusLabel} data-demo-ux="support-plan-status" data-planning-pc="status">
+      <p
+        className={styles.statusLabel}
+        data-demo-ux="support-plan-status"
+        data-planning-pc="status"
+      >
         {statusLabel}
       </p>
-      <p className={styles.periodLabel} data-demo-ux="support-plan-version" data-planning-pc="version">
+      <p
+        className={styles.periodLabel}
+        data-demo-ux="support-plan-version"
+        data-planning-pc="version"
+      >
         版 {currentVersion}
       </p>
       <p className={styles.sectionHint} data-planning-pc="not-final-approval">

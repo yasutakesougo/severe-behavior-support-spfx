@@ -80,20 +80,22 @@ export function isPlanningPcPresentationRole(role: ShellPresentationRole): boole
 }
 
 export type SupportPlanBlockKey =
-  | "summary"
-  | "goals"
-  | "actions"
-  | "review"
-  | "procedures"
-  | "records"
-  | "versions"
-  | "mutation";
+  "summary" | "goals" | "actions" | "review" | "procedures" | "records" | "versions" | "mutation";
 
 export function supportPlanBlockOrderForRole(
   role: ShellPresentationRole,
 ): readonly SupportPlanBlockKey[] {
   if (isPlanningPcPresentationRole(role)) {
-    return ["summary", "review", "procedures", "records", "versions", "goals", "actions", "mutation"];
+    return [
+      "summary",
+      "review",
+      "procedures",
+      "records",
+      "versions",
+      "goals",
+      "actions",
+      "mutation",
+    ];
   }
   return ["summary", "goals", "actions", "review", "mutation"];
 }

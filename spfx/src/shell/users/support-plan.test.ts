@@ -80,14 +80,16 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
   });
 
   it("does not present approvedBy as institutional final approval", () => {
-    expect(supportPlanCopyAvoidsFinalApprovalMeaning(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel)).toBe(
-      true,
-    );
+    expect(
+      supportPlanCopyAvoidsFinalApprovalMeaning(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel),
+    ).toBe(true);
     expect(
       supportPlanCopyAvoidsFinalApprovalMeaning(DEMO_UX_SUPPORT_PLAN_FIXTURE.planLifecycleLabel),
     ).toBe(true);
     expect(
-      supportPlanCopyAvoidsFinalApprovalMeaning(DEMO_UX_SUPPORT_PLAN_FIXTURE.businessFacts.appliedFromLabel),
+      supportPlanCopyAvoidsFinalApprovalMeaning(
+        DEMO_UX_SUPPORT_PLAN_FIXTURE.businessFacts.appliedFromLabel,
+      ),
     ).toBe(true);
     expect(supportPlanCopyAvoidsFinalApprovalMeaning(SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE)).toBe(
       true,

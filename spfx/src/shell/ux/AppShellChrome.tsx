@@ -856,7 +856,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       presentationRole={presentationRole}
                     />
                   ) : supportPlanPreviewOpen &&
-                  supportPlanPresentation.userId === selectedUserDetail.userId ? (
+                    supportPlanPresentation.userId === selectedUserDetail.userId ? (
                     <SupportPlan
                       presentation={supportPlanPresentation}
                       headingRef={destinationHeadingRef}

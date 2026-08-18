@@ -23,7 +23,9 @@ const puppeteerModule = await import(
   process.env.PPC_PUPPETEER_PATH ??
     "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
 );
-const sassModule = await import(process.env.PPC_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs");
+const sassModule = await import(
+  process.env.PPC_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs"
+);
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 const compileScss =
@@ -223,7 +225,14 @@ function assertPlannerSupportPlan() {
   const pass = Boolean(found.pass) && errors.length === 0;
   const shot = path.join(artifactsDir, "planner-review-materials.png");
   await page.screenshot({ path: shot, fullPage: true });
-  checks.push({ name: "planner-review-materials-nested", url, found, shot, pass, pageErrors: errors });
+  checks.push({
+    name: "planner-review-materials-nested",
+    url,
+    found,
+    shot,
+    pass,
+    pageErrors: errors,
+  });
   allPass = allPass && pass;
 
   await page.click('[data-demo-ux="review-due-back"]');
@@ -234,8 +243,7 @@ function assertPlannerSupportPlan() {
     planPresent: Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
     reviewPresent: Boolean(document.querySelector('[data-demo-ux="review-due-state"]')),
   }));
-  const backPass =
-    backFound.planPresent && !backFound.reviewPresent && errors.length === 0;
+  const backPass = backFound.planPresent && !backFound.reviewPresent && errors.length === 0;
   const backShot = path.join(artifactsDir, "planner-back-to-support-plan.png");
   await page.screenshot({ path: backShot, fullPage: true });
   checks.push({

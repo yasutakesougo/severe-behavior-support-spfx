@@ -110,7 +110,11 @@ export {
   DEMO_UX_USER_DETAIL_C_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
 } from "./user-detail-fixture";
-export { DEMO_UX_4_SLICE, DEMO_UX_SUPPORT_PLAN_FIXTURE, PLANNING_PC_DEMO_1_SLICE } from "./support-plan-fixture";
+export {
+  DEMO_UX_4_SLICE,
+  DEMO_UX_SUPPORT_PLAN_FIXTURE,
+  PLANNING_PC_DEMO_1_SLICE,
+} from "./support-plan-fixture";
 export type {
   ShellUserDetailPresentation,
   UserDetailBusinessFacts,
