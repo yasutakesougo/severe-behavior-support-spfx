@@ -25,7 +25,9 @@ docs/architecture/contracts-v1.md
 
 This packet is **docs-only**. It does **not** authorize ESLint rule implementation, Storybook, Figma MCP connection, Deploy, SharePoint write, Visual Acceptance, or #299 Close.
 
-UI-AGENT-IMPL-1 Skill 導入は **別 PR**（Human GO: Issue 起票後に IMPL-1 へ進む）。Issue 番号未着でも設計正本は main の本文書群を使う。
+UI-AGENT-IMPL-1: **#425 MERGED**（`design-context` / `design-review`）。
+UI-AGENT-IMPL-2: Component Catalog v1（本追跡の次 slice）。
+Issue 番号未着でも設計正本は main の本文書群を使う。
 
 ---
 

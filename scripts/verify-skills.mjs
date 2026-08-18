@@ -586,6 +586,7 @@ if (await exists(packageJsonAbsolutePath)) {
   const scripts = packageJson.scripts ?? {};
   for (const scriptName of [
     "verify:skills",
+    "verify:ui-catalog",
     "typecheck",
     "test",
     "check:contracts-boundaries",
@@ -605,6 +606,7 @@ if (await exists(workflowAbsolutePath)) {
   const workflowContent = await readText(workflowAbsolutePath);
   for (const phrase of [
     "npm run verify:skills",
+    "npm run verify:ui-catalog",
     "npm run typecheck",
     "npm test",
     "npm run check:contracts-boundaries",

@@ -87,6 +87,9 @@ jobs:
       - name: Verify skills
         run: npm run verify:skills
 
+      - name: Verify UI catalog
+        run: npm run verify:ui-catalog
+
       - name: Lint
         run: npm run lint
 

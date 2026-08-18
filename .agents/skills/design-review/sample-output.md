@@ -34,4 +34,4 @@
 
 ## Next Actions
 1. `merge-audit` へ証跡を渡す
-2. Catalog 未着地は P2 記録不要（本 slice KEEP）
+2. Catalog v1 の SupportPlan KEEP 規則を `merge-audit` へ渡す

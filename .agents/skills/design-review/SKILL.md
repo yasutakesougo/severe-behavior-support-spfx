@@ -20,7 +20,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - `design-context` 出力（あれば）
 - Domain / Contracts 語彙
 - DADS-03 Style Guide / DADS-04 tokens / DADS-05 primitives
-- Component Catalog（あれば）。未整備なら primitives + Style Guide を暫定正本
+- Component Catalog v1（`docs/architecture/ui-component-catalog-v1.md`）。該当 entry が無ければ GAP / HOLD
 - a11y gate / semantic tests / browser smoke 結果
 
 ## 前提条件
@@ -49,7 +49,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - 現場職員と計画担当者の入口を navigation だけで暗黙にしていないか
 - 新 hex / ad-hoc rem を DADS-04 抜きで増やしていないか
 - Storybook / Figma をレビュー正本にしていないか
-- Catalog 未整備を FAIL 理由にしていないか（GAP は P2 または HOLD）
+- Catalog 未掲載を FAIL 理由にしていないか（GAP は P2 または HOLD）
 
 ## 停止条件
 
