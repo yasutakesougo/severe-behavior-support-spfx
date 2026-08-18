@@ -44,6 +44,9 @@ This closeout: != A / C / D / E selection
 This closeout: != UX-P1-3 residual CLOSED
 POLISH-1 historical UX-P1-3: OUT OF SCOPE（unchanged）
 UX-P1-3 residual classification overall: NOT CLOSED
+Remaining-gap successor: FIELD-STAFF-COMPLETION-ON-CARDS-1
+Remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 ```
 
 Live gate（Ready / Merge 進行）は repository docs に書かない
@@ -204,13 +207,19 @@ Coverage residuals in §4 are **in-scope limits**, not new P0/P1 defects.
 ## 9. Next gate
 
 ```text
-Next gate: Human Decision among remaining gaps
-A UX-P1-2: NOT SELECTED
+Next gate: Human-selected remaining-gap slice
+Next slice identity: FIELD-STAFF-COMPLETION-ON-CARDS-1
+Human selection: SELECTED / A / UX-P1-2
+Selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
+Implementation Start: NOT AUTHORIZED
+Completion-meaning Decision: NOT ACCEPTED
 C UX-P2-5: NOT SELECTED
 D UX-P2-7: NOT SELECTED
 E defer: NOT SELECTED
 Unit 7: NOT STARTED
 UX-P1-3 residual classification overall: NOT CLOSED
+UX-P1-2 residual classification overall: NOT CLOSED
 Production-host re-acceptance: not started by this closeout
 LIVE WRITE: HOLD
 Deploy: HOLD
@@ -221,7 +230,7 @@ IMPLEMENTATION COMPLETE / MERGED は次を許可しない:
 ```text
 IMPLEMENTED / MERGED != UX-P1-3 residual CLOSED
 IMPLEMENTED / MERGED != rewrite PARTIAL or OUT OF SCOPE as PASS / CLOSED
-IMPLEMENTED / MERGED != A / C / D / E selection
+IMPLEMENTED / MERGED != A / C / D / E Implementation Start
 IMPLEMENTED / MERGED != Unit 7 start
 IMPLEMENTED / MERGED != LIVE WRITE GO
 IMPLEMENTED / MERGED != Deploy GO
@@ -235,8 +244,11 @@ IMPLEMENTED / MERGED != Full Application Acceptance
 This recording is successor closeout evidence only.
 Do not mark UX-P1-3 residual CLOSED.
 Do not rewrite Simulation / POLISH-1 historical observations.
-Do not start A / C / D / E from this closeout.
+Do not start C / D / E from this closeout.
 Do not start Unit 7 from this closeout.
+Do not treat this closeout as FIELD-STAFF-COMPLETION-ON-CARDS-1 Implementation Start.
+Successor remaining-gap selection SSOT:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection.md
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.

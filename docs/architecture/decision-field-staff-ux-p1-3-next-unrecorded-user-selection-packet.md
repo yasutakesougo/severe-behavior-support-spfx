@@ -130,10 +130,13 @@ UX-P1-3 residual classification overall: NOT CLOSED
 
 ```text
 This packet is CONSUMED by the selection record.
-Do not auto-select A / C / D / E.
+Do not auto-select A / C / D / E from this B packet.
 Do not start Unit 7.
 Do not enable LIVE WRITE.
 Implementation Start is recorded separately.
 Successor closeout is recorded in field-staff-next-unrecorded-user-1.md.
 Do not mark UX-P1-3 residual CLOSED.
+Remaining-gap A is a later ballot:
+  decision-field-staff-ux-p1-2-completion-on-cards-selection-packet.md
+This B packet does not authorize that Start.
 ```
