@@ -18,7 +18,8 @@
 ## Evidence
 - a11y gate: PASS（既存 A11Y-HD-07 / A11Y-SP-01）
 - smoke: PASS（DEMO-UX SupportPlan hooks）
-- semantic tests: PASS
+- semantic tests: PASS（既存 presentation fixtures）
+- lint:ui-sem: PASS
 
 ## Findings
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |

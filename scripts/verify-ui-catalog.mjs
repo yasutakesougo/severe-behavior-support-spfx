@@ -45,6 +45,7 @@ const requiredPhrases = [
   "save_failed",
   "save_outcome_unknown",
   "CurrentProcedure",
+  "lint:ui-sem",
 ];
 
 const failures = [];

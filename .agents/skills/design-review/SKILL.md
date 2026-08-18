@@ -38,7 +38,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 5. save 5-state 語彙外の発明がないか確認する
 6. CurrentProcedure と historical procedure の表示混同がないか確認する
 7. 既存 Catalog / primitives の forbidden substitution がないか確認する
-8. a11y 意味チャネル（label、live region）と smoke hook の退行を確認する
+8. a11y 意味チャネル（label、live region）、smoke hook、`lint:ui-sem`（UI-SEM-01..05）の退行を確認する
 9. Findings を P0 / P1 / P2 で整理し判定する
 
 ## 確認項目
@@ -47,7 +47,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - `EmptyNotice` を failure / access_denied に流用していないか
 - `save_failed` と `save_outcome_unknown` を同一表示に丸めていないか
 - 現場職員と計画担当者の入口を navigation だけで暗黙にしていないか
-- 新 hex / ad-hoc rem を DADS-04 抜きで増やしていないか
+- 新 hex / ad-hoc rem を DADS-04 抜きで増やしていないか（`npm run lint:ui-sem`）
 - Storybook / Figma をレビュー正本にしていないか
 - Catalog 未掲載を FAIL 理由にしていないか（GAP は P2 または HOLD）
 
@@ -70,7 +70,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 
 - UI 差分要約
 - Catalog / primitives 適合判定
-- semantic / a11y / smoke 証跡
+- semantic / a11y / smoke / lint:ui-sem 証跡
 - Findings（P0 / P1 / P2）
 - 次アクション
 
@@ -109,6 +109,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - a11y gate:
 - smoke:
 - semantic tests:
+- lint:ui-sem:
 
 ## Findings
 | ID | 重大度 | 状態 | 内容 | 根拠 | 対応 |
