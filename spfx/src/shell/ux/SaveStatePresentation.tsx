@@ -12,6 +12,8 @@ import styles from "./ShellUx.module.scss";
 
 export type SaveStatePresentationProps = Readonly<{
   state: ShellSaveState;
+  /** Optional presentation override. Does not change 5-state meaning. */
+  description?: string;
 }>;
 
 /**
@@ -19,9 +21,13 @@ export type SaveStatePresentationProps = Readonly<{
  * DEMO-UX-12: QUIET vs EMPHASIZED hierarchy — no save-outcome judgment or live I/O.
  * DEMO-UX-14: saving-only progress cue + aria-busy (presentation-only).
  */
-export const SaveStatePresentation: React.FC<SaveStatePresentationProps> = ({ state }) => {
+export const SaveStatePresentation: React.FC<SaveStatePresentationProps> = ({
+  state,
+  description,
+}) => {
   const emphasis = emphasisForShellSaveState(state);
   const showDescription = isSaveStateDescriptionVisible(state);
+  const descriptionText = description ?? descriptionForShellSaveState(state);
   const progressActive = isSavingProgressActive(state);
   const presentationClass =
     emphasis === "emphasized"
@@ -54,7 +60,7 @@ export const SaveStatePresentation: React.FC<SaveStatePresentationProps> = ({ st
       ) : null}
       {showDescription ? (
         <p className={styles.saveStateDescription} data-shell-ux="save-state-description">
-          {descriptionForShellSaveState(state)}
+          {descriptionText}
         </p>
       ) : null}
     </div>

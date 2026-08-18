@@ -143,6 +143,18 @@ export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
 export {
+  DemoPresentationRoleEntry,
+  type DemoPresentationRoleEntryProps,
+} from "./DemoPresentationRoleEntry";
+export {
+  ADMIN_DEMO_UX_POLISH_1_SLICE,
+  DEMO_LIVE_WRITE_HOLD_SAVE_NOTE,
+  DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE,
+  demoHoldCopyAvoidsSuccessClaim,
+  demoHoldSaveStatusNote,
+} from "./demo-save-hold-copy";
+export { shouldClearNextVersionConceptHighlight } from "./next-version-highlight";
+export {
   destinationCopyIsFailClosed,
   headingForShellDestination,
   isShellPrimaryNavigationId,
@@ -186,6 +198,8 @@ export {
   overviewSectionOrderForRole,
   parseShellPresentationRole,
   SHELL_DEFAULT_PRESENTATION_ROLE,
+  SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS,
+  SHELL_PRESENTATION_ROLE_ENTRY_LABELS,
   SHELL_PRESENTATION_ROLE_HINTS,
   SHELL_PRESENTATION_ROLES,
   supportPlanBlockOrderForRole,

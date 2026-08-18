@@ -52,6 +52,22 @@ export function isUnrecordedUserRow(row: UserListRow): boolean {
 }
 
 /**
+ * First unrecorded fixture row in the supplied visible order.
+ * Used on first list entry (no cursor). Does not re-sort, wrap, or mutate badges.
+ */
+export function selectFirstUnrecordedUser(
+  visibleRows: readonly UserListRow[],
+): NextUnrecordedUser | undefined {
+  for (const candidate of visibleRows) {
+    if (!isUnrecordedUserRow(candidate)) {
+      continue;
+    }
+    return { userId: candidate.id, personLabel: candidate.personLabel };
+  }
+  return undefined;
+}
+
+/**
  * First unrecorded fixture row AFTER the cursor in the supplied visible order.
  * Unknown / missing cursor fails closed. No wrap. Does not re-sort or mutate badges.
  */
@@ -96,10 +112,12 @@ export function presentNextUnrecordedUserCta(input: {
   visibleRows: readonly UserListRow[];
   detailEnabledUserIds: readonly string[];
 }): NextUnrecordedUserCtaPresentation | Readonly<{ visible: false }> {
-  if (!input.authorized || !input.currentUserId) {
+  if (!input.authorized) {
     return { visible: false };
   }
-  const next = selectNextUnrecordedUser(input.visibleRows, input.currentUserId);
+  const next = input.currentUserId
+    ? selectNextUnrecordedUser(input.visibleRows, input.currentUserId)
+    : selectFirstUnrecordedUser(input.visibleRows);
   if (!next) {
     return {
       visible: true,

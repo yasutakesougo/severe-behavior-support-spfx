@@ -57,8 +57,11 @@ import {
 } from "../users";
 import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
+import { DemoPresentationRoleEntry } from "./DemoPresentationRoleEntry";
+import { ADMIN_DEMO_UX_POLISH_1_SLICE, demoHoldSaveStatusNote } from "./demo-save-hold-copy";
 import { DestinationPlaceholder } from "./DestinationPlaceholder";
 import { SHELL_DEFAULT_DESTINATION } from "./destination";
+import { shouldClearNextVersionConceptHighlight } from "./next-version-highlight";
 import { PartialRetrievalPanel } from "./PartialRetrievalPanel";
 import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
@@ -149,6 +152,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     children,
   } = props;
 
+  const [activePresentationRole, setActivePresentationRole] =
+    React.useState<ShellPresentationRole>(presentationRole);
+
   const [selection, setSelection] = React.useState<ShellSiteSelection>(siteSelection);
   const [destination, setDestination] = React.useState<ShellPrimaryNavigationId>(
     selectedDestinationProp ?? SHELL_DEFAULT_DESTINATION,
@@ -213,6 +219,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   React.useEffect(() => {
+    setActivePresentationRole(presentationRole);
+  }, [presentationRole]);
+
+  React.useEffect(() => {
     setSelection(siteSelection);
     setSessionSaveStateByUserId({});
     setSessionDraftByUserId(discardAllUserSessionDrafts());
@@ -260,13 +270,21 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
           discardUsersListRestoreState();
         }
       }
+      if (
+        nextVersionConceptFromReview &&
+        shouldClearNextVersionConceptHighlight({
+          destination,
+          freshSupportPlanEntry: false,
+        })
+      ) {
+        setNextVersionConceptFromReview(false);
+      }
     }
     if (destination !== "overview" && reviewDuePreviewOpen && !reviewFromSupportPlan) {
       setReviewDuePreviewOpen(false);
     }
     if (destination !== "users" && reviewFromSupportPlan) {
       setReviewFromSupportPlan(false);
-      setNextVersionConceptFromReview(false);
       if (reviewDuePreviewOpen) {
         setReviewDuePreviewOpen(false);
       }
@@ -286,6 +304,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     usersFilterChip,
     usersFocusOriginUserId,
     restoreUsersList,
+    nextVersionConceptFromReview,
   ]);
 
   React.useEffect(() => {
@@ -355,6 +374,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         setProcedureFlowSaveState(undefined);
         setReviewDuePreviewOpen(false);
         setReviewFromSupportPlan(false);
+        setNextVersionConceptFromReview(false);
         setSelectedUserDetailId(undefined);
         requestUsersListRestore();
         return;
@@ -375,6 +395,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSelectedUserDetailId(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
+    setNextVersionConceptFromReview(false);
     setDestination(next);
     if (onSelectedDestinationChange) {
       onSelectedDestinationChange(next);
@@ -477,6 +498,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
+    if (
+      shouldClearNextVersionConceptHighlight({
+        destination: "users",
+        freshSupportPlanEntry: true,
+      })
+    ) {
+      setNextVersionConceptFromReview(false);
+    }
     setSupportPlanPreviewOpen(true);
   };
 
@@ -707,9 +736,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
       data-review-new-version-from-review={nextVersionConceptFromReview ? "true" : "false"}
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
+      data-admin-demo-ux-polish-1-slice={ADMIN_DEMO_UX_POLISH_1_SLICE.id}
       data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
       data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
-      data-shell-ux-presentation-role={presentationRole}
+      data-shell-ux-presentation-role={activePresentationRole}
       data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
       data-demo-ux-7-today-nav="true"
       data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
@@ -724,7 +754,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       <header className={styles.shellHeader} role="banner">
         <div className={styles.brandRow}>
           <p className={styles.productName}>強度行動障害支援（シェル表示）</p>
-          {!unauthenticated ? <SaveStatePresentation state={effectiveSaveState} /> : null}
+          {!unauthenticated ? (
+            <SaveStatePresentation
+              state={effectiveSaveState}
+              description={demoHoldSaveStatusNote(effectiveSaveState, demoMode)}
+            />
+          ) : null}
         </div>
         {!unauthenticated ? (
           <>
@@ -732,6 +767,17 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               selection={selection}
               options={siteOptions}
               onSelectionChange={handleSelectionChange}
+            />
+            <DemoPresentationRoleEntry
+              visible={demoMode}
+              role={activePresentationRole}
+              onRoleChange={(next) => {
+                if (interactionPaused) {
+                  return;
+                }
+                setActivePresentationRole(next);
+                setNextVersionConceptFromReview(false);
+              }}
             />
             {selectedSite ? (
               <CurrentSiteLabel site={selectedSite} />
@@ -836,7 +882,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     headingRef={destinationHeadingRef}
                     onBackToOverview={handleBackToOverview}
                     procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
-                    presentationRole={presentationRole}
+                    presentationRole={activePresentationRole}
                   />
                 ) : (
                   <OverviewDashboard
@@ -846,7 +892,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     selectedOccurrenceId={selectedOccurrenceId}
                     onReviewDueStateRequest={handleReviewDueStateRequest}
                     onTodayActionNavigate={handleTodayActionNavigate}
-                    presentationRole={presentationRole}
+                    presentationRole={activePresentationRole}
                     onSelectOccurrence={(occId) => {
                       const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
                       if (!item) {
@@ -870,7 +916,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       onBackToOverview={handleBackToSupportPlanFromReview}
                       onNextVersionConceptRequest={handleNextVersionConceptFromReview}
                       procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
-                      presentationRole={presentationRole}
+                      presentationRole={activePresentationRole}
                     />
                   ) : supportPlanPreviewOpen &&
                     supportPlanPresentation.userId === selectedUserDetail.userId ? (
@@ -880,7 +926,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       onBackToUserDetail={handleBackToUserDetail}
                       onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
                       nextVersionConceptHighlighted={nextVersionConceptFromReview}
-                      presentationRole={presentationRole}
+                      presentationRole={activePresentationRole}
                     />
                   ) : procedureRecordFormOpen &&
                     selectedCurrentProcedure &&
@@ -926,7 +972,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     <UserDetail
                       presentation={selectedUserDetail}
                       headingRef={destinationHeadingRef}
-                      presentationRole={presentationRole}
+                      presentationRole={activePresentationRole}
                       onBackToUsers={handleBackToUsers}
                       onSupportPlanRequest={
                         selectedUserDetail.userId === supportPlanPresentation.userId

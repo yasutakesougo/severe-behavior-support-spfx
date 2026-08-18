@@ -4,6 +4,7 @@ import {
   DEMO_USERS_FILTER_HINT_CONSOLIDATED,
   DEMO_UX_11_SLICE,
 } from "../ux/demo-note-consolidation";
+import { DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE } from "../ux/demo-save-hold-copy";
 import { DEMO_KPI_FAMILY_R_USERS_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import { DEMO_UX_13_SLICE, isSyntheticDetailPreviewEnabled } from "./detail-preview";
 import {
@@ -271,6 +272,9 @@ export const UsersList: React.FC<UsersListProps> = ({
 
       <p className={styles.sectionHint} data-demo-ux="users-detail-note">
         {detailPreviewNote}
+      </p>
+      <p className={styles.sectionHint} data-field-staff="demo-hold-unrecorded-note">
+        {DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE}
       </p>
 
       {nextUnrecordedCta.visible ? (
