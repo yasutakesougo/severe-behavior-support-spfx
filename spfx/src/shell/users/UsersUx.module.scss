@@ -296,3 +296,37 @@
     justify-self: start;
   }
 }
+
+// FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 5: tablet density only.
+// Keeps the 768px single-column stack and 44px targets. Desktop 3-col is unchanged.
+.usersListCompact {
+  @media (max-width: 768px) {
+    gap: sbs.$space-3;
+    padding: sbs.$space-3;
+
+    .userRow {
+      padding: sbs.$space-2 0;
+      gap: sbs.$space-1 sbs.$space-2;
+    }
+
+    .userMain {
+      gap: sbs.$space-1;
+    }
+
+    .personRow,
+    .badgeList {
+      gap: sbs.$space-1;
+    }
+
+    .planSummary,
+    .attentionNote {
+      font-size: sbs.$font-size-meta;
+      line-height: sbs.$line-height-meta;
+    }
+
+    .filterButton,
+    .detailButton {
+      min-height: 2.75rem; /* ~44px touch target — do not shrink with density */
+    }
+  }
+}
