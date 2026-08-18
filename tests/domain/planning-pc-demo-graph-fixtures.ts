@@ -31,7 +31,11 @@ const DEMO_SCOPE = {
   UserId: PLANNING_PC_DEMO_USER_ID,
 } as const;
 
-export function createPlanningPcDemoActivePlan(overrides?: Partial<SupportPlan>): SupportPlan {
+type PlanningPcDemoActivePlan = Extract<SupportPlan, { status: "Active" }>;
+
+export function createPlanningPcDemoActivePlan(
+  overrides?: Partial<PlanningPcDemoActivePlan>,
+): SupportPlan {
   return createSyntheticActivePlan({
     ...DEMO_SCOPE,
     PlanId: PLANNING_PC_DEMO_PLAN_ID,
