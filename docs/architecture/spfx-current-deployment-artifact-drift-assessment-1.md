@@ -13,6 +13,12 @@ assessment を再実行しない。
 は fixture-only Deploy Decision closeout 正本である。Option A KEEP CURRENT DEPLOYMENT
 は LOCKED のまま。本記録はそれを Option B に転換しない。
 
+後続の alignment decision 記録（この closeout を書き換えない）:
+[`spfx-current-deployment-alignment-decision-1.md`](./spfx-current-deployment-alignment-decision-1.md)
+（basis `cf0d45d…` / OPTION B ADOPT）。
+本 assessment snapshot は DRIFT_CONFIRMED のまま。
+next-gate 文言は本記録時点の snapshot である。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-CURRENT-DEPLOYMENT-ARTIFACT-DRIFT-ASSESSMENT-1
