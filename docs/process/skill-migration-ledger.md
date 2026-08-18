@@ -25,7 +25,7 @@
 | 旧パス | 対応する正式 Skill 名（予定） | 移行判断 | 根拠 | 備考 |
 |---|---|---|---|---|
 | `skills/requirements-review/` | `requirements-review` | **移行済み** | 実行正本は `.agents/skills/requirements-review/SKILL.md` | 旧パスは参照比較用に残置可。実行してはならない |
-| `skills/design-review/` | `architecture-review`（関連） | **参照専用** | `.agents/skills/architecture-review/` を正式導入。旧名は採用しない | 実行正本にしない |
+| `skills/design-review/` | `architecture-review`（関連） | **参照専用** | `.agents/skills/architecture-review/` を正式導入。旧名は採用しない。Product UI Contract 用の新設 Skill は `.agents/skills/design-review/`（別物） | 実行正本にしない |
 
 ## 対象なし / 新規作成禁止
 

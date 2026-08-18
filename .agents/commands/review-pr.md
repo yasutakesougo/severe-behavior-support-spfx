@@ -14,9 +14,10 @@ PR レビューを開始する。Review Agent を起動し、必要に応じて 
 
 1. Review Agent（`.agents/agents/review.md`）を参照する
 2. 導入済みの `implementation-review`、実装後なら `contracts-review` / `test-review` を用いる
-3. 強度行動障害支援サイクルの実操作レビューが必要な場合は、必須観点ではなく `severe-behavior-cycle-review` を直接実行する
-4. レビューコメント案・Review PASS 記録案をローカル出力する
-5. マージ可否の監査が必要なら Audit Agent（`merge-audit`）へ引き渡す
+3. UI / presentation 差分がある場合は `design-review` を追加する（非 UI は `NOT APPLICABLE`）
+4. 強度行動障害支援サイクルの実操作レビューが必要な場合は、必須観点ではなく `severe-behavior-cycle-review` を直接実行する
+5. レビューコメント案・Review PASS 記録案をローカル出力する
+6. マージ可否の監査が必要なら Audit Agent（`merge-audit`）へ引き渡す
 
 ## 起動 Agent
 
@@ -32,7 +33,8 @@ PR レビューを開始する。Review Agent を起動し、必要に応じて 
 1. Review Agent 定義を読む
 2. `implementation-review` を直接実行する（着手判定）
 3. 実装後なら `contracts-review` / `test-review` を直接実行する
-4. マージ監査が必要なら `merge-audit` を直接実行する（Audit Agent）
+4. UI 差分があれば `design-review` を直接実行する。なければ `NOT APPLICABLE`
+5. マージ監査が必要なら `merge-audit` を直接実行する（Audit Agent）
 
 ## 完了条件（本 Command）
 

@@ -15,6 +15,7 @@ Domain / DTO / Schema / SharePoint 設計の整合、Architecture Gate に向け
 
 - Domain が SharePoint 実装に依存していないことを確認する
 - Contracts / Schema / SharePoint 対応の境界を維持する
+- UI slice では `design-context` で domain semantics と visual intent を照合する（Figma コード化はしない）
 - 主要判断を DEC / ADR へ記録する準備をする
 - Architecture Gate（`docs/process/gate-definitions.md`）の通過条件を確認する
 - 未導入 Skill が必要な場合は「後続 / HOLD」と明示する
@@ -27,6 +28,7 @@ Domain / DTO / Schema / SharePoint 設計の整合、Architecture Gate に向け
 | `sharepoint-design` | 導入済み | Lists / 権限 / 接続の設計（実変更なし） |
 | `schema-design` | 導入済み | JSON Schema / DTO / 列挙値 |
 | `architecture-review` | 導入済み | Domain / Contracts / SharePoint / UI / ADR 整合 |
+| `design-context` | 導入済み | UI slice の domain semantics と visual intent 照合。Figma コード化はしない |
 | `adr-builder` | 後続（未カタログ） | ADR 草案。導入前は HOLD |
 
 導入済み Skill で設計確認まで進められる。`adr-builder` 未導入時は既存 `docs/decisions/` への手動記録を前提とし、完了を求められた場合のみ HOLD。
@@ -74,4 +76,5 @@ Domain / DTO / Schema / SharePoint 設計の整合、Architecture Gate に向け
 | Skill | `.agents/skills/sharepoint-design/SKILL.md` |
 | Skill | `.agents/skills/schema-design/SKILL.md` |
 | Skill | `.agents/skills/architecture-review/SKILL.md` |
+| Skill | `.agents/skills/design-context/SKILL.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |
