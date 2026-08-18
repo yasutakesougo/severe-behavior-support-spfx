@@ -1,15 +1,17 @@
-# SECURITY-DEEP-SCAN-CURRENT-SHA-1
+# SECURITY-DEEP-SCAN-CURRENT-SHA-2
 
-この文書は **SECURITY-DEEP-SCAN-CURRENT-SHA-1** の closeout 正本である
-（scan-target `93305a44…` **HISTORICAL**）。
-現行 main の Deep Scan closeout 正本は
-[`security-deep-scan-current-sha-2.md`](./security-deep-scan-current-sha-2.md) である。
+この文書は **SECURITY-DEEP-SCAN-CURRENT-SHA-1** ゲートの closeout 正本である（現行 main）。
 判定材料は、同一スキャン対象 SHA 上で完了した repository-wide Deep Scan である。
 本記録はスキャンを再実行しない。candidate を verified に変換しない。
 
+[`security-deep-scan-current-sha-1.md`](./security-deep-scan-current-sha-1.md)
+は scan-target `93305a44…` の **HISTORICAL** closeout である。現行 main の
+Deep Scan authority ではない。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
-Closeout ID: SECURITY-DEEP-SCAN-CURRENT-SHA-1
+Closeout ID: SECURITY-DEEP-SCAN-CURRENT-SHA-2
+Gate identity: SECURITY-DEEP-SCAN-CURRENT-SHA-1
 Kind: Closeout / evidence recording（docs-only）
 Status: RECORDED
 Decision: COMPLETE / NO VERIFIED BLOCKERS
@@ -23,42 +25,40 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 Record both identities distinctly. Do not collapse them.
 
 ```text
-Repository current main:
-  42578a2f1b28c0da280bf21e4bb3907b458525c0
-  Merge pull request #400 from yasutakesougo/docs/security-release-readiness-closeout-1
+Repository current main / Deep Scan code basis:
+  8a5056c5a93fc6d3de1989d3160c9e3cf9d8aacb
+  Merge pull request #432 from yasutakesougo/docs/security-release-readiness-closeout-2
 
-Security scan target / Deep Scan code basis:
-  93305a44b49474d2f6ae30c7b727889c481b1e59
-  Merge pull request #399 from yasutakesougo/feat/vp-g-presentation-role-entry
+Application tree (identical to):
+  16a66488b18073eac3ef6af3a4b1114e147d64e6
+  d8cbd0e4e7fa9eaf585ca7acef5b1f8f504829c3
+PR #432 delta:
+  docs-only RELEASE-READINESS CLOSEOUT-2
 ```
-
-`42578a2f…` differs from `93305a44…` through **PR #400**, which is
-docs-only Release-Readiness Closeout
-（[`security-release-readiness-closeout-1.md`](./security-release-readiness-closeout-1.md)）。
-The application / code tree between those commits is unchanged.
 
 ```text
 Deep Scan result authority:
-  application/code tree at 93305a44b49474d2f6ae30c7b727889c481b1e59
+  repository tree at 8a5056c5a93fc6d3de1989d3160c9e3cf9d8aacb
 Do NOT claim:
-  "42578a2f was Deep Scanned"
-Do NOT relabel the Deep Scan basis as 42578a2f.
+  "93305a44 Deep Scan covers 8a5056c"
+Do NOT relabel the scan basis as a later unscoped SHA.
 ```
 
-`93305a44…` is an ancestor of `42578a2f…`.
-The sole path difference is the PR #400 markdown closeout.
+U2 from RELEASE-READINESS CLOSEOUT-2（exact-SHA Deep Scan **NOT EXECUTED**
+on this application tree）is superseded by this record for scan-target
+`8a5056c…`. That supersession does not authorize package, Binding,
+LIVE WRITE, or Deploy.
 
 ## 2. Scope
 
 ```text
 Kind: repository-wide Deep Scan of the scan-target SHA
 Mode: read-only
-Mixed into PR #400: NO
-Rerun during this closeout: NO
 Fixes during scan or closeout: NONE
 Issues opened: NONE
 SharePoint / Graph / M365 / Entra / App Catalog mutation: NONE
 Production mutation: NONE
+Rerun during this closeout: NO
 ```
 
 Untracked local drafts, generated smoke CSS, and `workbench.sqlite3`
@@ -69,6 +69,8 @@ are out of scan authority and out of this closeout.
 ```text
 SECURITY-DEEP-SCAN-CURRENT-SHA-1:
 COMPLETE / NO VERIFIED BLOCKERS
+Scan target:
+8a5056c5a93fc6d3de1989d3160c9e3cf9d8aacb
 Verified Critical / High:
 0
 Verified default-runtime write:
@@ -95,6 +97,8 @@ Production mutation:
 NONE
 LIVE WRITE:
 HOLD
+Production Binding:
+NOT AUTHORIZED
 Deploy:
 HOLD
 ```
@@ -102,6 +106,17 @@ HOLD
 Verified requires all of: reachable, attacker / cross-boundary input,
 invariant breach, and source→sink evidence.
 No finding met those criteria on the default runtime of the scan-target SHA.
+
+Default runtime:
+
+```text
+ScaffoldShellWebPart = fixture-only host
+ProcedureRecordForm persistPort = LIVE WRITE HOLD
+→ lookup EMPTY + create DEFINITE_FAILURE → save_failed
+ProcedureRecord POST requires Human GO packet
+  expectedMainSha == runner-confirmed main SHA
+Consumed historical LIVE WRITE packets: NOT REUSABLE on 8a5056c
+```
 
 ## 4. Candidate handling
 
@@ -132,6 +147,8 @@ Surface: SPFx toolchain dependency advisories
   webpack-dev-server
   qs
   uuid
+  express
+  sockjs
   via SPFx / Heft dependency tree
 Production web part runtime reachable:
   NO
@@ -155,16 +172,17 @@ U1:
     production binding has not occurred.
   Contract-level isolation evidence is not live-tenant PASS.
 
+U2:
+  Exact-SHA Deep Security Scan
+  Status: EXECUTED for 8a5056c5a93fc6d3de1989d3160c9e3cf9d8aacb
+  This closeout records that execution. It does not convert U1 / U3 to PASS.
+
 U3:
   Current-basis .sppkg hash
   Status: UNVERIFIED / NOT AVAILABLE
   Reason: current release artifact has not been built.
   This closeout does not build it.
 ```
-
-U2 from Release-Readiness Closeout（exact-SHA Deep Scan **NOT EXECUTED**）
-is superseded by this record for scan-target `93305a44…`.
-That supersession does not authorize package, Binding, LIVE WRITE, or Deploy.
 
 ## 6. Prior SR-P3
 
@@ -173,7 +191,7 @@ Deep Scan does not automatically close these. Do not repair in this closeout.
 | ID | Content | Disposition |
 |---|---|---|
 | SR-P3-1 | `.gitignore` credential-pattern hardening | CARRY / NON-BLOCKING |
-| SR-P3-2 | package-solution metadata scaffold / toolchain copy | CARRY / NON-BLOCKING |
+| SR-P3-2 | package-solution feature title remains scaffold-oriented | CARRY / NON-BLOCKING |
 
 ## 7. Release interpretation
 
@@ -191,43 +209,31 @@ No verified security blocker
 
 Current release gaps still include:
 
-- SPFx release configuration decision outstanding
-- no current-basis artifact
+- no current-basis `.sppkg` for `8a5056c…`
 - reproducibility not evaluated
 - Production Binding not authorized
+- remaining SPFx config Human review items recorded in CLOSEOUT-2 RG3
+  (`isDomainIsolated=false`, `skipFeatureDeployment=true`)
 
-Building `.sppkg` before release configuration is frozen risks producing
-another artifact that is immediately obsolete.
-
-Recommended order after this closeout:
-
-```text
-Deep Scan SSOT
-→ SPFx Release Config Decision
-→ Release Artifact Authority
-→ Artifact reproducibility
-→ Production Binding Decision
-→ Deploy gate
-```
+Building `.sppkg` from this closeout is not authorized.
 
 ## 9. Next gate
 
 ```text
-Next gate identity: SPFX-RELEASE-CONFIG-DECISION-1
+Next gate identity: SPFX-RELEASE-ARTIFACT-AUTHORITY-1
 Status at this recording: NOT STARTED
 Human GO: REQUIRED
 This closeout does not start that gate.
+Package build: not authorized by this closeout
+Production Binding: not authorized by this closeout
 ```
 
 Reason:
 
-- security evidence has no verified blockers
-- Release Readiness still records SPFx release configuration as
-  DECISION REQUIRED
-- package-solution metadata, solution identity, `isDomainIsolated`,
-  `skipFeatureDeployment`, and release-facing description / metadata
-  must be explicitly reviewed before creating the authoritative
-  release artifact
+- security evidence has no verified blockers on `8a5056c…`
+- current-basis production artifact is still NOT BUILT
+- artifact authority is a separate Human gate
+- no production mutation is required to wait for that gate
 
 ## 10. STOP
 
@@ -242,7 +248,7 @@ Do not modify source or package metadata.
 Do not repair SR-P3.
 Do not build .sppkg.
 Do not calculate a release artifact hash.
-Do not begin SPFX-RELEASE-CONFIG-DECISION-1 from this document.
+Do not begin SPFX-RELEASE-ARTIFACT-AUTHORITY-1 from this document.
 Do not Production Bind.
 Do not enable LIVE WRITE.
 Do not Deploy.
