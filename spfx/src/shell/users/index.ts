@@ -12,6 +12,8 @@ export {
   DEMO_USERS_FILTER_EMPTY_NOTE,
   DEMO_USERS_FILTER_NOTE,
   DEMO_USERS_PRESENTATION_NOTE,
+  formatUsersDetailPreviewNote,
+  personLabelsForDetailPreview,
   usersCopyIsFailClosed,
 } from "./users-copy";
 export {

@@ -1,7 +1,10 @@
 import {
+  DEMO_USERS_DETAIL_DISABLED_NOTE,
   DEMO_USERS_FILTER_EMPTY_NOTE,
   DEMO_USERS_FILTER_NOTE,
   DEMO_USERS_PRESENTATION_NOTE,
+  formatUsersDetailPreviewNote,
+  personLabelsForDetailPreview,
   usersCopyIsFailClosed,
 } from "./users-copy";
 import { DEMO_UX_SLICE, DEMO_UX_USERS_FIXTURE, VISUAL_POLISH_3_USERS_SLICE } from "./users-fixture";
@@ -155,6 +158,43 @@ describe("DADS-UX-3 users list presentation contracts", () => {
   it("keeps Users fixture status vocabulary for ADAPT presentation (INV-05/12)", () => {
     expect(DEMO_UX_USERS_FIXTURE.rows).toHaveLength(8);
     expect(formatUsersFilterSummaryLabel(8, USERS_FILTER_CHIP_ALL, 8)).toBe("全8名（合成データ）");
+  });
+});
+
+describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 1 users detail copy", () => {
+  it("formats generic copy when no preview labels are supplied", () => {
+    const note = formatUsersDetailPreviewNote([]);
+    expect(note).toBe(DEMO_USERS_DETAIL_DISABLED_NOTE);
+    expect(note).toContain("合成詳細プレビューがある利用者のみ");
+    expect(note).toContain("業務データの詳細画面には接続されていません");
+    expect(note).not.toContain("Aさん");
+    expect(note).not.toContain("Cさん");
+    expect(note).not.toContain("全8名");
+  });
+
+  it("formats one and many labels without implying a full-roster detail path", () => {
+    expect(formatUsersDetailPreviewNote(["Xさん"])).toBe(
+      "合成詳細プレビューがある利用者のみ一覧から表示できます（現在は Xさん）。業務データの詳細画面には接続されていません。",
+    );
+    expect(formatUsersDetailPreviewNote(["Xさん", "Yさん"])).toContain("現在は Xさん・Yさん");
+    expect(formatUsersDetailPreviewNote(["Xさん", "Yさん"])).not.toContain("全8名");
+  });
+
+  it("does not infer A/C when preview ids are missing or unknown", () => {
+    expect(personLabelsForDetailPreview(DEMO_UX_USERS_FIXTURE.rows, undefined)).toEqual([]);
+    expect(personLabelsForDetailPreview(DEMO_UX_USERS_FIXTURE.rows, [])).toEqual([]);
+    expect(personLabelsForDetailPreview(DEMO_UX_USERS_FIXTURE.rows, ["user-missing"])).toEqual([]);
+    expect(
+      formatUsersDetailPreviewNote(
+        personLabelsForDetailPreview(DEMO_UX_USERS_FIXTURE.rows, undefined),
+      ),
+    ).not.toContain("Aさん");
+  });
+
+  it("resolves current 8-row fixture preview ids in collect order", () => {
+    const labels = personLabelsForDetailPreview(DEMO_UX_USERS_FIXTURE.rows, ["user-a", "user-c"]);
+    expect(labels).toEqual(["Aさん", "Cさん"]);
+    expect(formatUsersDetailPreviewNote(labels)).toContain("現在は Aさん・Cさん");
   });
 });
 

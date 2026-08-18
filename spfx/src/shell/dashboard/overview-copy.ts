@@ -21,6 +21,29 @@ export const DASHBOARD_OVERVIEW_ACTION_NAV_NOTE =
 export const DASHBOARD_OVERVIEW_KPI_NOTE =
   "件数は合成データです。絞り込み遷移は接続されていません。";
 
+const TODAY_SUPPORT_BOARD_DISCLAIMER_GENERIC =
+  "この「今日の支援」は合成の日次ボードです。利用者一覧の対象者集合とは別です。業務データには接続されていません。";
+
+/**
+ * POLISH-1 Unit 1: Overview day-board is a separate synthetic context from Users roster.
+ * Person labels come from runtime items (first-seen order). Do not hardcode Aさん.
+ */
+export function formatTodaySupportBoardDisclaimer(personLabels: readonly string[]): string {
+  const unique: string[] = [];
+  for (const label of personLabels) {
+    if (label.length === 0) {
+      continue;
+    }
+    if (unique.indexOf(label) < 0) {
+      unique.push(label);
+    }
+  }
+  if (unique.length === 0) {
+    return TODAY_SUPPORT_BOARD_DISCLAIMER_GENERIC;
+  }
+  return `この「今日の支援」は合成の日次ボードです（表示中の予定は ${unique.join("・")}）。利用者一覧の対象者集合とは別です。業務データには接続されていません。`;
+}
+
 /** Fail-closed copy must not claim usable business UI or live connection. */
 export function overviewCopyIsFailClosed(text: string): boolean {
   const lowered = text.toLowerCase();

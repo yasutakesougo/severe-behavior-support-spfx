@@ -6,7 +6,11 @@ import {
 } from "../ux/demo-note-consolidation";
 import { DEMO_KPI_FAMILY_R_USERS_NOTE, DEMO_UX_10_SLICE } from "../ux/kpi-review-count";
 import { DEMO_UX_13_SLICE, isSyntheticDetailPreviewEnabled } from "./detail-preview";
-import { DEMO_USERS_DETAIL_DISABLED_NOTE, DEMO_USERS_FILTER_EMPTY_NOTE } from "./users-copy";
+import {
+  DEMO_USERS_FILTER_EMPTY_NOTE,
+  formatUsersDetailPreviewNote,
+  personLabelsForDetailPreview,
+} from "./users-copy";
 import {
   DEMO_UX_8_SLICE,
   USERS_FILTER_CHIP_ALL,
@@ -44,6 +48,9 @@ export const UsersList: React.FC<UsersListProps> = ({
   const visibleRows = filterUserRowsByStatusChip(rows, activeChip);
   const summaryLabel = formatUsersFilterSummaryLabel(visibleRows.length, activeChip, rows.length);
   const showEmptyNote = visibleRows.length === 0;
+  const detailPreviewNote = formatUsersDetailPreviewNote(
+    personLabelsForDetailPreview(rows, detailPreviewUserIds),
+  );
 
   return (
     <section
@@ -116,7 +123,7 @@ export const UsersList: React.FC<UsersListProps> = ({
       </div>
 
       <p className={styles.sectionHint} data-demo-ux="users-detail-note">
-        {DEMO_USERS_DETAIL_DISABLED_NOTE}
+        {detailPreviewNote}
       </p>
 
       {showEmptyNote ? (

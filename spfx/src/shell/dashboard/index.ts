@@ -5,6 +5,7 @@ export {
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   DASHBOARD_OVERVIEW_KPI_NOTE,
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
+  formatTodaySupportBoardDisclaimer,
   overviewCopyIsFailClosed,
 } from "./overview-copy";
 export {
