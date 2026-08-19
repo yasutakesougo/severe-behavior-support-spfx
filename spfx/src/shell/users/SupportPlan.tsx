@@ -89,7 +89,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const currentVersionEntry = versions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
   const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
-  const [activePlannerSectionId, setActivePlannerSectionId] = React.useState(
+  const [activePlannerSectionId, setActivePlannerSectionId] = React.useState<string>(
     PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION[0].id,
   );
   const focusPlannerSection = (sectionId: string): void => {
