@@ -20,6 +20,7 @@ import {
 import {
   buildFamilyPCountLabels,
   buildFamilyPCounts,
+  selectPlannerListPrimaryActionUserId,
   selectTodayActionRows,
 } from "./support-plan-management-list-kpi";
 import { resolveSupportPlanManagementListNext } from "./support-plan-management-list-nav";
@@ -66,6 +67,14 @@ describe("SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 fixture", () => {
     expect(today.map((row) => row.userId)).toEqual(["user-b", "user-c", "user-d", "user-e"]);
     expect(today.every((row) => row.attentionKind !== "none")).toBe(true);
     expect(SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows[0]?.attentionLabel).toBe("");
+  });
+
+  it("selects one SBS_ACTION.primary from 今日やること without list-row fallback", () => {
+    const rows = SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows;
+    const today = selectTodayActionRows(rows);
+    expect(selectPlannerListPrimaryActionUserId(today)).toBe("user-b");
+    expect(selectPlannerListPrimaryActionUserId([])).toBeUndefined();
+    expect(rows[0]?.actionKind).toBe("detail");
   });
 
   it("keeps 状態 and 要対応 on separate channels", () => {

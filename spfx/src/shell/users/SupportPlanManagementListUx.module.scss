@@ -50,9 +50,10 @@
   line-height: sbs.$line-height-meta;
 }
 
-.kpiGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.kpiStrip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
   gap: sbs.$space-4;
   min-width: 0;
   padding: 0;
@@ -60,35 +61,35 @@
   list-style: none;
 }
 
-.kpiCard {
+.kpiMetric {
   display: flex;
   flex-direction: column;
-  gap: sbs.$space-2;
+  gap: sbs.$space-1;
   min-width: 0;
-  min-height: 4.5rem;
-  padding: sbs.$space-4;
-  border-width: sbs.$border-width-thin;
-  border-style: solid;
-  border-color: sbs.$color-border-subtle;
-  background: sbs.$color-surface;
-  border-radius: sbs.$radius-medium;
-  box-shadow: sbs.$elevation-subtle;
+  padding: 0 sbs.$space-4 0 0;
+  border-right-width: sbs.$border-width-thin;
+  border-right-style: solid;
+  border-right-color: sbs.$color-border-subtle;
   box-sizing: border-box;
-  overflow-wrap: anywhere;
+}
+
+.kpiMetric:last-child {
+  padding-right: 0;
+  border-right: none;
 }
 
 .kpiLabel {
   margin: 0;
   font-size: sbs.$font-size-body;
-  font-weight: sbs.$font-weight-semibold;
+  font-weight: sbs.$font-weight-body;
   line-height: sbs.$line-height-body;
 }
 
 .kpiCount {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
 }
 
 .todayList,
@@ -146,18 +147,23 @@
 
 .meta {
   margin: 0;
-  font-size: sbs.$font-size-body;
-  line-height: sbs.$line-height-body;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .attention {
   margin: 0;
   font-size: sbs.$font-size-body;
-  font-weight: sbs.$font-weight-semibold;
+  font-weight: sbs.$font-weight-body;
   line-height: sbs.$line-height-body;
 }
 
-.actionButton {
+.actionButton,
+.actionButtonPrimary,
+.actionButtonSecondary,
+.actionButtonTertiary {
   min-height: 2.75rem;
   padding: sbs.$space-2 sbs.$space-4;
   border-width: sbs.$border-width-thin;
@@ -167,14 +173,34 @@
   background: sbs.$color-surface;
   color: inherit;
   font-size: sbs.$font-size-body;
-  font-weight: sbs.$font-weight-semibold;
+  font-weight: sbs.$font-weight-body;
   line-height: sbs.$line-height-body;
   white-space: nowrap;
   cursor: pointer;
 }
 
+.actionButtonPrimary {
+  border-width: sbs.$border-width-thick;
+  border-color: sbs.$color-border-strong;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.actionButtonSecondary {
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.actionButtonTertiary {
+  font-weight: sbs.$font-weight-regular;
+}
+
 .actionButton:focus,
 .actionButton:focus-visible,
+.actionButtonPrimary:focus,
+.actionButtonPrimary:focus-visible,
+.actionButtonSecondary:focus,
+.actionButtonSecondary:focus-visible,
+.actionButtonTertiary:focus,
+.actionButtonTertiary:focus-visible,
 .backButton:focus,
 .backButton:focus-visible,
 .createButton:focus,
@@ -184,6 +210,9 @@
 }
 
 .actionButton:hover:not(:disabled),
+.actionButtonPrimary:hover:not(:disabled),
+.actionButtonSecondary:hover:not(:disabled),
+.actionButtonTertiary:hover:not(:disabled),
 .backButton:hover:not(:disabled),
 .createButton:hover:not(:disabled) {
   border-color: sbs.$color-border-strong;
@@ -191,12 +220,18 @@
 }
 
 .actionButton:active:not(:disabled),
+.actionButtonPrimary:active:not(:disabled),
+.actionButtonSecondary:active:not(:disabled),
+.actionButtonTertiary:active:not(:disabled),
 .backButton:active:not(:disabled),
 .createButton:active:not(:disabled) {
   background: sbs.$color-surface-muted;
 }
 
 .actionButton:disabled,
+.actionButtonPrimary:disabled,
+.actionButtonSecondary:disabled,
+.actionButtonTertiary:disabled,
 .backButton:disabled,
 .createButton:disabled {
   color: sbs.$color-text-disabled;
@@ -241,8 +276,23 @@
     padding: sbs.$space-4;
   }
 
-  .kpiGrid {
-    grid-template-columns: 1fr;
+  .kpiStrip {
+    flex-direction: column;
+    gap: sbs.$space-2;
+  }
+
+  .kpiMetric {
+    padding-right: 0;
+    padding-bottom: sbs.$space-2;
+    border-right: none;
+    border-bottom-width: sbs.$border-width-thin;
+    border-bottom-style: solid;
+    border-bottom-color: sbs.$color-border-subtle;
+  }
+
+  .kpiMetric:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
   }
 
   .todayRow,
@@ -251,7 +301,10 @@
     align-items: start;
   }
 
-  .actionButton {
+  .actionButton,
+  .actionButtonPrimary,
+  .actionButtonSecondary,
+  .actionButtonTertiary {
     justify-self: start;
     white-space: normal;
   }
