@@ -17,7 +17,7 @@ GitHub → Origin mirror: NOT AUTHORIZED
 Detach from GitHub: FORBIDDEN
 Ready / Merge: HUMAN-ONLY
 SharePoint / M365 / Entra / Deploy: FORBIDDEN
-Baseline main: 3df1d44760343f4eaed4ad0cdfeff214ae8337eb
+Baseline main: cd123afe8bb5154089994df0003d8fe2c370f1ea
 ```
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない

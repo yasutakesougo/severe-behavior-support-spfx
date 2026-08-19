@@ -12,7 +12,7 @@ Status: REVIEWABLE / READY FOR HUMAN ACCEPTANCE
 Human Decision: NOT YET GRANTED
 Authorization effect: NONE
 Date: 2026-08-18
-Baseline main: 3df1d44760343f4eaed4ad0cdfeff214ae8337eb
+Baseline main: cd123afe8bb5154089994df0003d8fe2c370f1ea
 
 Does NOT authorize:
   Origin enablement / codebase name claim
