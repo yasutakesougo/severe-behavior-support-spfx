@@ -41,6 +41,14 @@ export const SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE =
 
 export const SUPPORT_PLAN_NEXT_VERSION_HEADING = "次の版の考え方";
 
+export const PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION = [
+  { id: "demo-ux-plan-review-heading", label: "見直し状況" },
+  { id: "planning-pc-plan-procedures-heading", label: SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING },
+  { id: "planning-pc-plan-records-heading", label: SUPPORT_PLAN_RECENT_RECORDS_HEADING },
+  { id: "planning-pc-plan-versions-heading", label: SUPPORT_PLAN_VERSIONS_HEADING },
+  { id: "review-new-version-next-heading", label: SUPPORT_PLAN_NEXT_VERSION_HEADING },
+] as const;
+
 export const SUPPORT_PLAN_NEXT_VERSION_NOTE =
   "次回の変更は新しい版を作ります。現行の適用中版は残します。作成・保存は接続されていません。";
 

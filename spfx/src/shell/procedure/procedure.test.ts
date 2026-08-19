@@ -17,8 +17,10 @@ import {
   projectionUsesRecordPlanVersion,
   resolveProcedureReviewProjection,
   canInvokeProcedureRecordStart,
+  FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
   getKioskSyntheticTodaySupportItems,
   isProcedureRecordStartAllowed,
+  presentProcedureCorrection,
 } from "./index";
 
 beforeAll(() => {
@@ -284,5 +286,49 @@ describe("Kiosk Today Support synthetic fixture (read-model only)", () => {
         presentation: undefined,
       }),
     ).toBe(false);
+  });
+
+  it("exposes synthetic correction only for statuses with one bound record", () => {
+    expect(FIELD_STAFF_PHASE8_CORRECTION_1_SLICE.correctionEntryAuthorized).toBe(true);
+    expect(FIELD_STAFF_PHASE8_CORRECTION_1_SLICE.saveSemanticsChangeAuthorized).toBe(false);
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み");
+    const cancelled = items.find((item) => item.effectiveStatus === "取消済み");
+    const conflict = items.find((item) => item.effectiveStatus === "確認が必要");
+    const makeContext = (
+      item: NonNullable<typeof recorded>,
+    ): {
+      userId: string;
+      personLabel: string;
+      organizationId: string;
+      siteId: string;
+      planId: string;
+      planVersion: number;
+      procedureId: string;
+      procedureVersion: string;
+      planPeriodLabel: string;
+      occurrenceId: string;
+    } => ({
+      userId: item.userId,
+      personLabel: item.personLabel,
+      organizationId: "synthetic-org-001",
+      siteId: "SITE-ISG",
+      planId: item.planId,
+      planVersion: item.planVersion,
+      procedureId: item.procedure.ProcedureId,
+      procedureVersion: item.procedure.ProcedureVersion,
+      planPeriodLabel: "合成期間",
+      occurrenceId: item.occurrenceId,
+    });
+
+    const recordedCorrection = presentProcedureCorrection(recorded, makeContext(recorded!));
+    const cancelledCorrection = presentProcedureCorrection(cancelled, makeContext(cancelled!));
+    const conflictCorrection = presentProcedureCorrection(conflict, makeContext(conflict!));
+
+    expect(recordedCorrection?.recordId).toBe(recorded?.boundRecord?.RecordId);
+    expect(recordedCorrection?.occurrenceStatus).toBe("記録済み");
+    expect(cancelledCorrection?.recordId).toBe(cancelled?.boundRecord?.RecordId);
+    expect(cancelledCorrection?.occurrenceStatus).toBe("取消済み");
+    expect(conflictCorrection).toBeUndefined();
   });
 });

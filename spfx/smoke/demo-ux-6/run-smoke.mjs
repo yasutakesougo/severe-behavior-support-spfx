@@ -15,10 +15,16 @@ const outDir = __dirname;
 const artifactsDir = "/opt/cursor/artifacts/demo-ux-6-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
-const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js");
-const puppeteerModule =
-  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js");
-const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs");
+const esbuildModule = await import(
+  process.env.DEMO_UX_6_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js"
+);
+const puppeteerModule = await import(
+  process.env.DEMO_UX_6_PUPPETEER_PATH ??
+    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js"
+);
+const sassModule = await import(
+  process.env.DEMO_UX_6_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs"
+);
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 const compileScss =
@@ -138,7 +144,7 @@ await new Promise((resolve) => server.listen(4188, "127.0.0.1", resolve));
 const base = "http://127.0.0.1:4188";
 
 const browser = await puppeteer.launch({
-  executablePath: "/usr/bin/google-chrome-stable",
+  executablePath: process.env.DEMO_UX_6_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
   headless: true,
   args: ["--no-sandbox", "--disable-gpu", "--window-size=1280,900"],
   defaultViewport: { width: 1280, height: 900 },
@@ -154,6 +160,7 @@ function assertReviewDueState(expectedStateColumns) {
   const heading = document.querySelector('[data-demo-ux="review-due-heading"]');
   const note = document.querySelector('[data-demo-ux="review-due-presentation-note"]');
   const calcNote = document.querySelector('[data-demo-ux="review-due-calculation-note"]');
+  const basis = document.querySelector('[data-demo-ux="review-due-semantic-basis"]');
   const items = document.querySelectorAll('[data-demo-ux="review-due-attention-item"]');
   const statusLabels = document.querySelectorAll('[data-demo-ux="review-status-label"]');
   const dueLabels = document.querySelectorAll('[data-demo-ux="due-state-label"]');
@@ -183,7 +190,8 @@ function assertReviewDueState(expectedStateColumns) {
   const text = body?.textContent ?? "";
   const headings = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim() ?? "");
   const orderOk =
-    headings.indexOf("見直し・期限の要約") >= 0 &&
+    headings.indexOf("基準日・due・通知開始") >= 0 &&
+    headings.indexOf("見直し・期限の要約") > headings.indexOf("基準日・due・通知開始") &&
     headings.indexOf("確認が必要な対象") > headings.indexOf("見直し・期限の要約") &&
     headings.indexOf("見直し操作（表示専用）") > headings.indexOf("確認が必要な対象") &&
     headings.indexOf("制度・業務情報（合成表示）") > headings.indexOf("見直し操作（表示専用）") &&
@@ -212,6 +220,10 @@ function assertReviewDueState(expectedStateColumns) {
       Boolean(demo) &&
       Boolean(site) &&
       slice === "DEMO-UX-6" &&
+      Boolean(basis) &&
+      (basis?.textContent ?? "").includes("有効開始日") &&
+      (basis?.textContent ?? "").includes("caller-supplied") &&
+      (basis?.textContent ?? "").includes("暦月") &&
       cssApplied &&
       stateColumns === expectedStateColumns &&
       !horizontalOverflow,

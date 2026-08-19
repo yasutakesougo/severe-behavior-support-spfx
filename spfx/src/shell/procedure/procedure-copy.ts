@@ -26,6 +26,15 @@ export const FIELD_WORKFLOW_SAVE_OUTCOME_UNKNOWN_NOTE =
 export const FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE =
   "計画・手順の文脈は引き継がれています。再選択は不要です。" as const;
 
+export const FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE =
+  "元の記録と予定の文脈を確認して、訂正経路へ進みます。元の記録を上書きしません。" as const;
+
+export const FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE =
+  "訂正の合成表示です。元の記録は保持し、live SharePoint 保存は行いません。" as const;
+
+export const FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE =
+  "訂正の保存契約は未接続です。save 5-state や既存の記録保存意味は変更しません。" as const;
+
 export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<Record<ProcedureRecordResultValue, string>> =
   {
     PERFORMED_AS_PLANNED: "手順どおり実施",

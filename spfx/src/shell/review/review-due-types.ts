@@ -16,6 +16,11 @@ export type ShellReviewDueAttentionItem = Readonly<{
 export type ShellReviewDueStatePresentation = Readonly<{
   heading: string;
   summaryPrompt: string;
+  semanticBasis: Readonly<{
+    originLabel: string;
+    dueLabel: string;
+    approachingLabel: string;
+  }>;
   attentionSummary: Readonly<{
     awaitingConfirmationCountLabel: string;
     dueSoonCountLabel: string;

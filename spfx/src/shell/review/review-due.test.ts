@@ -11,6 +11,10 @@ import {
   DEMO_UX_REVIEW_DUE_FIXTURE,
   VP5_REVIEW_SLICE,
 } from "./review-due-fixture";
+import {
+  presentReviewDueSemanticBasis,
+  SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE,
+} from "./review-due-semantics";
 
 describe("DEMO-UX-6 review status & due-state presentation", () => {
   it("contains review attention items with status and due-state labels", () => {
@@ -35,6 +39,9 @@ describe("DEMO-UX-6 review status & due-state presentation", () => {
       "3件",
     );
     expect(DEMO_UX_REVIEW_DUE_FIXTURE.attentionSummary.dueSoonCountLabel).toContain("2件");
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.originLabel).toContain("有効開始日");
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.dueLabel).toContain("caller-supplied");
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.approachingLabel).toContain("暦月");
   });
 
   it("separates business facts from system state", () => {
@@ -64,6 +71,16 @@ describe("DEMO-UX-6 review status & due-state presentation", () => {
 });
 
 describe("DADS-UX-5 review due presentation contracts", () => {
+  it("keeps D5 semantic basis separate from hard due and D6", () => {
+    expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.id).toBe("SP-LC-3-REVIEW-DUE-ORIGIN-1");
+    expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.fixedNinetyDaysAuthorized).toBe(false);
+    expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.hardOverdueAuthorized).toBe(false);
+    expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.observationAssociationAuthorized).toBe(false);
+    expect(presentReviewDueSemanticBasis(true).originLabel).toContain("有効開始日");
+    expect(presentReviewDueSemanticBasis(false).originLabel).toContain("前回見直し日");
+    expect(presentReviewDueSemanticBasis(true).approachingLabel).toContain("30日前");
+  });
+
   it("keeps attention empty copy as zero-result (INV-17; not all-clear)", () => {
     expect(DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE).toContain(
       "表示する確認対象はありません（合成データ）",
