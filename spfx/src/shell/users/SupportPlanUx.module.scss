@@ -112,6 +112,12 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
+.personSubheading {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 .personHeading {
   margin: 0;
   font-size: sbs.$font-size-section-title;
