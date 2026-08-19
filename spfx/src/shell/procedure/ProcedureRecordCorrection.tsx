@@ -3,7 +3,10 @@ import {
   FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE,
   FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE,
 } from "./procedure-copy";
-import { FIELD_STAFF_PHASE8_CORRECTION_1_SLICE, type ProcedureCorrectionPresentation } from "./procedure-correction";
+import {
+  FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
+  type ProcedureCorrectionPresentation,
+} from "./procedure-correction";
 import styles from "./ProcedureRecordCorrectionUx.module.scss";
 
 export type ProcedureRecordCorrectionProps = Readonly<{

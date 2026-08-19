@@ -345,7 +345,9 @@ async function assertCorrectionPathForStatus(page, status) {
     };
   }, status);
   await page.click('[data-field-workflow="record-correction-cta"]');
-  await page.waitForSelector('[data-field-workflow="procedure-record-correction"]', { timeout: 8000 });
+  await page.waitForSelector('[data-field-workflow="procedure-record-correction"]', {
+    timeout: 8000,
+  });
   const correction = await page.evaluate(() => {
     const root = document.querySelector('[data-field-workflow="procedure-record-correction"]');
     const disabledSave = document.querySelector(

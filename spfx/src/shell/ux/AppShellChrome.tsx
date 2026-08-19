@@ -1120,7 +1120,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                           : undefined
                       }
                       onCorrectionRequest={
-                        procedureCorrectionPresentation ? handleProcedureCorrectionRequest : undefined
+                        procedureCorrectionPresentation
+                          ? handleProcedureCorrectionRequest
+                          : undefined
                       }
                     />
                   ) : (

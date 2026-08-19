@@ -15,12 +15,16 @@ const outDir = __dirname;
 const artifactsDir = "/opt/cursor/artifacts/demo-ux-6-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
-const esbuildModule = await import(process.env.DEMO_UX_6_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js");
+const esbuildModule = await import(
+  process.env.DEMO_UX_6_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js"
+);
 const puppeteerModule = await import(
   process.env.DEMO_UX_6_PUPPETEER_PATH ??
-    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js",
+    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js"
 );
-const sassModule = await import(process.env.DEMO_UX_6_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs");
+const sassModule = await import(
+  process.env.DEMO_UX_6_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs"
+);
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 const compileScss =
