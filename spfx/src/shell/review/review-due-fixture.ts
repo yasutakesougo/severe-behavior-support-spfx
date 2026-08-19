@@ -36,23 +36,31 @@ const DEMO_UX_REVIEW_ATTENTION_ITEMS: readonly ShellReviewDueAttentionItem[] = [
   },
 ];
 
+function buildReviewDueFixture(firstReview: boolean): ShellReviewDueStatePresentation {
+  return {
+    heading: "見直し状況",
+    summaryPrompt:
+      "責任者が見直し対象と期限状態の見え方を確認するための合成一覧です。分析グラフは主目的にしません。",
+    semanticBasis: presentReviewDueSemanticBasis(firstReview),
+    attentionSummary: buildAttentionSummaryFromItems(DEMO_UX_REVIEW_ATTENTION_ITEMS),
+    attentionItems: DEMO_UX_REVIEW_ATTENTION_ITEMS,
+    businessFacts: {
+      reviewScopeLabel: "見直し状況・期限状態（合成表示）",
+      responsibleRoleLabel: "責任者レビュー（合成表示）",
+    },
+    systemState: {
+      saveStateLabel: "表示サンプル（live保存なし）",
+      dataSourceLabel: "synthetic fixture only",
+    },
+  };
+}
+
 /** Synthetic review status & due-state fixture for responsible-person review only. */
-export const DEMO_UX_REVIEW_DUE_FIXTURE: ShellReviewDueStatePresentation = {
-  heading: "見直し状況",
-  summaryPrompt:
-    "責任者が見直し対象と期限状態の見え方を確認するための合成一覧です。分析グラフは主目的にしません。",
-  semanticBasis: presentReviewDueSemanticBasis(true),
-  attentionSummary: buildAttentionSummaryFromItems(DEMO_UX_REVIEW_ATTENTION_ITEMS),
-  attentionItems: DEMO_UX_REVIEW_ATTENTION_ITEMS,
-  businessFacts: {
-    reviewScopeLabel: "見直し状況・期限状態（合成表示）",
-    responsibleRoleLabel: "責任者レビュー（合成表示）",
-  },
-  systemState: {
-    saveStateLabel: "表示サンプル（live保存なし）",
-    dataSourceLabel: "synthetic fixture only",
-  },
-};
+export const DEMO_UX_REVIEW_DUE_FIXTURE: ShellReviewDueStatePresentation = buildReviewDueFixture(true);
+
+/** Synthetic subsequent-review fixture for smoke/unit evidence of D5 anchor branch. */
+export const DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE: ShellReviewDueStatePresentation =
+  buildReviewDueFixture(false);
 
 export const DEMO_UX_6_SLICE = {
   id: "DEMO-UX-6",

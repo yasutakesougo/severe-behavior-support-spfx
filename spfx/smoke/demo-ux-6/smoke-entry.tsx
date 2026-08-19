@@ -14,6 +14,7 @@ import {
   DEMO_UX_6_SLICE,
   DEMO_UX_DAILY_RECORD_FIXTURE,
   DEMO_UX_REVIEW_DUE_FIXTURE,
+  DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE,
   DEMO_UX_SLICE,
   DEMO_UX_SUPPORT_PLAN_FIXTURE,
   DEMO_UX_USER_DETAIL_FIXTURE,
@@ -40,12 +41,14 @@ function parseParams(): {
   siteSelection: ShellSiteSelection;
   selectedDestination: ShellPrimaryNavigationId;
   presentationRole: ShellPresentationRole;
+  reviewCycle: "first" | "subsequent";
 } {
   const params = new URLSearchParams(window.location.search);
   const viewRaw = params.get("viewMode") ?? "ready";
   const saveRaw = params.get("saveState") ?? "saved";
   const siteRaw = params.get("siteSelection") ?? "SITE-ISG";
   const destRaw = params.get("destination") ?? SHELL_DEFAULT_DESTINATION;
+  const reviewCycle = params.get("reviewCycle") === "subsequent" ? "subsequent" : "first";
   const viewMode = (SHELL_VIEW_MODES as readonly string[]).includes(viewRaw)
     ? (viewRaw as ShellViewMode)
     : "ready";
@@ -62,6 +65,7 @@ function parseParams(): {
     siteSelection,
     selectedDestination,
     presentationRole: parseShellPresentationRole(params.get("presentationRole") ?? undefined),
+    reviewCycle,
   };
 }
 
@@ -94,7 +98,11 @@ const SmokeApp: React.FC = () => {
         userDetailPresentation={DEMO_UX_USER_DETAIL_FIXTURE}
         supportPlanPresentation={DEMO_UX_SUPPORT_PLAN_FIXTURE}
         dailyRecordPresentation={DEMO_UX_DAILY_RECORD_FIXTURE}
-        reviewDueStatePresentation={DEMO_UX_REVIEW_DUE_FIXTURE}
+        reviewDueStatePresentation={
+          initial.reviewCycle === "subsequent"
+            ? DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE
+            : DEMO_UX_REVIEW_DUE_FIXTURE
+        }
         correlationId={SHELL_UX_DEFAULT_FIXTURE.correlationId}
         errorCode={SHELL_UX_DEFAULT_FIXTURE.errorCode}
         userDisplayName="Smoke Operator Synthetic"
