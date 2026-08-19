@@ -37,6 +37,9 @@ export {
   formatUsersFilterSummaryLabel,
   USERS_FILTER_CHIP_LABELS,
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
+  FIELD_STAFF_PHASE8_MULTI_USER_SCALE_EVIDENCE_1_SLICE,
+  FIELD_STAFF_PHASE8_MULTI_USER_SCALE_FIXTURE,
+  inspectScaleContextSafety,
   overlayForUserSessionSaveState,
   rememberUserSessionSaveState,
   type ShellUsersPresentation,
@@ -47,6 +50,7 @@ export {
   type SupportPlanProps,
   type UsersFilterChipLabel,
   type UsersSessionSaveStateByUserId,
+  type ScaleContextSafetyReport,
 } from "../users";
 export {
   DEMO_UX_7_SLICE,
