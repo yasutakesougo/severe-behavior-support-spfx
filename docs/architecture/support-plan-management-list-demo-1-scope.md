@@ -77,8 +77,14 @@ Ready / Merge auto-progress
 | Dさん | 手順更新中 | あり | あり | 目安表示 | 手順の更新確認 | needs_action |
 | Eさん | 未作成 | なし | なし可 | なし | 計画の作成 | needs_action |
 
-KPI 期待値（上表から導出）: 要確認=1, 見直し時期=1, 観察待ち=1。
-今日やること: 要対応が空でない行。
+KPI 期待値（上表から導出。ハードコード禁止）:
+
+- 要確認 = `needs_action` 行数 = **2**（Dさん + Eさん）
+- 見直し時期 = `review_window` 行数 = **1**（Bさん）
+- 観察待ち = `observation_wait` 行数 = **1**（Cさん）
+
+計画スケッチの 1/1/1 は導出誤り。件数は常に fixture 行から数える。
+今日やること: 要対応が空でない行（B/C/D/E）。
 
 shell fixture は `src/domain` を import しない。
 未作成行を domain `SupportPlan` として捏造しない。

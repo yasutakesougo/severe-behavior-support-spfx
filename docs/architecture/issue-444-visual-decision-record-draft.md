@@ -61,3 +61,5 @@ This draft does not authorize Issue mutation by Agent
 This draft does not authorize Implementation Start
 This draft does not close #444
 ```
+
+Subsequent gates landed in Draft PR #447（Scope Freeze + Implementation Start + presentation demo）. Do not mix those into the Visual Decision comment body above.

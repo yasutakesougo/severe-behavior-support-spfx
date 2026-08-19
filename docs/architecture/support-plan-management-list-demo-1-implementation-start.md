@@ -118,4 +118,6 @@ Do not enable live I/O / REST / binder / SharePoint write
 Do not implement review-due origin / approaching (#24)
 Do not change FIELD_STAFF save 5-state
 STOP at Draft PR after evidence
+Fresh Review / Ready / Merge remain Human GO
+KPI lock: Family P counts are derived（fixture 5 rows → 要確認=2 / 見直し時期=1 / 観察待ち=1）
 ```
