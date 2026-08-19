@@ -150,12 +150,16 @@ async function openFieldStaffSupportPlan(page) {
 function assertPlannerSupportPlan() {
   const plan = document.querySelector('[data-demo-ux="support-plan"]');
   const text = document.body?.textContent ?? "";
+  const person = document.querySelector('[data-demo-ux="support-plan-person"]');
   const status = document.querySelector('[data-planning-pc="status"]');
   const version = document.querySelector('[data-planning-pc="version"]');
   const procedures = document.querySelector('[data-planning-pc="current-procedures"]');
   const records = document.querySelector('[data-planning-pc="recent-records"]');
   const versions = document.querySelector('[data-planning-pc="version-list"]');
   const reviewCta = document.querySelector('[data-planning-pc="review-cta"]');
+  const reviewBadge = document.querySelector('[data-demo-ux="support-plan-review-status-badge"]');
+  const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+  const tertiaryActions = document.querySelectorAll('[data-sbs-action="tertiary"]');
   const mutationButtons = [
     ...document.querySelectorAll('[data-demo-ux="support-plan-mutation-button"]'),
   ];
@@ -164,12 +168,18 @@ function assertPlannerSupportPlan() {
   return {
     pass:
       Boolean(plan) &&
+      (person?.textContent ?? "").trim() === "Aさん" &&
       (status?.textContent ?? "").trim() === "適用中" &&
       (version?.textContent ?? "").includes("版 3") &&
       Boolean(procedures) &&
       Boolean(records) &&
       Boolean(versions) &&
       Boolean(reviewCta) &&
+      Boolean(reviewBadge) &&
+      (reviewBadge?.textContent ?? "").includes("要確認") &&
+      primaryActions.length === 1 &&
+      reviewCta?.getAttribute("data-sbs-action") === "primary" &&
+      tertiaryActions.length >= 3 &&
       mutationButtons.every((button) => button.disabled) &&
       headings.includes("現在の支援手順") &&
       headings.includes("最近の支援手順記録") &&
@@ -180,6 +190,7 @@ function assertPlannerSupportPlan() {
       forbidden.every((token) => text.indexOf(token) < 0),
     statusText: status?.textContent ?? "",
     versionText: version?.textContent ?? "",
+    reviewBadgeText: reviewBadge?.textContent ?? "",
     hasProcedures: Boolean(procedures),
     hasRecords: Boolean(records),
     hasVersions: Boolean(versions),
