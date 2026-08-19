@@ -54,6 +54,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
 }) => {
   const { heading, summaryPrompt, attentionSummary, attentionItems, businessFacts, systemState } =
     presentation;
+  const { semanticBasis } = presentation;
   const showAttentionEmpty = attentionItems.length === 0;
   const adminRead = isAdminAuditPresentationRole(presentationRole);
   const [selectedMaterialId, setSelectedMaterialId] = React.useState<string | undefined>();
@@ -95,6 +96,33 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
         </button>
       </div>
       <p className={styles.summaryPrompt}>{summaryPrompt}</p>
+
+      <section
+        className={`${styles.section} ${styles.resultSection}`}
+        data-review-visual-surface="basis"
+        aria-labelledby="demo-ux-review-basis-heading"
+      >
+        <div className={styles.sectionHeader}>
+          <div>
+            <p className={styles.sectionKicker}>判定の前提</p>
+            <h2 id="demo-ux-review-basis-heading" data-review-visual-role="section-title">
+              基準日・due・通知開始
+            </h2>
+          </div>
+          <span className={styles.boundaryTag}>意味固定</span>
+        </div>
+        <ul className={styles.summaryList} data-demo-ux="review-due-semantic-basis">
+          <li className={styles.summaryCard} data-demo-ux="review-due-origin-basis">
+            {semanticBasis.originLabel}
+          </li>
+          <li className={styles.summaryCard} data-demo-ux="review-due-due-basis">
+            {semanticBasis.dueLabel}
+          </li>
+          <li className={styles.summaryCard} data-demo-ux="review-due-approaching-basis">
+            {semanticBasis.approachingLabel}
+          </li>
+        </ul>
+      </section>
 
       <section
         className={`${styles.section} ${styles.resultSection}`}

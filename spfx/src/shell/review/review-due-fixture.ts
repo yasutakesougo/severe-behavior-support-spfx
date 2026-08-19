@@ -1,5 +1,6 @@
 import { SHELL_STATUS_LABEL_DUE_SOON, SHELL_STATUS_LABEL_NEEDS_REVIEW } from "../ux/status-labels";
 import { buildAttentionSummaryFromItems } from "../ux/kpi-review-count";
+import { presentReviewDueSemanticBasis } from "./review-due-semantics";
 import type {
   ShellReviewDueAttentionItem,
   ShellReviewDueStatePresentation,
@@ -40,6 +41,7 @@ export const DEMO_UX_REVIEW_DUE_FIXTURE: ShellReviewDueStatePresentation = {
   heading: "見直し状況",
   summaryPrompt:
     "責任者が見直し対象と期限状態の見え方を確認するための合成一覧です。分析グラフは主目的にしません。",
+  semanticBasis: presentReviewDueSemanticBasis(true),
   attentionSummary: buildAttentionSummaryFromItems(DEMO_UX_REVIEW_ATTENTION_ITEMS),
   attentionItems: DEMO_UX_REVIEW_ATTENTION_ITEMS,
   businessFacts: {

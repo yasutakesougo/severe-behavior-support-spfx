@@ -154,6 +154,7 @@ function assertReviewDueState(expectedStateColumns) {
   const heading = document.querySelector('[data-demo-ux="review-due-heading"]');
   const note = document.querySelector('[data-demo-ux="review-due-presentation-note"]');
   const calcNote = document.querySelector('[data-demo-ux="review-due-calculation-note"]');
+  const basis = document.querySelector('[data-demo-ux="review-due-semantic-basis"]');
   const items = document.querySelectorAll('[data-demo-ux="review-due-attention-item"]');
   const statusLabels = document.querySelectorAll('[data-demo-ux="review-status-label"]');
   const dueLabels = document.querySelectorAll('[data-demo-ux="due-state-label"]');
@@ -183,7 +184,8 @@ function assertReviewDueState(expectedStateColumns) {
   const text = body?.textContent ?? "";
   const headings = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim() ?? "");
   const orderOk =
-    headings.indexOf("見直し・期限の要約") >= 0 &&
+    headings.indexOf("基準日・due・通知開始") >= 0 &&
+    headings.indexOf("見直し・期限の要約") > headings.indexOf("基準日・due・通知開始") &&
     headings.indexOf("確認が必要な対象") > headings.indexOf("見直し・期限の要約") &&
     headings.indexOf("見直し操作（表示専用）") > headings.indexOf("確認が必要な対象") &&
     headings.indexOf("制度・業務情報（合成表示）") > headings.indexOf("見直し操作（表示専用）") &&
@@ -212,6 +214,10 @@ function assertReviewDueState(expectedStateColumns) {
       Boolean(demo) &&
       Boolean(site) &&
       slice === "DEMO-UX-6" &&
+      Boolean(basis) &&
+      (basis?.textContent ?? "").includes("有効開始日") &&
+      (basis?.textContent ?? "").includes("caller-supplied") &&
+      (basis?.textContent ?? "").includes("暦月") &&
       cssApplied &&
       stateColumns === expectedStateColumns &&
       !horizontalOverflow,
