@@ -19,6 +19,7 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 - Domain / Contracts 該当語彙
 - Component Catalog v1（`docs/architecture/ui-component-catalog-v1.md`）。該当 entry が無ければ GAP / HOLD
 - Screen Templates v1（`docs/architecture/ui-screen-templates-v1.md`）。該当 template が無ければ GAP / HOLD
+- Visual Hierarchy Contract v1（`docs/architecture/ui-visual-hierarchy-contract-1.md`）。EMPHASIS / CTA weight / density
 - 既存 components / tests / smoke / a11y gate
 - （任意）Figma MCP — layout / component / variables / screen reference
 
@@ -33,11 +34,12 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 1. 対象 screen / 利用者入口（現場職員 / 計画担当者等）を固定する
 2. 関係する Domain / Contracts 語彙を列挙する（status、save 5-state、procedure binding 等）
 3. Visual Principles（DADS-03 / DADS-04）と Screen Templates v1 を読む。primary template を 1 つ選ぶ
-4. Component Catalog v1 で表現候補を探す。未掲載なら GAP / HOLD（勝手に新 primitive を増やさない）
-5. 任意で Figma から visual intent のみ取得する（コード化しない）
-6. Figma intent を repository domain semantics と照合する
-7. 既存 component で表現可能か、GAP / 新 primitive 要否を判定する
-8. `implementation-plan` へ渡す前提と HOLD を出力する
+4. Visual Hierarchy Contract で EMPHASIS-1 と `SBS_ACTION.primary` を各 1 つ固定する。複数 / 不明なら HOLD
+5. Component Catalog v1 で表現候補を探す。未掲載なら GAP / HOLD（勝手に新 primitive を増やさない）
+6. 任意で Figma から visual intent のみ取得する（コード化しない）
+7. Figma intent を repository domain semantics と照合する
+8. 既存 component で表現可能か、GAP / 新 primitive 要否を判定する
+9. `implementation-plan` へ渡す前提と HOLD を出力する
 
 ## 確認項目
 
@@ -47,6 +49,7 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 - CurrentProcedure と historical procedure を区別しているか
 - 既存 primitive（`StatusBadge` / `EmptyNotice` 等）で足りるか
 - 既存 Screen Template で足りるか。新 layout を推測で増やしていないか
+- EMPHASIS-1 と `SBS_ACTION.primary` が各 1 つか。情報ランクと CTA ウェイトを混ぜていないか
 - Figma を SSOT として扱っていないか
 - Storybook を新 SSOT として扱っていないか
 
@@ -113,6 +116,12 @@ Figma をそのままコード化しません。意味の正本は Domain / Cont
 ## Screen Template
 - primary:
 - compose:
+- GAP:
+
+## Visual Hierarchy
+- EMPHASIS-1:
+- SBS_ACTION.primary:
+- density:
 - GAP:
 
 ## Findings

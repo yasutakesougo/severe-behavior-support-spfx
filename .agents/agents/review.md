@@ -29,7 +29,7 @@
 | `contracts-review` | 導入済み | 契約変更の互換性監査 |
 | `test-review` | 導入済み | テスト結果と網羅範囲 |
 | `severe-behavior-cycle-review` | 導入済み | 強度行動障害支援サイクルの実操作レビュー（直接実行。生活介護総合監査ではない） |
-| `design-review` | 導入済み | Product UI Contract（Catalog / semantic UI / a11y meaning）。UI 差分時 |
+| `design-review` | 導入済み | Product UI Contract（Catalog / Templates / Visual Hierarchy / semantic UI / a11y）。UI 差分時 |
 | `security-review` | 後続（未カタログ） | セキュリティ観点。導入前は HOLD |
 | `ui-review` | 後続（未カタログ） | 汎用 UI 観点。導入前は HOLD。Product UI Contract は `design-review`。サイクル監査は `severe-behavior-cycle-review` |
 

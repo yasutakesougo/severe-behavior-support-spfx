@@ -25,6 +25,7 @@ Domain / Contracts          ← 何を意味するか
 Visual Principles（DADS-03） ← どう見えるか・操作するか（原則）
 Component Catalog           ← どの component で表現するか
 Screen Templates（本文書）   ← どの screen 骨格か
+Visual Hierarchy             ← 何を強く・弱く見せるか（`docs/architecture/ui-visual-hierarchy-contract-1.md`）
 ```
 
 ```text
@@ -77,6 +78,7 @@ GAP     — 骨格は必要だが実装がない（v1 では使わない）
 - `design-context`: 対象 UI の primary template を選ぶ。無いなら GAP / HOLD。新 layout を推測で増やさない
 - `design-review`: 差分が template forbidden substitutions に当たるかを監査する
 - Template 不在を FAIL にしない。P2 または HOLD
+- 視覚の強弱は Visual Hierarchy Contract。Templates は骨格のみ。role は強調順のみ
 - Domain 意味変更が必要なら **別 Decision**。Templates は骨格のみ
 - `lint:ui-sem` は component 語彙ゲート。本 Templates は heading / slot / smoke 骨格ゲート
 
@@ -518,10 +520,11 @@ Optional presentation slots（SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1 で merged 
 ```text
 1. design-context で Domain 語彙と Catalog entry を固定する
 2. 本 Templates から primary template を 1 つ選ぶ
-3. 足りないスロットは Catalog GAP / HOLD（新 primitive を推測しない）
-4. smoke hook と a11y heading 規則を template からコピーする
-5. lint:ui-sem が通る語彙だけを使う
-6. generator / Plop が必要なら別 GO（本ファイルを入力にする）
+3. Visual Hierarchy Contract で EMPHASIS-1 と SBS_ACTION.primary を 1 つずつ固定する
+4. 足りないスロットは Catalog GAP / HOLD（新 primitive を推測しない）
+5. smoke hook と a11y heading 規則を template からコピーする
+6. lint:ui-sem が通る語彙だけを使う
+7. generator / Plop が必要なら別 GO（本ファイルを入力にする）
 ```
 
 新 template id が必要なら Catalog と同様、別 Implementation GO。v1 の 6 件を無断で増やさない。
