@@ -13,6 +13,7 @@ import { SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE } from "./support-plan-manage
 import {
   buildFamilyPCountLabels,
   buildFamilyPCounts,
+  selectPlannerListPrimaryActionUserId,
   selectTodayActionRows,
 } from "./support-plan-management-list-kpi";
 import type {
@@ -40,6 +41,7 @@ export const SupportPlanManagementList: React.FC<SupportPlanManagementListProps>
   const counts = buildFamilyPCounts(rows);
   const countLabels = buildFamilyPCountLabels(rows);
   const todayRows = selectTodayActionRows(rows);
+  const primaryActionUserId = selectPlannerListPrimaryActionUserId(todayRows, rows);
   const kpiItems = [
     {
       kind: "needs_action" as const,
@@ -91,12 +93,12 @@ export const SupportPlanManagementList: React.FC<SupportPlanManagementListProps>
         <h2 id="support-plan-mgmt-kpi-heading" className={styles.sectionHeading}>
           {SUPPORT_PLAN_MANAGEMENT_KPI_HEADING}
         </h2>
-        <ul className={styles.kpiGrid} data-demo-ux="support-plan-mgmt-kpi">
+        <ul className={styles.kpiStrip} data-demo-ux="support-plan-mgmt-kpi">
           {kpiItems.map((item) => (
             <li
               key={item.kind}
-              className={styles.kpiCard}
-              data-demo-ux="support-plan-mgmt-kpi-card"
+              className={styles.kpiMetric}
+              data-demo-ux="support-plan-mgmt-kpi-metric"
               data-support-plan-mgmt-kpi={item.kind}
               data-support-plan-mgmt-kpi-count={String(item.count)}
             >
@@ -121,28 +123,38 @@ export const SupportPlanManagementList: React.FC<SupportPlanManagementListProps>
             {SUPPORT_PLAN_MANAGEMENT_TODAY_EMPTY_NOTE}
           </EmptyNotice>
         ) : (
-          <ul className={styles.todayList} data-demo-ux="support-plan-mgmt-today-list">
-            {todayRows.map((row) => (
-              <li key={`today-${row.userId}`} className={styles.todayRow}>
-                <div className={styles.rowMain}>
-                  <p className={styles.personLabel}>{row.personLabel}</p>
-                  <p className={styles.attention}>{row.attentionLabel}</p>
-                </div>
-                <button
-                  type="button"
-                  className={styles.actionButton}
-                  data-demo-ux="support-plan-mgmt-today-action"
-                  data-support-plan-mgmt-user-id={row.userId}
-                  onClick={() => {
-                    if (onRowAction) {
-                      onRowAction(row);
+          <ul
+            className={styles.todayList}
+            data-demo-ux="support-plan-mgmt-today-list"
+            data-visual-hierarchy="action-queue"
+          >
+            {todayRows.map((row) => {
+              const isPrimary = row.userId === primaryActionUserId;
+              return (
+                <li key={`today-${row.userId}`} className={styles.todayRow}>
+                  <div className={styles.rowMain}>
+                    <p className={styles.personLabel}>{row.personLabel}</p>
+                    <p className={styles.attention}>{row.attentionLabel}</p>
+                  </div>
+                  <button
+                    type="button"
+                    className={
+                      isPrimary ? styles.actionButtonPrimary : styles.actionButtonSecondary
                     }
-                  }}
-                >
-                  {row.actionLabel}
-                </button>
-              </li>
-            ))}
+                    data-demo-ux="support-plan-mgmt-today-action"
+                    data-sbs-action={isPrimary ? "primary" : "secondary"}
+                    data-support-plan-mgmt-user-id={row.userId}
+                    onClick={() => {
+                      if (onRowAction) {
+                        onRowAction(row);
+                      }
+                    }}
+                  >
+                    {row.actionLabel}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
@@ -200,8 +212,21 @@ export const SupportPlanManagementList: React.FC<SupportPlanManagementListProps>
                 </div>
                 <button
                   type="button"
-                  className={styles.actionButton}
+                  className={
+                    todayRows.length === 0 && row.userId === primaryActionUserId
+                      ? styles.actionButtonPrimary
+                      : row.actionKind === "create"
+                        ? styles.actionButtonSecondary
+                        : styles.actionButtonTertiary
+                  }
                   data-demo-ux="support-plan-mgmt-action"
+                  data-sbs-action={
+                    todayRows.length === 0 && row.userId === primaryActionUserId
+                      ? "primary"
+                      : row.actionKind === "create"
+                        ? "secondary"
+                        : "tertiary"
+                  }
                   data-support-plan-mgmt-action={row.actionKind}
                   data-support-plan-mgmt-user-id={row.userId}
                   onClick={() => {

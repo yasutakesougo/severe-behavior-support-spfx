@@ -61,6 +61,16 @@ export function selectTodayActionRows(
   return rows.filter((row) => row.attentionKind !== "none");
 }
 
+/**
+ * One SBS_ACTION.primary per view (H-05). First 今日やること row, else first list row.
+ */
+export function selectPlannerListPrimaryActionUserId(
+  todayRows: readonly SupportPlanManagementRow[],
+  rows: readonly SupportPlanManagementRow[],
+): string | undefined {
+  return todayRows[0]?.userId ?? rows[0]?.userId;
+}
+
 export function rowForUserId(
   rows: readonly SupportPlanManagementRow[],
   userId: string,
