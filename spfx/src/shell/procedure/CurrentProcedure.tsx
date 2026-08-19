@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StatusBadge } from "../primitives";
 import {
+  FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE,
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_PRESENTATION_NOTE,
 } from "./procedure-copy";
@@ -14,6 +15,7 @@ export type CurrentProcedureProps = Readonly<{
   backLabel?: string;
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
+  onCorrectionRequest?: () => void;
 }>;
 
 /**
@@ -26,9 +28,14 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   backLabel = "← 利用者詳細",
   onBackToUserDetail,
   onRecordProcedureRequest,
+  onCorrectionRequest,
 }) => {
   const { heading, summaryPrompt, context, projection, canStartProcedureRecord } = presentation;
   const recordCtaEnabled = canStartProcedureRecord && Boolean(onRecordProcedureRequest);
+  const correctionCtaVisible =
+    !canStartProcedureRecord &&
+    Boolean(onCorrectionRequest) &&
+    (presentation.occurrenceStatus === "記録済み" || presentation.occurrenceStatus === "取消済み");
 
   return (
     <section
@@ -132,27 +139,45 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
 
       <section className={styles.section} aria-labelledby="field-workflow-record-cta-heading">
         <h2 id="field-workflow-record-cta-heading" data-field-workflow-visual-role="section-title">
-          この手順を記録
+          {correctionCtaVisible ? "記録の訂正" : "この手順を記録"}
         </h2>
         <p className={styles.sectionHint} data-field-workflow="context-handoff-note">
-          {FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE}
+          {correctionCtaVisible
+            ? FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE
+            : FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE}
         </p>
         <div className={styles.actionRow}>
-          <button
-            type="button"
-            className={styles.primaryButton}
-            onClick={() => {
-              if (recordCtaEnabled && onRecordProcedureRequest) {
-                onRecordProcedureRequest();
-              }
-            }}
-            disabled={!recordCtaEnabled}
-            aria-disabled={!recordCtaEnabled ? "true" : undefined}
-            data-field-workflow="record-procedure-cta"
-            data-kiosk-can-start-record={canStartProcedureRecord ? "true" : "false"}
-          >
-            この手順を記録
-          </button>
+          {correctionCtaVisible ? (
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => {
+                if (onCorrectionRequest) {
+                  onCorrectionRequest();
+                }
+              }}
+              data-field-workflow="record-correction-cta"
+              data-kiosk-occurrence-status={presentation.occurrenceStatus}
+            >
+              この記録を訂正する
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => {
+                if (recordCtaEnabled && onRecordProcedureRequest) {
+                  onRecordProcedureRequest();
+                }
+              }}
+              disabled={!recordCtaEnabled}
+              aria-disabled={!recordCtaEnabled ? "true" : undefined}
+              data-field-workflow="record-procedure-cta"
+              data-kiosk-can-start-record={canStartProcedureRecord ? "true" : "false"}
+            >
+              この手順を記録
+            </button>
+          )}
         </div>
       </section>
     </section>

@@ -46,6 +46,7 @@ function compileProductionCss() {
     "src/shell/users/UserDetailUx.module.scss",
     "src/shell/users/SupportPlanUx.module.scss",
     "src/shell/procedure/CurrentProcedureUx.module.scss",
+    "src/shell/procedure/ProcedureRecordCorrectionUx.module.scss",
     "src/shell/procedure/ProcedureRecordFormUx.module.scss",
     "src/shell/review/ReviewDueStateUx.module.scss",
     "src/shell/records/DailyRecordsUx.module.scss",
@@ -327,6 +328,58 @@ async function assertRecordFormBlockedForStatus(page, status) {
   };
 }
 
+async function assertCorrectionPathForStatus(page, status) {
+  await page.click(`[data-kiosk-status="${status}"] [data-kiosk-ux="tap-occurrence-button"]`);
+  await page.waitForSelector('[data-field-workflow="current-procedure"]', { timeout: 8000 });
+  const procedure = await page.evaluate((expectedStatus) => {
+    const root = document.querySelector('[data-field-workflow="current-procedure"]');
+    const correction = document.querySelector('[data-field-workflow="record-correction-cta"]');
+    const recordCta = document.querySelector('[data-field-workflow="record-procedure-cta"]');
+    return {
+      expectedStatus,
+      currentProcedurePresent: Boolean(root),
+      currentProcedureStatus: root?.getAttribute("data-kiosk-occurrence-status") ?? "",
+      correctionPresent: Boolean(correction),
+      correctionLabel: (correction?.textContent ?? "").trim(),
+      recordCtaPresent: Boolean(recordCta),
+    };
+  }, status);
+  await page.click('[data-field-workflow="record-correction-cta"]');
+  await page.waitForSelector('[data-field-workflow="procedure-record-correction"]', { timeout: 8000 });
+  const correction = await page.evaluate(() => {
+    const root = document.querySelector('[data-field-workflow="procedure-record-correction"]');
+    const disabledSave = document.querySelector(
+      '[data-field-workflow="procedure-correction-save-disabled"]',
+    );
+    return {
+      correctionPresent: Boolean(root),
+      saveDisabled: disabledSave instanceof HTMLButtonElement ? disabledSave.disabled : false,
+      shellCorrectionState:
+        document
+          .querySelector('[data-shell-ux="app-shell-chrome"]')
+          ?.getAttribute("data-shell-ux-procedure-correction") ?? "",
+    };
+  });
+  await screenshot(page, `occurrence-${status}-correction`);
+  await page.click('[data-field-workflow="procedure-correction-back"]');
+  await page.waitForSelector('[data-field-workflow="current-procedure"]', { timeout: 8000 });
+  await page.click('[data-field-workflow="current-procedure-back"]');
+  await page.waitForSelector('[data-kiosk-ux="today-support-list"]', { timeout: 8000 });
+  return {
+    procedure,
+    correction,
+    ok:
+      procedure.currentProcedurePresent &&
+      procedure.currentProcedureStatus === status &&
+      procedure.correctionPresent &&
+      procedure.correctionLabel.includes("訂正") &&
+      !procedure.recordCtaPresent &&
+      correction.correctionPresent &&
+      correction.saveDisabled &&
+      correction.shellCorrectionState === "open",
+  };
+}
+
 try {
   const readyQuery = "viewMode=ready&siteSelection=SITE-ISG&destination=overview&saveState=unsaved";
 
@@ -590,14 +643,14 @@ try {
       height: 1024,
       deviceScaleFactor: 1,
     });
-    const recorded = await assertRecordFormBlockedForStatus(page, "記録済み");
-    const cancelled = await assertRecordFormBlockedForStatus(page, "取消済み");
+    const recorded = await assertCorrectionPathForStatus(page, "記録済み");
+    const cancelled = await assertCorrectionPathForStatus(page, "取消済み");
     const conflict = await assertRecordFormBlockedForStatus(page, "確認が必要");
-    record("recorded-fresh-record-prevention", errors.length === 0 && recorded.blocked, {
+    record("recorded-correction-path", errors.length === 0 && recorded.ok, {
       errors,
       recorded,
     });
-    record("cancelled-record-prevention", errors.length === 0 && cancelled.blocked, {
+    record("cancelled-correction-path", errors.length === 0 && cancelled.ok, {
       errors,
       cancelled,
     });

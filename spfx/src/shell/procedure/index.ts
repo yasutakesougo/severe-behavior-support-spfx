@@ -1,6 +1,13 @@
 export { CurrentProcedure, type CurrentProcedureProps } from "./CurrentProcedure";
+export {
+  ProcedureRecordCorrection,
+  type ProcedureRecordCorrectionProps,
+} from "./ProcedureRecordCorrection";
 export { ProcedureRecordForm, type ProcedureRecordFormProps } from "./ProcedureRecordForm";
 export {
+  FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE,
+  FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE,
+  FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE,
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE,
   FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE,
@@ -24,6 +31,11 @@ export {
   VP4_WORKFLOW_SLICE,
 } from "./procedure-fixture";
 export { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
+export {
+  FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
+  presentProcedureCorrection,
+  type ProcedureCorrectionPresentation,
+} from "./procedure-correction";
 export {
   FIELD_WORKFLOW_NEXT_OCCURRENCE_UNKNOWN_REASON,
   FIELD_WORKFLOW_NEXT_OCCURRENCE_UNSAVED_REASON,
