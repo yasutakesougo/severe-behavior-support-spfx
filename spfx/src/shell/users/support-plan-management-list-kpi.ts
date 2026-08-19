@@ -62,13 +62,13 @@ export function selectTodayActionRows(
 }
 
 /**
- * One SBS_ACTION.primary per view (H-05). First 今日やること row, else first list row.
+ * One SBS_ACTION.primary per view (H-05). First 今日やること row only.
+ * Empty queue uses EmptyNotice; do not promote list 「詳細を見る」 / 「新規作成」 to primary.
  */
 export function selectPlannerListPrimaryActionUserId(
   todayRows: readonly SupportPlanManagementRow[],
-  rows: readonly SupportPlanManagementRow[],
 ): string | undefined {
-  return todayRows[0]?.userId ?? rows[0]?.userId;
+  return todayRows[0]?.userId;
 }
 
 export function rowForUserId(

@@ -41,7 +41,7 @@ export const SupportPlanManagementList: React.FC<SupportPlanManagementListProps>
   const counts = buildFamilyPCounts(rows);
   const countLabels = buildFamilyPCountLabels(rows);
   const todayRows = selectTodayActionRows(rows);
-  const primaryActionUserId = selectPlannerListPrimaryActionUserId(todayRows, rows);
+  const primaryActionUserId = selectPlannerListPrimaryActionUserId(todayRows);
   const kpiItems = [
     {
       kind: "needs_action" as const,
@@ -213,20 +213,12 @@ export const SupportPlanManagementList: React.FC<SupportPlanManagementListProps>
                 <button
                   type="button"
                   className={
-                    todayRows.length === 0 && row.userId === primaryActionUserId
-                      ? styles.actionButtonPrimary
-                      : row.actionKind === "create"
-                        ? styles.actionButtonSecondary
-                        : styles.actionButtonTertiary
+                    row.actionKind === "create"
+                      ? styles.actionButtonSecondary
+                      : styles.actionButtonTertiary
                   }
                   data-demo-ux="support-plan-mgmt-action"
-                  data-sbs-action={
-                    todayRows.length === 0 && row.userId === primaryActionUserId
-                      ? "primary"
-                      : row.actionKind === "create"
-                        ? "secondary"
-                        : "tertiary"
-                  }
+                  data-sbs-action={row.actionKind === "create" ? "secondary" : "tertiary"}
                   data-support-plan-mgmt-action={row.actionKind}
                   data-support-plan-mgmt-user-id={row.userId}
                   onClick={() => {

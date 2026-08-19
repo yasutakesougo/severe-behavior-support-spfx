@@ -137,6 +137,12 @@ function assertPlannerList() {
   const kpiMetric = document.querySelector('[data-demo-ux="support-plan-mgmt-kpi-metric"]');
   const kpiCard = document.querySelector('[data-demo-ux="support-plan-mgmt-kpi-card"]');
   const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+  const listPrimaryActions = document.querySelectorAll(
+    '[data-demo-ux="support-plan-mgmt-action"][data-sbs-action="primary"]',
+  );
+  const todayPrimary = document.querySelector(
+    '[data-demo-ux="support-plan-mgmt-today-action"][data-sbs-action="primary"]',
+  );
   const actionQueue = document.querySelector('[data-visual-hierarchy="action-queue"]');
   const kpiNeeds = document.querySelector('[data-support-plan-mgmt-kpi="needs_action"]');
   const kpiReview = document.querySelector('[data-support-plan-mgmt-kpi="review_window"]');
@@ -160,6 +166,10 @@ function assertPlannerList() {
       Boolean(kpiMetric) &&
       !kpiCard &&
       primaryActions.length === 1 &&
+      listPrimaryActions.length === 0 &&
+      todayPrimary?.getAttribute("data-support-plan-mgmt-user-id") === "user-b" &&
+      createAction?.getAttribute("data-sbs-action") === "secondary" &&
+      detailAction?.getAttribute("data-sbs-action") === "tertiary" &&
       Boolean(actionQueue) &&
       Boolean(uncreated) &&
       (createAction?.textContent ?? "").trim() === "新規作成" &&
