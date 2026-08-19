@@ -37,6 +37,7 @@ const scssPaths = [
   "src/shell/users/UsersUx.module.scss",
   "src/shell/users/UserDetailUx.module.scss",
   "src/shell/users/SupportPlanUx.module.scss",
+  "src/shell/users/SupportPlanManagementListUx.module.scss",
   "src/shell/review/ReviewDueStateUx.module.scss",
 ];
 
@@ -128,7 +129,16 @@ const browser = await puppeteer.launch({
 const checks = [];
 let allPass = true;
 
-async function openSupportPlan(page) {
+async function openPlannerSupportPlan(page) {
+  await page.click(
+    '[data-demo-ux="support-plan-mgmt-action"][data-support-plan-mgmt-user-id="user-a"]',
+  );
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
+}
+
+async function openFieldStaffSupportPlan(page) {
   await page.click('[data-demo-ux-detail-preview="true"]');
   await page.waitForFunction(() => Boolean(document.querySelector('[data-demo-ux="user-detail"]')));
   await page.click('[data-demo-ux="user-detail-open-plan"]');
@@ -183,7 +193,7 @@ function assertPlannerSupportPlan() {
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
   const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  await openSupportPlan(page);
+  await openPlannerSupportPlan(page);
   const found = await page.evaluate(assertPlannerSupportPlan);
   found.pageErrors = errors;
   const pass = Boolean(found.pass) && errors.length === 0;
@@ -200,7 +210,7 @@ function assertPlannerSupportPlan() {
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
   const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  await openSupportPlan(page);
+  await openPlannerSupportPlan(page);
   await page.click('[data-planning-pc="review-cta"]');
   await page.waitForFunction(() =>
     Boolean(document.querySelector('[data-demo-ux="review-due-state"]')),
@@ -264,7 +274,7 @@ function assertPlannerSupportPlan() {
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
   const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=FIELD_STAFF`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  await openSupportPlan(page);
+  await openFieldStaffSupportPlan(page);
   const found = await page.evaluate(() => {
     const text = document.body?.textContent ?? "";
     const procedures = document.querySelector('[data-planning-pc="current-procedures"]');

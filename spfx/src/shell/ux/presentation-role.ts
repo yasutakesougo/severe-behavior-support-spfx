@@ -95,6 +95,11 @@ export function isPlanningPcPresentationRole(role: ShellPresentationRole): boole
   return role === "PLANNER" || role === "ADMIN_AUDIT";
 }
 
+/** PLANNER-only list surface. ADMIN_AUDIT keeps existing UsersList this slice. */
+export function isPlannerSupportPlanManagementListRole(role: ShellPresentationRole): boolean {
+  return role === "PLANNER";
+}
+
 export type SupportPlanBlockKey =
   | "summary"
   | "goals"

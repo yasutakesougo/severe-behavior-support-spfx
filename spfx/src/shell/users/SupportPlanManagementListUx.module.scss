@@ -1,0 +1,258 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-6;
+  min-width: 0;
+  max-width: 100%;
+  padding: sbs.$space-6;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-medium;
+  box-sizing: border-box;
+}
+
+.heading {
+  margin: 0;
+  font-size: sbs.$font-size-page-title;
+  font-weight: sbs.$font-weight-page-title;
+  line-height: sbs.$line-height-page-title;
+  outline: none;
+}
+
+.heading:focus,
+.heading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  min-width: 0;
+}
+
+.sectionHeading {
+  margin: 0;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
+}
+
+.sectionHint {
+  margin: 0;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
+}
+
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: sbs.$space-4;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.kpiCard {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+  min-width: 0;
+  min-height: 4.5rem;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface;
+  border-radius: sbs.$radius-medium;
+  box-shadow: sbs.$elevation-subtle;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+.kpiLabel {
+  margin: 0;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+}
+
+.kpiCount {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.todayList,
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top-width: sbs.$border-width-thin;
+  border-top-style: solid;
+  border-top-color: sbs.$color-border-subtle;
+}
+
+.todayRow,
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: sbs.$space-2 sbs.$space-4;
+  align-items: center;
+  padding: sbs.$space-4 0;
+  border-bottom-width: sbs.$border-width-thin;
+  border-bottom-style: solid;
+  border-bottom-color: sbs.$color-border-subtle;
+  min-width: 0;
+  outline: none;
+}
+
+.row:focus,
+.row:focus-visible,
+.todayRow:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+  min-width: 0;
+}
+
+.personRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: sbs.$space-2;
+  min-width: 0;
+}
+
+.personLabel {
+  margin: 0;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+}
+
+.meta {
+  margin: 0;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
+}
+
+.attention {
+  margin: 0;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+}
+
+.actionButton {
+  min-height: 2.75rem;
+  padding: sbs.$space-2 sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
+  color: inherit;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.actionButton:focus,
+.actionButton:focus-visible,
+.backButton:focus,
+.backButton:focus-visible,
+.createButton:focus,
+.createButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.actionButton:hover:not(:disabled),
+.backButton:hover:not(:disabled),
+.createButton:hover:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.actionButton:active:not(:disabled),
+.backButton:active:not(:disabled),
+.createButton:active:not(:disabled) {
+  background: sbs.$color-surface-muted;
+}
+
+.actionButton:disabled,
+.backButton:disabled,
+.createButton:disabled {
+  color: sbs.$color-text-disabled;
+  opacity: 1;
+  cursor: not-allowed;
+}
+
+.backButton,
+.createButton {
+  min-height: 2.75rem;
+  padding: sbs.$space-2 sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
+  color: inherit;
+  font: inherit;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+  cursor: pointer;
+}
+
+.nextSurface {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  min-width: 0;
+  max-width: 100%;
+  padding: sbs.$space-6;
+  border-width: sbs.$border-width-thin;
+  border-style: dashed;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-medium;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .list,
+  .nextSurface {
+    padding: sbs.$space-4;
+  }
+
+  .kpiGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .todayRow,
+  .row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .actionButton {
+    justify-self: start;
+    white-space: normal;
+  }
+}

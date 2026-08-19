@@ -2,6 +2,14 @@ export { UserDetail, type UserDetailProps } from "./UserDetail";
 export { UsersList, type UsersListProps } from "./UsersList";
 export { SupportPlan, type SupportPlanProps } from "./SupportPlan";
 export {
+  SupportPlanManagementList,
+  type SupportPlanManagementListProps,
+} from "./SupportPlanManagementList";
+export {
+  SupportPlanManagementNextSurface,
+  type SupportPlanManagementNextSurfaceProps,
+} from "./SupportPlanManagementNextSurface";
+export {
   collectSyntheticDetailPreviewUserIds,
   DEMO_UX_13_SLICE,
   isSyntheticDetailPreviewEnabled,
@@ -118,6 +126,22 @@ export {
   PLANNING_PC_DEMO_1_SLICE,
   SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
+export {
+  SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE,
+  SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE,
+} from "./support-plan-management-list-fixture";
+export {
+  DEMO_KPI_FAMILY_P_NOTE,
+  SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL,
+  SUPPORT_PLAN_MANAGEMENT_HEADING,
+} from "./support-plan-management-list-copy";
+export { resolveSupportPlanManagementListNext } from "./support-plan-management-list-nav";
+export { rowForUserId } from "./support-plan-management-list-kpi";
+export type {
+  ShellSupportPlanManagementListPresentation,
+  SupportPlanManagementListNext,
+  SupportPlanManagementRow,
+} from "./support-plan-management-list-types";
 export type {
   ShellUserDetailPresentation,
   UserDetailBusinessFacts,

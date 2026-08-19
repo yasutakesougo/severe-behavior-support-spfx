@@ -1,6 +1,7 @@
 import {
   isAdminAuditPresentationRole,
   isPlanningPcPresentationRole,
+  isPlannerSupportPlanManagementListRole,
   isShellPresentationRole,
   kpiSectionHeadingForRole,
   overviewSectionOrderForRole,
@@ -50,6 +51,9 @@ describe("VP-G synthetic presentationRole", () => {
     expect(isPlanningPcPresentationRole("PLANNER")).toBe(true);
     expect(isPlanningPcPresentationRole("ADMIN_AUDIT")).toBe(true);
     expect(isPlanningPcPresentationRole("FIELD_STAFF")).toBe(false);
+    expect(isPlannerSupportPlanManagementListRole("PLANNER")).toBe(true);
+    expect(isPlannerSupportPlanManagementListRole("ADMIN_AUDIT")).toBe(false);
+    expect(isPlannerSupportPlanManagementListRole("FIELD_STAFF")).toBe(false);
   });
 
   it("keeps FIELD_STAFF UserDetail strip/order for DEMO-UX-3, planner path starts at 評価", () => {
