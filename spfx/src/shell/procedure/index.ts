@@ -26,6 +26,7 @@ export {
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
   FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
   FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
+  FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
   FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
   FIELD_WORKFLOW_UI_SLICE,
   VP4_WORKFLOW_SLICE,
@@ -56,6 +57,12 @@ export {
   resolveProcedureReviewProjection,
   type HistoricalProjectionView,
 } from "./procedure-projection";
+export {
+  associateReviewObservations,
+  type ReviewObservationAssociation,
+  type ReviewObservationEvidenceInput,
+  type ReviewObservationEvidenceItem,
+} from "./review-observation-association";
 export {
   canRetryProcedureRecordSave,
   createEmptyProcedureRecordDraft,

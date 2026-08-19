@@ -3,6 +3,7 @@ import type {
   ShellProcedureReviewMaterial,
   ShellProcedureWorkflowPresentation,
 } from "./procedure-types";
+import type { ReviewObservationEvidenceInput } from "./review-observation-association";
 
 /** Active field procedure for Aさん — plan v3 / P3 (current). */
 export const FIELD_WORKFLOW_CURRENT_USER_A: ShellCurrentProcedurePresentation = {
@@ -64,6 +65,35 @@ export const FIELD_WORKFLOW_PROCEDURE_FIXTURE: ShellProcedureWorkflowPresentatio
   },
   reviewMaterials: [FIELD_WORKFLOW_REVIEW_MATERIAL_V2, FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED],
 };
+
+/** D6 synthetic association evidence; no live Observation or Review mutation. */
+export const FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE: readonly ReviewObservationEvidenceInput[] =
+  [
+    {
+      procedureRecordId: "synthetic-proc-rec-v2-001",
+      observationRecordId: "synthetic-observation-v2-002",
+      observedAt: "2026-08-12T05:00:00.000Z",
+      observedBy: "synthetic-staff-002",
+      planId: "synthetic-plan-001",
+      planVersion: 2,
+    },
+    {
+      procedureRecordId: "synthetic-proc-rec-v2-001",
+      observationRecordId: "synthetic-observation-v2-001",
+      observedAt: "2026-08-12T04:00:00.000Z",
+      observedBy: "synthetic-staff-001",
+      planId: "synthetic-plan-001",
+      planVersion: 2,
+    },
+    {
+      procedureRecordId: "synthetic-proc-rec-v3-001",
+      observationRecordId: "synthetic-observation-v3-001",
+      observedAt: "2026-08-13T04:00:00.000Z",
+      observedBy: "synthetic-staff-003",
+      planId: "synthetic-plan-001",
+      planVersion: 3,
+    },
+  ];
 
 /** Staff recorder subject — not the supported person's UserId or display name. */
 export const FIELD_WORKFLOW_RECORDER_SUBJECT_ID = "synthetic-subject-001" as const;

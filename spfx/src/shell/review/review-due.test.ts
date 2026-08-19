@@ -1,5 +1,9 @@
 import { buildAttentionSummaryFromItems } from "../ux/kpi-review-count";
-import { FIELD_WORKFLOW_PROCEDURE_FIXTURE } from "../procedure";
+import {
+  associateReviewObservations,
+  FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+  FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
+} from "../procedure";
 import {
   DEMO_REVIEW_DUE_ADMIN_READ_NOTE,
   DEMO_REVIEW_DUE_ATTENTION_EMPTY_NOTE,
@@ -167,5 +171,138 @@ describe("VP-5 Review presentation boundary", () => {
       "synthetic-proc-rec-v2-001",
       "proc-rec-unresolved-001",
     ]);
+  });
+
+  it("associates only exact historical ProcedureRecord context", () => {
+    const material = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0];
+    const association = associateReviewObservations(
+      material,
+      FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
+    );
+
+    expect(association).toEqual({
+      status: "ASSOCIATED",
+      procedureRecordId: "synthetic-proc-rec-v2-001",
+      planId: "synthetic-plan-001",
+      planVersion: 2,
+      observations: [
+        {
+          observationRecordId: "synthetic-observation-v2-001",
+          observedAt: "2026-08-12T04:00:00.000Z",
+          observedBy: "synthetic-staff-001",
+        },
+        {
+          observationRecordId: "synthetic-observation-v2-002",
+          observedAt: "2026-08-12T05:00:00.000Z",
+          observedBy: "synthetic-staff-002",
+        },
+      ],
+    });
+  });
+
+  it("fails closed for unresolved or mismatched historical context", () => {
+    const [resolved, unresolved] = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials;
+    const unresolvedAssociation = associateReviewObservations(
+      unresolved,
+      FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
+    );
+    const mismatchAssociation = associateReviewObservations(resolved, [
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[0],
+        procedureRecordId: "different-record",
+      },
+    ]);
+
+    expect(unresolvedAssociation.status).toBe("UNRESOLVED");
+    if (unresolvedAssociation.status === "UNRESOLVED") {
+      expect(unresolvedAssociation.reason).toBe("HISTORICAL_LOOKUP_UNRESOLVED");
+    }
+    expect(mismatchAssociation.status).toBe("UNRESOLVED");
+    if (mismatchAssociation.status === "UNRESOLVED") {
+      expect(mismatchAssociation.reason).toBe("NO_EXACT_CONTEXT_MATCH");
+    }
+    expect(mismatchAssociation.observations).toEqual([]);
+  });
+
+  it.each(["UNKNOWN", "VERSION_MISMATCH", "PLAN_MISMATCH", "EMPTY", "FETCH_FAILED"] as const)(
+    "fails closed for historical lookup status %s",
+    (historicalLookupStatus) => {
+      const material = {
+        ...FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0],
+        historicalLookupStatus,
+      };
+      const association = associateReviewObservations(
+        material,
+        FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
+      );
+
+      expect(association).toMatchObject({
+        status: "UNRESOLVED",
+        reason: "HISTORICAL_LOOKUP_UNRESOLVED",
+        observations: [],
+      });
+    },
+  );
+
+  it("fails closed when plan identity or version does not match", () => {
+    const material = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0];
+    const mismatchedPlanEvidence = [
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[0],
+        planId: "different-plan",
+      },
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[1],
+        planVersion: 3,
+      },
+    ];
+
+    const association = associateReviewObservations(material, mismatchedPlanEvidence);
+
+    expect(association).toMatchObject({
+      status: "UNRESOLVED",
+      reason: "NO_EXACT_CONTEXT_MATCH",
+      observations: [],
+    });
+  });
+
+  it("uses observation RecordId only as an equal-timestamp technical tie-breaker", () => {
+    const material = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0];
+    const equalTimestampEvidence = [
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[0],
+        observationRecordId: "observation-z",
+        observedAt: "2026-08-12T06:00:00.000Z",
+      },
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[1],
+        observationRecordId: "observation-a",
+        observedAt: "2026-08-12T06:00:00.000Z",
+      },
+    ];
+
+    const association = associateReviewObservations(material, equalTimestampEvidence);
+
+    expect(association.status).toBe("ASSOCIATED");
+    if (association.status === "ASSOCIATED") {
+      expect(
+        association.observations.map(({ observationRecordId }) => observationRecordId),
+      ).toEqual(["observation-a", "observation-z"]);
+    }
+  });
+
+  it("does not mutate caller evidence and does not derive compliance", () => {
+    const evidence = [...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE];
+    const snapshot = [...evidence];
+    const association = associateReviewObservations(
+      FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0],
+      evidence,
+    );
+
+    expect(evidence).toEqual(snapshot);
+    expect(association.status).toBe("ASSOCIATED");
+    expect(association).not.toHaveProperty("compliance");
+    expect(association).not.toHaveProperty("overdue");
+    expect(association).not.toHaveProperty("invalidated");
   });
 });

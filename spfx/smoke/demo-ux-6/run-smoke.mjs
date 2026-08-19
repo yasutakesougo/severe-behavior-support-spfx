@@ -12,7 +12,8 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, "../..");
 const outDir = __dirname;
-const artifactsDir = "/opt/cursor/artifacts/demo-ux-6-browser-smoke";
+const artifactsDir =
+  process.env.DEMO_UX_6_ARTIFACTS_DIR ?? "/opt/cursor/artifacts/demo-ux-6-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const esbuildModule = await import(
@@ -167,6 +168,7 @@ function assertReviewDueState(expectedStateColumns) {
   const items = document.querySelectorAll('[data-demo-ux="review-due-attention-item"]');
   const statusLabels = document.querySelectorAll('[data-demo-ux="review-status-label"]');
   const dueLabels = document.querySelectorAll('[data-demo-ux="due-state-label"]');
+  const reviewMaterials = document.querySelectorAll('[data-field-workflow="review-material-item"]');
   const mutationButtons = [
     ...document.querySelectorAll('[data-demo-ux="review-due-mutation-button"]'),
   ];
@@ -210,6 +212,7 @@ function assertReviewDueState(expectedStateColumns) {
       items.length === 3 &&
       statusLabels.length === 3 &&
       dueLabels.length === 2 &&
+      reviewMaterials.length === 2 &&
       [...statusLabels].every((el) => (el.textContent ?? "").includes("要確認")) &&
       [...statusLabels].every((el) => !(el.textContent ?? "").includes("確認待ち")) &&
       [...dueLabels].every((el) => (el.textContent ?? "").includes("期限接近")) &&
@@ -236,6 +239,7 @@ function assertReviewDueState(expectedStateColumns) {
       stateColumns === expectedStateColumns &&
       !horizontalOverflow,
     items: items.length,
+    reviewMaterials: reviewMaterials.length,
     stateColumns,
     expectedStateColumns,
     cssApplied,
@@ -302,6 +306,89 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
   const pass = Boolean(found.pass);
   checks.push({ name: "desktop-review-due", url, found, shot, pass, pageErrors: errors });
   allPass = allPass && pass;
+
+  await page.click('[data-field-workflow="review-material-open"]');
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-field-workflow="review-observation-association"]')),
+  );
+  const associationState = await page.evaluate(() => {
+    const association = document.querySelector(
+      '[data-field-workflow="review-observation-association"]',
+    );
+    const evidence = document.querySelectorAll(
+      '[data-field-workflow="review-observation-evidence-list"] li',
+    );
+    const detail = document.querySelector('[data-field-workflow="review-material-detail"]');
+    return {
+      state: association?.getAttribute("data-field-workflow-association-state") ?? "",
+      evidence: [...evidence].map((item) => item.textContent?.trim() ?? ""),
+      detailVersion: detail?.getAttribute("data-field-workflow-plan-version") ?? "",
+    };
+  });
+  associationState.pageErrors = errors;
+  const associationPass =
+    associationState.state === "ASSOCIATED" &&
+    associationState.detailVersion === "2" &&
+    associationState.evidence.length === 2 &&
+    associationState.evidence[0]?.includes("synthetic-observation-v2-001") &&
+    associationState.evidence[1]?.includes("synthetic-observation-v2-002") &&
+    errors.length === 0;
+  const associationShot = path.join(artifactsDir, "desktop-review-observation-association.png");
+  await page.screenshot({ path: associationShot, fullPage: true });
+  checks.push({
+    name: "desktop-review-observation-association",
+    url,
+    found: associationState,
+    shot: associationShot,
+    pass: associationPass,
+    pageErrors: errors,
+  });
+  allPass = allPass && associationPass;
+
+  const materialOpenButtons = await page.$$('[data-field-workflow="review-material-open"]');
+  await materialOpenButtons[1].click();
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-field-workflow="review-observation-association"]')
+        ?.getAttribute("data-field-workflow-association-state") === "UNRESOLVED",
+  );
+  const unresolvedState = await page.evaluate(() => ({
+    associationState:
+      document
+        .querySelector('[data-field-workflow="review-observation-association"]')
+        ?.getAttribute("data-field-workflow-association-state") ?? "",
+    historicalProjectionUnresolved: Boolean(
+      document.querySelector('[data-field-workflow="review-projection-unresolved"]'),
+    ),
+    observationUnresolved: Boolean(
+      document.querySelector('[data-field-workflow="review-observation-unresolved"]'),
+    ),
+    observationEvidenceCount: document.querySelectorAll(
+      '[data-field-workflow="review-observation-evidence-list"] li',
+    ).length,
+    activeFallbackVisible: Boolean(
+      document.querySelector('[data-field-workflow="review-projection-resolved"]'),
+    ),
+  }));
+  const unresolvedPass =
+    unresolvedState.associationState === "UNRESOLVED" &&
+    unresolvedState.historicalProjectionUnresolved &&
+    unresolvedState.observationUnresolved &&
+    unresolvedState.observationEvidenceCount === 0 &&
+    !unresolvedState.activeFallbackVisible &&
+    errors.length === 0;
+  const unresolvedShot = path.join(artifactsDir, "desktop-review-observation-unresolved.png");
+  await page.screenshot({ path: unresolvedShot, fullPage: true });
+  checks.push({
+    name: "desktop-review-observation-unresolved",
+    url,
+    found: { ...unresolvedState, pageErrors: errors },
+    shot: unresolvedShot,
+    pass: unresolvedPass,
+    pageErrors: errors,
+  });
+  allPass = allPass && unresolvedPass;
 
   await page.click('[data-demo-ux="review-due-back"]');
   await page.waitForFunction(() => {

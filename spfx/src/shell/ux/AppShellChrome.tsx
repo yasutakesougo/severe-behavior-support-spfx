@@ -10,6 +10,7 @@ import {
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
   ProcedureRecordCorrection,
+  FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
   canInvokeProcedureRecordStart,
   getKioskSyntheticTodaySupportItems,
   isProcedureRecordStartAllowed,
@@ -18,6 +19,7 @@ import {
   selectNextActionableOccurrence,
   type ProcedureRecordFormSaveSnapshot,
   type ShellProcedureWorkflowPresentation,
+  type ReviewObservationEvidenceInput,
 } from "../procedure";
 import {
   DailyRecords,
@@ -133,6 +135,7 @@ export type AppShellChromeProps = Readonly<{
   dailyRecordPresentation?: ShellDailyRecordPresentation;
   reviewDueStatePresentation?: ShellReviewDueStatePresentation;
   procedureWorkflowPresentation?: ShellProcedureWorkflowPresentation;
+  reviewObservationEvidence?: readonly ReviewObservationEvidenceInput[];
   /** Synthetic VP-G entry emphasis. Not Entra / roleResolutionAuthorized. */
   presentationRole?: ShellPresentationRole;
   children?: React.ReactNode;
@@ -164,6 +167,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     dailyRecordPresentation = DEMO_UX_DAILY_RECORD_FIXTURE,
     reviewDueStatePresentation = DEMO_UX_REVIEW_DUE_FIXTURE,
     procedureWorkflowPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE,
+    reviewObservationEvidence = FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
     presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
     children,
   } = props;
@@ -1025,6 +1029,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     headingRef={destinationHeadingRef}
                     onBackToOverview={handleBackToOverview}
                     procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
+                    reviewObservationEvidence={reviewObservationEvidence}
                     presentationRole={activePresentationRole}
                   />
                 ) : (
@@ -1059,6 +1064,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       onBackToOverview={handleBackToSupportPlanFromReview}
                       onNextVersionConceptRequest={handleNextVersionConceptFromReview}
                       procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
+                      reviewObservationEvidence={reviewObservationEvidence}
                       presentationRole={activePresentationRole}
                     />
                   ) : supportPlanPreviewOpen &&
