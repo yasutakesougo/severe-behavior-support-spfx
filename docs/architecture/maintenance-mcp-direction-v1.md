@@ -9,7 +9,7 @@ Unit: MAINTENANCE-MCP-DIRECTION-1
 Kind: docs-only / direction (not a Contract; not Implementation Start)
 Status: REVIEWABLE（Accepted / LOCKED ではない）
 Date: 2026-08-14
-Baseline main: 72cad1b3ad126e00531b4726079f248f53412cd0
+Baseline main: 5626e6a640ee075af69815b27c57f9681d92a48b
 
 Does NOT authorize:
   MCP server 実装
@@ -47,11 +47,16 @@ MAINTENANCE-MCP-CONTRACT-V1: NOT STARTED by this document
 
 | 問い | 正本 |
 |---|---|
+| Delivery / Gate sequencing | #392 KIOSK-SPFX Delivery / Gate Sequence |
 | 職員入口・read-only first・Human GO 前 mutation 禁止 | [`staff-confidence-and-sustainable-maintenance-v1.md`](./staff-confidence-and-sustainable-maintenance-v1.md) |
 | AI 操作区分・人の事前承認・禁止 | [`DEC-AI-ORG-003.md`](../decisions/DEC-AI-ORG-003.md) / [`.agents/mcp/permission-matrix.md`](../../.agents/mcp/permission-matrix.md) |
 | 保守 MCP を採用する場合の安全境界 | **本文書** |
 | 保守 MCP Tool 契約（名前・入出力・件数） | 未作成。本文書では開始しない |
 | MCP server 実装 | 未承認。本文書では開始しない |
+
+#392 が現行の delivery / gate sequencing を所有する。
+本文書が所有するのは **maintenance-agent MCP safety direction** だけであり、delivery ownership を持たない。
+旧 delivery Issue #300 / #301 / #302 を現行 authority として復活させず、本文書から新しい依存を追加しない。
 
 本文書は STAFF-CONFIDENCE V1 と DEC-AI-ORG-003 を再 Decision しない。
 権限を増やさない。緩和しない。
@@ -96,6 +101,7 @@ mutationAuthorized = false = 初期既定と別 Capability 化を固定する
 
 | 正本 | 関係 |
 |---|---|
+| #392 KIOSK-SPFX Delivery / Gate Sequence | 現行の delivery / gate sequencing SSOT。本文書は maintenance-agent MCP safety direction に直交し、delivery ownership を変更しない |
 | STAFF-CONFIDENCE & SUSTAINABILITY V1 | P-SC-4 / P-SC-5（read-only first、Human GO）を維持。本文書は外部アクセス候補の境界だけを追加固定する |
 | DEC-AI-ORG-003 / permission-matrix | 操作単位の権限区分 UNCHANGED。本文書は権限を増やさない |
 | AI-ORG MCP 文書群 | 接続・認証・本番 MCP 接続は依然として未実施・未承認 |
@@ -124,6 +130,8 @@ LLM による件数計算・状態判定・正本化
 - LLM が説明役であり、件数計算・状態判定・正本にならない。
 - Evidence 必須と UNKNOWN 非推測が明示されている。
 - `mutationAuthorized = false` が初期既定であり、mutation capability は別設計・Human GO 必須である。
+- #392 が現行の delivery / gate sequencing SSOT であり、本文書が delivery ownership を変更しないことが読める。
+- 旧 delivery Issue #300 / #301 / #302 を現行 authority として本文書から新規依存させない。
 - MCP server / SharePoint write / GitHub mutation / production 接続 / 自動修復を開始しない。
 
 ## 7. Gate
