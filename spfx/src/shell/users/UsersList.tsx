@@ -21,6 +21,12 @@ import {
   type UsersFilterChipLabel,
 } from "./users-filter";
 import { presentUsersListCompact } from "./users-list-compact";
+import {
+  FIELD_STAFF_PHASE8_ROSTER_CONTEXT_PRESERVING_DISCLOSURE_1_SLICE,
+  isUsersRosterDisclosureExpanded,
+  toggleUsersRosterDisclosure,
+  usersRosterDisclosureId,
+} from "./users-roster-disclosure";
 import { rememberUsersFilterChip, resolveUsersListRestoreTarget } from "./users-list-restore";
 import {
   FIELD_STAFF_NEXT_UNRECORDED_USER_1_SLICE,
@@ -112,6 +118,7 @@ export const UsersList: React.FC<UsersListProps> = ({
   const activeChip =
     restoreAuthorized && filterChip !== undefined ? rememberUsersFilterChip(filterChip) : localChip;
   const listRef = React.useRef<HTMLUListElement>(null);
+  const [expandedByUserId, setExpandedByUserId] = React.useState<Record<string, boolean>>({});
   const visibleRows = filterUserRowsByStatusChip(rows, activeChip);
   const summaryLabel = formatUsersFilterSummaryLabel(visibleRows.length, activeChip, rows.length);
   const showEmptyNote = visibleRows.length === 0;
@@ -211,6 +218,9 @@ export const UsersList: React.FC<UsersListProps> = ({
       data-demo-ux-filter-count={String(visibleRows.length)}
       data-field-staff-users-restore={restoreAuthorized ? "true" : "false"}
       data-field-staff-users-compact={compact.dataAttr}
+      data-field-staff-roster-disclosure-slice={
+        FIELD_STAFF_PHASE8_ROSTER_CONTEXT_PRESERVING_DISCLOSURE_1_SLICE.id
+      }
       aria-labelledby="demo-ux-users-heading"
     >
       <h1
@@ -389,9 +399,36 @@ export const UsersList: React.FC<UsersListProps> = ({
                 </ul>
               </div>
               <div className={styles.userMeta}>
-                <p className={styles.planSummary}>{row.planSummary}</p>
                 <p className={styles.attentionNote}>{row.attentionNote}</p>
-                <p className={styles.lastRecordLabel}>{row.lastRecordLabel}</p>
+                <button
+                  type="button"
+                  className={styles.rosterDisclosureButton}
+                  aria-expanded={isUsersRosterDisclosureExpanded(expandedByUserId, row.id)}
+                  aria-controls={usersRosterDisclosureId(row.id)}
+                  data-field-staff="roster-secondary-disclosure"
+                  data-field-staff-user-id={row.id}
+                  onClick={() => {
+                    setExpandedByUserId((previous) =>
+                      toggleUsersRosterDisclosure(previous, row.id),
+                    );
+                  }}
+                >
+                  {isUsersRosterDisclosureExpanded(expandedByUserId, row.id)
+                    ? "計画・記録の詳細を隠す"
+                    : "計画・記録の詳細を表示"}
+                </button>
+                <div
+                  id={usersRosterDisclosureId(row.id)}
+                  className={styles.rosterSecondaryMetadata}
+                  data-field-staff="roster-secondary-metadata"
+                  data-field-staff-user-id={row.id}
+                  data-field-staff-expanded={
+                    isUsersRosterDisclosureExpanded(expandedByUserId, row.id) ? "true" : "false"
+                  }
+                >
+                  <p className={styles.planSummary}>{row.planSummary}</p>
+                  <p className={styles.lastRecordLabel}>{row.lastRecordLabel}</p>
+                </div>
               </div>
               <button
                 type="button"

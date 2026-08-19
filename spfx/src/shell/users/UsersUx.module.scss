@@ -258,6 +258,37 @@
   line-height: sbs.$line-height-body;
 }
 
+.rosterDisclosureButton {
+  display: none;
+  min-height: 2.75rem;
+  padding: sbs.$space-2 sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: sbs.$radius-small;
+  background: sbs.$color-surface;
+  color: inherit;
+  font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-meta;
+  text-align: start;
+}
+
+.rosterDisclosureButton:focus,
+.rosterDisclosureButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.rosterDisclosureButton:hover:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.rosterSecondaryMetadata {
+  display: block;
+}
+
 .attentionNote {
   font-weight: sbs.$font-weight-semibold;
 }
@@ -371,12 +402,18 @@
     padding: sbs.$space-3;
 
     .userRow {
+      position: relative;
       padding: sbs.$space-2 0;
       gap: sbs.$space-1 sbs.$space-2;
     }
 
     .userMain {
       gap: sbs.$space-1;
+      padding-right: 13rem;
+    }
+
+    .userMeta {
+      padding-right: 13rem;
     }
 
     .personRow,
@@ -388,6 +425,22 @@
     .attentionNote {
       font-size: sbs.$font-size-meta;
       line-height: sbs.$line-height-meta;
+    }
+
+    .rosterDisclosureButton {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: fit-content;
+      min-height: 2.75rem; /* 44px touch target */
+      transform: translateY(-50%);
+    }
+
+    .rosterSecondaryMetadata[data-field-staff-expanded="false"] {
+      display: none;
     }
 
     .filterButton,

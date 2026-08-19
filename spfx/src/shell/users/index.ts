@@ -1,6 +1,13 @@
 export { UserDetail, type UserDetailProps } from "./UserDetail";
 export { UsersList, type UsersListProps } from "./UsersList";
 export {
+  FIELD_STAFF_PHASE8_ROSTER_CONTEXT_PRESERVING_DISCLOSURE_1_SLICE,
+  isUsersRosterDisclosureExpanded,
+  toggleUsersRosterDisclosure,
+  usersRosterDisclosureId,
+  type UsersRosterDisclosureState,
+} from "./users-roster-disclosure";
+export {
   FIELD_STAFF_PHASE8_MULTI_USER_SCALE_EVIDENCE_1_SLICE,
   FIELD_STAFF_PHASE8_MULTI_USER_SCALE_FIXTURE,
   inspectScaleContextSafety,
