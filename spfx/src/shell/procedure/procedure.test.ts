@@ -295,7 +295,20 @@ describe("Kiosk Today Support synthetic fixture (read-model only)", () => {
     const recorded = items.find((item) => item.effectiveStatus === "記録済み");
     const cancelled = items.find((item) => item.effectiveStatus === "取消済み");
     const conflict = items.find((item) => item.effectiveStatus === "確認が必要");
-    const makeContext = (item: NonNullable<typeof recorded>) => ({
+    const makeContext = (
+      item: NonNullable<typeof recorded>,
+    ): {
+      userId: string;
+      personLabel: string;
+      organizationId: string;
+      siteId: string;
+      planId: string;
+      planVersion: number;
+      procedureId: string;
+      procedureVersion: string;
+      planPeriodLabel: string;
+      occurrenceId: string;
+    } => ({
       userId: item.userId,
       personLabel: item.personLabel,
       organizationId: "synthetic-org-001",
