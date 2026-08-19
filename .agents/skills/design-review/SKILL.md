@@ -4,7 +4,7 @@
 
 UI 変更が Product UI Contract に沿っているかを監査します。
 
-主眼は Component Catalog / Screen Templates / semantic UI 規則 / a11y 意味チャネルです。Domain / SharePoint / ADR の Architecture Gate は `architecture-review` が担当します。
+主眼は Component Catalog / Screen Templates / Visual Hierarchy / semantic UI 規則 / a11y 意味チャネルです。Domain / SharePoint / ADR の Architecture Gate は `architecture-review` が担当します。
 
 旧パスの同名 Skill とは別です。旧パスは実行正本にしません。実行正本は `.agents/skills/design-review/` のみです。
 
@@ -22,6 +22,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - DADS-03 Style Guide / DADS-04 tokens / DADS-05 primitives
 - Component Catalog v1（`docs/architecture/ui-component-catalog-v1.md`）。該当 entry が無ければ GAP / HOLD
 - Screen Templates v1（`docs/architecture/ui-screen-templates-v1.md`）。該当 template が無ければ GAP / HOLD
+- Visual Hierarchy Contract v1（`docs/architecture/ui-visual-hierarchy-contract-1.md`）
 - a11y gate / semantic tests / browser smoke 結果
 
 ## 前提条件
@@ -39,8 +40,9 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 5. save 5-state 語彙外の発明がないか確認する
 6. CurrentProcedure と historical procedure の表示混同がないか確認する
 7. 既存 Catalog / Templates / primitives の forbidden substitution がないか確認する
-8. a11y 意味チャネル（label、live region）、smoke hook、`lint:ui-sem`（UI-SEM-01..05）の退行を確認する
-9. Findings を P0 / P1 / P2 で整理し判定する
+8. Visual Hierarchy: EMPHASIS と `SBS_ACTION` の混同、1 view 複数 primary CTA、非操作 KPI の新規 card 化がないか確認する
+9. a11y 意味チャネル（label、live region）、smoke hook、`lint:ui-sem`（UI-SEM-01..05）の退行を確認する
+10. Findings を P0 / P1 / P2 で整理し判定する
 
 ## 確認項目
 
@@ -51,6 +53,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - 新 hex / ad-hoc rem を DADS-04 抜きで増やしていないか（`npm run lint:ui-sem`）
 - Storybook / Figma をレビュー正本にしていないか
 - Catalog 未掲載・Template 未掲載を FAIL 理由にしていないか（GAP は P2 または HOLD）
+- EMPHASIS と `SBS_ACTION.primary` を混ぜていないか。1 view に primary CTA が複数ないか
 
 ## 停止条件
 
@@ -70,7 +73,7 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 ## 成果物
 
 - UI 差分要約
-- Catalog / Templates / primitives 適合判定
+- Catalog / Templates / Visual Hierarchy / primitives 適合判定
 - semantic / a11y / smoke / lint:ui-sem / verify:ui-templates 証跡
 - Findings（P0 / P1 / P2）
 - 次アクション
@@ -106,6 +109,8 @@ UI 変更が Product UI Contract に沿っているかを監査します。
 - save states:
 - empty vs fail-closed:
 - procedure binding:
+- EMPHASIS / SBS_ACTION:
+- card / density:
 
 ## Evidence
 - a11y gate:

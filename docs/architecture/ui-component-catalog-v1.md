@@ -24,6 +24,7 @@ Domain / Contracts          ← 何を意味するか
 Visual Principles（DADS-03） ← どう見えるか・操作するか（原則）
 Component Catalog（本文書）  ← どの component で表現するか
 Screen Templates             ← どの screen 骨格か（`docs/architecture/ui-screen-templates-v1.md`）
+Visual Hierarchy             ← 何を強く・弱く見せるか（`docs/architecture/ui-visual-hierarchy-contract-1.md`）
 ```
 
 Storybook を新 SSOT にしない。必要なら後続で Catalog の実行可能ビューアにする。
@@ -66,6 +67,7 @@ GAP     — 意味は必要だが実装がない（本 v1 では使わない）
 - `design-context`: 対象 UI を既存 entry で表現できるか判定する。無いなら GAP / HOLD。新 primitive を推測で増やさない
 - `design-review`: 差分が forbidden substitutions に当たるかを監査する
 - Catalog 不在 entry を FAIL にしない。P2 または HOLD
+- 視覚の強弱は Visual Hierarchy Contract。Catalog は部品選択のみ
 - Domain 意味変更が必要なら **別 Decision**。Catalog は表示規則のみ
 
 ## 4. Entries
@@ -439,4 +441,4 @@ npm run verify:ui-templates
 npm run lint:ui-sem
 ```
 
-UI-SEM-01..05 の正本は `docs/architecture/ui-agent-impl-3-eslint-ui-sem.md`。Screen Templates の正本は `docs/architecture/ui-screen-templates-v1.md`。Catalog は component usage SSOT、Templates は screen 骨格 SSOT、ESLint は forbidden substitution の決定論ゲート。
+UI-SEM-01..05 の正本は `docs/architecture/ui-agent-impl-3-eslint-ui-sem.md`。Screen Templates の正本は `docs/architecture/ui-screen-templates-v1.md`。Visual Hierarchy の正本は `docs/architecture/ui-visual-hierarchy-contract-1.md`。Catalog は component usage SSOT、Templates は screen 骨格 SSOT、Hierarchy は強弱 SSOT、ESLint は forbidden substitution の決定論ゲート。
