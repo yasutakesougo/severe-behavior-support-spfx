@@ -52,6 +52,8 @@ Artifacts: /opt/cursor/artifacts/demo-ux-6-browser-smoke/
 |---|---|---|
 | desktop-review-due | 要確認 / 期限接近 labels；semantic basis = 初回 anchor + caller-supplied due + 暦月 notice；mutation disabled；business/system separated | PASS |
 | desktop-review-due-subsequent-anchor | semantic basis = 継続 anchor（前回見直し日）; due / notice semantics unchanged | PASS |
+| desktop-review-observation-association | exact historical ProcedureRecord context；associated Observation evidence；no mutation | PASS |
+| desktop-review-observation-unresolved | unresolved association；no Observation evidence；no Active fallback | PASS |
 | desktop-back-to-overview | back returns to 概要；focus on overview heading | PASS |
 | tablet-review-due | 768px single-column state grid；no overflow | PASS |
 | keyboard-overview-to-review-due | Enter opens review due；focus on heading | PASS |
@@ -60,9 +62,9 @@ Artifacts: /opt/cursor/artifacts/demo-ux-6-browser-smoke/
 
 ```text
 allPass: true
-cases: 7 / 7
+cases: 9 / 9
 DEMO_UX_6_SLICE.id: DEMO-UX-6
-Heft test: 291 / 291 PASS
+Heft test: 301 / 301 PASS
 ```
 
 ## Boundary held
@@ -78,4 +80,6 @@ semantic basis distinguishes:
   初回 = 支援計画の有効開始日
   継続 = 前回見直し日
   notice = 見直し対象の暦月に入ったら
+  Observation association = exact historical context only
+  unresolved / mismatch = fail-closed; no Active fallback
 ```

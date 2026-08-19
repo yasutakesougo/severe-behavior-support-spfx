@@ -224,6 +224,73 @@ describe("VP-5 Review presentation boundary", () => {
     expect(mismatchAssociation.observations).toEqual([]);
   });
 
+  it.each(["UNKNOWN", "VERSION_MISMATCH", "PLAN_MISMATCH", "EMPTY", "FETCH_FAILED"] as const)(
+    "fails closed for historical lookup status %s",
+    (historicalLookupStatus) => {
+      const material = {
+        ...FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0],
+        historicalLookupStatus,
+      };
+      const association = associateReviewObservations(
+        material,
+        FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
+      );
+
+      expect(association).toMatchObject({
+        status: "UNRESOLVED",
+        reason: "HISTORICAL_LOOKUP_UNRESOLVED",
+        observations: [],
+      });
+    },
+  );
+
+  it("fails closed when plan identity or version does not match", () => {
+    const material = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0];
+    const mismatchedPlanEvidence = [
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[0],
+        planId: "different-plan",
+      },
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[1],
+        planVersion: 3,
+      },
+    ];
+
+    const association = associateReviewObservations(material, mismatchedPlanEvidence);
+
+    expect(association).toMatchObject({
+      status: "UNRESOLVED",
+      reason: "NO_EXACT_CONTEXT_MATCH",
+      observations: [],
+    });
+  });
+
+  it("uses observation RecordId only as an equal-timestamp technical tie-breaker", () => {
+    const material = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0];
+    const equalTimestampEvidence = [
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[0],
+        observationRecordId: "observation-z",
+        observedAt: "2026-08-12T06:00:00.000Z",
+      },
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[1],
+        observationRecordId: "observation-a",
+        observedAt: "2026-08-12T06:00:00.000Z",
+      },
+    ];
+
+    const association = associateReviewObservations(material, equalTimestampEvidence);
+
+    expect(association.status).toBe("ASSOCIATED");
+    if (association.status === "ASSOCIATED") {
+      expect(
+        association.observations.map(({ observationRecordId }) => observationRecordId),
+      ).toEqual(["observation-a", "observation-z"]);
+    }
+  });
+
   it("does not mutate caller evidence and does not derive compliance", () => {
     const evidence = [...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE];
     const snapshot = [...evidence];

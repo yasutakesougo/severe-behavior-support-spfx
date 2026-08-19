@@ -323,9 +323,9 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
       state: association?.getAttribute("data-field-workflow-association-state") ?? "",
       evidence: [...evidence].map((item) => item.textContent?.trim() ?? ""),
       detailVersion: detail?.getAttribute("data-field-workflow-plan-version") ?? "",
-      pageErrors: errors,
     };
   });
+  associationState.pageErrors = errors;
   const associationPass =
     associationState.state === "ASSOCIATED" &&
     associationState.detailVersion === "2" &&
@@ -344,6 +344,51 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
     pageErrors: errors,
   });
   allPass = allPass && associationPass;
+
+  const materialOpenButtons = await page.$$('[data-field-workflow="review-material-open"]');
+  await materialOpenButtons[1].click();
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-field-workflow="review-observation-association"]')
+        ?.getAttribute("data-field-workflow-association-state") === "UNRESOLVED",
+  );
+  const unresolvedState = await page.evaluate(() => ({
+    associationState:
+      document
+        .querySelector('[data-field-workflow="review-observation-association"]')
+        ?.getAttribute("data-field-workflow-association-state") ?? "",
+    historicalProjectionUnresolved: Boolean(
+      document.querySelector('[data-field-workflow="review-projection-unresolved"]'),
+    ),
+    observationUnresolved: Boolean(
+      document.querySelector('[data-field-workflow="review-observation-unresolved"]'),
+    ),
+    observationEvidenceCount: document.querySelectorAll(
+      '[data-field-workflow="review-observation-evidence-list"] li',
+    ).length,
+    activeFallbackVisible: Boolean(
+      document.querySelector('[data-field-workflow="review-projection-resolved"]'),
+    ),
+  }));
+  const unresolvedPass =
+    unresolvedState.associationState === "UNRESOLVED" &&
+    unresolvedState.historicalProjectionUnresolved &&
+    unresolvedState.observationUnresolved &&
+    unresolvedState.observationEvidenceCount === 0 &&
+    !unresolvedState.activeFallbackVisible &&
+    errors.length === 0;
+  const unresolvedShot = path.join(artifactsDir, "desktop-review-observation-unresolved.png");
+  await page.screenshot({ path: unresolvedShot, fullPage: true });
+  checks.push({
+    name: "desktop-review-observation-unresolved",
+    url,
+    found: { ...unresolvedState, pageErrors: errors },
+    shot: unresolvedShot,
+    pass: unresolvedPass,
+    pageErrors: errors,
+  });
+  allPass = allPass && unresolvedPass;
 
   await page.click('[data-demo-ux="review-due-back"]');
   await page.waitForFunction(() => {

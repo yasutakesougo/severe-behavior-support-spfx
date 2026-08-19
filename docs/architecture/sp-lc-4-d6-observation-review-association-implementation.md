@@ -23,7 +23,7 @@ Mode: synthetic / read-only presentation evidence
 ```text
 Heft test --clean: PASS
   42 suites
-  289 tests passed
+  301 tests passed
   0 failed
 
 Prettier changed files: PASS
@@ -31,11 +31,13 @@ TypeScript / webpack / SPFx lint pipeline: PASS
   existing unrelated lint warning remains in
   src/adapters/assessment-snapshot/read-integration.ts
 
-Browser smoke: NOT RUN TO COMPLETION
-  runner startup was blocked because /usr/bin/google-chrome-stable is not
-  available in this environment. The runner now accepts
-  DEMO_UX_6_ARTIFACTS_DIR for writable artifact output while preserving the
-  existing default path.
+Browser smoke: PASS
+  9 / 9 cases
+  association display: PASS
+  unresolved association / no Active fallback: PASS
+  page errors: 0
+  horizontal overflow: false
+  artifacts: demo-ux-6-d6-artifacts
 ```
 
 ## Scope confirmation
