@@ -34,9 +34,16 @@ import {
   DEMO_UX_USERS_FIXTURE,
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
   PLANNING_PC_DEMO_1_SLICE,
+  SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL,
+  SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE,
+  SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE,
   SupportPlan,
+  SupportPlanManagementList,
+  SupportPlanManagementNextSurface,
   UserDetail,
   UsersList,
+  resolveSupportPlanManagementListNext,
+  rowForUserId,
   discardUsersListRestore,
   rememberUsersFilterChip,
   rememberUsersFocusOrigin,
@@ -51,6 +58,8 @@ import {
   type ShellSupportPlanPresentation,
   type ShellUserDetailPresentation,
   type ShellUsersPresentation,
+  type SupportPlanManagementListNext,
+  type SupportPlanManagementRow,
   type UsersFilterChipLabel,
   type UsersSessionDraftByUserId,
   type UsersSessionSaveStateByUserId,
@@ -65,7 +74,11 @@ import { shouldClearNextVersionConceptHighlight } from "./next-version-highlight
 import { PartialRetrievalPanel } from "./PartialRetrievalPanel";
 import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
-import { SHELL_DEFAULT_PRESENTATION_ROLE, type ShellPresentationRole } from "./presentation-role";
+import {
+  SHELL_DEFAULT_PRESENTATION_ROLE,
+  isPlannerSupportPlanManagementListRole,
+  type ShellPresentationRole,
+} from "./presentation-role";
 import type { ShellSaveState } from "./save-state";
 import {
   DEMO_UX_14_SLICE,
@@ -160,6 +173,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     selectedDestinationProp ?? SHELL_DEFAULT_DESTINATION,
   );
   const [selectedUserDetailId, setSelectedUserDetailId] = React.useState<string | undefined>();
+  const [plannerListNext, setPlannerListNext] = React.useState<
+    SupportPlanManagementListNext | undefined
+  >();
+  const [plannerListOrigin, setPlannerListOrigin] = React.useState(false);
   const [supportPlanPreviewOpen, setSupportPlanPreviewOpen] = React.useState(false);
   const [currentProcedureOpen, setCurrentProcedureOpen] = React.useState(false);
   const [procedureRecordFormOpen, setProcedureRecordFormOpen] = React.useState(false);
@@ -200,6 +217,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const selectedUserDetail = selectedUserDetailId
     ? userDetailById.get(selectedUserDetailId)
     : undefined;
+  const plannerNextRow = plannerListNext
+    ? rowForUserId(SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows, plannerListNext.userId)
+    : undefined;
+  const showPlannerManagementList =
+    SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.plannerUsersDestinationListAuthorized &&
+    isPlannerSupportPlanManagementListRole(activePresentationRole);
 
   const discardUsersListRestoreState = (): void => {
     const discarded = discardUsersListRestore();
@@ -221,6 +244,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   React.useEffect(() => {
     setActivePresentationRole(presentationRole);
   }, [presentationRole]);
+
+  React.useEffect(() => {
+    if (!isPlannerSupportPlanManagementListRole(activePresentationRole)) {
+      setPlannerListNext(undefined);
+      setPlannerListOrigin(false);
+    }
+  }, [activePresentationRole]);
 
   React.useEffect(() => {
     setSelection(siteSelection);
@@ -363,6 +393,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (
         next === "users" &&
         (selectedUserDetailId !== undefined ||
+          plannerListNext !== undefined ||
           supportPlanPreviewOpen ||
           currentProcedureOpen ||
           procedureRecordFormOpen ||
@@ -376,6 +407,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         setReviewFromSupportPlan(false);
         setNextVersionConceptFromReview(false);
         setSelectedUserDetailId(undefined);
+        setPlannerListNext(undefined);
+        setPlannerListOrigin(false);
         requestUsersListRestore();
         return;
       }
@@ -393,6 +426,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
     setSelectedUserDetailId(undefined);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(false);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
     setNextVersionConceptFromReview(false);
@@ -413,6 +448,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(undefined);
     setUsersFocusOriginUserId(rememberUsersFocusOrigin(userId));
     setRestoreUsersList(false);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(false);
     setSelectedUserDetailId(userId);
   };
 
@@ -486,6 +523,53 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
     setSelectedUserDetailId(undefined);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(false);
+  };
+
+  const handlePlannerListRowAction = (row: SupportPlanManagementRow): void => {
+    if (interactionPaused || !SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.demoNavigationAuthorized) {
+      return;
+    }
+    const fixtureRow = rowForUserId(SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows, row.userId);
+    if (!fixtureRow) {
+      return;
+    }
+    const next = resolveSupportPlanManagementListNext(fixtureRow, supportPlanPresentation.userId);
+    shouldFocusDestinationRef.current = true;
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
+    if (next.kind === "existing-plan") {
+      setPlannerListOrigin(true);
+      setPlannerListNext(undefined);
+      setSelectedUserDetailId(next.userId);
+      setSupportPlanPreviewOpen(true);
+      return;
+    }
+    setPlannerListOrigin(false);
+    setSelectedUserDetailId(undefined);
+    setSupportPlanPreviewOpen(false);
+    setPlannerListNext(next);
+  };
+
+  const handleBackToPlannerList = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureFlowSaveState(undefined);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
+    setNextVersionConceptFromReview(false);
+    setSelectedUserDetailId(undefined);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(false);
   };
 
   const handleSupportPlanRequest = (): void => {
@@ -511,6 +595,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const handleBackToUserDetail = (): void => {
     if (interactionPaused) {
+      return;
+    }
+    if (plannerListOrigin) {
+      handleBackToPlannerList();
       return;
     }
     shouldFocusDestinationRef.current = true;
@@ -736,6 +824,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
       data-review-new-version-from-review={nextVersionConceptFromReview ? "true" : "false"}
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
+      data-support-plan-mgmt-demo-slice={SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.id}
       data-admin-demo-ux-polish-1-slice={ADMIN_DEMO_UX_POLISH_1_SLICE.id}
       data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
       data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
@@ -924,6 +1013,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       presentation={supportPlanPresentation}
                       headingRef={destinationHeadingRef}
                       onBackToUserDetail={handleBackToUserDetail}
+                      backLabel={
+                        plannerListOrigin ? SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL : undefined
+                      }
                       onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
                       nextVersionConceptHighlighted={nextVersionConceptFromReview}
                       presentationRole={activePresentationRole}
@@ -986,6 +1078,21 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       }
                     />
                   )
+                ) : plannerListNext &&
+                  plannerNextRow &&
+                  plannerListNext.kind !== "existing-plan" ? (
+                  <SupportPlanManagementNextSurface
+                    kind={plannerListNext.kind === "create" ? "create" : "synthetic-detail"}
+                    row={plannerNextRow}
+                    headingRef={destinationHeadingRef}
+                    onBackToList={handleBackToPlannerList}
+                  />
+                ) : showPlannerManagementList ? (
+                  <SupportPlanManagementList
+                    presentation={SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE}
+                    headingRef={destinationHeadingRef}
+                    onRowAction={handlePlannerListRowAction}
+                  />
                 ) : (
                   <UsersList
                     presentation={usersPresentation}

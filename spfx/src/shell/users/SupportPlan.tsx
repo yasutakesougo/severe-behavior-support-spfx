@@ -40,6 +40,7 @@ export type SupportPlanProps = Readonly<{
   presentation: ShellSupportPlanPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToUserDetail?: () => void;
+  backLabel?: string;
   onReviewMaterialsRequest?: () => void;
   nextVersionConceptHighlighted?: boolean;
   presentationRole?: ShellPresentationRole;
@@ -56,6 +57,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   presentation,
   headingRef,
   onBackToUserDetail,
+  backLabel = "← 利用者詳細",
   onReviewMaterialsRequest,
   nextVersionConceptHighlighted = false,
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
@@ -404,7 +406,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           aria-disabled={!onBackToUserDetail ? "true" : undefined}
           data-demo-ux="support-plan-back"
         >
-          ← 利用者詳細
+          {backLabel}
         </button>
       </div>
       <p className={styles.personSubheading} data-demo-ux="support-plan-person">

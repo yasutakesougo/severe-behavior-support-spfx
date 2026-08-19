@@ -223,6 +223,7 @@ section
 id: DestinationList
 status: EXISTS
 path: spfx/src/shell/users/UsersList.tsx
+path: spfx/src/shell/users/SupportPlanManagementList.tsx
 path: spfx/src/shell/records/DailyRecords.tsx
 path: spfx/src/shell/review/ReviewDueState.tsx
 ```
@@ -272,7 +273,8 @@ section[data-demo-ux]
 - `data-demo-ux="users-list"` / `users-filter-empty-note`
 - `data-demo-ux="daily-record-recent-empty-note"`
 - `data-demo-ux="review-due-attention-empty-note"`
-- demo-ux-2 / 8 / 5 / 6 smokes
+- `data-demo-ux="support-plan-management-list"` / `support-plan-mgmt-today-empty`
+- demo-ux-2 / 8 / 5 / 6 smokes / support-plan-management-list-demo-1
 
 #### Good examples
 
@@ -287,6 +289,7 @@ section[data-demo-ux]
 #### Adoption surfaces
 
 - UsersList / DailyRecords の incomplete・recent / ReviewDue attention
+- SupportPlanManagementList（PLANNER 支援計画一覧。Family P。Family R を上書きしない）
 - 新一覧は本 template。カード壁紙を増やして EmptyNotice を省略しない
 
 ### DestinationDetail

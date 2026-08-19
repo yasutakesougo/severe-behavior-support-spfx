@@ -820,6 +820,59 @@ export function runAccessibilityGate() {
     });
   }
 
+  // --- A11Y-HD-08: SupportPlanManagementList heading hierarchy ---
+  const planListPath = "spfx/src/shell/users/SupportPlanManagementList.tsx";
+  if (relExists(planListPath)) {
+    const src = read(planListPath);
+    const h1Count = (src.match(/<h1\b/g) || []).length;
+    const hasListH1 = /<h1\b/.test(src) && src.includes("support-plan-mgmt-heading");
+    const sectionH2Count = (src.match(/<h2\b/g) || []).length;
+    const hasStatusBadge = src.includes("StatusBadge") && src.includes("workStateLabel");
+    const ok = h1Count === 1 && hasListH1 && sectionH2Count >= 2 && hasStatusBadge;
+    push({
+      id: "A11Y-HD-08",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "SupportPlanManagementList keeps single h1 + section h2 + StatusBadge labels"
+        : "SupportPlanManagementList heading/status regression (expect 1 h1, section h2, StatusBadge labels)",
+    });
+  } else {
+    push({
+      id: "A11Y-HD-08",
+      severity: "blocking",
+      ok: false,
+      detail: `${planListPath} missing`,
+    });
+  }
+
+  // --- A11Y-SPML-01: SupportPlanManagementList SCSS tokens + focus-visible ---
+  const planListScssPath = "spfx/src/shell/users/SupportPlanManagementListUx.module.scss";
+  if (relExists(planListScssPath)) {
+    const css = read(planListScssPath);
+    const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+    const hardcodedOutsideTheme = /(?:^|[^"])#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b/.test(
+      css.replace(/"[^"]*"/g, '""').replace(/@use[\s\S]*?;/, ""),
+    );
+    const focusVisible = /:focus-visible\b/.test(css);
+    const ok = usesTokens && !hardcodedOutsideTheme && focusVisible;
+    push({
+      id: "A11Y-SPML-01",
+      severity: "blocking",
+      ok,
+      detail: ok
+        ? "SupportPlanManagementList SCSS uses DADS-04 tokens + focus-visible"
+        : `SupportPlanManagementList SCSS gate failed (tokens=${usesTokens}, focus-visible=${focusVisible}, rawHex=${hardcodedOutsideTheme})`,
+    });
+  } else {
+    push({
+      id: "A11Y-SPML-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${planListScssPath} missing`,
+    });
+  }
+
   // --- A11Y-FV-01: focus tokens + selector mix advisory ---
   const semanticPath = "spfx/src/shell/tokens/semantic.ts";
   const scssFiles = listFilesRecursive("spfx/src/shell", [".scss"]);

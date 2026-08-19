@@ -245,6 +245,22 @@ export const SBS_A11Y_RULE_CATALOG: readonly SbsA11yRule[] = [
     summary: "SupportPlan disabled controls expose aria-disabled with disabled",
   },
   {
+    id: "A11Y-HD-08",
+    focus: "heading",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-08"],
+    summary: "SupportPlanManagementList keeps single h1, section h2, and StatusBadge labels",
+  },
+  {
+    id: "A11Y-SPML-01",
+    focus: "focus-visible",
+    severity: "blocking",
+    coverage: "covered",
+    inventoryRefs: ["INV-08", "INV-20", "INV-22"],
+    summary: "SupportPlanManagementList SCSS consumes DADS-04 tokens and exposes focus-visible",
+  },
+  {
     id: "A11Y-AN-01",
     focus: "accessible-name",
     severity: "blocking",
