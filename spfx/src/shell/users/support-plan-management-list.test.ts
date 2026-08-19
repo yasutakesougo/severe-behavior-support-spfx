@@ -56,7 +56,9 @@ describe("SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 fixture", () => {
     expect(labels.needsActionLabel).toBe(
       formatFamilyPCountLabel(SUPPORT_PLAN_MANAGEMENT_KPI_LABELS.needs_action, 2),
     );
-    expect(DEMO_KPI_FAMILY_P_NOTE).toContain("利用者一覧の要確認/未記録/期限接近とは対象が異なります");
+    expect(DEMO_KPI_FAMILY_P_NOTE).toContain(
+      "利用者一覧の要確認/未記録/期限接近とは対象が異なります",
+    );
   });
 
   it("builds 今日やること from non-empty 要対応 rows", () => {
@@ -79,9 +81,9 @@ describe("SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 fixture", () => {
 
   it("expresses review as a month guide and not a 90-day expiry", () => {
     expect(formatSupportPlanManagementReviewWindowLabel("2026/09")).toBe("見直し目安: 2026/09");
-    const joined = SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows.map((row) => row.reviewWindowLabel).join(
-      " ",
-    );
+    const joined = SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows
+      .map((row) => row.reviewWindowLabel)
+      .join(" ");
     expect(supportPlanManagementCopyAvoidsExpiryMeaning(joined)).toBe(true);
     expect(SUPPORT_PLAN_MANAGEMENT_FORBIDDEN_EXPIRY_TOKENS).toEqual(["90日", "失効"]);
   });
@@ -91,9 +93,9 @@ describe("SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 fixture", () => {
     expect(supportPlanManagementCopyAvoidsFinalApprovalMeaning(joined)).toBe(true);
     expect(SUPPORT_PLAN_MANAGEMENT_FORBIDDEN_STATUS_TOKENS).toEqual(["最終承認者", "承認済み"]);
     expect(supportPlanManagementCopyIsFailClosed(SUPPORT_PLAN_MANAGEMENT_CREATE_NOTE)).toBe(true);
-    expect(supportPlanManagementCopyIsFailClosed(SUPPORT_PLAN_MANAGEMENT_SYNTHETIC_DETAIL_NOTE)).toBe(
-      true,
-    );
+    expect(
+      supportPlanManagementCopyIsFailClosed(SUPPORT_PLAN_MANAGEMENT_SYNTHETIC_DETAIL_NOTE),
+    ).toBe(true);
   });
 
   it("routes Aさん to existing SupportPlan and others to demo-only next surfaces", () => {

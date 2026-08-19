@@ -75,7 +75,9 @@ export function formatSupportPlanManagementObservationLabel(dateLabel: string | 
   return `最終観察日: ${dateLabel}`;
 }
 
-export function formatSupportPlanManagementReviewWindowLabel(monthLabel: string | undefined): string {
+export function formatSupportPlanManagementReviewWindowLabel(
+  monthLabel: string | undefined,
+): string {
   if (!monthLabel) {
     return SUPPORT_PLAN_MANAGEMENT_REVIEW_NONE_LABEL;
   }

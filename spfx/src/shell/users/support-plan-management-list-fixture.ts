@@ -13,10 +13,12 @@ import type {
   SupportPlanManagementRow,
 } from "./support-plan-management-list-types";
 
-function row(input: Omit<SupportPlanManagementRow, "workStateLabel" | "actionLabel"> & {
-  workState: SupportPlanManagementRow["workState"];
-  actionKind: SupportPlanManagementRow["actionKind"];
-}): SupportPlanManagementRow {
+function row(
+  input: Omit<SupportPlanManagementRow, "workStateLabel" | "actionLabel"> & {
+    workState: SupportPlanManagementRow["workState"];
+    actionKind: SupportPlanManagementRow["actionKind"];
+  },
+): SupportPlanManagementRow {
   return {
     ...input,
     workStateLabel: SUPPORT_PLAN_MANAGEMENT_WORK_STATE_LABELS[input.workState],

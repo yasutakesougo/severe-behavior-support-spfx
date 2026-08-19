@@ -38,12 +38,16 @@ export const SupportPlanManagementNextSurface: React.FC<SupportPlanManagementNex
       ? SUPPORT_PLAN_MANAGEMENT_CREATE_NOTE
       : SUPPORT_PLAN_MANAGEMENT_SYNTHETIC_DETAIL_NOTE;
   const headingId =
-    kind === "create" ? "support-plan-mgmt-create-heading" : "support-plan-mgmt-synth-detail-heading";
+    kind === "create"
+      ? "support-plan-mgmt-create-heading"
+      : "support-plan-mgmt-synth-detail-heading";
 
   return (
     <section
       className={styles.nextSurface}
-      data-demo-ux={kind === "create" ? "support-plan-mgmt-create" : "support-plan-mgmt-synth-detail"}
+      data-demo-ux={
+        kind === "create" ? "support-plan-mgmt-create" : "support-plan-mgmt-synth-detail"
+      }
       data-support-plan-mgmt-demo-slice={SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.id}
       data-support-plan-mgmt-user-id={row.userId}
       aria-labelledby={headingId}

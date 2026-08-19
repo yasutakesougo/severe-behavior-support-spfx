@@ -35,7 +35,9 @@ export function buildFamilyPCounts(rows: readonly SupportPlanManagementRow[]): F
   };
 }
 
-export function buildFamilyPCountLabels(rows: readonly SupportPlanManagementRow[]): FamilyPCountLabels {
+export function buildFamilyPCountLabels(
+  rows: readonly SupportPlanManagementRow[],
+): FamilyPCountLabels {
   const counts = buildFamilyPCounts(rows);
   return {
     needsActionLabel: formatFamilyPCountLabel(

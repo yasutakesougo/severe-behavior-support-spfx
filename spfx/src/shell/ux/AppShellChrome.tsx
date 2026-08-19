@@ -528,20 +528,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handlePlannerListRowAction = (row: SupportPlanManagementRow): void => {
-    if (
-      interactionPaused ||
-      !SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.demoNavigationAuthorized
-    ) {
+    if (interactionPaused || !SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.demoNavigationAuthorized) {
       return;
     }
     const fixtureRow = rowForUserId(SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows, row.userId);
     if (!fixtureRow) {
       return;
     }
-    const next = resolveSupportPlanManagementListNext(
-      fixtureRow,
-      supportPlanPresentation.userId,
-    );
+    const next = resolveSupportPlanManagementListNext(fixtureRow, supportPlanPresentation.userId);
     shouldFocusDestinationRef.current = true;
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
@@ -1084,7 +1078,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       }
                     />
                   )
-                ) : plannerListNext && plannerNextRow && plannerListNext.kind !== "existing-plan" ? (
+                ) : plannerListNext &&
+                  plannerNextRow &&
+                  plannerListNext.kind !== "existing-plan" ? (
                   <SupportPlanManagementNextSurface
                     kind={plannerListNext.kind === "create" ? "create" : "synthetic-detail"}
                     row={plannerNextRow}
