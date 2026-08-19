@@ -88,6 +88,20 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const currentVersionEntry = versions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
   const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
+  const titleHeading = (
+    <div className={styles.headingTitleRow}>
+      <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
+      <h1
+        id="demo-ux-support-plan-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className={styles.planHeading}
+        data-demo-ux="support-plan-heading"
+      >
+        {planTitle}
+      </h1>
+    </div>
+  );
 
   const summaryBlock = (
     <section className={styles.detailSection} aria-labelledby="demo-ux-plan-summary-heading">
@@ -408,18 +422,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             <p className={styles.personHeading} data-demo-ux="support-plan-person">
               {personLabel}
             </p>
-            <div className={styles.headingTitleRow}>
-              <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
-              <h1
-                id="demo-ux-support-plan-heading"
-                ref={headingRef}
-                tabIndex={-1}
-                className={styles.planHeading}
-                data-demo-ux="support-plan-heading"
-              >
-                {planTitle}
-              </h1>
-            </div>
+            {titleHeading}
             <div className={styles.statusSummary} data-demo-ux="support-plan-status-summary">
               <p
                 className={styles.statusLabel}
@@ -460,18 +463,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         </>
       ) : (
         <>
-          <div className={styles.headingTitleRow}>
-            <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
-            <h1
-              id="demo-ux-support-plan-heading"
-              ref={headingRef}
-              tabIndex={-1}
-              className={styles.planHeading}
-              data-demo-ux="support-plan-heading"
-            >
-              {planTitle}
-            </h1>
-          </div>
+          {titleHeading}
           <div className={styles.topRow}>
             <button
               type="button"
