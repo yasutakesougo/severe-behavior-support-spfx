@@ -385,6 +385,130 @@ async function assertCorrectionPathForStatus(page, status) {
 try {
   const readyQuery = "viewMode=ready&siteSelection=SITE-ISG&destination=overview&saveState=unsaved";
 
+  {
+    const { page, errors } = await openPage(
+      "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=FIELD_STAFF&scale=18",
+      { width: 768, height: 1024, deviceScaleFactor: 1 },
+    );
+    const roster = await page.evaluate(() => {
+      const root = document.querySelector('[data-shell-ux="smoke-root"]');
+      const list = document.querySelector('[data-demo-ux="users-row-list"]');
+      const rows = [...document.querySelectorAll('[data-demo-ux="users-row"]')];
+      const contexts = rows.map((row) => ({
+        id: row.getAttribute("data-demo-ux-user-id") ?? "",
+        label: row.querySelector(".personLabel")?.textContent?.trim() ?? "",
+        detailPreview:
+          row
+            .querySelector('[data-demo-ux="users-detail-button"]')
+            ?.getAttribute("data-demo-ux-detail-preview") ?? "false",
+      }));
+      const ids = contexts.map(({ id }) => id);
+      const labels = contexts.map(({ label }) => label);
+      return {
+        scenario: root?.getAttribute("data-field-staff-scale-scenario") ?? "",
+        rowCount: rows.length,
+        uniqueIds: new Set(ids).size === ids.length,
+        uniqueLabels: new Set(labels).size === labels.length,
+        requiredContext: contexts.every(({ id, label }) => id.length > 0 && label.length > 0),
+        detailPreviewCount: contexts.filter(({ detailPreview }) => detailPreview === "true").length,
+        clientHeight: document.documentElement.clientHeight,
+        scrollHeight: document.documentElement.scrollHeight,
+        horizontalOverflow:
+          document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        contexts,
+      };
+    });
+    const beforeFilter = roster;
+    await page.$eval('[data-demo-ux="users-heading"]', (heading) => heading.focus());
+    const keyboardToDetail = await tabUntil(
+      page,
+      (active) => active.tag === "BUTTON" && active.text === "詳細を見る",
+    );
+    const keyboardFocus = await page.evaluate(hasVisibleFocus);
+    await page.keyboard.press("Enter");
+    await page.waitForSelector('[data-demo-ux="user-detail"]', { timeout: 8000 });
+    const keyboardDetailContext = await page.$eval(
+      '[data-demo-ux="user-detail"] [data-demo-ux="user-detail-heading"]',
+      (heading) => heading.textContent?.trim() ?? "",
+    );
+    await page.click('[data-demo-ux="user-detail-back"]');
+    await page.waitForSelector('[data-demo-ux="users-row-list"]', { timeout: 8000 });
+    await page.click('[data-demo-ux="users-filter-chip"][data-demo-ux-filter="未記録"]');
+    const filteredCount = await page.$eval(
+      '[data-demo-ux="users-row-list"]',
+      (list) => list.querySelectorAll('[data-demo-ux="users-row"]').length,
+    );
+    await page.click('[data-demo-ux="users-filter-chip"][data-demo-ux-filter="すべて"]');
+    await page.click('[data-demo-ux-detail-preview="true"]');
+    await page.waitForSelector('[data-demo-ux="user-detail"]', { timeout: 8000 });
+    const detailContext = await page.$eval(
+      '[data-demo-ux="user-detail"] [data-demo-ux="user-detail-heading"]',
+      (heading) => heading.textContent?.trim() ?? "",
+    );
+    await page.click('[data-demo-ux="user-detail-back"]');
+    await page.waitForSelector('[data-demo-ux="users-row-list"]', { timeout: 8000 });
+    const afterReturn = await page.$eval(
+      '[data-demo-ux="users-row-list"]',
+      (list) => list.querySelectorAll('[data-demo-ux="users-row"]').length,
+    );
+    const pass =
+      errors.length === 0 &&
+      beforeFilter.scenario === "18" &&
+      beforeFilter.rowCount === 18 &&
+      beforeFilter.uniqueIds &&
+      beforeFilter.uniqueLabels &&
+      beforeFilter.requiredContext &&
+      beforeFilter.detailPreviewCount === 2 &&
+      beforeFilter.scrollHeight > beforeFilter.clientHeight &&
+      beforeFilter.horizontalOverflow === false &&
+      keyboardToDetail.found &&
+      keyboardFocus.visible &&
+      keyboardDetailContext === "Aさん" &&
+      filteredCount === 7 &&
+      detailContext === "Aさん" &&
+      afterReturn === 18;
+    record("field-staff-18-user-scale-context-safety", pass, {
+      errors,
+      beforeFilter,
+      keyboardToDetail,
+      keyboardFocus,
+      keyboardDetailContext,
+      filteredCount,
+      detailContext,
+      afterReturn,
+      interactionBurden: {
+        rosterRows: beforeFilter.rowCount,
+        listClientHeight: beforeFilter.clientHeight,
+        listScrollHeight: beforeFilter.scrollHeight,
+        verticalScrollRequired: beforeFilter.scrollHeight > beforeFilter.clientHeight,
+      },
+    });
+    await screenshot(page, "field-staff-18-user-scale-context-safety");
+    await page.close();
+  }
+
+  if (process.env.KIOSK_SCALE_ONLY === "1") {
+    const scaleReport = {
+      slice: "FIELD-STAFF-PHASE8-MULTI-USER-SCALE-EVIDENCE-1",
+      kind: "focused synthetic 18-user browser smoke",
+      date: new Date().toISOString(),
+      liveTenantIoAuthorized: false,
+      sharePointRestAuthorized: false,
+      checks,
+      pass: checks.every((check) => check.pass),
+    };
+    fs.writeFileSync(
+      path.join(artifactsDir, "smoke-report.json"),
+      JSON.stringify(scaleReport, null, 2),
+    );
+    await browser.close();
+    server.close();
+    console.log(
+      JSON.stringify({ pass: scaleReport.pass, artifactsDir, checks: checks.length }, null, 2),
+    );
+    process.exit(scaleReport.pass ? 0 : 1);
+  }
+
   const viewportCases = [
     {
       id: "tablet-portrait",

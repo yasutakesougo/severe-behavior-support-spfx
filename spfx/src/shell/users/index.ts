@@ -1,5 +1,11 @@
 export { UserDetail, type UserDetailProps } from "./UserDetail";
 export { UsersList, type UsersListProps } from "./UsersList";
+export {
+  FIELD_STAFF_PHASE8_MULTI_USER_SCALE_EVIDENCE_1_SLICE,
+  FIELD_STAFF_PHASE8_MULTI_USER_SCALE_FIXTURE,
+  inspectScaleContextSafety,
+  type ScaleContextSafetyReport,
+} from "./field-staff-phase8-multi-user-scale-evidence";
 export { SupportPlan, type SupportPlanProps } from "./SupportPlan";
 export {
   SupportPlanManagementList,
