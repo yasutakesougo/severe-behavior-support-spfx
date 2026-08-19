@@ -144,8 +144,7 @@ function assertPlannerList() {
   );
   const usersList = document.querySelector('[data-demo-ux="users-list"]');
   const text = document.body?.textContent ?? "";
-  const overflow =
-    document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
   return {
     pass:
       Boolean(list) &&
@@ -218,7 +217,9 @@ async function recordCase(name, page, url, found, errors) {
   await page.click(
     '[data-demo-ux="support-plan-mgmt-action"][data-support-plan-mgmt-user-id="user-a"]',
   );
-  await page.waitForFunction(() => Boolean(document.querySelector('[data-demo-ux="support-plan"]')));
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
   const found = await page.evaluate(() => {
     const plan = document.querySelector('[data-demo-ux="support-plan"]');
     const list = document.querySelector('[data-demo-ux="support-plan-management-list"]');
@@ -359,7 +360,9 @@ async function recordCase(name, page, url, found, errors) {
     }
   });
   await page.keyboard.press("Enter");
-  await page.waitForFunction(() => Boolean(document.querySelector('[data-demo-ux="support-plan"]')));
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
   const found = await page.evaluate((beforeTag) => {
     const plan = document.querySelector('[data-demo-ux="support-plan"]');
     const heading = document.querySelector('[data-demo-ux="support-plan-heading"]');

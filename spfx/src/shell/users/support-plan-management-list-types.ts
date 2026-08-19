@@ -12,8 +12,7 @@ export const SUPPORT_PLAN_MANAGEMENT_WORK_STATES = [
   "uncreated",
 ] as const;
 
-export type SupportPlanManagementWorkState =
-  (typeof SUPPORT_PLAN_MANAGEMENT_WORK_STATES)[number];
+export type SupportPlanManagementWorkState = (typeof SUPPORT_PLAN_MANAGEMENT_WORK_STATES)[number];
 
 export const SUPPORT_PLAN_MANAGEMENT_ATTENTION_KINDS = [
   "none",
@@ -27,8 +26,7 @@ export type SupportPlanManagementAttentionKind =
 
 export const SUPPORT_PLAN_MANAGEMENT_ACTION_KINDS = ["detail", "create"] as const;
 
-export type SupportPlanManagementActionKind =
-  (typeof SUPPORT_PLAN_MANAGEMENT_ACTION_KINDS)[number];
+export type SupportPlanManagementActionKind = (typeof SUPPORT_PLAN_MANAGEMENT_ACTION_KINDS)[number];
 
 export type SupportPlanManagementRow = Readonly<{
   userId: string;
