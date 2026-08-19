@@ -16,6 +16,11 @@ Human SELECT **Option A — KEEP CURRENT DEPLOYMENT** である。
 （basis `8cc1d53…` / ACCEPT CURRENT FIXTURE DEMO SCOPE）。
 next-gate 文言は本記録時点の snapshot である。
 
+後続の alignment decision 記録（この closeout を書き換えない）:
+[`spfx-current-deployment-alignment-decision-1.md`](./spfx-current-deployment-alignment-decision-1.md)
+（basis `cf0d45d…` / OPTION B ADOPT）。
+当時の Option A SELECT snapshot は維持する。
+
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 Closeout ID: SPFX-FIXTURE-ONLY-DEPLOY-1
