@@ -39,7 +39,11 @@ export {
   FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE,
   FIELD_STAFF_PHASE8_MULTI_USER_SCALE_EVIDENCE_1_SLICE,
   FIELD_STAFF_PHASE8_MULTI_USER_SCALE_FIXTURE,
+  FIELD_STAFF_PHASE8_ROSTER_CONTEXT_PRESERVING_DISCLOSURE_1_SLICE,
   inspectScaleContextSafety,
+  isUsersRosterDisclosureExpanded,
+  toggleUsersRosterDisclosure,
+  usersRosterDisclosureId,
   overlayForUserSessionSaveState,
   rememberUserSessionSaveState,
   type ShellUsersPresentation,
@@ -51,6 +55,7 @@ export {
   type UsersFilterChipLabel,
   type UsersSessionSaveStateByUserId,
   type ScaleContextSafetyReport,
+  type UsersRosterDisclosureState,
 } from "../users";
 export {
   DEMO_UX_7_SLICE,

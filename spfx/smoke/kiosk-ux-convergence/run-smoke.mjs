@@ -246,6 +246,7 @@ async function tabUntil(page, predicate, maxTabs = 48) {
         kioskUx: el?.getAttribute("data-kiosk-ux") ?? "",
         nav: el?.getAttribute("data-shell-ux-nav") ?? "",
         field: el?.getAttribute("data-field-workflow") ?? "",
+        fieldStaff: el?.getAttribute("data-field-staff") ?? "",
       };
     });
     order.push(active);
@@ -411,6 +412,14 @@ try {
         uniqueLabels: new Set(labels).size === labels.length,
         requiredContext: contexts.every(({ id, label }) => id.length > 0 && label.length > 0),
         detailPreviewCount: contexts.filter(({ detailPreview }) => detailPreview === "true").length,
+        disclosureButtonCount: document.querySelectorAll(
+          '[data-field-staff="roster-secondary-disclosure"]',
+        ).length,
+        metadataCount: document.querySelectorAll('[data-field-staff="roster-secondary-metadata"]')
+          .length,
+        metadataExpandedCount: document.querySelectorAll(
+          '[data-field-staff="roster-secondary-metadata"][data-field-staff-expanded="true"]',
+        ).length,
         clientHeight: document.documentElement.clientHeight,
         scrollHeight: document.documentElement.scrollHeight,
         horizontalOverflow:
@@ -420,6 +429,31 @@ try {
     });
     const beforeFilter = roster;
     await page.$eval('[data-demo-ux="users-heading"]', (heading) => heading.focus());
+    const keyboardToDisclosure = await tabUntil(
+      page,
+      (active) => active.fieldStaff === "roster-secondary-disclosure",
+    );
+    const disclosureFocus = await page.evaluate(hasVisibleFocus);
+    await page.keyboard.press("Enter");
+    const keyboardDisclosureState = await page.$eval(
+      '[data-field-staff="roster-secondary-disclosure"][data-field-staff-user-id="user-a"]',
+      (button) => ({
+        expanded: button.getAttribute("aria-expanded") ?? "",
+        controls: button.getAttribute("aria-controls") ?? "",
+      }),
+    );
+    const expandedAfterKeyboard = await page.evaluate(() => ({
+      expandedCount: document.querySelectorAll(
+        '[data-field-staff="roster-secondary-metadata"][data-field-staff-expanded="true"]',
+      ).length,
+      firstMetadataText:
+        document
+          .querySelector(
+            '[data-field-staff="roster-secondary-metadata"][data-field-staff-user-id="user-a"]',
+          )
+          ?.textContent?.trim() ?? "",
+      scrollHeight: document.documentElement.scrollHeight,
+    }));
     const keyboardToDetail = await tabUntil(
       page,
       (active) => active.tag === "BUTTON" && active.text === "詳細を見る",
@@ -459,7 +493,17 @@ try {
       beforeFilter.uniqueLabels &&
       beforeFilter.requiredContext &&
       beforeFilter.detailPreviewCount === 2 &&
+      beforeFilter.disclosureButtonCount === 18 &&
+      beforeFilter.metadataCount === 18 &&
+      beforeFilter.metadataExpandedCount === 0 &&
       beforeFilter.scrollHeight > beforeFilter.clientHeight &&
+      keyboardToDisclosure.found &&
+      disclosureFocus.visible &&
+      keyboardDisclosureState.expanded === "true" &&
+      keyboardDisclosureState.controls === "users-roster-secondary-user-a" &&
+      expandedAfterKeyboard.expandedCount === 1 &&
+      expandedAfterKeyboard.firstMetadataText.includes("支援計画") &&
+      expandedAfterKeyboard.scrollHeight > beforeFilter.scrollHeight &&
       beforeFilter.horizontalOverflow === false &&
       keyboardToDetail.found &&
       keyboardFocus.visible &&
@@ -473,6 +517,10 @@ try {
       keyboardToDetail,
       keyboardFocus,
       keyboardDetailContext,
+      keyboardToDisclosure,
+      disclosureFocus,
+      keyboardDisclosureState,
+      expandedAfterKeyboard,
       filteredCount,
       detailContext,
       afterReturn,
@@ -485,12 +533,39 @@ try {
     });
     await screenshot(page, "field-staff-18-user-scale-context-safety");
     await page.close();
+
+    const { page: desktopPage, errors: desktopErrors } = await openPage(
+      "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=FIELD_STAFF&scale=18",
+      { width: 1440, height: 900, deviceScaleFactor: 1 },
+    );
+    const desktopDisclosure = await desktopPage.evaluate(() => {
+      const button = document.querySelector('[data-field-staff="roster-secondary-disclosure"]');
+      const metadata = document.querySelector('[data-field-staff="roster-secondary-metadata"]');
+      return {
+        rowCount: document.querySelectorAll('[data-demo-ux="users-row"]').length,
+        buttonDisplay: button instanceof HTMLElement ? window.getComputedStyle(button).display : "",
+        metadataDisplay:
+          metadata instanceof HTMLElement ? window.getComputedStyle(metadata).display : "",
+        horizontalOverflow:
+          document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      };
+    });
+    record(
+      "field-staff-roster-disclosure-desktop-unchanged",
+      desktopErrors.length === 0 &&
+        desktopDisclosure.rowCount === 18 &&
+        desktopDisclosure.buttonDisplay === "none" &&
+        desktopDisclosure.metadataDisplay !== "none" &&
+        desktopDisclosure.horizontalOverflow === false,
+      { errors: desktopErrors, desktopDisclosure },
+    );
+    await desktopPage.close();
   }
 
   if (process.env.KIOSK_SCALE_ONLY === "1") {
     const scaleReport = {
-      slice: "FIELD-STAFF-PHASE8-MULTI-USER-SCALE-EVIDENCE-1",
-      kind: "focused synthetic 18-user browser smoke",
+      slice: "FIELD-STAFF-PHASE8-ROSTER-CONTEXT-PRESERVING-DISCLOSURE-1",
+      kind: "focused synthetic 18-user roster disclosure browser smoke",
       date: new Date().toISOString(),
       liveTenantIoAuthorized: false,
       sharePointRestAuthorized: false,
