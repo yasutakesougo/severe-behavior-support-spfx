@@ -1,6 +1,7 @@
 import {
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
+  PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION,
   SUPPORT_PLAN_ACTIVE_STATUS_LABEL,
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
   SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
@@ -162,6 +163,16 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     expect(PLANNING_PC_DEMO_1_SLICE.liveWriteAuthorized).toBe(false);
     expect(PLANNING_PC_DEMO_1_SLICE.deployAuthorized).toBe(false);
     expect(PLANNING_PC_DEMO_1_SLICE.liveTenantIoAuthorized).toBe(false);
+  });
+
+  it("defines stable planner section navigation over existing headings only", () => {
+    expect(PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION).toEqual([
+      { id: "demo-ux-plan-review-heading", label: "見直し状況" },
+      { id: "planning-pc-plan-procedures-heading", label: "現在の支援手順" },
+      { id: "planning-pc-plan-records-heading", label: "最近の支援手順記録" },
+      { id: "planning-pc-plan-versions-heading", label: "過去の版" },
+      { id: "review-new-version-next-heading", label: "次の版の考え方" },
+    ]);
   });
 });
 

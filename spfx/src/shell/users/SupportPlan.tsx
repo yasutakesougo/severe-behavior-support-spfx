@@ -21,6 +21,7 @@ import {
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
   SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE,
   SUPPORT_PLAN_PAST_VERSION_READONLY_NOTE,
+  PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION,
   SUPPORT_PLAN_RECENT_RECORDS_HEADING,
   SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
   SUPPORT_PLAN_REVIEW_MATERIALS_NOTE,
@@ -88,6 +89,18 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const currentVersionEntry = versions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
   const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
+  const [activePlannerSectionId, setActivePlannerSectionId] = React.useState(
+    PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION[0].id,
+  );
+  const focusPlannerSection = (sectionId: string): void => {
+    const heading = document.getElementById(sectionId);
+    if (!(heading instanceof HTMLElement)) {
+      return;
+    }
+    setActivePlannerSectionId(sectionId);
+    heading.scrollIntoView({ block: "start", inline: "nearest" });
+    heading.focus();
+  };
   const titleHeading = (
     <div className={styles.headingTitleRow}>
       <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
@@ -142,7 +155,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     <section className={styles.detailSection} aria-labelledby="demo-ux-plan-review-heading">
       <div className={styles.sectionHeaderWithIcon}>
         <SemanticIcon name="monitoring" size={20} className={styles.sectionHeaderIcon} />
-        <h2 id="demo-ux-plan-review-heading">見直し状況</h2>
+        <h2 id="demo-ux-plan-review-heading" tabIndex={-1}>
+          見直し状況
+        </h2>
       </div>
       <div className={styles.reviewPanel} data-demo-ux="support-plan-review">
         <p className={styles.reviewStatus}>{reviewStatus.reviewStatusLabel}</p>
@@ -173,7 +188,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
 
   const proceduresBlock = (
     <section className={styles.detailSection} aria-labelledby="planning-pc-plan-procedures-heading">
-      <h2 id="planning-pc-plan-procedures-heading">{SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING}</h2>
+      <h2 id="planning-pc-plan-procedures-heading" tabIndex={-1}>
+        {SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING}
+      </h2>
       <ul className={styles.graphList} data-planning-pc="current-procedures">
         {currentProcedures.map((procedure) => (
           <li
@@ -204,7 +221,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
 
   const recordsBlock = (
     <section className={styles.detailSection} aria-labelledby="planning-pc-plan-records-heading">
-      <h2 id="planning-pc-plan-records-heading">{SUPPORT_PLAN_RECENT_RECORDS_HEADING}</h2>
+      <h2 id="planning-pc-plan-records-heading" tabIndex={-1}>
+        {SUPPORT_PLAN_RECENT_RECORDS_HEADING}
+      </h2>
       <p className={styles.sectionHint} data-planning-pc="historical-record-note">
         {SUPPORT_PLAN_HISTORICAL_RECORD_NOTE}
       </p>
@@ -226,7 +245,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
 
   const versionsBlock = (
     <section className={styles.detailSection} aria-labelledby="planning-pc-plan-versions-heading">
-      <h2 id="planning-pc-plan-versions-heading">{SUPPORT_PLAN_VERSIONS_HEADING}</h2>
+      <h2 id="planning-pc-plan-versions-heading" tabIndex={-1}>
+        {SUPPORT_PLAN_VERSIONS_HEADING}
+      </h2>
       <p className={styles.sectionHint} data-planning-pc="past-version-note">
         {SUPPORT_PLAN_PAST_VERSION_READONLY_NOTE}
       </p>
@@ -314,7 +335,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       data-review-new-version="next-version-concept"
       data-review-new-version-highlighted={nextVersionConceptHighlighted ? "true" : "false"}
     >
-      <h2 id="review-new-version-next-heading">{SUPPORT_PLAN_NEXT_VERSION_HEADING}</h2>
+      <h2 id="review-new-version-next-heading" tabIndex={-1}>
+        {SUPPORT_PLAN_NEXT_VERSION_HEADING}
+      </h2>
       <p className={styles.sectionHint} data-review-new-version="immutability-note">
         {SUPPORT_PLAN_NEXT_VERSION_NOTE}
       </p>
@@ -460,6 +483,33 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
               {SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE}
             </p>
           </header>
+          <nav
+            className={styles.sectionNavigation}
+            aria-label="支援計画セクション移動"
+            data-planning-pc="section-navigation"
+          >
+            {PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION.map((section) => {
+              const selected = activePlannerSectionId === section.id;
+              return (
+                <button
+                  key={section.id}
+                  type="button"
+                  className={
+                    selected
+                      ? `${styles.sectionNavButton} ${styles.sectionNavButtonSelected}`
+                      : styles.sectionNavButton
+                  }
+                  aria-pressed={selected}
+                  data-planning-pc-section-nav={section.id}
+                  onClick={() => {
+                    focusPlannerSection(section.id);
+                  }}
+                >
+                  {section.label}
+                </button>
+              );
+            })}
+          </nav>
         </>
       ) : (
         <>

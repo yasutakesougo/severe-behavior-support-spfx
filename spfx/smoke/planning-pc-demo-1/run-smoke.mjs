@@ -212,6 +212,39 @@ function assertPlannerSupportPlan() {
   await page.screenshot({ path: shot, fullPage: true });
   checks.push({ name: "planner-support-plan-graph", url, found, shot, pass, pageErrors: errors });
   allPass = allPass && pass;
+
+  await page.click('[data-planning-pc-section-nav="planning-pc-plan-records-heading"]');
+  await page.waitForFunction(
+    () => document.activeElement?.id === "planning-pc-plan-records-heading",
+  );
+  const sectionNavFound = await page.evaluate(() => {
+    const root = document.querySelector('[data-planning-pc="section-navigation"]');
+    const active = document.activeElement;
+    const selected = document.querySelector(
+      '[data-planning-pc-section-nav="planning-pc-plan-records-heading"]',
+    );
+    return {
+      pass:
+        Boolean(root) &&
+        active?.id === "planning-pc-plan-records-heading" &&
+        selected?.getAttribute("aria-pressed") === "true" &&
+        Boolean(document.querySelector('[data-planning-pc="recent-records"]')),
+      activeId: active?.id ?? "",
+      selectedPressed: selected?.getAttribute("aria-pressed") ?? "",
+    };
+  });
+  const sectionNavPass = Boolean(sectionNavFound.pass) && errors.length === 0;
+  const sectionNavShot = path.join(artifactsDir, "planner-section-navigation.png");
+  await page.screenshot({ path: sectionNavShot, fullPage: true });
+  checks.push({
+    name: "planner-section-navigation",
+    url,
+    found: sectionNavFound,
+    shot: sectionNavShot,
+    pass: sectionNavPass,
+    pageErrors: errors,
+  });
+  allPass = allPass && sectionNavPass;
   await page.close();
 }
 
