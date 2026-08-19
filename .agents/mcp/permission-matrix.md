@@ -123,4 +123,5 @@
 | Governance 入口 | `docs/process/ai-governance.md` |
 | Workflow 入口 | `docs/process/ai-workflow.md` |
 | Role 入口 | `docs/process/ai-role.md` |
+| Origin 評価（GitHub SSOT / 権限追加なし） | `docs/architecture/origin-evaluation-1.md` |
 | 配置 | `docs/decisions/ADR-AI-ORG-001.md` |

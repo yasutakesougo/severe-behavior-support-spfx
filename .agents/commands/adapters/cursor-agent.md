@@ -69,3 +69,11 @@
 - SharePoint / Entra ID / Microsoft 365 / 本番データ変更
 
 `git commit` と非保護 feature branch への通常 push は、実装開始承認済みかつ承認済み Issue 範囲内でのみ可（DEC-AI-ORG-3）。
+
+## Origin（非正本）
+
+Cursor Origin は GitHub の代替正本ではない。評価正本: `docs/architecture/origin-evaluation-1.md`。
+
+- GitHub = authoritative repository / governance SSOT
+- Origin enablement / mirror / Detach / Origin merge / force-push は Adapter 単独では認可しない
+- Human GO・PR 番号・main SHA・CI 証跡の正本は GitHub に残す
