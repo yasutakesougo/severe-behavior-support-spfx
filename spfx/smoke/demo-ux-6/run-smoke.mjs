@@ -268,9 +268,7 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
   found.pageErrors = errors;
   found.expectedOriginBasis = "継続基準日: 前回見直し日";
   found.pass =
-    Boolean(found.pass) &&
-    found.originBasis === found.expectedOriginBasis &&
-    errors.length === 0;
+    Boolean(found.pass) && found.originBasis === found.expectedOriginBasis && errors.length === 0;
   const shot = path.join(artifactsDir, "desktop-review-due-subsequent-anchor.png");
   await page.screenshot({ path: shot, fullPage: true });
   const pass = Boolean(found.pass);

@@ -94,7 +94,9 @@ describe("DADS-UX-5 review due presentation contracts", () => {
   });
 
   it("renders both first-review and subsequent-review anchor fixtures without changing due semantics", () => {
-    expect(DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.originLabel).toBe("初回基準日: 支援計画の有効開始日");
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.originLabel).toBe(
+      "初回基準日: 支援計画の有効開始日",
+    );
     expect(DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE.semanticBasis.originLabel).toBe(
       "継続基準日: 前回見直し日",
     );

@@ -50,7 +50,8 @@ Artifacts: /opt/cursor/artifacts/demo-ux-6-browser-smoke/
 
 | Case | Assertion | Result |
 |---|---|---|
-| desktop-review-due | 確認待ち / 期限接近 labels；mutation disabled；business/system separated | PASS |
+| desktop-review-due | 要確認 / 期限接近 labels；semantic basis = 初回 anchor + caller-supplied due + 暦月 notice；mutation disabled；business/system separated | PASS |
+| desktop-review-due-subsequent-anchor | semantic basis = 継続 anchor（前回見直し日）; due / notice semantics unchanged | PASS |
 | desktop-back-to-overview | back returns to 概要；focus on overview heading | PASS |
 | tablet-review-due | 768px single-column state grid；no overflow | PASS |
 | keyboard-overview-to-review-due | Enter opens review due；focus on heading | PASS |
@@ -59,9 +60,9 @@ Artifacts: /opt/cursor/artifacts/demo-ux-6-browser-smoke/
 
 ```text
 allPass: true
-cases: 6 / 6
+cases: 7 / 7
 DEMO_UX_6_SLICE.id: DEMO-UX-6
-Heft test: 60 / 60 PASS
+Heft test: 291 / 291 PASS
 ```
 
 ## Boundary held
@@ -72,5 +73,9 @@ No GOV-RULE decision / change
 No auth judgment / authorized appearance
 Overview / users / support plan / daily records presentation preserved
 demo / current site indicators remain visible
-期限接近 / 確認待ち remain synthetic display labels
+要確認 / 期限接近 remain synthetic display labels
+semantic basis distinguishes:
+  初回 = 支援計画の有効開始日
+  継続 = 前回見直し日
+  notice = 見直し対象の暦月に入ったら
 ```

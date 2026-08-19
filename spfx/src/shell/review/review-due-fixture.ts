@@ -56,7 +56,8 @@ function buildReviewDueFixture(firstReview: boolean): ShellReviewDueStatePresent
 }
 
 /** Synthetic review status & due-state fixture for responsible-person review only. */
-export const DEMO_UX_REVIEW_DUE_FIXTURE: ShellReviewDueStatePresentation = buildReviewDueFixture(true);
+export const DEMO_UX_REVIEW_DUE_FIXTURE: ShellReviewDueStatePresentation =
+  buildReviewDueFixture(true);
 
 /** Synthetic subsequent-review fixture for smoke/unit evidence of D5 anchor branch. */
 export const DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE: ShellReviewDueStatePresentation =
