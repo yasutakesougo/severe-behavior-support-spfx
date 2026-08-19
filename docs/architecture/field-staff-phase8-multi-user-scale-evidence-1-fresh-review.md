@@ -4,9 +4,10 @@
 Slice: FIELD-STAFF-PHASE8-MULTI-USER-SCALE-EVIDENCE-1
 Parent: #392
 Owner: #448
-Reviewed HEAD: bdaf105d8c0a25940992115700c130002d2805a7
+Reviewed implementation HEAD: 07f5a901942c07d25d826159bfdd70311bad07fa
 Implementation commit: 874e43f39cd51a2def4ab4d0bb0cb571616a03f1
 Evidence binding commit: bdaf105d8c0a25940992115700c130002d2805a7
+Review record is included in the Draft PR tip as a docs-only follow-up.
 Fresh Review: PASS
 ```
 
