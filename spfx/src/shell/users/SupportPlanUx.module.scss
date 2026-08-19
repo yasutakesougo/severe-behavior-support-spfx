@@ -31,7 +31,7 @@
 }
 
 .backButton {
-  min-height: 2.75rem; /* ~44px touch target */
+  min-height: 2.75rem;
   padding: 0.45rem sbs.$space-3;
   border-width: sbs.$border-width-thin;
   border-style: solid;
@@ -106,7 +106,6 @@
   color: sbs.$color-text-secondary;
 }
 
-/* INV-03 KEEP: programmatic destination focus remains visible. */
 .planHeading:focus,
 .planHeading:focus-visible {
   outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
@@ -169,7 +168,6 @@
 .detailSection h2,
 .statePanel h2 {
   margin: 0 0 sbs.$space-3;
-  /* Section title; nearest catalog step is 1.1rem — keep existing 1.05rem. */
   font-size: 1.05rem;
 }
 
@@ -284,11 +282,7 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
-.reviewMaterialsButton:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
+.reviewMaterialsButton:disabled,
 .reviewMaterialsButtonPrimary:disabled {
   opacity: 0.65;
   cursor: not-allowed;
@@ -371,6 +365,85 @@
 
 .statePanel dd {
   margin: 0;
+}
+
+.supportPlan[data-presentation-role="FIELD_STAFF"] {
+  .headerBlock {
+    gap: sbs.$space-4;
+  }
+
+  .headingTitleRow {
+    order: 1;
+  }
+
+  .personHeading {
+    order: 2;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .statusSummary,
+  .metaSummary {
+    display: contents;
+  }
+
+  .metaSummary > [data-demo-ux="support-plan-period"] {
+    order: 3;
+  }
+
+  .metaSummary > [data-demo-ux="support-plan-lifecycle"] {
+    order: 4;
+  }
+
+  .statusLabel {
+    order: 5;
+    font-size: sbs.$font-size-300;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .metaSummary > [data-demo-ux="support-plan-version"] {
+    order: 6;
+  }
+
+  .headerBlock > .sectionHint {
+    order: 7;
+  }
+
+  .reviewStatusBadge {
+    display: none;
+  }
+
+  .planHeading {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: inherit;
+  }
+
+  .periodLabel {
+    font-size: sbs.$font-size-300;
+    line-height: normal;
+  }
+
+  .sectionHint {
+    color: inherit;
+    font-size: sbs.$font-size-100;
+    line-height: normal;
+    opacity: 0.9;
+  }
+
+  .goalItem,
+  .actionItem {
+    padding: sbs.$space-3;
+    border-top: none;
+    background: sbs.$color-surface-subtle;
+  }
+
+  .goalItem:first-child,
+  .actionItem:first-child {
+    padding-top: sbs.$space-3;
+  }
 }
 
 @media (max-width: 768px) {
