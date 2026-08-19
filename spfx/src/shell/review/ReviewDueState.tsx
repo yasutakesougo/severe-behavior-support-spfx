@@ -4,7 +4,9 @@ import {
   FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE,
   FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE,
   labelForProcedureRecordResult,
+  associateReviewObservations,
   resolveProcedureReviewProjection,
+  type ReviewObservationEvidenceInput,
   type ShellProcedureReviewMaterial,
 } from "../procedure";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
@@ -34,6 +36,7 @@ export type ReviewDueStateProps = Readonly<{
   onNextVersionConceptRequest?: () => void;
   /** FIELD-WORKFLOW #356 FW-07 materials (optional). */
   procedureReviewMaterials?: readonly ShellProcedureReviewMaterial[];
+  reviewObservationEvidence?: readonly ReviewObservationEvidenceInput[];
   presentationRole?: ShellPresentationRole;
 }>;
 
@@ -50,6 +53,7 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   backLabel = "← 概要",
   onNextVersionConceptRequest,
   procedureReviewMaterials = [],
+  reviewObservationEvidence = [],
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
   const { heading, summaryPrompt, attentionSummary, attentionItems, businessFacts, systemState } =
@@ -61,6 +65,9 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
   const selectedMaterial = procedureReviewMaterials.find((item) => item.id === selectedMaterialId);
   const selectedProjection = selectedMaterial
     ? resolveProcedureReviewProjection(selectedMaterial)
+    : undefined;
+  const selectedObservationAssociation = selectedMaterial
+    ? associateReviewObservations(selectedMaterial, reviewObservationEvidence)
     : undefined;
 
   return (
@@ -363,6 +370,29 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
                 {FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE}（理由: {selectedProjection.reason}）
               </p>
             )}
+            {selectedObservationAssociation ? (
+              <div
+                data-field-workflow="review-observation-association"
+                data-field-workflow-association-state={selectedObservationAssociation.status}
+              >
+                <h4>関連する観察記録</h4>
+                {selectedObservationAssociation.status === "ASSOCIATED" ? (
+                  <ul data-field-workflow="review-observation-evidence-list">
+                    {selectedObservationAssociation.observations.map((observation) => (
+                      <li key={observation.observationRecordId}>
+                        {observation.observationRecordId} / {observation.observedAt} /{" "}
+                        {observation.observedBy}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p data-field-workflow="review-observation-unresolved">
+                    観察記録の関連付けは未解決です（理由: {selectedObservationAssociation.reason}
+                    ）。
+                  </p>
+                )}
+              </div>
+            ) : null}
           </div>
         ) : null}
         {onNextVersionConceptRequest ? (
