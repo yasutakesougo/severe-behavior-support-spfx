@@ -1,9 +1,9 @@
 # UI-VISUAL-HIERARCHY-CONTRACT-1 — read-only reconciliation
 
-Status: **COMPARISON ONLY**  
-Date: 2026-08-19  
-Mutation: **NONE**  
-Implementation: **NONE**  
+Status: **COMPARISON ONLY**
+Date: 2026-08-19
+Mutation: **NONE**
+Implementation: **NONE**
 Contract LOCK: **NOT AUTHORIZED**
 
 ```text
