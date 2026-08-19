@@ -80,7 +80,9 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.planTitle).toBe("支援計画");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel).toBe("適用中");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).toContain("要確認");
-    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.personLabel).not.toBe(DEMO_UX_SUPPORT_PLAN_FIXTURE.planTitle);
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.personLabel).not.toBe(
+      DEMO_UX_SUPPORT_PLAN_FIXTURE.planTitle,
+    );
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel).not.toBe(
       DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel,
     );
