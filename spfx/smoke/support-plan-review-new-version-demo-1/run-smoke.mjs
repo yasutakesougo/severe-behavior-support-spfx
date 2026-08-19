@@ -152,14 +152,21 @@ function assertPlannerSupportPlan() {
   const plan = document.querySelector('[data-demo-ux="support-plan"]');
   const text = document.body?.textContent ?? "";
   const status = document.querySelector('[data-planning-pc="status"]');
+  const reviewCta = document.querySelector('[data-planning-pc="review-cta"]');
+  const reviewBadge = document.querySelector('[data-demo-ux="support-plan-review-status-badge"]');
   const nextConcept = document.querySelector('[data-review-new-version="next-version-concept"]');
   const createCta = document.querySelector('[data-review-new-version="create-cta"]');
+  const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
   const forbidden = ["最終承認者", "承認済み"];
   const headings = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim() ?? "");
   return {
     pass:
       Boolean(plan) &&
       (status?.textContent ?? "").trim() === "適用中" &&
+      Boolean(reviewCta) &&
+      reviewCta?.getAttribute("data-sbs-action") === "primary" &&
+      Boolean(reviewBadge) &&
+      primaryActions.length === 1 &&
       Boolean(nextConcept) &&
       createCta instanceof HTMLButtonElement &&
       createCta.disabled &&
@@ -172,6 +179,7 @@ function assertPlannerSupportPlan() {
       text.indexOf("計画版 2") >= 0 &&
       forbidden.every((token) => text.indexOf(token) < 0),
     statusText: status?.textContent ?? "",
+    reviewBadgeText: reviewBadge?.textContent ?? "",
     hasNextConcept: Boolean(nextConcept),
     createDisabled: createCta instanceof HTMLButtonElement ? createCta.disabled : false,
   };

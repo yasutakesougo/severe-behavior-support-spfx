@@ -75,6 +75,17 @@ describe("DADS-UX-6 support plan presentation contracts", () => {
 });
 
 describe("PLANNING-PC-DEMO-1 support plan graph", () => {
+  it("keeps person, current status, and review cue on separate channels", () => {
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.personLabel).toBe("Aさん");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.planTitle).toBe("支援計画");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel).toBe("適用中");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel).toContain("要確認");
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.personLabel).not.toBe(DEMO_UX_SUPPORT_PLAN_FIXTURE.planTitle);
+    expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel).not.toBe(
+      DEMO_UX_SUPPORT_PLAN_FIXTURE.reviewStatus.reviewStatusLabel,
+    );
+  });
+
   it("shows Active as 適用中 and keeps Schema 1.0.0 identity join", () => {
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusCode).toBe("Active");
     expect(DEMO_UX_SUPPORT_PLAN_FIXTURE.statusLabel).toBe(SUPPORT_PLAN_ACTIVE_STATUS_LABEL);

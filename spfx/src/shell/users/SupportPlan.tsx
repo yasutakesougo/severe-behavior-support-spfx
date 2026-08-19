@@ -33,7 +33,7 @@ import {
   SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
-import { SemanticIcon } from "../primitives";
+import { SemanticIcon, StatusBadge } from "../primitives";
 import styles from "./SupportPlanUx.module.scss";
 
 export type SupportPlanProps = Readonly<{
@@ -141,12 +141,13 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             </p>
             <button
               type="button"
-              className={styles.reviewMaterialsButton}
+              className={styles.reviewMaterialsButtonPrimary}
               onClick={onReviewMaterialsRequest}
               disabled={!reviewCtaEnabled}
               aria-disabled={!reviewCtaEnabled ? "true" : undefined}
               data-demo-ux="support-plan-review-cta"
               data-planning-pc="review-cta"
+              data-sbs-action="primary"
             >
               {SUPPORT_PLAN_REVIEW_MATERIALS_CTA}
             </button>
@@ -223,6 +224,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
               className={styles.versionButton}
               data-planning-pc-version={String(entry.version)}
               data-planning-pc-version-current={entry.isCurrent ? "true" : "false"}
+              data-sbs-action="tertiary"
               aria-pressed={selectedVersion === entry.version}
               onClick={() => {
                 setSelectedVersion(entry.version);
@@ -320,6 +322,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           aria-disabled="true"
           data-demo-ux="support-plan-mutation-button"
           data-review-new-version="create-cta"
+          data-sbs-action="tertiary"
         >
           {SUPPORT_PLAN_NEXT_VERSION_CTA}
         </button>
@@ -350,6 +353,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
                 disabled
                 aria-disabled="true"
                 data-demo-ux="support-plan-mutation-button"
+                data-sbs-action="tertiary"
               >
                 {label}
               </button>
@@ -385,18 +389,6 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       data-presentation-role={presentationRole}
       aria-labelledby="demo-ux-support-plan-heading"
     >
-      <div className={styles.headingTitleRow}>
-        <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
-        <h1
-          id="demo-ux-support-plan-heading"
-          ref={headingRef}
-          tabIndex={-1}
-          className={styles.planHeading}
-          data-demo-ux="support-plan-heading"
-        >
-          {planTitle}
-        </h1>
-      </div>
       <div className={styles.topRow}>
         <button
           type="button"
@@ -405,36 +397,64 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           disabled={!onBackToUserDetail}
           aria-disabled={!onBackToUserDetail ? "true" : undefined}
           data-demo-ux="support-plan-back"
+          data-sbs-action="tertiary"
         >
           {backLabel}
         </button>
       </div>
-      <p className={styles.personSubheading} data-demo-ux="support-plan-person">
-        {personLabel}
-      </p>
-      <p className={styles.periodLabel} data-demo-ux="support-plan-period">
-        {planPeriodLabel}
-      </p>
-      <p className={styles.periodLabel} data-demo-ux="support-plan-lifecycle">
-        {planLifecycleLabel}
-      </p>
-      <p
-        className={styles.statusLabel}
-        data-demo-ux="support-plan-status"
-        data-planning-pc="status"
-      >
-        {statusLabel}
-      </p>
-      <p
-        className={styles.periodLabel}
-        data-demo-ux="support-plan-version"
-        data-planning-pc="version"
-      >
-        版 {currentVersion}
-      </p>
-      <p className={styles.sectionHint} data-planning-pc="not-final-approval">
-        {SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE}
-      </p>
+      <header className={styles.headerBlock}>
+        <p className={styles.personHeading} data-demo-ux="support-plan-person">
+          {personLabel}
+        </p>
+        <div className={styles.headingTitleRow}>
+          <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
+          <h1
+            id="demo-ux-support-plan-heading"
+            ref={headingRef}
+            tabIndex={-1}
+            className={styles.planHeading}
+            data-demo-ux="support-plan-heading"
+          >
+            {planTitle}
+          </h1>
+        </div>
+        <div className={styles.statusSummary} data-demo-ux="support-plan-status-summary">
+          <p
+            className={styles.statusLabel}
+            data-demo-ux="support-plan-status"
+            data-planning-pc="status"
+          >
+            {statusLabel}
+          </p>
+          <StatusBadge
+            label={reviewStatus.reviewStatusLabel}
+            shape="soft"
+            className={styles.reviewStatusBadge}
+            dataAttrs={{
+              "data-demo-ux": "support-plan-review-status-badge",
+              "data-support-plan-review-status": reviewStatus.reviewStatusLabel,
+            }}
+          />
+        </div>
+        <div className={styles.metaSummary} data-demo-ux="support-plan-meta-summary">
+          <p className={styles.periodLabel} data-demo-ux="support-plan-period">
+            {planPeriodLabel}
+          </p>
+          <p className={styles.periodLabel} data-demo-ux="support-plan-lifecycle">
+            {planLifecycleLabel}
+          </p>
+          <p
+            className={styles.periodLabel}
+            data-demo-ux="support-plan-version"
+            data-planning-pc="version"
+          >
+            版 {currentVersion}
+          </p>
+        </div>
+        <p className={styles.sectionHint} data-planning-pc="not-final-approval">
+          {SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE}
+        </p>
+      </header>
 
       {supportPlanBlockOrderForRole(presentationRole).map((key) => (
         <React.Fragment key={key}>{blockByKey[key]}</React.Fragment>

@@ -23,6 +23,13 @@
   justify-content: space-between;
 }
 
+.headerBlock {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+  min-width: 0;
+}
+
 .backButton {
   min-height: 2.75rem; /* ~44px touch target */
   padding: 0.45rem sbs.$space-3;
@@ -91,11 +98,12 @@
 
 .planHeading {
   margin: 0;
-  /* Display emphasis; no larger type token in DADS-04 catalog yet. */
-  font-size: 1.5rem;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-body;
   outline: none;
   min-width: 0;
   overflow-wrap: anywhere;
+  color: sbs.$color-text-secondary;
 }
 
 /* INV-03 KEEP: programmatic destination focus remains visible. */
@@ -105,27 +113,43 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
-.personSubheading {
+.personHeading {
   margin: 0;
-  /* Existing SupportPlan person subheading size; no 1rem type token in DADS-04 catalog. */
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
+}
+
+.statusSummary,
+.metaSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-2 sbs.$space-3;
+  align-items: center;
 }
 
 .periodLabel,
 .statusLabel {
   margin: 0;
-  font-size: sbs.$font-size-300;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .statusLabel {
-  font-weight: 700;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+}
+
+.reviewStatusBadge {
+  align-self: flex-start;
 }
 
 .sectionHint {
   margin: 0;
-  font-size: sbs.$font-size-100;
-  opacity: 0.9;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .detailSection {
@@ -167,8 +191,17 @@
 .goalItem,
 .actionItem {
   min-width: 0;
-  padding: sbs.$space-3;
-  background: sbs.$color-surface-subtle;
+  padding: sbs.$space-3 0;
+  border-top-width: sbs.$border-width-thin;
+  border-top-style: solid;
+  border-top-color: sbs.$color-border-subtle;
+  background: transparent;
+}
+
+.goalItem:first-child,
+.actionItem:first-child {
+  padding-top: 0;
+  border-top: none;
 }
 
 .goalLabel,
@@ -223,6 +256,7 @@
 }
 
 .reviewMaterialsButton,
+.reviewMaterialsButtonPrimary,
 .versionButton {
   min-height: 2.75rem;
   padding: 0.45rem sbs.$space-3;
@@ -235,8 +269,15 @@
   cursor: pointer;
 }
 
+.reviewMaterialsButtonPrimary {
+  border-width: sbs.$border-width-thick;
+  font-weight: sbs.$font-weight-semibold;
+}
+
 .reviewMaterialsButton:focus,
 .reviewMaterialsButton:focus-visible,
+.reviewMaterialsButtonPrimary:focus,
+.reviewMaterialsButtonPrimary:focus-visible,
 .versionButton:focus,
 .versionButton:focus-visible {
   outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
@@ -244,6 +285,11 @@
 }
 
 .reviewMaterialsButton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.reviewMaterialsButtonPrimary:disabled {
   opacity: 0.65;
   cursor: not-allowed;
 }
@@ -334,6 +380,12 @@
 
   .stateGrid {
     grid-template-columns: 1fr;
+  }
+
+  .statusSummary,
+  .metaSummary {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .versionCompareGrid {
