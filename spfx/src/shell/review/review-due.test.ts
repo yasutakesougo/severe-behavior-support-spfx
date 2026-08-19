@@ -9,6 +9,7 @@ import {
 import {
   DEMO_UX_6_SLICE,
   DEMO_UX_REVIEW_DUE_FIXTURE,
+  DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE,
   VP5_REVIEW_SLICE,
 } from "./review-due-fixture";
 import {
@@ -72,13 +73,39 @@ describe("DEMO-UX-6 review status & due-state presentation", () => {
 
 describe("DADS-UX-5 review due presentation contracts", () => {
   it("keeps D5 semantic basis separate from hard due and D6", () => {
+    const firstReviewBasis = presentReviewDueSemanticBasis(true);
+    const subsequentReviewBasis = presentReviewDueSemanticBasis(false);
+
     expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.id).toBe("SP-LC-3-REVIEW-DUE-ORIGIN-1");
     expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.fixedNinetyDaysAuthorized).toBe(false);
     expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.hardOverdueAuthorized).toBe(false);
     expect(SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE.observationAssociationAuthorized).toBe(false);
-    expect(presentReviewDueSemanticBasis(true).originLabel).toContain("有効開始日");
-    expect(presentReviewDueSemanticBasis(false).originLabel).toContain("前回見直し日");
-    expect(presentReviewDueSemanticBasis(true).approachingLabel).toContain("30日前");
+    expect(firstReviewBasis.originLabel).toBe("初回基準日: 支援計画の有効開始日");
+    expect(subsequentReviewBasis.originLabel).toBe("継続基準日: 前回見直し日");
+    expect(firstReviewBasis.dueLabel).toBe(
+      "reviewDueDate は caller-supplied の基準日です。固定90日や自動失効には変換しません。",
+    );
+    expect(firstReviewBasis.approachingLabel).toBe(
+      "通知開始は見直し対象の暦月に入った時点です。30日前などの日数固定窓は使いません。",
+    );
+    expect(firstReviewBasis.approachingLabel).toContain("見直し対象の暦月");
+    expect(firstReviewBasis.approachingLabel).toContain("使いません");
+    expect(firstReviewBasis.approachingLabel).not.toContain("30日前です");
+  });
+
+  it("renders both first-review and subsequent-review anchor fixtures without changing due semantics", () => {
+    expect(DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.originLabel).toBe(
+      "初回基準日: 支援計画の有効開始日",
+    );
+    expect(DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE.semanticBasis.originLabel).toBe(
+      "継続基準日: 前回見直し日",
+    );
+    expect(DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE.semanticBasis.dueLabel).toBe(
+      DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.dueLabel,
+    );
+    expect(DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE.semanticBasis.approachingLabel).toBe(
+      DEMO_UX_REVIEW_DUE_FIXTURE.semanticBasis.approachingLabel,
+    );
   });
 
   it("keeps attention empty copy as zero-result (INV-17; not all-clear)", () => {

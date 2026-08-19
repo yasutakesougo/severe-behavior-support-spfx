@@ -11,6 +11,7 @@ export {
 export {
   DEMO_UX_6_SLICE,
   DEMO_UX_REVIEW_DUE_FIXTURE,
+  DEMO_UX_REVIEW_DUE_SUBSEQUENT_FIXTURE,
   VP5_REVIEW_SLICE,
 } from "./review-due-fixture";
 export type {

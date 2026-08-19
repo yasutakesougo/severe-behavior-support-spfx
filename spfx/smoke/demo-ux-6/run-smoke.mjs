@@ -161,6 +161,9 @@ function assertReviewDueState(expectedStateColumns) {
   const note = document.querySelector('[data-demo-ux="review-due-presentation-note"]');
   const calcNote = document.querySelector('[data-demo-ux="review-due-calculation-note"]');
   const basis = document.querySelector('[data-demo-ux="review-due-semantic-basis"]');
+  const originBasis = document.querySelector('[data-demo-ux="review-due-origin-basis"]');
+  const dueBasis = document.querySelector('[data-demo-ux="review-due-due-basis"]');
+  const approachingBasis = document.querySelector('[data-demo-ux="review-due-approaching-basis"]');
   const items = document.querySelectorAll('[data-demo-ux="review-due-attention-item"]');
   const statusLabels = document.querySelectorAll('[data-demo-ux="review-status-label"]');
   const dueLabels = document.querySelectorAll('[data-demo-ux="due-state-label"]');
@@ -221,9 +224,14 @@ function assertReviewDueState(expectedStateColumns) {
       Boolean(site) &&
       slice === "DEMO-UX-6" &&
       Boolean(basis) &&
-      (basis?.textContent ?? "").includes("有効開始日") &&
-      (basis?.textContent ?? "").includes("caller-supplied") &&
-      (basis?.textContent ?? "").includes("暦月") &&
+      (originBasis?.textContent ?? "").trim().length > 0 &&
+      (dueBasis?.textContent ?? "").trim() ===
+        "reviewDueDate は caller-supplied の基準日です。固定90日や自動失効には変換しません。" &&
+      (approachingBasis?.textContent ?? "").trim() ===
+        "通知開始は見直し対象の暦月に入った時点です。30日前などの日数固定窓は使いません。" &&
+      (approachingBasis?.textContent ?? "").includes("見直し対象の暦月") &&
+      (approachingBasis?.textContent ?? "").includes("使いません") &&
+      !(approachingBasis?.textContent ?? "").includes("30日前です") &&
       cssApplied &&
       stateColumns === expectedStateColumns &&
       !horizontalOverflow,
@@ -233,6 +241,9 @@ function assertReviewDueState(expectedStateColumns) {
     cssApplied,
     horizontalOverflow,
     slice,
+    originBasis: (originBasis?.textContent ?? "").trim(),
+    dueBasis: (dueBasis?.textContent ?? "").trim(),
+    approachingBasis: (approachingBasis?.textContent ?? "").trim(),
   };
 }
 
@@ -244,6 +255,34 @@ async function openReviewDue(page) {
 }
 
 let allPass = Object.values(productionCssChecks).every(Boolean);
+
+{
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
+  await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 1 });
+  const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=overview&reviewCycle=subsequent`;
+  await page.goto(url, { waitUntil: "networkidle0" });
+  await openReviewDue(page);
+  const found = await page.evaluate(assertReviewDueState, 2);
+  found.pageErrors = errors;
+  found.expectedOriginBasis = "継続基準日: 前回見直し日";
+  found.pass =
+    Boolean(found.pass) && found.originBasis === found.expectedOriginBasis && errors.length === 0;
+  const shot = path.join(artifactsDir, "desktop-review-due-subsequent-anchor.png");
+  await page.screenshot({ path: shot, fullPage: true });
+  const pass = Boolean(found.pass);
+  checks.push({
+    name: "desktop-review-due-subsequent-anchor",
+    url,
+    found,
+    shot,
+    pass,
+    pageErrors: errors,
+  });
+  allPass = allPass && pass;
+  await page.close();
+}
 
 {
   const page = await browser.newPage();
