@@ -11,6 +11,7 @@ import {
   canRetryCancellationSave,
   createEmptyCancellationDraft,
   isCancellationDraftReadyToSave,
+  retainCancellationDraftAfterSaveFailed,
 } from "./procedure-cancellation-draft";
 import {
   FIELD_STAFF_CANCELLATION_UI_SLICE,
@@ -19,6 +20,7 @@ import {
 import {
   appendSessionCancellationLifecycleEvent,
   cancelledStatusFromSaveStateAlone,
+  chromeAfterCancellationPersisted,
   rebuildTodaySupportItemsWithSessionCancellations,
 } from "./procedure-cancellation-read-model";
 import {
@@ -77,9 +79,9 @@ describe("CANCEL-SLICE-D presentation gate", () => {
     const cancelled = items.find((item) => item.effectiveStatus === "取消済み");
     const conflict = items.find((item) => item.effectiveStatus === "確認が必要");
     expect(recorded).toBeDefined();
-    expect(
-      presentProcedureCancellation(recorded, contextForItem(recorded!)),
-    ).toMatchObject({ recordId: recorded!.boundRecord!.RecordId });
+    expect(presentProcedureCancellation(recorded, contextForItem(recorded!))).toMatchObject({
+      recordId: recorded!.boundRecord!.RecordId,
+    });
     expect(presentProcedureCancellation(cancelled, contextForItem(cancelled!))).toBeUndefined();
     expect(presentProcedureCancellation(conflict, contextForItem(conflict!))).toBeUndefined();
   });
@@ -125,6 +127,14 @@ describe("CANCEL-SLICE-D draft / save guards", () => {
     expect(canConfirmCancellationOutcome("save_outcome_unknown")).toBe(true);
     expect(canConfirmCancellationOutcome("save_failed")).toBe(false);
   });
+
+  it("retains draft after save_failed so retry stays valid", () => {
+    const draft = { reason: "保存失敗リトライ", confirmed: true };
+    const retained = retainCancellationDraftAfterSaveFailed(draft);
+    expect(retained).toEqual(draft);
+    expect(isCancellationDraftReadyToSave(retained)).toBe(true);
+    expect(canRetryCancellationSave("save_failed")).toBe(true);
+  });
 });
 
 describe("CANCEL-SLICE-D read-model refresh boundary", () => {
@@ -134,7 +144,9 @@ describe("CANCEL-SLICE-D read-model refresh boundary", () => {
 
   it("reaches 取消済み only via resolver rebuild after appending CANCEL event", () => {
     const baseline = getKioskSyntheticTodaySupportItems();
-    const recorded = baseline.find((item) => item.boundRecord?.RecordId === KIOSK_RECORD_1.RecordId);
+    const recorded = baseline.find(
+      (item) => item.boundRecord?.RecordId === KIOSK_RECORD_1.RecordId,
+    );
     expect(recorded?.effectiveStatus).toBe("記録済み");
 
     const cancelIdent = mintLifecycleEventIdentity({
@@ -166,5 +178,45 @@ describe("CANCEL-SLICE-D read-model refresh boundary", () => {
       ),
     ).toBe(true);
     expect(after === undefined || after.effectiveStatus === "取消済み").toBe(true);
+  });
+
+  it("after persist: closes cancellation chrome and destinations CurrentProcedure with resolver 取消済み", () => {
+    const baseline = getKioskSyntheticTodaySupportItems();
+    const recorded = baseline.find(
+      (item) => item.boundRecord?.RecordId === KIOSK_RECORD_1.RecordId,
+    );
+    expect(recorded?.effectiveStatus).toBe("記録済み");
+    expect(presentProcedureCancellation(recorded, contextForItem(recorded!))).toBeDefined();
+
+    const cancelIdent = mintLifecycleEventIdentity({
+      eventType: "CANCEL",
+      targetRecordId: KIOSK_RECORD_1.RecordId,
+      recordedAt: "2026-08-20T15:05:00.000Z",
+      recordedBy: "synthetic-user-001",
+      reason: "成功後遷移",
+    });
+    const cancelEvent: ProcedureRecordLifecycleEvent = {
+      schemaVersion: "1.0.0",
+      ...cancelIdent,
+      eventType: "CANCEL",
+      targetRecordId: KIOSK_RECORD_1.RecordId,
+      recordedAt: "2026-08-20T15:05:00.000Z",
+      recordedBy: "synthetic-user-001",
+      reason: "成功後遷移",
+    };
+
+    // Mimic handleCancellationPersisted: append → rebuild → chrome destination.
+    const session = appendSessionCancellationLifecycleEvent([], cancelEvent);
+    const rebuilt = rebuildTodaySupportItemsWithSessionCancellations(session);
+    const chrome = chromeAfterCancellationPersisted();
+    expect(chrome.procedureCancellationOpen).toBe(false);
+    expect(chrome.currentProcedureOpen).toBe(true);
+
+    const occurrence = rebuilt.find((item) => item.occurrenceId === recorded?.occurrenceId);
+    expect(occurrence?.effectiveStatus).toBe("取消済み");
+    // Cancellation presentation must not remain eligible; CurrentProcedure shows 取消済み.
+    expect(presentProcedureCancellation(occurrence, contextForItem(occurrence!))).toBeUndefined();
+    expect(cancelledStatusFromSaveStateAlone("saved")).toBeUndefined();
+    expect(occurrence?.effectiveStatus).not.toBe(cancelledStatusFromSaveStateAlone("saved"));
   });
 });

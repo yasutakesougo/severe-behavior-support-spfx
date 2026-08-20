@@ -22,6 +22,7 @@ import {
   presentAbcObservation,
   buildProcedureCorrectionOriginalBinding,
   appendSessionCancellationLifecycleEvent,
+  chromeAfterCancellationPersisted,
   rebuildTodaySupportItemsWithSessionCancellations,
   ProcedureRecordForm,
   selectNextActionableOccurrence,
@@ -863,6 +864,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSessionCancellationLifecycleEvents((prior) =>
       appendSessionCancellationLifecycleEvent(prior, event),
     );
+    // Close cancel UI and open CurrentProcedure so destination shows resolver-derived 取消済み.
+    // Status text must not be set from saveState; rebuild above remains the authority.
+    const chrome = chromeAfterCancellationPersisted();
+    shouldFocusDestinationRef.current = true;
+    setProcedureCancellationOpen(chrome.procedureCancellationOpen);
+    setProcedureFlowSaveState(undefined);
+    setCurrentProcedureOpen(chrome.currentProcedureOpen);
   };
 
   const handleAbcObservationRequest = (): void => {

@@ -11,9 +11,7 @@ import {
   FIELD_WORKFLOW_SAVE_FAILED_RETAIN_NOTE,
   FIELD_WORKFLOW_SAVE_OUTCOME_UNKNOWN_NOTE,
 } from "./procedure-copy";
-import {
-  buildFieldStaffCancellationSyntheticAuthorization,
-} from "./procedure-cancellation-auth";
+import { buildFieldStaffCancellationSyntheticAuthorization } from "./procedure-cancellation-auth";
 import {
   canConfirmCancellationOutcome,
   canRetryCancellationSave,
@@ -81,8 +79,7 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
     siteId: presentation.siteId,
   });
   const saveWiringActive =
-    FIELD_STAFF_CANCELLATION_UI_SLICE.cancellationPersistAuthorized &&
-    authorization !== undefined;
+    FIELD_STAFF_CANCELLATION_UI_SLICE.cancellationPersistAuthorized && authorization !== undefined;
 
   const [draft, setDraft] = React.useState<ProcedureCancellationDraft>(
     () => initialDraft ?? createEmptyCancellationDraft(),

@@ -37,3 +37,20 @@ export function rebuildTodaySupportItemsWithSessionCancellations(
 export function cancelledStatusFromSaveStateAlone(_saveState: string): undefined {
   return undefined;
 }
+
+/**
+ * Chrome destination after a CANCEL event is appended and the read model rebuilt.
+ * Closes cancellation presentation and opens CurrentProcedure so the user sees
+ * resolver-derived 取消済み. Does not assign cancelled status itself.
+ */
+export type CancellationChromeAfterPersist = Readonly<{
+  procedureCancellationOpen: false;
+  currentProcedureOpen: true;
+}>;
+
+export function chromeAfterCancellationPersisted(): CancellationChromeAfterPersist {
+  return {
+    procedureCancellationOpen: false,
+    currentProcedureOpen: true,
+  };
+}

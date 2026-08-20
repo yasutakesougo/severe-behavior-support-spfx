@@ -4,7 +4,11 @@
  * Real Entra / live AuthorizationContextResolver expansion is OUT.
  */
 
-import type { AuthorizationContext, LookupResult, Role } from "../../sbs-domain/cancellation-persist.bundle";
+import type {
+  AuthorizationContext,
+  LookupResult,
+  Role,
+} from "../../sbs-domain/cancellation-persist.bundle";
 
 export const FIELD_STAFF_CANCELLATION_SYNTHETIC_AUTHORIZATION = {
   id: "FIELD_STAFF_CANCELLATION_SYNTHETIC_AUTHORIZATION",

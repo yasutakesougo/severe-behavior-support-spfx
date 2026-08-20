@@ -64,7 +64,9 @@ export {
 export {
   appendSessionCancellationLifecycleEvent,
   cancelledStatusFromSaveStateAlone,
+  chromeAfterCancellationPersisted,
   rebuildTodaySupportItemsWithSessionCancellations,
+  type CancellationChromeAfterPersist,
 } from "./procedure-cancellation-read-model";
 export {
   canConfirmCancellationOutcome,

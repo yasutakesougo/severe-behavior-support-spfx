@@ -40,9 +40,7 @@ export type LookupResult<T> =
   | Readonly<{ status: "FETCH_FAILED"; code: string }>;
 
 export type ProcedureRecordCancellationSaveOutcome =
-  | "saved"
-  | "save_failed"
-  | "save_outcome_unknown";
+  "saved" | "save_failed" | "save_outcome_unknown";
 
 export type ProcedureRecordLifecycleEvent = Readonly<{
   schemaVersion: "1.0.0";
@@ -106,9 +104,7 @@ export type ProcedureRecordCancellationSubmitRequest = Readonly<{
 
 export interface ProcedureRecordCancellationPersistencePort {
   readonly liveWriteAuthorized: false;
-  submitCancellation(
-    request: ProcedureRecordCancellationSubmitRequest,
-  ): Promise<{
+  submitCancellation(request: ProcedureRecordCancellationSubmitRequest): Promise<{
     saveState: ProcedureRecordCancellationSaveOutcome;
     event: ProcedureRecordLifecycleEvent | null;
     appendCalled: boolean;
