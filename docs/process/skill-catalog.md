@@ -54,10 +54,13 @@
 | [`release-review`](../../.agents/skills/release-review/SKILL.md) | 導入済み | Audit | `release-check` | Skill 直接実行 | 対象なし | SHA/artifact/承認/ロールバック不足。deploy は実行しない |
 | [`handoff-builder`](../../.agents/skills/handoff-builder/SKILL.md) | 導入済み | **Audit** | `release-check` / `audit`（必要時） | Skill 直接実行 / `handoff:auto` | 対象なし（旧パスなし） | SHA / Issue / PR / 検証結果が不明 |
 | [`project-status`](../../.agents/skills/project-status/SKILL.md) | 導入済み | **Audit** | なし（直接実行 / 「進めて」時） | Skill 直接実行 | 対象なし（旧パスなし） | GitHub live state / Evidence 不足、Human 判断未解決、明示 GO なし mutation |
+| [`project-intelligence`](../../.agents/skills/project-intelligence/SKILL.md) | 導入済み | **Audit** | なし（直接実行） | Skill 直接実行 | 対象なし（旧パスなし） | catalog 欠落、Authority 不足、Human confirmation なしの PROMOTED 確定要求、Intelligence を SSOT / mutation 認可に使う要求 |
 
 `handoff-builder` の所属 Agent は **Audit** とする（AI-ORG-IMPL-2 維持）。
 
 `project-status` の所属 Agent は **Audit** とする（SKILL-PILOT-1）。状態判定・Gate・ALLOWED/FORBIDDEN の観測 Skill であり、正本は GitHub / Decision / Evidence のまま。
+
+`project-intelligence` の所属 Agent は **Audit** とする（EXTERNAL-INTELLIGENCE-V1）。再利用知識の索引取得 Skill であり、正本は GitHub / Decision / Evidence / Architecture のまま。索引は `.agents/intelligence/catalog.md`。
 
 ### 導入済み Skill の目的・入出力
 
@@ -80,6 +83,7 @@
 | `release-review` | リリース可否判定材料 | main SHA、artifact、承認 | Release Gate 判定 | リリース前 |
 | `handoff-builder` | 現在状態を次作業者へ引き継ぐ | repo 状態、SHA、Issue、PR、検証結果 | handoff 文面 | 節目ごと |
 | `project-status` | 現在状態と次工程を判定する | GitHub live state、Decision、Evidence、CI | CURRENT / GATE / ALLOWED / FORBIDDEN / NEXT | 「進めて」時・着手前 |
+| `project-intelligence` | 再利用知識を task-specific に取り出す | タスク語、intelligence catalog、任意の Issue/PR | 参照 KI-ID、Findings、promotion HOLD | 着手前・境界確認・再発見防止 |
 
 ## 後続（カタログ掲載）
 
@@ -133,9 +137,9 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 | Architecture | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review`, `design-context` |
 | Implementation | `implementation-plan` |
 | Review | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review`, `design-review` |
-| Audit | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
+| Audit | `merge-audit`, `release-review`, `handoff-builder`, `project-status`, `project-intelligence` |
 
-同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` / `project-status` は Audit のみ。
+同一導入済み Skill を複数 Agent の主所属にしない。`handoff-builder` / `project-status` / `project-intelligence` は Audit のみ。
 
 ## 旧 `skills/`
 
@@ -165,6 +169,7 @@ Agent 文書に記載があるが、本カタログの第 2 段階表に未掲�
 10. サイクル実操作レビュー（`severe-behavior-cycle-review`）
 11. リリース・運用 Skill（`release-review`）
 12. 状態判定 Skill（`project-status` / SKILL-PILOT-1）
+13. 再利用知識 Skill（`project-intelligence` / EXTERNAL-INTELLIGENCE-V1）
 
 ## 関連ファイル
 

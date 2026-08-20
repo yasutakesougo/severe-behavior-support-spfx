@@ -139,13 +139,13 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 
 | Agent | 正本 | 担当 | 現行で使える Skill |
 |---|---|---|---|
-| Audit | `.agents/agents/audit.md` | マージ監査・状態判定・引き継ぎ・リリース判定 | `merge-audit`, `release-review`, `handoff-builder`, `project-status` |
+| Audit | `.agents/agents/audit.md` | マージ監査・状態判定・引き継ぎ・リリース判定・再利用知識取得 | `merge-audit`, `release-review`, `handoff-builder`, `project-status`, `project-intelligence` |
 | Review | `.agents/agents/review.md` | 着手判定・コード / Contracts / テスト確認・サイクル実操作レビュー・UI Contract | `implementation-review`, `contracts-review`, `test-review`, `severe-behavior-cycle-review`, `design-review` |
 | Requirements | `.agents/agents/requirements.md` | 要件整理・DEC・Requirement ID | `requirements-review`, `decision-review` |
 | Architecture | `.agents/agents/architecture.md` | Domain / DTO / Schema / SharePoint / UI context | `domain-design`, `sharepoint-design`, `schema-design`, `architecture-review`, `design-context` |
 | Implementation | `.agents/agents/implementation.md` | 実装計画・Issue・PR・承認後実装 | `implementation-plan` |
 
-`handoff-builder` / `project-status` の所属 Agent は **Audit** とする。
+`handoff-builder` / `project-status` / `project-intelligence` の所属 Agent は **Audit** とする。
 
 ## 停止条件
 

@@ -17,6 +17,7 @@
 - Review PASS と merge 承認が同一 head SHA に拘束されていることを確認する
 - 現在状態を次作業者へ引き継ぐ（`handoff-builder`）— **本 Agent 所属**
 - 現在状態と次工程を判定する（`project-status`）— **本 Agent 所属**（SKILL-PILOT-1）
+- 再利用知識を task-specific に取り出す（`project-intelligence`）— **本 Agent 所属**（EXTERNAL-INTELLIGENCE-V1）
 - リリース判定（`release-review`）を行い、deploy は実行しない
 - 監査結果の案作成までとし、マージ実行は人の事前承認後
 
@@ -27,6 +28,7 @@
 | `merge-audit` | 導入済み | PR マージ可否の監査（Merge Gate） |
 | `handoff-builder` | 導入済み | 引き継ぎ文書の作成 |
 | `project-status` | 導入済み | 現在状態・Gate・次工程の判定（mutation しない） |
+| `project-intelligence` | 導入済み | External Intelligence 索引からの task-specific 知識取得（非 SSOT） |
 | `release-review` | 導入済み | リリース可否判定（deploy は実行しない） |
 | `ledger-audit` | 提案 alias 候補。現行正本は `merge-audit` | 改名しない |
 | `dependency-audit` / `approval-audit` / `final-audit` | 後続（未カタログ） | 導入前は HOLD |
@@ -49,6 +51,7 @@
 - リリース判定案（`release-review`）。deploy は含めない
 - handoff 文面（完了 / 未完了 / HOLD / 禁止操作 / 検証結果）
 - project-status 固定出力（CURRENT / GATE / ALLOWED / FORBIDDEN / NEXT）
+- project-intelligence 出力（参照 KI-ID / Findings / promotion HOLD）
 
 ## 停止条件
 
