@@ -23,6 +23,9 @@ import {
   presentProcedureCorrection,
   FIELD_STAFF_ABC_PRESENTATION_1_SLICE,
   presentAbcObservation,
+  FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE,
+  buildProcedureCorrectionOriginalBinding,
+  isCorrectionDraftReadyToSave,
 } from "./index";
 
 beforeAll(() => {
@@ -354,5 +357,50 @@ describe("Kiosk Today Support synthetic fixture (read-model only)", () => {
     expect(cancelledCorrection?.recordId).toBe(cancelled?.boundRecord?.RecordId);
     expect(cancelledCorrection?.occurrenceStatus).toBe("取消済み");
     expect(conflictCorrection).toBeUndefined();
+  });
+});
+
+describe("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1", () => {
+  it("authorizes fake-port save wiring only", () => {
+    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.id).toBe(
+      "FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1",
+    );
+    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.correctionSaveWiringAuthorized).toBe(
+      true,
+    );
+    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.correctionPersistAuthorized).toBe(true);
+    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.liveWriteAuthorized).toBe(false);
+    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.sharePointWriteAuthorized).toBe(false);
+  });
+
+  it("gates binding availability fail-closed", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み")!;
+    const context = {
+      userId: recorded.userId,
+      personLabel: recorded.personLabel,
+      organizationId: "synthetic-org-001",
+      siteId: "SITE-ISG",
+      planId: recorded.planId,
+      planVersion: recorded.planVersion,
+      procedureId: recorded.procedure.ProcedureId,
+      procedureVersion: recorded.procedure.ProcedureVersion,
+      planPeriodLabel: "合成期間",
+      occurrenceId: recorded.occurrenceId,
+    };
+    expect(
+      buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord),
+    ).toBeDefined();
+    expect(buildProcedureCorrectionOriginalBinding(context, undefined)).toBeUndefined();
+    expect(
+      isCorrectionDraftReadyToSave(
+        {
+          result: "PERFORMED_AS_PLANNED",
+          performedAtLocal: "2026-08-17T21:05",
+          reason: "test",
+        },
+        "2026-08-17",
+      ),
+    ).toBe(true);
   });
 });

@@ -33,7 +33,7 @@ export const FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE =
   "訂正の合成表示です。元の記録は保持し、live SharePoint 保存は行いません。" as const;
 
 export const FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE =
-  "訂正の保存契約は未接続です。save 5-state や既存の記録保存意味は変更しません。" as const;
+  "訂正の保存は in-memory fake append-only port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCorrection 確認後のみです。" as const;
 
 export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<Record<ProcedureRecordResultValue, string>> =
   {

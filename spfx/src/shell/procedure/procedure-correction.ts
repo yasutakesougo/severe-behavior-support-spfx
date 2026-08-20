@@ -1,6 +1,18 @@
 import { labelForProcedureRecordResult } from "./procedure-copy";
 import type { ProcedureBindingContext } from "./procedure-types";
+import type { ProcedureRecordResultValue } from "./procedure-types";
 import type { TodaySupportItem } from "../../sbs-domain/kiosk-read-model.bundle";
+
+export const FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE = {
+  id: "FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1",
+  correctionSaveWiringAuthorized: true as const,
+  correctionPersistAuthorized: true as const,
+  liveWriteAuthorized: false as const,
+  sharePointWriteAuthorized: false as const,
+  cancellationAuthorized: false as const,
+  lifecycleMutationAuthorized: false as const,
+  deployAuthorized: false as const,
+} as const;
 
 export const FIELD_STAFF_PHASE8_CORRECTION_1_SLICE = {
   id: "FIELD-STAFF-PHASE8-CORRECTION-1",
@@ -21,6 +33,7 @@ export type ProcedureCorrectionPresentation = Readonly<{
   activityLabel: string;
   scheduledTime: string;
   recordId: string;
+  result: ProcedureRecordResultValue;
   resultLabel: string;
   performedAt: string;
   recordedAt: string;
@@ -53,6 +66,7 @@ export function presentProcedureCorrection(
     activityLabel: item.activityLabel,
     scheduledTime: item.scheduledTime,
     recordId: item.boundRecord.RecordId,
+    result: item.boundRecord.result,
     resultLabel: labelForProcedureRecordResult(item.boundRecord.result),
     performedAt: item.boundRecord.performedAt,
     recordedAt: item.boundRecord.recordedAt,
