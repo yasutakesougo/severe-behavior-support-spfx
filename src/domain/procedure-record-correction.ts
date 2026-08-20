@@ -68,6 +68,8 @@ export type ProcedureRecordCorrectionClientInput = Readonly<{
 
 /** Immutable original binding/context. Not client-editable factual input. */
 export type ProcedureRecordCorrectionOriginalBinding = Readonly<{
+  /** Authoritative identity of the immutable original ProcedureRecord. */
+  originalRecordId: string;
   OrganizationId: string;
   SiteId: string;
   UserId: string;
@@ -303,7 +305,8 @@ export function assembleProcedureRecordCorrection(
     return { ok: false, reason: "AUTH_INDETERMINATE" };
   }
 
-  const originalRecordId = requiredIdentity(input.client.originalRecordId);
+  const clientOriginalRecordId = requiredIdentity(input.client.originalRecordId);
+  const originalRecordId = requiredIdentity(input.originalBinding.originalRecordId);
   const reason = requiredReason(input.client.reason);
   const organizationId = requiredIdentity(input.originalBinding.OrganizationId);
   const siteId = requiredIdentity(input.originalBinding.SiteId);
@@ -313,7 +316,9 @@ export function assembleProcedureRecordCorrection(
   const correctedBy = requiredIdentity(input.auth.correctedBy);
 
   if (
+    clientOriginalRecordId === null ||
     originalRecordId === null ||
+    clientOriginalRecordId !== originalRecordId ||
     reason === null ||
     organizationId === null ||
     siteId === null ||
@@ -400,8 +405,10 @@ export function orderProcedureRecordCorrections(
   corrections: readonly ProcedureRecordCorrection[],
 ): readonly ProcedureRecordCorrection[] {
   return [...corrections].sort((left, right) => {
-    if (left.correctedAt !== right.correctedAt) {
-      return left.correctedAt < right.correctedAt ? -1 : 1;
+    const leftInstant = Date.parse(left.correctedAt);
+    const rightInstant = Date.parse(right.correctedAt);
+    if (leftInstant !== rightInstant) {
+      return leftInstant < rightInstant ? -1 : 1;
     }
     if (left.CorrectionId === right.CorrectionId) {
       return 0;

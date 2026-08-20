@@ -48,6 +48,7 @@ const AUTHORIZED: FieldStaffCorrectionAuthContext = {
 };
 
 const ORIGINAL_BINDING: ProcedureRecordCorrectionOriginalBinding = {
+  originalRecordId: SYNTHETIC_PROCEDURE_RECORD_ID,
   OrganizationId: SYNTHETIC_PLAN_ORG_ID,
   SiteId: SYNTHETIC_PLAN_SITE_ID,
   UserId: SYNTHETIC_PLAN_USER_ID,
@@ -113,6 +114,11 @@ describe("ProcedureRecordCorrection domain contract", () => {
   it("rejects missing or blank reason", () => {
     assert.equal(assembleValid({ client: { reason: "" } }).ok, false);
     assert.equal(assembleValid({ client: { reason: "   " } }).ok, false);
+  });
+
+  it("rejects a client originalRecordId that does not match the authoritative binding", () => {
+    const assembled = assembleValid({ client: { originalRecordId: "other-original-record" } });
+    assert.equal(assembled.ok, false);
   });
 
   it("rejects forbidden client fields for original binding and derived/system values", () => {
@@ -392,6 +398,37 @@ describe("ProcedureRecordCorrection fake persistence port", () => {
 
     const latest = projectLatestCorrectionFacts(history.corrections);
     assert.equal(latest?.CorrectionId, ordered[ordered.length - 1]?.CorrectionId);
+  });
+
+  it("orders mixed-offset correctedAt values by instant", async () => {
+    const port = createInMemoryProcedureRecordCorrectionPersistencePort();
+    const earlierInstant = await port.submitCorrection(
+      {
+        client: validClient({ reason: "earlier-instant" }),
+        originalBinding: ORIGINAL_BINDING,
+        correctedAtIso: "2026-08-20T10:30:00+01:00",
+        nowIso: NOW_ISO,
+      },
+      AUTHORIZED,
+    );
+    const laterInstant = await port.submitCorrection(
+      {
+        client: validClient({ reason: "later-instant", result: "NOT_PERFORMED" }),
+        originalBinding: ORIGINAL_BINDING,
+        correctedAtIso: "2026-08-20T10:00:00Z",
+        nowIso: NOW_ISO,
+      },
+      AUTHORIZED,
+    );
+    assert.equal(earlierInstant.saveState, "saved");
+    assert.equal(laterInstant.saveState, "saved");
+
+    const history = await port.listCorrections(SYNTHETIC_PROCEDURE_RECORD_ID);
+    assert.deepEqual(
+      history.corrections.map((item) => item.reason),
+      ["earlier-instant", "later-instant"],
+    );
+    assert.equal(projectLatestCorrectionFacts(history.corrections)?.reason, "later-instant");
   });
 
   it("exposes only append submit and history read — no update/delete/lifecycle methods", () => {
