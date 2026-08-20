@@ -17,6 +17,7 @@ import {
   isProcedureRecordStartAllowed,
   presentProcedureCorrection,
   presentAbcObservation,
+  buildProcedureCorrectionOriginalBinding,
   ProcedureRecordForm,
   selectNextActionableOccurrence,
   type ProcedureRecordFormSaveSnapshot,
@@ -728,6 +729,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
     selectedCurrentProcedure?.context,
   );
+  const procedureCorrectionOriginalBinding =
+    occurrenceFlowFromOverview && selectedOccurrenceItem?.boundRecord && selectedCurrentProcedure
+      ? buildProcedureCorrectionOriginalBinding(
+          selectedCurrentProcedure.context,
+          selectedOccurrenceItem.boundRecord,
+        )
+      : undefined;
   const abcObservationPresentation = presentAbcObservation(selectedCurrentProcedure?.context);
 
   const handleRecordProcedureRequest = (): void => {
@@ -806,6 +814,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setProcedureCorrectionOpen(false);
+    setProcedureFlowSaveState(undefined);
     setCurrentProcedureOpen(true);
   };
 
@@ -1153,8 +1162,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   ) : procedureCorrectionOpen && procedureCorrectionPresentation ? (
                     <ProcedureRecordCorrection
                       presentation={procedureCorrectionPresentation}
+                      originalBinding={procedureCorrectionOriginalBinding}
                       headingRef={destinationHeadingRef}
                       onBackToCurrentProcedure={handleBackToCurrentProcedureFromCorrection}
+                      onSaveStateChange={handleProcedureFlowSaveStateChange}
                     />
                   ) : currentProcedureOpen && selectedCurrentProcedure ? (
                     <CurrentProcedure

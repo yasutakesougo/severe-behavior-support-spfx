@@ -37,10 +37,26 @@ export {
 } from "./procedure-fixture";
 export { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
 export {
+  FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE,
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
   presentProcedureCorrection,
   type ProcedureCorrectionPresentation,
 } from "./procedure-correction";
+export { buildProcedureCorrectionOriginalBinding } from "./procedure-correction-binding";
+export {
+  canRetryCorrectionSave,
+  createCorrectionDraftFromRecord,
+  createProcedureRecordSaveInFlightGuard as createCorrectionSaveInFlightGuard,
+  isCorrectionDraftReadyToSave,
+  retainCorrectionDraftAfterSaveFailed,
+  asiaTokyoIsoToDateTimeLocal,
+  type ProcedureCorrectionDraft,
+} from "./procedure-correction-draft";
+export {
+  buildStaffProcedureRecordCorrectionSaveInput,
+  persistStaffProcedureRecordCorrectionFromForm,
+  STAFF_PROCEDURE_RECORD_CORRECTION_IN_MEMORY_PORT,
+} from "./procedure-correction-persist";
 export {
   FIELD_STAFF_ABC_PRESENTATION_1_SLICE,
   presentAbcObservation,
