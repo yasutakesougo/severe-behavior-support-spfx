@@ -51,6 +51,7 @@ const expectedInstalledSkills = [
   "release-review",
   "handoff-builder",
   "project-status",
+  "project-intelligence",
 ];
 const expectedToolAdapters = ["cursor-agent", "cursor-cli", "codex"];
 const handoffBuilderOwnerAgent = "audit";

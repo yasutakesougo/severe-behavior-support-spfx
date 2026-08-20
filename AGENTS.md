@@ -96,12 +96,13 @@ Skill / Agent / Command の詳細:
 | Commands | `.agents/commands/` |
 | Skills | `.agents/skills/` |
 | MCP 権限 | `.agents/mcp/permission-matrix.md` |
+| 再利用知識索引（非 SSOT） | `.agents/intelligence/catalog.md` |
 | Governance 入口 | `docs/process/ai-governance.md` |
 | Workflow 入口 | `docs/process/ai-workflow.md` |
 | Background Agent 契約 | `docs/process/background-agent-contract.md` |
 | 品質ゲート | `docs/development/quality-gates.md` |
 
-状態判定が必要なときは `.agents/skills/project-status/SKILL.md` を使う。
+状態判定が必要なときは `.agents/skills/project-status/SKILL.md` を使う。再利用知識の取得は `.agents/skills/project-intelligence/SKILL.md`（正本ではない）。
 
 ## Security Scan との関係
 
