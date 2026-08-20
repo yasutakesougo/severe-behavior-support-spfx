@@ -13,6 +13,8 @@ export * from "./support-plan-version-procedure-binding";
 export * from "./procedure-record";
 export * from "./procedure-record-persistence";
 export * from "./procedure-record-staff-save";
+export * from "./procedure-record-correction";
+export * from "./procedure-record-correction-persistence";
 export * from "./support-record-trace";
 export * from "./finding-audit";
 export * from "./audit-event-persistence";
