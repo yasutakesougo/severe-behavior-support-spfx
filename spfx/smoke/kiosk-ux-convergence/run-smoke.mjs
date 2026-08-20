@@ -98,6 +98,61 @@ await esbuild.build({
   define: { "process.env.NODE_ENV": '"production"' },
 });
 
+function auditCorrectionSaveWiringSourceMarkers() {
+  const correctionTsx = fs.readFileSync(
+    path.join(repoRoot, "src/shell/procedure/ProcedureRecordCorrection.tsx"),
+    "utf8",
+  );
+  const procedureCorrectionTs = fs.readFileSync(
+    path.join(repoRoot, "src/shell/procedure/procedure-correction.ts"),
+    "utf8",
+  );
+  const procedureCopyTs = fs.readFileSync(
+    path.join(repoRoot, "src/shell/procedure/procedure-copy.ts"),
+    "utf8",
+  );
+  const persistSource = fs.readFileSync(
+    path.join(repoRoot, "src/shell/procedure/procedure-correction-persist.ts"),
+    "utf8",
+  );
+  const persistExists = persistSource.includes("persistStaffProcedureRecordCorrectionFromForm");
+  const draftExists = fs.existsSync(
+    path.join(repoRoot, "src/shell/procedure/procedure-correction-draft.ts"),
+  );
+  const bundleExists = fs.existsSync(
+    path.join(repoRoot, "src/sbs-domain/correction-persist.bundle.js"),
+  );
+  const bundleDtsExists = fs.existsSync(
+    path.join(repoRoot, "src/sbs-domain/correction-persist.bundle.d.ts"),
+  );
+  const boundaryNote = procedureCopyTs.match(
+    /FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE[\s\S]*?as const;/,
+  )?.[0];
+
+  const markersOk =
+    correctionTsx.includes('data-field-workflow="procedure-correction-save"') &&
+    correctionTsx.includes('data-field-workflow-save-path="submitCorrection"') &&
+    correctionTsx.includes("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1") &&
+    procedureCorrectionTs.includes("correctionSaveWiringAuthorized: true") &&
+    persistExists &&
+    draftExists &&
+    bundleExists &&
+    bundleDtsExists &&
+    boundaryNote !== undefined &&
+    !boundaryNote.includes("未接続");
+
+  record("CORRECTION-SAVE-WIRING-T1-source-markers", markersOk, {
+    wiredSaveMarker: correctionTsx.includes('data-field-workflow="procedure-correction-save"'),
+    submitCorrectionPath: correctionTsx.includes("submitCorrection"),
+    sliceId: correctionTsx.includes("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1"),
+    persistModule: persistExists,
+    draftModule: draftExists,
+    bundle: bundleExists,
+    boundaryNoteWired: boundaryNote !== undefined && !boundaryNote.includes("未接続"),
+  });
+  return markersOk;
+}
+
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".js": "application/javascript; charset=utf-8",
@@ -160,6 +215,12 @@ function record(id, pass, detail) {
   checks.push({ id, pass: Boolean(pass), detail });
   return Boolean(pass);
 }
+
+auditCorrectionSaveWiringSourceMarkers();
+record("CORRECTION-SAVE-WIRING-T2-compile-smoke", true, {
+  esbuildBundle: true,
+  productionCssIncludesCorrectionUx: productionCss.length > 0,
+});
 
 async function openPage(query, viewport) {
   const page = await browser.newPage();
@@ -352,12 +413,15 @@ async function assertCorrectionPathForStatus(page, status) {
   });
   const correction = await page.evaluate(() => {
     const root = document.querySelector('[data-field-workflow="procedure-record-correction"]');
+    const wiredSave = document.querySelector('[data-field-workflow="procedure-correction-save"]');
     const disabledSave = document.querySelector(
       '[data-field-workflow="procedure-correction-save-disabled"]',
     );
     return {
       correctionPresent: Boolean(root),
-      saveDisabled: disabledSave instanceof HTMLButtonElement ? disabledSave.disabled : false,
+      saveWired: Boolean(wiredSave),
+      saveDisabledOnly: Boolean(disabledSave) && !wiredSave,
+      savePath: root?.getAttribute("data-field-workflow-save-path") ?? "",
       shellCorrectionState:
         document
           .querySelector('[data-shell-ux="app-shell-chrome"]')
@@ -379,7 +443,9 @@ async function assertCorrectionPathForStatus(page, status) {
       procedure.correctionLabel.includes("訂正") &&
       !procedure.recordCtaPresent &&
       correction.correctionPresent &&
-      correction.saveDisabled &&
+      correction.saveWired &&
+      !correction.saveDisabledOnly &&
+      correction.savePath === "submitCorrection" &&
       correction.shellCorrectionState === "open",
   };
 }
