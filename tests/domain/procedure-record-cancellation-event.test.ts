@@ -181,7 +181,7 @@ describe("CANCEL-SLICE-B lifecycle event creation", () => {
     assert.equal(first.event.targetRecordId, first.semantics.targetRecordId);
     assert.equal(first.event.reason, first.semantics.reason);
     assert.equal(first.event.recordedAt, FROZEN_RECORDED_AT);
-    assert.equal(first.event.recordedBy, first.semantics.frozenContext.actorSubject);
+    assert.equal(first.event.recordedBy, first.semantics.frozenContext.actorUserId);
     assert.equal(first.event.replacementRecordId, undefined);
 
     const expected = mintLifecycleEventIdentity({

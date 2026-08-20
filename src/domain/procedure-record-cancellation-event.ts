@@ -105,7 +105,7 @@ export function assembleProcedureRecordCancellationLifecycleEvent(
     return invalid(semantics.reason);
   }
 
-  const recordedBy = semantics.frozenContext.actorSubject;
+  const recordedBy = semantics.frozenContext.actorUserId;
   const identity = mintLifecycleEventIdentity({
     eventType: "CANCEL",
     targetRecordId: semantics.targetRecordId,
