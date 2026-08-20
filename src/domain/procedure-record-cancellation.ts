@@ -16,7 +16,7 @@ import { validateProcedureRecord } from "./procedure-record";
 import { sha256Hex } from "./sha256";
 import { isNonEmptyString, isRecord } from "./validation";
 
-/** CANCEL-SLICE-A only: semantic validation. No event or persistence authority. */
+/** CANCEL-SLICE-A: semantic validation only. Event mint lives in cancellation-event (Slice B). */
 export const PROCEDURE_RECORD_CANCELLATION_SEMANTICS_VERSION = "1.0.0" as const;
 export const PROCEDURE_RECORD_CANCELLATION_LIVE_WRITE_AUTHORIZED = false as const;
 
