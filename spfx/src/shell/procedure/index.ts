@@ -1,5 +1,9 @@
 export { CurrentProcedure, type CurrentProcedureProps } from "./CurrentProcedure";
 export {
+  AbcObservationPresentation,
+  type AbcObservationPresentationProps,
+} from "./AbcObservationPresentation";
+export {
   ProcedureRecordCorrection,
   type ProcedureRecordCorrectionProps,
 } from "./ProcedureRecordCorrection";
@@ -37,6 +41,11 @@ export {
   presentProcedureCorrection,
   type ProcedureCorrectionPresentation,
 } from "./procedure-correction";
+export {
+  FIELD_STAFF_ABC_PRESENTATION_1_SLICE,
+  presentAbcObservation,
+  type AbcObservationPresentation as AbcObservationPresentationModel,
+} from "./abc-presentation";
 export {
   FIELD_WORKFLOW_NEXT_OCCURRENCE_UNKNOWN_REASON,
   FIELD_WORKFLOW_NEXT_OCCURRENCE_UNSAVED_REASON,

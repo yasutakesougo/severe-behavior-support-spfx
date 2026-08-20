@@ -16,6 +16,7 @@ export type CurrentProcedureProps = Readonly<{
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
   onCorrectionRequest?: () => void;
+  onAbcObservationRequest?: () => void;
 }>;
 
 /**
@@ -29,6 +30,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   onBackToUserDetail,
   onRecordProcedureRequest,
   onCorrectionRequest,
+  onAbcObservationRequest,
 }) => {
   const { heading, summaryPrompt, context, projection, canStartProcedureRecord } = presentation;
   const recordCtaEnabled = canStartProcedureRecord && Boolean(onRecordProcedureRequest);
@@ -178,6 +180,16 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
               この手順を記録
             </button>
           )}
+          <button
+            type="button"
+            className={styles.backButton}
+            onClick={onAbcObservationRequest}
+            disabled={!onAbcObservationRequest}
+            aria-disabled={!onAbcObservationRequest ? "true" : undefined}
+            data-field-workflow="abc-observation-cta"
+          >
+            ABC観察を見る
+          </button>
         </div>
       </section>
     </section>

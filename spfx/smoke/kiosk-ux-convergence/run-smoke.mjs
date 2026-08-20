@@ -46,6 +46,7 @@ function compileProductionCss() {
     "src/shell/users/UserDetailUx.module.scss",
     "src/shell/users/SupportPlanUx.module.scss",
     "src/shell/procedure/CurrentProcedureUx.module.scss",
+    "src/shell/procedure/AbcObservationPresentationUx.module.scss",
     "src/shell/procedure/ProcedureRecordCorrectionUx.module.scss",
     "src/shell/procedure/ProcedureRecordFormUx.module.scss",
     "src/shell/review/ReviewDueStateUx.module.scss",
@@ -662,6 +663,37 @@ try {
     );
     await screenshot(page, "keyboard-current-procedure");
 
+    const toAbcCta = await tabUntil(page, (active) => active.field === "abc-observation-cta");
+    const abcCtaFocus = await page.evaluate(hasVisibleFocus);
+    await page.keyboard.press("Enter");
+    await page.waitForSelector('[data-field-workflow="abc-observation-presentation"]', {
+      timeout: 8000,
+    });
+    await page.waitForFunction(
+      () =>
+        document.activeElement ===
+        document.querySelector('[data-field-workflow="abc-observation-heading"]'),
+      { timeout: 8000 },
+    );
+    const abcPresentation = await page.evaluate(() => {
+      const root = document.querySelector('[data-field-workflow="abc-observation-presentation"]');
+      const heading = document.querySelector('[data-field-workflow="abc-observation-heading"]');
+      const fields = document.querySelector('[data-field-workflow="abc-observation-fields"]');
+      return {
+        present: Boolean(root),
+        slice: root?.getAttribute("data-field-workflow-abc-slice") ?? "",
+        userId: root?.getAttribute("data-field-workflow-user") ?? "",
+        heading: heading?.textContent?.trim() ?? "",
+        fields: fields?.textContent?.trim() ?? "",
+        saveControls: document.querySelectorAll(
+          '[data-field-workflow="abc-observation-presentation"] input, [data-field-workflow="abc-observation-presentation"] textarea, [data-field-workflow="abc-observation-presentation"] select',
+        ).length,
+      };
+    });
+    const abcHeadingFocus = await page.evaluate(hasVisibleFocus);
+    await page.click('[data-field-workflow="abc-observation-back"]');
+    await page.waitForSelector('[data-field-workflow="current-procedure"]', { timeout: 8000 });
+
     const toRecordCta = await tabUntil(page, (active) => active.field === "record-procedure-cta");
     const recordCtaFocus = await page.evaluate(hasVisibleFocus);
     await page.keyboard.press("Enter");
@@ -738,6 +770,21 @@ try {
       occurrenceFocus,
       recordCtaFocus,
     });
+    record(
+      "field-staff-abc-read-only-path",
+      toAbcCta.found &&
+        abcCtaFocus.visible &&
+        abcPresentation.present &&
+        abcPresentation.slice === "FIELD-STAFF-ABC-PRESENTATION-1" &&
+        abcPresentation.userId === "user-a" &&
+        abcPresentation.heading === "ABC観察" &&
+        abcPresentation.fields.includes("Antecedent") &&
+        abcPresentation.fields.includes("Behavior") &&
+        abcPresentation.fields.includes("Consequence") &&
+        abcPresentation.saveControls === 0 &&
+        abcHeadingFocus.visible,
+      { toAbcCta, abcCtaFocus, abcPresentation, abcHeadingFocus },
+    );
     record(
       "keyboard-logical-order",
       toOccurrence.found &&
