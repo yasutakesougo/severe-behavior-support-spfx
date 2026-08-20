@@ -71,11 +71,10 @@ function validSemanticsInput(overrides: Record<string, unknown> = {}) {
 
 describe("CANCEL-SLICE-C persistence port / fake", () => {
   it("locks save outcomes and keeps LIVE WRITE / SharePoint unauthorized", () => {
-    assert.deepEqual([...PROCEDURE_RECORD_CANCELLATION_SAVE_OUTCOMES], [
-      "saved",
-      "save_failed",
-      "save_outcome_unknown",
-    ]);
+    assert.deepEqual(
+      [...PROCEDURE_RECORD_CANCELLATION_SAVE_OUTCOMES],
+      ["saved", "save_failed", "save_outcome_unknown"],
+    );
     assert.equal(PROCEDURE_RECORD_CANCELLATION_PERSISTENCE_LIVE_WRITE_AUTHORIZED, false);
     assert.equal(PROCEDURE_RECORD_CANCELLATION_LIVE_WRITE_AUTHORIZED, false);
     assert.equal(PROCEDURE_RECORD_CANCELLATION_EVENT_PERSISTENCE_AUTHORIZED, false);
@@ -168,10 +167,7 @@ describe("CANCEL-SLICE-C persistence port / fake", () => {
     assert.equal(first.saveState, "save_outcome_unknown");
     assert.ok(first.event);
 
-    port.storage.byLifecycleEventId.set(
-      first.event.LifecycleEventId,
-      structuredClone(first.event),
-    );
+    port.storage.byLifecycleEventId.set(first.event.LifecycleEventId, structuredClone(first.event));
     port.storage.byLifecycleIdempotencyKey.set(
       first.event.LifecycleIdempotencyKey,
       structuredClone(first.event),
