@@ -268,7 +268,16 @@ async function screenshot(page, name) {
 async function focusKey(page) {
   return page.evaluate(() => {
     const el = document.activeElement;
-    return `${el?.tagName}:${el?.id ?? ""}:${el?.getAttribute("data-field-workflow") ?? ""}:${el?.getAttribute("data-kiosk-ux") ?? ""}`;
+    return [
+      el?.tagName ?? "",
+      el?.id ?? "",
+      el?.getAttribute("data-field-workflow") ?? "",
+      el?.getAttribute("data-kiosk-ux") ?? "",
+      el?.getAttribute("data-shell-ux") ?? "",
+      el?.getAttribute("data-shell-ux-demo-role") ?? "",
+      el?.getAttribute("name") ?? "",
+      el?.getAttribute("value") ?? "",
+    ].join(":");
   });
 }
 
