@@ -59,8 +59,7 @@ export function buildStaffProcedureRecordCancellationSaveInput(args: {
 
 export async function persistStaffProcedureRecordCancellationFromForm(
   input: StaffProcedureRecordCancellationSaveInput,
-  port: ProcedureRecordCancellationPersistencePort =
-    STAFF_PROCEDURE_RECORD_CANCELLATION_IN_MEMORY_PORT,
+  port: ProcedureRecordCancellationPersistencePort = STAFF_PROCEDURE_RECORD_CANCELLATION_IN_MEMORY_PORT,
 ): Promise<StaffProcedureRecordCancellationSaveResult> {
   return persistStaffProcedureRecordCancellation(input, port);
 }

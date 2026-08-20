@@ -5,9 +5,7 @@
  */
 
 export type ProcedureRecordCancellationSaveOutcome =
-  | "saved"
-  | "save_failed"
-  | "save_outcome_unknown";
+  "saved" | "save_failed" | "save_outcome_unknown";
 
 export type ProcedureRecordLifecycleEvent = Readonly<{
   schemaVersion: "1.0.0";
@@ -23,10 +21,7 @@ export type ProcedureRecordLifecycleEvent = Readonly<{
 
 export interface ProcedureRecordCancellationPersistencePort {
   readonly liveWriteAuthorized: false;
-  submitCancellation(request: {
-    semanticsInput: unknown;
-    recordedAtIso: string;
-  }): Promise<{
+  submitCancellation(request: { semanticsInput: unknown; recordedAtIso: string }): Promise<{
     saveState: ProcedureRecordCancellationSaveOutcome;
     event: ProcedureRecordLifecycleEvent | null;
     appendCalled: boolean;

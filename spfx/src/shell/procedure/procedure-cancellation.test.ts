@@ -1,11 +1,17 @@
-import {
-  getKioskSyntheticTodaySupportItems,
-  KIOSK_RECORD_1,
-} from "./kiosk-today-support-fixture";
+import { getKioskSyntheticTodaySupportItems, KIOSK_RECORD_1 } from "./kiosk-today-support-fixture";
 import {
   presentProcedureCancellation,
   reasonWhyCancellationHidden,
 } from "./procedure-cancellation";
+
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
 
 describe("procedure-cancellation presentation", () => {
   const context = {

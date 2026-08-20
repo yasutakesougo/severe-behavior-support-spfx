@@ -513,7 +513,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setReviewDuePreviewOpen(false);
       setCurrentProcedureOpen(false);
       setProcedureCancellationOpen(false);
-    setProcedureCorrectionOpen(false);
+      setProcedureCorrectionOpen(false);
       setOccurrenceFlowFromOverview(false);
       setDestination("records");
       if (onSelectedDestinationChange) {
@@ -525,7 +525,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setSelectedUserDetailId(undefined);
       setCurrentProcedureOpen(false);
       setProcedureCancellationOpen(false);
-    setProcedureCorrectionOpen(false);
+      setProcedureCorrectionOpen(false);
       setOccurrenceFlowFromOverview(false);
       setDestination("overview");
       if (onSelectedDestinationChange) {

@@ -17,26 +17,29 @@ beforeAll(() => {
 });
 
 describe("procedure-cancellation-persist", () => {
-  const item = getKioskSyntheticTodaySupportItems().find((x) => x.effectiveStatus === "記録済み")!;
-  const context = {
-    userId: item.userId,
-    personLabel: item.personLabel,
-    organizationId: "synthetic-org-001",
-    siteId: "SITE-ISG",
-    planId: item.planId,
-    planVersion: item.planVersion,
-    procedureId: item.procedure.ProcedureId,
-    procedureVersion: item.procedure.ProcedureVersion,
-    planPeriodLabel: "合成期間",
-    occurrenceId: item.occurrenceId,
+  const presentation = (): NonNullable<ReturnType<typeof presentProcedureCancellation>> => {
+    const item = getKioskSyntheticTodaySupportItems().find(
+      (x) => x.effectiveStatus === "記録済み",
+    )!;
+    return presentProcedureCancellation(item, {
+      userId: item.userId,
+      personLabel: item.personLabel,
+      organizationId: "synthetic-org-001",
+      siteId: "SITE-ISG",
+      planId: item.planId,
+      planVersion: item.planVersion,
+      procedureId: item.procedure.ProcedureId,
+      procedureVersion: item.procedure.ProcedureVersion,
+      planPeriodLabel: "合成期間",
+      occurrenceId: item.occurrenceId,
+    })!;
   };
-  const presentation = presentProcedureCancellation(item, context)!;
 
   it("maps form input to submitCancellation against in-memory port", async () => {
     const port = createInMemoryProcedureRecordCancellationPersistencePort();
     const result = await persistStaffProcedureRecordCancellationFromForm(
       buildStaffProcedureRecordCancellationSaveInput({
-        presentation,
+        presentation: presentation(),
         reason: "記録取り消しテスト",
         cancelledBy: FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
         nowIso: "2026-08-20T14:00:00.000Z",
@@ -46,14 +49,14 @@ describe("procedure-cancellation-persist", () => {
 
     expect(result.saveState).toBe("saved");
     expect(result.appendCalled).toBe(true);
-    expect(result.event?.targetRecordId).toBe(presentation.recordId);
+    expect(result.event?.targetRecordId).toBe(presentation().recordId);
     expect(port.storage.appendCalls).toBe(1);
   });
 
   it("keeps same frozen submission on retry and avoids second append", async () => {
     const port = createInMemoryProcedureRecordCancellationPersistencePort();
     const input = buildStaffProcedureRecordCancellationSaveInput({
-      presentation,
+      presentation: presentation(),
       reason: "同一再試行",
       cancelledBy: FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
       recordedAtIso: "2026-08-20T14:10:00.000Z",

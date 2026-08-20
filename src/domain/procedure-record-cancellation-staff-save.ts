@@ -9,6 +9,7 @@ import {
   type ProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationSaveOutcome,
 } from "./procedure-record-cancellation-persistence";
+import type { ProcedureRecordLifecycleEvent } from "./kiosk-contract";
 import { isNonEmptyString, isValidIsoDateTime } from "./validation";
 
 export type StaffProcedureRecordCancellationSaveInput = Readonly<{
@@ -20,16 +21,7 @@ export type StaffProcedureRecordCancellationSaveInput = Readonly<{
 
 export type StaffProcedureRecordCancellationSaveResult = Readonly<{
   saveState: ProcedureRecordCancellationSaveOutcome;
-  event: Readonly<{
-    LifecycleEventId: string;
-    LifecycleIdempotencyKey: string;
-    LifecyclePayloadFingerprint: string;
-    eventType: "CANCEL";
-    targetRecordId: string;
-    recordedAt: string;
-    recordedBy: string;
-    reason?: string;
-  }> | null;
+  event: ProcedureRecordLifecycleEvent | null;
   appendCalled: boolean;
 }>;
 

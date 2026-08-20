@@ -63,7 +63,9 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
   const [reason, setReason] = React.useState("");
   const [saveState, setSaveState] = React.useState<ShellSaveState>(initialSaveState);
   const [confirming, setConfirming] = React.useState(false);
-  const [submittedLifecycleEventId, setSubmittedLifecycleEventId] = React.useState<string | null>(null);
+  const [submittedLifecycleEventId, setSubmittedLifecycleEventId] = React.useState<string | null>(
+    null,
+  );
   const saveInFlight = React.useRef(createProcedureRecordSaveInFlightGuard());
   const frozenSubmissionRef = React.useRef<
     | {
@@ -83,7 +85,10 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
   const reasonValid = isReasonValid(reason);
   const canProceedToConfirm = reasonValid && canRetryCancellationSave(saveState) && !editingLocked;
   const canSubmit =
-    confirming && canProceedToConfirm && !saveInFlight.current.isInFlight() && !submittedLifecycleEventId;
+    confirming &&
+    canProceedToConfirm &&
+    !saveInFlight.current.isInFlight() &&
+    !submittedLifecycleEventId;
 
   const statusNote =
     saveState === "save_failed"
@@ -253,7 +258,10 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
           aria-invalid={reason.length > 0 && !reasonValid ? "true" : undefined}
         />
         {reason.length > 0 && !reasonValid ? (
-          <p className={styles.validation} data-field-workflow="procedure-cancellation-reason-error">
+          <p
+            className={styles.validation}
+            data-field-workflow="procedure-cancellation-reason-error"
+          >
             取消理由は空白のみ不可・先頭末尾空白不可・制御文字不可です。
           </p>
         ) : null}
@@ -266,7 +274,9 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
           <p id="procedure-cancellation-action-status" className={styles.statusNote} role="status">
             {labelForShellSaveState(saveState)} — {statusNote}
           </p>
-          {submitDisabledReason ? <p className={styles.statusNote}>{submitDisabledReason}</p> : null}
+          {submitDisabledReason ? (
+            <p className={styles.statusNote}>{submitDisabledReason}</p>
+          ) : null}
         </div>
 
         <div className={styles.actionRow}>

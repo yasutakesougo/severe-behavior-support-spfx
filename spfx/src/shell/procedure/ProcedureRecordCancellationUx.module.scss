@@ -105,7 +105,7 @@ textarea {
 
 .validation {
   margin: sbs.$space-2 0 0;
-  color: sbs.$color-status-error;
+  color: sbs.$color-feedback-danger-fg;
   font-size: sbs.$font-size-meta;
   line-height: sbs.$line-height-meta;
 }
@@ -152,7 +152,7 @@ textarea {
 }
 
 .dangerButton {
-  background: sbs.$color-status-error;
+  background: sbs.$color-feedback-danger-fg;
   color: sbs.$color-surface-canvas;
   font-weight: sbs.$font-weight-semibold;
 }

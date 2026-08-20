@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { createInMemoryProcedureRecordCancellationPersistencePort } from "../../sbs-domain/cancellation-persist.bundle";
 import { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
 import { ProcedureRecordCancellation } from "./ProcedureRecordCancellation";
@@ -26,19 +26,23 @@ function renderCancellation(
 
 describe("ProcedureRecordCancellation", () => {
   let container: HTMLDivElement;
-  const item = getKioskSyntheticTodaySupportItems().find((x) => x.effectiveStatus === "記録済み")!;
-  const presentation = presentProcedureCancellation(item, {
-    userId: item.userId,
-    personLabel: item.personLabel,
-    organizationId: "synthetic-org-001",
-    siteId: "SITE-ISG",
-    planId: item.planId,
-    planVersion: item.planVersion,
-    procedureId: item.procedure.ProcedureId,
-    procedureVersion: item.procedure.ProcedureVersion,
-    planPeriodLabel: "合成期間",
-    occurrenceId: item.occurrenceId,
-  })!;
+  const presentation = (): NonNullable<ReturnType<typeof presentProcedureCancellation>> => {
+    const item = getKioskSyntheticTodaySupportItems().find(
+      (x) => x.effectiveStatus === "記録済み",
+    )!;
+    return presentProcedureCancellation(item, {
+      userId: item.userId,
+      personLabel: item.personLabel,
+      organizationId: "synthetic-org-001",
+      siteId: "SITE-ISG",
+      planId: item.planId,
+      planVersion: item.planVersion,
+      procedureId: item.procedure.ProcedureId,
+      procedureVersion: item.procedure.ProcedureVersion,
+      planPeriodLabel: "合成期間",
+      occurrenceId: item.occurrenceId,
+    })!;
+  };
 
   beforeEach(() => {
     container = document.createElement("div");
@@ -53,7 +57,7 @@ describe("ProcedureRecordCancellation", () => {
   });
 
   it("requires valid reason before first action", () => {
-    renderCancellation(container, { presentation });
+    renderCancellation(container, { presentation: presentation() });
     const beginButton = container.querySelector(
       '[data-field-workflow="procedure-cancellation-open-confirm"]',
     ) as HTMLButtonElement;
@@ -66,7 +70,7 @@ describe("ProcedureRecordCancellation", () => {
     const onSaveStateChange = jest.fn();
 
     renderCancellation(container, {
-      presentation,
+      presentation: presentation(),
       persistPort: port,
       nowIso: () => "2026-08-20T14:30:00.000Z",
       onCancelled,
@@ -84,9 +88,7 @@ describe("ProcedureRecordCancellation", () => {
     ) as HTMLButtonElement;
 
     act(() => {
-      reason.value = "取り消し理由";
-      reason.dispatchEvent(new Event("input", { bubbles: true }));
-      reason.dispatchEvent(new Event("change", { bubbles: true }));
+      Simulate.change(reason, { target: { value: "取り消し理由" } } as never);
     });
 
     expect(beginButton.disabled).toBe(false);
@@ -108,14 +110,14 @@ describe("ProcedureRecordCancellation", () => {
     expect(
       container.querySelector('[data-field-workflow="procedure-cancellation-submitted-summary"]'),
     ).toBeTruthy();
-    expect(onCancelled).toHaveBeenCalledWith(presentation.occurrenceId);
+    expect(onCancelled).toHaveBeenCalledWith(presentation().occurrenceId);
     expect(onSaveStateChange).toHaveBeenCalledWith("saved");
     expect(port.storage.appendCalls).toBe(1);
   });
 
   it("keeps confirm submit disabled when save state is unknown", () => {
     renderCancellation(container, {
-      presentation,
+      presentation: presentation(),
       initialSaveState: "save_outcome_unknown",
     });
     const submitButton = container.querySelector(
