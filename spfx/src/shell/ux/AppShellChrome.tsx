@@ -8,6 +8,7 @@ import {
 import {
   CurrentProcedure,
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
+  AbcObservationPresentation,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
   ProcedureRecordCorrection,
   FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
@@ -15,6 +16,7 @@ import {
   getKioskSyntheticTodaySupportItems,
   isProcedureRecordStartAllowed,
   presentProcedureCorrection,
+  presentAbcObservation,
   ProcedureRecordForm,
   selectNextActionableOccurrence,
   type ProcedureRecordFormSaveSnapshot,
@@ -188,6 +190,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [currentProcedureOpen, setCurrentProcedureOpen] = React.useState(false);
   const [procedureCorrectionOpen, setProcedureCorrectionOpen] = React.useState(false);
   const [procedureRecordFormOpen, setProcedureRecordFormOpen] = React.useState(false);
+  const [abcObservationOpen, setAbcObservationOpen] = React.useState(false);
   const [procedureFlowSaveState, setProcedureFlowSaveState] = React.useState<
     ShellSaveState | undefined
   >();
@@ -290,6 +293,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       if (procedureRecordFormOpen) {
         setProcedureRecordFormOpen(false);
       }
+      if (abcObservationOpen) {
+        setAbcObservationOpen(false);
+      }
       if (procedureFlowSaveState !== undefined) {
         setProcedureFlowSaveState(undefined);
       }
@@ -337,6 +343,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     currentProcedureOpen,
     procedureCorrectionOpen,
     procedureRecordFormOpen,
+    abcObservationOpen,
     procedureFlowSaveState,
     sessionSaveStateByUserId,
     sessionDraftByUserId,
@@ -365,6 +372,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     currentProcedureOpen,
     procedureCorrectionOpen,
     procedureRecordFormOpen,
+    abcObservationOpen,
     reviewDuePreviewOpen,
     reviewFromSupportPlan,
     restoreUsersList,
@@ -440,6 +448,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setSelectedUserDetailId(undefined);
     setPlannerListNext(undefined);
@@ -462,6 +471,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setUsersFocusOriginUserId(rememberUsersFocusOrigin(userId));
     setRestoreUsersList(false);
@@ -478,6 +488,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     if (target.kind === "records") {
       setSelectedUserDetailId(undefined);
@@ -541,6 +552,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
@@ -562,6 +574,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
@@ -587,6 +600,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
@@ -604,6 +618,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
@@ -631,6 +646,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
@@ -649,6 +665,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setOccurrenceFlowFromOverview(false);
     setCurrentProcedureOpen(true);
@@ -663,6 +680,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureRecordFormOpen(false);
+    setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
     setOccurrenceFlowFromOverview(false);
     setSelectedUserDetailId(undefined);
@@ -710,6 +728,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
     selectedCurrentProcedure?.context,
   );
+  const abcObservationPresentation = presentAbcObservation(selectedCurrentProcedure?.context);
 
   const handleRecordProcedureRequest = (): void => {
     if (
@@ -759,6 +778,26 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureCorrectionOpen(true);
+  };
+
+  const handleAbcObservationRequest = (): void => {
+    if (interactionPaused || !abcObservationPresentation) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureCorrectionOpen(false);
+    setAbcObservationOpen(true);
+  };
+
+  const handleBackToCurrentProcedureFromAbc = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setAbcObservationOpen(false);
+    setCurrentProcedureOpen(true);
   };
 
   const handleBackToCurrentProcedureFromCorrection = (): void => {
@@ -878,6 +917,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
       data-shell-ux-procedure-correction={procedureCorrectionOpen ? "open" : "closed"}
       data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
+      data-shell-ux-abc-observation={abcObservationOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
       data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
       data-review-new-version-from-review={nextVersionConceptFromReview ? "true" : "false"}
@@ -1080,6 +1120,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       nextVersionConceptHighlighted={nextVersionConceptFromReview}
                       presentationRole={activePresentationRole}
                     />
+                  ) : abcObservationOpen && abcObservationPresentation ? (
+                    <AbcObservationPresentation
+                      presentation={abcObservationPresentation}
+                      headingRef={destinationHeadingRef}
+                      onBackToCurrentProcedure={handleBackToCurrentProcedureFromAbc}
+                    />
                   ) : procedureRecordFormOpen &&
                     selectedCurrentProcedure &&
                     isProcedureRecordStartAllowed(selectedCurrentProcedure) ? (
@@ -1130,6 +1176,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                           ? handleProcedureCorrectionRequest
                           : undefined
                       }
+                      onAbcObservationRequest={handleAbcObservationRequest}
                     />
                   ) : (
                     <UserDetail

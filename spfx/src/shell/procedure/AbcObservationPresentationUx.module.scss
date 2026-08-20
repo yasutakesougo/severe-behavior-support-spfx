@@ -1,0 +1,95 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.abc {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-4;
+  min-width: 0;
+  max-width: 100%;
+  padding: sbs.$space-4;
+  border: sbs.$border-width-thin dashed sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+  box-sizing: border-box;
+}
+
+.heading {
+  margin: 0;
+  font-size: sbs.$font-size-page-title;
+  font-weight: sbs.$font-weight-page-title;
+  line-height: sbs.$line-height-page-title;
+  outline: none;
+}
+
+.heading:focus,
+.heading:focus-visible,
+.backButton:focus,
+.backButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
+}
+
+.topRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-3;
+}
+
+.backButton {
+  min-height: 2.75rem;
+  padding: 0.45rem sbs.$space-3;
+  border: sbs.$border-width-thin solid sbs.$color-border-strong;
+  background: sbs.$color-surface-canvas;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.note,
+.contextLine {
+  margin: 0;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
+}
+
+.section {
+  min-width: 0;
+  padding: sbs.$space-4;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  background: sbs.$color-surface-canvas;
+}
+
+.section h2 {
+  margin: 0 0 sbs.$space-3;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
+}
+
+.detailList {
+  display: grid;
+  gap: sbs.$space-3;
+  margin: 0;
+}
+
+.detailList div {
+  display: grid;
+  gap: sbs.$space-1;
+}
+
+.detailList dt,
+.detailList dd {
+  margin: 0;
+}
+
+.detailList dt {
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
+}
+
+.detailList dd {
+  overflow-wrap: anywhere;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
+}

@@ -21,6 +21,8 @@ import {
   getKioskSyntheticTodaySupportItems,
   isProcedureRecordStartAllowed,
   presentProcedureCorrection,
+  FIELD_STAFF_ABC_PRESENTATION_1_SLICE,
+  presentAbcObservation,
 } from "./index";
 
 beforeAll(() => {
@@ -62,6 +64,28 @@ describe("FIELD-WORKFLOW UI (#356) presentation boundary", () => {
       expect(procedureResultCopyIsNonFailure(result)).toBe(true);
       expect(labelForProcedureRecordResult(result).length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("FIELD-STAFF-ABC-PRESENTATION-1 read-only boundary", () => {
+  it("presents ABC context without authorizing observation or lifecycle writes", () => {
+    expect(FIELD_STAFF_ABC_PRESENTATION_1_SLICE.presentationOnly).toBe(true);
+    expect(FIELD_STAFF_ABC_PRESENTATION_1_SLICE.readOnly).toBe(true);
+    expect(FIELD_STAFF_ABC_PRESENTATION_1_SLICE.observationSaveAuthorized).toBe(false);
+    expect(FIELD_STAFF_ABC_PRESENTATION_1_SLICE.lifecycleChangeAuthorized).toBe(false);
+    expect(FIELD_STAFF_ABC_PRESENTATION_1_SLICE.sharePointWriteAuthorized).toBe(false);
+    const presentation = presentAbcObservation(
+      FIELD_WORKFLOW_PROCEDURE_FIXTURE.currentByUserId["user-a"].context,
+    );
+    expect(presentation?.context.userId).toBe("user-a");
+    expect(presentation?.context.planVersion).toBe(3);
+    expect(presentation?.antecedent.length).toBeGreaterThan(0);
+    expect(presentation?.behavior.length).toBeGreaterThan(0);
+    expect(presentation?.aftermath.length).toBeGreaterThan(0);
+  });
+
+  it("fails closed without a procedure binding context", () => {
+    expect(presentAbcObservation(undefined)).toBeUndefined();
   });
 });
 
