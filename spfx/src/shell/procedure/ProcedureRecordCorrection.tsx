@@ -258,15 +258,15 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
           </div>
           <div>
             <dt>OccurrenceId</dt>
-            <dd>{presentation.occurrenceId}</dd>
+            <dd><code className={styles.idValue}>{presentation.occurrenceId}</code></dd>
           </div>
           <div>
             <dt>手順</dt>
-            <dd>{`${presentation.procedureId} (${presentation.procedureVersion})`}</dd>
+            <dd><code className={styles.idValue}>{`${presentation.procedureId} (${presentation.procedureVersion})`}</code></dd>
           </div>
           <div>
             <dt>計画版</dt>
-            <dd>{`${presentation.planId} / 版 ${presentation.planVersion}`}</dd>
+            <dd><code className={styles.idValue}>{`${presentation.planId} / 版 ${presentation.planVersion}`}</code></dd>
           </div>
         </dl>
       </section>
@@ -276,7 +276,7 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
         <dl className={styles.detailList}>
           <div>
             <dt>RecordId</dt>
-            <dd>{presentation.recordId}</dd>
+            <dd><code className={styles.idValue}>{presentation.recordId}</code></dd>
           </div>
           <div>
             <dt>結果</dt>
@@ -410,7 +410,7 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
           <dl className={styles.detailList}>
             <div>
               <dt>CorrectionId</dt>
-              <dd>{submittedCorrection.CorrectionId}</dd>
+              <dd><code className={styles.idValue}>{submittedCorrection.CorrectionId}</code></dd>
             </div>
             <div>
               <dt>訂正時刻</dt>

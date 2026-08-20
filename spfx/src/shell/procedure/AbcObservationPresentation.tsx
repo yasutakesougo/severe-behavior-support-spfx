@@ -62,16 +62,16 @@ export const AbcObservationPresentation: React.FC<AbcObservationPresentationProp
       <dl className={styles.detailList} data-field-workflow="abc-binding-context">
         <div>
           <dt>計画 / 版</dt>
-          <dd>{`${presentation.context.planId} / 版 ${presentation.context.planVersion}`}</dd>
+          <dd><code className={styles.idValue}>{`${presentation.context.planId} / 版 ${presentation.context.planVersion}`}</code></dd>
         </div>
         <div>
           <dt>手順</dt>
-          <dd>{`${presentation.context.procedureId} (${presentation.context.procedureVersion})`}</dd>
+          <dd><code className={styles.idValue}>{`${presentation.context.procedureId} (${presentation.context.procedureVersion})`}</code></dd>
         </div>
         {presentation.context.occurrenceId ? (
           <div>
             <dt>OccurrenceId</dt>
-            <dd>{presentation.context.occurrenceId}</dd>
+            <dd><code className={styles.idValue}>{presentation.context.occurrenceId}</code></dd>
           </div>
         ) : null}
       </dl>

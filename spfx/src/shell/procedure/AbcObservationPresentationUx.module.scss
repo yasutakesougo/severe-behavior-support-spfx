@@ -93,3 +93,9 @@
   font-size: sbs.$font-size-body;
   line-height: sbs.$line-height-body;
 }
+
+.idValue {
+  font-family: monospace;
+  user-select: all;
+  cursor: text;
+}

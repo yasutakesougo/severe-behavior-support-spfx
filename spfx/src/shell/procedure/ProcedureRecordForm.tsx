@@ -287,14 +287,14 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         </h2>
         <dl className={styles.contextLine} data-field-workflow="binding-context">
           <div>
-            planId / planVersion: {context.planId} / v{context.planVersion}
+            planId / planVersion: <code className={styles.idValue}>{context.planId} / v{context.planVersion}</code>
           </div>
           <div>
-            ProcedureId / Version: {context.procedureId} / {context.procedureVersion}
+            ProcedureId / Version: <code className={styles.idValue}>{context.procedureId} / {context.procedureVersion}</code>
           </div>
           {context.occurrenceId ? (
             <div data-field-workflow="binding-occurrence-id">
-              OccurrenceId: {context.occurrenceId}
+              OccurrenceId: <code className={styles.idValue}>{context.occurrenceId}</code>
             </div>
           ) : null}
         </dl>

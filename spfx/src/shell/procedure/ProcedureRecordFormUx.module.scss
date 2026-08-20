@@ -295,3 +295,9 @@
     padding: sbs.$space-2;
   }
 }
+
+.idValue {
+  font-family: monospace;
+  user-select: all;
+  cursor: text;
+}
