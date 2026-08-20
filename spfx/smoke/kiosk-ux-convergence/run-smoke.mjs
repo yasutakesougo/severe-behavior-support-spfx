@@ -195,6 +195,7 @@ const browser = await puppeteer.launch({
 
 const checks = [];
 const liveWriteRequests = [];
+const fieldStaffScrollMinimumReductionPx = 704;
 
 function isSharePointOrGraphRequest(url) {
   try {
@@ -467,42 +468,136 @@ try {
       "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=FIELD_STAFF&scale=18",
       { width: 768, height: 1024, deviceScaleFactor: 1 },
     );
-    const roster = await page.evaluate(() => {
+    const roster = await page.evaluate((minimumReduction) => {
       const root = document.querySelector('[data-shell-ux="smoke-root"]');
       const list = document.querySelector('[data-demo-ux="users-row-list"]');
-      const rows = [...document.querySelectorAll('[data-demo-ux="users-row"]')];
-      const contexts = rows.map((row) => ({
-        id: row.getAttribute("data-demo-ux-user-id") ?? "",
-        label: row.querySelector(".personLabel")?.textContent?.trim() ?? "",
-        detailPreview:
-          row
-            .querySelector('[data-demo-ux="users-detail-button"]')
-            ?.getAttribute("data-demo-ux-detail-preview") ?? "false",
+      const readRosterState = () => {
+        const rows = list ? [...list.querySelectorAll('[data-demo-ux="users-row"]')] : [];
+        const detailButtons = list
+          ? [...list.querySelectorAll('[data-demo-ux="users-detail-button"]')]
+          : [];
+        const enabledDetailButtons = detailButtons.filter(
+          (button) =>
+            button.getAttribute("data-demo-ux-detail-preview") === "true" && !button.disabled,
+        );
+        const disabledDetailButtons = detailButtons.filter((button) => button.disabled);
+        const contexts = rows.map((row) => ({
+          id: row.getAttribute("data-demo-ux-user-id") ?? "",
+          label: row.querySelector(".personLabel")?.textContent?.trim() ?? "",
+          detailPreview:
+            row
+              .querySelector('[data-demo-ux="users-detail-button"]')
+              ?.getAttribute("data-demo-ux-detail-preview") ?? "false",
+        }));
+        const ids = contexts.map(({ id }) => id);
+        const labels = contexts.map(({ label }) => label);
+        return {
+          rowCount: rows.length,
+          uniqueIds: new Set(ids).size === ids.length,
+          uniqueLabels: new Set(labels).size === labels.length,
+          requiredContext: contexts.every(({ id, label }) => id.length > 0 && label.length > 0),
+          detailPreviewCount: contexts.filter(({ detailPreview }) => detailPreview === "true")
+            .length,
+          enabledDetailActionCount: enabledDetailButtons.length,
+          disabledDetailControlCount: disabledDetailButtons.length,
+          visibleDisabledDetailControlCount: disabledDetailButtons.filter(
+            (button) => window.getComputedStyle(button).display !== "none",
+          ).length,
+          disclosureButtonCount: document.querySelectorAll(
+            '[data-field-staff="roster-secondary-disclosure"]',
+          ).length,
+          metadataCount: document.querySelectorAll('[data-field-staff="roster-secondary-metadata"]')
+            .length,
+          metadataExpandedCount: document.querySelectorAll(
+            '[data-field-staff="roster-secondary-metadata"][data-field-staff-expanded="true"]',
+          ).length,
+          clientHeight: document.documentElement.clientHeight,
+          scrollHeight: document.documentElement.scrollHeight,
+          horizontalOverflow:
+            document.documentElement.scrollWidth > document.documentElement.clientWidth,
+          contexts,
+        };
+      };
+
+      const enabledDetailButtons = list
+        ? [
+            ...list.querySelectorAll(
+              '[data-demo-ux="users-detail-button"][data-demo-ux-detail-preview="true"]:not(:disabled)',
+            ),
+          ]
+        : [];
+      const disabledDetailButtons = list
+        ? [...list.querySelectorAll('[data-demo-ux="users-detail-button"][disabled]')]
+        : [];
+      const restoredDisplay = enabledDetailButtons[0]
+        ? window.getComputedStyle(enabledDetailButtons[0]).display
+        : "";
+      const originalStyles = disabledDetailButtons.map((button) => ({
+        button,
+        styleAttribute: button.getAttribute("style"),
       }));
-      const ids = contexts.map(({ id }) => id);
-      const labels = contexts.map(({ label }) => label);
+      const canMeasureBaseline =
+        enabledDetailButtons.length > 0 &&
+        restoredDisplay.length > 0 &&
+        restoredDisplay !== "none" &&
+        disabledDetailButtons.length === 16;
+
+      let baselineState;
+      let candidateState;
+      let temporaryBaselineOverrideRemoved = false;
+      let temporaryBaselineOverrideMismatchCount = 0;
+      if (canMeasureBaseline) {
+        for (const button of disabledDetailButtons) {
+          button.style.setProperty("display", restoredDisplay, "important");
+        }
+        baselineState = readRosterState();
+
+        for (const { button, styleAttribute } of originalStyles) {
+          if (styleAttribute === null) {
+            button.removeAttribute("style");
+            if (button.getAttribute("style") !== null) {
+              button.removeAttribute("style");
+            }
+          } else {
+            button.setAttribute("style", styleAttribute);
+          }
+        }
+        temporaryBaselineOverrideMismatchCount = originalStyles.filter(
+          ({ button, styleAttribute }) => button.getAttribute("style") !== styleAttribute,
+        ).length;
+        temporaryBaselineOverrideRemoved = temporaryBaselineOverrideMismatchCount === 0;
+        candidateState = readRosterState();
+      } else {
+        candidateState = readRosterState();
+      }
+
+      const baselineScrollHeight = baselineState?.scrollHeight ?? null;
+      const candidateScrollHeight = candidateState.scrollHeight;
+      const absoluteReduction =
+        baselineScrollHeight === null ? null : baselineScrollHeight - candidateScrollHeight;
       return {
         scenario: root?.getAttribute("data-field-staff-scale-scenario") ?? "",
-        rowCount: rows.length,
-        uniqueIds: new Set(ids).size === ids.length,
-        uniqueLabels: new Set(labels).size === labels.length,
-        requiredContext: contexts.every(({ id, label }) => id.length > 0 && label.length > 0),
-        detailPreviewCount: contexts.filter(({ detailPreview }) => detailPreview === "true").length,
-        disclosureButtonCount: document.querySelectorAll(
-          '[data-field-staff="roster-secondary-disclosure"]',
-        ).length,
-        metadataCount: document.querySelectorAll('[data-field-staff="roster-secondary-metadata"]')
-          .length,
-        metadataExpandedCount: document.querySelectorAll(
-          '[data-field-staff="roster-secondary-metadata"][data-field-staff-expanded="true"]',
-        ).length,
-        clientHeight: document.documentElement.clientHeight,
-        scrollHeight: document.documentElement.scrollHeight,
-        horizontalOverflow:
-          document.documentElement.scrollWidth > document.documentElement.clientWidth,
-        contexts,
+        ...candidateState,
+        baselineProvenance: "same-page-dom-visibility-restore",
+        baselineRowCount: baselineState?.rowCount ?? null,
+        candidateRowCount: candidateState.rowCount,
+        baselineEnabledDetailActionCount: baselineState?.enabledDetailActionCount ?? null,
+        candidateEnabledDetailActionCount: candidateState.enabledDetailActionCount,
+        baselineDisabledDetailControlCount: baselineState?.disabledDetailControlCount ?? null,
+        candidateDisabledDetailControlCount: candidateState.disabledDetailControlCount,
+        baselineVisibleDisabledDetailControlCount:
+          baselineState?.visibleDisabledDetailControlCount ?? null,
+        candidateVisibleDisabledDetailControlCount:
+          candidateState.visibleDisabledDetailControlCount,
+        baselineScrollHeight,
+        candidateScrollHeight,
+        absoluteReduction,
+        minimumReduction,
+        restoredDisplay,
+        temporaryBaselineOverrideRemoved,
+        temporaryBaselineOverrideMismatchCount,
       };
-    });
+    }, fieldStaffScrollMinimumReductionPx);
     const beforeFilter = roster;
     await page.$eval('[data-demo-ux="users-heading"]', (heading) => heading.focus());
     const keyboardToDisclosure = await tabUntil(
@@ -569,6 +664,9 @@ try {
       beforeFilter.uniqueLabels &&
       beforeFilter.requiredContext &&
       beforeFilter.detailPreviewCount === 2 &&
+      beforeFilter.enabledDetailActionCount === 2 &&
+      beforeFilter.disabledDetailControlCount === 16 &&
+      beforeFilter.visibleDisabledDetailControlCount === 0 &&
       beforeFilter.disclosureButtonCount === 18 &&
       beforeFilter.metadataCount === 18 &&
       beforeFilter.metadataExpandedCount === 0 &&
@@ -581,6 +679,21 @@ try {
       expandedAfterKeyboard.firstMetadataText.includes("支援計画") &&
       expandedAfterKeyboard.scrollHeight > beforeFilter.scrollHeight &&
       beforeFilter.horizontalOverflow === false &&
+      beforeFilter.baselineProvenance === "same-page-dom-visibility-restore" &&
+      beforeFilter.baselineRowCount === 18 &&
+      beforeFilter.candidateRowCount === 18 &&
+      beforeFilter.baselineEnabledDetailActionCount === 2 &&
+      beforeFilter.candidateEnabledDetailActionCount === 2 &&
+      beforeFilter.baselineDisabledDetailControlCount === 16 &&
+      beforeFilter.candidateDisabledDetailControlCount === 16 &&
+      beforeFilter.baselineVisibleDisabledDetailControlCount === 16 &&
+      beforeFilter.candidateVisibleDisabledDetailControlCount === 0 &&
+      beforeFilter.restoredDisplay.length > 0 &&
+      beforeFilter.restoredDisplay !== "none" &&
+      beforeFilter.temporaryBaselineOverrideRemoved &&
+      beforeFilter.baselineScrollHeight > beforeFilter.candidateScrollHeight &&
+      beforeFilter.absoluteReduction >= beforeFilter.minimumReduction &&
+      beforeFilter.minimumReduction === fieldStaffScrollMinimumReductionPx &&
       keyboardToDetail.found &&
       keyboardFocus.visible &&
       keyboardDetailContext === "Aさん" &&
@@ -605,6 +718,19 @@ try {
         listClientHeight: beforeFilter.clientHeight,
         listScrollHeight: beforeFilter.scrollHeight,
         verticalScrollRequired: beforeFilter.scrollHeight > beforeFilter.clientHeight,
+        baselineProvenance: beforeFilter.baselineProvenance,
+        baselineScrollHeight: beforeFilter.baselineScrollHeight,
+        candidateScrollHeight: beforeFilter.candidateScrollHeight,
+        absoluteReduction: beforeFilter.absoluteReduction,
+        minimumReduction: beforeFilter.minimumReduction,
+        baselineVisibleDisabledDetailControlCount:
+          beforeFilter.baselineVisibleDisabledDetailControlCount,
+        candidateVisibleDisabledDetailControlCount:
+          beforeFilter.candidateVisibleDisabledDetailControlCount,
+        enabledDetailActionCount: beforeFilter.candidateEnabledDetailActionCount,
+        disabledDetailControlCount: beforeFilter.candidateDisabledDetailControlCount,
+        restoredDisplay: beforeFilter.restoredDisplay,
+        temporaryBaselineOverrideRemoved: beforeFilter.temporaryBaselineOverrideRemoved,
       },
     });
     await screenshot(page, "field-staff-18-user-scale-context-safety");

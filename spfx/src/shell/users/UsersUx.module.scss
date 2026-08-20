@@ -448,5 +448,11 @@
     .nextUnrecordedButton {
       min-height: 2.75rem; /* ~44px touch target — do not shrink with density */
     }
+
+    // Keep unavailable detail controls in the DOM for fail-closed semantics,
+    // but do not reserve a tablet row for an action that cannot be used.
+    .detailButton:disabled {
+      display: none;
+    }
   }
 }
