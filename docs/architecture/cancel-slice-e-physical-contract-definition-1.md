@@ -14,7 +14,9 @@ CURRENT:
   Slice D — COMPLETE / CONSUMED
   Slice E — NOT STARTED
 Implementation Start: NOT AUTHORIZED
-Physical names: NOT YET LOCKED
+Physical names: SELECTED / LOCKED
+  authority: docs/architecture/cancel-slice-e-physical-naming-selection-1.md
+  E-P1=LN-1 / E-P2=LE-MAP-NAMES-LIFE-1 / E-P3=TP-1 / E-P4=PG-3
 Schema mutation / SharePoint WRITE / LIVE WRITE: HOLD
 Production Binding / Deploy: HOLD
 Issue mutation: FORBIDDEN
@@ -53,12 +55,15 @@ Reasons:
 - lifecycle items are not mixed into the ProcedureRecord List
 
 ```text
-List display name: NOT YET SELECTED
-Internal physical names: NOT YET SELECTED
+List display name: LOCKED = SBS_PROCEDURE_RECORD_LIFECYCLE_EVENTS（LN-1）
+Internal physical names: LOCKED = LE-MAP-NAMES-LIFE-1（life* + lifeSchemaVersion）
+Types: LOCKED = TP-1
+List GUID authority: LOCKED = PG-3（OBSERVED test-only GUID）
 ```
 
-Implementation must not invent names. Naming is owned by
-`CANCEL-SLICE-E-PHYSICAL-NAMING-DECISION-PREPARATION-1` → Human Decision.
+Naming authority:
+[`cancel-slice-e-physical-naming-selection-1.md`](./cancel-slice-e-physical-naming-selection-1.md).
+Implementation Start remains NOT AUTHORIZED.
 
 ## 3. Logical → physical required mapping
 
@@ -188,13 +193,14 @@ Exact file names are implementation detail.
 
 | ID | Item |
 |---|---|
-| E-P1 | Lifecycle-event List display name |
-| E-P2 | Lifecycle-event internal column names |
-| E-P3 | Exact SharePoint field types / max lengths |
-| E-P4 | Provisioning source for List GUID / field schema |
+| E-P1 | Lifecycle-event List display name — **LOCKED LN-1** |
+| E-P2 | Lifecycle-event internal column names — **LOCKED Package A** |
+| E-P3 | Exact SharePoint field types / max lengths — **LOCKED TP-1** |
+| E-P4 | Provisioning source for List GUID / field schema — **LOCKED PG-3** |
 
-These are physical naming / provisioning decisions. They must be locked
-before implementation may hard-code or verify them.
+Naming is LOCKED. Remaining before Implementation Start: explicit Human
+Implementation Start GO（and any required Provisioning GO for
+`lifeSchemaVersion` delta）.
 
 ## 10. Definition result
 
@@ -206,9 +212,9 @@ Append model:              CREATE ONLY
 Lookup model:              DUAL LOOKUP
 Readback:                  REQUIRED
 Implementation exact scope: DEFINED
-Physical names:            NOT YET LOCKED
+Physical names:            SELECTED / LOCKED（see naming selection）
 Implementation Start:      NOT AUTHORIZED
-SharePoint mutation:       NONE
+SharePoint mutation:       HOLD
 LIVE WRITE:                HOLD
 Production Binding:        HOLD
 Deploy:                    HOLD

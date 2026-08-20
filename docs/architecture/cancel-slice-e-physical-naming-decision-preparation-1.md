@@ -12,9 +12,13 @@ Upstream authority:
   ProcedureRecordLifecycleEvent@1.0.0（logical UNCHANGED）
   Decision-PROCEDURE-RECORD-MAPPING-1（PR-MAP-NAMES-1 / LOOKUP-B / TITLE-NONE）
   Accepted AuditEvent physical mapping #29（naming family reference only）
-Status: PREPARATION COMPLETE / NOT SELECTED / NOT LOCKED
+Status: CONSUMED（Human Selection recorded）
+Selection authority:
+  docs/architecture/cancel-slice-e-physical-naming-selection-1.md
+  Decision: SELECTED / LOCKED（scoped）
+  E-P1=A→LN-1 / E-P2=A→Package A / E-P3=TP-1 / E-P4=C→PG-3
 Implementation Start: NOT AUTHORIZED
-Physical hard-code: FORBIDDEN until Human Selection + Acceptance
+Physical hard-code: FORBIDDEN until Implementation Start GO
 Schema mutation / SharePoint WRITE / LIVE WRITE: HOLD
 Production Binding / Deploy: HOLD
 Issue mutation: FORBIDDEN
