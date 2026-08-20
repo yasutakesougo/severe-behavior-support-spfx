@@ -208,12 +208,12 @@ Reviewer final label as Commit-eligible.
 
 Blocking residuals:
 
-1. **FIELD POLICY / cross-date — DECISION REQUIRED**  
+1. **FIELD POLICY / cross-date — DECISION REQUIRED**
    C3 permits correcting `performedAt` while original `LocalDate` remains
    immutable. Cross-date Asia/Tokyo meaning is undefined under the accepted
    contract. Do not invent `effectiveLocalDate` or correction-side `LocalDate`.
 
-2. **Fake port shared reference — CONFORMANCE FAIL**  
+2. **Fake port shared reference — CONFORMANCE FAIL**
    Accepted HISTORY requires that a returned list cannot mutate internal
    history. Shared entity references from the in-memory fake violate that
    exact-slice condition and require remediation after the cross-date Decision.
