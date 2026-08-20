@@ -195,6 +195,8 @@ const browser = await puppeteer.launch({
 
 const checks = [];
 const liveWriteRequests = [];
+const fieldStaffScrollBaselinePx = Number(process.env.FIELD_STAFF_SCROLL_BASELINE_PX ?? "3527");
+const fieldStaffScrollMinimumReductionPx = 704;
 
 function isSharePointOrGraphRequest(url) {
   try {
@@ -488,6 +490,15 @@ try {
         uniqueLabels: new Set(labels).size === labels.length,
         requiredContext: contexts.every(({ id, label }) => id.length > 0 && label.length > 0),
         detailPreviewCount: contexts.filter(({ detailPreview }) => detailPreview === "true").length,
+        enabledDetailActionCount: document.querySelectorAll(
+          '[data-demo-ux="users-detail-button"][data-demo-ux-detail-preview="true"]:not(:disabled)',
+        ).length,
+        disabledDetailControlCount: document.querySelectorAll(
+          '[data-demo-ux="users-detail-button"][disabled]',
+        ).length,
+        visibleDisabledDetailControlCount: [
+          ...document.querySelectorAll('[data-demo-ux="users-detail-button"][disabled]'),
+        ].filter((button) => window.getComputedStyle(button).display !== "none").length,
         disclosureButtonCount: document.querySelectorAll(
           '[data-field-staff="roster-secondary-disclosure"]',
         ).length,
@@ -569,6 +580,9 @@ try {
       beforeFilter.uniqueLabels &&
       beforeFilter.requiredContext &&
       beforeFilter.detailPreviewCount === 2 &&
+      beforeFilter.enabledDetailActionCount === 2 &&
+      beforeFilter.disabledDetailControlCount === 16 &&
+      beforeFilter.visibleDisabledDetailControlCount === 0 &&
       beforeFilter.disclosureButtonCount === 18 &&
       beforeFilter.metadataCount === 18 &&
       beforeFilter.metadataExpandedCount === 0 &&
@@ -581,6 +595,8 @@ try {
       expandedAfterKeyboard.firstMetadataText.includes("支援計画") &&
       expandedAfterKeyboard.scrollHeight > beforeFilter.scrollHeight &&
       beforeFilter.horizontalOverflow === false &&
+      fieldStaffScrollBaselinePx - beforeFilter.scrollHeight >=
+        fieldStaffScrollMinimumReductionPx &&
       keyboardToDetail.found &&
       keyboardFocus.visible &&
       keyboardDetailContext === "Aさん" &&
@@ -605,6 +621,9 @@ try {
         listClientHeight: beforeFilter.clientHeight,
         listScrollHeight: beforeFilter.scrollHeight,
         verticalScrollRequired: beforeFilter.scrollHeight > beforeFilter.clientHeight,
+        baselineScrollHeight: fieldStaffScrollBaselinePx,
+        absoluteReduction: fieldStaffScrollBaselinePx - beforeFilter.scrollHeight,
+        minimumReduction: fieldStaffScrollMinimumReductionPx,
       },
     });
     await screenshot(page, "field-staff-18-user-scale-context-safety");
