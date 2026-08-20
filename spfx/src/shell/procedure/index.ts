@@ -42,9 +42,7 @@ export {
   presentProcedureCorrection,
   type ProcedureCorrectionPresentation,
 } from "./procedure-correction";
-export {
-  buildProcedureCorrectionOriginalBinding,
-} from "./procedure-correction-binding";
+export { buildProcedureCorrectionOriginalBinding } from "./procedure-correction-binding";
 export {
   canRetryCorrectionSave,
   createCorrectionDraftFromRecord,

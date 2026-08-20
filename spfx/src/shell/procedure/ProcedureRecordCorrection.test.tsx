@@ -125,8 +125,6 @@ describe("ProcedureRecordCorrection save wiring", () => {
     expect(
       container.querySelector('[data-field-workflow="procedure-correction-save-disabled"]'),
     ).toBeTruthy();
-    expect(
-      container.querySelector('[data-field-workflow="procedure-correction-save"]'),
-    ).toBeNull();
+    expect(container.querySelector('[data-field-workflow="procedure-correction-save"]')).toBeNull();
   });
 });

@@ -365,9 +365,7 @@ describe("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1", () => {
     expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.id).toBe(
       "FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1",
     );
-    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.correctionSaveWiringAuthorized).toBe(
-      true,
-    );
+    expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.correctionSaveWiringAuthorized).toBe(true);
     expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.correctionPersistAuthorized).toBe(true);
     expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.liveWriteAuthorized).toBe(false);
     expect(FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE.sharePointWriteAuthorized).toBe(false);
@@ -388,9 +386,7 @@ describe("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1", () => {
       planPeriodLabel: "合成期間",
       occurrenceId: recorded.occurrenceId,
     };
-    expect(
-      buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord),
-    ).toBeDefined();
+    expect(buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord)).toBeDefined();
     expect(buildProcedureCorrectionOriginalBinding(context, undefined)).toBeUndefined();
     expect(
       isCorrectionDraftReadyToSave(

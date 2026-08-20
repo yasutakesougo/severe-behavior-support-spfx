@@ -1,6 +1,4 @@
-import {
-  createInMemoryProcedureRecordCorrectionPersistencePort,
-} from "../../sbs-domain/correction-persist.bundle";
+import { createInMemoryProcedureRecordCorrectionPersistencePort } from "../../sbs-domain/correction-persist.bundle";
 import { KIOSK_RECORD_1 } from "./kiosk-today-support-fixture";
 import { buildProcedureCorrectionOriginalBinding } from "./procedure-correction-binding";
 import {
