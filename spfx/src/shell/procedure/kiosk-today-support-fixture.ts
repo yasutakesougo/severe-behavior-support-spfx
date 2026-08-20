@@ -3,6 +3,7 @@ import {
   buildTodaySupportReadModel,
   mintLifecycleEventIdentity,
   mintOccurrenceId,
+  type BuildTodaySupportReadModelInput,
   type ProcedureObservation,
   type ProcedureRecord,
   type ProcedureRecordLifecycleEvent,
@@ -207,11 +208,16 @@ function mintFixtureOccurrenceId(scheduleItemId: string): string {
 }
 
 /**
- * Returns the synthetic Today Support items covering fixture Cases A through G.
+ * Baseline synthetic Today Support read-model input (Cases A–G).
  * Occurrence minting is deferred so Jest jsdom can import this module before
  * TextEncoder is polyfilled.
+ *
+ * CANCEL-SLICE-D: callers may append session-local CANCEL lifecycle events and
+ * rebuild via buildTodaySupportReadModel — resolver remains status authority.
  */
-export function getKioskSyntheticTodaySupportItems(): readonly TodaySupportItem[] {
+export function getKioskSyntheticTodaySupportReadModelInput(
+  extraLifecycleEvents: readonly ProcedureRecordLifecycleEvent[] = [],
+): BuildTodaySupportReadModelInput {
   const occurrenceId2 = mintFixtureOccurrenceId("sch-002");
   const occurrenceId3 = mintFixtureOccurrenceId("sch-003");
   const occurrenceId5 = mintFixtureOccurrenceId("sch-005-conflict");
@@ -262,7 +268,7 @@ export function getKioskSyntheticTodaySupportItems(): readonly TodaySupportItem[
     reason: "熱感あり静養のため中止",
   };
 
-  return buildTodaySupportReadModel({
+  return {
     userId: KIOSK_FIXTURE_USER_ID,
     personLabel: KIOSK_FIXTURE_USER_LABEL,
     localDate: KIOSK_FIXTURE_LOCAL_DATE,
@@ -275,7 +281,15 @@ export function getKioskSyntheticTodaySupportItems(): readonly TodaySupportItem[
       KIOSK_RECORD_CONFLICT_A,
       KIOSK_RECORD_CONFLICT_B,
     ],
-    lifecycleEvents: [cancelEvent],
+    lifecycleEvents: [cancelEvent, ...extraLifecycleEvents],
     observations: [observation2],
-  });
+  };
+}
+
+export function getKioskSyntheticTodaySupportItems(
+  extraLifecycleEvents: readonly ProcedureRecordLifecycleEvent[] = [],
+): readonly TodaySupportItem[] {
+  return buildTodaySupportReadModel(
+    getKioskSyntheticTodaySupportReadModelInput(extraLifecycleEvents),
+  );
 }

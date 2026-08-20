@@ -8,19 +8,25 @@ import {
 import {
   CurrentProcedure,
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
+  FIELD_STAFF_CANCELLATION_UI_SLICE,
   AbcObservationPresentation,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
   ProcedureRecordCorrection,
+  ProcedureRecordCancellation,
   FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
   canInvokeProcedureRecordStart,
-  getKioskSyntheticTodaySupportItems,
+  getKioskSyntheticTodaySupportReadModelInput,
   isProcedureRecordStartAllowed,
   presentProcedureCorrection,
+  presentProcedureCancellation,
   presentAbcObservation,
   buildProcedureCorrectionOriginalBinding,
+  appendSessionCancellationLifecycleEvent,
+  rebuildTodaySupportItemsWithSessionCancellations,
   ProcedureRecordForm,
   selectNextActionableOccurrence,
   type ProcedureRecordFormSaveSnapshot,
+  type ProcedureRecordLifecycleEvent,
   type ShellProcedureWorkflowPresentation,
   type ReviewObservationEvidenceInput,
 } from "../procedure";
@@ -190,6 +196,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const [supportPlanPreviewOpen, setSupportPlanPreviewOpen] = React.useState(false);
   const [currentProcedureOpen, setCurrentProcedureOpen] = React.useState(false);
   const [procedureCorrectionOpen, setProcedureCorrectionOpen] = React.useState(false);
+  const [procedureCancellationOpen, setProcedureCancellationOpen] = React.useState(false);
   const [procedureRecordFormOpen, setProcedureRecordFormOpen] = React.useState(false);
   const [abcObservationOpen, setAbcObservationOpen] = React.useState(false);
   const [procedureFlowSaveState, setProcedureFlowSaveState] = React.useState<
@@ -209,7 +216,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     React.useState<UsersFilterChipLabel>(USERS_FILTER_CHIP_ALL);
   const [usersFocusOriginUserId, setUsersFocusOriginUserId] = React.useState<string | undefined>();
   const [restoreUsersList, setRestoreUsersList] = React.useState(false);
-  const todaySupportItems = React.useMemo(() => getKioskSyntheticTodaySupportItems(), []);
+  const [sessionCancellationLifecycleEvents, setSessionCancellationLifecycleEvents] =
+    React.useState<readonly ProcedureRecordLifecycleEvent[]>([]);
+  const todaySupportItems = React.useMemo(
+    () => rebuildTodaySupportItemsWithSessionCancellations(sessionCancellationLifecycleEvents),
+    [sessionCancellationLifecycleEvents],
+  );
+  const cancellationLifecycleEventsForSemantics = React.useMemo(
+    () =>
+      getKioskSyntheticTodaySupportReadModelInput(sessionCancellationLifecycleEvents)
+        .lifecycleEvents,
+    [sessionCancellationLifecycleEvents],
+  );
   const destinationHeadingRef = React.useRef<HTMLHeadingElement>(null);
   const readyRegionContentRef = React.useRef<HTMLDivElement>(null);
   const shouldFocusDestinationRef = React.useRef(false);
@@ -290,6 +308,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       }
       if (procedureCorrectionOpen) {
         setProcedureCorrectionOpen(false);
+        setProcedureCancellationOpen(false);
+      }
+      if (procedureCancellationOpen) {
+        setProcedureCancellationOpen(false);
       }
       if (procedureRecordFormOpen) {
         setProcedureRecordFormOpen(false);
@@ -343,6 +365,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     supportPlanPreviewOpen,
     currentProcedureOpen,
     procedureCorrectionOpen,
+    procedureCancellationOpen,
     procedureRecordFormOpen,
     abcObservationOpen,
     procedureFlowSaveState,
@@ -372,6 +395,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     supportPlanPreviewOpen,
     currentProcedureOpen,
     procedureCorrectionOpen,
+    procedureCancellationOpen,
     procedureRecordFormOpen,
     abcObservationOpen,
     reviewDuePreviewOpen,
@@ -419,12 +443,14 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
           supportPlanPreviewOpen ||
           currentProcedureOpen ||
           procedureCorrectionOpen ||
+          procedureCancellationOpen ||
           procedureRecordFormOpen ||
           reviewFromSupportPlan)
       ) {
         setSupportPlanPreviewOpen(false);
         setCurrentProcedureOpen(false);
         setProcedureCorrectionOpen(false);
+        setProcedureCancellationOpen(false);
         setProcedureRecordFormOpen(false);
         setProcedureFlowSaveState(undefined);
         setReviewDuePreviewOpen(false);
@@ -448,6 +474,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -471,6 +498,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -488,6 +516,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -496,6 +525,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setReviewDuePreviewOpen(false);
       setCurrentProcedureOpen(false);
       setProcedureCorrectionOpen(false);
+      setProcedureCancellationOpen(false);
       setOccurrenceFlowFromOverview(false);
       setDestination("records");
       if (onSelectedDestinationChange) {
@@ -507,6 +537,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setSelectedUserDetailId(undefined);
       setCurrentProcedureOpen(false);
       setProcedureCorrectionOpen(false);
+      setProcedureCancellationOpen(false);
       setOccurrenceFlowFromOverview(false);
       setDestination("overview");
       if (onSelectedDestinationChange) {
@@ -536,6 +567,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setReviewDuePreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setOccurrenceFlowFromOverview(false);
     setSelectedUserDetailId(target.userId);
     setDestination("users");
@@ -552,6 +584,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -574,6 +607,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -600,6 +634,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -618,6 +653,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -646,6 +682,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -665,6 +702,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setSupportPlanPreviewOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -680,6 +718,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSupportPlanPreviewOpen(false);
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
@@ -729,6 +768,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
     selectedCurrentProcedure?.context,
   );
+  const procedureCancellationPresentation = presentProcedureCancellation(
+    occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
+    selectedCurrentProcedure?.context,
+  );
   const procedureCorrectionOriginalBinding =
     occurrenceFlowFromOverview && selectedOccurrenceItem?.boundRecord && selectedCurrentProcedure
       ? buildProcedureCorrectionOriginalBinding(
@@ -751,6 +794,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     if (
       FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized &&
       snapshotForUser(sessionDraftByUserId, selectedUserDetailId) &&
@@ -785,7 +829,40 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     shouldFocusDestinationRef.current = true;
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureCorrectionOpen(true);
+  };
+
+  const handleProcedureCancellationRequest = (): void => {
+    if (
+      interactionPaused ||
+      !FIELD_STAFF_CANCELLATION_UI_SLICE.cancellationPresentationAuthorized ||
+      !procedureCancellationPresentation ||
+      !selectedOccurrenceItem?.boundRecord
+    ) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setCurrentProcedureOpen(false);
+    setProcedureRecordFormOpen(false);
+    setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(true);
+  };
+
+  const handleBackToCurrentProcedureFromCancellation = (): void => {
+    if (interactionPaused) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setProcedureCancellationOpen(false);
+    setProcedureFlowSaveState(undefined);
+    setCurrentProcedureOpen(true);
+  };
+
+  const handleCancellationPersisted = (event: ProcedureRecordLifecycleEvent): void => {
+    setSessionCancellationLifecycleEvents((prior) =>
+      appendSessionCancellationLifecycleEvent(prior, event),
+    );
   };
 
   const handleAbcObservationRequest = (): void => {
@@ -796,6 +873,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setCurrentProcedureOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setAbcObservationOpen(true);
   };
 
@@ -814,6 +892,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureFlowSaveState(undefined);
     setCurrentProcedureOpen(true);
   };
@@ -837,6 +916,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
     shouldFocusDestinationRef.current = true;
     setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setProcedureFlowSaveState(undefined);
     setSupportPlanPreviewOpen(false);
@@ -925,6 +1005,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
       data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
       data-shell-ux-procedure-correction={procedureCorrectionOpen ? "open" : "closed"}
+      data-shell-ux-procedure-cancellation={procedureCancellationOpen ? "open" : "closed"}
       data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
       data-shell-ux-abc-observation={abcObservationOpen ? "open" : "closed"}
       data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
@@ -1159,6 +1240,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       onNextActionableOccurrence={handleNextActionableOccurrence}
                       onReturnToTodaySupportDayBoard={handleBackToTodaySupport}
                     />
+                  ) : procedureCancellationOpen &&
+                    procedureCancellationPresentation &&
+                    selectedOccurrenceItem?.boundRecord ? (
+                    <ProcedureRecordCancellation
+                      presentation={procedureCancellationPresentation}
+                      originalRecord={selectedOccurrenceItem.boundRecord}
+                      lifecycleEventsForSemantics={cancellationLifecycleEventsForSemantics}
+                      headingRef={destinationHeadingRef}
+                      onBackToCurrentProcedure={handleBackToCurrentProcedureFromCancellation}
+                      onSaveStateChange={handleProcedureFlowSaveStateChange}
+                      onCancellationPersisted={handleCancellationPersisted}
+                    />
                   ) : procedureCorrectionOpen && procedureCorrectionPresentation ? (
                     <ProcedureRecordCorrection
                       presentation={procedureCorrectionPresentation}
@@ -1185,6 +1278,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       onCorrectionRequest={
                         procedureCorrectionPresentation
                           ? handleProcedureCorrectionRequest
+                          : undefined
+                      }
+                      onCancellationRequest={
+                        procedureCancellationPresentation
+                          ? handleProcedureCancellationRequest
                           : undefined
                       }
                       onAbcObservationRequest={handleAbcObservationRequest}

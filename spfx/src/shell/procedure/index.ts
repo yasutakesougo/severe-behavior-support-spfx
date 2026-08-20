@@ -4,11 +4,18 @@ export {
   type AbcObservationPresentationProps,
 } from "./AbcObservationPresentation";
 export {
+  ProcedureRecordCancellation,
+  type ProcedureRecordCancellationProps,
+} from "./ProcedureRecordCancellation";
+export {
   ProcedureRecordCorrection,
   type ProcedureRecordCorrectionProps,
 } from "./ProcedureRecordCorrection";
 export { ProcedureRecordForm, type ProcedureRecordFormProps } from "./ProcedureRecordForm";
 export {
+  FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE,
+  FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE,
+  FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE,
   FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE,
   FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE,
   FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE,
@@ -35,13 +42,45 @@ export {
   FIELD_WORKFLOW_UI_SLICE,
   VP4_WORKFLOW_SLICE,
 } from "./procedure-fixture";
-export { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
+export {
+  getKioskSyntheticTodaySupportItems,
+  getKioskSyntheticTodaySupportReadModelInput,
+} from "./kiosk-today-support-fixture";
 export {
   FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE,
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
   presentProcedureCorrection,
   type ProcedureCorrectionPresentation,
 } from "./procedure-correction";
+export {
+  FIELD_STAFF_CANCELLATION_UI_SLICE,
+  presentProcedureCancellation,
+  type ProcedureCancellationPresentation,
+} from "./procedure-cancellation";
+export {
+  buildFieldStaffCancellationSyntheticAuthorization,
+  FIELD_STAFF_CANCELLATION_SYNTHETIC_AUTHORIZATION,
+} from "./procedure-cancellation-auth";
+export {
+  appendSessionCancellationLifecycleEvent,
+  cancelledStatusFromSaveStateAlone,
+  rebuildTodaySupportItemsWithSessionCancellations,
+} from "./procedure-cancellation-read-model";
+export {
+  canConfirmCancellationOutcome,
+  canRetryCancellationSave,
+  createEmptyCancellationDraft,
+  isCancellationDraftReadyToSave,
+  retainCancellationDraftAfterSaveFailed,
+  type ProcedureCancellationDraft,
+} from "./procedure-cancellation-draft";
+export {
+  buildStaffProcedureRecordCancellationSaveInput,
+  confirmStaffProcedureRecordCancellationOutcome,
+  persistStaffProcedureRecordCancellationFromForm,
+  STAFF_PROCEDURE_RECORD_CANCELLATION_IN_MEMORY_PORT,
+  type ProcedureRecordLifecycleEvent,
+} from "./procedure-cancellation-persist";
 export { buildProcedureCorrectionOriginalBinding } from "./procedure-correction-binding";
 export {
   canRetryCorrectionSave,
