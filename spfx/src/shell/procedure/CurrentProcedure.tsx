@@ -16,6 +16,7 @@ export type CurrentProcedureProps = Readonly<{
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
   onCorrectionRequest?: () => void;
+  onCancellationRequest?: () => void;
   onAbcObservationRequest?: () => void;
 }>;
 
@@ -30,6 +31,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   onBackToUserDetail,
   onRecordProcedureRequest,
   onCorrectionRequest,
+  onCancellationRequest,
   onAbcObservationRequest,
 }) => {
   const { heading, summaryPrompt, context, projection, canStartProcedureRecord } = presentation;
@@ -38,6 +40,17 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
     !canStartProcedureRecord &&
     Boolean(onCorrectionRequest) &&
     (presentation.occurrenceStatus === "記録済み" || presentation.occurrenceStatus === "取消済み");
+  const cancellationCtaVisible = Boolean(onCancellationRequest);
+  const cancellationUnavailableReason =
+    !cancellationCtaVisible && presentation.occurrenceStatus
+      ? presentation.occurrenceStatus === "未実施"
+        ? "未実施のため、この記録は取り消せません。"
+        : presentation.occurrenceStatus === "取消済み"
+          ? "すでに取消済みのため、再度取り消しはできません。"
+          : presentation.occurrenceStatus === "確認が必要"
+            ? "確認が必要な状態のため、この記録は取り消せません。"
+            : "この記録は現在取り消し対象として確定できません。"
+      : undefined;
 
   return (
     <section
@@ -141,7 +154,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
 
       <section className={styles.section} aria-labelledby="field-workflow-record-cta-heading">
         <h2 id="field-workflow-record-cta-heading" data-field-workflow-visual-role="section-title">
-          {correctionCtaVisible ? "記録の訂正" : "この手順を記録"}
+          {correctionCtaVisible || cancellationCtaVisible ? "記録の操作" : "この手順を記録"}
         </h2>
         <p className={styles.sectionHint} data-field-workflow="context-handoff-note">
           {correctionCtaVisible
@@ -149,21 +162,33 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
             : FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE}
         </p>
         <div className={styles.actionRow}>
-          {correctionCtaVisible ? (
+          {cancellationCtaVisible ? (
             <button
               type="button"
               className={styles.primaryButton}
               onClick={() => {
-                if (onCorrectionRequest) {
-                  onCorrectionRequest();
-                }
+                onCancellationRequest?.();
+              }}
+              data-field-workflow="record-cancellation-cta"
+              data-kiosk-occurrence-status={presentation.occurrenceStatus}
+            >
+              記録を取り消す
+            </button>
+          ) : null}
+          {correctionCtaVisible ? (
+            <button
+              type="button"
+              className={cancellationCtaVisible ? styles.backButton : styles.primaryButton}
+              onClick={() => {
+                onCorrectionRequest?.();
               }}
               data-field-workflow="record-correction-cta"
               data-kiosk-occurrence-status={presentation.occurrenceStatus}
             >
               この記録を訂正する
             </button>
-          ) : (
+          ) : null}
+          {!correctionCtaVisible && !cancellationCtaVisible ? (
             <button
               type="button"
               className={styles.primaryButton}
@@ -179,7 +204,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
             >
               この手順を記録
             </button>
-          )}
+          ) : null}
           <button
             type="button"
             className={styles.backButton}
@@ -191,6 +216,11 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
             ABC観察を見る
           </button>
         </div>
+        {cancellationUnavailableReason ? (
+          <p className={styles.sectionHint} data-field-workflow="record-cancellation-status-note">
+            {cancellationUnavailableReason}
+          </p>
+        ) : null}
       </section>
     </section>
   );

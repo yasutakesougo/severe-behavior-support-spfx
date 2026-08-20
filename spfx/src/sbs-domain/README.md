@@ -24,6 +24,22 @@ npx esbuild src/domain/procedure-record-correction-staff-save.ts \
   --outfile=spfx/src/sbs-domain/correction-persist.bundle.js
 ```
 
+## cancellation-persist.bundle — cancellation persistence bridge
+
+`cancellation-persist.bundle.js` is an esbuild bundle of canonical:
+
+`src/domain/procedure-record-cancellation-staff-save.ts` → `persistStaffProcedureRecordCancellation` → `submitCancellation`
+
+This is the cancellation append-only / write-authority bridge. LIVE WRITE remains HOLD.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/procedure-record-cancellation-staff-save.ts \
+  --bundle --format=cjs --target=es2015 --platform=neutral \
+  --outfile=spfx/src/sbs-domain/cancellation-persist.bundle.js
+```
+
 ## staff-persist.bundle — persistence bridge
 
 `staff-persist.bundle.js` is an esbuild bundle of canonical:
