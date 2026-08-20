@@ -35,6 +35,15 @@ export const FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE =
 export const FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE =
   "訂正の保存は in-memory fake append-only port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCorrection 確認後のみです。" as const;
 
+export const FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE =
+  "対象記録と予定の文脈を確認して、取消経路へ進みます。記録の物理削除は行いません。" as const;
+
+export const FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE =
+  "取消の合成表示です。ProcedureRecord は保持し、append-only CANCEL のみです。live SharePoint 保存は行いません。" as const;
+
+export const FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE =
+  "取消の保存は in-memory Slice C fake port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCancellation 確認後のみです。取消済み表示は既存 resolver 再計算のみです。" as const;
+
 export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<Record<ProcedureRecordResultValue, string>> =
   {
     PERFORMED_AS_PLANNED: "手順どおり実施",

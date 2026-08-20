@@ -8,6 +8,22 @@ Keep canonical implementation in `src/domain`.
 
 Do not use either bundle for LIVE WRITE.
 
+## cancellation-persist.bundle — cancellation persistence bridge
+
+`cancellation-persist.bundle.js` is an esbuild bundle of canonical:
+
+`src/domain/procedure-record-cancellation-staff-save.ts` → `persistStaffProcedureRecordCancellation` → `submitCancellation`
+
+This is the CANCEL-SLICE-D / Slice C append-only bridge. LIVE WRITE remains HOLD.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/procedure-record-cancellation-staff-save.ts \
+  --bundle --format=cjs --target=es2015 --platform=neutral \
+  --outfile=spfx/src/sbs-domain/cancellation-persist.bundle.js
+```
+
 ## correction-persist.bundle — correction persistence bridge
 
 `correction-persist.bundle.js` is an esbuild bundle of canonical:

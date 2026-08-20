@@ -1,6 +1,7 @@
 import * as React from "react";
 import { StatusBadge } from "../primitives";
 import {
+  FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE,
   FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE,
   FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE,
   FIELD_WORKFLOW_PRESENTATION_NOTE,
@@ -16,6 +17,7 @@ export type CurrentProcedureProps = Readonly<{
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
   onCorrectionRequest?: () => void;
+  onCancellationRequest?: () => void;
   onAbcObservationRequest?: () => void;
 }>;
 
@@ -30,6 +32,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   onBackToUserDetail,
   onRecordProcedureRequest,
   onCorrectionRequest,
+  onCancellationRequest,
   onAbcObservationRequest,
 }) => {
   const { heading, summaryPrompt, context, projection, canStartProcedureRecord } = presentation;
@@ -38,6 +41,10 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
     !canStartProcedureRecord &&
     Boolean(onCorrectionRequest) &&
     (presentation.occurrenceStatus === "記録済み" || presentation.occurrenceStatus === "取消済み");
+  const cancellationCtaVisible =
+    !canStartProcedureRecord &&
+    Boolean(onCancellationRequest) &&
+    presentation.occurrenceStatus === "記録済み";
 
   return (
     <section
@@ -192,6 +199,38 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           </button>
         </div>
       </section>
+
+      {cancellationCtaVisible ? (
+        <section
+          className={styles.section}
+          aria-labelledby="field-workflow-cancellation-cta-heading"
+        >
+          <h2
+            id="field-workflow-cancellation-cta-heading"
+            data-field-workflow-visual-role="section-title"
+          >
+            記録の取消
+          </h2>
+          <p className={styles.sectionHint} data-field-workflow="cancellation-entry-note">
+            {FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE}
+          </p>
+          <div className={styles.actionRow}>
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => {
+                if (onCancellationRequest) {
+                  onCancellationRequest();
+                }
+              }}
+              data-field-workflow="record-cancellation-cta"
+              data-kiosk-occurrence-status={presentation.occurrenceStatus}
+            >
+              この記録を取り消す
+            </button>
+          </div>
+        </section>
+      ) : null}
     </section>
   );
 };
