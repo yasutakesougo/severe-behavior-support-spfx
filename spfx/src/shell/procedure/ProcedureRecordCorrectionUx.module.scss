@@ -199,3 +199,51 @@
   cursor: not-allowed;
   opacity: 0.7;
 }
+
+/* VP-2: preserve internal bindings in the DOM while removing opaque IDs from staff-facing detail lists. */
+.correction:has(#procedure-correction-context-heading)
+  #procedure-correction-context-heading
+  + .detailList
+  > div:nth-child(4),
+.correction:has(#procedure-correction-context-heading)
+  #procedure-correction-context-heading
+  + .detailList
+  > div:nth-child(5),
+.correction:has(#procedure-correction-context-heading)
+  #procedure-correction-context-heading
+  + .detailList
+  > div:nth-child(6),
+.correction:has(#procedure-correction-record-heading)
+  #procedure-correction-record-heading
+  + .detailList
+  > div:nth-child(1),
+.correction:has(#procedure-correction-record-heading)
+  #procedure-correction-record-heading
+  + .detailList
+  > div:nth-child(5),
+.correction [data-field-workflow="correction-submitted-summary"] .detailList > div:nth-child(1),
+.correction [data-field-workflow="correction-submitted-summary"] .detailList > div:nth-child(3),
+.correction:has(#procedure-cancellation-context-heading)
+  #procedure-cancellation-context-heading
+  + .detailList
+  > div:nth-child(4),
+.correction:has(#procedure-cancellation-context-heading)
+  #procedure-cancellation-context-heading
+  + .detailList
+  > div:nth-child(5),
+.correction:has(#procedure-cancellation-context-heading)
+  #procedure-cancellation-context-heading
+  + .detailList
+  > div:nth-child(6),
+.correction:has(#procedure-cancellation-record-heading)
+  #procedure-cancellation-record-heading
+  + .detailList
+  > div:nth-child(1),
+.correction:has(#procedure-cancellation-record-heading)
+  #procedure-cancellation-record-heading
+  + .detailList
+  > div:nth-child(5),
+.correction [data-field-workflow="cancellation-submitted-summary"] .detailList > div:nth-child(1),
+.correction [data-field-workflow="cancellation-submitted-summary"] .detailList > div:nth-child(3) {
+  display: none;
+}
