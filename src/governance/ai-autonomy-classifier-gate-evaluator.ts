@@ -214,8 +214,12 @@ export function classifyAutonomyChange(
   }
 
   const fileClassification = classifyFromFiles(input.changedFiles);
-  const hasL3Category = input.changedAreaCategories.some((category) => L3_CATEGORIES.has(category));
-  const hasL2Category = input.changedAreaCategories.some((category) => L2_CATEGORIES.has(category));
+  const hasL3Category = input.changedAreaCategories.some((category) =>
+    L3_CATEGORIES.has(category),
+  );
+  const hasL2Category = input.changedAreaCategories.some((category) =>
+    L2_CATEGORIES.has(category),
+  );
   const allL1Categories = input.changedAreaCategories.every((category) =>
     L1_CATEGORIES.has(category),
   );
