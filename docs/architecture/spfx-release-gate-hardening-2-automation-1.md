@@ -4,75 +4,77 @@
 
 Implementation slice for the deterministic, tenant-independent subset of SPFx release GATE 0.
 
+CORRECTION-1 extends the inspector so a commercial `.sppkg` can be inspected directly without requiring the vendor's source `package-solution.json`.
+
 This slice does not authorize deployment, Production Binding, App Catalog mutation, API permission approval, SharePoint mutation, Microsoft Entra mutation, or LIVE WRITE.
 
 ## Objective
 
-Convert the already-defined GATE 0 package-inspection checklist into a repeatable machine-readable check that can be used for internally built and commercial `.sppkg` artifacts.
+Convert the GATE 0 package-inspection checklist into repeatable machine-readable evidence for internally built and commercial `.sppkg` artifacts.
 
 The automation must not claim that the full release gate has passed when tenant-side permission state or runtime network behavior has not been observed.
+
+## Inspection modes
+
+`SOURCE_AND_SPPKG` is used when `package-solution.json` and a packaged artifact are supplied.
+
+This mode checks source metadata and packaged `AppManifest.xml`, and it fail-closes on mismatches in solution identity, version, deployment flags, isolation flag, or API permission requests.
+
+`SPPKG_DIRECT` is used when `--sppkg` is supplied without `--config`.
+
+This mode reads the packaged `AppManifest.xml` and packaged Feature manifests directly.
+
+It supports commercial packages for which source configuration is not available.
 
 ## IN
 
 The command `npm run check:spfx-release-gate0` performs deterministic inspection of:
 
-- `package-solution.json` readability and JSON shape.
-- `solution.name`.
-- `solution.id`.
-- `solution.version`.
+- source `package-solution.json` when available.
+- packaged `AppManifest.xml`.
+- solution name, id, and version.
 - explicit `skipFeatureDeployment` boolean.
 - explicit `isDomainIsolated` boolean.
-- `features` shape when present.
-- `webApiPermissionRequests` shape, duplicate resource/scope pairs, and broad-scope warnings.
-- `paths.zippedPackage`.
-- existence of the target `.sppkg` artifact.
-- SHA-256 and byte length of the target `.sppkg` artifact.
-- machine-readable evidence output with an explicit list of checks that were not performed.
+- packaged and source Feature metadata.
+- `webApiPermissionRequests`, including duplicate resource/scope pairs and broad-scope warnings.
+- `paths.zippedPackage` when source configuration is used.
+- `.sppkg` existence, byte length, and SHA-256.
+- source/package consistency when both sources are available.
+- machine-readable evidence with an explicit list of checks that were not performed.
 
-The `.sppkg` path can be supplied with `--sppkg`.
+The `.sppkg` ZIP is parsed read-only in-process.
 
-Without `--sppkg`, the command resolves the normal SPFx output path from `spfx/config/package-solution.json` and `paths.zippedPackage`.
+Stored and deflated ZIP entries are supported.
+
+## Feature validation
+
+Each source Feature entry must have non-empty `id`, `title`, and `version` values.
+
+Each packaged `feature_<guid>.xml` manifest must also have non-empty `Id`, `Title`, and `Version` attributes.
+
+Missing values are blocking findings rather than nullable evidence.
 
 ## Decision semantics
 
-`PASS_AUTOMATED_SUBSET` means only that this exact deterministic subset passed.
+`PASS_AUTOMATED_SUBSET` means only that this deterministic subset passed.
 
 It does not mean that GATE 0, GATE 2, Pilot, Acceptance, Production Binding, or Deploy has been approved.
 
-`BLOCKED` is returned when required package metadata cannot be determined or package provenance cannot be established.
+`BLOCKED` is returned when required package metadata cannot be determined, source/package evidence conflicts, or package provenance cannot be established.
 
-Examples of blocking conditions include:
+Broad API scopes are warnings that require later least-privilege review.
 
-- unreadable or invalid `package-solution.json`.
-- missing required solution identity/version fields.
-- missing explicit `skipFeatureDeployment`.
-- missing explicit `isDomainIsolated`.
-- malformed or duplicate API permission requests.
-- unresolved package output path.
-- missing `.sppkg` artifact.
-- unavailable package hash evidence.
-
-Broad API scopes are reported as warnings for mandatory least-privilege review.
-
-They are not silently treated as approved permissions.
+They are not treated as approved permissions.
 
 ## Evidence schema
 
 The command emits JSON with schema version:
 
 ```text
-spfx-release-gate0-evidence@1.0.0
+spfx-release-gate0-evidence@1.1.0
 ```
 
-The evidence records:
-
-- automated scope.
-- explicitly unverified scope.
-- decision.
-- blockers.
-- warnings.
-- normalized package configuration facts.
-- package path, byte length, and SHA-256 when available.
+The evidence records the inspection mode, automated scope, explicitly unverified scope, decision, blockers, warnings, normalized metadata, package byte length, and SHA-256.
 
 ## Explicitly not checked
 
@@ -97,18 +99,11 @@ package deployed != API permission granted
 PASS_AUTOMATED_SUBSET != GATE 0 full acceptance
 ```
 
-Commercial `.sppkg` and internally built `.sppkg` artifacts are subject to the same evidence semantics.
+Commercial `.sppkg` and internally built `.sppkg` artifacts are subject to the same packaged-manifest and provenance evidence semantics.
 
 ## Tests
 
-Focused tests cover:
-
-- successful deterministic inspection with SHA-256 evidence.
-- fail-closed behavior when deployment flags are absent.
-- malformed and duplicate API permission requests.
-- broad-scope warning behavior without GATE 2 elevation.
-- missing package fail-closed behavior.
-- machine-readable evidence file output.
+Focused tests cover source-plus-package inspection, commercial package direct inspection, explicit deployment flags, malformed or duplicate permission requests, broad-scope warnings, source and packaged Feature validation, missing package fail-closed behavior, and machine-readable evidence output.
 
 ## OUT
 
@@ -125,6 +120,6 @@ Focused tests cover:
 
 ## Next gate
 
-After independent implementation review and Human approval, a separate slice may decide whether this command becomes a mandatory CI release check.
+After independent implementation re-review and Human approval, a separate slice may decide whether this command becomes a mandatory CI release check.
 
 GATE 2 automation remains separately gated because it requires authoritative tenant-side read access.
