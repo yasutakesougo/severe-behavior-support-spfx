@@ -131,7 +131,9 @@ function auditCorrectionSaveWiringSourceMarkers() {
 
   const markersOk =
     correctionTsx.includes('data-field-workflow="procedure-correction-save"') &&
-    correctionTsx.includes('data-field-workflow-save-path="submitCorrection"') &&
+    correctionTsx.includes(
+      'data-field-workflow-save-path={saveWiringActive ? "submitCorrection" : "none"}',
+    ) &&
     correctionTsx.includes("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1") &&
     procedureCorrectionTs.includes("correctionSaveWiringAuthorized: true") &&
     persistExists &&
