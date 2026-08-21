@@ -138,7 +138,8 @@ export default class LifecycleCreateTestHarnessWebPart extends BaseClientSideWeb
       runtimeSiteIdentity,
       webAbsoluteUrl: this.context.pageContext.web.absoluteUrl,
       consumeStore: this.consumeStore,
-      spHttpClient: this.context.spHttpClient as unknown as ProcedureRecordLifecycleEventSpHttpClient,
+      spHttpClient:
+        this.context.spHttpClient as unknown as ProcedureRecordLifecycleEventSpHttpClient,
       configuration: SPHttpClient.configurations.v1,
     };
 
