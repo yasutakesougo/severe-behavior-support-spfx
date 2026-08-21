@@ -1,9 +1,7 @@
 import * as React from "react";
 import styles from "./ShellUx.module.scss";
 import vp1Styles from "./Vp1DemoSeparation.module.scss";
-
-export const VP1_DEMO_SAFETY_NOTICE =
-  "デモ環境｜表示内容は合成データです。保存されません。";
+import { VP1_DEMO_SAFETY_NOTICE } from "./vp1-demo-separation";
 
 export type DemoBannerProps = Readonly<{
   visible: boolean;
