@@ -9,5 +9,11 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts", "scripts/ui-sem/plugin.mjs"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "scripts/ui-sem/plugin.mjs",
+    "spfx/src/adapters/procedure-record-lifecycle-event/sphttpclient-list-transport.ts",
+    "spfx/src/adapters/procedure-record-lifecycle-event/transport-types.ts"
+  ]
 }
