@@ -6,6 +6,8 @@ import {
   type ShellPresentationRole,
 } from "./presentation-role";
 import styles from "./ShellUx.module.scss";
+import vp1Styles from "./Vp1DemoSeparation.module.scss";
+import { VP1_DEMO_ROLE_HINT, VP1_DEMO_ROLE_LEGEND } from "./vp1-demo-separation";
 
 export type DemoPresentationRoleEntryProps = Readonly<{
   visible: boolean;
@@ -27,15 +29,19 @@ export const DemoPresentationRoleEntry: React.FC<DemoPresentationRoleEntryProps>
   }
 
   return (
-    <fieldset className={styles.demoRoleEntry} data-shell-ux="demo-presentation-role-entry">
-      <legend className={styles.demoRoleEntryLegend}>デモ表示ロール（認証ではありません）</legend>
+    <fieldset
+      className={`${styles.demoRoleEntry} ${vp1Styles.demoSettingsRole}`}
+      data-shell-ux="demo-presentation-role-entry"
+      data-vp1-demo-settings="role"
+    >
+      <legend className={styles.demoRoleEntryLegend}>{VP1_DEMO_ROLE_LEGEND}</legend>
       <p className={styles.demoRoleEntryHint} data-shell-ux="demo-presentation-role-hint">
-        合成デモの見え方を切り替えます。権限判定・Entra ロールにはなりません。
+        {VP1_DEMO_ROLE_HINT}
       </p>
       <div
         className={styles.demoRoleEntryOptions}
         role="radiogroup"
-        aria-label="デモ表示ロール（認証ではありません）"
+        aria-label={VP1_DEMO_ROLE_LEGEND}
       >
         {SHELL_PRESENTATION_ROLES.map((value) => (
           <label key={value} className={styles.demoRoleOption}>
