@@ -6,10 +6,10 @@
 import type { ProcedureRecordResultValue } from "./procedure-types";
 
 export const FIELD_WORKFLOW_PRESENTATION_NOTE =
-  "FIELD-WORKFLOW 合成表示です。live SharePoint 保存・Deploy は行いません。" as const;
+  "表示内容は合成データです。実際の業務データには反映されません。" as const;
 
 export const FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE =
-  "保存は既存 ProcedureRecord persistence へ接続します。live SharePoint WRITE は未許可です。成功表示は persist 確認後のみです。" as const;
+  "入力内容は既存の記録処理で確認されます。実際の業務データには書き込まれません。保存状態は処理結果を確認してから表示します。" as const;
 
 export const FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE =
   "実施時点の計画版を解決できません。最新版への付け替えはしません（fail-closed）。" as const;
@@ -30,19 +30,19 @@ export const FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE =
   "元の記録と予定の文脈を確認して、訂正経路へ進みます。元の記録を上書きしません。" as const;
 
 export const FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE =
-  "訂正の合成表示です。元の記録は保持し、live SharePoint 保存は行いません。" as const;
+  "訂正内容は合成データです。元の記録を保持したまま、デモ内で訂正を確認できます。実際の業務データには反映されません。" as const;
 
 export const FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE =
-  "訂正の保存は in-memory fake append-only port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCorrection 確認後のみです。" as const;
+  "訂正はデモ内で保存状態を確認できます。実際の業務データには反映されません。元の記録は上書きしません。" as const;
 
 export const FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE =
   "対象記録と予定の文脈を確認して、取消経路へ進みます。記録の物理削除は行いません。" as const;
 
 export const FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE =
-  "取消の合成表示です。ProcedureRecord は保持し、append-only CANCEL のみです。live SharePoint 保存は行いません。" as const;
+  "取消内容は合成データです。元の記録は削除せず、取消の履歴を追加してデモ内で確認できます。実際の業務データには反映されません。" as const;
 
 export const FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE =
-  "取消の保存は in-memory Slice C fake port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCancellation 確認後のみです。取消済み表示は既存 resolver 再計算のみです。" as const;
+  "取消はデモ内で保存状態を確認できます。元の記録は削除せず、実際の業務データには反映されません。" as const;
 
 export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<Record<ProcedureRecordResultValue, string>> =
   {
