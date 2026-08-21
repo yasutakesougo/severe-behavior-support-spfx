@@ -7,10 +7,7 @@ import {
 } from "./presentation-role";
 import styles from "./ShellUx.module.scss";
 import vp1Styles from "./Vp1DemoSeparation.module.scss";
-
-export const VP1_DEMO_ROLE_LEGEND = "表示ロール（デモ専用）";
-export const VP1_DEMO_ROLE_HINT =
-  "表示だけを切り替えます。権限判定・Entra ロールには影響しません。";
+import { VP1_DEMO_ROLE_HINT, VP1_DEMO_ROLE_LEGEND } from "./vp1-demo-separation";
 
 export type DemoPresentationRoleEntryProps = Readonly<{
   visible: boolean;
