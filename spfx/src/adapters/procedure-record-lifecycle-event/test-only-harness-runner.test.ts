@@ -28,8 +28,7 @@ function packet(): HumanGoRequestPacket {
     listGuid: PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_LIST_GUID,
     lifecycleEventId: B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecycleEventId,
     lifecycleIdempotencyKey: B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecycleIdempotencyKey,
-    lifecyclePayloadFingerprint:
-      B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecyclePayloadFingerprint,
+    lifecyclePayloadFingerprint: B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecyclePayloadFingerprint,
     mutationBudget: { create: 1, retryPost: 0, update: 0, delete: 0 },
   };
 }
