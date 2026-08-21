@@ -208,7 +208,12 @@ function addReadyReasons(
 
   addEvidenceStateReason(input.rollback.status, reasons);
 
-  const headBound = [input.ci.headSha, input.review.headSha, input.threads.headSha, input.rollback.headSha];
+  const headBound = [
+    input.ci.headSha,
+    input.review.headSha,
+    input.threads.headSha,
+    input.rollback.headSha,
+  ];
   if (headBound.some((headSha) => headSha === undefined || headSha !== input.currentPrHeadSha)) {
     reasons.push("HEAD_EVIDENCE_MISMATCH");
   }
@@ -259,11 +264,7 @@ function addPreMergeReasons(
   if (preMerge.ci.status !== "PASS") reasons.push("CI_NOT_GREEN");
 
   addEvidenceStateReason(preMerge.review.status, reasons);
-  if (
-    preMerge.review.status !== "PASS" ||
-    preMerge.review.p0 > 0 ||
-    preMerge.review.p1 > 0
-  ) {
+  if (preMerge.review.status !== "PASS" || preMerge.review.p0 > 0 || preMerge.review.p1 > 0) {
     reasons.push("REVIEW_NOT_CLEARED");
   }
 
@@ -283,9 +284,7 @@ function addPreMergeReasons(
 
   const preMergeHeads = [preMerge.ci.headSha, preMerge.review.headSha, preMerge.threads.headSha];
   if (
-    preMergeHeads.some(
-      (headSha) => headSha === undefined || headSha !== preMerge.currentPrHeadSha,
-    )
+    preMergeHeads.some((headSha) => headSha === undefined || headSha !== preMerge.currentPrHeadSha)
   ) {
     reasons.push("HEAD_EVIDENCE_MISMATCH");
   }
@@ -301,16 +300,19 @@ function addPreMergeReasons(
   }
 }
 
-export function evaluateL1ExecutionPolicy(
-  input: L1ExecutionPolicyInput,
-): L1ExecutionPolicyResult {
+export function evaluateL1ExecutionPolicy(input: L1ExecutionPolicyInput): L1ExecutionPolicyResult {
   const readyReasons: ExecutionPolicyReasonCode[] = [];
   addReadyReasons(input, readyReasons);
   const uniqueReadyReasons = [...new Set(readyReasons)];
   const autoReadyAllowed = uniqueReadyReasons.length === 0;
 
   const mergeReasons = [...uniqueReadyReasons];
-  addPolicyAuthorityReasons(input.repositoryPolicy, input.currentBaseHeadSha, "merge", mergeReasons);
+  addPolicyAuthorityReasons(
+    input.repositoryPolicy,
+    input.currentBaseHeadSha,
+    "merge",
+    mergeReasons,
+  );
   addPreMergeReasons(input, input.preMerge, mergeReasons);
 
   const uniqueMergeReasons = [...new Set(mergeReasons)];

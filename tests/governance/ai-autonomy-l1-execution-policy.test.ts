@@ -11,9 +11,7 @@ import {
 const prHead = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 const baseHead = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
 
-function autoAllowedPolicy(
-  policyBaseHead = baseHead,
-): RepositoryAutonomyPolicyEvidence {
+function autoAllowedPolicy(policyBaseHead = baseHead): RepositoryAutonomyPolicyEvidence {
   return {
     status: "PASS",
     sourcePath: "docs/process/autonomy-policy-v1.md",
@@ -103,7 +101,10 @@ describe("evaluateL1ExecutionPolicy", () => {
     assert.equal(classResult.autoReadyAllowed, false);
     assert.ok(classResult.reasons.includes("CLASS_NOT_L1"));
 
-    const gateResult = evaluateL1ExecutionPolicy({ ...passingInput(), gateAutonomyEligible: false });
+    const gateResult = evaluateL1ExecutionPolicy({
+      ...passingInput(),
+      gateAutonomyEligible: false,
+    });
     assert.equal(gateResult.autoReadyAllowed, false);
     assert.ok(gateResult.reasons.includes("GATE_NOT_ELIGIBLE"));
   });
@@ -148,18 +149,14 @@ describe("evaluateL1ExecutionPolicy", () => {
       },
     });
     assert.equal(wrongPath.autoReadyAllowed, false);
-    assert.ok(
-      wrongPath.reasons.includes("REPOSITORY_AUTONOMY_POLICY_AUTHORITY_UNAVAILABLE"),
-    );
+    assert.ok(wrongPath.reasons.includes("REPOSITORY_AUTONOMY_POLICY_AUTHORITY_UNAVAILABLE"));
 
     const staleBase = evaluateL1ExecutionPolicy({
       ...passingInput(),
       repositoryPolicy: autoAllowedPolicy("cccccccccccccccccccccccccccccccccccccccc"),
     });
     assert.equal(staleBase.autoReadyAllowed, false);
-    assert.ok(
-      staleBase.reasons.includes("REPOSITORY_AUTONOMY_POLICY_AUTHORITY_UNAVAILABLE"),
-    );
+    assert.ok(staleBase.reasons.includes("REPOSITORY_AUTONOMY_POLICY_AUTHORITY_UNAVAILABLE"));
   });
 
   it("fails ready closed on non-green, unresolved, mismatched, production, or rollback evidence", () => {
