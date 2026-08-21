@@ -4,8 +4,9 @@
 AI-AUTONOMY-L1-EXECUTION-POLICY-EXACT-SLICE-DEFINITION-1
 
 STATUS:
-DEFINITION CORRECTION-1 COMPLETE
-READY FOR INDEPENDENT DEFINITION RE-REVIEW-2
+DEFINITION CORRECTION-2 COMPLETE
+READY FOR INDEPENDENT DEFINITION RE-REVIEW-3
+（or final confirmation after Re-Review-2 PASS + P2 typo closed）
 
 BASE:
 main@0123cb7b8e15fe897bfee80cdf4f9954d8575891
@@ -17,11 +18,18 @@ KIND:
 read-only exact-slice definition（docs-only）
 
 PRIOR REVIEW:
-AI-AUTONOMY-L1-EXECUTION-POLICY-INDEPENDENT-DEFINITION-REVIEW-1
-RESULT: FAIL / CORRECTION REQUIRED
+AI-AUTONOMY-L1-EXECUTION-POLICY-INDEPENDENT-DEFINITION-RE-REVIEW-2
+PR: #484
+HEAD reviewed: 8bb3805e08962cfa64734c5cb7be7955716f3ad2
+RESULT: PASS
 P0: none
-P1: 2（addressed in Correction-1）
-P2: 2（addressed in Correction-1）
+P1: none
+P2: 1 non-blocking cross-reference typo（addressed in Correction-2）
+
+Prior Review-1:
+FAIL / CORRECTION REQUIRED（consumed by Correction-1）
+P1: 2 CLOSED
+P2: 2 CLOSED
 
 Classifier / Gate Evaluator prerequisite:
 MERGED via PR #482
@@ -121,10 +129,10 @@ Self-governance surface（any match → override）:
 src/governance/**
 tests/governance/**
 .github/workflows/**
-designated autonomy-policy files（§7）
+designated autonomy-policy files（below / this section）
 ```
 
-Designated autonomy-policy files（initial fixed list）:
+Designated autonomy-policy files（initial fixed list; this section）:
 
 ```text
 docs/process/autonomy-policy-v1.md
@@ -412,7 +420,9 @@ Issue mutation
 Decision Acceptance by Agent
 ```
 
-## 15. Correction-1 closure map
+## 15. Correction closure map
+
+### Correction-1（consumed by Re-Review-2 PASS）
 
 | Finding | Severity | Correction-1 lock |
 |---|---|---|
@@ -421,10 +431,16 @@ Decision Acceptance by Agent
 | P2-1 approved integration branch undefined | P2 | §5 `main`-only allowlist |
 | P2-2 autonomy policy authority undefined | P2 | §6 Git-managed `docs/process/autonomy-policy-v1.md` primary authority; PR/caller forbidden |
 
+### Correction-2（Re-Review-2 P2 typo）
+
+| Finding | Severity | Correction-2 lock |
+|---|---|---|
+| P2 cross-reference typo: self-governance list pointed at §7 | P2 | §3 list now says `（below / this section）`; designated-files heading clarifies `this section` |
+
 ```text
 P0 remaining: none
-P1 remaining after Correction-1 text: none（pending Independent Re-Review）
-P2 remaining after Correction-1 text: none（pending Independent Re-Review）
+P1 remaining: none
+P2 remaining after Correction-2 text: none（pending final confirmation）
 ```
 
 ## 16. Authorization status / NEXT
@@ -432,25 +448,29 @@ P2 remaining after Correction-1 text: none（pending Independent Re-Review）
 ```text
 CURRENT
 L1 Execution Policy Definition:
-CORRECTION-1 APPLIED / AWAITING INDEPENDENT DEFINITION RE-REVIEW-2
+CORRECTION-2 APPLIED / AWAITING FINAL DEFINITION CONFIRMATION
+（Re-Review-2 PASS; P2 typo closed in Correction-2）
 P0: none
-P1: addressed in text / not yet re-cleared
-P2: addressed in text / not yet re-cleared
-Implementation Start eligibility: NOT READY
-Auto Ready: NOT AUTHORIZED
-Auto Merge: NOT AUTHORIZED
+P1: none
+P2: typo addressed in text / pending confirmation
+Implementation Start eligibility: READY FOR HUMAN GO
+  （after Correction-2 confirmation; GO itself remains Human-only）
+Implementation Start: NOT AUTHORIZED
+Auto Ready: NOT AUTHORIZED / NOT ENABLED
+Auto Merge: NOT AUTHORIZED / NOT ENABLED
+Ready / Merge: NOT AUTHORIZED
 GitHub mutation: NOT RUN
 
 NEXT
 Human / Independent Reviewer:
-  Independent Definition Re-Review-2 against this exact file path
-  on this PR HEAD
+  confirm Correction-2 closes the Re-Review-2 P2 typo on this PR HEAD
+  then Human may issue Implementation Start GO separately
 
 Agent:
-  no Implementation Start
+  no Implementation Start without explicit Human GO
   no GitHub Ready / Merge
   no policy enablement
-  STOP after publishing this review target
+  STOP after publishing Correction-2
 ```
 
 ## 17. Review target identity
@@ -461,7 +481,7 @@ path:
 unit:
   AI-AUTONOMY-L1-EXECUTION-POLICY-EXACT-SLICE-1
 correction:
-  DEFINITION CORRECTION-1
+  DEFINITION CORRECTION-2
 purpose:
-  Independent Definition Re-Review target publication only
+  close Re-Review-2 non-blocking cross-reference typo（docs-only）
 ```
