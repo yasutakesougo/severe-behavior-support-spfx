@@ -11,6 +11,7 @@ import type { ProcedureRecord } from "./procedure-record";
 import { nowAsiaTokyoIsoDateTime } from "./procedure-record-staff-save";
 import {
   createInMemoryProcedureRecordCancellationPersistencePort,
+  createProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationSaveOutcome,
   type ProcedureRecordCancellationSubmitRequest,
@@ -86,6 +87,7 @@ export async function resubmitFrozenProcedureRecordCancellation(
 
 export {
   createInMemoryProcedureRecordCancellationPersistencePort,
+  createProcedureRecordCancellationPersistencePort,
   nowAsiaTokyoIsoDateTime,
   type ProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationSaveOutcome,
