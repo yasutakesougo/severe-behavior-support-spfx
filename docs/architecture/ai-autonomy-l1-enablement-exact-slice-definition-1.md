@@ -9,8 +9,11 @@ Base: main@b5f7097c1213939a41b857bcdce52b0daecd2091
 STATUS:
   DEFINITION CORRECTION-1 COMPLETE
   DURABLE HUMAN ENABLEMENT SELECTION A RECORDED
-  DESIGNATED-LIST CLOSURE: INCLUDED ON THIS PR（pending main merge）
-  READY FOR INDEPENDENT DEFINITION RE-REVIEW-1
+  DESIGNATED-LIST CLOSURE: CONFIRMED ON MAIN（via #487 / main@8eca3e0）
+  POLICY MUTATION GO: CONSUMED（Ready-only；basis main@8eca3e08a1aeafa723c649980cc17484e4d54e53）
+  POLICY MUTATION: APPLIED ON THIS UNIT（autonomy-policy-v1 Ready-only）
+  Implementation Start: NOT AUTHORIZED
+  Auto Ready / Auto Merge execution: NOT AUTHORIZED
 
 Independent Definition Review-1:
   PR: #487
@@ -41,9 +44,12 @@ Implementation Start:
   NOT AUTHORIZED
 
 Policy mutation（autonomy-policy-v1）:
-  NOT AUTHORIZED by Selection alone
-  BLOCKED until designated-list closure is on main（§8）
-    AND a separate Human Policy Mutation GO is issued
+  Ready-only Policy Mutation GO CONSUMED
+  basisMainSha: 8eca3e08a1aeafa723c649980cc17484e4d54e53
+  authorityRef: cursor-cloud-agent:bc-01a0246d-3b08-73cc-baa0-599fedbec65d
+  Applied outcome: pull_request.ready=AUTO_ALLOWED；merge=HUMAN_ONLY；
+    L1_AUTO_READY=ENABLED；L1_AUTO_MERGE=DISABLED
+  Does not authorize Implementation Start / execution / Auto Merge
 
 Executor / workflow / GitHub settings mutation:
   NOT AUTHORIZED
@@ -503,9 +509,9 @@ productionCapabilityDelta must be NONE for L1 Ready allowance
 | Layer | Selection A requirement | Authorized by this definition? |
 |---|---|---|
 | Durable Human Selection record | A + Merge HUMAN_ONLY | **YES — RECORDED**（§2.3 / PR comment） |
-| Designated-list closure | §8 paths on main definition + evaluator | **PARTIAL** — edits on this PR; **main closure pending merge** |
-| `docs/process/autonomy-policy-v1.md` | Ready → enabled AUTO_ALLOWED; Merge HUMAN_ONLY; kill-switch fields | **NO** — Policy Mutation GO |
-| Kill switches | Ready ENABLED; Merge DISABLED | **NO** — with Policy Mutation GO |
+| Designated-list closure | §8 paths on main definition + evaluator | **YES — CONFIRMED ON MAIN**（#487） |
+| `docs/process/autonomy-policy-v1.md` | Ready → enabled AUTO_ALLOWED; Merge HUMAN_ONLY; kill-switch fields | **YES — APPLIED**（Ready-only Policy Mutation GO） |
+| Kill switches | Ready ENABLED; Merge DISABLED | **YES — APPLIED**（L1_AUTO_READY=ENABLED；L1_AUTO_MERGE=DISABLED） |
 | DEC / permission-matrix alignment | only if superseding Human Ready row | **NO** — separate Decision if needed |
 | GitHub settings / `allow_auto_merge` | not required for Ready-only; never primary | **NO** |
 | Branch protection / workflows | not implied | **NO** |
@@ -597,29 +603,34 @@ CURRENT
   Auto Merge: HUMAN_ONLY 継続
   authorityRef: PR #487 comment 5369935508
   Exact-slice definition: CORRECTION-1 + Selection recorded
-  Designated-list closure: INCLUDED ON PR / pending main merge
-  Policy on main: still ACCEPTED / NOT ENABLED；ready/merge HUMAN_ONLY
+  Designated-list closure: CONFIRMED ON MAIN
+  Policy Mutation GO: CONSUMED（Ready-only）
+  Policy on mutated tip: READY-ONLY ENABLED；
+    pull_request.ready=AUTO_ALLOWED；merge=HUMAN_ONLY；
+    L1_AUTO_READY=ENABLED；L1_AUTO_MERGE=DISABLED
   Executor: ABSENT
 
 GATE
-  Independent Definition Re-Review-1: REQUIRED
-  Policy Mutation GO: BLOCKED（await designated-list on main + separate GO）
   Implementation Start: NOT AUTHORIZED
   Ready / Merge / Auto Ready / Auto Merge execution: NOT AUTHORIZED
+  workflow / GitHub settings / Deploy / LIVE WRITE: FORBIDDEN
 
 ALLOWED now
-  Definition / closure review on this PR
+  Ready-only policy mutation recording + consistency tests（this unit）
   read-only observation
 
 FORBIDDEN now
-  autonomy-policy-v1 enablement mutation
-  GitHub settings / workflow / executor mutation
+  Auto Merge enablement
+  Implementation Start / executor creation
+  GitHub settings / workflow mutation
   Auto Ready / Auto Merge execution
   Deploy / LIVE WRITE / Production Binding
 
 NEXT
-  Human / Independent Reviewer:
-    Re-Review-1 on current HEAD；then Human Ready/Merge of this PR
+  Human:
+    Ready/Merge of this Policy Mutation PR（self-governance；HUMAN_ONLY）
+    separate Implementation Start only if Ready executor is desired
   Agent:
-    STOP on Policy Mutation / Implementation Start
+    STOP after policy mutation + tests/evidence
+    STOP on Implementation Start / execution
 ```
