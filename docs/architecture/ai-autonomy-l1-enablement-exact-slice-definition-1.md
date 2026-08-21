@@ -6,12 +6,23 @@ Unit: AI-AUTONOMY-L1-ENABLEMENT-EXACT-SLICE-DEFINITION-1
 Kind: read-only exact-slice definition（docs-only）
 Base: main@b5f7097c1213939a41b857bcdce52b0daecd2091
 
-Human Enablement Selection:
-  RECEIVED — A（Auto Ready のみ有効化）
-  Auto Merge: HUMAN_ONLY 継続
-
 STATUS:
-  DEFINITION PUBLISHED / READY FOR INDEPENDENT DEFINITION REVIEW
+  DEFINITION CORRECTION-1 COMPLETE
+  READY FOR INDEPENDENT DEFINITION RE-REVIEW-1
+
+Independent Definition Review-1:
+  PR: #487
+  HEAD reviewed: 4acd2b355fd777ce289aa7da7cf228fd5bfd36d6
+  RESULT: FAIL / CORRECTION REQUIRED
+  P0: none
+  P1: 2（addressed below）
+  P2: 1（addressed below）
+
+Human Enablement Selection:
+  BINDING STATUS: NOT ESTABLISHED / WAITING FOR HUMAN SELECTION
+  Prior “A RECEIVED” claim: WITHDRAWN as durable authority
+  Candidate intent（non-binding）: A — Auto Ready のみ / Merge HUMAN_ONLY
+  Agent recommendation ≠ Human Selection
 
 Authorization effect of THIS document:
   NONE
@@ -20,7 +31,7 @@ Implementation Start:
   NOT AUTHORIZED
 
 Policy mutation（autonomy-policy-v1）:
-  NOT AUTHORIZED by this definition
+  NOT AUTHORIZED / BLOCKED（see §2 / §8 eligibility）
 
 Executor / workflow / GitHub settings mutation:
   NOT AUTHORIZED
@@ -38,74 +49,139 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 
 ## 1. Objective
 
-Fix one exact enablement slice for **L1 Auto Ready only**, after Human
-Enablement Selection **A**.
+Define one exact enablement slice for **L1 Auto Ready only**, contingent on a
+**durable Human Enablement Selection A**.
 
-This packet records:
-
-1. that Selection A was received
-2. what must change later for Ready enablement to become real
-3. what must remain HUMAN_ONLY / ABSENT / FORBIDDEN
-4. the acceptance and fail-closed rules for the later policy-mutation unit
+Correction-1 keeps the Ready-only / Merge-HUMAN_ONLY shape, but removes the
+false binding that Selection A was already durable authority.
 
 This packet does **not** mutate `docs/process/autonomy-policy-v1.md`, does
 **not** start implementation, and does **not** authorize any Ready execution.
 
 ```text
-Human Enablement Selection A（RECEIVED）
-  → THIS exact-slice definition（docs-only）
-  → Independent Definition Review
+WAITING FOR HUMAN SELECTION（durable）
+  → IF Selection A is recorded with durable provenance
+  → THIS exact-slice definition（docs-only；candidate shape already drafted）
+  → Independent Definition Re-Review PASS
+  → designated-list closure on main（§8；Policy Mutation eligibility）
   → separate Human Policy Mutation GO（autonomy-policy-v1 text）
   → separate Human Implementation Start（executor / observer if any）
   → separate workflow / GitHub settings GO（if ever required）
   → Auto Ready execution only after executor exists + policy enabled
 ```
 
-## 2. Consumed Human Selection（CONFIRMED）
+## 2. Human Selection provenance（Correction-1 / P1-1）
+
+### 2.1 Binding rule（LOCKED）
 
 ```text
-Selection: A — Auto Ready のみ有効化
-Auto Merge: HUMAN_ONLY 継続
-Candidates not selected: B, C, D
-Current default before Selection: D（state only; superseded as selection target）
+Agent recommendation ≠ Human Selection
+PR text ≠ Human Selection
+This definition alone ≠ Human Selection
+Chat paraphrase without durable reference ≠ Human Selection
 ```
 
-Effect of Selection alone:
+`Human Enablement Selection: A RECEIVED` is **not** a binding fact unless a
+durable authority reference is present and Human-attributable.
+
+### 2.2 Prior claim — WITHDRAWN
+
+PR #487 HEAD `4acd2b3…` treated Selection A as RECEIVED / CONFIRMED without a
+durable authority reference. Independent Definition Review-1 P1-1 correctly
+rejected that.
 
 ```text
-Selection A
-  ≠ policy enabled
-  ≠ pull_request.ready already AUTO_ALLOWED on main
-  ≠ executor present
-  ≠ Ready may be executed
-  ≠ Auto Merge enablement
-  ≠ DEC-AI-ORG-003 / DEC-AA-001 / DEC-AA-003 superseded
+Prior binding claim: WITHDRAWN
+Selection gate: reopened
+Policy Mutation GO: remains BLOCKED until Selection is durably established
+  AND other eligibility gates in §8 / §16 pass
 ```
+
+### 2.3 Non-binding candidate evidence（NOT authority）
+
+The following is recorded only as **candidate / non-durable** context from
+Cursor Cloud Agent run
+`https://cursor.com/agents/bc-01a02449-561f-7bd2-99ac-2f7c162fd984`
+（bcId `bc-01a02449-561f-7bd2-99ac-2f7c162fd984`）.
+
+A Human-attributed message in that run used the wording:
+
+```text
+Human Enablement Selection:
+A — Auto Ready のみ有効化
+
+Auto Merge:
+HUMAN_ONLY 継続
+```
+
+Independent Definition Review-1 treated available conversational material as
+insufficient to prove durable Human Selection（recommendation / chat ambiguity
+risk）. Therefore this run citation is **NOT** accepted here as binding
+Selection authority.
+
+```text
+Candidate intent: A（Ready-only；Merge HUMAN_ONLY）
+Authority class: NON-BINDING / INSUFFICIENT ALONE
+Required next Human action: durable Selection（§2.4）
+```
+
+### 2.4 What counts as durable Human Selection（LOCKED）
+
+Exactly one of the following, Human-attributable, with explicit A/B/C/D:
+
+1. GitHub Issue or PR comment on this repository that states
+   `Human Enablement Selection: A`（or B/C/D）and Auto Merge disposition
+2. Accepted / LOCKED Decision or architecture recording on `main` that cites
+   the Selection and its issuer/date
+3. Other Human-signed durable artifact named by an Accepted authority and
+   referenced by repository path or immutable URL
+
+After durable Selection lands, this definition’s banner may record:
+
+```text
+Human Enablement Selection: A RECEIVED
+authorityRef: <Issue/PR comment URL | Decision path@SHA | artifact ref>
+issuer: <Human identity>
+recordedAt: <timestamp>
+```
+
+Until then:
+
+```text
+BINDING STATUS: NOT ESTABLISHED / WAITING FOR HUMAN SELECTION
+```
+
+### 2.5 Contingent exact-slice shape
+
+Sections §3–§15 describe the **contingent** Ready-only enablement slice that
+applies **if and only if** durable Selection **A** is established. If Human
+selects B/C/D instead, this contingent shape is not authorized and a new
+definition correction is required.
 
 ## 3. Binding authority（non-relaxable）
 
 | Authority | Binding effect on this slice |
 |---|---|
-| Human Enablement Selection A | Ready-only enablement target; Merge stays HUMAN_ONLY |
+| Durable Human Enablement Selection（when established） | Chooses A/B/C/D；contingent A shape below applies only for A |
 | `docs/decisions/DEC-AI-ORG-003.md` | Human Ready/Merge boundaries remain unless a later Accepted authority explicitly changes them |
 | `docs/decisions/DEC-AA-001.md` | Auto-Approval scope; no silent expansion |
-| `docs/decisions/DEC-AA-003.md` | AUTO-UNTIL-GATE NOT ENABLED; Merge HUMAN-ONLY retained by Selection A |
-| `docs/process/autonomy-policy-v1.md` | PRIMARY policy authority; still ACCEPTED / NOT ENABLED until a later Policy Mutation GO |
-| `docs/architecture/ai-autonomy-l1-execution-policy-exact-slice-definition-1.md` | Evaluator predicates remain; enablement only changes policy authority inputs |
+| `docs/decisions/DEC-AA-003.md` | AUTO-UNTIL-GATE NOT ENABLED；Merge HUMAN-ONLY unless a later Selection ≠ A |
+| `docs/process/autonomy-policy-v1.md` | PRIMARY policy + kill-switch source（§7）；still ACCEPTED / NOT ENABLED until Policy Mutation GO |
+| `docs/architecture/ai-autonomy-l1-execution-policy-exact-slice-definition-1.md` | Evaluator predicates remain |
 | `src/governance/ai-autonomy-l1-execution-policy.ts` | Pure decision function; does not execute Ready/Merge |
 | `docs/process/self-referential-gate-policy.md` | Live Ready/Merge state is not durable repo-doc authority |
 
 ```text
 Policy Accepted ≠ policy enabled
-Selection A ≠ policy mutation
+Durable Selection A ≠ policy mutation
 Policy mutation ≠ Implementation Start
 AUTO_READY_ALLOWED true ≠ Ready executed
 AUTO_MERGE_ALLOWED must remain false while merge = HUMAN_ONLY
 ```
 
-## 4. Exact enablement target（LOCKED by Selection A）
+## 4. Exact enablement target（CONTINGENT on durable Selection A）
 
-### In scope（later Policy Mutation GO only）
+### In scope（later Policy Mutation GO only；after Selection A + §8 closure）
 
 When a **separate** Human Policy Mutation GO is issued against this exact
 slice, the intended durable policy outcome on main is:
@@ -118,7 +194,7 @@ Capability: pull_request.ready
 
 Capability: pull_request.merge
   remains: HUMAN_ONLY
-  kill switch: L1_AUTO_MERGE_DISABLED（or equivalent）stays DISABLED / not enabled
+  kill switch: L1_AUTO_MERGE stays DISABLED / not enabled
 
 Policy enablement scope:
   Ready-only
@@ -140,8 +216,7 @@ Allowed companion docs（later GO, if needed for consistency only）:
   authorizes matrix alignment
 ```
 
-### Out of scope / FORBIDDEN in this definition and in the later Ready
-enablement unit unless a different exact-slice GO says otherwise
+### Out of scope / FORBIDDEN unless a different exact-slice GO says otherwise
 
 ```text
 pull_request.merge → AUTO_ALLOWED
@@ -156,6 +231,7 @@ secret / permission expansion
 Issue mutation / close
 Decision Acceptance by Agent
 weakening SELF_GOVERNANCE_OVERRIDE
+Policy Mutation GO before designated-list closure（§8）
 ```
 
 ## 5. Enablement authority（LOCKED）
@@ -180,13 +256,15 @@ Forbidden authority sources（never sufficient）:
 
 ```text
 PR body / title / description
-Issue body / comments
+Issue body / comments（except as durable Selection record under §2.4 item 1；
+  comments still never enable policy by themselves）
 caller Task Packet free-text or unchecked boolean
 agent prompt / chat instruction
 labels alone
 CI job name alone
 evaluator AUTO_READY_ALLOWED alone
-Human Selection recording alone（this doc）
+this definition alone
+Agent recommendation alone
 ```
 
 Optional secondary observation of a trusted repository setting is allowed
@@ -201,12 +279,12 @@ CONFIRMED on current main:
   Action Gateway Ready executor = ABSENT
   Action Gateway Merge executor = ABSENT
 
-Selection A / this definition:
+This definition:
   MUST NOT create either executor
   MUST NOT treat Human approval supplied to a Gateway as creating a route
 
 Later units（each requires its own Human GO）:
-  1. Policy Mutation（Ready AUTO_ALLOWED text）
+  1. Policy Mutation（Ready AUTO_ALLOWED text）— after §8 closure
   2. Ready executor Implementation Start（if automation is desired）
   3. workflow / settings（only if policy names them）
 
@@ -215,27 +293,94 @@ Until a Ready executor exists:
   live draft→ready GitHub mutation remains non-executable by automation
 ```
 
-## 7. Kill switch（LOCKED proposal for later Policy Mutation）
+## 7. Kill switch authority / source / enforcement（Correction-1 / P2-1）
+
+### 7.1 Canonical IDs
 
 ```text
-L1_AUTO_READY:
-  target after Policy Mutation GO under Selection A = ENABLED
-  until that GO = DISABLED / not enabled
-
-L1_AUTO_MERGE:
-  remains DISABLED / not enabled
-  Selection A forbids enabling this switch
-
-Fail Closed:
-  missing / unknown kill switch state → Ready not enabled
-  Agent MUST NOT flip kill switches
+L1_AUTO_READY   ∈ { ENABLED, DISABLED }
+L1_AUTO_MERGE   ∈ { ENABLED, DISABLED }
 ```
 
-Inherited AUTO-1 kill-switch / POLICY_NOT_ENABLED semantics remain in force.
+Contingent on durable Selection A after Policy Mutation:
 
-## 8. Self-governance exclusion（UNCHANGED）
+```text
+L1_AUTO_READY  → ENABLED
+L1_AUTO_MERGE  → DISABLED（must not be enabled by Selection A）
+```
 
-Existing L1 Execution Policy override remains mandatory:
+Until Policy Mutation GO:
+
+```text
+both treated as DISABLED / not enabled
+missing or unknown → DISABLED（Fail Closed）
+```
+
+### 7.2 Source of truth（LOCKED）
+
+```text
+PRIMARY SOURCE（required）:
+  Git-managed file: docs/process/autonomy-policy-v1.md
+  as committed on the repository default branch（main）
+  bound to the freshly observed base/main HEAD used for evaluation
+
+Required representation inside that file（later Policy Mutation must add
+if absent）:
+  explicit machine-readable or unambiguously parseable fields for:
+    L1_AUTO_READY = ENABLED | DISABLED
+    L1_AUTO_MERGE = ENABLED | DISABLED
+  plus policyVersion / enablement binding for Ready capability
+
+SECONDARY SOURCE（optional; never sufficient alone）:
+  a repository setting ONLY if the same autonomy-policy-v1.md text
+  explicitly names:
+    setting id
+    interpretation rule
+    conflict rule（policy file wins on conflict / unknown）
+```
+
+Forbidden kill-switch authority sources:
+
+```text
+PR body / labels / agent prompt / Task Packet free-text
+evaluator defaults invented at runtime
+executor local env vars not named by policy
+chat / Cloud Agent run text
+```
+
+### 7.3 Observation boundary（LOCKED）
+
+```text
+Observer: L1 Execution Policy evaluator（and any later Ready executor
+          preflight that reuses the same evidence schema）
+
+Observation rules:
+  1. Read kill-switch state from RepositoryAutonomyPolicyEvidence
+     （or a dedicated killSwitch evidence object）bound to current base HEAD
+  2. sourcePath must be docs/process/autonomy-policy-v1.md
+  3. evidence status PASS required; MISSING/STALE/UNPARSEABLE/INDETERMINATE
+     → treat as DISABLED and deny
+  4. baseHeadSha on the evidence must equal freshly observed base/main HEAD
+```
+
+### 7.4 Enforcement boundary（LOCKED）
+
+| Layer | Responsibility |
+|---|---|
+| Evaluator（`evaluateL1ExecutionPolicy`） | Must set `AUTO_READY_ALLOWED = false` when `L1_AUTO_READY ≠ ENABLED` or unknown; must keep `AUTO_MERGE_ALLOWED = false` when `L1_AUTO_MERGE ≠ ENABLED` or unknown; emit policy / not-enabled reasons |
+| Executor（ABSENT now; later Implementation Start） | Must not mutate GitHub Ready unless evaluator result is allow **and** a fresh kill-switch observation still shows `L1_AUTO_READY = ENABLED`; must not create Merge automation under Selection A; must not flip kill switches |
+| Human | Sole issuer of kill-switch transitions via Policy Mutation / disable path on the Git-managed policy file |
+
+```text
+Evaluator denies ≠ side effect
+Executor ABSENT ≠ kill switch ENABLED
+Agent MUST NOT flip kill switches
+```
+
+## 8. Self-governance exclusion + designated-list closure
+（Correction-1 / P1-2）
+
+### 8.1 Existing override（UNCHANGED）
 
 ```text
 any changed path matching:
@@ -248,19 +393,52 @@ any changed path matching:
 → SELF_GOVERNANCE_CHANGE
 ```
 
-Selection A MUST NOT weaken this override. Expanding the designated file
-list is itself a self-governance change and stays Human-only.
+Durable Selection A / this definition MUST NOT weaken this override.
 
-This definition file SHOULD be added to the designated autonomy-policy
-files list in a later self-governance-aware correction（separate GO）; until
-then, changes to this file remain Human Ready/Merge path by process, and
-any PR that also touches `src/governance/**` / designated files is already
-denied by the evaluator.
+### 8.2 Designated-list closure — Policy Mutation GO eligibility（LOCKED）
+
+```text
+Policy Mutation GO eligibility REQUIRES designated-list closure on main.
+Soft “SHOULD add later” is insufficient.
+```
+
+Before any Human Policy Mutation GO for Ready enablement may be issued, the
+following paths MUST already appear on **both**:
+
+1. designated autonomy-policy files list in
+   `docs/architecture/ai-autonomy-l1-execution-policy-exact-slice-definition-1.md`
+2. `DESIGNATED_AUTONOMY_POLICY_FILES` in
+   `src/governance/ai-autonomy-l1-execution-policy.ts`
+
+Required additions（minimum）:
+
+```text
+docs/architecture/ai-autonomy-l1-enablement-exact-slice-definition-1.md
+docs/architecture/ai-autonomy-l1-execution-policy-combined-reconciliation-1.md
+docs/architecture/ai-autonomy-l1-execution-policy-post-merge-reconciliation-1.md
+```
+
+Closure unit:
+
+```text
+Kind: self-governance designated-list closure
+Touches: definition doc list + evaluator allowlist（+ focused tests）
+Ready / Merge path: HUMAN_ONLY（self-governance）
+Must merge to main BEFORE Policy Mutation GO becomes eligible
+This enablement definition PR alone does NOT close the list
+```
+
+If closure is incomplete:
+
+```text
+Policy Mutation GO: BLOCKED
+reason: DESIGNATED_LIST_CLOSURE_INCOMPLETE
+```
 
 ## 9. Base drift / stale evidence（UNCHANGED; reaffirmed）
 
-Pre-Merge Revalidation rules stay as defined for Merge. Under Selection A,
-Merge remains HUMAN_ONLY, so Auto Merge allowance must continue to fail on
+Pre-Merge Revalidation rules stay as defined for Merge. While Merge remains
+HUMAN_ONLY, Auto Merge allowance must continue to fail on
 `REPOSITORY_AUTONOMY_POLICY_HUMAN_ONLY` / NOT_ENABLED even when Ready would
 pass.
 
@@ -269,7 +447,8 @@ For Ready enablement after Policy Mutation:
 ```text
 Ready evidence must be bound to current PR HEAD
 missing / stale / unparseable / indeterminate → AUTO_READY_ALLOWED = false
-base/policy authority must be read from current main（or fresh base HEAD）
+base/policy/kill-switch authority must be read from current main
+  （or fresh base HEAD）
 cached Selection text ≠ live policy authority
 ```
 
@@ -279,13 +458,15 @@ Minimum durable fields（ALLOW and DENY）:
 
 ```text
 auditId, timestamp
-policyVersion, policyEnablementRef, killSwitchState（ready/merge）
+policyVersion, policyEnablementRef
+killSwitchState（L1_AUTO_READY / L1_AUTO_MERGE）+ sourcePath + baseHeadSha
 repository, PR id, currentPrHeadSha, currentBaseHeadSha
 classification, gateAutonomyEligible
 autoReadyAllowed, autoMergeAllowed, reasons[]
 capability = pull_request.ready
 decision
 executor backend ID or ABSENT
+selectionAuthorityRef（durable Selection record）
 ```
 
 Record forbidden: secrets, tokens, credentials, personal data, production
@@ -297,20 +478,22 @@ If audit sink is unavailable before side effect: do not execute.
 
 | Failure | Required behavior |
 |---|---|
+| Durable Selection not established | no Policy Mutation GO; contingent A shape not authorized as selected |
 | Policy still NOT_ENABLED / ready HUMAN_ONLY | `AUTO_READY_ALLOWED = false` |
-| Merge path requested under Selection A | remain HUMAN_ONLY; no enablement |
+| Designated-list closure incomplete | Policy Mutation GO BLOCKED |
+| Merge path under contingent A | remain HUMAN_ONLY; no enablement |
 | Self-governance path | both false |
+| Kill switch source missing / unparseable | treat DISABLED; Ready false |
 | Evidence stale / HEAD mismatch | Ready false |
 | Executor ABSENT | no GitHub Ready mutation |
 | Audit unavailable | no execution |
 | productionCapabilityDelta ≠ NONE | deny |
-| Kill switch Ready not ENABLED | deny |
 | Attempt to enable Merge via “A side effect” | FORBIDDEN / fail closed |
 
 ## 12. Production capability separation（LOCKED）
 
 ```text
-Selection A / Ready enablement
+Contingent Selection A / Ready enablement
   ≠ Deploy / App Catalog
   ≠ SharePoint provision / schema / write
   ≠ LIVE WRITE / LIVE CREATE / Production Binding
@@ -323,9 +506,11 @@ productionCapabilityDelta must be NONE for L1 Ready allowance
 
 ## 13. Required repository setting / policy changes（later GOs only）
 
-| Layer | Selection A requirement | Authorized by this definition? |
+| Layer | Contingent Selection A requirement | Authorized by this definition? |
 |---|---|---|
-| `docs/process/autonomy-policy-v1.md` | Ready → enabled AUTO_ALLOWED; Merge stays HUMAN_ONLY; Policy enablement for Ready | **NO** — needs Policy Mutation GO |
+| Durable Human Selection record | A + Merge HUMAN_ONLY | **NO** — Human Selection gate |
+| Designated-list closure | §8 paths on main definition + evaluator | **NO** — separate self-governance PR |
+| `docs/process/autonomy-policy-v1.md` | Ready → enabled AUTO_ALLOWED; Merge HUMAN_ONLY; kill-switch fields | **NO** — Policy Mutation GO |
 | Kill switches | Ready ENABLED; Merge DISABLED | **NO** — with Policy Mutation GO |
 | DEC / permission-matrix alignment | only if superseding Human Ready row | **NO** — separate Decision if needed |
 | GitHub settings / `allow_auto_merge` | not required for Ready-only; never primary | **NO** |
@@ -341,49 +526,55 @@ Immediate disable after a future enablement:
 1. Human sets pull_request.ready → HUMAN_ONLY or NOT_ENABLED
    in docs/process/autonomy-policy-v1.md on main
 OR
-2. Human sets L1_AUTO_READY kill switch → DISABLED
+2. Human sets L1_AUTO_READY → DISABLED in the same policy file
+   （primary kill-switch source）
 
 Effect:
-  next evaluator observation on fresh base/main HEAD denies Ready
-  in-flight automation must fail closed on revalidation
+  evaluator observation on fresh base/main HEAD denies Ready
+  executor（if present）must fail closed on re-check
   no cached Ready-time allow survives disable
 ```
 
 Disable does **not** require deleting the classifier or L1 execution policy
 code.
 
-## 15. Acceptance criteria（this definition）
+## 15. Acceptance criteria（Correction-1）
 
-- Human Selection A is recorded as RECEIVED; B/C/D are not selected
-- Ready-only enablement target is explicit; Merge remains HUMAN_ONLY
+- Binding Selection A claim is WITHDRAWN until durable provenance exists
+- Candidate chat/run evidence is explicitly NON-BINDING
+- Contingent Ready-only / Merge-HUMAN_ONLY shape remains explicit
 - Primary authority remains `docs/process/autonomy-policy-v1.md`
-- Forbidden authority sources are listed
+- Kill-switch source / observation / enforcement boundaries are fixed（§7）
+- Designated-list closure is a hard Policy Mutation GO eligibility gate（§8）
 - Executor remains ABSENT / not created by this packet
-- Self-governance exclusion is unchanged
 - Production capability remains separated
-- Rollback and kill switch paths are defined
 - This definition alone causes **no** policy text change and **no** Ready execution
-- Independent Definition Review can judge the packet without Implementation Start
 
-## 16. Later unit sequence（not started）
+## 16. Later unit sequence（not started；eligibility ordered）
 
 ```text
-1. Independent Definition Review on this packet
-2. Human Policy Mutation GO（exact Ready-only autonomy-policy-v1 edit）
-3. Optional: Independent Review / Ready / Merge of that policy PR（Human）
-4. Optional: Ready executor Implementation Start（separate exact slice）
-5. Optional: workflow / settings GO only if policy names them
-6. Auto Merge enablement: NOT in this sequence（requires new Selection ≠ A）
+0. Durable Human Enablement Selection（A/B/C/D）— WAITING
+1. Independent Definition Re-Review-1 on Correction-1
+2. IF Selection A: self-governance designated-list closure PR → main
+3. Human Policy Mutation GO（Ready-only autonomy-policy-v1 + kill-switch fields）
+   — BLOCKED until 0=A and 2 complete
+4. Optional: Independent Review / Ready / Merge of that policy PR（Human）
+5. Optional: Ready executor Implementation Start（separate exact slice）
+6. Optional: workflow / settings GO only if policy names them
+7. Auto Merge enablement: NOT in this sequence（requires Selection ≠ A）
 ```
 
-Each arrow is a separate Gate. Definition Review PASS ≠ Policy Mutation GO ≠
-Implementation Start ≠ Ready execution.
+Each arrow is a separate Gate. Definition Re-Review PASS ≠ Selection ≠
+designated-list closure ≠ Policy Mutation GO ≠ Implementation Start ≠
+Ready execution.
 
 ## 17. Explicit non-claims
 
 This definition does **not**:
 
+- establish durable Human Enablement Selection A
 - mutate `docs/process/autonomy-policy-v1.md`
+- close the self-governance designated list by itself
 - enable AUTO-1 globally
 - authorize Auto Ready execution
 - authorize Auto Merge enablement or execution
@@ -393,34 +584,54 @@ This definition does **not**:
 - close or mutate Issues
 - accept or lock Decisions by Agent
 
-## 18. CURRENT / GATE / NEXT（definition-time）
+## 18. Correction closure map（Correction-1）
+
+| Finding | Severity | Correction-1 lock |
+|---|---|---|
+| P1-1 Selection A provenance | P1 | §2 binding claim WITHDRAWN; Selection gate reopened; durable authority rule fixed; candidate run evidence NON-BINDING |
+| P1-2 designated-list gap | P1 | §8 designated-list closure required on main before Policy Mutation GO eligibility |
+| P2-1 kill-switch authority underspecified | P2 | §7 source = autonomy-policy-v1.md; observation = evaluator evidence bound to base HEAD; enforcement = evaluator deny + executor re-check; Agent cannot flip |
+
+```text
+P0 remaining: none
+P1 remaining after Correction-1 text: none（pending Re-Review）
+P2 remaining after Correction-1 text: none（pending Re-Review）
+```
+
+## 19. CURRENT / GATE / NEXT（Correction-1）
 
 ```text
 CURRENT
-  Human Enablement Selection: A RECEIVED
-  Auto Merge: HUMAN_ONLY 継続
-  Exact-slice definition: PUBLISHED（this document）
+  Human Enablement Selection: WAITING（binding A WITHDRAWN）
+  Candidate intent: A（NON-BINDING）
+  Exact-slice definition: CORRECTION-1 COMPLETE
   Policy on main: still ACCEPTED / NOT ENABLED；ready/merge HUMAN_ONLY
+  Designated-list closure: INCOMPLETE
   Executor: ABSENT
 
 GATE
-  Independent Definition Review: REQUIRED
-  Policy Mutation GO: NOT YET
+  Independent Definition Re-Review-1: REQUIRED
+  Durable Human Selection: WAITING
+  Policy Mutation GO: BLOCKED
   Implementation Start: NOT AUTHORIZED
+  Ready / Merge / Auto Ready / Auto Merge execution: NOT AUTHORIZED
 
 ALLOWED now
-  docs-only definition review
-  read-only observation of main policy / evaluator
+  docs-only Correction-1 review
+  Human durable Selection recording
+  read-only observation
 
 FORBIDDEN now
+  treating candidate chat as Selection A
   autonomy-policy-v1 mutation
   GitHub settings / workflow / executor mutation
   Auto Ready / Auto Merge execution
   Deploy / LIVE WRITE / Production Binding
 
 NEXT
-  Human / Independent Reviewer:
-    Definition Review on this packet
+  Human:
+    1. Durable Enablement Selection（A/B/C/D）per §2.4
+    2. Independent Definition Re-Review-1 on Correction-1
   Agent:
-    STOP on policy mutation / Implementation Start until explicit GO
+    STOP on Policy Mutation / Implementation Start
 ```
