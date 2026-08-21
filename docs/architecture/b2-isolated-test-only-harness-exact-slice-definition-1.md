@@ -4,8 +4,8 @@
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 
 STATUS:
-READ-ONLY DEFINITION COMPLETE
-READY FOR INDEPENDENT DEFINITION REVIEW
+DEFINITION CORRECTION COMPLETE
+READY FOR INDEPENDENT DEFINITION RE-REVIEW-2
 
 BASE:
 main@3e4e2dee195ce82299b62f4b668d50cb563d2c68
@@ -14,6 +14,13 @@ AUTHORITY:
 LIVE-CREATE-TEST-ONLY-RUNTIME-PATH-DECISION-1
 B2 — ISOLATED TEST-ONLY HARNESS
 SELECTED / LOCKED
+
+PRIOR REVIEW:
+B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-1
+RESULT: PASS-WITH-CORRECTIONS
+P1-1: CLOSED (exact review target available)
+P1-2 / P1-3 / P1-4: addressed in this correction
+P2-1: addressed in this correction (non-blocking candidate closed in definition)
 
 Implementation Start:
 NOT AUTHORIZED
@@ -27,7 +34,7 @@ NOT AUTHORIZED
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 Kind: read-only exact-slice definition
-Independent Definition Review: NOT YET COMPLETE
+Independent Definition Re-Review-2: NOT YET COMPLETE
 Human Implementation Start GO: NOT YET ELIGIBLE
 Issue mutation: FORBIDDEN
 Production Binding: NOT ACTIVE (Option A KEEP unbound)
@@ -182,6 +189,28 @@ spfx/src/sbs-domain/README.md
 既存 Slice E は transport と binding の一致確認、schema verification、
 CANCEL-only append を既に実装している。
 
+GENERATED BRIDGE DRIFT GUARD（LOCKED; P2-1）:
+
+```text
+named canonical entrypoint:
+  src/adapters/sharepoint/procedure-record-lifecycle-event/
+    spfx-test-harness-entry.ts
+
+exact generation command (record in spfx/src/sbs-domain/README.md):
+  npx esbuild \
+    src/adapters/sharepoint/procedure-record-lifecycle-event/spfx-test-harness-entry.ts \
+    --bundle --format=cjs --target=es2015 --platform=neutral \
+    --outfile=spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.js
+
+generated bundle hand-edit:
+  FORBIDDEN
+  (.js and .d.ts)
+
+acceptance:
+  regenerate → git diff --exit-code clean
+  .d.ts export surface equals allowed exports only
+```
+
 ### C. Human GO execution gate
 
 ```text
@@ -209,6 +238,52 @@ authorization = NONE
 POST = 0
 ```
 
+Field-shape validation is necessary but **not sufficient**.
+
+TRUSTED RECEIPT PROVENANCE BOUNDARY（LOCKED; P1-2）:
+
+```text
+A structurally valid object alone MUST NOT constitute Human GO.
+
+Trusted provenance =
+  Human-issued receipt artifact bound outside the harness process
+  (Human Control / operator GO packet),
+  presented for validation + consume only.
+
+Harness / caller / composition / UI MUST NOT mint a trusted receipt.
+
+Self-issued / caller-constructed isomorphic packet:
+  authorization = NONE
+  POST = 0
+
+Signing / crypto mechanism:
+  NOT selected here
+  (Implementation Start design may choose a concrete channel;
+   the provenance boundary itself is fixed now.)
+```
+
+RECEIPT ANTI-REPLAY BOUNDARY（LOCKED; P1-3）:
+
+```text
+one Human GO receipt
+  → at most one CREATE attempt
+
+same receipt replay:
+  POST = 0
+
+new harness instance / page reload / transport reconstruction:
+  same consumed receipt MUST NOT restore write capability
+
+ownership:
+  new harness authorization layer
+  NOT Slice C retry semantics
+  NOT GATE-3 in-transport Set alone
+
+persist/consume mechanism:
+  Implementation design
+  (invariant locked here)
+```
+
 既存 ProcedureRecord 側に SHA / GUID / identity / mutation-budget を照合して
 run-scoped authorization を発行する先例がある。その構造は参照できるが、
 ProcedureRecord 用 purpose / GUID を流用してはいけない。
@@ -227,6 +302,9 @@ Rules:
 - existing Slice E storage port を再利用
 - existing Slice C persistence port を再利用
 - generic CREATE API を export しない
+- receipt-level anti-replay is enforced by harness authorization layer
+  before / around transport construction
+  (GATE-3 in-transport identity Set alone is NOT sufficient)
 ```
 
 ## 5. Separate SPFx entrypoint
@@ -255,6 +333,28 @@ Harness は最低限、次だけにする。
 4. frozen synthetic CANCEL確認
 5. explicit Execute button
 6. result/evidence表示
+```
+
+RUNTIME HOST / EXPOSURE BOUNDARY（LOCKED; P1-4）:
+
+```text
+current runtime host/context MUST match
+the exact historical test-only target
+
+wrong site/context:
+  authorization = NONE
+  POST = 0
+
+tenant-wide package availability
+  ≠ harness executable authority
+
+harness MUST NOT become an executable write surface
+for normal end users solely because the solution is
+tenant-available (skipFeatureDeployment=true)
+
+toolbox / manifest hardening means:
+  Implementation design
+  (fail-closed acceptance locked here)
 ```
 
 禁止事項:
@@ -308,6 +408,9 @@ ProductId は変更しない。現在値は `4342db47-21a3-4c48-aed1-ef615f55c40
 これは **package metadata change の authorization** であり、
 Deploy authorization ではない。
 
+`skipFeatureDeployment=true` による tenant-wide package availability は、
+§5 RUNTIME HOST / EXPOSURE BOUNDARY のとおり **executable authority を付与しない**。
+
 ## 8. Acceptance criteria / required tests
 
 最低限、以下を acceptance とする。
@@ -318,6 +421,8 @@ Deploy authorization ではない。
 - ScaffoldShellWebPart changed files = 0
 - ScaffoldShell bundle imports harness = NO
 - production lifecycle barrel synthetic CREATE export = NO
+- tenant-wide package availability ≠ harness executable authority
+- wrong runtime host/site/context → authorization NONE / POST 0
 ```
 
 ### AUTHORIZATION
@@ -325,11 +430,15 @@ Deploy authorization ではない。
 ```text
 - missing GO → POST 0
 - malformed GO → POST 0
+- structurally valid object alone ≠ Human GO
+- self-issued / caller-constructed receipt → authorization NONE / POST 0
+- trusted Human-issued provenance missing → authorization NONE / POST 0
 - SHA mismatch → POST 0
 - Site mismatch → POST 0
 - List GUID mismatch → POST 0
 - identity mismatch → POST 0
 - mutation-budget mismatch → POST 0
+- runtime host/context mismatch → POST 0
 ```
 
 ### PAYLOAD
@@ -346,10 +455,16 @@ Deploy authorization ではない。
 ```text
 - render/onInit → POST 0
 - preflight → GET only
+- one Human GO receipt → at most one CREATE attempt
 - exact authorized run → POST <= 1
+- same receipt replay → POST 0
+- new harness instance / page reload / transport reconstruction
+    with same consumed receipt → write capability NOT restored / POST 0
 - second automatic POST = impossible
-- Execute disabled after one run-scoped attempt
+- Execute disabled after one receipt-scoped attempt
 - no automatic retry
+- anti-replay ownership = harness authorization layer
+  (not GATE-3 / Slice C alone)
 ```
 
 ### OUTCOME
@@ -375,6 +490,16 @@ Deploy authorization ではない。
 - ScaffoldShell remains fixture-only
 ```
 
+### BRIDGE / GENERATED DRIFT
+
+```text
+- lifecycle-cancellation-storage.bundle named canonical entrypoint recorded
+- exact generation command recorded in spfx/src/sbs-domain/README.md
+- generated .js / .d.ts hand-edit FORBIDDEN
+- regenerate → git diff --exit-code clean
+- .d.ts export surface equals allowed exports only
+```
+
 ## 9. Explicit OUT
 
 ```text
@@ -394,6 +519,8 @@ Option B LIVE CREATE GO
 lifecycle semantics changes
 Slice A/B/C/E redesign
 GATE-3 reimplementation
+signing / crypto algorithm selection (deferred to Implementation design)
+toolbox / manifest concrete knobs (deferred; fail-closed acceptance locked)
 ```
 
 ## 10. Rollback boundary
@@ -415,12 +542,15 @@ GATE-3 reimplementation
 
 ```text
 CURRENT:
-B2 exact-slice definition = COMPLETE
-Independent Definition Review = NOT YET COMPLETE
+B2 exact-slice definition = CORRECTION COMPLETE
+Independent Definition Re-Review-1 = PASS-WITH-CORRECTIONS (consumed)
+P1-1 = CLOSED
+P1-2 / P1-3 / P1-4 / P2-1 = addressed in definition text
+Independent Definition Re-Review-2 = NOT YET COMPLETE
 Human Implementation Start GO = NOT YET ELIGIBLE
 
 NEXT:
-Independent Definition Review
+Independent Definition Re-Review-2
 
 Only if review returns:
 PASS
@@ -441,7 +571,7 @@ Agent Router v2 の独立性を維持するため、別 ChatGPT / Codex セッ�
 次を渡すのが適切である。
 
 ```text
-B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-REVIEW-1
+B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-2
 
 AGENT:
 Independent Reviewer
@@ -452,12 +582,21 @@ READ-ONLY
 BASE:
 main@3e4e2dee195ce82299b62f4b668d50cb563d2c68
 
+PRIOR:
+B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-1
+RESULT: PASS-WITH-CORRECTIONS
+P1-1 CLOSED
+P1-2 / P1-3 / P1-4 OPEN (addressed in correction)
+P2-1 OPEN (addressed in correction)
+
 AUTHORITY:
 docs/architecture/live-create-test-only-runtime-path-decision-1.md
 
 TARGET:
+PR #480
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 docs/architecture/b2-isolated-test-only-harness-exact-slice-definition-1.md
+(use PR HEAD after this correction commit)
 
 REVIEW QUESTIONS:
 
@@ -468,17 +607,22 @@ REVIEW QUESTIONS:
 5. canonical Slice C/E をコピーせず bridge reuse しているか
 6. SPFx rootDir bridge 方針が既存 architecture と整合するか
 7. synthetic CREATE mint が GO validation を迂回できない設計か
+   （trusted receipt provenance / no self-authorization 含む）
 8. render/onInit/preflight から POST 到達不能か
 9. arbitrary Site/List に POST できないか
+   （runtime host/context match 含む）
 10. arbitrary payload / SUPERSEDE が到達不能か
 11. one-POST / zero-retry invariant を維持できるか
+    （receipt-level anti-replay / one GO = max one POST 含む）
 12. CREATED mandatory EventId read-back を維持するか
 13. INDETERMINATE dual reconciliation を維持するか
 14. UPDATE/DELETE が増えていないか
 15. package version bump と Deploy GO が分離されているか
 16. test-only web part の tenant-wide availability が
     unauthorized write capabilityを生まないか
+    （package availability ≠ executable authority）
 17. bridge/generated bundle に contract drift risk がないか
+    （named entrypoint / regen / hand-edit ban / diff-clean / .d.ts）
 18. exact slice に不足・過剰なファイルがないか
 
 CLASSIFY:
@@ -535,7 +679,7 @@ This exact-slice definition DOES NOT authorize:
 - Implementation Start
 - code mutation
 - package version bump execution
-- PR
+- PR merge
 - Deploy
 - App Catalog mutation
 - SharePoint POST
@@ -552,10 +696,10 @@ This exact-slice definition DOES NOT authorize:
 CURRENT ACTION: STOP
 
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1:
-READ-ONLY DEFINITION COMPLETE
-READY FOR INDEPENDENT DEFINITION REVIEW
+DEFINITION CORRECTION COMPLETE
+READY FOR INDEPENDENT DEFINITION RE-REVIEW-2
 
-Independent Definition Review: NOT YET COMPLETE
+Independent Definition Re-Review-2: NOT YET COMPLETE
 Implementation Start: NOT AUTHORIZED
 code mutation: NOT AUTHORIZED
 Deploy / App Catalog: NOT AUTHORIZED
@@ -565,5 +709,5 @@ normal runtime LIVE WRITE: HOLD
 Issue close: NOT AUTHORIZED
 
 Do not self-certify Independent Review PASS in the Control session
-that authored this definition.
+that authored this definition correction.
 ```
