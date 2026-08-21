@@ -3,10 +3,11 @@
 - 文書: `docs/process/autonomy-policy-v1.md`
 - Unit: **AUTO-1**
 - 位置づけ: AI Development OS の **機械判定可能な自律実行 Policy 契約**
-- 状態: **ACCEPTED / NOT ENABLED**
+- 状態: **ACCEPTED / READY-ONLY ENABLED（Selection A）**
 - Human Decision: **AUTO-1 scope を採用**（2026-08-10）
-- Authorization effect: **NONE**
-- Implementation: **DO NOT START YET**
+- Ready-only Policy Mutation GO: **CONSUMED**（basis `main@8eca3e08a1aeafa723c649980cc17484e4d54e53`）
+- Authorization effect: **`pull_request.ready` = enabled `AUTO_ALLOWED` under `L1_AUTO_READY=ENABLED`；`pull_request.merge` remains `HUMAN_ONLY`；Ready/Merge executors ABSENT**
+- Implementation: **DO NOT START YET**（Ready executor / workflow / settings は別 GO）
 - 上位正本（緩和・上書きしない）:
   - `docs/decisions/DEC-AI-ORG-003.md`
   - `docs/decisions/DEC-AA-001.md`
@@ -16,6 +17,8 @@
   - `docs/process/low-auto-pilot-v1.md`
 - Selection / Acceptance 記録:
   [`../architecture/decision-autonomy-policy-v1-selection.md`](../architecture/decision-autonomy-policy-v1-selection.md)
+- Enablement exact-slice:
+  [`../architecture/ai-autonomy-l1-enablement-exact-slice-definition-1.md`](../architecture/ai-autonomy-l1-enablement-exact-slice-definition-1.md)
 
 Live gate（Ready / Merge / review 進行）は repository docs に書かない
 （[`self-referential-gate-policy.md`](./self-referential-gate-policy.md)）。
@@ -28,10 +31,13 @@ Decision:
 ACCEPTED
 
 Policy:
-DEFINED / NOT ENABLED
+DEFINED / READY-ONLY ENABLED（Selection A）
 
 Authorization effect:
-NONE
+pull_request.ready = AUTO_ALLOWED（L1_AUTO_READY = ENABLED）
+pull_request.merge = HUMAN_ONLY（L1_AUTO_MERGE = DISABLED）
+other AUTO_ALLOWED candidates = still NOT ENABLED for execution
+Ready / Merge Action Gateway executors = ABSENT
 
 Implementation:
 DO NOT START YET
@@ -39,21 +45,62 @@ DO NOT START YET
 UNKNOWN:
 DENY
 
-Ready / Merge / Decision Acceptance:
-NOT EXECUTABLE BY ACTION GATEWAY
+Ready execution / Merge / Decision Acceptance:
+NOT EXECUTABLE BY ACTION GATEWAY（executor ABSENT；Merge HUMAN_ONLY）
 
 SharePoint / M365 / Entra / permission / secret / production deploy:
 NOT EXECUTABLE BY ACTION GATEWAY
 ```
 
 ```text
-Policy Accepted ≠ policy enabled
-Policy Accepted ≠ Implementation Start
-Policy Accepted ≠ capability implementation
-Policy Accepted ≠ Task Packet approval
-Policy Accepted ≠ Ready / Merge authorization
+Policy Accepted ≠ full policy enabled
+Ready-only enablement ≠ Auto Merge enablement
+Ready-only enablement ≠ Implementation Start
+Ready-only enablement ≠ Ready executed
+Capability AUTO_ALLOWED ≠ executor present
 Capability ≠ Authorization
 CI PASS ≠ Authorization
+```
+
+## L1 Ready-only enablement binding（Selection A）
+
+Human Policy Mutation GO（Ready-only）was issued against
+`main@8eca3e08a1aeafa723c649980cc17484e4d54e53` under durable Selection A.
+This section is the **primary machine-observable enablement authority** for
+L1 Ready / Merge capability states and kill switches.
+
+```text
+BEGIN_L1_ENABLEMENT_BINDING
+policyVersion=AUTONOMY-POLICY-V1
+enablementUnit=AI-AUTONOMY-L1-READY-ONLY-POLICY-MUTATION-1
+repository=yasutakesougo/severe-behavior-support-spfx
+environment=repository-default
+basisMainSha=8eca3e08a1aeafa723c649980cc17484e4d54e53
+selection=A
+authorityRef=cursor-cloud-agent:bc-01a0246d-3b08-73cc-baa0-599fedbec65d
+selectionAuthorityRef=https://github.com/yasutakesougo/severe-behavior-support-spfx/pull/487#issuecomment-5369935508
+pull_request.ready=AUTO_ALLOWED
+pull_request.merge=HUMAN_ONLY
+L1_AUTO_READY=ENABLED
+L1_AUTO_MERGE=DISABLED
+readyExecutor=ABSENT
+mergeExecutor=ABSENT
+END_L1_ENABLEMENT_BINDING
+```
+
+Observation rules（Fail Closed）:
+
+```text
+1. Observers MUST read this binding from docs/process/autonomy-policy-v1.md
+   on the freshly observed base/main HEAD.
+2. Missing / unparseable / unknown L1_AUTO_* → treat as DISABLED and deny.
+3. pull_request.ready may be observed as AUTO_ALLOWED only when
+   L1_AUTO_READY = ENABLED and the capability line above is AUTO_ALLOWED.
+4. pull_request.merge remains HUMAN_ONLY while L1_AUTO_MERGE = DISABLED
+   （Selection A forbids enabling Merge）.
+5. AUTO_READY_ALLOWED true ≠ Ready executed（executor ABSENT）.
+6. This binding does not authorize Implementation Start, workflow mutation,
+   GitHub settings mutation, Deploy, LIVE WRITE, or Production Binding.
 ```
 
 ## 目的
@@ -255,14 +302,30 @@ baseline、limits、idempotency、audit の条件付きである。
 | `ci.read` | `LOW` | CI status / logs の read-only |
 | `review.request` | `LOW` | 同一 Draft の Independent Review 要求のみ。Ready、Decision Accepted、review verdict の自己生成を含まない |
 
-`AUTO_ALLOWED` は **将来有効化時の policy classification** である。
-AUTO-1 時点では `NOT ENABLED` のため、全 capability の実行結果は DENY となる。
+上記 table の `AUTO_ALLOWED` 行は **target classification** である。
+**Ready-only Policy Mutation（Selection A）** が enable した capability は
+`pull_request.ready` のみ（下記）。その他 candidate は引き続き
+`NOT ENABLED` であり、実行結果は DENY となる。
+
+### Enabled AUTO_ALLOWED（Ready-only / Selection A）
+
+| Capability ID | Classification | Kill switch | Executor |
+|---|---|---|---|
+| `pull_request.ready` | `AUTO_ALLOWED` | `L1_AUTO_READY = ENABLED` | ABSENT（Implementation Start 別 GO） |
+
+```text
+pull_request.ready = AUTO_ALLOWED
+  ∧ L1_AUTO_READY = ENABLED
+  ∧ L1 Execution Policy predicates PASS
+  ≠ Ready executed（executor ABSENT）
+```
 
 さらに effective classification は全上位 authority との intersection（最も厳しい
 分類）で決める。現行 DEC-AA-003 の GitHub 公開前 STOP / external write
 permissions `NONE` が有効な間、`branch.push`、Draft PR create/update、
 `review.request` は effective `HUMAN_ONLY` である。上位正本を明示的に supersede
 する別 Human Decision なしに、AUTO-1 の target classification を適用しない。
+Ready-only enablement はそれらの candidate を enable しない。
 
 ### HUMAN_ONLY policy entries
 
@@ -278,7 +341,6 @@ permissions `NONE` が有効な間、`branch.push`、Draft PR create/update、
 | `issue.write` | `HUMAN_ONLY` |
 | `label.write` | `HUMAN_ONLY` |
 | `review.publish` | `HUMAN_ONLY` |
-| `pull_request.ready` | `HUMAN_ONLY` |
 | `pull_request.merge` | `HUMAN_ONLY` |
 | `decision.accept` | `HUMAN_ONLY` |
 | `decision.lock` | `HUMAN_ONLY` |
@@ -287,15 +349,19 @@ permissions `NONE` が有効な間、`branch.push`、Draft PR create/update、
 | `security_boundary.write` | `HUMAN_ONLY` |
 
 特に `pull_request.merge` は prompt 上の禁止だけに依存しない。
+Selection A / Ready-only Policy Mutation は Merge を enable しない
+（`L1_AUTO_MERGE = DISABLED`）。
 
 ```text
+Action Gateway Ready executor: ABSENT
 Action Gateway merge executor: ABSENT
 Capability Registry executable merge adapter: ABSENT
 Human approval supplied to Gateway: MUST NOT create either route
 ```
 
 Human が別 workflow で merge を判断できることと、Gateway が merge capability を
-持たないことは両立する。
+持たないことは両立する。Ready capability が `AUTO_ALLOWED` でも、Ready executor
+が ABSENT の間は live draft→ready GitHub mutation を自動化しない。
 
 Draft PR head の変更は `pull_request.update_draft` では実行しない。
 commit / ref / head mutation を含む Draft update は
@@ -876,6 +942,16 @@ unknown / conflicting なら実行せず DENY する。複数 deny reason が同
 | `code.edit` outside `allowedPaths` | `DENY` | `POLICY_BLOCKED` | `OUT_OF_SCOPE` |
 | request after `baseRef` moved from `baselineSHA` | `DENY` | `BASELINE_MOVED` | `BASELINE_MOVED` |
 
+Ready-only note（Selection A）:
+
+```text
+pull_request.ready classification = AUTO_ALLOWED
+Action Gateway Ready executor = ABSENT
+→ live Ready mutation remains non-executable by automation until a separate
+  Implementation Start creates an executor that re-checks this policy file
+pull_request.merge remains HUMAN_ONLY / L1_AUTO_MERGE = DISABLED
+```
+
 追加必須:
 
 ```text
@@ -945,7 +1021,7 @@ AUTO-1、将来の Task Packet、CI PASS、Independent Review PASS のいずれ�
 | AUTO1-C2 | DEC-AA-003: GitHub publication 前 STOP | branch push / Draft PR capability は将来 policy 候補。**現時点では NOT ENABLED** |
 | AUTO1-C3 | LOW-AUTO-PILOT-V1: pilot execution NOT STARTED | execution を開始しない。**NO CHANGE** |
 | AUTO1-C4 | DEC-AI-ORG-003: PR publication requires bound Human approval | approval requirement を維持。AUTO-1 Acceptance 単独では満たさない |
-| AUTO1-C5 | Merge = Human prior approval | Gateway executor を持たない。Human workflow は上位正本のまま |
+| AUTO1-C5 | Merge = Human prior approval | Gateway merge executor を持たない。`pull_request.merge` = `HUMAN_ONLY`；`L1_AUTO_MERGE = DISABLED`。Human workflow は上位正本のまま |
 | AUTO1-C6 | AssessmentSnapshot adapter EC-3 / EC-4 = unmet | application lane の HOLD を維持。**NO BYPASS** |
 
 矛盾時は上位正本と厳しい分類を優先し、AUTO-1 を権限緩和として解釈しない。
@@ -960,24 +1036,29 @@ AUTO-1、将来の Task Packet、CI PASS、Independent Review PASS のいずれ�
   idempotency / approval / audit が判定可能
 - unknown / missing / conflict がすべて DENY
 - Gateway が Ready / Merge / Decision Acceptance / forbidden writes の executor を持たない
+  （Ready capability は AUTO_ALLOWED でも Ready executor は ABSENT）
+- Ready-only enablement binding（`BEGIN_L1_ENABLEMENT_BINDING`）が一意に観測可能
+- `pull_request.merge` = `HUMAN_ONLY` かつ `L1_AUTO_MERGE = DISABLED` が維持されている
 - core negative test 5 件の期待結果が固定
 - SDK language に非依存
 - AssessmentSnapshot adapter lane の HOLD を迂回しない
-- `src/` / `tests/` / runtime configuration を変更しない
 - Independent Review で P0 = 0 / P1 = 0
 - mechanical verification PASS
-- Draft PR のまま Human Ready Decision で停止
+- Draft PR のまま Human Ready Decision で停止（self-governance PR 含む）
 
 ## Next units（AUTO-1 の非効力）
 
-次は AUTO-1 とは別 substantive unit とする。
+次は AUTO-1 / Ready-only Policy Mutation とは別 substantive unit とする。
 
 1. Capability Registry contract
 2. Task Packet Schema
 3. Action Gateway contract
 4. execution backend selection
 5. Action Gateway implementation + mandatory negative tests
-6. `LOW-AUTO-PILOT-V2` enablement Decision
+6. Ready executor Implementation Start（separate exact-slice Human GO）
+7. `LOW-AUTO-PILOT-V2` enablement Decision
+8. Auto Merge enablement（requires Selection ≠ A）
 
-AUTO-1 の Acceptance は、上記の Implementation Start または enablement を
-自動付与しない。
+AUTO-1 Acceptance および Ready-only Policy Mutation は、上記の
+Implementation Start、workflow / GitHub settings mutation、Deploy、または
+Auto Merge enablement を自動付与しない。

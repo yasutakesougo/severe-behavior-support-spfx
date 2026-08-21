@@ -14,10 +14,13 @@ Kind: docs-only policy contract / Human Acceptance recording
 Selection status: SELECTED / CONSUMED
 Decision status: ACCEPTED
 Human Decision: AUTO-1 scope を採用（2026-08-10）
-Policy: DEFINED / NOT ENABLED
-Authorization effect: NONE
+Policy: DEFINED / READY-ONLY ENABLED（Selection A；later Policy Mutation GO）
+Authorization effect:
+  pull_request.ready = AUTO_ALLOWED（L1_AUTO_READY = ENABLED）
+  pull_request.merge = HUMAN_ONLY（L1_AUTO_MERGE = DISABLED）
+  Ready/Merge Gateway executors = ABSENT
 Implementation: DO NOT START YET
-Ready: HUMAN-ONLY
+Ready: AUTO_ALLOWED classification / executor ABSENT
 Merge: HUMAN-ONLY / Gateway executor ABSENT
 SharePoint / M365 / Entra / permission / secret / production deploy:
   Gateway execution FORBIDDEN
@@ -123,8 +126,17 @@ AUTO-1 Acceptance ≠ Action Gateway implementation
 AUTO-1 Acceptance ≠ Cursor SDK Runner implementation
 AUTO-1 Acceptance ≠ LOW-AUTO-PILOT-V2 enablement
 AUTO-1 Acceptance ≠ AssessmentSnapshot adapter EC-3 / EC-4 satisfaction
-AUTO-1 Acceptance ≠ Ready / Merge
+AUTO-1 Acceptance ≠ Ready / Merge execution
+
+Later Ready-only Policy Mutation（Selection A）≠ Auto Merge enablement
+Later Ready-only Policy Mutation ≠ Implementation Start
+Later Ready-only Policy Mutation ≠ Ready executed
+Later Ready-only Policy Mutation ≠ workflow / GitHub settings mutation
 ```
+
+Ready-only enablement binding SoT:
+[`../process/autonomy-policy-v1.md`](../process/autonomy-policy-v1.md)
+（`BEGIN_L1_ENABLEMENT_BINDING`）
 
 ## Done criteria（AUTO-1）
 
