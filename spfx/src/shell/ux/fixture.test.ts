@@ -1,4 +1,5 @@
 import {
+  DEMO_1_FIELD_STAFF_FIXTURE,
   SHELL_UX_DEFAULT_FIXTURE,
   SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
   SHELL_UX_SLICE,
@@ -16,6 +17,15 @@ describe("SHELL-UX fixture boundary", () => {
       "SITE-ISG",
       "SITE-HOM",
     ]);
+  });
+
+  it("provides DEMO-1 as a selected synthetic FIELD_STAFF overview entry", () => {
+    expect(DEMO_1_FIELD_STAFF_FIXTURE.demoMode).toBe(true);
+    expect(DEMO_1_FIELD_STAFF_FIXTURE.siteSelection).toBe("SITE-ISG");
+    expect(DEMO_1_FIELD_STAFF_FIXTURE.selectedDestination).toBe("overview");
+    expect(DEMO_1_FIELD_STAFF_FIXTURE.presentationRole).toBe("FIELD_STAFF");
+    expect(isShellSiteSelection(DEMO_1_FIELD_STAFF_FIXTURE.siteSelection)).toBe(true);
+    expect(isSiteUnselected(DEMO_1_FIELD_STAFF_FIXTURE.siteSelection)).toBe(false);
   });
 
   it("uses only presentation save/view/site vocabularies", () => {
