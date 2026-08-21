@@ -1,6 +1,7 @@
 import {
   evaluateLifecycleTestOnlyLiveCreateGo,
   physicalSiteIdentity,
+  signedReceiptLifecycleIdentityMatches,
   verifySignedReceiptArtifact,
 } from "./test-only-live-create-gate";
 import {
@@ -19,6 +20,39 @@ const host = {
 };
 
 describe("B2 signed receipt gate", () => {
+  it("requires all three signed lifecycle identity values to match", () => {
+    const packet = {
+      lifecycleEventId: "event-001",
+      lifecycleIdempotencyKey: "idem-001",
+      lifecyclePayloadFingerprint: "payload-001",
+    } as Parameters<typeof signedReceiptLifecycleIdentityMatches>[0];
+    const computed = {
+      LifecycleEventId: "event-001",
+      LifecycleIdempotencyKey: "idem-001",
+      LifecyclePayloadFingerprint: "payload-001",
+    };
+
+    expect(signedReceiptLifecycleIdentityMatches(packet, computed)).toBe(true);
+    expect(
+      signedReceiptLifecycleIdentityMatches(packet, {
+        ...computed,
+        LifecycleEventId: "different",
+      }),
+    ).toBe(false);
+    expect(
+      signedReceiptLifecycleIdentityMatches(packet, {
+        ...computed,
+        LifecycleIdempotencyKey: "different",
+      }),
+    ).toBe(false);
+    expect(
+      signedReceiptLifecycleIdentityMatches(packet, {
+        ...computed,
+        LifecyclePayloadFingerprint: "different",
+      }),
+    ).toBe(false);
+  });
+
   it.each([
     [
       "bad signature",

@@ -41,6 +41,12 @@ export type SignedReceiptArtifact = Readonly<{
   signatureB64u: string;
 }>;
 
+export type LifecycleIdentity = Readonly<{
+  LifecycleEventId: string;
+  LifecycleIdempotencyKey: string;
+  LifecyclePayloadFingerprint: string;
+}>;
+
 const VERIFIED_RECEIPT_BRAND: unique symbol = Symbol("b2-verified-trusted-receipt");
 export type VerifiedTrustedReceipt = Readonly<{
   readonly [VERIFIED_RECEIPT_BRAND]: true;
@@ -235,6 +241,17 @@ export function isVerifiedTrustedReceipt(value: unknown): value is VerifiedTrust
     typeof value === "object" &&
     value !== null &&
     (value as { [VERIFIED_RECEIPT_BRAND]?: true })[VERIFIED_RECEIPT_BRAND] === true
+  );
+}
+
+export function signedReceiptLifecycleIdentityMatches(
+  packet: HumanGoRequestPacket,
+  computed: LifecycleIdentity,
+): boolean {
+  return (
+    packet.lifecycleEventId === computed.LifecycleEventId &&
+    packet.lifecycleIdempotencyKey === computed.LifecycleIdempotencyKey &&
+    packet.lifecyclePayloadFingerprint === computed.LifecyclePayloadFingerprint
   );
 }
 

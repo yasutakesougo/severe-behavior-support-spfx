@@ -20,8 +20,35 @@ import { createLocalStorageTrustedReceiptConsumeStore } from "../../adapters/pro
 import { physicalSiteIdentity } from "../../adapters/procedure-record-lifecycle-event/test-only-live-create-gate";
 import {
   getB2HarnessCodeBasisSha,
+  signedReceiptLifecycleIdentityMatches,
   verifySignedReceiptArtifact,
 } from "../../adapters/procedure-record-lifecycle-event/test-only-live-create-gate";
+import { mintLifecycleEventIdentity } from "../../sbs-domain/kiosk-read-model.bundle";
+
+const SYNTHETIC_CANCEL_RECORD = {
+  OrganizationId: "synthetic-org-001",
+  SiteId: "SITE-ISG",
+  UserId: "synthetic-user-001",
+  TimeZone: "Asia/Tokyo",
+  RecordId: "synthetic-procedure-record-cancel-001",
+  IdempotencyKey: "synthetic-record-001",
+  PayloadFingerprint: "synthetic-record-payload-001",
+  Procedure: {
+    ProcedureId: "synthetic-procedure",
+    ProcedureVersion: "1",
+    ApprovalState: "APPROVED" as const,
+  },
+  LocalDate: "2026-08-21",
+  planId: "synthetic-plan",
+  planVersion: 1,
+  result: "PERFORMED_AS_PLANNED" as const,
+  performedAt: "2026-08-21T09:00:00.000Z",
+  recordedAt: "2026-08-21T09:00:00.000Z",
+  recordedBy: "synthetic-user-001",
+} as const;
+
+const SYNTHETIC_CANCEL_REASON = "synthetic test-only cancellation";
+const SYNTHETIC_CANCEL_RECORDED_AT = "2026-08-21T09:00:00.000Z";
 
 export interface ILifecycleCreateTestHarnessWebPartProps {
   description: string;
@@ -63,6 +90,16 @@ export default class LifecycleCreateTestHarnessWebPart extends BaseClientSideWeb
     };
     const verified = await verifySignedReceiptArtifact(artifact);
     if (!verified.receipt) return "save_failed";
+    const computedIdentity = mintLifecycleEventIdentity({
+      eventType: "CANCEL",
+      targetRecordId: SYNTHETIC_CANCEL_RECORD.RecordId,
+      recordedAt: SYNTHETIC_CANCEL_RECORDED_AT,
+      recordedBy: SYNTHETIC_CANCEL_RECORD.recordedBy,
+      reason: SYNTHETIC_CANCEL_REASON,
+    });
+    if (!signedReceiptLifecycleIdentityMatches(verified.receipt.payload, computedIdentity)) {
+      return "save_failed";
+    }
     const composed = await composeTestOnlyHarnessCancellationPersistence({
       receipt: verified.receipt,
       packet,
@@ -76,30 +113,10 @@ export default class LifecycleCreateTestHarnessWebPart extends BaseClientSideWeb
     const result = await composed.persistencePort.submitCancellation({
       semanticsInput: {
         operation: "CANCEL",
-        targetRecordId: composed.packet.lifecycleEventId,
-        originalRecord: {
-          OrganizationId: "synthetic-org-001",
-          SiteId: "SITE-ISG",
-          UserId: "synthetic-user-001",
-          TimeZone: "Asia/Tokyo",
-          RecordId: composed.packet.lifecycleEventId,
-          IdempotencyKey: "synthetic-record-001",
-          PayloadFingerprint: composed.packet.lifecyclePayloadFingerprint,
-          Procedure: {
-            ProcedureId: "synthetic-procedure",
-            ProcedureVersion: "1",
-            ApprovalState: "APPROVED",
-          },
-          LocalDate: "2026-08-21",
-          planId: "synthetic-plan",
-          planVersion: 1,
-          result: "PERFORMED_AS_PLANNED",
-          performedAt: "2026-08-21T09:00:00.000Z",
-          recordedAt: "2026-08-21T09:00:00.000Z",
-          recordedBy: "synthetic-user-001",
-        },
-        reason: "synthetic test-only cancellation",
-        boundRecordIds: [composed.packet.lifecycleEventId],
+        targetRecordId: SYNTHETIC_CANCEL_RECORD.RecordId,
+        originalRecord: SYNTHETIC_CANCEL_RECORD,
+        reason: SYNTHETIC_CANCEL_REASON,
+        boundRecordIds: [SYNTHETIC_CANCEL_RECORD.RecordId],
         lifecycleEvents: [],
         corrections: [],
         authorization: {
@@ -115,7 +132,7 @@ export default class LifecycleCreateTestHarnessWebPart extends BaseClientSideWeb
           },
         },
       },
-      recordedAtIso: new Date().toISOString(),
+      recordedAtIso: SYNTHETIC_CANCEL_RECORDED_AT,
     });
     return result.saveState;
   }
