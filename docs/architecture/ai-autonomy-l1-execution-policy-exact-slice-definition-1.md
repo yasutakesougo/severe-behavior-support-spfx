@@ -139,12 +139,15 @@ tests/governance/**
 designated autonomy-policy files（below / this section）
 ```
 
-Designated autonomy-policy files（initial fixed list; this section）:
+Designated autonomy-policy files（fixed list; this section）:
 
 ```text
 docs/process/autonomy-policy-v1.md
 docs/architecture/decision-autonomy-policy-v1-selection.md
 docs/architecture/ai-autonomy-l1-execution-policy-exact-slice-definition-1.md
+docs/architecture/ai-autonomy-l1-execution-policy-combined-reconciliation-1.md
+docs/architecture/ai-autonomy-l1-execution-policy-post-merge-reconciliation-1.md
+docs/architecture/ai-autonomy-l1-enablement-exact-slice-definition-1.md
 docs/decisions/DEC-AA-001.md
 docs/decisions/DEC-AA-003.md
 docs/decisions/DEC-AI-ORG-003.md
