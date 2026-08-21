@@ -59,6 +59,7 @@ var procedure_record_cancellation_staff_save_exports = {};
 __export(procedure_record_cancellation_staff_save_exports, {
   buildProcedureRecordCancellationSubmitRequest: () => buildProcedureRecordCancellationSubmitRequest,
   createInMemoryProcedureRecordCancellationPersistencePort: () => createInMemoryProcedureRecordCancellationPersistencePort,
+  createProcedureRecordCancellationPersistencePort: () => createProcedureRecordCancellationPersistencePort,
   nowAsiaTokyoIsoDateTime: () => nowAsiaTokyoIsoDateTime,
   persistStaffProcedureRecordCancellation: () => persistStaffProcedureRecordCancellation,
   resubmitFrozenProcedureRecordCancellation: () => resubmitFrozenProcedureRecordCancellation

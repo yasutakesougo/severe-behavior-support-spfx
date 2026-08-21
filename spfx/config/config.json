@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/scaffoldShellWebPart/ScaffoldShellWebPart.manifest.json"
         }
       ]
+    },
+    "lifecycle-create-test-harness-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/lifecycleCreateTestHarness/LifecycleCreateTestHarnessWebPart.js",
+          "manifest": "./src/webparts/lifecycleCreateTestHarness/LifecycleCreateTestHarnessWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "ScaffoldShellWebPartStrings": "lib/webparts/scaffoldShellWebPart/loc/{locale}.js"
+    "ScaffoldShellWebPartStrings": "lib/webparts/scaffoldShellWebPart/loc/{locale}.js",
+    "LifecycleCreateTestHarnessWebPartStrings": "lib/webparts/lifecycleCreateTestHarness/loc/{locale}.js"
   }
 }

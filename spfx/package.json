@@ -6,7 +6,8 @@
     "node": ">=22.14.0 < 23.0.0"
   },
   "scripts": {
-    "build": "heft test --clean --production && heft package-solution --production",
+    "prepare:b2-build-basis": "node ../scripts/ci/prepare-b2-build-basis.mjs",
+    "build": "npm run prepare:b2-build-basis && heft test --clean --production && heft package-solution --production",
     "start": "heft start --clean",
     "clean": "heft clean",
     "eject-webpack": "heft eject-webpack",

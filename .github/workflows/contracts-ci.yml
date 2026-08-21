@@ -21,6 +21,7 @@ on:
       - "tests/a11y/**"
       - "spfx/src/shell/**"
       - "spfx/src/webparts/scaffoldShellWebPart/**"
+      - "spfx/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -51,6 +52,7 @@ on:
       - "tests/a11y/**"
       - "spfx/src/shell/**"
       - "spfx/src/webparts/scaffoldShellWebPart/**"
+      - "spfx/**"
       - "package.json"
       - "package-lock.json"
       - "tsconfig.json"
@@ -78,6 +80,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -143,10 +146,72 @@ jobs:
           set -euo pipefail
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             git diff --check "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}"
-          else
-            before="${{ github.event.before }}"
-            if [[ "$before" =~ ^0+$ ]]; then
-              before="$(git rev-list --max-parents=0 HEAD)"
-            fi
-            git diff --check "$before...${{ github.sha }}"
-          fi
+           else
+             before="${{ github.event.before }}"
+             if [[ "$before" =~ ^0+$ ]]; then
+               before="$(git rev-list --max-parents=0 HEAD)"
+             fi
+             git diff --check "$before...${{ github.sha }}"
+           fi
+
+  build-spfx-production:
+    name: Build SPFx production artifact with exact basis
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.23.1
+          cache: npm
+          cache-dependency-path: spfx/package-lock.json
+
+      - name: Install SPFx dependencies
+        working-directory: spfx
+        run: npm ci
+
+      - name: Build and package with GitHub source basis
+        working-directory: spfx
+        env:
+          B2_HARNESS_BUILD_BASIS_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: npm run build
+
+      - name: Assert exact build basis checkout
+        working-directory: spfx
+        env:
+          B2_HARNESS_BUILD_BASIS_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          checkout_sha="$(git -C .. rev-parse HEAD)"
+          test "$checkout_sha" = "$B2_HARNESS_BUILD_BASIS_SHA"
+
+      - name: Record production artifact evidence
+        working-directory: spfx
+        env:
+          B2_HARNESS_BUILD_BASIS_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          harness_bundle="$(find sharepoint/solution/debug/ClientSideAssets -name 'lifecycle-create-test-harness-web-part_*.js' -print -quit)"
+          test -n "$harness_bundle"
+          {
+            printf 'build_basis_sha=%s\n' "$B2_HARNESS_BUILD_BASIS_SHA"
+            shasum -a 256 sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
+            shasum -a 256 "$harness_bundle"
+            shasum -a 256 src/sbs-domain/lifecycle-cancellation-storage.bundle.js
+          } | tee b2-production-artifact-sha256.txt
+
+      - name: Upload production artifact evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: b2-production-artifact-${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          path: |
+            spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg
+            spfx/sharepoint/solution/debug/ClientSideAssets/lifecycle-create-test-harness-web-part_*.js
+            spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.js
+            spfx/b2-production-artifact-sha256.txt
