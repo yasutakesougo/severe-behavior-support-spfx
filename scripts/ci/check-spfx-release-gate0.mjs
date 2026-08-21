@@ -176,10 +176,12 @@ function inspectConfig(config, configPath) {
 
 function resolveDefaultPackagePath(root, configPath, zippedPackage) {
   if (!zippedPackage) return null;
-  const normalizedConfig = path.normalize(configPath);
-  const configDir = path.dirname(normalizedConfig);
+  const absoluteConfig = path.isAbsolute(configPath)
+    ? path.normalize(configPath)
+    : path.resolve(root, configPath);
+  const configDir = path.dirname(absoluteConfig);
   const spfxDir = path.dirname(configDir);
-  return path.join(root, spfxDir, "sharepoint", zippedPackage);
+  return path.join(spfxDir, "sharepoint", zippedPackage);
 }
 
 async function sha256File(filePath) {
