@@ -12,7 +12,7 @@ export const FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE =
   "入力内容は既存の記録処理で確認されます。実際の業務データには書き込まれません。保存状態は処理結果を確認してから表示します。" as const;
 
 export const FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE =
-  "実施時点の計画版を解決できません。最新版への付け替えはしません（fail-closed）。" as const;
+  "実施時点の計画版を確認できないため、最新版には置き換えません。" as const;
 
 export const FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE =
   "見直し材料の表示です。「変更すべき」自動判定は行いません。" as const;
