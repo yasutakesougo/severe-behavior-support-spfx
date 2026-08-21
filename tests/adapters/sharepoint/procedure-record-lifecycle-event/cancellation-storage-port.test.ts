@@ -224,9 +224,7 @@ describe("CANCEL-SLICE-E SharePoint storage port", () => {
     const event = makeCancelEvent();
 
     const beforeById = await storage.findByLifecycleEventId(event.LifecycleEventId);
-    const beforeByKey = await storage.findByLifecycleIdempotencyKey(
-      event.LifecycleIdempotencyKey,
-    );
+    const beforeByKey = await storage.findByLifecycleIdempotencyKey(event.LifecycleIdempotencyKey);
     assert.deepEqual(beforeById, { status: "EMPTY" });
     assert.deepEqual(beforeByKey, { status: "EMPTY" });
 

@@ -30,8 +30,7 @@ export type ObservedLifecycleEventListIdentity = Readonly<{
 }>;
 
 export type ProcedureRecordLifecycleEventSchemaVerification =
-  | Readonly<{ ok: true }>
-  | Readonly<{ ok: false; reasons: readonly string[] }>;
+  Readonly<{ ok: true }> | Readonly<{ ok: false; reasons: readonly string[] }>;
 
 type ExpectedTextColumn = Readonly<{
   InternalName: string;
@@ -204,21 +203,23 @@ export function verifyProcedureRecordLifecycleEventPhysicalSchema(
     }
   }
 
-  const lockedUnique = new Set([COLUMNS.lifecycleEventId, COLUMNS.lifecycleIdempotencyKey]);
-  const lockedIndexed = new Set([
-    COLUMNS.lifecycleEventId,
-    COLUMNS.lifecycleIdempotencyKey,
-    COLUMNS.targetRecordId,
-  ]);
-
   for (const field of fields) {
     if (!field.InternalName.startsWith("life") || field.Hidden === true) {
       continue;
     }
-    if (field.EnforceUniqueValues === true && !lockedUnique.has(field.InternalName)) {
+    if (
+      field.EnforceUniqueValues === true &&
+      field.InternalName !== COLUMNS.lifecycleEventId &&
+      field.InternalName !== COLUMNS.lifecycleIdempotencyKey
+    ) {
       reasons.push(`extra-unique:${field.InternalName}`);
     }
-    if (field.Indexed === true && !lockedIndexed.has(field.InternalName)) {
+    if (
+      field.Indexed === true &&
+      field.InternalName !== COLUMNS.lifecycleEventId &&
+      field.InternalName !== COLUMNS.lifecycleIdempotencyKey &&
+      field.InternalName !== COLUMNS.targetRecordId
+    ) {
       reasons.push(`extra-index:${field.InternalName}`);
     }
   }

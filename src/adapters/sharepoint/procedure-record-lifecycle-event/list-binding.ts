@@ -11,14 +11,16 @@ export type ProcedureRecordLifecycleEventListBinding = Readonly<{
   listGuid: string;
 }>;
 
-const SHAREPOINT_GUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+const SHAREPOINT_GUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 export function normalizeLifecycleEventSharePointGuid(value: string): string | null {
   if (!isNonEmptyString(value)) {
     return null;
   }
-  const normalized = value.trim().replace(/^\{|\}$/g, "").toLowerCase();
+  const normalized = value
+    .trim()
+    .replace(/^\{|\}$/g, "")
+    .toLowerCase();
   return SHAREPOINT_GUID_RE.test(normalized) ? normalized : null;
 }
 

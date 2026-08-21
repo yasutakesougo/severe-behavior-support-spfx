@@ -69,9 +69,7 @@ describe("ProcedureRecordLifecycleEvent physical schema", () => {
   });
 
   it("fails closed without provisioned lifeSchemaVersion", () => {
-    const fields = observedFields().filter(
-      (field) => field.InternalName !== COLUMNS.schemaVersion,
-    );
+    const fields = observedFields().filter((field) => field.InternalName !== COLUMNS.schemaVersion);
     const result = verifyProcedureRecordLifecycleEventPhysicalSchema(
       PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_LIST_GUID,
       observedList(),

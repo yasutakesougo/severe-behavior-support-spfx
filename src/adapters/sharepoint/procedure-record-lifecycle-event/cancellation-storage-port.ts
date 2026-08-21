@@ -42,11 +42,11 @@ import type {
 
 export type ProcedureRecordCancellationSharePointStoragePort =
   ProcedureRecordCancellationStoragePort &
-  Readonly<{
-    binding: ProcedureRecordLifecycleEventListBinding;
-    liveWriteAuthorized: false;
-    verifyPhysicalSchema(): Promise<ProcedureRecordLifecycleEventSchemaVerification>;
-  }>;
+    Readonly<{
+      binding: ProcedureRecordLifecycleEventListBinding;
+      liveWriteAuthorized: false;
+      verifyPhysicalSchema(): Promise<ProcedureRecordLifecycleEventSchemaVerification>;
+    }>;
 
 const PHYSICAL_KEYS = [
   "lifeSchemaVersion",
@@ -122,8 +122,7 @@ function classifySingleRow(
   }
   if (
     (expected.kind === "eventId" && decoded.event.LifecycleEventId !== expected.token) ||
-    (expected.kind === "idempotencyKey" &&
-      decoded.event.LifecycleIdempotencyKey !== expected.token)
+    (expected.kind === "idempotencyKey" && decoded.event.LifecycleIdempotencyKey !== expected.token)
   ) {
     return { status: "FETCH_FAILED", code: "MALFORMED_PHYSICAL" };
   }
