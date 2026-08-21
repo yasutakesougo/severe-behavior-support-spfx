@@ -3,7 +3,14 @@
 ```text
 AI-AUTONOMY-L1-EXECUTION-POLICY-EXACT-SLICE-DEFINITION-1
 
-STATUS:
+RECORD CLASS:
+HISTORICAL SNAPSHOT / definition-time authority
+This STATUS banner records Definition Correction-2 publication state only.
+It is NOT the current combined PR #484 authorization / scope record.
+Current combined state:
+  docs/architecture/ai-autonomy-l1-execution-policy-combined-reconciliation-1.md
+
+STATUS（definition-time）:
 DEFINITION CORRECTION-2 COMPLETE
 READY FOR INDEPENDENT DEFINITION RE-REVIEW-3
 （or final confirmation after Re-Review-2 PASS + P2 typo closed）
@@ -14,8 +21,8 @@ main@0123cb7b8e15fe897bfee80cdf4f9954d8575891
 UNIT:
 AI-AUTONOMY-L1-EXECUTION-POLICY-EXACT-SLICE-1
 
-KIND:
-read-only exact-slice definition（docs-only）
+KIND（definition-time）:
+read-only exact-slice definition（docs-only at publication）
 
 PRIOR REVIEW:
 AI-AUTONOMY-L1-EXECUTION-POLICY-INDEPENDENT-DEFINITION-RE-REVIEW-2
@@ -35,16 +42,16 @@ Classifier / Gate Evaluator prerequisite:
 MERGED via PR #482
 HEAD consumed into main@0123cb7b8e15fe897bfee80cdf4f9954d8575891
 
-Implementation Start:
+Implementation Start（definition-time snapshot）:
 NOT AUTHORIZED
 
-Auto Ready:
+Auto Ready（definition-time snapshot）:
 NOT AUTHORIZED
 
-Auto Merge:
+Auto Merge（definition-time snapshot）:
 NOT AUTHORIZED
 
-GitHub mutation:
+GitHub mutation（definition-time snapshot）:
 NOT AUTHORIZED / NOT RUN
 
 Deploy / App Catalog / SharePoint / M365 / Entra /
