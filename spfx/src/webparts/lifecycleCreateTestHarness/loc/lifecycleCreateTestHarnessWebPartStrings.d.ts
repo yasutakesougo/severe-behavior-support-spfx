@@ -4,16 +4,18 @@ declare interface ILifecycleCreateTestHarnessWebPartStrings {
   DescriptionFieldLabel: string;
   Title: string;
   Description: string;
-  PhysicalTargetLabel: string;
+  RuntimeHostLabel: string;
+  LockedTargetLabel: string;
+  AuthoritativeMainShaLabel: string;
+  FrozenSyntheticIdentityLabel: string;
   ExpectedMainShaLabel: string;
   PacketLabel: string;
   ProvenanceLabel: string;
   ValidateButton: string;
   ExecuteButton: string;
   ResultIdle: string;
-  ResultValidateOnly: string;
   ResultExecuteDisabled: string;
-  ResultExecuteArmedConsumed: string;
+  RuntimeHostUnavailable: string;
   OperatorLabel: string;
 }
 
