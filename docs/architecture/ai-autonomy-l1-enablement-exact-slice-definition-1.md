@@ -8,6 +8,8 @@ Base: main@b5f7097c1213939a41b857bcdce52b0daecd2091
 
 STATUS:
   DEFINITION CORRECTION-1 COMPLETE
+  DURABLE HUMAN ENABLEMENT SELECTION A RECORDED
+  DESIGNATED-LIST CLOSURE: INCLUDED ON THIS PR（pending main merge）
   READY FOR INDEPENDENT DEFINITION RE-REVIEW-1
 
 Independent Definition Review-1:
@@ -15,23 +17,33 @@ Independent Definition Review-1:
   HEAD reviewed: 4acd2b355fd777ce289aa7da7cf228fd5bfd36d6
   RESULT: FAIL / CORRECTION REQUIRED
   P0: none
-  P1: 2（addressed below）
-  P2: 1（addressed below）
+  P1: 2（addressed in Correction-1）
+  P2: 1（addressed in Correction-1）
 
 Human Enablement Selection:
-  BINDING STATUS: NOT ESTABLISHED / WAITING FOR HUMAN SELECTION
-  Prior “A RECEIVED” claim: WITHDRAWN as durable authority
-  Candidate intent（non-binding）: A — Auto Ready のみ / Merge HUMAN_ONLY
+  BINDING STATUS: A RECEIVED（durable）
+  Selection: A — Auto Ready のみ有効化
+  Auto Merge: HUMAN_ONLY 継続
+  authorityRef:
+    https://github.com/yasutakesougo/severe-behavior-support-spfx/pull/487#issuecomment-5369935508
+  supportingRun:
+    https://cursor.com/agents/bc-01a02449-561f-7bd2-99ac-2f7c162fd984
+    bcId: bc-01a02449-561f-7bd2-99ac-2f7c162fd984
+  recordedAt: 2026-08-21T12:42:48Z
+  Prior premature “A RECEIVED” claim（HEAD 4acd2b3…）: remains WITHDRAWN;
+    this record supersedes it via §2.4 durable authority
   Agent recommendation ≠ Human Selection
 
 Authorization effect of THIS document:
-  NONE
+  NONE（Selection A ≠ Policy Mutation ≠ Implementation Start）
 
 Implementation Start:
   NOT AUTHORIZED
 
 Policy mutation（autonomy-policy-v1）:
-  NOT AUTHORIZED / BLOCKED（see §2 / §8 eligibility）
+  NOT AUTHORIZED by Selection alone
+  BLOCKED until designated-list closure is on main（§8）
+    AND a separate Human Policy Mutation GO is issued
 
 Executor / workflow / GitHub settings mutation:
   NOT AUTHORIZED
@@ -49,80 +61,73 @@ Live gate（Ready / Merge 進行）は repository docs に書かない
 
 ## 1. Objective
 
-Define one exact enablement slice for **L1 Auto Ready only**, contingent on a
-**durable Human Enablement Selection A**.
+Define one exact enablement slice for **L1 Auto Ready only**, under durable
+Human Enablement Selection **A**.
 
-Correction-1 keeps the Ready-only / Merge-HUMAN_ONLY shape, but removes the
-false binding that Selection A was already durable authority.
+Correction-1 removed the premature binding claim. A later Human message
+declared durable Selection A for PR #487; that Selection is now recorded via
+§2.4 item 1（PR comment authorityRef）.
 
-This packet does **not** mutate `docs/process/autonomy-policy-v1.md`, does
-**not** start implementation, and does **not** authorize any Ready execution.
+This packet still does **not** mutate `docs/process/autonomy-policy-v1.md`,
+does **not** start Ready-executor implementation, and does **not** authorize
+any Ready execution. Designated-list closure edits on this PR are limited to
+self-governance allowlist paths（§8）and are not Policy Mutation.
 
 ```text
-WAITING FOR HUMAN SELECTION（durable）
-  → IF Selection A is recorded with durable provenance
-  → THIS exact-slice definition（docs-only；candidate shape already drafted）
+Durable Human Enablement Selection A（RECORDED）
+  → THIS exact-slice definition + designated-list closure（this PR）
   → Independent Definition Re-Review PASS
-  → designated-list closure on main（§8；Policy Mutation eligibility）
+  → designated-list closure MERGED to main（§8 eligibility）
   → separate Human Policy Mutation GO（autonomy-policy-v1 text）
   → separate Human Implementation Start（executor / observer if any）
   → separate workflow / GitHub settings GO（if ever required）
   → Auto Ready execution only after executor exists + policy enabled
 ```
 
-## 2. Human Selection provenance（Correction-1 / P1-1）
+## 2. Human Selection provenance（Correction-1 / P1-1；Selection recorded）
 
 ### 2.1 Binding rule（LOCKED）
 
 ```text
 Agent recommendation ≠ Human Selection
-PR text ≠ Human Selection
+PR text alone ≠ Human Selection
 This definition alone ≠ Human Selection
 Chat paraphrase without durable reference ≠ Human Selection
 ```
 
-`Human Enablement Selection: A RECEIVED` is **not** a binding fact unless a
-durable authority reference is present and Human-attributable.
+`Human Enablement Selection: A RECEIVED` is binding only when a durable
+authority reference is present and Human-attributable.
 
-### 2.2 Prior claim — WITHDRAWN
+### 2.2 Prior premature claim — WITHDRAWN（historical）
 
-PR #487 HEAD `4acd2b3…` treated Selection A as RECEIVED / CONFIRMED without a
-durable authority reference. Independent Definition Review-1 P1-1 correctly
-rejected that.
+PR #487 HEAD `4acd2b3…` treated Selection A as RECEIVED without durable
+authority. Independent Definition Review-1 P1-1 correctly rejected that.
+That premature claim remains WITHDRAWN and is not revived.
+
+### 2.3 Durable Selection A — RECORDED
+
+Human Enablement Selection A was established with Auto Merge HUMAN_ONLY
+継続, and with explicit non-authorization of Policy Mutation /
+Implementation Start by Selection alone.
 
 ```text
-Prior binding claim: WITHDRAWN
-Selection gate: reopened
-Policy Mutation GO: remains BLOCKED until Selection is durably established
-  AND other eligibility gates in §8 / §16 pass
+Selection: A — Auto Ready のみ有効化
+Auto Merge: HUMAN_ONLY 継続
+authorityRef（§2.4 item 1）:
+  https://github.com/yasutakesougo/severe-behavior-support-spfx/pull/487#issuecomment-5369935508
+supportingRun:
+  https://cursor.com/agents/bc-01a02449-561f-7bd2-99ac-2f7c162fd984
+  bcId: bc-01a02449-561f-7bd2-99ac-2f7c162fd984
+recordedAt: 2026-08-21T12:42:48Z
+BINDING STATUS: A RECEIVED（durable）
 ```
 
-### 2.3 Non-binding candidate evidence（NOT authority）
-
-The following is recorded only as **candidate / non-durable** context from
-Cursor Cloud Agent run
-`https://cursor.com/agents/bc-01a02449-561f-7bd2-99ac-2f7c162fd984`
-（bcId `bc-01a02449-561f-7bd2-99ac-2f7c162fd984`）.
-
-A Human-attributed message in that run used the wording:
-
 ```text
-Human Enablement Selection:
-A — Auto Ready のみ有効化
-
-Auto Merge:
-HUMAN_ONLY 継続
-```
-
-Independent Definition Review-1 treated available conversational material as
-insufficient to prove durable Human Selection（recommendation / chat ambiguity
-risk）. Therefore this run citation is **NOT** accepted here as binding
-Selection authority.
-
-```text
-Candidate intent: A（Ready-only；Merge HUMAN_ONLY）
-Authority class: NON-BINDING / INSUFFICIENT ALONE
-Required next Human action: durable Selection（§2.4）
+Selection A
+  ≠ policy enabled
+  ≠ Policy Mutation GO
+  ≠ Implementation Start
+  ≠ Ready / Merge execution
 ```
 
 ### 2.4 What counts as durable Human Selection（LOCKED）
@@ -136,33 +141,19 @@ Exactly one of the following, Human-attributable, with explicit A/B/C/D:
 3. Other Human-signed durable artifact named by an Accepted authority and
    referenced by repository path or immutable URL
 
-After durable Selection lands, this definition’s banner may record:
+Current Selection A satisfies item 1 via `authorityRef` above.
 
-```text
-Human Enablement Selection: A RECEIVED
-authorityRef: <Issue/PR comment URL | Decision path@SHA | artifact ref>
-issuer: <Human identity>
-recordedAt: <timestamp>
-```
+### 2.5 Exact-slice shape under Selection A
 
-Until then:
-
-```text
-BINDING STATUS: NOT ESTABLISHED / WAITING FOR HUMAN SELECTION
-```
-
-### 2.5 Contingent exact-slice shape
-
-Sections §3–§15 describe the **contingent** Ready-only enablement slice that
-applies **if and only if** durable Selection **A** is established. If Human
-selects B/C/D instead, this contingent shape is not authorized and a new
-definition correction is required.
+Sections §3–§15 describe the Ready-only enablement slice authorized as the
+**selected definition shape** by durable Selection A. They still do not
+authorize Policy Mutation or Implementation Start.
 
 ## 3. Binding authority（non-relaxable）
 
 | Authority | Binding effect on this slice |
 |---|---|
-| Durable Human Enablement Selection（when established） | Chooses A/B/C/D；contingent A shape below applies only for A |
+| Durable Human Enablement Selection A（RECORDED） | Ready-only enablement target; Merge stays HUMAN_ONLY |
 | `docs/decisions/DEC-AI-ORG-003.md` | Human Ready/Merge boundaries remain unless a later Accepted authority explicitly changes them |
 | `docs/decisions/DEC-AA-001.md` | Auto-Approval scope; no silent expansion |
 | `docs/decisions/DEC-AA-003.md` | AUTO-UNTIL-GATE NOT ENABLED；Merge HUMAN-ONLY unless a later Selection ≠ A |
@@ -179,9 +170,9 @@ AUTO_READY_ALLOWED true ≠ Ready executed
 AUTO_MERGE_ALLOWED must remain false while merge = HUMAN_ONLY
 ```
 
-## 4. Exact enablement target（CONTINGENT on durable Selection A）
+## 4. Exact enablement target（LOCKED by durable Selection A）
 
-### In scope（later Policy Mutation GO only；after Selection A + §8 closure）
+### In scope（later Policy Mutation GO only；after §8 closure on main）
 
 When a **separate** Human Policy Mutation GO is issued against this exact
 slice, the intended durable policy outcome on main is:
@@ -418,21 +409,24 @@ docs/architecture/ai-autonomy-l1-execution-policy-combined-reconciliation-1.md
 docs/architecture/ai-autonomy-l1-execution-policy-post-merge-reconciliation-1.md
 ```
 
-Closure unit:
+Closure unit（this PR includes the closure edits）:
 
 ```text
 Kind: self-governance designated-list closure
 Touches: definition doc list + evaluator allowlist（+ focused tests）
 Ready / Merge path: HUMAN_ONLY（self-governance）
-Must merge to main BEFORE Policy Mutation GO becomes eligible
-This enablement definition PR alone does NOT close the list
+Must be MERGED to main BEFORE Policy Mutation GO becomes eligible
+Closure on this branch ≠ closure on main until merge
 ```
 
-If closure is incomplete:
+Status:
 
 ```text
-Policy Mutation GO: BLOCKED
-reason: DESIGNATED_LIST_CLOSURE_INCOMPLETE
+On this PR branch: CLOSURE EDITS INCLUDED
+On main: INCOMPLETE until this PR（or equivalent）merges
+If main lacks the required paths:
+  Policy Mutation GO: BLOCKED
+  reason: DESIGNATED_LIST_CLOSURE_INCOMPLETE
 ```
 
 ## 9. Base drift / stale evidence（UNCHANGED; reaffirmed）
@@ -478,9 +472,9 @@ If audit sink is unavailable before side effect: do not execute.
 
 | Failure | Required behavior |
 |---|---|
-| Durable Selection not established | no Policy Mutation GO; contingent A shape not authorized as selected |
+| Durable Selection not established | no Policy Mutation GO; Ready-only shape not selected |
 | Policy still NOT_ENABLED / ready HUMAN_ONLY | `AUTO_READY_ALLOWED = false` |
-| Designated-list closure incomplete | Policy Mutation GO BLOCKED |
+| Designated-list closure incomplete on main | Policy Mutation GO BLOCKED |
 | Merge path under contingent A | remain HUMAN_ONLY; no enablement |
 | Self-governance path | both false |
 | Kill switch source missing / unparseable | treat DISABLED; Ready false |
@@ -506,10 +500,10 @@ productionCapabilityDelta must be NONE for L1 Ready allowance
 
 ## 13. Required repository setting / policy changes（later GOs only）
 
-| Layer | Contingent Selection A requirement | Authorized by this definition? |
+| Layer | Selection A requirement | Authorized by this definition? |
 |---|---|---|
-| Durable Human Selection record | A + Merge HUMAN_ONLY | **NO** — Human Selection gate |
-| Designated-list closure | §8 paths on main definition + evaluator | **NO** — separate self-governance PR |
+| Durable Human Selection record | A + Merge HUMAN_ONLY | **YES — RECORDED**（§2.3 / PR comment） |
+| Designated-list closure | §8 paths on main definition + evaluator | **PARTIAL** — edits on this PR; **main closure pending merge** |
 | `docs/process/autonomy-policy-v1.md` | Ready → enabled AUTO_ALLOWED; Merge HUMAN_ONLY; kill-switch fields | **NO** — Policy Mutation GO |
 | Kill switches | Ready ENABLED; Merge DISABLED | **NO** — with Policy Mutation GO |
 | DEC / permission-matrix alignment | only if superseding Human Ready row | **NO** — separate Decision if needed |
@@ -538,58 +532,55 @@ Effect:
 Disable does **not** require deleting the classifier or L1 execution policy
 code.
 
-## 15. Acceptance criteria（Correction-1）
+## 15. Acceptance criteria（Selection recorded + closure edits）
 
-- Binding Selection A claim is WITHDRAWN until durable provenance exists
-- Candidate chat/run evidence is explicitly NON-BINDING
-- Contingent Ready-only / Merge-HUMAN_ONLY shape remains explicit
+- Durable Selection A is recorded with §2.4 authorityRef
+- Prior premature A RECEIVED claim remains WITHDRAWN historically
+- Ready-only / Merge-HUMAN_ONLY shape is explicit under Selection A
 - Primary authority remains `docs/process/autonomy-policy-v1.md`
-- Kill-switch source / observation / enforcement boundaries are fixed（§7）
-- Designated-list closure is a hard Policy Mutation GO eligibility gate（§8）
+- Kill-switch source / observation / enforcement boundaries remain fixed（§7）
+- Designated-list closure edits are included; main eligibility awaits merge（§8）
 - Executor remains ABSENT / not created by this packet
 - Production capability remains separated
-- This definition alone causes **no** policy text change and **no** Ready execution
+- Selection alone causes **no** autonomy-policy-v1 enablement mutation and **no** Ready execution
 
-## 16. Later unit sequence（not started；eligibility ordered）
+## 16. Later unit sequence（eligibility ordered）
 
 ```text
-0. Durable Human Enablement Selection（A/B/C/D）— WAITING
-1. Independent Definition Re-Review-1 on Correction-1
-2. IF Selection A: self-governance designated-list closure PR → main
+0. Durable Human Enablement Selection A — RECORDED
+1. Independent Definition Re-Review-1 on current HEAD
+2. Designated-list closure MERGED to main（this PR’s closure edits）
 3. Human Policy Mutation GO（Ready-only autonomy-policy-v1 + kill-switch fields）
-   — BLOCKED until 0=A and 2 complete
+   — BLOCKED until 2 is on main
 4. Optional: Independent Review / Ready / Merge of that policy PR（Human）
 5. Optional: Ready executor Implementation Start（separate exact slice）
 6. Optional: workflow / settings GO only if policy names them
 7. Auto Merge enablement: NOT in this sequence（requires Selection ≠ A）
 ```
 
-Each arrow is a separate Gate. Definition Re-Review PASS ≠ Selection ≠
-designated-list closure ≠ Policy Mutation GO ≠ Implementation Start ≠
-Ready execution.
+Each arrow is a separate Gate. Definition Re-Review PASS ≠ designated-list
+on main ≠ Policy Mutation GO ≠ Implementation Start ≠ Ready execution.
 
 ## 17. Explicit non-claims
 
-This definition does **not**:
+This definition / Selection record does **not**:
 
-- establish durable Human Enablement Selection A
-- mutate `docs/process/autonomy-policy-v1.md`
-- close the self-governance designated list by itself
-- enable AUTO-1 globally
+- mutate `docs/process/autonomy-policy-v1.md` capability enablement
 - authorize Auto Ready execution
 - authorize Auto Merge enablement or execution
 - create or register a Ready/Merge executor
-- change GitHub settings or workflows
+- change GitHub settings or workflows（beyond recording Selection comment）
 - authorize Deploy / LIVE WRITE / Production Binding
 - close or mutate Issues
 - accept or lock Decisions by Agent
+- make Policy Mutation GO eligible before designated-list closure is on main
 
-## 18. Correction closure map（Correction-1）
+## 18. Correction closure map（Correction-1；unchanged findings）
 
 | Finding | Severity | Correction-1 lock |
 |---|---|---|
-| P1-1 Selection A provenance | P1 | §2 binding claim WITHDRAWN; Selection gate reopened; durable authority rule fixed; candidate run evidence NON-BINDING |
-| P1-2 designated-list gap | P1 | §8 designated-list closure required on main before Policy Mutation GO eligibility |
+| P1-1 Selection A provenance | P1 | premature claim WITHDRAWN; durable §2.4 rule fixed; Selection A later recorded via PR comment authorityRef |
+| P1-2 designated-list gap | P1 | §8 designated-list closure required on main before Policy Mutation GO; closure edits included on this PR |
 | P2-1 kill-switch authority underspecified | P2 | §7 source = autonomy-policy-v1.md; observation = evaluator evidence bound to base HEAD; enforcement = evaluator deny + executor re-check; Agent cannot flip |
 
 ```text
@@ -598,40 +589,37 @@ P1 remaining after Correction-1 text: none（pending Re-Review）
 P2 remaining after Correction-1 text: none（pending Re-Review）
 ```
 
-## 19. CURRENT / GATE / NEXT（Correction-1）
+## 19. CURRENT / GATE / NEXT
 
 ```text
 CURRENT
-  Human Enablement Selection: WAITING（binding A WITHDRAWN）
-  Candidate intent: A（NON-BINDING）
-  Exact-slice definition: CORRECTION-1 COMPLETE
+  Human Enablement Selection: A RECEIVED（durable）
+  Auto Merge: HUMAN_ONLY 継続
+  authorityRef: PR #487 comment 5369935508
+  Exact-slice definition: CORRECTION-1 + Selection recorded
+  Designated-list closure: INCLUDED ON PR / pending main merge
   Policy on main: still ACCEPTED / NOT ENABLED；ready/merge HUMAN_ONLY
-  Designated-list closure: INCOMPLETE
   Executor: ABSENT
 
 GATE
   Independent Definition Re-Review-1: REQUIRED
-  Durable Human Selection: WAITING
-  Policy Mutation GO: BLOCKED
+  Policy Mutation GO: BLOCKED（await designated-list on main + separate GO）
   Implementation Start: NOT AUTHORIZED
   Ready / Merge / Auto Ready / Auto Merge execution: NOT AUTHORIZED
 
 ALLOWED now
-  docs-only Correction-1 review
-  Human durable Selection recording
+  Definition / closure review on this PR
   read-only observation
 
 FORBIDDEN now
-  treating candidate chat as Selection A
-  autonomy-policy-v1 mutation
+  autonomy-policy-v1 enablement mutation
   GitHub settings / workflow / executor mutation
   Auto Ready / Auto Merge execution
   Deploy / LIVE WRITE / Production Binding
 
 NEXT
-  Human:
-    1. Durable Enablement Selection（A/B/C/D）per §2.4
-    2. Independent Definition Re-Review-1 on Correction-1
+  Human / Independent Reviewer:
+    Re-Review-1 on current HEAD；then Human Ready/Merge of this PR
   Agent:
     STOP on Policy Mutation / Implementation Start
 ```
