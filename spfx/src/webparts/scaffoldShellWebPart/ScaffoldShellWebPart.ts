@@ -9,7 +9,7 @@ import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 import { IReadonlyTheme } from "@microsoft/sp-component-base";
 
 import * as strings from "ScaffoldShellWebPartStrings";
-import { SHELL_UX_DEFAULT_FIXTURE } from "../../shell/ux";
+import { DEMO_1_FIELD_STAFF_FIXTURE } from "../../shell/ux/fixture";
 import ScaffoldShell from "./components/ScaffoldShell";
 import { IScaffoldShellProps } from "./components/IScaffoldShellProps";
 
@@ -26,7 +26,7 @@ export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffol
   private _environmentMessage: string = "";
 
   public render(): void {
-    const fixture = SHELL_UX_DEFAULT_FIXTURE;
+    const fixture = DEMO_1_FIELD_STAFF_FIXTURE;
     const element: React.ReactElement<IScaffoldShellProps> = React.createElement(ScaffoldShell, {
       description: this.properties.description,
       isDarkTheme: this._isDarkTheme,
