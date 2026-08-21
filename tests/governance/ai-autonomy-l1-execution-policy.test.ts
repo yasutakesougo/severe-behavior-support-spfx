@@ -251,4 +251,30 @@ describe("evaluateL1ExecutionPolicy", () => {
     assert.equal(result.autoMergeAllowed, true);
     assert.equal(result.reasons.length, 0);
   });
+
+  it("denies merge when fresh base policy returns Ready to HUMAN_ONLY after base drift", () => {
+    const advancedBase = "ffffffffffffffffffffffffffffffffffffffff";
+    const preMerge = passingPreMerge();
+    const result = evaluateL1ExecutionPolicy({
+      ...passingInput(),
+      repositoryPolicy: autoAllowedPolicy(baseHead),
+      preMerge: {
+        ...preMerge,
+        currentBaseHeadSha: advancedBase,
+        readyTimeBaseHeadSha: baseHead,
+        baseRelativeEvidenceRevalidated: true,
+        repositoryPolicy: {
+          status: "PASS",
+          sourcePath: "docs/process/autonomy-policy-v1.md",
+          baseHeadSha: advancedBase,
+          ready: "HUMAN_ONLY",
+          merge: "AUTO_ALLOWED",
+        },
+      },
+    });
+
+    assert.equal(result.autoReadyAllowed, true);
+    assert.equal(result.autoMergeAllowed, false);
+    assert.ok(result.reasons.includes("REPOSITORY_AUTONOMY_POLICY_HUMAN_ONLY"));
+  });
 });

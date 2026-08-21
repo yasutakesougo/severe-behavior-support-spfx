@@ -279,6 +279,8 @@ function addPreMergeReasons(
 
   const currentBaseHeadSha = preMerge.currentBaseHeadSha;
   if (currentBaseHeadSha !== undefined) {
+    // Fresh-base Auto Ready re-evaluation before Auto Merge predicates.
+    addPolicyAuthorityReasons(preMerge.repositoryPolicy, currentBaseHeadSha, "ready", reasons);
     addPolicyAuthorityReasons(preMerge.repositoryPolicy, currentBaseHeadSha, "merge", reasons);
   }
 
@@ -306,6 +308,8 @@ export function evaluateL1ExecutionPolicy(input: L1ExecutionPolicyInput): L1Exec
   const uniqueReadyReasons = [...new Set(readyReasons)];
   const autoReadyAllowed = uniqueReadyReasons.length === 0;
 
+  // Merge requires Ready predicates on the fresh pre-merge evidence set as well
+  // as Ready-time denies (seeded below) and merge-specific checks.
   const mergeReasons = [...uniqueReadyReasons];
   addPolicyAuthorityReasons(
     input.repositoryPolicy,
@@ -318,7 +322,7 @@ export function evaluateL1ExecutionPolicy(input: L1ExecutionPolicyInput): L1Exec
   const uniqueMergeReasons = [...new Set(mergeReasons)];
   return {
     autoReadyAllowed,
-    autoMergeAllowed: autoReadyAllowed && uniqueMergeReasons.length === 0,
+    autoMergeAllowed: uniqueMergeReasons.length === 0,
     reasons: uniqueMergeReasons,
   };
 }
