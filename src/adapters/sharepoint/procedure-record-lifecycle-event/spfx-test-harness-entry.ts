@@ -8,12 +8,8 @@
  * reproducible without leaking root-relative imports into the SPFx rootDir.
  */
 
-import {
-  createProcedureRecordCancellationSharePointStoragePort as createCanonicalStoragePort,
-} from "./cancellation-storage-port";
-import {
-  bindProcedureRecordLifecycleEventList as bindCanonicalList,
-} from "./list-binding";
+import { createProcedureRecordCancellationSharePointStoragePort as createCanonicalStoragePort } from "./cancellation-storage-port";
+import { bindProcedureRecordLifecycleEventList as bindCanonicalList } from "./list-binding";
 import type { ProcedureRecordLifecycleEventListTransport as CanonicalTransport } from "./transport-seam";
 
 export type B2ProcedureRecordLifecycleEvent = Readonly<{
