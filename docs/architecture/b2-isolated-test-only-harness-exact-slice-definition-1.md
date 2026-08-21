@@ -4,8 +4,8 @@
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 
 STATUS:
-DEFINITION CORRECTION COMPLETE
-READY FOR INDEPENDENT DEFINITION RE-REVIEW-2
+DEFINITION CORRECTION-2 COMPLETE
+READY FOR INDEPENDENT DEFINITION RE-REVIEW-3
 
 BASE:
 main@3e4e2dee195ce82299b62f4b668d50cb563d2c68
@@ -16,11 +16,18 @@ B2 — ISOLATED TEST-ONLY HARNESS
 SELECTED / LOCKED
 
 PRIOR REVIEW:
-B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-1
+B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-2
 RESULT: PASS-WITH-CORRECTIONS
-P1-1: CLOSED (exact review target available)
-P1-2 / P1-3 / P1-4: addressed in this correction
-P2-1: addressed in this correction (non-blocking candidate closed in definition)
+P0: none
+P1-2: OPEN / BLOCKING (addressed in Correction-2)
+P1-3: PASS
+P1-4: PASS
+P2-1 core: PASS
+P2-a / P2-b: OPEN / non-blocking (addressed in Correction-2)
+
+Prior Re-Review-1:
+PASS-WITH-CORRECTIONS (consumed)
+P1-1: CLOSED
 
 Implementation Start:
 NOT AUTHORIZED
@@ -34,7 +41,7 @@ NOT AUTHORIZED
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 Kind: read-only exact-slice definition
-Independent Definition Re-Review-2: NOT YET COMPLETE
+Independent Definition Re-Review-3: NOT YET COMPLETE
 Human Implementation Start GO: NOT YET ELIGIBLE
 Issue mutation: FORBIDDEN
 Production Binding: NOT ACTIVE (Option A KEEP unbound)
@@ -128,11 +135,12 @@ spfx/src/webparts/scaffoldShellWebPart/*
 Slice C は、CREATED 後の `LifecycleEventId` mandatory read-back と、
 INDETERMINATE 後の dual lookup を既に所有している。
 
-GO gate の構造先例（purpose / GUID は流用禁止）:
+GO gate の構造先例（purpose / GUID / field-shape-only mint は流用禁止）:
 
 ```text
 spfx/src/adapters/procedure-record/live-write-gate.ts
   structure only — ProcedureRecord purpose / List GUID MUST NOT be reused
+  field-shape-only authorization pattern MUST NOT be copied (see §4.C CRITICAL)
 ```
 
 ## 4. Exact implementation slice — future GO only
@@ -153,7 +161,7 @@ domain semantics は変更しない。
 REGENERATE:
 spfx/src/sbs-domain/cancellation-persist.bundle.js
 
-MODIFY:
+REGENERATE / CHECK:
 spfx/src/sbs-domain/cancellation-persist.bundle.d.ts
 ```
 
@@ -189,26 +197,41 @@ spfx/src/sbs-domain/README.md
 既存 Slice E は transport と binding の一致確認、schema verification、
 CANCEL-only append を既に実装している。
 
-GENERATED BRIDGE DRIFT GUARD（LOCKED; P2-1）:
+GENERATED BRIDGE DRIFT GUARD（LOCKED; P2-1 / P2-a）:
 
 ```text
 named canonical entrypoint:
   src/adapters/sharepoint/procedure-record-lifecycle-event/
     spfx-test-harness-entry.ts
 
-exact generation command (record in spfx/src/sbs-domain/README.md):
+JS generation command (record in spfx/src/sbs-domain/README.md):
   npx esbuild \
     src/adapters/sharepoint/procedure-record-lifecycle-event/spfx-test-harness-entry.ts \
     --bundle --format=cjs --target=es2015 --platform=neutral \
     --outfile=spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.js
 
-generated bundle hand-edit:
-  FORBIDDEN
-  (.js and .d.ts)
+GENERATED DECLARATION DRIFT（LOCKED; P2-a）:
+  .js AND .d.ts MUST each have a defined reproducible
+  production/check path.
 
-acceptance:
-  regenerate → git diff --exit-code clean
-  .d.ts export surface equals allowed exports only
+  Implementation MUST record in spfx/src/sbs-domain/README.md:
+  - JS generation command
+  - declaration production/check command
+  - canonical entrypoint
+  - generated outputs
+
+  Concrete declaration tool command:
+    NOT invented in this Definition
+    Implementation design locks a repository-supported toolchain command
+
+  generated outputs hand-edit:
+    FORBIDDEN
+    (.js and .d.ts)
+    No manual drift is permitted
+
+  acceptance:
+    generation/check commands → git diff --exit-code clean
+    .d.ts export surface equals allowed exports only
 ```
 
 ### C. Human GO execution gate
@@ -217,8 +240,16 @@ acceptance:
 NEW:
 spfx/src/adapters/procedure-record-lifecycle-event/
   test-only-live-create-gate.ts
+```
 
-Required packet:
+TRUSTED RECEIPT PROVENANCE BOUNDARY（LOCKED; P1-2 / Correction-2）:
+
+```text
+HumanGoRequestPacket
+  ≠
+TrustedReceiptProvenanceEvidence
+
+HumanGoRequestPacket (field-shape / request material):
 - dedicated lifecycle-test-only purpose
 - humanLiveCreateGo = true
 - expected main SHA
@@ -233,33 +264,33 @@ Required packet:
     update = 0
     delete = 0
 
-Invalid / mismatch:
+Reconstructing every HumanGoRequestPacket field
+MUST NOT constitute Human GO authorization.
+POST = 0
+
+TrustedReceiptProvenanceEvidence:
+- trust material DISTINCT from HumanGoRequestPacket
+- NOT derivable / reconstructible from public/request fields alone
+- harness / UI / caller / composition MUST NOT mint or issue
+- issued only by Human Control authority outside the harness process
+- harness may verify + consume only
+- arbitrary / caller-created evidence → authorization NONE / POST = 0
+- missing evidence → authorization NONE / POST = 0
+- packet valid + provenance invalid/missing → authorization NONE / POST = 0
+
+Concrete channel:
+  Implementation design (deferred)
+  Allowed examples (NOT selected here):
+  - opaque receipt handle + external consume registry
+  - signed artifact
+
+CRITICAL:
+  ProcedureRecord live-write-gate field-shape-only authorization
+  pattern MUST NOT be copied for B2 harness GO.
+
+Invalid / mismatch (packet OR provenance OR host):
 authorization = NONE
 POST = 0
-```
-
-Field-shape validation is necessary but **not sufficient**.
-
-TRUSTED RECEIPT PROVENANCE BOUNDARY（LOCKED; P1-2）:
-
-```text
-A structurally valid object alone MUST NOT constitute Human GO.
-
-Trusted provenance =
-  Human-issued receipt artifact bound outside the harness process
-  (Human Control / operator GO packet),
-  presented for validation + consume only.
-
-Harness / caller / composition / UI MUST NOT mint a trusted receipt.
-
-Self-issued / caller-constructed isomorphic packet:
-  authorization = NONE
-  POST = 0
-
-Signing / crypto mechanism:
-  NOT selected here
-  (Implementation Start design may choose a concrete channel;
-   the provenance boundary itself is fixed now.)
 ```
 
 RECEIPT ANTI-REPLAY BOUNDARY（LOCKED; P1-3）:
@@ -284,10 +315,6 @@ persist/consume mechanism:
   (invariant locked here)
 ```
 
-既存 ProcedureRecord 側に SHA / GUID / identity / mutation-budget を照合して
-run-scoped authorization を発行する先例がある。その構造は参照できるが、
-ProcedureRecord 用 purpose / GUID を流用してはいけない。
-
 ### D. Controlled GATE-3 composition
 
 ```text
@@ -305,6 +332,7 @@ Rules:
 - receipt-level anti-replay is enforced by harness authorization layer
   before / around transport construction
   (GATE-3 in-transport identity Set alone is NOT sufficient)
+- MUST NOT mint TrustedReceiptProvenanceEvidence
 ```
 
 ## 5. Separate SPFx entrypoint
@@ -316,9 +344,15 @@ spfx/src/webparts/lifecycleCreateTestHarness/
   LifecycleCreateTestHarnessWebPart.manifest.json
   components/LifecycleCreateTestHarness.tsx
   components/ILifecycleCreateTestHarnessProps.ts
+  loc/*
+    (independent harness localization artifacts;
+     NOT a copy of ScaffoldShellWebPart loc/)
 
 MODIFY:
 spfx/config/config.json
+  - lifecycleCreateTestHarness bundle registration
+    (second independent bundle; do not import into scaffold-shell)
+  - LifecycleCreateTestHarness localizedResources registration
 ```
 
 現在は `scaffold-shell-web-part` の1 bundle しかない。B2 はそこへ import せず、
@@ -330,6 +364,7 @@ Harness は最低限、次だけにする。
 1. current physical target表示
 2. read-only preflight
 3. GO receipt input/validation
+   (HumanGoRequestPacket + TrustedReceiptProvenanceEvidence)
 4. frozen synthetic CANCEL確認
 5. explicit Execute button
 6. result/evidence表示
@@ -372,6 +407,7 @@ arbitrary lifecycle event input
 SUPERSEDE
 UPDATE
 DELETE
+TrustedReceiptProvenanceEvidence mint/issue in harness / UI / caller / composition
 ```
 
 ## 6. Synthetic input boundary
@@ -423,6 +459,8 @@ Deploy authorization ではない。
 - production lifecycle barrel synthetic CREATE export = NO
 - tenant-wide package availability ≠ harness executable authority
 - wrong runtime host/site/context → authorization NONE / POST 0
+- harness loc/* present (independent; not ScaffoldShell loc copy)
+- config.json registers harness bundle + localizedResources
 ```
 
 ### AUTHORIZATION
@@ -430,9 +468,13 @@ Deploy authorization ではない。
 ```text
 - missing GO → POST 0
 - malformed GO → POST 0
-- structurally valid object alone ≠ Human GO
-- self-issued / caller-constructed receipt → authorization NONE / POST 0
-- trusted Human-issued provenance missing → authorization NONE / POST 0
+- complete HumanGoRequestPacket only → POST 0
+- self-constructed isomorphic HumanGoRequestPacket → POST 0
+- TrustedReceiptProvenanceEvidence absent → POST 0
+- arbitrary / caller-created provenance value → POST 0
+- trusted provenance verification failure → POST 0
+- packet valid + provenance invalid/missing → POST 0
+- harness bundle contains no trusted receipt mint/issue path
 - SHA mismatch → POST 0
 - Site mismatch → POST 0
 - List GUID mismatch → POST 0
@@ -494,9 +536,12 @@ Deploy authorization ではない。
 
 ```text
 - lifecycle-cancellation-storage.bundle named canonical entrypoint recorded
-- exact generation command recorded in spfx/src/sbs-domain/README.md
+- JS generation command recorded in spfx/src/sbs-domain/README.md
+- declaration production/check command recorded
+  (repository-supported toolchain; not invented in this Definition)
+- generated outputs (.js and .d.ts) recorded
 - generated .js / .d.ts hand-edit FORBIDDEN
-- regenerate → git diff --exit-code clean
+- generation/check commands → git diff --exit-code clean
 - .d.ts export surface equals allowed exports only
 ```
 
@@ -519,7 +564,11 @@ Option B LIVE CREATE GO
 lifecycle semantics changes
 Slice A/B/C/E redesign
 GATE-3 reimplementation
+concrete TrustedReceiptProvenanceEvidence channel selection
+  (deferred to Implementation design; boundary locked)
 signing / crypto algorithm selection (deferred to Implementation design)
+concrete declaration tool command selection
+  (deferred; repository-supported toolchain only)
 toolbox / manifest concrete knobs (deferred; fail-closed acceptance locked)
 ```
 
@@ -528,7 +577,7 @@ toolbox / manifest concrete knobs (deferred; fail-closed acceptance locked)
 将来 Implementation Start 後に rollback する場合の境界（定義のみ; 実行しない）:
 
 ```text
-- revert harness web part / second bundle / config.json entries
+- revert harness web part / second bundle / loc / config.json entries
 - revert GO gate + composition files
 - revert Slice C bridge re-export + regenerated cancellation-persist bundle
 - revert Slice E spfx-test-harness-entry + lifecycle-cancellation-storage bundle
@@ -542,15 +591,14 @@ toolbox / manifest concrete knobs (deferred; fail-closed acceptance locked)
 
 ```text
 CURRENT:
-B2 exact-slice definition = CORRECTION COMPLETE
-Independent Definition Re-Review-1 = PASS-WITH-CORRECTIONS (consumed)
-P1-1 = CLOSED
-P1-2 / P1-3 / P1-4 / P2-1 = addressed in definition text
-Independent Definition Re-Review-2 = NOT YET COMPLETE
+B2 exact-slice definition = CORRECTION-2 COMPLETE
+Independent Definition Re-Review-2 = PASS-WITH-CORRECTIONS (consumed)
+P1-2 / P2-a / P2-b = addressed in Correction-2 text
+Independent Definition Re-Review-3 = NOT YET COMPLETE
 Human Implementation Start GO = NOT YET ELIGIBLE
 
 NEXT:
-Independent Definition Re-Review-2
+Independent Definition Re-Review-3 (focused)
 
 Only if review returns:
 PASS
@@ -571,7 +619,7 @@ Agent Router v2 の独立性を維持するため、別 ChatGPT / Codex セッ�
 次を渡すのが適切である。
 
 ```text
-B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-2
+B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-3
 
 AGENT:
 Independent Reviewer
@@ -579,15 +627,20 @@ Independent Reviewer
 MODE:
 READ-ONLY
 
+SCOPE:
+focused (not full 18-item re-open)
+
 BASE:
 main@3e4e2dee195ce82299b62f4b668d50cb563d2c68
 
 PRIOR:
-B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-1
+B2-ISOLATED-TEST-ONLY-HARNESS-INDEPENDENT-DEFINITION-RE-REVIEW-2
 RESULT: PASS-WITH-CORRECTIONS
-P1-1 CLOSED
-P1-2 / P1-3 / P1-4 OPEN (addressed in correction)
-P2-1 OPEN (addressed in correction)
+P1-2 OPEN / BLOCKING → Correction-2 target
+P1-3 PASS
+P1-4 PASS
+P2-1 core PASS
+P2-a / P2-b OPEN → Correction-2 target
 
 AUTHORITY:
 docs/architecture/live-create-test-only-runtime-path-decision-1.md
@@ -596,34 +649,23 @@ TARGET:
 PR #480
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 docs/architecture/b2-isolated-test-only-harness-exact-slice-definition-1.md
-(use PR HEAD after this correction commit)
+(use PR HEAD after Correction-2 commit)
 
-REVIEW QUESTIONS:
+VERIFY:
 
-1. B2 SELECTED / LOCKED と完全整合しているか
-2. ScaffoldShellWebPart fixture-only を破らないか
-3. Production Binding Option A KEEP unbound を破らないか
-4. existing GATE-3 を再実装していないか
-5. canonical Slice C/E をコピーせず bridge reuse しているか
-6. SPFx rootDir bridge 方針が既存 architecture と整合するか
-7. synthetic CREATE mint が GO validation を迂回できない設計か
-   （trusted receipt provenance / no self-authorization 含む）
-8. render/onInit/preflight から POST 到達不能か
-9. arbitrary Site/List に POST できないか
-   （runtime host/context match 含む）
-10. arbitrary payload / SUPERSEDE が到達不能か
-11. one-POST / zero-retry invariant を維持できるか
-    （receipt-level anti-replay / one GO = max one POST 含む）
-12. CREATED mandatory EventId read-back を維持するか
-13. INDETERMINATE dual reconciliation を維持するか
-14. UPDATE/DELETE が増えていないか
-15. package version bump と Deploy GO が分離されているか
-16. test-only web part の tenant-wide availability が
-    unauthorized write capabilityを生まないか
-    （package availability ≠ executable authority）
-17. bridge/generated bundle に contract drift risk がないか
-    （named entrypoint / regen / hand-edit ban / diff-clean / .d.ts）
-18. exact slice に不足・過剰なファイルがないか
+1. P1-2 closed per Correction-2 lock
+   HumanGoRequestPacket ≠ TrustedReceiptProvenanceEvidence
+   reconstruct packet alone → POST 0
+   no live-write-gate field-shape-only mint copy
+2. P2-a closed
+   .js AND .d.ts reproducible production/check path
+   no invented declaration command in Definition
+3. P2-b closed
+   harness loc/* in exact slice
+   config.json bundle + localizedResources named
+4. P1-3 / P1-4 / B2 authority / Option A / ScaffoldShell fixture-only
+   remain unbroken by Correction-2 text
+5. Implementation Start still NOT AUTHORIZED
 
 CLASSIFY:
 P0
@@ -644,6 +686,15 @@ P1:
 P2:
 ...
 
+P1-2 TRUSTED RECEIPT PROVENANCE:
+PASS / FAIL
+
+P2-a GENERATED DECLARATION DRIFT:
+PASS / FAIL
+
+P2-b HARNESS LOCALIZATION SLICE:
+PASS / FAIL
+
 EXACT-SLICE MINIMALITY:
 PASS / FAIL
 
@@ -652,6 +703,12 @@ PASS / FAIL
 
 SECURITY / WRITE BOUNDARY:
 PASS / FAIL
+
+SCAFFOLD SHELL FIXTURE-ONLY:
+PRESERVED / NOT PRESERVED
+
+PRODUCTION BINDING OPTION A:
+PRESERVED / NOT PRESERVED
 
 IMPLEMENTATION START ELIGIBILITY:
 READY FOR HUMAN GO
@@ -696,10 +753,10 @@ This exact-slice definition DOES NOT authorize:
 CURRENT ACTION: STOP
 
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1:
-DEFINITION CORRECTION COMPLETE
-READY FOR INDEPENDENT DEFINITION RE-REVIEW-2
+DEFINITION CORRECTION-2 COMPLETE
+READY FOR INDEPENDENT DEFINITION RE-REVIEW-3
 
-Independent Definition Re-Review-2: NOT YET COMPLETE
+Independent Definition Re-Review-3: NOT YET COMPLETE
 Implementation Start: NOT AUTHORIZED
 code mutation: NOT AUTHORIZED
 Deploy / App Catalog: NOT AUTHORIZED
