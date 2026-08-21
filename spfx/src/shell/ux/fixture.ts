@@ -54,6 +54,20 @@ export const SHELL_UX_DEFAULT_FIXTURE: ShellUxFixture = {
   partialRetrieval: SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
 };
 
+/**
+ * DEMO-1 synthetic entry fixture.
+ * Selects only a display fixture site so the existing FIELD_STAFF / Overview flow is visible.
+ * This is not tenant observation, membership resolution, authorization, or LIVE binding.
+ */
+export const DEMO_1_FIELD_STAFF_FIXTURE: ShellUxFixture = {
+  ...SHELL_UX_DEFAULT_FIXTURE,
+  siteSelection: "SITE-ISG",
+  selectedDestination: "overview",
+  presentationRole: "FIELD_STAFF",
+  correlationId: "demo-1-field-staff-synth-corr",
+  errorCode: "DEMO-1-SYNTH-E001",
+};
+
 export const SHELL_UX_SLICE = {
   id: "SHELL-UX-7",
   liveTenantIoAuthorized: false as const,
