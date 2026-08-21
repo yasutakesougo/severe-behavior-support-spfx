@@ -15,6 +15,7 @@
     "check:contracts-boundaries": "node scripts/ci/check-contracts-boundaries.mjs",
     "check:scope": "node scripts/ci/check-scope.mjs",
     "check:a11y": "node scripts/ci/check-accessibility-gate.mjs",
+    "check:spfx-release-gate0": "node scripts/ci/check-spfx-release-gate0.mjs",
     "lint:ui-sem": "node scripts/ui-sem/run.mjs",
     "verify:skills": "node scripts/verify-skills.mjs",
     "verify:ui-catalog": "node scripts/verify-ui-catalog.mjs",
