@@ -94,10 +94,12 @@ This reconciliation does **not**:
 
 ```text
 P1-1: RESOLVED by normalization（not by proving LOCK）
-Selection: SELECTED
-Acceptance: NOT YET
-LOCKED: NO
-Ready: BLOCKED
+Selection: SELECTED / CONFIRMED
+Acceptance: ACCEPTED / LOCKED（separate unit；Human Decision A）
+  authority: docs/architecture/cancel-slice-e-physical-naming-acceptance-1.md
+LOCKED: YES（scoped naming only；via Acceptance）
+Ready: NOT AUTHORIZED / NOT RUN
 Merge: NOT AUTHORIZED / NOT RUN
-Next Human unit: CANCEL-SLICE-E-PHYSICAL-NAMING-ACCEPTANCE-1
+#475 / Provisioning / SharePoint WRITE / LIVE WRITE /
+  Production Binding / Deploy: NOT AUTHORIZED by naming Acceptance
 ```
