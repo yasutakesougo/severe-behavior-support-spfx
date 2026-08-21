@@ -38,7 +38,7 @@ that may invoke an **injected** draft→ready mutation port only when:
 
 1. `evaluateL1ExecutionPolicy` returns `autoReadyAllowed = true` on fresh evidence
 2. a **fresh** kill-switch observation still shows `L1_AUTO_READY = ENABLED`
-3. audit sink accepts REQUESTED/PREPARED durable audit before side effect
+3. audit sink accepts durable PREPARED audit before side effect
 4. mode is explicitly `execute`（`dry_run` never mutates）
 
 ```text
@@ -197,11 +197,12 @@ Human Ready / Merge only.
 | all predicates pass + kill switch ENABLED + dry_run | decision DRY_RUN；mutationAttempted=false |
 | all predicates pass + kill switch ENABLED + execute | PREPARED then mutation；EXECUTED |
 | autoReadyAllowed false | DENY；no mutation |
-| kill switch DISABLED / UNKNOWN / base mismatch | DENY；no mutation |
+| kill switch DISABLED / UNKNOWN / status≠PASS / sourcePath mismatch / base mismatch | DENY；no mutation |
 | audit sink unavailable | DENY / AUDIT_UNAVAILABLE；no mutation |
 | PR already ready（not draft） | NO_OP；no mutation |
 | merge capability requested | DENY / FORBIDDEN_CAPABILITY（no merge port） |
 | mode missing / unknown | DENY |
+| execute without ReadyMutationPort | EXECUTION_FAILED；no mutation |
 
 ## 9. Authorization snapshot / NEXT
 

@@ -304,6 +304,54 @@ describe("executeL1Ready", () => {
     assert.ok(result.reasons.includes("MODE_INVALID"));
   });
 
+  it("denies when kill switch is UNKNOWN or evidence not PASS", async () => {
+    const audit = memoryAudit();
+    for (const killSwitch of [
+      { ...enabledKillSwitch(), l1AutoReady: "UNKNOWN" as const },
+      { ...enabledKillSwitch(), status: "MISSING" as const },
+      { ...enabledKillSwitch(), status: "STALE" as const },
+      {
+        ...enabledKillSwitch(),
+        sourcePath: "docs/architecture/example.md",
+      },
+    ]) {
+      let mutations = 0;
+      const result = await executeL1Ready({
+        mode: "execute",
+        target: draftTarget(),
+        policyInput: passingPolicyInput(),
+        killSwitch,
+        audit: audit.sink,
+        mutation: {
+          markReadyForReview() {
+            mutations += 1;
+          },
+        },
+      });
+      assert.equal(result.decision, "DENY");
+      assert.equal(mutations, 0);
+      assert.ok(
+        result.reasons.includes("KILL_SWITCH_DISABLED") ||
+          result.reasons.includes("KILL_SWITCH_AUTHORITY_UNAVAILABLE"),
+      );
+    }
+  });
+
+  it("records EXECUTION_FAILED when execute mode lacks a mutation port", async () => {
+    const audit = memoryAudit();
+    const result = await executeL1Ready({
+      mode: "execute",
+      target: draftTarget(),
+      policyInput: passingPolicyInput(),
+      killSwitch: enabledKillSwitch(),
+      audit: audit.sink,
+    });
+
+    assert.equal(result.decision, "EXECUTION_FAILED");
+    assert.ok(result.reasons.includes("MUTATION_FAILED"));
+    assert.equal(result.mutationAttempted, false);
+  });
+
   it("records EXECUTION_FAILED when mutation port throws", async () => {
     const audit = memoryAudit();
     const result = await executeL1Ready({
