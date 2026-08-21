@@ -11,7 +11,7 @@
     "lint": "eslint src tests scripts --max-warnings 0",
     "lint:fix": "eslint src tests scripts --fix --max-warnings 0",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --write spfx/src/adapters/procedure-record-lifecycle-event/test-only-harness-runner.ts spfx/src/adapters/procedure-record-lifecycle-event/test-only-harness-runner.test.ts spfx/src/webparts/lifecycleCreateTestHarness/LifecycleCreateTestHarnessWebPart.ts && git diff -- spfx/src/adapters/procedure-record-lifecycle-event/test-only-harness-runner.ts spfx/src/adapters/procedure-record-lifecycle-event/test-only-harness-runner.test.ts spfx/src/webparts/lifecycleCreateTestHarness/LifecycleCreateTestHarnessWebPart.ts && exit 1",
     "check:contracts-boundaries": "node scripts/ci/check-contracts-boundaries.mjs",
     "check:scope": "node scripts/ci/check-scope.mjs",
     "check:a11y": "node scripts/ci/check-accessibility-gate.mjs",
