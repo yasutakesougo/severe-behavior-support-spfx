@@ -60,4 +60,5 @@ Harness mirrors ScaffoldShellWebPart DEMO_1_FIELD_STAFF_FIXTURE entry.
 CSS: ShellUx + DashboardUx + TodaySupport + Users + UserDetail
      + CurrentProcedure + ProcedureRecordForm + DailyRecords (+ related)
 Chrome via puppeteer-core；synthetic presentation only.
+Headed walkthrough recording: demo1_browser_review_walkthrough.mp4
 ```
