@@ -5,11 +5,11 @@ define([], function () {
     DescriptionFieldLabel: "説明",
     Title: "Lifecycle CREATE test harness",
     Description:
-      "Isolated test-only surface. HumanGoRequestPacket + TrustedReceiptProvenanceEvidence required. No automatic POST.",
+      "Isolated test-only surface. SignedReceiptArtifact + frozen packet required. No automatic POST.",
     PhysicalTargetLabel: "Current physical target",
     ExpectedMainShaLabel: "expected main SHA",
     PacketLabel: "HumanGoRequestPacket (JSON)",
-    ProvenanceLabel: "TrustedReceiptProvenanceEvidence (JSON)",
+    ProvenanceLabel: "SignedReceiptArtifact (JSON)",
     ValidateButton: "Validate (no POST)",
     ExecuteButton: "Execute (explicit)",
     ResultIdle: "Idle — render/onInit did not POST.",

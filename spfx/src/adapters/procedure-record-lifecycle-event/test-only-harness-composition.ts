@@ -28,13 +28,12 @@ import {
   type HumanGoRequestPacket,
   type LifecycleTestOnlyHarnessRunAuthorization,
   type LifecycleTestOnlyRuntimeHostContext,
-  type TrustedReceiptProvenanceEvidence,
 } from "./test-only-live-create-gate";
 import type { TrustedReceiptConsumeStore } from "./test-only-receipt-consume-registry";
 
 export type TestOnlyHarnessCompositionInput = Readonly<{
-  packet: unknown;
-  provenance: unknown;
+  receipt: unknown;
+  packet?: unknown;
   runtimeHost: LifecycleTestOnlyRuntimeHostContext;
   consumeStore: TrustedReceiptConsumeStore;
   spHttpClient: ProcedureRecordLifecycleEventSpHttpClient;
@@ -64,12 +63,12 @@ export type TestOnlyHarnessCompositionResult =
  * Validates Human GO (packet + trusted provenance + host) then builds
  * Slice C persistence over Slice E storage + GATE-3 synthetic CREATE transport.
  */
-export function composeTestOnlyHarnessCancellationPersistence(
+export async function composeTestOnlyHarnessCancellationPersistence(
   input: TestOnlyHarnessCompositionInput,
-): TestOnlyHarnessCompositionResult {
-  const gate = evaluateLifecycleTestOnlyLiveCreateGo({
+): Promise<TestOnlyHarnessCompositionResult> {
+  const gate = await evaluateLifecycleTestOnlyLiveCreateGo({
+    receipt: input.receipt,
     packet: input.packet,
-    provenance: input.provenance,
     runtimeHost: input.runtimeHost,
     consumeStore: input.consumeStore,
   });
@@ -138,16 +137,4 @@ export function composeTestOnlyHarnessCancellationPersistence(
     packet: token.packet,
     postBudgetRemaining: 1,
   };
-}
-
-/** Type guard helper for callers; does not mint provenance. */
-export function isTrustedReceiptProvenanceEvidenceShape(
-  value: unknown,
-): value is TrustedReceiptProvenanceEvidence {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    (value as { kind?: unknown }).kind === "trusted-receipt-provenance-v1" &&
-    typeof (value as { handle?: unknown }).handle === "string"
-  );
 }

@@ -4,8 +4,8 @@
 B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 
 STATUS:
-DEFINITION CORRECTION-2 COMPLETE
-READY FOR INDEPENDENT DEFINITION RE-REVIEW-3
+IMPLEMENTATION CORRECTION IN PROGRESS
+INDEPENDENT IMPLEMENTATION RE-REVIEW HOLD
 
 BASE:
 main@3e4e2dee195ce82299b62f4b668d50cb563d2c68
@@ -29,8 +29,8 @@ Prior Re-Review-1:
 PASS-WITH-CORRECTIONS (consumed)
 P1-1: CLOSED
 
-Implementation Start:
-NOT AUTHORIZED
+Implementation Start GO:
+RECEIVED (B2 correction implementation)
 
 Deploy / App Catalog:
 NOT AUTHORIZED
@@ -41,8 +41,8 @@ NOT AUTHORIZED
 repository: yasutakesougo/severe-behavior-support-spfx
 Unit: B2-ISOLATED-TEST-ONLY-HARNESS-EXACT-SLICE-DEFINITION-1
 Kind: read-only exact-slice definition
-Independent Definition Re-Review-3: NOT YET COMPLETE
-Human Implementation Start GO: NOT YET ELIGIBLE
+Independent Implementation Re-Review: PASS-WITH-CORRECTIONS; corrections open
+Human Implementation Start GO: RECEIVED
 Issue mutation: FORBIDDEN
 Production Binding: NOT ACTIVE (Option A KEEP unbound)
 ```
@@ -591,14 +591,13 @@ toolbox / manifest concrete knobs (deferred; fail-closed acceptance locked)
 
 ```text
 CURRENT:
-B2 exact-slice definition = CORRECTION-2 COMPLETE
-Independent Definition Re-Review-2 = PASS-WITH-CORRECTIONS (consumed)
-P1-2 / P2-a / P2-b = addressed in Correction-2 text
-Independent Definition Re-Review-3 = NOT YET COMPLETE
-Human Implementation Start GO = NOT YET ELIGIBLE
+B2 implementation correction = P1-IMP-1/2/3/4 implemented on the named branch
+Signed receipt provenance = pinned-key verification; localStorage = consume-only
+Independent Implementation Re-Review = NOT YET COMPLETE
+Deploy / App Catalog / production binding / live mutation = FORBIDDEN
 
 NEXT:
-Independent Definition Re-Review-3 (focused)
+Independent Implementation Re-Review (focused)
 
 Only if review returns:
 PASS

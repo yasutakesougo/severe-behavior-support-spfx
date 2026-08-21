@@ -44,6 +44,21 @@ node scripts/ci/check-lifecycle-cancellation-storage-bridge.mjs
 Acceptance: generation/check commands → committed `.js` bytes match regeneration;
 `.d.ts` export surface equals allowed exports only.
 
+## B2 receipt correction
+
+`SignedReceiptArtifact` is verified with the pinned P-256 SPKI key before payload
+and runtime-host validation. The localStorage store is consume-only: it stores
+only the receipt handle, `consumed`, and `consumedAtIso`. The handle is burned
+before Slice C composition, so a timeout or reconciliation result cannot cause
+a second CREATE attempt. No issuer or private signing key is shipped in SPFx.
+
+The runner's code-basis value is generated into the ignored, build-only
+`b2-build-basis.generated.ts` by `npm run prepare:b2-build-basis`. CI supplies
+`B2_HARNESS_BUILD_BASIS_SHA=${GITHUB_SHA}`; a local reproducible build defaults
+to `git rev-parse HEAD`. An absent or malformed value fails closed. It must be
+the exact source/artifact basis used for the production package, not the
+definition document's historical base SHA.
+
 ## cancellation-persist.bundle — cancellation persistence bridge
 
 `cancellation-persist.bundle.js` is an esbuild bundle of canonical:

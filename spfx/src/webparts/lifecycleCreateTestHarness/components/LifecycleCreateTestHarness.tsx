@@ -12,7 +12,6 @@ export default function LifecycleCreateTestHarness(
 ): React.ReactElement<ILifecycleCreateTestHarnessProps> {
   const [packetJson, setPacketJson] = React.useState("");
   const [provenanceJson, setProvenanceJson] = React.useState("");
-  const [expectedMainSha, setExpectedMainSha] = React.useState("");
   const [resultText, setResultText] = React.useState(strings.ResultIdle);
   const [executeArmed, setExecuteArmed] = React.useState(true);
 
@@ -20,24 +19,22 @@ export default function LifecycleCreateTestHarness(
     setResultText(strings.ResultValidateOnly);
   };
 
-  const onExecute = (): void => {
+  const onExecute = async (): Promise<void> => {
     if (!executeArmed) {
       setResultText(strings.ResultExecuteDisabled);
       return;
     }
-    // Composition / POST wiring is invoked only from an explicit Execute path in a
-    // future authorized run. This UI does not auto-POST and does not mint provenance.
     setExecuteArmed(false);
-    setResultText(
-      [
-        strings.ResultExecuteArmedConsumed,
-        `siteIdentity=${props.siteIdentity}`,
-        `listGuid=${props.listGuid}`,
-        `packetChars=${packetJson.trim().length}`,
-        `provenanceChars=${provenanceJson.trim().length}`,
-        `expectedMainShaChars=${expectedMainSha.trim().length}`,
-      ].join(" | "),
-    );
+    try {
+      setResultText(
+        await props.onExecute(
+          JSON.parse(provenanceJson) as unknown,
+          JSON.parse(packetJson) as unknown,
+        ),
+      );
+    } catch {
+      setResultText("save_failed");
+    }
   };
 
   return (
@@ -50,19 +47,11 @@ export default function LifecycleCreateTestHarness(
           <div>{props.webAbsoluteUrl}</div>
           <div>{props.siteIdentity}</div>
           <div>{props.listGuid}</div>
+          <div>codeBasisSha={props.codeBasisSha || "unavailable"}</div>
         </dd>
       </dl>
       <label>
-        {strings.ExpectedMainShaLabel}
-        <input
-          value={expectedMainSha}
-          onChange={(event) => setExpectedMainSha(event.target.value)}
-          autoComplete="off"
-          spellCheck={false}
-        />
-      </label>
-      <label>
-        {strings.PacketLabel}
+        {strings.PacketLabel} (signed artifact payload is authoritative)
         <textarea
           value={packetJson}
           onChange={(event) => setPacketJson(event.target.value)}

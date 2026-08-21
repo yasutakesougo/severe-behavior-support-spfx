@@ -5,7 +5,6 @@
 
 export type TrustedReceiptRegistryEntry = Readonly<{
   handle: string;
-  packetBindingDigest: string;
   consumed: boolean;
   consumedAtIso?: string;
 }>;
@@ -45,7 +44,7 @@ export function getDefaultProcessTrustedReceiptConsumeStore(): TrustedReceiptCon
   };
 }
 
-const LOCAL_STORAGE_KEY = "b2-lifecycle-test-only-trusted-receipt-registry-v1";
+const LOCAL_STORAGE_KEY = "b2-lifecycle-test-only-receipt-consume-v1";
 
 export function createLocalStorageTrustedReceiptConsumeStore(
   storage: Pick<Storage, "getItem" | "setItem">,
@@ -60,7 +59,20 @@ export function createLocalStorageTrustedReceiptConsumeStore(
       if (typeof parsed !== "object" || parsed === null) {
         return {};
       }
-      return parsed as Record<string, TrustedReceiptRegistryEntry>;
+      const result: Record<string, TrustedReceiptRegistryEntry> = {};
+      const object = parsed as Record<string, unknown>;
+      for (const handle of Object.keys(object)) {
+        const value = object[handle];
+        if (
+          typeof value === "object" &&
+          value !== null &&
+          (value as { handle?: unknown }).handle === handle &&
+          typeof (value as { consumed?: unknown }).consumed === "boolean"
+        ) {
+          result[handle] = value as TrustedReceiptRegistryEntry;
+        }
+      }
+      return result;
     } catch {
       return {};
     }
