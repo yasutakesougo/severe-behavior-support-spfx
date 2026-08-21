@@ -185,6 +185,7 @@ export {
   type ShellErrorInquiryPresentation,
 } from "./error-inquiry";
 export {
+  DEMO_1_FIELD_STAFF_FIXTURE,
   SHELL_UX_DEFAULT_FIXTURE,
   SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
   SHELL_UX_SLICE,
