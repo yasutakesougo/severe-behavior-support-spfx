@@ -58,6 +58,11 @@ export type ProductionCapabilityDelta =
   | Readonly<{ status: "PRESENT"; capabilities: readonly ProductionCapability[] }>
   | Readonly<{ status: "UNKNOWN" }>;
 
+export type ChangedFileEvidence = Readonly<{
+  path: string;
+  patch: string | null;
+}>;
+
 export type ClassificationReason =
   | "L1_ALLOWLIST_ONLY"
   | "L2_BEHAVIORAL_CHANGE"
@@ -67,11 +72,11 @@ export type ClassificationReason =
   | "CLASSIFICATION_EVIDENCE_MISSING"
   | "DIFF_UNAVAILABLE"
   | "CHANGED_AREA_UNRESOLVED"
-  | "UNSTATED_SEMANTICS_REQUIRED";
+  | "UNSTATED_SEMANTICS_REQUIRED"
+  | "L1_NOT_POSITIVELY_PROVEN";
 
 export type AutonomyClassifierInput = Readonly<{
-  changedFilePaths: readonly string[];
-  diffAvailable: boolean;
+  changedFiles: readonly ChangedFileEvidence[];
   classificationEvidenceAvailable: boolean;
   changedAreaCategories: readonly ChangedAreaCategory[];
   requiresUnstatedSemantics?: boolean;
@@ -125,64 +130,111 @@ const L3_CATEGORIES = new Set<ChangedAreaCategory>([
   "POLICY_REQUIREMENT_ACCEPTANCE_AUTHORITY_CHANGE",
 ]);
 
+function normalizePath(path: string): string {
+  return path.replaceAll("\\", "/").replace(/^\.\//, "");
+}
+
+function pathRisk(path: string): AutonomyClassification {
+  const normalized = normalizePath(path);
+
+  if (
+    normalized.startsWith(".github/workflows/") ||
+    normalized.startsWith("config/package-solution") ||
+    normalized.startsWith("spfx/config/package-solution") ||
+    normalized.includes("deploy") ||
+    normalized.includes("provision") ||
+    normalized.includes("permission") ||
+    normalized.includes("production-binding") ||
+    normalized.includes("app-catalog")
+  ) {
+    return "L3";
+  }
+
+  if (
+    normalized.startsWith("src/") ||
+    normalized.startsWith("spfx/src/") ||
+    normalized.startsWith("scripts/") ||
+    normalized.endsWith("package.json") ||
+    normalized.endsWith("package-lock.json") ||
+    normalized.endsWith("tsconfig.json")
+  ) {
+    return "L2";
+  }
+
+  if (
+    normalized.startsWith("docs/") ||
+    normalized === "README.md" ||
+    normalized.startsWith("tests/") ||
+    normalized.startsWith("fixtures/") ||
+    normalized.includes("/fixtures/")
+  ) {
+    return "L1";
+  }
+
+  return "UNKNOWN";
+}
+
+function allDiffsAvailable(changedFiles: readonly ChangedFileEvidence[]): boolean {
+  return changedFiles.length > 0 && changedFiles.every((file) => file.patch !== null);
+}
+
+function classifyFromFiles(changedFiles: readonly ChangedFileEvidence[]): AutonomyClassification {
+  const risks = changedFiles.map((file) => pathRisk(file.path));
+  if (risks.includes("L3")) return "L3";
+  if (risks.includes("L2")) return "L2";
+  if (risks.includes("UNKNOWN")) return "UNKNOWN";
+  return risks.length > 0 ? "L1" : "UNKNOWN";
+}
+
 export function classifyAutonomyChange(
   input: AutonomyClassifierInput,
 ): AutonomyClassificationResult {
   if (!input.classificationEvidenceAvailable) {
-    return {
-      classification: "UNKNOWN",
-      reasons: ["CLASSIFICATION_EVIDENCE_MISSING"],
-    };
+    return { classification: "UNKNOWN", reasons: ["CLASSIFICATION_EVIDENCE_MISSING"] };
   }
 
-  if (!input.diffAvailable) {
+  if (!allDiffsAvailable(input.changedFiles)) {
     return { classification: "UNKNOWN", reasons: ["DIFF_UNAVAILABLE"] };
   }
 
   if (input.requiresUnstatedSemantics === true) {
-    return {
-      classification: "UNKNOWN",
-      reasons: ["UNSTATED_SEMANTICS_REQUIRED"],
-    };
+    return { classification: "UNKNOWN", reasons: ["UNSTATED_SEMANTICS_REQUIRED"] };
   }
 
   if (input.productionCapabilityDelta.status === "UNKNOWN") {
-    return {
-      classification: "UNKNOWN",
-      reasons: ["PRODUCTION_CAPABILITY_DELTA_UNKNOWN"],
-    };
+    return { classification: "UNKNOWN", reasons: ["PRODUCTION_CAPABILITY_DELTA_UNKNOWN"] };
   }
 
   if (input.productionCapabilityDelta.status === "PRESENT") {
-    return {
-      classification: "L3",
-      reasons: ["PRODUCTION_CAPABILITY_DELTA_PRESENT"],
-    };
+    return { classification: "L3", reasons: ["PRODUCTION_CAPABILITY_DELTA_PRESENT"] };
   }
 
-  if (input.changedAreaCategories.length === 0 || input.changedFilePaths.length === 0) {
-    return {
-      classification: "UNKNOWN",
-      reasons: ["CHANGED_AREA_UNRESOLVED"],
-    };
+  if (input.changedAreaCategories.length === 0 || input.changedFiles.length === 0) {
+    return { classification: "UNKNOWN", reasons: ["CHANGED_AREA_UNRESOLVED"] };
   }
 
-  if (input.changedAreaCategories.some((category) => L3_CATEGORIES.has(category))) {
+  const fileClassification = classifyFromFiles(input.changedFiles);
+  const hasL3Category = input.changedAreaCategories.some((category) => L3_CATEGORIES.has(category));
+  const hasL2Category = input.changedAreaCategories.some((category) => L2_CATEGORIES.has(category));
+  const allL1Categories = input.changedAreaCategories.every((category) => L1_CATEGORIES.has(category));
+
+  if (fileClassification === "L3" || hasL3Category) {
     return { classification: "L3", reasons: ["L3_HIGH_RISK_CHANGE"] };
   }
 
-  if (input.changedAreaCategories.some((category) => L2_CATEGORIES.has(category))) {
+  if (fileClassification === "L2" || hasL2Category) {
     return { classification: "L2", reasons: ["L2_BEHAVIORAL_CHANGE"] };
   }
 
-  if (input.changedAreaCategories.every((category) => L1_CATEGORIES.has(category))) {
+  if (fileClassification === "UNKNOWN") {
+    return { classification: "UNKNOWN", reasons: ["CHANGED_AREA_UNRESOLVED"] };
+  }
+
+  if (fileClassification === "L1" && allL1Categories) {
     return { classification: "L1", reasons: ["L1_ALLOWLIST_ONLY"] };
   }
 
-  return {
-    classification: "UNKNOWN",
-    reasons: ["CHANGED_AREA_UNRESOLVED"],
-  };
+  return { classification: "UNKNOWN", reasons: ["L1_NOT_POSITIVELY_PROVEN"] };
 }
 
 export type EvidenceStatus =
@@ -257,9 +309,7 @@ export type GateEvaluationResult = Readonly<{
   reasons: readonly GateReasonCode[];
 }>;
 
-function collectEvidenceStateReasons(
-  evidence: readonly HeadBoundEvidence[],
-): GateReasonCode[] {
+function collectEvidenceStateReasons(evidence: readonly HeadBoundEvidence[]): GateReasonCode[] {
   const reasons: GateReasonCode[] = [];
   for (const item of evidence) {
     if (item.status === "MISSING") reasons.push("EVIDENCE_MISSING");
@@ -312,8 +362,7 @@ export function evaluateAutonomyGate(input: GateEvaluatorInput): GateEvaluationR
 
   if (
     headBoundEvidence.some(
-      (evidence) =>
-        evidence.headSha === undefined || evidence.headSha !== input.currentHeadSha,
+      (evidence) => evidence.headSha === undefined || evidence.headSha !== input.currentHeadSha,
     )
   ) {
     reasons.push("HEAD_EVIDENCE_MISMATCH");
