@@ -129,8 +129,7 @@ type PreparedHarnessRun = Readonly<{
 }>;
 
 type PrepareResult =
-  | Readonly<{ ok: false; reason: string }>
-  | Readonly<{ ok: true; prepared: PreparedHarnessRun }>;
+  Readonly<{ ok: false; reason: string }> | Readonly<{ ok: true; prepared: PreparedHarnessRun }>;
 
 function parseJson(value: string): unknown {
   try {
