@@ -1,0 +1,81 @@
+.demoSafetyNotice {
+  align-self: flex-start;
+  max-width: 42rem;
+  padding: 0.35rem 0.65rem;
+  border-width: 1px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.demoSettingsRole {
+  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+  border-color: "[theme:neutralLight, default: #edebe9]";
+}
+
+/*
+ * VP-1 only: when the DEMO presentation-role control is present, reorder the
+ * existing shell chrome so business identity/navigation precedes the compact
+ * synthetic safety note, and visually demote demo-only controls.
+ * No workflow, auth, persistence, or navigation semantics are changed here.
+ */
+:global([data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"]) > header[role="banner"]) {
+  order: 1;
+}
+
+:global([data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"]) > nav[data-shell-ux="primary-navigation"]) {
+  order: 2;
+}
+
+:global([data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"]) > [data-shell-ux="demo-banner"]) {
+  order: 3;
+}
+
+:global([data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"]) > main#shell-ux-main) {
+  order: 4;
+}
+
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"]) > div:first-child) {
+  order: 1;
+}
+
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"]) > [data-shell-ux="current-site-label"]),
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"]) > [data-shell-ux="current-site-unselected"]) {
+  order: 2;
+}
+
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"]) > [data-shell-ux="user-display"]) {
+  order: 3;
+}
+
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"])::after) {
+  content: "デモ設定";
+  order: 4;
+  margin-top: 0.2rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid "[theme:neutralLight, default: #edebe9]";
+  color: "[theme:neutralSecondary, default: #605e5c]";
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"]) > [data-shell-ux="site-selector"]) {
+  order: 5;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  border-color: "[theme:neutralLight, default: #edebe9]";
+  background: "[theme:neutralLighterAlt, default: #faf9f8]";
+}
+
+:global([data-shell-ux="app-shell-chrome"] > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"]) > [data-shell-ux="demo-presentation-role-entry"]) {
+  order: 6;
+}
+
+@media (max-width: 768px) {
+  .demoSafetyNotice {
+    align-self: stretch;
+    max-width: none;
+  }
+}
