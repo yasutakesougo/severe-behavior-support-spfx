@@ -118,6 +118,21 @@ describe("classifyAutonomyChange", () => {
     });
   });
 
+  it("fails closed when classification evidence is unavailable", () => {
+    const result = classifyAutonomyChange({
+      changedFilePaths: ["docs/example.md"],
+      diffAvailable: true,
+      classificationEvidenceAvailable: false,
+      changedAreaCategories: ["DOCS_ONLY"],
+      productionCapabilityDelta: { status: "NONE" },
+    });
+
+    assert.deepEqual(result, {
+      classification: "UNKNOWN",
+      reasons: ["CLASSIFICATION_EVIDENCE_MISSING"],
+    });
+  });
+
   it("fails closed when diff evidence is unavailable", () => {
     const result = classifyAutonomyChange({
       changedFilePaths: ["docs/example.md"],
@@ -223,6 +238,17 @@ describe("evaluateAutonomyGate", () => {
 
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("PRODUCTION_CAPABILITY_DELTA_PRESENT"));
+  });
+
+  it("rejects unknown production capability delta", () => {
+    const input = passingGateInput();
+    const result = evaluateAutonomyGate({
+      ...input,
+      productionCapabilityDelta: { status: "UNKNOWN" },
+    });
+
+    assert.equal(result.autonomyEligible, false);
+    assert.ok(result.reasons.includes("PRODUCTION_CAPABILITY_DELTA_UNKNOWN"));
   });
 
   it("rejects rollback evidence with an external mutation", () => {
