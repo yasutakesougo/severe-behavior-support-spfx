@@ -21,36 +21,28 @@
  * No workflow, auth, persistence, or navigation semantics are changed here.
  */
 :global(
-  [data-shell-ux="app-shell-chrome"]:has(
-      [data-shell-ux="demo-presentation-role-entry"]
-    )
+  [data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"])
     > header[role="banner"]
 ) {
   order: 1;
 }
 
 :global(
-  [data-shell-ux="app-shell-chrome"]:has(
-      [data-shell-ux="demo-presentation-role-entry"]
-    )
+  [data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"])
     > nav[data-shell-ux="primary-navigation"]
 ) {
   order: 2;
 }
 
 :global(
-  [data-shell-ux="app-shell-chrome"]:has(
-      [data-shell-ux="demo-presentation-role-entry"]
-    )
+  [data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"])
     > [data-shell-ux="demo-banner"]
 ) {
   order: 3;
 }
 
 :global(
-  [data-shell-ux="app-shell-chrome"]:has(
-      [data-shell-ux="demo-presentation-role-entry"]
-    )
+  [data-shell-ux="app-shell-chrome"]:has([data-shell-ux="demo-presentation-role-entry"])
     > main#shell-ux-main
 ) {
   order: 4;
@@ -65,15 +57,15 @@
 }
 
 :global(
-    [data-shell-ux="app-shell-chrome"]
-      > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"])
-      > [data-shell-ux="current-site-label"]
-  ),
+  [data-shell-ux="app-shell-chrome"]
+    > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"])
+    > [data-shell-ux="current-site-label"]
+),
 :global(
-    [data-shell-ux="app-shell-chrome"]
-      > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"])
-      > [data-shell-ux="current-site-unselected"]
-  ) {
+  [data-shell-ux="app-shell-chrome"]
+    > header[role="banner"]:has([data-shell-ux="demo-presentation-role-entry"])
+    > [data-shell-ux="current-site-unselected"]
+) {
   order: 2;
 }
 
