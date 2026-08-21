@@ -34,10 +34,9 @@ function passingGateInput(): GateEvaluatorInput {
 }
 
 describe("classifyAutonomyChange", () => {
-  it("classifies allowlisted non-behavioral changes as L1", () => {
+  it("classifies positively proven docs-only changes as L1", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/architecture/example.md"],
-      diffAvailable: true,
+      changedFiles: [{ path: "docs/architecture/example.md", patch: "+example" }],
       classificationEvidenceAvailable: true,
       changedAreaCategories: ["DOCS_ONLY"],
       productionCapabilityDelta: { status: "NONE" },
@@ -49,10 +48,26 @@ describe("classifyAutonomyChange", () => {
     });
   });
 
-  it("promotes a mixed L1/L2 change to L2", () => {
+  it("does not let caller-supplied DOCS_ONLY downgrade a src change", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/example.md", "src/domain/example.ts"],
-      diffAvailable: true,
+      changedFiles: [{ path: "src/domain/example.ts", patch: "+behavior" }],
+      classificationEvidenceAvailable: true,
+      changedAreaCategories: ["DOCS_ONLY"],
+      productionCapabilityDelta: { status: "NONE" },
+    });
+
+    assert.deepEqual(result, {
+      classification: "L2",
+      reasons: ["L2_BEHAVIORAL_CHANGE"],
+    });
+  });
+
+  it("promotes a mixed docs/src change to L2", () => {
+    const result = classifyAutonomyChange({
+      changedFiles: [
+        { path: "docs/example.md", patch: "+docs" },
+        { path: "src/domain/example.ts", patch: "+behavior" },
+      ],
       classificationEvidenceAvailable: true,
       changedAreaCategories: ["DOCS_ONLY", "DOMAIN_LOGIC"],
       productionCapabilityDelta: { status: "NONE" },
@@ -61,12 +76,11 @@ describe("classifyAutonomyChange", () => {
     assert.equal(result.classification, "L2");
   });
 
-  it("promotes any L3 changed area over lower-risk categories", () => {
+  it("promotes workflow changes to L3 even when caller labels them L1", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/example.md", ".github/workflows/release.yml"],
-      diffAvailable: true,
+      changedFiles: [{ path: ".github/workflows/release.yml", patch: "+permissions: write-all" }],
       classificationEvidenceAvailable: true,
-      changedAreaCategories: ["DOCS_ONLY", "WORKFLOW_PERMISSION_EXPANSION"],
+      changedAreaCategories: ["DOCS_ONLY"],
       productionCapabilityDelta: { status: "NONE" },
     });
 
@@ -75,10 +89,9 @@ describe("classifyAutonomyChange", () => {
 
   it("classifies a present production capability delta as L3", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["generated/output.ts"],
-      diffAvailable: true,
+      changedFiles: [{ path: "docs/example.md", patch: "+example" }],
       classificationEvidenceAvailable: true,
-      changedAreaCategories: ["DETERMINISTIC_GENERATED_ARTIFACTS"],
+      changedAreaCategories: ["DOCS_ONLY"],
       productionCapabilityDelta: {
         status: "PRESENT",
         capabilities: ["LIVE_CREATE"],
@@ -93,8 +106,7 @@ describe("classifyAutonomyChange", () => {
 
   it("fails closed when production capability delta is unknown", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/example.md"],
-      diffAvailable: true,
+      changedFiles: [{ path: "docs/example.md", patch: "+example" }],
       classificationEvidenceAvailable: true,
       changedAreaCategories: ["DOCS_ONLY"],
       productionCapabilityDelta: { status: "UNKNOWN" },
@@ -103,12 +115,25 @@ describe("classifyAutonomyChange", () => {
     assert.equal(result.classification, "UNKNOWN");
   });
 
-  it("does not classify from a file path without changed-area evidence", () => {
+  it("fails closed when any changed-file diff is unavailable", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/example.md"],
-      diffAvailable: true,
+      changedFiles: [{ path: "docs/example.md", patch: null }],
       classificationEvidenceAvailable: true,
-      changedAreaCategories: [],
+      changedAreaCategories: ["DOCS_ONLY"],
+      productionCapabilityDelta: { status: "NONE" },
+    });
+
+    assert.deepEqual(result, {
+      classification: "UNKNOWN",
+      reasons: ["DIFF_UNAVAILABLE"],
+    });
+  });
+
+  it("fails closed for an unrecognized path even if caller labels it L1", () => {
+    const result = classifyAutonomyChange({
+      changedFiles: [{ path: "unknown-area/example.txt", patch: "+example" }],
+      classificationEvidenceAvailable: true,
+      changedAreaCategories: ["DOCS_ONLY"],
       productionCapabilityDelta: { status: "NONE" },
     });
 
@@ -120,8 +145,7 @@ describe("classifyAutonomyChange", () => {
 
   it("fails closed when classification evidence is unavailable", () => {
     const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/example.md"],
-      diffAvailable: true,
+      changedFiles: [{ path: "docs/example.md", patch: "+example" }],
       classificationEvidenceAvailable: false,
       changedAreaCategories: ["DOCS_ONLY"],
       productionCapabilityDelta: { status: "NONE" },
@@ -132,31 +156,17 @@ describe("classifyAutonomyChange", () => {
       reasons: ["CLASSIFICATION_EVIDENCE_MISSING"],
     });
   });
-
-  it("fails closed when diff evidence is unavailable", () => {
-    const result = classifyAutonomyChange({
-      changedFilePaths: ["docs/example.md"],
-      diffAvailable: false,
-      classificationEvidenceAvailable: true,
-      changedAreaCategories: ["DOCS_ONLY"],
-      productionCapabilityDelta: { status: "NONE" },
-    });
-
-    assert.equal(result.classification, "UNKNOWN");
-  });
 });
 
 describe("evaluateAutonomyGate", () => {
   it("allows L1 only when every required gate condition passes", () => {
     const result = evaluateAutonomyGate(passingGateInput());
-
     assert.deepEqual(result, { autonomyEligible: true, reasons: [] });
   });
 
   it("keeps L2 ineligible even when all evidence passes", () => {
     const input = passingGateInput();
     const result = evaluateAutonomyGate({ ...input, classification: "L2" });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("CLASS_L2"));
   });
@@ -164,7 +174,6 @@ describe("evaluateAutonomyGate", () => {
   it("keeps L3 ineligible even when all evidence passes", () => {
     const input = passingGateInput();
     const result = evaluateAutonomyGate({ ...input, classification: "L3" });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("CLASS_L3"));
   });
@@ -172,7 +181,6 @@ describe("evaluateAutonomyGate", () => {
   it("fails closed for UNKNOWN classification", () => {
     const input = passingGateInput();
     const result = evaluateAutonomyGate({ ...input, classification: "UNKNOWN" });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("CLASS_UNKNOWN"));
   });
@@ -186,7 +194,6 @@ describe("evaluateAutonomyGate", () => {
         ci: { status: "PASS", headSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
       },
     });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("HEAD_EVIDENCE_MISMATCH"));
   });
@@ -203,7 +210,6 @@ describe("evaluateAutonomyGate", () => {
         contracts: { status: "INDETERMINATE", headSha: head },
       },
     });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("EVIDENCE_MISSING"));
     assert.ok(result.reasons.includes("EVIDENCE_STALE"));
@@ -220,7 +226,6 @@ describe("evaluateAutonomyGate", () => {
         review: { status: "PASS", headSha: head, p0: 1, p1: 2 },
       },
     });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("P0_PRESENT"));
     assert.ok(result.reasons.includes("P1_PRESENT"));
@@ -230,12 +235,8 @@ describe("evaluateAutonomyGate", () => {
     const input = passingGateInput();
     const result = evaluateAutonomyGate({
       ...input,
-      productionCapabilityDelta: {
-        status: "PRESENT",
-        capabilities: ["DEPLOY"],
-      },
+      productionCapabilityDelta: { status: "PRESENT", capabilities: ["DEPLOY"] },
     });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("PRODUCTION_CAPABILITY_DELTA_PRESENT"));
   });
@@ -246,7 +247,6 @@ describe("evaluateAutonomyGate", () => {
       ...input,
       productionCapabilityDelta: { status: "UNKNOWN" },
     });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("PRODUCTION_CAPABILITY_DELTA_UNKNOWN"));
   });
@@ -263,7 +263,6 @@ describe("evaluateAutonomyGate", () => {
         },
       },
     });
-
     assert.equal(result.autonomyEligible, false);
     assert.ok(result.reasons.includes("ROLLBACK_UNAVAILABLE"));
   });
