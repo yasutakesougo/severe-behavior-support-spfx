@@ -17,8 +17,7 @@ import {
 } from "./test-only-live-create-gate";
 import { createInMemoryTrustedReceiptConsumeStore } from "./test-only-receipt-consume-registry";
 
-const WEB =
-  "https://isogokatudouhome.sharepoint.com/sites/severe-support-procedurerecord-test";
+const WEB = "https://isogokatudouhome.sharepoint.com/sites/severe-support-procedurerecord-test";
 
 function packet(): HumanGoRequestPacket {
   return {
@@ -28,8 +27,7 @@ function packet(): HumanGoRequestPacket {
     siteIdentity: PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_SITE_IDENTITY,
     listGuid: PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_LIST_GUID,
     lifecycleEventId: B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecycleEventId,
-    lifecycleIdempotencyKey:
-      B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecycleIdempotencyKey,
+    lifecycleIdempotencyKey: B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecycleIdempotencyKey,
     lifecyclePayloadFingerprint:
       B2_TEST_ONLY_SYNTHETIC_CANCEL_IDENTITY.LifecyclePayloadFingerprint,
     mutationBudget: { create: 1, retryPost: 0, update: 0, delete: 0 },
@@ -208,8 +206,7 @@ function actionInput(options: {
     provenanceJson: JSON.stringify(options.provenance),
     expectedMainSha: B2_HARNESS_AUTHORITY_MAIN_SHA,
     runtimeSiteIdentity:
-      options.runtimeSiteIdentity ??
-      PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_SITE_IDENTITY,
+      options.runtimeSiteIdentity ?? PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_SITE_IDENTITY,
     webAbsoluteUrl: WEB,
     consumeStore: options.store,
     spHttpClient: options.http,
