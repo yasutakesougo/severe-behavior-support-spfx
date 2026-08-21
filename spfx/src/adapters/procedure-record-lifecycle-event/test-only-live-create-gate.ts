@@ -65,6 +65,14 @@ export type LifecycleTestOnlyGoGateResult =
       token: LifecycleTestOnlyHarnessRunAuthorization;
     }>;
 
+export type LifecycleTestOnlyGoGateInspection =
+  | Readonly<{ authorization: "NONE"; reason: string }>
+  | Readonly<{
+      authorization: "READY";
+      packet: HumanGoRequestPacket;
+      provenance: TrustedReceiptProvenanceEvidence;
+    }>;
+
 export type LifecycleTestOnlyRuntimeHostContext = Readonly<{
   siteIdentity: string;
   listGuid: string;
@@ -163,13 +171,16 @@ export function humanGoRequestPacketBindingDigest(packet: HumanGoRequestPacket):
   return `pkt1.${fnv1aHex(canonical)}`;
 }
 
-export function evaluateLifecycleTestOnlyLiveCreateGo(input: {
+/**
+ * Non-consuming validation for the Validate button and composition preconditions.
+ * A READY result is not a write token and cannot mint synthetic CREATE capability.
+ */
+export function inspectLifecycleTestOnlyLiveCreateGo(input: {
   packet: unknown;
   provenance: unknown;
   runtimeHost: LifecycleTestOnlyRuntimeHostContext;
   consumeStore: TrustedReceiptConsumeStore;
-  nowIso?: string;
-}): LifecycleTestOnlyGoGateResult {
+}): LifecycleTestOnlyGoGateInspection {
   if (!isHumanGoRequestPacket(input.packet)) {
     return { authorization: "NONE", reason: "malformed_or_incomplete_request_packet" };
   }
@@ -225,19 +236,47 @@ export function evaluateLifecycleTestOnlyLiveCreateGo(input: {
     return { authorization: "NONE", reason: "receipt_already_consumed" };
   }
 
+  return {
+    authorization: "READY",
+    packet,
+    provenance: input.provenance,
+  };
+}
+
+export function evaluateLifecycleTestOnlyLiveCreateGo(input: {
+  packet: unknown;
+  provenance: unknown;
+  runtimeHost: LifecycleTestOnlyRuntimeHostContext;
+  consumeStore: TrustedReceiptConsumeStore;
+  nowIso?: string;
+}): LifecycleTestOnlyGoGateResult {
+  const inspection = inspectLifecycleTestOnlyLiveCreateGo(input);
+  if (inspection.authorization !== "READY") {
+    return inspection;
+  }
+
+  const entry = input.consumeStore.get(inspection.provenance.handle);
+  if (!entry || entry.consumed) {
+    return { authorization: "NONE", reason: "receipt_already_consumed" };
+  }
+
   const nowIso = input.nowIso ?? new Date().toISOString();
-  input.consumeStore.set(input.provenance.handle, {
-    ...entry,
-    consumed: true,
-    consumedAtIso: nowIso,
-  });
+  try {
+    input.consumeStore.set(inspection.provenance.handle, {
+      ...entry,
+      consumed: true,
+      consumedAtIso: nowIso,
+    });
+  } catch {
+    return { authorization: "NONE", reason: "trusted_provenance_consume_failed" };
+  }
 
   return {
     authorization: "GRANTED",
     token: {
       [HARNESS_RUN_AUTHORIZATION_BRAND]: true,
-      receiptHandle: input.provenance.handle,
-      packet,
+      receiptHandle: inspection.provenance.handle,
+      packet: inspection.packet,
     },
   };
 }

@@ -1,11 +1,14 @@
 import * as React from "react";
-import type { ILifecycleCreateTestHarnessProps } from "./ILifecycleCreateTestHarnessProps";
+import type {
+  ILifecycleCreateTestHarnessProps,
+  LifecycleCreateTestHarnessUiInput,
+} from "./ILifecycleCreateTestHarnessProps";
 import * as strings from "LifecycleCreateTestHarnessWebPartStrings";
 
 /**
- * Presentation-only harness shell.
- * No onInit/render POST. Execute is explicit and disabled until GO materials are present.
- * Does not mint TrustedReceiptProvenanceEvidence.
+ * Isolated B2 harness UI.
+ * No onInit/render POST. Validate is GET-only + non-consuming GO inspection.
+ * Execute is explicit, one-shot per mounted UI instance, and delegated to the host runner.
  */
 export default function LifecycleCreateTestHarness(
   props: ILifecycleCreateTestHarnessProps,
@@ -15,43 +18,67 @@ export default function LifecycleCreateTestHarness(
   const [expectedMainSha, setExpectedMainSha] = React.useState("");
   const [resultText, setResultText] = React.useState(strings.ResultIdle);
   const [executeArmed, setExecuteArmed] = React.useState(true);
+  const [busy, setBusy] = React.useState(false);
 
-  const onValidateOnly = (): void => {
-    setResultText(strings.ResultValidateOnly);
+  const currentInput = (): LifecycleCreateTestHarnessUiInput => ({
+    packetJson,
+    provenanceJson,
+    expectedMainSha,
+  });
+
+  const onValidateOnly = async (): Promise<void> => {
+    if (busy) {
+      return;
+    }
+    setBusy(true);
+    try {
+      setResultText(await props.onValidate(currentInput()));
+    } finally {
+      setBusy(false);
+    }
   };
 
-  const onExecute = (): void => {
-    if (!executeArmed) {
+  const onExecute = async (): Promise<void> => {
+    if (!executeArmed || busy) {
       setResultText(strings.ResultExecuteDisabled);
       return;
     }
-    // Composition / POST wiring is invoked only from an explicit Execute path in a
-    // future authorized run. This UI does not auto-POST and does not mint provenance.
+
+    // UI one-shot is consumed before awaiting. Durable receipt anti-replay is enforced
+    // separately by the host localStorage consume store, so reload cannot restore a
+    // consumed Human receipt after a real attempt.
     setExecuteArmed(false);
-    setResultText(
-      [
-        strings.ResultExecuteArmedConsumed,
-        `siteIdentity=${props.siteIdentity}`,
-        `listGuid=${props.listGuid}`,
-        `packetChars=${packetJson.trim().length}`,
-        `provenanceChars=${provenanceJson.trim().length}`,
-        `expectedMainShaChars=${expectedMainSha.trim().length}`,
-      ].join(" | "),
-    );
+    setBusy(true);
+    try {
+      setResultText(await props.onExecute(currentInput()));
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
     <section data-automation-id="lifecycle-create-test-harness">
       <h2>{strings.Title}</h2>
       <p>{strings.Description}</p>
+
       <dl>
-        <dt>{strings.PhysicalTargetLabel}</dt>
-        <dd>
-          <div>{props.webAbsoluteUrl}</div>
-          <div>{props.siteIdentity}</div>
-          <div>{props.listGuid}</div>
-        </dd>
+        <dt>{strings.RuntimeHostLabel}</dt>
+        <dd>{props.webAbsoluteUrl}</dd>
+        <dd>{props.runtimeSiteIdentity}</dd>
+
+        <dt>{strings.LockedTargetLabel}</dt>
+        <dd>{props.lockedSiteIdentity}</dd>
+        <dd>{props.lockedListGuid}</dd>
+
+        <dt>{strings.AuthoritativeMainShaLabel}</dt>
+        <dd>{props.authoritativeMainSha}</dd>
+
+        <dt>{strings.FrozenSyntheticIdentityLabel}</dt>
+        <dd>{props.frozenLifecycleEventId}</dd>
+        <dd>{props.frozenLifecycleIdempotencyKey}</dd>
+        <dd>{props.frozenLifecyclePayloadFingerprint}</dd>
       </dl>
+
       <label>
         {strings.ExpectedMainShaLabel}
         <input
@@ -61,32 +88,36 @@ export default function LifecycleCreateTestHarness(
           spellCheck={false}
         />
       </label>
+
       <label>
         {strings.PacketLabel}
         <textarea
           value={packetJson}
           onChange={(event) => setPacketJson(event.target.value)}
-          rows={8}
+          rows={10}
           spellCheck={false}
         />
       </label>
+
       <label>
         {strings.ProvenanceLabel}
         <textarea
           value={provenanceJson}
           onChange={(event) => setProvenanceJson(event.target.value)}
-          rows={4}
+          rows={5}
           spellCheck={false}
         />
       </label>
+
       <div>
-        <button type="button" onClick={onValidateOnly}>
+        <button type="button" onClick={onValidateOnly} disabled={busy}>
           {strings.ValidateButton}
         </button>
-        <button type="button" onClick={onExecute} disabled={!executeArmed}>
+        <button type="button" onClick={onExecute} disabled={!executeArmed || busy}>
           {strings.ExecuteButton}
         </button>
       </div>
+
       <pre data-automation-id="lifecycle-create-test-harness-result">{resultText}</pre>
       <p>
         {strings.OperatorLabel}: {props.userDisplayName}

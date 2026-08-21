@@ -3,7 +3,7 @@
  *
  * - Sole file allowed to import synthetic CREATE mint for harness runs
  * - MUST NOT mint TrustedReceiptProvenanceEvidence
- * - GO gate PASS required before synthetic CREATE transport construction
+ * - GO inspection + binding PASS required before receipt consume / synthetic CREATE construction
  * - Does not export a generic CREATE API
  */
 
@@ -24,6 +24,7 @@ import {
 } from "./sphttpclient-list-transport";
 import {
   evaluateLifecycleTestOnlyLiveCreateGo,
+  inspectLifecycleTestOnlyLiveCreateGo,
   isLifecycleTestOnlyHarnessRunAuthorization,
   type HumanGoRequestPacket,
   type LifecycleTestOnlyHarnessRunAuthorization,
@@ -61,15 +62,48 @@ export type TestOnlyHarnessCompositionResult =
     }>;
 
 /**
- * Validates Human GO (packet + trusted provenance + host) then builds
- * Slice C persistence over Slice E storage + GATE-3 synthetic CREATE transport.
+ * Validates Human GO (packet + trusted provenance + host), validates the canonical
+ * list binding without consuming the receipt, then consumes once immediately
+ * before building Slice C persistence over Slice E + GATE-3 synthetic CREATE.
  */
 export function composeTestOnlyHarnessCancellationPersistence(
   input: TestOnlyHarnessCompositionInput,
 ): TestOnlyHarnessCompositionResult {
-  const gate = evaluateLifecycleTestOnlyLiveCreateGo({
+  const inspection = inspectLifecycleTestOnlyLiveCreateGo({
     packet: input.packet,
     provenance: input.provenance,
+    runtimeHost: input.runtimeHost,
+    consumeStore: input.consumeStore,
+  });
+  if (inspection.authorization !== "READY") {
+    return {
+      ok: false,
+      authorization: "NONE",
+      reason: inspection.reason,
+      persistencePort: undefined,
+      postBudgetRemaining: 0,
+    };
+  }
+
+  const binding = bindProcedureRecordLifecycleEventList({
+    siteIdentity: inspection.packet.siteIdentity,
+    listGuid: inspection.packet.listGuid,
+  });
+  if (!binding) {
+    return {
+      ok: false,
+      authorization: "NONE",
+      reason: "list_binding_unusable",
+      persistencePort: undefined,
+      postBudgetRemaining: 0,
+    };
+  }
+
+  // Conservative one-shot boundary: consume only after non-consuming GO inspection
+  // and canonical binding validation, immediately before write-capable composition.
+  const gate = evaluateLifecycleTestOnlyLiveCreateGo({
+    packet: inspection.packet,
+    provenance: inspection.provenance,
     runtimeHost: input.runtimeHost,
     consumeStore: input.consumeStore,
   });
@@ -89,20 +123,6 @@ export function composeTestOnlyHarnessCancellationPersistence(
       ok: false,
       authorization: "NONE",
       reason: "harness_run_authorization_invalid",
-      persistencePort: undefined,
-      postBudgetRemaining: 0,
-    };
-  }
-
-  const binding = bindProcedureRecordLifecycleEventList({
-    siteIdentity: token.packet.siteIdentity,
-    listGuid: token.packet.listGuid,
-  });
-  if (!binding) {
-    return {
-      ok: false,
-      authorization: "NONE",
-      reason: "list_binding_unusable",
       persistencePort: undefined,
       postBudgetRemaining: 0,
     };

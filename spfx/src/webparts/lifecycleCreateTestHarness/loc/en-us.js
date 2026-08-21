@@ -5,18 +5,19 @@ define([], function () {
     DescriptionFieldLabel: "説明",
     Title: "Lifecycle CREATE test harness",
     Description:
-      "Isolated test-only surface. HumanGoRequestPacket + TrustedReceiptProvenanceEvidence required. No automatic POST.",
-    PhysicalTargetLabel: "Current physical target",
-    ExpectedMainShaLabel: "expected main SHA",
+      "Isolated test-only surface. Validate is GET-only. Execute requires HumanGoRequestPacket + TrustedReceiptProvenanceEvidence and never retries POST automatically.",
+    RuntimeHostLabel: "Actual runtime host (derived from pageContext)",
+    LockedTargetLabel: "Locked historical test-only target",
+    AuthoritativeMainShaLabel: "Authoritative implementation basis SHA",
+    FrozenSyntheticIdentityLabel: "Frozen synthetic CANCEL identity",
+    ExpectedMainShaLabel: "Confirm expected main SHA",
     PacketLabel: "HumanGoRequestPacket (JSON)",
     ProvenanceLabel: "TrustedReceiptProvenanceEvidence (JSON)",
-    ValidateButton: "Validate (no POST)",
-    ExecuteButton: "Execute (explicit)",
+    ValidateButton: "Validate (GET only / no consume)",
+    ExecuteButton: "Execute (explicit one-shot)",
     ResultIdle: "Idle — render/onInit did not POST.",
-    ResultValidateOnly: "Validate-only — no POST issued.",
-    ResultExecuteDisabled: "Execute disabled after receipt-scoped attempt.",
-    ResultExecuteArmedConsumed:
-      "Execute armed once in UI. POST remains gated by composition + Human GO; no automatic retry.",
+    ResultExecuteDisabled: "Execute disabled after this mounted-instance attempt.",
+    RuntimeHostUnavailable: "UNAVAILABLE",
     OperatorLabel: "Operator display name",
   };
 });
