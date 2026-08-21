@@ -131,14 +131,23 @@ function inspectConfig(config, configPath) {
   const blockers = [];
   const warnings = [];
   if (!isRecord(config)) {
-    return { blockers: ["package-solution.json root must be an object"], warnings, inspection: null };
+    return {
+      blockers: ["package-solution.json root must be an object"],
+      warnings,
+      inspection: null,
+    };
   }
   if (!isRecord(config.solution)) {
-    return { blockers: ["package-solution.json solution must be an object"], warnings, inspection: null };
+    return {
+      blockers: ["package-solution.json solution must be an object"],
+      warnings,
+      inspection: null,
+    };
   }
   const solution = config.solution;
   for (const field of ["name", "id", "version"]) {
-    if (!isNonEmptyString(solution[field])) blockers.push(`solution.${field} must be a non-empty string`);
+    if (!isNonEmptyString(solution[field]))
+      blockers.push(`solution.${field} must be a non-empty string`);
   }
   if (typeof solution.skipFeatureDeployment !== "boolean") {
     blockers.push("solution.skipFeatureDeployment must be explicit boolean");
@@ -169,7 +178,9 @@ function inspectConfig(config, configPath) {
         id: isNonEmptyString(solution.id) ? solution.id.trim() : null,
         version: isNonEmptyString(solution.version) ? solution.version.trim() : null,
         skipFeatureDeployment:
-          typeof solution.skipFeatureDeployment === "boolean" ? solution.skipFeatureDeployment : null,
+          typeof solution.skipFeatureDeployment === "boolean"
+            ? solution.skipFeatureDeployment
+            : null,
         isDomainIsolated:
           typeof solution.isDomainIsolated === "boolean" ? solution.isDomainIsolated : null,
         featureCount: features.length,
@@ -236,7 +247,11 @@ function parseSppkgManifest(entries, blockers, warnings) {
   const version = xmlAttribute(appTag, "Version");
   const skipText = xmlAttribute(appTag, "SkipFeatureDeployment");
   const isolatedText = xmlAttribute(appTag, "IsDomainIsolated");
-  for (const [field, value] of [["name", name], ["id", id], ["version", version]]) {
+  for (const [field, value] of [
+    ["name", name],
+    ["id", id],
+    ["version", version],
+  ]) {
     if (!isNonEmptyString(value)) blockers.push(`sppkg AppManifest.${field} must be present`);
   }
   const parseBoolean = (value, field) => {
@@ -248,10 +263,15 @@ function parseSppkgManifest(entries, blockers, warnings) {
   const skipFeatureDeployment = parseBoolean(skipText, "SkipFeatureDeployment");
   const isDomainIsolated = parseBoolean(isolatedText, "IsDomainIsolated");
   const rawPermissions = [...xml.matchAll(/<WebApiPermissionRequest\b([^>]*)\/?\s*>/gi)].map(
-    (match) => ({ resource: xmlAttribute(match[1], "ResourceId"), scope: xmlAttribute(match[1], "Scope") }),
+    (match) => ({
+      resource: xmlAttribute(match[1], "ResourceId"),
+      scope: xmlAttribute(match[1], "Scope"),
+    }),
   );
   const permissions = normalizePermissionEntries(rawPermissions, blockers, warnings);
-  const featureFiles = [...entries.keys()].filter((file) => /^feature_[0-9a-f-]+\.xml$/i.test(file));
+  const featureFiles = [...entries.keys()].filter((file) =>
+    /^feature_[0-9a-f-]+\.xml$/i.test(file),
+  );
   const features = featureFiles.map((file, index) => {
     const featureXml = entries.get(file).toString("utf8");
     const featureTag = featureXml.match(/<Feature\b([^>]*)>/i)?.[1] ?? "";
@@ -290,7 +310,9 @@ function parseSppkgManifest(entries, blockers, warnings) {
 
 function resolveDefaultPackagePath(root, configPath, zippedPackage) {
   if (!zippedPackage) return null;
-  const absoluteConfig = path.isAbsolute(configPath) ? path.normalize(configPath) : path.resolve(root, configPath);
+  const absoluteConfig = path.isAbsolute(configPath)
+    ? path.normalize(configPath)
+    : path.resolve(root, configPath);
   const spfxDir = path.dirname(path.dirname(absoluteConfig));
   return path.join(spfxDir, "sharepoint", zippedPackage);
 }
@@ -298,7 +320,8 @@ function resolveDefaultPackagePath(root, configPath, zippedPackage) {
 function compareConfigAndPackage(config, packaged, blockers) {
   if (!config || !packaged) return;
   for (const field of ["name", "id", "version", "skipFeatureDeployment", "isDomainIsolated"]) {
-    if (config.solution[field] !== packaged.solution[field]) blockers.push(`source/package mismatch for solution.${field}`);
+    if (config.solution[field] !== packaged.solution[field])
+      blockers.push(`source/package mismatch for solution.${field}`);
   }
   const permissionKey = (entry) => `${entry.resource}\u001f${entry.scope}`;
   const fromConfig = config.solution.webApiPermissionRequests.map(permissionKey).sort();
@@ -320,7 +343,9 @@ async function inspectPackage(packagePath, blockers, warnings) {
     try {
       packagedManifest = parseSppkgManifest(readZipEntries(data), blockers, warnings);
     } catch (error) {
-      blockers.push(`SPFx package cannot be inspected: ${error instanceof Error ? error.message : String(error)}`);
+      blockers.push(
+        `SPFx package cannot be inspected: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
     return {
       path: packagePath,
@@ -354,7 +379,11 @@ async function main() {
   }
   const blockers = [...configResult.blockers];
   const warnings = [...configResult.warnings];
-  const defaultPackagePath = resolveDefaultPackagePath(root, args.config, configResult.inspection?.zippedPackage ?? null);
+  const defaultPackagePath = resolveDefaultPackagePath(
+    root,
+    args.config,
+    configResult.inspection?.zippedPackage ?? null,
+  );
   const packagePath = args.sppkg ? path.resolve(root, args.sppkg) : defaultPackagePath;
   let packageEvidence = null;
   if (packagePath === null) blockers.push("SPFx package path cannot be resolved");
@@ -396,6 +425,8 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error(`SPFx GATE 0 inspection failed unexpectedly: ${error instanceof Error ? error.message : String(error)}`);
+  console.error(
+    `SPFx GATE 0 inspection failed unexpectedly: ${error instanceof Error ? error.message : String(error)}`,
+  );
   process.exit(1);
 });

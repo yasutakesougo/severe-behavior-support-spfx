@@ -77,9 +77,7 @@ function appManifest(
   return `<?xml version="1.0" encoding="utf-8"?><App Name="fixture-client-side-solution" ProductID="${solutionId}" Version="1.0.0.0" SkipFeatureDeployment="${options.skip ?? true}" IsDomainIsolated="${options.isolated ?? false}">${permissionXml}</App>`;
 }
 
-function featureManifest(
-  overrides: Partial<{ id: string; title: string; version: string }> = {},
-) {
+function featureManifest(overrides: Partial<{ id: string; title: string; version: string }> = {}) {
   const id = overrides.id ?? "34cf0c0f-1829-48f8-b907-4cb4a2722634";
   const title = overrides.title ?? "Fixture Feature";
   const version = overrides.version ?? "1.0.0.0";
@@ -164,7 +162,10 @@ test("directly inspects a commercial-style sppkg without source config", () => {
   const report = JSON.parse(result.stdout);
   assert.equal(report.inspectionMode, "SPPKG_DIRECT");
   assert.equal(report.config, null);
-  assert.equal(report.package.manifest.solution.webApiPermissionRequests[0].scope, "Sites.Read.All");
+  assert.equal(
+    report.package.manifest.solution.webApiPermissionRequests[0].scope,
+    "Sites.Read.All",
+  );
   assert.ok(report.warnings.some((value: string) => value.includes("least-privilege review")));
 });
 
@@ -191,8 +192,12 @@ test("blocks malformed or duplicate source API permission requests", () => {
   );
   assert.equal(result.status, 1);
   const report = JSON.parse(result.stdout);
-  assert.ok(report.blockers.some((value: string) => value.includes("duplicate API permission request")));
-  assert.ok(report.blockers.some((value: string) => value.includes("non-empty resource and scope")));
+  assert.ok(
+    report.blockers.some((value: string) => value.includes("duplicate API permission request")),
+  );
+  assert.ok(
+    report.blockers.some((value: string) => value.includes("non-empty resource and scope")),
+  );
 });
 
 test("blocks invalid feature fields instead of recording nulls", () => {
@@ -214,7 +219,9 @@ test("blocks malformed packaged feature metadata", () => {
   });
   assert.equal(result.status, 1);
   const report = JSON.parse(result.stdout);
-  assert.ok(report.blockers.some((value: string) => value.includes(".title must be a non-empty string")));
+  assert.ok(
+    report.blockers.some((value: string) => value.includes(".title must be a non-empty string")),
+  );
 });
 
 test("blocks when package artifact is missing because provenance cannot be established", () => {
