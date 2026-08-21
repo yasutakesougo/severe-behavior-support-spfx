@@ -36,8 +36,7 @@ import {
 } from "./test-only-live-create-gate";
 import type { TrustedReceiptConsumeStore } from "./test-only-receipt-consume-registry";
 
-export const B2_HARNESS_AUTHORITY_MAIN_SHA =
-  "3e4e2dee195ce82299b62f4b668d50cb563d2c68" as const;
+export const B2_HARNESS_AUTHORITY_MAIN_SHA = "3e4e2dee195ce82299b62f4b668d50cb563d2c68" as const;
 
 const SYNTHETIC_ORGANIZATION_ID = "synthetic-org-001";
 const SYNTHETIC_LOGICAL_SITE_ID = "SITE-ISG";
@@ -306,8 +305,7 @@ export async function executeLifecycleCreateTestHarnessRun(
   if (
     persisted.event !== null &&
     (persisted.event.LifecycleEventId !== composition.packet.lifecycleEventId ||
-      persisted.event.LifecycleIdempotencyKey !==
-        composition.packet.lifecycleIdempotencyKey ||
+      persisted.event.LifecycleIdempotencyKey !== composition.packet.lifecycleIdempotencyKey ||
       persisted.event.LifecyclePayloadFingerprint !==
         composition.packet.lifecyclePayloadFingerprint)
   ) {
