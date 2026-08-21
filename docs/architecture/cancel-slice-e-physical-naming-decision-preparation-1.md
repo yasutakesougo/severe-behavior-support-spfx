@@ -12,13 +12,17 @@ Upstream authority:
   ProcedureRecordLifecycleEvent@1.0.0（logical UNCHANGED）
   Decision-PROCEDURE-RECORD-MAPPING-1（PR-MAP-NAMES-1 / LOOKUP-B / TITLE-NONE）
   Accepted AuditEvent physical mapping #29（naming family reference only）
-Status: CONSUMED（Human Selection recorded）
+Status: CONSUMED by Selection（SELECT only）；Acceptance NOT YET
 Selection authority:
   docs/architecture/cancel-slice-e-physical-naming-selection-1.md
-  Decision: SELECTED / LOCKED（scoped）
+  Decision: SELECTED（scoped）
+  Acceptance: CANCEL-SLICE-E-PHYSICAL-NAMING-ACCEPTANCE-1 = NOT YET
   E-P1=A→LN-1 / E-P2=A→Package A / E-P3=TP-1 / E-P4=C→PG-3
+Gate Reconciliation:
+  docs/architecture/cancel-slice-e-physical-naming-gate-reconciliation-1.md
+  P1-1 HUMAN GATE COLLAPSE → Selection=SELECTED；Acceptance=NOT YET
 Implementation Start: NOT AUTHORIZED
-Physical hard-code: FORBIDDEN until Implementation Start GO
+Physical hard-code: FORBIDDEN until Acceptance LOCK + Implementation Start GO
 Schema mutation / SharePoint WRITE / LIVE WRITE: HOLD
 Production Binding / Deploy: HOLD
 Issue mutation: FORBIDDEN
@@ -362,13 +366,14 @@ This preparation does **not**:
 ## 6. Preparation result
 
 ```text
-E-P1 candidates:     LN-1..LN-4 + LN-X  READY FOR HUMAN SELECT
-E-P2 candidates:     Packages A/B/C/D/X READY FOR HUMAN SELECT
-E-P3 candidates:     TP-1 recommended; T2/T3 documented
-E-P4 candidates:     PG-1+PG-4 recommended; PS-1..PS-4 roles fixed
-Physical names:      NOT YET LOCKED
+E-P1 candidates:     CONSUMED by Selection（A → LN-1）
+E-P2 candidates:     CONSUMED by Selection（A → Package A）
+E-P3 candidates:     CONSUMED by Selection（ADOPT RECOMMENDED → TP-1）
+E-P4 candidates:     CONSUMED by Selection（C → PG-3）
+Physical names:      SELECTED / NOT YET LOCKED
+Acceptance unit:     CANCEL-SLICE-E-PHYSICAL-NAMING-ACCEPTANCE-1 = NOT YET
 Implementation Start: NOT AUTHORIZED
-Repository mutation this unit: docs-only preparation
+Repository mutation this unit: docs-only preparation（historical）
 SharePoint mutation: NONE
 LIVE WRITE:          HOLD
 Production Binding:  HOLD
@@ -379,14 +384,15 @@ Deploy:              HOLD
 
 ```text
 Human:
-  CANCEL-SLICE-E-PHYSICAL-NAMING-SELECTION-1
-  SELECT E-P1..E-P4（one package）
-  then ACCEPT / LOCK scoped mapping only
+  CANCEL-SLICE-E-PHYSICAL-NAMING-ACCEPTANCE-1
+  ACCEPT / LOCK scoped mapping only（or REJECT / revise Selection）
+  Selection alone is not LOCK authority（Gate Reconciliation P1-1）
 
 Agent:
-  STOP after this preparation unless Human Selection GO is explicit
+  STOP unless Human Acceptance GO is explicit
   do not hard-code names
   do not start adapter implementation
+  do not Ready / Merge from Selection alone
 ```
 
 ## 8. Evidence index

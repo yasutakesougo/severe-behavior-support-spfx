@@ -14,8 +14,10 @@ CURRENT:
   Slice D — COMPLETE / CONSUMED
   Slice E — NOT STARTED
 Implementation Start: NOT AUTHORIZED
-Physical names: SELECTED / LOCKED
-  authority: docs/architecture/cancel-slice-e-physical-naming-selection-1.md
+Physical names: SELECTED / NOT YET LOCKED
+  Selection authority: docs/architecture/cancel-slice-e-physical-naming-selection-1.md
+  Acceptance: CANCEL-SLICE-E-PHYSICAL-NAMING-ACCEPTANCE-1 = NOT YET
+  Gate Reconciliation: docs/architecture/cancel-slice-e-physical-naming-gate-reconciliation-1.md
   E-P1=LN-1 / E-P2=LE-MAP-NAMES-LIFE-1 / E-P3=TP-1 / E-P4=PG-3
 Schema mutation / SharePoint WRITE / LIVE WRITE: HOLD
 Production Binding / Deploy: HOLD
@@ -55,14 +57,17 @@ Reasons:
 - lifecycle items are not mixed into the ProcedureRecord List
 
 ```text
-List display name: LOCKED = SBS_PROCEDURE_RECORD_LIFECYCLE_EVENTS（LN-1）
-Internal physical names: LOCKED = LE-MAP-NAMES-LIFE-1（life* + lifeSchemaVersion）
-Types: LOCKED = TP-1
-List GUID authority: LOCKED = PG-3（OBSERVED test-only GUID）
+List display name: SELECTED = SBS_PROCEDURE_RECORD_LIFECYCLE_EVENTS（LN-1）
+Internal physical names: SELECTED = LE-MAP-NAMES-LIFE-1（life* + lifeSchemaVersion）
+Types: SELECTED = TP-1
+List GUID authority: SELECTED = PG-3（OBSERVED test-only GUID）
+Acceptance / LOCK: NOT YET
 ```
 
-Naming authority:
+Naming Selection authority:
 [`cancel-slice-e-physical-naming-selection-1.md`](./cancel-slice-e-physical-naming-selection-1.md).
+Gate Reconciliation:
+[`cancel-slice-e-physical-naming-gate-reconciliation-1.md`](./cancel-slice-e-physical-naming-gate-reconciliation-1.md).
 Implementation Start remains NOT AUTHORIZED.
 
 ## 3. Logical → physical required mapping
@@ -193,13 +198,14 @@ Exact file names are implementation detail.
 
 | ID | Item |
 |---|---|
-| E-P1 | Lifecycle-event List display name — **LOCKED LN-1** |
-| E-P2 | Lifecycle-event internal column names — **LOCKED Package A** |
-| E-P3 | Exact SharePoint field types / max lengths — **LOCKED TP-1** |
-| E-P4 | Provisioning source for List GUID / field schema — **LOCKED PG-3** |
+| E-P1 | Lifecycle-event List display name — **SELECTED LN-1**（Acceptance NOT YET） |
+| E-P2 | Lifecycle-event internal column names — **SELECTED Package A**（Acceptance NOT YET） |
+| E-P3 | Exact SharePoint field types / max lengths — **SELECTED TP-1**（Acceptance NOT YET） |
+| E-P4 | Provisioning source for List GUID / field schema — **SELECTED PG-3**（Acceptance NOT YET） |
 
-Naming is LOCKED. Remaining before Implementation Start: explicit Human
-Implementation Start GO（and any required Provisioning GO for
+Naming is SELECTED / NOT YET LOCKED. Remaining before Implementation Start:
+Human Acceptance / LOCK（`CANCEL-SLICE-E-PHYSICAL-NAMING-ACCEPTANCE-1`）, then
+explicit Human Implementation Start GO（and any required Provisioning GO for
 `lifeSchemaVersion` delta）.
 
 ## 10. Definition result
@@ -212,7 +218,8 @@ Append model:              CREATE ONLY
 Lookup model:              DUAL LOOKUP
 Readback:                  REQUIRED
 Implementation exact scope: DEFINED
-Physical names:            SELECTED / LOCKED（see naming selection）
+Physical names:            SELECTED / NOT YET LOCKED（see naming selection）
+Acceptance:                NOT YET
 Implementation Start:      NOT AUTHORIZED
 SharePoint mutation:       HOLD
 LIVE WRITE:                HOLD
