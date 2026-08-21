@@ -6,7 +6,43 @@ These esbuild bundles exist so SPFx can import canonical domain code without
 compiling `src/domain` as es5. Do not edit bundle logic by hand.
 Keep canonical implementation in `src/domain`.
 
-Do not use either bundle for LIVE WRITE.
+Do not use these bundles for LIVE WRITE / Production Binding / Deploy authorization.
+
+## lifecycle-cancellation-storage.bundle — Slice E narrow SPFx bridge (B2)
+
+Named canonical entrypoint:
+
+`src/adapters/sharepoint/procedure-record-lifecycle-event/spfx-test-harness-entry.ts`
+
+Generated outputs:
+
+- `spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.js`
+- `spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.d.ts`
+
+Exports only: `bindProcedureRecordLifecycleEventList`,
+`createProcedureRecordCancellationSharePointStoragePort`, and minimum required types.
+Does not copy Slice E logic. Does not authorize LIVE WRITE by itself.
+
+### JS generation command (locked)
+
+```bash
+npx esbuild \
+  src/adapters/sharepoint/procedure-record-lifecycle-event/spfx-test-harness-entry.ts \
+  --bundle --format=cjs --target=es2015 --platform=neutral \
+  --outfile=spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.js
+```
+
+### Declaration production / check command (repository-supported)
+
+`.d.ts` is the checked-in allowlisted declaration surface for the generated `.js`.
+Hand-edit of generated outputs is forbidden.
+
+```bash
+node scripts/ci/check-lifecycle-cancellation-storage-bridge.mjs
+```
+
+Acceptance: generation/check commands → committed `.js` bytes match regeneration;
+`.d.ts` export surface equals allowed exports only.
 
 ## cancellation-persist.bundle — cancellation persistence bridge
 
@@ -15,6 +51,7 @@ Do not use either bundle for LIVE WRITE.
 `src/domain/procedure-record-cancellation-staff-save.ts` → `persistStaffProcedureRecordCancellation` → `submitCancellation`
 
 This is the CANCEL-SLICE-D / Slice C append-only bridge. LIVE WRITE remains HOLD.
+B2 also re-exports `createProcedureRecordCancellationPersistencePort` for harness composition.
 
 Regenerate (no live I/O):
 

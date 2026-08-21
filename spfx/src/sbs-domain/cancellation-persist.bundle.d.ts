@@ -144,6 +144,26 @@ export function createInMemoryProcedureRecordCancellationPersistencePort(
   };
 };
 
+export function createProcedureRecordCancellationPersistencePort(
+  storage: ProcedureRecordCancellationStoragePort,
+): ProcedureRecordCancellationPersistencePort;
+
+export type ProcedureRecordCancellationAppendAttempt =
+  | Readonly<{ status: "CREATED" }>
+  | Readonly<{ status: "DEFINITE_FAILURE" }>
+  | Readonly<{ status: "INDETERMINATE" }>;
+
+export interface ProcedureRecordCancellationStoragePort {
+  findByLifecycleEventId(
+    lifecycleEventId: string,
+  ): Promise<LookupResult<ProcedureRecordLifecycleEvent>>;
+  findByLifecycleIdempotencyKey(
+    lifecycleIdempotencyKey: string,
+  ): Promise<LookupResult<ProcedureRecordLifecycleEvent>>;
+  append(event: ProcedureRecordLifecycleEvent): Promise<ProcedureRecordCancellationAppendAttempt>;
+  listByTargetRecordId(targetRecordId: string): Promise<readonly ProcedureRecordLifecycleEvent[]>;
+}
+
 export function nowAsiaTokyoIsoDateTime(): string | null;
 
 export function buildProcedureRecordCancellationSubmitRequest(

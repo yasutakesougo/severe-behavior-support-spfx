@@ -20,6 +20,7 @@ spfx/src/sbs-domain/staff-persist.bundle.js
 spfx/src/sbs-domain/correction-persist.bundle.js
 spfx/src/sbs-domain/kiosk-read-model.bundle.js
 spfx/src/sbs-domain/cancellation-persist.bundle.js
+spfx/src/sbs-domain/lifecycle-cancellation-storage.bundle.js
 spfx/smoke/**/smoke-bundle.js
 spfx/smoke/**/smoke-production.css
 spfx/smoke/**/smoke-report.json

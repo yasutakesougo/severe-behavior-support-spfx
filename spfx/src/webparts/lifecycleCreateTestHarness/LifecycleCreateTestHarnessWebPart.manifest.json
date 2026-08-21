@@ -1,0 +1,26 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "c8e2a91f-4b7d-4e6a-9c31-2f0d8b5a1742",
+  "alias": "LifecycleCreateTestHarnessWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "hiddenFromToolbox": true,
+  "supportedHosts": ["SharePointWebPart"],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": { "default": "Advanced" },
+      "title": { "default": "Lifecycle CREATE test harness (hidden)" },
+      "description": {
+        "default": "Isolated test-only harness. Not an end-user write surface. Human GO required."
+      },
+      "officeFabricIconFontName": "TestBeaker",
+      "properties": {
+        "description": "Lifecycle CREATE test harness"
+      }
+    }
+  ]
+}

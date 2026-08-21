@@ -11,8 +11,10 @@ import type { ProcedureRecord } from "./procedure-record";
 import { nowAsiaTokyoIsoDateTime } from "./procedure-record-staff-save";
 import {
   createInMemoryProcedureRecordCancellationPersistencePort,
+  createProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationSaveOutcome,
+  type ProcedureRecordCancellationStoragePort,
   type ProcedureRecordCancellationSubmitRequest,
 } from "./procedure-record-cancellation-persistence";
 
@@ -86,8 +88,10 @@ export async function resubmitFrozenProcedureRecordCancellation(
 
 export {
   createInMemoryProcedureRecordCancellationPersistencePort,
+  createProcedureRecordCancellationPersistencePort,
   nowAsiaTokyoIsoDateTime,
   type ProcedureRecordCancellationPersistencePort,
   type ProcedureRecordCancellationSaveOutcome,
+  type ProcedureRecordCancellationStoragePort,
   type ProcedureRecordCancellationSubmitRequest,
 };
