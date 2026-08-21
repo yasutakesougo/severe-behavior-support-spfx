@@ -273,6 +273,11 @@
   outline-offset: sbs.$focus-outline-offset;
 }
 
+/* VP-2: keep binding metadata in DOM for smoke/tests, but remove opaque IDs from normal staff presentation. */
+.procedureRecordForm section:has([data-field-workflow="binding-context"]) {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .actionRow {
     flex-direction: column;
