@@ -11,9 +11,12 @@ import {
   type ObservedLifecycleEventPhysicalField,
 } from "../../../../src/adapters/sharepoint/procedure-record-lifecycle-event";
 
+const COLUMNS = PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS;
+
 function observedFields(): ObservedLifecycleEventPhysicalField[] {
-  const fields: ObservedLifecycleEventPhysicalField[] =
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_EXPECTED_TEXT_COLUMNS.map((column) => ({
+  const fields: ObservedLifecycleEventPhysicalField[] = [];
+  for (const column of PROCEDURE_RECORD_LIFECYCLE_EVENT_EXPECTED_TEXT_COLUMNS) {
+    fields.push({
       InternalName: column.InternalName,
       StaticName: column.InternalName,
       TypeAsString: "Text",
@@ -21,10 +24,11 @@ function observedFields(): ObservedLifecycleEventPhysicalField[] {
       EnforceUniqueValues: column.EnforceUniqueValues,
       Indexed: column.Indexed,
       MaxLength: column.MaxLength,
-    }));
+    });
+  }
   fields.push({
-    InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType,
-    StaticName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType,
+    InternalName: COLUMNS.eventType,
+    StaticName: COLUMNS.eventType,
     TypeAsString: "Choice",
     Required: true,
     EnforceUniqueValues: false,
@@ -53,7 +57,7 @@ function observedList(): ObservedLifecycleEventListIdentity {
 }
 
 describe("ProcedureRecordLifecycleEvent physical schema", () => {
-  it("accepts the locked LN-1 / Package A / TP-1 / PG-3 schema", () => {
+  it("accepts locked LN-1 / Package A / TP-1 / PG-3 schema", () => {
     assert.deepEqual(
       verifyProcedureRecordLifecycleEventPhysicalSchema(
         PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_LIST_GUID,
@@ -64,11 +68,9 @@ describe("ProcedureRecordLifecycleEvent physical schema", () => {
     );
   });
 
-  it("fails closed while the separately-gated lifeSchemaVersion provisioning delta is absent", () => {
+  it("fails closed without provisioned lifeSchemaVersion", () => {
     const fields = observedFields().filter(
-      (field) =>
-        field.InternalName !==
-        PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.schemaVersion,
+      (field) => field.InternalName !== COLUMNS.schemaVersion,
     );
     const result = verifyProcedureRecordLifecycleEventPhysicalSchema(
       PROCEDURE_RECORD_LIFECYCLE_EVENT_TEST_ONLY_LIST_GUID,
@@ -77,17 +79,13 @@ describe("ProcedureRecordLifecycleEvent physical schema", () => {
     );
     assert.equal(result.ok, false);
     if (!result.ok) {
-      assert.ok(
-        result.reasons.includes(
-          `missing:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.schemaVersion}`,
-        ),
-      );
+      assert.ok(result.reasons.includes(`missing:${COLUMNS.schemaVersion}`));
     }
   });
 
-  it("rejects list identity/title drift and eventType vocabulary drift", () => {
+  it("rejects list identity/title and eventType vocabulary drift", () => {
     const fields = observedFields().map((field) =>
-      field.InternalName === PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType
+      field.InternalName === COLUMNS.eventType
         ? { ...field, Choices: ["SUPERSEDE", "CANCEL", "DELETE"] }
         : field,
     );
@@ -100,17 +98,13 @@ describe("ProcedureRecordLifecycleEvent physical schema", () => {
     if (!result.ok) {
       assert.ok(result.reasons.includes("list-guid-mismatch"));
       assert.ok(result.reasons.includes("list-display-name-mismatch"));
-      assert.ok(
-        result.reasons.includes(
-          `choices:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`,
-        ),
-      );
+      assert.ok(result.reasons.includes(`choices:${COLUMNS.eventType}`));
     }
   });
 
-  it("rejects extra lifecycle unique/index drift and Title becoming required", () => {
+  it("rejects extra lifecycle unique/index drift and required Title", () => {
     const fields = observedFields().map((field) => {
-      if (field.InternalName === PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.reason) {
+      if (field.InternalName === COLUMNS.reason) {
         return { ...field, EnforceUniqueValues: true, Indexed: true };
       }
       if (field.InternalName === "Title") {
@@ -125,16 +119,8 @@ describe("ProcedureRecordLifecycleEvent physical schema", () => {
     );
     assert.equal(result.ok, false);
     if (!result.ok) {
-      assert.ok(
-        result.reasons.includes(
-          `extra-unique:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.reason}`,
-        ),
-      );
-      assert.ok(
-        result.reasons.includes(
-          `extra-index:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.reason}`,
-        ),
-      );
+      assert.ok(result.reasons.includes(`extra-unique:${COLUMNS.reason}`));
+      assert.ok(result.reasons.includes(`extra-index:${COLUMNS.reason}`));
       assert.ok(result.reasons.includes("required:Title"));
     }
   });

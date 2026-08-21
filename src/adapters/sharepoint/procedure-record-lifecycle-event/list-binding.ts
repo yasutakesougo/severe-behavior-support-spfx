@@ -18,10 +18,7 @@ export function normalizeLifecycleEventSharePointGuid(value: string): string | n
   if (!isNonEmptyString(value)) {
     return null;
   }
-  const normalized = value
-    .trim()
-    .replace(/^\{|\}$/g, "")
-    .toLowerCase();
+  const normalized = value.trim().replace(/^\{|\}$/g, "").toLowerCase();
   return SHAREPOINT_GUID_RE.test(normalized) ? normalized : null;
 }
 

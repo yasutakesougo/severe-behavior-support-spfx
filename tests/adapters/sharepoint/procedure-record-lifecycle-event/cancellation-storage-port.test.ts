@@ -23,6 +23,7 @@ import {
 import { persistProcedureRecordCancellation } from "../../../../src/domain/procedure-record-cancellation-persistence";
 
 const SITE_IDENTITY = "https://tenant.example/sites/sbs-test";
+const COLUMNS = PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS;
 
 function makeCancelEvent(reason = "duplicate entry"): ProcedureRecordLifecycleEvent {
   const input = {
@@ -56,8 +57,9 @@ function makeSupersedeEvent(): ProcedureRecordLifecycleEvent {
 }
 
 function observedFields(): ObservedLifecycleEventPhysicalField[] {
-  const fields: ObservedLifecycleEventPhysicalField[] =
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_EXPECTED_TEXT_COLUMNS.map((column) => ({
+  const fields: ObservedLifecycleEventPhysicalField[] = [];
+  for (const column of PROCEDURE_RECORD_LIFECYCLE_EVENT_EXPECTED_TEXT_COLUMNS) {
+    fields.push({
       InternalName: column.InternalName,
       StaticName: column.InternalName,
       TypeAsString: "Text",
@@ -65,10 +67,11 @@ function observedFields(): ObservedLifecycleEventPhysicalField[] {
       EnforceUniqueValues: column.EnforceUniqueValues,
       Indexed: column.Indexed,
       MaxLength: column.MaxLength,
-    }));
+    });
+  }
   fields.push({
-    InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType,
-    StaticName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType,
+    InternalName: COLUMNS.eventType,
+    StaticName: COLUMNS.eventType,
     TypeAsString: "Choice",
     Required: true,
     EnforceUniqueValues: false,
@@ -95,7 +98,9 @@ type FakeOptions = {
   targetListGuid?: string;
 };
 
-function createFakeTransport(options: FakeOptions = {}): ProcedureRecordLifecycleEventListTransport & {
+function createFakeTransport(
+  options: FakeOptions = {},
+): ProcedureRecordLifecycleEventListTransport & {
   rows: Array<Record<string, unknown>>;
   createCalls: number;
 } {
@@ -124,11 +129,7 @@ function createFakeTransport(options: FakeOptions = {}): ProcedureRecordLifecycl
 
     async getSchema() {
       const fields = options.omitSchemaVersion
-        ? observedFields().filter(
-            (field) =>
-              field.InternalName !==
-              PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.schemaVersion,
-          )
+        ? observedFields().filter((field) => field.InternalName !== COLUMNS.schemaVersion)
         : observedFields();
       return {
         ok: true as const,
@@ -142,28 +143,15 @@ function createFakeTransport(options: FakeOptions = {}): ProcedureRecordLifecycl
     },
 
     async findByLifecycleEventId(lifecycleEventId) {
-      return query(
-        (row) =>
-          row[PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleEventId] ===
-          lifecycleEventId,
-      );
+      return query((row) => row[COLUMNS.lifecycleEventId] === lifecycleEventId);
     },
 
     async findByLifecycleIdempotencyKey(lifecycleIdempotencyKey) {
-      return query(
-        (row) =>
-          row[
-            PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleIdempotencyKey
-          ] === lifecycleIdempotencyKey,
-      );
+      return query((row) => row[COLUMNS.lifecycleIdempotencyKey] === lifecycleIdempotencyKey);
     },
 
     async listByTargetRecordId(targetRecordId) {
-      return query(
-        (row) =>
-          row[PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.targetRecordId] ===
-          targetRecordId,
-      );
+      return query((row) => row[COLUMNS.targetRecordId] === targetRecordId);
     },
 
     async createItem(fields): Promise<ProcedureRecordLifecycleEventItemCreateResult> {
@@ -203,7 +191,7 @@ describe("ProcedureRecordLifecycleEvent physical mapper", () => {
     assert.deepEqual(decoded, { ok: true, event });
   });
 
-  it("keeps shared SUPERSEDE rows parseable without implementing SUPERSEDE orchestration", () => {
+  it("parses shared SUPERSEDE rows without orchestration", () => {
     const event = makeSupersedeEvent();
     const encoded = encodeProcedureRecordLifecycleEventPhysicalRow(event);
     assert.equal(encoded.ok, true);
@@ -214,7 +202,7 @@ describe("ProcedureRecordLifecycleEvent physical mapper", () => {
     assert.deepEqual(decoded, { ok: true, event });
   });
 
-  it("rejects a physical CANCEL row that contains replacementRecordId", () => {
+  it("rejects CANCEL with physical replacementRecordId", () => {
     const event = makeCancelEvent();
     const encoded = encodeProcedureRecordLifecycleEventPhysicalRow(event);
     assert.equal(encoded.ok, true);
@@ -230,7 +218,7 @@ describe("ProcedureRecordLifecycleEvent physical mapper", () => {
 });
 
 describe("CANCEL-SLICE-E SharePoint storage port", () => {
-  it("implements dual lookup and Slice C read-back: persisted cancellation becomes saved", async () => {
+  it("uses dual lookup and Slice C read-back before saved", async () => {
     const transport = createFakeTransport();
     const storage = makeStorage(transport);
     const event = makeCancelEvent();
@@ -250,21 +238,21 @@ describe("CANCEL-SLICE-E SharePoint storage port", () => {
     assert.deepEqual(after, { status: "FOUND", value: event });
   });
 
-  it("maps transport ambiguity to INDETERMINATE and never upgrades it to success without read-back", async () => {
+  it("keeps transport ambiguity as save_outcome_unknown", async () => {
     const transport = createFakeTransport({ createMode: "transport_error" });
     const storage = makeStorage(transport);
     const result = await persistProcedureRecordCancellation(makeCancelEvent(), storage);
     assert.deepEqual(result, { saveState: "save_outcome_unknown", appendCalled: true });
   });
 
-  it("maps a definite create refusal to save_failed", async () => {
+  it("maps definite create refusal to save_failed", async () => {
     const transport = createFakeTransport({ createMode: "forbidden" });
     const storage = makeStorage(transport);
     const result = await persistProcedureRecordCancellation(makeCancelEvent(), storage);
     assert.deepEqual(result, { saveState: "save_failed", appendCalled: true });
   });
 
-  it("fails before CREATE while lifeSchemaVersion provisioning is absent", async () => {
+  it("blocks CREATE while lifeSchemaVersion is absent", async () => {
     const transport = createFakeTransport({ omitSchemaVersion: true });
     const storage = makeStorage(transport);
     const attempt = await storage.append(makeCancelEvent());
@@ -294,7 +282,7 @@ describe("CANCEL-SLICE-E SharePoint storage port", () => {
     });
   });
 
-  it("fails closed on malformed or duplicate physical lookup rows", async () => {
+  it("fails closed on malformed or duplicate lookup rows", async () => {
     const transport = createFakeTransport();
     const storage = makeStorage(transport);
     const event = makeCancelEvent();
@@ -321,7 +309,7 @@ describe("CANCEL-SLICE-E SharePoint storage port", () => {
     });
   });
 
-  it("lists only validated target history and exposes no UPDATE/DELETE transport surface", async () => {
+  it("lists target history without UPDATE/DELETE surface", async () => {
     const transport = createFakeTransport();
     const storage = makeStorage(transport);
     const first = makeCancelEvent("first");

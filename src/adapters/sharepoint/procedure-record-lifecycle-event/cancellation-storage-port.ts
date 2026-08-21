@@ -42,11 +42,11 @@ import type {
 
 export type ProcedureRecordCancellationSharePointStoragePort =
   ProcedureRecordCancellationStoragePort &
-    Readonly<{
-      binding: ProcedureRecordLifecycleEventListBinding;
-      liveWriteAuthorized: false;
-      verifyPhysicalSchema(): Promise<ProcedureRecordLifecycleEventSchemaVerification>;
-    }>;
+  Readonly<{
+    binding: ProcedureRecordLifecycleEventListBinding;
+    liveWriteAuthorized: false;
+    verifyPhysicalSchema(): Promise<ProcedureRecordLifecycleEventSchemaVerification>;
+  }>;
 
 const PHYSICAL_KEYS = [
   "lifeSchemaVersion",

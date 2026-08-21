@@ -41,72 +41,73 @@ type ExpectedTextColumn = Readonly<{
   MaxLength: 255;
 }>;
 
-export const PROCEDURE_RECORD_LIFECYCLE_EVENT_EXPECTED_TEXT_COLUMNS: readonly ExpectedTextColumn[] =
-  [
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.schemaVersion,
-      Required: true,
-      EnforceUniqueValues: false,
-      Indexed: false,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleEventId,
-      Required: true,
-      EnforceUniqueValues: true,
-      Indexed: true,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleIdempotencyKey,
-      Required: true,
-      EnforceUniqueValues: true,
-      Indexed: true,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecyclePayloadFingerprint,
-      Required: true,
-      EnforceUniqueValues: false,
-      Indexed: false,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.targetRecordId,
-      Required: true,
-      EnforceUniqueValues: false,
-      Indexed: true,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.replacementRecordId,
-      Required: false,
-      EnforceUniqueValues: false,
-      Indexed: false,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.recordedAt,
-      Required: true,
-      EnforceUniqueValues: false,
-      Indexed: false,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.recordedBy,
-      Required: true,
-      EnforceUniqueValues: false,
-      Indexed: false,
-      MaxLength: 255,
-    },
-    {
-      InternalName: PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.reason,
-      Required: false,
-      EnforceUniqueValues: false,
-      Indexed: false,
-      MaxLength: 255,
-    },
-  ];
+const COLUMNS = PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS;
+
+export const PROCEDURE_RECORD_LIFECYCLE_EVENT_EXPECTED_TEXT_COLUMNS = [
+  {
+    InternalName: COLUMNS.schemaVersion,
+    Required: true,
+    EnforceUniqueValues: false,
+    Indexed: false,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.lifecycleEventId,
+    Required: true,
+    EnforceUniqueValues: true,
+    Indexed: true,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.lifecycleIdempotencyKey,
+    Required: true,
+    EnforceUniqueValues: true,
+    Indexed: true,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.lifecyclePayloadFingerprint,
+    Required: true,
+    EnforceUniqueValues: false,
+    Indexed: false,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.targetRecordId,
+    Required: true,
+    EnforceUniqueValues: false,
+    Indexed: true,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.replacementRecordId,
+    Required: false,
+    EnforceUniqueValues: false,
+    Indexed: false,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.recordedAt,
+    Required: true,
+    EnforceUniqueValues: false,
+    Indexed: false,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.recordedBy,
+    Required: true,
+    EnforceUniqueValues: false,
+    Indexed: false,
+    MaxLength: 255,
+  },
+  {
+    InternalName: COLUMNS.reason,
+    Required: false,
+    EnforceUniqueValues: false,
+    Indexed: false,
+    MaxLength: 255,
+  },
+] satisfies readonly ExpectedTextColumn[];
 
 function fieldByInternalName(
   fields: readonly ObservedLifecycleEventPhysicalField[],
@@ -164,36 +165,30 @@ export function verifyProcedureRecordLifecycleEventPhysicalSchema(
     }
   }
 
-  const eventType = fieldByInternalName(
-    fields,
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType,
-  );
+  const eventType = fieldByInternalName(fields, COLUMNS.eventType);
   if (!eventType) {
-    reasons.push(`missing:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+    reasons.push(`missing:${COLUMNS.eventType}`);
   } else {
-    if (
-      eventType.StaticName !== undefined &&
-      eventType.StaticName !== PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType
-    ) {
-      reasons.push(`static-name:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+    if (eventType.StaticName !== undefined && eventType.StaticName !== COLUMNS.eventType) {
+      reasons.push(`static-name:${COLUMNS.eventType}`);
     }
     if (eventType.TypeAsString !== "Choice") {
-      reasons.push(`type:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+      reasons.push(`type:${COLUMNS.eventType}`);
     }
     if (eventType.Required !== true) {
-      reasons.push(`required:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+      reasons.push(`required:${COLUMNS.eventType}`);
     }
     if (eventType.EnforceUniqueValues !== false) {
-      reasons.push(`unique:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+      reasons.push(`unique:${COLUMNS.eventType}`);
     }
     if (eventType.Indexed !== false) {
-      reasons.push(`indexed:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+      reasons.push(`indexed:${COLUMNS.eventType}`);
     }
     if (eventType.FillInChoice !== false) {
-      reasons.push(`fill-in:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+      reasons.push(`fill-in:${COLUMNS.eventType}`);
     }
     if (!sameChoices(eventType.Choices, PROCEDURE_RECORD_LIFECYCLE_EVENT_TYPES)) {
-      reasons.push(`choices:${PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.eventType}`);
+      reasons.push(`choices:${COLUMNS.eventType}`);
     }
   }
 
@@ -209,14 +204,11 @@ export function verifyProcedureRecordLifecycleEventPhysicalSchema(
     }
   }
 
-  const lockedUnique = new Set([
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleEventId,
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleIdempotencyKey,
-  ]);
+  const lockedUnique = new Set([COLUMNS.lifecycleEventId, COLUMNS.lifecycleIdempotencyKey]);
   const lockedIndexed = new Set([
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleEventId,
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.lifecycleIdempotencyKey,
-    PROCEDURE_RECORD_LIFECYCLE_EVENT_PHYSICAL_COLUMNS.targetRecordId,
+    COLUMNS.lifecycleEventId,
+    COLUMNS.lifecycleIdempotencyKey,
+    COLUMNS.targetRecordId,
   ]);
 
   for (const field of fields) {
