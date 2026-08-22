@@ -79,6 +79,7 @@
   color: sbs.$color-surface-canvas;
   font-weight: sbs.$font-weight-semibold;
   cursor: pointer;
+  box-shadow: sbs.$elevation-subtle;
 }
 
 .saveButton:hover:not(:disabled) {
@@ -113,6 +114,7 @@
   border-color: sbs.$color-border-subtle;
   background: sbs.$color-surface-muted;
   color: sbs.$color-text-disabled;
+  box-shadow: none;
   cursor: not-allowed;
   opacity: 1;
 }
