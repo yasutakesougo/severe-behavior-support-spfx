@@ -28,7 +28,9 @@ export type ProcedureCancellationPresentation = Readonly<{
   result: ProcedureRecordResultValue;
   resultLabel: string;
   performedAt: string;
+  performedAtLabel: string;
   recordedAt: string;
+  recordedAtLabel: string;
   recordedBy: string;
   planId: string;
   planVersion: number;
@@ -71,8 +73,10 @@ export function presentProcedureCancellation(
     recordId: item.boundRecord.RecordId,
     result: item.boundRecord.result,
     resultLabel: labelForProcedureRecordResult(item.boundRecord.result),
-    performedAt: formatStaffBusinessDateTime(item.boundRecord.performedAt),
-    recordedAt: formatStaffBusinessDateTime(item.boundRecord.recordedAt),
+    performedAt: item.boundRecord.performedAt,
+    performedAtLabel: formatStaffBusinessDateTime(item.boundRecord.performedAt),
+    recordedAt: item.boundRecord.recordedAt,
+    recordedAtLabel: formatStaffBusinessDateTime(item.boundRecord.recordedAt),
     recordedBy: item.boundRecord.recordedBy,
     planId: context.planId,
     planVersion: context.planVersion,
