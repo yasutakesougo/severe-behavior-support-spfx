@@ -5,6 +5,7 @@ import {
   type ShellSiteSelection,
 } from "./site-selection";
 import styles from "./ShellUx.module.scss";
+import vp3Styles from "./Vp3ControlFamily.module.scss";
 
 export type SiteSelectorProps = Readonly<{
   selection: ShellSiteSelection;
@@ -22,7 +23,10 @@ export const SiteSelector: React.FC<SiteSelectorProps> = ({
   onSelectionChange,
 }) => {
   return (
-    <fieldset className={styles.siteSelector} data-shell-ux="site-selector">
+    <fieldset
+      className={`${styles.siteSelector} ${vp3Styles.scopeAnchor}`}
+      data-shell-ux="site-selector"
+    >
       <legend className={styles.siteSelectorLegend}>事業所（表示専用）</legend>
       <div className={styles.siteSelectorOptions} role="radiogroup" aria-label="事業所の表示選択">
         <label className={styles.siteOption}>
