@@ -2,6 +2,7 @@ import { labelForProcedureRecordResult } from "./procedure-copy";
 import type { ProcedureBindingContext } from "./procedure-types";
 import type { ProcedureRecordResultValue } from "./procedure-types";
 import type { TodaySupportItem } from "../../sbs-domain/kiosk-read-model.bundle";
+import { formatStaffBusinessDateTime } from "../ux/staff-date-time-presentation";
 
 export const FIELD_STAFF_CORRECTION_UI_SAVE_WIRING_1_SLICE = {
   id: "FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1",
@@ -68,8 +69,8 @@ export function presentProcedureCorrection(
     recordId: item.boundRecord.RecordId,
     result: item.boundRecord.result,
     resultLabel: labelForProcedureRecordResult(item.boundRecord.result),
-    performedAt: item.boundRecord.performedAt,
-    recordedAt: item.boundRecord.recordedAt,
+    performedAt: formatStaffBusinessDateTime(item.boundRecord.performedAt),
+    recordedAt: formatStaffBusinessDateTime(item.boundRecord.recordedAt),
     recordedBy: item.boundRecord.recordedBy,
     planId: context.planId,
     planVersion: context.planVersion,
