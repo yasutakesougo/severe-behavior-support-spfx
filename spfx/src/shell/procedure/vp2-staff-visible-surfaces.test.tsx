@@ -117,6 +117,8 @@ describe("VP-2 staff-visible surface purity", () => {
       ReactDOM.render(
         <ProcedureRecordCancellation
           presentation={presentation}
+          originalRecord={KIOSK_RECORD_1}
+          lifecycleEventsForSemantics={[]}
           onBackToCurrentProcedure={() => undefined}
         />,
         container,

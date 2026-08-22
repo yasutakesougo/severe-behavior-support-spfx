@@ -27,22 +27,19 @@ export const VP2_STAFF_VISIBLE_FORBIDDEN_TOKENS = [
   "saveState",
 ] as const;
 
-export type Vp2StaffVisibleForbiddenToken =
-  (typeof VP2_STAFF_VISIBLE_FORBIDDEN_TOKENS)[number];
+export type Vp2StaffVisibleForbiddenToken = (typeof VP2_STAFF_VISIBLE_FORBIDDEN_TOKENS)[number];
 
 /** Opaque fixture-style actor ids such as staff-1 must not be shown as 記録者. */
 const OPAQUE_STAFF_ID_PATTERN = /^[a-z][a-z0-9]*-\d+$/i;
 
-export function isOpaqueStaffActorId(value: string | undefined | null): boolean {
+export function isOpaqueStaffActorId(value: string | undefined): boolean {
   if (!value) {
     return true;
   }
   return OPAQUE_STAFF_ID_PATTERN.test(value.trim());
 }
 
-export function findVp2StaffVisibleForbiddenTokens(
-  text: string,
-): Vp2StaffVisibleForbiddenToken[] {
+export function findVp2StaffVisibleForbiddenTokens(text: string): Vp2StaffVisibleForbiddenToken[] {
   return VP2_STAFF_VISIBLE_FORBIDDEN_TOKENS.filter((token) => text.includes(token));
 }
 
