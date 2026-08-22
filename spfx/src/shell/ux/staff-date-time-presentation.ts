@@ -3,34 +3,33 @@ const STAFF_TIME_ZONE = "Asia/Tokyo" as const;
 const LOCAL_DATE_TIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?$/;
 const DATE_ONLY = /^(\d{4})[-/](\d{2})[-/](\d{2})$/;
 const MONTH_ONLY = /^(\d{4})[-/](\d{2})$/;
+const FORMATTED_INSTANT = /^(\d{4})\/(\d{1,2})\/(\d{1,2})\s+(\d{1,2}):(\d{2})$/;
 
 function numberPart(value: string): string {
   return String(Number(value));
 }
 
-function partsForInstant(value: string): Readonly<Record<string, string>> | undefined {
+function formatInstantInStaffTimeZone(value: string): string | undefined {
   const instant = new Date(value);
   if (Number.isNaN(instant.getTime())) {
     return undefined;
   }
 
-  const parts = new Intl.DateTimeFormat("ja-JP", {
+  const formatted = new Intl.DateTimeFormat("ja-JP", {
     timeZone: STAFF_TIME_ZONE,
     year: "numeric",
     month: "numeric",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(instant);
-
-  const result: Record<string, string> = {};
-  for (const part of parts) {
-    if (part.type !== "literal") {
-      result[part.type] = part.value;
-    }
+    hour12: false,
+  }).format(instant);
+  const match = FORMATTED_INSTANT.exec(formatted);
+  if (!match) {
+    return undefined;
   }
-  return result;
+
+  return `${numberPart(match[1])}年${numberPart(match[2])}月${numberPart(match[3])}日 ${match[4].padStart(2, "0")}:${match[5]}`;
 }
 
 /** Presentation-only formatter. It never derives or persists a business date. */
@@ -40,11 +39,7 @@ export function formatStaffBusinessDateTime(value: string): string {
     return `${numberPart(local[1])}年${numberPart(local[2])}月${numberPart(local[3])}日 ${local[4]}:${local[5]}`;
   }
 
-  const parts = partsForInstant(value);
-  if (!parts?.year || !parts.month || !parts.day || !parts.hour || !parts.minute) {
-    return value;
-  }
-  return `${numberPart(parts.year)}年${numberPart(parts.month)}月${numberPart(parts.day)}日 ${parts.hour}:${parts.minute}`;
+  return formatInstantInStaffTimeZone(value) ?? value;
 }
 
 export function formatStaffBusinessDate(value: string): string {
