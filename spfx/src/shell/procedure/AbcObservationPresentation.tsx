@@ -48,7 +48,7 @@ export const AbcObservationPresentation: React.FC<AbcObservationPresentationProp
       </button>
     </div>
     <p className={styles.note} data-field-workflow="abc-observation-note">
-      合成・表示専用です。観察の保存、記録訂正、取消し、SharePoint WRITE は行いません。
+      合成・表示専用です。観察の保存、記録訂正、取消しは行いません。
     </p>
     <p className={styles.contextLine} data-field-workflow="abc-observation-person">
       {presentation.context.personLabel} / {presentation.context.planPeriodLabel}
@@ -56,26 +56,6 @@ export const AbcObservationPresentation: React.FC<AbcObservationPresentationProp
     <p className={styles.contextLine} data-field-workflow="abc-observation-handoff-note">
       {FIELD_WORKFLOW_CONTEXT_HANDOFF_NOTE}
     </p>
-
-    <section className={styles.section} aria-labelledby="field-workflow-abc-context-heading">
-      <h2 id="field-workflow-abc-context-heading">対象の文脈</h2>
-      <dl className={styles.detailList} data-field-workflow="abc-binding-context">
-        <div>
-          <dt>計画 / 版</dt>
-          <dd>{`${presentation.context.planId} / 版 ${presentation.context.planVersion}`}</dd>
-        </div>
-        <div>
-          <dt>手順</dt>
-          <dd>{`${presentation.context.procedureId} (${presentation.context.procedureVersion})`}</dd>
-        </div>
-        {presentation.context.occurrenceId ? (
-          <div>
-            <dt>OccurrenceId</dt>
-            <dd>{presentation.context.occurrenceId}</dd>
-          </div>
-        ) : null}
-      </dl>
-    </section>
 
     <section className={styles.section} aria-labelledby="field-workflow-abc-fields-heading">
       <h2 id="field-workflow-abc-fields-heading">観察の流れ（表示専用）</h2>

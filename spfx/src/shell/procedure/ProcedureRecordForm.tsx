@@ -281,25 +281,6 @@ export const ProcedureRecordForm: React.FC<ProcedureRecordFormProps> = ({
         {mutationBoundaryNote}
       </p>
 
-      <section className={styles.section} aria-labelledby="field-workflow-binding-heading">
-        <h2 id="field-workflow-binding-heading" data-field-workflow-visual-role="section-title">
-          引き継いだ文脈
-        </h2>
-        <dl className={styles.contextLine} data-field-workflow="binding-context">
-          <div>
-            planId / planVersion: {context.planId} / v{context.planVersion}
-          </div>
-          <div>
-            ProcedureId / Version: {context.procedureId} / {context.procedureVersion}
-          </div>
-          {context.occurrenceId ? (
-            <div data-field-workflow="binding-occurrence-id">
-              OccurrenceId: {context.occurrenceId}
-            </div>
-          ) : null}
-        </dl>
-      </section>
-
       <section className={styles.section} aria-labelledby="field-workflow-result-heading">
         <h2 id="field-workflow-result-heading" data-field-workflow-visual-role="section-title">
           実施結果

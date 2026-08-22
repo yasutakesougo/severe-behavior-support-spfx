@@ -15,6 +15,7 @@ export { ProcedureRecordForm, type ProcedureRecordFormProps } from "./ProcedureR
 export {
   FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE,
   FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE,
+  FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE,
   FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE,
   FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE,
   FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE,
@@ -32,6 +33,12 @@ export {
   labelForProcedureRecordResult,
   procedureResultCopyIsNonFailure,
 } from "./procedure-copy";
+export {
+  VP2_STAFF_VISIBLE_FORBIDDEN_TOKENS,
+  findVp2StaffVisibleForbiddenTokens,
+  isOpaqueStaffActorId,
+  staffVisibleTextAvoidsVp2ForbiddenTokens,
+} from "./vp2-staff-visible-copy";
 export {
   FIELD_WORKFLOW_CURRENT_USER_A,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,

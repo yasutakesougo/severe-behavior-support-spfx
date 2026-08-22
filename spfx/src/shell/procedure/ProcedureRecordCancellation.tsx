@@ -7,10 +7,12 @@ import {
 } from "../ux/save-state";
 import {
   FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE,
+  FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE,
   FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE,
   FIELD_WORKFLOW_SAVE_FAILED_RETAIN_NOTE,
   FIELD_WORKFLOW_SAVE_OUTCOME_UNKNOWN_NOTE,
 } from "./procedure-copy";
+import { isOpaqueStaffActorId } from "./vp2-staff-visible-copy";
 import { buildFieldStaffCancellationSyntheticAuthorization } from "./procedure-cancellation-auth";
 import {
   canConfirmCancellationOutcome,
@@ -294,28 +296,12 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
               {presentation.occurrenceStatus}
             </dd>
           </div>
-          <div>
-            <dt>OccurrenceId</dt>
-            <dd>{presentation.occurrenceId}</dd>
-          </div>
-          <div>
-            <dt>手順</dt>
-            <dd>{`${presentation.procedureId} (${presentation.procedureVersion})`}</dd>
-          </div>
-          <div>
-            <dt>計画版</dt>
-            <dd>{`${presentation.planId} / 版 ${presentation.planVersion}`}</dd>
-          </div>
         </dl>
       </section>
 
       <section className={styles.section} aria-labelledby="procedure-cancellation-record-heading">
         <h2 id="procedure-cancellation-record-heading">取消する記録（確認）</h2>
         <dl className={styles.detailList}>
-          <div>
-            <dt>RecordId</dt>
-            <dd>{presentation.recordId}</dd>
-          </div>
           <div>
             <dt>結果</dt>
             <dd>{presentation.resultLabel}</dd>
@@ -328,10 +314,12 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
             <dt>記録時刻</dt>
             <dd>{presentation.recordedAt}</dd>
           </div>
-          <div>
-            <dt>記録者</dt>
-            <dd>{presentation.recordedBy}</dd>
-          </div>
+          {!isOpaqueStaffActorId(presentation.recordedBy) ? (
+            <div>
+              <dt>記録者</dt>
+              <dd>{presentation.recordedBy}</dd>
+            </div>
+          ) : null}
         </dl>
       </section>
 
@@ -424,25 +412,22 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
           <h2 id="procedure-cancellation-submitted-heading">提出済みの取消イベント</h2>
           <dl className={styles.detailList}>
             <div>
-              <dt>LifecycleEventId</dt>
-              <dd>{submittedEvent.LifecycleEventId}</dd>
-            </div>
-            <div>
               <dt>記録時刻</dt>
               <dd>{submittedEvent.recordedAt}</dd>
             </div>
-            <div>
-              <dt>記録者</dt>
-              <dd>{submittedEvent.recordedBy}</dd>
-            </div>
+            {!isOpaqueStaffActorId(submittedEvent.recordedBy) ? (
+              <div>
+                <dt>記録者</dt>
+                <dd>{submittedEvent.recordedBy}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>理由</dt>
               <dd>{submittedEvent.reason ?? ""}</dd>
             </div>
           </dl>
           <p className={styles.note} data-field-workflow="cancellation-refresh-note">
-            画面上の「取消済み」は saveState から直接設定せず、既存 resolver
-            による再計算結果のみを表示します。
+            {FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE}
           </p>
         </section>
       ) : null}

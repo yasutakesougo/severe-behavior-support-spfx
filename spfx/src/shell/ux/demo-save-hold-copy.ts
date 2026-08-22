@@ -26,10 +26,10 @@ export const ADMIN_DEMO_UX_POLISH_1_SLICE = {
 
 /** Expected disconnected demo save — not a production error story, not a success claim. */
 export const DEMO_LIVE_WRITE_HOLD_SAVE_NOTE =
-  "デモでは保存しません。入力内容の確認まで行えます。実データ・SharePoint には書き込まれていません。" as const;
+  "デモでは保存しません。入力内容の確認まで行えます。このデモでの内容は実際の業務データには反映されません。" as const;
 
 export const DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE =
-  "デモでは保存しないため、未記録の表示は合成データのままです。実データ・SharePoint には書き込まれていません。" as const;
+  "デモでは保存しないため、未記録の表示は合成データのままです。このデモでの内容は実際の業務データには反映されません。" as const;
 
 const FORBIDDEN_SUCCESS_CLAIMS = [
   `保存${"成功"}`,

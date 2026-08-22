@@ -1,15 +1,16 @@
 /**
  * FIELD-WORKFLOW UI (#356) — fail-closed copy + result labels.
  * PERFORMED_WITH_ADAPTATION / NOT_PERFORMED must not read as staff failure.
+ * VP-2: staff-visible notes must avoid infra / implementation vocabulary.
  */
 
 import type { ProcedureRecordResultValue } from "./procedure-types";
 
 export const FIELD_WORKFLOW_PRESENTATION_NOTE =
-  "FIELD-WORKFLOW 合成表示です。live SharePoint 保存・Deploy は行いません。" as const;
+  "デモの合成表示です。この内容は実際の業務データには反映されません。" as const;
 
 export const FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE =
-  "保存は既存 ProcedureRecord persistence へ接続します。live SharePoint WRITE は未許可です。成功表示は persist 確認後のみです。" as const;
+  "保存結果は処理の確認後に表示します。実業務データには書き込みません。" as const;
 
 export const FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE =
   "実施時点の計画版を解決できません。最新版への付け替えはしません（fail-closed）。" as const;
@@ -30,19 +31,22 @@ export const FIELD_WORKFLOW_CORRECTION_ENTRY_NOTE =
   "元の記録と予定の文脈を確認して、訂正経路へ進みます。元の記録を上書きしません。" as const;
 
 export const FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE =
-  "訂正の合成表示です。元の記録は保持し、live SharePoint 保存は行いません。" as const;
+  "訂正の確認表示です。元の記録は残します。" as const;
 
 export const FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE =
-  "訂正の保存は in-memory fake append-only port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCorrection 確認後のみです。" as const;
+  "訂正はデモ内での確認用です。実業務データには反映されません。成功表示は処理確認後のみです。" as const;
 
 export const FIELD_WORKFLOW_CANCELLATION_ENTRY_NOTE =
   "対象記録と予定の文脈を確認して、取消経路へ進みます。記録の物理削除は行いません。" as const;
 
 export const FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE =
-  "取消の合成表示です。ProcedureRecord は保持し、append-only CANCEL のみです。live SharePoint 保存は行いません。" as const;
+  "取消の確認表示です。記録は残し、取消として扱います。" as const;
 
 export const FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE =
-  "取消の保存は in-memory Slice C fake port へ接続します。live SharePoint WRITE は未許可です。成功表示は submitCancellation 確認後のみです。取消済み表示は既存 resolver 再計算のみです。" as const;
+  "取消はデモ内での確認用です。実業務データには反映されません。成功表示は処理確認後のみです。" as const;
+
+export const FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE =
+  "画面上の「取消済み」は、保存ボタンの状態から直接付けず、一覧の再計算結果だけを表示します。" as const;
 
 export const PROCEDURE_RECORD_RESULT_LABELS: Readonly<Record<ProcedureRecordResultValue, string>> =
   {

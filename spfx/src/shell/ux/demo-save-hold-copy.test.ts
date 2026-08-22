@@ -40,11 +40,15 @@ describe("ADMIN-DEMO-UX-POLISH-1 demo save hold copy", () => {
   it("explains expected disconnect without claiming persistence success", () => {
     expect(DEMO_LIVE_WRITE_HOLD_SAVE_NOTE).toContain("デモでは保存しません");
     expect(DEMO_LIVE_WRITE_HOLD_SAVE_NOTE).toContain("入力内容の確認まで行えます");
-    expect(DEMO_LIVE_WRITE_HOLD_SAVE_NOTE).toContain("書き込まれていません");
+    expect(DEMO_LIVE_WRITE_HOLD_SAVE_NOTE).toContain(
+      "このデモでの内容は実際の業務データには反映されません",
+    );
+    expect(DEMO_LIVE_WRITE_HOLD_SAVE_NOTE).not.toContain("SharePoint");
     expect(demoHoldCopyAvoidsSuccessClaim(DEMO_LIVE_WRITE_HOLD_SAVE_NOTE)).toBe(true);
     expect(demoHoldCopyAvoidsSuccessClaim(DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE)).toBe(true);
     expect(demoHoldCopyAvoidsSuccessClaim("保存成功しました")).toBe(false);
     expect(DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE).toContain("未記録");
+    expect(DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE).not.toContain("SharePoint");
     expect(DEMO_UNRECORDED_AFTER_HOLD_SAVE_NOTE).not.toContain("本日記録した");
   });
 });
