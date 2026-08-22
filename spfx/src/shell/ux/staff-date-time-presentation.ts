@@ -9,6 +9,10 @@ function numberPart(value: string): string {
   return String(Number(value));
 }
 
+function twoDigit(value: string): string {
+  return value.length >= 2 ? value : `0${value}`;
+}
+
 function formatInstantInStaffTimeZone(value: string): string | undefined {
   const instant = new Date(value);
   if (Number.isNaN(instant.getTime())) {
@@ -29,7 +33,7 @@ function formatInstantInStaffTimeZone(value: string): string | undefined {
     return undefined;
   }
 
-  return `${numberPart(match[1])}年${numberPart(match[2])}月${numberPart(match[3])}日 ${match[4].padStart(2, "0")}:${match[5]}`;
+  return `${numberPart(match[1])}年${numberPart(match[2])}月${numberPart(match[3])}日 ${twoDigit(match[4])}:${match[5]}`;
 }
 
 /** Presentation-only formatter. It never derives or persists a business date. */
