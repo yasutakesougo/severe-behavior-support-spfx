@@ -25,7 +25,11 @@
 .heading:focus,
 .heading:focus-visible,
 .backButton:focus,
-.backButton:focus-visible {
+.backButton:focus-visible,
+.saveButton:focus,
+.saveButton:focus-visible,
+.secondaryButton:focus,
+.secondaryButton:focus-visible {
   outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
   outline-offset: sbs.$focus-outline-offset;
 }
@@ -37,25 +41,69 @@
 }
 
 .backButton,
+.saveButton,
+.secondaryButton,
 .disabledAction {
   min-height: 2.75rem;
   padding: 0.45rem sbs.$space-3;
   border-width: sbs.$border-width-thin;
   border-style: solid;
-  border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-canvas;
-  color: inherit;
+  border-radius: sbs.$radius-medium;
   font: inherit;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .backButton {
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface;
+  color: sbs.$color-text-secondary;
   cursor: pointer;
 }
 
+.backButton:hover:not(:disabled),
+.backButton:active:not(:disabled),
+.secondaryButton:hover:not(:disabled),
+.secondaryButton:active:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.saveButton {
+  border-color: sbs.$color-focus-ring;
+  background: sbs.$color-focus-ring;
+  color: sbs.$color-surface-canvas;
+  font-weight: sbs.$font-weight-semibold;
+  cursor: pointer;
+}
+
+.saveButton:hover:not(:disabled) {
+  box-shadow: sbs.$elevation-subtle;
+}
+
+.saveButton:active:not(:disabled) {
+  box-shadow: none;
+}
+
+.secondaryButton {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface;
+  color: inherit;
+  font-weight: sbs.$font-weight-semibold;
+  cursor: pointer;
+}
+
+.backButton:disabled,
+.saveButton:disabled,
+.secondaryButton:disabled,
 .disabledAction {
+  border-color: sbs.$color-border-subtle;
   background: sbs.$color-surface-muted;
+  color: sbs.$color-text-disabled;
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .note {
@@ -119,18 +167,39 @@
 
 .resultOption {
   display: flex;
-  gap: sbs.$space-2;
+  gap: sbs.$space-3;
+  align-items: flex-start;
+  min-height: 2.75rem;
   padding: sbs.$space-3;
   border-width: sbs.$border-width-thin;
   border-style: solid;
   border-color: sbs.$color-border-subtle;
-  background: sbs.$color-surface-canvas;
+  border-radius: sbs.$radius-medium;
+  background: sbs.$color-surface;
   cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.resultOption:hover {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.resultOption:has(input:focus-visible) {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .resultOptionSelected {
   border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-subtle;
+  background: sbs.$color-surface-selected;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.resultOption input:focus {
+  outline: none;
 }
 
 .resultLabel {
@@ -141,6 +210,7 @@
 .resultHint {
   color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-regular;
   line-height: sbs.$line-height-meta;
 }
 
@@ -180,22 +250,4 @@
   color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-meta;
   line-height: sbs.$line-height-meta;
-}
-
-.saveButton {
-  min-height: 2.75rem;
-  padding: 0.45rem sbs.$space-3;
-  border-width: sbs.$border-width-thin;
-  border-style: solid;
-  border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-canvas;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-}
-
-.saveButton:disabled {
-  background: sbs.$color-surface-muted;
-  cursor: not-allowed;
-  opacity: 0.7;
 }
