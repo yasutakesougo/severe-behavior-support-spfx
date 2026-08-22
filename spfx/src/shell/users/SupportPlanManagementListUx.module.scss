@@ -240,6 +240,7 @@
 .backButton:disabled,
 .createButton:disabled {
   color: sbs.$color-text-disabled;
+  box-shadow: none;
   opacity: 1;
   cursor: not-allowed;
 }
