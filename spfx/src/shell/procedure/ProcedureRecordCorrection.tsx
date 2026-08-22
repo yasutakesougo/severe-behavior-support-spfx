@@ -13,6 +13,7 @@ import {
   hintForProcedureRecordResult,
   labelForProcedureRecordResult,
 } from "./procedure-copy";
+import { isOpaqueStaffActorId } from "./vp2-staff-visible-copy";
 import {
   buildStaffProcedureRecordCorrectionSaveInput,
   nowAsiaTokyoIsoDateTime,
@@ -256,28 +257,12 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
             <dt>現在状態</dt>
             <dd>{presentation.occurrenceStatus}</dd>
           </div>
-          <div>
-            <dt>OccurrenceId</dt>
-            <dd>{presentation.occurrenceId}</dd>
-          </div>
-          <div>
-            <dt>手順</dt>
-            <dd>{`${presentation.procedureId} (${presentation.procedureVersion})`}</dd>
-          </div>
-          <div>
-            <dt>計画版</dt>
-            <dd>{`${presentation.planId} / 版 ${presentation.planVersion}`}</dd>
-          </div>
         </dl>
       </section>
 
       <section className={styles.section} aria-labelledby="procedure-correction-record-heading">
         <h2 id="procedure-correction-record-heading">元の記録</h2>
         <dl className={styles.detailList}>
-          <div>
-            <dt>RecordId</dt>
-            <dd>{presentation.recordId}</dd>
-          </div>
           <div>
             <dt>結果</dt>
             <dd>{presentation.resultLabel}</dd>
@@ -290,10 +275,12 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
             <dt>記録時刻</dt>
             <dd>{presentation.recordedAt}</dd>
           </div>
-          <div>
-            <dt>記録者</dt>
-            <dd>{presentation.recordedBy}</dd>
-          </div>
+          {!isOpaqueStaffActorId(presentation.recordedBy) ? (
+            <div>
+              <dt>記録者</dt>
+              <dd>{presentation.recordedBy}</dd>
+            </div>
+          ) : null}
         </dl>
       </section>
 
@@ -409,17 +396,15 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
           <h2 id="procedure-correction-submitted-heading">提出済みの訂正</h2>
           <dl className={styles.detailList}>
             <div>
-              <dt>CorrectionId</dt>
-              <dd>{submittedCorrection.CorrectionId}</dd>
-            </div>
-            <div>
               <dt>訂正時刻</dt>
               <dd>{submittedCorrection.correctedAt}</dd>
             </div>
-            <div>
-              <dt>訂正者</dt>
-              <dd>{submittedCorrection.correctedBy}</dd>
-            </div>
+            {!isOpaqueStaffActorId(submittedCorrection.correctedBy) ? (
+              <div>
+                <dt>訂正者</dt>
+                <dd>{submittedCorrection.correctedBy}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>結果</dt>
               <dd>{labelForProcedureRecordResult(submittedCorrection.result as never)}</dd>
