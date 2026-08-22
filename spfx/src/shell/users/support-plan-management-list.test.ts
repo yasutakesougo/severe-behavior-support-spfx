@@ -58,7 +58,7 @@ describe("SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 fixture", () => {
       formatFamilyPCountLabel(SUPPORT_PLAN_MANAGEMENT_KPI_LABELS.needs_action, 2),
     );
     expect(DEMO_KPI_FAMILY_P_NOTE).toContain(
-      "利用者一覧の要確認/未記録/期限接近とは対象が異なります",
+      "利用者一覧の要確認・未記録・期限接近とは対象が異なります",
     );
   });
 
@@ -89,7 +89,7 @@ describe("SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 fixture", () => {
   });
 
   it("expresses review as a month guide and not a 90-day expiry", () => {
-    expect(formatSupportPlanManagementReviewWindowLabel("2026/09")).toBe("見直し目安: 2026/09");
+    expect(formatSupportPlanManagementReviewWindowLabel("2026/09")).toBe("見直し目安: 2026年9月");
     const joined = SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE.rows
       .map((row) => row.reviewWindowLabel)
       .join(" ");
