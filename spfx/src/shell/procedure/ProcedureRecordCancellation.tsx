@@ -5,6 +5,7 @@ import {
   labelForShellSaveState,
   type ShellSaveState,
 } from "../ux/save-state";
+import { formatStaffBusinessDateTime } from "../ux/staff-date-time-presentation";
 import {
   FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE,
   FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE,
@@ -308,11 +309,11 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
           </div>
           <div>
             <dt>実施時刻</dt>
-            <dd>{presentation.performedAt}</dd>
+            <dd>{presentation.performedAtLabel}</dd>
           </div>
           <div>
             <dt>記録時刻</dt>
-            <dd>{presentation.recordedAt}</dd>
+            <dd>{presentation.recordedAtLabel}</dd>
           </div>
           {!isOpaqueStaffActorId(presentation.recordedBy) ? (
             <div>
@@ -413,7 +414,7 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
           <dl className={styles.detailList}>
             <div>
               <dt>記録時刻</dt>
-              <dd>{submittedEvent.recordedAt}</dd>
+              <dd>{formatStaffBusinessDateTime(submittedEvent.recordedAt)}</dd>
             </div>
             {!isOpaqueStaffActorId(submittedEvent.recordedBy) ? (
               <div>

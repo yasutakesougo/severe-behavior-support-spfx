@@ -5,6 +5,7 @@ import {
   labelForShellSaveState,
   type ShellSaveState,
 } from "../ux/save-state";
+import { formatStaffBusinessDateTime } from "../ux/staff-date-time-presentation";
 import {
   FIELD_WORKFLOW_CORRECTION_PRESENTATION_NOTE,
   FIELD_WORKFLOW_CORRECTION_SAVE_BOUNDARY_NOTE,
@@ -269,11 +270,11 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
           </div>
           <div>
             <dt>実施時刻</dt>
-            <dd>{presentation.performedAt}</dd>
+            <dd>{presentation.performedAtLabel}</dd>
           </div>
           <div>
             <dt>記録時刻</dt>
-            <dd>{presentation.recordedAt}</dd>
+            <dd>{presentation.recordedAtLabel}</dd>
           </div>
           {!isOpaqueStaffActorId(presentation.recordedBy) ? (
             <div>
@@ -397,7 +398,7 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
           <dl className={styles.detailList}>
             <div>
               <dt>訂正時刻</dt>
-              <dd>{submittedCorrection.correctedAt}</dd>
+              <dd>{formatStaffBusinessDateTime(submittedCorrection.correctedAt)}</dd>
             </div>
             {!isOpaqueStaffActorId(submittedCorrection.correctedBy) ? (
               <div>
@@ -411,7 +412,7 @@ export const ProcedureRecordCorrection: React.FC<ProcedureRecordCorrectionProps>
             </div>
             <div>
               <dt>実施時刻</dt>
-              <dd>{submittedCorrection.performedAt}</dd>
+              <dd>{formatStaffBusinessDateTime(submittedCorrection.performedAt)}</dd>
             </div>
             <div>
               <dt>理由</dt>
