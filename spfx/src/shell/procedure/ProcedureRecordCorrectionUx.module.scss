@@ -87,12 +87,21 @@
   box-shadow: none;
 }
 
-.secondaryButton {
+.secondaryButton,
+.correction [data-field-workflow="procedure-cancellation-confirm-outcome"] {
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface;
   color: inherit;
   font-weight: sbs.$font-weight-semibold;
   cursor: pointer;
+  box-shadow: none;
+}
+
+.correction [data-field-workflow="procedure-cancellation-confirm-outcome"]:hover:not(:disabled),
+.correction [data-field-workflow="procedure-cancellation-confirm-outcome"]:active:not(:disabled) {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+  box-shadow: none;
 }
 
 .backButton:disabled,
