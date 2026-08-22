@@ -191,7 +191,7 @@
     border-color 120ms ease;
 }
 
-.resultOption:hover {
+.resultOption:hover:not(:has(input:disabled)) {
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-hover;
 }
@@ -205,6 +205,17 @@
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-selected;
   font-weight: sbs.$font-weight-semibold;
+}
+
+.resultOption:has(input:disabled) {
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-muted;
+  color: sbs.$color-text-disabled;
+  cursor: not-allowed;
+}
+
+.resultOption:has(input:disabled) .resultHint {
+  color: sbs.$color-text-disabled;
 }
 
 .resultOption input:focus {
