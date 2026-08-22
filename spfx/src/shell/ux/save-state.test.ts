@@ -38,7 +38,7 @@ describe("SHELL-UX save-state presentation", () => {
 
   it("keeps 保存結果不明 independent from 保存失敗 and 保存済み", () => {
     const unknown = descriptionForShellSaveState("save_outcome_unknown");
-    expect(unknown).toContain("丸めません");
+    expect(unknown).toContain("成功・失敗は確定していません");
     expect(unknown).not.toContain("保存失敗");
     expect(unknown).not.toContain("保存済み");
     expect(labelForShellSaveState("save_outcome_unknown")).not.toBe(
@@ -101,8 +101,8 @@ describe("DEMO-UX-12 save badge hierarchy (RPF-005)", () => {
 
   it("keeps saving description presentation-only and non-success", () => {
     const saving = descriptionForShellSaveState("saving");
-    expect(saving).toContain("保存処理を表示中");
-    expect(saving).toContain("実保存なし");
+    expect(saving).toContain("保存しています");
+    expect(saving).toContain("完了するまで主要な操作はできません");
     expect(saving).not.toContain("保存済み");
   });
 });
