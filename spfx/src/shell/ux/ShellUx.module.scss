@@ -113,12 +113,34 @@
   align-items: center;
   gap: 0.35rem;
   min-height: 2.75rem; /* ~44px touch target */
+  padding: sbs.$space-2 sbs.$space-3;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-medium;
+  background: sbs.$color-surface;
   font-size: sbs.$font-size-200;
   cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.siteOption:hover {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.siteOption:has(input:checked) {
+  border-color: sbs.$color-focus-ring;
+  background: sbs.$color-surface-selected;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.siteOption:has(input:focus-visible) {
+  @include sbs.focus-ring;
 }
 
 .siteOption input:focus {
-  @include sbs.focus-ring;
+  outline: none;
 }
 
 .demoRoleEntry {
@@ -158,8 +180,30 @@
   gap: 0.35rem;
   min-height: 2.75rem; /* ~44px touch target */
   min-width: 0;
+  padding: sbs.$space-2 sbs.$space-3;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-medium;
+  background: sbs.$color-surface;
   font-size: sbs.$font-size-200;
   cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.demoRoleOption:hover {
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-hover;
+}
+
+.demoRoleOption:has(input:checked) {
+  border-color: sbs.$color-focus-ring;
+  background: sbs.$color-surface-selected;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.demoRoleOption:has(input:focus-visible) {
+  @include sbs.focus-ring;
 }
 
 .demoRoleOptionDirection {
@@ -171,12 +215,7 @@
 }
 
 .demoRoleOption input:focus {
-  @include sbs.focus-ring;
-}
-
-.navButton:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
+  outline: none;
 }
 
 .saveStatePresentation {
@@ -320,12 +359,21 @@
   border-width: sbs.$border-width-thin;
   border-style: solid;
   border-color: sbs.$color-border-strong;
+  border-radius: sbs.$radius-medium;
   background: sbs.$color-surface-muted;
   color: inherit;
   cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
 }
 
-.navButton:focus {
+.navButton:hover:not(:disabled) {
+  background: sbs.$color-surface-hover;
+}
+
+.navButton:focus,
+.navButton:focus-visible {
   @include sbs.focus-ring;
 }
 
@@ -333,6 +381,14 @@
   border-color: sbs.$color-focus-ring;
   background: sbs.$color-surface-selected;
   font-weight: 700;
+}
+
+.navButton:disabled {
+  border-color: sbs.$color-border-subtle;
+  background: sbs.$color-surface-muted;
+  color: sbs.$color-text-disabled;
+  opacity: 1;
+  cursor: not-allowed;
 }
 
 .destinationPlaceholder {
