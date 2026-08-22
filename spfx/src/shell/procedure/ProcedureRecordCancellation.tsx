@@ -5,6 +5,7 @@ import {
   labelForShellSaveState,
   type ShellSaveState,
 } from "../ux/save-state";
+import { formatStaffBusinessDateTime } from "../ux/staff-date-time-presentation";
 import {
   FIELD_WORKFLOW_CANCELLATION_PRESENTATION_NOTE,
   FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE,
@@ -43,15 +44,10 @@ import styles from "./ProcedureRecordCorrectionUx.module.scss";
 export type ProcedureRecordCancellationProps = Readonly<{
   presentation: ProcedureCancellationPresentation;
   originalRecord: ProcedureRecord;
-  /** Lifecycle events fed to Slice A/C for this attempt (baseline + session). */
   lifecycleEventsForSemantics: readonly ProcedureRecordLifecycleEvent[];
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToCurrentProcedure?: () => void;
   onSaveStateChange?: (state: ShellSaveState) => void;
-  /**
-   * After Slice C returns saved + CANCEL event, chrome appends to session collection
-   * and rebuilds Today Support via existing resolver. Must not set 取消済み from saveState.
-   */
   onCancellationPersisted?: (event: ProcedureRecordLifecycleEvent) => void;
   persistPort?: ProcedureRecordCancellationPersistencePort;
   nowIso?: () => string | undefined;
@@ -59,10 +55,6 @@ export type ProcedureRecordCancellationProps = Readonly<{
   initialSaveState?: ShellSaveState;
 }>;
 
-/**
- * CANCEL-SLICE-D — FIELD_STAFF cancellation CTA / presentation.
- * Wired to Slice C in-memory fake only. LIVE WRITE / SharePoint remain HOLD.
- */
 export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationProps> = ({
   presentation,
   originalRecord,
@@ -282,155 +274,37 @@ export const ProcedureRecordCancellation: React.FC<ProcedureRecordCancellationPr
       <section className={styles.section} aria-labelledby="procedure-cancellation-context-heading">
         <h2 id="procedure-cancellation-context-heading">対象の予定と文脈</h2>
         <dl className={styles.detailList}>
-          <div>
-            <dt>利用者</dt>
-            <dd>{presentation.personLabel}</dd>
-          </div>
-          <div>
-            <dt>予定</dt>
-            <dd>{`${presentation.scheduledTime} / ${presentation.activityLabel}`}</dd>
-          </div>
-          <div>
-            <dt>現在状態</dt>
-            <dd data-field-workflow="cancellation-occurrence-status">
-              {presentation.occurrenceStatus}
-            </dd>
-          </div>
+          <div><dt>利用者</dt><dd>{presentation.personLabel}</dd></div>
+          <div><dt>予定</dt><dd>{`${presentation.scheduledTime} / ${presentation.activityLabel}`}</dd></div>
+          <div><dt>現在状態</dt><dd data-field-workflow="cancellation-occurrence-status">{presentation.occurrenceStatus}</dd></div>
         </dl>
       </section>
 
       <section className={styles.section} aria-labelledby="procedure-cancellation-record-heading">
         <h2 id="procedure-cancellation-record-heading">取消する記録（確認）</h2>
         <dl className={styles.detailList}>
-          <div>
-            <dt>結果</dt>
-            <dd>{presentation.resultLabel}</dd>
-          </div>
-          <div>
-            <dt>実施時刻</dt>
-            <dd>{presentation.performedAt}</dd>
-          </div>
-          <div>
-            <dt>記録時刻</dt>
-            <dd>{presentation.recordedAt}</dd>
-          </div>
-          {!isOpaqueStaffActorId(presentation.recordedBy) ? (
-            <div>
-              <dt>記録者</dt>
-              <dd>{presentation.recordedBy}</dd>
-            </div>
-          ) : null}
+          <div><dt>結果</dt><dd>{presentation.resultLabel}</dd></div>
+          <div><dt>実施時刻</dt><dd>{presentation.performedAtLabel}</dd></div>
+          <div><dt>記録時刻</dt><dd>{presentation.recordedAtLabel}</dd></div>
+          {!isOpaqueStaffActorId(presentation.recordedBy) ? <div><dt>記録者</dt><dd>{presentation.recordedBy}</dd></div> : null}
         </dl>
       </section>
 
       <section className={styles.section} aria-labelledby="procedure-cancellation-reason-heading">
         <h2 id="procedure-cancellation-reason-heading">取消理由（必須）</h2>
         <div className={styles.fieldGrid}>
-          <label>
-            理由
-            <textarea
-              value={draft.reason}
-              disabled={!unlockForEdit()}
-              onChange={(event) => {
-                updateReason(event.target.value);
-              }}
-              data-field-workflow="cancellation-reason-input"
-            />
-          </label>
-          <label data-field-workflow="cancellation-confirm-label">
-            <input
-              type="checkbox"
-              checked={draft.confirmed}
-              disabled={!unlockForEdit() || draft.reason.trim().length === 0}
-              onChange={(event) => {
-                updateConfirmed(event.target.checked);
-              }}
-              data-field-workflow="cancellation-confirm-input"
-            />{" "}
-            対象記録と理由を確認し、取消を実行します（記録は削除しません）
-          </label>
+          <label>理由<textarea value={draft.reason} disabled={!unlockForEdit()} onChange={(event) => { updateReason(event.target.value); }} data-field-workflow="cancellation-reason-input" /></label>
+          <label data-field-workflow="cancellation-confirm-label"><input type="checkbox" checked={draft.confirmed} disabled={!unlockForEdit() || draft.reason.trim().length === 0} onChange={(event) => { updateConfirmed(event.target.checked); }} data-field-workflow="cancellation-confirm-input" />{" "}対象記録と理由を確認し、取消を実行します（記録は削除しません）</label>
         </div>
       </section>
 
       <section className={styles.section} aria-labelledby="procedure-cancellation-boundary-heading">
         <h2 id="procedure-cancellation-boundary-heading">保存</h2>
         <p className={styles.note}>{FIELD_WORKFLOW_CANCELLATION_SAVE_BOUNDARY_NOTE}</p>
-        {saveWiringActive ? (
-          <>
-            <div
-              className={styles.saveStatusBlock}
-              data-field-workflow="cancellation-save-status"
-              data-field-workflow-save-state={saveState}
-            >
-              <SaveStateBadge state={saveState} />
-              <p className={styles.statusNote} role="status">
-                {labelForShellSaveState(saveState)} — {statusNote}
-              </p>
-            </div>
-            <button
-              type="button"
-              className={styles.saveButton}
-              disabled={!saveEnabled}
-              aria-disabled={!saveEnabled ? "true" : undefined}
-              data-field-workflow="procedure-cancellation-save"
-              onClick={handleSave}
-            >
-              取消を保存
-            </button>
-            {saveState === "save_outcome_unknown" ? (
-              <button
-                type="button"
-                className={styles.saveButton}
-                disabled={!confirmOutcomeEnabled}
-                aria-disabled={!confirmOutcomeEnabled ? "true" : undefined}
-                data-field-workflow="procedure-cancellation-confirm-outcome"
-                onClick={handleConfirmOutcome}
-              >
-                結果を確認
-              </button>
-            ) : null}
-          </>
-        ) : (
-          <button
-            type="button"
-            className={styles.disabledAction}
-            disabled
-            aria-disabled="true"
-            data-field-workflow="procedure-cancellation-save-disabled"
-          >
-            取消を保存する（権限入力不足）
-          </button>
-        )}
+        {saveWiringActive ? <><div className={styles.saveStatusBlock} data-field-workflow="cancellation-save-status" data-field-workflow-save-state={saveState}><SaveStateBadge state={saveState} /><p className={styles.statusNote} role="status">{labelForShellSaveState(saveState)} — {statusNote}</p></div><button type="button" className={styles.saveButton} disabled={!saveEnabled} aria-disabled={!saveEnabled ? "true" : undefined} data-field-workflow="procedure-cancellation-save" onClick={handleSave}>取消を保存</button>{saveState === "save_outcome_unknown" ? <button type="button" className={styles.saveButton} disabled={!confirmOutcomeEnabled} aria-disabled={!confirmOutcomeEnabled ? "true" : undefined} data-field-workflow="procedure-cancellation-confirm-outcome" onClick={handleConfirmOutcome}>結果を確認</button> : null}</> : <button type="button" className={styles.disabledAction} disabled aria-disabled="true" data-field-workflow="procedure-cancellation-save-disabled">取消を保存する（権限入力不足）</button>}
       </section>
 
-      {submittedEvent ? (
-        <section
-          className={styles.section}
-          aria-labelledby="procedure-cancellation-submitted-heading"
-          data-field-workflow="cancellation-submitted-summary"
-        >
-          <h2 id="procedure-cancellation-submitted-heading">提出済みの取消イベント</h2>
-          <dl className={styles.detailList}>
-            <div>
-              <dt>記録時刻</dt>
-              <dd>{submittedEvent.recordedAt}</dd>
-            </div>
-            {!isOpaqueStaffActorId(submittedEvent.recordedBy) ? (
-              <div>
-                <dt>記録者</dt>
-                <dd>{submittedEvent.recordedBy}</dd>
-              </div>
-            ) : null}
-            <div>
-              <dt>理由</dt>
-              <dd>{submittedEvent.reason ?? ""}</dd>
-            </div>
-          </dl>
-          <p className={styles.note} data-field-workflow="cancellation-refresh-note">
-            {FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE}
-          </p>
-        </section>
-      ) : null}
+      {submittedEvent ? <section className={styles.section} aria-labelledby="procedure-cancellation-submitted-heading" data-field-workflow="cancellation-submitted-summary"><h2 id="procedure-cancellation-submitted-heading">提出済みの取消イベント</h2><dl className={styles.detailList}><div><dt>記録時刻</dt><dd>{formatStaffBusinessDateTime(submittedEvent.recordedAt)}</dd></div>{!isOpaqueStaffActorId(submittedEvent.recordedBy) ? <div><dt>記録者</dt><dd>{submittedEvent.recordedBy}</dd></div> : null}<div><dt>理由</dt><dd>{submittedEvent.reason ?? ""}</dd></div></dl><p className={styles.note} data-field-workflow="cancellation-refresh-note">{FIELD_WORKFLOW_CANCELLATION_REFRESH_NOTE}</p></section> : null}
     </section>
   );
 };
