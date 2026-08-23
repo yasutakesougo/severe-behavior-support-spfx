@@ -7,22 +7,24 @@ Kind: read-only Exact Scope Definition
 MODE: READ-ONLY DEFINITION
 BASE: main@7944cea0fad20783f178ec613080283b98b5cca5
 Definition Correction-1: APPLIED
+Definition Correction-2: APPLIED
 Code / SCSS / TSX mutation: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 Deploy / SharePoint / Graph / Entra: FORBIDDEN
-NEXT: VP-7 Definition focused Re-Review
+NEXT: VP-7 Definition focused Re-Review-2
 Agent: STOP on implementation
 ```
 
-## 0. Correction-1
+## 0. Correction history
 
-Definition Reviewで見つかった境界の曖昧さを先に閉じる。
+Definition Reviewで見つかった境界の曖昧さを閉じる。
 
 | ID | Severity | Status | Correction |
 |---|---|---|---|
 | P1-1 | P1 | CLOSED | VP-4で固定した構造spacingと、VP-7で検討する局所optical offsetを分離した。VP-7はcontainer width / padding / gap / spacing token assignmentを変更しない。alignment propertyまたは局所offsetだけを候補にする。 |
 | P2-1 | P2 | CLOSED | このDefinitionから新しい`44px`数値要件を持ち込まない。既存のhit-area / accessibility authorityを弱めない、とだけ固定する。 |
 | P2-2 | P2 | CLOSED | Visual weightは診断観点に限定する。color / shadow / font-weight等によるCTA優先順位の再設計はVP-7では行わない。 |
+| P1-2 | P1 | CLOSED | VP-7のchanged-areaを3つのSCSSファイルのsubsetだけに固定した。TSX、Shared Shell、tokens、その他SCSSへの拡張はVP-7では禁止する。SCSSだけで閉じない場合は別exact sliceへ戻す。 |
 
 ## 1. VP-7が扱う対象
 
@@ -56,6 +58,8 @@ Optical correctionは、デザイントークンや既存spacingを置き換え�
 
 候補にできるのは、既存構造spacingを変えないalignment propertyまたは局所optical offsetである。
 
+補正は§5で固定したSCSSファイル内だけで行う。
+
 「なんとなく見やすい」だけを理由にした補正は認めない。
 
 ## 4. 視覚レビューで確認する4項目
@@ -88,9 +92,9 @@ Perceived spacingは診断観点であり、VP-4のcontainer padding / gap / spa
 
 構造spacingの変更が必要と判定された場合は、VP-7の実装対象から外す。
 
-## 5. In-scope candidate surfaces
+## 5. Changed-area authority
 
-候補は、VP-4からVP-6までの視覚収束対象と重なる次の3 surfaceとする。
+VP-7で変更可能なファイルは次の3ファイルだけである。
 
 ```text
 spfx/src/shell/procedure/ProcedureRecordFormUx.module.scss
@@ -98,11 +102,22 @@ spfx/src/shell/procedure/ProcedureRecordCorrectionUx.module.scss
 spfx/src/shell/users/SupportPlanManagementListUx.module.scss
 ```
 
-Shared Shellは、VP-7 Reviewで具体的な視覚偏りが確認された場合だけ追加候補にする。
+実装時のchanged-areaは、上記3ファイルのsubsetでなければならない。
+
+Before evidenceで視覚偏りが確認できないファイルは変更しない。
+
+上記3ファイル以外の変更が必要になった場合は、VP-7を拡張しない。
+
+その場合は実装を停止し、別のExact Scope Definitionへ戻す。
 
 ## 6. Explicit OUT
 
 ```text
+all TSX / TS / JS changes
+ShellUx.module.scss
+SaveStateBadge / SaveStatePresentation
+spfx/src/shell/tokens/**
+§5に列挙していないその他SCSS
 新しい色体系
 color / shadow / font-weightによるCTA優先順位の再設計
 新しいspacing scale
@@ -133,19 +148,23 @@ viewportごとに説明できないmagic numberを増やさない。
 
 Primary CTAを強く見せるために、VP-5で確定したdisabled表現を上書きしない。
 
+TSX、Shared Shell、tokens、その他SCSSへ変更範囲を拡張しない。
+
 ## 8. Definition Reviewで確定する事項
 
 VP-7 Definition Reviewでは、次の事項だけを判定する。
 
 1. VP-7を独立sliceとして実施する価値があるか。
-2. 3 candidate surfacesのうち、実際に補正対象とするsurfaceはどれか。
+2. §5の3ファイルのうち、実際に補正対象とするsubsetはどれか。
 3. Before evidenceで再現する視覚偏りが存在するか。
-4. alignment propertyまたは局所offsetで閉じるか。
+4. §5のSCSS内のalignment propertyまたは局所offsetで閉じるか。
 5. VP-3からVP-6のauthorityを再オープンせずに実装できるか。
 
 視覚偏りが確認できないsurfaceは変更対象にしない。
 
 構造spacingまたはVP-5 priorityの変更が必要なsurfaceもVP-7では変更しない。
+
+SCSS-onlyで閉じないsurfaceもVP-7では変更しない。
 
 ## 9. Implementation Start後に要求するEvidence
 
@@ -155,9 +174,11 @@ Implementation Startが別GOで許可された場合だけ、次のEvidenceを�
 - desktop、tablet、narrowのBefore / Afterを同一条件で比較する。
 - 変更selectorごとに、何が視覚的に偏っていたかを記録する。
 - 数値上の整列だけでは解消しない理由を記録する。
-- SCSS diffを最小化する。
-- TSXを変更する場合はclassName wiringだけに限定する。
+- diffが§5の3 SCSSファイルのsubsetだけであることを確認する。
 - container width / padding / gap / spacing token assignmentが不変であることを確認する。
+- color / shadow / font-weightが不変であることを確認する。
+- TSX / TS / JSが不変であることを確認する。
+- ShellUx.module.scssとtokensが不変であることを確認する。
 - keyboard順序が不変であることを確認する。
 - focus ringとhit areaが不変であることを確認する。
 - horizontal overflowが増えていないことを確認する。
@@ -179,8 +200,10 @@ Implementation Startが別GOで許可された場合だけ、次のEvidenceを�
 | VP-7-AC9 | desktop / tablet / narrowで新しいoverflowを発生させない |
 | VP-7-AC10 | 補正が不要なsurfaceは変更しない |
 | VP-7-AC11 | color / shadow / font-weightでVP-5 priorityを再設計しない |
-| VP-7-AC12 | SharePoint / Graph requests = 0 |
-| VP-7-AC13 | Deploy / Production Bindingを行わない |
+| VP-7-AC12 | changed-areaは§5の3 SCSSファイルのsubsetだけである |
+| VP-7-AC13 | TSX / TS / JS / ShellUx.module.scss / tokens / その他SCSSを変更しない |
+| VP-7-AC14 | SharePoint / Graph requests = 0 |
+| VP-7-AC15 | Deploy / Production Bindingを行わない |
 
 ## 11. External referenceの扱い
 
@@ -195,7 +218,7 @@ https://speakerdeck.com/yuichi_hara7/mei-siiuiwozuo-rutameni-dezainagayi-shi-sit
 
 ## 12. Rollback boundary
 
-後続実装のrollbackは、VP-7で追加したpresentation-only SCSSまたはclassName wiringだけに限定する。
+後続実装のrollbackは、§5のSCSS内でVP-7が追加したpresentation-only変更だけに限定する。
 
 Domain、persistence、navigation、save-state semantics、SharePoint、Graph、Deployへrollback影響を波及させない。
 
@@ -203,8 +226,8 @@ Domain、persistence、navigation、save-state semantics、SharePoint、Graph、
 
 | Item | Status |
 |---|---|
-| VP-7 Exact Scope Definition | CORRECTED / REVIEW READY |
-| VP-7 Definition focused Re-Review | NEXT |
+| VP-7 Exact Scope Definition | CORRECTED-2 / REVIEW READY |
+| VP-7 Definition focused Re-Review-2 | NEXT |
 | Implementation Start | NOT AUTHORIZED |
 | Code / SCSS / TSX mutation | STOP |
 | Ready / Merge | NOT AUTHORIZED BY THIS DEFINITION |
