@@ -1,9 +1,9 @@
 # CURRENT-RC SECURITY EXACT-SCOPE DEFINITION-1
 
 この文書は、current Product RC に対する Security Definition と、後続の
-exact-SHA Deep Scan の対象境界を固定するための **docs-only definition** である。
-この文書自体は Deep Scan の実行結果、Security Definition PASS、Deep Scan Start GO、
-Artifact Authority、Deploy authorization を意味しない。
+exact-SHA Deep Scan の対象境界を固定するための **docs-only definition / durable status record** である。
+この文書自体は Deep Scan の実行結果、Deep Scan Start GO、Artifact Authority、
+Deploy authorization を意味しない。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
@@ -17,7 +17,14 @@ RR-2 Definition:
   focused review authority:
     5536b7402ab13ba0f52c2a6521da5e91670f9637
 Definition status:
-  RECORDED / AWAITING INDEPENDENT REVIEW
+  PASS / LOCKED
+  review basis:
+    112d7ffca57e93b80d2d308902633aa4eef2c7d8
+  independent focused re-review:
+    PASS / LOCKABLE
+  previous publication status:
+    RECORDED / AWAITING INDEPENDENT REVIEW
+    STALE / RECONCILED BY THIS RECORD
 Deep Scan Start GO:
   NOT GRANTED
 Deep Scan:
@@ -40,6 +47,14 @@ Product RC / code basis:
 
 RR-2 focused Definition review authority:
   5536b7402ab13ba0f52c2a6521da5e91670f9637
+
+Security Exact-Scope independent-review authority:
+  review basis:
+    112d7ffca57e93b80d2d308902633aa4eef2c7d8
+  result:
+    PASS / LOCKABLE
+  durable status:
+    PASS / LOCKED
 
 This Security Exact-Scope Definition:
   this definition document revision
@@ -203,15 +218,16 @@ alter package metadata as part of discovery or closeout.
 
 ```text
 1. Current-RC Security Exact-Scope Definition
-   Status: RECORDED
+   Status: PASS / LOCKED
    Target: 7944cea0fad20783f178ec613080283b98b5cca5
 
 2. Independent Review of this Security Definition
-   Status: NOT STARTED
+   Status: PASS / LOCKABLE / COMPLETE
+   Review basis: 112d7ffca57e93b80d2d308902633aa4eef2c7d8
    Requires Step 1
 
 3. Security Definition PASS / LOCK
-   Status: NOT ESTABLISHED
+   Status: PASS / LOCKED
    Requires Step 2 PASS
 
 4. Human Deep Scan Start GO
@@ -223,14 +239,16 @@ alter package metadata as part of discovery or closeout.
    Requires Step 4
 ```
 
-Only Step 2 is the next action after this document is recorded. Step 4 is a
-separate Human-only authorization and must not be inferred from RR-2 Definition
-LOCK or from this scope definition.
+Steps 1-3 are complete. Step 4 is a separate Human-only authorization and must
+not be inferred from RR-2 Definition LOCK or from this scope definition.
 
 ## 8. STOP
 
 ```text
-This document defines scope only.
+This document records the Security Definition PASS / LOCK status and defines scope.
+The previous `RECORDED / AWAITING INDEPENDENT REVIEW` publication status is stale
+and has been reconciled by this durable record.
+Do not treat this status record as Deep Scan authorization.
 Do not begin the Deep Scan from this document.
 Do not build .sppkg.
 Do not calculate an artifact hash.
@@ -240,8 +258,8 @@ Do not Production Bind.
 Do not enable LIVE WRITE.
 Do not Deploy.
 Do not mutate SharePoint / Graph / M365 / Entra / App Catalog.
-Wait for Independent Review, Security Definition PASS / LOCK,
-and a separate Human Deep Scan Start GO.
+Security Definition PASS / LOCK is recorded.
+Wait for a separate Human Deep Scan Start GO.
 CURRENT ACTION: STOP
 ```
 
