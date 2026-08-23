@@ -9,7 +9,7 @@ evidence の関係を独立に確認するための **docs-only review companion
 repository: yasutakesougo/severe-behavior-support-spfx
 Review ID: CURRENT-RC-FIXTURE-DEMO-RECONCILIATION-INDEPENDENT-REVIEW-1
 Kind: independent reconciliation review / docs-only
-Status: PUBLICATION COMPLETE / P2-1 STATUS CORRECTION LOCAL
+Status: PUBLICATION COMPLETE / P2-1 STATUS CORRECTION PUBLISHED
 Review baseline: 7944cea0fad20783f178ec613080283b98b5cca5
 ProductId: 4342db47-21a3-4c48-aed1-ef615f55c404
 Version: 1.0.0.2
@@ -31,7 +31,7 @@ Artifact Authority: NOT STARTED
 Production Binding: Option A — KEEP unbound / UNCHANGED
 LIVE WRITE: HOLD
 Deploy: NOT AUTHORIZED
-Current status correction: LOCAL WORKTREE ONLY / NOT YET PUBLISHED
+Current status correction: PUBLISHED / REMOTE BRANCH VERIFIED
 External mutation: NONE
 ```
 
@@ -63,9 +63,8 @@ Published reconciliation:
   remote push: COMPLETE
 
 Current companion status correction:
-  local worktree only / not yet published
-  correction commit: NOT PERFORMED
-  correction push: NOT PERFORMED
+  published on the feature branch
+  remote push: COMPLETE
 ```
 
 The predecessor records are evidence sources. They are not relabeled as
@@ -94,8 +93,8 @@ Review checks:
 6. Same path / Record ID does not carry changed semantics.
 7. Published reconciliation identity is explicit: commit `0930b02...`, branch
    `codex/current-rc-fixture-demo-reconciliation-1`, and remote push COMPLETE.
-   Any later status correction is separately identified as local until separately
-   published.
+   The P2-1 status correction is now published; no pending local status correction
+   remains.
 
 ## 3. Historical pre-publication review finding
 
@@ -185,7 +184,7 @@ Remote push:
   COMPLETE
 
 Status correction publication:
-  NOT PERFORMED / separate commit and push GO required
+  COMPLETE / remote branch verified
 
 Next security execution path:
   CONDITIONAL / NOT AUTHORIZED
@@ -212,7 +211,7 @@ Still forbidden:
 
 ```text
 The reconciliation publication is COMPLETE at 0930b02.
-This P2-1 status correction is local until separately committed and pushed.
+The P2-1 status correction is PUBLISHED / REMOTE BRANCH VERIFIED.
 Independent Review-1 is recorded as PASS.
 Do not treat publication or this correction as Deep Scan authorization.
 Do not edit predecessor evidence to repair a review finding.
