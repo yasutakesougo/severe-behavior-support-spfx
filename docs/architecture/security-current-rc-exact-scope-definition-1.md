@@ -82,7 +82,8 @@ the repository-wide review.
 ## 3. Explicit exclusions and boundaries
 
 The following are outside the authority of this definition and must not be
-introduced into the scan target by local workspace state:
+introduced into the scan environment by local workspace state or external
+runtime data:
 
 ```text
 Out of scan authority:
@@ -90,7 +91,15 @@ Out of scan authority:
   - generated local smoke CSS or other untracked generated files
   - workbench.sqlite3 or other local databases
   - local WIP not present in Product RC 7944cea…
-  - tokens, cookies, secrets, personal data, or production data
+  - live tokens / cookies / credentials
+  - personal data or production data from outside the tracked Product RC
+  - external secrets
+
+Still IN SCOPE in the tracked Product RC 7944cea…:
+  - detection of accidentally tracked secrets or credentials
+  - detection of accidentally tracked personal data or production data
+  - presence, path, and classification of any detected sensitive content
+    without reproducing secret values or personal data
 
 Out of this gate:
   - SharePoint / Graph / M365 / Entra reads or writes
@@ -125,6 +134,27 @@ Primary references are `SECURITY.md`, `docs/development/quality-gates.md`,
 Existing Accepted / LOCKED Decisions remain authoritative.
 
 ## 5. Finding and evidence rules
+
+### 5.1 Historical/supporting carry-forward inputs
+
+Repository-wide current-RC review inputs must not be silently dropped merely
+because their prior status was candidate, supporting, or non-blocking.
+
+```text
+Historical/supporting inputs to re-evaluate on Product RC 7944cea…:
+  - DS-C1: AssessmentSnapshot write surface
+  - DS-C2: toolchain dependency advisories
+  - SR-P3-1: .gitignore credential-pattern hardening
+  - SR-P3-2: package-solution feature title / metadata
+```
+
+These inputs are carried forward for explicit current-RC reassessment only:
+
+```text
+not automatically verified
+not automatically a blocker
+not automatically closed
+```
 
 No candidate is verified by pattern matching alone. A verified security finding
 requires all of the following:
