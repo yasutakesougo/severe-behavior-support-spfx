@@ -29,7 +29,15 @@ Initial RR-2 publication:
   c306af47743f89d066509cfed7106ee06ae444c9
 
 Definition Correction-1 revision:
-  this published revision
+  5536b7402ab13ba0f52c2a6521da5e91670f9637
+
+Focused Definition Re-Review:
+  Reviewed revision:
+    5536b7402ab13ba0f52c2a6521da5e91670f9637
+  Scope:
+    P1-1 / P1-2 / P2-1 only
+  Result:
+    PASS / LOCKED
 
 Product RC != Definition revision
 ```
@@ -85,6 +93,10 @@ Product P1:
 
 Product readiness:
   PASS
+
+Definition:
+  PASS / LOCKED
+  focused re-review scope: P1-1 / P1-2 / P2-1
 
 Release readiness:
   HOLD WITH CURRENT-RC EVIDENCE GAPS
@@ -161,7 +173,40 @@ New Binding Decision:
   and select a new binding intent
 ```
 
-### 3.3 Previous Deploy ≠ current RC release readiness
+### 3.3 Focused Definition Re-Review / Definition LOCK
+
+```text
+RELEASE-READINESS-2
+Focused Definition Re-Review:
+  Reviewed revision:
+    5536b7402ab13ba0f52c2a6521da5e91670f9637
+  Product RC:
+    7944cea0fad20783f178ec613080283b98b5cca5
+    UNCHANGED
+  Scope:
+    P1-1 / P1-2 / P2-1 only
+
+P0:
+  none
+
+P1-1 Authority Identity Separation:
+  CLOSED / PASS
+
+P1-2 Next-Gate Sequence:
+  CLOSED / PASS
+
+P2-1 Historical Security Labeling:
+  CLOSED / PASS
+
+Definition:
+  PASS / LOCKED
+  Human Decision recorded from the focused re-review result
+
+Release readiness:
+  HOLD WITH CURRENT-RC EVIDENCE GAPS
+```
+
+### 3.4 Previous Deploy ≠ current RC release readiness
 
 過去には artifact authority、reproducibility、fixture-only deployment、
 alignment decision が存在するが、それらは現在の 7944cea... より前の
@@ -191,6 +236,7 @@ Deployment alignment も旧 BUILD 1 を deploy candidate としていた
 | Deep Scan (8a5056c) | COMPLETE / NO VERIFIED BLOCKERS | historical/supporting |
 | Artifact Authority (d264a743) | COMPLETE / LOCAL ARTIFACT RECORDED | old basis BUILD 1 |
 | Production Binding Decision | SELECTED / LOCKED | Option A KEEP unbound |
+| RR-2 Focused Definition Re-Review | PASS / LOCKED | P1-1 / P1-2 / P2-1 only; reviewed `5536b740` |
 | SR-P0 / SR-P1 / SR-P2 | 0 / 0 / 0 | historical/supporting basis only |
 
 ## 5. Current-RC Evidence Gaps
@@ -237,7 +283,7 @@ Previous Deploy PASS != current RC Deploy readiness
 ```text
 1. Current-RC Security Exact-Scope Definition
    target = 7944cea0fad20783f178ec613080283b98b5cca5
-   Status: NOT STARTED
+   Status: RECORDED / READY FOR INDEPENDENT REVIEW
 
 2. Independent Review of that Security Definition
    Status: NOT STARTED
@@ -274,11 +320,11 @@ Previous Deploy PASS != current RC Deploy readiness
 ```
 
 ```text
-Correction-1 完了直後の NEXT は Security Definition ではなく
-RELEASE-READINESS-2 Focused Definition Re-Review である。
+RR-2 Definition PASS / LOCKED が成立したため、
+次は Step 2 の Independent Review である。
 
-RR-2 Definition PASS / LOCK が成立した後にのみ
-Step 1 (Security Exact-Scope Definition) へ進む。
+Security Definition の記録は Deep Scan authorization ではない。
+Step 2 PASS、Step 3 PASS / LOCK、Human Deep Scan Start GO の順序を維持する。
 ```
 
 ```text
@@ -313,10 +359,13 @@ CURRENT ACTION: STOP
 しかし「この exact RC をリリースしてよい」という
 security/artifact authority がまだ current-RC 化されていない。
 
+Definition:
+PASS / LOCKED
+reviewed revision: 5536b7402ab13ba0f52c2a6521da5e91670f9637
+
 NEXT:
-RELEASE-READINESS-2
-Focused Definition Re-Review
-scope: P1-1 / P1-2 / P2-1 only
+Independent Review of Current-RC Security Exact-Scope Definition
+target: 7944cea0fad20783f178ec613080283b98b5cca5
 
 STOP
 ```
