@@ -20,17 +20,42 @@ Deploy: NOT PERFORMED
 Product RC:
   7944cea0fad20783f178ec613080283b98b5cca5
   Merge pull request #501 from yasutakesougo/feat/vp-6-copy-datetime-convergence-1
+  UNCHANGED
 
 VA-3 basis:
   PASS / ACCEPTED / COMPLETE
 
-Previous authority basis:
-  d8cbd0e4e7fa9eaf585ca7acef5b1f8f504829c3
-  (CLOSEOUT-2 / Deep Scan / Artifact Authority / Binding Decision)
+Initial RR-2 publication:
+  c306af47743f89d066509cfed7106ee06ae444c9
 
-Current HEAD:
-  0dbcdc4a82951de42f23ca0b1a5239dbb2b0112d
-  docs/cancellation-exact-slice-definition-1 branch
+Definition Correction-1 revision:
+  this published revision
+
+Product RC != Definition revision
+```
+
+```text
+Previous authority bases (all before current-RC 7944cea):
+
+1. Security Release Readiness Closeout-2:
+   d8cbd0e4e7fa9eaf585ca7acef5b1f8f504829c3
+
+2. Deep Scan:
+   8a5056c5a93fc6d3de1989d3160c9e3cf9d8aacb
+
+3. Artifact Authority:
+   Record basis:
+     c100c439f50a06f5fcbcb831e83ea4f67b218ad1
+   Recorded BUILD 1 artifact:
+     SHA-256: d264a74326dff42c98eff262dbe608f8ff2886d1779312786d4be15a4b6096ac
+     size: 58247 bytes
+
+4. Production Binding Decision:
+   Record basis:
+     8f13cd91f9b56cf067fbd0cef799b5d502c33773
+   Decision:
+     Option A — KEEP unbound
+     SELECTED / LOCKED
 ```
 
 ```text
@@ -119,14 +144,17 @@ U3:
 ### 3.2 Production Binding Decision status
 
 既存正本ではすでに Human Decision が行われ、Option A KEEP unbound が
-SELECTED / LOCKED である。
+SELECTED / LOCKED である。record basis / decision / artifact hash は
+それぞれ独立して記録する。
 
 ```text
 Production Binding Decision:
-  ALREADY TAKEN
-
-Current authority:
-  Option A KEEP unbound
+  Record basis:
+    8f13cd91f9b56cf067fbd0cef799b5d502c33773
+  Decision:
+    Option A — KEEP unbound
+    SELECTED / LOCKED
+    ALREADY TAKEN
 
 New Binding Decision:
   only required if Human intends to overturn Option A
@@ -143,10 +171,12 @@ application tree を basis にしている。
 Previous Deploy PASS
 ≠ current RC 7944cea Deploy readiness
 
-Artifact Authority は旧 basis の BUILD 1 を:
-  sha256 d264a743...
-  size 58247
-として固定
+Artifact Authority:
+  Record basis:
+    c100c439f50a06f5fcbcb831e83ea4f67b218ad1
+  Recorded BUILD 1 artifact:
+    SHA-256: d264a74326dff42c98eff262dbe608f8ff2886d1779312786d4be15a4b6096ac
+    size: 58247 bytes
 
 Binding は KEEP unbound
 reproducibility は byte-identical 不成立ながら non-blocking
@@ -161,7 +191,7 @@ Deployment alignment も旧 BUILD 1 を deploy candidate としていた
 | Deep Scan (8a5056c) | COMPLETE / NO VERIFIED BLOCKERS | historical/supporting |
 | Artifact Authority (d264a743) | COMPLETE / LOCAL ARTIFACT RECORDED | old basis BUILD 1 |
 | Production Binding Decision | SELECTED / LOCKED | Option A KEEP unbound |
-| SR-P0 / SR-P1 / SR-P2 | 0 / 0 / 0 | — |
+| SR-P0 / SR-P1 / SR-P2 | 0 / 0 / 0 | historical/supporting basis only |
 
 ## 5. Current-RC Evidence Gaps
 
@@ -188,7 +218,7 @@ U3:
 
 | ID | Content | Disposition |
 |---|---|---|
-| SR-P3-1 | `.gitignore` does not explicitly enumerate `.env` / credential patterns. No tracked secrets were found. | CARRY / NON-BLOCKING |
+| SR-P3-1 | `.gitignore` does not explicitly enumerate `.env` / credential patterns. No tracked secrets were found. historical/supporting basis only | CARRY / NON-BLOCKING |
 | SR-P3-2 | `spfx/config/package-solution.json` feature title remains scaffold-oriented. | CARRY / NON-BLOCKING |
 
 ## 7. Release interpretation
@@ -205,25 +235,50 @@ Previous Deploy PASS != current RC Deploy readiness
 ## 8. Next gate（正確な順序）
 
 ```text
-1. CURRENT-RC Exact-SHA Security Reassessment / Deep Scan
+1. Current-RC Security Exact-Scope Definition
    target = 7944cea0fad20783f178ec613080283b98b5cca5
    Status: NOT STARTED
-   Human GO: REQUIRED
 
-2. CURRENT-RC Release Artifact Authority
+2. Independent Review of that Security Definition
+   Status: NOT STARTED
+   requires Step 1
+
+3. Security Definition PASS / LOCK
+   Status: NOT ESTABLISHED
+   requires Step 2 PASS
+
+4. Human Deep Scan Start GO
+   Status: NOT GRANTED
+   requires Step 3
+
+5. Exact-RC Deep Scan execution
+   Status: NOT STARTED
+   requires Step 4
+
+6. Current-RC Release Artifact Authority
    - exact RC: 7944cea...
    - .sppkg size
    - SHA-256
    - package identity
    - build basis
    Status: NOT STARTED
-   Human GO: REQUIRED
+   requires Step 5
 
-3. RELEASE-READINESS-2 focused reassessment
+7. RELEASE-READINESS-2 focused reassessment
    Status: NOT STARTED
-   Human GO: REQUIRED
+   requires Step 6
 
-4. その後にのみ Human release/deploy decision
+8. Human release/deploy decision
+   Status: NOT AUTHORIZED
+   requires Step 7
+```
+
+```text
+Correction-1 完了直後の NEXT は Security Definition ではなく
+RELEASE-READINESS-2 Focused Definition Re-Review である。
+
+RR-2 Definition PASS / LOCK が成立した後にのみ
+Step 1 (Security Exact-Scope Definition) へ進む。
 ```
 
 ```text
@@ -260,7 +315,8 @@ security/artifact authority がまだ current-RC 化されていない。
 
 NEXT:
 RELEASE-READINESS-2
-Current-RC Security Exact-Scope Definition
+Focused Definition Re-Review
+scope: P1-1 / P1-2 / P2-1 only
 
 STOP
 ```
