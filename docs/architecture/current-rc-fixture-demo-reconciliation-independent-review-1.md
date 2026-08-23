@@ -9,13 +9,29 @@ evidence の関係を独立に確認するための **docs-only review companion
 repository: yasutakesougo/severe-behavior-support-spfx
 Review ID: CURRENT-RC-FIXTURE-DEMO-RECONCILIATION-INDEPENDENT-REVIEW-1
 Kind: independent reconciliation review / docs-only
-Status: PREPARED / INDEPENDENT REVIEW REQUIRED
+Status: PUBLICATION COMPLETE / P2-1 STATUS CORRECTION LOCAL
 Review baseline: 7944cea0fad20783f178ec613080283b98b5cca5
 ProductId: 4342db47-21a3-4c48-aed1-ef615f55c404
 Version: 1.0.0.2
-Current reconciliation: LOCAL / UNPUBLISHED
-Commit: NONE
-Push: NONE
+Publication: COMPLETE
+Publication commit: 0930b02a27f1cef02a8231feae469ceafd87f560
+Publication branch: codex/current-rc-fixture-demo-reconciliation-1
+Remote push: COMPLETE
+Product RC / main: 7944cea0fad20783f178ec613080283b98b5cca5 / UNCHANGED
+Predecessor Security Definition:
+  112d7ffca57e93b80d2d308902633aa4eef2c7d8 / VERBATIM / UNCHANGED
+Environment-Blocked Record:
+  205ff543997a8063af724ec38b2346a650322b65 / VERBATIM / UNCHANGED
+Predecessor integrity: PASS / EXACT BLOB MATCH
+Exact-publication verification: PASS / P2-1 DOCUMENT-STATE CORRECTION REQUIRED
+P2-1: TARGET OF THIS CORRECTION / CLOSED LOCALLY
+Deep Scan: NOT STARTED
+U2: UNVERIFIED
+Artifact Authority: NOT STARTED
+Production Binding: Option A — KEEP unbound / UNCHANGED
+LIVE WRITE: HOLD
+Deploy: NOT AUTHORIZED
+Current status correction: LOCAL WORKTREE ONLY / NOT YET PUBLISHED
 External mutation: NONE
 ```
 
@@ -41,9 +57,15 @@ Environment-blocked predecessor:
   docs/architecture/security-current-rc-deep-scan-environment-blocked-1.md
   verbatim carry-forward required
 
-Current reconciliation worktree:
-  local / unpublished
-  no commit or push
+Published reconciliation:
+  publication commit: 0930b02a27f1cef02a8231feae469ceafd87f560
+  publication branch: codex/current-rc-fixture-demo-reconciliation-1
+  remote push: COMPLETE
+
+Current companion status correction:
+  local worktree only / not yet published
+  correction commit: NOT PERFORMED
+  correction push: NOT PERFORMED
 ```
 
 The predecessor records are evidence sources. They are not relabeled as
@@ -70,11 +92,15 @@ Review checks:
 4. Artifact Authority and Deploy are not advanced.
 5. The predecessor `PASS / LOCKED` and `ENVIRONMENT BLOCKED` facts are preserved.
 6. Same path / Record ID does not carry changed semantics.
-7. Local reconciliation is explicitly `UNPUBLISHED`.
+7. Published reconciliation identity is explicit: commit `0930b02...`, branch
+   `codex/current-rc-fixture-demo-reconciliation-1`, and remote push COMPLETE.
+   Any later status correction is separately identified as local until separately
+   published.
 
-## 3. Pre-correction review finding
+## 3. Historical pre-publication review finding
 
-The shortened local copies were not acceptable as an independent-review target.
+The following records preserve the pre-publication review state. They are historical
+facts and do not describe the current publication state.
 
 ```text
 Initial verdict: HOLD / REVISE REQUIRED
@@ -98,12 +124,13 @@ F-IR-002: RESTORED by verbatim carry-forward from 205ff54
 Predecessor semantic diff: ZERO
 ```
 
-The remediation result is not itself an Independent Review PASS. A separate
-reviewer must re-run the checks below.
+Historically, the remediation result was not itself an Independent Review PASS. A
+separate reviewer subsequently re-ran the checks and recorded the verdict below.
 
-## 4. Required independent verdict
+## 4. Recorded independent verdict
 
-The reviewer must record one of the following without inferring missing evidence.
+The independent reviewer recorded the following verdict without inferring missing
+evidence.
 
 ```text
 PASS
@@ -112,15 +139,8 @@ P1: none
 P2: none
 ```
 
-or:
-
-```text
-HOLD
-<exact finding and affected identity>
-Publication GO: NOT ELIGIBLE
-```
-
-This control session does not self-certify the independent verdict.
+This verdict establishes reconciliation review completion only. It does not establish
+Deep Scan completion, Artifact Authority, or Deploy eligibility.
 
 ## 5. Verification evidence
 
@@ -129,6 +149,12 @@ Completed local checks:
 ```text
 Predecessor comparison:
   ZERO semantic / byte diff for both restored records
+
+Exact-publication verification:
+  PASS with P2-1 document-state correction required
+
+P2-1:
+  CLOSED IN THIS LOCAL STATUS CORRECTION
 
 git diff --check:
   PASS
@@ -143,14 +169,34 @@ format:check:
 These checks establish document integrity only. They do not establish Security
 Definition PASS, Deep Scan completion, Artifact Authority, or Deploy eligibility.
 
-## 6. Next gate
+## 6. Current publication and next security gate
 
 ```text
-Next Human Gate:
-  Docs-only Reconciliation Publication GO
+Current publication:
+  COMPLETE
 
-Required before that gate:
-  independent review PASS
+Publication commit:
+  0930b02a27f1cef02a8231feae469ceafd87f560
+
+Publication branch:
+  codex/current-rc-fixture-demo-reconciliation-1
+
+Remote push:
+  COMPLETE
+
+Status correction publication:
+  NOT PERFORMED / separate commit and push GO required
+
+Next security execution path:
+  CONDITIONAL / NOT AUTHORIZED
+
+Resume conditions:
+  1. new host/session
+  2. managed filesystem permission profile available
+  3. managed read-only suitability confirmed
+  4. exact RC 7944cea0fad20783f178ec613080283b98b5cca5 reconfirmed
+  5. clean exact-RC target reconfirmed
+  6. separate new Human Deep Scan Start GO
 
 Still forbidden:
   Deep Scan
@@ -165,9 +211,11 @@ Still forbidden:
 ## 7. STOP
 
 ```text
-This companion is local and unpublished.
-Do not claim Independent Review PASS from this document.
+The reconciliation publication is COMPLETE at 0930b02.
+This P2-1 status correction is local until separately committed and pushed.
+Independent Review-1 is recorded as PASS.
+Do not treat publication or this correction as Deep Scan authorization.
 Do not edit predecessor evidence to repair a review finding.
 Do not begin Deep Scan, Artifact Authority, Deploy, Production Binding, or LIVE WRITE.
-Wait for the separate independent verdict and Publication GO.
+If all resume conditions are not satisfied, STOP.
 ```
