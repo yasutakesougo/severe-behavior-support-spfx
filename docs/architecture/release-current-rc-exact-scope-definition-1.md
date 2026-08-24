@@ -7,15 +7,25 @@ Kind: read-only Exact Scope Definition
 MODE: READ-ONLY DEFINITION
 BASE: main@145dcb349f80590b91a7267caf79fdc1587064a5
   Merge pull request #502 (VP-7 optical alignment)
+Definition Correction-1: APPLIED
 Code / SCSS / TSX mutation: NOT AUTHORIZED
 Implementation Start: NOT AUTHORIZED
 Deep Scan execution: NOT AUTHORIZED
 Deploy / SharePoint / Graph / Entra / Production Binding / LIVE WRITE: FORBIDDEN
-NEXT: Independent Definition Review
+NEXT: Independent Definition focused Re-Review-1
 Agent: STOP on Deep Scan / tenant access / Ready / Merge / Issue mutation
 ```
 
-## 0. Purpose and priority / execution split
+## 0. Correction history
+
+Definition Review-1 で見つかった境界の曖昧さを閉じる。
+
+| ID | Severity | Status | Correction |
+|---|---|---|---|
+| P1-1 | P1 | CLOSED | Pre-existing CI may auto-build/upload a production `.sppkg` on docs-only PRs. That artifact is CI SIDE EFFECT / NON-AUTHORITATIVE FOR U3. It does not consume Artifact Authority GO, clear U3, or authorize Deploy / Binding / LIVE WRITE. PR HEAD build basis ≠ Definition BASE unless shaMatch is proven. |
+| P1-2 | P1 | CLOSED | U2 Deep Scan environment prerequisite now fail-closes when the required managed filesystem permission profile (or equivalent scanner filesystem capability) is unavailable or unconfirmed: ENVIRONMENT BLOCKED → Deep Scan NOT STARTED → U2 UNVERIFIED → Release Readiness HOLD. Standard / diff scan / npm audit are not substitutes. |
+
+## 0a. Purpose and priority / execution split
 
 This Definition fixes the **exact boundaries** for clearing the three
 current-main Release blockers recorded as UNVERIFIED / RELEASE-GAP.
@@ -202,6 +212,34 @@ Read-only repository access sufficient for scan
 No Deploy / Binding / LIVE WRITE / tenant mutation in the same GO
 ```
 
+Deep Scan environment capability is a separate fail-closed prerequisite:
+
+```text
+Deep Scan environment prerequisite:
+  required managed filesystem permission profile
+  or equivalent scanner filesystem capability
+  Status must be: AVAILABLE / CONFIRMED
+
+If unavailable or unconfirmed:
+  ENVIRONMENT BLOCKED
+  Deep Scan = NOT STARTED
+  U2 = UNVERIFIED
+  Release Readiness = HOLD
+  do NOT substitute:
+    - standard security scan
+    - security-diff-scan
+    - npm audit
+    - CI Contracts and Process CI alone
+```
+
+```text
+Human Deep Scan GO + ENVIRONMENT BLOCKED
+  ≠ Deep Scan STARTED
+  ≠ U2 PASS
+ENVIRONMENT BLOCKED is not a verified vulnerability.
+It is a Release Readiness HOLD condition.
+```
+
 ## 5. U3 — exact artifact / hash authority boundary
 
 ### 5.1 What U3 is
@@ -263,9 +301,55 @@ committing .sppkg into git by default
 App Catalog upload as part of U3 evidence
 treating GATE 0 automation as Deep Scan
 treating local hash as catalog object proof without catalog evidence
+treating pre-existing CI artifact build/upload as U3 PASS
+treating a docs-only PR HEAD package basis as Definition BASE authority
+  without expectedMainSha / observedMainSha shaMatch
 ```
 
-### 5.5 Environment prerequisites (U3)
+### 5.5 Pre-existing CI artifact side effect (NON-AUTHORITATIVE)
+
+Contracts and Process CI may automatically run
+`Build SPFx production artifact with exact basis` when a PR that touches
+`docs/architecture/**` is published, including this Definition PR.
+
+That job may build a production `.sppkg`, record SHA-256, and upload a
+CI artifact. This is an **existing pipeline side effect**, not an
+Artifact Authority GO.
+
+```text
+Pre-existing CI may automatically build/upload a production artifact
+when this docs-only PR is published.
+
+That CI artifact is:
+  CI SIDE EFFECT / NON-AUTHORITATIVE FOR U3
+
+It does NOT:
+  - consume Human Artifact Authority / build GO
+  - clear U3
+  - prove current-main artifact authority
+  - authorize Deploy / Binding / LIVE WRITE
+
+U3 may be cleared only by separately authorized evidence satisfying
+the exact target-SHA and provenance requirements.
+```
+
+Example on Definition Review-1 of PR #504:
+
+```text
+Definition BASE: 145dcb349f80590b91a7267caf79fdc1587064a5
+PR HEAD (CI build basis): 164fe0ebb6c0e865bce1b8d4846bc43887861390
+CI #1354: SUCCESS with production artifact upload
+
+shaMatch to Definition BASE: false (PR HEAD ≠ BASE)
+→ CI artifact MUST NOT be converted into U3 PASS
+```
+
+Any later U3 Evidence Packet that cites a CI artifact MUST still satisfy
+§6 provenance (`expectedMainSha` / `observedMainSha` / `shaMatch`) and a
+separate Human Artifact Authority / build GO. CI SUCCESS alone is
+insufficient.
+
+### 5.6 Environment prerequisites (U3)
 
 ```text
 Human Artifact Authority / build GO (separate)
@@ -274,6 +358,7 @@ Exact BASE checkout
 Optional: PR #491 automation available for deterministic inspection
 No App Catalog mutation
 No Production Binding
+CI auto-built artifacts: NON-AUTHORITATIVE unless GO + shaMatch satisfied
 ```
 
 ## 6. Required Evidence provenance (all U*)
@@ -312,6 +397,8 @@ older closeout docs alone != CONFIRMED on this BASE
 | RC-AC8 | VP-7 is EXCLUDED / CONSUMED and not reopened here |
 | RC-AC9 | Definition Review PASS enables only Independent readiness for Human Deep Scan GO — not the GO itself |
 | RC-AC10 | Any Evidence Packet with sha mismatch is invalid and must not clear a blocker |
+| RC-AC11 | Pre-existing CI production-artifact build/upload is CI SIDE EFFECT / NON-AUTHORITATIVE FOR U3; it does not consume Artifact Authority GO, clear U3, prove BASE artifact authority, or authorize Deploy / Binding / LIVE WRITE |
+| RC-AC12 | If Deep Scan managed filesystem permission profile (or equivalent capability) is unavailable or unconfirmed: ENVIRONMENT BLOCKED; Deep Scan = NOT STARTED; U2 = UNVERIFIED; Release Readiness = HOLD; standard / diff scan / npm audit are not substitutes |
 
 ## 8. Explicit OUT / FORBIDDEN (this unit)
 
@@ -352,20 +439,24 @@ Independent Definition Review judges only:
 5. Environment prerequisites do not smuggle mutation authority.
 6. Acceptance criteria block false PASS / false GO conversion.
 7. FORBIDDEN list matches Human boundaries (Ready / Merge / Deploy / Binding / LIVE WRITE / Issue mutation).
+8. Pre-existing CI artifact build/upload is classified NON-AUTHORITATIVE FOR U3 (RC-AC11).
+9. Deep Scan ENVIRONMENT BLOCKED semantics are explicit and non-substitutable (RC-AC12).
 
 ## 11. NEXT gates
 
 ```text
 NOW:
-  Independent Definition Review for this Exact Scope Definition
+  Independent Definition focused Re-Review-1 for Correction-1
 
 AFTER Definition Review PASS ONLY:
   Human exact-current-main Deep Scan GO  (U2 path)
+  — still requires ENVIRONMENT AVAILABLE / CONFIRMED
   — still does not clear U1 or U3 by itself
 
 NOT YET / SEPARATE GOs:
   U1 Evidence GO (live tenant isolation)
   U3 Artifact Authority / build GO
+    (CI auto-artifact alone is insufficient)
   any Deploy / Production Binding / LIVE WRITE GO
 
 Release Readiness:
@@ -379,7 +470,8 @@ This document is READ-ONLY DEFINITION only.
 Do not execute Deep Scan from this document.
 Do not expand tenant access from this document.
 Do not build or upload .sppkg from this document.
+Do not treat CI auto-built artifacts as U3 PASS.
 Do not Ready / Merge / close Issues from this document.
 Do not claim Release Readiness PASS.
-Agent: STOP after Definition publication / Definition Review handoff.
+Agent: STOP after Definition Correction publication / Re-Review handoff.
 ```
