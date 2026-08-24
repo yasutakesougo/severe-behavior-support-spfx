@@ -195,6 +195,10 @@
     border-color 120ms ease;
 }
 
+.resultOption input {
+  margin-top: sbs.$space-1;
+}
+
 .resultOption:hover:not(:has(input:disabled)) {
   border-color: sbs.$color-border-strong;
   background: sbs.$color-surface-hover;
