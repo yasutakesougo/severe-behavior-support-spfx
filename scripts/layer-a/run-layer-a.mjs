@@ -122,7 +122,12 @@ const STEP_REQUIREMENTS = Object.freeze({
   "ST-10": [
     {
       runner: "shell-ux-5",
-      checks: ["inquiry-on-retrieval-failed", "inquiry-on-access-denied", "ready-hides-inquiry"],
+      checks: [
+        "inquiry-on-retrieval-failed",
+        "inquiry-on-access-denied",
+        "ready-hides-inquiry",
+        "application-data-mutation-none",
+      ],
     },
   ],
 });
@@ -421,6 +426,47 @@ export function validateProvenanceEntry(entry) {
 
 function checkMap(report) {
   return new Map((report?.checks ?? []).map((check) => [check.id ?? check.name, check]));
+}
+
+export function evaluateSt10BehaviorContract({
+  retrievalFailedRendered,
+  readyRendered,
+  inquiryRendered,
+  copyControlRendered,
+  errorCodeText,
+  correlationIdText,
+  copyText,
+  syntheticDataOnly,
+  applicationDataMutationNone,
+}) {
+  const errorCode = typeof errorCodeText === "string" ? errorCodeText.trim() : "";
+  const correlationId = typeof correlationIdText === "string" ? correlationIdText.trim() : "";
+  const inquiryCopy = typeof copyText === "string" ? copyText : "";
+  const checks = {
+    retrievalFailedRendered: Boolean(retrievalFailedRendered),
+    readyStateNotRendered: readyRendered !== true,
+    inquiryPresentationAvailable: Boolean(inquiryRendered),
+    nonEmptyErrorCodePresented: errorCode.length > 0,
+    nonEmptyCorrelationIdPresented: correlationId.length > 0,
+    copyInquiryBehaviorPreserved:
+      Boolean(copyControlRendered) &&
+      inquiryCopy.includes("エラーコード:") &&
+      inquiryCopy.includes(errorCode) &&
+      inquiryCopy.includes("相関ID:") &&
+      inquiryCopy.includes(correlationId),
+    syntheticOnlyExecution: syntheticDataOnly === true,
+    applicationDataMutationNone: applicationDataMutationNone === true,
+  };
+
+  return {
+    ...checks,
+    pass: Object.values(checks).every(Boolean),
+    actualRenderedValues: {
+      errorCode,
+      correlationId,
+      copyText: inquiryCopy,
+    },
+  };
 }
 
 export function evaluateCanonicalSteps(reports) {

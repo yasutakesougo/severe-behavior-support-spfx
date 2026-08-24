@@ -12,6 +12,7 @@ import {
   createBrowserNetworkEvidenceCollector,
   NO_LIVE_WRITE_CHECK_ID,
 } from "../../../scripts/layer-a/browser-network-evidence.mjs";
+import { evaluateSt10BehaviorContract } from "../../../scripts/layer-a/run-layer-a.mjs";
 
 const esbuildModule = await import(
   process.env.SHELL_UX_5_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js",
@@ -101,12 +102,12 @@ const browser = await puppeteer.launch({
 const checks = [];
 const networkEvidenceCollector = createBrowserNetworkEvidenceCollector();
 
-async function smokeCase(name, query, assertFn) {
+async function smokeCase(name, query, assertFn, normalizeFound = (found) => found) {
   const page = await browser.newPage();
   networkEvidenceCollector.attach(page);
   const url = `${base}/index.html?${query}`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  const found = await page.evaluate(assertFn);
+  const found = normalizeFound(await page.evaluate(assertFn));
   const shot = path.join(artifactsDir, `${name}.png`);
   await page.screenshot({ path: shot, fullPage: true });
   const pass = Boolean(found.pass);
@@ -129,29 +130,22 @@ allPass =
       const copyText = document.querySelector('[data-shell-ux="error-inquiry-text"]');
       const copyBtn = document.querySelector('[data-shell-ux="error-inquiry-copy"]');
       const ready = document.querySelector('[data-shell-ux="ready-region"]');
-      const slice = document
-        .querySelector("[data-shell-ux-slice]")
-        ?.getAttribute("data-shell-ux-slice");
-      const textValue = copyText?.value ?? "";
       return {
-        pass:
-          Boolean(panel) &&
-          Boolean(inquiry) &&
-          Boolean(errorCode) &&
-          Boolean(correlationId) &&
-          Boolean(copyBtn) &&
-          !ready &&
-          slice === "SHELL-UX-5" &&
-          (errorCode?.textContent ?? "").includes("SHELL-UX-5-SYNTH-E001") &&
-          (correlationId?.textContent ?? "").includes("shell-ux-5-synth-corr") &&
-          textValue.includes("エラーコード:") &&
-          textValue.includes("相関ID:"),
-        panel: Boolean(panel),
-        inquiry: Boolean(inquiry),
-        slice,
-        textValue,
+        retrievalFailedRendered: Boolean(panel),
+        readyRendered: Boolean(ready),
+        inquiryRendered: Boolean(inquiry),
+        copyControlRendered: Boolean(copyBtn),
+        errorCodeText: errorCode?.textContent ?? "",
+        correlationIdText: correlationId?.textContent ?? "",
+        copyText: copyText instanceof HTMLTextAreaElement ? copyText.value : "",
       };
     },
+    (rendered) =>
+      evaluateSt10BehaviorContract({
+        ...rendered,
+        syntheticDataOnly: true,
+        applicationDataMutationNone: networkEvidenceCollector.snapshot().noLiveWriteProof,
+      }),
   )) && allPass;
 
 allPass =

@@ -1,5 +1,7 @@
+import fs from "node:fs";
 import assert from "node:assert/strict";
 import test from "node:test";
+import path from "node:path";
 import {
   classifyBrowserRequest,
   createBrowserNetworkEvidenceCollector,
@@ -14,6 +16,7 @@ import {
   createEnvironmentIdentity,
   evaluateCanonicalSteps,
   evaluateProductWorktreeState,
+  evaluateSt10BehaviorContract,
   validateEnvironmentIdentity,
   validateProvenanceEntry,
 } from "../../scripts/layer-a/run-layer-a.mjs";
@@ -223,6 +226,94 @@ test("canonical step evaluation requires every mandatory ST-02 check", () => {
   reports["kiosk-ux-convergence"].checks.splice(2, 1);
   steps = evaluateCanonicalSteps(reports);
   assert.equal(steps.find((step) => step.step === "ST-02")?.status, "FAIL");
+});
+
+test("ST-10 behavior contract is identity-independent and uses actual inquiry values", () => {
+  const genericPass = evaluateSt10BehaviorContract({
+    retrievalFailedRendered: true,
+    readyRendered: false,
+    inquiryRendered: true,
+    copyControlRendered: true,
+    errorCodeText: "ERR-GENERIC-001",
+    correlationIdText: "corr-generic-001",
+    copyText: "エラーコード: ERR-GENERIC-001\n相関ID: corr-generic-001",
+    syntheticDataOnly: true,
+    applicationDataMutationNone: true,
+  });
+  assert.equal(genericPass.pass, true);
+  assert.deepEqual(genericPass.actualRenderedValues, {
+    errorCode: "ERR-GENERIC-001",
+    correlationId: "corr-generic-001",
+    copyText: "エラーコード: ERR-GENERIC-001\n相関ID: corr-generic-001",
+  });
+
+  const emptyErrorCode = evaluateSt10BehaviorContract({
+    ...genericPass.actualRenderedValues,
+    retrievalFailedRendered: true,
+    readyRendered: false,
+    inquiryRendered: true,
+    copyControlRendered: true,
+    errorCodeText: "   ",
+    correlationIdText: "corr-generic-001",
+    syntheticDataOnly: true,
+    applicationDataMutationNone: true,
+  });
+  assert.equal(emptyErrorCode.pass, false);
+  assert.equal(emptyErrorCode.nonEmptyErrorCodePresented, false);
+
+  const copiedValueMismatch = evaluateSt10BehaviorContract({
+    retrievalFailedRendered: true,
+    readyRendered: false,
+    inquiryRendered: true,
+    copyControlRendered: true,
+    errorCodeText: "ERR-GENERIC-001",
+    correlationIdText: "corr-generic-001",
+    copyText: "エラーコード: STALE\n相関ID: stale",
+    syntheticDataOnly: true,
+    applicationDataMutationNone: true,
+  });
+  assert.equal(copiedValueMismatch.pass, false);
+  assert.equal(copiedValueMismatch.copyInquiryBehaviorPreserved, false);
+});
+
+test("ST-10 aggregation requires its behavior checks and no application-data mutation", () => {
+  const reports = {
+    "shell-ux-5": {
+      checks: [
+        { id: "inquiry-on-retrieval-failed", pass: true },
+        { id: "inquiry-on-access-denied", pass: true },
+        { id: "ready-hides-inquiry", pass: true },
+        { id: "application-data-mutation-none", pass: true },
+      ],
+    },
+  };
+
+  let steps = evaluateCanonicalSteps(reports);
+  assert.equal(steps.find((step) => step.step === "ST-10")?.status, "PASS");
+
+  reports["shell-ux-5"].checks[3].pass = false;
+  steps = evaluateCanonicalSteps(reports);
+  assert.equal(steps.find((step) => step.step === "ST-10")?.status, "FAIL");
+
+  reports["shell-ux-5"].checks.splice(3, 1);
+  steps = evaluateCanonicalSteps(reports);
+  assert.equal(steps.find((step) => step.step === "ST-10")?.status, "FAIL");
+});
+
+test("kiosk runner keeps compiled CSS in an owned transient runtime directory", () => {
+  const source = fs.readFileSync(
+    path.resolve("spfx/smoke/kiosk-ux-convergence/run-smoke.mjs"),
+    "utf8",
+  );
+  assert.match(
+    source,
+    /fs\.mkdtempSync\(path\.join\(os\.tmpdir\(\), "kiosk-ux-convergence-runtime-"\)\)/,
+  );
+  assert.match(source, /fs\.writeFileSync\(path\.join\(outDir, "smoke-production\.css"/);
+  assert.match(source, /process\.once\("exit", cleanupRuntimeDir\)/);
+  assert.match(source, /fs\.rmSync\(outDir, \{ recursive: true, force: true \}\)/);
+  assert.doesNotMatch(source, /writeFileSync\(path\.join\(__dirname, "smoke-production\.css"/);
+  assert.doesNotMatch(source, /rmSync\(\s*(?:repoRoot|__dirname)/);
 });
 
 test("normative no-live-write identity is not an old SharePoint-request absence claim", () => {

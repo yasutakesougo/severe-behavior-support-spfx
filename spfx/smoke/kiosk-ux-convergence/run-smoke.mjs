@@ -8,6 +8,7 @@
  */
 import http from "node:http";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -17,7 +18,14 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, "../..");
-const outDir = __dirname;
+const outDir = fs.mkdtempSync(path.join(os.tmpdir(), "kiosk-ux-convergence-runtime-"));
+const cleanupRuntimeDir = () => {
+  if (fs.existsSync(outDir)) {
+    fs.rmSync(outDir, { recursive: true, force: true });
+  }
+};
+process.once("exit", cleanupRuntimeDir);
+fs.copyFileSync(path.join(__dirname, "index.html"), path.join(outDir, "index.html"));
 const artifactsDir = process.env.KIOSK_ARTIFACTS_DIR ?? path.join(__dirname, "artifacts");
 fs.mkdirSync(artifactsDir, { recursive: true });
 
