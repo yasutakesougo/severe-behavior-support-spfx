@@ -10,6 +10,10 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  createBrowserNetworkEvidenceCollector,
+  NO_LIVE_WRITE_CHECK_ID,
+} from "../../../scripts/layer-a/browser-network-evidence.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, "../..");
@@ -196,23 +200,8 @@ const browser = await puppeteer.launch({
 });
 
 const checks = [];
-const liveWriteRequests = [];
+const networkEvidenceCollector = createBrowserNetworkEvidenceCollector();
 const fieldStaffScrollMinimumReductionPx = 704;
-
-function isSharePointOrGraphRequest(url) {
-  try {
-    const parsed = new URL(url);
-    const host = parsed.hostname.toLowerCase();
-    const pathname = parsed.pathname.toLowerCase();
-    return (
-      host.includes("sharepoint.com") ||
-      host.includes("graph.microsoft.com") ||
-      pathname.includes("/_api/")
-    );
-  } catch {
-    return false;
-  }
-}
 
 function record(id, pass, detail) {
   checks.push({ id, pass: Boolean(pass), detail });
@@ -238,12 +227,7 @@ async function openPage(query, viewport) {
       errors.push(`console: ${text}`);
     }
   });
-  page.on("request", (request) => {
-    const url = request.url();
-    if (isSharePointOrGraphRequest(url)) {
-      liveWriteRequests.push({ url, method: request.method() });
-    }
-  });
+  networkEvidenceCollector.attach(page);
   if (viewport) {
     await page.setViewport(viewport);
   }
@@ -445,9 +429,27 @@ async function assertCorrectionPathForStatus(page, status) {
   await page.waitForSelector('[data-field-workflow="current-procedure"]', { timeout: 8000 });
   await page.click('[data-field-workflow="current-procedure-back"]');
   await page.waitForSelector('[data-kiosk-ux="today-support-list"]', { timeout: 8000 });
+  const readState = await page.evaluate((expectedStatus) => {
+    const item = document.querySelector(`[data-kiosk-status="${expectedStatus}"]`);
+    return {
+      listItemPresent: Boolean(item),
+      listItemStatus: item?.getAttribute("data-kiosk-status") ?? "",
+      canStartRecord: item?.getAttribute("data-kiosk-can-start-record") ?? "",
+      procedureRecordFormPresent: Boolean(
+        document.querySelector('[data-field-workflow="procedure-record-form"]'),
+      ),
+    };
+  }, status);
   return {
     procedure,
     correction,
+    readState,
+    cancelledReadState:
+      status !== "取消済み" ||
+      (readState.listItemPresent &&
+        readState.listItemStatus === "取消済み" &&
+        readState.canStartRecord === "false" &&
+        !readState.procedureRecordFormPresent),
     ok:
       procedure.currentProcedurePresent &&
       procedure.currentProcedureStatus === status &&
@@ -1105,6 +1107,10 @@ try {
       errors,
       cancelled,
     });
+    record("cancelled-read-state", errors.length === 0 && cancelled.cancelledReadState, {
+      errors,
+      readState: cancelled.readState,
+    });
     record("conflict-record-prevention", errors.length === 0 && conflict.blocked, {
       errors,
       conflict,
@@ -1174,7 +1180,10 @@ try {
     await page.close();
   }
 
-  record("sharepoint-requests-none", liveWriteRequests.length === 0, { liveWriteRequests });
+  const networkEvidence = networkEvidenceCollector.snapshot();
+    record(NO_LIVE_WRITE_CHECK_ID, networkEvidence.noLiveWriteProof, {
+    applicationDataMutationRequests: networkEvidence.applicationDataMutationRequests,
+  });
 } catch (error) {
   record("smoke-uncaught", false, {
     message: error instanceof Error ? error.message : String(error),
@@ -1190,8 +1199,11 @@ const report = {
   date: new Date().toISOString(),
   artifactsDir,
   zoomMethodology: "C-G accepted 200% equivalent (CSS width halved, deviceScaleFactor 2)",
+  syntheticDataOnly: true,
+  productionBound: false,
   liveTenantIoAuthorized: false,
   sharePointRestAuthorized: false,
+  networkEvidence: networkEvidenceCollector.snapshot(),
   checks,
   pass: checks.every((check) => check.pass),
 };

@@ -7,6 +7,10 @@ import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  createBrowserNetworkEvidenceCollector,
+  NO_LIVE_WRITE_CHECK_ID,
+} from "../../../scripts/layer-a/browser-network-evidence.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, "../..");
@@ -127,22 +131,7 @@ const browser = await puppeteer.launch({
 });
 
 const checks = [];
-const liveWriteRequests = [];
-
-function isSharePointOrGraphRequest(url) {
-  try {
-    const parsed = new URL(url);
-    const host = parsed.hostname.toLowerCase();
-    const pathname = parsed.pathname.toLowerCase();
-    return (
-      host.includes("sharepoint.com") ||
-      host.includes("graph.microsoft.com") ||
-      pathname.includes("/_api/")
-    );
-  } catch {
-    return false;
-  }
-}
+const networkEvidenceCollector = createBrowserNetworkEvidenceCollector();
 
 async function openPage(query) {
   const page = await browser.newPage();
@@ -161,12 +150,7 @@ async function openPage(query) {
       errors.push(`console: ${text}`);
     }
   });
-  page.on("request", (request) => {
-    const url = request.url();
-    if (isSharePointOrGraphRequest(url)) {
-      liveWriteRequests.push({ url, method: request.method() });
-    }
-  });
+  networkEvidenceCollector.attach(page);
   page.on("requestfailed", (request) => {
     const url = request.url();
     if (url.includes("favicon")) {
@@ -366,10 +350,13 @@ try {
     fullPage: true,
   });
 
+  const networkEvidence = networkEvidenceCollector.snapshot();
   checks.push({
-    id: "kp-sharepoint-requests-none",
-    pass: liveWriteRequests.length === 0,
-    detail: { liveWriteRequests },
+    id: NO_LIVE_WRITE_CHECK_ID,
+    pass: networkEvidence.noLiveWriteProof,
+    detail: {
+      applicationDataMutationRequests: networkEvidence.applicationDataMutationRequests,
+    },
   });
 } finally {
   await browser.close();
@@ -379,9 +366,13 @@ try {
 const report = {
   slice: "FIELD-WORKFLOW-UI",
   issue: "#356",
+  date: new Date().toISOString(),
   viewport: { width: 390, height: 844 },
+  syntheticDataOnly: true,
+  productionBound: false,
   checks,
   pass: checks.every((check) => check.pass),
+  networkEvidence: networkEvidenceCollector.snapshot(),
 };
 fs.writeFileSync(path.join(artifactsDir, "smoke-report.json"), JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));

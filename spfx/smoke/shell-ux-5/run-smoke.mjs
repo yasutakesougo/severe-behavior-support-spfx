@@ -4,16 +4,29 @@
  * Scope: error-code + correlationId inquiry presentation only.
  * No generation / classification / REST / live I/O.
  */
-import * as esbuild from "/tmp/node_modules/esbuild/lib/main.js";
-import puppeteer from "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js";
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  createBrowserNetworkEvidenceCollector,
+  NO_LIVE_WRITE_CHECK_ID,
+} from "../../../scripts/layer-a/browser-network-evidence.mjs";
+
+const esbuildModule = await import(
+  process.env.SHELL_UX_5_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js",
+);
+const puppeteerModule = await import(
+  process.env.SHELL_UX_5_PUPPETEER_PATH ??
+    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js",
+);
+const esbuild = esbuildModule.default ?? esbuildModule;
+const puppeteer = puppeteerModule.default ?? puppeteerModule;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outDir = __dirname;
-const artifactsDir = "/opt/cursor/artifacts/shell-ux-5-browser-smoke";
+const artifactsDir =
+  process.env.SHELL_UX_5_ARTIFACTS_DIR ?? "/opt/cursor/artifacts/shell-ux-5-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const scssStubPlugin = {
@@ -78,16 +91,19 @@ await new Promise((resolve) => server.listen(4177, "127.0.0.1", resolve));
 const base = "http://127.0.0.1:4177";
 
 const browser = await puppeteer.launch({
-  executablePath: "/usr/bin/google-chrome-stable",
+  executablePath:
+    process.env.SHELL_UX_5_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
   headless: true,
   args: ["--no-sandbox", "--disable-gpu", "--window-size=1280,900"],
   defaultViewport: { width: 1280, height: 900 },
 });
 
 const checks = [];
+const networkEvidenceCollector = createBrowserNetworkEvidenceCollector();
 
 async function smokeCase(name, query, assertFn) {
   const page = await browser.newPage();
+  networkEvidenceCollector.attach(page);
   const url = `${base}/index.html?${query}`;
   await page.goto(url, { waitUntil: "networkidle0" });
   const found = await page.evaluate(assertFn);
@@ -173,6 +189,7 @@ allPass =
 // Keyboard: Tab reaches copy button under retrieval_failed
 {
   const page = await browser.newPage();
+  networkEvidenceCollector.attach(page);
   const url = `${base}/index.html?viewMode=retrieval_failed&siteSelection=SITE-ISG`;
   await page.goto(url, { waitUntil: "networkidle0" });
   let reachedCopy = false;
@@ -207,6 +224,7 @@ allPass =
 // Tablet inquiry
 {
   const page = await browser.newPage();
+  networkEvidenceCollector.attach(page);
   await page.setViewport({ width: 768, height: 1024 });
   const url = `${base}/index.html?viewMode=retrieval_failed&siteSelection=SITE-ISG`;
   await page.goto(url, { waitUntil: "networkidle0" });
@@ -225,10 +243,23 @@ allPass =
   await page.close();
 }
 
+const networkEvidence = networkEvidenceCollector.snapshot();
+const noLiveWrite = networkEvidence.noLiveWriteProof;
+checks.push({
+  name: NO_LIVE_WRITE_CHECK_ID,
+  url: "",
+  found: { applicationDataMutationRequests: networkEvidence.applicationDataMutationRequests },
+  shot: "",
+  pass: noLiveWrite,
+});
+allPass = allPass && noLiveWrite;
+
 const report = {
   unit: "SHELL-UX-5",
   kind: "browser smoke / error-code + correlationId inquiry presentation",
   date: new Date().toISOString(),
+  syntheticDataOnly: true,
+  productionBound: false,
   sliceFlags: {
     id: "SHELL-UX-5",
     liveTenantIoAuthorized: false,
@@ -243,6 +274,7 @@ const report = {
   },
   allPass,
   checks,
+  networkEvidence,
 };
 
 fs.writeFileSync(path.join(artifactsDir, "smoke-report.json"), JSON.stringify(report, null, 2));
