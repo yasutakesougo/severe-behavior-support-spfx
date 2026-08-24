@@ -10,8 +10,13 @@ Unit: LIMITED-DEMO-DEPLOY-GATE-DEFINITION-1
 Kind: Exact Scope Definition（docs-only）
 Definition Start: GO RECEIVED
 Definition Correction-1 Implementation Start: GO RECEIVED
-Definition Correction-1 status: APPLIED / REVIEW PENDING
-Definition status: DRAFT / NOT LOCKED
+Focused Independent Definition Re-Review: PASS / LOCKABLE
+P0: 0
+P1: 0
+Human Decision: ACCEPTED / LOCKED
+Definition Correction-1 status: APPLIED / PUBLISHED
+Definition status: ACCEPTED / LOCKED
+Publication status: PR #507 OPEN / DRAFT / NOT IN MAIN
 ```
 
 ## 1. Authority and exact basis
@@ -360,19 +365,20 @@ Release PASS claim
 
 ## 9. Definition deliverable and next gate
 
-This document is the definition deliverable started by the named GO. It does not
-record a Definition Review PASS or a Deploy GO.
+This document is the definition deliverable started by the named GO. Its
+Independent Definition Re-Review is PASS / LOCKABLE and the Human Decision is
+ACCEPTED / LOCKED. It does not record a Deploy GO.
 
 ```text
 Current unit: LIMITED-DEMO-DEPLOY-GATE-DEFINITION-1
-Current result: DEFINITION CORRECTION-1 APPLIED / REVIEW PENDING / DRAFT / NOT LOCKED
-Next named gate: Independent Definition Re-Review / Lock
+Current result: DEFINITION CORRECTION-1 APPLIED / PUBLISHED / PASS / LOCKED
+Next named gate: read-only Deploy Precondition
 After lock: read-only Deploy Precondition
 Deploy: separate Human GO required
 Current action: STOP after docs-only Correction-1 work
 ```
 
-The next definition review must check this document against the current main
-evidence and the accepted decision hierarchy. It must not convert historical
-fixture acceptance, a visible catalog panel, local build success, or an empty
-search result into current Deploy evidence.
+The locked definition must still be checked against current main evidence at the
+read-only Deploy Precondition. It must not convert historical fixture acceptance,
+a visible catalog panel, local build success, or an empty search result into
+current Deploy evidence.
