@@ -3,6 +3,7 @@
 import { spawn, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
 import { promises as fsp } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -21,6 +22,27 @@ export const CANONICAL_HARNESS_PATHS = Object.freeze([
 ]);
 
 export const LAYER_A_ENVIRONMENT_KIND = "synthetic-local";
+
+export const SPFX_DEPENDENCY_REQUIREMENTS = Object.freeze([
+  {
+    name: "react",
+    manifestSection: "dependencies",
+    packageJsonPath: "spfx/node_modules/react/package.json",
+  },
+  {
+    name: "react-dom",
+    manifestSection: "dependencies",
+    packageJsonPath: "spfx/node_modules/react-dom/package.json",
+  },
+  {
+    name: "@microsoft/spfx-web-build-rig",
+    manifestSection: "devDependencies",
+    packageJsonPath: "spfx/node_modules/@microsoft/spfx-web-build-rig/package.json",
+    requiredPaths: [
+      "spfx/node_modules/@microsoft/spfx-web-build-rig/profiles/default/tsconfig-base.json",
+    ],
+  },
+]);
 
 export const CANONICAL_STEPS = Object.freeze([
   { step: "ST-01", name: "App Entry", runner: "shell-ux-1" },
@@ -143,12 +165,28 @@ function firstExisting(paths) {
   return paths.find((candidate) => candidate && fs.existsSync(candidate));
 }
 
+function readJsonFile(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+export function createTransientRuntimeDirectory(prefix) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), prefix));
+  const cleanup = () => {
+    if (fs.existsSync(directory)) {
+      fs.rmSync(directory, { recursive: true, force: true });
+    }
+  };
+  process.once("exit", cleanup);
+  return { directory, cleanup };
+}
+
 export function resolveExecutionTools(env = process.env) {
   return {
-    esbuildPath: firstExisting([
-      env.LAYER_A_ESBUILD_PATH,
-      "/tmp/node_modules/esbuild/lib/main.js",
-    ]),
+    esbuildPath: firstExisting([env.LAYER_A_ESBUILD_PATH, "/tmp/node_modules/esbuild/lib/main.js"]),
     puppeteerPath: firstExisting([
       env.LAYER_A_PUPPETEER_PATH,
       "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js",
@@ -160,6 +198,48 @@ export function resolveExecutionTools(env = process.env) {
       "/usr/bin/google-chrome-stable",
       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
     ]),
+  };
+}
+
+export function inspectSpfxDependencyReadiness(root = REPOSITORY_ROOT) {
+  const manifestPath = path.join(root, "spfx/package.json");
+  const manifest = readJsonFile(manifestPath);
+  const checks = SPFX_DEPENDENCY_REQUIREMENTS.map((requirement) => {
+    const expectedVersion = manifest?.[requirement.manifestSection]?.[requirement.name] ?? null;
+    const packageJsonPath = path.join(root, requirement.packageJsonPath);
+    const installed = readJsonFile(packageJsonPath);
+    const missingRequiredPaths = (requirement.requiredPaths ?? []).filter(
+      (requiredPath) => !fs.existsSync(path.join(root, requiredPath)),
+    );
+    let status = "PASS";
+    if (!expectedVersion) {
+      status = "MISSING_AUTHORITY";
+    } else if (!installed) {
+      status = "MISSING";
+    } else if (installed.version !== expectedVersion) {
+      status = "VERSION_MISMATCH";
+    } else if (missingRequiredPaths.length > 0) {
+      status = "MISSING_ENTRYPOINT";
+    }
+    return {
+      name: requirement.name,
+      expectedVersion,
+      installedVersion: installed?.version ?? null,
+      packageJsonPath: requirement.packageJsonPath,
+      missingRequiredPaths,
+      status,
+    };
+  });
+  const blockers = checks
+    .filter((check) => check.status !== "PASS")
+    .map(
+      (check) => `SPFx dependency readiness failed: ${check.name} (${check.status.toLowerCase()})`,
+    );
+  return {
+    ready: Boolean(manifest) && blockers.length === 0,
+    manifestPath: "spfx/package.json",
+    checks,
+    blockers: manifest ? blockers : ["SPFx dependency authority manifest is missing or invalid"],
   };
 }
 
@@ -254,6 +334,7 @@ export function buildPreflight({ root = REPOSITORY_ROOT, env = process.env } = {
   const worktree = inspectExecutionBasis(root);
   const tools = resolveExecutionTools(env);
   const environment = createEnvironmentIdentity(tools, env);
+  const spfxDependencyReadiness = inspectSpfxDependencyReadiness(root);
   const missingScripts = RUNNER_SPECS.filter(
     (spec) => !fs.existsSync(path.join(root, spec.script)),
   ).map((spec) => spec.script);
@@ -282,10 +363,13 @@ export function buildPreflight({ root = REPOSITORY_ROOT, env = process.env } = {
       blockers.push(`missing execution dependency: ${name}`);
     }
   }
+  blockers.push(...spfxDependencyReadiness.blockers);
   if (!validateEnvironmentIdentity(environment)) {
     blockers.push(
       `approved environment identity is required: ${
-        env.LAYER_A_ENVIRONMENT_ID ? "invalid environment kind" : "LAYER_A_ENVIRONMENT_ID is missing"
+        env.LAYER_A_ENVIRONMENT_ID
+          ? "invalid environment kind"
+          : "LAYER_A_ENVIRONMENT_ID is missing"
       }`,
     );
   }
@@ -298,6 +382,7 @@ export function buildPreflight({ root = REPOSITORY_ROOT, env = process.env } = {
     worktree,
     tools,
     environment,
+    spfxDependencyReadiness,
     missingScripts,
     blockers,
   };
@@ -384,15 +469,12 @@ export function validateProvenanceEntry(entry) {
   ];
   const sha256 = /^[0-9a-f]{64}$/;
   const objectEntry = entry !== null && typeof entry === "object";
-  const hasRequiredFields =
-    objectEntry && required.every((field) => Object.hasOwn(entry, field));
+  const hasRequiredFields = objectEntry && required.every((field) => Object.hasOwn(entry, field));
   const validTimestamp =
     objectEntry &&
     typeof entry.execution_timestamp === "string" &&
     !Number.isNaN(Date.parse(entry.execution_timestamp));
-  const validEnvironment =
-    objectEntry &&
-    validateEnvironmentIdentity(entry.environment);
+  const validEnvironment = objectEntry && validateEnvironmentIdentity(entry.environment);
   const validProductWorktreeState =
     objectEntry &&
     entry.product_worktree_state !== null &&
@@ -426,6 +508,42 @@ export function validateProvenanceEntry(entry) {
 
 function checkMap(report) {
   return new Map((report?.checks ?? []).map((check) => [check.id ?? check.name, check]));
+}
+
+/**
+ * @param {{ missingRunnerReports?: string[], applicationDataMutation?: string }} input
+ */
+export function classifyExecutionFailure({ missingRunnerReports = [], applicationDataMutation }) {
+  if (missingRunnerReports.length > 0) {
+    return {
+      code: "RUNNER_REPORT_MISSING",
+      applicationDataMutation: "UNVERIFIED",
+      provenance: "WITHHELD",
+      message:
+        `runner reports were not generated (${missingRunnerReports.join(", ")}); ` +
+        "application-data mutation is UNVERIFIED; compliant provenance manifest was not minted",
+    };
+  }
+  if (applicationDataMutation === "OBSERVED") {
+    return {
+      code: "APPLICATION_DATA_MUTATION_OBSERVED",
+      applicationDataMutation: "OBSERVED",
+      provenance: "WITHHELD",
+      message:
+        "application-data mutation evidence observed; compliant provenance manifest was not minted",
+    };
+  }
+  if (applicationDataMutation !== "NONE") {
+    return {
+      code: "NO_LIVE_WRITE_PROOF_FAILED",
+      applicationDataMutation: applicationDataMutation ?? "UNVERIFIED",
+      provenance: "WITHHELD",
+      message:
+        `no-live-write proof was not established (${applicationDataMutation ?? "UNVERIFIED"}); ` +
+        "compliant provenance manifest was not minted",
+    };
+  }
+  return null;
 }
 
 export function evaluateSt10BehaviorContract({
@@ -673,9 +791,16 @@ async function executeLayerA({ root, artifactsDir, preflight }) {
   );
   const runnerNoLiveWrite =
     missingRunnerReports.length === 0 &&
-    Object.values(reports).every(
-      (report) => report.networkEvidence?.noLiveWriteProof === true,
-    );
+    Object.values(reports).every((report) => report.networkEvidence?.noLiveWriteProof === true);
+  const applicationDataMutation = runnerNoLiveWrite
+    ? "NONE"
+    : missingRunnerReports.length > 0
+      ? "UNVERIFIED"
+      : "OBSERVED";
+  const executionFailure = classifyExecutionFailure({
+    missingRunnerReports,
+    applicationDataMutation,
+  });
   const summary = {
     schema: "CURRENT-RC-LAYER-A-EXECUTION-SUMMARY-1",
     productRcSha: PRODUCT_RC_SHA,
@@ -687,14 +812,17 @@ async function executeLayerA({ root, artifactsDir, preflight }) {
     steps,
     noLiveWrite: {
       status: runnerNoLiveWrite ? "PASS" : "FAIL",
-      applicationDataMutation: runnerNoLiveWrite
-        ? "NONE"
-        : missingRunnerReports.length > 0
-          ? "UNVERIFIED"
-          : "OBSERVED",
+      applicationDataMutation,
       runnerReports: Object.keys(reports),
       missingRunnerReports,
     },
+    failureClassification: executionFailure
+      ? {
+          code: executionFailure.code,
+          applicationDataMutation: executionFailure.applicationDataMutation,
+          provenance: executionFailure.provenance,
+        }
+      : null,
     pass:
       runnerResults.every((result) => result.code === 0) &&
       steps.every((step) => step.status === "PASS") &&
@@ -705,10 +833,8 @@ async function executeLayerA({ root, artifactsDir, preflight }) {
     `${JSON.stringify(summary, null, 2)}\n`,
     "utf8",
   );
-  if (!runnerNoLiveWrite) {
-    throw new Error(
-      "application-data mutation evidence observed; compliant provenance manifest was not minted",
-    );
+  if (executionFailure) {
+    throw new Error(executionFailure.message);
   }
   const manifest = await writeManifest({
     artifactsDir,
@@ -724,7 +850,9 @@ export async function main(argv = process.argv.slice(2)) {
   const options = parseArgs(argv);
   const preflight = buildPreflight();
   if (!preflight.ready) {
-    console.log(JSON.stringify({ mode: options.execute ? "execute" : "preflight", preflight }, null, 2));
+    console.log(
+      JSON.stringify({ mode: options.execute ? "execute" : "preflight", preflight }, null, 2),
+    );
     process.exitCode = 1;
     return;
   }

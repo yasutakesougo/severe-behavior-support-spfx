@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import assert from "node:assert/strict";
+import os from "node:os";
 import test from "node:test";
 import path from "node:path";
 import {
@@ -12,11 +13,15 @@ import {
   CANONICAL_STEPS,
   LAYER_A_ENVIRONMENT_KIND,
   PRODUCT_RC_SHA,
+  SPFX_DEPENDENCY_REQUIREMENTS,
+  classifyExecutionFailure,
   createProvenanceEntry,
   createEnvironmentIdentity,
+  createTransientRuntimeDirectory,
   evaluateCanonicalSteps,
   evaluateProductWorktreeState,
   evaluateSt10BehaviorContract,
+  inspectSpfxDependencyReadiness,
   validateEnvironmentIdentity,
   validateProvenanceEntry,
 } from "../../scripts/layer-a/run-layer-a.mjs";
@@ -97,9 +102,7 @@ test("framework, authentication, telemetry, and unknown traffic remain distinct"
   assert.equal(telemetry.applicationDataMutationCandidate, false);
   assert.equal(telemetry.unknownMutationRisk, false);
 
-  const unknown = classifyBrowserRequest(
-    request("https://unknown.example.invalid/mutate", "POST"),
-  );
+  const unknown = classifyBrowserRequest(request("https://unknown.example.invalid/mutate", "POST"));
   assert.equal(unknown.purpose, "unknown-nonlocal-mutation");
   assert.equal(unknown.applicationDataMutationCandidate, false);
   assert.equal(unknown.unknownMutationRisk, true);
@@ -163,6 +166,113 @@ test("environment identity requires explicit approved identity and synthetic kin
   const inferred = createEnvironmentIdentity({}, { LAYER_A_ENVIRONMENT_KIND });
   assert.equal(inferred.environment_id, "");
   assert.equal(validateEnvironmentIdentity(inferred), false);
+});
+
+test("SPFx dependency readiness checks the manifest authority and required entrypoint", () => {
+  const fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "layer-a-spfx-dependency-fixture-"));
+  try {
+    fs.mkdirSync(path.join(fixtureRoot, "spfx"), { recursive: true });
+    fs.writeFileSync(
+      path.join(fixtureRoot, "spfx/package.json"),
+      JSON.stringify({
+        dependencies: { react: "17.0.1", "react-dom": "17.0.1" },
+        devDependencies: { "@microsoft/spfx-web-build-rig": "1.23.2" },
+      }),
+    );
+    for (const requirement of SPFX_DEPENDENCY_REQUIREMENTS) {
+      const packagePath = path.join(fixtureRoot, requirement.packageJsonPath);
+      fs.mkdirSync(path.dirname(packagePath), { recursive: true });
+      const expectedVersion =
+        requirement.name === "@microsoft/spfx-web-build-rig" ? "1.23.2" : "17.0.1";
+      fs.writeFileSync(packagePath, JSON.stringify({ version: expectedVersion }));
+      for (const requiredPath of requirement.requiredPaths ?? []) {
+        const requiredFile = path.join(fixtureRoot, requiredPath);
+        fs.mkdirSync(path.dirname(requiredFile), { recursive: true });
+        fs.writeFileSync(requiredFile, "{}");
+      }
+    }
+
+    assert.equal(inspectSpfxDependencyReadiness(fixtureRoot).ready, true);
+
+    fs.rmSync(path.join(fixtureRoot, "spfx/node_modules/react-dom"), {
+      recursive: true,
+      force: true,
+    });
+    const missing = inspectSpfxDependencyReadiness(fixtureRoot);
+    assert.equal(missing.ready, false);
+    assert.equal(missing.checks.find((check) => check.name === "react-dom")?.status, "MISSING");
+
+    const reactDomPackage = path.join(fixtureRoot, "spfx/node_modules/react-dom/package.json");
+    fs.mkdirSync(path.dirname(reactDomPackage), { recursive: true });
+    fs.writeFileSync(reactDomPackage, JSON.stringify({ version: "18.0.0" }));
+    const mismatched = inspectSpfxDependencyReadiness(fixtureRoot);
+    assert.equal(mismatched.ready, false);
+    assert.equal(
+      mismatched.checks.find((check) => check.name === "react-dom")?.status,
+      "VERSION_MISMATCH",
+    );
+  } finally {
+    fs.rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
+test("remaining canonical runners isolate transient output for success and failure paths", () => {
+  for (const [runnerPath, prefix] of [
+    ["spfx/smoke/field-workflow-ui/run-smoke.mjs", "field-workflow-ui-runtime-"],
+    ["spfx/smoke/shell-ux-1/run-smoke.mjs", "shell-ux-1-runtime-"],
+    ["spfx/smoke/shell-ux-5/run-smoke.mjs", "shell-ux-5-runtime-"],
+  ]) {
+    const source = fs.readFileSync(runnerPath, "utf8");
+    assert.match(source, /createTransientRuntimeDirectory/);
+    assert.match(source, new RegExp(prefix));
+    assert.doesNotMatch(source, /const outDir = __dirname/);
+  }
+
+  const successRuntime = createTransientRuntimeDirectory("layer-a-success-runtime-");
+  try {
+    const generatedBundle = path.join(successRuntime.directory, "smoke-bundle.js");
+    fs.writeFileSync(generatedBundle, "success");
+    successRuntime.cleanup();
+    assert.equal(fs.existsSync(generatedBundle), false);
+  } finally {
+    successRuntime.cleanup();
+  }
+
+  const failureRuntime = createTransientRuntimeDirectory("layer-a-failure-runtime-");
+  try {
+    const generatedCss = path.join(failureRuntime.directory, "smoke-production.css");
+    fs.writeFileSync(generatedCss, "failure");
+    failureRuntime.cleanup();
+    assert.equal(fs.existsSync(generatedCss), false);
+  } finally {
+    failureRuntime.cleanup();
+  }
+});
+
+test("missing runner reports fail closed as UNVERIFIED rather than observed mutation", () => {
+  const missingReports = classifyExecutionFailure({
+    missingRunnerReports: ["field-workflow-ui"],
+    applicationDataMutation: "UNVERIFIED",
+  });
+  assert.equal(missingReports?.code, "RUNNER_REPORT_MISSING");
+  assert.equal(missingReports?.applicationDataMutation, "UNVERIFIED");
+  assert.equal(missingReports?.provenance, "WITHHELD");
+  assert.match(missingReports?.message ?? "", /UNVERIFIED/);
+  assert.doesNotMatch(missingReports?.message ?? "", /mutation evidence observed/);
+
+  const observedMutation = classifyExecutionFailure({
+    missingRunnerReports: [],
+    applicationDataMutation: "OBSERVED",
+  });
+  assert.equal(observedMutation?.code, "APPLICATION_DATA_MUTATION_OBSERVED");
+  assert.match(observedMutation?.message ?? "", /mutation evidence observed/);
+  assert.equal(
+    classifyExecutionFailure({
+      missingRunnerReports: [],
+      applicationDataMutation: "NONE",
+    }),
+    null,
+  );
 });
 
 test("provenance entries contain locked fields and both revision identities", () => {

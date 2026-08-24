@@ -6,26 +6,29 @@
  */
 import http from "node:http";
 import fs from "node:fs";
+import {
+  createTransientRuntimeDirectory,
+  evaluateSt10BehaviorContract,
+} from "../../../scripts/layer-a/run-layer-a.mjs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   createBrowserNetworkEvidenceCollector,
   NO_LIVE_WRITE_CHECK_ID,
 } from "../../../scripts/layer-a/browser-network-evidence.mjs";
-import { evaluateSt10BehaviorContract } from "../../../scripts/layer-a/run-layer-a.mjs";
-
 const esbuildModule = await import(
-  process.env.SHELL_UX_5_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js",
+  process.env.SHELL_UX_5_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js"
 );
 const puppeteerModule = await import(
   process.env.SHELL_UX_5_PUPPETEER_PATH ??
-    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js",
+    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
 );
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const outDir = __dirname;
+const { directory: outDir } = createTransientRuntimeDirectory("shell-ux-5-runtime-");
+fs.copyFileSync(path.join(__dirname, "index.html"), path.join(outDir, "index.html"));
 const artifactsDir =
   process.env.SHELL_UX_5_ARTIFACTS_DIR ?? "/opt/cursor/artifacts/shell-ux-5-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
@@ -92,8 +95,7 @@ await new Promise((resolve) => server.listen(4177, "127.0.0.1", resolve));
 const base = "http://127.0.0.1:4177";
 
 const browser = await puppeteer.launch({
-  executablePath:
-    process.env.SHELL_UX_5_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
+  executablePath: process.env.SHELL_UX_5_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
   headless: true,
   args: ["--no-sandbox", "--disable-gpu", "--window-size=1280,900"],
   defaultViewport: { width: 1280, height: 900 },

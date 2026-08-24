@@ -5,6 +5,7 @@
  */
 import http from "node:http";
 import fs from "node:fs";
+import { createTransientRuntimeDirectory } from "../../../scripts/layer-a/run-layer-a.mjs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -14,7 +15,8 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, "../..");
-const outDir = __dirname;
+const { directory: outDir } = createTransientRuntimeDirectory("field-workflow-ui-runtime-");
+fs.copyFileSync(path.join(__dirname, "index.html"), path.join(outDir, "index.html"));
 const artifactsDir =
   process.env.FW_ARTIFACTS_DIR ?? "/opt/cursor/artifacts/field-workflow-ui-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
