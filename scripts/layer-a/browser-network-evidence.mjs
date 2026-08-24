@@ -24,7 +24,7 @@ function isMutationMethod(method) {
 }
 
 function isSharePointListItemPath(pathname) {
-  return /\/\_api\/web\/lists(?:\([^)]*\)|\/GetByTitle\([^)]*\))\/items(?:\([^)]*\))?$/i.test(
+  return /\/_api\/web\/lists(?:\([^)]*\)|\/GetByTitle\([^)]*\))\/items(?:\([^)]*\))?$/i.test(
     pathname,
   );
 }
@@ -34,7 +34,7 @@ function isGraphApplicationDataPath(pathname) {
 }
 
 function isSharePointFrameworkPath(pathname) {
-  return /(?:^|\/)\_api\/(?:contextinfo|web|site)(?:\/|$)/i.test(pathname);
+  return /(?:^|\/)_api\/(?:contextinfo|web|site)(?:\/|$)/i.test(pathname);
 }
 
 function normalizeConfiguredPaths(paths) {

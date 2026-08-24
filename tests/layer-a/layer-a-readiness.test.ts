@@ -24,6 +24,18 @@ const request = (url: string, method = "GET", resourceType = "fetch") => ({
   resourceType: () => resourceType,
 });
 
+type ProductWorktreeStateInputForTest = {
+  head: string;
+  productRcAvailable: boolean;
+  productRcAncestor: boolean;
+  clean: boolean;
+  changedPaths?: string[];
+};
+
+const evaluateProductWorktreeStateForTest = evaluateProductWorktreeState as unknown as (
+  input: ProductWorktreeStateInputForTest,
+) => ReturnType<typeof evaluateProductWorktreeState>;
+
 test("network evidence redacts query strings and accepts local harness traffic", () => {
   const evidence = classifyBrowserRequest(
     request("http://127.0.0.1:4188/index.html?token=must-not-be-recorded", "GET", "document"),
@@ -104,7 +116,7 @@ test("framework, authentication, telemetry, and unknown traffic remain distinct"
 
 test("product RC and harness revision are separate and product-path drift fails closed", () => {
   const harnessRevision = "b".repeat(40);
-  const valid = evaluateProductWorktreeState({
+  const valid = evaluateProductWorktreeStateForTest({
     head: harnessRevision,
     productRcAvailable: true,
     productRcAncestor: true,
@@ -116,7 +128,7 @@ test("product RC and harness revision are separate and product-path drift fails 
   assert.equal(valid.harnessRevisionDistinct, true);
   assert.equal(valid.productContentUnchanged, true);
 
-  const productDrift = evaluateProductWorktreeState({
+  const productDrift = evaluateProductWorktreeStateForTest({
     head: harnessRevision,
     productRcAvailable: true,
     productRcAncestor: true,
