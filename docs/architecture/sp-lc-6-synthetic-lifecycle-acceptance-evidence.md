@@ -17,7 +17,9 @@ CI run #1378 / 32828078295: SUCCESS
 Post-merge reconciliation: CORRECTION REQUIRED / P1=1 / P2=1
 Execution-authority Correction-1 Implementation Start GO: CONSUMED
 Execution-authority Correction-1 basis main: be1faaf5e401f3e1fb54c0f23a79b63baa7d7833
-Execution-authority Correction-1 status: IMPLEMENTED / CI PENDING
+Execution-authority functional HEAD: 8f9c9dd5e88787bf5695b81ff8ba34018b8c1b47
+Execution-authority CI run #1383 / 32831592375: SUCCESS
+Execution-authority Correction-1 status: IMPLEMENTED / VERIFIED
 Full acceptance execution: NOT AUTHORIZED / NOT STARTED
 Issue #445 mutation / close: NOT AUTHORIZED
 Deploy / Production Binding / LIVE WRITE: FORBIDDEN
@@ -157,7 +159,7 @@ This correction does not itself authorize or perform full acceptance execution.
 
 ## 6. Regression coverage
 
-The focused contract suite now includes preflight-only child-runner checks that terminate before any acceptance checkpoint execution:
+The focused contract suite includes preflight-only child-runner checks that terminate before any acceptance checkpoint execution:
 
 ```text
 missing expectedMainSha
@@ -170,9 +172,31 @@ expectedMainSha != observedMainSha
   -> PRECHECK_BASE_MISMATCH_NOT_STARTED
 ```
 
+The contract test passes only the synthetic preflight variables required for these checks; it does not inherit environment secrets. The repository contracts/domain boundary inspection therefore remains satisfied.
+
 These tests intentionally do not exercise a matching execution authority, because a matching preflight would start the full acceptance runner and requires a separate Human Acceptance Execution GO.
 
-## 7. Mutation boundary
+## 7. Correction verification
+
+Functional HEAD `8f9c9dd5e88787bf5695b81ff8ba34018b8c1b47` was verified by GitHub Actions run `#1383 / 32831592375`.
+
+```text
+Verify skills / UI catalog / UI templates: PASS
+Semantic lint: PASS
+Lint: PASS
+Format: PASS
+Typecheck: PASS
+Root test: PASS
+Contracts/domain boundaries: PASS
+Scope check: PASS
+Accessibility gate: PASS
+Changed-lines check: PASS
+SPFx production artifact exact-basis build: PASS
+```
+
+The evidence synchronization commit that records this run does not alter runner or test behavior. Its final PR HEAD is still required to pass the repository CI before Independent Correction Review.
+
+## 8. Mutation boundary
 
 This correction does not authorize or perform:
 
@@ -191,7 +215,7 @@ full acceptance execution
 
 AC-4 / AC-7 / AC-9 remain fail-closed gaps on the currently known product/evidence basis. The correction changes only how future execution authority is supplied and recorded.
 
-## 8. Evidence fields after correction
+## 9. Evidence fields after correction
 
 When a separately authorized full acceptance execution eventually occurs, the machine-readable report records at least:
 
@@ -218,11 +242,11 @@ overallResult
 
 `acceptanceExecutionAuthority` and `expectedMainSha` come from the later Human Acceptance Execution GO and are the only authority used to enter the acceptance checkpoints.
 
-## 9. Gate
+## 10. Gate
 
 ```text
 PR #510 implementation: MERGED / CONSUMED
-Execution-authority Correction-1: IMPLEMENTED / CI PENDING
+Execution-authority Correction-1: IMPLEMENTED / VERIFIED
 Independent Correction Review: NOT YET COMPLETE
 Full acceptance execution: NOT AUTHORIZED / NOT STARTED
 Issue #445 mutation / close: NOT AUTHORIZED
