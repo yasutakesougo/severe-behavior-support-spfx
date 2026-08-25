@@ -50,6 +50,8 @@ The test also asserts the locked overall precedence:
 ENVIRONMENT_BLOCKED > GAP_FOUND > PASS
 ```
 
+Root `tsx --test` (CI `npm test`) loads `spfx/` as CJS because the nested package.json has no `"type": "module"`. The focused test therefore unwraps CJS default exports at runtime and does not change any SPFx source.
+
 ## 3. Runner preflight
 
 The runner records both historical Definition provenance and execution authority separately.

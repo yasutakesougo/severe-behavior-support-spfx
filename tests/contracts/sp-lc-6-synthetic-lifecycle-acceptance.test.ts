@@ -9,24 +9,11 @@ import {
   validateSupportPlanVersion,
   validateSupportPlanVersionProcedureBinding,
 } from "../../src/domain";
-import {
-  associateReviewObservations,
-  type ReviewObservationEvidenceInput,
-} from "../../spfx/src/shell/procedure/review-observation-association";
-import {
-  FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
-  FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
-  FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
-} from "../../spfx/src/shell/procedure/procedure-fixture";
-import {
-  SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE,
-  presentReviewDueSemanticBasis,
-} from "../../spfx/src/shell/review/review-due-semantics";
-import {
-  DEMO_UX_SUPPORT_PLAN_FIXTURE,
-  PLANNING_PC_DEMO_1_SLICE,
-  SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
-} from "../../spfx/src/shell/users/support-plan-fixture";
+import type { ReviewObservationEvidenceInput } from "../../spfx/src/shell/procedure/review-observation-association";
+import * as reviewObservationAssociationModule from "../../spfx/src/shell/procedure/review-observation-association";
+import * as procedureFixtureModule from "../../spfx/src/shell/procedure/procedure-fixture";
+import * as reviewDueSemanticsModule from "../../spfx/src/shell/review/review-due-semantics";
+import * as supportPlanFixtureModule from "../../spfx/src/shell/users/support-plan-fixture";
 import {
   createPlanningPcDemoActivePlan,
   createPlanningPcDemoHistoricalProcedureRecord,
@@ -38,6 +25,36 @@ import {
 } from "../domain/planning-pc-demo-graph-fixtures";
 
 type CheckpointResult = "PASS" | "GAP_FOUND" | "ENVIRONMENT_BLOCKED";
+
+/**
+ * Root `tsx --test` loads `spfx/` as CJS (nested package.json has no "type": "module").
+ * Named ESM imports then fail at instantiate time; unwrap the CJS default when present.
+ */
+function runtimeExports<T extends object>(mod: T): T {
+  const candidate = mod as T & { default?: T };
+  if (!candidate.default || typeof candidate.default !== "object") {
+    return mod;
+  }
+  const named = candidate as Record<string, unknown>;
+  const hasNamedRuntimeValue = Object.keys(candidate).some(
+    (key) => key !== "default" && key !== "__esModule" && named[key] !== undefined,
+  );
+  return hasNamedRuntimeValue ? mod : candidate.default;
+}
+
+const { associateReviewObservations } = runtimeExports(reviewObservationAssociationModule);
+const {
+  FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
+  FIELD_WORKFLOW_REVIEW_MATERIAL_V2,
+  FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
+} = runtimeExports(procedureFixtureModule);
+const { SP_LC_3_REVIEW_DUE_ORIGIN_1_SLICE, presentReviewDueSemanticBasis } =
+  runtimeExports(reviewDueSemanticsModule);
+const {
+  DEMO_UX_SUPPORT_PLAN_FIXTURE,
+  PLANNING_PC_DEMO_1_SLICE,
+  SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
+} = runtimeExports(supportPlanFixtureModule);
 
 function aggregateCheckpointResults(results: readonly CheckpointResult[]): CheckpointResult {
   if (results.includes("ENVIRONMENT_BLOCKED")) {
