@@ -48,4 +48,4 @@ implementationAuthorityReference: docs/architecture/ui-rendered-review-v1-exact-
 
 - Retrieval keys: adaptive layout, tablet layout, responsive review, breakpoints, safe area, clipping, reading order, better-layout, FIELD_STAFF tablet
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Priority P2 / SECOND for future `adaptive-layout-review`. Do not install external Skill or elevate example spacing above local tokens.
+- Promotion notes: `OBSERVED` only. Priority P2 / SECOND for future `adaptive-layout-review`. Do not install external Skill or elevate example spacing above local tokens. Source commit/release pin deferred to Post-Merge / Implementation Start preflight（UI-RENDERED-REVIEW-V1 Definition Correction-2 / P2-2）.

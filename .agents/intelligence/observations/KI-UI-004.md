@@ -48,4 +48,4 @@ implementationAuthorityReference: NONE
 
 - Retrieval keys: accessibility runtime, touch target, 44px, keyboard-only, 200% zoom, reflow, forced-colors, hover on touch, better-accessibility
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Do not install the external Skill or treat runtime checks as CI gate replacements. Static a11y authority remains DADS-06 and `design-review`.
+- Promotion notes: `OBSERVED` only. Source commit/release pin deferred to Post-Merge / Implementation Start preflight（UI-RENDERED-REVIEW-V1 Definition Correction-2 / P2-2）.

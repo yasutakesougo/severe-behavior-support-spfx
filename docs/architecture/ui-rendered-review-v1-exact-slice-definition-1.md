@@ -3,8 +3,9 @@
 ```text
 Program: UI-AGENT-SYSTEM-V1（review layer extension）
 Unit: UI-RENDERED-REVIEW-V1 — rendered-usability-review boundary
-Status: Definition Correction-1 APPLIED（this PR）
+Status: Definition Correction-2 APPLIED（this PR）
 Definition Correction-1: APPLIED (P1-1 + P1-2 + P1-3 + P2-1 + P2-2 + P2-3)
+Definition Correction-2: APPLIED (P1-1 + P1-2 + P2-1 + P2-2)
 Definition status: CORRECTED / AWAITING FOCUSED RE-REVIEW
 Authority:
   Human GO: UI-RENDERED-REVIEW-V1 Definition Start
@@ -17,7 +18,7 @@ Skill directory promotion: NOT AUTHORIZED（verify:skills 導入済み set 未�
 Deploy / SharePoint write / Product UI Contract mutation: FORBIDDEN
 Domain semantics mutation: FORBIDDEN
 NEXT: UI-RENDERED-REVIEW-V1 Definition focused Re-Review
-then, if accepted: UI-RENDERED-REVIEW-V1 Implementation Start GO
+then: Definition ACCEPT/LOCK → Ready → Merge → Post-Merge → Implementation Start GO
 Agent: STOP on implementation
 ```
 
@@ -46,6 +47,29 @@ FIELD_STAFF tablet evidence supported: PASS
 PLANNER desktop evidence supported: PASS
 external design-review name collision avoided: PASS
 Implementation Start until Skill directory promotion: PASS
+```
+
+## 0.1 Correction-2（closes Definition publication gate-chain HOLD）
+
+Consumed review against Definition Correction-1 publication:
+
+| ID | Severity | Status | Correction |
+|---|---|---|---|
+| P1-1 | P1 | **CLOSED** | **Remove Implementation Start shortcut.** Definition Re-Review PASS / ACCEPT alone does **not** authorize Implementation Start. Explicit Post-Merge `Implementation Start GO` remains required. |
+| P1-2 | P1 | **CLOSED** | **Human gate chain locked.** Required order: `Definition ACCEPT/LOCK → Ready → Merge → Post-Merge → Implementation Start GO`. Each gate is Human-owned; agents STOP between gates. |
+| P2-1 | P2 | **CLOSED** | **Command path corrected.** Implementation Start prerequisite references `.agents/commands/review-pr.md`, not bare `review-pr.md`. |
+| P2-2 | P2 | **CLOSED** | **KI source pin deferred.** KI-UI-004 / 005 / 006 retain `NOT_PINNED_DEFINITION_PHASE` during Definition. Source commit/release pin is a **Post-Merge / Implementation Start preflight** revalidation item, not a Definition blocker. |
+
+Prior Correction-1 items that remain PASS（unchanged by Correction-2）:
+
+```text
+V1 workflow order: PASS
+Gate independence: PASS
+Responsive ownership split: PASS
+Runtime a11y relocation: PASS
+KI-UI-005 Allowed/Forbidden: PASS
+Evidence contract: PASS
+Product UI Contract authority: PASS
 ```
 
 
@@ -163,6 +187,18 @@ Contract / semantics / a11y gate = design-review が最終 blocking gate
 外部 Skill install / --apply / runtime execution: FORBIDDEN
 外部 px 値を SBS token より上位にしない
 Product UI Contract 変更: FORBIDDEN
+```
+
+### 5.2 External Intelligence source pin（Correction-2 / P2-2）
+
+KI-UI-004 / 005 / 006 は Definition 段階では **source commit/release pin 不要**（`NOT_PINNED_DEFINITION_PHASE`）。
+
+```text
+Pin timing: Post-Merge reconciliation または Implementation Start preflight
+Revalidation trigger: Implementation Start GO 直前
+Required action: canonical source identity の live HEAD / release pin を observation に追記
+Failure handling: pin 不能または source drift 疑い → HOLD（Promotion しない）
+Definition blocker: NO（OBSERVED + GUIDANCE_ONLY のまま進行可）
 ```
 
 ## 6. In scope（Definition）
@@ -322,18 +358,19 @@ V1 では `adaptive-layout-review` ステップは **挿入しない**（Correct
 ## 13. Acceptance（Definition）
 
 1. 本 Definition 文書が repository-canonical である
-2. Definition Correction-1 が適用され、P1/P2 残が text 上 zero である
+2. Definition Correction-1 / Correction-2 が適用され、P1/P2 残が text 上 zero である
 3. KI-UI-004 / 005 / 006 が catalog に索引されている
 4. `rendered-usability-review` が skill-catalog **後続** に掲載されている
 5. 外部 `design-review` との名前衝突回避が明記されている
 6. evidence contract（no screenshot => no unsupported visual finding）が固定されている
 7. V1 workflow / gate independence / responsive ownership split が固定されている
-8. Product UI Contract remains authority が明記されている
-9. Implementation Start まで Skill ディレクトリを作らない（verify:skills 整合）
+8. Human gate chain（§15）が固定され、Implementation Start 直行記述がない
+9. Product UI Contract remains authority が明記されている
+10. Implementation Start まで Skill ディレクトリを作らない（verify:skills 整合）
 
 ## 14. Next phase — Implementation Start prerequisites
 
-Implementation Start GO 時に実施:
+Implementation Start は **§15 Human gate chain** の Post-Merge 到達 **かつ** 明示 `UI-RENDERED-REVIEW-V1 Implementation Start GO` 後のみ実施:
 
 ```text
 .agents/skills/rendered-usability-review/SKILL.md   （Appendix A を正本化）
@@ -342,9 +379,41 @@ scripts/verify-skills.mjs                           expectedInstalledSkills 追�
 docs/process/skill-catalog.md                       導入済みへ昇格
 .agents/agents/review.md                            導入済み行
 docs/process/development-process.md                 workflow 追記
-review-pr.md                                        UI 差分時 Fallback（任意）
+.agents/commands/review-pr.md                       UI 差分時 Fallback（任意）
 npm run verify:skills / verify:ci                   PASS
+KI-UI-004 / 005 / 006                               source pin revalidation（§5.2）
 ```
+
+```text
+Definition ACCEPT/LOCK alone     → Implementation Start NOT AUTHORIZED
+Merge alone                      → Implementation Start NOT AUTHORIZED
+Post-Merge without Start GO      → Implementation Start NOT AUTHORIZED
+```
+
+## 15. Human gate chain（Correction-2 / P1-2）
+
+Definition publication から Implementation Start までの **唯一の許可順序**:
+
+```text
+1. Definition focused Re-Review PASS
+2. Human Definition ACCEPT/LOCK
+3. PR Ready（Human）
+4. Merge（Human）
+5. Post-Merge reconciliation（definition canonical on main）
+6. Human UI-RENDERED-REVIEW-V1 Implementation Start GO
+7. Implementation Start authorized
+```
+
+```text
+FORBIDDEN shortcuts:
+  Re-Review PASS → Implementation Start
+  Definition ACCEPT/LOCK → Implementation Start
+  Ready → Implementation Start
+  Merge → Implementation Start
+  Post-Merge → Implementation Start（without explicit Start GO）
+```
+
+Agent rule: 各 gate 間で STOP。次 gate の Human GO / action なしに Implementation Start 前提作業（Skill ディレクトリ作成、verify:skills 昇格、application mutation）を開始しない。
 
 ## Appendix A — rendered-usability-review SKILL specification（draft）
 

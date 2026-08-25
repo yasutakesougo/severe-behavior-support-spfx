@@ -50,4 +50,4 @@ implementationAuthorityReference: docs/architecture/ui-rendered-review-v1-exact-
 
 - Retrieval keys: rendered usability, screenshot review, visual hierarchy, spacing review, component state review, Superfuture design-review, rendered-usability-review
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Priority P1 / FIRST for local Skill `rendered-usability-review`. Allowed/Forbidden boundary locked in UI-RENDERED-REVIEW-V1 Definition Correction-1 / P2-2.
+- Promotion notes: `OBSERVED` only. Priority P1 / FIRST for local Skill `rendered-usability-review`. Allowed/Forbidden boundary locked in UI-RENDERED-REVIEW-V1 Definition Correction-1 / P2-2. Source commit/release pin deferred to Post-Merge / Implementation Start preflight（Definition Correction-2 / P2-2）.
