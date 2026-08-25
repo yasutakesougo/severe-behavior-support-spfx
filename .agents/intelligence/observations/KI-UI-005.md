@@ -8,7 +8,9 @@
 - Reference use: `GUIDANCE_REFERENCE`
 - Terminal recommendation: `REFERENCE_ACCEPTED`
 - Finding: Superfuture/design-review is an external Claude Code skill that critiques URLs, screenshots, or component code against visual hierarchy, typography, spacing, contrast, component states, responsiveness, accessibility, motion, and brand consistency. It ranks findings and can optionally apply fixes with `--apply`. The repository's local skill must use a distinct name (`rendered-usability-review`) and forbid `--apply`, source mutation, and Product UI Contract changes.
-- Local rationale: Aligns with evidence-first UI review (KI-UI-001) and the need to evaluate rendered usability separately from Product UI Contract compliance (`design-review`). External name collision with local `design-review` is explicitly avoided.
+- Local rationale: Aligns with evidence-first UI review (KI-UI-001) and the need to evaluate rendered usability separately from Product UI Contract compliance (`design-review`). External name collision with local `design-review` is explicitly avoided. Priority P1 / FIRST for local Skill introduction.
+- Allowed（local GUIDANCE_ONLY）: screenshot review; rendered hierarchy review; spacing / density review; responsive visual review（width-labeled evidence）; component state review; concrete findings with evidence refs
+- Forbidden（local）: `--apply`; source mutation; Product UI Contract change; Domain semantics change; local `design-review` replacement; external Skill install / runtime execution
 - Authority: NONE（promotion 待ち。rendered review lens != Product UI Contract authority）
 - Evidence:
   - Canonical repository: https://github.com/Superfuture/design-review
@@ -48,4 +50,4 @@ implementationAuthorityReference: docs/architecture/ui-rendered-review-v1-exact-
 
 - Retrieval keys: rendered usability, screenshot review, visual hierarchy, spacing review, component state review, Superfuture design-review, rendered-usability-review
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Priority P1 for local Skill `rendered-usability-review`. External `--apply` and install remain forbidden.
+- Promotion notes: `OBSERVED` only. Priority P1 / FIRST for local Skill `rendered-usability-review`. Allowed/Forbidden boundary locked in UI-RENDERED-REVIEW-V1 Definition Correction-1 / P2-2.

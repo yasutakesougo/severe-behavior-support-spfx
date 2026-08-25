@@ -3,7 +3,9 @@
 ```text
 Program: UI-AGENT-SYSTEM-V1（review layer extension）
 Unit: UI-RENDERED-REVIEW-V1 — rendered-usability-review boundary
-Status: Definition Start（this PR）
+Status: Definition Correction-1 APPLIED（this PR）
+Definition Correction-1: APPLIED (P1-1 + P1-2 + P1-3 + P2-1 + P2-2 + P2-3)
+Definition status: CORRECTED / AWAITING FOCUSED RE-REVIEW
 Authority:
   Human GO: UI-RENDERED-REVIEW-V1 Definition Start
   docs/architecture/ui-agent-system-v1-design-issue-body.md
@@ -14,9 +16,40 @@ Implementation Start: NOT AUTHORIZED
 Skill directory promotion: NOT AUTHORIZED（verify:skills 導入済み set 未更新）
 Deploy / SharePoint write / Product UI Contract mutation: FORBIDDEN
 Domain semantics mutation: FORBIDDEN
+NEXT: UI-RENDERED-REVIEW-V1 Definition focused Re-Review
+then, if accepted: UI-RENDERED-REVIEW-V1 Implementation Start GO
+Agent: STOP on implementation
 ```
 
-## 0. Purpose
+## 0. Correction-1（closes Definition Review HOLD）
+
+Consumed review against Definition Start publication（PR #521 / branch `cursor/ui-rendered-review-v1-definition-9913`）:
+
+| ID | Severity | Status | Correction |
+|---|---|---|---|
+| P1-1 | P1 | **CLOSED** | **V1 execution order locked.** V1 runs `rendered-usability-review → design-review` only. `adaptive-layout-review` is P2 deferred; V1 records layout-break handoff notes but does not require that Skill. Full target order after P2: `rendered-usability-review → adaptive-layout-review → design-review`. |
+| P1-2 | P1 | **CLOSED** | **Gate independence locked.** `rendered-usability-review` PASS does **not** substitute `design-review` PASS. Contract / semantics / a11y gate failures remain blocking via `design-review` even when rendered usability passes. |
+| P1-3 | P1 | **CLOSED** | **Responsive ownership split.** V1 `rendered-usability-review` may raise P0/P1 only for width-labeled screenshot evidence of operation-blocking clip / overlap / state invisibility on representative viewports. Breakpoint philosophy, safe area, content growth, touch-target layout verification, and tablet-specific layout adaptation are **handoff notes** to P2 `adaptive-layout-review`（KI-UI-006）, not primary P0/P1 owners in V1 unless clip/overlap is already visible in rendered evidence. |
+| P2-1 | P2 | **CLOSED** | **Runtime a11y lens relocated.** Touch / zoom / keyboard-only / forced-colors runtime checks（KI-UI-004）are **not** primary dimensions of `rendered-usability-review` V1. They supplement `design-review` / DADS-06; static gate regressions stay in `design-review`. |
+| P2-2 | P2 | **CLOSED** | **KI-UI-005 Allowed/Forbidden explicit.** Local use of Superfuture/design-review guidance is limited to Allowed list; Forbidden list includes `--apply`, source mutation, Contract/Domain change, and local `design-review` replacement. |
+| P2-3 | P2 | **CLOSED** | **Path typo fixed.** `.adents/` → `.agents/` in Implementation Start prerequisites. |
+
+Prior Definition Start items that remain PASS（unchanged by Correction-1）:
+
+```text
+Product UI Contract remains authority: PASS
+no screenshot => no unsupported visual finding: PASS
+Domain semantics cannot be changed: PASS
+no source mutation / no automatic apply: PASS
+findings classified P0 / P1 / P2: PASS
+FIELD_STAFF tablet evidence supported: PASS
+PLANNER desktop evidence supported: PASS
+external design-review name collision avoided: PASS
+Implementation Start until Skill directory promotion: PASS
+```
+
+
+## 1. Purpose
 
 既存 Product UI Contract を変更せず、**browser / screenshot evidence** を使って実画面の usability / visual quality を **read-only** で評価するレビュー境界を定義する。
 
@@ -28,7 +61,7 @@ adaptive-layout-review  = tablet / narrow / touch / clip（P2 / 後続）
 
 外部 Skill は **「問題を見つける目」** としてのみ参照する。**「何が正しい UI か」** の正本は引き続き Domain / Contracts / DADS / Component Catalog / Screen Templates / Visual Hierarchy Contract である。
 
-## 1. Problem statement
+## 2. Problem statement
 
 現行 `design-review` は Product UI Contract 適合監査に強いが、次の gap がある。
 
@@ -39,7 +72,7 @@ adaptive-layout-review  = tablet / narrow / touch / clip（P2 / 後続）
 | evidence discipline | 停止条件はあるが、visual finding の証跡契約が Skill 単位で未固定 | no screenshot => no unsupported visual finding |
 | external intelligence | KI-UI-001..003 は OBSERVED。rendered / layout / runtime a11y lens が未索引 | KI-UI-004 / 005 / 006 を GUIDANCE_ONLY で索引 |
 
-## 2. Naming / collision boundary
+## 3. Naming / collision boundary
 
 | 名称 | 扱い |
 |---|---|
@@ -49,7 +82,9 @@ adaptive-layout-review  = tablet / narrow / touch / clip（P2 / 後続）
 | `ui-review`（後続候補） | 本 Skill 導入後も汎用 UI 分割要否は未決。rendered usability は本 Skill が担当 |
 | `adaptive-layout-review` | **P2 後続**。本 V1 では境界のみ定義 |
 
-## 3. Authority stack（変更不可）
+## 4. Authority stack（変更不可）
+
+### 4.1 Full target order（P2 導入後）
 
 ```text
 Domain / Contracts
@@ -68,21 +103,61 @@ Browser / Screenshot Evidence
   ↓
 rendered-usability-review   ← 本 Definition
   ↓
-adaptive-layout-review      ← P2 後続
+adaptive-layout-review      ← P2 後続（Correction-1 / P1-1）
   ↓
 design-review               ← 既存 Contract gate
   ↓
 Independent Review
 ```
 
-## 4. External Intelligence（GUIDANCE_ONLY）
+### 4.2 V1 execution order（Correction-1 / P1-1）
+
+```text
+Browser / Screenshot Evidence
+  ↓
+rendered-usability-review
+  ↓
+design-review
+```
+
+`adaptive-layout-review` は V1 では **未導入**。layout-break 疑いは handoff note として記録し、P2 で Skill 化する。
+
+### 4.3 Gate independence（Correction-1 / P1-2）
+
+```text
+rendered-usability-review PASS  ≠  design-review PASS
+rendered-usability-review FAIL   ≠  design-review 不要
+Contract / semantics / a11y gate = design-review が最終 blocking gate
+```
+
+## 5. External Intelligence（GUIDANCE_ONLY）
 
 | ID | Topic | External reference | Priority | Use |
 |---|---|---|---|---|
 | KI-UI-001 | evidence-first read-only UI audit | improve-ui | — | 証跡不足時は finding を出さない |
 | KI-UI-004 | accessibility runtime / touch verification | jakubkrehel/skills `better-accessibility` | P3 | design-review / DADS-06 補強 lens |
-| KI-UI-005 | rendered evidence usability review | Superfuture/design-review | **P1** | hierarchy / spacing / state / screenshot discipline |
+| KI-UI-005 | rendered evidence usability review | Superfuture/design-review | **P1 / FIRST** | hierarchy / spacing / state / screenshot discipline |
 | KI-UI-006 | adaptive / tablet layout review | jakubkrehel/skills `better-layout` | P2 | 後続 adaptive-layout-review lens |
+
+### 5.1 KI-UI-005 local use boundary（Correction-1 / P2-2）
+
+**Allowed（GUIDANCE_ONLY）**
+
+- screenshot review
+- rendered hierarchy review
+- spacing / density review
+- responsive visual review（width-labeled screenshot evidence のみ）
+- component state review
+- concrete findings（evidence ref 必須）
+
+**Forbidden**
+
+- `--apply`
+- source mutation
+- Product UI Contract 変更
+- Domain semantics 変更
+- local `design-review` 置換
+- external Skill install / runtime execution
 
 ```text
 外部 Skill install / --apply / runtime execution: FORBIDDEN
@@ -90,7 +165,7 @@ Independent Review
 Product UI Contract 変更: FORBIDDEN
 ```
 
-## 5. In scope（Definition）
+## 6. In scope（Definition）
 
 - 本 Exact Scope Definition 文書
 - KI-UI-004 / 005 / 006 observation 登録（`.agents/intelligence/`）
@@ -99,7 +174,7 @@ Product UI Contract 変更: FORBIDDEN
 - Review Agent 後続 Skill 行の追加
 - workflow 上の位置づけ（development-process 追記は Implementation Start）
 
-## 6. Explicit OUT
+## 7. Explicit OUT
 
 ```text
 .agents/skills/rendered-usability-review/ 作成（Implementation Start まで）
@@ -116,9 +191,9 @@ Storybook / Chromatic 新 SSOT 化
 Deploy / SharePoint write / Issue mutation / Merge / Ready
 ```
 
-## 7. Evidence contract（Must establish）
+## 8. Evidence contract（Must establish）
 
-### 7.1 Rendered evidence required
+### 8.1 Rendered evidence required
 
 visual / usability finding は **rendered evidence** を根拠にのみ出す。
 
@@ -128,10 +203,10 @@ visual / usability finding は **rendered evidence** を根拠にのみ出す。
 | typography / spacing / density | screenshot または measured capture + 対象要素特定 |
 | component state（hover / focus / disabled / empty / error） | 該当 state の screenshot または smoke 証跡 |
 | contrast（visual） | screenshot + 対象要素。数値断定は measured evidence がなければ `HOLD` |
-| responsive visual break | 幅別 screenshot（後続 adaptive-layout と分担） |
-| accessibility runtime（touch / zoom / keyboard-only） | 実操作証跡。静的 gate のみでは P1 確定不可 |
+| responsive visual break | width-labeled screenshot。操作 blocking の clip / overlap / state 不可視のみ P0/P1 可（Correction-1 / P1-3） |
+| runtime a11y（touch / zoom / keyboard-only） | **OUT of V1 primary scope**（Correction-1 / P2-1）。`design-review` + KI-UI-004 補強 lens へ handoff |
 
-### 7.2 No evidence => no unsupported finding
+### 8.2 No evidence => no unsupported finding
 
 ```text
 screenshot / browser evidence なし
@@ -140,16 +215,17 @@ screenshot / browser evidence なし
   → HOLD または NOT APPLICABLE
 ```
 
-### 7.3 Evidence vs preference
+### 8.3 Evidence vs preference
 
 | 区分 | 例 | 扱い |
 |---|---|---|
 | evidence-backed defect | primary CTA が fold 下で clip、error state が視認不能 | P0 / P1 candidate |
-| responsive break | 320px で label が control と重なる | P1（adaptive-layout 後続と分担可） |
+| responsive break | 320px screenshot で label が control と重なる（操作 blocking） | P1（width-labeled evidence 必須） |
+| responsive layout hypothesis | breakpoint 設計 / safe area / content growth の改善提案 | **handoff note のみ**（P2 adaptive-layout-review） |
 | visual preference | 「もう少し余白があるとよい」 | **finding にしない**（Contract 未違反なら） |
 | Contract violation | save 5-state 語彙混同 | **design-review** へ handoff（本 Skill では確定しない） |
 
-### 7.4 Role-specific minimum evidence
+### 8.4 Role-specific minimum evidence
 
 | Role / surface | 最低 rendered evidence |
 |---|---|
@@ -159,7 +235,18 @@ screenshot / browser evidence なし
 
 smoke 証跡（`spfx/smoke/**`）は synthetic / presentation 境界を維持する。本番データ・個人情報は使わない。
 
-## 8. Review dimensions（rendered-usability-review）
+### 8.5 Responsive vs adaptive-layout boundary（Correction-1 / P1-3）
+
+| 観点 | `rendered-usability-review` V1 | `adaptive-layout-review` P2 |
+|---|---|---|
+| width-labeled clip / overlap / unreadable state | P0/P1 可（screenshot 根拠） | 受け取り可 |
+| breakpoint を content break で決める | finding にしない | 主担当 |
+| safe area / notch / full-bleed | handoff note | 主担当 |
+| long-string / i18n content growth | handoff note（clip が見えれば P1） | 主担当 |
+| touch-target layout verification | handoff note（44px 等は KI-UI-004 補強） | 共有 |
+| visual preference / polish | finding にしない | finding にしない |
+
+## 9. Review dimensions（rendered-usability-review）
 
 Contract 適合は **design-review** に委譲し、本 Skill は rendered 観点のみを見る。
 
@@ -172,8 +259,11 @@ Contract 適合は **design-review** に委譲し、本 Skill は rendered 観�
 | spacing / alignment | グループ境界、control と content の分離 | 新 token 提案 |
 | motion（visual） | 過剰 motion の視覚的妨害 | KI-UI-003 数値の自動採用 |
 | brand / polish | DADS 既存 dialect との一貫性（見た目） | 新 design system 提案 |
+| responsive visual（V1） | 代表 viewport で clip / overlap / state 不可視（width-labeled evidence） | breakpoint / safe-area 設計 |
 
-## 9. Findings classification
+Runtime a11y（touch / zoom / keyboard-only / forced-colors）は **見ない**（Correction-1 / P2-1）。`design-review` + KI-UI-004 へ handoff。
+
+## 10. Findings classification
 
 | 重大度 | 定義（rendered usability） |
 |---|---|
@@ -183,9 +273,9 @@ Contract 適合は **design-review** に委譲し、本 Skill は rendered 観�
 
 `READY` は本 Skill では原則使用しない。
 
-## 10. Handoff rules
+## 11. Handoff rules
 
-### 10.1 To design-review
+### 11.1 To design-review
 
 次を見つけたら **Contract 側** として design-review へ handoff する。本 Skill 単独で FAIL 確定しない。
 
@@ -193,20 +283,21 @@ Contract 適合は **design-review** に委譲し、本 Skill は rendered 観�
 - Catalog / Template / Visual Hierarchy Contract 違反
 - a11y 意味チャネル（label / live region / color-only status）
 - `lint:ui-sem` / a11y gate 退行
+- runtime a11y verification 疑い（touch / zoom / keyboard-only / forced-colors）（KI-UI-004 補強 lens）
 
-### 10.2 From design-review
+### 11.2 From design-review
 
 design-review が `HOLD`（visual / rendered 証跡不足）とした UI PR は、本 Skill の入力候補となる。
 
-### 10.3 To adaptive-layout-review（P2 後続）
+### 11.3 To adaptive-layout-review（P2 後続）
 
 - breakpoint 崩れ地点
 - safe area / clip / content growth
 - tablet width 専用 layout break
 
-本 V1 では finding を記録し、後続 Skill 導入時に正式 handoff 形式を固定する。
+本 V1 では **P0/P1 finding に昇格せず** handoff note として記録する（Correction-1 / P1-3）。clip / overlap が rendered evidence 上で既に visible なら §8.5 のとおり P1 可。
 
-## 11. Workflow placement（target）
+## 12. Workflow placement（target）
 
 Implementation Start 時に `docs/process/development-process.md` へ追記予定:
 
@@ -217,30 +308,36 @@ Browser / Screenshot Evidence
   ↓
 rendered-usability-review（UI 差分 + rendered 証跡あり）
   ↓
-design-review（Contract gate）
+design-review（Contract gate — blocking）
   ↓
 review-pr 他観点
 ```
 
+V1 では `adaptive-layout-review` ステップは **挿入しない**（Correction-1 / P1-1）。P2 導入後は §4.1 full target order へ拡張する。
+
+`rendered-usability-review` PASS は `design-review` PASS を **置換しない**（Correction-1 / P1-2）。
+
 `review-pr` 必須化は Implementation Start で判断する。Definition 時点では **後続 Skill** として HOLD。
 
-## 12. Acceptance（Definition）
+## 13. Acceptance（Definition）
 
 1. 本 Definition 文書が repository-canonical である
-2. KI-UI-004 / 005 / 006 が catalog に索引されている
-3. `rendered-usability-review` が skill-catalog **後続** に掲載されている
-4. 外部 `design-review` との名前衝突回避が明記されている
-5. evidence contract（no screenshot => no unsupported visual finding）が固定されている
-6. Product UI Contract remains authority が明記されている
-7. Implementation Start まで Skill ディレクトリを作らない（verify:skills 整合）
+2. Definition Correction-1 が適用され、P1/P2 残が text 上 zero である
+3. KI-UI-004 / 005 / 006 が catalog に索引されている
+4. `rendered-usability-review` が skill-catalog **後続** に掲載されている
+5. 外部 `design-review` との名前衝突回避が明記されている
+6. evidence contract（no screenshot => no unsupported visual finding）が固定されている
+7. V1 workflow / gate independence / responsive ownership split が固定されている
+8. Product UI Contract remains authority が明記されている
+9. Implementation Start まで Skill ディレクトリを作らない（verify:skills 整合）
 
-## 13. Next phase — Implementation Start prerequisites
+## 14. Next phase — Implementation Start prerequisites
 
 Implementation Start GO 時に実施:
 
 ```text
 .agents/skills/rendered-usability-review/SKILL.md   （Appendix A を正本化）
-.adents/skills/rendered-usability-review/sample-output.md
+.agents/skills/rendered-usability-review/sample-output.md
 scripts/verify-skills.mjs                           expectedInstalledSkills 追加
 docs/process/skill-catalog.md                       導入済みへ昇格
 .agents/agents/review.md                            導入済み行
@@ -276,7 +373,7 @@ Product UI Contract 適合、Domain 意味、a11y gate / smoke / lint:ui-sem は
 - rendered evidence（screenshot / browser capture / smoke 証跡 doc への参照）
 - 任意: `design-context` 出力
 - 任意: 対象 role（FIELD_STAFF / PLANNER / ADMIN）
-- External Intelligence（GUIDANCE_ONLY）: KI-UI-001, KI-UI-005。layout / runtime a11y は P2/P3 後続 lens
+- External Intelligence（GUIDANCE_ONLY）: KI-UI-001, KI-UI-005（Allowed list のみ）。layout / runtime a11y は handoff
 
 ## 前提条件
 
@@ -292,8 +389,10 @@ Product UI Contract 適合、Domain 意味、a11y gate / smoke / lint:ui-sem は
 4. hierarchy / density / readability / visual state / spacing を rendered evidence 上で評価する
 5. component state（empty / error / disabled / loading）が視覚的に区別できるか確認する
 6. visual preference と evidence-backed defect を分離する
-7. Contract / semantics / a11y 意味の疑いがあれば design-review へ handoff し、本 Skill では確定しない
-8. Findings を P0 / P1 / P2 で整理し判定する
+7. responsive layout 設計疑いは adaptive-layout handoff note とし、V1 では P0/P1 に昇格しない（clip/overlap visible 時を除く）
+8. runtime a11y 疑いは design-review + KI-UI-004 へ handoff する
+9. Contract / semantics / a11y 意味の疑いがあれば design-review へ handoff し、本 Skill では確定しない
+10. Findings を P0 / P1 / P2 で整理し判定する。本 Skill PASS は design-review PASS を置換しない
 
 ## 確認項目
 
