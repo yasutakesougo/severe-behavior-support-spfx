@@ -33,15 +33,30 @@
 | 正常版への復旧やデータ復旧条件を確認する | `recovery-and-rollback.md` |
 | 開発担当者なしで運用情報を確認できるか試す | `handover.md` |
 
-## Evidence Basis
+## Authority Sourceの扱い
 
-Operational ReadinessのEvidenceは、少なくとも次のBasisに結び付ける。
+Runbookは「何を確認するか」だけでなく、「どの正式な情報源または連絡経路で確認するか」を記録する。
+
+各Runbookの`Authoritative Source`欄には、法人が管理できる文書、管理画面、台帳、役割、問い合わせ経路など、再確認可能な参照先を記録する。
+
+個人の記憶、口頭説明だけの経路、共有password、共有MFA、token、cookie、secret、recovery codeはAuthoritative Sourceとして認めない。
+
+正式な参照先が未決定の場合は、推定で埋めず`UNRESOLVED`とする。
+
+`UNRESOLVED`のAuthoritative Sourceが適用対象に残る場合は`HOLD`とする。
+
+## 共通Evidence Basis
+
+Operational ReadinessのEvidenceは、各EvidenceにBasis項目を重複して持たせず、1つの共通`OPS-EVIDENCE-BASIS-ID`へ結び付ける。
+
+共通Basisは少なくとも次を持つ。
 
 ```text
+OPS-EVIDENCE-BASIS-ID:
 repository:
 mainSha:
 applicationVersion:
-deployedArtifactIdentity: N/A when not applicable
+deployedArtifactIdentity: N/A only when deployment evidence is not applicable
 targetEnvironment:
 runbookRevision:
 evidenceObservedAt:
@@ -49,6 +64,22 @@ observerRole:
 ```
 
 Handover Drillでは、追加で`handoverParticipantRole`を記録する。
+
+各`OR-*` Evidenceには、必ず次を記録する。
+
+```text
+EvidenceBasisId: <OPS-EVIDENCE-BASIS-ID>
+```
+
+存在しないBasis ID、複数のBasisを混在させたEvidence、必要項目が欠けたBasisは無効であり`HOLD`とする。
+
+### runbookRevisionの正本
+
+`runbookRevision`は、レビュー対象となる`docs/operations/`一式を含むGit commit SHAとする。
+
+手入力の版番号、日付、ファイル名だけを`runbookRevision`の正本にはしない。
+
+Runbook修正後はGit commit SHAが変わるため、影響を受けるEvidenceを再評価する。
 
 Evidence Basisが一致しない過去のPASSは、現在のPASSとして扱わない。
 
@@ -65,17 +96,24 @@ Evidence Basisが一致しない過去のPASSは、現在のPASSとして扱わ�
 
 Evidenceが古い、混在している、再現できない場合は`STALE`として扱い、再照合が終わるまで`HOLD`とする。
 
-## 判定規則
+## N/Aの使用条件
 
-未確認事項はfail-closedで扱う。
+`N/A`は、各Runbookで適用除外条件が明示され、その条件をEvidenceで確認できる場合だけ使用できる。
+
+適用除外条件が定義されていない項目を`N/A`にしてはならない。
+
+適用除外条件を確認できない`N/A`は`INVALID N/A`として`HOLD`とする。
 
 ```text
 UNKNOWN -> HOLD
 UNRESOLVED -> HOLD
 STALE -> HOLD
+INVALID N/A -> HOLD
 ```
 
 Definitionで明示的に`NON-BLOCKING`と分類された事項だけは、PASSを妨げない。
+
+## OPS-READINESS-V1の判定
 
 `OPS-READINESS-V1 PASS`には、次のEvidenceが必要である。
 
@@ -94,7 +132,7 @@ ProductionでLIVE persistenceを有効化する前には、追加で次を必要
 OR-5D Data Recovery Evidence
 ```
 
-`OR-1`から`OR-6`までがPASSし、適用対象の`UNKNOWN`、`UNRESOLVED`、`STALE`が残っていない場合に限り、`OPS-READINESS-V1 PASS`を判定できる。
+`OR-1`から`OR-6`までがPASSし、適用対象の`UNKNOWN`、`UNRESOLVED`、`STALE`、`INVALID N/A`が残っていない場合に限り、`OPS-READINESS-V1 PASS`を判定できる。
 
 ## 秘密情報の扱い
 
