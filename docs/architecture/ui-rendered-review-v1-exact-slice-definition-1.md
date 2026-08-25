@@ -3,12 +3,15 @@
 ```text
 Program: UI-AGENT-SYSTEM-V1（review layer extension）
 Unit: UI-RENDERED-REVIEW-V1 — rendered-usability-review boundary
-Status: Definition Correction-2 APPLIED（this PR）
+Status: ACCEPTED / LOCKED（Human Decision recorded）
 Definition Correction-1: APPLIED (P1-1 + P1-2 + P1-3 + P2-1 + P2-2 + P2-3)
 Definition Correction-2: APPLIED (P1-1 + P1-2 + P2-1 + P2-2)
-Definition status: CORRECTED / AWAITING FOCUSED RE-REVIEW
+Definition status: ACCEPTED / LOCKED
+Human Decision: ACCEPTED / LOCKED
+Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK — RECEIVED
 Authority:
   Human GO: UI-RENDERED-REVIEW-V1 Definition Start
+  Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK
   docs/architecture/ui-agent-system-v1-design-issue-body.md
   docs/process/skill-catalog.md
   .agents/skills/design-review/SKILL.md
@@ -17,8 +20,8 @@ Implementation Start: NOT AUTHORIZED
 Skill directory promotion: NOT AUTHORIZED（verify:skills 導入済み set 未更新）
 Deploy / SharePoint write / Product UI Contract mutation: FORBIDDEN
 Domain semantics mutation: FORBIDDEN
-NEXT: UI-RENDERED-REVIEW-V1 Definition focused Re-Review
-then: Definition ACCEPT/LOCK → Ready → Merge → Post-Merge → Implementation Start GO
+Publication status: PR #521 OPEN / DRAFT / NOT IN MAIN
+NEXT: Ready → Merge → Post-Merge → Implementation Start GO
 Agent: STOP on implementation
 ```
 
@@ -414,6 +417,47 @@ FORBIDDEN shortcuts:
 ```
 
 Agent rule: 各 gate 間で STOP。次 gate の Human GO / action なしに Implementation Start 前提作業（Skill ディレクトリ作成、verify:skills 昇格、application mutation）を開始しない。
+
+## 16. Definition acceptance / lock（Human GO consumed）
+
+```text
+Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK
+Received: 2026-08-25
+Human Decision: ACCEPTED / LOCKED
+Publication: PR #521（branch cursor/ui-rendered-review-v1-definition-9913）— NOT IN MAIN until Merge
+Implementation Start: NOT AUTHORIZED（Post-Merge + explicit Start GO required）
+```
+
+### Locked scope
+
+本 ACCEPT/LOCK は次を固定する。
+
+- `rendered-usability-review` 境界（evidence contract、V1 workflow、gate independence、responsive split）
+- External Intelligence 索引 KI-UI-004 / 005 / 006（GUIDANCE_ONLY）
+- Human gate chain §15（ACCEPT/LOCK 完了；次は Ready）
+- Implementation Start 前提（§14）— Post-Merge 到達 + 明示 Start GO まで Skill 未導入
+
+### Not authorized by this ACCEPT/LOCK
+
+```text
+Implementation Start
+Skill directory promotion / verify:skills 導入済み昇格
+Product UI Contract / Domain semantics 変更
+Ready / Merge / Deploy（Human-only；別 GO）
+Issue mutation
+```
+
+### Gate chain progress
+
+| Step | Status |
+|---|---|
+| 1. Definition focused Re-Review | **CONSUMED BY Human ACCEPT/LOCK** |
+| 2. Human Definition ACCEPT/LOCK | **COMPLETE** |
+| 3. PR Ready | **NEXT（Human）** |
+| 4. Merge | PENDING |
+| 5. Post-Merge reconciliation | PENDING |
+| 6. Implementation Start GO | PENDING |
+| 7. Implementation Start | NOT AUTHORIZED |
 
 ## Appendix A — rendered-usability-review SKILL specification（draft）
 
