@@ -639,7 +639,7 @@ Definition Correction-1: COMPLETE
 Definition Correction-2: COMPLETE / PUBLISHED
 Definition Correction-3 Start GO: CONSUMED
 Definition Correction-3: COMPLETE / PUBLISHED (PR #512 MERGED)
-Definition: READY FOR INDEPENDENT DEFINITION REVIEW
+Definition: LOCKED / PUBLISHED / CONSUMED
 
 PR #510 implementation publication:
 MERGED / CONSUMED
@@ -678,5 +678,5 @@ Deploy / Production Binding / LIVE WRITE:
 FORBIDDEN
 
 NEXT:
-Independent Definition Review of Correction-3
+AC-3 / AC-5 / AC-8 stale smoke expectation Exact Slice
 ```
