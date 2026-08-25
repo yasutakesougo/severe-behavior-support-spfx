@@ -292,11 +292,8 @@ describe("SP-LC-6 acceptance execution authority preflight", () => {
     observedMainSha: string;
   }): PreflightReport {
     const env: NodeJS.ProcessEnv = {
-      ...process.env,
       SP_LC_6_OBSERVED_MAIN_SHA: options.observedMainSha,
     };
-    delete env.SP_LC_6_EXPECTED_MAIN_SHA;
-    delete env.SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY;
 
     if (options.expectedMainSha) {
       env.SP_LC_6_EXPECTED_MAIN_SHA = options.expectedMainSha;
