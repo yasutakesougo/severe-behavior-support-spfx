@@ -207,7 +207,9 @@ function assertReviewDueState(expectedStateColumns) {
       !overview &&
       (heading?.textContent ?? "").trim() === "見直し状況" &&
       !note &&
-      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
+      (demo?.textContent ?? "").includes(
+        "デモ環境｜表示内容は合成データです。保存されません。",
+      ) &&
       (calcNote?.textContent ?? "").includes("合成表示ラベル") &&
       items.length === 3 &&
       statusLabels.length === 3 &&
