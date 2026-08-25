@@ -11,13 +11,17 @@ const spfxRoot = path.join(repoRoot, "spfx");
 const UNIT = "SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-IMPLEMENTATION-1";
 const DEFINITION = "SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1";
 const DEFINITION_BASELINE_MAIN_SHA = "4dd41c4ff27265dba09b6872727cc782244715b6";
-const EXPECTED_MAIN_SHA = "e8261761e4cff29babfa49c59c4f7de89373e48c";
 const IMPLEMENTATION_START_AUTHORITY =
   "Human Implementation Start GO / #445 / D1=B D2=B D3=B D4=A D5=B D6=A";
 
 const CHECKPOINT_IDS = ["AC-1", "AC-2", "AC-3", "AC-4", "AC-5", "AC-6", "AC-7", "AC-8", "AC-9"];
 const ENVIRONMENT_BLOCK_PATTERN =
   /ENOENT|ERR_MODULE_NOT_FOUND|Cannot find module|command not found|google-chrome|puppeteer|esbuild|sass/i;
+
+function envValue(name) {
+  const value = process.env[name]?.trim();
+  return value ? value : null;
+}
 
 function gitRevParse(ref) {
   const result = spawnSync("git", ["rev-parse", ref], {
@@ -160,44 +164,73 @@ function emit(report, exitCode) {
   process.exit(exitCode);
 }
 
+const expectedMainSha = envValue("SP_LC_6_EXPECTED_MAIN_SHA");
+const acceptanceExecutionAuthority = envValue("SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY");
 const observedMainSha = resolveObservedMainSha();
+
+if (!expectedMainSha || !acceptanceExecutionAuthority) {
+  emit(
+    {
+      unit: UNIT,
+      definition: DEFINITION,
+      definitionBaselineMainSha: DEFINITION_BASELINE_MAIN_SHA,
+      expectedMainSha,
+      observedMainSha,
+      shaMatch: null,
+      preflightState: "PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED",
+      implementationStartAuthority: IMPLEMENTATION_START_AUTHORITY,
+      acceptanceExecutionAuthority,
+      checkpoints: [],
+      knownGaps: [],
+      overallResult: null,
+      mutationAttempted: null,
+      liveWriteAuthorized: null,
+    },
+    2,
+  );
+}
+
 if (!observedMainSha) {
   emit(
     {
       unit: UNIT,
       definition: DEFINITION,
       definitionBaselineMainSha: DEFINITION_BASELINE_MAIN_SHA,
-      expectedMainSha: EXPECTED_MAIN_SHA,
+      expectedMainSha,
       observedMainSha: null,
-      shaMatch: null,
-      preflightState: null,
+      shaMatch: false,
+      preflightState: "PRECHECK_BASE_MISMATCH_NOT_STARTED",
       implementationStartAuthority: IMPLEMENTATION_START_AUTHORITY,
+      acceptanceExecutionAuthority,
+      checkpoints: [],
+      knownGaps: [],
       overallResult: null,
       runnerError: "OBSERVED_MAIN_SHA_UNRESOLVED",
-      mutationAttempted: false,
-      liveWriteAuthorized: false,
+      mutationAttempted: null,
+      liveWriteAuthorized: null,
     },
     2,
   );
 }
 
-const shaMatch = observedMainSha === EXPECTED_MAIN_SHA;
+const shaMatch = observedMainSha === expectedMainSha;
 if (!shaMatch) {
   emit(
     {
       unit: UNIT,
       definition: DEFINITION,
       definitionBaselineMainSha: DEFINITION_BASELINE_MAIN_SHA,
-      expectedMainSha: EXPECTED_MAIN_SHA,
+      expectedMainSha,
       observedMainSha,
       shaMatch,
       preflightState: "PRECHECK_BASE_MISMATCH_NOT_STARTED",
       implementationStartAuthority: IMPLEMENTATION_START_AUTHORITY,
+      acceptanceExecutionAuthority,
       checkpoints: [],
       knownGaps: [],
       overallResult: null,
-      mutationAttempted: false,
-      liveWriteAuthorized: false,
+      mutationAttempted: null,
+      liveWriteAuthorized: null,
     },
     2,
   );
@@ -332,11 +365,12 @@ emit(
     unit: UNIT,
     definition: DEFINITION,
     definitionBaselineMainSha: DEFINITION_BASELINE_MAIN_SHA,
-    expectedMainSha: EXPECTED_MAIN_SHA,
+    expectedMainSha,
     observedMainSha,
     shaMatch,
     preflightState: "PRECHECK_BASE_MATCH",
     implementationStartAuthority: IMPLEMENTATION_START_AUTHORITY,
+    acceptanceExecutionAuthority,
     checkpoints,
     executions,
     testCount: Object.fromEntries(executions.map((item) => [item.name, item.testCount])),
