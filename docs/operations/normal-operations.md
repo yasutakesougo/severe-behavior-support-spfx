@@ -6,6 +6,22 @@
 
 必要なのは、担当者が何を確認し、何を異常として扱い、次にどこへ連絡するかを判断できることである。
 
+## Authoritative Source
+
+平常時の確認に使用する正式な参照先を記録する。
+
+```text
+currentVersionSource:
+targetEnvironmentSource:
+operatingModeSource:
+applicationAvailabilitySource:
+incidentEscalationSource:
+```
+
+参照先が未決定の場合は`UNRESOLVED`とする。
+
+個人の記憶や開発担当者の口頭説明だけを参照先にしない。
+
 ## 平常時に確認すること
 
 ```text
@@ -57,12 +73,31 @@ OPS-NORMAL-DET6
 
 結果が確認できるまで、重複記録の可能性を含む異常として扱う。
 
+## N/A eligibility
+
+`N/A`は次の条件に限り使用できる。
+
+```text
+save failure:
+  N/A only when the observed operating mode has no write capability.
+
+save outcome unknown:
+  N/A only when the observed operating mode has no write capability.
+
+authorization failure:
+  N/A only when the observed operating mode has no authorization-dependent path.
+```
+
+上記条件をEvidenceで確認できない`N/A`は`INVALID N/A`として`HOLD`とする。
+
+`page/application unavailable`と`version mismatch`は、このRunbookでは`N/A`にしない。
+
 ## 異常を認識した場合
 
 1. 現在の画面と操作を止める。
 2. 異常の種類を記録する。
 3. `incident-and-safe-stop.md`を参照する。
-4. 必要な連絡・停止判断経路へ進む。
+4. `incidentEscalationSource`で正式な連絡・停止判断経路を確認する。
 5. 未確認のまま正常扱いへ戻さない。
 
 このRunbookは、利用者データ、token、cookie、credentialをEvidenceへ転記することを要求しない。
@@ -71,11 +106,8 @@ OPS-NORMAL-DET6
 
 ```text
 Evidence ID: OR-2
-Basis:
-  mainSha:
-  applicationVersion:
-  targetEnvironment:
-  runbookRevision:
+EvidenceBasisId:
+Authoritative sources resolved: PASS / FAIL / UNKNOWN
 Observed operating mode:
 Observed application availability: PASS / FAIL / UNKNOWN
 Observed expected version match: PASS / FAIL / UNKNOWN
@@ -85,6 +117,7 @@ Detection path reviewed:
   authorization failure: PASS / FAIL / N/A
   page/application unavailable: PASS / FAIL
   version mismatch: PASS / FAIL
+N/A eligibility confirmed: PASS / FAIL / N/A
 Incident escalation path confirmed: PASS / FAIL / UNKNOWN
 Result: PASS / HOLD
 Residual:
@@ -92,6 +125,6 @@ Residual:
 
 ## PASS条件
 
-平常時の確認項目を再現でき、異常状態とその後の行動を判断できる場合に`OR-2 PASS`とする。
+Authoritative Sourceから平常時の確認項目を再現でき、異常状態とその後の行動を判断できる場合に`OR-2 PASS`とする。
 
-必要な確認が`UNKNOWN`または`STALE`の場合は`HOLD`とする。
+必要な参照先や確認が`UNKNOWN`、`UNRESOLVED`、`STALE`、`INVALID N/A`の場合は`HOLD`とする。
