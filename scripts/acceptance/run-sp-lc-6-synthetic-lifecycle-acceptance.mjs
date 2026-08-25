@@ -15,17 +15,7 @@ const EXPECTED_MAIN_SHA = "e8261761e4cff29babfa49c59c4f7de89373e48c";
 const IMPLEMENTATION_START_AUTHORITY =
   "Human Implementation Start GO / #445 / D1=B D2=B D3=B D4=A D5=B D6=A";
 
-const CHECKPOINT_IDS = [
-  "AC-1",
-  "AC-2",
-  "AC-3",
-  "AC-4",
-  "AC-5",
-  "AC-6",
-  "AC-7",
-  "AC-8",
-  "AC-9",
-];
+const CHECKPOINT_IDS = ["AC-1", "AC-2", "AC-3", "AC-4", "AC-5", "AC-6", "AC-7", "AC-8", "AC-9"];
 const ENVIRONMENT_BLOCK_PATTERN =
   /ENOENT|ERR_MODULE_NOT_FOUND|Cannot find module|command not found|google-chrome|puppeteer|esbuild|sass/i;
 
@@ -108,11 +98,7 @@ function commandResult(executions, name) {
 function emit(report, exitCode) {
   const serialized = JSON.stringify(report, null, 2);
   if (process.env.SP_LC_6_REPORT_PATH) {
-    fs.writeFileSync(
-      path.resolve(process.env.SP_LC_6_REPORT_PATH),
-      `${serialized}\n`,
-      "utf8",
-    );
+    fs.writeFileSync(path.resolve(process.env.SP_LC_6_REPORT_PATH), `${serialized}\n`, "utf8");
   }
   console.log(serialized);
   process.exit(exitCode);
@@ -177,15 +163,10 @@ const executions = [
   runCommand("planning-pc-demo-1-smoke", repoRoot, "node", [
     "spfx/smoke/planning-pc-demo-1/run-smoke.mjs",
   ]),
-  runCommand("demo-ux-6-smoke", repoRoot, "node", [
-    "spfx/smoke/demo-ux-6/run-smoke.mjs",
+  runCommand("demo-ux-6-smoke", repoRoot, "node", ["spfx/smoke/demo-ux-6/run-smoke.mjs"]),
+  runCommand("support-plan-review-new-version-demo-1-smoke", repoRoot, "node", [
+    "spfx/smoke/support-plan-review-new-version-demo-1/run-smoke.mjs",
   ]),
-  runCommand(
-    "support-plan-review-new-version-demo-1-smoke",
-    repoRoot,
-    "node",
-    ["spfx/smoke/support-plan-review-new-version-demo-1/run-smoke.mjs"],
-  ),
 ];
 
 const focused = commandResult(executions, "root-focused-acceptance");
@@ -193,10 +174,7 @@ const planning = commandResult(executions, "root-planning-graph");
 const heft = commandResult(executions, "spfx-heft");
 const planningSmoke = commandResult(executions, "planning-pc-demo-1-smoke");
 const reviewSmoke = commandResult(executions, "demo-ux-6-smoke");
-const nextVersionSmoke = commandResult(
-  executions,
-  "support-plan-review-new-version-demo-1-smoke",
-);
+const nextVersionSmoke = commandResult(executions, "support-plan-review-new-version-demo-1-smoke");
 
 const checkpoints = [
   {
@@ -212,29 +190,17 @@ const checkpoints = [
   {
     id: "AC-3",
     result: mergeResults([focused, heft, reviewSmoke]),
-    source: [
-      "root-focused-acceptance",
-      "spfx-heft",
-      "demo-ux-6-smoke",
-    ],
+    source: ["root-focused-acceptance", "spfx-heft", "demo-ux-6-smoke"],
   },
   {
     id: "AC-4",
     result: mergeResults([focused, heft, reviewSmoke]),
-    source: [
-      "root-focused-acceptance",
-      "spfx-heft",
-      "demo-ux-6-smoke",
-    ],
+    source: ["root-focused-acceptance", "spfx-heft", "demo-ux-6-smoke"],
   },
   {
     id: "AC-5",
     result: mergeResults([focused, heft, reviewSmoke]),
-    source: [
-      "root-focused-acceptance",
-      "spfx-heft",
-      "demo-ux-6-smoke",
-    ],
+    source: ["root-focused-acceptance", "spfx-heft", "demo-ux-6-smoke"],
   },
   {
     id: "AC-6",
@@ -243,25 +209,15 @@ const checkpoints = [
   },
   {
     id: "AC-7",
-    result:
-      nextVersionSmoke === "ENVIRONMENT_BLOCKED"
-        ? "ENVIRONMENT_BLOCKED"
-        : "GAP_FOUND",
-    source: [
-      "root-focused-acceptance",
-      "support-plan-review-new-version-demo-1-smoke",
-    ],
+    result: nextVersionSmoke === "ENVIRONMENT_BLOCKED" ? "ENVIRONMENT_BLOCKED" : "GAP_FOUND",
+    source: ["root-focused-acceptance", "support-plan-review-new-version-demo-1-smoke"],
     note: "Current authorized main exposes concept-only next-version presentation; persistence/draft workflow remain unauthorized.",
     smokeObservation: nextVersionSmoke,
   },
   {
     id: "AC-8",
     result: mergeResults([focused, planning, reviewSmoke]),
-    source: [
-      "root-focused-acceptance",
-      "root-planning-graph",
-      "demo-ux-6-smoke",
-    ],
+    source: ["root-focused-acceptance", "root-planning-graph", "demo-ux-6-smoke"],
   },
   {
     id: "AC-9",
@@ -296,9 +252,7 @@ emit(
     implementationStartAuthority: IMPLEMENTATION_START_AUTHORITY,
     checkpoints,
     executions,
-    testCount: Object.fromEntries(
-      executions.map((item) => [item.name, item.testCount]),
-    ),
+    testCount: Object.fromEntries(executions.map((item) => [item.name, item.testCount])),
     browserSmokeResult,
     mutationAttempted: false,
     liveWriteAuthorized: false,
