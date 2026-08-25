@@ -13,9 +13,12 @@ Authority inputs:
     AC-3 / AC-5 / AC-8 = STALE SMOKE EXPECTATION
 Prior consumed:
   PR #514 DEFINITION-STATUS-SYNC-1 MERGED / CONSUMED
-Definition Start GO: THIS DOCUMENT (scope fixation)
+Definition Start GO: CONSUMED (scope fixation published on PR #515)
+Exact Slice Definition APPROVE: RECEIVED / LOCKED
+  Human: PR #515 Exact Slice Definition APPROVE
+  Approved HEAD at receipt: f78863ad2b5cba2b5afd7409f90f03ac5567021c
 Implementation Start: NOT AUTHORIZED
-Smoke runner mutation: NOT AUTHORIZED by this document
+Smoke runner mutation: NOT AUTHORIZED
 Acceptance re-execution: NOT AUTHORIZED
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
@@ -214,14 +217,15 @@ assertion unchanged.
 
 ```text
 Exact Slice Definition / scope fixation:
-  COMPLETE (this document)
+  COMPLETE / APPROVED / LOCKED
 
 Human gate 1:
-  approve or reject this Exact Slice Definition
+  Exact Slice Definition APPROVE = RECEIVED / LOCKED
+  (PR #515 Human instruction)
 
-Human gate 2, only after approval:
-  Implementation Start GO
-  bound to:
+Human gate 2:
+  Implementation Start GO = NOT RECEIVED
+  bound to (when issued):
     this Unit
     baseline or later approved main SHA
     changed-area = spfx/smoke/demo-ux-6/run-smoke.mjs
@@ -229,20 +233,21 @@ Human gate 2, only after approval:
     acceptance criteria in §5
     OUT list in §6
 
-Until both gates are explicit:
+Until Implementation Start GO is explicit:
   smoke runner mutation = NO-GO
   product / domain / fixture / schema mutation = NO-GO
   acceptance re-execution = NO-GO
   Issue mutation = NO-GO
-  Ready / Merge = NO-GO
+  Ready / Merge = NO-GO (unless separate Human Ready / Merge GO)
   Deploy / Production Binding / LIVE WRITE = FORBIDDEN
 
-NEXT after Definition approval:
-  Implementation Start GO request for this Exact Slice only
+NEXT:
+  Human Implementation Start GO for this Exact Slice only
+  (optional separate Human Ready / Merge GO for PR #515 definition publication)
 ```
 
 ```text
-EXACT-SLICE-DEFINITION-1: COMPLETE
+EXACT-SLICE-DEFINITION-1: APPROVED / LOCKED
 Implementation Start: NOT AUTHORIZED
-CURRENT ACTION: STOP (await Human Definition approval)
+CURRENT ACTION: STOP (await Human Implementation Start GO)
 ```
