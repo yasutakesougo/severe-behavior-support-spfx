@@ -16,6 +16,23 @@
 
 必要なのは、担当者が変わっても役割と回復経路を確認できることである。
 
+## Authoritative Source
+
+次の参照先を、法人が再確認できる形で記録する。
+
+```text
+applicationOwnershipSource:
+m365AdminSource:
+sourceReleaseCustodySource:
+alternateEscalationSource:
+```
+
+参照先が未決定の場合は`UNRESOLVED`とする。
+
+個人の記憶や口頭説明だけを参照先にしない。
+
+共有password、共有MFA、token、cookie、secret、recovery codeを参照先へ含めない。
+
 ## Acceptance Criteria
 
 ```text
@@ -58,10 +75,8 @@ account ownership / role / recovery path / escalation routeを管理する。
 
 ```text
 Evidence ID: OR-1
-Basis:
-  mainSha:
-  targetEnvironment:
-  runbookRevision:
+EvidenceBasisId:
+Authoritative sources resolved: PASS / FAIL / UNKNOWN
 Observed roles:
   applicationOwnerRole:
   m365AdminPath:
@@ -81,8 +96,8 @@ Residual:
 
 ## PASS条件
 
-必要な役割と回復・移管経路を確認でき、共有credentialや秘密情報の記載を必要としない場合に`OR-1 PASS`とする。
+必要な役割、Authoritative Source、回復・移管経路を確認でき、共有credentialや秘密情報の記載を必要としない場合に`OR-1 PASS`とする。
 
 個人アカウントに依存する資産が存在することだけでは自動FAILにしない。
 
-ただし、主担当者不在時に法人が管理権を回復または移管できる経路を確認できない場合は`HOLD`とする。
+ただし、Authoritative Sourceが`UNRESOLVED`、または主担当者不在時に法人が管理権を回復・移管できる経路を確認できない場合は`HOLD`とする。
