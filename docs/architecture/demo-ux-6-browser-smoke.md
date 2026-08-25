@@ -83,3 +83,27 @@ semantic basis distinguishes:
   Observation association = exact historical context only
   unresolved / mismatch = fail-closed; no Active fallback
 ```
+
+## SP-LC-6 stale smoke expectation realignment (PR #515)
+
+```text
+Unit: SP-LC-6-DEMO-UX-6-STALE-SMOKE-EXPECTATION-EXACT-SLICE-DEFINITION-1
+Implementation Start GO: RECEIVED / CONSUMED
+Changed path: spfx/smoke/demo-ux-6/run-smoke.mjs only
+Banner expectation: VP1_DEMO_SAFETY_NOTICE
+  "デモ環境｜表示内容は合成データです。保存されません。"
+Product / DemoBanner / VP-1 copy: UNCHANGED
+Acceptance re-execution: NOT AUTHORIZED
+```
+
+| Case | Result |
+|---|---|
+| desktop-review-due-subsequent-anchor | PASS |
+| desktop-review-due | PASS |
+| tablet-review-due | PASS |
+| remaining DEMO-UX-6 cases (6) | PASS |
+
+```text
+allPass: true
+cases: 9 / 9
+```
