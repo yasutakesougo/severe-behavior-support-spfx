@@ -123,17 +123,31 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
     );
   });
 
-  it("AC-4 keeps unresolved historical Review material fail-closed", () => {
-    const association = associateReviewObservations(
+  it("AC-4 keeps unresolved distinct and records missing successful-empty as GAP_FOUND", () => {
+    const unresolved = associateReviewObservations(
       FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
       FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
     );
-
-    assert.equal(association.status, "UNRESOLVED");
-    if (association.status === "UNRESOLVED") {
-      assert.equal(association.reason, "HISTORICAL_LOOKUP_UNRESOLVED");
-      assert.deepEqual(association.observations, []);
+    assert.equal(unresolved.status, "UNRESOLVED");
+    if (unresolved.status === "UNRESOLVED") {
+      assert.equal(unresolved.reason, "HISTORICAL_LOOKUP_UNRESOLVED");
+      assert.deepEqual(unresolved.observations, []);
     }
+
+    const zeroMatch = associateReviewObservations(FIELD_WORKFLOW_REVIEW_MATERIAL_V2, []);
+    const successfulEmptyExists =
+      zeroMatch.status === "ASSOCIATED" && zeroMatch.observations.length === 0;
+    assert.equal(successfulEmptyExists, false);
+    assert.notEqual(zeroMatch.status, "ASSOCIATED");
+    assert.equal(zeroMatch.status, "UNRESOLVED");
+    if (zeroMatch.status === "UNRESOLVED") {
+      assert.equal(zeroMatch.reason, "NO_EXACT_CONTEXT_MATCH");
+      assert.deepEqual(zeroMatch.observations, []);
+    }
+
+    const result: CheckpointResult =
+      unresolved.status === "UNRESOLVED" && successfulEmptyExists ? "PASS" : "GAP_FOUND";
+    assert.equal(result, "GAP_FOUND");
   });
 
   it("AC-5 preserves D5 review timing semantics without fixed 90-day invalidation", () => {
@@ -214,7 +228,7 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
     }
   });
 
-  it("AC-9 keeps the acceptance inputs synthetic and LIVE WRITE disabled", () => {
+  it("AC-9 records missing execution-time mutation telemetry as GAP_FOUND", () => {
     assert.equal(PLANNING_PC_DEMO_1_SLICE.liveWriteAuthorized, false);
     assert.equal(PLANNING_PC_DEMO_1_SLICE.liveTenantIoAuthorized, false);
     assert.equal(PLANNING_PC_DEMO_1_SLICE.sharePointRestAuthorized, false);
@@ -223,6 +237,23 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.liveTenantIoAuthorized, false);
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.sharePointRestAuthorized, false);
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.deployAuthorized, false);
+
+    const observedSlices: ReadonlyArray<Record<string, unknown>> = [
+      PLANNING_PC_DEMO_1_SLICE,
+      SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
+    ];
+    const mutationCountKeys = [
+      "mutationCount",
+      "liveWriteCount",
+      "sharePointWriteCount",
+      "writeCount",
+    ];
+    const mutationCountTelemetryAvailable = observedSlices.some((slice) =>
+      mutationCountKeys.some((key) => key in slice && typeof slice[key] === "number"),
+    );
+    const result: CheckpointResult = mutationCountTelemetryAvailable ? "PASS" : "GAP_FOUND";
+    assert.equal(mutationCountTelemetryAvailable, false);
+    assert.equal(result, "GAP_FOUND");
   });
 
   it("uses deterministic acceptance precedence ENVIRONMENT_BLOCKED > GAP_FOUND > PASS", () => {

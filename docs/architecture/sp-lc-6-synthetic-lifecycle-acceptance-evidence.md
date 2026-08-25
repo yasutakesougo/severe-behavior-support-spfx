@@ -10,8 +10,10 @@ Implementation Start GO: RECEIVED
 expectedMainSha: e8261761e4cff29babfa49c59c4f7de89373e48c
 observedMainSha at Implementation Start preflight: e8261761e4cff29babfa49c59c4f7de89373e48c
 preflightState at Implementation Start: PRECHECK_BASE_MATCH
-Implementation status: IMPLEMENTED / EXECUTION EVIDENCE PENDING
+Implementation status: CORRECTION-1 APPLIED / EXECUTION EVIDENCE PENDING
 Acceptance execution result: NOT YET RECORDED
+Independent Implementation Review-1: CORRECTION REQUIRED / HOLD
+Correction-1 GO: CONSUMED
 Ready / Merge: NOT AUTHORIZED
 Deploy / Production Binding / LIVE WRITE: FORBIDDEN
 ```
@@ -37,12 +39,12 @@ The focused contract test covers the nine Definition checkpoints without adding 
 | AC-1 | existing synthetic SupportPlanVersion v2/v3 + version/procedure binding contracts |
 | AC-2 | existing historical ProcedureRecord v2 projection and no-v3-fallback contract |
 | AC-3 | existing D6 exact ProcedureRecord/planId/planVersion Observation association |
-| AC-4 | existing unresolved historical Review material fail-closed behavior |
+| AC-4 | unresolved historical Review material remains fail-closed; current main has no successful-empty association status, so the checkpoint is `GAP_FOUND` |
 | AC-5 | existing D5 review anchor / caller-supplied due / calendar-month semantics |
 | AC-6 | no-mutation continuation invariant over the existing Active/historical graph |
 | AC-7 | existing concept-only next-version slice flags; missing executable capability remains a gap |
 | AC-8 | existing fail-closed identity/version mismatch paths |
-| AC-9 | existing synthetic/live-write-disabled slice boundaries plus runner no-mutation boundary |
+| AC-9 | slice authorization flags are observed, but existing runners expose no write-count telemetry, so the checkpoint is `GAP_FOUND` |
 
 The test also asserts the locked overall precedence:
 
@@ -151,11 +153,25 @@ Production Binding
 Deploy / App Catalog
 ```
 
-The runner itself only invokes local tests and the existing synthetic browser smoke runners. It records:
+The runner invokes local tests and the existing synthetic browser smoke runners, then reads any `smoke-report.json` those runners already emit. `mutationAttempted` and `liveWriteAuthorized` are derived from that observed report data. When write-count telemetry is absent, `mutationAttempted` is `null` and AC-9 is `GAP_FOUND` rather than a hard-coded PASS.
+
+## 6.1 Correction-1
+
+Independent Implementation Review-1 on `133bbc76c59f42a16b5b0a7c0c1a5e43963d40e6` required two P1 corrections. Human Correction-1 GO was consumed without expanding the 3-file changed-area.
 
 ```text
-mutationAttempted: false
-liveWriteAuthorized: false
+P1-1 AC-4:
+Current main associateReviewObservations maps a RESOLVED historical material
+with zero exact Observation matches to UNRESOLVED / NO_EXACT_CONTEXT_MATCH.
+There is no ASSOCIATED + empty-observations successful-empty status.
+Acceptance records this as GAP_FOUND. Unresolved remains a separate proven state.
+No fixture-only successful-empty PASS is manufactured.
+
+P1-2 AC-9:
+Existing smoke reports expose sliceFlags (liveWriteAuthorized / liveTenantIoAuthorized /
+sharePointRestAuthorized) but no SharePoint / M365 / Entra / App Catalog / LIVE WRITE
+count telemetry. AC-9 is GAP_FOUND unless such counts are later present on current main.
+mutationAttempted is not hard-coded false after execution.
 ```
 
 ## 7. Execution evidence state
@@ -177,8 +193,9 @@ Do not copy prior smoke PASS documents into this section as current execution ev
 ## 8. Gate
 
 ```text
-Implementation: IMPLEMENTED
-Independent Implementation Review: NOT YET COMPLETE
+Implementation: CORRECTION-1 APPLIED / EXECUTION EVIDENCE PENDING
+Independent Implementation Review-1: CORRECTION REQUIRED / HOLD
+Independent Implementation Re-Review: NOT YET COMPLETE
 Acceptance execution evidence: PENDING
 Issue #445 mutation / close: NOT AUTHORIZED
 Ready / Merge: NOT AUTHORIZED
