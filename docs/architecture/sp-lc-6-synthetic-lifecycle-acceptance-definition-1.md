@@ -11,8 +11,12 @@ Definition Start GO: RECEIVED
 Definition Review-1: CORRECTION REQUIRED / P1=2
 Definition Correction-1: APPLIED
 Independent Definition Re-Review-2: CORRECTION REQUIRED / P1=1 / P2=1
-Definition Correction-2: APPLIED
-Implementation / acceptance execution: NOT AUTHORIZED
+Definition Correction-2: APPLIED / PUBLISHED (PR #509 MERGED)
+Implementation publication: MERGED / CONSUMED (PR #510)
+PR #511 Independent Correction Review: CORRECTION REQUIRED / P1=1
+Definition Correction-3 Start GO: RECEIVED
+Definition Correction-3: APPLIED
+Acceptance execution: NOT AUTHORIZED
 Code / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -137,13 +141,17 @@ Later Active versionへのfallbackは禁止されている。
 
 `Definition baseline main`をfuture acceptance executionの`expectedMainSha`として自動使用してはならない。
 
-PR #509がmainへmergeされれば、Definition publicationだけでもmain SHAは`4dd41c4ff27265dba09b6872727cc782244715b6`から進む。
+PR #509がmainへmergeされたため、Definition publicationだけでもmain SHAは`4dd41c4ff27265dba09b6872727cc782244715b6`から進んだ。
 
 したがってfuture Implementation Start / acceptance executionでは、Definition publication baselineとは別にexecution base authorityを取得する。
 
-`expectedMainSha`は、別Human `Implementation Start GO`で明示的に承認されたcurrent-main SHAとする。
+`expectedMainSha`のauthority sourceは工程によって異なる。Implementation Start GOとAcceptance Execution GOは別のHuman GOである。
 
-Human `Implementation Start GO`は最低限、次をbindする。
+#### 4.1.1 Implementation Start GO
+
+Human `Implementation Start GO`は、acceptance layerのimplementation publication専用である。
+
+このGOは最低限、次をbindする。
 
 ```text
 Unit:
@@ -161,9 +169,45 @@ scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs
 docs/architecture/sp-lc-6-synthetic-lifecycle-acceptance-evidence.md
 ```
 
-Definition merge後にmainがさらに進んでいる場合は、Implementation Start GO前にcurrent-main residual reassessmentを行い、その結果に基づくSHAを承認する。
+この`expectedMainSha`はimplementation publication preflight専用である。
 
-Definition publication baselineとexecution-authorized SHAが偶然同じである必要はない。
+PR #510 merge後、このImplementation Start GOはCONSUMEDである。CONSUMEDなImplementation Start GOは、future acceptance executionの`expectedMainSha` authorityではない。
+
+#### 4.1.2 Acceptance Execution GO
+
+AC-1からAC-9を開始するfuture acceptance executionでは、`expectedMainSha`は別Human `Acceptance Execution GO`で明示的に承認されたcurrent-main SHAとする。
+
+Human `Acceptance Execution GO`は最低限、次をbindする。
+
+```text
+Unit:
+SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-IMPLEMENTATION-1
+
+Definition:
+SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1
+
+expectedMainSha:
+<GO時点でHumanが承認したpost-merge current-main SHA>
+
+acceptanceExecutionAuthority:
+<non-empty Human Acceptance Execution GO reference>
+```
+
+Implementation Start以降にmainが進んでいる場合は、Acceptance Execution GO前にcurrent-main residual reassessmentを行い、その結果に基づくSHAを承認する。
+
+post-merge Acceptance Execution GOは、Implementation Start GOのconsumed SHAとは異なるcurrent-main SHAをbindしてよい。
+
+`expectedMainSha`も`acceptanceExecutionAuthority`も、次から推定してはならない。
+
+```text
+Definition baseline main
+consumed Implementation Start GO
+implementation-time SHA constant
+observed current main
+repository state
+```
+
+Definition publication baseline、implementation-time SHA、execution-authorized SHAが偶然同じである必要はない。
 
 ### 4.2 Preflight state
 
@@ -175,7 +219,9 @@ PRECHECK_BASE_MATCH
 PRECHECK_BASE_MISMATCH_NOT_STARTED
 ```
 
-Human `Implementation Start GO`に`expectedMainSha`が明示されていない場合は`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`とし、acceptance checkpointを開始しない。
+Human `Acceptance Execution GO`に`expectedMainSha`または`acceptanceExecutionAuthority`が明示されていない場合は`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`とし、acceptance checkpointを開始しない。
+
+CONSUMEDなImplementation Start GOだけでは、このpreflightを進めてはならない。
 
 Execution base authorityが存在する場合だけ、`expectedMainSha`と`observedMainSha`を比較する。
 
@@ -322,6 +368,8 @@ Production Bindingを有効化しない。
 
 別Human `Implementation Start GO`が与えられた場合でも、acceptance layerの追加だけを許可する。
 
+PR #510はそのImplementation Start GOをCONSUMEDした。後続のexecution-authority correctionおよびevidence更新も、同じ3ファイル境界に限定する。
+
 変更可能範囲を次に固定する。
 
 ```text
@@ -366,6 +414,7 @@ observedMainSha
 shaMatch
 preflightState
 implementationStartAuthority
+acceptanceExecutionAuthority
 checkpoint id
 checkpoint result
 source path / runner
@@ -379,9 +428,13 @@ overallResult
 
 `definitionBaselineMainSha`はprovenanceとして記録するだけで、`shaMatch`判定には使用しない。
 
+`implementationStartAuthority`はhistorical implementation provenanceとして記録するだけで、future `shaMatch`判定には使用しない。
+
 `shaMatch`は`expectedMainSha === observedMainSha`だけを表す。
 
-`expectedMainSha`はHuman `Implementation Start GO`のauthorityから取得する。
+`expectedMainSha`と`acceptanceExecutionAuthority`はHuman `Acceptance Execution GO`のauthorityから取得する。
+
+runnerはこれらの値を明示的なHuman-authorized execution inputとして受け取る。repository constant、Definition baseline、consumed Implementation Start GO、observed mainから推定してはならない。
 
 `overallResult`は`PRECHECK_BASE_MATCH`後だけ設定する。
 
@@ -406,7 +459,9 @@ existing smoke harness変更
 SharePoint adapter変更
 persistence実装
 Definition baseline mainをexecution authorityとして自動再利用すること
-Human Implementation Start GOなしにexpectedMainShaを推定すること
+consumed Implementation Start GOをfuture acceptance execution authorityとして再利用すること
+expectedMainShaまたはacceptanceExecutionAuthorityを推定すること
+Human Acceptance Execution GOなしにacceptance checkpointを開始すること
 Production Binding
 LIVE WRITE
 SharePoint / M365 / Entra mutation
@@ -417,13 +472,13 @@ Ready / Merge
 
 ## 9. Verification requirements for future acceptance execution
 
-Acceptance execution前に、Human `Implementation Start GO`から`expectedMainSha`を取得する。
+Acceptance execution前に、Human `Acceptance Execution GO`から`expectedMainSha`と`acceptanceExecutionAuthority`を取得する。
 
-`Definition baseline main`はhistorical provenanceとしてのみ保持し、execution preflightの比較対象にはしない。
+`Definition baseline main`とconsumed Implementation Start GOはhistorical provenanceとしてのみ保持し、execution preflightの比較対象にはしない。
 
-`expectedMainSha`が未承認なら`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`としてacceptanceを開始しない。
+`expectedMainSha`または`acceptanceExecutionAuthority`が未承認なら`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`としてacceptanceを開始しない。
 
-`expectedMainSha`が承認済みの場合だけ、`observedMainSha`と比較する。
+`expectedMainSha`と`acceptanceExecutionAuthority`の両方が承認済みの場合だけ、`expectedMainSha`と`observedMainSha`を比較する。
 
 SHAが一致しない場合は`PRECHECK_BASE_MISMATCH_NOT_STARTED`としてacceptanceを開始せず、current-main residual reassessmentへ戻す。
 
@@ -494,7 +549,32 @@ PR #509本文をCorrection-2後のcontinuation invariant / execution base author
 
 Correction-2はD1-D6の意味、AC-1からAC-9の業務意味、future changed-areaを変更しない。
 
-## 13. Rollback boundary
+## 13. Correction-3 traceability
+
+PR #511 Independent Correction ReviewのP1-1を次のように閉じる。
+
+```text
+P1-1:
+Locked DefinitionはexpectedMainShaのauthority sourceを
+Human Implementation Start GOへ固定していた。
+
+PR #511はfuture execution authorityを
+Human Acceptance Execution GOへ移した。
+
+これはhard-coded SHAの移動ではなくauthority contractの変更である。
+
+Correction-3は、post-merge Acceptance Execution GOが
+future expectedMainShaとacceptanceExecutionAuthorityをbindできることを
+Definitionへ正式追加する。
+
+Implementation Start GOはimplementation publication専用のままCONSUMEDとする。
+```
+
+このCorrectionはD1-D6の意味、AC-1からAC-9の業務意味、3ファイルchanged-areaを変更しない。
+
+このCorrectionはPR #511のReady / Merge、full acceptance execution、Issue #445 mutationを許可しない。
+
+## 14. Rollback boundary
 
 Definition publicationのrollbackはこの文書だけを戻す。
 
@@ -502,18 +582,21 @@ Future acceptance implementationのrollbackも、acceptance test、runner、evid
 
 既存product/domain/fixture/smokeを変更しないため、rollbackで業務意味や既存UIを変えない。
 
-## 14. Gate
+## 15. Gate
 
 ```text
 Definition Start GO: CONSUMED
-Definition Review-1: CORRECTION REQUIRED / HOLD
 Definition Correction-1: COMPLETE
-Independent Definition Re-Review-2: CORRECTION REQUIRED / HOLD
-Definition Correction-2: COMPLETE
-Definition: READY FOR INDEPENDENT RE-REVIEW-3
+Definition Correction-2: COMPLETE / PUBLISHED
+Definition Correction-3 Start GO: CONSUMED
+Definition Correction-3: COMPLETE
+Definition: READY FOR INDEPENDENT DEFINITION REVIEW
 
-Implementation Start:
-NOT AUTHORIZED
+PR #510 implementation publication:
+MERGED / CONSUMED
+
+PR #511:
+HOLD pending Definition LOCK then Independent Correction Re-Review
 
 Acceptance execution:
 NOT AUTHORIZED
@@ -528,5 +611,5 @@ Deploy / Production Binding / LIVE WRITE:
 FORBIDDEN
 
 NEXT:
-Independent Definition Re-Review-3
+Independent Definition Review of Correction-3
 ```
