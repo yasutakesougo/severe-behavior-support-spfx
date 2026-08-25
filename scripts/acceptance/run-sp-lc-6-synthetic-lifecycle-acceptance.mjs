@@ -10,8 +10,7 @@ const spfxRoot = path.join(repoRoot, "spfx");
 
 const UNIT = "SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-IMPLEMENTATION-1";
 const DEFINITION = "SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1";
-const DEFINITION_BASELINE_MAIN_SHA =
-  "4dd41c4ff27265dba09b6872727cc782244715b6";
+const DEFINITION_BASELINE_MAIN_SHA = "4dd41c4ff27265dba09b6872727cc782244715b6";
 const EXPECTED_MAIN_SHA = "e8261761e4cff29babfa49c59c4f7de89373e48c";
 const IMPLEMENTATION_START_AUTHORITY =
   "Human Implementation Start GO / #445 / D1=B D2=B D3=B D4=A D5=B D6=A";
@@ -56,9 +55,7 @@ function classifyExecution(result) {
   if (result.status === 0) {
     return "PASS";
   }
-  const combined = `${result.error?.message ?? ""}\n${
-    result.stdout ?? ""
-  }\n${result.stderr ?? ""}`;
+  const combined = `${result.error?.message ?? ""}\n${result.stdout ?? ""}\n${result.stderr ?? ""}`;
   return result.status === null || ENVIRONMENT_BLOCK_PATTERN.test(combined)
     ? "ENVIRONMENT_BLOCKED"
     : "GAP_FOUND";
@@ -194,10 +191,7 @@ const executions = [
 const focused = commandResult(executions, "root-focused-acceptance");
 const planning = commandResult(executions, "root-planning-graph");
 const heft = commandResult(executions, "spfx-heft");
-const planningSmoke = commandResult(
-  executions,
-  "planning-pc-demo-1-smoke",
-);
+const planningSmoke = commandResult(executions, "planning-pc-demo-1-smoke");
 const reviewSmoke = commandResult(executions, "demo-ux-6-smoke");
 const nextVersionSmoke = commandResult(
   executions,
@@ -276,10 +270,7 @@ const checkpoints = [
   },
 ];
 
-if (
-  checkpoints.map((item) => item.id).join(",") !==
-  CHECKPOINT_IDS.join(",")
-) {
+if (checkpoints.map((item) => item.id).join(",") !== CHECKPOINT_IDS.join(",")) {
   throw new Error("Acceptance checkpoint set drifted from AC-1 through AC-9");
 }
 
