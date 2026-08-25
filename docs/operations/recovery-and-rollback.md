@@ -4,6 +4,24 @@
 
 アプリを以前の版へ戻すことと、保存済みデータを復旧することは同じ操作ではない。
 
+## Authoritative Source
+
+Recoveryに使用する正式な参照先を記録する。
+
+```text
+currentDeploymentSource:
+lastKnownGoodSource:
+rollbackArtifactRegistrySource:
+rollbackGateSource:
+postRollbackVerificationSource:
+dataRecoveryMechanismSource:
+dataRecoveryAuthoritySource:
+```
+
+参照先が未決定の場合は`UNRESOLVED`とする。
+
+Version名、ファイル名、個人の記憶、開発担当者の口頭説明だけをRecovery authorityにしない。
+
 ## A. Application Recovery
 
 Application Recoveryでは、Last Known Goodとrollback対象を一意に特定する。
@@ -33,19 +51,19 @@ rollback実行には必要なHuman GOを要求する。
 
 Version名やファイル名だけでrollback authorityを確定しない。
 
-必要な場合は、少なくともsource basis、artifact identity、hash、target environmentを同じEvidence Basisで照合する。
+必要な場合は、source basis、artifact identity、hash、target environmentを同じEvidence Basisで照合する。
 
 ## Application Recovery手順
 
 1. 現在の異常状態と影響範囲を確認する。
-2. 現在のapplication versionとsource basisを確認する。
-3. Last Known Good候補を確認する。
-4. rollback artifact identityとhashを確認する。
-5. 対象environmentを確認する。
-6. 必要なHuman rollback / Deploy Gateを取得する。
-7. 許可されたrollbackを実行する。
-8. rollback後のversion、稼働状態、主要確認項目を再確認する。
-9. Evidence Basisを更新する。
+2. `currentDeploymentSource`で現在のapplication versionとsource basisを確認する。
+3. `lastKnownGoodSource`でLast Known Good候補を確認する。
+4. `rollbackArtifactRegistrySource`でrollback artifact identityとhashを確認する。
+5. Evidence Basisのtarget environmentとrollback対象を照合する。
+6. `rollbackGateSource`で必要なHuman rollback / Deploy Gateを確認する。
+7. 明示されたHuman GOを取得した場合だけ、許可されたrollbackを実行する。
+8. `postRollbackVerificationSource`に従ってrollback後のversion、稼働状態、主要確認項目を再確認する。
+9. 変更後の状態に対して新しいEvidence Basisを作成する。
 
 このRunbook自体は、rollbackやDeployを許可しない。
 
@@ -70,20 +88,24 @@ OPS-REC-D5
 data recoveryを実施できるauthorityとescalation経路を確認できる。
 ```
 
-現在LIVE persistenceが適用されていない場合、Data Recoveryの実行Evidenceは`N/A`とできる。
+`dataRecoveryMechanismSource`と`dataRecoveryAuthoritySource`から、機構と権限経路を確認する。
 
-ただし、Production BindingまたはLIVE WRITEを有効化する前には`OPS-REC-D1`から`OPS-REC-D5`までを解決し、`OR-5D PASS`を必要とする。
+具体的な復旧操作は、このRunbookだけでは許可しない。
+
+## N/A eligibility
+
+`OR-5D`を`N/A`にできるのは、Evidence Basisで確認した現在のoperating modeにProduction LIVE persistenceが適用されていない場合だけである。
+
+この条件を確認できない`N/A`は`INVALID N/A`として`HOLD`とする。
+
+Production BindingまたはLIVE WRITEを有効化する前には、`OPS-REC-D1`から`OPS-REC-D5`までを解決し、`OR-5D PASS`を必要とする。
 
 ## Application Recovery Evidence
 
 ```text
 Evidence ID: OR-5
-Basis:
-  mainSha:
-  applicationVersion:
-  deployedArtifactIdentity:
-  targetEnvironment:
-  runbookRevision:
+EvidenceBasisId:
+Authoritative sources resolved: PASS / FAIL / UNKNOWN
 Last Known Good:
   sourceBasis:
   applicationVersion:
@@ -91,6 +113,7 @@ Last Known Good:
   artifactHash:
 Rollback target confirmed: PASS / FAIL / UNKNOWN
 Human rollback/deploy gate required: YES
+Rollback gate path confirmed: PASS / FAIL / UNKNOWN
 Post-rollback verification path confirmed: PASS / FAIL / UNKNOWN
 Result: PASS / HOLD
 Residual:
@@ -100,24 +123,23 @@ Residual:
 
 ```text
 Evidence ID: OR-5D
+EvidenceBasisId:
 Applicability: REQUIRED / N/A
-Basis:
-  applicationVersion:
-  targetEnvironment:
-  runbookRevision:
-Recovery mechanism identified: PASS / FAIL / UNKNOWN
-Recoverable scope identified: PASS / FAIL / UNKNOWN
-Integrity verification defined: PASS / FAIL / UNKNOWN
-Missing/duplicate/partial check defined: PASS / FAIL / UNKNOWN
-Authority/escalation path confirmed: PASS / FAIL / UNKNOWN
+N/A eligibility confirmed: PASS / FAIL / N/A
+Authoritative sources resolved: PASS / FAIL / UNKNOWN / N/A
+Recovery mechanism identified: PASS / FAIL / UNKNOWN / N/A
+Recoverable scope identified: PASS / FAIL / UNKNOWN / N/A
+Integrity verification defined: PASS / FAIL / UNKNOWN / N/A
+Missing/duplicate/partial check defined: PASS / FAIL / UNKNOWN / N/A
+Authority/escalation path confirmed: PASS / FAIL / UNKNOWN / N/A
 Result: PASS / HOLD / N/A
 Residual:
 ```
 
 ## PASS条件
 
-Application Recoveryについて、Last Known Good、artifact identity、対象environment、Human Gate、復旧後verificationを確認できる場合に`OR-5 PASS`とする。
+Application Recoveryについて、Authoritative SourceからLast Known Good、artifact identity、対象environment、Human Gate、復旧後verificationを確認できる場合に`OR-5 PASS`とする。
 
-LIVE persistenceをProductionで有効化する場合は、Data Recovery条件も確認できる場合に限り`OR-5D PASS`とする。
+LIVE persistenceをProductionで有効化する場合は、Data Recovery条件もAuthoritative Sourceから確認できる場合に限り`OR-5D PASS`とする。
 
-具体的な復旧値や仕組みが未決定の場合は、推定で埋めず`UNRESOLVED`として`HOLD`にする。
+必要な参照先や具体的な復旧値・仕組みが未決定の場合は、推定で埋めず`UNRESOLVED`として`HOLD`にする。
