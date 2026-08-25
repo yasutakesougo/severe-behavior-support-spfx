@@ -41,6 +41,16 @@ type PreflightReport = Readonly<{
   overallResult: null;
 }>;
 
+const REGRESSION_EXPECTED_SHA = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const REGRESSION_OBSERVED_SHA = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+const REGRESSION_EXECUTION_AUTHORITY = "Human Acceptance Execution GO / regression";
+const ACCEPTANCE_RUNNER_PATH = path.join(
+  process.cwd(),
+  "scripts",
+  "acceptance",
+  "run-sp-lc-6-synthetic-lifecycle-acceptance.mjs",
+);
+
 /**
  * Root `tsx --test` loads `spfx/` as CJS (nested package.json has no "type": "module").
  * Named ESM imports then fail at instantiate time; unwrap the CJS default when present.
@@ -100,15 +110,11 @@ function runPreflightOnly(options: {
     env.SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY = options.acceptanceExecutionAuthority;
   }
 
-  const result = spawnSync(
-    process.execPath,
-    [path.join(process.cwd(), "scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs")],
-    {
-      cwd: process.cwd(),
-      encoding: "utf8",
-      env,
-    },
-  );
+  const result = spawnSync(process.execPath, [ACCEPTANCE_RUNNER_PATH], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+    env,
+  });
 
   assert.equal(result.status, 2);
   assert.equal(result.stderr, "");
@@ -318,8 +324,8 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
 describe("SP-LC-6 acceptance execution authority preflight", () => {
   it("does not start when Human Acceptance Execution authority is incomplete", () => {
     const missingExpected = runPreflightOnly({
-      observedMainSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      acceptanceExecutionAuthority: "Human Acceptance Execution GO / regression",
+      observedMainSha: REGRESSION_OBSERVED_SHA,
+      acceptanceExecutionAuthority: REGRESSION_EXECUTION_AUTHORITY,
     });
     assert.equal(
       missingExpected.preflightState,
@@ -331,8 +337,8 @@ describe("SP-LC-6 acceptance execution authority preflight", () => {
     assert.equal(missingExpected.overallResult, null);
 
     const missingAuthority = runPreflightOnly({
-      expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      observedMainSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      expectedMainSha: REGRESSION_EXPECTED_SHA,
+      observedMainSha: REGRESSION_OBSERVED_SHA,
     });
     assert.equal(
       missingAuthority.preflightState,
@@ -346,16 +352,16 @@ describe("SP-LC-6 acceptance execution authority preflight", () => {
 
   it("does not start when execution-authorized SHA differs from observed main", () => {
     const report = runPreflightOnly({
-      expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      observedMainSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      acceptanceExecutionAuthority: "Human Acceptance Execution GO / regression",
+      expectedMainSha: REGRESSION_EXPECTED_SHA,
+      observedMainSha: REGRESSION_OBSERVED_SHA,
+      acceptanceExecutionAuthority: REGRESSION_EXECUTION_AUTHORITY,
     });
 
     assert.equal(report.preflightState, "PRECHECK_BASE_MISMATCH_NOT_STARTED");
-    assert.equal(report.expectedMainSha, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-    assert.equal(report.observedMainSha, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+    assert.equal(report.expectedMainSha, REGRESSION_EXPECTED_SHA);
+    assert.equal(report.observedMainSha, REGRESSION_OBSERVED_SHA);
     assert.equal(report.shaMatch, false);
-    assert.equal(report.acceptanceExecutionAuthority, "Human Acceptance Execution GO / regression");
+    assert.equal(report.acceptanceExecutionAuthority, REGRESSION_EXECUTION_AUTHORITY);
     assert.deepEqual(report.checkpoints, []);
     assert.equal(report.overallResult, null);
   });
