@@ -32,7 +32,7 @@ Observation
   ↓
 Review
   ↓
-continue
+continue invariant
   or
 new-version outcome
 ```
