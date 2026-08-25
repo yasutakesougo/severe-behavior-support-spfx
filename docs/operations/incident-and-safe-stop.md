@@ -2,6 +2,22 @@
 
 このRunbookは、障害や不明な状態を認識したときに、安全に停止し、代替運用へ移り、復旧後の記録整合までつなぐために使用する。
 
+## Authoritative Source
+
+Incident対応に使用する正式な参照先を記録する。
+
+```text
+incidentEscalationSource:
+safeStopAuthoritySource:
+fallbackProcedureSource:
+fallbackRecordAuthoritySource:
+restartDecisionSource:
+```
+
+参照先が未決定の場合は`UNRESOLVED`とする。
+
+個人の記憶や開発担当者の口頭説明だけを停止・再開判断の根拠にしない。
+
 ## Incidentとして扱う例
 
 - save failure
@@ -18,10 +34,11 @@
 
 1. 異常を認識した操作を止める。
 2. 影響範囲を推測で確定しない。
-3. 必要に応じて新規writeを停止する。
-4. 停止権限がない場合は、正式な停止依頼経路へ連絡する。
-5. 現場業務に必要な代替運用へ移る。
-6. 復旧判断は、停止判断とは別に行う。
+3. `safeStopAuthoritySource`で停止権限または停止依頼経路を確認する。
+4. 必要に応じて新規writeを停止する。
+5. 停止権限がない場合は、正式な停止依頼経路へ連絡する。
+6. `fallbackProcedureSource`で現場業務に必要な代替運用を確認する。
+7. 復旧判断は停止判断とは別にし、`restartDecisionSource`で正式な判断経路を確認する。
 
 ## Acceptance Criteria
 
@@ -48,7 +65,7 @@ OPS-AC17
 
 ## Fallback record
 
-代替運用で記録を残す場合は、停止中の正本が何かを明示する。
+代替運用で記録を残す場合は、`fallbackRecordAuthoritySource`から停止中の正本が何かを確認する。
 
 復旧後に、アプリへ必ず再入力すると仮定しない。
 
@@ -79,6 +96,12 @@ OPS-INC-R7
 reconciliation完了を確認する手順がある。
 ```
 
+## N/A eligibility
+
+`Write state: N/A`は、Evidence Basisで確認したoperating modeにwrite capabilityが存在しない場合だけ使用できる。
+
+条件を確認できない`N/A`は`INVALID N/A`として`HOLD`とする。
+
 ## Incident Evidence
 
 Evidenceには利用者の個人情報や秘密情報を含めない。
@@ -87,14 +110,12 @@ Evidenceには利用者の個人情報や秘密情報を含めない。
 
 ```text
 Evidence ID: OR-4
-Basis:
-  mainSha:
-  applicationVersion:
-  targetEnvironment:
-  runbookRevision:
+EvidenceBasisId:
+Authoritative sources resolved: PASS / FAIL / UNKNOWN
 Incident type:
 ObservedAt:
 Write state: ENABLED / STOPPED / UNKNOWN / N/A
+Write-state N/A eligibility confirmed: PASS / FAIL / N/A
 Fallback path confirmed: PASS / FAIL / UNKNOWN
 Fallback record authority confirmed: PASS / FAIL / UNKNOWN
 Backfill decision path confirmed: PASS / FAIL / UNKNOWN
@@ -108,6 +129,6 @@ Residual:
 
 ## PASS条件
 
-異常時の連絡、安全停止、代替運用、復旧後の記録整合までを再現できる場合に`OR-4 PASS`とする。
+Authoritative Sourceから異常時の連絡、安全停止、代替運用、復旧後の記録整合までを再現できる場合に`OR-4 PASS`とする。
 
-fallback記録の正本や復旧後の扱いが決まっていない場合は`HOLD`とする。
+必要な参照先が`UNRESOLVED`、fallback記録の正本や復旧後の扱いが決まっていない、または`INVALID N/A`がある場合は`HOLD`とする。
