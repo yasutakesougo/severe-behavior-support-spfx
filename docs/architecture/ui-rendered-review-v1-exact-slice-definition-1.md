@@ -8,20 +8,24 @@ Definition Correction-1: APPLIED (P1-1 + P1-2 + P1-3 + P2-1 + P2-2 + P2-3)
 Definition Correction-2: APPLIED (P1-1 + P1-2 + P2-1 + P2-2)
 Definition status: ACCEPTED / LOCKED
 Human Decision: ACCEPTED / LOCKED
-Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK — RECEIVED
+Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK — RECEIVED / CONSUMED
 Authority:
   Human GO: UI-RENDERED-REVIEW-V1 Definition Start
   Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK
   docs/architecture/ui-agent-system-v1-design-issue-body.md
   docs/process/skill-catalog.md
   .agents/skills/design-review/SKILL.md
+  docs/architecture/ui-rendered-review-v1-post-merge-reconciliation-1.md
 Kind: read-only Definition（Skill boundary / evidence contract / workflow wiring plan）
 Implementation Start: NOT AUTHORIZED
 Skill directory promotion: NOT AUTHORIZED（verify:skills 導入済み set 未更新）
 Deploy / SharePoint write / Product UI Contract mutation: FORBIDDEN
 Domain semantics mutation: FORBIDDEN
-Publication status: PR #521 OPEN / DRAFT / NOT IN MAIN
-NEXT: Ready → Merge → Post-Merge → Implementation Start GO
+Publication status: PR #521 MERGED / CONSUMED ON MAIN
+  merge commit: f8b247f9b4cbf310e0c7c3fe07cd86924ac4cdd5
+  consumed HEAD: a4beec5bf53bbd75c97aaa27437de1ae960eb6ca
+Post-Merge reconciliation: RECORDED（ui-rendered-review-v1-post-merge-reconciliation-1.md）
+NEXT: Human UI-RENDERED-REVIEW-V1 Implementation Start GO
 Agent: STOP on implementation
 ```
 
@@ -424,8 +428,11 @@ Agent rule: 各 gate 間で STOP。次 gate の Human GO / action なしに Impl
 Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK
 Received: 2026-08-25
 Human Decision: ACCEPTED / LOCKED
-Publication: PR #521（branch cursor/ui-rendered-review-v1-definition-9913）— NOT IN MAIN until Merge
-Implementation Start: NOT AUTHORIZED（Post-Merge + explicit Start GO required）
+Publication: PR #521 MERGED / CONSUMED ON MAIN
+  merge commit: f8b247f9b4cbf310e0c7c3fe07cd86924ac4cdd5
+  consumed HEAD: a4beec5bf53bbd75c97aaa27437de1ae960eb6ca
+Post-Merge: docs/architecture/ui-rendered-review-v1-post-merge-reconciliation-1.md
+Implementation Start: NOT AUTHORIZED（explicit Start GO required）
 ```
 
 ### Locked scope
@@ -434,8 +441,8 @@ Implementation Start: NOT AUTHORIZED（Post-Merge + explicit Start GO required�
 
 - `rendered-usability-review` 境界（evidence contract、V1 workflow、gate independence、responsive split）
 - External Intelligence 索引 KI-UI-004 / 005 / 006（GUIDANCE_ONLY）
-- Human gate chain §15（ACCEPT/LOCK 完了；次は Ready）
-- Implementation Start 前提（§14）— Post-Merge 到達 + 明示 Start GO まで Skill 未導入
+- Human gate chain §15（ACCEPT/LOCK → Ready → Merge → Post-Merge 完了；次は Implementation Start GO）
+- Implementation Start 前提（§14）— 明示 Start GO まで Skill 未導入
 
 ### Not authorized by this ACCEPT/LOCK
 
@@ -443,7 +450,7 @@ Implementation Start: NOT AUTHORIZED（Post-Merge + explicit Start GO required�
 Implementation Start
 Skill directory promotion / verify:skills 導入済み昇格
 Product UI Contract / Domain semantics 変更
-Ready / Merge / Deploy（Human-only；別 GO）
+Deploy（Human-only；別 GO）
 Issue mutation
 ```
 
@@ -452,11 +459,11 @@ Issue mutation
 | Step | Status |
 |---|---|
 | 1. Definition focused Re-Review | **CONSUMED BY Human ACCEPT/LOCK** |
-| 2. Human Definition ACCEPT/LOCK | **COMPLETE** |
-| 3. PR Ready | **NEXT（Human）** |
-| 4. Merge | PENDING |
-| 5. Post-Merge reconciliation | PENDING |
-| 6. Implementation Start GO | PENDING |
+| 2. Human Definition ACCEPT/LOCK | **COMPLETE / CONSUMED** |
+| 3. PR Ready | **COMPLETE / CONSUMED**（#521） |
+| 4. Merge | **COMPLETE / CONSUMED**（#521 → main@f8b247f） |
+| 5. Post-Merge reconciliation | **RECORDED** |
+| 6. Implementation Start GO | **NEXT（Human）** |
 | 7. Implementation Start | NOT AUTHORIZED |
 
 ## Appendix A — rendered-usability-review SKILL specification（draft）
