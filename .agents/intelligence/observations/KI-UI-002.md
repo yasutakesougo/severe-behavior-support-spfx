@@ -1,0 +1,21 @@
+# KI-UI-002
+
+- Knowledge-ID: `KI-UI-002`
+- State: `OBSERVED`
+- Topic: design-system coverage checklist
+- Scope: UI / design-system review
+- Evaluation intent: `GUIDANCE_ONLY`
+- Reference use: `GUIDANCE_REFERENCE`
+- Terminal recommendation: `REFERENCE_ACCEPTED`
+- Finding: Design System Checklist is an open-source checklist intended to help plan, build, and grow a design system. Its contribution guidance asks that additions represent standards found across multiple well-known design systems and include reference links. This makes it useful as a coverage-review prompt, not as authority for local tokens, components, or UI semantics.
+- Local rationale: Can be used to ask whether established local contracts have missed a common design-system concern, while preserving DADS, local component/token contracts, screen templates, UI semantics, and Visual Hierarchy as the governing sources.
+- Authority: NONE（promotion 待ち。checklist coverage != local design authority）
+- Evidence:
+  - Canonical repository: https://github.com/ardakaracizmeli/design-system-checklist
+  - Observed at: `2026-08-26`
+  - Repository HEAD observed: `a131d2f9235fcfa6376d561fae3b6cca6552ffa4`
+  - README describes the project as an open-source checklist to help plan, build, and grow a design system.
+  - Contribution guidance requires proposed content to be standard across multiple well-known design systems and to include reference links.
+- Retrieval keys: design system, checklist, coverage, review, tokens, components, design-system-checklist
+- Rule authority: NONE
+- Promotion notes: `OBSERVED` only. Checklist presence does not authorize new primitives, tokens, component families, dependency changes, or design-system replacement.
