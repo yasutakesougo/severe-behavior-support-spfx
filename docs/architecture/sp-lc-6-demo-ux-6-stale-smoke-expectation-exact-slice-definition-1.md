@@ -245,13 +245,43 @@ Still forbidden without separate Human GO:
   Deploy / Production Binding / LIVE WRITE
 
 NEXT:
-  Implement authorized smoke assertion alignment
-  → verify DEMO-UX-6 smoke PASS
-  → Human Ready / Merge GO for PR #515
+  Human Ready / Merge GO for PR #515
+  (definition + authorized smoke expectation mutation)
 ```
 
 ```text
 EXACT-SLICE-DEFINITION-1: APPROVED / LOCKED
 Implementation Start: RECEIVED / CONSUMED
-CURRENT ACTION: authorized smoke expectation mutation only
+CURRENT ACTION: STOP (await Human Ready / Merge GO for PR #515)
+```
+
+## 10. Implementation evidence (Implementation Start GO)
+
+```text
+Human GO:
+  SP-LC-6 STALE-SMOKE-EXPECTATION Implementation Start GO
+
+Authorized mutation:
+  spfx/smoke/demo-ux-6/run-smoke.mjs
+  assertReviewDueState demo-banner substring
+  FROM: "live SharePoint 接続なし"
+  TO:   "デモ環境｜表示内容は合成データです。保存されません。"
+
+Verification:
+  node spfx/smoke/demo-ux-6/run-smoke.mjs
+  allPass: true
+  cases: 9 / 9
+  focus PASS:
+    desktop-review-due-subsequent-anchor
+    desktop-review-due
+    tablet-review-due
+  artifacts:
+    /opt/cursor/artifacts/demo-ux-6-browser-smoke/smoke-report.json
+
+Not performed:
+  product / domain / fixture / schema mutation
+  other smoke runners
+  acceptance re-execution
+  Issue #445 mutation
+  Deploy / Production Binding / LIVE WRITE
 ```
