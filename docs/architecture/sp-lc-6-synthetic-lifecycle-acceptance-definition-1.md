@@ -6,9 +6,12 @@ Issue: #445
 Unit: SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1
 Kind: acceptance exact-slice definition only
 Definition baseline main: 4dd41c4ff27265dba09b6872727cc782244715b6
+Definition baseline role: HISTORICAL PROVENANCE ONLY
 Definition Start GO: RECEIVED
 Definition Review-1: CORRECTION REQUIRED / P1=2
 Definition Correction-1: APPLIED
+Independent Definition Re-Review-2: CORRECTION REQUIRED / P1=1 / P2=1
+Definition Correction-2: APPLIED
 Implementation / acceptance execution: NOT AUTHORIZED
 Code / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
@@ -126,22 +129,67 @@ Later Active versionへのfallbackは禁止されている。
 
 したがって、次版の概念表示だけを「新version作成が実装済み」と数えてはならない。
 
-## 4. PreflightとAcceptance result model
+## 4. Execution base authority / Preflight / Acceptance result model
 
-Acceptance resultを計算する前に、base SHA preflightを必須とする。
+### 4.1 Definition baselineとexecution baseを分離する
+
+`Definition baseline main`は、このDefinitionを作成した時点のmainを示すhistorical provenanceである。
+
+`Definition baseline main`をfuture acceptance executionの`expectedMainSha`として自動使用してはならない。
+
+PR #509がmainへmergeされれば、Definition publicationだけでもmain SHAは`4dd41c4ff27265dba09b6872727cc782244715b6`から進む。
+
+したがってfuture Implementation Start / acceptance executionでは、Definition publication baselineとは別にexecution base authorityを取得する。
+
+`expectedMainSha`は、別Human `Implementation Start GO`で明示的に承認されたcurrent-main SHAとする。
+
+Human `Implementation Start GO`は最低限、次をbindする。
 
 ```text
+Unit:
+SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-IMPLEMENTATION-1
+
+Definition:
+SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1
+
+expectedMainSha:
+<GO時点でHumanが承認したpost-merge current-main SHA>
+
+changed-area:
+tests/contracts/sp-lc-6-synthetic-lifecycle-acceptance.test.ts
+scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs
+docs/architecture/sp-lc-6-synthetic-lifecycle-acceptance-evidence.md
+```
+
+Definition merge後にmainがさらに進んでいる場合は、Implementation Start GO前にcurrent-main residual reassessmentを行い、その結果に基づくSHAを承認する。
+
+Definition publication baselineとexecution-authorized SHAが偶然同じである必要はない。
+
+### 4.2 Preflight state
+
+Acceptance resultを計算する前にexecution base preflightを必須とする。
+
+```text
+PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED
 PRECHECK_BASE_MATCH
 PRECHECK_BASE_MISMATCH_NOT_STARTED
 ```
 
-`expectedMainSha`と`observedMainSha`が一致する場合だけ`PRECHECK_BASE_MATCH`とし、AC-1からAC-9を実行する。
+Human `Implementation Start GO`に`expectedMainSha`が明示されていない場合は`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`とし、acceptance checkpointを開始しない。
 
-SHAが一致しない場合は`PRECHECK_BASE_MISMATCH_NOT_STARTED`とし、acceptance checkpointを開始しない。
+Execution base authorityが存在する場合だけ、`expectedMainSha`と`observedMainSha`を比較する。
 
-`PRECHECK_BASE_MISMATCH_NOT_STARTED`はacceptance resultではない。
+両者が一致する場合だけ`PRECHECK_BASE_MATCH`とし、AC-1からAC-9を実行する。
 
-この場合はcurrent-main residual reassessmentへ戻る。
+両者が一致しない場合は`PRECHECK_BASE_MISMATCH_NOT_STARTED`とし、acceptance checkpointを開始しない。
+
+`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`と`PRECHECK_BASE_MISMATCH_NOT_STARTED`はacceptance resultではない。
+
+どちらの場合もoverall resultを設定せず、Human authorityまたはcurrent-main residual reassessmentへ戻る。
+
+Definition baseline mainとの不一致だけを理由にpreflightを失敗させてはならない。
+
+### 4.3 Checkpoint result model
 
 Base match後のcheckpoint resultは次の3状態だけとする。
 
@@ -159,7 +207,7 @@ ENVIRONMENT_BLOCKED
 
 Skipped、未実行、fixture-onlyの作り込みをPASSへ変換しない。
 
-### 4.1 Overall resultの決定規則
+### 4.4 Overall resultの決定規則
 
 Base match後は、全必須checkpointに必ず1つのresultを付与する。
 
@@ -312,10 +360,12 @@ acceptance evidence document作成
 Acceptance runnerは、少なくとも次を記録する。
 
 ```text
+definitionBaselineMainSha
 expectedMainSha
 observedMainSha
 shaMatch
 preflightState
+implementationStartAuthority
 checkpoint id
 checkpoint result
 source path / runner
@@ -327,9 +377,15 @@ knownGaps
 overallResult
 ```
 
+`definitionBaselineMainSha`はprovenanceとして記録するだけで、`shaMatch`判定には使用しない。
+
+`shaMatch`は`expectedMainSha === observedMainSha`だけを表す。
+
+`expectedMainSha`はHuman `Implementation Start GO`のauthorityから取得する。
+
 `overallResult`は`PRECHECK_BASE_MATCH`後だけ設定する。
 
-`PRECHECK_BASE_MISMATCH_NOT_STARTED`の場合、`overallResult`は未設定とする。
+`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`または`PRECHECK_BASE_MISMATCH_NOT_STARTED`の場合、`overallResult`は未設定とする。
 
 ## 8. Explicit OUT / FORBIDDEN
 
@@ -349,6 +405,8 @@ fixture追加でmissing capabilityを隠すこと
 existing smoke harness変更
 SharePoint adapter変更
 persistence実装
+Definition baseline mainをexecution authorityとして自動再利用すること
+Human Implementation Start GOなしにexpectedMainShaを推定すること
 Production Binding
 LIVE WRITE
 SharePoint / M365 / Entra mutation
@@ -359,9 +417,17 @@ Ready / Merge
 
 ## 9. Verification requirements for future acceptance execution
 
-実行時はbaseline SHAとobserved SHAを比較する。
+Acceptance execution前に、Human `Implementation Start GO`から`expectedMainSha`を取得する。
+
+`Definition baseline main`はhistorical provenanceとしてのみ保持し、execution preflightの比較対象にはしない。
+
+`expectedMainSha`が未承認なら`PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED`としてacceptanceを開始しない。
+
+`expectedMainSha`が承認済みの場合だけ、`observedMainSha`と比較する。
 
 SHAが一致しない場合は`PRECHECK_BASE_MISMATCH_NOT_STARTED`としてacceptanceを開始せず、current-main residual reassessmentへ戻す。
+
+SHAが一致した場合だけAC-1からAC-9を開始する。
 
 最低限、次を実行対象とする。
 
@@ -376,7 +442,7 @@ support-plan-review-new-version-demo-1 browser smoke
 
 各既存runnerの既存PASSを文書から転記するだけでは不十分である。
 
-Acceptance execution時のcurrent SHAで再実行し、実行結果を記録する。
+Acceptance execution時のexecution-authorized current SHAで再実行し、実行結果を記録する。
 
 ## 10. Pass criteria
 
@@ -392,7 +458,7 @@ AC-7は実行可能なnew-version behaviorを要求する。
 
 `GAP_FOUND`はacceptance失敗を隠す状態ではなく、次に必要なproduct Exact Sliceを決めるための正常な出力である。
 
-Overall resultは§4.1の決定規則だけで算出する。
+Overall resultは§4.4の決定規則だけで算出する。
 
 ## 11. Correction-1 traceability
 
@@ -411,7 +477,24 @@ ENVIRONMENT_BLOCKED > GAP_FOUND > PASSのoverall precedenceを固定。
 
 このCorrectionはD1-D6の意味を変更しない。
 
-## 12. Rollback boundary
+## 12. Correction-2 traceability
+
+Independent Definition Re-Review-2の指摘を次のように閉じる。
+
+```text
+P1-3:
+Definition baseline mainをhistorical provenanceに限定。
+future expectedMainShaを別Human Implementation Start GOで承認されたpost-merge current-main SHAへ分離。
+preflightはexpectedMainShaとobservedMainShaだけを比較。
+Implementation Start authorityがない場合のNOT_STARTED stateを追加。
+
+P2-1:
+PR #509本文をCorrection-2後のcontinuation invariant / execution base authority / preflight stateへ同期する。
+```
+
+Correction-2はD1-D6の意味、AC-1からAC-9の業務意味、future changed-areaを変更しない。
+
+## 13. Rollback boundary
 
 Definition publicationのrollbackはこの文書だけを戻す。
 
@@ -419,13 +502,15 @@ Future acceptance implementationのrollbackも、acceptance test、runner、evid
 
 既存product/domain/fixture/smokeを変更しないため、rollbackで業務意味や既存UIを変えない。
 
-## 13. Gate
+## 14. Gate
 
 ```text
 Definition Start GO: CONSUMED
 Definition Review-1: CORRECTION REQUIRED / HOLD
 Definition Correction-1: COMPLETE
-Definition: READY FOR INDEPENDENT RE-REVIEW
+Independent Definition Re-Review-2: CORRECTION REQUIRED / HOLD
+Definition Correction-2: COMPLETE
+Definition: READY FOR INDEPENDENT RE-REVIEW-3
 
 Implementation Start:
 NOT AUTHORIZED
@@ -443,5 +528,5 @@ Deploy / Production Binding / LIVE WRITE:
 FORBIDDEN
 
 NEXT:
-Independent Definition Re-Review-2
+Independent Definition Re-Review-3
 ```
