@@ -5,11 +5,15 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Issue: #445 (parent residual; no Issue mutation)
 Unit: SP-LC-6-DEFINITION-STATUS-SYNC-2
 Kind: docs-only status provenance synchronization definition
-Basis main: 0346d0a1c73f524e3a993401d57b38ac1c33b1af
-Basis event: PR #515 MERGED / CONSUMED
+Evidence basis main: 0346d0a1c73f524e3a993401d57b38ac1c33b1af
+Evidence basis event: PR #515 MERGED / CONSUMED
+Review-observed current main: 3bf96a732e7a6a211d441b56b490508459922419
+Known drift from evidence basis: PR #519 only / .agents/intelligence scope / SP-LC-6 relevant overlap NONE
 Definition Start GO: RECEIVED / CONSUMED
-Definition Review: PENDING
-Parent Definition mutation: NOT AUTHORIZED by this Definition Start
+Definition Review-1: CORRECTION REQUIRED / P1=1
+Correction-1 Implementation Start GO: RECEIVED / CONSUMED
+Correction-1: APPLIED
+Parent Definition mutation: NOT AUTHORIZED by this Correction
 Acceptance re-execution: NOT AUTHORIZED
 AC-4 / AC-7 / AC-9 implementation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
@@ -24,9 +28,9 @@ PR #515 merge後のcurrent-main事実を、locked parent Definitionのstatus pro
 
 D1-D6、AC-1からAC-9の業務意味、result precedence、execution authority modelを変更しない。
 
-## 2. Confirmed current-main facts
+## 2. Confirmed evidence-basis facts
 
-Basis main `0346d0a1c73f524e3a993401d57b38ac1c33b1af` では次を確認済みとする。
+Evidence basis main `0346d0a1c73f524e3a993401d57b38ac1c33b1af` では次を確認済みとする。
 
 ```text
 PR #515:
@@ -54,9 +58,50 @@ OPEN / separate real residuals
 
 PR #515の修正は、recorded Full Acceptance resultを遡及変更しない。
 
-## 3. Exact future synchronization target
+`0346d0a1c73f524e3a993401d57b38ac1c33b1af` はstatus provenanceのhistorical evidence basisであり、future parent Definition mutation authorityまたはfuture acceptance execution authorityではない。
 
-Definition Reviewを通過し、別Human authorizationが与えられた場合の同期対象は次の1ファイルだけとする。
+## 3. Current-main drift observed during Definition Review
+
+Independent Definition Review時点でmainは次へ進んでいた。
+
+```text
+Review-observed current main:
+3bf96a732e7a6a211d441b56b490508459922419
+
+Evidence basis main:
+0346d0a1c73f524e3a993401d57b38ac1c33b1af
+
+Known drift:
+PR #519 MERGED
+```
+
+PR #519で確認したchanged-areaは次だけである。
+
+```text
+.agents/intelligence/catalog.md
+.agents/intelligence/observations/KI-UI-001.md
+.agents/intelligence/observations/KI-UI-002.md
+.agents/intelligence/observations/KI-UI-003.md
+```
+
+このdriftはUI External IntelligenceのOBSERVED / GUIDANCE_ONLY materializationであり、次には触れていない。
+
+```text
+SP-LC-6 parent Definition
+SP-LC-6 acceptance evidence
+SP-LC-6 acceptance runner / contract
+SupportPlan lifecycle product/domain behavior
+DEMO-UX-6 smoke runner
+AC-4 / AC-7 / AC-9 residual implementation
+```
+
+したがってDefinition Review時点では、PR #519によるdriftは本Definitionのevidence basisを無効化しない。
+
+ただし、この判断はfuture parent Definition synchronizationを自動認可しない。
+
+## 4. Exact future synchronization target
+
+Definition Re-Reviewを通過し、別Human authorizationが与えられた場合の同期対象は次の1ファイルだけとする。
 
 ```text
 IN:
@@ -87,7 +132,39 @@ C. §16 Gate
 - NEXTを AC-4 successful-empty Observation association Exact Slice へ更新
 ```
 
-## 4. Historical acceptance result preservation
+## 5. Parent synchronization current-main preflight
+
+別Human authorization後にparent Definition status synchronizationを実行する直前、current mainを再観測しなければならない。
+
+```text
+mutation-time preflight:
+1. current main SHAをread-onlyで再取得
+2. review-observed current main以降のdriftを確認
+3. parent Definition / SP-LC-6 relevant scopeとのoverlapを確認
+4. non-overlapping driftだけならstatus syncを継続可能
+5. relevant driftが1件でもあればSTOP
+6. STOP後はcurrent-main residual reassessmentへ戻る
+```
+
+`relevant drift`は少なくとも次のいずれかを含む。
+
+```text
+docs/architecture/sp-lc-6-synthetic-lifecycle-acceptance-definition-1.md
+sp-lc-6 acceptance evidence / runner / contract
+SupportPlan lifecycle product/domain behavior
+DEMO-UX-6 smoke behavior relevant to AC-3 / AC-5 / AC-8
+AC-4 / AC-7 / AC-9 residual state or implementation
+D1-D6 / AC-1〜AC-9 semantics
+execution authority / preflight / result precedence
+```
+
+Non-overlapping driftの存在だけを理由にhistorical evidence basisを書き換えない。
+
+Observed current main、repository state、historical evidence basisからparent Definition mutation authorityを推定してはならない。
+
+Parent Definition mutationは別Human authorizationが必要である。
+
+## 6. Historical acceptance result preservation
 
 既に実行済みのFull Acceptance resultは変更しない。
 
@@ -120,7 +197,7 @@ post-execution remediation status
 
 Acceptance全体を新しいcurrent-mainで再評価するには、別Human `Acceptance Execution GO`が必要である。
 
-## 5. Residual classification after PR #515
+## 7. Residual classification after PR #515
 
 ### AC-3 / AC-5 / AC-8
 
@@ -139,7 +216,7 @@ PASS / 9 of 9
 
 ### AC-4
 
-Current mainにはsuccessful-emptyとunresolvedを区別するassociation statusが存在しない。
+Evidence basis mainではsuccessful-emptyとunresolvedを区別するassociation statusが存在しない。
 
 historical lookupがRESOLVEDでもexact Observationが0件の場合、現在は次へmapされる。
 
@@ -154,15 +231,17 @@ reason: NO_EXACT_CONTEXT_MATCH
 AC-4 successful-empty Observation association Exact Slice
 ```
 
+Mutation-time preflightでAC-4関連driftが確認された場合、この候補を自動継続せずresidual reassessmentへ戻る。
+
 ### AC-7
 
-実行可能なnew SupportPlanVersion creation behaviorが既存mainで証明されていないため、別residualとしてOPENを維持する。
+実行可能なnew SupportPlanVersion creation behaviorがevidence basis mainで証明されていないため、別residualとしてOPENを維持する。
 
 ### AC-9
 
 SharePoint / M365 / Entra / App Catalog / LIVE WRITE count telemetryが十分でないため、別evidence residualとしてOPENを維持する。
 
-## 6. Frozen semantics
+## 8. Frozen semantics
 
 次は変更しない。
 
@@ -183,9 +262,10 @@ D5 review timing semantics
 D6 fail-closed association semantics
 ```
 
-## 7. Explicit OUT / FORBIDDEN
+## 9. Explicit OUT / FORBIDDEN
 
 ```text
+parent Definition mutation under this Correction-1
 spfx/smoke/demo-ux-6/run-smoke.mjs mutation
 other smoke runner mutation
 acceptance runner mutation
@@ -204,18 +284,46 @@ SharePoint / M365 / Entra mutation
 LIVE WRITE
 ```
 
-## 8. Acceptance criteria for this Definition
+## 10. Correction-1 traceability
 
-- Basis mainが `0346d0a1c73f524e3a993401d57b38ac1c33b1af` に固定されている。
+Independent Definition Review-1のP1-1を次で閉じる。
+
+```text
+P1-1:
+Definition evidence basis 0346d0a1... と
+review-observed current main 3bf96a73... を分離した。
+
+PR #519のみのknown driftをread-onlyで確認し、
+SP-LC-6 relevant overlap NONEを記録した。
+
+Future parent Definition synchronization直前に
+current mainを再観測するmutation-time preflightを追加した。
+
+Non-overlapping driftなら継続可能。
+Relevant driftならSTOP / current-main residual reassessmentへ戻る。
+
+Observed current mainまたはrepository stateから
+mutation authorityを推定しない。
+```
+
+Correction-1はD1-D6、AC-1〜AC-9 semantics、historical acceptance result、execution authority modelを変更しない。
+
+## 11. Acceptance criteria for this Definition
+
+- Evidence basis mainが `0346d0a1c73f524e3a993401d57b38ac1c33b1af` にhistorical provenanceとして固定されている。
+- Review-observed current main `3bf96a732e7a6a211d441b56b490508459922419` をevidence basisと分離して記録する。
+- PR #519 driftが `.agents/intelligence` scopeのみでSP-LC-6 relevant overlap NONEであることを記録する。
+- Future parent synchronization直前にcurrent-main drift preflightを必須化する。
+- Relevant driftがある場合はSTOP / residual reassessmentとする。
 - PR #515を `MERGED / CONSUMED` として扱う。
 - AC-3 / AC-5 / AC-8はpost-execution remediation COMPLETEと記録するが、historical Full Acceptance resultを遡及変更しない。
 - AC-4 / AC-7 / AC-9をOPEN residualとして維持する。
 - future parent Definition mutationを1ファイルに限定する。
 - parent Definitionの業務semantics、authority model、result precedenceを変更しない。
-- `NEXT`を `AC-4 successful-empty Observation association Exact Slice` へ同期する。
+- `NEXT`候補を `AC-4 successful-empty Observation association Exact Slice` とする。
 - Acceptance re-execution、Issue mutation、Deploy / Production Binding / LIVE WRITEを許可しない。
 
-## 9. Rollback boundary
+## 12. Rollback boundary
 
 このDefinition publicationのrollbackはこの文書1ファイルだけを戻す。
 
@@ -223,14 +331,23 @@ LIVE WRITE
 
 業務semantics、product behavior、acceptance evidence実行結果へrollbackを波及させない。
 
-## 10. Gate
+## 13. Gate
 
 ```text
 DEFINITION-STATUS-SYNC-2 Definition Start GO:
 CONSUMED
 
+Independent Definition Review-1:
+CORRECTION REQUIRED / P1=1
+
+Correction-1 Implementation Start GO:
+CONSUMED
+
+Correction-1:
+APPLIED
+
 Exact scope Definition:
-COMPLETE / REVIEW READY
+READY FOR INDEPENDENT DEFINITION RE-REVIEW
 
 Parent Definition mutation:
 NOT AUTHORIZED
@@ -242,7 +359,7 @@ AC-4 / AC-7 / AC-9 implementation:
 NOT AUTHORIZED
 
 NEXT HUMAN GATE:
-Independent Definition Review
+Independent Definition Re-Review-2
 
 After PASS / LOCK only:
 separate Human authorization for parent Definition status synchronization
