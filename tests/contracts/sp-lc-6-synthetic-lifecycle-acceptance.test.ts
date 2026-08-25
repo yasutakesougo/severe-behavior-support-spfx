@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import path from "node:path";
 import { describe, it } from "node:test";
 import {
   bindingMatchesSupportPlanVersion,
@@ -25,6 +27,19 @@ import {
 } from "../domain/planning-pc-demo-graph-fixtures";
 
 type CheckpointResult = "PASS" | "GAP_FOUND" | "ENVIRONMENT_BLOCKED";
+type PreflightReport = Readonly<{
+  expectedMainSha: string | null;
+  observedMainSha: string | null;
+  shaMatch: boolean | null;
+  preflightState:
+    | "PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED"
+    | "PRECHECK_BASE_MISMATCH_NOT_STARTED";
+  implementationStartAuthority: string;
+  acceptanceExecutionAuthority: string | null;
+  checkpoints: readonly unknown[];
+  knownGaps: readonly unknown[];
+  overallResult: null;
+}>;
 
 /**
  * Root `tsx --test` loads `spfx/` as CJS (nested package.json has no "type": "module").
@@ -64,6 +79,40 @@ function aggregateCheckpointResults(results: readonly CheckpointResult[]): Check
     return "GAP_FOUND";
   }
   return "PASS";
+}
+
+function runPreflightOnly(options: {
+  expectedMainSha?: string;
+  acceptanceExecutionAuthority?: string;
+  observedMainSha: string;
+}): PreflightReport {
+  const env: NodeJS.ProcessEnv = {
+    ...process.env,
+    SP_LC_6_OBSERVED_MAIN_SHA: options.observedMainSha,
+  };
+  delete env.SP_LC_6_EXPECTED_MAIN_SHA;
+  delete env.SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY;
+
+  if (options.expectedMainSha) {
+    env.SP_LC_6_EXPECTED_MAIN_SHA = options.expectedMainSha;
+  }
+  if (options.acceptanceExecutionAuthority) {
+    env.SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY = options.acceptanceExecutionAuthority;
+  }
+
+  const result = spawnSync(
+    process.execPath,
+    [path.join(process.cwd(), "scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs")],
+    {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      env,
+    },
+  );
+
+  assert.equal(result.status, 2);
+  assert.equal(result.stderr, "");
+  return JSON.parse(result.stdout) as PreflightReport;
 }
 
 describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
@@ -263,5 +312,51 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
       aggregateCheckpointResults(["PASS", "GAP_FOUND", "ENVIRONMENT_BLOCKED"]),
       "ENVIRONMENT_BLOCKED",
     );
+  });
+});
+
+describe("SP-LC-6 acceptance execution authority preflight", () => {
+  it("does not start when Human Acceptance Execution authority is incomplete", () => {
+    const missingExpected = runPreflightOnly({
+      observedMainSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      acceptanceExecutionAuthority: "Human Acceptance Execution GO / regression",
+    });
+    assert.equal(
+      missingExpected.preflightState,
+      "PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED",
+    );
+    assert.equal(missingExpected.expectedMainSha, null);
+    assert.equal(missingExpected.shaMatch, null);
+    assert.deepEqual(missingExpected.checkpoints, []);
+    assert.equal(missingExpected.overallResult, null);
+
+    const missingAuthority = runPreflightOnly({
+      expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      observedMainSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    });
+    assert.equal(
+      missingAuthority.preflightState,
+      "PRECHECK_EXECUTION_BASE_NOT_AUTHORIZED_NOT_STARTED",
+    );
+    assert.equal(missingAuthority.acceptanceExecutionAuthority, null);
+    assert.equal(missingAuthority.shaMatch, null);
+    assert.deepEqual(missingAuthority.checkpoints, []);
+    assert.equal(missingAuthority.overallResult, null);
+  });
+
+  it("does not start when execution-authorized SHA differs from observed main", () => {
+    const report = runPreflightOnly({
+      expectedMainSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      observedMainSha: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      acceptanceExecutionAuthority: "Human Acceptance Execution GO / regression",
+    });
+
+    assert.equal(report.preflightState, "PRECHECK_BASE_MISMATCH_NOT_STARTED");
+    assert.equal(report.expectedMainSha, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    assert.equal(report.observedMainSha, "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+    assert.equal(report.shaMatch, false);
+    assert.equal(report.acceptanceExecutionAuthority, "Human Acceptance Execution GO / regression");
+    assert.deepEqual(report.checkpoints, []);
+    assert.equal(report.overallResult, null);
   });
 });
