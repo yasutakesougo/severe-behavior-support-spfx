@@ -235,9 +235,7 @@ const knownGaps = checkpoints
   .map((item) => ({ id: item.id, note: item.note ?? null }));
 const overallResult = mergeResults(checkpoints.map((item) => item.result));
 const browserSmokeResult = Object.fromEntries(
-  executions
-    .filter((item) => item.name.endsWith("-smoke"))
-    .map((item) => [item.name, item.result]),
+  executions.filter((item) => item.name.endsWith("-smoke")).map((item) => [item.name, item.result]),
 );
 
 emit(
