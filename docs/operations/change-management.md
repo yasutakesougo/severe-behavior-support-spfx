@@ -13,6 +13,24 @@
 - security上の修正
 - Runbookや運用責任構造の変更
 
+## Authoritative Source
+
+変更判断に使用する正式な参照先を記録する。
+
+```text
+changeNoticeSource:
+regulatoryAuthoritySource:
+corporateRuleSource:
+repositoryProcessSource:
+releaseDecisionSource:
+```
+
+適用しない参照先は、理由を明示したうえで各RunbookのN/A規則に従う。
+
+参照先が必要なのに未決定の場合は`UNRESOLVED`とする。
+
+制度上の根拠と法人独自ルールは、同じ参照先として混同しない。
+
 ## Acceptance Criteria
 
 ```text
@@ -74,9 +92,8 @@ nextGate:
 
 ```text
 Evidence ID: OR-3
-Basis:
-  mainSha:
-  runbookRevision:
+EvidenceBasisId:
+Authoritative sources resolved: PASS / FAIL / UNKNOWN
 Change intake path confirmed: PASS / FAIL / UNKNOWN
 Impact assessment path confirmed: PASS / FAIL / UNKNOWN
 Definition gate preserved: PASS / FAIL
@@ -90,6 +107,6 @@ Residual:
 
 ## PASS条件
 
-変更の発見からRelease判断までの経路を、各Human Gateを飛ばさず説明・再現できる場合に`OR-3 PASS`とする。
+Authoritative Sourceから変更の発見、根拠確認、影響判断、Release判断までの経路を、各Human Gateを飛ばさず説明・再現できる場合に`OR-3 PASS`とする。
 
-変更が必要か判断できない場合は`UNKNOWN`として扱い、推定で実装へ進めない。
+必要な参照先が`UNRESOLVED`、または変更が必要か判断できない場合は`UNKNOWN`として`HOLD`にし、推定で実装へ進めない。
