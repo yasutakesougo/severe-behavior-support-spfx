@@ -32,6 +32,8 @@
 | `design-review` | 導入済み | Product UI Contract（Catalog / Templates / Visual Hierarchy / semantic UI / a11y）。UI 差分時 |
 | `security-review` | 後続（未カタログ） | セキュリティ観点。導入前は HOLD |
 | `ui-review` | 後続（未カタログ） | 汎用 UI 観点。導入前は HOLD。Product UI Contract は `design-review`。サイクル監査は `severe-behavior-cycle-review` |
+| `rendered-usability-review` | 後続 | rendered evidence 上の usability / visual quality（UI 差分 + screenshot / browser 証跡時）。Contract / semantics は `design-review` |
+| `adaptive-layout-review` | 後続（P2） | tablet / narrow / responsive layout break 専用。導入前は HOLD |
 
 `merge-audit` は Audit Agent の担当とする。本 Agent の `review-pr` 起動時は、レビュー完了後に Audit へ引き渡す。
 

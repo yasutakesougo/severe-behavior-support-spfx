@@ -91,6 +91,8 @@
 |---|---|---|---|---|---|---|
 | `project-audit` | 後続 | Audit（候補） | なし | 未導入のため HOLD | 対象なし | Skill 未導入 |
 | `finding-review` | 後続 | Requirements（候補） | なし | 未導入のため HOLD | 対象なし | Skill 未導入 |
+| [`rendered-usability-review`](../../docs/architecture/ui-rendered-review-v1-exact-slice-definition-1.md) | 後続 | Review（候補） | `review-pr`（UI 差分 + rendered 証跡時） | Definition 完了。Implementation Start 待ち | UI-RENDERED-REVIEW-V1 Definition | rendered 証跡不足、head SHA 不明、Contract 確定を本 Skill だけで求められている |
+| [`adaptive-layout-review`](../../docs/architecture/ui-rendered-review-v1-exact-slice-definition-1.md#appendix-b--adaptive-layout-review-boundary-sketch-p2--後続) | 後続 | Review（候補） | `review-pr`（P2 後続） | P2 / UI-ADAPTIVE-LAYOUT-REVIEW-V1 待ち | KI-UI-006 boundary sketch | Skill 未導入。tablet / responsive layout 専用 |
 
 ## Agent 未カタログ後続（Agent 定義上の候補）
 
