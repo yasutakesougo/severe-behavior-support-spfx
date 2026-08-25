@@ -2,6 +2,16 @@
 
 索引のみ。知識本文ではない。Agent はまず本表を読み、必要な ID の本文だけ開く。
 
+## Operational playbooks
+
+Knowledge state machineとは別の、LOCKED Definitionを実行可能なread/review手順へmaterializeした索引。Playbook自体はSSOTでもmutation authorityでもない。
+
+| Playbook | Basis / authority source | Scope | Authority granted | Retrieval keys | Path |
+|---|---|---|---|---|---|
+| UI-REVIEW-PLAYBOOK-V1 | Issue #518 `UI-EXTERNAL-INTELLIGENCE-V1` ACCEPTED / LOCKED Definition | external UI intelligence / UI review | `NONE` | UI review, external UI intelligence, evaluationIntent, GUIDANCE_ONLY, PATTERN_TRANSLATION, CODE_OR_MATERIAL_REUSE, provenance, sanitization, sensitive evidence, revalidation, HOLD_UNKNOWN | `ui-review-playbook.md` |
+
+## Knowledge index
+
 | ID | State | Topic | Scope | Authority | Evidence | Retrieval keys | Path |
 |---|---|---|---|---|---|---|---|
 | KI-GOV-001 | LOCKED_REFERENCE | mutation authorization | repository-wide | `AGENTS.md`, `docs/decisions/DEC-AI-ORG-003.md` | DEC Accepted | Human GO, mutation, Ready, Merge, Issue mutation | `rules/KI-GOV-001.md` |
