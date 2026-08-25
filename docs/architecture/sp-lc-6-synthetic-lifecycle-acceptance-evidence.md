@@ -19,8 +19,15 @@ Execution-authority Correction-1 Implementation Start GO: CONSUMED
 Execution-authority Correction-1 basis main: be1faaf5e401f3e1fb54c0f23a79b63baa7d7833
 Execution-authority functional HEAD: 8f9c9dd5e88787bf5695b81ff8ba34018b8c1b47
 Execution-authority CI run #1383 / 32831592375: SUCCESS
-Execution-authority Correction-1 status: IMPLEMENTED / VERIFIED
-Full acceptance execution: NOT AUTHORIZED / NOT STARTED
+Execution-authority Correction-1 status: MERGED / CONSUMED
+PR #511 merge commit: 29653bfcc9e0169beeabc2a13a3978eadfdc2e5f
+Independent Correction Re-Review: PASS / LOCKABLE
+Acceptance Evidence Recording-1 Implementation Start GO: CONSUMED
+Acceptance Evidence Recording-1 basis main: 29653bfcc9e0169beeabc2a13a3978eadfdc2e5f
+Acceptance Execution GO: CONSUMED
+Acceptance execution preflight: PRECHECK_BASE_MATCH
+Full acceptance execution: EXECUTED / overallResult = GAP_FOUND
+DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1: RECORDED
 Issue #445 mutation / close: NOT AUTHORIZED
 Deploy / Production Binding / LIVE WRITE: FORBIDDEN
 ```
@@ -246,10 +253,157 @@ overallResult
 
 ```text
 PR #510 implementation: MERGED / CONSUMED
-Execution-authority Correction-1: IMPLEMENTED / VERIFIED
-Independent Correction Review: NOT YET COMPLETE
-Full acceptance execution: NOT AUTHORIZED / NOT STARTED
+PR #511 execution-authority correction: MERGED / CONSUMED
+Independent Correction Re-Review: PASS / LOCKABLE
+Full acceptance execution: EXECUTED / overallResult = GAP_FOUND
+DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1: RECORDED
 Issue #445 mutation / close: NOT AUTHORIZED
-Ready / Merge for correction: NOT AUTHORIZED
 Deploy / Production Binding / LIVE WRITE: FORBIDDEN
 ```
+
+## 11. Full acceptance execution result
+
+The separately authorized full acceptance execution ran under:
+
+```text
+acceptanceExecutionAuthority:
+Human Acceptance Execution GO / SP-LC-6 / main 29653bfcc9e0169beeabc2a13a3978eadfdc2e5f
+
+expectedMainSha:   29653bfcc9e0169beeabc2a13a3978eadfdc2e5f
+observedMainSha:   29653bfcc9e0169beeabc2a13a3978eadfdc2e5f
+shaMatch:          true
+preflightState:    PRECHECK_BASE_MATCH
+```
+
+`definitionBaselineMainSha` (`4dd41c4ff27265dba09b6872727cc782244715b6`) and the consumed Implementation Start GO remain historical provenance only.
+
+### 11.1 Checkpoint results
+
+| Checkpoint | Result | Source |
+|---|---|---|
+| AC-1 | PASS | root-focused-acceptance / root-planning-graph |
+| AC-2 | PASS | root-focused-acceptance / root-planning-graph |
+| AC-3 | GAP_FOUND | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-4 | GAP_FOUND | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-5 | GAP_FOUND | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-6 | PASS | root-focused-acceptance / planning-pc-demo-1-smoke |
+| AC-7 | GAP_FOUND | root-focused-acceptance / support-plan-review-new-version-demo-1-smoke |
+| AC-8 | GAP_FOUND | root-focused-acceptance / root-planning-graph / demo-ux-6-smoke |
+| AC-9 | GAP_FOUND | root-focused-acceptance / planning-pc-demo-1-smoke / demo-ux-6-smoke / support-plan-review-new-version-demo-1-smoke |
+
+Overall result under the locked precedence `ENVIRONMENT_BLOCKED > GAP_FOUND > PASS`:
+
+```text
+ENVIRONMENT_BLOCKED count: 0
+GAP_FOUND count: 6
+overallResult: GAP_FOUND
+```
+
+### 11.2 Execution counts and smoke results
+
+| Execution | Command | Exit | Result | Count |
+|---|---|---|---|---|
+| root-focused-acceptance | `tsx --test tests/contracts/sp-lc-6-synthetic-lifecycle-acceptance.test.ts` | 0 | PASS | 12 tests |
+| root-planning-graph | `tsx --test tests/contracts/planning-pc-demo-graph-contract.test.ts tests/contracts/support-plan-version-procedure-binding-contract.test.ts tests/contracts/procedure-record-contract.test.ts` | 0 | PASS | 25 tests |
+| spfx-heft | `npm run _phase:test` (cwd `spfx`) | 0 | PASS | — |
+| planning-pc-demo-1-smoke | `node spfx/smoke/planning-pc-demo-1/run-smoke.mjs` | 0 | PASS | 5 cases |
+| demo-ux-6-smoke | `node spfx/smoke/demo-ux-6/run-smoke.mjs` | 1 | GAP_FOUND | 9 cases |
+| support-plan-review-new-version-demo-1-smoke | `node spfx/smoke/support-plan-review-new-version-demo-1/run-smoke.mjs` | 0 | PASS | 6 cases |
+
+Browser smoke summary:
+
+```text
+planning-pc-demo-1-smoke: PASS
+demo-ux-6-smoke: GAP_FOUND
+support-plan-review-new-version-demo-1-smoke: PASS
+```
+
+demo-ux-6 detail: 6 of 9 checks PASS. The failing checks are `desktop-review-due-subsequent-anchor`, `desktop-review-due`, and `tablet-review-due`. All three production CSS checks (`reviewDueWidthSafety`, `stateGridDesktopColumns`, `stateGridTabletStack`) are `true`. The classification of these failures is recorded in §12.
+
+### 11.3 Mutation boundary observations
+
+```text
+observedWriteCounts: []
+mutationAttempted: null   (no write-count telemetry available)
+liveWriteAuthorized: false
+```
+
+Mutation observations per smoke:
+
+```text
+planning-pc-demo-1-smoke:
+  executionResult PASS / reportFound true / liveWriteAuthorized false
+
+demo-ux-6-smoke:
+  executionResult GAP_FOUND / reportFound false
+
+support-plan-review-new-version-demo-1-smoke:
+  executionResult PASS / reportFound true / liveWriteAuthorized false
+```
+
+AC-9 remains `GAP_FOUND` because no smoke report exposes SharePoint / M365 / Entra / App Catalog / LIVE WRITE count telemetry.
+
+## 12. DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1
+
+### 12.1 Classification
+
+```text
+AC-3 / AC-5 / AC-8: STALE SMOKE EXPECTATION
+root cause: PR #493 / VP-1 banner copy change
+AC-4 / AC-7 / AC-9: separate residuals (unchanged)
+```
+
+The AC-3 / AC-5 / AC-8 `GAP_FOUND` results derive from the demo-ux-6 smoke exit, not from a lifecycle identity-chain defect:
+
+```text
+PR #493 (feat/vp-1-demo-ui-separation-1, merge 860a15a)
+  -> VP-1 compact demo safety notice (4bf1f34)
+  -> VP-1 centralized demo safety copy (554085a)
+  -> demo banner copy is now VP1_DEMO_SAFETY_NOTICE:
+     "デモ環境｜表示内容は合成データです。保存されません。"
+```
+
+The demo-ux-6 runner's `assertReviewDueState` still requires the demo banner text to include the pre-VP-1 copy `live SharePoint 接続なし` (`spfx/smoke/demo-ux-6/run-smoke.mjs`). This stale expectation fails the three review-due presentation checks:
+
+```text
+desktop-review-due-subsequent-anchor
+desktop-review-due
+tablet-review-due
+```
+
+Every other observed condition in those three checks passed: items=3, reviewMaterials=2, expected state columns, `cssApplied=true`, no horizontal overflow, DEMO-UX-6 slice flag, origin/due/approaching basis copy, and zero page errors.
+
+### 12.2 No retroactive change
+
+The original acceptance result is not retroactively changed by this classification:
+
+```text
+acceptance-report.json (machine-readable execution result): unchanged
+acceptance runner: unchanged
+contract test: unchanged
+demo-ux-6 smoke runner: unchanged
+product/domain/fixture/schema: unchanged
+```
+
+The recorded AC-3 / AC-5 / AC-8 `GAP_FOUND` results stand as executed. This section records interpretation only. Correcting the stale smoke expectation would require mutating an existing smoke runner, which remains forbidden without a separate authorization.
+
+### 12.3 Separate residuals
+
+AC-4 / AC-7 / AC-9 are independent of the banner copy change and remain `GAP_FOUND` as separate residuals on the currently known product/evidence basis:
+
+```text
+AC-4:
+Current main maps zero exact Observation matches to
+UNRESOLVED / NO_EXACT_CONTEXT_MATCH; no successful-empty
+association status exists.
+
+AC-7:
+Current authorized main exposes concept-only next-version
+presentation; persistence/draft workflow remain unauthorized.
+
+AC-9:
+Existing smoke reports expose slice authorization flags but no
+SharePoint / M365 / Entra / App Catalog / LIVE WRITE count telemetry.
+```
+
+These residuals are not reclassified by §12.1 and remain candidates for separate Exact Slice separation.
