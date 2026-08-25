@@ -15,8 +15,16 @@ Definition Correction-2: APPLIED / PUBLISHED (PR #509 MERGED)
 Implementation publication: MERGED / CONSUMED (PR #510)
 PR #511 Independent Correction Review: CORRECTION REQUIRED / P1=1
 Definition Correction-3 Start GO: RECEIVED
-Definition Correction-3: APPLIED
-Acceptance execution: NOT AUTHORIZED
+Definition Correction-3: APPLIED / PUBLISHED (PR #512 MERGED)
+Independent Correction Re-Review: PASS / LOCKABLE
+PR #511 execution-authority correction: MERGED / CONSUMED
+Acceptance Execution GO: CONSUMED
+Full acceptance execution: EXECUTED / overallResult = GAP_FOUND
+DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1: RECORDED
+AC-3 / AC-5 / AC-8 execution result: GAP_FOUND / STALE SMOKE EXPECTATION
+AC-4 / AC-7 / AC-9 execution result: GAP_FOUND / separate residuals
+Acceptance evidence recording: MERGED / CONSUMED (PR #513)
+Acceptance re-execution: NOT AUTHORIZED
 Code / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -574,7 +582,48 @@ Implementation Start GOはimplementation publication専用のままCONSUMEDと�
 
 このCorrectionはPR #511のReady / Merge、full acceptance execution、Issue #445 mutationを許可しない。
 
-## 14. Rollback boundary
+## 14. Execution status provenance (DEFINITION-STATUS-SYNC-1)
+
+この節はDefinition semanticsを変更せず、current mainのstatus provenanceのみをこの文書へ同期する。
+
+同期根拠となるcurrent mainの事実は次のとおりである。
+
+```text
+Definition Correction-3: PUBLISHED (PR #512 MERGED)
+Independent Correction Re-Review: PASS / LOCKABLE
+PR #511 execution-authority correction: MERGED / CONSUMED
+Acceptance Execution GO: CONSUMED
+Full acceptance execution: EXECUTED / overallResult = GAP_FOUND
+Acceptance evidence recording: MERGED / CONSUMED (PR #513)
+```
+
+Full acceptance executionのcheckpoint resultは次のとおりである。
+
+```text
+AC-1: PASS
+AC-2: PASS
+AC-3: GAP_FOUND
+AC-4: GAP_FOUND
+AC-5: GAP_FOUND
+AC-6: PASS
+AC-7: GAP_FOUND
+AC-8: GAP_FOUND
+AC-9: GAP_FOUND
+
+overallResult: GAP_FOUND
+```
+
+AC-3 / AC-5 / AC-8の`GAP_FOUND`は、lifecycle identity chainの欠陥ではなく、DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1で`STALE SMOKE EXPECTATION`（PR #493 / VP-1 demo banner copy変更に由来するdemo-ux-6 smoke runnerのstale期待）として分類済みである。
+
+AC-4 / AC-7 / AC-9はこの分類の対象外であり、separate residualsとして`GAP_FOUND`のまま保持する。これらは個別Exact Slice候補への分離候補である。
+
+記録済みのacceptance resultは遡って変更しない。smoke runner、acceptance runner、contract test、product / domain / fixture / schemaはすべて変更しない。acceptance再実行はこの同期では許可しない。
+
+実行詳細の正本は`sp-lc-6-synthetic-lifecycle-acceptance-evidence.md`のFull acceptance execution result節およびDEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1節である。
+
+この同期はD1-D6、AC-1からAC-9の業務意味、result precedence（`ENVIRONMENT_BLOCKED > GAP_FOUND > PASS`）、execution authority modelを変更しない。
+
+## 15. Rollback boundary
 
 Definition publicationのrollbackはこの文書だけを戻す。
 
@@ -582,23 +631,41 @@ Future acceptance implementationのrollbackも、acceptance test、runner、evid
 
 既存product/domain/fixture/smokeを変更しないため、rollbackで業務意味や既存UIを変えない。
 
-## 15. Gate
+## 16. Gate
 
 ```text
 Definition Start GO: CONSUMED
 Definition Correction-1: COMPLETE
 Definition Correction-2: COMPLETE / PUBLISHED
 Definition Correction-3 Start GO: CONSUMED
-Definition Correction-3: COMPLETE
+Definition Correction-3: COMPLETE / PUBLISHED (PR #512 MERGED)
 Definition: READY FOR INDEPENDENT DEFINITION REVIEW
 
 PR #510 implementation publication:
 MERGED / CONSUMED
 
-PR #511:
-HOLD pending Definition LOCK then Independent Correction Re-Review
+PR #511 execution-authority correction:
+MERGED / CONSUMED
 
-Acceptance execution:
+Independent Correction Re-Review:
+PASS / LOCKABLE
+
+Acceptance Execution GO:
+CONSUMED
+
+Full acceptance execution:
+EXECUTED / overallResult = GAP_FOUND
+
+DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1:
+RECORDED (AC-3 / AC-5 / AC-8 = STALE SMOKE EXPECTATION)
+
+AC-4 / AC-7 / AC-9:
+GAP_FOUND / separate residuals (not reclassified)
+
+PR #513 acceptance evidence recording:
+MERGED / CONSUMED
+
+Acceptance re-execution:
 NOT AUTHORIZED
 
 Issue mutation:
