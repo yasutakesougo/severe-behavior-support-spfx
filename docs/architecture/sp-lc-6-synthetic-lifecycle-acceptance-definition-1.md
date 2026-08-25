@@ -7,6 +7,8 @@ Unit: SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1
 Kind: acceptance exact-slice definition only
 Definition baseline main: 4dd41c4ff27265dba09b6872727cc782244715b6
 Definition Start GO: RECEIVED
+Definition Review-1: CORRECTION REQUIRED / P1=2
+Definition Correction-1: APPLIED
 Implementation / acceptance execution: NOT AUTHORIZED
 Code / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
@@ -124,9 +126,24 @@ Later Active versionへのfallbackは禁止されている。
 
 したがって、次版の概念表示だけを「新version作成が実装済み」と数えてはならない。
 
-## 4. Acceptance result model
+## 4. PreflightとAcceptance result model
 
-結果は次の3状態だけとする。
+Acceptance resultを計算する前に、base SHA preflightを必須とする。
+
+```text
+PRECHECK_BASE_MATCH
+PRECHECK_BASE_MISMATCH_NOT_STARTED
+```
+
+`expectedMainSha`と`observedMainSha`が一致する場合だけ`PRECHECK_BASE_MATCH`とし、AC-1からAC-9を実行する。
+
+SHAが一致しない場合は`PRECHECK_BASE_MISMATCH_NOT_STARTED`とし、acceptance checkpointを開始しない。
+
+`PRECHECK_BASE_MISMATCH_NOT_STARTED`はacceptance resultではない。
+
+この場合はcurrent-main residual reassessmentへ戻る。
+
+Base match後のcheckpoint resultは次の3状態だけとする。
 
 ```text
 PASS
@@ -134,13 +151,36 @@ GAP_FOUND
 ENVIRONMENT_BLOCKED
 ```
 
-`PASS`は、全必須checkpointを既存production/pure-domain behaviorまたは既存presentation projectionを通して再現できた場合だけ許可する。
+`PASS`は、checkpointを既存production/pure-domain behaviorまたは既存presentation projectionを通して確認でき、要求されたinvariantまたはcapabilityが成立した場合に使用する。
 
-`GAP_FOUND`は、必要なproduct/domain behaviorが存在しない、またはidentity chainを既存behaviorだけで証明できない場合に使用する。
+`GAP_FOUND`は、必要なproduct/domain behaviorが存在しない、またはidentity chainやrequired invariantを既存behaviorだけで証明できない場合に使用する。
 
 `ENVIRONMENT_BLOCKED`は、必要なローカルtest/browser実行環境が利用できず、checkpoint自体を観測できない場合に使用する。
 
 Skipped、未実行、fixture-onlyの作り込みをPASSへ変換しない。
+
+### 4.1 Overall resultの決定規則
+
+Base match後は、全必須checkpointに必ず1つのresultを付与する。
+
+Overall resultは次の順序で一意に決定する。
+
+```text
+1. required checkpointにENVIRONMENT_BLOCKEDが1件以上ある
+   -> overall = ENVIRONMENT_BLOCKED
+
+2. ENVIRONMENT_BLOCKEDが0件で、GAP_FOUNDが1件以上ある
+   -> overall = GAP_FOUND
+
+3. AC-1からAC-9がすべてPASS
+   -> overall = PASS
+```
+
+`ENVIRONMENT_BLOCKED`と`GAP_FOUND`が混在する場合、overallは`ENVIRONMENT_BLOCKED`とする。
+
+ただし既に確認できた`GAP_FOUND` checkpointは`knownGaps`として保持し、環境復旧後の再実行で失われないようにする。
+
+Acceptance開始後のrequired checkpointに`SKIPPED`や`NOT_RUN`を残してoverallを計算してはならない。
 
 ## 5. 必須Acceptance checkpoints
 
@@ -174,13 +214,29 @@ Review materialとreview timing presentationがD5 accepted semanticsを維持す
 
 固定90日失効、観察不足による自動無効化、hard dueを導入しない。
 
-### AC-6 Continue outcome
+### AC-6 Continue invariant
 
-Review後に「継続」を選ぶ場合の意味が、既存versionの履歴を上書きせず、不要な新versionを作成したと見せないことを確認する。
+AC-6は、専用の「継続」command、button、persisted outcomeを要求するcapability checkpointではない。
 
-継続結果を表現する既存product/domain behaviorがない場合は`GAP_FOUND`とする。
+Review後に変更を発生させない場合のobservable invariantとして判定する。
 
-Acceptance用fixtureだけで継続機能を発明してはならない。
+次を確認する。
+
+```text
+same Active SupportPlanVersion identity remains in effect
+historical SupportPlanVersion is not overwritten
+historical Procedure / ProcedureRecord binding remains unchanged
+no new SupportPlanVersion is fabricated merely to express continuation
+no existing record is rebound to a later version
+```
+
+専用の「継続」操作が存在しないことだけを理由に`GAP_FOUND`としてはならない。
+
+既存behaviorが上記invariantに反する場合は`GAP_FOUND`とする。
+
+必要な状態を実行環境上で観測できない場合は`ENVIRONMENT_BLOCKED`とする。
+
+Acceptance用fixtureだけで「継続」機能を発明してはならない。
 
 ### AC-7 New-version outcome
 
@@ -240,6 +296,8 @@ Acceptance runnerは既存runnerの結果とroot graph contractを集約して�
 
 既存runnerやproduct codeを変更しなければacceptanceできない場合は、その事実を`GAP_FOUND`とする。
 
+ただしAC-6は専用continue commandの存在を要求しないため、専用continue implementationがないこと自体をgapにしてはならない。
+
 ## 7. Future implementationで許可すること
 
 ```text
@@ -257,15 +315,21 @@ Acceptance runnerは、少なくとも次を記録する。
 expectedMainSha
 observedMainSha
 shaMatch
+preflightState
 checkpoint id
-result
+checkpoint result
 source path / runner
 test count
 browser smoke result
 mutationAttempted
 liveWriteAuthorized
-residual gap
+knownGaps
+overallResult
 ```
+
+`overallResult`は`PRECHECK_BASE_MATCH`後だけ設定する。
+
+`PRECHECK_BASE_MISMATCH_NOT_STARTED`の場合、`overallResult`は未設定とする。
 
 ## 8. Explicit OUT / FORBIDDEN
 
@@ -279,6 +343,7 @@ approvedBy / approvedAt rename
 status enum変更
 new-version product behaviorの実装
 continue product behaviorの実装
+専用continue commandを新しいacceptance requirementとして追加すること
 テスト専用能力をproduct能力としてPASS扱い
 fixture追加でmissing capabilityを隠すこと
 existing smoke harness変更
@@ -296,7 +361,7 @@ Ready / Merge
 
 実行時はbaseline SHAとobserved SHAを比較する。
 
-SHAが一致しない場合はacceptanceを継続せず、current-main residual reassessmentへ戻す。
+SHAが一致しない場合は`PRECHECK_BASE_MISMATCH_NOT_STARTED`としてacceptanceを開始せず、current-main residual reassessmentへ戻す。
 
 最低限、次を実行対象とする。
 
@@ -317,11 +382,36 @@ Acceptance execution時のcurrent SHAで再実行し、実行結果を記録す�
 
 `PASS`にはAC-1からAC-9の全項目が必要である。
 
-特にAC-6またはAC-7が既存behaviorで証明できなければ、他が全てPASSでもoverallは`GAP_FOUND`とする。
+AC-6は専用continue capabilityの存在ではなく、continuation invariantが成立することを要求する。
+
+AC-7は実行可能なnew-version behaviorを要求する。
+
+したがってAC-7を既存behaviorで証明できなければ、他が全て観測可能でもoverallは`GAP_FOUND`とする。
+
+一方、専用continue commandが存在しないことだけではAC-6を`GAP_FOUND`にしない。
 
 `GAP_FOUND`はacceptance失敗を隠す状態ではなく、次に必要なproduct Exact Sliceを決めるための正常な出力である。
 
-## 11. Rollback boundary
+Overall resultは§4.1の決定規則だけで算出する。
+
+## 11. Correction-1 traceability
+
+Definition Review-1の指摘を次のように閉じる。
+
+```text
+P1-1:
+AC-6をdedicated continue capability requirementからobservable invariantへ補正。
+専用continue actionがないことだけではGAP_FOUNDにしない。
+
+P1-2:
+SHA mismatchをPRECHECK_BASE_MISMATCH_NOT_STARTEDとしてacceptance resultから分離。
+ENVIRONMENT_BLOCKED > GAP_FOUND > PASSのoverall precedenceを固定。
+混在時のknownGaps保持を固定。
+```
+
+このCorrectionはD1-D6の意味を変更しない。
+
+## 12. Rollback boundary
 
 Definition publicationのrollbackはこの文書だけを戻す。
 
@@ -329,11 +419,13 @@ Future acceptance implementationのrollbackも、acceptance test、runner、evid
 
 既存product/domain/fixture/smokeを変更しないため、rollbackで業務意味や既存UIを変えない。
 
-## 12. Gate
+## 13. Gate
 
 ```text
 Definition Start GO: CONSUMED
-Definition: COMPLETE / READY FOR INDEPENDENT REVIEW
+Definition Review-1: CORRECTION REQUIRED / HOLD
+Definition Correction-1: COMPLETE
+Definition: READY FOR INDEPENDENT RE-REVIEW
 
 Implementation Start:
 NOT AUTHORIZED
@@ -351,5 +443,5 @@ Deploy / Production Binding / LIVE WRITE:
 FORBIDDEN
 
 NEXT:
-Independent Definition Review
+Independent Definition Re-Review-2
 ```
