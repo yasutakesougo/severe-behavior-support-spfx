@@ -17,8 +17,10 @@ Definition Start GO: CONSUMED (scope fixation published on PR #515)
 Exact Slice Definition APPROVE: RECEIVED / LOCKED
   Human: PR #515 Exact Slice Definition APPROVE
   Approved HEAD at receipt: f78863ad2b5cba2b5afd7409f90f03ac5567021c
-Implementation Start: NOT AUTHORIZED
-Smoke runner mutation: NOT AUTHORIZED
+Implementation Start GO: RECEIVED / CONSUMED
+  Human: SP-LC-6 STALE-SMOKE-EXPECTATION Implementation Start GO
+  Bound changed-area: spfx/smoke/demo-ux-6/run-smoke.mjs
+    (assertReviewDueState demo-banner expectation only)
 Acceptance re-execution: NOT AUTHORIZED
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
@@ -224,30 +226,32 @@ Human gate 1:
   (PR #515 Human instruction)
 
 Human gate 2:
-  Implementation Start GO = NOT RECEIVED
-  bound to (when issued):
+  Implementation Start GO = RECEIVED / CONSUMED
+  Human: SP-LC-6 STALE-SMOKE-EXPECTATION Implementation Start GO
+  bound:
     this Unit
-    baseline or later approved main SHA
+    baseline main 1846e3645ae759b2c9999bdf361f107ab59f2bcd
+      (or later approved main SHA)
     changed-area = spfx/smoke/demo-ux-6/run-smoke.mjs
       (demo banner expectation only)
     acceptance criteria in §5
     OUT list in §6
 
-Until Implementation Start GO is explicit:
-  smoke runner mutation = NO-GO
-  product / domain / fixture / schema mutation = NO-GO
-  acceptance re-execution = NO-GO
-  Issue mutation = NO-GO
-  Ready / Merge = NO-GO (unless separate Human Ready / Merge GO)
-  Deploy / Production Binding / LIVE WRITE = FORBIDDEN
+Still forbidden without separate Human GO:
+  acceptance re-execution
+  product / domain / fixture / schema mutation
+  Issue mutation
+  Ready / Merge
+  Deploy / Production Binding / LIVE WRITE
 
 NEXT:
-  Human Implementation Start GO for this Exact Slice only
-  (optional separate Human Ready / Merge GO for PR #515 definition publication)
+  Implement authorized smoke assertion alignment
+  → verify DEMO-UX-6 smoke PASS
+  → Human Ready / Merge GO for PR #515
 ```
 
 ```text
 EXACT-SLICE-DEFINITION-1: APPROVED / LOCKED
-Implementation Start: NOT AUTHORIZED
-CURRENT ACTION: STOP (await Human Implementation Start GO)
+Implementation Start: RECEIVED / CONSUMED
+CURRENT ACTION: authorized smoke expectation mutation only
 ```
