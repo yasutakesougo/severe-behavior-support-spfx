@@ -5,3 +5,9 @@ artifacts/
 spfx/smoke/**/smoke-bundle.js
 spfx/smoke/**/smoke-report.json
 spfx/src/adapters/procedure-record-lifecycle-event/b2-build-basis.generated.ts
+.worktrees/
+tmp/
+output/
+workbench.sqlite3
+**/*.sppkg
+spfx/smoke/**/smoke-production.css
