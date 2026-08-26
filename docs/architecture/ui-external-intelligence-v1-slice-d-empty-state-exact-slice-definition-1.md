@@ -13,8 +13,10 @@ human candidate selection: RECEIVED / CONSUMED
 selected local problem: DailyRecords — 未完了確認 zero-result presentation
 selected pattern: KI-UI-007 — empty-state primary statement + supporting description
 independent definition review-1: CORRECTION REQUIRED / P0=0 / P1=3 / P2=0 / CONSUMED
-definition correction-1: APPLIED / RE-REVIEW HOLD
-definition status: CORRECTED / RE-REVIEW HOLD
+definition correction-1: APPLIED / CONSUMED
+independent definition re-review-2: PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=0 / CONSUMED
+definition ACCEPT / LOCK: RECEIVED / CONSUMED
+definition status: ACCEPTED / LOCKED
 implementation: NOT AUTHORIZED
 implementation start: NOT AUTHORIZED
 ready / merge / deploy / production binding / LIVE WRITE: NOT AUTHORIZED
@@ -422,12 +424,12 @@ Any rendered evidence remains synthetic and must require no LIVE I/O.
 ## 13. Definition status and stop condition
 
 ```text
-Slice D Candidate Exact Slice Definition-1: CORRECTED / RE-REVIEW HOLD
+Slice D Candidate Exact Slice Definition-1: ACCEPTED / LOCKED
 Human Candidate Selection: RECEIVED / CONSUMED
 Independent Definition Review-1: CORRECTION REQUIRED / P0=0 / P1=3 / P2=0 / CONSUMED
 Definition Correction-1: APPLIED / CONSUMED
-Independent Definition Re-Review-2: REQUIRED / NOT PERFORMED
-Definition ACCEPT / LOCK: HOLD
+Independent Definition Re-Review-2: PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=0 / CONSUMED
+Definition ACCEPT / LOCK: RECEIVED / CONSUMED
 Implementation Start: NOT AUTHORIZED
 Product code mutation: NOT AUTHORIZED
 Ready: NOT AUTHORIZED
@@ -437,5 +439,5 @@ SharePoint / M365 / Entra mutation: NOT AUTHORIZED
 
 NEXT:
 UI-EXTERNAL-INTELLIGENCE-V1
-Slice D — Candidate Exact Slice Independent Definition Re-Review-2
+Slice D — Candidate Exact Slice Implementation Start GO
 ```
