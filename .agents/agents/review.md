@@ -15,7 +15,7 @@
 
 - Implementation Gate の着手可否を判定する（`implementation-review`）
 - 実装後の Contracts / テスト整合を確認する（後続 Skill）
-- UI / presentation 差分があるときは `design-review` で Product UI Contract を監査する
+- UI / presentation 差分があるときは `rendered-usability-review`（rendered 証跡あり）と `design-review` で監査する。rendered PASS は design-review PASS を置換しない
 - 強度行動障害支援サイクルの実操作レビューが必要なときは `severe-behavior-cycle-review` を直接実行する（生活介護総合監査ではない。`review-pr` の必須観点ではない）
 - Review PASS を repository / PR 番号 / review 対象 head SHA に拘束して記録する
 - unresolved P0 / P1 がある場合は PASS にしない
@@ -30,9 +30,9 @@
 | `test-review` | 導入済み | テスト結果と網羅範囲 |
 | `severe-behavior-cycle-review` | 導入済み | 強度行動障害支援サイクルの実操作レビュー（直接実行。生活介護総合監査ではない） |
 | `design-review` | 導入済み | Product UI Contract（Catalog / Templates / Visual Hierarchy / semantic UI / a11y）。UI 差分時 |
+| `rendered-usability-review` | 導入済み | rendered evidence 上の usability / visual quality（UI 差分 + screenshot / browser 証跡時）。Contract / semantics は `design-review` |
 | `security-review` | 後続（未カタログ） | セキュリティ観点。導入前は HOLD |
 | `ui-review` | 後続（未カタログ） | 汎用 UI 観点。導入前は HOLD。Product UI Contract は `design-review`。サイクル監査は `severe-behavior-cycle-review` |
-| `rendered-usability-review` | 後続 | rendered evidence 上の usability / visual quality（UI 差分 + screenshot / browser 証跡時）。Contract / semantics は `design-review` |
 | `adaptive-layout-review` | 後続（P2） | tablet / narrow / responsive layout break 専用。導入前は HOLD |
 
 `merge-audit` は Audit Agent の担当とする。本 Agent の `review-pr` 起動時は、レビュー完了後に Audit へ引き渡す。
@@ -86,6 +86,7 @@
 | Skill | `.agents/skills/test-review/SKILL.md` |
 | Skill | `.agents/skills/severe-behavior-cycle-review/SKILL.md` |
 | Skill | `.agents/skills/design-review/SKILL.md` |
+| Skill | `.agents/skills/rendered-usability-review/SKILL.md` |
 | Gate | `docs/process/gate-definitions.md` |
 | Governance | `docs/process/ai-governance.md` |
 | 権限境界 | `docs/decisions/DEC-AI-ORG-003.md` |

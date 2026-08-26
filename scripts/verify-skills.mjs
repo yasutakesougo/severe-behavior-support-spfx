@@ -42,6 +42,7 @@ const expectedInstalledSkills = [
   "architecture-review",
   "design-context",
   "design-review",
+  "rendered-usability-review",
   "implementation-plan",
   "implementation-review",
   "contracts-review",

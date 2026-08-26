@@ -147,14 +147,18 @@ Skill 文書内でこれらを自動実行する手順を書いてはいけま�
 ...
 /test-review
   ↓
+/rendered-usability-review （UI 差分 + rendered 証跡時。Contract は置換しない）
+  ↓
 /design-review           （UI 差分時。architecture-review を置換しない）
   ↓
 /merge-audit
 ```
 
 `design-implementation` は後続。当面は `implementation-plan` に内包する。
+`adaptive-layout-review` は後続（P2）。V1 では layout break を handoff note として記録する。
 Component Catalog v1（`docs/architecture/ui-component-catalog-v1.md`）を component usage の正本とする。未掲載は GAP / HOLD。
 Visual Hierarchy Contract v1（`docs/architecture/ui-visual-hierarchy-contract-1.md`）を情報の強弱の正本とする。画面の具体配置は `#444` / `#448`。
+Rendered usability 境界は `docs/architecture/ui-rendered-review-v1-exact-slice-definition-1.md`。
 
 ## 初回導入の最小実用セット
 
