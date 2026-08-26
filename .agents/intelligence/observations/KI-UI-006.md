@@ -14,6 +14,7 @@
   - Canonical repository: https://github.com/jakubkrehel/skills
   - Skill path: `skills/better-layout/SKILL.md`
   - Observed at: `2026-08-26`
+  - Source pin（Implementation Start preflight）: `ca483852de23d48ab4f4ea71da37dad12bd70a95`（jakubkrehel/skills main）
   - UI-RENDERED-REVIEW-V1 Definition selection: P2 follow-on; GUIDANCE_ONLY; external spacing examples must not override SBS tokens
 
 ## Evaluation evidence contract
@@ -27,7 +28,7 @@ sourceType: OPEN_SOURCE_SKILL_REPOSITORY
 canonicalSourceIdentity: https://github.com/jakubkrehel/skills
 exactPageFileComponentOrMaterialIdentity: skills/better-layout/SKILL.md
 observedAt: 2026-08-26
-sourceVersionCommitRelease: NOT_PINNED_DEFINITION_PHASE
+sourceVersionCommitRelease: ca483852de23d48ab4f4ea71da37dad12bd70a95 (jakubkrehel/skills main at Implementation Start preflight)
 contentDigestOrEquivalentFingerprint: NOT_REQUIRED_FOR_GUIDANCE_ONLY
 referenceUse: GUIDANCE_REFERENCE
 observedPatternOrGuidance: content-derived breakpoints; clip prevention; safe area; no fixed-height text containers; reading order; control/content separation; responsive verification in existing styling system
@@ -48,4 +49,4 @@ implementationAuthorityReference: docs/architecture/ui-rendered-review-v1-exact-
 
 - Retrieval keys: adaptive layout, tablet layout, responsive review, breakpoints, safe area, clipping, reading order, better-layout, FIELD_STAFF tablet
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Priority P2 / SECOND for future `adaptive-layout-review`. Do not install external Skill or elevate example spacing above local tokens. Source commit/release pin deferred to Post-Merge / Implementation Start preflight（UI-RENDERED-REVIEW-V1 Definition Correction-2 / P2-2）.
+- Promotion notes: `OBSERVED` only. Priority P2 / SECOND for future `adaptive-layout-review`. Do not install external Skill or elevate example spacing above local tokens. Source commit pin recorded at Implementation Start preflight（GUIDANCE_ONLY fingerprint; Authority NONE; pin ≠ PROMOTED）.

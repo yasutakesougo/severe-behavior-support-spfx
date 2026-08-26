@@ -15,6 +15,7 @@
 - Evidence:
   - Canonical repository: https://github.com/Superfuture/design-review
   - Observed at: `2026-08-26`
+  - Source pin（Implementation Start preflight）: `d4d2609b53fccb475d11490e2c6261e5eb2f0c5d`（Superfuture/design-review main）
   - Observed guidance: URL / screenshot / component review; ranked findings; requires rendered artifact; optional `--apply` (FORBIDDEN locally)
   - Local mapping: `docs/architecture/ui-rendered-review-v1-exact-slice-definition-1.md`
 
@@ -29,7 +30,7 @@ sourceType: OPEN_SOURCE_SKILL_REPOSITORY
 canonicalSourceIdentity: https://github.com/Superfuture/design-review
 exactPageFileComponentOrMaterialIdentity: design-review skill rubric (repository root)
 observedAt: 2026-08-26
-sourceVersionCommitRelease: NOT_PINNED_DEFINITION_PHASE
+sourceVersionCommitRelease: d4d2609b53fccb475d11490e2c6261e5eb2f0c5d (Superfuture/design-review main at Implementation Start preflight)
 contentDigestOrEquivalentFingerprint: NOT_REQUIRED_FOR_GUIDANCE_ONLY
 referenceUse: GUIDANCE_REFERENCE
 observedPatternOrGuidance: rendered critique from URL/screenshot/code; hierarchy/spacing/state/responsive review; ranked findings; no unsupported visual claims without artifact
@@ -50,4 +51,4 @@ implementationAuthorityReference: docs/architecture/ui-rendered-review-v1-exact-
 
 - Retrieval keys: rendered usability, screenshot review, visual hierarchy, spacing review, component state review, Superfuture design-review, rendered-usability-review
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Priority P1 / FIRST for local Skill `rendered-usability-review`. Allowed/Forbidden boundary locked in UI-RENDERED-REVIEW-V1 Definition Correction-1 / P2-2. Source commit/release pin deferred to Post-Merge / Implementation Start preflight（Definition Correction-2 / P2-2）.
+- Promotion notes: `OBSERVED` only. Priority P1 / FIRST for local Skill `rendered-usability-review`. Allowed/Forbidden boundary locked in UI-RENDERED-REVIEW-V1 Definition Correction-1 / P2-2. Source commit pin recorded at Implementation Start preflight（GUIDANCE_ONLY fingerprint; Authority NONE; pin ≠ PROMOTED）.

@@ -9,24 +9,26 @@ Definition Correction-2: APPLIED (P1-1 + P1-2 + P2-1 + P2-2)
 Definition status: ACCEPTED / LOCKED
 Human Decision: ACCEPTED / LOCKED
 Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK — RECEIVED / CONSUMED
+Human GO: UI-RENDERED-REVIEW-V1 Implementation Start GO — RECEIVED / CONSUMED
 Authority:
   Human GO: UI-RENDERED-REVIEW-V1 Definition Start
   Human GO: UI-RENDERED-REVIEW-V1 Definition ACCEPT / LOCK
+  Human GO: UI-RENDERED-REVIEW-V1 Implementation Start GO
   docs/architecture/ui-agent-system-v1-design-issue-body.md
   docs/process/skill-catalog.md
   .agents/skills/design-review/SKILL.md
   docs/architecture/ui-rendered-review-v1-post-merge-reconciliation-1.md
-Kind: read-only Definition（Skill boundary / evidence contract / workflow wiring plan）
-Implementation Start: NOT AUTHORIZED
-Skill directory promotion: NOT AUTHORIZED（verify:skills 導入済み set 未更新）
+Kind: Skill / catalog / workflow wiring（Implementation Start）
+Implementation Start: AUTHORIZED（this PR）
+Skill directory promotion: AUTHORIZED（this PR）
 Deploy / SharePoint write / Product UI Contract mutation: FORBIDDEN
 Domain semantics mutation: FORBIDDEN
-Publication status: PR #521 MERGED / CONSUMED ON MAIN
-  merge commit: f8b247f9b4cbf310e0c7c3fe07cd86924ac4cdd5
-  consumed HEAD: a4beec5bf53bbd75c97aaa27437de1ae960eb6ca
-Post-Merge reconciliation: RECORDED（ui-rendered-review-v1-post-merge-reconciliation-1.md）
-NEXT: Human UI-RENDERED-REVIEW-V1 Implementation Start GO
-Agent: STOP on implementation
+Publication status:
+  PR #521 MERGED / CONSUMED ON MAIN（f8b247f；HEAD a4beec5）
+  PR #522 MERGED / CONSUMED ON MAIN（21c3427；HEAD 276c8eb）
+Post-Merge reconciliation: COMPLETE（ui-rendered-review-v1-post-merge-reconciliation-1.md）
+NEXT: Implementation Start publication → Ready → Merge
+Agent: STOP on Product UI Contract / Domain / Deploy mutation
 ```
 
 ## 0. Correction-1（closes Definition Review HOLD）
@@ -431,8 +433,12 @@ Human Decision: ACCEPTED / LOCKED
 Publication: PR #521 MERGED / CONSUMED ON MAIN
   merge commit: f8b247f9b4cbf310e0c7c3fe07cd86924ac4cdd5
   consumed HEAD: a4beec5bf53bbd75c97aaa27437de1ae960eb6ca
-Post-Merge: docs/architecture/ui-rendered-review-v1-post-merge-reconciliation-1.md
-Implementation Start: NOT AUTHORIZED（explicit Start GO required）
+Post-Merge publication: PR #522 MERGED / CONSUMED ON MAIN
+  merge commit: 21c34277c701cdd2ae497fcc73c8f6b8a23fb5d2
+  exact HEAD: 276c8ebe91223502bf806ab75db88f728f36ed2e
+  CI #1424: SUCCESS
+Post-Merge: COMPLETE（docs/architecture/ui-rendered-review-v1-post-merge-reconciliation-1.md）
+Implementation Start: AUTHORIZED（Human Start GO RECEIVED / CONSUMED）
 ```
 
 ### Locked scope
@@ -462,142 +468,57 @@ Issue mutation
 | 2. Human Definition ACCEPT/LOCK | **COMPLETE / CONSUMED** |
 | 3. PR Ready | **COMPLETE / CONSUMED**（#521） |
 | 4. Merge | **COMPLETE / CONSUMED**（#521 → main@f8b247f） |
-| 5. Post-Merge reconciliation | **RECORDED** |
-| 6. Implementation Start GO | **NEXT（Human）** |
-| 7. Implementation Start | NOT AUTHORIZED |
+| 5. Post-Merge reconciliation | **COMPLETE**（#522 → main@21c3427） |
+| 6. Implementation Start GO | **RECEIVED / CONSUMED** |
+| 7. Implementation Start | **IN PROGRESS**（Skill / catalog / workflow wiring） |
 
-## Appendix A — rendered-usability-review SKILL specification（draft）
+## 17. Implementation Start（Human GO consumed）
 
-Implementation Start まで **実行正本にしない**。正本化時は Appendix を `.agents/skills/rendered-usability-review/SKILL.md` へ移す。
-
-```md
-# rendered-usability-review
-
-## 目的
-
-browser / screenshot evidence を根拠に、実画面の usability / visual quality を read-only で評価する。
-
-Product UI Contract 適合、Domain 意味、a11y gate / smoke / lint:ui-sem は `design-review` が担当する。本 Skill は **rendered 結果が実際に使いやすいか** のみを見る。
-
-外部 `Superfuture/design-review` とは別 Skill である。実行正本は `.agents/skills/rendered-usability-review/` のみ。
-
-## 使用する場面
-
-- UI / presentation 差分があり、screenshot または browser smoke 証跡がある PR レビュー
-- design-review が visual / rendered 証跡不足で `HOLD` とした UI PR の follow-up
-- Visual Polish / DADS-UX / FIELD_STAFF tablet / PLANNER desktop の rendered 品質確認
-
-## 入力
-
-- 対象 PR / head SHA / UI 差分要約
-- rendered evidence（screenshot / browser capture / smoke 証跡 doc への参照）
-- 任意: `design-context` 出力
-- 任意: 対象 role（FIELD_STAFF / PLANNER / ADMIN）
-- External Intelligence（GUIDANCE_ONLY）: KI-UI-001, KI-UI-005（Allowed list のみ）。layout / runtime a11y は handoff
-
-## 前提条件
-
-- head SHA が固定できる
-- UI / presentation 差分がある
-- visual finding に必要な rendered evidence が添付または参照可能
-
-## 実行手順
-
-1. UI 差分の有無を判定する。なければ `NOT APPLICABLE`
-2. rendered evidence の有無を判定する。visual finding に必要な証跡がなければ `HOLD`
-3. 対象 role / viewport（FIELD_STAFF tablet、PLANNER desktop 等）を evidence から特定する
-4. hierarchy / density / readability / visual state / spacing を rendered evidence 上で評価する
-5. component state（empty / error / disabled / loading）が視覚的に区別できるか確認する
-6. visual preference と evidence-backed defect を分離する
-7. responsive layout 設計疑いは adaptive-layout handoff note とし、V1 では P0/P1 に昇格しない（clip/overlap visible 時を除く）
-8. runtime a11y 疑いは design-review + KI-UI-004 へ handoff する
-9. Contract / semantics / a11y 意味の疑いがあれば design-review へ handoff し、本 Skill では確定しない
-10. Findings を P0 / P1 / P2 で整理し判定する。本 Skill PASS は design-review PASS を置換しない
-
-## 確認項目
-
-- primary action が rendered 上で視認・到達可能か
-- 情報 hierarchy が scan 可能か（証跡上）
-- error / empty / disabled state が視覚的に区別できるか
-- FIELD_STAFF tablet / PLANNER desktop の代表 evidence が揃っているか（slice による）
-- screenshot なしの visual finding を出していないか
-- 外部 Skill の `--apply` や source mutation を提案していないか
-- SBS / DADS token を外部 px 値で上書き提案していないか
-
-## 停止条件
-
-- head SHA 不明
-- UI 差分があるのに rendered evidence がなく、visual finding の推測補完を求められている
-- Domain 意味変更を本 Skill だけで確定するよう求められている
-- 外部 `design-review` Skill をローカル実行正本として使うよう求められている
-- Product UI Contract 変更を本 Skill 出力だけで確定するよう求められている
-
-## 判定基準
-
-- `PASS`: rendered evidence 上、未解決 P0 / P1 がない
-- `READY`: 本 Skill では原則使用しない
-- `HOLD`: rendered 証跡不足、role / viewport 不明、measured evidence 不足
-- `FAIL`: P0 / P1 の rendered usability 破壊。P2 は後続可
-- `NOT APPLICABLE`: UI / presentation 差分がない
-
-## 成果物
-
-- rendered evidence 一覧（path / viewport / role / surface）
-- usability / visual quality 評価要約
-- Findings（P0 / P1 / P2）— 各 finding に evidence ref 必須
-- design-review / adaptive-layout-review への handoff 項目
-- 次アクション
-
-## 禁止事項
-
-- merge、push、deploy を自動実行手順に含めること
-- SharePoint変更、Microsoft 365変更、Entra ID変更を承認不要または自動実行として扱うこと
-- 本番データ変更や物理削除を許可または手順化すること
-- 未確認事項を推測で確定すること
-- `HOLD` を `PASS` / `READY` と同義に扱うこと
-- `design-review` を本 Skill で置換すること
-- 外部 Skill の `--apply`、install、runtime execution を手順化すること
-- Product UI Contract / Domain semantics を変更すること
-- rendered evidence なしの visual finding を出すこと
-
-## 出力形式
-
-# rendered-usability-review
-
-## Summary
-- 判定: PASS / HOLD / FAIL / NOT APPLICABLE
-- 対象PR:
-- head SHA:
-- role / viewport:
-
-## Rendered Evidence
-| ID | kind | viewport | role | surface | ref |
-|---|---|---|---|---|---|
-| E-001 | screenshot | 768px | FIELD_STAFF | Today | path or smoke doc |
-
-## Usability Assessment
-- hierarchy:
-- density:
-- readability:
-- visual states:
-- spacing / alignment:
-
-## Findings
-| ID | 重大度 | 状態 | 内容 | evidence ref | 対応 |
-|---|---|---|---|---|---|
-| F-001 | P1 | OPEN |  | E-001 |  |
-
-## Handoff
-- design-review:
-- adaptive-layout-review:
-
-## HOLD
-- なし / または列挙
-
-## Next Actions
-1.
-2.
+```text
+Human GO: UI-RENDERED-REVIEW-V1 Implementation Start GO
+Received: 2026-08-26
+Basis main: 21c34277c701cdd2ae497fcc73c8f6b8a23fb5d2
+Post-Merge: COMPLETE（PR #522）
 ```
+
+### In scope
+
+```text
+.agents/skills/rendered-usability-review/SKILL.md
+.agents/skills/rendered-usability-review/sample-output.md
+scripts/verify-skills.mjs expectedInstalledSkills
+docs/process/skill-catalog.md 導入済み昇格
+.agents/agents/review.md 導入済み行
+docs/process/development-process.md workflow 追記
+.agents/commands/review-pr.md UI 差分時 Fallback
+KI-UI-004 / 005 / 006 source pin revalidation（GUIDANCE_ONLY）
+Post-Merge reconciliation COMPLETE recording
+```
+
+### Explicit OUT
+
+```text
+Product UI Contract / DADS / Catalog / Templates / Visual Hierarchy 変更
+Domain semantics 変更
+React / SCSS / token 変更
+adaptive-layout-review Skill 実装
+外部 Skill install / --apply
+Deploy / SharePoint write / Issue mutation
+```
+
+### KI source pin revalidation（§5.2）
+
+| ID | Canonical source | Pinned HEAD（Implementation Start preflight） |
+|---|---|---|
+| KI-UI-004 | jakubkrehel/skills `better-accessibility` | `ca483852de23d48ab4f4ea71da37dad12bd70a95`（repo main） |
+| KI-UI-005 | Superfuture/design-review | `d4d2609b53fccb475d11490e2c6261e5eb2f0c5d`（repo main） |
+| KI-UI-006 | jakubkrehel/skills `better-layout` | `ca483852de23d48ab4f4ea71da37dad12bd70a95`（repo main） |
+
+Pins are GUIDANCE_ONLY fingerprints. Authority remains NONE. Pin ≠ PROMOTED.
+
+## Appendix A — rendered-usability-review SKILL specification
+
+実行正本は `.agents/skills/rendered-usability-review/SKILL.md`（Implementation Start で正本化）。本 Appendix は履歴参照。
 
 ## Appendix B — adaptive-layout-review boundary sketch（P2 / 後続）
 

@@ -14,6 +14,7 @@
   - Canonical repository: https://github.com/jakubkrehel/skills
   - Skill path: `skills/better-accessibility/SKILL.md`
   - Observed at: `2026-08-26`
+  - Source pin（Implementation Start preflight）: `ca483852de23d48ab4f4ea71da37dad12bd70a95`（jakubkrehel/skills main）
   - UI-RENDERED-REVIEW-V1 Definition selection: GUIDANCE_ONLY supplement to `design-review` / DADS-06, not a standalone Skill install
 
 ## Evaluation evidence contract
@@ -27,7 +28,7 @@ sourceType: OPEN_SOURCE_SKILL_REPOSITORY
 canonicalSourceIdentity: https://github.com/jakubkrehel/skills
 exactPageFileComponentOrMaterialIdentity: skills/better-accessibility/SKILL.md
 observedAt: 2026-08-26
-sourceVersionCommitRelease: NOT_PINNED_DEFINITION_PHASE
+sourceVersionCommitRelease: ca483852de23d48ab4f4ea71da37dad12bd70a95 (jakubkrehel/skills main at Implementation Start preflight)
 contentDigestOrEquivalentFingerprint: NOT_REQUIRED_FOR_GUIDANCE_ONLY
 referenceUse: GUIDANCE_REFERENCE
 observedPatternOrGuidance: keyboard-only and screen-reader review walks; touch hit-area targets; 200% zoom and reflow checks; hover-on-touch and forced-colors focus checks; write fixes in existing styling system only
@@ -48,4 +49,4 @@ implementationAuthorityReference: NONE
 
 - Retrieval keys: accessibility runtime, touch target, 44px, keyboard-only, 200% zoom, reflow, forced-colors, hover on touch, better-accessibility
 - Rule authority: NONE
-- Promotion notes: `OBSERVED` only. Source commit/release pin deferred to Post-Merge / Implementation Start preflight（UI-RENDERED-REVIEW-V1 Definition Correction-2 / P2-2）.
+- Promotion notes: `OBSERVED` only. Source commit pin recorded at Implementation Start preflight（GUIDANCE_ONLY fingerprint; Authority NONE; pin ≠ PROMOTED）. Do not install the external Skill or treat runtime checks as CI gate replacements. Static a11y authority remains DADS-06 and `design-review`.
