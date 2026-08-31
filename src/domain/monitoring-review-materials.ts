@@ -153,10 +153,7 @@ function validateMonitoringReadModel(value: unknown): value is MonitoringReadMod
   return true;
 }
 
-function contextMatches(
-  model: MonitoringReadModel,
-  context: ReviewPresentationContext,
-): boolean {
+function contextMatches(model: MonitoringReadModel, context: ReviewPresentationContext): boolean {
   return (
     model.OrganizationId === context.OrganizationId &&
     model.SiteId === context.SiteId &&
