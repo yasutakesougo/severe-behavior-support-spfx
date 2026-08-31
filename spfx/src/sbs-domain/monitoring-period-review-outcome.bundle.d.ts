@@ -3,8 +3,7 @@ export const MONITORING_PERIOD_REVIEW_OUTCOME_SCHEMA_VERSION: "1.0.0";
 export const MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED: false;
 export const MONITORING_PERIOD_REVIEW_DECISIONS: readonly ["NO_CHANGE", "CHANGE_REQUIRED"];
 
-export type MonitoringPeriodReviewDecision =
-  (typeof MONITORING_PERIOD_REVIEW_DECISIONS)[number];
+export type MonitoringPeriodReviewDecision = (typeof MONITORING_PERIOD_REVIEW_DECISIONS)[number];
 
 export type MonitoringPeriodReviewOutcome = Readonly<{
   OutcomeId: string;

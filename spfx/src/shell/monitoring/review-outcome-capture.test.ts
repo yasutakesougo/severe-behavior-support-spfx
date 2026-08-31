@@ -34,7 +34,11 @@ const MATERIALS: HumanReviewMaterials = {
 
 describe("review-outcome-capture", () => {
   it("assembles a canonical domain-valid NO_CHANGE outcome with synthetic authority boundaries", () => {
-    const result = assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "2026-09-01T12:00:00+09:00");
+    const result = assembleSyntheticReviewOutcome(
+      MATERIALS,
+      "NO_CHANGE",
+      "2026-09-01T12:00:00+09:00",
+    );
     expect(result.status).toBe("CAPTURED");
     if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
     expect(validateMonitoringPeriodReviewOutcome(result.outcome)).toBe(true);
@@ -48,7 +52,11 @@ describe("review-outcome-capture", () => {
   });
 
   it("captures CHANGE_REQUIRED without creating or implying N+1 data", () => {
-    const result = assembleSyntheticReviewOutcome(MATERIALS, "CHANGE_REQUIRED", "2026-09-01T12:00:00+09:00");
+    const result = assembleSyntheticReviewOutcome(
+      MATERIALS,
+      "CHANGE_REQUIRED",
+      "2026-09-01T12:00:00+09:00",
+    );
     expect(result.status).toBe("CAPTURED");
     if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
     expect(result.outcome.decision).toBe("CHANGE_REQUIRED");
@@ -56,8 +64,14 @@ describe("review-outcome-capture", () => {
   });
 
   it("fails closed on invalid reviewedAt and blocks duplicate overwrite", () => {
-    expect(assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "not-a-date")).toEqual({ status: "INVALID" });
-    const first = assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "2026-09-01T12:00:00+09:00");
+    expect(assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "not-a-date")).toEqual({
+      status: "INVALID",
+    });
+    const first = assembleSyntheticReviewOutcome(
+      MATERIALS,
+      "NO_CHANGE",
+      "2026-09-01T12:00:00+09:00",
+    );
     if (first.status !== "CAPTURED") throw new Error("expected first capture");
     const duplicate = captureSyntheticReviewOutcome(
       first.outcome,
@@ -73,6 +87,8 @@ describe("review-outcome-capture", () => {
 
   it("keys synthetic session state by exact review context", () => {
     expect(reviewOutcomeContextKey(MATERIALS)).toContain("org-a\u001fsite-a\u001fuser-a");
-    expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(reviewOutcomeContextKey(MATERIALS));
+    expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(
+      reviewOutcomeContextKey(MATERIALS),
+    );
   });
 });

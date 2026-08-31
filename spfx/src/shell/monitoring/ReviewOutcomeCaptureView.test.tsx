@@ -34,7 +34,11 @@ describe("ReviewOutcomeCaptureView", () => {
   });
 
   it("renders CHANGE_REQUIRED as revision pending and disables both actions", () => {
-    const result = assembleSyntheticReviewOutcome(MATERIALS, "CHANGE_REQUIRED", "2026-09-01T12:00:00+09:00");
+    const result = assembleSyntheticReviewOutcome(
+      MATERIALS,
+      "CHANGE_REQUIRED",
+      "2026-09-01T12:00:00+09:00",
+    );
     if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
     const html = renderToStaticMarkup(
       <ReviewOutcomeCaptureView
