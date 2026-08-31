@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { ProcedureRecord } from "../../src/domain/procedure-record";
-import { buildMonitoringReadModel, type MonitoringQuery } from "../../src/domain/monitoring-read-model";
+import {
+  buildMonitoringReadModel,
+  type MonitoringQuery,
+} from "../../src/domain/monitoring-read-model";
 import { createSyntheticProcedureRecord } from "./procedure-record-fixtures";
 
 const TARGET_QUERY: MonitoringQuery = {
