@@ -1,8 +1,11 @@
 import * as React from "react";
 import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
-import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
+import {
+  buildHumanReviewMaterials,
+  type MonitoringReadModel,
+  type ReviewPresentationContext,
+} from "../../sbs-domain/monitoring-read-model.bundle";
 import { HumanReviewView } from "./HumanReviewView";
-import { humanReviewResultForSyntheticVersion } from "./human-review-fixture";
 import styles from "./MonitoringViewUx.module.scss";
 
 export type MonitoringViewProps = Readonly<{
@@ -31,9 +34,21 @@ function formatTokyoDate(value: string): string {
   }).format(new Date(value));
 }
 
+function exactReviewContext(model: MonitoringReadModel): ReviewPresentationContext {
+  return {
+    OrganizationId: model.OrganizationId,
+    SiteId: model.SiteId,
+    UserId: model.UserId,
+    planId: model.planId,
+    planVersion: model.planVersion,
+    periodStart: model.periodStart,
+    periodEnd: model.periodEnd,
+  };
+}
+
 /** Fact-only monitoring input. No success/failure, effectiveness, or plan-change judgment. */
 export const MonitoringView: React.FC<MonitoringViewProps> = ({ model, personLabel }) => {
-  const humanReviewResult = humanReviewResultForSyntheticVersion(model.planVersion);
+  const humanReviewResult = buildHumanReviewMaterials(model, exactReviewContext(model));
 
   return (
     <>
