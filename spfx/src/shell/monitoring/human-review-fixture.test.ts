@@ -45,6 +45,15 @@ describe("HUMAN-REVIEW-UI-SLICE-A synthetic review materials", () => {
   it("preserves explicit fail-closed parent states", () => {
     expect(HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE).toEqual({ status: "CONTEXT_MISMATCH" });
     expect(HUMAN_REVIEW_MALFORMED_FIXTURE).toEqual({ status: "MALFORMED_INPUT" });
-    expect(humanReviewResultForSyntheticVersion(99)).toEqual({ status: "MALFORMED_INPUT" });
+  });
+
+  it("keeps an unrepresented positive version as exact zero-record context without fallback", () => {
+    const result = humanReviewResultForSyntheticVersion(99);
+    expect(result.status).toBe("RESOLVED");
+    if (result.status !== "RESOLVED") return;
+
+    expect(result.value.planVersion).toBe(99);
+    expect(result.value.recordCount).toBe(0);
+    expect(result.value.records).toEqual([]);
   });
 });
