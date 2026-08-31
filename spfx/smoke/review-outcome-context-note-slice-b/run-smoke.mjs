@@ -122,18 +122,20 @@ for (const viewport of viewports) {
   });
   const url = "http://127.0.0.1:4195/index.html";
 
-  async function observe({ decisionCopy, revisionPending, noteText, disabled, person = "Aさん" }) {
+  async function observe(expectedCopy, expectRevisionPending, expectDisabled, person, noteText) {
     return page.evaluate(
-      ({ decisionCopy, revisionPending, noteText, disabled, person }) => {
+      ({ copy, revisionPending, disabled, person, noteText }) => {
         const text = document.body.textContent ?? "";
         const q = (selector) => document.querySelector(selector);
         const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
         const textarea = q('[data-review-outcome-note-input="true"]');
         const scope = q('[data-human-review-scope-meta="true"]')?.textContent ?? "";
         const personText = q('[data-human-review-person-identity="true"]')?.textContent?.trim();
-        const capture = q("[data-review-outcome-capture]");
-        const liveWrite = capture?.getAttribute("data-live-write-authorized");
-        const noteReadback = q('[data-review-outcome-note-readback="true"]')?.textContent ?? null;
+        const liveWrite = q("[data-review-outcome-capture]")?.getAttribute(
+          "data-live-write-authorized",
+        );
+        const noteReadback =
+          q('[data-review-outcome-note-readback="true"]')?.textContent ?? null;
         const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
         const common =
           Boolean(q('[data-human-review-status="RESOLVED"]')) &&
@@ -148,11 +150,12 @@ for (const viewport of viewports) {
           buttons.length === 2 &&
           Boolean(textarea) &&
           noHorizontalOverflow;
-        const noteMatches = noteText === null ? noteReadback === null : noteReadback?.includes(noteText);
+        const noteMatches =
+          noteText === null ? noteReadback === null : noteReadback?.includes(noteText);
         return {
           pass:
             common &&
-            text.includes(decisionCopy) &&
+            text.includes(copy) &&
             text.includes("次の計画版はまだ作成されていません") === revisionPending &&
             buttons.every((button) => button.disabled === disabled) &&
             textarea.disabled === disabled &&
@@ -162,17 +165,12 @@ for (const viewport of viewports) {
           noHorizontalOverflow,
         };
       },
-      { decisionCopy, revisionPending, noteText, disabled, person },
+      { copy: expectedCopy, revisionPending: expectRevisionPending, disabled: expectDisabled, person, noteText },
     );
   }
 
   await page.goto(url, { waitUntil: "networkidle0" });
-  const undecided = await observe({
-    decisionCopy: "見直し結果: 未判断",
-    revisionPending: false,
-    noteText: null,
-    disabled: false,
-  });
+  const undecided = await observe("見直し結果: 未判断", false, false, "Aさん", null);
   const undecidedShot = path.join(artifactsDir, `${viewport.name}-undecided.png`);
   await page.screenshot({ path: undecidedShot, fullPage: true });
 
@@ -181,12 +179,13 @@ for (const viewport of viewports) {
   await page.waitForFunction(
     () => document.body.textContent?.includes("補足メモ: 継続して観察したい") === true,
   );
-  const noChangeWithNote = await observe({
-    decisionCopy: "デモ上の見直し結果: 変更なし",
-    revisionPending: false,
-    noteText: "継続して観察したい",
-    disabled: true,
-  });
+  const noChangeWithNote = await observe(
+    "デモ上の見直し結果: 変更なし",
+    false,
+    true,
+    "Aさん",
+    "継続して観察したい",
+  );
   const noChangeShot = path.join(artifactsDir, `${viewport.name}-no-change-with-note.png`);
   await page.screenshot({ path: noChangeShot, fullPage: true });
 
@@ -195,12 +194,13 @@ for (const viewport of viewports) {
   await page.waitForFunction(
     () => document.body.textContent?.includes("次の計画版はまだ作成されていません") === true,
   );
-  const changeRequiredBlank = await observe({
-    decisionCopy: "デモ上の見直し結果: 変更が必要",
-    revisionPending: true,
-    noteText: null,
-    disabled: true,
-  });
+  const changeRequiredBlank = await observe(
+    "デモ上の見直し結果: 変更が必要",
+    true,
+    true,
+    "Aさん",
+    null,
+  );
   const changeRequiredShot = path.join(artifactsDir, `${viewport.name}-change-required-blank.png`);
   await page.screenshot({ path: changeRequiredShot, fullPage: true });
 
@@ -212,13 +212,7 @@ for (const viewport of viewports) {
       document.querySelector('[data-human-review-person-identity="true"]')?.textContent?.trim() ===
       "Bさん",
   );
-  const contextReset = await observe({
-    decisionCopy: "見直し結果: 未判断",
-    revisionPending: false,
-    noteText: null,
-    disabled: false,
-    person: "Bさん",
-  });
+  const contextReset = await observe("見直し結果: 未判断", false, false, "Bさん", null);
   const resetPass =
     contextReset.pass && contextReset.textareaValue === "" && contextReset.counter === "0 / 255";
   const resetShot = path.join(artifactsDir, `${viewport.name}-context-reset.png`);

@@ -97,7 +97,9 @@ describe("ReviewOutcomeCaptureView", () => {
       textarea.dispatchEvent(new Event("input", { bubbles: true }));
     });
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.click();
     });
     expect(container.textContent).toContain("見直し結果を安全に記録できません");
 

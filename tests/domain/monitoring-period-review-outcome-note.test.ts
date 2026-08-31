@@ -56,6 +56,9 @@ describe("MonitoringPeriodReviewOutcomeNote domain", () => {
 
   it("fails closed on missing OutcomeId and on non-normalized stored note", () => {
     assert.equal(normalizeMonitoringPeriodReviewOutcomeNote("", "memo").status, "INVALID");
-    assert.equal(validateMonitoringPeriodReviewOutcomeNote({ OutcomeId: OUTCOME_ID, note: " memo " }), false);
+    assert.equal(
+      validateMonitoringPeriodReviewOutcomeNote({ OutcomeId: OUTCOME_ID, note: " memo " }),
+      false,
+    );
   });
 });
