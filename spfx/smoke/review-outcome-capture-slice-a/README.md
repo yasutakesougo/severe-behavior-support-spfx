@@ -21,10 +21,10 @@ actions disabled after successful capture
 no horizontal overflow
 ```
 
-Run:
+Run from the repository root after installing the isolated smoke dependencies under `/tmp`:
 
 ```bash
-cd /tmp && npm install puppeteer-core@24 esbuild@0.25 sass --no-save
+(cd /tmp && npm install puppeteer-core@24 esbuild@0.25 sass --no-save)
 REVIEW_OUTCOME_CHROME_PATH=/usr/bin/google-chrome-stable \
 REVIEW_OUTCOME_HEAD=<exact-head-sha> \
 node spfx/smoke/review-outcome-capture-slice-a/run-smoke.mjs
