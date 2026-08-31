@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: SCOPE CORRECTION-1 APPLIED / AWAITING INDEPENDENT SCOPE RE-REVIEW
+status: SCOPE RE-REVIEW-1 PASS / REVIEW-CLEARED / UNAUTHORIZED IMPLEMENTATION DRIFT RECONCILED
 parent definition: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B
 parent correction: Correction-1
 parent status: HUMAN DEFINITION LOCKED
@@ -14,8 +14,13 @@ basis main: 47145948b337d7e7f9d923bbf01ec962daafef08
 Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
 P1-1 context-switch draft carry-over: CORRECTED
 P2-1 character-count metric ambiguity: CORRECTED
+Independent Scope Re-Review-1: PASS / REVIEW-CLEARED
+P0=0 / P1=0 / P2=0
+exact reviewed Scope HEAD: 4044e4b0e8b3f3e41db90e9303d0eabd02886434
 Human Definition Lock GO: RECEIVED / CONSUMED
 Human Implementation Start GO: NOT RECEIVED
+prior PR comment GO (2026-08-31T22:45:40Z): INVALIDATED / NOT CONSUMED
+unauthorized implementation drift ref: cursor/drift-slice-b-unauthorized-impl-bbe0 @ 4bfed955f008c2f7ea91f145aee16aaab0726881
 Implementation: NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED
@@ -551,8 +556,12 @@ If locked Definition changes => HOLD / re-scope.
 
 ```text
 Scope Correction-1 = APPLIED
-Independent Scope Re-Review-1 = NOT STARTED
-Human Implementation Start GO / HOLD = NOT YET ELIGIBLE
-Implementation = NOT AUTHORIZED
+Independent Scope Re-Review-1 = PASS / REVIEW-CLEARED
+Exact reviewed Scope HEAD = 4044e4b0e8b3f3e41db90e9303d0eabd02886434
+Unauthorized implementation drift = RECONCILED (branch reset to exact reviewed Scope HEAD)
+Prior PR comment Human Implementation Start GO (2026-08-31T22:45:40Z) = INVALIDATED
+Drift preservation ref = cursor/drift-slice-b-unauthorized-impl-bbe0 @ 4bfed955f008c2f7ea91f145aee16aaab0726881
+Human Implementation Start GO / HOLD = AWAITING SEPARATE NEW GO
+Implementation = NOT AUTHORIZED until separate new Human Implementation Start GO
 Ready / Merge / Deploy / Production Binding / LIVE WRITE = NOT AUTHORIZED
 ```
