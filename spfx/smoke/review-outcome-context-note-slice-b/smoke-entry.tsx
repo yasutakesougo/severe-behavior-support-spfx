@@ -1,0 +1,74 @@
+/**
+ * REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B — synthetic rendered browser acceptance.
+ * Verification surface only. No LIVE I/O / Deploy / SharePoint.
+ */
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import type { MonitoringReadModel } from "../../src/sbs-domain/monitoring-read-model.bundle";
+import { MonitoringView } from "../../src/shell/monitoring/MonitoringView";
+
+function modelFor(userId: string, planVersion: number): MonitoringReadModel {
+  return {
+    OrganizationId: "synthetic-org-001",
+    SiteId: "synthetic-site-001",
+    UserId: userId,
+    planId: "plan-a",
+    planVersion,
+    periodStart: "2026-08-01T00:00:00+09:00",
+    periodEnd: "2026-08-31T23:59:59+09:00",
+    recordCount: 1,
+    records: [
+      {
+        RecordId: `record-${userId}`,
+        Procedure: {
+          ProcedureId: "procedure-1",
+          ProcedureVersion: "v1",
+          ApprovalState: "APPROVED",
+        },
+        result: "PERFORMED_AS_PLANNED",
+        performedAt: "2026-08-10T10:00:00+09:00",
+        recordedAt: "2026-08-10T10:05:00+09:00",
+        planId: "plan-a",
+        planVersion,
+      },
+    ],
+  };
+}
+
+const MODEL_A = modelFor("user-a", 3);
+const MODEL_B = modelFor("user-b", 4);
+
+const SmokeApp: React.FC = () => {
+  const [useB, setUseB] = React.useState(false);
+  const model = useB ? MODEL_B : MODEL_A;
+  const personLabel = useB ? "Bさん" : "Aさん";
+
+  return (
+    <>
+      <button type="button" data-smoke-switch-context="true" onClick={() => setUseB((value) => !value)}>
+        verification context switch
+      </button>
+      <MonitoringView
+        model={model}
+        personLabel={personLabel}
+        procedureLabelContext={{
+          userId: model.UserId,
+          planId: model.planId,
+          currentVersion: model.planVersion,
+          currentProcedures: [
+            {
+              procedureId: "procedure-1",
+              procedureVersion: "v1",
+              planVersion: model.planVersion,
+              sceneLabel: "朝の活動前",
+            },
+          ],
+        }}
+      />
+    </>
+  );
+};
+
+const root = document.getElementById("root");
+if (!root) throw new Error("review outcome note smoke root missing");
+ReactDOM.render(<SmokeApp />, root);

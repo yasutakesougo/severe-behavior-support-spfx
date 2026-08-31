@@ -1,11 +1,18 @@
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
 import {
+  MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED,
+  MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH,
+  validateMonitoringPeriodReviewOutcomeNote,
+} from "../../sbs-domain/monitoring-period-review-outcome-note.bundle";
+import {
   MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED,
   mintMonitoringPeriodReviewOutcomeId,
   validateMonitoringPeriodReviewOutcome,
 } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import {
   REVIEW_OUTCOME_CAPTURE_SLICE_A,
+  REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B,
+  assembleSyntheticCapturedReview,
   assembleSyntheticReviewOutcome,
   captureSyntheticReviewOutcome,
   reviewOutcomeContextKey,
@@ -43,8 +50,78 @@ const MATERIALS: HumanReviewMaterials = {
   humanInterpretationRequired: true,
 };
 
+const REVIEWED_AT = "2026-09-01T12:00:00+09:00";
+
 describe("review-outcome-capture", () => {
-  it("exposes the canonical bridge mint directly", () => {
+  it("keeps canonical Outcome mint semantics independent from note content", () => {
+    const blank = assembleSyntheticCapturedReview(MATERIALS, "NO_CHANGE", "", REVIEWED_AT);
+    const withNote = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "継続して観察する",
+      REVIEWED_AT,
+    );
+    expect(blank.status).toBe("CAPTURED");
+    expect(withNote.status).toBe("CAPTURED");
+    if (blank.status !== "CAPTURED" || withNote.status !== "CAPTURED") {
+      throw new Error("expected CAPTURED");
+    }
+    expect(blank.captured.outcome.OutcomeId).toBe(withNote.captured.outcome.OutcomeId);
+    expect(blank.captured.note).toBeNull();
+    expect(withNote.captured.note?.OutcomeId).toBe(withNote.captured.outcome.OutcomeId);
+    expect(validateMonitoringPeriodReviewOutcomeNote(withNote.captured.note)).toBe(true);
+  });
+
+  it("preserves Slice A canonical outcome validation and non-production boundaries", () => {
+    const result = assembleSyntheticReviewOutcome(MATERIALS, "CHANGE_REQUIRED", REVIEWED_AT);
+    expect(result.status).toBe("CAPTURED");
+    if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
+    expect(validateMonitoringPeriodReviewOutcome(result.outcome)).toBe(true);
+    expect(result.outcome.decision).toBe("CHANGE_REQUIRED");
+    expect(Object.prototype.hasOwnProperty.call(result.outcome, "note")).toBe(false);
+    expect(Object.prototype.hasOwnProperty.call(result.outcome, "nextPlanVersion")).toBe(false);
+    expect(REVIEW_OUTCOME_CAPTURE_SLICE_A.presentationOnly).toBe(true);
+    expect(REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B.presentationOnly).toBe(true);
+    expect(MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED).toBe(false);
+    expect(MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED).toBe(false);
+  });
+
+  it("fails atomically for over-limit note text", () => {
+    expect(MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH).toBe(255);
+    const result = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "a".repeat(256),
+      REVIEWED_AT,
+    );
+    expect(result).toEqual({ status: "INVALID" });
+  });
+
+  it("blocks duplicate decision/note overwrite after first success", () => {
+    const first = assembleSyntheticCapturedReview(MATERIALS, "NO_CHANGE", "最初のメモ", REVIEWED_AT);
+    if (first.status !== "CAPTURED") throw new Error("expected first capture");
+    const duplicate = captureSyntheticReviewOutcome(
+      first.captured,
+      MATERIALS,
+      "CHANGE_REQUIRED",
+      "上書きメモ",
+      "2026-09-01T12:01:00+09:00",
+    );
+    expect(duplicate.status).toBe("DUPLICATE");
+    if (duplicate.status !== "DUPLICATE") throw new Error("expected duplicate");
+    expect(duplicate.captured).toBe(first.captured);
+    expect(duplicate.captured.outcome.decision).toBe("NO_CHANGE");
+    expect(duplicate.captured.note?.note).toBe("最初のメモ");
+  });
+
+  it("keys synthetic session state by exact review context", () => {
+    expect(reviewOutcomeContextKey(MATERIALS)).toContain("org-a\u001fsite-a\u001fuser-a");
+    expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(
+      reviewOutcomeContextKey(MATERIALS),
+    );
+  });
+
+  it("still exposes the canonical bridge mint directly", () => {
     const id = mintMonitoringPeriodReviewOutcomeId({
       OrganizationId: MATERIALS.OrganizationId,
       SiteId: MATERIALS.SiteId,
@@ -55,68 +132,9 @@ describe("review-outcome-capture", () => {
       periodEnd: MATERIALS.periodEnd,
       sourceRecordIds: ["record-1"],
       decision: "NO_CHANGE",
-      reviewedAt: "2026-09-01T12:00:00+09:00",
+      reviewedAt: REVIEWED_AT,
       reviewedBy: "synthetic-reviewer-slice-a",
     });
     expect(id).toMatch(/^[0-9a-f]{64}$/);
-  });
-
-  it("assembles a canonical domain-valid NO_CHANGE outcome with synthetic authority boundaries", () => {
-    const result = assembleSyntheticReviewOutcome(
-      MATERIALS,
-      "NO_CHANGE",
-      "2026-09-01T12:00:00+09:00",
-    );
-    expect(result.status).toBe("CAPTURED");
-    if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
-    expect(validateMonitoringPeriodReviewOutcome(result.outcome)).toBe(true);
-    expect(result.outcome.decision).toBe("NO_CHANGE");
-    expect(result.outcome.reviewedBy).toBe("synthetic-reviewer-slice-a");
-    expect(result.outcome.sourceRecordIds).toEqual(["record-1"]);
-    expect(result.outcome.OutcomeId).toMatch(/^[0-9a-f]{64}$/);
-    expect(REVIEW_OUTCOME_CAPTURE_SLICE_A.presentationOnly).toBe(true);
-    expect(REVIEW_OUTCOME_CAPTURE_SLICE_A.authoritativeDecisionCompletionAuthorized).toBe(false);
-    expect(MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED).toBe(false);
-  });
-
-  it("captures CHANGE_REQUIRED without creating or implying N+1 data", () => {
-    const result = assembleSyntheticReviewOutcome(
-      MATERIALS,
-      "CHANGE_REQUIRED",
-      "2026-09-01T12:00:00+09:00",
-    );
-    expect(result.status).toBe("CAPTURED");
-    if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
-    expect(result.outcome.decision).toBe("CHANGE_REQUIRED");
-    expect(Object.prototype.hasOwnProperty.call(result.outcome, "nextPlanVersion")).toBe(false);
-  });
-
-  it("fails closed on invalid reviewedAt and blocks duplicate overwrite", () => {
-    expect(assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "not-a-date")).toEqual({
-      status: "INVALID",
-    });
-    const first = assembleSyntheticReviewOutcome(
-      MATERIALS,
-      "NO_CHANGE",
-      "2026-09-01T12:00:00+09:00",
-    );
-    if (first.status !== "CAPTURED") throw new Error("expected first capture");
-    const duplicate = captureSyntheticReviewOutcome(
-      first.outcome,
-      MATERIALS,
-      "CHANGE_REQUIRED",
-      "2026-09-01T12:01:00+09:00",
-    );
-    expect(duplicate.status).toBe("DUPLICATE");
-    if (duplicate.status !== "DUPLICATE") throw new Error("expected duplicate");
-    expect(duplicate.outcome).toBe(first.outcome);
-    expect(duplicate.outcome.decision).toBe("NO_CHANGE");
-  });
-
-  it("keys synthetic session state by exact review context", () => {
-    expect(reviewOutcomeContextKey(MATERIALS)).toContain("org-a\u001fsite-a\u001fuser-a");
-    expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(
-      reviewOutcomeContextKey(MATERIALS),
-    );
   });
 });
