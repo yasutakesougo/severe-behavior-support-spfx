@@ -4,17 +4,23 @@
 Definition ID = REVIEW-OUTCOME-CAPTURE-SLICE-A
 Correction = 1
 Mode = DEFINITION ONLY
-Status = CANDIDATE / CORRECTION-1 APPLIED / NOT LOCKED
+Status = HUMAN DEFINITION LOCKED
 basis main = ea0963268c8ba86c546a2c251b4fd81a582c08a3
 parent = REVIEW-TO-PLAN-REVISION-RELATIONSHIP-DEFINITION-1
 parent status = HUMAN DEFINITION LOCKED / merged via PR #548
-Human Definition Lock GO = NOT RECEIVED
+Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
+Definition Correction-1 = APPLIED / CONSUMED
+Independent Definition Re-Review-1 = PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=0 / CONSUMED
+Human Definition Lock GO = RECEIVED / CONSUMED
+Locked Definition HEAD = 9c12b58076aefc4b6e514b1abb6aadc774b142dc
+authorityRef = PR #549 Human Definition Lock GO comment
 Implementation = NOT AUTHORIZED
 Ready / Merge = NOT AUTHORIZED
 SharePoint / Production / LIVE WRITE = NOT AUTHORIZED
 ```
 
 This Definition does not authorize Implementation Start.
+Lock authorizes progression to Implementation Scope Definition only.
 
 ---
 
@@ -542,7 +548,10 @@ Current state is NOT DEFINED / NOT ADOPTED; future decision remains OUT OF THIS 
 
 ```text
 REVIEW-OUTCOME-CAPTURE-SLICE-A
-= DEFINED / CORRECTION-1 APPLIED / CANDIDATE
+= HUMAN DEFINITION LOCKED
+
+Locked Definition HEAD
+= 9c12b58076aefc4b6e514b1abb6aadc774b142dc
 
 Implementation
 = NOT STARTED / NOT AUTHORIZED
@@ -551,7 +560,9 @@ Product code mutation
 = 0
 
 NEXT
-= Independent Definition Re-Review-1
+= Implementation Scope Definition
+        ↓
+Independent Scope Review-1
+        ↓
+Human Implementation Start GO / HOLD
 ```
-
-Human Definition Lock GO remains a separate gate after Independent Definition Re-Review-1.
