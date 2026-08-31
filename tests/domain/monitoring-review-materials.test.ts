@@ -127,6 +127,26 @@ describe("MONITORING-REVIEW-LINK-SLICE-A human review materials", () => {
       }),
       { status: "MALFORMED_INPUT" },
     );
+    assert.deepEqual(
+      buildHumanReviewMaterials({
+        ...model([]),
+        periodStart: "2026-09-01T00:00:00+09:00",
+        periodEnd: "2026-08-01T00:00:00+09:00",
+      }),
+      { status: "MALFORMED_INPUT" },
+    );
+  });
+
+  it("fails closed on malformed presentation context before mismatch comparison", () => {
+    const input = model([]);
+    const malformedContext = {
+      ...contextFor(input),
+      periodStart: "2026-09-01T00:00:00+09:00",
+      periodEnd: "2026-08-01T00:00:00+09:00",
+    };
+    assert.deepEqual(buildHumanReviewMaterials(input, malformedContext), {
+      status: "MALFORMED_INPUT",
+    });
   });
 
   it("requires the upstream deterministic chronological sequence instead of re-sorting", () => {
