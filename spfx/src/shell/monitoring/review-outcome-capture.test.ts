@@ -98,7 +98,12 @@ describe("review-outcome-capture", () => {
   });
 
   it("blocks duplicate decision/note overwrite after first success", () => {
-    const first = assembleSyntheticCapturedReview(MATERIALS, "NO_CHANGE", "最初のメモ", REVIEWED_AT);
+    const first = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "最初のメモ",
+      REVIEWED_AT,
+    );
     if (first.status !== "CAPTURED") throw new Error("expected first capture");
     const duplicate = captureSyntheticReviewOutcome(
       first.captured,

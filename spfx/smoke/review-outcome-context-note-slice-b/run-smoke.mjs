@@ -15,15 +15,18 @@ const artifactsDir =
   "/opt/cursor/artifacts/review-outcome-context-note-slice-b-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
-const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catch(
-  () => import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
+const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catch(() =>
+  import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
 );
-const puppeteerModule =
-  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js").catch(
-    () => import("/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"),
-  );
-const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs").catch(
-  () => import("/tmp/hr-smoke-runner/node_modules/sass/sass.node.mjs"),
+const puppeteerModule = await import(
+  "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+).catch(() =>
+  import(
+    "/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+  ),
+);
+const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs").catch(() =>
+  import("/tmp/hr-smoke-runner/node_modules/sass/sass.node.mjs"),
 );
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
@@ -54,7 +57,9 @@ const scssStubPlugin = {
     build.onLoad({ filter: /\.module\.scss$/ }, async (args) => {
       const text = await fs.promises.readFile(args.path, "utf8");
       const keys = new Set();
-      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) keys.add(match[1]);
+      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) {
+        keys.add(match[1]);
+      }
       const entries = [...keys]
         .map((key) => `${JSON.stringify(key)}:${JSON.stringify(key)}`)
         .join(",");
@@ -116,7 +121,13 @@ for (const viewport of viewports) {
   page.on("pageerror", (error) => pageErrors.push(error.message));
   const url = "http://127.0.0.1:4195/index.html";
 
-  async function observe({ decisionCopy, revisionPending, noteText, disabled, person = "Aさん" }) {
+  async function observe({
+    decisionCopy,
+    revisionPending,
+    noteText,
+    disabled,
+    person = "Aさん",
+  }) {
     return page.evaluate(
       ({ decisionCopy, revisionPending, noteText, disabled, person }) => {
         const text = document.body.textContent ?? "";
@@ -124,12 +135,14 @@ for (const viewport of viewports) {
         const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
         const textarea = q('[data-review-outcome-note-input="true"]');
         const scope = q('[data-human-review-scope-meta="true"]')?.textContent ?? "";
-        const personText = q('[data-human-review-person-identity="true"]')?.textContent?.trim();
-        const liveWrite = q("[data-review-outcome-capture]")?.getAttribute(
-          "data-live-write-authorized",
-        );
-        const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
-        const noteReadback = q('[data-review-outcome-note-readback="true"]')?.textContent ?? null;
+        const personElement = q('[data-human-review-person-identity="true"]');
+        const personText = personElement?.textContent?.trim();
+        const captureElement = q("[data-review-outcome-capture]");
+        const liveWrite = captureElement?.getAttribute("data-live-write-authorized");
+        const noHorizontalOverflow =
+          document.documentElement.scrollWidth <= window.innerWidth + 1;
+        const noteReadbackElement = q('[data-review-outcome-note-readback="true"]');
+        const noteReadback = noteReadbackElement?.textContent ?? null;
         const common =
           Boolean(q('[data-human-review-status="RESOLVED"]')) &&
           personText === person &&
@@ -142,7 +155,8 @@ for (const viewport of viewports) {
           buttons.length === 2 &&
           Boolean(textarea) &&
           noHorizontalOverflow;
-        const noteMatches = noteText === null ? noteReadback === null : noteReadback?.includes(noteText);
+        const noteMatches =
+          noteText === null ? noteReadback === null : noteReadback?.includes(noteText);
         return {
           pass:
             common &&
@@ -196,14 +210,19 @@ for (const viewport of viewports) {
     noteText: null,
     disabled: true,
   });
-  const changeRequiredShot = path.join(artifactsDir, `${viewport.name}-change-required-blank.png`);
+  const changeRequiredShot = path.join(
+    artifactsDir,
+    `${viewport.name}-change-required-blank.png`,
+  );
   await page.screenshot({ path: changeRequiredShot, fullPage: true });
 
   await page.goto(url, { waitUntil: "networkidle0" });
   await page.type('[data-review-outcome-note-input="true"]', "Aの未確定メモ");
   await page.click('[data-smoke-switch-context="true"]');
   await page.waitForFunction(
-    () => document.querySelector('[data-human-review-person-identity="true"]')?.textContent?.trim() === "Bさん",
+    () =>
+      document.querySelector('[data-human-review-person-identity="true"]')?.textContent?.trim() ===
+      "Bさん",
   );
   const contextReset = await observe({
     decisionCopy: "見直し結果: 未判断",
@@ -212,18 +231,27 @@ for (const viewport of viewports) {
     disabled: false,
     person: "Bさん",
   });
-  const resetPass = contextReset.pass && contextReset.textareaValue === "" && contextReset.counter === "0 / 255";
+  const resetPass =
+    contextReset.pass && contextReset.textareaValue === "" && contextReset.counter === "0 / 255";
   const resetShot = path.join(artifactsDir, `${viewport.name}-context-reset.png`);
   await page.screenshot({ path: resetShot, fullPage: true });
 
   await page.type('[data-review-outcome-note-input="true"]', "a".repeat(255));
-  const boundary = await page.evaluate(() => ({
-    counter: document.querySelector('[data-review-outcome-note-count="true"]')?.textContent?.trim(),
-    valueLength: document.querySelector('[data-review-outcome-note-input="true"]')?.value.length,
-    noHorizontalOverflow: document.documentElement.scrollWidth <= window.innerWidth + 1,
-  }));
+  const boundary = await page.evaluate(() => {
+    const counter = document.querySelector(
+      '[data-review-outcome-note-count="true"]',
+    )?.textContent?.trim();
+    const textarea = document.querySelector('[data-review-outcome-note-input="true"]');
+    return {
+      counter,
+      valueLength: textarea?.value.length,
+      noHorizontalOverflow: document.documentElement.scrollWidth <= window.innerWidth + 1,
+    };
+  });
   const boundaryPass =
-    boundary.counter === "255 / 255" && boundary.valueLength === 255 && boundary.noHorizontalOverflow;
+    boundary.counter === "255 / 255" &&
+    boundary.valueLength === 255 &&
+    boundary.noHorizontalOverflow;
 
   const pass =
     undecided.pass &&
@@ -261,7 +289,13 @@ const report = {
   allPass,
   checks,
 };
-fs.writeFileSync(path.join(artifactsDir, "smoke-report.json"), JSON.stringify(report, null, 2));
-fs.writeFileSync(path.join(__dirname, "smoke-report.json"), JSON.stringify(report, null, 2));
+fs.writeFileSync(
+  path.join(artifactsDir, "smoke-report.json"),
+  JSON.stringify(report, null, 2),
+);
+fs.writeFileSync(
+  path.join(__dirname, "smoke-report.json"),
+  JSON.stringify(report, null, 2),
+);
 console.log(JSON.stringify({ allPass, artifactsDir, viewports: checks.length }, null, 2));
 process.exit(allPass ? 0 : 1);

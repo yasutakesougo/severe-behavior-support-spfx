@@ -24,6 +24,9 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
     if (built.status !== "VALID") throw new Error("expected VALID");
     const dto = toMonitoringPeriodReviewOutcomeNoteDto(built.note);
     assert.equal(validateMonitoringPeriodReviewOutcomeNoteDto(dto), true);
-    assert.equal(validateMonitoringPeriodReviewOutcomeNoteDto({ ...dto, dtoVersion: "2.0.0" }), false);
+    assert.equal(
+      validateMonitoringPeriodReviewOutcomeNoteDto({ ...dto, dtoVersion: "2.0.0" }),
+      false,
+    );
   });
 });

@@ -45,7 +45,11 @@ const SmokeApp: React.FC = () => {
 
   return (
     <>
-      <button type="button" data-smoke-switch-context="true" onClick={() => setUseB((value) => !value)}>
+      <button
+        type="button"
+        data-smoke-switch-context="true"
+        onClick={() => setUseB((value) => !value)}
+      >
         verification context switch
       </button>
       <MonitoringView
