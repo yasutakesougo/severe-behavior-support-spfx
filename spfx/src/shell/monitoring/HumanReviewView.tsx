@@ -32,7 +32,11 @@ function formatTokyoDate(value: string): string {
 export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
   if (result.status === "CONTEXT_MISMATCH") {
     return (
-      <section className={styles.monitoringView} aria-label="見直し資料" data-human-review-status="CONTEXT_MISMATCH">
+      <section
+        className={styles.monitoringView}
+        aria-label="見直し資料"
+        data-human-review-status="CONTEXT_MISMATCH"
+      >
         <h3 className={styles.heading}>見直し資料</h3>
         <p className={styles.emptyState} role="status">
           選択中の計画・対象期間と見直し資料が一致しません。別の資料への置換は行いません。
@@ -43,7 +47,11 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
 
   if (result.status === "MALFORMED_INPUT") {
     return (
-      <section className={styles.monitoringView} aria-label="見直し資料" data-human-review-status="MALFORMED_INPUT">
+      <section
+        className={styles.monitoringView}
+        aria-label="見直し資料"
+        data-human-review-status="MALFORMED_INPUT"
+      >
         <h3 className={styles.heading}>見直し資料</h3>
         <p className={styles.emptyState} role="status">
           見直し資料を安全に表示できません。入力内容を確認してください。
@@ -63,7 +71,9 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
     >
       <div className={styles.headingRow}>
         <div>
-          <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>見直し資料</h3>
+          <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>
+            見直し資料
+          </h3>
           <p className={styles.scopeNote}>
             UserId: {model.UserId} · planId: {model.planId} · 計画版 {model.planVersion}
           </p>
@@ -87,15 +97,30 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
       ) : (
         <ol className={styles.recordList} data-human-review-record-list="true">
           {model.records.map((record) => (
-            <li key={record.RecordId} className={styles.recordItem} data-human-review-record-id={record.RecordId}>
+            <li
+              key={record.RecordId}
+              className={styles.recordItem}
+              data-human-review-record-id={record.RecordId}
+            >
               <div className={styles.recordHeader}>
                 <strong>{formatTokyoDateTime(record.performedAt)}</strong>
-                <span className={styles.resultLabel}>{labelForProcedureRecordResult(record.result)}</span>
+                <span className={styles.resultLabel}>
+                  {labelForProcedureRecordResult(record.result)}
+                </span>
               </div>
               <dl className={styles.recordFacts}>
-                <div><dt>ProcedureId</dt><dd>{record.ProcedureId}</dd></div>
-                <div><dt>ProcedureVersion</dt><dd>{record.ProcedureVersion}</dd></div>
-                <div><dt>記録時刻</dt><dd>{formatTokyoDateTime(record.recordedAt)}</dd></div>
+                <div>
+                  <dt>ProcedureId</dt>
+                  <dd>{record.ProcedureId}</dd>
+                </div>
+                <div>
+                  <dt>ProcedureVersion</dt>
+                  <dd>{record.ProcedureVersion}</dd>
+                </div>
+                <div>
+                  <dt>記録時刻</dt>
+                  <dd>{formatTokyoDateTime(record.recordedAt)}</dd>
+                </div>
               </dl>
             </li>
           ))}
