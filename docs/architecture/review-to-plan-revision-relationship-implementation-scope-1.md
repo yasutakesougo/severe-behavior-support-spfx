@@ -4,12 +4,14 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: REVIEW-TO-PLAN-REVISION-RELATIONSHIP-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: CANDIDATE / NOT LOCKED
+status: SCOPE REVIEW-CLEARED / AWAITING IMPLEMENTATION START GO
 parent definition: REVIEW-TO-PLAN-REVISION-RELATIONSHIP-DEFINITION-1
 parent correction: Correction-1
 parent status: HUMAN DEFINITION LOCKED
 parent durable path: docs/architecture/review-to-plan-revision-relationship-definition-1.md
 basis main: 697c8d920d278b723cf2efbd289d1694f18e7c1a
+scope review: docs/architecture/review-to-plan-revision-relationship-implementation-scope-review-1.md
+Independent Scope Review-1: PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=0
 Human Definition Lock GO: RECEIVED / CONSUMED
 Human Implementation Start GO: NOT RECEIVED
 Implementation: NOT AUTHORIZED
@@ -453,8 +455,9 @@ If parent Definition Lock is revoked or materially amended → HOLD + re-scope
 ## 14. Next gate
 
 ```text
-NEXT = Independent Scope Review-1
-THEN = Human Implementation Start GO / HOLD
+Independent Scope Review-1 = PASS / REVIEW-CLEARED / CONSUMED
+Scope Correction-1 = NOT REQUIRED
+NEXT = Human Implementation Start GO / HOLD
 Implementation = NOT AUTHORIZED
 Mutation by implementation = 0 until Start GO
 ```
