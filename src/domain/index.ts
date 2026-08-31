@@ -13,6 +13,8 @@ export * from "./support-plan-version-procedure-binding";
 export * from "./procedure-record";
 export * from "./monitoring-read-model";
 export * from "./monitoring-review-materials";
+export * from "./monitoring-period-review-outcome";
+export * from "./support-plan-version-monitoring-period-review-binding";
 export * from "./procedure-record-persistence";
 export * from "./procedure-record-staff-save";
 export * from "./procedure-record-correction";
