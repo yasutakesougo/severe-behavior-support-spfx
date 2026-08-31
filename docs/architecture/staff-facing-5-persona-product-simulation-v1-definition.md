@@ -5,7 +5,8 @@ repository: yasutakesougo/severe-behavior-support-spfx
 parent: Issue #542
 kind: process definition
 basis main: 72f2bb1dd0cfde2301b01cbad0c2fce7bfe266e0
-status: DEFINITION DRAFT
+status: DEFINITION DRAFT / CORRECTION-1 APPLIED
+independent definition review-1: CORRECTION REQUIRED / P0=0 / P1=2 / P2=1
 implementation / enforcement: NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED
@@ -25,7 +26,7 @@ Simulation Evidence Only
 Actual Staff Value Evidence
 ```
 
-## 2. Process position
+## 2. Process position and exact-head invariant
 
 標準位置は次とする。
 
@@ -42,9 +43,11 @@ Focused Verification
 ↓
 Rendered Browser Acceptance
 ↓
-5-Persona Product Simulation
+Exact Implementation HEAD Fixation
 ↓
 Independent Implementation Review
+↓
+5-Persona Product Simulation on the same review-cleared HEAD
 ↓
 Human Ready GO
 ↓
@@ -54,6 +57,12 @@ Actual Staff Value Check
 ↓
 Product Value Decision
 ```
+
+5-Persona Product SimulationはIndependent Implementation ReviewでREVIEW-CLEAREDとなったexact HEADだけを入力とする。
+
+Simulation中またはSimulation後に対象実装HEADが変わった場合、古いSimulation結果を新HEADへ自動継承しない。
+
+新HEADについて必要なVerification、Rendered Browser Acceptance、Independent Implementation Reviewを再評価した後にSimulationを再実施する。
 
 5-Persona Product Simulationは既存のVerification、Independent Review、Human Authorityを置換しない。
 
@@ -77,15 +86,25 @@ Product Value Decision
 - dependency maintenance
 - 表示・操作が不変の内部refactor
 
-境界が不明な場合は、自動適用せずApplicabilityを明示的に判断する。
+各対象SliceまたはPRで、次をdurable Evidenceとして記録する。
+
+```text
+Applicability Decision: APPLICABLE | NOT_APPLICABLE | UNKNOWN
+Applicability Reason:
+Decision Target SHA / PR HEAD:
+```
+
+`NOT_APPLICABLE`はSimulation COMPLETEを意味しない。
+
+`UNKNOWN`の場合は自動的にSimulationを省略せず、Human Ready判断前にApplicabilityを解消する。
+
+Simulationを実施しない場合でも、`NOT_APPLICABLE`と理由を記録する。
 
 ## 4. Personas
 
 ### Persona D — 新人支援員
 
 主な観察対象は、操作開始点、業務意味の理解、何を確認しどこへ記録するかである。
-
-Taskは対象Sliceに合わせて具体化する。
 
 例:
 
@@ -152,9 +171,9 @@ Persona間でTaskを同一にする必要はない。
 
 ## 6. Evidence input boundary
 
-Simulationに使用する画面、fixture、状態、対象SHAまたはPR HEADをEvidenceへ記録する。
+Simulationに使用する画面、fixture、状態、exact implementation HEADをEvidenceへ記録する。
 
-Rendered Browser Acceptanceで確認したsurfaceを優先する。
+Rendered Browser Acceptanceで確認し、Independent Implementation ReviewでREVIEW-CLEAREDとなった同一surface / HEADを使用する。
 
 Synthetic画面を使用した場合はSyntheticであることを明記する。
 
@@ -203,7 +222,7 @@ SeverityとGap Classは別々に記録する。
 
 ```text
 Persona:
-Target SHA / PR HEAD:
+Target exact implementation HEAD:
 Rendered surface / state:
 Task:
 Observed path:
@@ -213,32 +232,69 @@ Observation:
 Candidate next action:
 ```
 
+全体について次を記録する。
+
+```text
+Applicability Decision:
+Applicability Reason:
+Persona Evidence Complete: YES | NO
+Simulation Outcome: REVIEW_CLEARED | HOLD
+Actual Staff Evidence: UNKNOWN | separately-established value
+```
+
 観測していない心理状態や実職員の反応を事実として記録しない。
 
-## 9. Decision rules
+## 9. Deterministic routing
 
 5人中のPASS数を合格率として扱わない。
 
 多数決でProduct Valueを決定しない。
 
-`BLOCKING_FRICTION`が出た場合は、そのObservationとGap Classを個別に評価する。
+次のいずれかの場合、Simulation Outcomeは`HOLD`とする。
 
-`BLOCKING_FRICTION`だけを根拠として全面UI redesignを開始しない。
+```text
+Persona Evidence Complete = NO
+Applicability Decision = UNKNOWN
+any BLOCKING_FRICTION without explicit disposition
+any DOMAIN_UNCERTAINTY without authoritative resolution or explicit HOLD disposition
+target implementation HEAD changed after review/simulation fixation
+required rendered surface or state unavailable
+```
 
-問題候補がUIに限定される場合でも、Observed product gapからSmallest useful sliceを定義する。
+`BLOCKING_FRICTION`がある場合はObservationとGap Classを個別評価し、解消、別Slice候補、業務確認待ち、または明示HOLDのdispositionを記録する。
 
-`INFORMATION_GAP`、`WORKFLOW_GAP`、`DOMAIN_UNCERTAINTY`をラベル変更や説明文追加だけで自動的に解消したことにしない。
+`DOMAIN_UNCERTAINTY`はUI修正で自動解消しない。
+
+全5PersonaのEvidenceが揃い、未dispositionの`BLOCKING_FRICTION`または`DOMAIN_UNCERTAINTY`がなく、exact HEADが維持されている場合は`REVIEW_CLEARED`とできる。
+
+`MINOR_FRICTION`は、Candidate next actionまたは明示的なdefer理由を記録したうえで`REVIEW_CLEARED`を妨げない。
 
 全Personaが`RESOLVED`でもActual Staff ValueはUNKNOWNのままとする。
 
-## 10. Authority invariants
+`REVIEW_CLEARED`はHuman Ready GOではない。
+
+## 10. Smallest useful slice routing
+
+Simulationで問題候補が見つかっても新Sliceを自動開始しない。
+
+`UI_FRICTION`の場合は、実際に観測された摩擦だけを対象にSmallest useful slice候補を作る。
+
+`INFORMATION_GAP`の場合は、必要情報の正本と表示責務を確認してからSlice候補を判断する。
+
+`WORKFLOW_GAP`の場合は、画面間・業務工程間の責務境界を確認してからSlice候補を判断する。
+
+`DOMAIN_UNCERTAINTY`の場合は、業務上の意味または正本が確定するまでProduct UI変更を開始しない。
+
+全面redesignはSimulation結果だけでは認可しない。
+
+## 11. Authority invariants
 
 次を常に維持する。
 
 1. Simulation Evidence Only。
 2. Actual Staff Evidenceは別途取得されるまでUNKNOWN。
-3. Simulation PASS != Actual Staff Value PASS。
-4. Simulation PASS != Human Ready GO。
+3. Simulation REVIEW_CLEARED != Actual Staff Value PASS。
+4. Simulation REVIEW_CLEARED != Human Ready GO。
 5. Human Ready GO != Human Merge GO。
 6. Human Merge GO != Deploy GO。
 7. Deploy GO != LIVE WRITE。
@@ -246,7 +302,7 @@ Candidate next action:
 9. SimulationだけでIssueを自動Closeしない。
 10. Simulation結果はProduction Binding、SharePoint WRITE、M365 / Entra mutation authorityを作らない。
 
-## 11. Pilot
+## 12. Pilot
 
 最初のpilotはHuman Review / Monitoring系のstaff-facing UIを対象とする。
 
@@ -264,22 +320,24 @@ RETIRE
 
 継続採用は自動としない。
 
-## 12. Acceptance criteria
+## 13. Acceptance criteria
 
 - 5ペルソナの役割と観察対象が定義されている。
 - PersonaごとのTaskを対象Sliceに合わせて具体化できる。
 - SeverityとGap Classが分離されている。
+- Applicability Decisionと理由をdurable記録する。
 - Minimum Evidence Recordが定義されている。
+- Simulation OutcomeのREVIEW_CLEARED / HOLD routingが決定的である。
+- SimulationはIndependent Implementation ReviewでREVIEW-CLEAREDとなったexact HEADを使用する。
 - Simulation Evidence Only境界が明記されている。
 - Actual Staff Evidenceを代替しない。
 - Ready / Merge / Deploy / LIVE WRITE Authorityを変更しない。
-- 適用対象と非対象が定義されている。
 - 5ペルソナ結果を多数決または合格率として扱わない。
 - BLOCKING_FRICTIONから自動的に全面redesignへ進まない。
-- Gap ClassからSmallest useful sliceへ接続できる。
+- Gap ClassからSmallest useful slice候補へ接続できる。
 - 2〜3 Sliceのpilot後にADOPT / ADJUST / RETIREを再評価する。
 
-## 13. OUT
+## 14. OUT
 
 ```text
 Product code change
@@ -302,16 +360,14 @@ all UI changesへの無条件強制
 statistical validity claim
 ```
 
-## 14. Next gate
+## 15. Next gate
 
 ```text
-Definition Draft
+Definition Correction-1
 ↓
-Independent Definition Review
+exact Definition re-read
 ↓
-Correction if required
-↓
-Independent Definition Re-Review
+Independent Definition Re-Review-1
 ↓
 Human Definition Lock GO
 ```
