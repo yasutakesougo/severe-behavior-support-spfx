@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * REVIEW-OUTCOME-CAPTURE-SLICE-A rendered browser acceptance.
+ * REVIEW-OUTCOME-CAPTURE-SLICE-A browser acceptance.
  * Synthetic fixtures only. No LIVE I/O / Deploy / SharePoint.
  */
 import http from "node:http";
@@ -55,9 +55,7 @@ const scssStubPlugin = {
     build.onLoad({ filter: /\.module\.scss$/ }, async (args) => {
       const text = await fs.promises.readFile(args.path, "utf8");
       const keys = new Set();
-      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) {
-        keys.add(match[1]);
-      }
+      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) keys.add(match[1]);
       const entries = [...keys]
         .map((key) => `${JSON.stringify(key)}:${JSON.stringify(key)}`)
         .join(",");
@@ -100,10 +98,7 @@ const server = http.createServer((req, res) => {
 await new Promise((resolve) => server.listen(4194, "127.0.0.1", resolve));
 
 const browser = await puppeteer.launch({
-  executablePath:
-    process.env.REVIEW_OUTCOME_CHROME_PATH ??
-    process.env.IA_CLARITY_CHROME_PATH ??
-    "/usr/bin/google-chrome-stable",
+  executablePath: process.env.REVIEW_OUTCOME_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
   headless: true,
   args: ["--no-sandbox", "--disable-gpu"],
 });
@@ -112,77 +107,6 @@ const viewports = [
   { name: "desktop-1280x900", width: 1280, height: 900 },
   { name: "mobile-390x844", width: 390, height: 844 },
 ];
-
-function phaseCheckScript(expectedDecision) {
-  const text = document.body.textContent ?? "";
-  const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
-  const materials = Boolean(document.querySelector('[data-human-review-status="RESOLVED"]'));
-  const person = document
-    .querySelector('[data-human-review-person-identity="true"]')
-    ?.textContent?.trim();
-  const scope = document.querySelector('[data-human-review-scope-meta="true"]')?.textContent ?? "";
-  const liveWrite = document
-    .querySelector("[data-review-outcome-capture]")
-    ?.getAttribute("data-live-write-authorized");
-  const presentationOnly = document
-    .querySelector("[data-review-outcome-capture]")
-    ?.getAttribute("data-presentation-only");
-  const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
-  const noN1Control = !text.includes("次の計画版を作成");
-  const common =
-    materials &&
-    person === "Aさん" &&
-    scope.includes("計画版 3") &&
-    text.includes("個別の事実資料") &&
-    text.includes("見直し資料") &&
-    text.includes("本番には保存されていません") &&
-    liveWrite === "false" &&
-    presentationOnly === "true" &&
-    buttons.length === 2 &&
-    noHorizontalOverflow &&
-    noN1Control;
-
-  if (expectedDecision === "UNDECIDED") {
-    return {
-      pass:
-        common &&
-        text.includes("見直し結果: 未判断") &&
-        buttons.every((button) => !button.disabled),
-      text,
-      materials,
-      person,
-      scope,
-      liveWrite,
-      presentationOnly,
-      noHorizontalOverflow,
-      noN1Control,
-      disabledCount: buttons.filter((button) => button.disabled).length,
-    };
-  }
-
-  const changeRequired = expectedDecision === "CHANGE_REQUIRED";
-  return {
-    pass:
-      common &&
-      text.includes(
-        changeRequired
-          ? "デモ上の見直し結果: 変更が必要"
-          : "デモ上の見直し結果: 変更なし",
-      ) &&
-      (changeRequired ? text.includes("次の計画版はまだ作成されていません") : true) &&
-      buttons.every((button) => button.disabled),
-    text,
-    materials,
-    person,
-    scope,
-    liveWrite,
-    presentationOnly,
-    noHorizontalOverflow,
-    noN1Control,
-    disabledCount: buttons.filter((button) => button.disabled).length,
-  };
-}
-
 const checks = [];
 let allPass = true;
 
@@ -191,11 +115,51 @@ for (const viewport of viewports) {
   await page.setViewport({ width: viewport.width, height: viewport.height });
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
-
   const url = "http://127.0.0.1:4194/index.html";
-  await page.goto(url, { waitUntil: "networkidle0" });
 
-  const undecided = await page.evaluate(phaseCheckScript, "UNDECIDED");
+  async function observe(expectedCopy, expectRevisionPending, expectDisabled) {
+    return page.evaluate(
+      ({ copy, revisionPending, disabled }) => {
+        const text = document.body.textContent ?? "";
+        const q = (selector) => document.querySelector(selector);
+        const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
+        const scope = q('[data-human-review-scope-meta="true"]')?.textContent ?? "";
+        const person = q('[data-human-review-person-identity="true"]')?.textContent?.trim();
+        const liveWrite = q("[data-review-outcome-capture]")?.getAttribute(
+          "data-live-write-authorized",
+        );
+        const presentationOnly = q("[data-review-outcome-capture]")?.getAttribute(
+          "data-presentation-only",
+        );
+        const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
+        const common =
+          Boolean(q('[data-human-review-status="RESOLVED"]')) &&
+          person === "Aさん" &&
+          scope.includes("計画版 3") &&
+          text.includes("個別の事実資料") &&
+          text.includes("見直し資料") &&
+          text.includes("本番には保存されていません") &&
+          !text.includes("次の計画版を作成") &&
+          liveWrite === "false" &&
+          presentationOnly === "true" &&
+          buttons.length === 2 &&
+          noHorizontalOverflow;
+        return {
+          pass:
+            common &&
+            text.includes(copy) &&
+            text.includes("次の計画版はまだ作成されていません") === revisionPending &&
+            buttons.every((button) => button.disabled === disabled),
+          noHorizontalOverflow,
+          disabledCount: buttons.filter((button) => button.disabled).length,
+        };
+      },
+      { copy: expectedCopy, revisionPending: expectRevisionPending, disabled: expectDisabled },
+    );
+  }
+
+  await page.goto(url, { waitUntil: "networkidle0" });
+  const undecided = await observe("見直し結果: 未判断", false, false);
   const undecidedShot = path.join(artifactsDir, `${viewport.name}-undecided.png`);
   await page.screenshot({ path: undecidedShot, fullPage: true });
 
@@ -203,7 +167,7 @@ for (const viewport of viewports) {
   await page.waitForFunction(
     () => document.body.textContent?.includes("デモ上の見直し結果: 変更なし") === true,
   );
-  const noChange = await page.evaluate(phaseCheckScript, "NO_CHANGE");
+  const noChange = await observe("デモ上の見直し結果: 変更なし", false, true);
   const noChangeShot = path.join(artifactsDir, `${viewport.name}-no-change.png`);
   await page.screenshot({ path: noChangeShot, fullPage: true });
 
@@ -212,7 +176,7 @@ for (const viewport of viewports) {
   await page.waitForFunction(
     () => document.body.textContent?.includes("次の計画版はまだ作成されていません") === true,
   );
-  const changeRequired = await page.evaluate(phaseCheckScript, "CHANGE_REQUIRED");
+  const changeRequired = await observe("デモ上の見直し結果: 変更が必要", true, true);
   const changeRequiredShot = path.join(artifactsDir, `${viewport.name}-change-required.png`);
   await page.screenshot({ path: changeRequiredShot, fullPage: true });
 
