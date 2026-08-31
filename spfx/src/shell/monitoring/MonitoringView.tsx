@@ -77,6 +77,9 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({ model, personLab
         <p className={styles.factOnlyNote}>
           記録された事実を表示します。支援の良否、効果、計画変更の要否はこの画面では判定しません。
         </p>
+        <p className={styles.scopeNote}>
+          <a href="#human-review-materials">見直し資料へ移動</a>
+        </p>
 
         {model.records.length === 0 ? (
           <p className={styles.emptyState} data-monitoring-empty="true">
@@ -116,7 +119,7 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({ model, personLab
         )}
       </section>
 
-      <HumanReviewView result={humanReviewResult} />
+      <HumanReviewView result={humanReviewResult} personLabel={personLabel} />
     </>
   );
 };
