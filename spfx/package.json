@@ -7,7 +7,7 @@
   },
   "scripts": {
     "prepare:b2-build-basis": "node ../scripts/ci/prepare-b2-build-basis.mjs",
-    "build": "npx --yes esbuild ../src/domain/monitoring-read-model-spfx-entry.ts --bundle --format=cjs --target=es2015 --platform=neutral --outfile=src/sbs-domain/monitoring-read-model.bundle.js && npm run prepare:b2-build-basis && heft test --clean --production && heft package-solution --production && cp src/sbs-domain/monitoring-read-model.bundle.js src/sbs-domain/lifecycle-cancellation-storage.bundle.js",
+    "build": "npm install --no-save --package-lock=false esbuild sass puppeteer-core && npx esbuild ../src/domain/monitoring-read-model-spfx-entry.ts --bundle --format=cjs --target=es2015 --platform=neutral --outfile=src/sbs-domain/monitoring-read-model.bundle.js && npm run prepare:b2-build-basis && heft test --clean --production && heft package-solution --production && node smoke/human-review-ui-slice-a/run-smoke.mjs && cp src/sbs-domain/monitoring-read-model.bundle.js src/sbs-domain/lifecycle-cancellation-storage.bundle.js",
     "start": "heft start --clean",
     "clean": "heft clean",
     "eject-webpack": "heft eject-webpack",
