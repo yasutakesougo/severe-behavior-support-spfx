@@ -55,7 +55,9 @@ const scssStubPlugin = {
     build.onLoad({ filter: /\.module\.scss$/ }, async (args) => {
       const text = await fs.promises.readFile(args.path, "utf8");
       const keys = new Set();
-      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) keys.add(match[1]);
+      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) {
+        keys.add(match[1]);
+      }
       const entries = [...keys]
         .map((key) => `${JSON.stringify(key)}:${JSON.stringify(key)}`)
         .join(",");
@@ -115,10 +117,17 @@ function phaseCheckScript(expectedDecision) {
   const text = document.body.textContent ?? "";
   const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
   const materials = Boolean(document.querySelector('[data-human-review-status="RESOLVED"]'));
-  const person = document.querySelector('[data-human-review-person-identity="true"]')?.textContent?.trim();
-  const scope = document.querySelector('[data-human-review-scope-meta="true"]')?.textContent ?? "";
-  const liveWrite = document.querySelector('[data-review-outcome-capture]')?.getAttribute("data-live-write-authorized");
-  const presentationOnly = document.querySelector('[data-review-outcome-capture]')?.getAttribute("data-presentation-only");
+  const person = document
+    .querySelector('[data-human-review-person-identity="true"]')
+    ?.textContent?.trim();
+  const scope =
+    document.querySelector('[data-human-review-scope-meta="true"]')?.textContent ?? "";
+  const liveWrite = document
+    .querySelector("[data-review-outcome-capture]")
+    ?.getAttribute("data-live-write-authorized");
+  const presentationOnly = document
+    .querySelector("[data-review-outcome-capture]")
+    ?.getAttribute("data-presentation-only");
   const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
   const noN1Control = !text.includes("次の計画版を作成");
   const common =
@@ -205,10 +214,14 @@ for (const viewport of viewports) {
     () => document.body.textContent?.includes("次の計画版はまだ作成されていません") === true,
   );
   const changeRequired = await page.evaluate(phaseCheckScript, "CHANGE_REQUIRED");
-  const changeRequiredShot = path.join(artifactsDir, `${viewport.name}-change-required.png`);
+  const changeRequiredShot = path.join(
+    artifactsDir,
+    `${viewport.name}-change-required.png`,
+  );
   await page.screenshot({ path: changeRequiredShot, fullPage: true });
 
-  const pass = undecided.pass && noChange.pass && changeRequired.pass && pageErrors.length === 0;
+  const pass =
+    undecided.pass && noChange.pass && changeRequired.pass && pageErrors.length === 0;
   checks.push({
     viewport,
     url,
@@ -234,7 +247,13 @@ const report = {
   allPass,
   checks,
 };
-fs.writeFileSync(path.join(artifactsDir, "smoke-report.json"), JSON.stringify(report, null, 2));
-fs.writeFileSync(path.join(__dirname, "smoke-report.json"), JSON.stringify(report, null, 2));
+fs.writeFileSync(
+  path.join(artifactsDir, "smoke-report.json"),
+  JSON.stringify(report, null, 2),
+);
+fs.writeFileSync(
+  path.join(__dirname, "smoke-report.json"),
+  JSON.stringify(report, null, 2),
+);
 console.log(JSON.stringify({ allPass, artifactsDir, viewports: checks.length }, null, 2));
 process.exit(allPass ? 0 : 1);
