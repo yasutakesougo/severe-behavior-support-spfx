@@ -90,32 +90,21 @@ export function humanReviewResultForSyntheticVersion(
   if (planVersion === 2) {
     return {
       status: "RESOLVED",
-      value: {
-        ...BASE,
-        planVersion: 2,
-        recordCount: V2_RECORDS.length,
-        records: V2_RECORDS,
-      },
+      value: { ...BASE, planVersion: 2, recordCount: V2_RECORDS.length, records: V2_RECORDS },
     };
   }
   if (planVersion === 3) {
     return {
       status: "RESOLVED",
-      value: {
-        ...BASE,
-        planVersion: 3,
-        recordCount: V3_RECORDS.length,
-        records: V3_RECORDS,
-      },
+      value: { ...BASE, planVersion: 3, recordCount: V3_RECORDS.length, records: V3_RECORDS },
     };
   }
   return { status: "MALFORMED_INPUT" };
 }
 
-export const HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE: HumanReviewMaterialsBuildResult =
-  {
-    status: "CONTEXT_MISMATCH",
-  };
+export const HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE: HumanReviewMaterialsBuildResult = {
+  status: "CONTEXT_MISMATCH",
+};
 
 export const HUMAN_REVIEW_MALFORMED_FIXTURE: HumanReviewMaterialsBuildResult = {
   status: "MALFORMED_INPUT",
