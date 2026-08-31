@@ -15,17 +15,16 @@ const artifactsDir =
   "/opt/cursor/artifacts/human-review-staff-partial-ia-clarity-1-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
-const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catch(() =>
-  import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
+const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catch(
+  () => import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
 );
-const puppeteerModule = await import(
-  "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
-).catch(
-  () =>
-    import("/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"),
-);
-const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs").catch(() =>
-  import("/tmp/hr-smoke-runner/node_modules/sass/sass.node.mjs"),
+const puppeteerModule =
+  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js").catch(
+    () =>
+      import("/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"),
+  );
+const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs").catch(
+  () => import("/tmp/hr-smoke-runner/node_modules/sass/sass.node.mjs"),
 );
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;

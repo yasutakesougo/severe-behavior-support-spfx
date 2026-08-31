@@ -19,7 +19,4 @@ function selectedResult() {
 const root = document.getElementById("root");
 if (!root) throw new Error("human review smoke root missing");
 
-ReactDOM.render(
-  <HumanReviewView result={selectedResult()} personLabel="Aさん" />,
-  root,
-);
+ReactDOM.render(<HumanReviewView result={selectedResult()} personLabel="Aさん" />, root);
