@@ -1,4 +1,8 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import { describe, it } from "node:test";
 import {
   MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED,
@@ -31,5 +35,39 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
       validateMonitoringPeriodReviewOutcomeNoteDto({ ...dto, dtoVersion: "2.0.0" }),
       false,
     );
+  });
+
+  it("regenerates the checked-in narrow SPFx bridge byte-for-byte", () => {
+    const repoRoot = process.cwd();
+    const esbuildBin = path.join(repoRoot, "node_modules", "esbuild", "bin", "esbuild");
+    const tempDir = mkdtempSync(path.join(tmpdir(), "review-outcome-note-bridge-"));
+    const generatedPath = path.join(tempDir, "monitoring-period-review-outcome-note.bundle.js");
+
+    try {
+      execFileSync(
+        process.execPath,
+        [
+          esbuildBin,
+          "src/domain/monitoring-period-review-outcome-note-spfx-entry.ts",
+          "--bundle",
+          "--format=cjs",
+          "--target=es2015",
+          "--platform=neutral",
+          `--outfile=${generatedPath}`,
+        ],
+        { cwd: repoRoot, stdio: "pipe" },
+      );
+
+      const generated = readFileSync(generatedPath);
+      const committed = readFileSync(
+        path.join(repoRoot, "spfx/src/sbs-domain/monitoring-period-review-outcome-note.bundle.js"),
+      );
+      if (!generated.equals(committed)) {
+        console.error(`GENERATED_BUNDLE_BASE64=${generated.toString("base64")}`);
+      }
+      assert.deepEqual(committed, generated, "checked-in note bridge must equal canonical regeneration");
+    } finally {
+      rmSync(tempDir, { recursive: true, force: true });
+    }
   });
 });
