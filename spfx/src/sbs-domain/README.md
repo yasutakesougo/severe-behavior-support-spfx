@@ -34,6 +34,34 @@ npx esbuild src/domain/monitoring-period-review-outcome-spfx-entry.ts \
 
 The checked-in `.d.ts` is the narrow allowlisted declaration surface.
 
+## REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B — outcome note narrow bridge
+
+`monitoring-period-review-outcome-note.bundle.js` is the narrow synthetic note bridge for:
+
+`src/domain/monitoring-period-review-outcome-note-spfx-entry.ts`
+
+It exposes only the optional `MonitoringPeriodReviewOutcomeNote` contract,
+raw 255 UTF-16-code-unit validation/normalization helpers, DTO validators,
+schema constants, and `MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED=false`.
+
+The note is anchored to an existing `OutcomeId`. It has no `NoteId`, does not
+change `MonitoringPeriodReviewOutcome` v1.0.0, and note text is never OutcomeId
+mint material.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/monitoring-period-review-outcome-note-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/monitoring-period-review-outcome-note.bundle.js
+```
+
+The checked-in `.d.ts` is the narrow allowlisted declaration surface. This bridge
+does not authorize SharePoint persistence, Deploy, Production Binding, or LIVE WRITE.
+
 ## lifecycle-cancellation-storage.bundle — Slice E narrow SPFx bridge (B2)
 
 Named canonical entrypoint:
