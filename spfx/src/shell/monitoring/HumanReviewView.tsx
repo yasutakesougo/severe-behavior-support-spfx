@@ -5,6 +5,12 @@ import type {
   HumanReviewMaterials,
   HumanReviewMaterialsBuildResult,
 } from "../../sbs-domain/monitoring-read-model.bundle";
+import type {
+  MonitoringPeriodReviewDecision,
+  MonitoringPeriodReviewOutcome,
+} from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import { ReviewOutcomeCaptureView } from "./ReviewOutcomeCaptureView";
+import type { SyntheticReviewOutcomeCaptureResult } from "./review-outcome-capture";
 import styles from "./MonitoringViewUx.module.scss";
 
 export type HumanReviewProcedureLabelItem = Readonly<{
@@ -25,6 +31,10 @@ export type HumanReviewViewProps = Readonly<{
   result: HumanReviewMaterialsBuildResult;
   personLabel?: string;
   procedureLabelContext?: HumanReviewProcedureLabelContext;
+  capturedOutcome?: MonitoringPeriodReviewOutcome | null;
+  onCaptureOutcome?: (
+    decision: MonitoringPeriodReviewDecision,
+  ) => SyntheticReviewOutcomeCaptureResult;
 }>;
 
 function formatTokyoDateTime(value: string): string {
@@ -81,6 +91,8 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
   result,
   personLabel,
   procedureLabelContext,
+  capturedOutcome = null,
+  onCaptureOutcome,
 }) => {
   if (result.status === "CONTEXT_MISMATCH") {
     return (
@@ -219,6 +231,14 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
           })}
         </ol>
       )}
+
+      {onCaptureOutcome ? (
+        <ReviewOutcomeCaptureView
+          materials={model}
+          capturedOutcome={capturedOutcome}
+          onCapture={onCaptureOutcome}
+        />
+      ) : null}
     </section>
   );
 };
