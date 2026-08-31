@@ -1,11 +1,30 @@
 import * as React from "react";
 import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
-import type { HumanReviewMaterialsBuildResult } from "../../sbs-domain/monitoring-read-model.bundle";
+import type {
+  HumanReviewMaterialRecord,
+  HumanReviewMaterials,
+  HumanReviewMaterialsBuildResult,
+} from "../../sbs-domain/monitoring-read-model.bundle";
 import styles from "./MonitoringViewUx.module.scss";
+
+export type HumanReviewProcedureLabelItem = Readonly<{
+  procedureId: string;
+  procedureVersion: string;
+  planVersion: number;
+  sceneLabel: string;
+}>;
+
+export type HumanReviewProcedureLabelContext = Readonly<{
+  userId: string;
+  planId: string;
+  currentVersion: number;
+  currentProcedures: readonly HumanReviewProcedureLabelItem[];
+}>;
 
 export type HumanReviewViewProps = Readonly<{
   result: HumanReviewMaterialsBuildResult;
   personLabel?: string;
+  procedureLabelContext?: HumanReviewProcedureLabelContext;
 }>;
 
 function formatTokyoDateTime(value: string): string {
@@ -30,7 +49,39 @@ function formatTokyoDate(value: string): string {
   }).format(new Date(value));
 }
 
-export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result, personLabel }) => {
+function exactSceneLabel(
+  model: HumanReviewMaterials,
+  record: HumanReviewMaterialRecord,
+  context?: HumanReviewProcedureLabelContext,
+): string | undefined {
+  if (
+    !context ||
+    context.userId !== model.UserId ||
+    context.planId !== model.planId ||
+    context.currentVersion !== model.planVersion
+  ) {
+    return undefined;
+  }
+
+  const matches = context.currentProcedures.filter(
+    (procedure) =>
+      procedure.procedureId === record.ProcedureId &&
+      procedure.procedureVersion === record.ProcedureVersion &&
+      procedure.planVersion === model.planVersion,
+  );
+
+  if (matches.length !== 1 || matches[0].sceneLabel.trim().length === 0) {
+    return undefined;
+  }
+
+  return matches[0].sceneLabel;
+}
+
+export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
+  result,
+  personLabel,
+  procedureLabelContext,
+}) => {
   if (result.status === "CONTEXT_MISMATCH") {
     return (
       <section
@@ -103,34 +154,43 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result, person
         </div>
       ) : (
         <ol className={styles.recordList} data-human-review-record-list="true">
-          {model.records.map((record) => (
-            <li
-              key={record.RecordId}
-              className={styles.recordItem}
-              data-human-review-record-id={record.RecordId}
-            >
-              <div className={styles.recordHeader}>
-                <strong>{formatTokyoDateTime(record.performedAt)}</strong>
-                <span className={styles.resultLabel}>
-                  {labelForProcedureRecordResult(record.result)}
-                </span>
-              </div>
-              <dl className={styles.recordFacts}>
-                <div>
-                  <dt>支援手順</dt>
-                  <dd>{record.ProcedureId}</dd>
+          {model.records.map((record) => {
+            const sceneLabel = exactSceneLabel(model, record, procedureLabelContext);
+            return (
+              <li
+                key={record.RecordId}
+                className={styles.recordItem}
+                data-human-review-record-id={record.RecordId}
+              >
+                <div className={styles.recordHeader}>
+                  <strong>{formatTokyoDateTime(record.performedAt)}</strong>
+                  <span className={styles.resultLabel}>
+                    {labelForProcedureRecordResult(record.result)}
+                  </span>
                 </div>
-                <div>
-                  <dt>ProcedureVersion</dt>
-                  <dd>{record.ProcedureVersion}</dd>
-                </div>
-                <div>
-                  <dt>記録時刻</dt>
-                  <dd>{formatTokyoDateTime(record.recordedAt)}</dd>
-                </div>
-              </dl>
-            </li>
-          ))}
+                <dl className={styles.recordFacts}>
+                  {sceneLabel ? (
+                    <div data-human-review-scene-label="true">
+                      <dt>支援場面</dt>
+                      <dd>{sceneLabel}</dd>
+                    </div>
+                  ) : null}
+                  <div>
+                    <dt>支援手順ID</dt>
+                    <dd>{record.ProcedureId}</dd>
+                  </div>
+                  <div>
+                    <dt>ProcedureVersion</dt>
+                    <dd>{record.ProcedureVersion}</dd>
+                  </div>
+                  <div>
+                    <dt>記録時刻</dt>
+                    <dd>{formatTokyoDateTime(record.recordedAt)}</dd>
+                  </div>
+                </dl>
+              </li>
+            );
+          })}
         </ol>
       )}
     </section>

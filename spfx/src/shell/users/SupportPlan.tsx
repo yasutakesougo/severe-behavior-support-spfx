@@ -252,7 +252,16 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       {planningPc ? (
         <div data-monitoring-link-slice={MONITORING_LINK_SLICE_A.id}>
           {monitoringResult.status === "RESOLVED" ? (
-            <MonitoringView model={monitoringResult.value} personLabel={personLabel} />
+            <MonitoringView
+              model={monitoringResult.value}
+              personLabel={personLabel}
+              procedureLabelContext={{
+                userId: presentation.userId,
+                planId,
+                currentVersion,
+                currentProcedures,
+              }}
+            />
           ) : (
             <p className={styles.sectionHint} role="status" data-monitoring-malformed="true">
               モニタリング入力を確認できません。記録または期間条件を確認してください（合成）。
