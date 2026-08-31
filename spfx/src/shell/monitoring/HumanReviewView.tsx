@@ -5,6 +5,7 @@ import styles from "./MonitoringViewUx.module.scss";
 
 export type HumanReviewViewProps = Readonly<{
   result: HumanReviewMaterialsBuildResult;
+  personLabel?: string;
 }>;
 
 function formatTokyoDateTime(value: string): string {
@@ -29,10 +30,11 @@ function formatTokyoDate(value: string): string {
   }).format(new Date(value));
 }
 
-export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
+export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result, personLabel }) => {
   if (result.status === "CONTEXT_MISMATCH") {
     return (
       <section
+        id="human-review-materials"
         className={styles.monitoringView}
         aria-label="見直し資料"
         data-human-review-status="CONTEXT_MISMATCH"
@@ -48,6 +50,7 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
   if (result.status === "MALFORMED_INPUT") {
     return (
       <section
+        id="human-review-materials"
         className={styles.monitoringView}
         aria-label="見直し資料"
         data-human-review-status="MALFORMED_INPUT"
@@ -63,6 +66,7 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
   const model = result.value;
   return (
     <section
+      id="human-review-materials"
       className={styles.monitoringView}
       aria-labelledby="human-review-ui-slice-a-heading"
       data-human-review-status="RESOLVED"
@@ -74,11 +78,13 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
           <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>
             見直し資料
           </h3>
+          {personLabel ? <p className={styles.scopeNote}>{personLabel}</p> : null}
           <p className={styles.scopeNote}>
-            UserId: {model.UserId} · planId: {model.planId} · 計画版 {model.planVersion}
+            計画版 {model.planVersion} · 対象期間 {formatTokyoDate(model.periodStart)}〜
+            {formatTokyoDate(model.periodEnd)}
           </p>
           <p className={styles.scopeNote}>
-            対象期間: {formatTokyoDate(model.periodStart)}〜{formatTokyoDate(model.periodEnd)}
+            詳細: UserId {model.UserId} · planId {model.planId}
           </p>
         </div>
         <p className={styles.count} data-human-review-record-count={String(model.recordCount)}>
@@ -91,9 +97,10 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
       </p>
 
       {model.records.length === 0 ? (
-        <p className={styles.emptyState} data-human-review-empty="true">
-          この計画版・対象期間に一致する実施記録はありません。
-        </p>
+        <div className={styles.emptyState} data-human-review-empty="true">
+          <p>この計画版・対象期間に一致する実施記録はありません。</p>
+          <p>0件であることは、「実施できなかった」という結果を意味しません。</p>
+        </div>
       ) : (
         <ol className={styles.recordList} data-human-review-record-list="true">
           {model.records.map((record) => (
@@ -110,7 +117,7 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({ result }) => {
               </div>
               <dl className={styles.recordFacts}>
                 <div>
-                  <dt>ProcedureId</dt>
+                  <dt>支援手順</dt>
                   <dd>{record.ProcedureId}</dd>
                 </div>
                 <div>
