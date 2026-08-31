@@ -71,7 +71,9 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
         </div>
 
         <p className={styles.factOnlyNote}>
-          この期間に一致した記録の件数を確認します。個別の記録は下の見直し資料で確認できます。支援の良否、効果、計画変更の要否はこの画面では判定しません。
+          {
+            "この期間に一致した記録の件数を確認します。個別の記録は下の見直し資料で確認できます。支援の良否、効果、計画変更の要否はこの画面では判定しません。"
+          }
         </p>
         <p className={styles.scopeNote}>
           <a href="#human-review-materials">見直し資料へ移動</a>
