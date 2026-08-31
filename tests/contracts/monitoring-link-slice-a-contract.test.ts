@@ -1,17 +1,25 @@
 import assert from "node:assert/strict";
+import { createRequire } from "node:module";
 import { describe, it } from "node:test";
 import { buildMonitoringReadModel as buildCanonicalMonitoringReadModel } from "../../src/domain/monitoring-read-model";
-import {
-  buildDemoMonitoringForVersion,
-  monitoringQueryForVersion,
-  MONITORING_LINK_SLICE_A_RECORDS,
-} from "../../spfx/src/shell/monitoring/monitoring-fixture";
+const require = createRequire(import.meta.url);
+const { buildMonitoringReadModel: buildSpfxMonitoringReadModel } =
+  require("../../spfx/src/sbs-domain/monitoring-read-model.bundle.js") as {
+    buildMonitoringReadModel: typeof buildCanonicalMonitoringReadModel;
+  };
+const { monitoringQueryForVersion, MONITORING_LINK_SLICE_A_RECORDS } =
+  require("../../spfx/src/shell/monitoring/monitoring-fixture-data.ts") as {
+    monitoringQueryForVersion: (
+      planVersion: number,
+    ) => Parameters<typeof buildCanonicalMonitoringReadModel>[0];
+    MONITORING_LINK_SLICE_A_RECORDS: Parameters<typeof buildCanonicalMonitoringReadModel>[1];
+  };
 
 describe("MONITORING-LINK-SLICE-A contract", () => {
-  it("keeps the SPFx synthetic projection equivalent to the canonical domain projection", () => {
+  it("keeps the SPFx bundle projection equivalent to the canonical domain projection", () => {
     const query = monitoringQueryForVersion(2);
     const canonical = buildCanonicalMonitoringReadModel(query, MONITORING_LINK_SLICE_A_RECORDS);
-    const spfx = buildDemoMonitoringForVersion(2);
+    const spfx = buildSpfxMonitoringReadModel(query, MONITORING_LINK_SLICE_A_RECORDS);
 
     assert.deepEqual(spfx, canonical);
     assert.equal(canonical.status, "RESOLVED");

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
-import type { MonitoringReadModel } from "./monitoring-read-model";
+import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
 import styles from "./MonitoringViewUx.module.scss";
 
 export type MonitoringViewProps = Readonly<{

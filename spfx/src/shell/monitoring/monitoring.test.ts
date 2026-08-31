@@ -4,7 +4,7 @@ import {
   MONITORING_LINK_SLICE_A,
   MONITORING_LINK_SLICE_A_RECORDS,
 } from "./monitoring-fixture";
-import { buildMonitoringReadModel } from "./monitoring-read-model";
+import { buildMonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
 
 describe("MONITORING-LINK-SLICE-A synthetic monitoring", () => {
   it("projects exactly three target v2 records and keeps deterministic order", () => {
