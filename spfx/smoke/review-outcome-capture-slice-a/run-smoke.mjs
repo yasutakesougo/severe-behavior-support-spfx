@@ -120,8 +120,7 @@ function phaseCheckScript(expectedDecision) {
   const person = document
     .querySelector('[data-human-review-person-identity="true"]')
     ?.textContent?.trim();
-  const scope =
-    document.querySelector('[data-human-review-scope-meta="true"]')?.textContent ?? "";
+  const scope = document.querySelector('[data-human-review-scope-meta="true"]')?.textContent ?? "";
   const liveWrite = document
     .querySelector("[data-review-outcome-capture]")
     ?.getAttribute("data-live-write-authorized");
@@ -214,14 +213,10 @@ for (const viewport of viewports) {
     () => document.body.textContent?.includes("次の計画版はまだ作成されていません") === true,
   );
   const changeRequired = await page.evaluate(phaseCheckScript, "CHANGE_REQUIRED");
-  const changeRequiredShot = path.join(
-    artifactsDir,
-    `${viewport.name}-change-required.png`,
-  );
+  const changeRequiredShot = path.join(artifactsDir, `${viewport.name}-change-required.png`);
   await page.screenshot({ path: changeRequiredShot, fullPage: true });
 
-  const pass =
-    undecided.pass && noChange.pass && changeRequired.pass && pageErrors.length === 0;
+  const pass = undecided.pass && noChange.pass && changeRequired.pass && pageErrors.length === 0;
   checks.push({
     viewport,
     url,
@@ -247,13 +242,7 @@ const report = {
   allPass,
   checks,
 };
-fs.writeFileSync(
-  path.join(artifactsDir, "smoke-report.json"),
-  JSON.stringify(report, null, 2),
-);
-fs.writeFileSync(
-  path.join(__dirname, "smoke-report.json"),
-  JSON.stringify(report, null, 2),
-);
+fs.writeFileSync(path.join(artifactsDir, "smoke-report.json"), JSON.stringify(report, null, 2));
+fs.writeFileSync(path.join(__dirname, "smoke-report.json"), JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ allPass, artifactsDir, viewports: checks.length }, null, 2));
 process.exit(allPass ? 0 : 1);
