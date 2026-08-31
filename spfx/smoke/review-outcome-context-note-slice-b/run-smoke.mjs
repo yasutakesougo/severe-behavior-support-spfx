@@ -110,6 +110,7 @@ const viewports = [
 const checks = [];
 let allPass = true;
 
+// prettier-ignore
 for (const viewport of viewports) {
   const page = await browser.newPage();
   await page.setViewport({ width: viewport.width, height: viewport.height });

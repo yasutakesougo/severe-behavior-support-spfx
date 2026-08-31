@@ -8,6 +8,7 @@ import {
 
 const OUTCOME_ID = "outcome-001";
 
+// prettier-ignore
 describe("MonitoringPeriodReviewOutcomeNote domain", () => {
   it("treats blank and whitespace-only drafts as no note record", () => {
     assert.deepEqual(normalizeMonitoringPeriodReviewOutcomeNote(OUTCOME_ID, ""), {
