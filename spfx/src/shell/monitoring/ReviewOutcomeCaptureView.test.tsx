@@ -4,6 +4,16 @@ import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-mode
 import { assembleSyntheticReviewOutcome } from "./review-outcome-capture";
 import { ReviewOutcomeCaptureView } from "./ReviewOutcomeCaptureView";
 
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // Jest jsdom may omit TextEncoder; SHA-256 uses it. SPFx/browser have it.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
+
 const MATERIALS: HumanReviewMaterials = {
   OrganizationId: "org-a",
   SiteId: "site-a",

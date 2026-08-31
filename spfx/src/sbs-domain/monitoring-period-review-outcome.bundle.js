@@ -167,9 +167,7 @@ function sha256Hex(value) {
 
   const digest = new Uint8Array(32);
   const digestView = new DataView(digest.buffer);
-  [h0, h1, h2, h3, h4, h5, h6, h7].forEach((item, index) =>
-    digestView.setUint32(index * 4, item),
-  );
+  [h0, h1, h2, h3, h4, h5, h6, h7].forEach((item, index) => digestView.setUint32(index * 4, item));
 
   let out = "";
   for (let i = 0; i < digest.length; i += 1) {
@@ -190,10 +188,9 @@ function isValidIsoDateTime(value) {
   if (typeof value !== "string" || value.trim() === "") {
     return false;
   }
-  const match =
-    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(
-      value,
-    );
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d+)?(Z|[+-]\d{2}:\d{2})$/.exec(
+    value,
+  );
   if (!match) {
     return false;
   }
@@ -254,9 +251,7 @@ function isUniqueStringArray(value) {
 }
 
 function isDecision(value) {
-  return (
-    typeof value === "string" && exports.MONITORING_PERIOD_REVIEW_DECISIONS.includes(value)
-  );
+  return typeof value === "string" && exports.MONITORING_PERIOD_REVIEW_DECISIONS.includes(value);
 }
 
 function mintMonitoringPeriodReviewOutcomeId(input) {
