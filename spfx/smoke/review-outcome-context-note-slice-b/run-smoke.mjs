@@ -117,13 +117,7 @@ for (const viewport of viewports) {
   page.on("pageerror", (error) => pageErrors.push(error.message));
   const url = "http://127.0.0.1:4195/index.html";
 
-  async function observe({
-    decisionCopy,
-    revisionPending,
-    noteText,
-    disabled,
-    person = "Aさん",
-  }) {
+  async function observe({ decisionCopy, revisionPending, noteText, disabled, person = "Aさん" }) {
     return page.evaluate(
       ({ decisionCopy, revisionPending, noteText, disabled, person }) => {
         const text = document.body.textContent ?? "";
