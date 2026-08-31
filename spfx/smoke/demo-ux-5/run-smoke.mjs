@@ -141,15 +141,26 @@ const browser = await puppeteer.launch({
 
 const checks = [];
 
-function assertDailyRecords(expectedStateColumns) {
+function assertDailyRecords(expectedStateColumns, expectedIncompleteState) {
   const root = document.documentElement;
   const body = document.body;
   const records = document.querySelector('[data-demo-ux="daily-records"]');
   const placeholder = document.querySelector('[data-shell-ux="destination-placeholder"]');
   const heading = document.querySelector('[data-demo-ux="daily-record-heading"]');
   const note = document.querySelector('[data-demo-ux="daily-record-presentation-note"]');
+  const incompleteHint = document.querySelector('[data-demo-ux="daily-record-incomplete-hint"]');
+  const incompleteList = document.querySelector('[data-demo-ux="daily-record-incomplete-list"]');
   const incomplete = document.querySelectorAll(
     '[data-demo-ux="daily-record-incomplete-list"] > li',
+  );
+  const incompleteEmptyNote = document.querySelector(
+    '[data-demo-ux="daily-record-incomplete-empty-note"]',
+  );
+  const incompleteEmptyPrimary = document.querySelector(
+    '[data-demo-ux="daily-record-incomplete-empty-primary"]',
+  );
+  const incompleteEmptySupporting = document.querySelector(
+    '[data-demo-ux="daily-record-incomplete-empty-supporting"]',
   );
   const recent = document.querySelectorAll('[data-demo-ux="daily-record-recent-list"] > li');
   const mutationButtons = [
@@ -182,19 +193,41 @@ function assertDailyRecords(expectedStateColumns) {
     headings.indexOf("最近の記録") > headings.indexOf("記録入力イメージ") &&
     headings.indexOf("制度・業務情報（合成表示）") > headings.indexOf("最近の記録") &&
     headings.indexOf("システム状態") > headings.indexOf("最近の記録");
+  const incompleteCopyPass =
+    expectedIncompleteState === "empty"
+      ? !text.includes("本日の支援記録が未入力")
+      : text.includes("本日の支援記録が未入力");
+  const incompleteStatePass =
+    expectedIncompleteState === "empty"
+      ? !incompleteHint &&
+        !incompleteList &&
+        incomplete.length === 0 &&
+        Boolean(incompleteEmptyNote) &&
+        (incompleteEmptyPrimary?.textContent ?? "").trim() ===
+          "表示する未完了確認はありません（合成データ）。" &&
+        (incompleteEmptySupporting?.textContent ?? "").trim() ===
+          "業務上の未完了が無いことを示すものではありません。"
+      : Boolean(incompleteHint) &&
+        (incompleteHint?.textContent ?? "").trim() ===
+          "未完了確認から対象を選ぶと、下の記録入力イメージが追随します。" &&
+        Boolean(incompleteList) &&
+        incomplete.length === 2 &&
+        !incompleteEmptyNote &&
+        !incompleteEmptyPrimary &&
+        !incompleteEmptySupporting;
   return {
     pass:
       Boolean(records) &&
       !placeholder &&
       (heading?.textContent ?? "").trim() === "日々の記録" &&
       !note &&
-      (demo?.textContent ?? "").includes("live SharePoint 接続なし") &&
-      incomplete.length === 2 &&
+      (demo?.textContent ?? "").includes("デモ環境｜表示内容は合成データです。保存されません。") &&
+      incompleteStatePass &&
       recent.length === 3 &&
       mutationButtons.length === 2 &&
       mutationButtons.every((button) => button.disabled) &&
       orderOk &&
-      text.indexOf("本日の支援記録が未入力") >= 0 &&
+      incompleteCopyPass &&
       text.indexOf("synthetic fixture only") >= 0 &&
       text.indexOf("利用可能です") < 0 &&
       text.indexOf("この画面は未接続です") < 0 &&
@@ -205,6 +238,14 @@ function assertDailyRecords(expectedStateColumns) {
       stateColumns === expectedStateColumns &&
       !horizontalOverflow,
     incomplete: incomplete.length,
+    expectedIncompleteState,
+    incompleteStatePass,
+    incompleteCopyPass,
+    incompleteHintPresent: Boolean(incompleteHint),
+    incompleteListPresent: Boolean(incompleteList),
+    incompleteEmptyNotePresent: Boolean(incompleteEmptyNote),
+    incompleteEmptyPrimary: incompleteEmptyPrimary?.textContent?.trim() ?? "",
+    incompleteEmptySupporting: incompleteEmptySupporting?.textContent?.trim() ?? "",
     recent: recent.length,
     stateColumns,
     expectedStateColumns,
@@ -223,7 +264,7 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
   await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 1 });
   const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=records`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  const found = await page.evaluate(assertDailyRecords, 2);
+  const found = await page.evaluate(assertDailyRecords, 2, "non-empty");
   found.pageErrors = errors;
   if (errors.length > 0) {
     found.pass = false;
@@ -240,10 +281,37 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
   const page = await browser.newPage();
   const errors = [];
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
+  await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 1 });
+  const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=records&incompleteState=empty`;
+  await page.goto(url, { waitUntil: "networkidle0" });
+  const found = await page.evaluate(assertDailyRecords, 2, "empty");
+  found.pageErrors = errors;
+  if (errors.length > 0) {
+    found.pass = false;
+  }
+  const shot = path.join(artifactsDir, "desktop-daily-records-incomplete-empty.png");
+  await page.screenshot({ path: shot, fullPage: true });
+  const pass = Boolean(found.pass);
+  checks.push({
+    name: "desktop-daily-records-incomplete-empty",
+    url,
+    found,
+    shot,
+    pass,
+    pageErrors: errors,
+  });
+  allPass = allPass && pass;
+  await page.close();
+}
+
+{
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
   await page.setViewport({ width: 768, height: 1024, deviceScaleFactor: 1 });
   const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-HOM&destination=records`;
   await page.goto(url, { waitUntil: "networkidle0" });
-  const found = await page.evaluate(assertDailyRecords, 1);
+  const found = await page.evaluate(assertDailyRecords, 1, "non-empty");
   found.pageErrors = errors;
   if (errors.length > 0) {
     found.pass = false;
@@ -271,6 +339,7 @@ let allPass = Object.values(productionCssChecks).every(Boolean);
   await page.setViewport({ width: 1280, height: 900, deviceScaleFactor: 1 });
   const url = `${base}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=overview`;
   await page.goto(url, { waitUntil: "networkidle0" });
+  await page.waitForSelector('[data-shell-ux-nav="records"]', { visible: true });
   await page.focus('[data-shell-ux-nav="records"]');
   await page.keyboard.press("Enter");
   await page.waitForFunction(() => {

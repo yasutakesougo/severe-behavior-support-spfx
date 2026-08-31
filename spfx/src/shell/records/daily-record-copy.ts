@@ -17,8 +17,11 @@ export const DEMO_DAILY_RECORD_RECENT_HINT =
  * INV-17: incomplete zero-result only — not “all clear” business completion.
  * Default synthetic fixture is non-empty; this copy is for empty presentation paths.
  */
-export const DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE =
-  "表示する未完了確認はありません（合成データ）。業務上の未完了が無いことを示すものではありません。";
+export const DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_PRIMARY =
+  "表示する未完了確認はありません（合成データ）。";
+export const DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_SUPPORTING =
+  "業務上の未完了が無いことを示すものではありません。";
+export const DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE = `${DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_PRIMARY}${DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_SUPPORTING}`;
 
 /**
  * INV-17: recent-records zero-result only — not live retrieval failure / facility-empty.
