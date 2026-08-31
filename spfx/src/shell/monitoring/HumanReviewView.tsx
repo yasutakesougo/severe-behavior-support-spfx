@@ -86,11 +86,20 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
     return (
       <section
         id="human-review-materials"
-        className={styles.monitoringView}
+        className={`${styles.monitoringView} ${styles.roleMaterials}`}
         aria-label="見直し資料"
         data-human-review-status="CONTEXT_MISMATCH"
+        data-human-review-role="materials"
       >
+        <p className={styles.roleCue} data-human-review-role-cue="materials">
+          個別の事実資料
+        </p>
         <h3 className={styles.heading}>見直し資料</h3>
+        {personLabel ? (
+          <p className={styles.personIdentity} data-human-review-person-identity="true">
+            {personLabel}
+          </p>
+        ) : null}
         <p className={styles.emptyState} role="status">
           選択中の計画・対象期間と見直し資料が一致しません。別の資料への置換は行いません。
         </p>
@@ -102,11 +111,20 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
     return (
       <section
         id="human-review-materials"
-        className={styles.monitoringView}
+        className={`${styles.monitoringView} ${styles.roleMaterials}`}
         aria-label="見直し資料"
         data-human-review-status="MALFORMED_INPUT"
+        data-human-review-role="materials"
       >
+        <p className={styles.roleCue} data-human-review-role-cue="materials">
+          個別の事実資料
+        </p>
         <h3 className={styles.heading}>見直し資料</h3>
+        {personLabel ? (
+          <p className={styles.personIdentity} data-human-review-person-identity="true">
+            {personLabel}
+          </p>
+        ) : null}
         <p className={styles.emptyState} role="status">
           見直し資料を安全に表示できません。入力内容を確認してください。
         </p>
@@ -118,23 +136,31 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
   return (
     <section
       id="human-review-materials"
-      className={styles.monitoringView}
+      className={`${styles.monitoringView} ${styles.roleMaterials}`}
       aria-labelledby="human-review-ui-slice-a-heading"
       data-human-review-status="RESOLVED"
       data-human-review-plan-id={model.planId}
       data-human-review-plan-version={String(model.planVersion)}
+      data-human-review-role="materials"
     >
+      <p className={styles.roleCue} data-human-review-role-cue="materials">
+        個別の事実資料
+      </p>
       <div className={styles.headingRow}>
         <div>
           <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>
             見直し資料
           </h3>
-          {personLabel ? <p className={styles.scopeNote}>{personLabel}</p> : null}
-          <p className={styles.scopeNote}>
+          {personLabel ? (
+            <p className={styles.personIdentity} data-human-review-person-identity="true">
+              {personLabel}
+            </p>
+          ) : null}
+          <p className={styles.scopeMeta} data-human-review-scope-meta="true">
             計画版 {model.planVersion} · 対象期間 {formatTokyoDate(model.periodStart)}〜
             {formatTokyoDate(model.periodEnd)}
           </p>
-          <p className={styles.scopeNote}>
+          <p className={styles.technicalDetail} data-human-review-technical-detail="true">
             詳細: UserId {model.UserId} · planId {model.planId}
           </p>
         </div>

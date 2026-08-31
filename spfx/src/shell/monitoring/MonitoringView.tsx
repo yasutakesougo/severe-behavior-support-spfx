@@ -45,20 +45,27 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
   return (
     <>
       <section
-        className={styles.monitoringView}
+        className={`${styles.monitoringView} ${styles.roleSummary}`}
         aria-labelledby="monitoring-link-slice-a-heading"
         data-monitoring-link-slice="MONITORING-LINK-SLICE-A"
         data-monitoring-plan-id={model.planId}
         data-monitoring-plan-version={String(model.planVersion)}
         data-monitoring-summary-only="true"
+        data-monitoring-role="summary"
       >
+        <p className={styles.roleCue} data-monitoring-role-cue="summary">
+          期間の件数確認
+        </p>
         <div className={styles.headingRow}>
           <div>
             <h3 id="monitoring-link-slice-a-heading" className={styles.heading}>
               期間モニタリング（概要）
             </h3>
-            <p className={styles.scopeNote}>
-              {personLabel} · 計画版 {model.planVersion} · {formatTokyoDate(model.periodStart)}〜
+            <p className={styles.personIdentity} data-monitoring-person-identity="true">
+              {personLabel}
+            </p>
+            <p className={styles.scopeMeta} data-monitoring-scope-meta="true">
+              計画版 {model.planVersion} · {formatTokyoDate(model.periodStart)}〜
               {formatTokyoDate(model.periodEnd)}
             </p>
           </div>
