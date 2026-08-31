@@ -39,7 +39,10 @@ describe("MonitoringPeriodReviewOutcome domain", () => {
   });
 
   it("allows a zero-record review while rejecting duplicate source RecordIds", () => {
-    assert.equal(validateMonitoringPeriodReviewOutcome(createOutcome({ sourceRecordIds: [] })), true);
+    assert.equal(
+      validateMonitoringPeriodReviewOutcome(createOutcome({ sourceRecordIds: [] })),
+      true,
+    );
     assert.equal(
       validateMonitoringPeriodReviewOutcome(
         createOutcome({ sourceRecordIds: ["synthetic-record-001", "synthetic-record-001"] }),
@@ -59,12 +62,12 @@ describe("MonitoringPeriodReviewOutcome domain", () => {
       }),
       false,
     );
-    assert.equal(validateMonitoringPeriodReviewOutcome({ ...valid, reviewedAt: "not-a-time" }), false);
-    assert.equal(validateMonitoringPeriodReviewOutcome({ ...valid, reviewedBy: "" }), false);
     assert.equal(
-      validateMonitoringPeriodReviewOutcome({ ...valid, decision: "PENDING" }),
+      validateMonitoringPeriodReviewOutcome({ ...valid, reviewedAt: "not-a-time" }),
       false,
     );
+    assert.equal(validateMonitoringPeriodReviewOutcome({ ...valid, reviewedBy: "" }), false);
+    assert.equal(validateMonitoringPeriodReviewOutcome({ ...valid, decision: "PENDING" }), false);
   });
 
   it("mints the same OutcomeId for the same decision payload regardless of sourceRecordIds order", () => {

@@ -95,13 +95,19 @@ describe("SupportPlanVersionMonitoringPeriodReviewBinding domain", () => {
     const sourceB = outcome({ OutcomeId: "synthetic-outcome-002" });
     const first = binding();
     const second = binding({ sourceOutcomeId: sourceB.OutcomeId });
-    assert.equal(validateMonitoringPeriodReviewBindingSet([sourceA, sourceB], [first, second]), false);
+    assert.equal(
+      validateMonitoringPeriodReviewBindingSet([sourceA, sourceB], [first, second]),
+      false,
+    );
   });
 
   it("fails closed when source outcome identity/context does not match", () => {
     const source = outcome();
     assert.equal(
-      bindingMatchesMonitoringPeriodReviewOutcome(binding({ UserId: "synthetic-user-002" }), source),
+      bindingMatchesMonitoringPeriodReviewOutcome(
+        binding({ UserId: "synthetic-user-002" }),
+        source,
+      ),
       false,
     );
     assert.equal(

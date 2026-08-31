@@ -8,8 +8,7 @@ export const MONITORING_PERIOD_REVIEW_OUTCOME_SCHEMA_VERSION = "1.0.0" as const;
 export const MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED = false as const;
 
 export const MONITORING_PERIOD_REVIEW_DECISIONS = ["NO_CHANGE", "CHANGE_REQUIRED"] as const;
-export type MonitoringPeriodReviewDecision =
-  (typeof MONITORING_PERIOD_REVIEW_DECISIONS)[number];
+export type MonitoringPeriodReviewDecision = (typeof MONITORING_PERIOD_REVIEW_DECISIONS)[number];
 
 export type MonitoringPeriodReviewOutcome = Readonly<{
   OutcomeId: string;
@@ -48,8 +47,7 @@ export type MonitoringPeriodReviewOutcomeIdentityMintInput = Readonly<{
 }>;
 
 export const MONITORING_PERIOD_REVIEW_OUTCOME_IDENTITY_SEPARATOR = "\u001f";
-const MONITORING_PERIOD_REVIEW_OUTCOME_ID_NAMESPACE =
-  "monitoring-period-review.outcome-id.v1";
+const MONITORING_PERIOD_REVIEW_OUTCOME_ID_NAMESPACE = "monitoring-period-review.outcome-id.v1";
 
 export function isMonitoringPeriodReviewDecision(
   value: unknown,
@@ -76,8 +74,7 @@ function isUniqueStringArray(value: unknown): value is readonly string[] {
 
 function isWellFormedReviewPeriod(periodStart: string, periodEnd: string): boolean {
   return (
-    evaluateObservationPeriodMembership(periodStart, periodEnd, periodStart) !==
-    "MALFORMED_INPUT"
+    evaluateObservationPeriodMembership(periodStart, periodEnd, periodStart) !== "MALFORMED_INPUT"
   );
 }
 

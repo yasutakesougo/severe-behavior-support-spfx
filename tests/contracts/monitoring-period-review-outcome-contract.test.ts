@@ -38,9 +38,6 @@ describe("MonitoringPeriodReviewOutcome contract", () => {
     const outcome = { OutcomeId: mintMonitoringPeriodReviewOutcomeId(input), ...input };
     const dto = toMonitoringPeriodReviewOutcomeDto(outcome);
     assert.equal(validateMonitoringPeriodReviewOutcomeDto(dto), true);
-    assert.equal(
-      validateMonitoringPeriodReviewOutcomeDto({ ...dto, dtoVersion: "2.0.0" }),
-      false,
-    );
+    assert.equal(validateMonitoringPeriodReviewOutcomeDto({ ...dto, dtoVersion: "2.0.0" }), false);
   });
 });
