@@ -10,6 +10,7 @@ exports.MONITORING_PERIOD_REVIEW_DECISIONS = ["NO_CHANGE", "CHANGE_REQUIRED"];
 const ID_SEPARATOR = "\u001f";
 const ID_NAMESPACE = "monitoring-period-review.outcome-id.v1";
 const TOKYO_TIME_ZONE = "Asia/Tokyo";
+// prettier-ignore
 const K = new Uint32Array([
   0x428a2f98,
   0x71374491,
