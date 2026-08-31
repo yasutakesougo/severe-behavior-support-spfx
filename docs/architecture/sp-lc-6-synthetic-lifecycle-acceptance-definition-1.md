@@ -24,6 +24,11 @@ DEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1: RECORDED
 AC-3 / AC-5 / AC-8 execution result: GAP_FOUND / STALE SMOKE EXPECTATION
 AC-4 / AC-7 / AC-9 execution result: GAP_FOUND / separate residuals
 Acceptance evidence recording: MERGED / CONSUMED (PR #513)
+PR #515 stale-smoke Exact Slice: MERGED / CONSUMED
+AC-3 / AC-5 / AC-8 stale-smoke remediation: COMPLETE / CONSUMED
+DEMO-UX-6 smoke: PASS / 9 of 9
+DEFINITION-STATUS-SYNC-2 Parent Definition Status Synchronization GO: RECEIVED / CONSUMED
+mutation-time current main: 66219ae16c3f2ca1ebee7bbe5b479c8286ac79e8
 Acceptance re-execution: NOT AUTHORIZED
 Code / fixture / schema mutation: NOT AUTHORIZED
 Issue mutation: NOT AUTHORIZED
@@ -582,7 +587,7 @@ Implementation Start GOはimplementation publication専用のままCONSUMEDと�
 
 このCorrectionはPR #511のReady / Merge、full acceptance execution、Issue #445 mutationを許可しない。
 
-## 14. Execution status provenance (DEFINITION-STATUS-SYNC-1)
+## 14. Execution status provenance (DEFINITION-STATUS-SYNC-1 / DEFINITION-STATUS-SYNC-2)
 
 この節はDefinition semanticsを変更せず、current mainのstatus provenanceのみをこの文書へ同期する。
 
@@ -622,6 +627,73 @@ AC-4 / AC-7 / AC-9はこの分類の対象外であり、separate residualsと�
 実行詳細の正本は`sp-lc-6-synthetic-lifecycle-acceptance-evidence.md`のFull acceptance execution result節およびDEMO-UX-6 REVIEW-DUE GAP CLASSIFICATION-1節である。
 
 この同期はD1-D6、AC-1からAC-9の業務意味、result precedence（`ENVIRONMENT_BLOCKED > GAP_FOUND > PASS`）、execution authority modelを変更しない。
+
+### DEFINITION-STATUS-SYNC-2 (post-PR #515)
+
+この追記はDefinition semanticsを変更せず、PR #515 merge後のstatus provenanceのみを同期する。
+
+historical acceptance execution result と post-execution remediation status は別物である。SYNC-2は後者だけを記録し、前者を再計算しない。
+
+```text
+Human authorization:
+SP-LC-6 DEFINITION-STATUS-SYNC-2 Parent Definition Status Synchronization GO
+
+Exact scope definition:
+SP-LC-6-DEFINITION-STATUS-SYNC-2 (PR #516; docs-only exact scope)
+
+mutation-time preflight:
+observed current main: 66219ae16c3f2ca1ebee7bbe5b479c8286ac79e8
+review-observed current main: 3bf96a732e7a6a211d441b56b490508459922419
+evidence basis main: 0346d0a1c73f524e3a993401d57b38ac1c33b1af
+relevant SP-LC-6 overlap since review-observed: NONE
+non-overlapping drift: UI-RENDERED-REVIEW-V1 / UI External Intelligence only
+preflight: PASS / CONTINUE
+```
+
+同期するcurrent-main事実は次のとおりである。
+
+```text
+PR #515:
+MERGED / CONSUMED
+
+AC-3 / AC-5 / AC-8 stale-smoke remediation:
+COMPLETE / CONSUMED
+
+DEMO-UX-6 browser smoke:
+PASS / 9 of 9
+
+Recorded Full Acceptance execution:
+EXECUTED / overallResult = GAP_FOUND
+(historical checkpoint results unchanged)
+
+AC-4 / AC-7 / AC-9:
+OPEN / separate residuals
+
+Acceptance re-execution:
+NOT AUTHORIZED
+```
+
+PR #515はAC-3 / AC-5 / AC-8のstale smoke expectationを後続で修正した。これはhistorical Full Acceptance resultの再計算ではない。したがって次を保持する。
+
+```text
+historical execution result:
+AC-1: PASS
+AC-2: PASS
+AC-3: GAP_FOUND
+AC-4: GAP_FOUND
+AC-5: GAP_FOUND
+AC-6: PASS
+AC-7: GAP_FOUND
+AC-8: GAP_FOUND
+AC-9: GAP_FOUND
+overallResult: GAP_FOUND
+```
+
+AC-3 / AC-5 / AC-8のhistorical `GAP_FOUND` はPASSへ書き換えない。stale-smoke remediationはpost-execution statusとしてCOMPLETE / CONSUMEDと記録するだけである。
+
+AC-4 / AC-7 / AC-9は未解消のseparate residualsとしてOPENを維持する。Gate NEXTは `AC-4 successful-empty Observation association Exact Slice` とする。
+
+この同期はD1-D6、AC-1からAC-9の業務意味、result precedence、execution authority / preflight modelを変更しない。smoke runner、acceptance runner、contract test、product / domain / fixture / schema、Issue #445、acceptance-reportは変更しない。
 
 ## 15. Rollback boundary
 
@@ -665,6 +737,21 @@ GAP_FOUND / separate residuals (not reclassified)
 PR #513 acceptance evidence recording:
 MERGED / CONSUMED
 
+PR #515 stale-smoke Exact Slice:
+MERGED / CONSUMED
+
+AC-3 / AC-5 / AC-8 stale-smoke remediation:
+COMPLETE / CONSUMED
+
+DEMO-UX-6 smoke:
+PASS / 9 of 9
+
+DEFINITION-STATUS-SYNC-1:
+COMPLETE / CONSUMED (PR #514)
+
+DEFINITION-STATUS-SYNC-2:
+APPLIED (parent Definition status provenance only)
+
 Acceptance re-execution:
 NOT AUTHORIZED
 
@@ -678,5 +765,5 @@ Deploy / Production Binding / LIVE WRITE:
 FORBIDDEN
 
 NEXT:
-AC-3 / AC-5 / AC-8 stale smoke expectation Exact Slice
+AC-4 successful-empty Observation association Exact Slice
 ```
