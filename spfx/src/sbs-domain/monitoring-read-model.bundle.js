@@ -17,17 +17,18 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
-// src/domain/monitoring-read-model-spfx-entry.ts
+// ../src/domain/monitoring-read-model-spfx-entry.ts
 var monitoring_read_model_spfx_entry_exports = {};
 __export(monitoring_read_model_spfx_entry_exports, {
+  buildHumanReviewMaterials: () => buildHumanReviewMaterials,
   buildMonitoringReadModel: () => buildMonitoringReadModel
 });
 module.exports = __toCommonJS(monitoring_read_model_spfx_entry_exports);
 
-// src/contracts/types.ts
+// ../src/contracts/types.ts
 var ASIA_TOKYO_TIME_ZONE = "Asia/Tokyo";
 
-// src/domain/validation.ts
+// ../src/domain/validation.ts
 function isRecord(value) {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -56,7 +57,7 @@ function isValidIsoDateTime(value) {
   return !isNaN(new Date(value).getTime());
 }
 
-// src/domain/support-plan.ts
+// ../src/domain/support-plan.ts
 var TOKYO_TIME_ZONE = "Asia/Tokyo";
 function toAsiaTokyoCalendarDay(isoDateTime) {
   if (!isValidIsoDateTime(isoDateTime)) {
@@ -90,7 +91,7 @@ function evaluateObservationPeriodMembership(periodFrom, periodTo, asOf) {
   return "OUTSIDE_PERIOD";
 }
 
-// src/domain/sha256.ts
+// ../src/domain/sha256.ts
 var K = new Uint32Array([
   1116352408,
   1899447441,
@@ -159,7 +160,7 @@ var K = new Uint32Array([
 ]);
 var SHA256_MAX_MESSAGE_BYTES = Math.floor(Number.MAX_SAFE_INTEGER / 8);
 
-// src/domain/procedure-record.ts
+// ../src/domain/procedure-record.ts
 var PROCEDURE_RECORD_RESULTS = [
   "PERFORMED_AS_PLANNED",
   "PERFORMED_WITH_ADAPTATION",
@@ -200,7 +201,7 @@ function validateProcedureRecord(value) {
   return true;
 }
 
-// src/domain/monitoring-read-model.ts
+// ../src/domain/monitoring-read-model.ts
 var MONITORING_QUERY_KEYS = /* @__PURE__ */ new Set([
   "OrganizationId",
   "SiteId",
@@ -295,6 +296,113 @@ function buildMonitoringReadModel(queryInput, recordsInput) {
       periodEnd: query.periodEnd,
       recordCount: records.length,
       records
+    }
+  };
+}
+
+// ../src/domain/monitoring-review-materials.ts
+var RESULT_VALUES = /* @__PURE__ */ new Set([
+  "PERFORMED_AS_PLANNED",
+  "PERFORMED_WITH_ADAPTATION",
+  "NOT_PERFORMED"
+]);
+var CONTEXT_KEYS = /* @__PURE__ */ new Set([
+  "OrganizationId",
+  "SiteId",
+  "UserId",
+  "planId",
+  "planVersion",
+  "periodStart",
+  "periodEnd"
+]);
+function hasValidPeriod(periodStart, periodEnd) {
+  return evaluateObservationPeriodMembership(periodStart, periodEnd, periodStart) !== "MALFORMED_INPUT";
+}
+function parsePresentationContext(value) {
+  if (!isRecord(value) || !Object.keys(value).every((key) => CONTEXT_KEYS.has(key))) {
+    return null;
+  }
+  if (!isNonEmptyString(value.OrganizationId) || !isNonEmptyString(value.SiteId) || !isNonEmptyString(value.UserId) || !isNonEmptyString(value.planId) || typeof value.planVersion !== "number" || !Number.isInteger(value.planVersion) || value.planVersion < 1 || !isValidIsoDateTime(value.periodStart) || !isValidIsoDateTime(value.periodEnd) || !hasValidPeriod(value.periodStart, value.periodEnd)) {
+    return null;
+  }
+  return {
+    OrganizationId: value.OrganizationId,
+    SiteId: value.SiteId,
+    UserId: value.UserId,
+    planId: value.planId,
+    planVersion: value.planVersion,
+    periodStart: value.periodStart,
+    periodEnd: value.periodEnd
+  };
+}
+function validateMonitoringReadModel(value) {
+  if (!isRecord(value)) {
+    return false;
+  }
+  if (!isNonEmptyString(value.OrganizationId) || !isNonEmptyString(value.SiteId) || !isNonEmptyString(value.UserId) || !isNonEmptyString(value.planId) || typeof value.planVersion !== "number" || !Number.isInteger(value.planVersion) || value.planVersion < 1 || !isValidIsoDateTime(value.periodStart) || !isValidIsoDateTime(value.periodEnd) || !hasValidPeriod(value.periodStart, value.periodEnd) || typeof value.recordCount !== "number" || !Number.isInteger(value.recordCount) || value.recordCount < 0 || !Array.isArray(value.records) || value.recordCount !== value.records.length) {
+    return false;
+  }
+  const seen = /* @__PURE__ */ new Set();
+  let previousPerformedAt = null;
+  let previousRecordId = null;
+  for (const record of value.records) {
+    if (!isRecord(record) || !isRecord(record.Procedure)) {
+      return false;
+    }
+    if (!isNonEmptyString(record.RecordId) || !isNonEmptyString(record.Procedure.ProcedureId) || !isNonEmptyString(record.Procedure.ProcedureVersion) || record.Procedure.ApprovalState !== "APPROVED" || !RESULT_VALUES.has(record.result) || !isValidIsoDateTime(record.performedAt) || !isValidIsoDateTime(record.recordedAt) || record.planId !== value.planId || record.planVersion !== value.planVersion) {
+      return false;
+    }
+    if (seen.has(record.RecordId)) {
+      return false;
+    }
+    seen.add(record.RecordId);
+    if (previousPerformedAt !== null && previousRecordId !== null) {
+      const timeOrder = Date.parse(previousPerformedAt) - Date.parse(record.performedAt);
+      if (timeOrder > 0 || timeOrder === 0 && previousRecordId.localeCompare(record.RecordId) > 0) {
+        return false;
+      }
+    }
+    previousPerformedAt = record.performedAt;
+    previousRecordId = record.RecordId;
+  }
+  return true;
+}
+function contextMatches(model, context) {
+  return model.OrganizationId === context.OrganizationId && model.SiteId === context.SiteId && model.UserId === context.UserId && model.planId === context.planId && model.planVersion === context.planVersion && model.periodStart === context.periodStart && model.periodEnd === context.periodEnd;
+}
+function buildHumanReviewMaterials(monitoringInput, presentationContextInput) {
+  if (!validateMonitoringReadModel(monitoringInput)) {
+    return { status: "MALFORMED_INPUT" };
+  }
+  if (presentationContextInput !== void 0) {
+    const context = parsePresentationContext(presentationContextInput);
+    if (context === null) {
+      return { status: "MALFORMED_INPUT" };
+    }
+    if (!contextMatches(monitoringInput, context)) {
+      return { status: "CONTEXT_MISMATCH" };
+    }
+  }
+  return {
+    status: "RESOLVED",
+    value: {
+      OrganizationId: monitoringInput.OrganizationId,
+      SiteId: monitoringInput.SiteId,
+      UserId: monitoringInput.UserId,
+      planId: monitoringInput.planId,
+      planVersion: monitoringInput.planVersion,
+      periodStart: monitoringInput.periodStart,
+      periodEnd: monitoringInput.periodEnd,
+      recordCount: monitoringInput.recordCount,
+      records: monitoringInput.records.map((record) => ({
+        RecordId: record.RecordId,
+        ProcedureId: record.Procedure.ProcedureId,
+        ProcedureVersion: record.Procedure.ProcedureVersion,
+        result: record.result,
+        performedAt: record.performedAt,
+        recordedAt: record.recordedAt
+      })),
+      humanInterpretationRequired: true
     }
   };
 }
