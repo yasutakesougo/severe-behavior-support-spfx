@@ -2,284 +2,242 @@
 
 ```text
 Definition ID = REVIEW-OUTCOME-CAPTURE-SLICE-A
+Correction = 1
 Mode = DEFINITION ONLY
-Status = CANDIDATE / NOT LOCKED
+Status = CANDIDATE / CORRECTION-1 APPLIED / NOT LOCKED
 basis main = ea0963268c8ba86c546a2c251b4fd81a582c08a3
-parent relationship definition = REVIEW-TO-PLAN-REVISION-RELATIONSHIP-DEFINITION-1
-parent relationship status = HUMAN DEFINITION LOCKED / merged via PR #548
+parent = REVIEW-TO-PLAN-REVISION-RELATIONSHIP-DEFINITION-1
+parent status = HUMAN DEFINITION LOCKED / merged via PR #548
 Human Definition Lock GO = NOT RECEIVED
 Implementation = NOT AUTHORIZED
-SharePoint Write = NOT AUTHORIZED
-Production Write = NOT AUTHORIZED
-LIVE WRITE = NOT AUTHORIZED
-Ready / Merge = NOT AUTHORIZED by this Definition
-Issue mutation = NOT AUTHORIZED by this Definition
+Ready / Merge = NOT AUTHORIZED
+SharePoint / Production / LIVE WRITE = NOT AUTHORIZED
 ```
 
-This Definition does **not** authorize Implementation Start.
+This Definition does not authorize Implementation Start.
 
 ---
 
 ## 1. Purpose
 
-Define the smallest Product Slice that connects **current-main Human Review**
-to **MonitoringPeriodReviewOutcome capture and readback**, using the domain
-relationship already implemented on main via PR #548.
+Current main already displays `HumanReviewMaterials`, states that judgment belongs to humans, and implements the `MonitoringPeriodReviewOutcome` domain contract.
 
-This Slice closes the direct current-main Product Gap:
+Current main does not connect human judgment to outcome input and same-screen readback.
+
+This Slice defines the smallest Product Slice that proves that connection with synthetic, non-authoritative persistence only.
 
 ```text
 HumanReviewMaterials
-= displayable
-
-Human judgment ownership
-= stated in UI
-
-MonitoringPeriodReviewOutcome
-= domain-implemented
-
-NO_CHANGE / CHANGE_REQUIRED
-= domain-implemented
-
-Revision Pending
-= domain-derived
-
-however
-
-Human judgment
         ↓
-Outcome input
+人が事実を確認
         ↓
-Outcome readback
-= NOT CONNECTED
+未判断
+        ↓
+「変更なし」 | 「変更が必要」
+        ↓
+canonical MonitoringPeriodReviewOutcome contract に適合する値を組み立てる
+        ↓
+synthetic / presentation-only state
+        ↓
+同一画面で非本番の結果を確認
 ```
 
-This Definition is **not** a pre-#547 UI friction correction Slice.
-It is **not** a Monitoring versioning Slice.
-It is **not** an Assessment→Plan or ServiceUser master Slice.
+This Slice does not create an authoritative business decision record.
 
 ---
 
-## 2. Background — current main freeze
+## 2. Current-main baseline
 
 ```text
 main = ea0963268c8ba86c546a2c251b4fd81a582c08a3
-latest merge = PR #548 (Review → Revision domain relationship)
-prior merge = PR #547 (Human Review IA clarity A1/A2)
+PR #547 = Human Review identity / role clarity merged
+PR #548 = Review → Revision domain relationship merged
 ```
 
-### Already on main
-
-| Capability | Status | Evidence |
-|---|---|---|
-| `MonitoringPeriodReviewOutcome` domain type | IMPLEMENTED | `src/domain/monitoring-period-review-outcome.ts` |
-| `NO_CHANGE` / `CHANGE_REQUIRED` | IMPLEMENTED | domain validators + tests |
-| `isRevisionPending()` | IMPLEMENTED | derived; no SupportPlan status added |
-| N→N+1 binding type | IMPLEMENTED | domain only; not product-connected |
-| `HumanReviewView` materials display | IMPLEMENTED | fact materials + human-ownership copy |
-| `MonitoringView` composition | IMPLEMENTED | summary + materials on same page |
-| #547 identity / role cues | MERGED | person identity primary; summary vs materials cues |
-| `LIVE_WRITE_AUTHORIZED` | false | domain constant |
-
-### Not on main
-
-| Capability | Status |
-|---|---|
-| Human Review outcome input UI | NOT CONNECTED |
-| Outcome capture from reviewed materials context | NOT CONNECTED |
-| Outcome readback on same screen | NOT CONNECTED |
-| Outcome persistence (even synthetic) in Product | NOT CONNECTED |
-| SupportPlanVersion N+1 creation UI | NOT CONNECTED |
-| SharePoint Outcome persistence | NOT CONNECTED |
-
-Current `HumanReviewView` states that humans own judgment, but provides no
-operation to record `NO_CHANGE` or `CHANGE_REQUIRED`.
-
----
-
-## 3. Evidence boundaries (do not conflate)
-
-### Pre-#547 Actual Staff Evidence (#539)
+Already implemented:
 
 ```text
-Actual Staff Evidence = ESTABLISHED
-Staff count = 1
-Overall = PARTIAL
-Actual Staff Value PASS = NOT ESTABLISHED
-Evidence target UI = pre-#547
-Further AI persona evaluation = STOP
+MonitoringPeriodReviewOutcome
+NO_CHANGE / CHANGE_REQUIRED
+isRevisionPending()
+N→N+1 lineage contract
+HumanReviewMaterials display
+Human judgment ownership copy
 ```
 
-This evidence remains valid as **pre-#547 observation**.
-It must **not** be reinterpreted as proof that current-main Q1/Q2/Q5 remain
-unresolved after #547.
-
-### Current-main Actual Staff revalidation
+Not connected:
 
 ```text
-Current-main Actual Staff revalidation = NOT PERFORMED
-Current-main Actual Staff Value PASS = UNKNOWN / NOT ESTABLISHED
+Human Review outcome input
+canonical Outcome assembly from the displayed review context
+synthetic readback on the same screen
+SharePoint Outcome persistence
+SupportPlanVersion N+1 creation
 ```
 
-This Slice does **not** require current-main staff revalidation before Definition.
-It does **not** claim staff friction is fully resolved.
-
-### Primary justification for this Slice
-
-The Slice is justified by a **current-main structural Product Gap** that exists
-independently of pre-#547 staff evidence:
+The direct current-main Product Gap is:
 
 ```text
 Domain contract exists
         ↓
 Human judgment responsibility is displayed
         ↓
-Human cannot yet record that judgment
+Human cannot yet record and confirm a synthetic domain-valid result
 ```
 
 ---
 
-## 4. Problem Statement
+## 3. Evidence boundary
 
-After a staff member reviews `HumanReviewMaterials`, the product must allow
-them to record one of two business decisions already defined in domain:
+Pre-#547 Actual Staff Evidence in #539 remains valid for the pre-#547 UI.
+
+```text
+Actual Staff Evidence = ESTABLISHED
+Staff count = 1
+Overall = PARTIAL
+Evidence target = pre-#547 UI
+```
+
+It must not be treated as proof that Q1 / Q2 / Q5 remain unresolved on current main.
+
+Current-main Actual Staff revalidation has not been performed.
+
+```text
+Current-main Actual Staff revalidation = NOT PERFORMED
+Current-main Actual Staff Value PASS = NOT ESTABLISHED
+```
+
+This Slice is justified by the current-main structural gap, not by assuming that the pre-#547 UI findings still exist.
+
+---
+
+## 4. Parent Definition binding
+
+This Slice consumes the locked parent relationship without reopening it.
+
+```text
+Monitoring = Derived
+HumanReviewMaterials != MonitoringPeriodReviewOutcome
+NO_CHANGE = reviewed, no change required
+CHANGE_REQUIRED may exist before N+1
+CHANGE_REQUIRED != Revision complete
+Revision Pending = derived relationship state
+UI / AI != Outcome System of Record
+Human authority is required for authoritative Outcome completion
+```
+
+This Slice does not change `SupportPlan.status`.
+
+This Slice does not create SupportPlanVersion N+1.
+
+---
+
+## 5. Decision vocabulary
+
+The only selectable decisions are:
 
 ```text
 NO_CHANGE
 CHANGE_REQUIRED
 ```
 
-Without this connection:
+Human-readable labels are:
 
 ```text
-「見直したが変更なし」
+NO_CHANGE        → 変更なし
+CHANGE_REQUIRED  → 変更が必要
 ```
 
-and
+No default decision is allowed.
 
-```text
-「変更が必要」
-```
+No timeout decision is allowed.
 
-cannot be distinguished from
-
-```text
-「まだ見直していない」
-```
-
-even though domain types for the first two already exist.
-
-Monitoring remains Derived.
-This Slice does **not** introduce MonitoringVersion.
+AI must not select or finalize either value.
 
 ---
 
-## 5. Parent Definition binding
+## 6. Synthetic authority boundary — Correction-1 / P1-1
 
-This Slice must remain conformant with locked
-`REVIEW-TO-PLAN-REVISION-RELATIONSHIP-DEFINITION-1`.
-
-It must **not** reopen:
+An explicit human button action is necessary for Slice A capture, but it is not sufficient to establish authoritative business decision completion.
 
 ```text
-MonitoringVersion
-SupportPlan.status = PendingReview reinterpretation
-Decision complete = Revision complete
-UI / AI as Outcome System of Record
-Assessment → Plan
-ServiceUser master
+Human button click
+!= Human authority established for production record
+
+canonical domain-valid value
+!= authoritative MonitoringPeriodReviewOutcome business record
+
+synthetic/session readback
+!= parent Definition Decision completion
 ```
 
-It **uses** without redefining:
+Slice A may assemble a value that validates against the canonical `MonitoringPeriodReviewOutcome` contract.
+
+That value is classified only as:
+
+```text
+SYNTHETIC CAPTURE EVIDENCE
+PRESENTATION ONLY
+NON-PRODUCTION
+```
+
+`reviewedBy` may use a synthetic or shell-provided actor decided in Implementation Scope.
+
+A non-empty `reviewedBy` value satisfies the domain shape only.
+
+It does not prove actor authenticity or production authority.
+
+The UI must not claim that the business Outcome has been durably or authoritatively saved.
+
+The readback must make the boundary visible with equivalent meaning to:
+
+```text
+デモ上の見直し結果
+本番には保存されていません
+```
+
+Exact wording is decided in Implementation Scope and rendered acceptance.
+
+---
+
+## 7. Canonical domain → SPFx bridge invariant — Correction-1 / P1-2
+
+The SPFx surface must consume the canonical #548 domain contract.
+
+The SPFx shell must not independently redefine:
 
 ```text
 MonitoringPeriodReviewOutcome
-NO_CHANGE
-CHANGE_REQUIRED
-Revision Pending (derived)
-Monitoring Period Review Context fields
-Human authority required
+MonitoringPeriodReviewDecision
+Outcome validator semantics
+OutcomeId mint semantics
+Revision Pending semantics
 ```
+
+```text
+Duplicate Outcome contract in SPFx shell = FORBIDDEN
+Duplicate validator / mint logic in SPFx shell = FORBIDDEN
+```
+
+Current SPFx monitoring bridge exposes read-model and review-material contracts but does not expose `MonitoringPeriodReviewOutcome`.
+
+Implementation Scope must explicitly decide the canonical domain → SPFx export path before Implementation Start GO.
+
+Allowed design choices may include extending the existing narrow bridge or introducing another narrow generated bridge.
+
+This Definition does not choose between those implementation mechanisms.
+
+The resulting bridge must remain bounded to this synthetic Product Slice and must not create persistence or LIVE WRITE authority.
 
 ---
 
-## 6. Target Product Flow (Slice A)
+## 8. Review context assembly
 
-```text
-MonitoringReadModel
-        ↓
-HumanReviewMaterials
-        ↓
-Monitoring Period Review (human reads facts)
-        ↓
-[未判断]
-        ↓
-Human selects exactly one:
-  「変更なし」  → NO_CHANGE
-  「変更が必要」 → CHANGE_REQUIRED
-        ↓
-MonitoringPeriodReviewOutcome assembled
-        ↓
-Synthetic / fake persistence (presentation boundary)
-        ↓
-Same-screen readback of saved Outcome
-```
+Review context must come from the already-resolved `HumanReviewMaterials` / Monitoring context on screen.
 
-If `CHANGE_REQUIRED`:
+Staff must not re-enter identity or period fields for this Slice.
 
-```text
-表示:
-  変更が必要
-
-  次の計画版は
-  まだ作成されていません
-```
-
-This readback must reflect **Revision Pending** semantics from the parent
-Definition. It must **not** imply N+1 already exists.
-
-If `NO_CHANGE`:
-
-```text
-表示:
-  見直し結果: 変更なし
-```
-
----
-
-## 7. Core Principles
-
-### 7.1 Human authority
-
-Only an explicit human action may finalize Outcome capture.
-
-```text
-AI suggestion
-≠
-Outcome capture
-
-Materials display
-≠
-Outcome capture
-
-Default / implicit / timeout
-≠
-Outcome capture
-```
-
-### 7.2 Domain-first capture
-
-Captured values must map to existing domain contract:
-
-```text
-MonitoringPeriodReviewOutcome.decision
-= "NO_CHANGE" | "CHANGE_REQUIRED"
-```
-
-Review Context must be taken from the already-resolved
-`HumanReviewMaterials` / Monitoring context on screen, not re-entered by staff.
-
-At minimum:
+The assembled canonical value includes the existing contract fields:
 
 ```text
 OrganizationId
@@ -290,312 +248,310 @@ planVersion
 periodStart
 periodEnd
 sourceRecordIds[]
+decision
 reviewedAt
 reviewedBy
-OutcomeId (minted deterministically from payload)
+OutcomeId
 ```
 
-### 7.3 Synthetic persistence only
+`sourceRecordIds[]` must reflect the exact displayed review evidence set.
 
-Slice A persistence is **presentation-only / synthetic**.
-
-```text
-Synthetic persistence
-≠
-SharePoint persistence
-≠
-Production Binding
-≠
-LIVE WRITE
-```
-
-Saved Outcome exists for demo/session readback and proof of connection only.
-It must be clearly bounded as non-production data.
-
-Follow existing demo boundary patterns (`presentationOnly`, hold copy, no live
-write claims).
-
-### 7.4 Same-screen readback
-
-After capture, the same composition must show the saved Outcome without
-navigation away from the Monitoring + Human Review surface.
-
-Readback must show:
-
-```text
-decision label (human-readable)
-reviewed plan version
-reviewed period
-Revision Pending state when CHANGE_REQUIRED and no binding exists
-```
-
-### 7.5 No automatic revision
-
-Outcome capture does **not** create SupportPlanVersion N+1.
-Outcome capture does **not** mutate `SupportPlan.currentVersion`.
-Outcome capture does **not** complete Revision.
+A valid zero-record review may therefore produce an empty source set according to the already-implemented domain contract.
 
 ---
 
-## 8. UI Boundary
+## 9. Target Product Flow
 
-### IN (conceptual)
-
-```text
-Undecided state indicator (before capture)
-Two explicit human actions only:
-  NO_CHANGE
-  CHANGE_REQUIRED
-Post-save readback panel / section
-CHANGE_REQUIRED Revision Pending message
-Synthetic/demo boundary note (non-production persistence)
-Disabled / unavailable after successful capture for same review context
-  (exact UX deferred to Implementation Scope; must not allow silent overwrite)
-```
-
-### OUT
+Before capture:
 
 ```text
-N+1 creation UI
-Plan editing
-MonitoringVersion display
-Assessment linkage UI
-AI recommendation / auto-decision
-SharePoint save success semantics
-Production save badge
-Navigation to a separate Review outcome page (unless later Human GO)
-Daily Records journey redesign
+見直し結果 = 未判断
 ```
 
-UI remains a projection of captured Outcome; UI state alone is not System of Record.
+Human selects exactly one action:
+
+```text
+変更なし
+変更が必要
+```
+
+After successful synthetic capture, the same Monitoring / Human Review composition shows the synthetic result.
+
+For `NO_CHANGE`:
+
+```text
+デモ上の見直し結果: 変更なし
+本番には保存されていません
+```
+
+For `CHANGE_REQUIRED`:
+
+```text
+デモ上の見直し結果: 変更が必要
+次の計画版はまだ作成されていません
+本番には保存されていません
+```
+
+`CHANGE_REQUIRED` readback must not imply that N+1 exists.
 
 ---
 
-## 9. Persistence Boundary
+## 10. Synthetic persistence boundary
 
-Slice A may use one of (Implementation Scope decides):
+Implementation Scope may choose one bounded presentation mechanism:
 
 ```text
-A. in-memory / session-scoped synthetic store keyed by review context
-B. component-local state with explicit presentationOnly flag
-C. existing demo fixture/session pattern consistent with shell boundaries
+in-memory / session-scoped synthetic store
+component-local state with explicit presentation-only classification
+existing synthetic demo/session pattern
 ```
 
-Slice A must **not** use:
+Slice A must not use:
 
 ```text
 SharePoint list / REST / adapter
-domain persistence port (deferred from #548 Scope)
-Production repository
+domain persistence port
+production repository
 cross-tenant durable storage
 ```
 
-Duplicate capture for the same review context should fail closed or be explicitly
-handled (Implementation Scope). Silent overwrite of a finalized Outcome is forbidden.
+Silent overwrite of an already captured synthetic result for the same review context is forbidden.
+
+Duplicate handling is decided in Implementation Scope and must fail closed or require an explicit separate action.
+
+Outcome correction / cancellation / supersede is outside Slice A.
 
 ---
 
-## 10. Relationship to MonitoringVersion / Q6
+## 11. MonitoringVersion boundary — Correction-1 / P2-1
 
-Staff 1 Q6 asked whether Monitoring itself needs version management.
-Parent Definition and PR #548 answered: **no MonitoringVersion**.
-
-This Slice preserves:
+The current parent contract states:
 
 ```text
-MonitoringVersion = NOT REQUIRED
-Monitoring versioning decision = HOLD / OUT
+Monitoring = Re-computable Derived View
+MonitoringVersion = NOT DEFINED / NOT ADOPTED
 ```
 
-Slice A captures **human review outcome**, not a Monitoring snapshot version.
+This Slice does not introduce `MonitoringVersion` or Monitoring snapshot persistence.
 
----
-
-## 11. Open PR / simulation entropy
-
-PHASE 1 reconciliation (read-only):
-
-| PR | Disposition relative to Slice A |
-|---|---|
-| #539 | Evidence container; pre-#547 staff observation |
-| #543 | Historical simulation evidence; do not extend simulation |
-| #544 | Separate LOCKED process Definition; no enforcement |
-| #526,#506,#505,#504,#491,#489,#481 | Separate HOLD tracks |
-
-No open PR blocks Slice A Definition.
-No requirement to merge #543 / #544 before Slice A.
-
----
-
-## 12. Non-Goals
+This Slice does not claim that every future Monitoring versioning question has been permanently decided.
 
 ```text
-SharePoint persistence
+Future Monitoring versioning decision = OUT OF THIS SLICE
+```
+
+Staff 1 Q6 remains a separate domain observation and does not authorize MonitoringVersion work here.
+
+---
+
+## 12. Explicit OUT
+
+```text
+SharePoint Outcome persistence
 SupportPlanVersion N+1 creation
 SupportPlan.currentVersion mutation
-SupportPlan.status enum changes
+SupportPlan.status changes
+Active / effective state changes
 MonitoringVersion / Monitoring snapshot persistence
 Assessment → Plan relationship
-ServiceUser master / Staff master
+ServiceUser / Staff master redesign
 Production Binding
 LIVE WRITE
 Deploy
-AI automatic decision
-Actual Staff revalidation on current main
-Pre-#547 UI friction rework
+AI recommendation / automatic decision
 Daily → Monitoring → Review journey redesign
 Outcome correction / cancellation / supersede
-Binding creation UI (N→N+1 linkage product flow)
+N→N+1 binding creation UI
 ```
 
-Secondary Gaps remain separate.
+Secondary Gaps must not be absorbed into this Slice.
 
 ---
 
-## 13. Invariants
+## 13. UI boundary
+
+IN conceptually:
 
 ```text
-INV-A1  Outcome capture requires explicit human action
-INV-A2  Only NO_CHANGE or CHANGE_REQUIRED may be captured
-INV-A3  Captured Outcome must validate against domain contract
-INV-A4  Review Context comes from on-screen materials context
-INV-A5  Synthetic persistence only; LIVE WRITE forbidden
-INV-A6  Readback occurs on same Monitoring/Human Review composition
-INV-A7  CHANGE_REQUIRED readback must not imply N+1 exists
-INV-A8  NO_CHANGE readback must distinguish reviewed-no-change from undecided
-INV-A9  MonitoringVersion must not be introduced
-INV-A10 UI-only state must not substitute for captured Outcome
-INV-A11 AI must not finalize Outcome
-INV-A12 Parent Definition relationship semantics must not be contradicted
+未判断 state
+NO_CHANGE explicit human action
+CHANGE_REQUIRED explicit human action
+synthetic non-production boundary note
+same-screen synthetic readback
+CHANGE_REQUIRED Revision Pending explanation
+disabled / unavailable state after successful capture for the same context
 ```
 
----
-
-## 14. Acceptance Criteria (Definition)
+OUT:
 
 ```text
-AC-A1
-Slice closes Human Review → Outcome input → readback gap on current main.
-
-AC-A2
-Uses existing MonitoringPeriodReviewOutcome domain; no domain redesign.
-
-AC-A3
-Captures only NO_CHANGE or CHANGE_REQUIRED.
-
-AC-A4
-Synthetic / fake persistence is explicit and non-production.
-
-AC-A5
-Same-screen readback after capture is required.
-
-AC-A6
-CHANGE_REQUIRED shows Revision Pending message without N+1 creation.
-
-AC-A7
-MonitoringVersion is not introduced.
-
-AC-A8
-SharePoint / LIVE WRITE / N+1 / currentVersion / Assessment / User master remain OUT.
-
-AC-A9
-Justification is current-main structural gap, not pre-#547 staff evidence alone.
-
-AC-A10
-No Implementation or production mutation authorized by this Definition.
+N+1 creation UI
+plan editing
+MonitoringVersion UI
+SharePoint save-success semantics
+production save badge
+AI decision control
 ```
+
+UI state alone is not an authoritative Outcome System of Record.
 
 ---
 
-## 15. Expected Staff Explanation
+## 14. Required invariants
 
 ```text
-見直し資料を確認したあと、
-「変更なし」か「変更が必要」かを選んで記録できます。
-
-変更なしの場合は、
-今の計画版をそのまま使い続けます。
-
-変更が必要の場合は、
-まず「変更が必要」という結果だけを残します。
-次の計画版は、この画面ではまだ作りません。
-
-モニタリング自体の版は作りません。
+INV-A1  Explicit human action is required for synthetic capture.
+INV-A2  Only NO_CHANGE or CHANGE_REQUIRED may be selected.
+INV-A3  Synthetic capture must validate through the canonical #548 domain contract.
+INV-A4  Review context comes from the displayed resolved materials context.
+INV-A5  Synthetic persistence only; SharePoint / LIVE WRITE are forbidden.
+INV-A6  Synthetic readback occurs on the same Monitoring / Human Review composition.
+INV-A7  CHANGE_REQUIRED readback must not imply N+1 exists.
+INV-A8  NO_CHANGE readback must distinguish reviewed-no-change from undecided.
+INV-A9  MonitoringVersion is not introduced by this Slice.
+INV-A10 UI-only state is not authoritative business Outcome persistence.
+INV-A11 AI cannot select or finalize Outcome.
+INV-A12 Parent relationship semantics must not be contradicted.
+INV-A13 Synthetic domain-valid value != authoritative business Outcome.
+INV-A14 SPFx must consume canonical domain semantics; duplicate contract logic is forbidden.
+INV-A15 reviewedBy shape validity != actor authenticity / Human authority establishment.
 ```
 
 ---
 
-## 16. Implementation Scope Gate (after Definition Lock)
-
-Definition Lock后、Implementation Scope では最低限決定する:
+## 15. Definition acceptance criteria
 
 ```text
-1. Exact Product files (MonitoringView / HumanReviewView / new module?)
-2. Synthetic persistence mechanism (session / in-memory / component state)
-3. reviewedBy source in demo (synthetic actor string vs shell context)
-4. reviewedAt source (client clock vs injected frozen timestamp)
-5. Duplicate capture handling for same review context
-6. Disabled state after capture UX
-7. Readback presentation structure and copy
-8. Slice flag constant (presentationOnly / liveWriteAuthorized false)
-9. Focused tests + rendered smoke scope
-10. Whether capture attaches below materials or adjacent section
-11. Error / malformed domain assembly handling (fail-closed copy)
-12. Whether MonitoringView or HumanReviewView owns capture UI
+AC-A1  Slice targets the current-main Human Review → outcome input → readback structural gap.
+AC-A2  Existing MonitoringPeriodReviewOutcome domain semantics are reused without redesign.
+AC-A3  Only NO_CHANGE / CHANGE_REQUIRED are selectable.
+AC-A4  Synthetic capture is explicit, presentation-only, and non-authoritative.
+AC-A5  Same-screen readback is required.
+AC-A6  CHANGE_REQUIRED shows next-version-not-created semantics.
+AC-A7  MonitoringVersion is not introduced.
+AC-A8  SharePoint / LIVE WRITE / N+1 / currentVersion / Assessment / master redesign remain OUT.
+AC-A9  Pre-#547 staff evidence is not misrepresented as current-main evidence.
+AC-A10 SPFx must consume canonical #548 outcome semantics through an explicitly scoped bridge/export path.
+AC-A11 Synthetic readback must visibly state that it is not production persistence.
+AC-A12 No Implementation, Ready, Merge, Deploy, or production mutation is authorized by this Definition.
 ```
 
 ---
 
-## 17. Verification intent (Definition level)
+## 16. Implementation Scope Gate
 
-Later implementation evidence should prove at minimum:
+Only after Human Definition Lock GO, Implementation Scope must decide:
 
 ```text
-undecided → capture NO_CHANGE → readback shows 変更なし
-undecided → capture CHANGE_REQUIRED → readback shows 変更が必要 + Revision Pending
-captured Outcome validates against domain contract
-synthetic boundary note visible
-no SharePoint / LIVE WRITE path
-no N+1 creation UI
-focused tests + rendered smoke PASS
+1. Exact Product / verification files.
+2. Canonical domain → SPFx bridge/export path.
+3. Synthetic persistence mechanism.
+4. reviewedBy source and its explicit non-authoritative classification.
+5. reviewedAt source.
+6. OutcomeId mint call path from canonical domain code.
+7. Duplicate capture handling.
+8. Disabled state after capture.
+9. Readback structure and exact non-production copy.
+10. Error / malformed assembly fail-closed behavior.
+11. Focused test surface.
+12. Rendered browser acceptance surface at 1280×900 and 390×844.
+13. Capture UI ownership between MonitoringView / HumanReviewView / a narrow child component.
 ```
 
-Actual Staff revalidation on current main remains a **separate optional gate**
-after implementation; not required for Definition Lock.
+Implementation Scope must not authorize SharePoint persistence, N+1 creation, MonitoringVersion, Deploy, or LIVE WRITE.
 
 ---
 
-## 18. Independent Definition Review targets
+## 17. Verification and Actual Staff Value Gate — Correction-1 / P1-3
+
+Implementation verification must prove at minimum:
 
 ```text
-Parent Definition conformance
-No MonitoringVersion creep
-No SharePoint / LIVE WRITE authorization
-Synthetic persistence boundary explicit
-Human authority explicit
-NO_CHANGE vs undecided distinction preserved
-CHANGE_REQUIRED Revision Pending message without N+1
-Evidence boundary (pre-#547 vs current-main) respected
-Secondary Gap firewall maintained
-Scope minimalism (Outcome capture/readback only)
+undecided → NO_CHANGE → synthetic readback
+undecided → CHANGE_REQUIRED → synthetic readback + next version not created
+canonical domain validation is used
+canonical OutcomeId mint semantics are used
+non-production boundary is visible
+no SharePoint / LIVE WRITE path exists
+no N+1 creation UI exists
+focused tests PASS
+rendered browser acceptance PASS
+```
+
+Actual Staff Value Check is not required before Definition Lock.
+
+Actual Staff Value Check is not required before Implementation Start GO.
+
+After implementation and Rendered Browser Acceptance, Actual Staff Value Check is a required Product Value Gate before Human Ready eligibility.
+
+Minimum questions:
+
+```text
+1. 誰の・どの期間・どの計画を見直しているか分かるか？
+2. 「変更なし」と「変更が必要」の意味が迷わず分かるか？
+3. 「変更が必要」でも、まだ次の計画版が作られていないことが分かるか？
+```
+
+One staff participant is sufficient for the first check unless broader confirmation is separately requested.
+
+If the staff check causes Product code or copy changes, focused verification and rendered browser acceptance must be repeated before exact implementation HEAD fixation.
+
+```text
+Rendered Browser Acceptance
+        ↓
+Actual Staff Value Check = REQUIRED
+        ↓
+correction if needed
+        ↓
+re-verification if changed
+        ↓
+Exact Diff / HEAD Fixation
+        ↓
+Independent Implementation Review
+        ↓
+Human Ready GO / HOLD
 ```
 
 ---
 
-## 19. Stop Condition
+## 18. Correction-1 disposition
+
+Independent Definition Review-1 findings are dispositioned as follows:
+
+```text
+P1-1 synthetic authority ambiguity
+= RESOLVED
+Synthetic domain-valid capture is explicitly non-authoritative and not Decision completion.
+
+P1-2 canonical domain → SPFx bridge ambiguity
+= RESOLVED
+Canonical #548 semantics are mandatory; duplicate SPFx contract logic is forbidden; exact bridge path is deferred to Scope.
+
+P1-3 Actual Staff gate weakened to optional
+= RESOLVED
+Post-render implementation staff check is REQUIRED before Human Ready eligibility.
+
+P2-1 MonitoringVersion wording too strong
+= RESOLVED
+Current state is NOT DEFINED / NOT ADOPTED; future decision remains OUT OF THIS SLICE.
+```
+
+---
+
+## 19. Stop condition
 
 ```text
 REVIEW-OUTCOME-CAPTURE-SLICE-A
-= DEFINED (candidate)
+= DEFINED / CORRECTION-1 APPLIED / CANDIDATE
 
 Implementation
-= NOT STARTED
+= NOT STARTED / NOT AUTHORIZED
 
-Mutation of Product code
+Product code mutation
 = 0
 
 NEXT
-= Independent Definition Review-1
+= Independent Definition Re-Review-1
 ```
 
-Human Definition Lock GO is required before Implementation Scope or Implementation.
+Human Definition Lock GO remains a separate gate after Independent Definition Re-Review-1.
