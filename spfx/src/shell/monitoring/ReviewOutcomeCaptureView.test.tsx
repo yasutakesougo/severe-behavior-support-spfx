@@ -121,7 +121,9 @@ describe("ReviewOutcomeCaptureView", () => {
     expect(container.textContent).toContain("0 / 255");
     expect(container.textContent).not.toContain("見直し結果を安全に記録できません");
 
-    act(() => ReactDOM.unmountComponentAtNode(container));
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
     container.remove();
   });
 });
