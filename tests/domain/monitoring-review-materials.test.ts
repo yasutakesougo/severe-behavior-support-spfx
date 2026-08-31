@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import type { MonitoringReadModel, MonitoringRecordItem } from "../../src/domain/monitoring-read-model";
+import type {
+  MonitoringReadModel,
+  MonitoringRecordItem,
+} from "../../src/domain/monitoring-read-model";
 import {
   buildHumanReviewMaterials,
   type ReviewPresentationContext,
@@ -118,7 +121,10 @@ describe("MONITORING-REVIEW-LINK-SLICE-A human review materials", () => {
       status: "MALFORMED_INPUT",
     });
     assert.deepEqual(
-      buildHumanReviewMaterials({ ...input, records: [{ ...input.records[0], planVersion: 3 }] }),
+      buildHumanReviewMaterials({
+        ...input,
+        records: [{ ...input.records[0], planVersion: 3 }],
+      }),
       { status: "MALFORMED_INPUT" },
     );
   });
@@ -137,6 +143,9 @@ describe("MONITORING-REVIEW-LINK-SLICE-A human review materials", () => {
     if (result.status !== "RESOLVED") return;
 
     assert.equal(result.value.recordCount, 0);
-    assert.equal(result.value.records.some((item) => item.result === "NOT_PERFORMED"), false);
+    assert.equal(
+      result.value.records.some((item) => item.result === "NOT_PERFORMED"),
+      false,
+    );
   });
 });
