@@ -207,8 +207,9 @@ for (const viewport of viewports) {
   await page.click('[data-smoke-switch-context="true"]');
   await page.waitForFunction(
     () =>
-      document.querySelector('[data-human-review-person-identity="true"]')?.textContent?.trim() ===
-      "Bさん",
+      document
+        .querySelector('[data-human-review-person-identity="true"]')
+        ?.textContent?.trim() === "Bさん",
   );
   const contextReset = await observe({
     decisionCopy: "見直し結果: 未判断",
@@ -224,9 +225,9 @@ for (const viewport of viewports) {
 
   await page.type('[data-review-outcome-note-input="true"]', "a".repeat(255));
   const boundary = await page.evaluate(() => {
-    const counter = document.querySelector(
-      '[data-review-outcome-note-count="true"]',
-    )?.textContent?.trim();
+    const counter = document
+      .querySelector('[data-review-outcome-note-count="true"]')
+      ?.textContent?.trim();
     const textarea = document.querySelector('[data-review-outcome-note-input="true"]');
     return {
       counter,
