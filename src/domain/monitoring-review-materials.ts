@@ -1,5 +1,6 @@
 import type { ProcedureRecordResult } from "./procedure-record";
 import type { MonitoringReadModel } from "./monitoring-read-model";
+import { evaluateObservationPeriodMembership } from "./support-plan";
 import { isNonEmptyString, isRecord, isValidIsoDateTime } from "./validation";
 
 export type ReviewPresentationContext = Readonly<{
@@ -55,6 +56,12 @@ const CONTEXT_KEYS = new Set([
   "periodEnd",
 ]);
 
+function hasValidPeriod(periodStart: string, periodEnd: string): boolean {
+  return (
+    evaluateObservationPeriodMembership(periodStart, periodEnd, periodStart) !== "MALFORMED_INPUT"
+  );
+}
+
 function parsePresentationContext(value: unknown): ReviewPresentationContext | null {
   if (!isRecord(value) || !Object.keys(value).every((key) => CONTEXT_KEYS.has(key))) {
     return null;
@@ -69,7 +76,8 @@ function parsePresentationContext(value: unknown): ReviewPresentationContext | n
     !Number.isInteger(value.planVersion) ||
     value.planVersion < 1 ||
     !isValidIsoDateTime(value.periodStart) ||
-    !isValidIsoDateTime(value.periodEnd)
+    !isValidIsoDateTime(value.periodEnd) ||
+    !hasValidPeriod(value.periodStart, value.periodEnd)
   ) {
     return null;
   }
@@ -100,6 +108,7 @@ function validateMonitoringReadModel(value: unknown): value is MonitoringReadMod
     value.planVersion < 1 ||
     !isValidIsoDateTime(value.periodStart) ||
     !isValidIsoDateTime(value.periodEnd) ||
+    !hasValidPeriod(value.periodStart, value.periodEnd) ||
     typeof value.recordCount !== "number" ||
     !Number.isInteger(value.recordCount) ||
     value.recordCount < 0 ||
