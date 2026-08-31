@@ -64,10 +64,16 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({ model, personLab
     ) : (
       <ol className={styles.recordList} data-monitoring-record-list="true">
         {model.records.map((record) => (
-          <li key={record.RecordId} className={styles.recordItem} data-monitoring-record-id={record.RecordId}>
+          <li
+            key={record.RecordId}
+            className={styles.recordItem}
+            data-monitoring-record-id={record.RecordId}
+          >
             <div className={styles.recordHeader}>
               <strong>{formatTokyoDateTime(record.performedAt)}</strong>
-              <span className={styles.resultLabel}>{labelForProcedureRecordResult(record.result)}</span>
+              <span className={styles.resultLabel}>
+                {labelForProcedureRecordResult(record.result)}
+              </span>
             </div>
             <dl className={styles.recordFacts}>
               <div>
