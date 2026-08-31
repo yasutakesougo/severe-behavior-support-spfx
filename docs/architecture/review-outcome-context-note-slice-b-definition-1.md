@@ -2,13 +2,17 @@
 
 ```text
 Definition ID = REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B
+Correction = 1
 Mode = DEFINITION ONLY
-Status = DEFINITION CANDIDATE / AWAITING INDEPENDENT REVIEW
+Status = DEFINITION CORRECTION-1 APPLIED / AWAITING INDEPENDENT RE-REVIEW
 basis main = 47145948b337d7e7f9d923bbf01ec962daafef08
 parent = REVIEW-OUTCOME-CAPTURE-SLICE-A
 parent PR = #549 MERGED
 parent exact implementation HEAD = 4731e4d855c289d90a35eb2b4a8b68e43e462952
 parent merge commit = 47145948b337d7e7f9d923bbf01ec962daafef08
+Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
+P1-1 Outcome identity semantics = CORRECTED
+P1-2 post-capture note edit boundary = CORRECTED
 Human Definition Lock GO = NOT RECEIVED
 Implementation = NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE = NOT AUTHORIZED
@@ -117,11 +121,13 @@ Target concept:
 ```text
 HumanReviewMaterials
         ↓
+human enters optional review context note
+        ↓
 human chooses NO_CHANGE or CHANGE_REQUIRED
         ↓
-optional human-authored review context note
+atomic synthetic capture of decision + associated note representation
         ↓
-synthetic outcome capture/readback
+same-screen readback
 ```
 
 The note is supplementary context. It is not a third decision value.
@@ -195,7 +201,7 @@ No AI-generated default note is allowed.
 
 ---
 
-## 6. Domain contract boundary
+## 6. Domain contract and identity boundary — Correction-1 / P1-1
 
 Current `MonitoringPeriodReviewOutcome` schema is v1.0.0 and has no note field.
 
@@ -204,10 +210,10 @@ This Slice must not silently mutate that v1.0.0 contract.
 Before Implementation Start, Implementation Scope must make an explicit domain
 compatibility decision for representing the note.
 
-Allowed semantic implementation families are limited to:
+Allowed implementation families are limited to:
 
 ```text
-A. additive review-note field owned by MonitoringPeriodReviewOutcome,
+A. additive review-note field semantically owned by MonitoringPeriodReviewOutcome,
    with explicit schema / DTO / validator / compatibility treatment
 
 or
@@ -216,14 +222,36 @@ B. narrow 1:1 review-outcome note record anchored to OutcomeId,
    used only if preserving the existing Outcome schema requires it
 ```
 
-The implementation mechanism is not chosen by this Definition.
+The physical representation mechanism is not chosen by this Definition.
+
+The business identity rule IS fixed here:
+
+```text
+review note content
+!= MonitoringPeriodReviewOutcome identity material
+```
+
+The existing Outcome business identity remains the review decision identity already
+established by the parent contract. The optional note supplements that Outcome; it
+does not create a different Outcome identity.
+
+Therefore:
+
+```text
+OutcomeId mint semantics MUST NOT add review-note text
+blank vs non-blank note MUST NOT by itself produce a different OutcomeId
+changing only note text MUST NOT be modeled as a new review decision Outcome
+```
+
+If representation family B is selected, the narrow note record references the
+existing `OutcomeId`; it must not remint or replace the parent Outcome identity.
 
 Whichever family is chosen, it must preserve:
 
 ```text
 one review context
 one captured decision
-optional supplemental note
+one optional supplemental note value at initial capture
 no general-purpose notes subsystem
 ```
 
@@ -234,6 +262,7 @@ UI-only text with no defined semantic owner
 silent extra property on v1.0.0 Outcome object
 reuse of SupportPlan free text as the review note
 new generic comment/activity-feed architecture
+note content added to canonical OutcomeId hash material
 ```
 
 ---
@@ -307,9 +336,9 @@ capture:
 
 ---
 
-## 9. Capture timing
+## 9. Capture timing and immutability boundary — Correction-1 / P1-2
 
-Preferred interaction concept:
+Target interaction:
 
 ```text
 optional note entry
@@ -319,6 +348,8 @@ explicit NO_CHANGE or CHANGE_REQUIRED action
 atomic synthetic capture of decision + associated note representation
         ↓
 same-screen readback
+        ↓
+all decision/note mutation controls disabled for that review context
 ```
 
 The note must not be silently saved before the explicit decision action.
@@ -331,11 +362,23 @@ no note success readback
 no partial synthetic store
 ```
 
-Duplicate handling from Slice A remains fail-closed unless Implementation Scope
-explicitly defines a bounded note-edit behavior.
+After first successful synthetic capture for the same review-context key:
 
-Note editing after successful capture is NOT automatically authorized by this
-Definition.
+```text
+second decision capture = blocked
+note overwrite = blocked
+note edit = OUT
+silent replacement = forbidden
+```
+
+This Slice does not define correction / edit / supersede semantics.
+
+If staff later need to edit a captured note, that requires a separate Definition
+with explicit identity, audit/history, and correction semantics. Implementation
+Scope must not invent an edit path.
+
+A different person / planVersion / review period remains a different review context
+and may start in undecided state as already defined by Slice A.
 
 ---
 
@@ -355,6 +398,9 @@ Example meaning:
 For blank note, the UI should not invent placeholder content as if a note exists.
 
 The note readback must be visually secondary to the decision.
+
+The rendered readback is immutable for that captured synthetic review context in
+this Slice.
 
 ---
 
@@ -410,6 +456,8 @@ INV-B9  No SharePoint / LIVE WRITE / Deploy authority is introduced.
 INV-B10 AI cannot author or infer the note.
 INV-B11 No generic comments/timeline subsystem is introduced.
 INV-B12 Existing Slice A identity / period / plan context and readback remain visible.
+INV-B13 Review-note text is excluded from MonitoringPeriodReviewOutcome identity / OutcomeId mint material.
+INV-B14 Post-success note editing / overwrite is forbidden in this Slice.
 ```
 
 ---
@@ -434,6 +482,7 @@ attachments
 rich text
 comment threads
 note history / edit history
+post-capture note edit / overwrite
 correction / cancellation / supersede workflow
 generic notes architecture
 ```
@@ -452,7 +501,9 @@ AC-B6  UI target is one bounded plain-text optional field + readback.
 AC-B7  CHANGE_REQUIRED still states next plan version is not yet created.
 AC-B8  Synthetic / non-production boundary remains visible.
 AC-B9  No generic comment architecture or production persistence is absorbed.
-AC-B10 No Implementation / Ready / Merge / Deploy / LIVE WRITE is authorized here.
+AC-B10 Review-note text does not change OutcomeId identity semantics.
+AC-B11 Successful capture locks both decision and note for that review context.
+AC-B12 No Implementation / Ready / Merge / Deploy / LIVE WRITE is authorized here.
 ```
 
 ---
@@ -463,13 +514,13 @@ If this Definition is independently review-cleared and later Human-locked,
 Implementation Scope must decide at minimum:
 
 ```text
-1. exact representation family: Outcome additive field vs narrow 1:1 OutcomeNote
+1. exact physical representation family: Outcome additive field vs narrow 1:1 OutcomeNote
 2. schema / DTO / validator compatibility treatment
-3. whether OutcomeId identity material includes or excludes note content
-4. exact note field name / type / maximum length / whitespace normalization
-5. exact canonical domain -> SPFx export path
-6. synthetic state shape and atomic capture behavior
-7. duplicate behavior and whether post-capture note edit remains OUT
+3. exact field/record name, type, maximum length, whitespace normalization
+4. exact canonical domain -> SPFx export path
+5. synthetic state shape and atomic capture behavior
+6. enforce locked OutcomeId mint semantics: note text excluded from identity material
+7. enforce duplicate behavior: after success, decision + note mutation unavailable
 8. UI label, helper copy, character-limit UX, error copy
 9. readback rendering for blank and non-blank note
 10. focused contract/component tests
@@ -479,6 +530,9 @@ Implementation Scope must decide at minimum:
 
 If item 1 or 2 cannot be resolved without materially changing the parent Outcome
 semantics, stop for Definition Correction rather than implementing ad hoc.
+
+Implementation Scope cannot reopen the identity or post-capture mutability rules
+fixed by Correction-1.
 
 ---
 
@@ -492,9 +546,11 @@ non-blank note + NO_CHANGE
 blank note + CHANGE_REQUIRED
 non-blank note + CHANGE_REQUIRED
 note readback matches human-entered text
+note text does not alter OutcomeId mint material
 note does not create N+1 semantics
 invalid/over-limit note fails closed
 no partial success
+successful capture disables second decision + note mutation
 non-production boundary visible
 no SharePoint / LIVE WRITE path
 ```
@@ -525,8 +581,8 @@ confirmation is separately requested.
 ## 18. Gate
 
 ```text
-Definition = CANDIDATE
-Independent Definition Review-1 = REQUIRED
+Definition Correction-1 = APPLIED
+Independent Definition Re-Review-1 = REQUIRED
 Human Definition Lock GO = NOT AUTHORIZED YET
 Implementation Scope = NOT AUTHORIZED YET
 Implementation Start = NOT AUTHORIZED
@@ -536,11 +592,7 @@ Ready / Merge / Deploy / Production Binding / LIVE WRITE = NOT AUTHORIZED
 NEXT:
 
 ```text
-Independent Definition Review-1
-        ↓
-Definition Correction if required
-        ↓
-Independent Definition Re-Review
+Independent Definition Re-Review-1
         ↓
 Human Definition Lock GO / HOLD
 ```
