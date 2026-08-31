@@ -129,7 +129,11 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
           <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>
             見直し資料
           </h3>
-          {personLabel ? <p className={styles.scopeNote}>{personLabel}</p> : null}
+          {personLabel ? (
+            <p className={styles.personIdentity} data-human-review-person-primary="true">
+              対象: {personLabel}
+            </p>
+          ) : null}
           <p className={styles.scopeNote}>
             計画版 {model.planVersion} · 対象期間 {formatTokyoDate(model.periodStart)}〜
             {formatTokyoDate(model.periodEnd)}

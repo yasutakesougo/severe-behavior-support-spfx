@@ -3,8 +3,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MonitoringView } from "./MonitoringView";
 import { buildDemoMonitoringForVersion } from "./monitoring-fixture";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "../users/support-plan-fixture";
+import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
 
-function resolvedMonitoringVersion(planVersion: number) {
+function resolvedMonitoringVersion(planVersion: number): MonitoringReadModel {
   const result = buildDemoMonitoringForVersion(planVersion);
   if (result.status !== "RESOLVED") {
     throw new Error(`expected RESOLVED monitoring fixture for version ${planVersion}`);
@@ -28,10 +29,16 @@ describe("MonitoringView", () => {
     );
 
     expect(html).toContain('data-monitoring-summary-only="true"');
+    expect(html).toContain('data-monitoring-person-primary="true"');
+    expect(html).toContain("Aさん");
+    expect(html.indexOf("Aさん")).toBeLessThan(html.indexOf("期間モニタリング（概要）"));
+    expect(html.indexOf("期間モニタリング（概要）")).toBeLessThan(html.indexOf("計画版 3"));
     expect(html).toContain("期間モニタリング（概要）");
     expect(html).not.toContain("data-monitoring-record-id=");
     expect(html).not.toContain("data-monitoring-record-list=");
     expect(html.match(/data-human-review-record-id=/g)).toHaveLength(1);
+    expect(html).toContain('data-human-review-person-primary="true"');
+    expect(html).toContain("対象: Aさん");
     expect(html).toContain('data-human-review-scene-label="true"');
     expect(html).toContain(DEMO_UX_SUPPORT_PLAN_FIXTURE.currentProcedures[0].sceneLabel);
     expect(html).toContain("synthetic-procedure-p3");

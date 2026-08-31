@@ -32,8 +32,10 @@ describe("HumanReviewView", () => {
   it("renders human-friendly identity before technical identity while preserving exact facts", () => {
     const html = render(humanReviewResultForSyntheticVersion(2));
 
-    expect(html).toContain("Aさん");
-    expect(html.indexOf("Aさん")).toBeLessThan(html.indexOf("UserId user-a"));
+    expect(html).toContain('data-human-review-person-primary="true"');
+    expect(html).toContain("対象: Aさん");
+    expect(html.indexOf("対象: Aさん")).toBeLessThan(html.indexOf("計画版 2"));
+    expect(html.indexOf("対象: Aさん")).toBeLessThan(html.indexOf("UserId user-a"));
     expect(html).toContain("UserId user-a");
     expect(html).toContain("planId synthetic-plan-001");
     expect(html).toContain("計画版 2");
@@ -43,6 +45,18 @@ describe("HumanReviewView", () => {
     expect(html).toContain("一部変更して実施");
     expect(html).toContain("評価・承認・変更要否の判断は人が行います");
     expect(html).not.toContain("失敗");
+  });
+
+  it("keeps personLabel as primary identity cue ahead of the review heading block metadata", () => {
+    const html = render(humanReviewResultForSyntheticVersion(3));
+    const personMark = html.indexOf('data-human-review-person-primary="true"');
+    const planMark = html.indexOf("計画版 3");
+    const detailMark = html.indexOf("詳細: UserId");
+
+    expect(personMark).toBeGreaterThanOrEqual(0);
+    expect(personMark).toBeLessThan(planMark);
+    expect(planMark).toBeLessThan(detailMark);
+    expect(html).toContain("対象: Aさん");
   });
 
   it("renders an evidenced sceneLabel before canonical technical identity for one exact current match", () => {

@@ -54,11 +54,14 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
       >
         <div className={styles.headingRow}>
           <div>
+            <p className={styles.personIdentity} data-monitoring-person-primary="true">
+              {personLabel}
+            </p>
             <h3 id="monitoring-link-slice-a-heading" className={styles.heading}>
               期間モニタリング（概要）
             </h3>
             <p className={styles.scopeNote}>
-              {personLabel} · 計画版 {model.planVersion} · {formatTokyoDate(model.periodStart)}〜
+              計画版 {model.planVersion} · {formatTokyoDate(model.periodStart)}〜
               {formatTokyoDate(model.periodEnd)}
             </p>
           </div>

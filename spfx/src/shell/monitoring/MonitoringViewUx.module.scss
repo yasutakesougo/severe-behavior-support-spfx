@@ -27,6 +27,14 @@
   line-height: sbs.$line-height-section-title;
 }
 
+.personIdentity {
+  margin: 0 0 sbs.$space-2;
+  color: sbs.$color-text-primary;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-section-title;
+}
+
 .scopeNote,
 .factOnlyNote,
 .emptyState,
