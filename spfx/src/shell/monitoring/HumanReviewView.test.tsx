@@ -50,17 +50,22 @@ describe("HumanReviewView", () => {
 
   it("renders an evidenced sceneLabel before canonical technical identity for one exact current match", () => {
     const html = render(humanReviewResultForSyntheticVersion(3));
-    const sceneLabel = DEMO_UX_SUPPORT_PLAN_FIXTURE.currentProcedures[0].sceneLabel;
+    const sceneLabel =
+      DEMO_UX_SUPPORT_PLAN_FIXTURE.currentProcedures[0].sceneLabel;
 
     expect(html).toContain(sceneLabel);
     expect(html).toContain('data-human-review-scene-label="true"');
-    expect(html.indexOf(sceneLabel)).toBeLessThan(html.indexOf("synthetic-procedure-p3"));
+    expect(html.indexOf(sceneLabel)).toBeLessThan(
+      html.indexOf("synthetic-procedure-p3"),
+    );
     expect(html).toContain("synthetic-procedure-p3-v1");
   });
 
   it("fails closed to canonical technical identity for historical or mismatched source context", () => {
     const historicalHtml = render(humanReviewResultForSyntheticVersion(2));
-    expect(historicalHtml).not.toContain('data-human-review-scene-label="true"');
+    expect(historicalHtml).not.toContain(
+      'data-human-review-scene-label="true"',
+    );
     expect(historicalHtml).toContain("synthetic-procedure-p2");
     expect(historicalHtml).toContain("synthetic-procedure-p2-v1");
 
@@ -68,8 +73,13 @@ describe("HumanReviewView", () => {
       ...PROCEDURE_LABEL_CONTEXT,
       userId: "user-b",
     };
-    const wrongUserHtml = render(humanReviewResultForSyntheticVersion(3), wrongUserContext);
-    expect(wrongUserHtml).not.toContain('data-human-review-scene-label="true"');
+    const wrongUserHtml = render(
+      humanReviewResultForSyntheticVersion(3),
+      wrongUserContext,
+    );
+    expect(wrongUserHtml).not.toContain(
+      'data-human-review-scene-label="true"',
+    );
     expect(wrongUserHtml).toContain("synthetic-procedure-p3");
   });
 
@@ -81,7 +91,10 @@ describe("HumanReviewView", () => {
         ...PROCEDURE_LABEL_CONTEXT.currentProcedures,
       ],
     };
-    const html = render(humanReviewResultForSyntheticVersion(3), duplicatedContext);
+    const html = render(
+      humanReviewResultForSyntheticVersion(3),
+      duplicatedContext,
+    );
 
     expect(html).not.toContain('data-human-review-scene-label="true"');
     expect(html).toContain("synthetic-procedure-p3");
@@ -91,7 +104,9 @@ describe("HumanReviewView", () => {
     const html = render(humanReviewResultForSyntheticVersion(1));
 
     expect(html).toContain("この計画版・対象期間に一致する実施記録はありません。");
-    expect(html).toContain("0件であることは、「実施できなかった」という結果を意味しません。");
+    expect(html).toContain(
+      "0件であることは、「実施できなかった」という結果を意味しません。",
+    );
     expect(html).toContain("0件");
     expect(html).not.toContain("data-human-review-record-id=");
   });
@@ -103,10 +118,16 @@ describe("HumanReviewView", () => {
 
   it("renders parent mismatch and malformed states fail closed", () => {
     const mismatch = renderToStaticMarkup(
-      <HumanReviewView result={HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE} personLabel="Aさん" />,
+      <HumanReviewView
+        result={HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE}
+        personLabel="Aさん"
+      />,
     );
     const malformed = renderToStaticMarkup(
-      <HumanReviewView result={HUMAN_REVIEW_MALFORMED_FIXTURE} personLabel="Aさん" />,
+      <HumanReviewView
+        result={HUMAN_REVIEW_MALFORMED_FIXTURE}
+        personLabel="Aさん"
+      />,
     );
 
     expect(mismatch).toContain('data-human-review-status="CONTEXT_MISMATCH"');
