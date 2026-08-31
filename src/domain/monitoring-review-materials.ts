@@ -139,7 +139,10 @@ function validateMonitoringReadModel(value: unknown): value is MonitoringReadMod
 
     if (previousPerformedAt !== null && previousRecordId !== null) {
       const timeOrder = Date.parse(previousPerformedAt) - Date.parse(record.performedAt);
-      if (timeOrder > 0 || (timeOrder === 0 && previousRecordId.localeCompare(record.RecordId) > 0)) {
+      if (
+        timeOrder > 0 ||
+        (timeOrder === 0 && previousRecordId.localeCompare(record.RecordId) > 0)
+      ) {
         return false;
       }
     }
@@ -150,7 +153,10 @@ function validateMonitoringReadModel(value: unknown): value is MonitoringReadMod
   return true;
 }
 
-function contextMatches(model: MonitoringReadModel, context: ReviewPresentationContext): boolean {
+function contextMatches(
+  model: MonitoringReadModel,
+  context: ReviewPresentationContext,
+): boolean {
   return (
     model.OrganizationId === context.OrganizationId &&
     model.SiteId === context.SiteId &&
