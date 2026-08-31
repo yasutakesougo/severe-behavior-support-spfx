@@ -7,6 +7,8 @@ kind: implementation evidence
 parent locked Definition: #545 @ 8b5c48b8d3e67e53dc9857bbc2b5fd67bb3b4416
 parent Scope: #546 @ fe5692e69d66b320cbd4815a2083c87e84a73bf5
 Human Implementation Start GO: RECEIVED / CONSUMED
+exact implementation HEAD: 2bd8b34eca4b922dcc0bab89eef0bab38912bc55
+prior implementation HEAD (superseded by format correction): 696e4eae58a46c25f30325575fb7c1cefb8a5516
 date: 2026-08-31
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 Track B / Monitoring versioning: OUT / NOT DECIDED
@@ -58,14 +60,26 @@ spfx/smoke/human-review-ui-slice-a/run-smoke.mjs
 spfx/smoke/human-review-ui-slice-a/smoke-entry.tsx
 ```
 
-## 4. Focused verification
+## 4. Format Correction
 
 ```text
+CI failure on HEAD 696e4ea: format:check
+Fixed files:
+  spfx/smoke/human-review-staff-partial-ia-clarity-1/run-smoke.mjs
+  spfx/smoke/human-review-ui-slice-a/smoke-entry.tsx
+Local format:check after correction: PASS
+New HEAD after format correction: 2bd8b34eca4b922dcc0bab89eef0bab38912bc55
+```
+
+## 5. Focused verification (reconfirmed on format-corrected HEAD)
+
+```text
+npm run typecheck: PASS
 npx heft test --clean --test-path-pattern "MonitoringView|HumanReviewView"
 Result: PASS (suite total 391 / 0 failed; MonitoringView 3; HumanReviewView 7)
 ```
 
-## 5. Rendered browser acceptance
+## 6. Rendered browser acceptance (reconfirmed)
 
 ```text
 Runner: node spfx/smoke/human-review-staff-partial-ia-clarity-1/run-smoke.mjs
@@ -85,7 +99,7 @@ node spfx/smoke/human-review-ui-slice-a/run-smoke.mjs
 passed: true
 ```
 
-## 6. Invariants checked
+## 7. Invariants checked
 
 ```text
 summary-only Monitoring: PASS
@@ -97,7 +111,7 @@ no system judgment / effectiveness / automated plan-change recommendation: PASS
 Track B versioning language absent: PASS
 ```
 
-## 7. Non-claims
+## 8. Non-claims
 
 ```text
 Implementation evidence ≠ Human Ready GO
@@ -106,12 +120,12 @@ Implementation evidence ≠ Actual Staff Value PASS re-established
 Track B remains NOT DECIDED
 ```
 
-## 8. Next gate
+## 9. Next gate
 
 ```text
-Exact Implementation HEAD Fixation
+New Exact Implementation HEAD Fixation @ 2bd8b34
 ↓
-Independent Implementation Review
+Independent Implementation Re-Review-1
 ↓
 5-Persona Product Simulation (if applicable)
 ↓
