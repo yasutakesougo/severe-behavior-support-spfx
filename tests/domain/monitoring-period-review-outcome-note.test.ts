@@ -19,10 +19,7 @@ describe("MonitoringPeriodReviewOutcomeNote domain", () => {
   });
 
   it("normalizes non-blank text and anchors it to the existing OutcomeId", () => {
-    const result = buildMonitoringPeriodReviewOutcomeNote(
-      "outcome-1",
-      "  継続して観察する  ",
-    );
+    const result = buildMonitoringPeriodReviewOutcomeNote("outcome-1", "  継続して観察する  ");
     assert.equal(result.status, "VALID");
     if (result.status !== "VALID") throw new Error("expected VALID");
     assert.deepEqual(result.note, { OutcomeId: "outcome-1", note: "継続して観察する" });
@@ -47,10 +44,7 @@ describe("MonitoringPeriodReviewOutcomeNote domain", () => {
   });
 
   it("rejects malformed records and requires already-normalized stored text", () => {
-    assert.equal(
-      validateMonitoringPeriodReviewOutcomeNote({ OutcomeId: "", note: "memo" }),
-      false,
-    );
+    assert.equal(validateMonitoringPeriodReviewOutcomeNote({ OutcomeId: "", note: "memo" }), false);
     assert.equal(
       validateMonitoringPeriodReviewOutcomeNote({ OutcomeId: "outcome-1", note: " memo " }),
       false,

@@ -52,31 +52,28 @@ describe("ReviewOutcomeCaptureView", () => {
     expect(html).toContain('data-live-write-authorized="false"');
   });
 
-  it(
-    "renders CHANGE_REQUIRED memo readback and disables textarea plus both actions",
-    () => {
-      const result = assembleSyntheticCapturedReview(
-        MATERIALS,
-        "CHANGE_REQUIRED",
-        "次回見直しで再確認",
-        "2026-09-01T12:00:00+09:00",
-      );
-      if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
-      const html = renderToStaticMarkup(
-        <ReviewOutcomeCaptureView
-          materials={MATERIALS}
-          capturedReview={result.captured}
-          onCapture={() => result}
-        />,
-      );
-      expect(html).toContain("デモ上の見直し結果: 変更が必要");
-      expect(html).toContain("補足メモ: 次回見直しで再確認");
-      expect(html).toContain("次の計画版はまだ作成されていません");
-      expect(html).toContain("本番には保存されていません");
-      expect(html.match(/disabled=""/g)).toHaveLength(3);
-      expect(html).not.toContain("次の計画版を作成");
-    },
-  );
+  it("renders CHANGE_REQUIRED memo readback and disables textarea plus both actions", () => {
+    const result = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "CHANGE_REQUIRED",
+      "次回見直しで再確認",
+      "2026-09-01T12:00:00+09:00",
+    );
+    if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
+    const html = renderToStaticMarkup(
+      <ReviewOutcomeCaptureView
+        materials={MATERIALS}
+        capturedReview={result.captured}
+        onCapture={() => result}
+      />,
+    );
+    expect(html).toContain("デモ上の見直し結果: 変更が必要");
+    expect(html).toContain("補足メモ: 次回見直しで再確認");
+    expect(html).toContain("次の計画版はまだ作成されていません");
+    expect(html).toContain("本番には保存されていません");
+    expect(html.match(/disabled=""/g)).toHaveLength(3);
+    expect(html).not.toContain("次の計画版を作成");
+  });
 
   it("resets uncommitted memo and error when the exact review context changes", () => {
     const container = document.createElement("div");

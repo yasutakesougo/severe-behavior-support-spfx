@@ -15,18 +15,16 @@ const artifactsDir =
   "/opt/cursor/artifacts/review-outcome-context-note-slice-b-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
-const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catch(() =>
-  import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
+const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catch(
+  () => import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
 );
-const puppeteerModule = await import(
-  "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
-).catch(() =>
-  import(
-    "/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
-  ),
-);
-const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs").catch(() =>
-  import("/tmp/hr-smoke-runner/node_modules/sass/sass.node.mjs"),
+const puppeteerModule =
+  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js").catch(
+    () =>
+      import("/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"),
+  );
+const sassModule = await import("/tmp/node_modules/sass/sass.node.mjs").catch(
+  () => import("/tmp/hr-smoke-runner/node_modules/sass/sass.node.mjs"),
 );
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
@@ -57,9 +55,7 @@ const scssStubPlugin = {
     build.onLoad({ filter: /\.module\.scss$/ }, async (args) => {
       const text = await fs.promises.readFile(args.path, "utf8");
       const keys = new Set();
-      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) {
-        keys.add(match[1]);
-      }
+      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) keys.add(match[1]);
       const entries = [...keys]
         .map((key) => `${JSON.stringify(key)}:${JSON.stringify(key)}`)
         .join(",");
@@ -139,8 +135,7 @@ for (const viewport of viewports) {
         const personText = personElement?.textContent?.trim();
         const captureElement = q("[data-review-outcome-capture]");
         const liveWrite = captureElement?.getAttribute("data-live-write-authorized");
-        const noHorizontalOverflow =
-          document.documentElement.scrollWidth <= window.innerWidth + 1;
+        const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
         const noteReadbackElement = q('[data-review-outcome-note-readback="true"]');
         const noteReadback = noteReadbackElement?.textContent ?? null;
         const common =
@@ -210,10 +205,7 @@ for (const viewport of viewports) {
     noteText: null,
     disabled: true,
   });
-  const changeRequiredShot = path.join(
-    artifactsDir,
-    `${viewport.name}-change-required-blank.png`,
-  );
+  const changeRequiredShot = path.join(artifactsDir, `${viewport.name}-change-required-blank.png`);
   await page.screenshot({ path: changeRequiredShot, fullPage: true });
 
   await page.goto(url, { waitUntil: "networkidle0" });
@@ -289,13 +281,7 @@ const report = {
   allPass,
   checks,
 };
-fs.writeFileSync(
-  path.join(artifactsDir, "smoke-report.json"),
-  JSON.stringify(report, null, 2),
-);
-fs.writeFileSync(
-  path.join(__dirname, "smoke-report.json"),
-  JSON.stringify(report, null, 2),
-);
+fs.writeFileSync(path.join(artifactsDir, "smoke-report.json"), JSON.stringify(report, null, 2));
+fs.writeFileSync(path.join(__dirname, "smoke-report.json"), JSON.stringify(report, null, 2));
 console.log(JSON.stringify({ allPass, artifactsDir, viewports: checks.length }, null, 2));
 process.exit(allPass ? 0 : 1);
