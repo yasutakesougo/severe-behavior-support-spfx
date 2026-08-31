@@ -1,6 +1,6 @@
 import * as React from "react";
 import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
-import type { HumanReviewMaterialsBuildResult } from "./human-review-fixture";
+import type { HumanReviewMaterialsBuildResult } from "../../sbs-domain/monitoring-read-model.bundle";
 import styles from "./MonitoringViewUx.module.scss";
 
 export type HumanReviewViewProps = Readonly<{
