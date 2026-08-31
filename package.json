@@ -11,7 +11,7 @@
     "lint": "eslint src tests scripts --max-warnings 0",
     "lint:fix": "eslint src tests scripts --fix --max-warnings 0",
     "format": "prettier --write .",
-    "format:check": "prettier --write spfx/src/shell/monitoring/HumanReviewView.test.tsx spfx/src/shell/monitoring/MonitoringView.tsx spfx/src/shell/users/SupportPlan.tsx && git diff -- spfx/src/shell/monitoring/HumanReviewView.test.tsx spfx/src/shell/monitoring/MonitoringView.tsx spfx/src/shell/users/SupportPlan.tsx && exit 1",
+    "format:check": "prettier --check .",
     "check:contracts-boundaries": "node scripts/ci/check-contracts-boundaries.mjs",
     "check:scope": "node scripts/ci/check-scope.mjs",
     "check:a11y": "node scripts/ci/check-accessibility-gate.mjs",
