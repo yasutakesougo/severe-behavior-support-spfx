@@ -16,28 +16,70 @@
 .boundary,
 .pending,
 .error,
-.meta {
+.meta,
+.noteHelper,
+.noteCounter,
+.noteReadback {
   margin: 0;
 }
 
-.heading {
+.heading,
+.noteLabel {
   color: sbs.$color-text-primary;
   font-size: sbs.$font-size-body;
   font-weight: sbs.$font-weight-semibold;
 }
 
 .status,
-.pending {
+.pending,
+.noteReadback {
   color: sbs.$color-text-primary;
   line-height: sbs.$line-height-body;
 }
 
 .boundary,
 .meta,
-.error {
+.error,
+.noteHelper,
+.noteCounter {
   color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-meta;
   line-height: sbs.$line-height-meta;
+}
+
+.noteField {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+}
+
+.noteInput {
+  width: 100%;
+  min-height: 5rem;
+  resize: vertical;
+  padding: sbs.$space-2;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-md;
+  background: sbs.$color-surface-canvas;
+  color: sbs.$color-text-primary;
+  font: inherit;
+  line-height: sbs.$line-height-body;
+}
+
+.noteInput:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.noteMeta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: sbs.$space-2;
+}
+
+.noteReadback {
+  overflow-wrap: anywhere;
 }
 
 .actions {

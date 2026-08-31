@@ -4,14 +4,12 @@ import {
   type MonitoringReadModel,
   type ReviewPresentationContext,
 } from "../../sbs-domain/monitoring-read-model.bundle";
-import type {
-  MonitoringPeriodReviewDecision,
-  MonitoringPeriodReviewOutcome,
-} from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
   captureSyntheticReviewOutcome,
   reviewOutcomeContextKey,
+  type SyntheticCapturedReview,
   type SyntheticReviewOutcomeCaptureResult,
 } from "./review-outcome-capture";
 import styles from "./MonitoringViewUx.module.scss";
@@ -50,31 +48,39 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
   procedureLabelContext,
 }) => {
   const humanReviewResult = buildHumanReviewMaterials(model, exactReviewContext(model));
-  const [capturedOutcomes, setCapturedOutcomes] = React.useState<
-    Readonly<Record<string, MonitoringPeriodReviewOutcome>>
+  const [capturedReviews, setCapturedReviews] = React.useState<
+    Readonly<Record<string, SyntheticCapturedReview>>
   >({});
-  const capturedOutcomesRef = React.useRef<Record<string, MonitoringPeriodReviewOutcome>>({});
+  const capturedReviewsRef = React.useRef<Record<string, SyntheticCapturedReview>>({});
 
   const contextKey =
     humanReviewResult.status === "RESOLVED"
       ? reviewOutcomeContextKey(humanReviewResult.value)
       : null;
-  const capturedOutcome = contextKey ? (capturedOutcomes[contextKey] ?? null) : null;
+  const capturedReview = contextKey ? (capturedReviews[contextKey] ?? null) : null;
 
   const handleCaptureOutcome = React.useCallback(
-    (decision: MonitoringPeriodReviewDecision): SyntheticReviewOutcomeCaptureResult => {
+    (
+      decision: MonitoringPeriodReviewDecision,
+      rawNoteText: string,
+    ): SyntheticReviewOutcomeCaptureResult => {
       if (humanReviewResult.status !== "RESOLVED") {
         return { status: "INVALID" };
       }
       const key = reviewOutcomeContextKey(humanReviewResult.value);
-      const existing = capturedOutcomesRef.current[key] ?? null;
-      const result = captureSyntheticReviewOutcome(existing, humanReviewResult.value, decision);
+      const existing = capturedReviewsRef.current[key] ?? null;
+      const result = captureSyntheticReviewOutcome(
+        existing,
+        humanReviewResult.value,
+        decision,
+        rawNoteText,
+      );
       if (result.status === "CAPTURED") {
-        capturedOutcomesRef.current = {
-          ...capturedOutcomesRef.current,
-          [key]: result.outcome,
+        capturedReviewsRef.current = {
+          ...capturedReviewsRef.current,
+          [key]: result.captured,
         };
-        setCapturedOutcomes(capturedOutcomesRef.current);
+        setCapturedReviews(capturedReviewsRef.current);
       }
       return result;
     },
@@ -133,7 +139,7 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
         result={humanReviewResult}
         personLabel={personLabel}
         procedureLabelContext={procedureLabelContext}
-        capturedOutcome={capturedOutcome}
+        capturedReview={capturedReview}
         onCaptureOutcome={handleCaptureOutcome}
       />
     </>

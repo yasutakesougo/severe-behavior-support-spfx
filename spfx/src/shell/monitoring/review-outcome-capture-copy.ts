@@ -10,6 +10,9 @@ export const REVIEW_OUTCOME_CAPTURE_COPY = {
   error: "見直し結果を安全に記録できません。入力内容を確認してください。",
   actionNoChange: "変更なし",
   actionChangeRequired: "変更が必要",
+  noteLabel: "見直しの補足メモ（任意）",
+  noteHelper: "見直し結果に添える短い補足です。次の計画内容ではありません。",
+  noteLimitError: "補足メモは255文字以内で入力してください。",
 } as const;
 
 export function labelForReviewDecision(decision: MonitoringPeriodReviewDecision): string {

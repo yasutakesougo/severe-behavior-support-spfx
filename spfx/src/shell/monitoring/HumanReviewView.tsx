@@ -5,12 +5,12 @@ import type {
   HumanReviewMaterials,
   HumanReviewMaterialsBuildResult,
 } from "../../sbs-domain/monitoring-read-model.bundle";
-import type {
-  MonitoringPeriodReviewDecision,
-  MonitoringPeriodReviewOutcome,
-} from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import { ReviewOutcomeCaptureView } from "./ReviewOutcomeCaptureView";
-import type { SyntheticReviewOutcomeCaptureResult } from "./review-outcome-capture";
+import type {
+  SyntheticCapturedReview,
+  SyntheticReviewOutcomeCaptureResult,
+} from "./review-outcome-capture";
 import styles from "./MonitoringViewUx.module.scss";
 
 export type HumanReviewProcedureLabelItem = Readonly<{
@@ -31,9 +31,10 @@ export type HumanReviewViewProps = Readonly<{
   result: HumanReviewMaterialsBuildResult;
   personLabel?: string;
   procedureLabelContext?: HumanReviewProcedureLabelContext;
-  capturedOutcome?: MonitoringPeriodReviewOutcome | null;
+  capturedReview?: SyntheticCapturedReview | null;
   onCaptureOutcome?: (
     decision: MonitoringPeriodReviewDecision,
+    rawNoteText: string,
   ) => SyntheticReviewOutcomeCaptureResult;
 }>;
 
@@ -91,7 +92,7 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
   result,
   personLabel,
   procedureLabelContext,
-  capturedOutcome = null,
+  capturedReview = null,
   onCaptureOutcome,
 }) => {
   if (result.status === "CONTEXT_MISMATCH") {
@@ -235,7 +236,7 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
       {onCaptureOutcome ? (
         <ReviewOutcomeCaptureView
           materials={model}
-          capturedOutcome={capturedOutcome}
+          capturedReview={capturedReview}
           onCapture={onCaptureOutcome}
         />
       ) : null}

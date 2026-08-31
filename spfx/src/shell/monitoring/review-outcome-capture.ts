@@ -6,6 +6,11 @@ import {
   type MonitoringPeriodReviewDecision,
   type MonitoringPeriodReviewOutcome,
 } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import {
+  MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED,
+  buildMonitoringPeriodReviewOutcomeNote,
+  type MonitoringPeriodReviewOutcomeNote,
+} from "../../sbs-domain/monitoring-period-review-outcome-note.bundle";
 
 export const REVIEW_OUTCOME_CAPTURE_SLICE_A = {
   id: "REVIEW-OUTCOME-CAPTURE-SLICE-A",
@@ -17,9 +22,29 @@ export const REVIEW_OUTCOME_CAPTURE_SLICE_A = {
   authoritativeDecisionCompletionAuthorized: false,
 } as const;
 
-export type SyntheticReviewOutcomeCaptureResult =
+export const REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B = {
+  id: "REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B",
+  presentationOnly: true,
+  liveWriteAuthorized: MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED,
+  sharePointWriteAuthorized: false,
+  planVersionMutationAuthorized: false,
+  monitoringVersionAuthorized: false,
+  noteEditAuthorized: false,
+  aiNoteAuthoringAuthorized: false,
+} as const;
+
+export type SyntheticCapturedReview = Readonly<{
+  outcome: MonitoringPeriodReviewOutcome;
+  note: MonitoringPeriodReviewOutcomeNote | null;
+}>;
+
+export type SyntheticReviewOutcomeAssemblyResult =
   | Readonly<{ status: "CAPTURED"; outcome: MonitoringPeriodReviewOutcome }>
-  | Readonly<{ status: "DUPLICATE"; outcome: MonitoringPeriodReviewOutcome }>
+  | Readonly<{ status: "INVALID" }>;
+
+export type SyntheticReviewOutcomeCaptureResult =
+  | Readonly<{ status: "CAPTURED"; captured: SyntheticCapturedReview }>
+  | Readonly<{ status: "DUPLICATE"; captured: SyntheticCapturedReview }>
   | Readonly<{ status: "INVALID" }>;
 
 export function reviewOutcomeContextKey(materials: HumanReviewMaterials): string {
@@ -38,7 +63,7 @@ export function assembleSyntheticReviewOutcome(
   materials: HumanReviewMaterials,
   decision: MonitoringPeriodReviewDecision,
   reviewedAtIso: string = new Date().toISOString(),
-): SyntheticReviewOutcomeCaptureResult {
+): SyntheticReviewOutcomeAssemblyResult {
   const sourceRecordIds = materials.records.map((record) => record.RecordId);
   const reviewedBy = "synthetic-reviewer-slice-a";
   const mintInput = {
@@ -60,25 +85,51 @@ export function assembleSyntheticReviewOutcome(
       OutcomeId: mintMonitoringPeriodReviewOutcomeId(mintInput),
       ...mintInput,
     };
-
-    if (!validateMonitoringPeriodReviewOutcome(outcome)) {
-      return { status: "INVALID" };
-    }
-
-    return { status: "CAPTURED", outcome };
+    return validateMonitoringPeriodReviewOutcome(outcome)
+      ? { status: "CAPTURED", outcome }
+      : { status: "INVALID" };
   } catch {
     return { status: "INVALID" };
   }
 }
 
-export function captureSyntheticReviewOutcome(
-  existingOutcome: MonitoringPeriodReviewOutcome | null,
+export function assembleSyntheticCapturedReview(
   materials: HumanReviewMaterials,
   decision: MonitoringPeriodReviewDecision,
+  rawNoteText: string,
+  reviewedAtIso: string = new Date().toISOString(),
+): SyntheticReviewOutcomeCaptureResult {
+  const outcomeResult = assembleSyntheticReviewOutcome(materials, decision, reviewedAtIso);
+  if (outcomeResult.status !== "CAPTURED") {
+    return { status: "INVALID" };
+  }
+
+  const noteResult = buildMonitoringPeriodReviewOutcomeNote(
+    outcomeResult.outcome.OutcomeId,
+    rawNoteText,
+  );
+  if (noteResult.status === "INVALID") {
+    return { status: "INVALID" };
+  }
+
+  return {
+    status: "CAPTURED",
+    captured: {
+      outcome: outcomeResult.outcome,
+      note: noteResult.status === "VALID" ? noteResult.note : null,
+    },
+  };
+}
+
+export function captureSyntheticReviewOutcome(
+  existingCaptured: SyntheticCapturedReview | null,
+  materials: HumanReviewMaterials,
+  decision: MonitoringPeriodReviewDecision,
+  rawNoteText: string,
   reviewedAtIso?: string,
 ): SyntheticReviewOutcomeCaptureResult {
-  if (existingOutcome) {
-    return { status: "DUPLICATE", outcome: existingOutcome };
+  if (existingCaptured) {
+    return { status: "DUPLICATE", captured: existingCaptured };
   }
-  return assembleSyntheticReviewOutcome(materials, decision, reviewedAtIso);
+  return assembleSyntheticCapturedReview(materials, decision, rawNoteText, reviewedAtIso);
 }
