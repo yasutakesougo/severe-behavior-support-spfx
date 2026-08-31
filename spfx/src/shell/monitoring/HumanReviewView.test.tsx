@@ -33,9 +33,14 @@ describe("HumanReviewView", () => {
     const html = render(humanReviewResultForSyntheticVersion(2));
 
     expect(html).toContain("Aさん");
+    expect(html).toContain('data-human-review-person-identity="true"');
+    expect(html).toContain('data-human-review-role-cue="materials"');
+    expect(html).toContain("個別の事実資料");
     expect(html.indexOf("Aさん")).toBeLessThan(html.indexOf("UserId user-a"));
+    expect(html.indexOf("Aさん")).toBeLessThan(html.indexOf("計画版 2"));
     expect(html).toContain("UserId user-a");
     expect(html).toContain("planId synthetic-plan-001");
+    expect(html).toContain('data-human-review-technical-detail="true"');
     expect(html).toContain("計画版 2");
     expect(html).toContain("3件");
     expect(html.match(/data-human-review-record-id=/g)).toHaveLength(3);
@@ -43,6 +48,7 @@ describe("HumanReviewView", () => {
     expect(html).toContain("一部変更して実施");
     expect(html).toContain("評価・承認・変更要否の判断は人が行います");
     expect(html).not.toContain("失敗");
+    expect(html).not.toContain("版管理");
   });
 
   it("renders an evidenced sceneLabel before canonical technical identity for one exact current match", () => {

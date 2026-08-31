@@ -101,22 +101,31 @@ for (const viewport of viewports) {
       if (activeCase === "v2") {
         semanticPass =
           status === "RESOLVED" &&
-          text.includes("UserId: user-a") &&
-          text.includes("planId: synthetic-plan-001") &&
+          text.includes("UserId user-a") &&
+          text.includes("planId synthetic-plan-001") &&
           text.includes("計画版 2") &&
           text.includes("synthetic-procedure-p2-v1") &&
           text.includes("一部変更して実施") &&
           text.includes("評価・承認・変更要否の判断は人が行います") &&
+          text.includes("個別の事実資料") &&
+          Boolean(document.querySelector('[data-human-review-person-identity="true"]')) &&
+          Boolean(document.querySelector('[data-human-review-role-cue="materials"]')) &&
           !text.includes("失敗") &&
           recordCount === 3;
       } else if (activeCase === "v1") {
         semanticPass =
           status === "RESOLVED" &&
           text.includes("この計画版・対象期間に一致する実施記録はありません。") &&
-          !text.includes("実施できなかった") &&
+          text.includes("0件であることは、「実施できなかった」という結果を意味しません。") &&
+          !text.includes("失敗") &&
           recordCount === 0;
       } else if (activeCase === "v3") {
-        semanticPass = status === "RESOLVED" && text.includes("計画版 3") && recordCount === 1;
+        semanticPass =
+          status === "RESOLVED" &&
+          text.includes("計画版 3") &&
+          text.includes("個別の事実資料") &&
+          Boolean(document.querySelector('[data-human-review-person-identity="true"]')) &&
+          recordCount === 1;
       } else if (activeCase === "mismatch") {
         semanticPass =
           status === "CONTEXT_MISMATCH" && text.includes("別の資料への置換は行いません");
