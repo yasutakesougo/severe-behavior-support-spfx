@@ -36,6 +36,6 @@ Deploy / LIVE WRITE     NOT AUTHORIZED
 
 ## Follow-up
 
-Slice C implemented; staff re-check answer 「すぐ分かる」→ PASS.  
-See `human-review-ui-friction-slice-c-staff-recheck-pass.md`.  
+Slice C implemented; staff re-check answer 「すぐ分かる」→ PASS.
+See `human-review-ui-friction-slice-c-staff-recheck-pass.md`.
 UI Friction CLOSE is now **ELIGIBLE** (requires Human GO; not auto-closed here).
