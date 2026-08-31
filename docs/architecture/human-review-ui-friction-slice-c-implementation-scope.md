@@ -44,5 +44,5 @@ Presentation goals:
 
 ## Success for CLOSE eligibility
 
-Same staff re-check question 「誰の記録かすぐ分かる」→ PASS  
+Same staff re-check question 「誰の記録かすぐ分かる」→ PASS
 Then UI-friction improvement CLOSE may be requested under Human GO.

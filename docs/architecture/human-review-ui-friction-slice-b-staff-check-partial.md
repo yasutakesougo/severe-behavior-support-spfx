@@ -24,7 +24,7 @@ UI Friction CLOSE: HOLD
 |---|---|---|
 | 人物識別の視認性 | PARTIAL | 「見れば分かる」ではなく「意識しないと分からない」 |
 
-## Disposition
+## Disposition (at PARTIAL time)
 
 ```text
 friction 改善 CLOSE     HOLD
@@ -34,4 +34,8 @@ Slice C scope           PERSON IDENTITY VISIBILITY ONLY
 Deploy / LIVE WRITE     NOT AUTHORIZED
 ```
 
-Next: implement Slice C person-identity visibility only, then re-run the same staff check on「誰の記録かすぐ分かる」.
+## Follow-up
+
+Slice C implemented; staff re-check answer 「すぐ分かる」→ PASS.  
+See `human-review-ui-friction-slice-c-staff-recheck-pass.md`.  
+UI Friction CLOSE is now **ELIGIBLE** (requires Human GO; not auto-closed here).
