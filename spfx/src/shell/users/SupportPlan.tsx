@@ -1,4 +1,11 @@
 import * as React from "react";
+import {
+  buildDemoMonitoringForVersion,
+  MonitoringView,
+  MONITORING_LINK_SLICE_A,
+} from "../monitoring";
+import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
+import { SemanticIcon, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   SHELL_DEFAULT_PRESENTATION_ROLE,
@@ -8,7 +15,6 @@ import {
   type ShellPresentationRole,
   type SupportPlanBlockKey,
 } from "../ux/presentation-role";
-import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
 import {
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
@@ -34,7 +40,6 @@ import {
   SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
-import { SemanticIcon, StatusBadge } from "../primitives";
 import styles from "./SupportPlanUx.module.scss";
 
 export type SupportPlanProps = Readonly<{
@@ -89,6 +94,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const currentVersionEntry = versions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
   const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
+  const monitoringResult = React.useMemo(
+    () => buildDemoMonitoringForVersion(selectedVersion),
+    [selectedVersion],
+  );
   const [activePlannerSectionId, setActivePlannerSectionId] = React.useState<string>(
     PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION[0].id,
   );
@@ -240,6 +249,17 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           </li>
         ))}
       </ul>
+      {planningPc ? (
+        <div data-monitoring-link-slice={MONITORING_LINK_SLICE_A.id}>
+          {monitoringResult.status === "RESOLVED" ? (
+            <MonitoringView model={monitoringResult.value} personLabel={personLabel} />
+          ) : (
+            <p className={styles.sectionHint} role="status" data-monitoring-malformed="true">
+              モニタリング入力を確認できません。記録または期間条件を確認してください（合成）。
+            </p>
+          )}
+        </div>
+      ) : null}
     </section>
   );
 
@@ -420,6 +440,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
       data-review-new-version-demo-slice={SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.id}
+      data-monitoring-link-slice={planningPc ? MONITORING_LINK_SLICE_A.id : undefined}
       data-planning-pc-plan-id={planId}
       data-planning-pc-current-version={String(currentVersion)}
       data-planning-pc-status={presentation.statusCode}
