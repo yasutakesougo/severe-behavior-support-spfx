@@ -1,6 +1,7 @@
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
 import {
   MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED,
+  mintMonitoringPeriodReviewOutcomeId,
   validateMonitoringPeriodReviewOutcome,
 } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import {
@@ -33,6 +34,23 @@ const MATERIALS: HumanReviewMaterials = {
 };
 
 describe("review-outcome-capture", () => {
+  it("exposes the canonical bridge mint directly", () => {
+    const id = mintMonitoringPeriodReviewOutcomeId({
+      OrganizationId: MATERIALS.OrganizationId,
+      SiteId: MATERIALS.SiteId,
+      UserId: MATERIALS.UserId,
+      planId: MATERIALS.planId,
+      planVersion: MATERIALS.planVersion,
+      periodStart: MATERIALS.periodStart,
+      periodEnd: MATERIALS.periodEnd,
+      sourceRecordIds: ["record-1"],
+      decision: "NO_CHANGE",
+      reviewedAt: "2026-09-01T12:00:00+09:00",
+      reviewedBy: "synthetic-reviewer-slice-a",
+    });
+    expect(id).toMatch(/^[0-9a-f]{64}$/);
+  });
+
   it("assembles a canonical domain-valid NO_CHANGE outcome with synthetic authority boundaries", () => {
     const result = assembleSyntheticReviewOutcome(
       MATERIALS,
