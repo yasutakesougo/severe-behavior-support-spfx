@@ -112,9 +112,10 @@ export function humanReviewResultForSyntheticVersion(
   return { status: "MALFORMED_INPUT" };
 }
 
-export const HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE: HumanReviewMaterialsBuildResult = {
-  status: "CONTEXT_MISMATCH",
-};
+export const HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE: HumanReviewMaterialsBuildResult =
+  {
+    status: "CONTEXT_MISMATCH",
+  };
 
 export const HUMAN_REVIEW_MALFORMED_FIXTURE: HumanReviewMaterialsBuildResult = {
   status: "MALFORMED_INPUT",
