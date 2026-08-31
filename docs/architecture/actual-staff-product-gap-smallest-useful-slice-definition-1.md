@@ -9,10 +9,12 @@ basis main: 72f2bb1dd0cfde2301b01cbad0c2fce7bfe266e0
 evidence PR: #539
 evidence HEAD (unchanged): 87090a7aa9f6f611e1f1f3a4c33a5397cba28b26
 evidence location: PR comment (Staff 1 Actual Staff Value Check)
-definition status: CANDIDATE / CORRECTION-1 APPLIED / NOT LOCKED
+definition status: CANDIDATE / CORRECTION-2 APPLIED / NOT LOCKED
 independent definition review-1: CORRECTION REQUIRED / P0=0 / P1=2 / P2=1 / CONSUMED
-definition correction-1: APPLIED
-independent definition re-review-1: NOT STARTED
+definition correction-1: APPLIED / CONSUMED
+independent definition re-review-1: CORRECTION REQUIRED / P0=0 / P1=1 / P2=0 / CONSUMED
+definition correction-2: APPLIED
+independent definition re-review-2: NOT STARTED
 implementation: NOT AUTHORIZED
 implementation start: NOT AUTHORIZED
 ready / merge / deploy / production binding / LIVE WRITE: NOT AUTHORIZED
@@ -366,13 +368,26 @@ UI must not remove existing 計画版 context from Monitoring/Review headers
 ## 7. Authority and stop conditions
 
 ```text
-This Definition: CANDIDATE / CORRECTION-1 APPLIED
+This Definition: CANDIDATE / CORRECTION-2 APPLIED
 Human Definition Lock: NOT RECEIVED
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED
-Independent Definition Re-Review-1: NOT STARTED
+Independent Definition Re-Review-1: CORRECTION REQUIRED / CONSUMED
+Independent Definition Re-Review-2: NOT STARTED
 Implementation Start: NOT AUTHORIZED
 #539 Ready / Merge: NOT AUTHORIZED by this document
 Deploy / LIVE WRITE: NOT AUTHORIZED
+```
+
+Authority separation (Correction-2 / P1-3):
+
+```text
+Human Definition Lock GO
+  ≠ Implementation Start
+  ≠ authorization to change Product UI
+
+Product UI change requires both:
+  Human Definition Lock GO
+  + separate Human Implementation Start GO
 ```
 
 Stop / do not proceed to implementation if any of the following occur:
@@ -383,16 +398,30 @@ Stop / do not proceed to implementation if any of the following occur:
 - human decision ownership statements are removed to “satisfy” AC-4
 - “Slice C” is treated as automatically authorized
 - Actual Staff PARTIAL is rewritten as Actual Staff Value PASS
+- Human Definition Lock alone is treated as Implementation Start
 - Ready / Merge / Deploy are treated as implied
 
 ## 8. Recommended next gates
 
 ```text
-1) Exact Definition re-read after Correction-1
-2) Independent Definition Re-Review-1 (P0/P1/P2)
-3) Human Definition Lock GO   → then only Track A may be implemented
+1) Exact Definition re-read after Correction-2
+2) Independent Definition Re-Review-2 (P0/P1/P2)
+3) Human Definition Lock GO
+     ↓
+   Implementation Scope / Start Gate
+     ↓
+   separate Human Implementation Start GO
+     ↓
+   Track A Implementation only
 4) Separate Domain relationship Definition for Track B / Q6
 5) #539 Ready / Merge remain independent Human gates for the docs PR itself
+```
+
+§8 must be read together with §5.3:
+
+```text
+Human Definition Lock GO alone does not authorize Product UI change.
+Implementation requires Human Definition Lock + Implementation Start GO.
 ```
 
 ## 9. Non-claims
@@ -407,21 +436,29 @@ Actual Staff WORKFLOW_GAP ≠ established by Staff 1 Q5
 This Definition ≠ Ready / Merge / Deploy authority
 ```
 
-## 10. Correction-1 change log
+## 10. Correction change log
 
 ```text
-P1-1 CONSUMED:
-  Q5 classification narrowed to UI_FRICTION / IA_ROLE_CLARITY
-  Actual Staff WORKFLOW_GAP = NOT ESTABLISHED by Staff 1
-  Persona G journey gap kept as Simulation Evidence only
+Correction-1:
+  P1-1 CONSUMED:
+    Q5 classification narrowed to UI_FRICTION / IA_ROLE_CLARITY
+    Actual Staff WORKFLOW_GAP = NOT ESTABLISHED by Staff 1
+    Persona G journey gap kept as Simulation Evidence only
+  P1-2 CONSUMED:
+    AC-3 / AC-4 distinguish human decision ownership vs system judgment
+    existing HumanReviewView ownership copy is explicitly preservable
+  P2-1 CONSUMED:
+    §5.4 / AC-1 split Product change surface vs Verification surface
 
-P1-2 CONSUMED:
-  AC-3 / AC-4 distinguish human decision ownership vs system judgment
-  existing HumanReviewView ownership copy is explicitly preservable
-
-P2-1 CONSUMED:
-  §5.4 / AC-1 split Product change surface vs Verification surface
+Correction-2:
+  P1-3 CONSUMED:
+    §8 no longer reads as “Lock GO → implement”
+    Lock GO → Implementation Scope / Start Gate
+      → separate Human Implementation Start GO
+      → Track A Implementation
+    aligned with §5.3 dual-GO requirement
+    §7 stop condition added: Lock alone ≠ Implementation Start
 
 Track B:
-  unchanged / still OUT of this Correction
+  unchanged / still OUT of Correction-1 and Correction-2
 ```
