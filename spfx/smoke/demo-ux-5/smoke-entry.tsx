@@ -30,11 +30,14 @@ import {
   type ShellViewMode,
 } from "../../src/shell/ux";
 
+type IncompleteState = "default" | "empty";
+
 function parseParams(): {
   viewMode: ShellViewMode;
   saveState: ShellSaveState;
   siteSelection: ShellSiteSelection;
   selectedDestination: ShellPrimaryNavigationId;
+  incompleteState: IncompleteState;
 } {
   const params = new URLSearchParams(window.location.search);
   const viewRaw = params.get("viewMode") ?? "ready";
@@ -51,7 +54,9 @@ function parseParams(): {
   const selectedDestination = isShellPrimaryNavigationId(destRaw)
     ? destRaw
     : SHELL_DEFAULT_DESTINATION;
-  return { viewMode, saveState, siteSelection, selectedDestination };
+  const incompleteState: IncompleteState =
+    params.get("incompleteState") === "empty" ? "empty" : "default";
+  return { viewMode, saveState, siteSelection, selectedDestination, incompleteState };
 }
 
 const SmokeApp: React.FC = () => {
@@ -59,6 +64,10 @@ const SmokeApp: React.FC = () => {
   const [selectedDestination, setSelectedDestination] = React.useState<ShellPrimaryNavigationId>(
     initial.selectedDestination,
   );
+  const dailyRecordPresentation =
+    initial.incompleteState === "empty"
+      ? { ...DEMO_UX_DAILY_RECORD_FIXTURE, incompleteItems: [] }
+      : DEMO_UX_DAILY_RECORD_FIXTURE;
 
   return (
     <div
@@ -81,7 +90,7 @@ const SmokeApp: React.FC = () => {
         usersPresentation={DEMO_UX_USERS_FIXTURE}
         userDetailPresentation={DEMO_UX_USER_DETAIL_FIXTURE}
         supportPlanPresentation={DEMO_UX_SUPPORT_PLAN_FIXTURE}
-        dailyRecordPresentation={DEMO_UX_DAILY_RECORD_FIXTURE}
+        dailyRecordPresentation={dailyRecordPresentation}
         correlationId={SHELL_UX_DEFAULT_FIXTURE.correlationId}
         errorCode={SHELL_UX_DEFAULT_FIXTURE.errorCode}
         userDisplayName="Smoke Operator Synthetic"

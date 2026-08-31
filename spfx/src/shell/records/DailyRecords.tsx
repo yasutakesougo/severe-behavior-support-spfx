@@ -3,7 +3,8 @@ import { EmptyNotice, SemanticIcon, SingleSelectListbox, StatusBadge } from "../
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
 import {
   DEMO_DAILY_RECORD_DRAFT_HINT,
-  DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE,
+  DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_PRIMARY,
+  DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_SUPPORTING,
   DEMO_DAILY_RECORD_INCOMPLETE_HINT,
   DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE,
   DEMO_DAILY_RECORD_RECENT_EMPTY_NOTE,
@@ -78,16 +79,24 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         <h2 id="demo-ux-record-incomplete-heading" className={styles.sectionHeading}>
           未完了確認
         </h2>
-        <p className={styles.sectionHint} data-demo-ux="daily-record-incomplete-hint">
-          {DEMO_DAILY_RECORD_INCOMPLETE_HINT}
-        </p>
+        {!showIncompleteEmpty ? (
+          <p className={styles.sectionHint} data-demo-ux="daily-record-incomplete-hint">
+            {DEMO_DAILY_RECORD_INCOMPLETE_HINT}
+          </p>
+        ) : null}
         {showIncompleteEmpty ? (
           // INV-17: incomplete zero-result only — not mutation failure / “all clear”.
           <EmptyNotice
             announce
             dataAttrs={{ "data-demo-ux": "daily-record-incomplete-empty-note" }}
           >
-            {DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_NOTE}
+            <span data-demo-ux="daily-record-incomplete-empty-primary">
+              {DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_PRIMARY}
+            </span>
+            <br />
+            <span data-demo-ux="daily-record-incomplete-empty-supporting">
+              {DEMO_DAILY_RECORD_INCOMPLETE_EMPTY_SUPPORTING}
+            </span>
           </EmptyNotice>
         ) : (
           // INV-10: SingleSelectListbox (listbox/option + keyboard); not button+option hybrid.
