@@ -5,6 +5,12 @@ import type {
   HumanReviewMaterials,
   HumanReviewMaterialsBuildResult,
 } from "../../sbs-domain/monitoring-read-model.bundle";
+import type {
+  MonitoringPeriodReviewDecision,
+  MonitoringPeriodReviewOutcome,
+} from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import { ReviewOutcomeCaptureView } from "./ReviewOutcomeCaptureView";
+import type { SyntheticReviewOutcomeCaptureResult } from "./review-outcome-capture";
 import styles from "./MonitoringViewUx.module.scss";
 
 export type HumanReviewProcedureLabelItem = Readonly<{
@@ -25,6 +31,10 @@ export type HumanReviewViewProps = Readonly<{
   result: HumanReviewMaterialsBuildResult;
   personLabel?: string;
   procedureLabelContext?: HumanReviewProcedureLabelContext;
+  capturedOutcome?: MonitoringPeriodReviewOutcome | null;
+  onCaptureOutcome?: (
+    decision: MonitoringPeriodReviewDecision,
+  ) => SyntheticReviewOutcomeCaptureResult;
 }>;
 
 function formatTokyoDateTime(value: string): string {
@@ -81,6 +91,8 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
   result,
   personLabel,
   procedureLabelContext,
+  capturedOutcome = null,
+  onCaptureOutcome,
 }) => {
   if (result.status === "CONTEXT_MISMATCH") {
     return (
@@ -91,18 +103,10 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
         data-human-review-status="CONTEXT_MISMATCH"
         data-human-review-role="materials"
       >
-        <p className={styles.roleCue} data-human-review-role-cue="materials">
-          個別の事実資料
-        </p>
+        <p className={styles.roleCue} data-human-review-role-cue="materials">個別の事実資料</p>
         <h3 className={styles.heading}>見直し資料</h3>
-        {personLabel ? (
-          <p className={styles.personIdentity} data-human-review-person-identity="true">
-            {personLabel}
-          </p>
-        ) : null}
-        <p className={styles.emptyState} role="status">
-          選択中の計画・対象期間と見直し資料が一致しません。別の資料への置換は行いません。
-        </p>
+        {personLabel ? <p className={styles.personIdentity} data-human-review-person-identity="true">{personLabel}</p> : null}
+        <p className={styles.emptyState} role="status">選択中の計画・対象期間と見直し資料が一致しません。別の資料への置換は行いません。</p>
       </section>
     );
   }
@@ -116,18 +120,10 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
         data-human-review-status="MALFORMED_INPUT"
         data-human-review-role="materials"
       >
-        <p className={styles.roleCue} data-human-review-role-cue="materials">
-          個別の事実資料
-        </p>
+        <p className={styles.roleCue} data-human-review-role-cue="materials">個別の事実資料</p>
         <h3 className={styles.heading}>見直し資料</h3>
-        {personLabel ? (
-          <p className={styles.personIdentity} data-human-review-person-identity="true">
-            {personLabel}
-          </p>
-        ) : null}
-        <p className={styles.emptyState} role="status">
-          見直し資料を安全に表示できません。入力内容を確認してください。
-        </p>
+        {personLabel ? <p className={styles.personIdentity} data-human-review-person-identity="true">{personLabel}</p> : null}
+        <p className={styles.emptyState} role="status">見直し資料を安全に表示できません。入力内容を確認してください。</p>
       </section>
     );
   }
@@ -143,35 +139,22 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
       data-human-review-plan-version={String(model.planVersion)}
       data-human-review-role="materials"
     >
-      <p className={styles.roleCue} data-human-review-role-cue="materials">
-        個別の事実資料
-      </p>
+      <p className={styles.roleCue} data-human-review-role-cue="materials">個別の事実資料</p>
       <div className={styles.headingRow}>
         <div>
-          <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>
-            見直し資料
-          </h3>
-          {personLabel ? (
-            <p className={styles.personIdentity} data-human-review-person-identity="true">
-              {personLabel}
-            </p>
-          ) : null}
+          <h3 id="human-review-ui-slice-a-heading" className={styles.heading}>見直し資料</h3>
+          {personLabel ? <p className={styles.personIdentity} data-human-review-person-identity="true">{personLabel}</p> : null}
           <p className={styles.scopeMeta} data-human-review-scope-meta="true">
-            計画版 {model.planVersion} · 対象期間 {formatTokyoDate(model.periodStart)}〜
-            {formatTokyoDate(model.periodEnd)}
+            計画版 {model.planVersion} · 対象期間 {formatTokyoDate(model.periodStart)}〜{formatTokyoDate(model.periodEnd)}
           </p>
           <p className={styles.technicalDetail} data-human-review-technical-detail="true">
             詳細: UserId {model.UserId} · planId {model.planId}
           </p>
         </div>
-        <p className={styles.count} data-human-review-record-count={String(model.recordCount)}>
-          {model.recordCount}件
-        </p>
+        <p className={styles.count} data-human-review-record-count={String(model.recordCount)}>{model.recordCount}件</p>
       </div>
 
-      <p className={styles.factOnlyNote}>
-        ここに表示する内容は見直しのための事実資料です。評価・承認・変更要否の判断は人が行います。
-      </p>
+      <p className={styles.factOnlyNote}>ここに表示する内容は見直しのための事実資料です。評価・承認・変更要否の判断は人が行います。</p>
 
       {model.records.length === 0 ? (
         <div className={styles.emptyState} data-human-review-empty="true">
@@ -183,42 +166,30 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
           {model.records.map((record) => {
             const sceneLabel = exactSceneLabel(model, record, procedureLabelContext);
             return (
-              <li
-                key={record.RecordId}
-                className={styles.recordItem}
-                data-human-review-record-id={record.RecordId}
-              >
+              <li key={record.RecordId} className={styles.recordItem} data-human-review-record-id={record.RecordId}>
                 <div className={styles.recordHeader}>
                   <strong>{formatTokyoDateTime(record.performedAt)}</strong>
-                  <span className={styles.resultLabel}>
-                    {labelForProcedureRecordResult(record.result)}
-                  </span>
+                  <span className={styles.resultLabel}>{labelForProcedureRecordResult(record.result)}</span>
                 </div>
                 <dl className={styles.recordFacts}>
-                  {sceneLabel ? (
-                    <div data-human-review-scene-label="true">
-                      <dt>支援場面</dt>
-                      <dd>{sceneLabel}</dd>
-                    </div>
-                  ) : null}
-                  <div>
-                    <dt>支援手順ID</dt>
-                    <dd>{record.ProcedureId}</dd>
-                  </div>
-                  <div>
-                    <dt>ProcedureVersion</dt>
-                    <dd>{record.ProcedureVersion}</dd>
-                  </div>
-                  <div>
-                    <dt>記録時刻</dt>
-                    <dd>{formatTokyoDateTime(record.recordedAt)}</dd>
-                  </div>
+                  {sceneLabel ? <div data-human-review-scene-label="true"><dt>支援場面</dt><dd>{sceneLabel}</dd></div> : null}
+                  <div><dt>支援手順ID</dt><dd>{record.ProcedureId}</dd></div>
+                  <div><dt>ProcedureVersion</dt><dd>{record.ProcedureVersion}</dd></div>
+                  <div><dt>記録時刻</dt><dd>{formatTokyoDateTime(record.recordedAt)}</dd></div>
                 </dl>
               </li>
             );
           })}
         </ol>
       )}
+
+      {onCaptureOutcome ? (
+        <ReviewOutcomeCaptureView
+          materials={model}
+          capturedOutcome={capturedOutcome}
+          onCapture={onCaptureOutcome}
+        />
+      ) : null}
     </section>
   );
 };

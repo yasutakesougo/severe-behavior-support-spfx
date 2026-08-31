@@ -8,6 +8,32 @@ Keep canonical implementation in `src/domain`.
 
 Do not use these bundles for LIVE WRITE / Production Binding / Deploy authorization.
 
+## REVIEW-OUTCOME-CAPTURE-SLICE-A — outcome capture narrow bridge
+
+`monitoring-period-review-outcome.bundle.js` is the narrow synthetic-capture bridge for:
+
+`src/domain/monitoring-period-review-outcome-spfx-entry.ts`
+
+It exposes only the canonical `MonitoringPeriodReviewOutcome` decision contract,
+validators, deterministic OutcomeId mint, schema constants, and
+`MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED=false`.
+
+It does **not** expose N+1 binding helpers, persistence ports, SharePoint adapters,
+or AI helpers. It does not authorize authoritative business Outcome completion.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/monitoring-period-review-outcome-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/monitoring-period-review-outcome.bundle.js
+```
+
+The checked-in `.d.ts` is the narrow allowlisted declaration surface.
+
 ## lifecycle-cancellation-storage.bundle — Slice E narrow SPFx bridge (B2)
 
 Named canonical entrypoint:

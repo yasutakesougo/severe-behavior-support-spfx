@@ -1,0 +1,62 @@
+@use "../tokens/sbs-tokens" as sbs;
+
+.capture {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-3;
+  margin-top: sbs.$space-4;
+  padding: sbs.$space-4;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-md;
+  background: sbs.$color-surface-canvas;
+}
+
+.heading,
+.status,
+.boundary,
+.pending,
+.error,
+.meta {
+  margin: 0;
+}
+
+.heading {
+  color: sbs.$color-text-primary;
+  font-size: sbs.$font-size-body;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.status,
+.pending {
+  color: sbs.$color-text-primary;
+  line-height: sbs.$line-height-body;
+}
+
+.boundary,
+.meta,
+.error {
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-2;
+}
+
+.action {
+  padding: sbs.$space-2 sbs.$space-4;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  border-radius: sbs.$radius-md;
+  background: sbs.$color-surface-canvas;
+  color: sbs.$color-text-primary;
+  font: inherit;
+  cursor: pointer;
+}
+
+.action:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
