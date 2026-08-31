@@ -146,3 +146,39 @@ npx esbuild src/domain/kiosk-today-support-spfx-entry.ts \
   --platform=neutral \
   --outfile=spfx/src/sbs-domain/kiosk-read-model.bundle.js
 ```
+
+## monitoring-read-model.bundle — READ-ONLY monitoring projection bridge
+
+`monitoring-read-model.bundle.js` is an esbuild bundle of the narrow entry:
+
+`src/domain/monitoring-read-model-spfx-entry.ts`
+
+That entry re-exports only the monitoring projection/read-model surface
+needed by `MonitoringView`, `SupportPlan`, and the synthetic SPFx fixture.
+
+Canonical implementation remains:
+
+- `src/domain/monitoring-read-model.ts`
+
+**Monitoring read-model bundle has no write authority.**
+
+It must not expose or import persistence / mutation surfaces such as:
+
+- `persistProcedureRecord`
+- `persistStaffProcedureRecord`
+- review decision / plan mutation
+- SharePoint write / live tenant I/O
+
+Do not use the root domain barrel (`src/domain/index.ts`) as this bundle's
+entrypoint.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/monitoring-read-model-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/monitoring-read-model.bundle.js
+```
