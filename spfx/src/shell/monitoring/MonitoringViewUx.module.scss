@@ -11,6 +11,23 @@
   background: sbs.$color-feedback-info-bg-tint;
 }
 
+.roleSummary {
+  border-left: sbs.$space-2 solid sbs.$color-feedback-info-border;
+}
+
+.roleMaterials {
+  border-left: sbs.$space-2 solid sbs.$color-text-primary;
+}
+
+.roleCue {
+  margin: 0;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-meta;
+  letter-spacing: 0.02em;
+}
+
 .headingRow {
   display: flex;
   flex-wrap: wrap;
@@ -27,11 +44,35 @@
   line-height: sbs.$line-height-section-title;
 }
 
+.personIdentity {
+  margin: sbs.$space-2 0 0;
+  color: sbs.$color-text-primary;
+  font-size: sbs.$font-size-300;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-body;
+}
+
+.scopeMeta,
+.technicalDetail,
 .scopeNote,
 .factOnlyNote,
 .emptyState,
 .count {
   margin: 0;
+}
+
+.scopeMeta {
+  margin-top: sbs.$space-1;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-body;
+  line-height: sbs.$line-height-body;
+}
+
+.technicalDetail {
+  margin-top: sbs.$space-1;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .scopeNote,
