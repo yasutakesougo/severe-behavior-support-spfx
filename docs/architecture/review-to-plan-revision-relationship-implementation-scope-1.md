@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: REVIEW-TO-PLAN-REVISION-RELATIONSHIP-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: SCOPE REVIEW-CLEARED / AWAITING IMPLEMENTATION START GO
+status: IMPLEMENTATION REVIEW-CLEARED / AWAITING HUMAN READY GO
 parent definition: REVIEW-TO-PLAN-REVISION-RELATIONSHIP-DEFINITION-1
 parent correction: Correction-1
 parent status: HUMAN DEFINITION LOCKED
