@@ -1,0 +1,55 @@
+name: Human Review UI Temporary Acceptance
+
+on:
+  pull_request:
+    paths:
+      - "spfx/smoke/human-review-ui-slice-a/**"
+      - "spfx/src/shell/monitoring/**"
+      - "spfx/src/sbs-domain/monitoring-read-model.bundle.*"
+      - "src/domain/monitoring-read-model-spfx-entry.ts"
+      - ".github/workflows/human-review-ui-smoke-temp.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  human-review-browser-acceptance:
+    name: Human Review UI browser acceptance 1280 / 390
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.23.1
+
+      - name: Install SPFx dependencies
+        working-directory: spfx
+        run: npm ci
+
+      - name: Install smoke-only runtime dependencies
+        working-directory: spfx
+        run: npm install --no-save --ignore-scripts esbuild puppeteer-core sass
+
+      - name: Run exact viewport browser acceptance
+        env:
+          HRUI_ARTIFACTS_DIR: ${{ github.workspace }}/hrui-browser-artifacts
+          HRUI_CHROME_PATH: /usr/bin/google-chrome-stable
+        run: node spfx/smoke/human-review-ui-slice-a/run-smoke.mjs
+
+      - name: Record exact tested HEAD
+        run: |
+          git rev-parse HEAD | tee hrui-browser-artifacts/tested-head.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+
+      - name: Upload browser acceptance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: human-review-ui-browser-${{ github.event.pull_request.head.sha }}
+          path: hrui-browser-artifacts/**
