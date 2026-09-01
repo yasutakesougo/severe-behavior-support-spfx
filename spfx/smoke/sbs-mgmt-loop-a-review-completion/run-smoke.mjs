@@ -13,10 +13,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const spfxRoot = path.join(__dirname, "../..");
 const repositoryRoot = path.join(spfxRoot, "..");
 const artifactsDir =
-  process.env.SBS_MGMT_LOOP_A_ARTIFACTS_DIR ?? "/tmp/sbs-mgmt-loop-a-review-completion";
+  process.env.SBS_MGMT_LOOP_A_ARTIFACTS_DIR ??
+  "/tmp/sbs-mgmt-loop-a-review-completion";
 const PRODUCT_BASIS_HEAD =
   process.env.SBS_MGMT_LOOP_A_PRODUCT_BASIS_HEAD ??
-  execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim();
+  execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: repositoryRoot,
+    encoding: "utf8",
+  }).trim();
 
 fs.mkdirSync(artifactsDir, { recursive: true });
 
@@ -69,7 +73,9 @@ const scssStubPlugin = {
     build.onLoad({ filter: /\.module\.scss$/ }, async (args) => {
       const text = await fs.promises.readFile(args.path, "utf8");
       const keys = new Set();
-      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) keys.add(match[1]);
+      for (const match of text.matchAll(/\.([A-Za-z_][\w-]*)\s*[,:{]/g)) {
+        keys.add(match[1]);
+      }
       const entries = [...keys]
         .map((key) => `${JSON.stringify(key)}:${JSON.stringify(key)}`)
         .join(",");
@@ -111,8 +117,10 @@ const server = http.createServer((req, res) => {
 });
 await new Promise((resolve) => server.listen(4197, "127.0.0.1", resolve));
 
+const chromePath =
+  process.env.SBS_MGMT_LOOP_A_CHROME_PATH ?? "/usr/bin/google-chrome-stable";
 const browser = await puppeteer.launch({
-  executablePath: process.env.SBS_MGMT_LOOP_A_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
+  executablePath: chromePath,
   headless: true,
   args: ["--no-sandbox", "--disable-gpu"],
 });
@@ -129,25 +137,36 @@ function observe(page) {
     const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
     const reason = q('[data-review-outcome-reason-input="true"]');
     const note = q('[data-review-outcome-note-input="true"]');
-    const reasonReadback = q('[data-review-outcome-reason-readback="true"]')?.textContent ?? null;
-    const noteReadback = q('[data-review-outcome-note-readback="true"]')?.textContent ?? null;
-    const recordId =
-      q("[data-human-review-record-id]")?.getAttribute("data-human-review-record-id") ?? null;
+    const reasonReadback = q(
+      '[data-review-outcome-reason-readback="true"]',
+    )?.textContent;
+    const noteReadback = q(
+      '[data-review-outcome-note-readback="true"]',
+    )?.textContent;
+    const recordId = q("[data-human-review-record-id]")?.getAttribute(
+      "data-human-review-record-id",
+    );
+    const liveWrite = q("[data-review-outcome-capture]")?.getAttribute(
+      "data-live-write-authorized",
+    );
+    const noHorizontalOverflow =
+      document.documentElement.scrollWidth <= window.innerWidth + 1;
     return {
       text,
-      recordId,
+      recordId: recordId ?? null,
       reasonValue: reason?.value ?? null,
       noteValue: note?.value ?? null,
       reasonDisabled: reason?.disabled ?? null,
       noteDisabled: note?.disabled ?? null,
-      buttonsDisabled: buttons.length === 2 && buttons.every((button) => button.disabled),
-      buttonsEnabled: buttons.length === 2 && buttons.every((button) => !button.disabled),
-      reasonReadback,
-      noteReadback,
+      buttonsDisabled:
+        buttons.length === 2 && buttons.every((button) => button.disabled),
+      buttonsEnabled:
+        buttons.length === 2 && buttons.every((button) => !button.disabled),
+      reasonReadback: reasonReadback ?? null,
+      noteReadback: noteReadback ?? null,
       zeroState: Boolean(q('[data-human-review-empty="true"]')),
-      liveWrite:
-        q("[data-review-outcome-capture]")?.getAttribute("data-live-write-authorized") ?? null,
-      noHorizontalOverflow: document.documentElement.scrollWidth <= window.innerWidth + 1,
+      liveWrite: liveWrite ?? null,
+      noHorizontalOverflow,
     };
   });
 }
@@ -158,24 +177,27 @@ async function setSnapshot(page, snapshot) {
     await page.waitForSelector('[data-human-review-empty="true"]');
     return;
   }
-  const expectedRecordId = snapshot === "A" ? "record-a" : "record-b";
+  const recordId = snapshot === "A" ? "record-a" : "record-b";
   await page.waitForFunction(
-    (recordId) =>
+    (expectedRecordId) =>
       document
         .querySelector("[data-human-review-record-id]")
-        ?.getAttribute("data-human-review-record-id") === recordId,
+        ?.getAttribute("data-human-review-record-id") === expectedRecordId,
     {},
-    expectedRecordId,
+    recordId,
   );
 }
 
-async function screenshot(page, viewport, name) {
-  const output = path.join(artifactsDir, `${viewport}-${name}.png`);
+async function saveScreenshot(page, viewportName, stateName) {
+  const output = path.join(
+    artifactsDir,
+    `${viewportName}-${stateName}.png`,
+  );
   await page.screenshot({ path: output, fullPage: true });
   return output;
 }
 
-function check(name, pass, details = {}) {
+function recordCheck(name, pass, details) {
   return { name, pass: Boolean(pass), details };
 }
 
@@ -191,43 +213,45 @@ try {
     page.on("pageerror", (error) => pageErrors.push(error.message));
     page.on("request", (request) => {
       const requestUrl = new URL(request.url());
-      if (requestUrl.hostname !== "127.0.0.1") externalRequests.push(request.url());
+      if (requestUrl.hostname !== "127.0.0.1") {
+        externalRequests.push(request.url());
+      }
     });
 
-    await page.goto("http://127.0.0.1:4197/index.html", { waitUntil: "networkidle0" });
+    const url = "http://127.0.0.1:4197/index.html";
+    await page.goto(url, { waitUntil: "networkidle0" });
     await setSnapshot(page, "A");
 
     const initial = await observe(page);
+    const initialPass =
+      initial.text.includes("Aさん") &&
+      initial.text.includes("計画版 3") &&
+      initial.text.includes("判断理由") &&
+      initial.text.includes("見直しの補足メモ（任意）") &&
+      initial.text.includes("本番には保存されていません") &&
+      initial.liveWrite === "false" &&
+      initial.buttonsEnabled &&
+      initial.noHorizontalOverflow;
     checks.push(
-      check(
-        `${viewport.name}: common boundary`,
-        initial.text.includes("Aさん") &&
-          initial.text.includes("計画版 3") &&
-          initial.text.includes("判断理由") &&
-          initial.text.includes("見直しの補足メモ（任意）") &&
-          initial.text.includes("本番には保存されていません") &&
-          initial.liveWrite === "false" &&
-          initial.buttonsEnabled &&
-          initial.noHorizontalOverflow,
-        initial,
-      ),
+      recordCheck(`${viewport.name}: common boundary`, initialPass, initial),
     );
 
     await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
     await page.waitForFunction(() =>
-      document.body.textContent?.includes("「変更が必要」を記録する場合は、判断理由を入力してください。"),
+      document.body.textContent?.includes(
+        "「変更が必要」を記録する場合は、判断理由を入力してください。",
+      ),
     );
     const blankChange = await observe(page);
+    const blankChangePass =
+      blankChange.text.includes("見直し結果: 未判断") &&
+      blankChange.reasonReadback === null &&
+      blankChange.noteReadback === null &&
+      blankChange.buttonsEnabled;
     checks.push(
-      check(
+      recordCheck(
         `${viewport.name}: R3 blank CHANGE_REQUIRED blocked`,
-        blankChange.text.includes("見直し結果: 未判断") &&
-          blankChange.text.includes(
-            "「変更が必要」を記録する場合は、判断理由を入力してください。",
-          ) &&
-          blankChange.reasonReadback === null &&
-          blankChange.noteReadback === null &&
-          blankChange.buttonsEnabled,
+        blankChangePass,
         blankChange,
       ),
     );
@@ -235,140 +259,180 @@ try {
     await page.type('[data-review-outcome-reason-input="true"]', "reason A");
     await page.type('[data-review-outcome-note-input="true"]', "memo A");
     await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
-    await page.waitForFunction(() => document.body.textContent?.includes("判断理由: reason A"));
+    await page.waitForFunction(() =>
+      document.body.textContent?.includes("判断理由: reason A"),
+    );
     const capturedA = await observe(page);
+    const capturedAPass =
+      capturedA.reasonReadback === "判断理由: reason A" &&
+      capturedA.noteReadback === "補足メモ: memo A" &&
+      capturedA.buttonsDisabled &&
+      capturedA.reasonDisabled === true &&
+      capturedA.noteDisabled === true;
     checks.push(
-      check(
-        `${viewport.name}: R2/R9 capture A reason+note immutable`,
-        capturedA.text.includes("デモ上の見直し結果: 変更が必要") &&
-          capturedA.reasonReadback === "判断理由: reason A" &&
-          capturedA.noteReadback === "補足メモ: memo A" &&
-          capturedA.buttonsDisabled &&
-          capturedA.reasonDisabled === true &&
-          capturedA.noteDisabled === true,
+      recordCheck(
+        `${viewport.name}: R2/R8 capture A immutable`,
+        capturedAPass,
         capturedA,
       ),
     );
-    await screenshot(page, viewport.name, "captured-a");
+    await saveScreenshot(page, viewport.name, "captured-a");
 
     await setSnapshot(page, "B");
     const mismatchB = await observe(page);
+    const mismatchBPass =
+      mismatchB.recordId === "record-b" &&
+      mismatchB.text.includes("見直し結果: 未判断") &&
+      mismatchB.reasonReadback === null &&
+      mismatchB.noteReadback === null &&
+      mismatchB.reasonValue === "" &&
+      mismatchB.noteValue === "" &&
+      mismatchB.buttonsEnabled;
     checks.push(
-      check(
+      recordCheck(
         `${viewport.name}: R9 A→B mismatch undecided`,
-        mismatchB.recordId === "record-b" &&
-          mismatchB.text.includes("見直し結果: 未判断") &&
-          mismatchB.reasonReadback === null &&
-          mismatchB.noteReadback === null &&
-          mismatchB.reasonValue === "" &&
-          mismatchB.noteValue === "" &&
-          mismatchB.buttonsEnabled,
+        mismatchBPass,
         mismatchB,
       ),
     );
 
     await page.type('[data-review-outcome-note-input="true"]', "memo B");
     await page.click('[data-review-outcome-action="NO_CHANGE"]');
-    await page.waitForFunction(() => document.body.textContent?.includes("補足メモ: memo B"));
+    await page.waitForFunction(() =>
+      document.body.textContent?.includes("補足メモ: memo B"),
+    );
     const capturedB = await observe(page);
+    const capturedBPass =
+      capturedB.text.includes("デモ上の見直し結果: 変更なし") &&
+      capturedB.reasonReadback === null &&
+      capturedB.noteReadback === "補足メモ: memo B" &&
+      capturedB.buttonsDisabled;
     checks.push(
-      check(
+      recordCheck(
         `${viewport.name}: R1 NO_CHANGE blank reason`,
-        capturedB.text.includes("デモ上の見直し結果: 変更なし") &&
-          capturedB.reasonReadback === null &&
-          capturedB.noteReadback === "補足メモ: memo B" &&
-          capturedB.buttonsDisabled,
+        capturedBPass,
         capturedB,
       ),
     );
 
     await setSnapshot(page, "A");
     const recurrenceA = await observe(page);
+    const recurrenceAPass =
+      recurrenceA.recordId === "record-a" &&
+      recurrenceA.text.includes("見直し結果: 未判断") &&
+      recurrenceA.reasonReadback === null &&
+      recurrenceA.noteReadback === null &&
+      recurrenceA.reasonValue === "" &&
+      recurrenceA.noteValue === "" &&
+      recurrenceA.buttonsEnabled;
     checks.push(
-      check(
-        `${viewport.name}: R10 B→A recurrence new epoch`,
-        recurrenceA.recordId === "record-a" &&
-          recurrenceA.text.includes("見直し結果: 未判断") &&
-          recurrenceA.reasonReadback === null &&
-          recurrenceA.noteReadback === null &&
-          recurrenceA.reasonValue === "" &&
-          recurrenceA.noteValue === "" &&
-          recurrenceA.buttonsEnabled,
+      recordCheck(
+        `${viewport.name}: R10 B→A recurrence`,
+        recurrenceAPass,
         recurrenceA,
       ),
     );
 
-    await page.type('[data-review-outcome-reason-input="true"]', "reason renewed");
-    await page.type('[data-review-outcome-note-input="true"]', "memo renewed");
+    await page.type(
+      '[data-review-outcome-reason-input="true"]',
+      "reason renewed",
+    );
+    await page.type(
+      '[data-review-outcome-note-input="true"]',
+      "memo renewed",
+    );
     await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
-    await page.waitForFunction(() => document.body.textContent?.includes("判断理由: reason renewed"));
+    await page.waitForFunction(() =>
+      document.body.textContent?.includes("判断理由: reason renewed"),
+    );
     const recapturedA = await observe(page);
+    const recapturedAPass =
+      recapturedA.reasonReadback === "判断理由: reason renewed" &&
+      recapturedA.noteReadback === "補足メモ: memo renewed" &&
+      !recapturedA.text.includes("判断理由: reason A") &&
+      !recapturedA.text.includes("補足メモ: memo A") &&
+      !recapturedA.text.includes("補足メモ: memo B");
     checks.push(
-      check(
-        `${viewport.name}: R10 recapture A replaces current only`,
-        recapturedA.reasonReadback === "判断理由: reason renewed" &&
-          recapturedA.noteReadback === "補足メモ: memo renewed" &&
-          !recapturedA.text.includes("reason A") &&
-          !recapturedA.text.includes("memo A") &&
-          !recapturedA.text.includes("memo B"),
+      recordCheck(
+        `${viewport.name}: R10 recapture A isolated`,
+        recapturedAPass,
         recapturedA,
       ),
     );
 
     await setSnapshot(page, "ZERO");
     const zeroUndecided = await observe(page);
+    const zeroFactualPass =
+      zeroUndecided.zeroState &&
+      zeroUndecided.text.includes(
+        "この計画版・対象期間に一致する実施記録はありません。",
+      ) &&
+      zeroUndecided.text.includes(
+        "0件であることは、「実施できなかった」という結果を意味しません。",
+      ) &&
+      zeroUndecided.text.includes("見直し結果: 未判断");
     checks.push(
-      check(
+      recordCheck(
         `${viewport.name}: zero-record remains factual`,
-        zeroUndecided.zeroState &&
-          zeroUndecided.text.includes("この計画版・対象期間に一致する実施記録はありません。") &&
-          zeroUndecided.text.includes("0件であることは、「実施できなかった」という結果を意味しません。") &&
-          zeroUndecided.text.includes("見直し結果: 未判断") &&
-          zeroUndecided.reasonReadback === null,
+        zeroFactualPass,
         zeroUndecided,
       ),
     );
+
     await page.click('[data-review-outcome-action="NO_CHANGE"]');
-    await page.waitForFunction(() => document.body.textContent?.includes("デモ上の見直し結果: 変更なし"));
+    await page.waitForFunction(() =>
+      document.body.textContent?.includes("デモ上の見直し結果: 変更なし"),
+    );
     const zeroNoChange = await observe(page);
+    const zeroNoChangePass =
+      zeroNoChange.zeroState &&
+      zeroNoChange.reasonReadback === null &&
+      zeroNoChange.noteReadback === null &&
+      zeroNoChange.buttonsDisabled;
     checks.push(
-      check(
-        `${viewport.name}: R4 zero-record NO_CHANGE blank reason`,
-        zeroNoChange.zeroState &&
-          zeroNoChange.reasonReadback === null &&
-          zeroNoChange.noteReadback === null &&
-          zeroNoChange.buttonsDisabled,
+      recordCheck(
+        `${viewport.name}: R4 zero-record NO_CHANGE`,
+        zeroNoChangePass,
         zeroNoChange,
       ),
     );
 
-    await page.goto("http://127.0.0.1:4197/index.html", { waitUntil: "networkidle0" });
+    await page.goto(url, { waitUntil: "networkidle0" });
     await setSnapshot(page, "A");
-    await page.type('[data-review-outcome-reason-input="true"]', "uncommitted A reason");
-    await page.type('[data-review-outcome-note-input="true"]', "uncommitted A memo");
+    await page.type(
+      '[data-review-outcome-reason-input="true"]',
+      "uncommitted A reason",
+    );
+    await page.type(
+      '[data-review-outcome-note-input="true"]',
+      "uncommitted A memo",
+    );
     await setSnapshot(page, "B");
     const uncommittedReset = await observe(page);
+    const uncommittedResetPass =
+      uncommittedReset.reasonValue === "" &&
+      uncommittedReset.noteValue === "" &&
+      uncommittedReset.reasonReadback === null &&
+      uncommittedReset.noteReadback === null &&
+      !uncommittedReset.text.includes("uncommitted A reason") &&
+      !uncommittedReset.text.includes("uncommitted A memo");
     checks.push(
-      check(
+      recordCheck(
         `${viewport.name}: R11 uncommitted A→B reset`,
-        uncommittedReset.reasonValue === "" &&
-          uncommittedReset.noteValue === "" &&
-          uncommittedReset.reasonReadback === null &&
-          uncommittedReset.noteReadback === null &&
-          !uncommittedReset.text.includes("uncommitted A reason") &&
-          !uncommittedReset.text.includes("uncommitted A memo"),
+        uncommittedResetPass,
         uncommittedReset,
       ),
     );
 
+    const browserSafety =
+      pageErrors.length === 0 && externalRequests.length === 0;
     checks.push(
-      check(
-        `${viewport.name}: browser safety`,
-        pageErrors.length === 0 && externalRequests.length === 0,
-        { pageErrors, externalRequests },
-      ),
+      recordCheck(`${viewport.name}: browser safety`, browserSafety, {
+        pageErrors,
+        externalRequests,
+      }),
     );
-    await screenshot(page, viewport.name, "final-b-reset");
+    await saveScreenshot(page, viewport.name, "final-b-reset");
     await page.close();
   }
 
@@ -386,9 +450,14 @@ try {
     pass: allPass,
     liveWriteAuthorized: false,
   };
-  fs.writeFileSync(path.join(artifactsDir, "report.json"), JSON.stringify(report, null, 2));
+  fs.writeFileSync(
+    path.join(artifactsDir, "report.json"),
+    JSON.stringify(report, null, 2),
+  );
   console.log(JSON.stringify(report, null, 2));
-  console.log(allPass ? "SBS-MGMT-LOOP-A SMOKE PASS" : "SBS-MGMT-LOOP-A SMOKE FAIL");
+  console.log(
+    allPass ? "SBS-MGMT-LOOP-A SMOKE PASS" : "SBS-MGMT-LOOP-A SMOKE FAIL",
+  );
   if (!allPass) process.exitCode = 1;
 } finally {
   await browser.close();
