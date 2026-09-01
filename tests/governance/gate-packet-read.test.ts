@@ -8,10 +8,12 @@ import {
   deriveNextHumanAction,
   normalizeGateState,
   parseAuthorizedPaths,
+  parseAuthorizedSurfaceDelivered,
   parseCorrectionGeneration,
   parseGatesFromKeyValues,
   parseKeyValueLines,
   parseLockedHeads,
+  parseSecondPilotLockedHeads,
   parseSliceABindLockedHeads,
   extractTextBlocks,
   resolvePrState,
@@ -177,5 +179,91 @@ describe("gate-packet pilot #552 integration", () => {
 describe("gate-packet fail-closed (V-3 / V-4)", () => {
   it("uses UNKNOWN when gates ambiguous for next action", () => {
     assert.equal(deriveNextHumanAction({}), "UNKNOWN");
+  });
+});
+
+const PILOT_548_EVIDENCE_REL =
+  "docs/architecture/review-to-plan-revision-relationship-implementation-evidence.md";
+const PILOT_548_SELECTION_REL =
+  "docs/architecture/asana-style-delegation-slice-b-second-pilot-selection-1.md";
+
+const EXPECTED_548_PATHS = [
+  "src/domain/index.ts",
+  "src/domain/monitoring-period-review-outcome.ts",
+  "src/domain/support-plan-version-monitoring-period-review-binding.ts",
+  "tests/domain/monitoring-period-review-outcome.test.ts",
+  "tests/domain/support-plan-version-monitoring-period-review-binding.test.ts",
+  "tests/contracts/monitoring-period-review-outcome-contract.test.ts",
+  "tests/contracts/support-plan-version-monitoring-period-review-binding-contract.test.ts",
+];
+
+describe("gate-packet Slice-B #548 bounded parsers (PORTABLE-B)", () => {
+  it("parseAuthorizedSurfaceDelivered reads heading + bounded text fence (V-B5)", async () => {
+    const markdown = await readFile(path.join(process.cwd(), PILOT_548_EVIDENCE_REL), "utf8");
+    const paths = parseAuthorizedSurfaceDelivered(markdown);
+    assert.equal(paths.length, 7);
+    assert.deepEqual(paths, EXPECTED_548_PATHS);
+  });
+
+  it("parseAuthorizedPaths dispatches to surface delivered when Authorized diff absent", async () => {
+    const markdown = await readFile(path.join(process.cwd(), PILOT_548_EVIDENCE_REL), "utf8");
+    const paths = parseAuthorizedPaths(markdown);
+    assert.deepEqual(paths, EXPECTED_548_PATHS);
+  });
+
+  it("parseSecondPilotLockedHeads reads Available locked identity section only (V-B6)", async () => {
+    const selection = await readFile(path.join(process.cwd(), PILOT_548_SELECTION_REL), "utf8");
+    const heads = parseSecondPilotLockedHeads(selection);
+    assert.equal(heads.definition, "2ec766c97b1e1a09bb7fc4de85118eaf8dd73264");
+    assert.equal(heads.scope, "0a863e693a5fc42359200081a1b3659aa2227bce");
+    assert.equal(heads.implementation, "1cf450fb1718ace2b437e8414a481071058abe7e");
+    assert.notEqual(heads.definition, "d107e855eccd7ebdf3b7733bd1e6860b9871e1a0");
+  });
+
+  it("does not return Slice-B parent Definition blob as pilot lineage definition", async () => {
+    const selection = await readFile(path.join(process.cwd(), PILOT_548_SELECTION_REL), "utf8");
+    const heads = parseSecondPilotLockedHeads(selection);
+    assert.notEqual(heads.definition, "d107e855eccd7ebdf3b7733bd1e6860b9871e1a0");
+  });
+});
+
+describe("gate-packet pilot #548 integration (Slice-B)", () => {
+  it("reads real evidence with 7 authorized paths and pilot lineage locked heads", async () => {
+    const markdown = await readFile(path.join(process.cwd(), PILOT_548_EVIDENCE_REL), "utf8");
+    const bindMarkdown = await readFile(path.join(process.cwd(), PILOT_548_SELECTION_REL), "utf8");
+    const packet = buildGatePacket({
+      issue: 548,
+      pr: 548,
+      evidenceMarkdown: markdown,
+      sliceBindMarkdown: bindMarkdown,
+      mainSha: "426fddb7914df7d3fbf41739add91e852bf35b02",
+      prLive: { state: "MERGED", mergedAt: "2026-01-01T00:00:00Z" } as never,
+      githubLivePr: "AVAILABLE",
+    });
+
+    assert.equal(packet.issue, 548);
+    assert.equal(packet.pr, 548);
+    assert.deepEqual(packet.authorized_paths, EXPECTED_548_PATHS);
+    assert.equal(packet.locked_heads.definition, "2ec766c97b1e1a09bb7fc4de85118eaf8dd73264");
+    assert.equal(packet.locked_heads.scope, "0a863e693a5fc42359200081a1b3659aa2227bce");
+    assert.equal(packet.locked_heads.implementation, "1cf450fb1718ace2b437e8414a481071058abe7e");
+    assert.equal(packet.live.pr_state, "MERGED");
+    assert.equal((packet.gates as Record<string, string>).merge, undefined);
+    assert.equal((packet.gates as Record<string, string>).ready, undefined);
+    assert.equal(packet.next_human_action, "UNKNOWN");
+  });
+
+  it("keeps live MERGED separate from Human merge gate inference (§5.6 / V-B4)", () => {
+    const packet = buildGatePacket({
+      issue: 548,
+      pr: 548,
+      evidenceMarkdown: "",
+      sliceBindMarkdown: "",
+      prLive: { state: "MERGED", mergedAt: "2026-01-01T00:00:00Z" } as never,
+      githubLivePr: "AVAILABLE",
+    });
+    assert.equal(packet.live.pr_state, "MERGED");
+    assert.notEqual((packet.gates as Record<string, string>).merge, "CONSUMED");
+    assert.equal(packet.next_human_action, "UNKNOWN");
   });
 });
