@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: ASANA-STYLE-DELEGATION-SLICE-B-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: SCOPE CORRECTION-1 APPLIED / AWAITING EXACT SCOPE RE-READBACK ON PR
+status: REVIEW-CLEARED / AWAITING HUMAN IMPLEMENTATION START GO
 parent definition: ASANA-STYLE-DELEGATION-SLICE-B-DEFINITION-1
 parent durable path: docs/architecture/asana-style-delegation-slice-b-definition-1.md
 Definition Lock PR: #569 MERGED
@@ -16,6 +16,7 @@ Second Pilot selection record: docs/architecture/asana-style-delegation-slice-b-
 Second Pilot selection blob: b489b11ee730bc27507515c4b30224b58feb86bd
 Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
 Scope Correction-1: APPLIED
+Independent Scope Re-Review-1: PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=1 / CONSUMED
 Human Implementation Start GO: NOT RECEIVED
 Implementation: NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
@@ -594,7 +595,8 @@ Second Pilot mutation authority = NO
 Implementation Scope Definition = RECORDED (this document)
 Independent Scope Review-1 = CORRECTION REQUIRED / CONSUMED
 Scope Correction-1 = APPLIED
-Exact Scope re-readback on Scope PR = PENDING
+Independent Scope Re-Review-1 = PASS / REVIEW-CLEARED / CONSUMED
+Exact Scope re-readback on Scope PR = COMPLETE
 Human Implementation Start GO = NOT RECEIVED
 Implementation = NOT AUTHORIZED
 PORTABLE-A / PORTABLE-B = NOT YET CLASSIFIED
@@ -606,9 +608,7 @@ Deploy / LIVE WRITE = NOT AUTHORIZED
 ## 15. Next
 
 ```text
-Exact Scope re-readback on Scope PR（post Correction-1）
-        ↓
-Independent Scope Re-Review-1
+Independent Scope Re-Review-1 = PASS / REVIEW-CLEARED / CONSUMED
         ↓
 Human Implementation Start GO / HOLD
         ↓

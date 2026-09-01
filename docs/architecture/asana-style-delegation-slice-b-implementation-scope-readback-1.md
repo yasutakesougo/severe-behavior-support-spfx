@@ -26,13 +26,16 @@ Scope artifact:
 Scope review readback:
   docs/architecture/asana-style-delegation-slice-b-implementation-scope-review-1-readback.md
 
+Scope re-review readback:
+  docs/architecture/asana-style-delegation-slice-b-implementation-scope-re-review-1-readback.md
+
 Post-merge readback (#569):
   docs/architecture/asana-style-delegation-slice-b-post-merge-readback-569.md
 
 Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
 Scope Correction-1: APPLIED
-Independent Scope Re-Review-1: NOT YET PERFORMED
-Human Implementation Start GO: NOT RECEIVED
+Independent Scope Re-Review-1: PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=1 / CONSUMED
+Human Implementation Start GO: NOT RECEIVED / ELIGIBLE (materials only)
 Implementation: NOT AUTHORIZED
 PORTABLE-A / PORTABLE-B: NOT YET CLASSIFIED
 Second Pilot mutation authority: NO
@@ -87,6 +90,7 @@ Expected delta (docs only):
 | `asana-style-delegation-slice-b-implementation-scope-1.md` | Locked Scope (Correction-1) |
 | `asana-style-delegation-slice-b-implementation-scope-readback-1.md` | This re-readback |
 | `asana-style-delegation-slice-b-implementation-scope-review-1-readback.md` | Review-1 record |
+| `asana-style-delegation-slice-b-implementation-scope-re-review-1-readback.md` | Re-Review-1 PASS |
 
 ```text
 Product delta = 0
@@ -132,8 +136,8 @@ Prior Review-1 failures (P1-1, P1-2, P1-3, P2-1): **ADDRESSED by Correction-1**
 Does **not** grant Implementation Start GO.
 
 ```text
-Pending: Independent Scope Re-Review-1
-Human Implementation Start GO: NOT RECEIVED
+Independent Scope Re-Review-1: PASS / REVIEW-CLEARED / CONSUMED
+Human Implementation Start GO: NOT RECEIVED / ELIGIBLE (materials only)
 Implementation: NOT AUTHORIZED
 ```
 
@@ -143,13 +147,16 @@ Implementation: NOT AUTHORIZED
 
 ```text
 Exact Scope re-readback (post Correction-1) = COMPLETE
+Independent Scope Re-Review-1 = PASS / REVIEW-CLEARED / CONSUMED
 
 STOP before Human Implementation Start GO
 
-NEXT:
-  Independent Scope Re-Review-1
-        ↓
+NEXT Human Gate:
   Human Implementation Start GO / HOLD
+  — bind Definition @ 426fddb / d107e855
+  — bind Scope @ blob 22084df1
+  — bind Second Pilot #548 selection record
+  — does NOT authorize Second Pilot mutation, Ready, Merge, Deploy, or Product changes
 ```
 
 After Start GO (separate authorization):
