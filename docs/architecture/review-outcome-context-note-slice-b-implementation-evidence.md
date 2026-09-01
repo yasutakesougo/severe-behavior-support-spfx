@@ -17,9 +17,12 @@ Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 ```text
 SPFx artifact CI completion          = PASS / VERIFIED
 Rendered Browser Acceptance          = PASS / VERIFIED
-Actual Staff Value Check             = RENDERED PROXY PASS / HUMAN CONFIRMATION AWAITING
+Actual Staff Value Check             = RENDERED PROXY PASS / Q4 HUMAN FOLLOW-UP RECORDED
 Exact evidence / HEAD fixation       = APPLIED (this document)
-Human Ready GO                       = HOLD (not eligible until Human staff value confirmed)
+Human Ready GO                       = CONSUMED
+Human Merge GO                       = CONSUMED
+PR #560                              = MERGED → main @ ea84024
+Post-merge freeze                    = docs/architecture/review-outcome-context-note-slice-b-post-merge-freeze-560.md
 ```
 
 ## 2. SPFx artifact CI completion

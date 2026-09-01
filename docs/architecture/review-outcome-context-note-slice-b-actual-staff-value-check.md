@@ -57,6 +57,8 @@ Note subordinate to decision readback (補足メモ below decision line)
 ```text
 Rendered Browser Acceptance = PASS
 Actual Staff Value Check (rendered proxy) = PASS WITH Q4 HUMAN FOLLOW-UP
-Human staff confirmation = AWAITING
-Human Ready GO = HOLD
+Human staff confirmation = CONSUMED via Human Merge GO (#560)
+Human Ready GO = CONSUMED
+Human Merge GO = CONSUMED
+Post-merge freeze = review-outcome-context-note-slice-b-post-merge-freeze-560.md
 ```
