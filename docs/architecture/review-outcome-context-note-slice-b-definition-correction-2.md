@@ -5,13 +5,16 @@ repository: yasutakesougo/severe-behavior-support-spfx
 unit: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B
 kind: definition amendment / post-merge correction
 correction: DEFINITION CORRECTION-2
-status: APPLIED / AWAITING INDEPENDENT DEFINITION RE-REVIEW-2
+status: APPLIED / CONSUMED BY DEFINITION CORRECTION-3
 basis main: 08492b65412053c78bcd976d7dde547b632dacfe
 parent durable definition: docs/architecture/review-outcome-context-note-slice-b-definition-1.md
 locked definition HEAD before this amendment: 29c9941d87067e38d32a9b612911e66a0504332c
 triggering Scope candidate HEAD: 34483cf7edc56adaab3a96d201b40be2d85224bc
 trigger: Independent Scope Re-Review-3 P1-1
-Human Definition Lock GO for Correction-2: NOT RECEIVED
+Independent Definition Re-Review-2: CORRECTION REQUIRED / CONSUMED
+P1-1: evidence snapshot recurrence A→B→A vs current-only storage
+successor: docs/architecture/review-outcome-context-note-slice-b-definition-correction-3.md
+Human Definition Lock GO for Correction-2 alone: SUPERSEDED BY CORRECTION-3 PACKET LOCK
 Implementation Correction: NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED
@@ -319,9 +322,12 @@ semantics, stop for another Definition correction instead of implementing ad hoc
 ## 9. Gate
 
 ```text
-Definition Correction-2 = APPLIED
-Independent Definition Re-Review-2 = REQUIRED / NOT STARTED
-Human Definition Lock GO（Correction-2）= NOT RECEIVED
+Definition Correction-2 = APPLIED / CONSUMED
+Independent Definition Re-Review-2 = CORRECTION REQUIRED / CONSUMED
+Definition Correction-3 = APPLIED / REVIEW-CLEARED
+Independent Definition Re-Review-3 = PASS / REVIEW-CLEARED
+  @ aff0f748a8b4fd997dac74fcc6be7397b37a21a4
+Human Definition Lock GO（Correction-3 packet）= NOT RECEIVED
 Scope lineage reconciliation = HOLD
 Independent Scope Re-Review-4 = HOLD
 Human Implementation Start GO（correction-only）= NOT ELIGIBLE
@@ -335,10 +341,8 @@ SharePoint / M365 / Entra mutation = NOT AUTHORIZED
 NEXT:
 
 ```text
-exact Definition packet re-read
-→ Independent Definition Re-Review-2
-→ PASSなら separate Human Definition Lock GO
-→ Scope lineage reconciliation
+separate Human Definition Lock GO（Correction-3 packet）
+→ Scope lineage reconciliation + R3
 → Independent Scope Re-Review-4
 → PASSなら separate Human Implementation Start GO（correction-only）
 ```
