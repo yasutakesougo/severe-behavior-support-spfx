@@ -153,9 +153,9 @@ describe("review-outcome-capture", () => {
 
     expect(capturedReviewMatchesMaterials(first.captured, MATERIALS)).toBe(true);
     expect(capturedReviewMatchesMaterials(first.captured, MATERIALS_B)).toBe(false);
-    expect(
-      capturedReviewMatchesMaterials(first.captured, { ...MATERIALS, UserId: "user-b" }),
-    ).toBe(false);
+    expect(capturedReviewMatchesMaterials(first.captured, { ...MATERIALS, UserId: "user-b" })).toBe(
+      false,
+    );
   });
 
   it("captures an atomic outcome + optional note pair without changing OutcomeId", () => {

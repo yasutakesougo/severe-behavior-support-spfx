@@ -65,7 +65,7 @@ export function reviewOutcomeContextKey(materials: HumanReviewMaterials): string
 }
 
 export function reviewOutcomeEvidenceSnapshot(sourceRecordIds: readonly string[]): string {
-  return [...new Set(sourceRecordIds.filter((recordId) => recordId.length > 0))]
+  return Array.from(new Set(sourceRecordIds.filter((recordId) => recordId.length > 0)))
     .sort()
     .join(REVIEW_OUTCOME_EVIDENCE_SNAPSHOT_SEPARATOR);
 }

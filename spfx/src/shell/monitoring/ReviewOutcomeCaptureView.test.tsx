@@ -193,7 +193,9 @@ describe("ReviewOutcomeCaptureView", () => {
     ).toBe("");
     expect(container.textContent).not.toContain("見直し結果を安全に記録できません");
 
-    act(() => ReactDOM.unmountComponentAtNode(container));
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
     container.remove();
   });
 
@@ -269,7 +271,9 @@ describe("ReviewOutcomeCaptureView", () => {
     expect(container.textContent).toContain("見直し結果: 未判断");
     expect(container.textContent).not.toContain("補足メモ: snapshot A memo");
 
-    act(() => ReactDOM.unmountComponentAtNode(container));
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
     container.remove();
   });
 });

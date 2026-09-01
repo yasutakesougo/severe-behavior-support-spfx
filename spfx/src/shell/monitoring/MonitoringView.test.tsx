@@ -175,7 +175,9 @@ describe("MonitoringView", () => {
     expect(container.textContent).not.toContain("補足メモ: memo A");
     expect(container.textContent).not.toContain("補足メモ: memo B");
 
-    act(() => ReactDOM.unmountComponentAtNode(container));
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
     container.remove();
   });
 });
