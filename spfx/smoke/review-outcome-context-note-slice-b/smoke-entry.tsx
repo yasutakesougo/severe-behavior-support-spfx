@@ -1,25 +1,31 @@
 /**
  * REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B — synthetic rendered browser acceptance.
  * Verification surface only. No LIVE I/O / Deploy / SharePoint.
+ *
+ * Snapshot A / B share the same review-context key; only evidence RecordId differs.
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import type { MonitoringReadModel } from "../../src/sbs-domain/monitoring-read-model.bundle";
 import { MonitoringView } from "../../src/shell/monitoring/MonitoringView";
 
-function modelFor(userId: string, planVersion: number): MonitoringReadModel {
+const SHARED_CONTEXT = {
+  OrganizationId: "synthetic-org-001",
+  SiteId: "synthetic-site-001",
+  UserId: "user-a",
+  planId: "plan-a",
+  planVersion: 3,
+  periodStart: "2026-08-01T00:00:00+09:00",
+  periodEnd: "2026-08-31T23:59:59+09:00",
+} as const;
+
+function modelForEvidenceSnapshot(recordId: string): MonitoringReadModel {
   return {
-    OrganizationId: "synthetic-org-001",
-    SiteId: "synthetic-site-001",
-    UserId: userId,
-    planId: "plan-a",
-    planVersion,
-    periodStart: "2026-08-01T00:00:00+09:00",
-    periodEnd: "2026-08-31T23:59:59+09:00",
+    ...SHARED_CONTEXT,
     recordCount: 1,
     records: [
       {
-        RecordId: `record-${userId}-v${planVersion}`,
+        RecordId: recordId,
         Procedure: {
           ProcedureId: "procedure-1",
           ProcedureVersion: "v1",
@@ -28,22 +34,21 @@ function modelFor(userId: string, planVersion: number): MonitoringReadModel {
         result: "PERFORMED_AS_PLANNED",
         performedAt: "2026-08-10T10:00:00+09:00",
         recordedAt: "2026-08-10T10:05:00+09:00",
-        planId: "plan-a",
-        planVersion,
+        planId: SHARED_CONTEXT.planId,
+        planVersion: SHARED_CONTEXT.planVersion,
       },
     ],
   };
 }
 
-/** Snapshot A: user-a on plan version 3 */
-const MODEL_A = modelFor("user-a", 3);
-/** Snapshot B: user-b on plan version 4 — same org/site/period base, different review context */
-const MODEL_B = modelFor("user-b", 4);
+/** Evidence snapshot A = record-a */
+const MODEL_A = modelForEvidenceSnapshot("record-a");
+/** Evidence snapshot B = record-b (same review-context key) */
+const MODEL_B = modelForEvidenceSnapshot("record-b");
 
 const SmokeApp: React.FC = () => {
   const [snapshot, setSnapshot] = React.useState<"A" | "B">("A");
   const model = snapshot === "A" ? MODEL_A : MODEL_B;
-  const personLabel = snapshot === "A" ? "Aさん" : "Bさん";
 
   return (
     <>
@@ -52,11 +57,11 @@ const SmokeApp: React.FC = () => {
         data-smoke-switch-context="true"
         onClick={() => setSnapshot((current) => (current === "A" ? "B" : "A"))}
       >
-        verification context switch
+        evidence snapshot switch
       </button>
       <MonitoringView
         model={model}
-        personLabel={personLabel}
+        personLabel="Aさん"
         procedureLabelContext={{
           userId: model.UserId,
           planId: model.planId,
