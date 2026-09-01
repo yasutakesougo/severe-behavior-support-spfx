@@ -62,7 +62,9 @@ describe("ReviewOutcomeCaptureView", () => {
     );
     expect(html).toContain("見直し結果: 未判断");
     expect(html).toContain("判断理由");
-    expect(html).toContain("見直し結果を選んだ理由です。「変更が必要」の場合は入力してください。");
+    expect(html).toContain(
+      "見直し結果を選んだ理由です。「変更が必要」の場合は入力してください。",
+    );
     expect(html).toContain("変更なし");
     expect(html).toContain("変更が必要");
     expect(html).toContain("本番には保存されていません");
@@ -152,7 +154,9 @@ describe("ReviewOutcomeCaptureView", () => {
     });
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.click();
     });
 
     expect(onCapture).toHaveBeenCalledWith("NO_CHANGE", "", "");
@@ -187,7 +191,9 @@ describe("ReviewOutcomeCaptureView", () => {
     expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
     act(() => enterText(reason, "Aの判断理由"));
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.click();
     });
     expect(container.textContent).toContain("見直し結果を安全に記録できません");
 
@@ -238,7 +244,9 @@ describe("ReviewOutcomeCaptureView", () => {
     if (!reason) throw new Error("expected reason textarea");
     act(() => enterText(reason, "snapshot A reason"));
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.click();
     });
     expect(container.textContent).toContain("見直し結果を安全に記録できません");
 
