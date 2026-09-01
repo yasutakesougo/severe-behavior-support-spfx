@@ -6,7 +6,7 @@ Unit: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B
 Kind: browser smoke / rendered acceptance
 Status: PASS / VERIFIED
 Date: 2026-09-01
-Implementation HEAD: 08492b65412053c78bcd976d7dde547b632dacfe (smoke extended on branch)
+Implementation HEAD: 35cece6 (context-switch smoke matrix)
 Harness: spfx/smoke/review-outcome-context-note-slice-b/
 presentationOnly: true
 LIVE WRITE / Deploy / SharePoint: NOT AUTHORIZED
