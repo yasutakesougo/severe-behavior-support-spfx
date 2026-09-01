@@ -62,9 +62,7 @@ describe("ReviewOutcomeCaptureView", () => {
     );
     expect(html).toContain("見直し結果: 未判断");
     expect(html).toContain("判断理由");
-    expect(html).toContain(
-      "見直し結果を選んだ理由です。「変更が必要」の場合は入力してください。",
-    );
+    expect(html).toContain("見直し結果を選んだ理由です。「変更が必要」の場合は入力してください。");
     expect(html).toContain("変更なし");
     expect(html).toContain("変更が必要");
     expect(html).toContain("本番には保存されていません");

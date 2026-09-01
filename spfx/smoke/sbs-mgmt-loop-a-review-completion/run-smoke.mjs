@@ -155,12 +155,14 @@ function observe(page) {
     );
     const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
     const noChangeStyle = noChangeButton ? getComputedStyle(noChangeButton) : null;
-    const changeRequiredStyle = changeRequiredButton ? getComputedStyle(changeRequiredButton) : null;
+    const changeRequiredStyle = changeRequiredButton
+      ? getComputedStyle(changeRequiredButton)
+      : null;
     const nonColorActionDistinction = Boolean(
       noChangeStyle &&
-        changeRequiredStyle &&
-        (noChangeStyle.borderTopWidth !== changeRequiredStyle.borderTopWidth ||
-          noChangeStyle.fontWeight !== changeRequiredStyle.fontWeight),
+      changeRequiredStyle &&
+      (noChangeStyle.borderTopWidth !== changeRequiredStyle.borderTopWidth ||
+        noChangeStyle.fontWeight !== changeRequiredStyle.fontWeight),
     );
     const capture = q("[data-review-outcome-capture]");
     return {
