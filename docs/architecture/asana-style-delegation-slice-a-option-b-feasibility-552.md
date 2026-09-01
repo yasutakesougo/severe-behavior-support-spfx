@@ -6,13 +6,17 @@ Unit: ASANA-STYLE-DELEGATION-SLICE-A-OPTION-B-FEASIBILITY-552
 Kind: V-11 Option B feasibility record
 Mode: READ ONLY assessment
 Date: 2026-09-01
+Status: CORRECTION-1 RE-FIXED
 Pilot: Issue #552 / PR #563
 Scope bind: main @ 2a604ed / blob 2b0b934
-Result: PASS
+Result: PASS (after Implementation Correction-1)
 Option C required: NO
 ```
 
 Template per Scope §6.
+
+Prior assessment marked B-5 PASS prematurely (implementation HEAD only). Correction-1
+adds `locked_heads.definition` / `locked_heads.scope` from Slice-A bind artifact.
 
 ---
 
@@ -25,23 +29,23 @@ Pilot:
 Exact basis:
   Scope §4 Option B / §6 template / §15 V-11
   Pilot evidence: docs/architecture/sbs-mgmt-loop-a-implementation-evidence.md
-  GitHub live: gh pr view 563 (MERGED @ a19576c)
-  Definition blob: 25443455 (unchanged)
-  Scope blob: 2b0b934 (on main)
+  Slice-A bind: docs/architecture/asana-style-delegation-slice-a-implementation-start-readback-1.md
+  GitHub live: gh pr view 563 (lifecycle fact only; not Human GO inference)
+  Definition blob: 25443455fad9d0ccb76a84a4ebdc94c4ac242442
+  Scope blob: 2b0b934a977bfe5192ecb6087fda67215c79a366
 
 Result: PASS
 
 Failed requirements:
-- NONE
+- NONE (post Correction-1)
 
 Unavailable or unstable fields:
-- issue_comment_live: GitHub Issues API returns 403 in agent integration context;
-  mitigated by review-cleared evidence doc + PR live state (Primary Sources §4.1).
-  Field degrades to UNKNOWN when neither source yields explicit GO line — fail-closed.
+- issue_comment_live: GitHub Issues API may return 403;
+  gate values from non-formal phrases → UNKNOWN (fail-closed).
+- github_live_pr UNAVAILABLE → live.pr_state = UNKNOWN; sources.github_live_pr = UNAVAILABLE
 
 Why UNKNOWN is insufficient:
-- NONE for Acceptance Criteria SC-5 / V-4: UNKNOWN is acceptable per Scope §6 when
-  live comment access unavailable; pilot gates are recoverable from evidence doc + PR state.
+- NONE for SC-5 / V-4 when formal tokens or bind artifacts supply required fields.
 
 Option C required:
   NO
@@ -49,18 +53,18 @@ Option C required:
 
 ---
 
-## B-1 — B-8 requirement matrix
+## B-1 — B-8 requirement matrix (post Correction-1)
 
 | ID | Requirement | Result | Basis |
 |---|---|---|---|
-| B-1 | Do not change project-status authority model | **PASS** | Read-only script; no mutation paths; skill adds reference only |
-| B-2 | GitHub live evidence priority unchanged | **PASS** | Live PR merge state overrides stale doc index; evidence.md order preserved |
-| B-3 | Agent cannot forge GO via editable index | **PASS** | Output generated at read time from live + locked docs; no persistent agent-writable packet in Option B |
-| B-4 | Issue-level authorized paths | **PASS** | Parsed from evidence doc §2 authorized diff list |
-| B-5 | locked Definition / Scope HEAD uniquely | **PASS** | Evidence doc fixes implementation HEAD + product basis SHA |
-| B-6 | correction generation uniquely | **PASS** | Parsed from PR #563 body correction lineage block (supplementary); generation=4 |
-| B-7 | next_human_action unique or UNKNOWN | **PASS** | Derived from gate subset + Scope §9 enum; UNKNOWN when ambiguous |
-| B-8 | No large state engine | **PASS** | Single-issue focused parser + gh subprocess; no repository-wide scan |
+| B-1 | Do not change project-status authority model | **PASS** | Read-only script; no mutation paths |
+| B-2 | GitHub live evidence priority unchanged | **PASS** | Live PR lifecycle in `live.pr_state`; gates not overridden by merge |
+| B-3 | Agent cannot forge GO via editable index | **PASS** | Read-time generation; exact-token gates only |
+| B-4 | Issue-level authorized paths | **PASS** | Evidence doc §2 authorized diff |
+| B-5 | locked Definition / Scope HEAD uniquely | **PASS** | `parseSliceABindLockedHeads` from implementation-start-readback |
+| B-6 | correction generation uniquely | **PASS** | Supplementary PR body pattern |
+| B-7 | next_human_action unique or UNKNOWN | **PASS** | Exact gate tokens only; no HOLD→ELIGIBLE inference |
+| B-8 | No large state engine | **PASS** | Focused parser + optional gh subprocess |
 
 ---
 
@@ -72,4 +76,5 @@ Option C = NOT REQUIRED
 Option A = REJECTED (unchanged)
 ```
 
-Implementation may proceed on allowlist-bound surface only.
+Independent Implementation Review-1 = CORRECTION REQUIRED / CONSUMED by Correction-1.
+Re-Review required before Human Ready eligibility.

@@ -4,6 +4,9 @@ export const PILOTS = {
     issue: 552,
     pr: 563,
     evidencePaths: ["docs/architecture/sbs-mgmt-loop-a-implementation-evidence.md"],
+    sliceBindPaths: [
+      "docs/architecture/asana-style-delegation-slice-a-implementation-start-readback-1.md",
+    ],
     supplementaryPr: 563,
   },
 };

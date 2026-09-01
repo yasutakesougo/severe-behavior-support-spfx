@@ -2,6 +2,16 @@ import { GATE_LINE_ALIASES, GATE_STATES } from "./constants.mjs";
 
 const TEXT_FENCE = /```text\n([\s\S]*?)```/g;
 
+/** Formal gate tokens accepted verbatim (Correction-1 / fail-closed). */
+const EXACT_GATE_ALIASES = new Map([
+  ["CONSUMED", "CONSUMED"],
+  ["ELIGIBLE", "ELIGIBLE"],
+  ["NOT_RECEIVED", "NOT_RECEIVED"],
+  ["NOT RECEIVED", "NOT_RECEIVED"],
+  ["INVALIDATED", "INVALIDATED"],
+  ["FORBIDDEN", "FORBIDDEN"],
+]);
+
 /** Extract all ```text blocks from markdown. */
 export function extractTextBlocks(markdown) {
   const blocks = [];
@@ -27,38 +37,26 @@ export function parseKeyValueLines(textBlocks) {
   return map;
 }
 
-/** Normalize gate state token from free-form value (first recognized token). */
+/**
+ * Normalize gate state: exact formal token only; all other phrases → UNKNOWN.
+ * Does not map HOLD/REQUIRED/PASS/VERIFIED/NOT ELIGIBLE to gate states.
+ */
 export function normalizeGateState(raw) {
   if (!raw) {
     return "UNKNOWN";
   }
-  const upper = raw.toUpperCase();
-  if (upper.includes("NOT RECEIVED") || upper.includes("NOT YET")) {
-    return "NOT_RECEIVED";
+  const trimmed = raw.trim();
+  const upper = trimmed.toUpperCase();
+
+  if (EXACT_GATE_ALIASES.has(upper)) {
+    return EXACT_GATE_ALIASES.get(upper);
   }
-  if (upper.includes("NOT ELIGIBLE")) {
-    return "NOT_RECEIVED";
+
+  const underscored = upper.replace(/\s+/g, "_");
+  if (GATE_STATES.has(underscored)) {
+    return underscored;
   }
-  if (upper.includes("INVALIDATED")) {
-    return "INVALIDATED";
-  }
-  if (upper.includes("FORBIDDEN")) {
-    return "FORBIDDEN";
-  }
-  for (const state of GATE_STATES) {
-    if (upper.includes(state)) {
-      return state;
-    }
-  }
-  if (upper.includes("RECEIVED") || upper.includes("CONSUMED")) {
-    return "CONSUMED";
-  }
-  if (upper.includes("HOLD") || upper.includes("REQUIRED")) {
-    return "ELIGIBLE";
-  }
-  if (upper.includes("PASS") && upper.includes("VERIFIED")) {
-    return "CONSUMED";
-  }
+
   return "UNKNOWN";
 }
 
@@ -101,8 +99,8 @@ export function parseAuthorizedPaths(markdown) {
   return paths;
 }
 
-/** Parse locked HEAD SHAs from evidence content. */
-export function parseLockedHeads(markdown, keyValues) {
+/** Parse pilot implementation / product locked HEAD SHAs from evidence content. */
+export function parsePilotLockedHeads(markdown, keyValues) {
   const heads = {};
   const impl =
     markdown.match(/exact (?:corrected )?implementation HEAD\s*=\s*([0-9a-f]{40})/i)?.[1] ??
@@ -121,6 +119,28 @@ export function parseLockedHeads(markdown, keyValues) {
     heads.evidence = evidenceHead;
   }
   return heads;
+}
+
+/** Parse Slice-A parent Definition / Scope blob identity from bind readback artifact. */
+export function parseSliceABindLockedHeads(markdown) {
+  const heads = {};
+  const definition = markdown.match(/Definition blob:\s*([0-9a-f]{40})/i)?.[1];
+  if (definition) {
+    heads.definition = definition;
+  }
+  const scope = markdown.match(/Scope blob:\s*([0-9a-f]{40})/i)?.[1];
+  if (scope) {
+    heads.scope = scope;
+  }
+  return heads;
+}
+
+/** Merge pilot + Slice-A bind locked heads (B-5 / V-6). */
+export function parseLockedHeads(pilotMarkdown, keyValues, sliceBindMarkdown = "") {
+  return {
+    ...parseSliceABindLockedHeads(sliceBindMarkdown),
+    ...parsePilotLockedHeads(pilotMarkdown, keyValues),
+  };
 }
 
 /** Infer correction generation from PR body or evidence (supplementary). */
@@ -142,26 +162,34 @@ export function parseCorrectionGeneration(markdown) {
   return null;
 }
 
-/** Derive next_human_action from gate subset (Scope §9). Fail-closed to UNKNOWN. */
-export function deriveNextHumanAction(gates, { prMerged = false, issueClosed = false } = {}) {
-  if (prMerged && issueClosed) {
-    return "UNKNOWN";
-  }
-  if (gates.actual_staff_value === "ELIGIBLE" || gates.actual_staff_value === "NOT_RECEIVED") {
+/** Derive next_human_action from exact gate tokens only (Scope §9). Fail-closed to UNKNOWN. */
+export function deriveNextHumanAction(gates) {
+  if (gates.actual_staff_value === "ELIGIBLE") {
     if (gates.ready === "NOT_RECEIVED" && gates.merge === "NOT_RECEIVED") {
       return "ACTUAL_STAFF_VALUE_CONFIRMED";
     }
   }
-  if (gates.ready === "ELIGIBLE" || gates.ready === "NOT_RECEIVED") {
+  if (gates.ready === "ELIGIBLE") {
     if (gates.merge === "NOT_RECEIVED") {
       return "READY";
     }
   }
-  if (gates.merge === "ELIGIBLE" || gates.merge === "NOT_RECEIVED") {
+  if (gates.merge === "ELIGIBLE") {
     return "MERGE";
   }
   if (gates.implementation_start === "NOT_RECEIVED") {
     return "IMPLEMENTATION_START";
   }
   return "UNKNOWN";
+}
+
+/** Resolve live PR lifecycle fact (not Human GO state). */
+export function resolvePrState(prLive) {
+  if (!prLive) {
+    return "UNKNOWN";
+  }
+  if (prLive.mergedAt) {
+    return "MERGED";
+  }
+  return prLive.state ?? "UNKNOWN";
 }

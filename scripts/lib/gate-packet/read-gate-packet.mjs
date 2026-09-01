@@ -9,57 +9,38 @@ import {
   parseGatesFromKeyValues,
   parseKeyValueLines,
   parseLockedHeads,
+  resolvePrState,
 } from "./parse-markdown-evidence.mjs";
 import { getPilot } from "./pilots.mjs";
-
-/**
- * Apply GitHub live PR state over doc-derived gates (Evidence priority §4.1).
- * Does not infer GO from CI or review chronology.
- */
-export function applyLivePrOverrides(gates, { prState, prMerged }) {
-  const next = { ...gates };
-  if (prMerged) {
-    next.merge = "CONSUMED";
-    if (next.ready === "NOT_RECEIVED" || next.ready === "ELIGIBLE" || next.ready === "UNKNOWN") {
-      next.ready = "CONSUMED";
-    }
-  } else if (prState === "OPEN" && !prMerged) {
-    if (next.merge === undefined) {
-      next.merge = "NOT_RECEIVED";
-    }
-  }
-  return next;
-}
 
 /** Build structured gate packet from pilot config + file contents + optional live PR. */
 export function buildGatePacket({
   issue,
   pr,
   evidenceMarkdown,
+  sliceBindMarkdown = "",
   supplementaryMarkdown = "",
   mainSha = "UNKNOWN",
   prLive = null,
+  githubLivePr = "NOT_REQUESTED",
   evidenceCheckedAt = new Date().toISOString(),
 }) {
   const combined = `${evidenceMarkdown}\n${supplementaryMarkdown}`;
   const textBlocks = extractTextBlocks(combined);
   const keyValues = parseKeyValueLines(textBlocks);
 
-  let gates = parseGatesFromKeyValues(keyValues);
-  const prMerged = Boolean(prLive?.mergedAt);
-  gates = applyLivePrOverrides(gates, {
-    prState: prLive?.state ?? "UNKNOWN",
-    prMerged,
-  });
-
+  const gates = parseGatesFromKeyValues(keyValues);
   const authorized_paths = parseAuthorizedPaths(evidenceMarkdown);
-  const locked_heads = parseLockedHeads(evidenceMarkdown, keyValues);
+  const locked_heads = parseLockedHeads(evidenceMarkdown, keyValues, sliceBindMarkdown);
   const definition_generation = parseCorrectionGeneration(combined);
+  const next_human_action = deriveNextHumanAction(gates);
 
-  const next_human_action = deriveNextHumanAction(gates, {
-    prMerged,
-    issueClosed: prLive?.issueClosed ?? false,
-  });
+  const pr_state = githubLivePr === "AVAILABLE" ? resolvePrState(prLive) : "UNKNOWN";
+
+  const primary = ["locked_architecture_artifacts"];
+  if (githubLivePr === "AVAILABLE") {
+    primary.unshift("github_live_pr");
+  }
 
   return {
     issue,
@@ -67,6 +48,10 @@ export function buildGatePacket({
     authorized_paths,
     locked_heads,
     gates,
+    live: {
+      pr_state,
+      github_live_pr: githubLivePr,
+    },
     definition_generation: definition_generation ?? "UNKNOWN",
     next_human_action,
     freshness: {
@@ -74,8 +59,10 @@ export function buildGatePacket({
       evidence_basis_sha: mainSha,
     },
     sources: {
-      primary: ["github_live_pr", "locked_architecture_artifacts"],
+      primary,
+      github_live_pr: githubLivePr,
       pilot_evidence_paths: [],
+      slice_bind_paths: [],
     },
   };
 }
@@ -93,8 +80,16 @@ export async function readGatePacketForIssue(issueNumber, { root, runGh, mainSha
   }
   const evidenceMarkdown = evidenceParts.join("\n");
 
+  let sliceBindMarkdown = "";
+  for (const rel of pilot.sliceBindPaths ?? []) {
+    const abs = path.join(root, rel);
+    sliceBindMarkdown += `${await readFile(abs, "utf8")}\n`;
+  }
+
   let prLive = null;
   let supplementaryMarkdown = "";
+  let githubLivePr = pilot.supplementaryPr ? "UNAVAILABLE" : "NOT_REQUESTED";
+
   if (pilot.supplementaryPr && runGh) {
     try {
       const raw = runGh([
@@ -107,10 +102,11 @@ export async function readGatePacketForIssue(issueNumber, { root, runGh, mainSha
       if (raw) {
         prLive = JSON.parse(raw);
         supplementaryMarkdown = prLive.body ?? "";
-        prLive.issueClosed = undefined;
+        githubLivePr = "AVAILABLE";
       }
     } catch {
       prLive = null;
+      githubLivePr = "UNAVAILABLE";
     }
   }
 
@@ -118,10 +114,13 @@ export async function readGatePacketForIssue(issueNumber, { root, runGh, mainSha
     issue: pilot.issue,
     pr: pilot.pr,
     evidenceMarkdown,
+    sliceBindMarkdown,
     supplementaryMarkdown,
     mainSha,
     prLive,
+    githubLivePr,
   });
   packet.sources.pilot_evidence_paths = pilot.evidencePaths;
+  packet.sources.slice_bind_paths = pilot.sliceBindPaths ?? [];
   return packet;
 }
