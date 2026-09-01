@@ -5,7 +5,8 @@ repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-LOOP-A (#552)
 kind: implementation evidence / exact HEAD fixation
 parent Product basis: main @ 2c99d0c6d4dd8a4691ed64386650808d07525f38
-implementation HEAD: bfa7eaa2821197d68c284735ce5a6b355c3e5687
+implementation HEAD (product): bfa7eaa2821197d68c284735ce5a6b355c3e5687
+evidence packet HEAD: 8e6596f5867978030953d133989e91ba8d4b55b1
 smoke evidence HEAD: bfa7eaa2821197d68c284735ce5a6b355c3e5687
 PR: #563 (agent/552-sbs-mgmt-loop-a-implementation)
 date: 2026-09-01
@@ -54,6 +55,17 @@ includes:
   draftDecisionReason UI + separate reason/note readback
   R1–R12 focused tests in review-outcome-capture / ReviewOutcomeCaptureView / MonitoringView
   dedicated smoke harness spfx/smoke/sbs-mgmt-loop-a-review-completion/
+```
+
+### Evidence packet tip
+
+```text
+evidence packet HEAD = 8e6596f5867978030953d133989e91ba8d4b55b1
+delta from product HEAD (bfa7eaa):
+  docs/architecture/sbs-mgmt-loop-a-browser-smoke.md
+  docs/architecture/sbs-mgmt-loop-a-actual-staff-value-check.md
+  docs/architecture/sbs-mgmt-loop-a-implementation-evidence.md
+Product blobs = IDENTICAL to bfa7eaa (no diff)
 ```
 
 ### Smoke evidence tip
