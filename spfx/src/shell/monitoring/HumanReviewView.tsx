@@ -8,7 +8,7 @@ import type {
 import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import { ReviewOutcomeCaptureView } from "./ReviewOutcomeCaptureView";
 import {
-  reviewOutcomeContextKey,
+  reviewOutcomeCurrentEpochBindingKey,
   type SyntheticCapturedReview,
   type SyntheticCapturedReviewResult,
 } from "./review-outcome-capture";
@@ -236,7 +236,7 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
 
       {onCaptureOutcome ? (
         <ReviewOutcomeCaptureView
-          key={reviewOutcomeContextKey(model)}
+          key={reviewOutcomeCurrentEpochBindingKey(model)}
           materials={model}
           capturedReview={capturedReview}
           onCapture={onCaptureOutcome}

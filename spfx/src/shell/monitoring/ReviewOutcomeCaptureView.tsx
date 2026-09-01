@@ -4,6 +4,7 @@ import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
 import {
   reviewOutcomeContextKey,
+  reviewOutcomeCurrentEpochBindingKey,
   type SyntheticCapturedReview,
   type SyntheticCapturedReviewResult,
 } from "./review-outcome-capture";
@@ -27,12 +28,13 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
   const [draftNoteText, setDraftNoteText] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const contextKey = reviewOutcomeContextKey(materials);
+  const currentEpochBindingKey = reviewOutcomeCurrentEpochBindingKey(materials);
   const disabled = capturedReview !== null;
 
   React.useEffect(() => {
     setDraftNoteText("");
     setError(null);
-  }, [contextKey]);
+  }, [currentEpochBindingKey]);
 
   const capture = (decision: MonitoringPeriodReviewDecision): void => {
     if (draftNoteText.length > MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH) {

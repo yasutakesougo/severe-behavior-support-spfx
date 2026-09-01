@@ -1,9 +1,21 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { renderToStaticMarkup } from "react-dom/server";
+import { act, Simulate } from "react-dom/test-utils";
 import { MonitoringView } from "./MonitoringView";
 import { buildDemoMonitoringForVersion } from "./monitoring-fixture";
 import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "../users/support-plan-fixture";
+
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // Jest jsdom may omit TextEncoder; SHA-256 uses it. SPFx/browser have it.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
 
 function resolvedMonitoringVersion(planVersion: number): MonitoringReadModel {
   const result = buildDemoMonitoringForVersion(planVersion);
@@ -11,6 +23,37 @@ function resolvedMonitoringVersion(planVersion: number): MonitoringReadModel {
     throw new Error(`expected RESOLVED monitoring fixture for version ${planVersion}`);
   }
   return result.value;
+}
+
+function withEvidenceRecordId(model: MonitoringReadModel, suffix: string): MonitoringReadModel {
+  return {
+    ...model,
+    records: model.records.map((record) => ({
+      ...record,
+      RecordId: `${record.RecordId}-${suffix}`,
+    })),
+  };
+}
+
+function renderMonitoring(container: Element, model: MonitoringReadModel): void {
+  ReactDOM.render(<MonitoringView model={model} personLabel="Aさん" />, container);
+}
+
+function enterMemo(container: Element, value: string): void {
+  const textarea = container.querySelector<HTMLTextAreaElement>(
+    '[data-review-outcome-note-input="true"]',
+  );
+  if (!textarea) throw new Error("expected note textarea");
+  textarea.value = value;
+  Simulate.change(textarea);
+}
+
+function clickDecision(container: Element, decision: "NO_CHANGE" | "CHANGE_REQUIRED"): void {
+  const button = container.querySelector<HTMLButtonElement>(
+    `[data-review-outcome-action="${decision}"]`,
+  );
+  if (!button) throw new Error(`expected ${decision} button`);
+  button.click();
 }
 
 describe("MonitoringView", () => {
@@ -85,5 +128,58 @@ describe("MonitoringView", () => {
     expect(html).toContain('data-monitoring-role-cue="summary"');
     expect(html).not.toContain("data-monitoring-record-id=");
     expect(html).not.toContain("data-human-review-record-id=");
+  });
+
+  it("R1-R3 binds session capture to current evidence and supports A-B-A recurrence", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const modelA = withEvidenceRecordId(resolvedMonitoringVersion(3), "A");
+    const modelB = withEvidenceRecordId(resolvedMonitoringVersion(3), "B");
+
+    act(() => renderMonitoring(container, modelA));
+    act(() => enterMemo(container, "memo A"));
+    act(() => clickDecision(container, "CHANGE_REQUIRED"));
+    expect(container.textContent).toContain("デモ上の見直し結果: 変更が必要");
+    expect(container.textContent).toContain("補足メモ: memo A");
+
+    act(() => renderMonitoring(container, modelB));
+    expect(container.textContent).toContain("見直し結果: 未判断");
+    expect(container.textContent).not.toContain("補足メモ: memo A");
+    const bTextarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-note-input="true"]',
+    );
+    expect(bTextarea?.value).toBe("");
+    expect(bTextarea?.disabled).toBe(false);
+
+    act(() => enterMemo(container, "memo B"));
+    act(() => clickDecision(container, "NO_CHANGE"));
+    expect(container.textContent).toContain("デモ上の見直し結果: 変更なし");
+    expect(container.textContent).toContain("補足メモ: memo B");
+    expect(
+      container.querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.disabled,
+    ).toBe(true);
+
+    act(() => renderMonitoring(container, modelA));
+    expect(container.textContent).toContain("見直し結果: 未判断");
+    expect(container.textContent).not.toContain("補足メモ: memo B");
+    expect(
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+        ?.value,
+    ).toBe("");
+
+    act(() => enterMemo(container, "memo renewed"));
+    act(() => clickDecision(container, "NO_CHANGE"));
+    expect(container.textContent).toContain("デモ上の見直し結果: 変更なし");
+    const noteReadbacks = container.querySelectorAll('[data-review-outcome-note-readback="true"]');
+    expect(noteReadbacks).toHaveLength(1);
+    expect(noteReadbacks[0]?.textContent).toBe("補足メモ: memo renewed");
+    expect(container.textContent).not.toContain("補足メモ: memo A");
+    expect(container.textContent).not.toContain("補足メモ: memo B");
+
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    container.remove();
   });
 });

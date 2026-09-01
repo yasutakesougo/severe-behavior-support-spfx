@@ -8,6 +8,7 @@ import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
   captureSyntheticCapturedReview,
+  capturedReviewMatchesMaterials,
   reviewOutcomeContextKey,
   type SyntheticCapturedReview,
   type SyntheticCapturedReviewResult,
@@ -57,7 +58,13 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
     humanReviewResult.status === "RESOLVED"
       ? reviewOutcomeContextKey(humanReviewResult.value)
       : null;
-  const capturedReview = contextKey ? (capturedReviews[contextKey] ?? null) : null;
+  const storedReview = contextKey ? (capturedReviews[contextKey] ?? null) : null;
+  const capturedReview =
+    humanReviewResult.status === "RESOLVED" &&
+    storedReview !== null &&
+    capturedReviewMatchesMaterials(storedReview, humanReviewResult.value)
+      ? storedReview
+      : null;
 
   const handleCaptureOutcome = React.useCallback(
     (
@@ -68,9 +75,13 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
         return { status: "INVALID" };
       }
       const key = reviewOutcomeContextKey(humanReviewResult.value);
-      const existing = capturedReviewsRef.current[key] ?? null;
+      const stored = capturedReviewsRef.current[key] ?? null;
+      const effectiveExisting =
+        stored !== null && capturedReviewMatchesMaterials(stored, humanReviewResult.value)
+          ? stored
+          : null;
       const result = captureSyntheticCapturedReview(
-        existing,
+        effectiveExisting,
         humanReviewResult.value,
         decision,
         draftNoteText,
