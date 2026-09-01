@@ -104,9 +104,9 @@ Test plan fixed in Scope §5.5 / §5.6.
 ## 6. Next gate
 
 ```text
-Independent Implementation Review
-        ↓
-SB-11 Short Delegation READ-ONLY Acceptance
+Independent Implementation Review-1 = PASS
+SB-11 READ-ONLY Acceptance          = PASS
+CI SUCCESS @ dfbf29d                = RECORDED (run 33500028631)
         ↓
 Human Ready GO
         ↓

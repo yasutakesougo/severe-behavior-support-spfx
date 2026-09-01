@@ -127,16 +127,21 @@ No code correction is required.
 
 ## 5. CI note
 
-At review time, GitHub Actions run 33499713081 for exact implementation HEAD `c5d56e0...` was still in progress. This does not change the code-review verdict and does not constitute Human Ready eligibility. Exact final-tip CI must be read back before Human Ready GO / merge handling.
+Final-tip CI readback recorded at PR HEAD `dfbf29dcb33f5276cbe5bf1435d5931f6fec4cf3`:
+
+```text
+docs/architecture/asana-style-delegation-slice-b-implementation-ci-readback-571.md
+run 33500028631 = SUCCESS
+```
+
+Pre-Ready CI eligibility is satisfied. Human Ready GO remains NOT RECEIVED.
 
 ## 6. Next
 
 ```text
 Independent Implementation Review-1 = PASS / REVIEW-CLEARED
-        ↓
-SB-11 Short Delegation READ-ONLY Acceptance
-        ↓
-Exact final HEAD + CI readback
+SB-11 READ-ONLY Acceptance           = PASS
+CI SUCCESS @ dfbf29d                 = RECORDED
         ↓
 Human Ready GO / HOLD
 ```
