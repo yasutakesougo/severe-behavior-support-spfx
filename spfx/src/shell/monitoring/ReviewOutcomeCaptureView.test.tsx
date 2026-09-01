@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { renderToStaticMarkup } from "react-dom/server";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
 import { assembleSyntheticCapturedReview } from "./review-outcome-capture";
 import { ReviewOutcomeCaptureView } from "./ReviewOutcomeCaptureView";
@@ -44,6 +44,11 @@ function materialsWithRecord(recordId: string): HumanReviewMaterials {
       },
     ],
   };
+}
+
+function enterMemo(textarea: HTMLTextAreaElement, value: string): void {
+  textarea.value = value;
+  Simulate.change(textarea);
 }
 
 describe("ReviewOutcomeCaptureView", () => {
@@ -109,10 +114,7 @@ describe("ReviewOutcomeCaptureView", () => {
       '[data-review-outcome-note-input="true"]',
     );
     if (!textarea) throw new Error("expected note textarea");
-    act(() => {
-      textarea.value = "Aの未確定メモ";
-      textarea.dispatchEvent(new Event("input", { bubbles: true }));
-    });
+    act(() => enterMemo(textarea, "Aの未確定メモ"));
     act(() => {
       container
         .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
@@ -165,10 +167,7 @@ describe("ReviewOutcomeCaptureView", () => {
       '[data-review-outcome-note-input="true"]',
     );
     if (!textarea) throw new Error("expected note textarea");
-    act(() => {
-      textarea.value = "snapshot A memo";
-      textarea.dispatchEvent(new Event("input", { bubbles: true }));
-    });
+    act(() => enterMemo(textarea, "snapshot A memo"));
     act(() => {
       container
         .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
@@ -227,10 +226,7 @@ describe("ReviewOutcomeCaptureView", () => {
       '[data-review-outcome-note-input="true"]',
     );
     if (!textarea) throw new Error("expected note textarea");
-    act(() => {
-      textarea.value = "snapshot A memo";
-      textarea.dispatchEvent(new Event("input", { bubbles: true }));
-    });
+    act(() => enterMemo(textarea, "snapshot A memo"));
     act(() => {
       container
         .querySelector<HTMLButtonElement>('[data-review-outcome-action="CHANGE_REQUIRED"]')
