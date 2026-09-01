@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { renderToStaticMarkup } from "react-dom/server";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
   HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE,
@@ -120,7 +120,7 @@ describe("HumanReviewView", () => {
     expect(malformed).toContain("見直し資料を安全に表示できません");
   });
 
-  it("remounts the capture view so a context switch clears the memo on the first B render", () => {
+  it("remounts the capture view so a context switch clears decisionReason and exposes no memo input", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
     const baseResult = humanReviewResultForSyntheticVersion(3);
@@ -133,7 +133,7 @@ describe("HumanReviewView", () => {
       value: { ...baseResult.value, UserId: userId },
     });
     const onCapture = jest.fn(() => ({ status: "INVALID" as const }));
-    const firstBRenderNote = jest.fn<void, [string]>();
+    const firstBRenderReason = jest.fn<void, [string]>();
 
     const ContextSwitchHarness: React.FC = () => {
       const [userId, setUserId] = React.useState("user-a");
@@ -142,9 +142,9 @@ describe("HumanReviewView", () => {
       React.useLayoutEffect(() => {
         if (userId !== "user-b") return;
         const textarea = container.querySelector<HTMLTextAreaElement>(
-          '[data-review-outcome-note-input="true"]',
+          '[data-review-outcome-reason-input="true"]',
         );
-        firstBRenderNote(textarea?.value ?? "");
+        firstBRenderReason(textarea?.value ?? "");
       }, [userId]);
 
       return (
@@ -167,14 +167,15 @@ describe("HumanReviewView", () => {
     });
 
     const textarea = container.querySelector<HTMLTextAreaElement>(
-      '[data-review-outcome-note-input="true"]',
+      '[data-review-outcome-reason-input="true"]',
     );
-    if (!textarea) throw new Error("expected note textarea");
+    if (!textarea) throw new Error("expected reason textarea");
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
     act(() => {
-      textarea.value = "Aの未確定メモ";
-      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+      textarea.value = "Aの未確定判断理由";
+      Simulate.change(textarea);
     });
-    expect(textarea.value).toBe("Aの未確定メモ");
+    expect(textarea.value).toBe("Aの未確定判断理由");
 
     act(() => {
       container.querySelector<HTMLButtonElement>('[data-switch-context="true"]')?.click();
@@ -183,11 +184,12 @@ describe("HumanReviewView", () => {
     expect(container.querySelector('[data-human-review-person-identity="true"]')?.textContent).toBe(
       "Bさん",
     );
-    expect(firstBRenderNote).toHaveBeenCalledWith("");
+    expect(firstBRenderReason).toHaveBeenCalledWith("");
     expect(
-      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-reason-input="true"]')
         ?.value,
     ).toBe("");
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
 
     act(() => {
       ReactDOM.unmountComponentAtNode(container);

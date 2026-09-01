@@ -69,6 +69,7 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
   const handleCaptureOutcome = React.useCallback(
     (
       decision: MonitoringPeriodReviewDecision,
+      draftDecisionReason: string,
       draftNoteText: string,
     ): SyntheticCapturedReviewResult => {
       if (humanReviewResult.status !== "RESOLVED") {
@@ -84,6 +85,7 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
         effectiveExisting,
         humanReviewResult.value,
         decision,
+        draftDecisionReason,
         draftNoteText,
       );
       if (result.status === "CAPTURED") {

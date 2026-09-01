@@ -17,14 +17,14 @@
 .pending,
 .error,
 .meta,
-.noteHelper,
-.noteCounter,
+.reasonHelper,
+.reasonReadback,
 .noteReadback {
   margin: 0;
 }
 
 .heading,
-.noteLabel {
+.reasonLabel {
   color: sbs.$color-text-primary;
   font-size: sbs.$font-size-body;
   font-weight: sbs.$font-weight-semibold;
@@ -32,6 +32,7 @@
 
 .status,
 .pending,
+.reasonReadback,
 .noteReadback {
   color: sbs.$color-text-primary;
   line-height: sbs.$line-height-body;
@@ -40,21 +41,20 @@
 .boundary,
 .meta,
 .error,
-.noteHelper,
-.noteCounter {
+.reasonHelper {
   color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-meta;
   line-height: sbs.$line-height-meta;
 }
 
-.noteField {
+.reasonField {
   display: flex;
   flex-direction: column;
   gap: sbs.$space-2;
   min-width: 0;
 }
 
-.noteTextarea {
+.reasonTextarea {
   width: 100%;
   min-height: 5rem;
   padding: sbs.$space-2;
@@ -67,15 +67,12 @@
   resize: vertical;
 }
 
-.noteTextarea:disabled {
+.reasonTextarea:disabled {
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-.noteCounter {
-  align-self: flex-end;
-}
-
+.reasonReadback,
 .noteReadback {
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -95,6 +92,17 @@
   color: sbs.$color-text-primary;
   font: inherit;
   cursor: pointer;
+}
+
+.actionNoChange {
+  border-color: sbs.$color-border-strong;
+}
+
+.actionChangeRequired {
+  border-width: sbs.$border-width-thick;
+  border-color: sbs.$color-border-secondary;
+  background: sbs.$color-surface-subtle;
+  font-weight: sbs.$font-weight-semibold;
 }
 
 .action:disabled {

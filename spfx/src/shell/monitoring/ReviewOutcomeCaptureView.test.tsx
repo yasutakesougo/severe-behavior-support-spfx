@@ -46,13 +46,13 @@ function materialsWithRecord(recordId: string): HumanReviewMaterials {
   };
 }
 
-function enterMemo(textarea: HTMLTextAreaElement, value: string): void {
+function enterText(textarea: HTMLTextAreaElement, value: string): void {
   textarea.value = value;
   Simulate.change(textarea);
 }
 
 describe("ReviewOutcomeCaptureView", () => {
-  it("renders an optional note with the exact helper and explicit non-production boundary", () => {
+  it("F1 renders decisionReason as the only staff-facing writable text input", () => {
     const html = renderToStaticMarkup(
       <ReviewOutcomeCaptureView
         materials={MATERIALS}
@@ -61,19 +61,24 @@ describe("ReviewOutcomeCaptureView", () => {
       />,
     );
     expect(html).toContain("見直し結果: 未判断");
-    expect(html).toContain("見直しの補足メモ（任意）");
-    expect(html).toContain("見直し結果に添える短い補足です。次の計画内容ではありません。");
-    expect(html).toContain("0 / 255");
+    expect(html).toContain("判断理由");
+    expect(html).toContain("見直し結果を選んだ理由です。「変更が必要」の場合は入力してください。");
     expect(html).toContain("変更なし");
     expect(html).toContain("変更が必要");
     expect(html).toContain("本番には保存されていません");
     expect(html).toContain('data-live-write-authorized="false"');
+    expect(html).toContain('data-review-outcome-reason-input="true"');
+    expect(html).not.toContain('data-review-outcome-note-input="true"');
+    expect(html).not.toContain("見直しの補足メモ（任意）");
+    expect(html).not.toContain("0 / 255");
+    expect(html.match(/<textarea/g)).toHaveLength(1);
   });
 
-  it("renders CHANGE_REQUIRED + memo readback and disables decision and note controls", () => {
+  it("preserves non-null legacy/session note readback without restoring a writable note input", () => {
     const result = assembleSyntheticCapturedReview(
       MATERIALS,
       "CHANGE_REQUIRED",
+      "支援方法の再検討が必要",
       "確認を継続",
       "2026-09-01T12:00:00+09:00",
     );
@@ -87,14 +92,17 @@ describe("ReviewOutcomeCaptureView", () => {
     );
     expect(html).toContain("デモ上の見直し結果: 変更が必要");
     expect(html).toContain("次の計画版はまだ作成されていません");
+    expect(html).toContain("判断理由: 支援方法の再検討が必要");
     expect(html).toContain("補足メモ: 確認を継続");
+    expect(html).toContain('data-review-outcome-reason-readback="true"');
     expect(html).toContain('data-review-outcome-note-readback="true"');
+    expect(html).not.toContain('data-review-outcome-note-input="true"');
     expect(html).toContain("本番には保存されていません");
     expect(html.match(/disabled=""/g)).toHaveLength(3);
     expect(html).not.toContain("次の計画版を作成");
   });
 
-  it("resets uncommitted memo and error when the exact review context changes", () => {
+  it("F2 blocks CHANGE_REQUIRED with blank reason before calling capture", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
     const onCapture = jest.fn(() => ({ status: "INVALID" as const }));
@@ -110,11 +118,76 @@ describe("ReviewOutcomeCaptureView", () => {
       );
     });
 
-    const textarea = container.querySelector<HTMLTextAreaElement>(
-      '[data-review-outcome-note-input="true"]',
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="CHANGE_REQUIRED"]')
+        ?.click();
+    });
+
+    expect(onCapture).not.toHaveBeenCalled();
+    expect(container.textContent).toContain(
+      "「変更が必要」を記録する場合は、判断理由を入力してください。",
     );
-    if (!textarea) throw new Error("expected note textarea");
-    act(() => enterMemo(textarea, "Aの未確定メモ"));
+
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    container.remove();
+  });
+
+  it("F5 passes an empty note draft through the existing capture contract", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const onCapture = jest.fn(() => ({ status: "INVALID" as const }));
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={MATERIALS}
+          capturedReview={null}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.click();
+    });
+
+    expect(onCapture).toHaveBeenCalledWith("NO_CHANGE", "", "");
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
+
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    container.remove();
+  });
+
+  it("resets uncommitted reason and error when the exact review context changes", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const onCapture = jest.fn(() => ({ status: "INVALID" as const }));
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={MATERIALS}
+          capturedReview={null}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+
+    const reason = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-reason-input="true"]',
+    );
+    if (!reason) throw new Error("expected reason textarea");
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
+    act(() => enterText(reason, "Aの判断理由"));
     act(() => {
       container
         .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
@@ -133,11 +206,11 @@ describe("ReviewOutcomeCaptureView", () => {
       );
     });
 
-    const resetTextarea = container.querySelector<HTMLTextAreaElement>(
-      '[data-review-outcome-note-input="true"]',
-    );
-    expect(resetTextarea?.value).toBe("");
-    expect(container.textContent).toContain("0 / 255");
+    expect(
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-reason-input="true"]')
+        ?.value,
+    ).toBe("");
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
     expect(container.textContent).not.toContain("見直し結果を安全に記録できません");
 
     act(() => {
@@ -146,7 +219,7 @@ describe("ReviewOutcomeCaptureView", () => {
     container.remove();
   });
 
-  it("R4a resets an uncaptured memo when evidence changes under the same base context", () => {
+  it("R11 resets uncommitted reason and error when evidence changes under same base context", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
     const materialsA = materialsWithRecord("record-a");
@@ -163,11 +236,11 @@ describe("ReviewOutcomeCaptureView", () => {
         container,
       );
     });
-    const textarea = container.querySelector<HTMLTextAreaElement>(
-      '[data-review-outcome-note-input="true"]',
+    const reason = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-reason-input="true"]',
     );
-    if (!textarea) throw new Error("expected note textarea");
-    act(() => enterMemo(textarea, "snapshot A memo"));
+    if (!reason) throw new Error("expected reason textarea");
+    act(() => enterText(reason, "snapshot A reason"));
     act(() => {
       container
         .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
@@ -187,9 +260,10 @@ describe("ReviewOutcomeCaptureView", () => {
     });
 
     expect(
-      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-reason-input="true"]')
         ?.value,
     ).toBe("");
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
     expect(container.textContent).not.toContain("見直し結果を安全に記録できません");
 
     act(() => {
@@ -198,7 +272,7 @@ describe("ReviewOutcomeCaptureView", () => {
     container.remove();
   });
 
-  it("R4b clears a captured epoch input buffer before the next evidence snapshot", () => {
+  it("R12 clears captured-epoch reason buffer before next evidence snapshot", () => {
     const container = document.createElement("div");
     document.body.appendChild(container);
     const materialsA = materialsWithRecord("record-a");
@@ -206,6 +280,7 @@ describe("ReviewOutcomeCaptureView", () => {
     const capturedA = assembleSyntheticCapturedReview(
       materialsA,
       "CHANGE_REQUIRED",
+      "snapshot A reason",
       "snapshot A memo",
       "2026-09-01T12:00:00+09:00",
     );
@@ -222,11 +297,11 @@ describe("ReviewOutcomeCaptureView", () => {
         container,
       );
     });
-    const textarea = container.querySelector<HTMLTextAreaElement>(
-      '[data-review-outcome-note-input="true"]',
+    const reason = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-reason-input="true"]',
     );
-    if (!textarea) throw new Error("expected note textarea");
-    act(() => enterMemo(textarea, "snapshot A memo"));
+    if (!reason) throw new Error("expected reason textarea");
+    act(() => enterText(reason, "snapshot A reason"));
     act(() => {
       container
         .querySelector<HTMLButtonElement>('[data-review-outcome-action="CHANGE_REQUIRED"]')
@@ -243,11 +318,13 @@ describe("ReviewOutcomeCaptureView", () => {
         container,
       );
     });
+    expect(container.textContent).toContain("判断理由: snapshot A reason");
     expect(container.textContent).toContain("補足メモ: snapshot A memo");
     expect(
-      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-reason-input="true"]')
         ?.disabled,
     ).toBe(true);
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
 
     act(() => {
       ReactDOM.render(
@@ -260,12 +337,14 @@ describe("ReviewOutcomeCaptureView", () => {
       );
     });
 
-    const resetTextarea = container.querySelector<HTMLTextAreaElement>(
-      '[data-review-outcome-note-input="true"]',
+    const resetReason = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-reason-input="true"]',
     );
-    expect(resetTextarea?.value).toBe("");
-    expect(resetTextarea?.disabled).toBe(false);
+    expect(resetReason?.value).toBe("");
+    expect(resetReason?.disabled).toBe(false);
+    expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
     expect(container.textContent).toContain("見直し結果: 未判断");
+    expect(container.textContent).not.toContain("判断理由: snapshot A reason");
     expect(container.textContent).not.toContain("補足メモ: snapshot A memo");
 
     act(() => {

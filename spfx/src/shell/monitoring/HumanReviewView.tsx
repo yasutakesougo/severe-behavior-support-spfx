@@ -35,6 +35,7 @@ export type HumanReviewViewProps = Readonly<{
   capturedReview?: SyntheticCapturedReview | null;
   onCaptureOutcome?: (
     decision: MonitoringPeriodReviewDecision,
+    draftDecisionReason: string,
     draftNoteText: string,
   ) => SyntheticCapturedReviewResult;
 }>;

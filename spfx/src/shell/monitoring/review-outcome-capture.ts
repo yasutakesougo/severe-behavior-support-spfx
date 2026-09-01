@@ -1,5 +1,11 @@
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
 import {
+  MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
+  normalizeMonitoringPeriodReviewDecisionReason,
+  validateMonitoringPeriodReviewDecisionReason,
+  type MonitoringPeriodReviewDecisionReason,
+} from "../../sbs-domain/monitoring-period-review-decision-reason.bundle";
+import {
   MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED,
   mintMonitoringPeriodReviewOutcomeId,
   validateMonitoringPeriodReviewOutcome,
@@ -34,6 +40,17 @@ export const REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B = {
   aiNoteAuthoringAuthorized: false,
 } as const;
 
+export const SBS_MGMT_LOOP_A = {
+  id: "SBS-MGMT-LOOP-A",
+  presentationOnly: true,
+  liveWriteAuthorized: MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
+  sharePointWriteAuthorized: false,
+  planVersionMutationAuthorized: false,
+  monitoringVersionAuthorized: false,
+  decisionReasonEditAuthorized: false,
+  aiDecisionReasonAuthoringAuthorized: false,
+} as const;
+
 export type SyntheticReviewOutcomeCaptureResult =
   | Readonly<{ status: "CAPTURED"; outcome: MonitoringPeriodReviewOutcome }>
   | Readonly<{ status: "DUPLICATE"; outcome: MonitoringPeriodReviewOutcome }>
@@ -41,6 +58,7 @@ export type SyntheticReviewOutcomeCaptureResult =
 
 export type SyntheticCapturedReview = Readonly<{
   outcome: MonitoringPeriodReviewOutcome;
+  decisionReason: MonitoringPeriodReviewDecisionReason | null;
   note: MonitoringPeriodReviewOutcomeNote | null;
 }>;
 
@@ -151,11 +169,26 @@ export function captureSyntheticReviewOutcome(
 export function assembleSyntheticCapturedReview(
   materials: HumanReviewMaterials,
   decision: MonitoringPeriodReviewDecision,
+  draftDecisionReason: string,
   draftNoteText: string,
   reviewedAtIso: string = new Date().toISOString(),
 ): SyntheticCapturedReviewResult {
   const outcomeResult = assembleSyntheticReviewOutcome(materials, decision, reviewedAtIso);
   if (outcomeResult.status !== "CAPTURED") {
+    return { status: "INVALID" };
+  }
+
+  const reasonResult = normalizeMonitoringPeriodReviewDecisionReason(
+    outcomeResult.outcome.OutcomeId,
+    draftDecisionReason,
+  );
+  if (reasonResult.status === "INVALID") {
+    return { status: "INVALID" };
+  }
+  if (decision === "CHANGE_REQUIRED" && reasonResult.reason === null) {
+    return { status: "INVALID" };
+  }
+  if (reasonResult.reason && !validateMonitoringPeriodReviewDecisionReason(reasonResult.reason)) {
     return { status: "INVALID" };
   }
 
@@ -172,7 +205,11 @@ export function assembleSyntheticCapturedReview(
 
   return {
     status: "CAPTURED",
-    captured: { outcome: outcomeResult.outcome, note: noteResult.note },
+    captured: {
+      outcome: outcomeResult.outcome,
+      decisionReason: reasonResult.reason,
+      note: noteResult.note,
+    },
   };
 }
 
@@ -180,11 +217,18 @@ export function captureSyntheticCapturedReview(
   existing: SyntheticCapturedReview | null,
   materials: HumanReviewMaterials,
   decision: MonitoringPeriodReviewDecision,
+  draftDecisionReason: string,
   draftNoteText: string,
   reviewedAtIso?: string,
 ): SyntheticCapturedReviewResult {
   if (existing) {
     return { status: "DUPLICATE", captured: existing };
   }
-  return assembleSyntheticCapturedReview(materials, decision, draftNoteText, reviewedAtIso);
+  return assembleSyntheticCapturedReview(
+    materials,
+    decision,
+    draftDecisionReason,
+    draftNoteText,
+    reviewedAtIso,
+  );
 }
