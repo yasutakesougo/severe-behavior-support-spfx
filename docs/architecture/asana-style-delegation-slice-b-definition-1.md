@@ -2,12 +2,15 @@
 
 ```text
 Definition ID = ASANA-STYLE-DELEGATION-SLICE-B-DEFINITION-1
+Correction = 1
 Mode = DEFINITION ONLY
-Status = DEFINITION DRAFT
+Status = DEFINITION CORRECTION-1 APPLIED / AWAITING RE-REVIEW
 Parent = ASANA-STYLE-DELEGATION-SLICE-A (CLOSED)
 Parent final main = 1b2b106b9c799dd5936481dc9c9b4808449f63c8
 Parent representation = Option B — Structured Gate Packet READ-ONLY index
-Human Definition Lock GO = NOT RECEIVED
+Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
+Definition Correction-1 = APPLIED
+Human Definition Lock GO = NOT RECEIVED / NOT ELIGIBLE
 Human Implementation Start GO = NOT RECEIVED
 Implementation Scope = NOT AUTHORIZED
 Implementation = NOT AUTHORIZED
@@ -17,7 +20,8 @@ Issue mutation = NOT AUTHORIZED by this Definition
 ```
 
 This durable document records the Definition draft for **Second-Pilot Portability**
-verification of Slice-A Option B.
+verification of Slice-A Option B (Correction-1 applied per Independent Definition
+Review-1).
 
 It does **not** authorize Implementation Start, Second Pilot selection authority,
 Implementation Scope, Ready, Merge, Deploy, `verify:slice`, GitHub Issue Template
@@ -121,6 +125,28 @@ UNKNOWN
     ≠ implicit permission
 ```
 
+### 4.1 Slice-B Implementation Authority Boundary (Correction-1)
+
+Slice-B Human Implementation Start GOが認可するのは **Slice-B portability implementation**
+（registry / 最小 parser 一般化 / focused tests / Short Delegation READ-ONLY
+Acceptance）に限定する。
+
+以下を明示的に禁止する。
+
+```text
+Slice-B Implementation Start GO
+    ≠ Second Pilot本体（例: #548 / #560）への新規mutation authority
+
+Second Pilot Gate Packet output
+    ≠ Second Pilot work authorization
+
+Short Delegation Acceptance（SB-11）
+    = READ-ONLY by default
+```
+
+Second Pilot本体へのmutationは、当該Pilotの **separate explicit Human authority**
+が必要である。Packetが返すstateだけで実作業を再開してはならない。
+
 ---
 
 ## 5. Second Pilot
@@ -153,6 +179,25 @@ Comparison candidate:
   PR #560
   review-outcome-context-note-slice-b
 ```
+
+### 5.1 Second Pilot Selection Record (Correction-1)
+
+Second Pilot選定時（READ-ONLY phase）に、Selection recordで最低限以下を固定する。
+新しいHuman Gateは追加しない。
+
+```text
+Second Pilot Issue
+Second Pilot PR
+selection basis
+evidence path(s)
+available locked identity（取得可能なもの）
+authorized_paths source
+rejected comparison candidate + short reason
+Selection = READ-ONLY
+Selection grants mutation authority = NO
+```
+
+Selection recordはPilot selection authorityを生成しない。
 
 ---
 
@@ -297,8 +342,14 @@ authorized_paths = UNKNOWN
 
 推測は禁止。
 
-ただし、Short Delegation Acceptanceに必要なmutation eligibilityが成立しない場合、
-そのPilotがportability検証に適切か再評価する。
+**Correction-1:** `authorized_paths = UNKNOWN` は fail-closed として安全だが、
+**Portability Minimum Evidence Floor**（§9.0）を満たさない。PORTABLE-A / PORTABLE-B
+のportability証明としては扱わない。その場合は **pilot unsuitable** または
+**NOT-PORTABLE** として固定する。
+
+```text
+safe fail-closed ≠ portability success
+```
 
 ### SB-7 — Locked Identity
 
@@ -358,21 +409,25 @@ live state = UNKNOWN
 
 取得していないlive sourceをprimary sourceとして表示しない。
 
-### SB-11 — Short Delegation Acceptance
+### SB-11 — Short Delegation Acceptance (READ-ONLY)
 
 Second Pilotについて、HumanからAgentへの入力を短いjob instructionへ縮小する。
+
+**Correction-1:** Short Delegation Acceptanceは **READ-ONLY by default** とする。
+SB-11は state reconstruction / wrong-scope prevention / Human Gate stop accuracy
+を純粋にテストする。mutation authority を含まない。
 
 目標例:
 
 ```text
 /goal
 Issue #<N> の現在状態を確認し、
-現在authorizedな次作業だけ進める。
+現在authorizedな次作業を特定する。
 
 既存repo規範に従う。
 gate-packet readerを使用する。
-必要なverificationを実行する。
-次のHuman Gateで停止する。
+必要なREAD-ONLY verificationを実行する。
+mutationは行わず、次のHuman Gateで停止する。
 ```
 
 Acceptance:
@@ -380,12 +435,15 @@ Acceptance:
 ```text
 - Agentが正しいIssue / PRへ到達
 - current gateを正しく取得
-- authorized pathsを正しく取得またはUNKNOWN
-- locked HEADを取得
+- authorized pathsを正しく取得（portability floor満たす場合）
+- locked HEADを取得（portability floor満たす場合）
 - unauthorized mutationをしない
 - next Human GateでSTOP
 - Humanが長いlineageを再説明しない
+- Second Pilot本体へのmutationを開始しない
 ```
+
+SB-11 PASSは、Second Pilot本体への作業再開を認可しない（§4.1）。
 
 ### SB-12 — Ponytail / Complexity Check
 
@@ -406,10 +464,46 @@ Second Pilot追加のために以下が必要になった場合はSTOPする。
 
 Second Pilotの結果を以下の3分類とする。
 
+### 9.0 Portability Minimum Evidence Floor (Correction-1)
+
+PORTABLE-A / PORTABLE-B を成立させる **最低条件**:
+
+```text
+1. Issue anchor = exact
+2. PR anchor = exact
+3. authorized_paths = exact（UNKNOWN は floor 未達）
+4. locked execution identity =
+   少なくとも1つ exact
+   （implementation / relevant locked artifact 等）
+5. live source availability / provenance = explicit
+6. Human GOは推測しない
+7. gate / next_human_action が UNKNOWN の場合、
+   UNKNOWNのまま STOP できる
+```
+
+以下は明確に区別する。
+
+```text
+fail-closed UNKNOWN返却
+    = 安全性 PASS の可能性あり
+
+Portability Minimum Evidence Floor 満たす
+    = PORTABLE-A / PORTABLE-B 判定可能
+
+authorized_paths = UNKNOWN
+    → pilot unsuitable または NOT-PORTABLE
+    → PORTABLE-A / PORTABLE-B として扱わない
+```
+
+gate / next_human_action / correction generation が UNKNOWN でも floor 未達には
+ならないが、Short Delegation で意味のある state reconstruction ができない場合は
+portability 証明として不十分と記録する。
+
 ### PORTABLE-A
 
 ```text
 registry-only
+AND Portability Minimum Evidence Floor satisfied
 ```
 
 既存reader変更なし。
@@ -420,13 +514,14 @@ registry-only
 registry
 +
 small parser normalization/generalization
+AND Portability Minimum Evidence Floor satisfied
 ```
 
 既存意味モデルは変更しない。
 
 ### NOT-PORTABLE
 
-以下のいずれかが必要。
+以下のいずれかが必要、または Portability Minimum Evidence Floor 未達。
 
 ```text
 state engine
@@ -434,6 +529,8 @@ generic repository scanner
 new authority model
 Option C
 large evidence normalization
+authorized_paths = UNKNOWN（floor 未達）
+pilot unsuitable for portability proof
 ```
 
 NOT-PORTABLEは失敗ではなく、Slice-A Option Bの適用境界を示すEvidenceとする。
@@ -446,6 +543,10 @@ NOT-PORTABLEは失敗ではなく、Slice-A Option Bの適用境界を示すEvid
 Slice-A Option B
         ↓
 Second Pilot
+        ↓
+Portability Minimum Evidence Floor satisfied?
+  NO → pilot unsuitable / NOT-PORTABLE → STOP / record
+  YES
         ↓
 PORTABLE-A?
   YES → finish
@@ -494,14 +595,15 @@ V-B1  Second Pilot structured read PASS
 V-B2  Pilot #552 regression PASS
 V-B3  formal-token fail-closed PASS
 V-B4  live lifecycle / Human GO separation PASS
-V-B5  authorized_paths exact or UNKNOWN
-V-B6  locked identity exact or UNKNOWN
+V-B5  authorized_paths exact（UNKNOWN = floor fail / not PORTABLE-A/B）
+V-B6  locked identity exact or UNKNOWN（floor: ≥1 execution identity exact）
 V-B7  correction generation exact or UNKNOWN
 V-B8  next_human_action exact or UNKNOWN
 V-B9  live unavailable provenance PASS
 V-B10 npm run verify:ci PASS
 V-B11 Product / SPFx / domain delta = 0
-V-B12 Short Delegation Acceptance PASS / FAIL fixed
+V-B12 Short Delegation READ-ONLY Acceptance PASS / FAIL fixed
+V-B13 Portability Minimum Evidence Floor evaluated before PORTABLE-A/B
 ```
 
 ---
@@ -523,6 +625,7 @@ V-B12 Short Delegation Acceptance PASS / FAIL fixed
 - Product / SPFx変更が必要
 - Slice-A Pilot #552を壊す
 - Short Delegation成功のために長いprompt追加が必要
+- Portability Minimum Evidence Floor未達でPORTABLE-A/Bと判定する
 ```
 
 ---
@@ -579,9 +682,11 @@ D-B6  Issue TemplateはOUT
 D-B7  Product delta 0
 D-B8  fail-closed維持
 D-B9  Human GO inference禁止
-D-B10 SB-11 Short DelegationがPrimary Acceptance
-D-B11 PORTABLE-A/B/NOT-PORTABLE classificationあり
+D-B10 SB-11 Short Delegation READ-ONLY Primary Acceptance
+D-B11 PORTABLE-A/B/NOT-PORTABLE + Minimum Evidence Floor
 D-B12 Complexity STOP条件あり
+D-B13 Slice-B GO ≠ Second Pilot mutation（§4.1）
+D-B14 Selection record minimum fields（§5.1）
 ```
 
 ---
@@ -593,10 +698,16 @@ ASANA-STYLE-DELEGATION-SLICE-A
 = CLOSED
 
 ASANA-STYLE-DELEGATION-SLICE-B
-= DEFINITION DRAFT
+= DEFINITION CORRECTION-1 APPLIED
+
+Independent Definition Review-1
+= CORRECTION REQUIRED / CONSUMED
+
+Definition Correction-1
+= APPLIED
 
 Human Definition Lock GO
-= NOT RECEIVED
+= NOT RECEIVED / NOT ELIGIBLE
 
 Second Pilot
 = NOT SELECTED
@@ -619,5 +730,9 @@ Ready / Merge / Deploy / LIVE WRITE
 ## 17. Next
 
 ```text
-Independent Definition Review-1
+exact Definition diff re-read
+        ↓
+Independent Definition Re-Review-1
+        ↓
+Human Definition Lock GO / HOLD
 ```
