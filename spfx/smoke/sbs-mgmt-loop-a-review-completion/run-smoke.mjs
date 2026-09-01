@@ -141,6 +141,8 @@ function observe(page) {
     const text = document.body.textContent ?? "";
     const q = (selector) => document.querySelector(selector);
     const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
+    const noChangeButton = q('[data-review-outcome-action="NO_CHANGE"]');
+    const changeRequiredButton = q('[data-review-outcome-action="CHANGE_REQUIRED"]');
     const reason = q('[data-review-outcome-reason-input="true"]');
     const note = q('[data-review-outcome-note-input="true"]');
     const reasonReadback = q('[data-review-outcome-reason-readback="true"]')?.textContent;
@@ -152,17 +154,27 @@ function observe(page) {
       "data-live-write-authorized",
     );
     const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
+    const noChangeStyle = noChangeButton ? getComputedStyle(noChangeButton) : null;
+    const changeRequiredStyle = changeRequiredButton ? getComputedStyle(changeRequiredButton) : null;
+    const nonColorActionDistinction = Boolean(
+      noChangeStyle &&
+        changeRequiredStyle &&
+        (noChangeStyle.borderTopWidth !== changeRequiredStyle.borderTopWidth ||
+          noChangeStyle.fontWeight !== changeRequiredStyle.fontWeight),
+    );
+    const capture = q("[data-review-outcome-capture]");
     return {
       text,
       recordId: recordId ?? null,
       reasonValue: reason?.value ?? null,
-      noteValue: note?.value ?? null,
       reasonDisabled: reason?.disabled ?? null,
-      noteDisabled: note?.disabled ?? null,
+      noteInputPresent: Boolean(note),
+      textInputCount: capture?.querySelectorAll("textarea").length ?? 0,
       buttonsDisabled: buttons.length === 2 && buttons.every((button) => button.disabled),
       buttonsEnabled: buttons.length === 2 && buttons.every((button) => !button.disabled),
       reasonReadback: reasonReadback ?? null,
       noteReadback: noteReadback ?? null,
+      nonColorActionDistinction,
       zeroState: Boolean(q('[data-human-review-empty="true"]')),
       liveWrite: liveWrite ?? null,
       noHorizontalOverflow,
@@ -209,9 +221,7 @@ try {
     page.on("pageerror", (error) => pageErrors.push(error.message));
     page.on("request", (request) => {
       const requestUrl = new URL(request.url());
-      if (requestUrl.hostname !== "127.0.0.1") {
-        externalRequests.push(request.url());
-      }
+      if (requestUrl.hostname !== "127.0.0.1") externalRequests.push(request.url());
     });
 
     const url = "http://127.0.0.1:4197/index.html";
@@ -223,12 +233,16 @@ try {
       initial.text.includes("Aさん") &&
       initial.text.includes("計画版 3") &&
       initial.text.includes("判断理由") &&
-      initial.text.includes("見直しの補足メモ（任意）") &&
+      !initial.text.includes("見直しの補足メモ（任意）") &&
       initial.text.includes("本番には保存されていません") &&
+      initial.textInputCount === 1 &&
+      !initial.noteInputPresent &&
+      initial.nonColorActionDistinction &&
       initial.liveWrite === "false" &&
       initial.buttonsEnabled &&
       initial.noHorizontalOverflow;
-    checks.push(recordCheck(`${viewport.name}: common boundary`, initialPass, initial));
+    checks.push(recordCheck(`${viewport.name}: F1/F8 corrected boundary`, initialPass, initial));
+    await saveScreenshot(page, viewport.name, "01-undecided");
 
     await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
     await page.waitForFunction(() =>
@@ -241,30 +255,25 @@ try {
       blankChange.text.includes("見直し結果: 未判断") &&
       blankChange.reasonReadback === null &&
       blankChange.noteReadback === null &&
+      !blankChange.noteInputPresent &&
       blankChange.buttonsEnabled;
     checks.push(
-      recordCheck(
-        `${viewport.name}: R3 blank CHANGE_REQUIRED blocked`,
-        blankChangePass,
-        blankChange,
-      ),
+      recordCheck(`${viewport.name}: R3/F2 blank CHANGE_REQUIRED blocked`, blankChangePass, blankChange),
     );
+    await saveScreenshot(page, viewport.name, "02-blank-reason-blocked");
 
     await page.type('[data-review-outcome-reason-input="true"]', "reason A");
-    await page.type('[data-review-outcome-note-input="true"]', "memo A");
     await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
     await page.waitForFunction(() => document.body.textContent?.includes("判断理由: reason A"));
     const capturedA = await observe(page);
     const capturedAPass =
       capturedA.reasonReadback === "判断理由: reason A" &&
-      capturedA.noteReadback === "補足メモ: memo A" &&
+      capturedA.noteReadback === null &&
+      !capturedA.noteInputPresent &&
       capturedA.buttonsDisabled &&
-      capturedA.reasonDisabled === true &&
-      capturedA.noteDisabled === true;
-    checks.push(
-      recordCheck(`${viewport.name}: R2/R8 capture A immutable`, capturedAPass, capturedA),
-    );
-    await saveScreenshot(page, viewport.name, "captured-a");
+      capturedA.reasonDisabled === true;
+    checks.push(recordCheck(`${viewport.name}: R2/F3/F5 capture A`, capturedAPass, capturedA));
+    await saveScreenshot(page, viewport.name, "03-captured-with-reason");
 
     await setSnapshot(page, "B");
     const mismatchB = await observe(page);
@@ -274,24 +283,22 @@ try {
       mismatchB.reasonReadback === null &&
       mismatchB.noteReadback === null &&
       mismatchB.reasonValue === "" &&
-      mismatchB.noteValue === "" &&
+      !mismatchB.noteInputPresent &&
       mismatchB.buttonsEnabled;
-    checks.push(
-      recordCheck(`${viewport.name}: R9 A→B mismatch undecided`, mismatchBPass, mismatchB),
-    );
+    checks.push(recordCheck(`${viewport.name}: R9 A→B mismatch undecided`, mismatchBPass, mismatchB));
 
-    await page.type('[data-review-outcome-note-input="true"]', "memo B");
     await page.click('[data-review-outcome-action="NO_CHANGE"]');
-    await page.waitForFunction(() => document.body.textContent?.includes("補足メモ: memo B"));
+    await page.waitForFunction(() =>
+      document.body.textContent?.includes("デモ上の見直し結果: 変更なし"),
+    );
     const capturedB = await observe(page);
     const capturedBPass =
       capturedB.text.includes("デモ上の見直し結果: 変更なし") &&
       capturedB.reasonReadback === null &&
-      capturedB.noteReadback === "補足メモ: memo B" &&
+      capturedB.noteReadback === null &&
+      !capturedB.noteInputPresent &&
       capturedB.buttonsDisabled;
-    checks.push(
-      recordCheck(`${viewport.name}: R1 NO_CHANGE blank reason`, capturedBPass, capturedB),
-    );
+    checks.push(recordCheck(`${viewport.name}: R1/F4 NO_CHANGE blank reason`, capturedBPass, capturedB));
 
     await setSnapshot(page, "A");
     const recurrenceA = await observe(page);
@@ -301,12 +308,11 @@ try {
       recurrenceA.reasonReadback === null &&
       recurrenceA.noteReadback === null &&
       recurrenceA.reasonValue === "" &&
-      recurrenceA.noteValue === "" &&
+      !recurrenceA.noteInputPresent &&
       recurrenceA.buttonsEnabled;
     checks.push(recordCheck(`${viewport.name}: R10 B→A recurrence`, recurrenceAPass, recurrenceA));
 
     await page.type('[data-review-outcome-reason-input="true"]', "reason renewed");
-    await page.type('[data-review-outcome-note-input="true"]', "memo renewed");
     await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
     await page.waitForFunction(() =>
       document.body.textContent?.includes("判断理由: reason renewed"),
@@ -314,13 +320,9 @@ try {
     const recapturedA = await observe(page);
     const recapturedAPass =
       recapturedA.reasonReadback === "判断理由: reason renewed" &&
-      recapturedA.noteReadback === "補足メモ: memo renewed" &&
-      !recapturedA.text.includes("判断理由: reason A") &&
-      !recapturedA.text.includes("補足メモ: memo A") &&
-      !recapturedA.text.includes("補足メモ: memo B");
-    checks.push(
-      recordCheck(`${viewport.name}: R10 recapture A isolated`, recapturedAPass, recapturedA),
-    );
+      recapturedA.noteReadback === null &&
+      !recapturedA.text.includes("判断理由: reason A");
+    checks.push(recordCheck(`${viewport.name}: R10 recapture A isolated`, recapturedAPass, recapturedA));
 
     await setSnapshot(page, "ZERO");
     const zeroUndecided = await observe(page);
@@ -330,10 +332,10 @@ try {
       zeroUndecided.text.includes(
         "0件であることは、「実施できなかった」という結果を意味しません。",
       ) &&
-      zeroUndecided.text.includes("見直し結果: 未判断");
-    checks.push(
-      recordCheck(`${viewport.name}: zero-record remains factual`, zeroFactualPass, zeroUndecided),
-    );
+      zeroUndecided.text.includes("見直し結果: 未判断") &&
+      !zeroUndecided.noteInputPresent;
+    checks.push(recordCheck(`${viewport.name}: zero-record remains factual`, zeroFactualPass, zeroUndecided));
+    await saveScreenshot(page, viewport.name, "04-zero-record");
 
     await page.click('[data-review-outcome-action="NO_CHANGE"]');
     await page.waitForFunction(() =>
@@ -345,45 +347,28 @@ try {
       zeroNoChange.reasonReadback === null &&
       zeroNoChange.noteReadback === null &&
       zeroNoChange.buttonsDisabled;
-    checks.push(
-      recordCheck(`${viewport.name}: R4 zero-record NO_CHANGE`, zeroNoChangePass, zeroNoChange),
-    );
+    checks.push(recordCheck(`${viewport.name}: R4 zero-record NO_CHANGE`, zeroNoChangePass, zeroNoChange));
 
     await page.goto(url, { waitUntil: "networkidle0" });
     await setSnapshot(page, "A");
     await page.type('[data-review-outcome-reason-input="true"]', "uncommitted A reason");
-    await page.type('[data-review-outcome-note-input="true"]', "uncommitted A memo");
     await setSnapshot(page, "B");
     const uncommittedReset = await observe(page);
     const uncommittedResetPass =
       uncommittedReset.reasonValue === "" &&
-      uncommittedReset.noteValue === "" &&
       uncommittedReset.reasonReadback === null &&
       uncommittedReset.noteReadback === null &&
-      !uncommittedReset.text.includes("uncommitted A reason") &&
-      !uncommittedReset.text.includes("uncommitted A memo");
-    checks.push(
-      recordCheck(
-        `${viewport.name}: R11 uncommitted A→B reset`,
-        uncommittedResetPass,
-        uncommittedReset,
-      ),
-    );
+      !uncommittedReset.noteInputPresent &&
+      !uncommittedReset.text.includes("uncommitted A reason");
+    checks.push(recordCheck(`${viewport.name}: R11 uncommitted A→B reset`, uncommittedResetPass, uncommittedReset));
 
     const browserSafety = pageErrors.length === 0 && externalRequests.length === 0;
-    checks.push(
-      recordCheck(`${viewport.name}: browser safety`, browserSafety, {
-        pageErrors,
-        externalRequests,
-      }),
-    );
-    await saveScreenshot(page, viewport.name, "final-b-reset");
+    checks.push(recordCheck(`${viewport.name}: browser safety`, browserSafety, { pageErrors, externalRequests }));
+    await saveScreenshot(page, viewport.name, "05-final-b-reset");
     await page.close();
   }
 
-  for (const entry of checks) {
-    if (!entry.pass) allPass = false;
-  }
+  for (const entry of checks) if (!entry.pass) allPass = false;
 
   const report = {
     unit: "SBS-MGMT-LOOP-A",
