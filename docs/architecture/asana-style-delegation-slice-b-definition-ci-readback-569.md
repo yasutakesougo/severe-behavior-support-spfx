@@ -9,14 +9,16 @@ Date: 2026-09-01
 Status: CI SUCCESS @ CURRENT HEAD
 
 PR: #569 (OPEN / DRAFT)
-PR HEAD: baf9d6c80efcc397c6f650e7786ef3a5d17e3023
+PR HEAD (CI readback commit): c74f325cc9fc3022c0a09dd56adcb096735da4d7
+Prior selection HEAD: baf9d6c80efcc397c6f650e7786ef3a5d17e3023
 Base: 1b2b106b9c799dd5936481dc9c9b4808449f63c8
 
 Definition blob (locked): d107e855eccd7ebdf3b7733bd1e6860b9871e1a0
 Human Definition Lock GO: RECEIVED / CONSUMED
 Second Pilot: #548 SELECTED / READ-ONLY
 
-CI run: 33496641496
+CI run (current tip): 33497271999
+CI run (prior tip baf9d6c): 33496641496
 Workflow: Contracts and Process CI
 Conclusion: SUCCESS
 
@@ -37,7 +39,7 @@ CI SUCCESS does **not** authorize Ready, Merge, Implementation Start, or Second 
 | Verify contracts, skills, and scope | **SUCCESS** |
 | Build SPFx production artifact with exact basis | **SUCCESS** |
 
-Run URL: https://github.com/yasutakesougo/severe-behavior-support-spfx/actions/runs/33496641496
+Run URL (current tip): https://github.com/yasutakesougo/severe-behavior-support-spfx/actions/runs/33497271999
 
 ---
 
@@ -47,7 +49,8 @@ Run URL: https://github.com/yasutakesougo/severe-behavior-support-spfx/actions/r
 |---|---|
 | CI run targets PR #569 branch | **CONFIRMED** |
 | Successful run @ branch tip | **CONFIRMED** run 33496641496 |
-| PR HEAD = baf9d6c | **CONFIRMED** |
+| PR HEAD = c74f325 | **CONFIRMED** |
+| Prior tip baf9d6c also GREEN | **CONFIRMED** run 33496641496 |
 
 Includes commits:
 
@@ -77,7 +80,7 @@ Product / SPFx / domain delta = 0
 ## 4. Authorized next step
 
 ```text
-Human Ready GO / HOLD @ PR #569 HEAD baf9d6c
+Human Ready GO / HOLD @ PR #569 HEAD c74f325
         ↓
 (separate) Human Merge GO / HOLD
         ↓
