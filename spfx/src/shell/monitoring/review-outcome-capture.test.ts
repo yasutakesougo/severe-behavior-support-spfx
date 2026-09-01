@@ -11,8 +11,11 @@ import {
   assembleSyntheticCapturedReview,
   assembleSyntheticReviewOutcome,
   captureSyntheticCapturedReview,
+  capturedReviewMatchesMaterials,
   captureSyntheticReviewOutcome,
   reviewOutcomeContextKey,
+  reviewOutcomeCurrentEpochBindingKey,
+  reviewOutcomeEvidenceSnapshot,
 } from "./review-outcome-capture";
 
 beforeAll(() => {
@@ -45,6 +48,11 @@ const MATERIALS: HumanReviewMaterials = {
     },
   ],
   humanInterpretationRequired: true,
+};
+
+const MATERIALS_B: HumanReviewMaterials = {
+  ...MATERIALS,
+  records: MATERIALS.records.map((record) => ({ ...record, RecordId: "record-2" })),
 };
 
 describe("review-outcome-capture", () => {
@@ -122,6 +130,32 @@ describe("review-outcome-capture", () => {
     expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(
       reviewOutcomeContextKey(MATERIALS),
     );
+  });
+
+  it("binds the current capture epoch to a canonical evidence snapshot", () => {
+    expect(reviewOutcomeContextKey(MATERIALS_B)).toBe(reviewOutcomeContextKey(MATERIALS));
+    expect(reviewOutcomeCurrentEpochBindingKey(MATERIALS_B)).not.toBe(
+      reviewOutcomeCurrentEpochBindingKey(MATERIALS),
+    );
+    expect(reviewOutcomeEvidenceSnapshot(["record-b", "record-a", "record-a", ""])).toBe(
+      "record-a\u001frecord-b",
+    );
+  });
+
+  it("treats a stored capture as current only when base context and evidence both match", () => {
+    const first = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "memo A",
+      "2026-09-01T12:00:00+09:00",
+    );
+    if (first.status !== "CAPTURED") throw new Error("expected first capture");
+
+    expect(capturedReviewMatchesMaterials(first.captured, MATERIALS)).toBe(true);
+    expect(capturedReviewMatchesMaterials(first.captured, MATERIALS_B)).toBe(false);
+    expect(
+      capturedReviewMatchesMaterials(first.captured, { ...MATERIALS, UserId: "user-b" }),
+    ).toBe(false);
   });
 
   it("captures an atomic outcome + optional note pair without changing OutcomeId", () => {
