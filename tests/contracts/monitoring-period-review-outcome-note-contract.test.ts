@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
@@ -40,13 +41,8 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
   // prettier-ignore
   it("regenerates the checked-in narrow SPFx bridge byte-for-byte", () => {
     const repoRoot = process.cwd();
-    const esbuildBin = path.join(
-      repoRoot,
-      "node_modules",
-      "esbuild",
-      "bin",
-      "esbuild",
-    );
+    const require = createRequire(import.meta.url);
+    const esbuildBin = require.resolve("esbuild/bin/esbuild");
     const tempDir = mkdtempSync(
       path.join(tmpdir(), "review-outcome-note-bridge-"),
     );
@@ -57,9 +53,8 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
 
     try {
       execFileSync(
-        process.execPath,
+        esbuildBin,
         [
-          esbuildBin,
           "src/domain/monitoring-period-review-outcome-note-spfx-entry.ts",
           "--bundle",
           "--format=cjs",
