@@ -71,16 +71,10 @@ export function parseGatesFromKeyValues(keyValues) {
   return gates;
 }
 
-/** Parse authorized path list from evidence markdown (bullet lines under Authorized diff). */
-export function parseAuthorizedPaths(markdown) {
+/** Parse path lines from a ```text fence body. */
+function parsePathLinesFromFence(fenceBody) {
   const paths = [];
-  const section = markdown.match(
-    /Authorized diff:[^\n]*\n([\s\S]*?)(?:\n\n|\nProduct correction:|\n## )/,
-  );
-  if (!section) {
-    return paths;
-  }
-  for (const line of section[1].split("\n")) {
+  for (const line of fenceBody.split("\n")) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("Human GO:")) {
       continue;
@@ -97,6 +91,50 @@ export function parseAuthorizedPaths(markdown) {
     }
   }
   return paths;
+}
+
+/** Parse authorized path list from evidence markdown (bullet lines under Authorized diff). */
+export function parseAuthorizedDiffPaths(markdown) {
+  const section = markdown.match(
+    /Authorized diff:[^\n]*\n([\s\S]*?)(?:\n\n|\nProduct correction:|\n## )/,
+  );
+  if (!section) {
+    return [];
+  }
+  return parsePathLinesFromFence(section[1]);
+}
+
+/**
+ * Parse #548 canonical evidence: heading + bounded text fence after scope-start anchor.
+ * Scope §5.2.2 — explicit source grammar only.
+ */
+export function parseAuthorizedSurfaceDelivered(markdown) {
+  const headingMatch = markdown.match(
+    /## 1\. Authorized surface delivered\s*\n([\s\S]*?)(?:\n## |\n---\s*\n|$)/,
+  );
+  if (!headingMatch) {
+    return [];
+  }
+  const section = headingMatch[1];
+  const anchorIdx = section.search(/Exact diff from scope start HEAD/i);
+  if (anchorIdx === -1) {
+    return [];
+  }
+  const afterAnchor = section.slice(anchorIdx);
+  const fenceMatch = afterAnchor.match(/```text\n([\s\S]*?)```/);
+  if (!fenceMatch) {
+    return [];
+  }
+  return parsePathLinesFromFence(fenceMatch[1]);
+}
+
+/** Dispatch: Pilot #552 Authorized diff first; else #548 bounded heading grammar. */
+export function parseAuthorizedPaths(markdown) {
+  const fromDiff = parseAuthorizedDiffPaths(markdown);
+  if (fromDiff.length > 0) {
+    return fromDiff;
+  }
+  return parseAuthorizedSurfaceDelivered(markdown);
 }
 
 /** Parse pilot implementation / product locked HEAD SHAs from evidence content. */
@@ -122,6 +160,7 @@ export function parsePilotLockedHeads(markdown, keyValues) {
 }
 
 /** Parse Slice-A parent Definition / Scope blob identity from bind readback artifact. */
+/** @returns {Record<string, string>} */
 export function parseSliceABindLockedHeads(markdown) {
   const heads = {};
   const definition = markdown.match(/Definition blob:\s*([0-9a-f]{40})/i)?.[1];
@@ -135,10 +174,40 @@ export function parseSliceABindLockedHeads(markdown) {
   return heads;
 }
 
-/** Merge pilot + Slice-A bind locked heads (B-5 / V-6). */
+/** Parse Second Pilot locked identity from selection record bounded section (Slice-B §5.2.3). */
+/** @returns {Record<string, string>} */
+export function parseSecondPilotLockedHeads(markdown) {
+  const sectionMatch = markdown.match(
+    /## Available locked identity\s*\n([\s\S]*?)(?:\n## |\n---\s*\n|$)/,
+  );
+  if (!sectionMatch) {
+    return {};
+  }
+  const section = sectionMatch[1];
+  const heads = {};
+  const definition = section.match(/Definition blob\s*=\s*([0-9a-f]{40})/i)?.[1];
+  if (definition) {
+    heads.definition = definition;
+  }
+  const scope = section.match(/Scope blob\s*=\s*([0-9a-f]{40})/i)?.[1];
+  if (scope) {
+    heads.scope = scope;
+  }
+  const implementation = section.match(/exact implementation HEAD\s*=\s*([0-9a-f]{40})/i)?.[1];
+  if (implementation) {
+    heads.implementation = implementation;
+  }
+  return heads;
+}
+
+/** Merge pilot + bind locked heads (Slice-A colon bind or Slice-B bounded section). */
+/** @returns {Record<string, string | undefined>} */
 export function parseLockedHeads(pilotMarkdown, keyValues, sliceBindMarkdown = "") {
+  const sliceA = parseSliceABindLockedHeads(sliceBindMarkdown);
+  const bindHeads =
+    sliceA.definition || sliceA.scope ? sliceA : parseSecondPilotLockedHeads(sliceBindMarkdown);
   return {
-    ...parseSliceABindLockedHeads(sliceBindMarkdown),
+    ...bindHeads,
     ...parsePilotLockedHeads(pilotMarkdown, keyValues),
   };
 }
