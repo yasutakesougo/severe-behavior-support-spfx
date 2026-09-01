@@ -8,6 +8,32 @@ Keep canonical implementation in `src/domain`.
 
 Do not use these bundles for LIVE WRITE / Production Binding / Deploy authorization.
 
+## SBS-MGMT-LOOP-A — decision reason narrow bridge
+
+`monitoring-period-review-decision-reason.bundle.js` is the narrow synthetic review-decision reason bridge for:
+
+`src/domain/monitoring-period-review-decision-reason-spfx-entry.ts`
+
+It exposes only the canonical decision-reason type/DTO, normalization and validation helpers,
+schema constants, and
+`MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED=false`.
+
+It does **not** modify Outcome `v1.0.0`, mint OutcomeId, expose persistence ports,
+or authorize MonitoringVersion, N+1, SharePoint, Production Binding, Deploy, or LIVE WRITE.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/monitoring-period-review-decision-reason-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/monitoring-period-review-decision-reason.bundle.js
+```
+
+The checked-in `.d.ts` is the narrow allowlisted declaration surface.
+
 ## REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B — outcome note narrow bridge
 
 `monitoring-period-review-outcome-note.bundle.js` is the narrow synthetic note bridge for:
