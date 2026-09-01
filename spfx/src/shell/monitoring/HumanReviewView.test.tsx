@@ -1,5 +1,7 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { renderToStaticMarkup } from "react-dom/server";
+import { act } from "react-dom/test-utils";
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
   HUMAN_REVIEW_CONTEXT_MISMATCH_FIXTURE,
@@ -116,5 +118,80 @@ describe("HumanReviewView", () => {
     expect(mismatch).toContain("別の資料への置換は行いません");
     expect(malformed).toContain('data-human-review-status="MALFORMED_INPUT"');
     expect(malformed).toContain("見直し資料を安全に表示できません");
+  });
+
+  it("remounts the capture view so a context switch clears the memo on the first B render", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const baseResult = humanReviewResultForSyntheticVersion(3);
+    if (baseResult.status !== "RESOLVED") throw new Error("expected resolved review materials");
+
+    const resultForUser = (
+      userId: string,
+    ): ReturnType<typeof humanReviewResultForSyntheticVersion> => ({
+      status: "RESOLVED" as const,
+      value: { ...baseResult.value, UserId: userId },
+    });
+    const onCapture = jest.fn(() => ({ status: "INVALID" as const }));
+    const firstBRenderNote = jest.fn<void, [string]>();
+
+    const ContextSwitchHarness: React.FC = () => {
+      const [userId, setUserId] = React.useState("user-a");
+      const result = resultForUser(userId);
+
+      React.useLayoutEffect(() => {
+        if (userId !== "user-b") return;
+        const textarea = container.querySelector<HTMLTextAreaElement>(
+          '[data-review-outcome-note-input="true"]',
+        );
+        firstBRenderNote(textarea?.value ?? "");
+      }, [userId]);
+
+      return (
+        <>
+          <button type="button" onClick={() => setUserId("user-b")} data-switch-context="true">
+            Bさんへ切替
+          </button>
+          <HumanReviewView
+            result={result}
+            personLabel={userId === "user-a" ? "Aさん" : "Bさん"}
+            capturedReview={null}
+            onCaptureOutcome={onCapture}
+          />
+        </>
+      );
+    };
+
+    act(() => {
+      ReactDOM.render(<ContextSwitchHarness />, container);
+    });
+
+    const textarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-note-input="true"]',
+    );
+    if (!textarea) throw new Error("expected note textarea");
+    act(() => {
+      textarea.value = "Aの未確定メモ";
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    expect(textarea.value).toBe("Aの未確定メモ");
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-switch-context="true"]')?.click();
+    });
+
+    expect(container.querySelector('[data-human-review-person-identity="true"]')?.textContent).toBe(
+      "Bさん",
+    );
+    expect(firstBRenderNote).toHaveBeenCalledWith("");
+    expect(
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+        ?.value,
+    ).toBe("");
+
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    container.remove();
   });
 });

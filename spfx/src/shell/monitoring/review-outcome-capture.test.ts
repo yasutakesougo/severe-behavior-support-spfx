@@ -1,4 +1,5 @@
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
+import { validateMonitoringPeriodReviewOutcomeNote } from "../../sbs-domain/monitoring-period-review-outcome-note.bundle";
 import {
   MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED,
   mintMonitoringPeriodReviewOutcomeId,
@@ -6,7 +7,10 @@ import {
 } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import {
   REVIEW_OUTCOME_CAPTURE_SLICE_A,
+  REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B,
+  assembleSyntheticCapturedReview,
   assembleSyntheticReviewOutcome,
+  captureSyntheticCapturedReview,
   captureSyntheticReviewOutcome,
   reviewOutcomeContextKey,
 } from "./review-outcome-capture";
@@ -118,5 +122,72 @@ describe("review-outcome-capture", () => {
     expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(
       reviewOutcomeContextKey(MATERIALS),
     );
+  });
+
+  it("captures an atomic outcome + optional note pair without changing OutcomeId", () => {
+    const reviewedAt = "2026-09-01T12:00:00+09:00";
+    const outcomeOnly = assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", reviewedAt);
+    const withNote = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "  継続して観察したい  ",
+      reviewedAt,
+    );
+    expect(withNote.status).toBe("CAPTURED");
+    expect(outcomeOnly.status).toBe("CAPTURED");
+    if (withNote.status !== "CAPTURED" || outcomeOnly.status !== "CAPTURED") {
+      throw new Error("expected CAPTURED");
+    }
+    expect(withNote.captured.outcome.OutcomeId).toBe(outcomeOnly.outcome.OutcomeId);
+    expect(withNote.captured.note?.OutcomeId).toBe(withNote.captured.outcome.OutcomeId);
+    expect(withNote.captured.note?.note).toBe("継続して観察したい");
+    expect(validateMonitoringPeriodReviewOutcomeNote(withNote.captured.note)).toBe(true);
+    expect(REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B.liveWriteAuthorized).toBe(false);
+    expect(REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B.noteEditAuthorized).toBe(false);
+  });
+
+  it("keeps a blank note optional for both decisions", () => {
+    for (const decision of ["NO_CHANGE", "CHANGE_REQUIRED"] as const) {
+      const result = assembleSyntheticCapturedReview(
+        MATERIALS,
+        decision,
+        " \n ",
+        "2026-09-01T12:00:00+09:00",
+      );
+      expect(result.status).toBe("CAPTURED");
+      if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
+      expect(result.captured.note).toBeNull();
+      expect(result.captured.outcome.decision).toBe(decision);
+    }
+  });
+
+  it("fails atomically for an over-limit note and blocks duplicate replacement", () => {
+    const invalid = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "a".repeat(256),
+      "2026-09-01T12:00:00+09:00",
+    );
+    expect(invalid).toEqual({ status: "INVALID" });
+
+    const first = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "NO_CHANGE",
+      "first memo",
+      "2026-09-01T12:00:00+09:00",
+    );
+    if (first.status !== "CAPTURED") throw new Error("expected first capture");
+    const duplicate = captureSyntheticCapturedReview(
+      first.captured,
+      MATERIALS,
+      "CHANGE_REQUIRED",
+      "replacement",
+      "2026-09-01T12:01:00+09:00",
+    );
+    expect(duplicate.status).toBe("DUPLICATE");
+    if (duplicate.status !== "DUPLICATE") throw new Error("expected duplicate");
+    expect(duplicate.captured).toBe(first.captured);
+    expect(duplicate.captured.outcome.decision).toBe("NO_CHANGE");
+    expect(duplicate.captured.note?.note).toBe("first memo");
   });
 });

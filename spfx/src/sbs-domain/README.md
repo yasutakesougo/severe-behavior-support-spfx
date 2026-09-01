@@ -8,6 +8,32 @@ Keep canonical implementation in `src/domain`.
 
 Do not use these bundles for LIVE WRITE / Production Binding / Deploy authorization.
 
+## REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B — outcome note narrow bridge
+
+`monitoring-period-review-outcome-note.bundle.js` is the narrow synthetic note bridge for:
+
+`src/domain/monitoring-period-review-outcome-note-spfx-entry.ts`
+
+It exposes only the canonical note type/DTO, normalization and validation helpers,
+schema/max-length constants, and
+`MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_LIVE_WRITE_AUTHORIZED=false`.
+
+It does **not** modify Outcome `v1.0.0`, mint OutcomeId, expose persistence ports,
+or authorize MonitoringVersion, N+1, SharePoint, Production Binding, Deploy, or LIVE WRITE.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/monitoring-period-review-outcome-note-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/monitoring-period-review-outcome-note.bundle.js
+```
+
+The checked-in `.d.ts` is the narrow allowlisted declaration surface.
+
 ## REVIEW-OUTCOME-CAPTURE-SLICE-A — outcome capture narrow bridge
 
 `monitoring-period-review-outcome.bundle.js` is the narrow synthetic-capture bridge for:
