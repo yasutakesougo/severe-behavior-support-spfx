@@ -16,6 +16,7 @@ export type ReviewOutcomeCaptureViewProps = Readonly<{
   capturedReview: SyntheticCapturedReview | null;
   onCapture: (
     decision: MonitoringPeriodReviewDecision,
+    draftDecisionReason: string,
     draftNoteText: string,
   ) => SyntheticCapturedReviewResult;
 }>;
@@ -25,6 +26,7 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
   capturedReview,
   onCapture,
 }) => {
+  const [draftDecisionReason, setDraftDecisionReason] = React.useState("");
   const [draftNoteText, setDraftNoteText] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const contextKey = reviewOutcomeContextKey(materials);
@@ -32,16 +34,21 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
   const disabled = capturedReview !== null;
 
   React.useEffect(() => {
+    setDraftDecisionReason("");
     setDraftNoteText("");
     setError(null);
   }, [currentEpochBindingKey]);
 
   const capture = (decision: MonitoringPeriodReviewDecision): void => {
+    if (decision === "CHANGE_REQUIRED" && draftDecisionReason.trim().length === 0) {
+      setError(REVIEW_OUTCOME_CAPTURE_COPY.reasonRequired);
+      return;
+    }
     if (draftNoteText.length > MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH) {
       setError(REVIEW_OUTCOME_CAPTURE_COPY.noteLengthError);
       return;
     }
-    const result = onCapture(decision, draftNoteText);
+    const result = onCapture(decision, draftDecisionReason, draftNoteText);
     if (result.status === "INVALID") {
       setError(REVIEW_OUTCOME_CAPTURE_COPY.error);
       return;
@@ -57,7 +64,7 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
     <section
       className={styles.capture}
       aria-label="見直し結果のデモ記録"
-      data-review-outcome-capture="REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B"
+      data-review-outcome-capture="SBS-MGMT-LOOP-A"
       data-presentation-only="true"
       data-live-write-authorized="false"
     >
@@ -68,6 +75,11 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
           <p className={styles.status}>{labelForReviewDecision(capturedReview.outcome.decision)}</p>
           {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? (
             <p className={styles.pending}>{REVIEW_OUTCOME_CAPTURE_COPY.revisionPending}</p>
+          ) : null}
+          {capturedReview.decisionReason ? (
+            <p className={styles.reasonReadback} data-review-outcome-reason-readback="true">
+              判断理由: {capturedReview.decisionReason.reason}
+            </p>
           ) : null}
           {capturedReview.note ? (
             <p className={styles.noteReadback} data-review-outcome-note-readback="true">
@@ -84,6 +96,24 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
           {REVIEW_OUTCOME_CAPTURE_COPY.undecided}
         </p>
       )}
+
+      <div className={styles.reasonField}>
+        <label className={styles.reasonLabel} htmlFor={`review-outcome-reason-${contextKey}`}>
+          {REVIEW_OUTCOME_CAPTURE_COPY.reasonLabel}
+        </label>
+        <p className={styles.reasonHelper} id={`review-outcome-reason-help-${contextKey}`}>
+          {REVIEW_OUTCOME_CAPTURE_COPY.reasonHelper}
+        </p>
+        <textarea
+          id={`review-outcome-reason-${contextKey}`}
+          className={styles.reasonTextarea}
+          value={draftDecisionReason}
+          onChange={(event) => setDraftDecisionReason(event.currentTarget.value)}
+          disabled={disabled}
+          aria-describedby={`review-outcome-reason-help-${contextKey}`}
+          data-review-outcome-reason-input="true"
+        />
+      </div>
 
       <div className={styles.noteField}>
         <label className={styles.noteLabel} htmlFor={`review-outcome-note-${contextKey}`}>
