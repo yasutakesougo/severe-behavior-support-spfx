@@ -168,10 +168,12 @@ describe("MonitoringView", () => {
         ?.value,
     ).toBe("");
 
-    act(() => enterMemo(container, "memo A2"));
+    act(() => enterMemo(container, "memo renewed"));
     act(() => clickDecision(container, "NO_CHANGE"));
     expect(container.textContent).toContain("デモ上の見直し結果: 変更なし");
-    expect(container.textContent).toContain("補足メモ: memo A2");
+    const noteReadbacks = container.querySelectorAll('[data-review-outcome-note-readback="true"]');
+    expect(noteReadbacks).toHaveLength(1);
+    expect(noteReadbacks[0]?.textContent).toBe("補足メモ: memo renewed");
     expect(container.textContent).not.toContain("補足メモ: memo A");
     expect(container.textContent).not.toContain("補足メモ: memo B");
 
