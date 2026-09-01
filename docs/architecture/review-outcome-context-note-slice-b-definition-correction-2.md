@@ -159,7 +159,60 @@ longer matches current materials.
 
 ---
 
-## 4. Boundaries preserved from Correction-1
+## 4. Explicit reconciliation of Correction-1 wording
+
+Correction-2 supersedes only the ambiguous breadth of the following
+Correction-1 phrases. All other Correction-1 semantics remain in force.
+
+### Original phrase: one review context / one captured decision
+
+The original Definition requires:
+
+```text
+one review context
+one captured decision
+one optional supplemental note value at initial capture
+```
+
+For this amended Definition, that means:
+
+```text
+one evidence-bound captured review instance
+→ one captured decision
+→ zero or one supplemental note value at initial capture
+```
+
+It does **not** mean that one base review-context key is permanently limited to
+one capture after the underlying evidence snapshot changes.
+
+### Original phrase: after first successful capture for the same review-context key
+
+The original duplicate/immutability rule is now read as:
+
+```text
+after first successful capture for the same base review-context key
+AND the same evidence snapshot
+→ second capture blocked / immutable
+```
+
+When the evidence snapshot is MISMATCH, the prior capture is not the current
+captured review instance and the MATCH duplicate rule does not apply.
+
+### Original phrase: a different person / planVersion / review period is different context
+
+That statement remains true but is non-exhaustive.
+
+A different person / planVersion / review period changes the **base review
+context**. An evidence-snapshot change can instead create a different
+**evidence-bound captured review instance** while the base review-context key
+remains unchanged.
+
+No note-edit, correction, cancellation, supersede, or history semantics are
+introduced by this distinction.
+
+---
+
+## 5. Boundaries preserved from Correction-1
 
 Correction-2 does not authorize any of the following:
 
@@ -187,7 +240,7 @@ The note remains excluded from Outcome identity / OutcomeId mint material.
 
 ---
 
-## 5. Definition invariants added by Correction-2
+## 6. Definition invariants added by Correction-2
 
 ```text
 INV-B15 A successful capture is immutable for the same evidence-bound review
@@ -212,7 +265,7 @@ to the **same evidence-bound review instance**.
 
 ---
 
-## 6. Acceptance criteria added by Correction-2
+## 7. Acceptance criteria added by Correction-2
 
 ```text
 AC-B13 Same base review context + matching evidence snapshot preserves the
@@ -237,7 +290,7 @@ AC-B17 No Product/domain implementation starts until this Correction-2 receives
 
 ---
 
-## 7. Required downstream Scope reconciliation
+## 8. Required downstream Scope reconciliation
 
 After this Definition Correction-2 is independently review-cleared and separately
 Human-locked, the existing Scope Correction-3 may be reconciled against it.
@@ -263,7 +316,7 @@ semantics, stop for another Definition correction instead of implementing ad hoc
 
 ---
 
-## 8. Gate
+## 9. Gate
 
 ```text
 Definition Correction-2 = APPLIED
