@@ -1,5 +1,4 @@
 import * as React from "react";
-import { MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH } from "../../sbs-domain/monitoring-period-review-outcome-note.bundle";
 import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import type { HumanReviewMaterials } from "../../sbs-domain/monitoring-read-model.bundle";
 import {
@@ -27,7 +26,6 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
   onCapture,
 }) => {
   const [draftDecisionReason, setDraftDecisionReason] = React.useState("");
-  const [draftNoteText, setDraftNoteText] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const contextKey = reviewOutcomeContextKey(materials);
   const currentEpochBindingKey = reviewOutcomeCurrentEpochBindingKey(materials);
@@ -35,7 +33,6 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
 
   React.useEffect(() => {
     setDraftDecisionReason("");
-    setDraftNoteText("");
     setError(null);
   }, [currentEpochBindingKey]);
 
@@ -44,11 +41,7 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
       setError(REVIEW_OUTCOME_CAPTURE_COPY.reasonRequired);
       return;
     }
-    if (draftNoteText.length > MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH) {
-      setError(REVIEW_OUTCOME_CAPTURE_COPY.noteLengthError);
-      return;
-    }
-    const result = onCapture(decision, draftDecisionReason, draftNoteText);
+    const result = onCapture(decision, draftDecisionReason, "");
     if (result.status === "INVALID") {
       setError(REVIEW_OUTCOME_CAPTURE_COPY.error);
       return;
@@ -115,32 +108,10 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
         />
       </div>
 
-      <div className={styles.noteField}>
-        <label className={styles.noteLabel} htmlFor={`review-outcome-note-${contextKey}`}>
-          {REVIEW_OUTCOME_CAPTURE_COPY.noteLabel}
-        </label>
-        <p className={styles.noteHelper} id={`review-outcome-note-help-${contextKey}`}>
-          {REVIEW_OUTCOME_CAPTURE_COPY.noteHelper}
-        </p>
-        <textarea
-          id={`review-outcome-note-${contextKey}`}
-          className={styles.noteTextarea}
-          value={draftNoteText}
-          onChange={(event) => setDraftNoteText(event.currentTarget.value)}
-          maxLength={MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH}
-          disabled={disabled}
-          aria-describedby={`review-outcome-note-help-${contextKey}`}
-          data-review-outcome-note-input="true"
-        />
-        <p className={styles.noteCounter} data-review-outcome-note-count="true">
-          {draftNoteText.length} / {MONITORING_PERIOD_REVIEW_OUTCOME_NOTE_MAX_LENGTH}
-        </p>
-      </div>
-
       <div className={styles.actions} role="group" aria-label="見直し結果を選択">
         <button
           type="button"
-          className={styles.action}
+          className={`${styles.action} ${styles.actionNoChange}`}
           disabled={disabled}
           onClick={() => capture("NO_CHANGE")}
           data-review-outcome-action="NO_CHANGE"
@@ -149,7 +120,7 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
         </button>
         <button
           type="button"
-          className={styles.action}
+          className={`${styles.action} ${styles.actionChangeRequired}`}
           disabled={disabled}
           onClick={() => capture("CHANGE_REQUIRED")}
           data-review-outcome-action="CHANGE_REQUIRED"
