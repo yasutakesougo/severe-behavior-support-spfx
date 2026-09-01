@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: ASANA-STYLE-DELEGATION-SLICE-B-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: RECORDED / AWAITING EXACT SCOPE READBACK ON PR
+status: SCOPE CORRECTION-1 APPLIED / AWAITING EXACT SCOPE RE-READBACK ON PR
 parent definition: ASANA-STYLE-DELEGATION-SLICE-B-DEFINITION-1
 parent durable path: docs/architecture/asana-style-delegation-slice-b-definition-1.md
 Definition Lock PR: #569 MERGED
@@ -14,7 +14,8 @@ Human Definition Lock GO: CONSUMED
 Second Pilot: #548 SELECTED / READ-ONLY
 Second Pilot selection record: docs/architecture/asana-style-delegation-slice-b-second-pilot-selection-1.md
 Second Pilot selection blob: b489b11ee730bc27507515c4b30224b58feb86bd
-Independent Scope Review-1: NOT YET PERFORMED
+Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
+Scope Correction-1: APPLIED
 Human Implementation Start GO: NOT RECEIVED
 Implementation: NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
@@ -145,13 +146,15 @@ Scope Lock時点でSecond Pilotは **#548** に固定する（selection record�
 #548 differs from Pilot #552 in ways that test minimal generalization:
 
 ```text
-- authorized path section label = "Authorized surface delivered"
-  (Pilot #552 uses "Authorized diff")
+- authorized path grammar = markdown heading + bounded text fence
+  (Pilot #552 uses inline "Authorized diff:" label)
 - pilot lineage Definition / Scope blobs differ from Slice-A parent blobs
+- selection record carries dual Definition identity (Slice-B parent vs #548 lineage)
 - historical Scope header gate text vs later consumed evidence state
+- live PR lifecycle MERGED with durable ready/merge formal tokens absent
 ```
 
-Pre-implementation expectation: **PORTABLE-B** (registry + small parser normalization).
+Pre-implementation expectation: **PORTABLE-B** (registry + bounded explicit-source parsers).
 Final classification requires Implementation verification (§15).
 
 ### 3.2 Portability Minimum Evidence Floor (Definition §9.0)
@@ -220,26 +223,98 @@ evidencePaths:
   - docs/architecture/review-to-plan-revision-relationship-implementation-evidence.md
 sliceBindPaths:
   - docs/architecture/asana-style-delegation-slice-b-second-pilot-selection-1.md
-  （または Start GO時に固定する equivalent bind artifact）
 supplementaryPr: 548
 ```
 
 Pilot #552 registry entry は変更しない（regression baseline）。
 
-### 5.2 Parser normalization (PORTABLE-B candidate)
+`sliceBindPaths` は上記 selection record に固定する。Start GO readback で
+equivalent bind artifact へ差し替える場合は Scope Correction が必要。
 
-既存 `parseAuthorizedPaths` を、以下の **explicit section labels** のみ一般化する:
+### 5.2 Parser contracts (PORTABLE-B candidate)
+
+**Correction-1 (C1 / C2):** explicit source grammar generalization ≠ generic parser。
+
+#### 5.2.1 Pilot #552 — authorized paths (unchanged)
+
+既存 `parseAuthorizedPaths` の `"Authorized diff:"` literal parser を **変更しない**。
+
+#### 5.2.2 Pilot #548 — authorized paths (bounded grammar)
+
+新関数 `parseAuthorizedSurfaceDelivered(markdown)` を追加する（または pilot-specific
+dispatch のみ）。#548 canonical evidence grammar を **exact** に固定する:
 
 ```text
-Authorized diff:
-Authorized surface delivered:
+exact heading:
+  ## 1. Authorized surface delivered
+
+within heading section only:
+  line containing "Exact diff from scope start HEAD"
+  → immediately following first ```text fence = sole path source
 ```
 
-自由記述PR本文grammarの全面標準化は禁止。
+Expected paths（V-B5）:
 
-`parseSliceABindLockedHeads` が selection record の `Definition blob =` /
-`Scope blob =` 形式を読める場合のみ最小拡張を許可する。
-推測によるidentity生成は禁止。
+```text
+src/domain/index.ts
+src/domain/monitoring-period-review-outcome.ts
+src/domain/support-plan-version-monitoring-period-review-binding.ts
+tests/domain/monitoring-period-review-outcome.test.ts
+tests/domain/support-plan-version-monitoring-period-review-binding.test.ts
+tests/contracts/monitoring-period-review-outcome-contract.test.ts
+tests/contracts/support-plan-version-monitoring-period-review-binding-contract.test.ts
+```
+
+禁止:
+
+```text
+arbitrary heading scan
+generic markdown path harvesting
+PR body path inference
+repo-wide path discovery
+colon label "Authorized surface delivered:" （canonical evidence に存在しない）
+```
+
+#### 5.2.3 Second Pilot locked identity (bounded section)
+
+新関数 `parseSecondPilotLockedHeads(markdown)` を追加する。
+
+`parseSliceABindLockedHeads` の意味は **変更しない**（Pilot #552 bind 専用のまま）。
+
+Source:
+
+```text
+docs/architecture/asana-style-delegation-slice-b-second-pilot-selection-1.md
+```
+
+Bounded section **のみ**:
+
+```text
+## Available locked identity
+```
+
+Section 内の `Definition blob =` / `Scope blob =` /
+`exact implementation HEAD =` のみを読む。
+
+Expected（V-B6）:
+
+```text
+locked_heads.definition = 2ec766c97b1e1a09bb7fc4de85118eaf8dd73264
+locked_heads.scope      = 0a863e693a5fc42359200081a1b3659aa2227bce
+locked_heads.implementation = 1cf450fb1718ace2b437e8414a481071058abe7e
+```
+
+禁止:
+
+```text
+selection record 全体からの汎用 regex
+header の Slice-B parent Definition blob (d107e855...) を locked_heads.definition に返す
+`:` → `[:=]` の無条件一般化
+```
+
+Alternative（Scope Correction 不要で許可）: Start GO readback artifact で
+pilot lineage identity を専用 label へ再固定し、その artifact のみ bind する。
+いずれの場合も Slice-B parent blob を pilot lineage definition として返してはならない。
 
 ### 5.3 Tests
 
@@ -249,9 +324,36 @@ Authorized surface delivered:
 - formal-token fail-closed（V-B3）
 - live lifecycle / Human GO separation（V-B4）
 - authorized_paths exact 7 paths（V-B5）
-- locked identity（V-B6）
+- locked identity from bounded section only（V-B6）
 - PORTABLE classification fixture（V-B13）
+- #548 expected gate behavior（§5.6 / P2-1）
 ```
+
+### 5.6 #548 expected gate behavior (Correction-1 C4 / P2-1)
+
+#548 durable evidence には formal ready/merge token が残っていない。
+live PR lifecycle は MERGED である。これは fail-closed の **期待動作** であり失敗ではない。
+
+Implementation / SB-11 test plan で固定する expected output:
+
+```text
+live.pr_state = MERGED
+
+gates.definition_lock = CONSUMED
+gates.implementation_start = CONSUMED
+
+gates.ready = UNKNOWN
+gates.merge = UNKNOWN
+
+next_human_action = UNKNOWN
+```
+
+```text
+PR MERGED ≠ Human Merge GO inference
+durable exact formal token unavailable → UNKNOWN → STOP
+```
+
+「UNKNOWN だから parser 不足」と Implementation Review で誤判定してはならない。
 
 ### 5.4 CLI / npm script
 
@@ -274,6 +376,8 @@ Input (example):
 Acceptance:
   - 正しい Issue / PR へ到達
   - gate / authorized_paths / locked HEAD を取得
+  - live MERGED でも ready/merge を推測しない（§5.6）
+  - next_human_action = UNKNOWN でも STOP できる
   - unauthorized mutation なし
   - next Human Gate で STOP
   - Second Pilot本体へのmutationを開始しない
@@ -325,20 +429,42 @@ SB-11 PASS ≠ Second Pilot work authorization（Definition §4.1）。
 
 ## 8. Authorized Mutation Surface
 
-Human Implementation Start GO成立後も、mutationは最小ファイルに限定する。
+Human Implementation Start GO成立後も、mutationは **exact file allowlist** に限定する
+（Correction-1 C3）。
 
 ```text
-.agents/skills/project-status/**
-scripts/**
-tests/**
-docs/architecture/**
+scripts/lib/gate-packet/pilots.mjs
+
+scripts/lib/gate-packet/parse-markdown-evidence.mjs
+  only if PORTABLE-A fails (expected: required for #548 bounded parsers)
+
+tests/governance/gate-packet-read.test.ts
+
+docs/architecture/asana-style-delegation-slice-b-implementation-*.md
+```
+
+現時点で **除外**（必要が判明した場合は STOP → Scope Correction）:
+
+```text
 package.json
+.agents/skills/project-status/**
+scripts/lib/gate-packet/read-gate-packet.mjs
+scripts/** （上記以外）
+tests/** （上記以外）
+generic docs/architecture/**
+Second Pilot lineage artifact の semantics 変更
+```
+
+`read-gate-packet.mjs` 等別 file 変更が実際に必要と判明した場合:
+
+```text
+STOP → Scope Correction → Re-Review
 ```
 
 Human Implementation Start GO + 確定allowlistが揃うまで変更してはならない。
 
-Implementation PRは docs/architecture への portability evidence / classification
-記録を含めてよいが、Second Pilot lineage artifact の semantics を書き換えてはならない。
+Implementation PRは allowlist 内の Slice-B portability evidence / classification
+記録を含めてよい。
 
 ---
 
@@ -363,11 +489,11 @@ verify:slice / Issue Template / docs/gates/**
 | V-B1 | Second Pilot #548 structured read PASS |
 | V-B2 | Pilot #552 regression PASS |
 | V-B3 | formal-token fail-closed PASS |
-| V-B4 | live lifecycle / Human GO separation PASS |
-| V-B5 | authorized_paths exact（7 paths; UNKNOWN = floor fail） |
-| V-B6 | locked identity exact or UNKNOWN（floor: ≥1 execution identity exact） |
+| V-B4 | live lifecycle / Human GO separation PASS（#548: MERGED ≠ merge GO; §5.6） |
+| V-B5 | authorized_paths exact（7 paths via §5.2.2; UNKNOWN = floor fail） |
+| V-B6 | locked identity from §5.2.3 bounded section（≥1 execution identity exact） |
 | V-B7 | correction generation exact or UNKNOWN |
-| V-B8 | next_human_action exact or UNKNOWN |
+| V-B8 | next_human_action exact or UNKNOWN（#548: UNKNOWN expected; §5.6） |
 | V-B9 | live unavailable provenance PASS |
 | V-B10 | npm run verify:ci PASS |
 | V-B11 | Product / SPFx / domain delta = 0 |
@@ -415,8 +541,9 @@ SC-B10 Human Implementation Start GO前に実装しない
 SC-B11 PORTABLE-A/B/NOT-PORTABLE + Minimum Evidence Floor
 SC-B12 SB-11 READ-ONLY Primary Acceptance plan fixed
 SC-B13 Slice-B GO ≠ Second Pilot mutation（Definition §4.1）
-SC-B14 Selection record bind preserved（blob b489b11）
-SC-B15 Parser一般化はexplicit section labelsのみ
+SC-B14 Selection record bind preserved（blob b489b11; §5.2.3 bounded section）
+SC-B15 Parser = bounded explicit-source grammar（§5.2; not generic scan）
+SC-B16 Authorized mutation = exact file allowlist only（§8）
 ```
 
 ---
@@ -465,8 +592,9 @@ Second Pilot #548 = SELECTED / READ-ONLY
 Second Pilot mutation authority = NO
 
 Implementation Scope Definition = RECORDED (this document)
-Independent Scope Review-1 = NOT YET PERFORMED
-Exact Scope readback on Scope PR = PENDING
+Independent Scope Review-1 = CORRECTION REQUIRED / CONSUMED
+Scope Correction-1 = APPLIED
+Exact Scope re-readback on Scope PR = PENDING
 Human Implementation Start GO = NOT RECEIVED
 Implementation = NOT AUTHORIZED
 PORTABLE-A / PORTABLE-B = NOT YET CLASSIFIED
@@ -478,15 +606,15 @@ Deploy / LIVE WRITE = NOT AUTHORIZED
 ## 15. Next
 
 ```text
-Exact Scope readback on Scope PR
+Exact Scope re-readback on Scope PR（post Correction-1）
         ↓
-Independent Scope Review-1
+Independent Scope Re-Review-1
         ↓
 Human Implementation Start GO / HOLD
         ↓
 （GO後のみ）
 Locked Definition exact bind reconfirm @ 426fddb / d107e855
-Second Pilot #548 registry + minimal parser（if PORTABLE-B）
+Second Pilot #548 registry + bounded parsers（§5.2）
 Pilot #552 regression + #548 structured read
 PORTABLE classification + SB-11 READ-ONLY Acceptance
 ```

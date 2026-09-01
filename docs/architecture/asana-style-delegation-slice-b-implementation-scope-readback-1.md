@@ -6,7 +6,7 @@ Unit: ASANA-STYLE-DELEGATION-SLICE-B-IMPLEMENTATION-SCOPE-READBACK-1
 Kind: pre-merge Implementation Scope exact readback
 Mode: READ ONLY verification + durable facts
 Date: 2026-09-01
-Status: EXACT SCOPE READBACK COMPLETE
+Status: EXACT SCOPE RE-READBACK COMPLETE (post Correction-1)
 
 Parent Definition (main):
   path: docs/architecture/asana-style-delegation-slice-b-definition-1.md
@@ -23,10 +23,15 @@ Scope artifact:
   path: docs/architecture/asana-style-delegation-slice-b-implementation-scope-1.md
   unit: ASANA-STYLE-DELEGATION-SLICE-B-IMPLEMENTATION-SCOPE-1
 
+Scope review readback:
+  docs/architecture/asana-style-delegation-slice-b-implementation-scope-review-1-readback.md
+
 Post-merge readback (#569):
   docs/architecture/asana-style-delegation-slice-b-post-merge-readback-569.md
 
-Independent Scope Review-1: NOT YET PERFORMED
+Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
+Scope Correction-1: APPLIED
+Independent Scope Re-Review-1: NOT YET PERFORMED
 Human Implementation Start GO: NOT RECEIVED
 Implementation: NOT AUTHORIZED
 PORTABLE-A / PORTABLE-B: NOT YET CLASSIFIED
@@ -46,10 +51,8 @@ Ready, Merge, Deploy, Production Write, or SharePoint / M365 / Entra mutation.
 | Definition on main @ 426fddb | **CONFIRMED** |
 | Definition blob d107e855 | **CONFIRMED** |
 | Pattern A bind (merged main) | **SATISFIED** |
-| Definition `Implementation Scope = NOT AUTHORIZED` in header | **CONFIRMED** (Scope recording ≠ authorization) |
+| Definition `Implementation Scope = NOT AUTHORIZED` in header | **CONFIRMED** |
 | Slice-A CLOSED / Option B @ #552 only on main | **CONFIRMED** |
-
-Scope recording on this PR does not consume Implementation Start GO.
 
 ---
 
@@ -60,73 +63,78 @@ Scope recording on this PR does not consume Implementation Start GO.
 | Selection record on main | **CONFIRMED** (blob b489b11) |
 | Second Pilot = #548 | **CONFIRMED** |
 | Selection grants mutation authority = NO | **CONFIRMED** |
-| authorized_paths exact source available | **CONFIRMED** (7 paths in evidence doc) |
+| authorized_paths exact source available | **CONFIRMED** (§5.2.2 bounded grammar) |
+| locked identity bounded section defined | **CONFIRMED** (§5.2.3) |
 | Portability Minimum Evidence Floor (selection-time) | **PASS** |
-| Pre-implementation PORTABLE expectation | **PORTABLE-B** (section label normalization) |
-
-Selection bind does not authorize Second Pilot mutation (Definition §4.1).
+| Pre-implementation PORTABLE expectation | **PORTABLE-B** |
 
 ---
 
-## 3. Scope delta check (this PR)
+## 3. Scope Correction-1 delta check (this PR revision)
+
+| Correction | Scope § | Applied |
+|---|---|---|
+| C1 #548 authorized_paths bounded grammar | §5.2.2 | **YES** |
+| C2 Second Pilot locked identity bounded parse | §5.2.3 | **YES** |
+| C3 exact file mutation allowlist | §8 | **YES** |
+| C4 #548 MERGED / UNKNOWN expected gates | §5.6 | **YES** |
 
 Expected delta (docs only):
 
 | Path | Role |
 |---|---|
 | `asana-style-delegation-slice-b-post-merge-readback-569.md` | #569 main fixation |
-| `asana-style-delegation-slice-b-implementation-scope-1.md` | Locked Scope |
-| `asana-style-delegation-slice-b-implementation-scope-readback-1.md` | This readback |
+| `asana-style-delegation-slice-b-implementation-scope-1.md` | Locked Scope (Correction-1) |
+| `asana-style-delegation-slice-b-implementation-scope-readback-1.md` | This re-readback |
+| `asana-style-delegation-slice-b-implementation-scope-review-1-readback.md` | Review-1 record |
 
 ```text
 Product delta = 0
 SPFx delta = 0
 src/domain delta = 0
 scripts delta = 0
-.agents delta = 0 (until Implementation Start)
+.agents delta = 0
 Pilot #552 reader unchanged on this PR
 ```
 
 ---
 
-## 4. Locked Definition conformance
+## 4. Locked Definition conformance (post Correction-1)
 
 | Definition rule | Scope § | Result |
 |---|---|---|
-| Portability proof; not feature add | §2, SC-B1 | **PASS** |
-| Second Pilot = 1 (#548) | §3, SC-B1 | **PASS** |
-| Option C OUT | §4, §7, SC-B3 | **PASS** |
-| Minimum Evidence Floor | §3.2, SC-B11 | **PASS** |
-| Slice-B GO ≠ Second Pilot mutation | §2, §9, SC-B13 | **PASS** |
-| SB-11 READ-ONLY plan | §5.5, SC-B12 | **PASS** |
-| #552 regression required | §5.3, SC-B4 | **PASS** |
-| Human GO inference禁止 | §5.2, Definition SB-4 | **PASS** |
-| verify:slice / Template OUT | §7, SC-B9 | **PASS** |
-| Product OUT | §9, SC-B8, V-B11 | **PASS** |
-| Parser一般化 = explicit labels only | §5.2, SC-B15 | **PASS** |
+| Portability proof; not feature add | §2 | **PASS** |
+| Second Pilot = 1 (#548) | §3 | **PASS** |
+| Option C OUT | §4, §7 | **PASS** |
+| Minimum Evidence Floor | §3.2 | **PASS** |
+| Slice-B GO ≠ Second Pilot mutation | §2, §9 | **PASS** |
+| SB-11 READ-ONLY + §5.6 gate expectations | §5.5, §5.6 | **PASS** |
+| #552 regression required | §5.3 | **PASS** |
+| Human GO inference禁止 | §5.2, §5.6 | **PASS** |
+| verify:slice / Template OUT | §7 | **PASS** |
+| Product OUT | §9 | **PASS** |
+| Bounded parser grammar (not generic) | §5.2, SC-B15 | **PASS** |
+| Dual Definition blob disambiguation | §5.2.3, SC-B14 | **PASS** |
+| Exact mutation allowlist | §8, SC-B16 | **PASS** |
 
 ---
 
 ## 5. Scope Acceptance Criteria
 
-SC-B1 through SC-B15: **DEFINITION SATISFIED** (Implementation-time proof deferred to Start GO后)
+SC-B1 through SC-B16: **DEFINITION SATISFIED** (Implementation-time proof deferred to Start GO后)
+
+Prior Review-1 failures (P1-1, P1-2, P1-3, P2-1): **ADDRESSED by Correction-1**
 
 ---
 
-## 6. Human Implementation Start eligibility (materials only)
+## 6. Human Implementation Start eligibility
 
 Does **not** grant Implementation Start GO.
 
-Materials present after Scope PR merge (pending Independent Scope Review):
-
 ```text
-- Locked Definition on main (426fddb / blob d107e855)
-- Second Pilot #548 selected (selection blob b489b11)
-- Scope recorded on separate PR
-- Exact Scope readback COMPLETE
-- Product delta = 0 on Scope PR
-- PORTABLE classification deferred to Implementation
-- SB-11 deferred to post-Implementation phase
+Pending: Independent Scope Re-Review-1
+Human Implementation Start GO: NOT RECEIVED
+Implementation: NOT AUTHORIZED
 ```
 
 ---
@@ -134,24 +142,22 @@ Materials present after Scope PR merge (pending Independent Scope Review):
 ## 7. Next gate
 
 ```text
-Exact Scope readback = COMPLETE
+Exact Scope re-readback (post Correction-1) = COMPLETE
 
 STOP before Human Implementation Start GO
 
 NEXT:
-  Independent Scope Review-1
+  Independent Scope Re-Review-1
         ↓
   Human Implementation Start GO / HOLD
-  — bind main Definition @ 426fddb / blob d107e855
-  — bind Second Pilot #548 selection record
-  — does NOT authorize Second Pilot mutation, Ready, Merge, Deploy, or Product changes
 ```
 
 After Start GO (separate authorization):
 
 ```text
-Registry add #548 + minimal parser if PORTABLE-B
-Pilot #552 regression + #548 structured read
-PORTABLE classification + SB-11 READ-ONLY Acceptance
-Implementation within §8 allowlist only
+Exact allowlist §8 only:
+  pilots.mjs
+  parse-markdown-evidence.mjs (if PORTABLE-B)
+  gate-packet-read.test.ts
+  asana-style-delegation-slice-b-implementation-*.md
 ```
