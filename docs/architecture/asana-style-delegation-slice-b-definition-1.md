@@ -4,13 +4,15 @@
 Definition ID = ASANA-STYLE-DELEGATION-SLICE-B-DEFINITION-1
 Correction = 1
 Mode = DEFINITION ONLY
-Status = DEFINITION CORRECTION-1 APPLIED / AWAITING RE-REVIEW
+Status = REVIEW-CLEARED / AWAITING HUMAN DEFINITION LOCK GO
 Parent = ASANA-STYLE-DELEGATION-SLICE-A (CLOSED)
 Parent final main = 1b2b106b9c799dd5936481dc9c9b4808449f63c8
 Parent representation = Option B — Structured Gate Packet READ-ONLY index
 Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
-Definition Correction-1 = APPLIED
-Human Definition Lock GO = NOT RECEIVED / NOT ELIGIBLE
+Definition Correction-1 = APPLIED / CONSUMED
+Independent Definition Re-Review-1 = PASS / REVIEW-CLEARED / P0=0 / P1=0 / P2=0 / CONSUMED
+Definition Correction-2 = NOT REQUIRED
+Human Definition Lock GO = ELIGIBLE / NOT RECEIVED
 Human Implementation Start GO = NOT RECEIVED
 Implementation Scope = NOT AUTHORIZED
 Implementation = NOT AUTHORIZED
@@ -19,9 +21,8 @@ SharePoint / M365 / Entra mutation = NOT AUTHORIZED
 Issue mutation = NOT AUTHORIZED by this Definition
 ```
 
-This durable document records the Definition draft for **Second-Pilot Portability**
-verification of Slice-A Option B (Correction-1 applied per Independent Definition
-Review-1).
+This durable document records the Definition for **Second-Pilot Portability**
+verification of Slice-A Option B (Correction-1 applied; Re-Review-1 cleared).
 
 It does **not** authorize Implementation Start, Second Pilot selection authority,
 Implementation Scope, Ready, Merge, Deploy, `verify:slice`, GitHub Issue Template
@@ -698,16 +699,22 @@ ASANA-STYLE-DELEGATION-SLICE-A
 = CLOSED
 
 ASANA-STYLE-DELEGATION-SLICE-B
-= DEFINITION CORRECTION-1 APPLIED
+= REVIEW-CLEARED
 
 Independent Definition Review-1
 = CORRECTION REQUIRED / CONSUMED
 
 Definition Correction-1
-= APPLIED
+= APPLIED / CONSUMED
+
+Independent Definition Re-Review-1
+= PASS / REVIEW-CLEARED / CONSUMED
+
+Definition Correction-2
+= NOT REQUIRED
 
 Human Definition Lock GO
-= NOT RECEIVED / NOT ELIGIBLE
+= ELIGIBLE / NOT RECEIVED
 
 Second Pilot
 = NOT SELECTED
@@ -730,9 +737,12 @@ Ready / Merge / Deploy / LIVE WRITE
 ## 17. Next
 
 ```text
-exact Definition diff re-read
-        ↓
-Independent Definition Re-Review-1
-        ↓
 Human Definition Lock GO / HOLD
+        ↓
+（GO後のみ）
+Second Pilot READ-ONLY Selection
+        ↓
+Implementation Scope Definition
 ```
+
+Definition Lock alone does not authorize Implementation Start or Second Pilot mutation.
