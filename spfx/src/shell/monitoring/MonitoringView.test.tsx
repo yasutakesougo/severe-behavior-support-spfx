@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { renderToStaticMarkup } from "react-dom/server";
-import { act } from "react-dom/test-utils";
+import { act, Simulate } from "react-dom/test-utils";
 import { MonitoringView } from "./MonitoringView";
 import { buildDemoMonitoringForVersion } from "./monitoring-fixture";
 import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
@@ -45,7 +45,7 @@ function enterMemo(container: Element, value: string): void {
   );
   if (!textarea) throw new Error("expected note textarea");
   textarea.value = value;
-  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  Simulate.change(textarea);
 }
 
 function clickDecision(container: Element, decision: "NO_CHANGE" | "CHANGE_REQUIRED"): void {
