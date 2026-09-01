@@ -6,7 +6,7 @@ Unit: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B-POST-MERGE-RECONCILIATION-1
 Kind: post-merge reconciliation + current-state freeze
       （read-only first / durable facts only）
 Date: 2026-09-01
-Status: RECORDING
+Status: RECORDING / SCOPE CORRECTION-3 PENDING RE-REVIEW-3
 Authority:
   .agents/skills/project-status/SKILL.md
   docs/process/self-referential-gate-policy.md
@@ -278,6 +278,34 @@ Issue close / reopen
 ```
 
 ---
+
+## Independent Scope Re-Review-2 disposition
+
+```text
+Exact Scope candidate HEAD reviewed
+= fba1761c966d7a00497092a7bd8aa3f6ee07a853
+
+VERDICT
+= CORRECTION REQUIRED
+P0=0 / P1=1 / P2=0
+
+P1-1
+= S6.1 mismatch-recapture allowance conflicted with S9 same-key
+  duplicate/immutability / no-silent-replacement wording
+
+Disposition
+= Scope Correction-3 APPLIED on PR #558
+= INV-SB17 / S6.2 / S9.1 / S9.2 now distinguish:
+    MATCH  => DUPLICATE / immutable
+    MISMATCH => prior non-current; new capture allowed;
+               successful capture atomically replaces session current value
+
+Independent Scope Re-Review-3
+= REQUIRED / NOT STARTED
+
+Human Implementation Start GO eligibility
+= NO until Re-Review-3 PASS + separate Human GO
+```
 
 ## NEXT
 

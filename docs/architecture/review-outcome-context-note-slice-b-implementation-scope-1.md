@@ -4,14 +4,15 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: SCOPE CORRECTION-2 APPLIED / AWAITING INDEPENDENT SCOPE RE-REVIEW-2
+status: SCOPE CORRECTION-3 APPLIED / AWAITING INDEPENDENT SCOPE RE-REVIEW-3
 parent definition: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B
 parent correction: Correction-1
 parent status: HUMAN DEFINITION LOCKED
 parent durable path: docs/architecture/review-outcome-context-note-slice-b-definition-1.md
 locked definition HEAD: 29c9941d87067e38d32a9b612911e66a0504332c
-basis main at Scope Correction-2: 08492b65412053c78bcd976d7dde547b632dacfe
+basis main at Scope Correction-3: 08492b65412053c78bcd976d7dde547b632dacfe
 merged Product HEAD under review: b4bd4eb3e4b5cbfa2d3c4927b7d9a223f966c96f
+Scope candidate HEAD reviewed by Re-Review-2: fba1761c966d7a00497092a7bd8aa3f6ee07a853
 post-merge reconciliation: docs/architecture/review-outcome-context-note-slice-b-post-merge-reconciliation-1.md
 Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
 P1-1 context-switch draft carry-over: CORRECTED
@@ -21,14 +22,17 @@ P0=0 / P1=0 / P2=0
 exact reviewed Scope HEAD before Correction-2: 4044e4b0e8b3f3e41db90e9303d0eabd02886434
 Independent Post-Merge Implementation Review-1: CORRECTION REQUIRED / CONSUMED
 P1-1 evidence snapshot ↔ captured review binding: CORRECTED BY SCOPE CORRECTION-2
-Scope Correction-2: APPLIED
-Independent Scope Re-Review-2: REQUIRED / NOT STARTED
+Scope Correction-2: APPLIED / CONSUMED
+Independent Scope Re-Review-2: CORRECTION REQUIRED / CONSUMED
+P1-1 S6.1 ↔ S9 snapshot-mismatch recapture lifecycle conflict: CORRECTED BY SCOPE CORRECTION-3
+Scope Correction-3: APPLIED
+Independent Scope Re-Review-3: REQUIRED / NOT STARTED
 Human Definition Lock GO: RECEIVED / CONSUMED
 Human Implementation Start GO (original Slice B): CONSUMED historically via #550
-Human Implementation Start GO (Correction-2 only): NOT RECEIVED
+Human Implementation Start GO (Correction-2/3 only): NOT RECEIVED
 prior PR comment GO (2026-08-31T22:45:40Z): INVALIDATED / NOT CONSUMED
 unauthorized implementation drift ref: cursor/drift-slice-b-unauthorized-impl-bbe0 @ 4bfed955f008c2f7ea91f145aee16aaab0726881
-Implementation Correction: NOT AUTHORIZED until Re-Review-2 PASS + Human GO
+Implementation Correction: NOT AUTHORIZED until Re-Review-3 PASS + Human GO
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED
 ```
@@ -246,25 +250,97 @@ currently displayed RESOLVED materials:
 4. If stored exists AND evidence snapshots differ => current capture = null
    - do NOT show stored decision/note as committed for current materials
    - do NOT disable decision/note controls solely because of the mismatched store
-   - do NOT silently overwrite or delete other context keys
-   - optional: keep the mismatched map entry as non-current orphan data for the
-     session; it must not be presented as the active capture
+   - S9 same-context duplicate/immutability rule does NOT apply to current materials
+     while the stored capture is non-current due to evidence-snapshot mismatch
 ```
 
-This is intentionally **not** solved only by concatenating `sourceRecordIds`
-into the session map key. The binding check against current materials is
-mandatory even if an implementation also chooses a richer storage key.
+### S6.2 — Snapshot-mismatch recapture lifecycle — Scope Correction-3 / Re-Review-2 P1-1
 
-Focused regression required before Correction-2 implementation acceptance:
+Session storage remains **one current capture per review-context key**:
 
 ```text
+capturedReviews: Record<reviewOutcomeContextKey, SyntheticCapturedReview>
+```
+
+No generic history / multi-version capture archive is introduced in this Slice.
+
+Lifecycle rules（binding + duplicate/immutability together）:
+
+```text
+INV-SB17
+
+Case MATCH
+  same review-context key
+  + stored capture exists
+  + evidence snapshots match
+  => DUPLICATE / immutable
+  => decision/note mutation blocked
+  => second capture blocked
+  => note overwrite blocked
+  => silent replacement within the same evidence snapshot = forbidden
+
+Case MISMATCH
+  same review-context key
+  + stored capture exists
+  + evidence snapshots differ
+  => prior capture is NOT the capture for current materials
+  => Case MATCH duplicate rule does NOT apply to current materials
+  => a new capture for the new evidence snapshot is allowed
+  => after that new capture succeeds, replace capturedReviews[contextKey]
+     atomically with the new SyntheticCapturedReview
+```
+
+Meaning of the MISMATCH replacement:
+
+```text
+This replacement
+  != post-capture note edit
+  != decision overwrite within the same evidence snapshot
+  != silent replacement under S9 Case MATCH
+
+It is replacement of the session's current review because the underlying
+evidence snapshot changed.
+```
+
+Capture-path existing-value rule:
+
+```text
+effectiveExistingForCapture(currentMaterials) =
+  stored if stored exists AND evidence snapshots match
+  else null
+
+captureSyntheticCapturedReview(effectiveExistingForCapture(...), ...)
+  => if effectiveExisting != null: DUPLICATE（Case MATCH）
+  => if effectiveExisting == null: assemble/commit new capture
+     and on success set capturedReviews[contextKey] = newCapture
+```
+
+Do **not** keep both A and B as simultaneously current under the same key.
+History retention of mismatched prior captures is OUT of this Slice.
+
+This is intentionally **not** solved only by concatenating `sourceRecordIds`
+into the session map key. The binding check against current materials remains
+mandatory even if an implementation also chooses a richer storage key.
+
+Focused regressions required before Correction-3 implementation acceptance:
+
+```text
+R1 — mismatch clears current capture
 same OrganizationId/SiteId/UserId/planId/planVersion/period
 capture CHANGE_REQUIRED + optional note under sourceRecordIds = [A]
 rerender materials with sourceRecordIds = [A,B]（or [B]）
 => UI is undecided again for current materials
 => prior note/decision are not shown as current committed readback
 => new capture is allowed
-=> newly captured Outcome.sourceRecordIds reflect the new materials snapshot
+
+R2 — mismatch recapture replaces current; then match is immutable
+continue from R1
+capture B succeeds under sourceRecordIds = [A,B]（or [B]）
+=> current readback = B only
+=> captured Outcome.sourceRecordIds reflect the new materials snapshot
+=> A note/decision cannot reappear as current
+=> second capture against unchanged snapshot B = DUPLICATE / blocked
+=> note overwrite against unchanged snapshot B = blocked
 ```
 
 ### S7 — Atomic capture algorithm
@@ -331,7 +407,14 @@ The note is semantically captured only when the explicit decision action succeed
 
 ### S9 — Duplicate and immutability behavior
 
-After first successful capture for the same review-context key:
+S9 applies to the **current** capture for current materials after evidence-snapshot
+binding（S6.1 / S6.2）. It does not freeze a mismatched prior store as if it were
+still current.
+
+#### S9.1 — Case MATCH（same evidence snapshot）
+
+After first successful capture for the same review-context key **and** matching
+evidence snapshot:
 
 ```text
 decision buttons = disabled
@@ -340,10 +423,26 @@ note draft mutation = unavailable
 second decision capture = blocked
 note overwrite = blocked
 note edit = OUT
-silent replacement = forbidden
+silent replacement within the same evidence snapshot = forbidden
 ```
 
 No correction, cancel, supersede, or history UI is added.
+
+#### S9.2 — Case MISMATCH（evidence snapshot changed, key unchanged）
+
+When stored capture exists for the same review-context key but evidence snapshots
+differ:
+
+```text
+S9.1 duplicate/immutability controls do NOT apply to current materials
+current capture = null（undecided）for UI / capture-path purposes
+new capture for the new evidence snapshot = allowed
+on successful new capture:
+  capturedReviews[contextKey] is replaced atomically with the new capture
+```
+
+This MISMATCH replacement is defined by S6.2 / INV-SB17 and is not a S9.1
+same-snapshot overwrite.
 
 ### S10 — UI copy and interaction
 
@@ -566,6 +665,12 @@ INV-SB15 Slice A materials/identity/role cues remain intact.
 INV-SB16 Current HumanReviewMaterials evidence snapshot must match captured
          Outcome.sourceRecordIds before a stored capture is treated as current.
          Mismatch => do not reuse old capture as current review.
+INV-SB17 Snapshot-mismatch recapture lifecycle is explicit:
+         MATCH => DUPLICATE / immutable / no same-snapshot replacement.
+         MISMATCH => prior capture is non-current; new capture allowed;
+         successful new capture atomically replaces capturedReviews[contextKey]
+         as the session's current review for that key.
+         MISMATCH replacement != same-snapshot note/decision overwrite.
 ```
 
 ## 6. Explicit OUT
@@ -575,6 +680,8 @@ additive note property on MonitoringPeriodReviewOutcome v1.0.0
 OutcomeId mint changes
 NoteId / independent note identity
 note edit / overwrite / correction / cancellation / supersede
+same-snapshot silent replacement after successful capture
+multi-version capture history archive under one review-context key
 multiple notes / timeline / threaded comments
 rich text / attachments / mentions / reactions
 AI generation / summarization / auto-completion
@@ -625,18 +732,21 @@ SAC-B11 MonitoringVersion / N+1 / SharePoint / LIVE WRITE remain OUT.
 SAC-B12 Human Implementation Start is still a separate gate.
 SAC-B13 Evidence-snapshot binding（INV-SB16 / S6.1）is fixed; mismatched
         sourceRecordIds cannot present a prior capture as current.
+SAC-B14 Snapshot-mismatch recapture lifecycle（INV-SB17 / S6.2 / S9.2）is fixed:
+        mismatch allows a new capture; success replaces the session current
+        capture for that key; unchanged snapshot remains immutable/duplicate-blocked.
 ```
 
 ## 9. Stop conditions
 
 ```text
-Independent Scope Re-Review-2 required before Human Implementation Start GO
-for Correction-2.
-If Re-Review-2 finds P0/P1 => further Scope Correction + exact re-review.
+Independent Scope Re-Review-3 required before Human Implementation Start GO
+for Correction-2/3.
+If Re-Review-3 finds P0/P1 => further Scope Correction + exact re-review.
 If representation Family B cannot be implemented without changing Outcome identity => HOLD / Definition re-open candidate.
 If additional Product/domain paths are required => HOLD / Scope Correction.
 If locked Definition changes => HOLD / re-scope.
-Do not start Rendered Browser Acceptance while P1-1 remains open.
+Do not start Rendered Browser Acceptance while open Scope P1 remains.
 Do not treat #550 merge as Deploy / LIVE WRITE authority.
 ```
 
@@ -651,12 +761,17 @@ Unauthorized implementation drift = RECONCILED historically
 Prior PR comment Human Implementation Start GO (2026-08-31T22:45:40Z) = INVALIDATED
 #550 merged Product HEAD = b4bd4eb3e4b5cbfa2d3c4927b7d9a223f966c96f
 Independent Post-Merge Implementation Review-1 = CORRECTION REQUIRED / CONSUMED
-Scope Correction-2 = APPLIED
-Independent Scope Re-Review-2 = REQUIRED / NOT STARTED
-Human Implementation Start GO（Correction-2 only）= AWAITING
-  Re-Review-2 PASS + separate Human GO
+Scope Correction-2 = APPLIED / CONSUMED
+Scope candidate HEAD reviewed by Re-Review-2
+  = fba1761c966d7a00497092a7bd8aa3f6ee07a853
+Independent Scope Re-Review-2 = CORRECTION REQUIRED / CONSUMED
+  P1-1 S6.1 ↔ S9 lifecycle conflict
+Scope Correction-3 = APPLIED
+Independent Scope Re-Review-3 = REQUIRED / NOT STARTED
+Human Implementation Start GO（Correction-2/3 only）= AWAITING
+  Re-Review-3 PASS + separate Human GO
 Implementation Correction = NOT AUTHORIZED yet
-Rendered Browser Acceptance = HOLD until Correction-2 lands
+Rendered Browser Acceptance = HOLD until Correction-3 lands and is implemented
 Actual Staff Value Check = HOLD
 Ready / Merge / Deploy / Production Binding / LIVE WRITE = NOT AUTHORIZED
 ```
