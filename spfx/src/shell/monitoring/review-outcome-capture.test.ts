@@ -25,7 +25,9 @@ beforeAll(() => {
   if (typeof g.TextEncoder === "undefined") {
     // Jest jsdom may omit TextEncoder; SHA-256 uses it. SPFx/browser have it.
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    const nodeUtil = require("util") as {
+      TextEncoder: { new (): unknown };
+    };
     g.TextEncoder = nodeUtil.TextEncoder;
   }
 });
@@ -54,7 +56,10 @@ const MATERIALS: HumanReviewMaterials = {
 
 const MATERIALS_B: HumanReviewMaterials = {
   ...MATERIALS,
-  records: MATERIALS.records.map((record) => ({ ...record, RecordId: "record-2" })),
+  records: MATERIALS.records.map((record) => ({
+    ...record,
+    RecordId: "record-2",
+  })),
 };
 
 const ZERO_MATERIALS: HumanReviewMaterials = {
@@ -95,7 +100,9 @@ describe("review-outcome-capture", () => {
     expect(result.outcome.sourceRecordIds).toEqual(["record-1"]);
     expect(result.outcome.OutcomeId).toMatch(/^[0-9a-f]{64}$/);
     expect(REVIEW_OUTCOME_CAPTURE_SLICE_A.presentationOnly).toBe(true);
-    expect(REVIEW_OUTCOME_CAPTURE_SLICE_A.authoritativeDecisionCompletionAuthorized).toBe(false);
+    expect(
+      REVIEW_OUTCOME_CAPTURE_SLICE_A.authoritativeDecisionCompletionAuthorized,
+    ).toBe(false);
     expect(MONITORING_PERIOD_REVIEW_OUTCOME_LIVE_WRITE_AUTHORIZED).toBe(false);
     expect(SBS_MGMT_LOOP_A.liveWriteAuthorized).toBe(false);
   });
@@ -109,11 +116,15 @@ describe("review-outcome-capture", () => {
     expect(result.status).toBe("CAPTURED");
     if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
     expect(result.outcome.decision).toBe("CHANGE_REQUIRED");
-    expect(Object.prototype.hasOwnProperty.call(result.outcome, "nextPlanVersion")).toBe(false);
+    expect(
+      Object.prototype.hasOwnProperty.call(result.outcome, "nextPlanVersion"),
+    ).toBe(false);
   });
 
   it("fails closed on invalid reviewedAt and blocks duplicate overwrite", () => {
-    expect(assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "not-a-date")).toEqual({
+    expect(
+      assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", "not-a-date"),
+    ).toEqual({
       status: "INVALID",
     });
     const first = assembleSyntheticReviewOutcome(
@@ -135,22 +146,36 @@ describe("review-outcome-capture", () => {
   });
 
   it("keys synthetic session state by exact review context", () => {
-    expect(reviewOutcomeContextKey(MATERIALS)).toContain("org-a\u001fsite-a\u001fuser-a");
-    expect(reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 })).not.toBe(
-      reviewOutcomeContextKey(MATERIALS),
+    expect(reviewOutcomeContextKey(MATERIALS)).toContain(
+      "org-a\u001fsite-a\u001fuser-a",
     );
+    expect(
+      reviewOutcomeContextKey({ ...MATERIALS, planVersion: 4 }),
+    ).not.toBe(reviewOutcomeContextKey(MATERIALS));
   });
 
   it("R8 binds the current capture epoch to a canonical evidence snapshot", () => {
-    expect(reviewOutcomeContextKey(MATERIALS_B)).toBe(reviewOutcomeContextKey(MATERIALS));
+    expect(reviewOutcomeContextKey(MATERIALS_B)).toBe(
+      reviewOutcomeContextKey(MATERIALS),
+    );
     expect(reviewOutcomeCurrentEpochBindingKey(MATERIALS_B)).not.toBe(
       reviewOutcomeCurrentEpochBindingKey(MATERIALS),
     );
-    expect(reviewOutcomeEvidenceSnapshot(["record-b", "record-a", "record-a", ""])).toBe(
-      "record-a\u001frecord-b",
-    );
+    expect(
+      reviewOutcomeEvidenceSnapshot([
+        "record-b",
+        "record-a",
+        "record-a",
+        "",
+      ]),
+    ).toBe("record-a\u001frecord-b");
     expect(reviewOutcomeEvidenceSnapshot(["record-a", "record-b"])).toBe(
-      reviewOutcomeEvidenceSnapshot(["record-b", "record-a", "record-a", ""]),
+      reviewOutcomeEvidenceSnapshot([
+        "record-b",
+        "record-a",
+        "record-a",
+        "",
+      ]),
     );
   });
 
@@ -165,10 +190,15 @@ describe("review-outcome-capture", () => {
     if (first.status !== "CAPTURED") throw new Error("expected first capture");
 
     expect(capturedReviewMatchesMaterials(first.captured, MATERIALS)).toBe(true);
-    expect(capturedReviewMatchesMaterials(first.captured, MATERIALS_B)).toBe(false);
-    expect(capturedReviewMatchesMaterials(first.captured, { ...MATERIALS, UserId: "user-b" })).toBe(
+    expect(capturedReviewMatchesMaterials(first.captured, MATERIALS_B)).toBe(
       false,
     );
+    expect(
+      capturedReviewMatchesMaterials(first.captured, {
+        ...MATERIALS,
+        UserId: "user-b",
+      }),
+    ).toBe(false);
   });
 
   it("R1 allows NO_CHANGE with blank reason and optional blank note", () => {
@@ -187,7 +217,11 @@ describe("review-outcome-capture", () => {
 
   it("captures an atomic outcome + reason + optional note without changing OutcomeId", () => {
     const reviewedAt = "2026-09-01T12:00:00+09:00";
-    const outcomeOnly = assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", reviewedAt);
+    const outcomeOnly = assembleSyntheticReviewOutcome(
+      MATERIALS,
+      "NO_CHANGE",
+      reviewedAt,
+    );
     const captured = assembleSyntheticCapturedReview(
       MATERIALS,
       "NO_CHANGE",
@@ -200,13 +234,25 @@ describe("review-outcome-capture", () => {
     if (captured.status !== "CAPTURED" || outcomeOnly.status !== "CAPTURED") {
       throw new Error("expected CAPTURED");
     }
-    expect(captured.captured.outcome.OutcomeId).toBe(outcomeOnly.outcome.OutcomeId);
-    expect(captured.captured.decisionReason?.OutcomeId).toBe(captured.captured.outcome.OutcomeId);
+    expect(captured.captured.outcome.OutcomeId).toBe(
+      outcomeOnly.outcome.OutcomeId,
+    );
+    expect(captured.captured.decisionReason?.OutcomeId).toBe(
+      captured.captured.outcome.OutcomeId,
+    );
     expect(captured.captured.decisionReason?.reason).toBe("継続する理由");
-    expect(captured.captured.note?.OutcomeId).toBe(captured.captured.outcome.OutcomeId);
+    expect(captured.captured.note?.OutcomeId).toBe(
+      captured.captured.outcome.OutcomeId,
+    );
     expect(captured.captured.note?.note).toBe("継続して観察したい");
-    expect(validateMonitoringPeriodReviewDecisionReason(captured.captured.decisionReason)).toBe(true);
-    expect(validateMonitoringPeriodReviewOutcomeNote(captured.captured.note)).toBe(true);
+    expect(
+      validateMonitoringPeriodReviewDecisionReason(
+        captured.captured.decisionReason,
+      ),
+    ).toBe(true);
+    expect(validateMonitoringPeriodReviewOutcomeNote(captured.captured.note)).toBe(
+      true,
+    );
     expect(REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B.liveWriteAuthorized).toBe(false);
   });
 
@@ -221,7 +267,9 @@ describe("review-outcome-capture", () => {
     expect(result.status).toBe("CAPTURED");
     if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
     expect(result.captured.outcome.decision).toBe("CHANGE_REQUIRED");
-    expect(result.captured.decisionReason?.reason).toBe("支援方法の再検討が必要");
+    expect(result.captured.decisionReason?.reason).toBe(
+      "支援方法の再検討が必要",
+    );
     expect(result.captured.note).toBeNull();
   });
 
@@ -262,7 +310,9 @@ describe("review-outcome-capture", () => {
     expect(result.status).toBe("CAPTURED");
     if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
     expect(result.captured.outcome.sourceRecordIds).toEqual([]);
-    expect(result.captured.decisionReason?.reason).toBe("記録0件のため確認方法を見直す");
+    expect(result.captured.decisionReason?.reason).toBe(
+      "記録0件のため確認方法を見直す",
+    );
   });
 
   it("R6 does not infer CHANGE_REQUIRED from PERFORMED_WITH_ADAPTATION", () => {
