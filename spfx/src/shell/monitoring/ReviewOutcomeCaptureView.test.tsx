@@ -243,10 +243,11 @@ describe("ReviewOutcomeCaptureView", () => {
         container,
       );
     });
+    expect(container.textContent).toContain("補足メモ: snapshot A memo");
     expect(
       container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
-        ?.value,
-    ).toBe("snapshot A memo");
+        ?.disabled,
+    ).toBe(true);
 
     act(() => {
       ReactDOM.render(
