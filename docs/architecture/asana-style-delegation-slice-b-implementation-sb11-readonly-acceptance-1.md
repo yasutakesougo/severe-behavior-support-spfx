@@ -113,7 +113,7 @@ The live PR lifecycle was independently read back from GitHub during acceptance.
 ```text
 Independent Implementation Review-1 = PASS / REVIEW-CLEARED
 SB-11 READ-ONLY Acceptance           = PASS
-CI SUCCESS @ dfbf29d (run 33500028631) = RECORDED
+CI SUCCESS @ exact Ready basis 69970e4 (run 33500702066) = RECORDED
         ↓
-Human Ready GO / HOLD
+Human Ready GO / HOLD @ exact basis 69970e4
 ```

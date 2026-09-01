@@ -106,9 +106,9 @@ Test plan fixed in Scope §5.5 / §5.6.
 ```text
 Independent Implementation Review-1 = PASS
 SB-11 READ-ONLY Acceptance          = PASS
-CI SUCCESS @ dfbf29d                = RECORDED (run 33500028631)
+CI SUCCESS @ exact Ready basis 69970e4 (run 33500702066) = RECORDED
         ↓
-Human Ready GO
+Human Ready GO / HOLD @ exact basis 69970e4
         ↓
 separate Human Merge GO
 ```

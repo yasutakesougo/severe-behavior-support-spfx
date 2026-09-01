@@ -127,14 +127,15 @@ No code correction is required.
 
 ## 5. CI note
 
-Final-tip CI readback recorded at PR HEAD `dfbf29dcb33f5276cbe5bf1435d5931f6fec4cf3`:
+Final exact Ready basis fixation:
 
 ```text
+Exact Ready basis HEAD = 69970e4ea815930cc08dddf0951ce7460b115a58
+Exact Ready basis CI   = run 33500702066 SUCCESS
 docs/architecture/asana-style-delegation-slice-b-implementation-ci-readback-571.md
-run 33500028631 = SUCCESS
 ```
 
-Pre-Ready CI eligibility is satisfied. Human Ready GO remains NOT RECEIVED.
+Pre-Ready exact-tip CI eligibility is satisfied. Human Ready GO remains NOT RECEIVED.
 
 ## 6. Next
 
