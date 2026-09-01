@@ -7,6 +7,8 @@ Kind: browser smoke / rendered acceptance
 Status: PASS / VERIFIED
 Date: 2026-09-01
 Product basis HEAD: 3e4a035c3e70474e28dd26fbdfb49ab794c23090 (#558 correction)
+Smoke evidence HEAD: 1f7e2da90fc9db130e67717c3cd3c24141eb33f3 (#560)
+CI run: 33470677338 (Verify + SPFx artifact PASS)
 Harness: spfx/smoke/review-outcome-context-note-slice-b/
 presentationOnly: true
 LIVE WRITE / Deploy / SharePoint: NOT AUTHORIZED
@@ -46,6 +48,7 @@ pageerror: 0
 externalRequests: 0
 horizontalOverflow: 0
 productBasisHead: 3e4a035c3e70474e28dd26fbdfb49ab794c23090
+smokeEvidenceHead: 1f7e2da90fc9db130e67717c3cd3c24141eb33f3
 ```
 
 ## Boundary held
