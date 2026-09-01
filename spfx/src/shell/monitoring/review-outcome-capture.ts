@@ -43,8 +43,7 @@ export const REVIEW_OUTCOME_CONTEXT_NOTE_SLICE_B = {
 export const SBS_MGMT_LOOP_A = {
   id: "SBS-MGMT-LOOP-A",
   presentationOnly: true,
-  liveWriteAuthorized:
-    MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
+  liveWriteAuthorized: MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
   sharePointWriteAuthorized: false,
   planVersionMutationAuthorized: false,
   monitoringVersionAuthorized: false,
@@ -71,9 +70,7 @@ export type SyntheticCapturedReviewResult =
 const REVIEW_OUTCOME_EVIDENCE_SNAPSHOT_SEPARATOR = "\u001f";
 const REVIEW_OUTCOME_CURRENT_EPOCH_SEPARATOR = "\u001e";
 
-export function reviewOutcomeContextKey(
-  materials: HumanReviewMaterials,
-): string {
+export function reviewOutcomeContextKey(materials: HumanReviewMaterials): string {
   return [
     materials.OrganizationId,
     materials.SiteId,
@@ -85,25 +82,17 @@ export function reviewOutcomeContextKey(
   ].join("\u001f");
 }
 
-export function reviewOutcomeEvidenceSnapshot(
-  sourceRecordIds: readonly string[],
-): string {
-  return Array.from(
-    new Set(sourceRecordIds.filter((recordId) => recordId.length > 0)),
-  )
+export function reviewOutcomeEvidenceSnapshot(sourceRecordIds: readonly string[]): string {
+  return Array.from(new Set(sourceRecordIds.filter((recordId) => recordId.length > 0)))
     .sort()
     .join(REVIEW_OUTCOME_EVIDENCE_SNAPSHOT_SEPARATOR);
 }
 
-function materialSourceRecordIds(
-  materials: HumanReviewMaterials,
-): readonly string[] {
+function materialSourceRecordIds(materials: HumanReviewMaterials): readonly string[] {
   return materials.records.map((record) => record.RecordId);
 }
 
-export function reviewOutcomeCurrentEpochBindingKey(
-  materials: HumanReviewMaterials,
-): string {
+export function reviewOutcomeCurrentEpochBindingKey(materials: HumanReviewMaterials): string {
   return [
     reviewOutcomeContextKey(materials),
     reviewOutcomeEvidenceSnapshot(materialSourceRecordIds(materials)),
@@ -184,11 +173,7 @@ export function assembleSyntheticCapturedReview(
   draftNoteText: string,
   reviewedAtIso: string = new Date().toISOString(),
 ): SyntheticCapturedReviewResult {
-  const outcomeResult = assembleSyntheticReviewOutcome(
-    materials,
-    decision,
-    reviewedAtIso,
-  );
+  const outcomeResult = assembleSyntheticReviewOutcome(materials, decision, reviewedAtIso);
   if (outcomeResult.status !== "CAPTURED") {
     return { status: "INVALID" };
   }
@@ -203,10 +188,7 @@ export function assembleSyntheticCapturedReview(
   if (decision === "CHANGE_REQUIRED" && reasonResult.reason === null) {
     return { status: "INVALID" };
   }
-  if (
-    reasonResult.reason &&
-    !validateMonitoringPeriodReviewDecisionReason(reasonResult.reason)
-  ) {
+  if (reasonResult.reason && !validateMonitoringPeriodReviewDecisionReason(reasonResult.reason)) {
     return { status: "INVALID" };
   }
 
@@ -217,10 +199,7 @@ export function assembleSyntheticCapturedReview(
   if (noteResult.status === "INVALID") {
     return { status: "INVALID" };
   }
-  if (
-    noteResult.note &&
-    !validateMonitoringPeriodReviewOutcomeNote(noteResult.note)
-  ) {
+  if (noteResult.note && !validateMonitoringPeriodReviewOutcomeNote(noteResult.note)) {
     return { status: "INVALID" };
   }
 

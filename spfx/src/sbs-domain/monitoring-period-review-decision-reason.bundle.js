@@ -13,8 +13,7 @@ var __copyProps = (to, from, except, desc) => {
       if (!__hasOwnProp.call(to, key) && key !== except)
         __defProp(to, key, {
           get: () => from[key],
-          enumerable:
-            !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
         });
   }
   return to;

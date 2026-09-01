@@ -22,17 +22,11 @@ describe("MonitoringPeriodReviewDecisionReason contract", () => {
       "severe-behavior-support.monitoring-period-review.decision-reason",
     );
     assert.equal(MONITORING_PERIOD_REVIEW_DECISION_REASON_SCHEMA_VERSION, "1.0.0");
-    assert.equal(
-      MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
-      false,
-    );
+    assert.equal(MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED, false);
   });
 
   it("round-trips the narrow DTO and rejects schema drift", () => {
-    const result = normalizeMonitoringPeriodReviewDecisionReason(
-      "outcome-001",
-      "変更が必要な理由",
-    );
+    const result = normalizeMonitoringPeriodReviewDecisionReason("outcome-001", "変更が必要な理由");
     assert.equal(result.status, "VALID");
     if (result.status !== "VALID") throw new Error("expected VALID");
     const dto = toMonitoringPeriodReviewDecisionReasonDto(result.reason);
@@ -50,13 +44,8 @@ describe("MonitoringPeriodReviewDecisionReason contract", () => {
     const repoRoot = process.cwd();
     const require = createRequire(import.meta.url);
     const esbuildBin = require.resolve("esbuild/bin/esbuild");
-    const tempDir = mkdtempSync(
-      path.join(tmpdir(), "review-decision-reason-bridge-"),
-    );
-    const generatedPath = path.join(
-      tempDir,
-      "monitoring-period-review-decision-reason.bundle.js",
-    );
+    const tempDir = mkdtempSync(path.join(tmpdir(), "review-decision-reason-bridge-"));
+    const generatedPath = path.join(tempDir, "monitoring-period-review-decision-reason.bundle.js");
 
     try {
       execFileSync(
