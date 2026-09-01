@@ -258,7 +258,11 @@ try {
       !blankChange.noteInputPresent &&
       blankChange.buttonsEnabled;
     checks.push(
-      recordCheck(`${viewport.name}: R3/F2 blank CHANGE_REQUIRED blocked`, blankChangePass, blankChange),
+      recordCheck(
+        `${viewport.name}: R3/F2 blank CHANGE_REQUIRED blocked`,
+        blankChangePass,
+        blankChange,
+      ),
     );
     await saveScreenshot(page, viewport.name, "02-blank-reason-blocked");
 
@@ -285,7 +289,9 @@ try {
       mismatchB.reasonValue === "" &&
       !mismatchB.noteInputPresent &&
       mismatchB.buttonsEnabled;
-    checks.push(recordCheck(`${viewport.name}: R9 A→B mismatch undecided`, mismatchBPass, mismatchB));
+    checks.push(
+      recordCheck(`${viewport.name}: R9 A→B mismatch undecided`, mismatchBPass, mismatchB),
+    );
 
     await page.click('[data-review-outcome-action="NO_CHANGE"]');
     await page.waitForFunction(() =>
@@ -298,7 +304,9 @@ try {
       capturedB.noteReadback === null &&
       !capturedB.noteInputPresent &&
       capturedB.buttonsDisabled;
-    checks.push(recordCheck(`${viewport.name}: R1/F4 NO_CHANGE blank reason`, capturedBPass, capturedB));
+    checks.push(
+      recordCheck(`${viewport.name}: R1/F4 NO_CHANGE blank reason`, capturedBPass, capturedB),
+    );
 
     await setSnapshot(page, "A");
     const recurrenceA = await observe(page);
@@ -322,7 +330,9 @@ try {
       recapturedA.reasonReadback === "判断理由: reason renewed" &&
       recapturedA.noteReadback === null &&
       !recapturedA.text.includes("判断理由: reason A");
-    checks.push(recordCheck(`${viewport.name}: R10 recapture A isolated`, recapturedAPass, recapturedA));
+    checks.push(
+      recordCheck(`${viewport.name}: R10 recapture A isolated`, recapturedAPass, recapturedA),
+    );
 
     await setSnapshot(page, "ZERO");
     const zeroUndecided = await observe(page);
@@ -334,7 +344,9 @@ try {
       ) &&
       zeroUndecided.text.includes("見直し結果: 未判断") &&
       !zeroUndecided.noteInputPresent;
-    checks.push(recordCheck(`${viewport.name}: zero-record remains factual`, zeroFactualPass, zeroUndecided));
+    checks.push(
+      recordCheck(`${viewport.name}: zero-record remains factual`, zeroFactualPass, zeroUndecided),
+    );
     await saveScreenshot(page, viewport.name, "04-zero-record");
 
     await page.click('[data-review-outcome-action="NO_CHANGE"]');
@@ -347,7 +359,9 @@ try {
       zeroNoChange.reasonReadback === null &&
       zeroNoChange.noteReadback === null &&
       zeroNoChange.buttonsDisabled;
-    checks.push(recordCheck(`${viewport.name}: R4 zero-record NO_CHANGE`, zeroNoChangePass, zeroNoChange));
+    checks.push(
+      recordCheck(`${viewport.name}: R4 zero-record NO_CHANGE`, zeroNoChangePass, zeroNoChange),
+    );
 
     await page.goto(url, { waitUntil: "networkidle0" });
     await setSnapshot(page, "A");
@@ -360,10 +374,21 @@ try {
       uncommittedReset.noteReadback === null &&
       !uncommittedReset.noteInputPresent &&
       !uncommittedReset.text.includes("uncommitted A reason");
-    checks.push(recordCheck(`${viewport.name}: R11 uncommitted A→B reset`, uncommittedResetPass, uncommittedReset));
+    checks.push(
+      recordCheck(
+        `${viewport.name}: R11 uncommitted A→B reset`,
+        uncommittedResetPass,
+        uncommittedReset,
+      ),
+    );
 
     const browserSafety = pageErrors.length === 0 && externalRequests.length === 0;
-    checks.push(recordCheck(`${viewport.name}: browser safety`, browserSafety, { pageErrors, externalRequests }));
+    checks.push(
+      recordCheck(`${viewport.name}: browser safety`, browserSafety, {
+        pageErrors,
+        externalRequests,
+      }),
+    );
     await saveScreenshot(page, viewport.name, "05-final-b-reset");
     await page.close();
   }
