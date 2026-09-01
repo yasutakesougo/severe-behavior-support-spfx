@@ -39,9 +39,20 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
 
   it("regenerates the checked-in narrow SPFx bridge byte-for-byte", () => {
     const repoRoot = process.cwd();
-    const esbuildBin = path.join(repoRoot, "node_modules", "esbuild", "bin", "esbuild");
-    const tempDir = mkdtempSync(path.join(tmpdir(), "review-outcome-note-bridge-"));
-    const generatedPath = path.join(tempDir, "monitoring-period-review-outcome-note.bundle.js");
+    const esbuildBin = path.join(
+      repoRoot,
+      "node_modules",
+      "esbuild",
+      "bin",
+      "esbuild",
+    );
+    const tempDir = mkdtempSync(
+      path.join(tmpdir(), "review-outcome-note-bridge-"),
+    );
+    const generatedPath = path.join(
+      tempDir,
+      "monitoring-period-review-outcome-note.bundle.js",
+    );
 
     try {
       execFileSync(
@@ -60,12 +71,19 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
 
       const generated = readFileSync(generatedPath);
       const committed = readFileSync(
-        path.join(repoRoot, "spfx/src/sbs-domain/monitoring-period-review-outcome-note.bundle.js"),
+        path.join(
+          repoRoot,
+          "spfx/src/sbs-domain/monitoring-period-review-outcome-note.bundle.js",
+        ),
       );
       if (!generated.equals(committed)) {
         console.error(`GENERATED_BUNDLE_BASE64=${generated.toString("base64")}`);
       }
-      assert.deepEqual(committed, generated, "checked-in note bridge must equal canonical regeneration");
+      assert.deepEqual(
+        committed,
+        generated,
+        "checked-in note bridge must equal canonical regeneration",
+      );
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
     }
