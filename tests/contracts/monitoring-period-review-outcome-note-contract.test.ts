@@ -37,6 +37,7 @@ describe("MonitoringPeriodReviewOutcomeNote contract", () => {
     );
   });
 
+  // prettier-ignore
   it("regenerates the checked-in narrow SPFx bridge byte-for-byte", () => {
     const repoRoot = process.cwd();
     const esbuildBin = path.join(
