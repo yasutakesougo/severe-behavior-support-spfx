@@ -193,7 +193,21 @@ describe("review-outcome-capture", () => {
     expect(result.captured.note).toBeNull();
   });
 
-  it("captures an atomic outcome + reason + optional note without changing OutcomeId", () => {
+  it("F5 keeps corrected UI blank note input normalized to note = null", () => {
+    const result = assembleSyntheticCapturedReview(
+      MATERIALS,
+      "CHANGE_REQUIRED",
+      "支援方法の再検討が必要",
+      "",
+      "2026-09-01T12:00:00+09:00",
+    );
+    expect(result.status).toBe("CAPTURED");
+    if (result.status !== "CAPTURED") throw new Error("expected CAPTURED");
+    expect(result.captured.decisionReason?.reason).toBe("支援方法の再検討が必要");
+    expect(result.captured.note).toBeNull();
+  });
+
+  it("F6 preserves non-blank Note v1 normalization and OutcomeId compatibility", () => {
     const reviewedAt = "2026-09-01T12:00:00+09:00";
     const outcomeOnly = assembleSyntheticReviewOutcome(MATERIALS, "NO_CHANGE", reviewedAt);
     const captured = assembleSyntheticCapturedReview(
