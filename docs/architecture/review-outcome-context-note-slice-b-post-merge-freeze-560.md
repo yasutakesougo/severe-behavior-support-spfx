@@ -64,8 +64,11 @@ Evidence class:
   CONFIRMED — Rendered Browser Acceptance @ Product basis 3e4a035
   CONFIRMED — Post-merge smoke @ main ea84024 allPass=true
   CONFIRMED — capturedReviewMatchesMaterials on current main
+  CONFIRMED — Actual Staff Value Check PASS / HUMAN CONFIRMED
+              Q1-Q3 rendered proxy PASS
+              Q4 Staff 1「役立つ」PASS / Human confirmation received
   CONFIRMED — Human Ready / Merge GO consumed（Human message; not GitHub event alone）
-  RECORDED — Actual Staff Value rendered proxy PASS; Q4 subjective HOLD at pre-merge packet
+  HISTORICAL — pre-confirmation packet had Q4 subjective HOLD; superseded by Staff 1 response
 ```
 
 ### Lineage absorbed into main via #560
@@ -142,14 +145,15 @@ presentationOnly synthetic capture = IN（session-only）
 ## GATE（post-merge）
 
 ```text
-PR #560 Merge           = CONSUMED
-Human Ready GO          = CONSUMED
-Human Merge GO          = CONSUMED
+PR #560 Merge                    = CONSUMED
+Actual Staff Value Check         = PASS / HUMAN CONFIRMED
+Human Ready GO                   = CONSUMED
+Human Merge GO                   = CONSUMED
 Rendered Browser Acceptance @ main = PASS（post-merge smoke）
-Deploy                  = NOT AUTHORIZED
-Production Binding      = NOT AUTHORIZED
-LIVE WRITE              = NOT AUTHORIZED
-SharePoint mutation     = NOT AUTHORIZED
+Deploy                           = NOT AUTHORIZED
+Production Binding               = NOT AUTHORIZED
+LIVE WRITE                       = NOT AUTHORIZED
+SharePoint mutation              = NOT AUTHORIZED
 ```
 
 ---
