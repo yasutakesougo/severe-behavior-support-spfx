@@ -22,7 +22,8 @@
     "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries",
     "check:lifecycle-cancellation-storage-bridge": "node scripts/ci/check-lifecycle-cancellation-storage-bridge.mjs",
     "verify:ci": "npm run verify:skills && npm run verify:ui-catalog && npm run verify:ui-templates && npm run lint && npm run lint:ui-sem && npm run format:check && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:scope && npm run check:a11y && npm run check:lifecycle-cancellation-storage-bridge",
-    "handoff:auto": "node scripts/auto-handoff.mjs"
+    "handoff:auto": "node scripts/auto-handoff.mjs",
+    "gate-packet:read": "node scripts/gate-packet-read.mjs"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -45,6 +45,19 @@ Skill は正本ではない。正本は GitHub live state、Accepted / LOCKED De
 
 詳細は `evidence.md` を参照する。
 
+## Structured Gate Packet（Slice-A / Option B）
+
+Issue 単位の機械可読 index が必要な場合（Pilot 登録済み Issue のみ）:
+
+```bash
+npm run gate-packet:read -- 552
+```
+
+- READ-ONLY。mutation authority を付与しない。
+- GitHub live PR state が locked evidence doc より優先（`evidence.md` 整合）。
+- Pilot 未登録 Issue は `UNKNOWN` / STOP。Packet 編集で GO を成立させない。
+- 正本: `docs/architecture/asana-style-delegation-slice-a-definition-1.md`
+
 ## 実行手順
 
 1. GitHub live state を取得する（main SHA、Open PR、対象 Issue、CI）
