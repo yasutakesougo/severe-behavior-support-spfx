@@ -9,7 +9,7 @@ smoke evidence HEAD: 1f7e2da90fc9db130e67717c3cd3c24141eb33f3
 PR: #560 (cursor/slice-b-context-switch-smoke-e632)
 date: 2026-09-01
 presentationOnly: true
-Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
+Ready / Merge: CONSUMED; Deploy / LIVE WRITE: NOT AUTHORIZED
 ```
 
 ## 1. Gate chain status
@@ -17,9 +17,14 @@ Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 ```text
 SPFx artifact CI completion          = PASS / VERIFIED
 Rendered Browser Acceptance          = PASS / VERIFIED
-Actual Staff Value Check             = RENDERED PROXY PASS / HUMAN CONFIRMATION AWAITING
+Actual Staff Value Check             = PASS / HUMAN CONFIRMED
+                                          Q1-Q3 rendered proxy PASS
+                                          Q4 Staff 1「役立つ」PASS
 Exact evidence / HEAD fixation       = APPLIED (this document)
-Human Ready GO                       = HOLD (not eligible until Human staff value confirmed)
+Human Ready GO                       = CONSUMED
+Human Merge GO                       = CONSUMED
+PR #560                              = MERGED → main @ ea84024
+Post-merge freeze                    = docs/architecture/review-outcome-context-note-slice-b-post-merge-freeze-560.md
 ```
 
 ## 2. SPFx artifact CI completion
@@ -96,16 +101,21 @@ non-production boundary visible
 ## 5. Non-claims
 
 ```text
-Implementation evidence ≠ Human Ready GO
-Implementation evidence ≠ Merge / Deploy / LIVE WRITE
-Rendered proxy staff value ≠ Human Actual Staff Value CONFIRMED
+Implementation evidence alone ≠ Human Ready GO
+Implementation evidence alone ≠ Merge / Deploy / LIVE WRITE
+Rendered proxy alone ≠ Human Actual Staff Value CONFIRMED
+Q4 Human confirmation was received separately from Staff 1
 CI PASS ≠ authorization to merge
+Merge ≠ Deploy / LIVE WRITE authorization
 ```
 
-## 6. Next gate
+## 6. Post-merge state
 
 ```text
-Human Actual Staff Value Check (Staff 1 minimum)
-        ↓
-Human Ready GO / HOLD
+Actual Staff Value Check = PASS / HUMAN CONFIRMED
+Human Ready GO = CONSUMED
+Human Merge GO = CONSUMED
+PR #560 = MERGED / CLOSED
+Deploy / Production Binding / LIVE WRITE = NOT AUTHORIZED
+Next = post-merge freeze recording only; no automatic next slice selection
 ```
