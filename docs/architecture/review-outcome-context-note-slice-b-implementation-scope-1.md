@@ -4,24 +4,31 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: SCOPE RE-REVIEW-1 PASS / REVIEW-CLEARED / UNAUTHORIZED IMPLEMENTATION DRIFT RECONCILED
+status: SCOPE CORRECTION-2 APPLIED / AWAITING INDEPENDENT SCOPE RE-REVIEW-2
 parent definition: REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B
 parent correction: Correction-1
 parent status: HUMAN DEFINITION LOCKED
 parent durable path: docs/architecture/review-outcome-context-note-slice-b-definition-1.md
 locked definition HEAD: 29c9941d87067e38d32a9b612911e66a0504332c
-basis main: 47145948b337d7e7f9d923bbf01ec962daafef08
+basis main at Scope Correction-2: 08492b65412053c78bcd976d7dde547b632dacfe
+merged Product HEAD under review: b4bd4eb3e4b5cbfa2d3c4927b7d9a223f966c96f
+post-merge reconciliation: docs/architecture/review-outcome-context-note-slice-b-post-merge-reconciliation-1.md
 Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
 P1-1 context-switch draft carry-over: CORRECTED
 P2-1 character-count metric ambiguity: CORRECTED
-Independent Scope Re-Review-1: PASS / REVIEW-CLEARED
+Independent Scope Re-Review-1: PASS / REVIEW-CLEARED / CONSUMED
 P0=0 / P1=0 / P2=0
-exact reviewed Scope HEAD: 4044e4b0e8b3f3e41db90e9303d0eabd02886434
+exact reviewed Scope HEAD before Correction-2: 4044e4b0e8b3f3e41db90e9303d0eabd02886434
+Independent Post-Merge Implementation Review-1: CORRECTION REQUIRED / CONSUMED
+P1-1 evidence snapshot ↔ captured review binding: CORRECTED BY SCOPE CORRECTION-2
+Scope Correction-2: APPLIED
+Independent Scope Re-Review-2: REQUIRED / NOT STARTED
 Human Definition Lock GO: RECEIVED / CONSUMED
-Human Implementation Start GO: NOT RECEIVED
+Human Implementation Start GO (original Slice B): CONSUMED historically via #550
+Human Implementation Start GO (Correction-2 only): NOT RECEIVED
 prior PR comment GO (2026-08-31T22:45:40Z): INVALIDATED / NOT CONSUMED
 unauthorized implementation drift ref: cursor/drift-slice-b-unauthorized-impl-bbe0 @ 4bfed955f008c2f7ea91f145aee16aaab0726881
-Implementation: NOT AUTHORIZED
+Implementation Correction: NOT AUTHORIZED until Re-Review-2 PASS + Human GO
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED
 ```
@@ -186,6 +193,79 @@ OrganizationId + SiteId + UserId + planId + planVersion + periodStart + periodEn
 
 `MonitoringView` owns the captured pair map for the current React session.
 No localStorage, SharePoint, repository port, or durable storage.
+
+### S6.1 — Evidence snapshot binding — Scope Correction-2 / P1-1
+
+The review-context key above is **not** a complete capture-identity for current
+readback / “already captured” UI.
+
+Canonical `MonitoringPeriodReviewOutcome` retains `sourceRecordIds`, and
+`OutcomeId` mint material includes canonicalized `sourceRecordIds`.
+
+Therefore the following divergence is possible while the review-context key is
+unchanged:
+
+```text
+person / planId / planVersion / period = same
+HumanReviewMaterials.sourceRecordIds A → B
+
+reviewOutcomeContextKey = unchanged
+canonical Outcome identity  = changed
+```
+
+Required invariant:
+
+```text
+INV-SB16
+A stored SyntheticCapturedReview MUST NOT be treated as the current review
+when the current HumanReviewMaterials evidence snapshot does not match the
+captured Outcome evidence snapshot.
+```
+
+Evidence snapshot equality（deterministic）:
+
+```text
+canonicalize(ids) = unique non-empty RecordId strings, sorted ascending,
+                    joined by the same separator used by OutcomeId mint
+                    sourceRecordIds materialization
+
+currentSnapshot = canonicalize(current materials.records[*].RecordId)
+capturedSnapshot = canonicalize(captured.outcome.sourceRecordIds)
+
+currentSnapshot == capturedSnapshot  => capture may be shown as current
+currentSnapshot != capturedSnapshot  => capture is NOT current for these materials
+```
+
+Required resolve behavior when looking up `capturedReviews[contextKey]` for the
+currently displayed RESOLVED materials:
+
+```text
+1. Read stored = capturedReviews[contextKey] | null
+2. If stored is null => current capture = null（undecided）
+3. If stored exists AND evidence snapshots match => current capture = stored
+4. If stored exists AND evidence snapshots differ => current capture = null
+   - do NOT show stored decision/note as committed for current materials
+   - do NOT disable decision/note controls solely because of the mismatched store
+   - do NOT silently overwrite or delete other context keys
+   - optional: keep the mismatched map entry as non-current orphan data for the
+     session; it must not be presented as the active capture
+```
+
+This is intentionally **not** solved only by concatenating `sourceRecordIds`
+into the session map key. The binding check against current materials is
+mandatory even if an implementation also chooses a richer storage key.
+
+Focused regression required before Correction-2 implementation acceptance:
+
+```text
+same OrganizationId/SiteId/UserId/planId/planVersion/period
+capture CHANGE_REQUIRED + optional note under sourceRecordIds = [A]
+rerender materials with sourceRecordIds = [A,B]（or [B]）
+=> UI is undecided again for current materials
+=> prior note/decision are not shown as current committed readback
+=> new capture is allowed
+=> newly captured Outcome.sourceRecordIds reflect the new materials snapshot
+```
 
 ### S7 — Atomic capture algorithm
 
@@ -483,6 +563,9 @@ INV-SB12 SharePoint / LIVE WRITE / Deploy are absent.
 INV-SB13 AI cannot author or infer note content.
 INV-SB14 Generic comments/timeline/history are not introduced.
 INV-SB15 Slice A materials/identity/role cues remain intact.
+INV-SB16 Current HumanReviewMaterials evidence snapshot must match captured
+         Outcome.sourceRecordIds before a stored capture is treated as current.
+         Mismatch => do not reuse old capture as current review.
 ```
 
 ## 6. Explicit OUT
@@ -540,28 +623,40 @@ SAC-B9  Post-success note/decision mutation remains forbidden.
 SAC-B10 Rendered acceptance + Actual Staff gate remain downstream prerequisites.
 SAC-B11 MonitoringVersion / N+1 / SharePoint / LIVE WRITE remain OUT.
 SAC-B12 Human Implementation Start is still a separate gate.
+SAC-B13 Evidence-snapshot binding（INV-SB16 / S6.1）is fixed; mismatched
+        sourceRecordIds cannot present a prior capture as current.
 ```
 
 ## 9. Stop conditions
 
 ```text
-Independent Scope Re-Review required before Human Implementation Start GO.
-If re-review finds P0/P1 => further Scope Correction + exact re-review.
+Independent Scope Re-Review-2 required before Human Implementation Start GO
+for Correction-2.
+If Re-Review-2 finds P0/P1 => further Scope Correction + exact re-review.
 If representation Family B cannot be implemented without changing Outcome identity => HOLD / Definition re-open candidate.
 If additional Product/domain paths are required => HOLD / Scope Correction.
 If locked Definition changes => HOLD / re-scope.
+Do not start Rendered Browser Acceptance while P1-1 remains open.
+Do not treat #550 merge as Deploy / LIVE WRITE authority.
 ```
 
 ## 10. Next gate
 
 ```text
-Scope Correction-1 = APPLIED
-Independent Scope Re-Review-1 = PASS / REVIEW-CLEARED
-Exact reviewed Scope HEAD = 4044e4b0e8b3f3e41db90e9303d0eabd02886434
-Unauthorized implementation drift = RECONCILED (branch reset to exact reviewed Scope HEAD)
+Scope Correction-1 = APPLIED / CONSUMED
+Independent Scope Re-Review-1 = PASS / REVIEW-CLEARED / CONSUMED
+Exact reviewed Scope HEAD before Correction-2
+  = 4044e4b0e8b3f3e41db90e9303d0eabd02886434
+Unauthorized implementation drift = RECONCILED historically
 Prior PR comment Human Implementation Start GO (2026-08-31T22:45:40Z) = INVALIDATED
-Drift preservation ref = cursor/drift-slice-b-unauthorized-impl-bbe0 @ 4bfed955f008c2f7ea91f145aee16aaab0726881
-Human Implementation Start GO / HOLD = AWAITING SEPARATE NEW GO
-Implementation = NOT AUTHORIZED until separate new Human Implementation Start GO
+#550 merged Product HEAD = b4bd4eb3e4b5cbfa2d3c4927b7d9a223f966c96f
+Independent Post-Merge Implementation Review-1 = CORRECTION REQUIRED / CONSUMED
+Scope Correction-2 = APPLIED
+Independent Scope Re-Review-2 = REQUIRED / NOT STARTED
+Human Implementation Start GO（Correction-2 only）= AWAITING
+  Re-Review-2 PASS + separate Human GO
+Implementation Correction = NOT AUTHORIZED yet
+Rendered Browser Acceptance = HOLD until Correction-2 lands
+Actual Staff Value Check = HOLD
 Ready / Merge / Deploy / Production Binding / LIVE WRITE = NOT AUTHORIZED
 ```
