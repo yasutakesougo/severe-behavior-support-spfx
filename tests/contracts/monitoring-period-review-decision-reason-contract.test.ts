@@ -5,6 +5,7 @@ import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
+import { format } from "prettier";
 import {
   MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
   MONITORING_PERIOD_REVIEW_DECISION_REASON_SCHEMA_ID,
@@ -21,23 +22,31 @@ describe("MonitoringPeriodReviewDecisionReason contract", () => {
       "severe-behavior-support.monitoring-period-review.decision-reason",
     );
     assert.equal(MONITORING_PERIOD_REVIEW_DECISION_REASON_SCHEMA_VERSION, "1.0.0");
-    assert.equal(MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED, false);
+    assert.equal(
+      MONITORING_PERIOD_REVIEW_DECISION_REASON_LIVE_WRITE_AUTHORIZED,
+      false,
+    );
   });
 
   it("round-trips the narrow DTO and rejects schema drift", () => {
-    const result = normalizeMonitoringPeriodReviewDecisionReason("outcome-001", "変更が必要な理由");
+    const result = normalizeMonitoringPeriodReviewDecisionReason(
+      "outcome-001",
+      "変更が必要な理由",
+    );
     assert.equal(result.status, "VALID");
     if (result.status !== "VALID") throw new Error("expected VALID");
     const dto = toMonitoringPeriodReviewDecisionReasonDto(result.reason);
     assert.equal(validateMonitoringPeriodReviewDecisionReasonDto(dto), true);
     assert.equal(
-      validateMonitoringPeriodReviewDecisionReasonDto({ ...dto, dtoVersion: "2.0.0" }),
+      validateMonitoringPeriodReviewDecisionReasonDto({
+        ...dto,
+        dtoVersion: "2.0.0",
+      }),
       false,
     );
   });
 
-  // prettier-ignore
-  it("regenerates the checked-in narrow SPFx bridge byte-for-byte", () => {
+  it("regenerates the checked-in narrow SPFx bridge byte-for-byte", async () => {
     const repoRoot = process.cwd();
     const require = createRequire(import.meta.url);
     const esbuildBin = require.resolve("esbuild/bin/esbuild");
@@ -63,20 +72,21 @@ describe("MonitoringPeriodReviewDecisionReason contract", () => {
         { cwd: repoRoot, stdio: "pipe" },
       );
 
-      const generated = readFileSync(generatedPath);
+      const generated = Buffer.from(
+        await format(readFileSync(generatedPath, "utf8"), {
+          parser: "babel",
+        }),
+      );
       const committed = readFileSync(
         path.join(
           repoRoot,
           "spfx/src/sbs-domain/monitoring-period-review-decision-reason.bundle.js",
         ),
       );
-      if (!generated.equals(committed)) {
-        console.error(`GENERATED_BUNDLE_BASE64=${generated.toString("base64")}`);
-      }
       assert.deepEqual(
         committed,
         generated,
-        "checked-in reason bridge must equal canonical regeneration",
+        "checked-in reason bridge must equal canonical esbuild + Prettier regeneration",
       );
     } finally {
       rmSync(tempDir, { recursive: true, force: true });
