@@ -49,6 +49,9 @@ export type SyntheticCapturedReviewResult =
   | Readonly<{ status: "DUPLICATE"; captured: SyntheticCapturedReview }>
   | Readonly<{ status: "INVALID" }>;
 
+const REVIEW_OUTCOME_EVIDENCE_SNAPSHOT_SEPARATOR = "\u001f";
+const REVIEW_OUTCOME_CURRENT_EPOCH_SEPARATOR = "\u001e";
+
 export function reviewOutcomeContextKey(materials: HumanReviewMaterials): string {
   return [
     materials.OrganizationId,
@@ -59,6 +62,41 @@ export function reviewOutcomeContextKey(materials: HumanReviewMaterials): string
     materials.periodStart,
     materials.periodEnd,
   ].join("\u001f");
+}
+
+export function reviewOutcomeEvidenceSnapshot(sourceRecordIds: readonly string[]): string {
+  return [...new Set(sourceRecordIds.filter((recordId) => recordId.length > 0))]
+    .sort()
+    .join(REVIEW_OUTCOME_EVIDENCE_SNAPSHOT_SEPARATOR);
+}
+
+function materialSourceRecordIds(materials: HumanReviewMaterials): readonly string[] {
+  return materials.records.map((record) => record.RecordId);
+}
+
+export function reviewOutcomeCurrentEpochBindingKey(materials: HumanReviewMaterials): string {
+  return [
+    reviewOutcomeContextKey(materials),
+    reviewOutcomeEvidenceSnapshot(materialSourceRecordIds(materials)),
+  ].join(REVIEW_OUTCOME_CURRENT_EPOCH_SEPARATOR);
+}
+
+export function capturedReviewMatchesMaterials(
+  captured: SyntheticCapturedReview,
+  materials: HumanReviewMaterials,
+): boolean {
+  const outcome = captured.outcome;
+  return (
+    outcome.OrganizationId === materials.OrganizationId &&
+    outcome.SiteId === materials.SiteId &&
+    outcome.UserId === materials.UserId &&
+    outcome.planId === materials.planId &&
+    outcome.planVersion === materials.planVersion &&
+    outcome.periodStart === materials.periodStart &&
+    outcome.periodEnd === materials.periodEnd &&
+    reviewOutcomeEvidenceSnapshot(outcome.sourceRecordIds) ===
+      reviewOutcomeEvidenceSnapshot(materialSourceRecordIds(materials))
+  );
 }
 
 export function assembleSyntheticReviewOutcome(
