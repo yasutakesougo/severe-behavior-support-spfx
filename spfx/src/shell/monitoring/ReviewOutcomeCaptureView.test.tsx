@@ -29,6 +29,23 @@ const MATERIALS: HumanReviewMaterials = {
   humanInterpretationRequired: true,
 };
 
+function materialsWithRecord(recordId: string): HumanReviewMaterials {
+  return {
+    ...MATERIALS,
+    recordCount: 1,
+    records: [
+      {
+        RecordId: recordId,
+        ProcedureId: "procedure-1",
+        ProcedureVersion: "v1",
+        result: "PERFORMED_AS_PLANNED",
+        performedAt: "2026-08-10T10:00:00+09:00",
+        recordedAt: "2026-08-10T10:05:00+09:00",
+      },
+    ],
+  };
+}
+
 describe("ReviewOutcomeCaptureView", () => {
   it("renders an optional note with the exact helper and explicit non-production boundary", () => {
     const html = renderToStaticMarkup(
@@ -124,6 +141,135 @@ describe("ReviewOutcomeCaptureView", () => {
     act(() => {
       ReactDOM.unmountComponentAtNode(container);
     });
+    container.remove();
+  });
+
+  it("R4a resets an uncaptured memo when evidence changes under the same base context", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const materialsA = materialsWithRecord("record-a");
+    const materialsB = materialsWithRecord("record-b");
+    const onCapture = jest.fn(() => ({ status: "INVALID" as const }));
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={materialsA}
+          capturedReview={null}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+    const textarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-note-input="true"]',
+    );
+    if (!textarea) throw new Error("expected note textarea");
+    act(() => {
+      textarea.value = "snapshot A memo";
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
+        ?.click();
+    });
+    expect(container.textContent).toContain("見直し結果を安全に記録できません");
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={materialsB}
+          capturedReview={null}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+
+    expect(
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+        ?.value,
+    ).toBe("");
+    expect(container.textContent).not.toContain("見直し結果を安全に記録できません");
+
+    act(() => ReactDOM.unmountComponentAtNode(container));
+    container.remove();
+  });
+
+  it("R4b clears a captured epoch input buffer before the next evidence snapshot", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    const materialsA = materialsWithRecord("record-a");
+    const materialsB = materialsWithRecord("record-b");
+    const capturedA = assembleSyntheticCapturedReview(
+      materialsA,
+      "CHANGE_REQUIRED",
+      "snapshot A memo",
+      "2026-09-01T12:00:00+09:00",
+    );
+    if (capturedA.status !== "CAPTURED") throw new Error("expected captured A");
+    const onCapture = jest.fn(() => capturedA);
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={materialsA}
+          capturedReview={null}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+    const textarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-note-input="true"]',
+    );
+    if (!textarea) throw new Error("expected note textarea");
+    act(() => {
+      textarea.value = "snapshot A memo";
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-review-outcome-action="CHANGE_REQUIRED"]')
+        ?.click();
+    });
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={materialsA}
+          capturedReview={capturedA.captured}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+    expect(
+      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-note-input="true"]')
+        ?.value,
+    ).toBe("snapshot A memo");
+
+    act(() => {
+      ReactDOM.render(
+        <ReviewOutcomeCaptureView
+          materials={materialsB}
+          capturedReview={null}
+          onCapture={onCapture}
+        />,
+        container,
+      );
+    });
+
+    const resetTextarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-review-outcome-note-input="true"]',
+    );
+    expect(resetTextarea?.value).toBe("");
+    expect(resetTextarea?.disabled).toBe(false);
+    expect(container.textContent).toContain("見直し結果: 未判断");
+    expect(container.textContent).not.toContain("補足メモ: snapshot A memo");
+
+    act(() => ReactDOM.unmountComponentAtNode(container));
     container.remove();
   });
 });
