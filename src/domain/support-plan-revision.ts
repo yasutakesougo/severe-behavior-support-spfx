@@ -1,11 +1,15 @@
-import type { MonitoringPeriodReviewDecisionReason } from "./monitoring-period-review-decision-reason";
+import type {
+  MonitoringPeriodReviewDecisionReason,
+} from "./monitoring-period-review-decision-reason";
 import { validateMonitoringPeriodReviewDecisionReason } from "./monitoring-period-review-decision-reason";
 import type { MonitoringPeriodReviewOutcome } from "./monitoring-period-review-outcome";
 import { validateMonitoringPeriodReviewOutcome } from "./monitoring-period-review-outcome";
 import { sha256Hex } from "./sha256";
 import type { SupportPlan, SupportPlanVersion } from "./support-plan";
 import { validateSupportPlan, validateSupportPlanVersion } from "./support-plan";
-import type { SupportPlanVersionMonitoringPeriodReviewBinding } from "./support-plan-version-monitoring-period-review-binding";
+import type {
+  SupportPlanVersionMonitoringPeriodReviewBinding,
+} from "./support-plan-version-monitoring-period-review-binding";
 import { validateSupportPlanVersionMonitoringPeriodReviewBinding } from "./support-plan-version-monitoring-period-review-binding";
 import { isNonEmptyString, isRecord, isValidIsoDateTime } from "./validation";
 
@@ -106,7 +110,9 @@ export function mintRevisionIntentId(
     String(input.sourcePlanVersion),
     input.sourceReviewOutcomeId,
   ].join(REVISION_INTENT_ID_SEPARATOR);
-  return sha256Hex(`${REVISION_INTENT_ID_NAMESPACE}${REVISION_INTENT_ID_SEPARATOR}${material}`);
+  return sha256Hex(
+    `${REVISION_INTENT_ID_NAMESPACE}${REVISION_INTENT_ID_SEPARATOR}${material}`,
+  );
 }
 
 export function validateRevisionIntent(value: unknown): value is RevisionIntent {
@@ -179,14 +185,16 @@ export function revisionDraftMatchesIntent(
   );
 }
 
-export function createRevisionIntent(input: Readonly<{
-  currentPlan: SupportPlan;
-  sourceVersion: SupportPlanVersion;
-  sourceOutcome: MonitoringPeriodReviewOutcome;
-  sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
-  createdBy: string;
-  createdAt: string;
-}>): CreateRevisionIntentResult {
+export function createRevisionIntent(
+  input: Readonly<{
+    currentPlan: SupportPlan;
+    sourceVersion: SupportPlanVersion;
+    sourceOutcome: MonitoringPeriodReviewOutcome;
+    sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
+    createdBy: string;
+    createdAt: string;
+  }>,
+): CreateRevisionIntentResult {
   const { currentPlan, sourceVersion, sourceOutcome, sourceDecisionReason } = input;
   if (
     !validateSupportPlan(currentPlan) ||
@@ -198,7 +206,10 @@ export function createRevisionIntent(input: Readonly<{
   ) {
     return { status: "INVALID", reason: "MALFORMED_INPUT" };
   }
-  if (!samePlanContext(currentPlan, sourceVersion) || !outcomeMatchesSource(sourceOutcome, sourceVersion)) {
+  if (
+    !samePlanContext(currentPlan, sourceVersion) ||
+    !outcomeMatchesSource(sourceOutcome, sourceVersion)
+  ) {
     return { status: "INVALID", reason: "CONTEXT_MISMATCH" };
   }
   if (currentPlan.currentVersion !== sourceVersion.version) {
@@ -234,15 +245,17 @@ export function createRevisionIntent(input: Readonly<{
     : { status: "INVALID", reason: "INVALID_REVISION_INTENT" };
 }
 
-export function consumeRevisionIntentToDraft(input: Readonly<{
-  intent: RevisionIntent;
-  sourceVersion: SupportPlanVersion;
-  sourceOutcome: MonitoringPeriodReviewOutcome;
-  existingVersions: readonly SupportPlanVersion[];
-  existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
-  draftCreatedBy: string;
-  draftCreatedAt: string;
-}>): ConsumeRevisionIntentToDraftResult {
+export function consumeRevisionIntentToDraft(
+  input: Readonly<{
+    intent: RevisionIntent;
+    sourceVersion: SupportPlanVersion;
+    sourceOutcome: MonitoringPeriodReviewOutcome;
+    existingVersions: readonly SupportPlanVersion[];
+    existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
+    draftCreatedBy: string;
+    draftCreatedAt: string;
+  }>,
+): ConsumeRevisionIntentToDraftResult {
   const { intent, sourceVersion, sourceOutcome } = input;
   if (
     !validateRevisionIntent(intent) ||
@@ -335,17 +348,19 @@ export function consumeRevisionIntentToDraft(input: Readonly<{
   return { status: "CREATED", intent: consumedIntent, draft };
 }
 
-export function startSupportPlanRevision(input: Readonly<{
-  currentPlan: SupportPlan;
-  sourceVersion: SupportPlanVersion;
-  sourceOutcome: MonitoringPeriodReviewOutcome;
-  sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
-  existingVersions: readonly SupportPlanVersion[];
-  existingIntents: readonly RevisionIntent[];
-  existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
-  actor: string;
-  actionAt: string;
-}>): StartSupportPlanRevisionResult {
+export function startSupportPlanRevision(
+  input: Readonly<{
+    currentPlan: SupportPlan;
+    sourceVersion: SupportPlanVersion;
+    sourceOutcome: MonitoringPeriodReviewOutcome;
+    sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
+    existingVersions: readonly SupportPlanVersion[];
+    existingIntents: readonly RevisionIntent[];
+    existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
+    actor: string;
+    actionAt: string;
+  }>,
+): StartSupportPlanRevisionResult {
   const created = createRevisionIntent({
     currentPlan: input.currentPlan,
     sourceVersion: input.sourceVersion,
@@ -360,7 +375,8 @@ export function startSupportPlanRevision(input: Readonly<{
 
   const sameIdentityIntents = input.existingIntents.filter(
     (intent) =>
-      validateRevisionIntent(intent) && intent.RevisionIntentId === created.intent.RevisionIntentId,
+      validateRevisionIntent(intent) &&
+      intent.RevisionIntentId === created.intent.RevisionIntentId,
   );
   if (sameIdentityIntents.length > 1) {
     return { status: "HOLD", reason: "DUPLICATE_INTENT_STATE" };
@@ -376,7 +392,11 @@ export function startSupportPlanRevision(input: Readonly<{
       matchingDrafts.length === 1 &&
       revisionDraftMatchesIntent(matchingDrafts[0], existingIntent)
     ) {
-      return { status: "ALREADY_STARTED", intent: existingIntent, draft: matchingDrafts[0] };
+      return {
+        status: "ALREADY_STARTED",
+        intent: existingIntent,
+        draft: matchingDrafts[0],
+      };
     }
     if (existingIntent.status !== "OPEN") {
       return { status: "HOLD", reason: "INCONSISTENT_EXISTING_REVISION_STATE" };
@@ -391,7 +411,11 @@ export function startSupportPlanRevision(input: Readonly<{
       draftCreatedAt: input.actionAt,
     });
     if (consumedExisting.status === "CREATED") {
-      return { status: "STARTED", intent: consumedExisting.intent, draft: consumedExisting.draft };
+      return {
+        status: "STARTED",
+        intent: consumedExisting.intent,
+        draft: consumedExisting.draft,
+      };
     }
     return consumedExisting.status === "HOLD"
       ? { status: "HOLD", reason: consumedExisting.reason }
