@@ -27,4 +27,3 @@ spfx/src/sbs-domain/monitoring-period-review-decision-reason.bundle.js
 spfx/smoke/**/smoke-bundle.js
 spfx/smoke/**/smoke-production.css
 spfx/smoke/**/smoke-report.json
-src/domain/support-plan-revision.ts
