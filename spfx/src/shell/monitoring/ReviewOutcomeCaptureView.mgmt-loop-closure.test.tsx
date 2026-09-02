@@ -36,7 +36,7 @@ const MATERIALS: HumanReviewMaterials = {
 };
 
 describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
-  it("separates the CHANGE_REQUIRED next step from evidence metadata", () => {
+  it("keeps CHANGE_REQUIRED review inside monitoring when possible without forcing a separate review", () => {
     const result = assembleSyntheticCapturedReview(
       MATERIALS,
       "CHANGE_REQUIRED",
@@ -58,8 +58,11 @@ describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
     expect(html).toContain('data-current-review-epoch-bound="true"');
     expect(html).toContain('data-next-support-step="true"');
     expect(html).toContain("次に行うこと");
-    expect(html).toContain("次回の支援検討");
-    expect(html).toContain("判断理由と見直し資料を確認します。");
+    expect(html).toContain("支援内容を見直す");
+    expect(html).toContain(
+      "今回「変更が必要」と判断した理由と見直し資料を確認し、このモニタリングで具体的な変更内容まで検討します。決めきれない場合は、追加の支援検討につなげます。",
+    );
+    expect(html).not.toContain("次回の支援検討");
     expect(html).toContain("計画はこの画面では変更されません。");
     expect(html).toContain("根拠: この見直し資料の記録 1件");
     expect(html).toContain("判断理由: 支援方法の再検討が必要");
