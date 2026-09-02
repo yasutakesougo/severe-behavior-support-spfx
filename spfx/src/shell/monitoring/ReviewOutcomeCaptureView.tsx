@@ -29,6 +29,8 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
   const [error, setError] = React.useState<string | null>(null);
   const contextKey = reviewOutcomeContextKey(materials);
   const currentEpochBindingKey = reviewOutcomeCurrentEpochBindingKey(materials);
+  const periodStartLabel = materials.periodStart.slice(0, 10);
+  const periodEndLabel = materials.periodEnd.slice(0, 10);
 
   React.useEffect(() => {
     setDraftDecisionReason("");
@@ -91,7 +93,7 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
               className={`${styles.meta} ${styles.nextStepEvidence}`}
               data-next-support-evidence-summary="true"
             >
-              根拠 {materials.recordCount}件 · 計画版 {materials.planVersion} · 対象期間 {materials.periodStart.slice(0, 10)}〜{materials.periodEnd.slice(0, 10)}
+              根拠 {materials.recordCount}件 · 計画版 {materials.planVersion} · 対象期間 {periodStartLabel}〜{periodEndLabel}
             </p>
           </div>
           <p className={styles.boundary}>{REVIEW_OUTCOME_CAPTURE_COPY.nonProduction}</p>
