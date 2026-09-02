@@ -159,10 +159,8 @@ describe("MonitoringView", () => {
     expect(container.textContent).toContain("デモ上の見直し結果: 変更なし");
     expect(container.textContent).not.toContain("補足メモ:");
     expect(container.textContent).not.toContain("判断理由:");
-    expect(
-      container.querySelector<HTMLButtonElement>('[data-review-outcome-action="NO_CHANGE"]')
-        ?.disabled,
-    ).toBe(true);
+    expect(container.querySelector('[data-review-outcome-action="NO_CHANGE"]')).toBeNull();
+    expect(container.querySelector('[data-review-outcome-action="CHANGE_REQUIRED"]')).toBeNull();
 
     act(() => renderMonitoring(container, modelA));
     expect(container.textContent).toContain("見直し結果: 未判断");
