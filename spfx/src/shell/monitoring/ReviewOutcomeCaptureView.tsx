@@ -29,7 +29,6 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
   const [error, setError] = React.useState<string | null>(null);
   const contextKey = reviewOutcomeContextKey(materials);
   const currentEpochBindingKey = reviewOutcomeCurrentEpochBindingKey(materials);
-  const disabled = capturedReview !== null;
 
   React.useEffect(() => {
     setDraftDecisionReason("");
@@ -66,9 +65,6 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
       {capturedReview ? (
         <div data-review-outcome-readback="true">
           <p className={styles.status}>{labelForReviewDecision(capturedReview.outcome.decision)}</p>
-          {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? (
-            <p className={styles.pending}>{REVIEW_OUTCOME_CAPTURE_COPY.revisionPending}</p>
-          ) : null}
           {capturedReview.decisionReason ? (
             <p className={styles.reasonReadback} data-review-outcome-reason-readback="true">
               判断理由: {capturedReview.decisionReason.reason}
@@ -81,79 +77,71 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
           ) : null}
           <div data-next-support-summary="true" data-current-review-epoch-bound="true">
             <div className={styles.nextStep} data-next-support-step="true">
-              <p className={styles.nextStepLabel}>次に行うこと</p>
-              <p className={styles.nextStepHeading}>
+              <p className={styles.nextStepLabel}>次にすること</p>
+              <p className={styles.nextStepHeading} data-next-support-cue="true">
                 {capturedReview.outcome.decision === "CHANGE_REQUIRED"
                   ? "支援内容を見直す"
                   : "次回のモニタリングへ"}
               </p>
-              <p className={styles.nextStepCopy} data-next-support-cue="true">
-                {capturedReview.outcome.decision === "CHANGE_REQUIRED"
-                  ? "今回「変更が必要」と判断した理由と見直し資料を確認し、このモニタリングで具体的な変更内容まで検討します。決めきれない場合は、追加の支援検討につなげます。"
-                  : "今回の見直し資料と支援記録を、次回のモニタリングでも確認します。"}
-              </p>
               {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? (
-                <p className={styles.nextStepBoundary}>計画はこの画面では変更されません。</p>
+                <p className={styles.nextStepCopy}>この場で決められなければ、追加で検討します。</p>
               ) : null}
             </div>
             <p
               className={`${styles.meta} ${styles.nextStepEvidence}`}
               data-next-support-evidence-summary="true"
             >
-              根拠: この見直し資料の記録 {materials.recordCount}件
+              根拠 {materials.recordCount}件 · 計画版 {materials.planVersion} · 対象期間 {materials.periodStart.slice(0, 10)}〜{materials.periodEnd.slice(0, 10)}
             </p>
           </div>
           <p className={styles.boundary}>{REVIEW_OUTCOME_CAPTURE_COPY.nonProduction}</p>
-          <p className={styles.meta}>
-            計画版 {materials.planVersion} · 対象期間 {materials.periodStart}〜{materials.periodEnd}
-          </p>
         </div>
       ) : (
-        <p className={styles.status} data-review-outcome-undecided="true">
-          {REVIEW_OUTCOME_CAPTURE_COPY.undecided}
-        </p>
+        <>
+          <p className={styles.status} data-review-outcome-undecided="true">
+            {REVIEW_OUTCOME_CAPTURE_COPY.undecided}
+          </p>
+
+          <div className={styles.reasonField}>
+            <label className={styles.reasonLabel} htmlFor={`review-outcome-reason-${contextKey}`}>
+              {REVIEW_OUTCOME_CAPTURE_COPY.reasonLabel}
+            </label>
+            <p className={styles.reasonHelper} id={`review-outcome-reason-help-${contextKey}`}>
+              {REVIEW_OUTCOME_CAPTURE_COPY.reasonHelper}
+            </p>
+            <textarea
+              id={`review-outcome-reason-${contextKey}`}
+              className={styles.reasonTextarea}
+              value={draftDecisionReason}
+              onChange={(event) => setDraftDecisionReason(event.currentTarget.value)}
+              aria-describedby={`review-outcome-reason-help-${contextKey}`}
+              data-review-outcome-reason-input="true"
+            />
+          </div>
+
+          <div className={styles.actions} role="group" aria-label="見直し結果を選択">
+            <button
+              type="button"
+              className={`${styles.action} ${styles.actionNoChange}`}
+              onClick={() => capture("NO_CHANGE")}
+              data-review-outcome-action="NO_CHANGE"
+            >
+              {REVIEW_OUTCOME_CAPTURE_COPY.actionNoChange}
+            </button>
+            <button
+              type="button"
+              className={`${styles.action} ${styles.actionChangeRequired}`}
+              onClick={() => capture("CHANGE_REQUIRED")}
+              data-review-outcome-action="CHANGE_REQUIRED"
+            >
+              {REVIEW_OUTCOME_CAPTURE_COPY.actionChangeRequired}
+            </button>
+          </div>
+
+          <p className={styles.boundary}>{REVIEW_OUTCOME_CAPTURE_COPY.nonProduction}</p>
+        </>
       )}
 
-      <div className={styles.reasonField}>
-        <label className={styles.reasonLabel} htmlFor={`review-outcome-reason-${contextKey}`}>
-          {REVIEW_OUTCOME_CAPTURE_COPY.reasonLabel}
-        </label>
-        <p className={styles.reasonHelper} id={`review-outcome-reason-help-${contextKey}`}>
-          {REVIEW_OUTCOME_CAPTURE_COPY.reasonHelper}
-        </p>
-        <textarea
-          id={`review-outcome-reason-${contextKey}`}
-          className={styles.reasonTextarea}
-          value={draftDecisionReason}
-          onChange={(event) => setDraftDecisionReason(event.currentTarget.value)}
-          disabled={disabled}
-          aria-describedby={`review-outcome-reason-help-${contextKey}`}
-          data-review-outcome-reason-input="true"
-        />
-      </div>
-
-      <div className={styles.actions} role="group" aria-label="見直し結果を選択">
-        <button
-          type="button"
-          className={`${styles.action} ${styles.actionNoChange}`}
-          disabled={disabled}
-          onClick={() => capture("NO_CHANGE")}
-          data-review-outcome-action="NO_CHANGE"
-        >
-          {REVIEW_OUTCOME_CAPTURE_COPY.actionNoChange}
-        </button>
-        <button
-          type="button"
-          className={`${styles.action} ${styles.actionChangeRequired}`}
-          disabled={disabled}
-          onClick={() => capture("CHANGE_REQUIRED")}
-          data-review-outcome-action="CHANGE_REQUIRED"
-        >
-          {REVIEW_OUTCOME_CAPTURE_COPY.actionChangeRequired}
-        </button>
-      </div>
-
-      <p className={styles.boundary}>{REVIEW_OUTCOME_CAPTURE_COPY.nonProduction}</p>
       {error ? (
         <p className={styles.error} role="alert">
           {error}
