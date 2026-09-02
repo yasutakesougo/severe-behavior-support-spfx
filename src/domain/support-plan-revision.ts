@@ -185,16 +185,14 @@ export function revisionDraftMatchesIntent(
   );
 }
 
-export function createRevisionIntent(
-  input: Readonly<{
-    currentPlan: SupportPlan;
-    sourceVersion: SupportPlanVersion;
-    sourceOutcome: MonitoringPeriodReviewOutcome;
-    sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
-    createdBy: string;
-    createdAt: string;
-  }>,
-): CreateRevisionIntentResult {
+export function createRevisionIntent(input: Readonly<{
+  currentPlan: SupportPlan;
+  sourceVersion: SupportPlanVersion;
+  sourceOutcome: MonitoringPeriodReviewOutcome;
+  sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
+  createdBy: string;
+  createdAt: string;
+}>): CreateRevisionIntentResult {
   const { currentPlan, sourceVersion, sourceOutcome, sourceDecisionReason } = input;
   if (
     !validateSupportPlan(currentPlan) ||
@@ -245,17 +243,15 @@ export function createRevisionIntent(
     : { status: "INVALID", reason: "INVALID_REVISION_INTENT" };
 }
 
-export function consumeRevisionIntentToDraft(
-  input: Readonly<{
-    intent: RevisionIntent;
-    sourceVersion: SupportPlanVersion;
-    sourceOutcome: MonitoringPeriodReviewOutcome;
-    existingVersions: readonly SupportPlanVersion[];
-    existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
-    draftCreatedBy: string;
-    draftCreatedAt: string;
-  }>,
-): ConsumeRevisionIntentToDraftResult {
+export function consumeRevisionIntentToDraft(input: Readonly<{
+  intent: RevisionIntent;
+  sourceVersion: SupportPlanVersion;
+  sourceOutcome: MonitoringPeriodReviewOutcome;
+  existingVersions: readonly SupportPlanVersion[];
+  existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
+  draftCreatedBy: string;
+  draftCreatedAt: string;
+}>): ConsumeRevisionIntentToDraftResult {
   const { intent, sourceVersion, sourceOutcome } = input;
   if (
     !validateRevisionIntent(intent) ||
@@ -348,19 +344,17 @@ export function consumeRevisionIntentToDraft(
   return { status: "CREATED", intent: consumedIntent, draft };
 }
 
-export function startSupportPlanRevision(
-  input: Readonly<{
-    currentPlan: SupportPlan;
-    sourceVersion: SupportPlanVersion;
-    sourceOutcome: MonitoringPeriodReviewOutcome;
-    sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
-    existingVersions: readonly SupportPlanVersion[];
-    existingIntents: readonly RevisionIntent[];
-    existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
-    actor: string;
-    actionAt: string;
-  }>,
-): StartSupportPlanRevisionResult {
+export function startSupportPlanRevision(input: Readonly<{
+  currentPlan: SupportPlan;
+  sourceVersion: SupportPlanVersion;
+  sourceOutcome: MonitoringPeriodReviewOutcome;
+  sourceDecisionReason: MonitoringPeriodReviewDecisionReason;
+  existingVersions: readonly SupportPlanVersion[];
+  existingIntents: readonly RevisionIntent[];
+  existingDrafts: readonly SupportPlanRevisionDraftCandidate[];
+  actor: string;
+  actionAt: string;
+}>): StartSupportPlanRevisionResult {
   const created = createRevisionIntent({
     currentPlan: input.currentPlan,
     sourceVersion: input.sourceVersion,
