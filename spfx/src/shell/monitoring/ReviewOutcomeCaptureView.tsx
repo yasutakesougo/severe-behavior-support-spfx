@@ -84,12 +84,12 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
               <p className={styles.nextStepLabel}>次に行うこと</p>
               <p className={styles.nextStepHeading}>
                 {capturedReview.outcome.decision === "CHANGE_REQUIRED"
-                  ? "次回の支援検討"
+                  ? "支援内容を見直す"
                   : "次回のモニタリングへ"}
               </p>
               <p className={styles.nextStepCopy} data-next-support-cue="true">
                 {capturedReview.outcome.decision === "CHANGE_REQUIRED"
-                  ? "判断理由と見直し資料を確認します。"
+                  ? "今回「変更が必要」と判断した理由と見直し資料を確認し、このモニタリングで具体的な変更内容まで検討します。決めきれない場合は、追加の支援検討につなげます。"
                   : "今回の見直し資料と支援記録を、次回のモニタリングでも確認します。"}
               </p>
               {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? (
