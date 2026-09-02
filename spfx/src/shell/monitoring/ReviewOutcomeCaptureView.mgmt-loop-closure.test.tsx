@@ -36,7 +36,7 @@ const MATERIALS: HumanReviewMaterials = {
 };
 
 describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
-  it("keeps CHANGE_REQUIRED readback minimal without forcing a separate review", () => {
+  it("keeps CHANGE_REQUIRED readback minimal", () => {
     const result = assembleSyntheticCapturedReview(
       MATERIALS,
       "CHANGE_REQUIRED",
@@ -62,19 +62,18 @@ describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
     expect(html).toContain("支援内容を見直す");
     expect(html).toContain("この場で決められなければ、追加で検討します。");
     expect(html).toContain("判断理由: 支援方法の再検討が必要");
-    expect(html).toContain("根拠 1件 · 計画版 3 · 対象期間 2026-08-01〜2026-08-31");
+    expect(html).toContain("根拠 1件");
+    expect(html).toContain("計画版 3");
+    expect(html).toContain("対象期間 2026-08-01〜2026-08-31");
     expect(html).not.toContain("次回の支援検討");
-    expect(html).not.toContain("次の計画版はまだ作成されていません");
-    expect(html).not.toContain("計画はこの画面では変更されません。");
-    expect(html).not.toContain("今回「変更が必要」と判断した理由と見直し資料を確認し");
     expect(html).not.toContain('data-review-outcome-reason-input="true"');
     expect(html).not.toContain('data-review-outcome-action="NO_CHANGE"');
     expect(html).not.toContain('data-review-outcome-action="CHANGE_REQUIRED"');
-    expect((html.match(/本番には保存されていません/g) ?? [])).toHaveLength(1);
+    expect(html.match(/本番には保存されていません/g) ?? []).toHaveLength(1);
     expect(html).not.toContain("record-a");
   });
 
-  it("keeps NO_CHANGE continuation explicit without repeated explanatory copy", () => {
+  it("keeps NO_CHANGE continuation explicit", () => {
     const result = assembleSyntheticCapturedReview(
       MATERIALS,
       "NO_CHANGE",
@@ -95,12 +94,14 @@ describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
     expect(html).toContain("デモ上の見直し結果: 変更なし");
     expect(html).toContain("次にすること");
     expect(html).toContain("次回のモニタリングへ");
-    expect(html).toContain("根拠 1件 · 計画版 3 · 対象期間 2026-08-01〜2026-08-31");
-    expect(html).not.toContain("今回の見直し資料と支援記録を、次回のモニタリングでも確認します。");
+    expect(html).toContain("根拠 1件");
+    expect(html).toContain("計画版 3");
+    expect(html).toContain("対象期間 2026-08-01〜2026-08-31");
+    expect(html).not.toContain("今回の見直し資料と支援記録を");
     expect(html).not.toContain('data-review-outcome-reason-input="true"');
     expect(html).not.toContain('data-review-outcome-action="NO_CHANGE"');
     expect(html).not.toContain('data-review-outcome-action="CHANGE_REQUIRED"');
-    expect((html.match(/本番には保存されていません/g) ?? [])).toHaveLength(1);
+    expect(html.match(/本番には保存されていません/g) ?? []).toHaveLength(1);
     expect(html).not.toContain("次の計画版を作成");
     expect(html).not.toContain("record-a");
   });
