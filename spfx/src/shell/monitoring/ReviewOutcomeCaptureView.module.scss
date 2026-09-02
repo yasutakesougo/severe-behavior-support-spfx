@@ -14,12 +14,15 @@
 .heading,
 .status,
 .boundary,
-.pending,
 .error,
 .meta,
 .reasonHelper,
 .reasonReadback,
-.noteReadback {
+.noteReadback,
+.nextStepLabel,
+.nextStepHeading,
+.nextStepCopy,
+.nextStepEvidence {
   margin: 0;
 }
 
@@ -31,9 +34,10 @@
 }
 
 .status,
-.pending,
 .reasonReadback,
-.noteReadback {
+.noteReadback,
+.nextStepHeading,
+.nextStepCopy {
   color: sbs.$color-text-primary;
   line-height: sbs.$line-height-body;
 }
@@ -41,10 +45,29 @@
 .boundary,
 .meta,
 .error,
-.reasonHelper {
+.reasonHelper,
+.nextStepLabel {
   color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-meta;
   line-height: sbs.$line-height-meta;
+}
+
+.nextStep {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+  margin-top: sbs.$space-4;
+  padding-left: sbs.$space-3;
+  border-left: sbs.$border-width-thick solid sbs.$color-border-secondary;
+}
+
+.nextStepLabel,
+.nextStepHeading {
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.nextStepEvidence {
+  margin-top: sbs.$space-4;
 }
 
 .reasonField {
@@ -65,11 +88,6 @@
   font: inherit;
   line-height: sbs.$line-height-body;
   resize: vertical;
-}
-
-.reasonTextarea:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
 }
 
 .reasonReadback,
@@ -103,9 +121,4 @@
   border-color: sbs.$color-border-secondary;
   background: sbs.$color-surface-subtle;
   font-weight: sbs.$font-weight-semibold;
-}
-
-.action:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
 }

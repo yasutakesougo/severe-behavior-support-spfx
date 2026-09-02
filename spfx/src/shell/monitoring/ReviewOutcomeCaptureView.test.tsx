@@ -74,7 +74,7 @@ describe("ReviewOutcomeCaptureView", () => {
     expect(html.match(/<textarea/g)).toHaveLength(1);
   });
 
-  it("preserves non-null legacy/session note readback without restoring a writable note input", () => {
+  it("preserves non-null legacy/session note readback without restoring writable controls", () => {
     const result = assembleSyntheticCapturedReview(
       MATERIALS,
       "CHANGE_REQUIRED",
@@ -91,14 +91,17 @@ describe("ReviewOutcomeCaptureView", () => {
       />,
     );
     expect(html).toContain("デモ上の見直し結果: 変更が必要");
-    expect(html).toContain("次の計画版はまだ作成されていません");
+    expect(html).not.toContain("次の計画版はまだ作成されていません");
     expect(html).toContain("判断理由: 支援方法の再検討が必要");
     expect(html).toContain("補足メモ: 確認を継続");
     expect(html).toContain('data-review-outcome-reason-readback="true"');
     expect(html).toContain('data-review-outcome-note-readback="true"');
+    expect(html).not.toContain('data-review-outcome-reason-input="true"');
     expect(html).not.toContain('data-review-outcome-note-input="true"');
+    expect(html).not.toContain('data-review-outcome-action="NO_CHANGE"');
+    expect(html).not.toContain('data-review-outcome-action="CHANGE_REQUIRED"');
     expect(html).toContain("本番には保存されていません");
-    expect(html.match(/disabled=""/g)).toHaveLength(3);
+    expect(html).not.toContain('disabled=""');
     expect(html).not.toContain("次の計画版を作成");
   });
 
@@ -320,10 +323,9 @@ describe("ReviewOutcomeCaptureView", () => {
     });
     expect(container.textContent).toContain("判断理由: snapshot A reason");
     expect(container.textContent).toContain("補足メモ: snapshot A memo");
-    expect(
-      container.querySelector<HTMLTextAreaElement>('[data-review-outcome-reason-input="true"]')
-        ?.disabled,
-    ).toBe(true);
+    expect(container.querySelector('[data-review-outcome-reason-input="true"]')).toBeNull();
+    expect(container.querySelector('[data-review-outcome-action="NO_CHANGE"]')).toBeNull();
+    expect(container.querySelector('[data-review-outcome-action="CHANGE_REQUIRED"]')).toBeNull();
     expect(container.querySelector('[data-review-outcome-note-input="true"]')).toBeNull();
 
     act(() => {
