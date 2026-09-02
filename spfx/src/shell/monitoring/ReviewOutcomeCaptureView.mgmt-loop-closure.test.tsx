@@ -87,9 +87,7 @@ describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
     expect(html).toContain("デモ上の見直し結果: 変更なし");
     expect(html).toContain("次に行うこと");
     expect(html).toContain("次回のモニタリングへ");
-    expect(html).toContain(
-      "今回の見直し資料と支援記録を、次回のモニタリングでも確認します。",
-    );
+    expect(html).toContain("今回の見直し資料と支援記録を、次回のモニタリングでも確認します。");
     expect(html).toContain("根拠: この見直し資料の記録 1件");
     expect(html).toContain("本番には保存されていません");
     expect(html).not.toContain("次の計画版を作成");
