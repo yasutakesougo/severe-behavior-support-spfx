@@ -14,7 +14,6 @@
 .heading,
 .status,
 .boundary,
-.pending,
 .error,
 .meta,
 .reasonHelper,
@@ -23,7 +22,6 @@
 .nextStepLabel,
 .nextStepHeading,
 .nextStepCopy,
-.nextStepBoundary,
 .nextStepEvidence {
   margin: 0;
 }
@@ -36,12 +34,10 @@
 }
 
 .status,
-.pending,
 .reasonReadback,
 .noteReadback,
 .nextStepHeading,
-.nextStepCopy,
-.nextStepBoundary {
+.nextStepCopy {
   color: sbs.$color-text-primary;
   line-height: sbs.$line-height-body;
 }
@@ -94,11 +90,6 @@
   resize: vertical;
 }
 
-.reasonTextarea:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
 .reasonReadback,
 .noteReadback {
   overflow-wrap: anywhere;
@@ -130,9 +121,4 @@
   border-color: sbs.$color-border-secondary;
   background: sbs.$color-surface-subtle;
   font-weight: sbs.$font-weight-semibold;
-}
-
-.action:disabled {
-  cursor: not-allowed;
-  opacity: 0.55;
 }
