@@ -80,13 +80,26 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
             </p>
           ) : null}
           <div data-next-support-summary="true" data-current-review-epoch-bound="true">
-            <p className={styles.pending}>次回の支援検討</p>
-            <p className={styles.meta} data-next-support-cue="true">
-              {capturedReview.outcome.decision === "CHANGE_REQUIRED"
-                ? "次回の支援検討で、判断理由と見直し資料を確認します。計画はこの画面では変更されません。"
-                : "次回のモニタリングで、今回の見直し資料と支援記録を確認します。"}
-            </p>
-            <p className={styles.meta} data-next-support-evidence-summary="true">
+            <div className={styles.nextStep} data-next-support-step="true">
+              <p className={styles.nextStepLabel}>次に行うこと</p>
+              <p className={styles.nextStepHeading}>
+                {capturedReview.outcome.decision === "CHANGE_REQUIRED"
+                  ? "次回の支援検討"
+                  : "次回のモニタリングへ"}
+              </p>
+              <p className={styles.nextStepCopy} data-next-support-cue="true">
+                {capturedReview.outcome.decision === "CHANGE_REQUIRED"
+                  ? "判断理由と見直し資料を確認します。"
+                  : "今回の見直し資料と支援記録を、次回のモニタリングでも確認します。"}
+              </p>
+              {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? (
+                <p className={styles.nextStepBoundary}>計画はこの画面では変更されません。</p>
+              ) : null}
+            </div>
+            <p
+              className={`${styles.meta} ${styles.nextStepEvidence}`}
+              data-next-support-evidence-summary="true"
+            >
               根拠: この見直し資料の記録 {materials.recordCount}件
             </p>
           </div>
