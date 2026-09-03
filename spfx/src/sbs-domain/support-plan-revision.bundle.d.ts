@@ -77,9 +77,12 @@ export declare function startSupportPlanRevision(
       UserId: string;
       planId: string;
       planVersion: number;
+      periodStart: string;
+      periodEnd: string;
+      sourceRecordIds: readonly string[];
       decision: "NO_CHANGE" | "CHANGE_REQUIRED";
-      completedBy: string;
-      completedAt: string;
+      reviewedAt: string;
+      reviewedBy: string;
     }>;
     sourceDecisionReason: Readonly<{
       OutcomeId: string;
