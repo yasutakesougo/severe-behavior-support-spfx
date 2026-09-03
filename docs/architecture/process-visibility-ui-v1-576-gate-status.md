@@ -5,79 +5,65 @@ repository: yasutakesougo/severe-behavior-support-spfx
 unit: PROCESS-VISIBILITY-UI-V1
 kind: prerequisite gate status（#576）
 date: 2026-09-03
-refreshed: live GitHub read-only after ready_for_review event
+refreshed: live GitHub read-only after MERGED event
 ```
 
-## Live state（read-only）
+## Live state（CONFIRMED）
 
 ```text
-#576 = OPEN / READY FOR REVIEW（isDraft=false）
-url = https://github.com/yasutakesougo/severe-behavior-support-spfx/pull/576
-event: ready_for_review @ 2026-09-03T07:30:44Z by yasutakesougo
-head tip = 87bbadccabd15134418efcb3a9e78a0cc067b9bc
-exact product HEAD = 4eab190eecdec5b05d7051d1ede3240dfdfa0052
-tip − product = docs + smoke README only（SupportPlan.tsx unchanged）
-mergedAt = null
-Merge = NOT DONE / NOT AUTHORIZED BY AGENT
+#576 = MERGED
+mergedAt = 2026-09-03T07:39:18Z
+mergeCommit = 475ad1aff798e1668ea820fbaf7cdfccf0f80297
+pre-merge tip = 87bbadccabd15134418efcb3a9e78a0cc067b9bc
+exact product HEAD（lifecycle） = 4eab190eecdec5b05d7051d1ede3240dfdfa0052
+4eab190 ancestor of origin/main = YES
+origin/main = 475ad1aff798e1668ea820fbaf7cdfccf0f80297
 ```
 
-## Gate interpretation（fail-closed）
+## Post-merge fixation
+
+| Check | Result |
+|---|---|
+| Merge commit on main | CONFIRMED `475ad1a` |
+| Lifecycle product @ `4eab190` on main | CONFIRMED（ancestor） |
+| `SupportPlan.tsx` draft-lifecycle / source-safety / CTA on main | CONFIRMED |
+| Product path diff `4eab190`…`origin/main`（spfx/src, packages, contracts） | EMPTY（docs-only after product） |
 
 ```text
-ready_for_review / left draft
-≠ Actual Staff Re-Check PASS|ACCEPTABLE
-≠ Human Merge GO
-≠ post-merge fixation
-≠ PROCESS-VISIBILITY-UI-V1 Implementation Start
-
-Actual Staff Re-Check evidence in #576 comments
-= NOT FOUND on this refresh
-= still REQUIRED before treating Ready path as complete for V1 prerequisite
+post-merge fixation = CONFIRMED
+Staff Re-Check packet in #576 comments = NOT FOUND
+Human Merge occurred without Agent-invented Staff PASS
+Agent does not backfill Staff Re-Check verdict
 ```
 
-| Gate | Required | Live |
-|---|---|---|
-| Actual Staff Re-Check | PASS or ACCEPTABLE | NOT YET / no packet in comments |
-| PR left draft | optional signal | DONE（ready_for_review） |
-| Human Ready GO consumption | explicit / Staff-gated | SIGNAL ONLY（undraft）— Staff Re-Check still open |
-| Human Merge GO | explicit | NOT RECEIVED |
-| Merge on main | MERGED | NO |
-| post-merge fixation | CONFIRMED | N/A |
-
-## Separation
+## #580 companion
 
 ```text
-#580 Definition Lock = CONSUMED
-#580 Visual Acceptance = CONSUMED
-#580 Simulation 2 = PASS WITH MINOR FRICTION
-≠ #576 Actual Staff Re-Check
-≠ authorize Merge
-≠ authorize V1 product mutation
-```
-
-## Prerequisite rule（unchanged）
-
-```text
-PROCESS-VISIBILITY-UI-V1 Implementation Start GO
-requires:
-  #580 Definition Lock CONSUMED
-  + #580 Visual Acceptance CONSUMED
-  + #580 Simulation 2 PASS系
-  + #576 Actual Staff Re-Check PASS|ACCEPTABLE
-  + Human Ready path consistent with Staff result
-  + Human Merge GO
-  + post-merge fixation
+Definition Lock = CONSUMED
+Visual Acceptance = CONSUMED
+Simulation 2 = PASS WITH MINOR FRICTION
+Scope = CLEARED CANDIDATE
+#576 Merge + fixation = CONFIRMED
+Human Implementation Start GO = NOT RECEIVED
+PHASE 4 product mutation = FORBIDDEN until Implementation Start GO
 ```
 
 ## Agent decision
 
 ```text
-wait-576 = ACTIVE HOLD
-Merge #576 = FORBIDDEN（Agent）
-PHASE 4 SupportPlan mutation = FORBIDDEN
-further design mutation on #580 = STOP
-NEXT Human:
-  1) publish Actual Staff Re-Check PASS|ACCEPTABLE|HOLD @ product 4eab190
-  2) if PASS|ACCEPTABLE → Human Merge GO（separate）
-  3) after merge + fixation → Human Implementation Start GO for V1
+wait-576 Merge/fixation = CLEARED
+PHASE 4 = BLOCKED on Human Implementation Start GO only
+further design mutation = STOP
+Agent Merge/Deploy/LIVE WRITE = FORBIDDEN
+```
+
+## NEXT
+
+```text
+Human Implementation Start GO（explicit）
+↓
+PHASE 4 PLANNER-only presentation impl on main-based branch
+→ verification → RBA → Independent Review
+→ Actual Staff Process-Comprehension Check
+→ Ready（Human）
 ```
