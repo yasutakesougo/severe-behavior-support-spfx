@@ -69,19 +69,23 @@ describe("VP-G synthetic presentationRole", () => {
     expect(userDetailSectionOrderForRole("PLANNER")[1]).toBe("supportPlan");
   });
 
-  it("moves SupportPlan review earlier for PLANNER/ADMIN without dropping plan blocks", () => {
-    expect(supportPlanBlockOrderForRole("FIELD_STAFF")[0]).toBe("summary");
-    expect(supportPlanBlockOrderForRole("FIELD_STAFF")[3]).toBe("review");
-    expect(supportPlanBlockOrderForRole("PLANNER")[1]).toBe("review");
-    expect(supportPlanBlockOrderForRole("PLANNER")).toEqual([
+  it("changes only PLANNER SupportPlan order and preserves ADMIN_AUDIT", () => {
+    expect(supportPlanBlockOrderForRole("FIELD_STAFF")).toEqual([
       "summary",
-      "review",
-      "procedures",
-      "records",
-      "versions",
-      "nextVersion",
       "goals",
       "actions",
+      "review",
+      "mutation",
+    ]);
+    expect(supportPlanBlockOrderForRole("PLANNER")).toEqual([
+      "summary",
+      "goals",
+      "actions",
+      "procedures",
+      "records",
+      "review",
+      "nextVersion",
+      "versions",
       "mutation",
     ]);
     expect(supportPlanBlockOrderForRole("ADMIN_AUDIT")).toEqual([

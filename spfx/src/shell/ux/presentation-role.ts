@@ -114,7 +114,20 @@ export type SupportPlanBlockKey =
 export function supportPlanBlockOrderForRole(
   role: ShellPresentationRole,
 ): readonly SupportPlanBlockKey[] {
-  if (isPlanningPcPresentationRole(role)) {
+  if (role === "PLANNER") {
+    return [
+      "summary",
+      "goals",
+      "actions",
+      "procedures",
+      "records",
+      "review",
+      "nextVersion",
+      "versions",
+      "mutation",
+    ];
+  }
+  if (role === "ADMIN_AUDIT") {
     return [
       "summary",
       "review",

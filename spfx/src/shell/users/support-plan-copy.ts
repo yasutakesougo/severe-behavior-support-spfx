@@ -41,6 +41,7 @@ export const SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE =
 
 export const SUPPORT_PLAN_NEXT_VERSION_HEADING = "次の版の考え方";
 
+/** Pre-V1 planning-PC navigation retained unchanged for ADMIN_AUDIT. */
 export const PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION = [
   { id: "demo-ux-plan-review-heading", label: "見直し状況" },
   { id: "planning-pc-plan-procedures-heading", label: SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING },
@@ -48,6 +49,19 @@ export const PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION = [
   { id: "planning-pc-plan-versions-heading", label: SUPPORT_PLAN_VERSIONS_HEADING },
   { id: "review-new-version-next-heading", label: SUPPORT_PLAN_NEXT_VERSION_HEADING },
 ] as const;
+
+/** PROCESS-VISIBILITY-UI-V1 — PLANNER-only in-page process navigation. */
+export const PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION = [
+  { id: "planner-process-plan-heading", label: "① 計画" },
+  { id: "planner-process-support-heading", label: "② 支援" },
+  { id: "planner-process-records-heading", label: "③ 記録" },
+  { id: "planner-process-monitoring-heading", label: "④ モニタリング" },
+  { id: "planner-process-review-heading", label: "⑤ 見直し" },
+  { id: "planner-process-next-version-heading", label: "⑥ 次版準備" },
+] as const;
+
+export const PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT =
+  "選択中はページ内の表示位置です。工程の完了・進捗を表しません。";
 
 export const SUPPORT_PLAN_NEXT_VERSION_NOTE =
   "次回の変更は新しい版を作ります。現行の適用中版は残します。作成・保存は接続されていません。";
