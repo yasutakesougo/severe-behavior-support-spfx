@@ -88,13 +88,9 @@ export type ApplySupportPlanActivationResult =
   | Readonly<{ status: "HOLD"; reason: string }>
   | Readonly<{ status: "INVALID"; reason: string }>;
 
-export declare function mintDraftSnapshotId(
-  draft: SupportPlanRevisionDraftCandidate,
-): string;
+export declare function mintDraftSnapshotId(draft: SupportPlanRevisionDraftCandidate): string;
 
-export declare function validateActivationReceipt(
-  value: unknown,
-): value is ActivationReceipt;
+export declare function validateActivationReceipt(value: unknown): value is ActivationReceipt;
 
 export declare function applySupportPlanActivation(
   request: SupportPlanActivationRequest,

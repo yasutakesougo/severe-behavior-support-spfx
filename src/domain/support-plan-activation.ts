@@ -84,9 +84,7 @@ export function mintDraftSnapshotId(draft: SupportPlanRevisionDraftCandidate): s
     binding.boundAt,
     binding.boundBy,
   ].join(DRAFT_SNAPSHOT_ID_SEPARATOR);
-  return sha256Hex(
-    `${DRAFT_SNAPSHOT_ID_NAMESPACE}${DRAFT_SNAPSHOT_ID_SEPARATOR}${material}`,
-  );
+  return sha256Hex(`${DRAFT_SNAPSHOT_ID_NAMESPACE}${DRAFT_SNAPSHOT_ID_SEPARATOR}${material}`);
 }
 
 export function validateActivationReceipt(value: unknown): value is ActivationReceipt {

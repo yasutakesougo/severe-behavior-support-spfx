@@ -52,10 +52,7 @@ import {
   startSyntheticPlanningPcRevision,
   type SupportPlanRevisionSession,
 } from "./support-plan-revision-start";
-import type {
-  ShellSupportPlanPresentation,
-  SupportPlanVersionEntry,
-} from "./support-plan-types";
+import type { ShellSupportPlanPresentation, SupportPlanVersionEntry } from "./support-plan-types";
 import styles from "./SupportPlanUx.module.scss";
 
 export type SupportPlanProps = Readonly<{
@@ -526,14 +523,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           );
           return;
         }
-        setRevisionError(
-          "適用を開始できませんでした。下書き内容と現在版を確認してください。",
-        );
+        setRevisionError("適用を開始できませんでした。下書き内容と現在版を確認してください。");
       })
       .catch(() => {
-        setRevisionError(
-          "適用を開始できませんでした。下書き内容と現在版を確認してください。",
-        );
+        setRevisionError("適用を開始できませんでした。下書き内容と現在版を確認してください。");
       });
   };
 

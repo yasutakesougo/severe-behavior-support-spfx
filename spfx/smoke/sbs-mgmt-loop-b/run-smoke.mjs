@@ -223,8 +223,7 @@ async function runHappyPath(name, width, height) {
       startActionCleared: startGone === null,
       applyPresent: apply instanceof HTMLButtonElement && !apply.disabled,
       applyIsPrimary: apply?.getAttribute("data-sbs-action") === "primary",
-      applyLabelClear:
-        applyText.includes("版 4") && applyText.includes("を適用開始する"),
+      applyLabelClear: applyText.includes("版 4") && applyText.includes("を適用開始する"),
       overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     };
   });
@@ -252,7 +251,8 @@ async function runHappyPath(name, width, height) {
       draftCleared: draftGone === null,
       applyCleared: applyGone === null,
       currentVersionIsV4: (currentVersion?.textContent ?? "").includes("版 4"),
-      liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-plan-activation-c-live-write") === "false",
+      liveWriteFalse:
+        liveWrite?.getAttribute("data-sbs-mgmt-plan-activation-c-live-write") === "false",
       primaryCountAfterApply: primaryActions.length,
       overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     };

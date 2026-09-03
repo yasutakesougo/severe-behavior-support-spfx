@@ -11,9 +11,7 @@ import {
   createSyntheticSupportPlanCasRepository,
 } from "./support-plan-activation-session";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "./support-plan-fixture";
-import {
-  SBS_MGMT_LOOP_B_REVISION_FIXTURE,
-} from "./support-plan-revision-fixture";
+import { SBS_MGMT_LOOP_B_REVISION_FIXTURE } from "./support-plan-revision-fixture";
 import {
   EMPTY_SUPPORT_PLAN_REVISION_SESSION,
   startSyntheticPlanningPcRevision,
@@ -115,10 +113,7 @@ describe("SBS-MGMT-PLAN-ACTIVATION-C session orchestration", () => {
       EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION.currentPlan,
     );
     // Force conflict by advancing row version underneath.
-    await repo.save(
-      { ...EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION.currentPlan, currentVersion: 3 },
-      1,
-    );
+    await repo.save({ ...EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION.currentPlan, currentVersion: 3 }, 1);
     const result = await applySyntheticPlanningPcActivation({
       draft,
       session: EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION,

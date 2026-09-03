@@ -50,14 +50,9 @@ export type SessionApplyResult =
  * Minimal in-memory CAS repository for synthetic/session Apply.
  * Local session helper only — not a new domain port.
  */
-export function createSyntheticSupportPlanCasRepository(
-  initial: CanonicalSupportPlan,
-): {
+export function createSyntheticSupportPlanCasRepository(initial: CanonicalSupportPlan): {
   getPlan: () => CanonicalSupportPlan;
-  save: (
-    plan: CanonicalSupportPlan,
-    expectedVersion: number,
-  ) => Promise<SessionSaveResult>;
+  save: (plan: CanonicalSupportPlan, expectedVersion: number) => Promise<SessionSaveResult>;
 } {
   let plan = initial;
   return {
@@ -79,10 +74,7 @@ export async function applySyntheticPlanningPcActivation(
     actor: string;
     actionAt: string;
     /** Optional injectable CAS save for tests / HOLD paths. */
-    savePlan?: (
-      plan: CanonicalSupportPlan,
-      expectedVersion: number,
-    ) => Promise<SessionSaveResult>;
+    savePlan?: (plan: CanonicalSupportPlan, expectedVersion: number) => Promise<SessionSaveResult>;
   }>,
 ): Promise<SessionApplyResult> {
   const { draft, session, actor, actionAt } = input;
