@@ -6,7 +6,9 @@ Exact B12 / RBA matrix: `docs/architecture/sbs-mgmt-loop-b-browser-smoke.md`.
 
 Checks both `1280x900` and `390x844`:
 
-`CHANGE_REQUIRED` + human-authored reason → C2 single primary + demoted review predecessor → explicit `変更内容の作成を始める` → exact N+1 draft readback → source version unchanged → `本番には保存されていません`.
+`CHANGE_REQUIRED` + human-authored reason → C2 single primary + demoted review predecessor + retained disabled `create-cta` → separate `start-revision` CTA → exact N+1 draft readback → repeated action does not double-create → source version unchanged → `LIVE_WRITE=false` / external requests=0.
+
+Negative paths: `NO_CHANGE` does not enable revision-start; historical v2 selection blocks start / forbids N+2.
 
 The isolated browser runtime resolves package entrypoints from each package's canonical export rather than depending on internal package paths.
 
