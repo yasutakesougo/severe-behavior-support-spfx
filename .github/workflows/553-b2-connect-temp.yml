@@ -74,6 +74,7 @@ jobs:
         run: |
           npx prettier --write \
             src/domain/support-plan-revision-spfx-entry.ts \
+            spfx/src/sbs-domain/support-plan-revision.bundle.js \
             spfx/src/sbs-domain/support-plan-revision.bundle.d.ts \
             spfx/src/shell/monitoring/MonitoringView.tsx \
             spfx/src/shell/users/support-plan-revision-start.ts \
