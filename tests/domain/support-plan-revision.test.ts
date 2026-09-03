@@ -3,12 +3,16 @@ import { describe, it } from "node:test";
 import type { MonitoringPeriodReviewDecisionReason } from "../../src/domain/monitoring-period-review-decision-reason";
 import type { MonitoringPeriodReviewOutcome } from "../../src/domain/monitoring-period-review-outcome";
 import type { SupportPlan, SupportPlanVersion } from "../../src/domain/support-plan";
+import { validateSupportPlanVersion } from "../../src/domain/support-plan";
+import { validateSupportPlanVersionMonitoringPeriodReviewBinding } from "../../src/domain/support-plan-version-monitoring-period-review-binding";
 import {
   consumeRevisionIntentToDraft,
   createRevisionIntent,
   mintRevisionIntentId,
   revisionDraftMatchesIntent,
   startSupportPlanRevision,
+  validateRevisionIntent,
+  validateSupportPlanRevisionDraftCandidate,
   type RevisionIntent,
   type SupportPlanRevisionDraftCandidate,
 } from "../../src/domain/support-plan-revision";
@@ -182,6 +186,17 @@ describe("SBS-MGMT-LOOP-B support-plan revision domain", () => {
     assert.equal(revisionDraftMatchesIntent(draft, intent), true);
   });
 
+  it("B7a validates candidate and review binding with domain validators", () => {
+    const { intent, draft } = createdAggregate();
+    assert.equal(validateSupportPlanVersion(draft.candidate), true);
+    assert.equal(
+      validateSupportPlanVersionMonitoringPeriodReviewBinding(draft.reviewBinding),
+      true,
+    );
+    assert.equal(validateRevisionIntent(intent), true);
+    assert.equal(validateSupportPlanRevisionDraftCandidate(draft), true);
+  });
+
   it("B8 holds when N+1 already exists and leaves the intent OPEN", () => {
     const existingN4: SupportPlanVersion = { ...sourceVersion, version: 4 };
     const intent = openIntent();
@@ -211,11 +226,42 @@ describe("SBS-MGMT-LOOP-B support-plan revision domain", () => {
     assert.equal(draft.candidate.versionCreatedAt, actionAt);
   });
 
+  it("B9a keeps source provenance immutable while candidate uses actor/time", () => {
+    const sourceBefore = {
+      versionCreatedBy: sourceVersion.versionCreatedBy,
+      versionCreatedAt: sourceVersion.versionCreatedAt,
+      goals: [...sourceVersion.goals],
+      supportMethods: [...sourceVersion.supportMethods],
+      precautions: [...sourceVersion.precautions],
+      reviewCriteria: [...sourceVersion.reviewCriteria],
+    };
+    const { draft } = createdAggregate();
+    assert.equal(sourceVersion.versionCreatedBy, sourceBefore.versionCreatedBy);
+    assert.equal(sourceVersion.versionCreatedAt, sourceBefore.versionCreatedAt);
+    assert.deepEqual([...sourceVersion.goals], sourceBefore.goals);
+    assert.deepEqual([...sourceVersion.supportMethods], sourceBefore.supportMethods);
+    assert.deepEqual([...sourceVersion.precautions], sourceBefore.precautions);
+    assert.deepEqual([...sourceVersion.reviewCriteria], sourceBefore.reviewCriteria);
+    assert.equal(draft.candidate.versionCreatedBy, actor);
+    assert.equal(draft.candidate.versionCreatedAt, actionAt);
+    assert.notEqual(draft.candidate.versionCreatedBy, sourceVersion.versionCreatedBy);
+  });
+
   it("B10 returns consumed intent, candidate and binding as one successful aggregate", () => {
     const { intent, draft } = createdAggregate();
     assert.equal(intent.status, "CONSUMED");
     assert.equal(draft.RevisionIntentId, intent.RevisionIntentId);
     assert.equal(revisionDraftMatchesIntent(draft, intent), true);
+  });
+
+  it("B10a aligns intent/candidate/binding actor and time", () => {
+    const { intent, draft } = createdAggregate();
+    assert.equal(intent.createdBy, actor);
+    assert.equal(intent.createdAt, actionAt);
+    assert.equal(draft.candidate.versionCreatedBy, actor);
+    assert.equal(draft.candidate.versionCreatedAt, actionAt);
+    assert.equal(draft.reviewBinding.boundBy, actor);
+    assert.equal(draft.reviewBinding.boundAt, actionAt);
   });
 
   it("B11 leaves the current SupportPlan status/currentVersion untouched", () => {
