@@ -444,7 +444,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const capturedReviewSummary = capturedReview ? (
     <div className={styles.processReviewOutcome} data-sbs-mgmt-loop-b-review="true">
       <p data-sbs-mgmt-loop-b-decision={capturedReview.outcome.decision}>
-        見直し結果: {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? "変更が必要" : "変更なし"}
+        見直し結果:{" "}
+        {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? "変更が必要" : "変更なし"}
       </p>
       {capturedReview.decisionReason ? (
         <p data-sbs-mgmt-loop-b-reason="true">判断理由: {capturedReview.decisionReason.reason}</p>
@@ -629,7 +630,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     detail = false,
   ): React.ReactNode => (
     <section
-      className={detail ? `${styles.processSection} ${styles.processDetailSection}` : styles.processSection}
+      className={
+        detail ? `${styles.processSection} ${styles.processDetailSection}` : styles.processSection
+      }
       aria-labelledby={id}
       data-process-visibility-ui-v1={processKey}
     >

@@ -5,22 +5,8 @@
   "bodyScrollWidth": 390,
   "overflowX": false,
   "overflowDelta": 0,
-  "headings": [
-    "① 計画",
-    "② 支援",
-    "③ 記録",
-    "④ モニタリング",
-    "⑤ 見直し",
-    "⑥ 次版準備"
-  ],
-  "navButtons": [
-    "① 計画",
-    "② 支援",
-    "③ 記録",
-    "④ モニタリング",
-    "⑤ 見直し",
-    "⑥ 次版準備"
-  ],
+  "headings": ["① 計画", "② 支援", "③ 記録", "④ モニタリング", "⑤ 見直し", "⑥ 次版準備"],
+  "navButtons": ["① 計画", "② 支援", "③ 記録", "④ モニタリング", "⑤ 見直し", "⑥ 次版準備"],
   "navDisplay": "grid",
   "navColumns": "158.797px 158.812px",
   "viewportLabel": "Viewport · Mobile（<900px / target 390×844）",
