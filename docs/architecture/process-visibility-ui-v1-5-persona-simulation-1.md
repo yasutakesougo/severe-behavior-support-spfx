@@ -10,7 +10,8 @@ date: 2026-09-03
 verdict: PASS WITH MINOR FRICTION（SIMULATION EVIDENCE ONLY）
 note: Prototype 1 Mobile P1 findings closed by Correction-1; this packet remains simulation-only
 correction: docs/architecture/process-visibility-ui-v1-presentation-prototype-correction-1.md
-Human Visual Acceptance: NOT RECEIVED
+Human Visual Acceptance: CONSUMED（see Simulation 2 for post-acceptance Process-Comprehension）
+superseded_for_gate_by: docs/architecture/process-visibility-ui-v1-5-persona-simulation-2.md
 Actual Staff Process-Comprehension Check: NOT YET / NOT AUTHORIZED BY THIS DOC
 Implementation Start: NOT AUTHORIZED
 mutation: 0
@@ -65,9 +66,9 @@ PASS WITH MINOR FRICTION
 ## 5. NEXT
 
 ```text
-Human Visual Acceptance
+Simulation 1 = historical pre-Correction-1 packet
+Gate Process-Comprehension after Visual Acceptance
+= Simulation 2 @ Correction-1
 ↓
-PHASE 3 Implementation Scope → Ponytail → Independent Scope Review
-↓
-Human Implementation Start GO（requires #576 Merged）
+WAIT #576 → Implementation Start GO
 ```
