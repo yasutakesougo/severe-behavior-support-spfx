@@ -492,7 +492,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       ) : revisionEligible && !adminRead ? (
         <>
           <p className={styles.sectionHint} data-sbs-mgmt-loop-b-source-safety="true">
-            現在使用中の版 {currentVersion} は変更しません。版 {conceptualNextVersion} の下書きを別に作ります。
+            現在使用中の版 {currentVersion} は変更しません。版 {conceptualNextVersion}{" "}
+            の下書きを別に作ります。
           </p>
           <button
             type="button"
