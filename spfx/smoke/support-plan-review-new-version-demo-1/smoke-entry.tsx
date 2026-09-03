@@ -66,17 +66,61 @@ function parseParams(): {
   };
 }
 
+const ARRIVAL_TITLE: Record<"driving" | "ready" | "failed", string> = {
+  driving: "【駆動中】適用前状態へ進めています",
+  ready: "【適用待機】版 4 を適用開始する",
+  failed: "【未到着】適用前状態へ進めませんでした",
+};
+
+const ARRIVAL_BANNER_STYLE: Record<"driving" | "ready" | "failed", React.CSSProperties> = {
+  driving: {
+    position: "sticky",
+    top: 0,
+    zIndex: 40,
+    margin: 0,
+    padding: "12px 16px",
+    background: "#1e3a5f",
+    color: "#ffffff",
+    fontWeight: 700,
+  },
+  ready: {
+    position: "sticky",
+    top: 0,
+    zIndex: 40,
+    margin: 0,
+    padding: "12px 16px",
+    background: "#14532d",
+    color: "#ffffff",
+    fontWeight: 700,
+  },
+  failed: {
+    position: "sticky",
+    top: 0,
+    zIndex: 40,
+    margin: 0,
+    padding: "12px 16px",
+    background: "#7f1d1d",
+    color: "#ffffff",
+    fontWeight: 700,
+  },
+};
+
 const BeforeApplyArrivalBanner: React.FC<{ status: "driving" | "ready" | "failed" }> = ({
   status,
 }) => {
   const text =
     status === "ready"
-      ? "合成確認画面です。本番には保存されません。版3適用中 / 版4下書きです。⑥で「版 4 を適用開始する」を押せます。"
+      ? "合成確認画面です。本番には保存されません。版3適用中 / 版4下書きです。⑥で「版 4 を適用開始する」を押せます。見直し結果が「変更なし」のままなら未到着です。"
       : status === "failed"
-        ? "適用前状態へ進めませんでした。verification HEAD の serve-smoke を確認してください。"
-        : "合成確認: 適用前状態へ進めています（本番保存なし）。";
+        ? "適用前状態へ進めませんでした。verification HEAD の serve-smoke を再起動し、URL に staffPlanTransition=beforeApply があるか確認してください。"
+        : "合成確認: 適用前状態へ進めています（本番保存なし）。⑥の「次の版を作る」だけでは未到着です。";
   return (
-    <p data-sbs-mgmt-plan-activation-c-staff-check={status} role="status">
+    <p
+      data-sbs-mgmt-plan-activation-c-staff-check={status}
+      data-sbs-mgmt-plan-activation-c-staff-overlay="true"
+      role="status"
+      style={ARRIVAL_BANNER_STYLE[status]}
+    >
       {text}
     </p>
   );
@@ -84,6 +128,13 @@ const BeforeApplyArrivalBanner: React.FC<{ status: "driving" | "ready" | "failed
 
 const BeforeApplyDomDriver: React.FC = () => {
   const [status, setStatus] = React.useState<"driving" | "ready" | "failed">("driving");
+  React.useEffect(() => {
+    const previousTitle = document.title;
+    document.title = ARRIVAL_TITLE[status];
+    return () => {
+      document.title = previousTitle;
+    };
+  }, [status]);
   React.useEffect(() => {
     let cancelled = false;
     driveBeforeApplyPublicDom()
@@ -122,6 +173,7 @@ const SmokeApp: React.FC = () => {
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
       data-review-new-version-demo-slice={SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.id}
     >
+      {initial.staffPlanTransition === "beforeApply" ? <BeforeApplyDomDriver /> : null}
       <AppShellChrome
         demoMode={SHELL_UX_DEFAULT_FIXTURE.demoMode}
         siteSelection={initial.siteSelection}
@@ -139,7 +191,6 @@ const SmokeApp: React.FC = () => {
         partialRetrieval={SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE}
         presentationRole={initial.presentationRole}
       />
-      {initial.staffPlanTransition === "beforeApply" ? <BeforeApplyDomDriver /> : null}
     </div>
   );
 };

@@ -14,6 +14,9 @@ Staff Apply 前:
 http://127.0.0.1:4194/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER&staffPlanTransition=beforeApply
 ```
 
+到着: ページ最上部の緑バナー + タブ `【適用待機】` + ⑤ `変更が必要` + ⑥ `版 4 を適用開始する`。
+`見直し結果: 変更なし` と `次の版を作る（表示専用）` だけなら未到着。
+
 Product source stays #584 `@ 5437e64703db055eef2bf230f5a682cf0286dc1a`. See `docs/architecture/sbs-mgmt-plan-activation-c-staff-arrival-1-procedure-1.md`.
 
 Exact B12 / RBA matrix: `docs/architecture/sbs-mgmt-loop-b-browser-smoke.md`.

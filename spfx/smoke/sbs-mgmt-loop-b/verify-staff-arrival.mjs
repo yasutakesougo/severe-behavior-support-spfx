@@ -50,12 +50,19 @@ async function collect(page) {
     const draft = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
     const query = document.querySelector("[data-sbs-mgmt-plan-activation-c-query]");
     const ready = document.querySelector('[data-sbs-mgmt-plan-activation-c-staff-check="ready"]');
+    const overlay = document.querySelector(
+      '[data-sbs-mgmt-plan-activation-c-staff-overlay="true"]',
+    );
+    const reviewReadback = document.querySelector("[data-review-outcome-readback='true']");
     return {
       query: query?.getAttribute("data-sbs-mgmt-plan-activation-c-query") ?? null,
       ready: Boolean(ready),
+      overlaySticky: overlay instanceof HTMLElement && overlay.style.position === "sticky",
+      reviewReadback: reviewReadback?.textContent?.trim() ?? "",
       draftPresent: Boolean(draft),
       applyPresent: apply instanceof HTMLButtonElement && !apply.disabled,
       applyText: apply?.textContent?.trim() ?? "",
+      title: document.title,
     };
   });
 }
@@ -98,6 +105,9 @@ await browser.close();
 const pass =
   beforeApply.query === "beforeApply" &&
   beforeApply.ready &&
+  beforeApply.overlaySticky &&
+  beforeApply.reviewReadback.includes("変更が必要") &&
+  beforeApply.title.includes("適用待機") &&
   beforeApply.draftPresent &&
   beforeApply.applyPresent &&
   beforeApply.applyText.includes("版 4") &&
