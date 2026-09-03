@@ -19,6 +19,7 @@ export type MonitoringViewProps = Readonly<{
   model: MonitoringReadModel;
   personLabel: string;
   procedureLabelContext?: HumanReviewProcedureLabelContext;
+  onCapturedReviewChange?: (capturedReview: SyntheticCapturedReview | null) => void;
 }>;
 
 function formatTokyoDate(value: string): string {
@@ -47,6 +48,7 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
   model,
   personLabel,
   procedureLabelContext,
+  onCapturedReviewChange,
 }) => {
   const humanReviewResult = buildHumanReviewMaterials(model, exactReviewContext(model));
   const [capturedReviews, setCapturedReviews] = React.useState<
@@ -65,6 +67,10 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
     capturedReviewMatchesMaterials(storedReview, humanReviewResult.value)
       ? storedReview
       : null;
+
+  React.useEffect(() => {
+    onCapturedReviewChange?.(capturedReview);
+  }, [capturedReview, onCapturedReviewChange]);
 
   const handleCaptureOutcome = React.useCallback(
     (
