@@ -132,20 +132,78 @@ http://127.0.0.1:4194/index.html?viewMode=ready&siteSelection=SITE-ISG&destinati
 SupportPlan.tsx mutation = FORBIDDEN
 Proposal A candidate mutation = FORBIDDEN
 Apply CTA / lifecycle mutation = FORBIDDEN
-Human arrival gate 5/5 definition change = FORBIDDEN
+Human arrival gate 5/5 count = UNCHANGED（4/5 では通過しない）
+⑤ 採点対象 = 「見直し結果: 変更が必要」行に固定（要確認カードは使わない）
 Human Ready GO = NOT ELIGIBLE
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
 
-## NEXT
+## NEXT Human check（product は触らない）
 
 ```text
-Human arrival gate = HOLD (2/5)
-↓
-confirm URL + smoke-entry mount of BeforeApplyDomDriver
-↓
-re-score ⑤ on 見直し結果 / process kicker, not 要確認 fixture
-↓
-5/5 YES → Actual Staff Re-Test START
-1–3 still NO → harness path correction (smoke-entry / serve-smoke / URL) only
+CURRENT
+PRODUCT ARRIVAL STATE = PARTIAL CONFIRMED
+VERIFICATION ARRIVAL MARKERS = NOT CONFIRMED
+Human arrival gate = HOLD
+Actual Staff Re-Test = NOT STARTED / NOT SCORED
+Human Ready GO = NOT ELIGIBLE
+```
+
+### PHASE 1 — URL 全文
+
+必須 query がすべて揃っていること。
+
+```text
+viewMode=ready
+siteSelection=SITE-ISG
+destination=users
+presentationRole=PLANNER
+staffPlanTransition=beforeApply
+```
+
+```text
+http://127.0.0.1:4194/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER&staffPlanTransition=beforeApply
+```
+
+### PHASE 2 — hard refresh
+
+```text
+⌘ + Shift + R
+```
+
+### PHASE 3 — driver marker
+
+```text
+緑バナー あり AND タブ【適用待機】 あり
+→ BeforeApplyDomDriver = MOUNTED / path ACTIVE
+
+両方なし
+→ BeforeApplyDomDriver = NOT MOUNTED
+→ PRIMARY NEXT = URL / bundle / server path verification
+→ SupportPlan.tsx / Proposal A / Apply = 変更しない
+```
+
+どちらか一方だけなら path は部分的に ACTIVE。5/5 にはしない。
+
+### PHASE 4 — ⑤ を正しい行で確認
+
+```text
+使わない: 固定カード「要確認（合成表示）」
+使う: 「見直し結果: 変更が必要」
+```
+
+### PHASE 5 — Arrival Gate 再採点
+
+```text
+1. 緑の確認バナー = YES
+2. タブに【適用待機】 = YES
+3. ⑤の「見直し結果: 変更が必要」行 = YES
+4. ⑥「適用中: 版3 / 下書き: 版4」 = YES
+5. 「版4を適用開始する」 = YES
+```
+
+```text
+5/5 YES → Human arrival gate = PASS → Actual Staff Plan-Transition Re-Test = START
+1つでも NO → Human arrival gate = HOLD → Actual Staff Re-Test = NOT SCORED
+1–2 が NO → BeforeApplyDomDriver = NOT MOUNTED → URL / bundle / server path のみ
 ```
