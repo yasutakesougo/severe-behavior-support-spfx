@@ -4,7 +4,8 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: PROCESS-VISIBILITY-UI-V1
 kind: desktop / mobile presentation prototype
-status: PROTOTYPE READY / AWAITING Human Visual Acceptance
+status: CORRECTION-1 APPLIED / AWAITING Human Visual Acceptance
+correction: docs/architecture/process-visibility-ui-v1-presentation-prototype-correction-1.md
 definition: docs/architecture/process-visibility-ui-v1-definition-1.md
 freeze: docs/architecture/process-visibility-ui-v1-information-mapping-freeze-1.md
 static artifact: docs/architecture/process-visibility-ui-v1-presentation-prototype-1.html
@@ -26,17 +27,17 @@ presentation-only prototype
 
 ## 2. Layout contract
 
-### Shared skeleton
+### Shared skeleton（Desktop + Mobile — same document flow）
 
 ```text
-[ Person label + active version meta ]
-[ Process nav — 6 items ]
-[ ① 計画 — Process Header + summary/goals/actions ]
-[ ② 支援 — Process Header + procedures ]
-[ ③ 記録 — Process Header + recent records only ]
-[ ④ モニタリング — Process Header + existing MonitoringView ]
-[ ⑤ 見直し — Process Header + reviewStatus + capturedReview ]
-[ ⑥ 次版準備 — Process Header + #576 nextVersionBlock invariants ]
+[ Person label + 支援計画 + active version meta ]
+[ 支援サイクル Process nav — 6 items ]
+[ ① 計画 — Process Header + 目標・支援内容 ]
+[ ② 支援 — Process Header + 現在の支援手順 ]
+[ ③ 記録 — Process Header + 最近の支援結果 ]
+[ ④ モニタリング — Process Header + 期間・事実資料 ]
+[ ⑤ 見直し — Process Header + 判断理由 / 次にすること ]
+[ ⑥ 次版準備 — Process Header + #576 lifecycle ]
 [ 履歴・詳細 — versions + mutation + stateGrid（下位階層） ]
 ```
 
@@ -53,25 +54,36 @@ presentation-only prototype
   ⑥ 版4・下書き・未適用
 ```
 
-### Desktop（1280×900）
+### Desktop（≥900px / target 1280×900）
 
-- Process nav: existing `sectionNavButton*` horizontal wrap
-- 6 labels: 計画 / 支援 / 記録 / モニタリング / 見直し / 次版準備
-- Focus target = Process section `id`（heading）
+- Single Desktop shell only（no side-by-side Mobile mock）
+- Process nav: horizontal wrap
+- 6 labels with ①〜⑥
+- Focus target = Process section `id`
 
-### Mobile（390×844）
+### Mobile（&lt;900px / target 390×844）
 
+- Single Mobile shell only（Desktop strip not rendered）
 - Process nav: **2列 × 3行** grid
-- Same 6 labels / same focus targets
+- Body must include **all six** Process headings in order（Correction-1）
+- `horizontal overflow = 0`
 - No tabs, no drawer required for V1
+
+### Nav selection semantics
+
+```text
+aria-current / 選択中
+= ページ内位置
+≠ 完了 / 現在工程 / 未完了（Stepper）
+```
 
 ## 3. Visual separation rules
 
 | Rule | Prototype behavior |
 |---|---|
-| ③ ≠ ④ | Monitoring is **after** records, under its own Process Header |
-| ⑤ ≠ ⑥ | Review outcome/reason grouped under ⑤; lifecycle CTA under ⑥ |
-| 履歴・詳細 | Below ⑥; visually demoted（smaller heading / spacing）, not Accordion |
+| ③ ≠ ④ | Monitoring after records, own Process Header |
+| ⑤ ≠ ⑥ | Review outcome under ⑤; lifecycle CTA under ⑥ |
+| 履歴・詳細 | Below ⑥; demoted; not Accordion |
 | FIELD_STAFF / ADMIN_AUDIT | Not shown in this PLANNER prototype |
 
 ## 4. #576 copy placeholders（must survive）
@@ -79,26 +91,26 @@ presentation-only prototype
 Prototype ⑥ includes read-only placeholders for:
 
 ```text
-現在適用中: 版 N
-版 N+1 は下書きです。まだ適用開始されていません
+現在適用中：版 N
+版 N+1：まだ適用開始されていない
 現在使用中の版 N は変更しません
 CTA: 支援内容の見直しを始める（版 N+1 の下書き）
 ```
 
 ## 5. Static artifact
 
-Open:
-
 ```text
 docs/architecture/process-visibility-ui-v1-presentation-prototype-1.html
 ```
 
-Contains Desktop strip + Mobile 390px frame. Synthetic labels only. No SharePoint / LIVE WRITE.
+Correction-1: one responsive shell. Synthetic labels only. No SharePoint / LIVE WRITE.
 
 ## 6. Gate
 
 ```text
-PHASE 2 Prototype = READY FOR 5 Persona + Human Visual Acceptance
+Prototype 1 findings = P1×2 + P2×1（Mobile）
+Correction-1 = APPLIED
+PHASE 2 = READY FOR exact 390 re-read + Human Visual Acceptance
 Human Visual Acceptance = NOT RECEIVED
 Implementation Start = NOT AUTHORIZED
 ```

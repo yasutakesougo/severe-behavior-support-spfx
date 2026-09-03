@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: PROCESS-VISIBILITY-UI-V1
 kind: exact slice definition
-status: DEFINITION DRAFT / AWAITING Human Definition Lock GO
+status: REVIEW-CLEARED / Human Definition Lock ELIGIBLE
 PHASE 0 freeze: docs/architecture/process-visibility-ui-v1-information-mapping-freeze-1.md
 #576 product HEAD invariant: 4eab190eecdec5b05d7051d1ede3240dfdfa0052
 date: 2026-09-03
@@ -173,10 +173,12 @@ Implementation Start != Ready / Merge
 ## 11. Status
 
 ```text
-Definition = DRAFT / SUBMITTED FOR Human Definition Lock GO
+Definition = REVIEW-CLEARED
 Independent Definition Review-1 = PASS
-Human Definition Lock GO = NOT RECEIVED
-PHASE 2 / PHASE 3 docs = prepared as candidates（see companion docs）
+Human Definition Lock GO = NOT RECEIVED / ELIGIBLE
+Mobile Prototype Correction-1 does NOT invalidate Definition
+PHASE 2 Prototype = Correction-1 APPLIED / Visual Acceptance separate
+PHASE 3 Scope = REVIEW-CLEARED candidate / Implementation blocked
 Implementation Start = NOT AUTHORIZED
 mutation = 0
 ```
@@ -186,6 +188,7 @@ Companion:
 ```text
 docs/architecture/process-visibility-ui-v1-definition-independent-review-1.md
 docs/architecture/process-visibility-ui-v1-presentation-prototype-1.md
+docs/architecture/process-visibility-ui-v1-presentation-prototype-correction-1.md
 docs/architecture/process-visibility-ui-v1-5-persona-simulation-1.md
 docs/architecture/process-visibility-ui-v1-visual-acceptance-packet-1.md
 docs/architecture/process-visibility-ui-v1-implementation-scope-1.md

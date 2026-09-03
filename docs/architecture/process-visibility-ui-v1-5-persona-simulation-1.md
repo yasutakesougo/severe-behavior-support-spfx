@@ -8,6 +8,8 @@ prototype: docs/architecture/process-visibility-ui-v1-presentation-prototype-1.m
 acceptance probes: Definition §8 T1–T5
 date: 2026-09-03
 verdict: PASS WITH MINOR FRICTION（SIMULATION EVIDENCE ONLY）
+note: Prototype 1 Mobile P1 findings closed by Correction-1; this packet remains simulation-only
+correction: docs/architecture/process-visibility-ui-v1-presentation-prototype-correction-1.md
 Human Visual Acceptance: NOT RECEIVED
 Actual Staff Process-Comprehension Check: NOT YET / NOT AUTHORIZED BY THIS DOC
 Implementation Start: NOT AUTHORIZED
