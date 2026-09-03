@@ -10,8 +10,8 @@ authority: docs/architecture/understanding-test-matrix-version-management-v1.md
 product basis HEAD (PR #576): 633a5b461eabe49902e92486670272f6ac9231bc
 status: C1-C3 Test Matrix = DEFINED（Correction-1）
 5 Persona Simulation: PASS WITH MINOR FRICTION（SIMULATION EVIDENCE ONLY）
-Actual Staff Value Check: REQUIRED / NOT YET
-Human Ready GO consumption: NOT AUTHORIZED BY THIS DOC
+Actual Staff Value Check — Staff 1: HOLD（P1 >= 2）
+Human Ready GO consumption: BLOCKED BY STAFF P1
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 Mutation: 0
 ```
@@ -23,21 +23,30 @@ Mutation: 0
 = PASS WITH MINOR FRICTION
 C1-C3 Test Matrix
 = DEFINED（Correction-1）
-↓ NEXT
-Actual Staff Value Check
-  + C1-C3 observer scoring
 ↓
-PASS / ACCEPTABLE / HOLD
-↓ PASS / ACCEPTABLE
-Human Ready GO consumption
+Actual Staff Value Check — Staff 1
+= HOLD
+↓ NEXT
+Staff Finding Fix Scope
+↓
+Ponytail / Minimality Check
+↓
+Human Correction Implementation GO
+（Ready / GO consumption = BLOCKED）
 ```
 
 ```text
+Simulation Evidence < Actual Staff Evidence
 Simulation PASS != Actual Staff Value Check PASS
 Matrix DEFINED != Staff Value PASS
-Matrix DEFINED != Human Ready Authority
-#576 Human Ready GO = separate gate / not consumed here
+#576 Human Ready GO = RECEIVED / NOT CONSUMED / BLOCKED BY STAFF P1
 ```
+
+Staff 1 証跡:
+[`sbs-mgmt-loop-b-actual-staff-value-check.md`](./sbs-mgmt-loop-b-actual-staff-value-check.md)
+
+Fix Scope:
+[`sbs-mgmt-loop-b-staff-finding-fix-scope-1.md`](./sbs-mgmt-loop-b-staff-finding-fix-scope-1.md)
 
 ## 2. Correction-1 binding
 
@@ -101,45 +110,39 @@ Use Understanding Test Matrix v1 + Correction-1 only.
 
 Evidence 各行に Persona / Psychological state を添える（5 Persona または Staff 1）。
 
-## 5. Simulation-derived expected pattern（非 Staff 結果）
-
-5 Persona Simulation（PASS WITH MINOR FRICTION）から導いた、本画面の**予測パターン**。Staff 採点を先取り確定しない。
+## 5. Simulation vs Actual Staff（Evidence priority）
 
 ```text
-Evidence Type = SIMULATION-DERIVED EXPECTATION ONLY
-!= Actual Staff Value Check result
+Evidence Type (Simulation) = SIMULATION-DERIVED EXPECTATION ONLY
+Evidence Type (Staff 1) = ACTUAL STAFF VALUE EVIDENCE / HOLD
+Simulation Evidence < Actual Staff Evidence
 ```
 
-| Pattern | Expected shape | Finding 化 |
+Simulation 予測は P2 寄りだったが、Staff 1 では安全境界 P1 が出た。
+
+| Pattern | Simulation 予測 | Staff 1 実測 |
 |---|---|---|
-| C1 PRE vs POST | C1-2 = PARTIAL, C1-3 = YES が出やすい | 操作後は安全と分かるが、押す前の CTA 認識・不安が残る → P2 |
-| C1-4 | YES が出やすい | 版3残置 + Draft 別作成は操作後に追いやすい |
-| C2 save vs apply | C2-4a = YES, C2-4b = PARTIAL が出やすい | 本番未保存は明確、未適用の明示だけ弱い → P2 |
-| C2-2 | 「消えるのでは？」不安があっても即 NO にしない | PARTIAL / UI_FRICTION |
-| C3-3 | 過去版一覧の軽い混乱 | P2 候補（自動 P1 にしない） |
-| C3-1 / C3-2 / C3-4 | 現行特定不能・対比不能・上書き/適用済み説明 | P1 候補のみ |
+| C1-2 | PARTIAL | NO（P1）— 次操作が複数候補 |
+| C1 PRE | PARTIAL→理解 | NO — 新規/既存の作成編集？ |
+| C2-4b | PARTIAL | NO（P1）— 最新版を使っている前提 |
+| C3-4 | YES 寄り | NO（P1）— 版3残置/版4 Draft 未説明 |
 
-既知の Simulation P2（導線）:
+既知の Simulation P2（導線）は secondary。Staff P1 を優先して Fix Scope へ渡す。
 
-- readback「支援内容を見直す」↔ CTA「変更内容の作成を始める」語対応（C1-2 Moment）
-- disabled predecessor 並置による探索コスト
-- 適用未開始の明示不足（C2-4b）
+## 6. Actual Staff Value Check / Fix Scope
 
-## 6. Actual Staff Value Check への受け渡し
-
-正本セッション票:
-[`sbs-mgmt-loop-b-actual-staff-value-check.md`](./sbs-mgmt-loop-b-actual-staff-value-check.md)
-
-職員には 4 問のみ。C1〜C3 は observer が裏採点する。
+- Staff 1 HOLD 証跡: [`sbs-mgmt-loop-b-actual-staff-value-check.md`](./sbs-mgmt-loop-b-actual-staff-value-check.md)
+- Fix Scope: [`sbs-mgmt-loop-b-staff-finding-fix-scope-1.md`](./sbs-mgmt-loop-b-staff-finding-fix-scope-1.md)
 
 ## 7. Boundaries
 
 ```text
 C1-C3 Test Matrix = DEFINED（Correction-1）
-Actual Staff Value Check = REQUIRED
-Human Ready GO consumption = NOT BY THIS DOC
+Actual Staff Value Check — Staff 1 = HOLD
+Human Ready GO consumption = BLOCKED BY STAFF P1
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 SharePoint / M365 / Entra mutation = NOT AUTHORIZED
 source SupportPlanVersion N mutation = NOT AUTHORIZED
-#576 code mutation via this docs PR = 0
+Human Correction Implementation GO = REQUIRED BEFORE UI FIX
+mutation = 0
 ```
