@@ -5,6 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 Unit: SBS-MGMT-LOOP-B (#553)
 Kind: B12 browser smoke / Rendered Browser Acceptance (RBA)
 Harness: spfx/smoke/sbs-mgmt-loop-b/
+exact HEAD: 4eab190eecdec5b05d7051d1ede3240dfdfa0052
 presentationOnly: true
 LIVE WRITE / Deploy / SharePoint: NOT AUTHORIZED
 source SupportPlanVersion N mutation: NOT AUTHORIZED
@@ -19,9 +20,12 @@ source SupportPlanVersion N mutation: NOT AUTHORIZED
 | B12-R3 | both | review-materials predecessor demoted (`tertiary` + `data-sbs-mgmt-loop-b-predecessor="demoted"`) | B12 / P1-1 |
 | B12-R4 | both | `[data-review-new-version="create-cta"]` remains present and disabled (Scope Correction-1 retain) | B12 / P1-1 |
 | B12-R5 | both | #553 executable CTA uses `data-sbs-mgmt-loop-b-action="start-revision"` only (no create-cta) | B12 / P1-1 |
-| B12-R6 | both | explicit CTA `変更内容の作成を始める` creates session-only N+1 draft | B12 |
+| B12-R6 | both | CTA label clear: `支援内容の見直しを始める（版 4 の下書き）` | B12 / Staff Fix 1 |
+| B12-R6a | both | CTA直前 source safety: `現在使用中の版 3 は変更しません` + 版4下書きを別に作る | B12 / Staff Fix 2 |
 | B12-R7 | both | draft readback: `変更内容の下書き: 版 4` | B12 |
 | B12-R8 | both | source N immutable: `元の版: 3（変更しない）` + current version control still 版 3 | B12 |
+| B12-R8a | both | active version explicit: `現在適用中: 版 3` | B12 / Staff Fix 3 |
+| B12-R8b | both | draft not applied: `版 4 は下書きです。まだ適用開始されていません` | B12 / Staff Fix 3 |
 | B12-R9 | both | session-only: `下書き / 本番未保存` + boundary `本番には保存されていません` | B12 |
 | B12-R10 | both | decision + reason readback remain visible | B12 |
 | B12-R11 | both | after draft: start-revision cleared; draft count remains 1 under repeated action | B12 |
@@ -34,9 +38,25 @@ source SupportPlanVersion N mutation: NOT AUTHORIZED
 | RBA-V1 | 1280×900 | desktop rendered acceptance exercised | RBA |
 | RBA-V2 | 390×844 | mobile rendered acceptance exercised | RBA |
 
+## Exact-head RBA evidence @ 4eab190
+
 ```text
+CI B12 run 33719952116 = SUCCESS
+Local re-run pass = true
+Artifacts: /opt/cursor/artifacts/sbs-mgmt-loop-b-browser-smoke-4eab190/
+  desktop-1280x900.png
+  mobile-390x844.png
+  desktop-no-change-blocked.png
+  mobile-no-change-blocked.png
+  desktop-historical-stale-blocked.png
+  mobile-historical-stale-blocked.png
+  report.json
+```
+
+```text
+Rendered Browser Acceptance @ 4eab190 = PASS / VERIFIED
 Rendered Browser Acceptance ≠ Actual Staff Value Check
-Actual Staff Value Check remains a separate Human gate after Independent Review
+Actual Staff Re-Check remains required before Human Ready GO consumption
 ```
 
 ## Boundary held
