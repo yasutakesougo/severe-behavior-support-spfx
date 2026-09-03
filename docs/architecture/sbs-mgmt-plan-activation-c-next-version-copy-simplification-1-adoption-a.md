@@ -15,7 +15,12 @@ Implementation = DONE
     spfx/src/shell/users/support-plan.test.ts (assert 同期)
   npm test 954/954 PASS
   typecheck PASS
-Actual Staff Check = HOLD
+  verify:ci PASS
+  B12 RBA 6/6 PASS
+Dual HEAD:
+  #584 @ 5437e64 = FROZEN historical reviewed basis
+  Proposal A = NEW product candidate for next Staff Check
+Actual Staff Check = HOLD（exact-head fixation + Human arrival gate 後）
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
 
@@ -96,13 +101,11 @@ schema / CAS / ActivationReceipt / DraftSnapshotId — 変更なし
 ## Next action
 
 ```text
-Human UI Copy Correction Start GO — Proposal A
-= NOT RECEIVED
-
-このGOを受けるまで実装は行わない。
-GOを受けた時点で:
-  exact files = SupportPlan.tsx / support-plan-copy.ts / support-plan.test.ts
-  変更 = 区間 B の REMOVE 行を削除し、短縮 copy を挿入
-  DOM selector = 保持のまま
-  locked invariant = 変更なし
+Exact UI-Correction HEAD Fixation
+↓
+Exact-head CI GREEN
+↓
+Human arrival gate 5/5 on Proposal A HEAD
+↓
+Actual Staff Plan-Transition Re-Test
 ```
