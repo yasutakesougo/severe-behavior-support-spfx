@@ -16,9 +16,11 @@ LIVE WRITE = false
 |---|---|
 | beforeApply query recognized | PASS (`data-sbs-mgmt-plan-activation-c-query=beforeApply`) |
 | DOM driver executed | PASS (banner `ready`) |
+| sticky overlay + tab title | PASS（`position:sticky` / `【適用待機】`） |
+| ⑤ review readback | PASS（`変更が必要`） |
 | Draft v4 present | PASS |
 | Apply CTA mounted | PASS（`版 4 を適用開始する` enabled） |
-| cold URL empty session | PASS（list + opened plan: no draft / no Apply） |
+| cold URL empty session | PASS（list + opened plan: no draft / no Apply; matches Human HOLD surface） |
 | #584 product source unchanged | PASS（diff vs `5437e64` = smoke + these docs only） |
 
 ## Not claimed
