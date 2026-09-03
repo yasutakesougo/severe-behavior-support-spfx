@@ -264,6 +264,8 @@ async function runNoChangeBlocked(name, width, height) {
   await openSupportPlan(page);
   await page.click('[data-review-outcome-action="NO_CHANGE"]');
   await page.waitForSelector('[data-review-outcome-readback="true"]');
+  // Parent SupportPlan decision marker propagates via useEffect after capture readback.
+  await page.waitForSelector('[data-sbs-mgmt-loop-b-decision="NO_CHANGE"]');
   const found = await page.evaluate(() => {
     const start = document.querySelector('[data-sbs-mgmt-loop-b-action="start-revision"]');
     const createCta = document.querySelector('[data-review-new-version="create-cta"]');

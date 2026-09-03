@@ -25,7 +25,7 @@ source SupportPlanVersion N mutation: NOT AUTHORIZED
 | B12-R9 | both | session-only: `下書き / 本番未保存` + boundary `本番には保存されていません` | B12 |
 | B12-R10 | both | decision + reason readback remain visible | B12 |
 | B12-R11 | both | after draft: start-revision cleared; draft count remains 1 under repeated action | B12 |
-| B12-R12 | both | NO_CHANGE capture does not enable start-revision / does not create draft | B12 |
+| B12-R12 | both | NO_CHANGE capture does not enable start-revision / does not create draft; wait parent `data-sbs-mgmt-loop-b-decision="NO_CHANGE"` after capture readback | B12 |
 | B12-R13 | both | historical v2 selection blocks start-revision / forbids N+2 draft | B12 |
 | B12-R14 | both | `data-sbs-mgmt-loop-b-live-write="false"` | B12 |
 | B12-R15 | both | external requests = 0 | B12 / RBA |
