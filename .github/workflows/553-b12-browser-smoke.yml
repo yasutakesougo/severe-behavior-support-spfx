@@ -25,9 +25,12 @@ jobs:
         run: npm install --prefix /tmp --no-save puppeteer-core esbuild sass
       - name: Resolve isolated runtime package entries
         run: |
-          echo "SBS_MGMT_LOOP_B_PUPPETEER_PATH=$(node -p \"require.resolve('puppeteer-core', { paths: ['/tmp'] })\")" >> "$GITHUB_ENV"
-          echo "SBS_MGMT_LOOP_B_ESBUILD_PATH=$(node -p \"require.resolve('esbuild', { paths: ['/tmp'] })\")" >> "$GITHUB_ENV"
-          echo "SBS_MGMT_LOOP_B_SASS_PATH=$(node -p \"require.resolve('sass', { paths: ['/tmp'] })\")" >> "$GITHUB_ENV"
+          PUPPETEER_PATH=$(node -e "console.log(require.resolve('puppeteer-core', { paths: ['/tmp'] }))")
+          ESBUILD_PATH=$(node -e "console.log(require.resolve('esbuild', { paths: ['/tmp'] }))")
+          SASS_PATH=$(node -e "console.log(require.resolve('sass', { paths: ['/tmp'] }))")
+          echo "SBS_MGMT_LOOP_B_PUPPETEER_PATH=$PUPPETEER_PATH" >> "$GITHUB_ENV"
+          echo "SBS_MGMT_LOOP_B_ESBUILD_PATH=$ESBUILD_PATH" >> "$GITHUB_ENV"
+          echo "SBS_MGMT_LOOP_B_SASS_PATH=$SASS_PATH" >> "$GITHUB_ENV"
       - name: Run B12 desktop + mobile browser acceptance
         env:
           SBS_MGMT_LOOP_B_ARTIFACTS_DIR: /tmp/sbs-mgmt-loop-b-browser-smoke
