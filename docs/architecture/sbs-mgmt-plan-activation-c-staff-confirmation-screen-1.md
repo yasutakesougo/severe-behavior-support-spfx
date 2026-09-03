@@ -16,7 +16,9 @@ Human Ready GO: NOT RECEIVED / NOT ELIGIBLE
 リポジトリ根で、この確認画面を含むブランチを checkout する。
 
 ```bash
-# 初回のみ（esbuild / sass が無いとき）
+# 初回のみ
+npm ci
+cd spfx && npm ci && cd ..
 npm install esbuild sass --no-save
 
 node spfx/smoke/sbs-mgmt-loop-b/serve-smoke.mjs

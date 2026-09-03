@@ -10,7 +10,9 @@ Exact B12 / RBA matrix: `docs/architecture/sbs-mgmt-loop-b-browser-smoke.md`.
 From repository root, on PR branch / exact HEAD:
 
 ```bash
-# once, if esbuild/sass are not already available
+# once
+npm ci
+cd spfx && npm ci && cd ..
 npm install esbuild sass --no-save
 
 node spfx/smoke/sbs-mgmt-loop-b/serve-smoke.mjs
