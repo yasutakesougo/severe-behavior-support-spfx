@@ -62,9 +62,10 @@ Visual Acceptance = CONSUMED
 = PASS WITH MINOR FRICTION
 ↓
 WAIT #576
-  Actual Staff Re-Check
+  live: OPEN / READY FOR REVIEW（left draft 2026-09-03）
+  Actual Staff Re-Check = NOT YET / REQUIRED
+  ready_for_review ≠ Staff Re-Check PASS ≠ Merge
   → PASS / ACCEPTABLE
-  → Human Ready GO consumption
   → Human Merge GO
   → post-merge fixation
 ↓
