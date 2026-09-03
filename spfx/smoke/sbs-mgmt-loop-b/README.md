@@ -23,7 +23,7 @@ Exact B12 / RBA matrix: `docs/architecture/sbs-mgmt-loop-b-browser-smoke.md`.
 
 Checks both `1280x900` and `390x844`:
 
-`CHANGE_REQUIRED` + human-authored reason → C2 single primary + demoted review predecessor + retained disabled `create-cta` → clear `支援内容の見直しを始める（版 N+1 の下書き）` CTA with CTA-adjacent source-safety copy → exact N+1 draft readback including `現在適用中: 版 N` and `まだ適用開始されていません` → repeated action does not double-create → source version unchanged → `LIVE_WRITE=false` / external requests=0.
+`CHANGE_REQUIRED` + human-authored reason → C2 single primary + demoted review predecessor + retained disabled `create-cta` → clear `支援内容の見直しを始める（版 N+1 の下書き）` CTA with CTA-adjacent source-safety copy → exact N+1 draft readback including `適用中: 版 N` and `下書き: 版 N+1` → Apply → `版 4 適用中 / 版 3 過去版` → repeated action does not double-create → source version unchanged → `LIVE_WRITE=false` / external requests=0.
 
 Negative paths: `NO_CHANGE` does not enable revision-start; historical v2 selection blocks start / forbids N+2.
 

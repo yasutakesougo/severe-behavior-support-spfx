@@ -205,13 +205,17 @@ async function runHappyPath(name, width, height) {
     const applyText = apply?.textContent ?? "";
     return {
       draftCount: drafts.length,
-      draftHasNPlusOne: (draft?.textContent ?? "").includes("変更内容の下書き: 版 4"),
-      draftKeepsSourceN: (draft?.textContent ?? "").includes("元の版: 3（変更しない）"),
-      draftSessionOnly: (draft?.textContent ?? "").includes("下書き / 本番未保存"),
-      activeVersionClear: (activeVersion?.textContent ?? "").includes("現在適用中: 版 3"),
-      draftNotApplied:
-        (draftLifecycle?.textContent ?? "").includes("版 4 は下書きです") &&
-        (draftLifecycle?.textContent ?? "").includes("まだ適用開始されていません"),
+      draftHasNPlusOne: (draftLifecycle?.textContent ?? "").includes("下書き: 版 4"),
+      draftKeepsSourceN: (activeVersion?.textContent ?? "").includes("適用中: 版 3"),
+      draftSessionOnly: (boundary?.textContent ?? "").includes("本番には保存されていません"),
+      activeVersionClear: (activeVersion?.textContent ?? "").includes("適用中: 版 3"),
+      draftNotApplied: (draftLifecycle?.textContent ?? "").includes("下書き: 版 4"),
+      removedLongDraftCopy: !(draft?.textContent ?? "").includes("変更内容の下書き"),
+      removedSourceUnchangedCopy: !(draft?.textContent ?? "").includes("元の版: 3（変更しない）"),
+      removedDraftLifecycleSentence: !(draft?.textContent ?? "").includes(
+        "は下書きです。まだ適用開始されていません",
+      ),
+      removedDraftStatusLine: !(draft?.textContent ?? "").includes("状態: 下書き / 本番未保存"),
       boundaryNoLiveWrite: (boundary?.textContent ?? "").includes("本番には保存されていません"),
       liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-loop-b-live-write") === "false",
       decisionPresent: Boolean(decision),
@@ -276,6 +280,10 @@ async function runHappyPath(name, width, height) {
     found.draftSessionOnly &&
     found.activeVersionClear &&
     found.draftNotApplied &&
+    found.removedLongDraftCopy &&
+    found.removedSourceUnchangedCopy &&
+    found.removedDraftLifecycleSentence &&
+    found.removedDraftStatusLine &&
     found.boundaryNoLiveWrite &&
     found.liveWriteFalse &&
     found.decisionPresent &&
@@ -400,9 +408,7 @@ async function runHistoricalStaleBlocked(name, width, height) {
       draftAbsent: draft === null,
       currentStillN: (currentVersion?.textContent ?? "").includes("版 3"),
       liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-loop-b-live-write") === "false",
-      textHasNoNPlusTwoDraft: !(document.body?.textContent ?? "").includes(
-        "変更内容の下書き: 版 5",
-      ),
+      textHasNoNPlusTwoDraft: !(document.body?.textContent ?? "").includes("下書き: 版 5"),
     };
   });
   const pass =
