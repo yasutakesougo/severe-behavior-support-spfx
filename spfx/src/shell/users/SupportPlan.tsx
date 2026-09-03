@@ -403,8 +403,23 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       actionAt: new Date().toISOString(),
     });
     if (result.status === "STARTED" || result.status === "ALREADY_STARTED") {
-      setRevisionSession({ intents: [result.intent], drafts: [result.draft] });
+      const knownVersions = revisionSession.existingVersions.some(
+        (version) => version.version === result.draft.candidate.version,
+      )
+        ? revisionSession.existingVersions
+        : [...revisionSession.existingVersions, result.draft.candidate];
+      setRevisionSession({
+        intents: [result.intent],
+        drafts: [result.draft],
+        existingVersions: knownVersions,
+      });
       setRevisionError(null);
+      return;
+    }
+    if (result.status === "HOLD") {
+      setRevisionError(
+        "変更内容の下書きを開始できませんでした。既存の次版または下書きを確認してください。",
+      );
       return;
     }
     setRevisionError(
@@ -448,6 +463,20 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           ) : null}
         </div>
       ) : null}
+      {/* Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate. */}
+      {!adminRead ? (
+        <button
+          type="button"
+          className={styles.mutationButton}
+          disabled
+          aria-disabled="true"
+          data-demo-ux="support-plan-mutation-button"
+          data-review-new-version="create-cta"
+          data-sbs-action="tertiary"
+        >
+          {SUPPORT_PLAN_NEXT_VERSION_CTA}
+        </button>
+      ) : null}
       {revisionDraft ? (
         <div role="status" data-sbs-mgmt-loop-b-draft="true">
           <p>変更内容の下書き: 版 {revisionDraft.candidate.version}</p>
@@ -459,27 +488,17 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           type="button"
           className={styles.mutationButton}
           onClick={handleRevisionStart}
-          data-review-new-version="create-cta"
           data-sbs-mgmt-loop-b-action="start-revision"
           data-sbs-action="primary"
         >
           変更内容の作成を始める
         </button>
-      ) : adminRead ? null : (
-        <button
-          type="button"
-          className={styles.mutationButton}
-          disabled
-          aria-disabled="true"
-          data-demo-ux="support-plan-mutation-button"
-          data-review-new-version="create-cta"
-          data-sbs-mgmt-loop-b-action="start-revision-disabled"
-          data-sbs-action="tertiary"
-        >
-          {SUPPORT_PLAN_NEXT_VERSION_CTA}
-        </button>
-      )}
-      <p className={styles.sectionHint} data-sbs-mgmt-loop-b-boundary="true">
+      ) : null}
+      <p
+        className={styles.sectionHint}
+        data-sbs-mgmt-loop-b-boundary="true"
+        data-sbs-mgmt-loop-b-live-write="false"
+      >
         本番には保存されていません
       </p>
       {revisionError ? (
