@@ -17,14 +17,14 @@ const artifactsDir =
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const esbuildModule = await import(
-  process.env.SBS_MGMT_LOOP_B_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js",
+  process.env.SBS_MGMT_LOOP_B_ESBUILD_PATH ?? "/tmp/node_modules/esbuild/lib/main.js"
 );
 const puppeteerModule = await import(
   process.env.SBS_MGMT_LOOP_B_PUPPETEER_PATH ??
-    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js",
+    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js"
 );
 const sassModule = await import(
-  process.env.SBS_MGMT_LOOP_B_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.js",
+  process.env.SBS_MGMT_LOOP_B_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.js"
 );
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
@@ -48,9 +48,7 @@ function normalizeSpfxThemeCss(css) {
 
 const css = scssPaths
   .map((rel) =>
-    normalizeSpfxThemeCss(
-      compileScss(path.join(spfxRoot, rel), { style: "expanded" }).css,
-    ),
+    normalizeSpfxThemeCss(compileScss(path.join(spfxRoot, rel), { style: "expanded" }).css),
   )
   .join("\n");
 fs.writeFileSync(path.join(outDir, "smoke-production.css"), css);
@@ -97,7 +95,8 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (error, data) => {
     if (error) return res.writeHead(404).end("not found");
     const ext = path.extname(filePath);
-    const type = ext === ".html" ? "text/html" : ext === ".css" ? "text/css" : "application/javascript";
+    const type =
+      ext === ".html" ? "text/html" : ext === ".css" ? "text/css" : "application/javascript";
     res.writeHead(200, { "Content-Type": `${type}; charset=utf-8` });
     res.end(data);
   });
