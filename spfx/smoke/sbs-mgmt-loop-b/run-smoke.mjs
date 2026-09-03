@@ -201,6 +201,8 @@ async function runHappyPath(name, width, height) {
     const liveWrite = document.querySelector("[data-sbs-mgmt-loop-b-live-write]");
     const activeVersion = document.querySelector('[data-sbs-mgmt-loop-b-active-version="true"]');
     const draftLifecycle = document.querySelector('[data-sbs-mgmt-loop-b-draft-lifecycle="true"]');
+    const apply = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
+    const applyText = apply?.textContent ?? "";
     return {
       draftCount: drafts.length,
       draftHasNPlusOne: (draft?.textContent ?? "").includes("変更内容の下書き: 版 4"),
@@ -219,6 +221,39 @@ async function runHappyPath(name, width, height) {
       currentVersionStillN: (currentVersion?.textContent ?? "").includes("版 3"),
       createCtaStillDisabled: createCta instanceof HTMLButtonElement && createCta.disabled,
       startActionCleared: startGone === null,
+      applyPresent: apply instanceof HTMLButtonElement && !apply.disabled,
+      applyIsPrimary: apply?.getAttribute("data-sbs-action") === "primary",
+      applyLabelClear:
+        applyText.includes("版 4") && applyText.includes("を適用開始する"),
+      overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    };
+  });
+
+  await page.click('[data-sbs-mgmt-plan-activation-c-action="apply"]');
+  await page.waitForSelector('[data-sbs-mgmt-plan-activation-c="applied"]');
+
+  const afterApply = await page.evaluate(() => {
+    const applied = document.querySelector('[data-sbs-mgmt-plan-activation-c="applied"]');
+    const active = document.querySelector(
+      '[data-sbs-mgmt-plan-activation-c-active-version="true"]',
+    );
+    const history = document.querySelector('[data-sbs-mgmt-plan-activation-c-history="true"]');
+    const receipt = document.querySelector('[data-sbs-mgmt-plan-activation-c-receipt="true"]');
+    const draftGone = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
+    const applyGone = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
+    const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
+    const liveWrite = document.querySelector("[data-sbs-mgmt-plan-activation-c-live-write]");
+    const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+    return {
+      appliedPresent: Boolean(applied),
+      activeIsV4: (active?.textContent ?? "").includes("現在適用中: 版 4"),
+      historyIsV3: (history?.textContent ?? "").includes("版 3: 過去版"),
+      receiptPresent: (receipt?.textContent ?? "").includes("適用:"),
+      draftCleared: draftGone === null,
+      applyCleared: applyGone === null,
+      currentVersionIsV4: (currentVersion?.textContent ?? "").includes("版 4"),
+      liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-plan-activation-c-live-write") === "false",
+      primaryCountAfterApply: primaryActions.length,
       overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     };
   });
@@ -250,7 +285,20 @@ async function runHappyPath(name, width, height) {
     found.currentVersionStillN &&
     found.createCtaStillDisabled &&
     found.startActionCleared &&
+    found.applyPresent &&
+    found.applyIsPrimary &&
+    found.applyLabelClear &&
     !found.overflowX &&
+    afterApply.appliedPresent &&
+    afterApply.activeIsV4 &&
+    afterApply.historyIsV3 &&
+    afterApply.receiptPresent &&
+    afterApply.draftCleared &&
+    afterApply.applyCleared &&
+    afterApply.currentVersionIsV4 &&
+    afterApply.liveWriteFalse &&
+    afterApply.primaryCountAfterApply <= 1 &&
+    !afterApply.overflowX &&
     externalRequests.length === 0;
 
   const screenshot = path.join(artifactsDir, `${name}.png`);
@@ -263,6 +311,7 @@ async function runHappyPath(name, width, height) {
     pass,
     preStart,
     found,
+    afterApply,
     externalRequests,
     pageErrors,
     screenshot,

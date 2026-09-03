@@ -43,11 +43,19 @@ import {
   SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
 import {
+  EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION,
+  applySyntheticPlanningPcActivation,
+  type SupportPlanActivationSession,
+} from "./support-plan-activation-session";
+import {
   EMPTY_SUPPORT_PLAN_REVISION_SESSION,
   startSyntheticPlanningPcRevision,
   type SupportPlanRevisionSession,
 } from "./support-plan-revision-start";
-import type { ShellSupportPlanPresentation } from "./support-plan-types";
+import type {
+  ShellSupportPlanPresentation,
+  SupportPlanVersionEntry,
+} from "./support-plan-types";
 import styles from "./SupportPlanUx.module.scss";
 
 export type SupportPlanProps = Readonly<{
@@ -106,9 +114,43 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const [revisionSession, setRevisionSession] = React.useState<SupportPlanRevisionSession>(
     EMPTY_SUPPORT_PLAN_REVISION_SESSION,
   );
+  const [activationSession, setActivationSession] = React.useState<SupportPlanActivationSession>(
+    EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION,
+  );
+  const [activatedVersionEntry, setActivatedVersionEntry] =
+    React.useState<SupportPlanVersionEntry | null>(null);
   const [revisionError, setRevisionError] = React.useState<string | null>(null);
-  const selectedVersionEntry = versions.find((entry) => entry.version === selectedVersion);
-  const currentVersionEntry = versions.find((entry) => entry.isCurrent);
+  const liveCurrentVersion = activationSession.currentPlan.currentVersion;
+  const activationReceipt = activationSession.receipt;
+  const displayVersions = React.useMemo(() => {
+    const mapped = versions.map((entry) => ({
+      ...entry,
+      isCurrent: entry.version === liveCurrentVersion,
+      lifecycleLabel:
+        entry.version === liveCurrentVersion
+          ? "現行版"
+          : entry.version < liveCurrentVersion
+            ? "過去版"
+            : entry.lifecycleLabel,
+    }));
+    if (
+      activatedVersionEntry &&
+      !mapped.some((entry) => entry.version === activatedVersionEntry.version)
+    ) {
+      return [
+        ...mapped.map((entry) => ({
+          ...entry,
+          isCurrent: false,
+          lifecycleLabel:
+            entry.version < activatedVersionEntry.version ? "過去版" : entry.lifecycleLabel,
+        })),
+        activatedVersionEntry,
+      ];
+    }
+    return mapped;
+  }, [activatedVersionEntry, liveCurrentVersion, versions]);
+  const selectedVersionEntry = displayVersions.find((entry) => entry.version === selectedVersion);
+  const currentVersionEntry = displayVersions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
   const reviewCtaEnabled = Boolean(onReviewMaterialsRequest);
   const monitoringResult = React.useMemo(
@@ -118,17 +160,24 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const revisionDraft = revisionSession.drafts[0] ?? null;
   const revisionEligible = Boolean(
     planningPc &&
-    selectedVersion === currentVersion &&
+    selectedVersion === liveCurrentVersion &&
+    !activationReceipt &&
     capturedReview?.outcome.decision === "CHANGE_REQUIRED" &&
     capturedReview.decisionReason !== null &&
     capturedReview.decisionReason.reason.trim().length > 0 &&
     capturedReview.outcome.UserId === presentation.userId &&
     capturedReview.outcome.planId === planId &&
-    capturedReview.outcome.planVersion === currentVersion,
+    capturedReview.outcome.planVersion === liveCurrentVersion,
   );
-  // H-05 / C2: at most one SBS_ACTION.primary per view. While revision-start is the
-  // forward CTA, demote the review-materials predecessor from primary.
-  const revisionStartIsPrimaryForward = Boolean(revisionEligible && !revisionDraft && !adminRead);
+  // H-05 / C2: at most one SBS_ACTION.primary per view. While revision-start or
+  // activation Apply is the forward CTA, demote the review-materials predecessor.
+  const activationApplyIsPrimaryForward = Boolean(
+    planningPc && revisionDraft && !activationReceipt && !adminRead,
+  );
+  const revisionStartIsPrimaryForward = Boolean(
+    revisionEligible && !revisionDraft && !activationApplyIsPrimaryForward && !adminRead,
+  );
+  const demoteReviewMaterialsCta = revisionStartIsPrimaryForward || activationApplyIsPrimaryForward;
   const [activePlannerSectionId, setActivePlannerSectionId] = React.useState<string>(
     sectionNavigation[0].id,
   );
@@ -217,7 +266,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             <button
               type="button"
               className={
-                revisionStartIsPrimaryForward
+                demoteReviewMaterialsCta
                   ? styles.reviewMaterialsButton
                   : styles.reviewMaterialsButtonPrimary
               }
@@ -226,10 +275,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
               aria-disabled={!reviewCtaEnabled ? "true" : undefined}
               data-demo-ux="support-plan-review-cta"
               data-planning-pc="review-cta"
-              data-sbs-action={revisionStartIsPrimaryForward ? "tertiary" : "primary"}
-              data-sbs-mgmt-loop-b-predecessor={
-                revisionStartIsPrimaryForward ? "demoted" : undefined
-              }
+              data-sbs-action={demoteReviewMaterialsCta ? "tertiary" : "primary"}
+              data-sbs-mgmt-loop-b-predecessor={demoteReviewMaterialsCta ? "demoted" : undefined}
             >
               {SUPPORT_PLAN_REVIEW_MATERIALS_CTA}
             </button>
@@ -281,7 +328,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           procedureLabelContext={{
             userId: presentation.userId,
             planId,
-            currentVersion,
+            currentVersion: liveCurrentVersion,
             currentProcedures,
           }}
           onCapturedReviewChange={setCapturedReview}
@@ -328,7 +375,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         {SUPPORT_PLAN_PAST_VERSION_READONLY_NOTE}
       </p>
       <ul className={styles.versionList} data-planning-pc="version-list">
-        {versions.map((entry) => (
+        {displayVersions.map((entry) => (
           <li key={entry.version}>
             <button
               type="button"
@@ -441,6 +488,49 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     );
   };
 
+  const handleActivationApply = (): void => {
+    if (!revisionDraft || activationReceipt) {
+      setRevisionError("適用する下書きを確認してください。");
+      return;
+    }
+    const draft = revisionDraft;
+    void applySyntheticPlanningPcActivation({
+      draft,
+      session: activationSession,
+      actor: "planning-pc-synthetic-staff",
+      actionAt: new Date().toISOString(),
+    }).then((result) => {
+      if (result.status === "SUCCESS" || result.status === "ALREADY_APPLIED") {
+        setActivationSession(result.session);
+        setActivatedVersionEntry({
+          version: result.receipt.activatedVersion,
+          createdAtLabel: result.receipt.activatedAt,
+          lifecycleLabel: "現行版",
+          isCurrent: true,
+          summary: draft.candidate.goals[0] ?? `版 ${result.receipt.activatedVersion}`,
+          supportMethods: draft.candidate.supportMethods,
+          precautions: draft.candidate.precautions,
+        });
+        setRevisionSession((previous) => ({
+          ...previous,
+          drafts: [],
+        }));
+        setSelectedVersion(result.receipt.activatedVersion);
+        setRevisionError(null);
+        return;
+      }
+      if (result.status === "CONFLICT") {
+        setRevisionError(
+          "適用を開始できませんでした。別の操作と競合したため、状態を確認してください。",
+        );
+        return;
+      }
+      setRevisionError(
+        "適用を開始できませんでした。下書き内容と現在版を確認してください。",
+      );
+    });
+  };
+
   const capturedReviewSummary = capturedReview ? (
     <div className={styles.processReviewOutcome} data-sbs-mgmt-loop-b-review="true">
       <p data-sbs-mgmt-loop-b-decision={capturedReview.outcome.decision}>
@@ -468,7 +558,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       </p>
       <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
       <p data-review-new-version="next-version-number">
-        現行は版 {currentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion} です。
+        現行は版 {liveCurrentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion}{" "}
+        です。
       </p>
       <p className={styles.sectionHint} data-review-new-version="observation-not-invalidating">
         {SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE}
@@ -491,7 +582,19 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           {SUPPORT_PLAN_NEXT_VERSION_CTA}
         </button>
       ) : null}
-      {revisionDraft ? (
+      {activationReceipt ? (
+        <div role="status" data-sbs-mgmt-plan-activation-c="applied">
+          <p data-sbs-mgmt-plan-activation-c-active-version="true">
+            現在適用中: 版 {activationReceipt.activatedVersion}
+          </p>
+          <p data-sbs-mgmt-plan-activation-c-history="true">
+            版 {activationReceipt.fromVersion}: 過去版
+          </p>
+          <p data-sbs-mgmt-plan-activation-c-receipt="true">
+            適用: {activationReceipt.activatedBy} / {activationReceipt.activatedAt}
+          </p>
+        </div>
+      ) : revisionDraft ? (
         <div role="status" data-sbs-mgmt-loop-b-draft="true">
           <p>変更内容の下書き: 版 {revisionDraft.candidate.version}</p>
           <p>元の版: {revisionDraft.reviewBinding.reviewedPlanVersion}（変更しない）</p>
@@ -502,11 +605,22 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             版 {revisionDraft.candidate.version} は下書きです。まだ適用開始されていません。
           </p>
           <p>状態: 下書き / 本番未保存</p>
+          {!adminRead ? (
+            <button
+              type="button"
+              className={styles.reviewMaterialsButtonPrimary}
+              onClick={handleActivationApply}
+              data-sbs-mgmt-plan-activation-c-action="apply"
+              data-sbs-action="primary"
+            >
+              版 {revisionDraft.candidate.version} を適用開始する
+            </button>
+          ) : null}
         </div>
       ) : revisionEligible && !adminRead ? (
         <>
           <p className={styles.sectionHint} data-sbs-mgmt-loop-b-source-safety="true">
-            現在使用中の版 {currentVersion} は変更しません。版 {conceptualNextVersion}{" "}
+            現在使用中の版 {liveCurrentVersion} は変更しません。版 {conceptualNextVersion}{" "}
             の下書きを別に作ります。
           </p>
           <button
@@ -524,6 +638,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         className={styles.sectionHint}
         data-sbs-mgmt-loop-b-boundary="true"
         data-sbs-mgmt-loop-b-live-write="false"
+        data-sbs-mgmt-plan-activation-c-live-write="false"
       >
         本番には保存されていません
       </p>
@@ -651,9 +766,11 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       ? "変更が必要"
       : "変更なし"
     : reviewStatus.reviewStatusLabel;
-  const nextVersionSummaryLabel = revisionDraft
-    ? `版 ${revisionDraft.candidate.version}・下書き・未適用`
-    : `版 ${conceptualNextVersion}・次版準備`;
+  const nextVersionSummaryLabel = activationReceipt
+    ? `版 ${activationReceipt.activatedVersion}・適用中`
+    : revisionDraft
+      ? `版 ${revisionDraft.candidate.version}・下書き・未適用`
+      : `版 ${conceptualNextVersion}・次版準備`;
 
   const plannerProcessFlow = (
     <div className={styles.processFlow} data-process-visibility-ui-v1="process-flow">
