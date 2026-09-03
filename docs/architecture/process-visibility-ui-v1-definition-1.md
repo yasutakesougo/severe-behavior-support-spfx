@@ -176,9 +176,12 @@ Implementation Start != Ready / Merge
 Definition = REVIEW-CLEARED
 Independent Definition Review-1 = PASS
 Human Definition Lock GO = NOT RECEIVED / ELIGIBLE
-Mobile Prototype Correction-1 does NOT invalidate Definition
-PHASE 2 Prototype = Correction-1 APPLIED / Visual Acceptance separate
-PHASE 3 Scope = REVIEW-CLEARED candidate / Implementation blocked
+recommended next Human gate = Definition Lock（before Visual Acceptance）
+PHASE 2 Prototype Correction-1 = PASS / VISUAL-ACCEPTANCE ELIGIBLE
+Independent Visual Re-Check-1 = PASS
+PHASE 3 Scope = CLEARED CANDIDATE
+PHASE 4 = BLOCKED
+further design mutation = STOP
 Implementation Start = NOT AUTHORIZED
 mutation = 0
 ```
@@ -186,9 +189,11 @@ mutation = 0
 Companion:
 
 ```text
+docs/architecture/process-visibility-ui-v1-human-gate-packet-1.md
 docs/architecture/process-visibility-ui-v1-definition-independent-review-1.md
 docs/architecture/process-visibility-ui-v1-presentation-prototype-1.md
 docs/architecture/process-visibility-ui-v1-presentation-prototype-correction-1.md
+docs/architecture/process-visibility-ui-v1-independent-visual-re-check-1.md
 docs/architecture/process-visibility-ui-v1-5-persona-simulation-1.md
 docs/architecture/process-visibility-ui-v1-visual-acceptance-packet-1.md
 docs/architecture/process-visibility-ui-v1-implementation-scope-1.md
