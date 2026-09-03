@@ -3,9 +3,10 @@
 ```text
 unit: SBS-MGMT-PLAN-ACTIVATION-C-STAFF-ARRIVAL-1
 PRODUCT UNDER TEST = #584 @ 5437e64703db055eef2bf230f5a682cf0286dc1a
-VERIFICATION HARNESS HEAD = 10269a2ef5110e3b11bb74bd0e498cb371578c90
+VERIFICATION HARNESS HEAD (driver) = 10269a2ef5110e3b11bb74bd0e498cb371578c90
+VERIFICATION HARNESS HEAD (sticky overlay) = 93a2ccbd6bfd70967cf69685a3c71698e0774b6e
 command: node spfx/smoke/sbs-mgmt-loop-b/verify-staff-arrival.mjs
-result: PASS
+result: PASS (re-run after overlay; Human screenshot remains HOLD)
 LIVE WRITE = false
 ```
 
