@@ -2,6 +2,20 @@
 
 Synthetic/session-only browser acceptance for the Planning-PC revision-start path.
 
+## Staff Arrival (verification HEAD)
+
+```bash
+node spfx/smoke/sbs-mgmt-loop-b/serve-smoke.mjs
+```
+
+Staff Apply 前:
+
+```text
+http://127.0.0.1:4194/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER&staffPlanTransition=beforeApply
+```
+
+Product source stays #584 `@ 5437e64703db055eef2bf230f5a682cf0286dc1a`. See `docs/architecture/sbs-mgmt-plan-activation-c-staff-arrival-1-procedure-1.md`.
+
 Exact B12 / RBA matrix: `docs/architecture/sbs-mgmt-loop-b-browser-smoke.md`.
 
 Checks both `1280x900` and `390x844`:

@@ -31,6 +31,7 @@ import {
   type ShellSiteSelection,
   type ShellViewMode,
 } from "../../src/shell/ux";
+import { driveBeforeApplyPublicDom } from "../sbs-mgmt-loop-b/before-apply-dom-driver";
 
 function parseParams(): {
   viewMode: ShellViewMode;
@@ -38,6 +39,7 @@ function parseParams(): {
   siteSelection: ShellSiteSelection;
   selectedDestination: ShellPrimaryNavigationId;
   presentationRole: ShellPresentationRole;
+  staffPlanTransition: string | null;
 } {
   const params = new URLSearchParams(window.location.search);
   const viewRaw = params.get("viewMode") ?? "ready";
@@ -60,18 +62,58 @@ function parseParams(): {
     siteSelection,
     selectedDestination,
     presentationRole: parseShellPresentationRole(params.get("presentationRole") ?? "PLANNER"),
+    staffPlanTransition: params.get("staffPlanTransition"),
   };
 }
+
+const BeforeApplyArrivalBanner: React.FC<{ status: "driving" | "ready" | "failed" }> = ({
+  status,
+}) => {
+  const text =
+    status === "ready"
+      ? "合成確認画面です。本番には保存されません。版3適用中 / 版4下書きです。⑥で「版 4 を適用開始する」を押せます。"
+      : status === "failed"
+        ? "適用前状態へ進めませんでした。verification HEAD の serve-smoke を確認してください。"
+        : "合成確認: 適用前状態へ進めています（本番保存なし）。";
+  return (
+    <p data-sbs-mgmt-plan-activation-c-staff-check={status} role="status">
+      {text}
+    </p>
+  );
+};
+
+const BeforeApplyDomDriver: React.FC = () => {
+  const [status, setStatus] = React.useState<"driving" | "ready" | "failed">("driving");
+  React.useEffect(() => {
+    let cancelled = false;
+    driveBeforeApplyPublicDom()
+      .then(() => {
+        if (!cancelled) {
+          setStatus("ready");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setStatus("failed");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  return <BeforeApplyArrivalBanner status={status} />;
+};
 
 const SmokeApp: React.FC = () => {
   const initial = parseParams();
   const [selectedDestination, setSelectedDestination] = React.useState<ShellPrimaryNavigationId>(
-    initial.selectedDestination,
+    initial.staffPlanTransition === "beforeApply" ? "users" : initial.selectedDestination,
   );
 
   return (
     <div
       data-shell-ux="smoke-root"
+      data-sbs-mgmt-plan-activation-c-query={initial.staffPlanTransition ?? "none"}
       data-shell-ux-slice={SHELL_UX_SLICE.id}
       data-dashboard-ux-slice={DASHBOARD_UX_SLICE.id}
       data-demo-ux-slice={DEMO_UX_SLICE.id}
@@ -97,6 +139,7 @@ const SmokeApp: React.FC = () => {
         partialRetrieval={SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE}
         presentationRole={initial.presentationRole}
       />
+      {initial.staffPlanTransition === "beforeApply" ? <BeforeApplyDomDriver /> : null}
     </div>
   );
 };
