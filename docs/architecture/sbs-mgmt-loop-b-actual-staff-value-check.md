@@ -164,10 +164,12 @@ Staff Finding Fix Scope
 3. Draft 作成後に「まだ適用開始されていない」を明示
 4. display-only / 計画操作との競合を最小限整理
 ↓
-Ponytail / Minimality Check
-↓
+Ponytail / Minimality Check = PONYTAIL PASS
+  docs/architecture/sbs-mgmt-loop-b-staff-finding-fix-scope-1-ponytail.md
+↓ NEXT
 Human Correction Implementation GO
 （新 workflow / 新 state / 新 component = まだ不要）
+（GO なし → UI mutation = 0）
 ```
 
 ## Gate

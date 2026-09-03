@@ -7,7 +7,8 @@ kind: staff finding fix scope / correction scope packet
 basis product HEAD (PR #576): 633a5b461eabe49902e92486670272f6ac9231bc
 authority evidence: docs/architecture/sbs-mgmt-loop-b-actual-staff-value-check.md
 matrix: Understanding Test Matrix v1 / Correction-1
-status: SCOPE DRAFT / AWAITING PONYTAIL + Human Correction Implementation GO
+status: SCOPE DEFINED / PONYTAIL PASS / AWAITING Human Correction Implementation GO
+ponytail evidence: docs/architecture/sbs-mgmt-loop-b-staff-finding-fix-scope-1-ponytail.md
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 Human Ready GO consumption: BLOCKED
 UI implementation: NOT STARTED / NOT AUTHORIZED BY THIS DOC
@@ -65,6 +66,8 @@ OUT:
 
 Human Correction Implementation GO の前に確認する。
 
+正本結果: [`sbs-mgmt-loop-b-staff-finding-fix-scope-1-ponytail.md`](./sbs-mgmt-loop-b-staff-finding-fix-scope-1-ponytail.md)
+
 ```text
 1. 4 点以外の UI / domain 変更を含めていないか
 2. Simulation P2 の文言候補だけで Staff P1 を解消しようとしていないか
@@ -79,11 +82,16 @@ Human Correction Implementation GO の前に確認する。
 ```text
 PONYTAIL PASS
 = 上記 1–5 を満たし、最小 UI correction のみ
+（本 Scope: PASS @ 2026-09-03）
 
 PONYTAIL HOLD
 = 範囲拡大 / 新 component / 永続化 / Ready 消費が混入
 ```
 
+```text
+PONYTAIL PASS != Human Correction Implementation GO
+PONYTAIL PASS != UI implementation start
+```
 ## 5. Required gate sequence
 
 ```text
@@ -132,8 +140,11 @@ Q4 「最新版を使ってる前提」再発
 #576 = OPEN / DRAFT
 product HEAD = 633a5b461eabe49902e92486670272f6ac9231bc
 Actual Staff Value Check = HOLD
+Staff Finding Fix Scope = DEFINED
+Ponytail / Minimality Check = PONYTAIL PASS
 Human Ready GO = RECEIVED / NOT CONSUMED / BLOCKED BY STAFF P1
 Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 Human Correction Implementation GO = NOT RECEIVED
+UI correction = NOT STARTED
 mutation = 0
 ```

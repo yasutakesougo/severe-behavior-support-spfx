@@ -26,13 +26,14 @@ C1-C3 Test Matrix
 ↓
 Actual Staff Value Check — Staff 1
 = HOLD
+↓
+Staff Finding Fix Scope = DEFINED
+↓
+Ponytail / Minimality Check = PONYTAIL PASS
 ↓ NEXT
-Staff Finding Fix Scope
-↓
-Ponytail / Minimality Check
-↓
 Human Correction Implementation GO
 （Ready / GO consumption = BLOCKED）
+（GO なし → UI mutation = 0）
 ```
 
 ```text
