@@ -76,6 +76,10 @@ export const SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE =
 export const SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE =
   "見直し期限の超過だけでは、この計画を無効にしません。";
 
+/** NEXT-VERSION-COPY-SIMPLIFICATION-1 Proposal A — draft block short labels. */
+export const SUPPORT_PLAN_DRAFT_ACTIVE_LABEL = "適用中";
+export const SUPPORT_PLAN_DRAFT_DRAFT_LABEL = "下書き";
+
 export const SUPPORT_PLAN_FORBIDDEN_STATUS_TOKENS = ["最終承認者", "承認済み"] as const;
 
 /** Fail-closed copy must not claim usable business UI or live connection. */

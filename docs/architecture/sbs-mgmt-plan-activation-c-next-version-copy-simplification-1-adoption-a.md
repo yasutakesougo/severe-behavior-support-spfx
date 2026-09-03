@@ -7,8 +7,14 @@ date: 2026-09-03
 product HEAD: 5437e64703db055eef2bf230f5a682cf0286dc1a = FROZEN / NO CHANGE
 Scope review cleared: sbs-mgmt-plan-activation-c-next-version-copy-simplification-1-scope.md
 Adopted proposal: A / MINIMAL
-Human UI Copy Correction Start GO = NOT RECEIVED
-Implementation = NOT AUTHORIZED
+Human UI Copy Correction Start GO = RECEIVED / CONSUMED
+Implementation = DONE
+  files changed vs 5437e64:
+    spfx/src/shell/users/SupportPlan.tsx      (区間 B JSX 差し替え)
+    spfx/src/shell/users/support-plan-copy.ts (短縮ラベル定数追加)
+    spfx/src/shell/users/support-plan.test.ts (assert 同期)
+  npm test 954/954 PASS
+  typecheck PASS
 Actual Staff Check = HOLD
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```

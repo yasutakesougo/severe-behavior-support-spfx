@@ -23,6 +23,8 @@ import {
   PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT,
   SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING,
   SUPPORT_PLAN_HISTORICAL_RECORD_NOTE,
+  SUPPORT_PLAN_DRAFT_ACTIVE_LABEL,
+  SUPPORT_PLAN_DRAFT_DRAFT_LABEL,
   SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE,
   SUPPORT_PLAN_NEXT_VERSION_CTA,
   SUPPORT_PLAN_NEXT_VERSION_HEADING,
@@ -595,15 +597,12 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         </div>
       ) : revisionDraft ? (
         <div role="status" data-sbs-mgmt-loop-b-draft="true">
-          <p>変更内容の下書き: 版 {revisionDraft.candidate.version}</p>
-          <p>元の版: {revisionDraft.reviewBinding.reviewedPlanVersion}（変更しない）</p>
           <p data-sbs-mgmt-loop-b-active-version="true">
-            現在適用中: 版 {revisionDraft.reviewBinding.reviewedPlanVersion}
+            {SUPPORT_PLAN_DRAFT_ACTIVE_LABEL}: 版 {revisionDraft.reviewBinding.reviewedPlanVersion}
           </p>
           <p data-sbs-mgmt-loop-b-draft-lifecycle="true">
-            版 {revisionDraft.candidate.version} は下書きです。まだ適用開始されていません。
+            {SUPPORT_PLAN_DRAFT_DRAFT_LABEL}: 版 {revisionDraft.candidate.version}
           </p>
-          <p>状態: 下書き / 本番未保存</p>
           {!adminRead ? (
             <button
               type="button"
