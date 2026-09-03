@@ -79,8 +79,8 @@ const StaffBeforeApplyApp: React.FC = () => {
   return (
     <div data-sbs-mgmt-plan-activation-c-staff-check="before-apply">
       <p data-sbs-mgmt-plan-activation-c-staff-check-note="true">
-        合成確認画面です。本番には保存されません。現在適用中は版3、次版は版4の下書きです。⑥で「版
-        4 を適用開始する」を押せます。
+        合成確認画面です。本番には保存されません。現在適用中は版3、次版は版4の下書きです。⑥で「版 4
+        を適用開始する」を押せます。
       </p>
       <SupportPlan
         presentation={DEMO_UX_SUPPORT_PLAN_FIXTURE}
