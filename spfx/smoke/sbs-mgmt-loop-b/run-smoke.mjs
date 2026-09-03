@@ -132,6 +132,28 @@ async function runCase(name, width, height) {
     const button = document.querySelector('[data-sbs-mgmt-loop-b-action="start-revision"]');
     return button instanceof HTMLButtonElement && !button.disabled;
   });
+
+  const preStart = await page.evaluate(() => {
+    const start = document.querySelector('[data-sbs-mgmt-loop-b-action="start-revision"]');
+    const predecessor = document.querySelector('[data-planning-pc="review-cta"]');
+    const disabledPredecessor = document.querySelector(
+      '[data-sbs-mgmt-loop-b-action="start-revision-disabled"]',
+    );
+    const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+    const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
+    return {
+      startEnabled: start instanceof HTMLButtonElement && !start.disabled,
+      startIsPrimary: start?.getAttribute("data-sbs-action") === "primary",
+      predecessorDemoted:
+        predecessor?.getAttribute("data-sbs-action") === "tertiary" &&
+        predecessor?.getAttribute("data-sbs-mgmt-loop-b-predecessor") === "demoted",
+      disabledPredecessorAbsent: disabledPredecessor === null,
+      primaryCount: primaryActions.length,
+      currentVersionLabel: currentVersion?.textContent ?? "",
+      overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    };
+  });
+
   await page.click('[data-sbs-mgmt-loop-b-action="start-revision"]');
   await page.waitForSelector('[data-sbs-mgmt-loop-b-draft="true"]');
 
@@ -141,25 +163,52 @@ async function runCase(name, width, height) {
     const boundary = document.querySelector('[data-sbs-mgmt-loop-b-boundary="true"]');
     const decision = document.querySelector('[data-sbs-mgmt-loop-b-decision="CHANGE_REQUIRED"]');
     const reason = document.querySelector('[data-sbs-mgmt-loop-b-reason="true"]');
+    const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+    const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
+    const startGone = document.querySelector('[data-sbs-mgmt-loop-b-action="start-revision"]');
     return {
-      pass:
-        Boolean(draft) &&
-        Boolean(decision) &&
-        Boolean(reason) &&
-        (draft?.textContent ?? "").includes("変更内容の下書き: 版 4") &&
-        (draft?.textContent ?? "").includes("元の版: 3（変更しない）") &&
-        (draft?.textContent ?? "").includes("下書き / 本番未保存") &&
-        (boundary?.textContent ?? "").includes("本番には保存されていません") &&
-        text.includes("Synthetic B12 human decision reason"),
+      draftPresent: Boolean(draft),
+      decisionPresent: Boolean(decision),
+      reasonPresent: Boolean(reason),
+      draftHasNPlusOne: (draft?.textContent ?? "").includes("変更内容の下書き: 版 4"),
+      draftKeepsSourceN: (draft?.textContent ?? "").includes("元の版: 3（変更しない）"),
+      draftSessionOnly: (draft?.textContent ?? "").includes("下書き / 本番未保存"),
+      boundaryNoLiveWrite: (boundary?.textContent ?? "").includes("本番には保存されていません"),
+      reasonTextPresent: text.includes("Synthetic B12 human decision reason"),
+      primaryCountAfterDraft: primaryActions.length,
+      currentVersionStillN: (currentVersion?.textContent ?? "").includes("版 3"),
+      startActionCleared: startGone === null,
+      overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
       draftText: draft?.textContent ?? "",
       boundaryText: boundary?.textContent ?? "",
     };
   });
 
+  const pass =
+    preStart.startEnabled &&
+    preStart.startIsPrimary &&
+    preStart.predecessorDemoted &&
+    preStart.disabledPredecessorAbsent &&
+    preStart.primaryCount === 1 &&
+    !preStart.overflowX &&
+    (preStart.currentVersionLabel.includes("版 3") || preStart.currentVersionLabel.includes("3")) &&
+    found.draftPresent &&
+    found.decisionPresent &&
+    found.reasonPresent &&
+    found.draftHasNPlusOne &&
+    found.draftKeepsSourceN &&
+    found.draftSessionOnly &&
+    found.boundaryNoLiveWrite &&
+    found.reasonTextPresent &&
+    found.primaryCountAfterDraft === 1 &&
+    found.currentVersionStillN &&
+    found.startActionCleared &&
+    !found.overflowX;
+
   const screenshot = path.join(artifactsDir, `${name}.png`);
   await page.screenshot({ path: screenshot, fullPage: true });
   await page.close();
-  return { name, width, height, ...found, pageErrors, screenshot };
+  return { name, width, height, pass, preStart, found, pageErrors, screenshot };
 }
 
 const cases = [
