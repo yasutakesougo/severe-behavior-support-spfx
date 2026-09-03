@@ -109,6 +109,20 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     () => buildDemoMonitoringForVersion(selectedVersion),
     [selectedVersion],
   );
+  const revisionDraft = revisionSession.drafts[0] ?? null;
+  const revisionEligible = Boolean(
+    planningPc &&
+    selectedVersion === currentVersion &&
+    capturedReview?.outcome.decision === "CHANGE_REQUIRED" &&
+    capturedReview.decisionReason !== null &&
+    capturedReview.decisionReason.reason.trim().length > 0 &&
+    capturedReview.outcome.UserId === presentation.userId &&
+    capturedReview.outcome.planId === planId &&
+    capturedReview.outcome.planVersion === currentVersion,
+  );
+  // H-05 / C2: at most one SBS_ACTION.primary per view. While revision-start is the
+  // forward CTA, demote the review-materials predecessor from primary.
+  const revisionStartIsPrimaryForward = Boolean(revisionEligible && !revisionDraft && !adminRead);
   const [activePlannerSectionId, setActivePlannerSectionId] = React.useState<string>(
     PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION[0].id,
   );
@@ -190,13 +204,20 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             </p>
             <button
               type="button"
-              className={styles.reviewMaterialsButtonPrimary}
+              className={
+                revisionStartIsPrimaryForward
+                  ? styles.reviewMaterialsButton
+                  : styles.reviewMaterialsButtonPrimary
+              }
               onClick={onReviewMaterialsRequest}
               disabled={!reviewCtaEnabled}
               aria-disabled={!reviewCtaEnabled ? "true" : undefined}
               data-demo-ux="support-plan-review-cta"
               data-planning-pc="review-cta"
-              data-sbs-action="primary"
+              data-sbs-action={revisionStartIsPrimaryForward ? "tertiary" : "primary"}
+              data-sbs-mgmt-loop-b-predecessor={
+                revisionStartIsPrimaryForward ? "demoted" : undefined
+              }
             >
               {SUPPORT_PLAN_REVIEW_MATERIALS_CTA}
             </button>
@@ -369,17 +390,6 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     </section>
   );
 
-  const revisionDraft = revisionSession.drafts[0] ?? null;
-  const revisionEligible =
-    planningPc &&
-    selectedVersion === currentVersion &&
-    capturedReview?.outcome.decision === "CHANGE_REQUIRED" &&
-    capturedReview.decisionReason !== null &&
-    capturedReview.decisionReason.reason.trim().length > 0 &&
-    capturedReview.outcome.UserId === presentation.userId &&
-    capturedReview.outcome.planId === planId &&
-    capturedReview.outcome.planVersion === currentVersion;
-
   const handleRevisionStart = (): void => {
     if (!revisionEligible || capturedReview === null) {
       setRevisionError("現在の見直し結果と計画版を確認してください。");
@@ -449,7 +459,6 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           type="button"
           className={styles.mutationButton}
           onClick={handleRevisionStart}
-          data-demo-ux="support-plan-mutation-button"
           data-review-new-version="create-cta"
           data-sbs-mgmt-loop-b-action="start-revision"
           data-sbs-action="primary"
@@ -464,6 +473,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           aria-disabled="true"
           data-demo-ux="support-plan-mutation-button"
           data-review-new-version="create-cta"
+          data-sbs-mgmt-loop-b-action="start-revision-disabled"
           data-sbs-action="tertiary"
         >
           {SUPPORT_PLAN_NEXT_VERSION_CTA}
