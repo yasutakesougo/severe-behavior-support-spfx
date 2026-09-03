@@ -118,8 +118,12 @@ SupportPlan.tsx = untouched
 ```text
 Prototype 1 = SUPERSEDED by Correction-1 HTML
 Prototype Correction-1 = APPLIED + exact Mobile re-read PASS
-Human Visual Acceptance = NOT RECEIVED（now ELIGIBLE）
-Definition Lock = still Human-owned / ELIGIBLE（not blocked by Mobile correction）
+Independent Visual Re-Check-1 = PASS / VISUAL-ACCEPTANCE ELIGIBLE
+P0 = 0 / P1 = 0 / P2 blocking = 0
+Correction-2 = NOT REQUIRED
+Human Visual Acceptance = NOT RECEIVED / ELIGIBLE
+Human Definition Lock = NOT RECEIVED / ELIGIBLE（recommended before Visual Acceptance）
+further design mutation = STOP
 Implementation Start = NOT AUTHORIZED
 #576 prerequisite = ACTIVE HOLD
 ```

@@ -8,16 +8,22 @@ prototype: docs/architecture/process-visibility-ui-v1-presentation-prototype-1.m
 correction: docs/architecture/process-visibility-ui-v1-presentation-prototype-correction-1.md
 html: docs/architecture/process-visibility-ui-v1-presentation-prototype-1.html
 persona: docs/architecture/process-visibility-ui-v1-5-persona-simulation-1.md
+independent visual re-check: docs/architecture/process-visibility-ui-v1-independent-visual-re-check-1.md
+human gate packet: docs/architecture/process-visibility-ui-v1-human-gate-packet-1.md
 date: 2026-09-03
+basis HEAD（PR #580）: 7ccf1121e47fc20d4fa08174fd2dc357279e4ee5
 basis: Prototype Correction-1
-Human Visual Acceptance: NOT RECEIVED
+Independent Visual Re-Check-1: PASS / VISUAL-ACCEPTANCE ELIGIBLE
+Human Visual Acceptance: NOT RECEIVED / ELIGIBLE
 Implementation Start: NOT AUTHORIZED
 mutation: 0
 ```
 
 ## 1. Ask（Human）
 
-Confirm Desktop + **real** Mobile（390 viewport）prototype as the visual IA for PLANNER V1.
+Confirm Desktop + **real** Mobile（390 viewport）Prototype Correction-1 as the visual IA for PLANNER V1.
+
+Recommended order: consume **Human Definition Lock GO** first, then this Visual Acceptance（separate gates）.
 
 Accept if:
 
@@ -34,24 +40,26 @@ Accept if:
 
 Reject / HOLD if any of 1–8 fail.
 
-## 2. Correction-1 summary
+## 2. Pre-acceptance evidence
 
 ```text
-P1-1 Mobile ②⑤ missing = CLOSED in Correction-1
-P1-2 390 Desktop overflow = CLOSED in Correction-1（responsive single shell）
-P2-1 Stepper risk = MITIGATED（aria-current + hint）
-5 Persona prior = PASS WITH MINOR FRICTION（SIMULATION ONLY; re-check optional）
+P1-1 / P1-2 = CLOSED in Correction-1
+P2-1 Stepper risk = closed as blocker in Independent Visual Re-Check-1
+Independent Visual Re-Check-1 = PASS / VISUAL-ACCEPTANCE ELIGIBLE
+P0 = 0 / P1 = 0 / P2 blocking = 0
+Correction-2 = NOT REQUIRED
 ```
 
 ## 3. Status
 
 ```text
-Human Visual Acceptance = NOT RECEIVED
-Agent does not grant Visual Acceptance
-Definition Lock = ELIGIBLE（separate Human gate; not blocked by Mobile correction）
+Human Visual Acceptance = NOT RECEIVED / ELIGIBLE
+Agent does not grant or consume Visual Acceptance
+Definition Lock = separate Human gate / ELIGIBLE / recommended before Visual Acceptance
+further design mutation = STOP
 Implementation Start remains blocked without:
-  Visual Acceptance
-  + Definition Lock
-  + #576 Merged
-  + Implementation Start GO
+  Definition Lock consumed
+  + Visual Acceptance consumed
+  + #576 Merged + post-merge fixation
+  + Human Implementation Start GO
 ```
