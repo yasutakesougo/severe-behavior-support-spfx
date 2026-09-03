@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PROCESS-VISIBILITY-UI-V1 — Presentation Prototype 1（synthetic）</title>
+    <style>
+      :root {
+        --ink: #1c2430;
+        --muted: #5b6775;
+        --line: #c5ced8;
+        --surface: #f3f6f9;
+        --canvas: #ffffff;
+        --accent: #2f5d7c;
+        --focus: #0b6bcb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font: 16px/1.45 "Hiragino Sans", "Noto Sans JP", sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, #e8eef4 0%, #f7f9fb 40%, #eef2f6 100%);
+      }
+      main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.25rem;
+        margin: 0 0 0.5rem;
+      }
+      .note {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+        font-size: 0.9rem;
+      }
+      .frames {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 1100px) {
+        .frames {
+          grid-template-columns: 1.4fr 390px;
+          align-items: start;
+        }
+      }
+      .frame {
+        background: var(--canvas);
+        border: 1px dashed var(--line);
+        padding: 1rem;
+      }
+      .frame h2 {
+        margin: 0 0 0.75rem;
+        font-size: 1rem;
+      }
+      .person {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 0.75rem;
+      }
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+      }
+      .nav.mobile {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+      }
+      .nav button {
+        min-height: 2.5rem;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: inherit;
+        font: inherit;
+        padding: 0.35rem 0.6rem;
+        cursor: default;
+      }
+      .nav button[aria-pressed="true"] {
+        border-color: var(--accent);
+        background: #e7f0f6;
+      }
+      .process {
+        border-top: 1px solid var(--line);
+        padding: 0.85rem 0;
+      }
+      .process-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: baseline;
+        margin-bottom: 0.35rem;
+      }
+      .process-header strong {
+        font-size: 1.05rem;
+      }
+      .process-header span {
+        color: var(--muted);
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .body {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .aux {
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed var(--line);
+        opacity: 0.85;
+      }
+      .aux h3 {
+        margin: 0 0 0.35rem;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+      .cta {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.55rem 0.75rem;
+        border: 1px solid var(--accent);
+        background: #e7f0f6;
+        color: var(--ink);
+        font: inherit;
+      }
+      .safety {
+        margin: 0.35rem 0;
+        font-size: 0.85rem;
+      }
+      .phone {
+        width: 390px;
+        max-width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>PROCESS-VISIBILITY-UI-V1 Presentation Prototype 1</h1>
+      <p class="note">
+        Synthetic / presentation-only. PLANNER. No SharePoint. No LIVE WRITE. No progress Stepper.
+        #576 lifecycle copy placeholders preserved under ⑥.
+      </p>
+      <div class="frames">
+        <section class="frame" aria-label="Desktop 1280 prototype">
+          <h2>Desktop · 1280</h2>
+          <p class="person">Aさん</p>
+          <p class="meta">支援計画 · 版 3 · 適用中 · 合成表示</p>
+          <nav class="nav" aria-label="支援サイクル">
+            <button type="button" aria-pressed="true">計画</button>
+            <button type="button">支援</button>
+            <button type="button">記録</button>
+            <button type="button">モニタリング</button>
+            <button type="button">見直し</button>
+            <button type="button">次版準備</button>
+          </nav>
+          <article class="process">
+            <div class="process-header"><strong>① 計画</strong><span>版3・適用中</span></div>
+            <p class="body">summary / goals / actions（既存 block 再配置）</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>② 支援</strong><span>手順 3件</span></div>
+            <p class="body">procedures（現行）</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>③ 記録</strong><span>直近 4件</span></div>
+            <p class="body">recent records only · 版紐づけ維持 · Monitoring を含めない</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>④ モニタリング</strong><span>根拠 4件</span></div>
+            <p class="body">既存 MonitoringView（書換なし）+ Process Header</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>⑤ 見直し</strong><span>変更が必要</span></div>
+            <p class="body">reviewStatus + capturedReview outcome/reason（表示位置のみ）</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>⑥ 次版準備</strong><span>版4・下書き・未適用</span></div>
+            <p class="safety">現在適用中: 版 3</p>
+            <p class="safety">版 4 は下書きです。まだ適用開始されていません。</p>
+            <p class="safety">現在使用中の版 3 は変更しません。版 4 の下書きを別に作ります。</p>
+            <button class="cta" type="button">支援内容の見直しを始める（版 4 の下書き）</button>
+          </article>
+          <section class="aux">
+            <h3>履歴・詳細</h3>
+            <p class="body">versions / mutation / stateGrid（削除せず下位階層）</p>
+          </section>
+        </section>
+
+        <section class="frame phone" aria-label="Mobile 390 prototype">
+          <h2>Mobile · 390</h2>
+          <p class="person">Aさん</p>
+          <p class="meta">版 3 · 適用中</p>
+          <nav class="nav mobile" aria-label="支援サイクル（2×3）">
+            <button type="button" aria-pressed="true">計画</button>
+            <button type="button">支援</button>
+            <button type="button">記録</button>
+            <button type="button">モニタリング</button>
+            <button type="button">見直し</button>
+            <button type="button">次版準備</button>
+          </nav>
+          <article class="process">
+            <div class="process-header"><strong>① 計画</strong><span>版3・適用中</span></div>
+            <p class="body">目標・支援内容が最上流</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>③ 記録</strong><span>直近</span></div>
+            <p class="body">Monitoring なし</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>④ モニタリング</strong><span>根拠</span></div>
+            <p class="body">視覚分離</p>
+          </article>
+          <article class="process">
+            <div class="process-header"><strong>⑥ 次版準備</strong><span>未適用</span></div>
+            <p class="safety">Draft ≠ 適用中</p>
+          </article>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
