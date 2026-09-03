@@ -1,47 +1,45 @@
-# PROCESS-VISIBILITY-UI-V1 — Human Gate Packet 1
+# PROCESS-VISIBILITY-UI-V1 — Human Gate Packet 1（closeout）
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: PROCESS-VISIBILITY-UI-V1
-kind: human gate packet / current freeze
-PR #580: OPEN / DRAFT
+kind: human gate packet / MERGED closeout
 date: 2026-09-03
-product binding HEAD: 0fba4e506842effd38dc4195be831b6dc86d7dc5
-CI tip: f9f6907a777e018d2e90a4a796551beeba1748b1
-Human Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
+#580 = MERGED / CLOSED
+merge commit / main = a87359b4594b7c74a1d667a6b91218fb517fee40
+product binding = 0fba4e506842effd38dc4195be831b6dc86d7dc5
 ```
 
-## Consumed / cleared
+## Final board
 
 ```text
-Human Definition Lock = CONSUMED
-Human Visual Acceptance = CONSUMED
+PHASE 0 Mapping Freeze = FROZEN
+PHASE 1 Definition Lock = CONSUMED
+PHASE 2 Visual Acceptance = CONSUMED
 5 Persona Simulation 2 = PASS WITH MINOR FRICTION
-#576 Merge + fixation = CONFIRMED
-Human Implementation Start GO = CONSUMED
-Phase 4 implementation = IMPLEMENTED（4954c7d → format 0fba4e5）
-Format-only Correction = APPLIED
-Exact-head CI @ f9f6907 = GREEN
-0fba4e5..f9f6907 = docs-only
+PHASE 3 Scope = CLEARED（consumed via Implementation Start）
+#576 prerequisite = SATISFIED（earlier）
+Implementation Start GO = CONSUMED
+PHASE 4 implementation = ON MAIN
 RBA = PASS
-Exact Implementation HEAD Fixation = CONFIRMED（product = 0fba4e5）
-Independent Implementation Review-1 = PASS / REVIEW-CLEARED
+Independent Implementation Review = PASS
+Actual Staff Process-Comprehension = PASS
+Human Ready GO = CONSUMED
+Human Merge GO = CONSUMED
+post-merge fixation = CONFIRMED
 ```
 
-## NEXT（Human / Staff）
+## Out of this unit
 
 ```text
-Actual Staff Process-Comprehension T1–T5
-= NOT YET / REQUIRED
-↓ PASS|ACCEPTABLE
-Human Ready GO
-↓
-Merge（Human）
+Deploy / SharePoint / M365 / Entra / LIVE WRITE = NOT PART OF #580 / NOT EXECUTED
 ```
 
-## Agent STOP
+## Evidence
 
 ```text
-no further product mutation without new Human GO
-no Ready / Merge / Deploy / LIVE WRITE by Agent
+docs/architecture/process-visibility-ui-v1-580-post-merge-fixation-1.md
+docs/architecture/process-visibility-ui-v1-browser-rba-1.md
+docs/architecture/process-visibility-ui-v1-independent-implementation-review-1.md
+docs/architecture/process-visibility-ui-v1-exact-implementation-head-fixation-1.md
 ```
