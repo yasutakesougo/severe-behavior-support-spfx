@@ -70,6 +70,18 @@ Human Ready GO = NOT ELIGIBLE
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
 
+## Separation rule
+
+```text
+Do not mix:
+- Agent verification arrival = PASS
+- Human screenshot = HOLD / NOT arrival
+
+Agent PASS proves the verification harness can reach arrival.
+Human HOLD proves the observed Human browser did not reach arrival.
+These are different evidences and must stay separated.
+```
+
 Re-test only after the ready banner + 変更が必要 + Apply are all visible on:
 
 ```text

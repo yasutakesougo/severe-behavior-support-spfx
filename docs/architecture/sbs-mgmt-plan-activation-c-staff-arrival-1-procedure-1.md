@@ -39,6 +39,27 @@ http://127.0.0.1:4194/index.html?viewMode=ready&siteSelection=SITE-ISG&destinati
 
 query だけでは足りない。`destination=users` が必要。harness が公開 #584 DOM を駆動する。
 
+## ARRIVAL GATE（先に判定）
+
+```text
+[ ] 緑の確認バナーがある
+[ ] タブに【適用待機】がある
+[ ] ⑤ が「変更が必要」
+[ ] ⑥ に版4下書きの説明がある
+[ ] 「版 4 を適用開始する」がある
+```
+
+```text
+5項目すべて YES
+→ T1–T5 START
+
+1つでも NO
+→ HOLD
+→ T1–T5 NOT SCORED
+```
+
+環境到着失敗を「職員が操作を理解できなかった」と誤分類しないため、質問や操作評価より先にこの gate を判定する。
+
 ## この画面なら未到着（T3–T5 を採点しない）
 
 ```text
@@ -49,7 +70,7 @@ query だけでは足りない。`destination=users` が必要。harness が公�
 タブが【適用待機】ではない / 緑の固定バナーが無い
 ```
 
-これは empty / NO_CHANGE session。Apply 欠落として #584 を採点しない。
+これは empty / NO_CHANGE session。`次の版を作る（表示専用）` は Apply の代替ではない。`変更なし` のままでは Activation-C のテスト開始条件を満たさないため、Apply 欠落として #584 を採点しない。
 
 対処:
 

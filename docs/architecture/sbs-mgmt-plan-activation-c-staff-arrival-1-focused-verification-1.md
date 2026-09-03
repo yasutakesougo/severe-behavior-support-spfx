@@ -32,3 +32,17 @@ Human screenshot 2026-09-03 = HOLD / NOT arrival
 Human Ready GO = NOT ELIGIBLE until a Human surface matches ready + Apply
 #584 Implementation Review re-opened = NO
 ```
+
+## Separation rule
+
+```text
+Do not mix Agent verification arrival PASS with Human rendered HOLD.
+
+Agent verification arrival
+= harness-path success
+
+Human screenshot HOLD
+= observed Human browser did not arrive
+
+Only the Human side can authorize Actual Staff Plan-Transition Re-Test.
+```
