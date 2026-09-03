@@ -21,10 +21,10 @@ const esbuildModule = await import(
 );
 const puppeteerModule = await import(
   process.env.SBS_MGMT_LOOP_B_PUPPETEER_PATH ??
-    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer.js",
+    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js",
 );
 const sassModule = await import(
-  process.env.SBS_MGMT_LOOP_B_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs",
+  process.env.SBS_MGMT_LOOP_B_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.js",
 );
 const esbuild = esbuildModule.default ?? esbuildModule;
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
@@ -82,6 +82,7 @@ await esbuild.build({
   loader: { ".ts": "ts", ".tsx": "tsx" },
   plugins: [scssStubPlugin],
   define: { "process.env.NODE_ENV": '"production"' },
+  nodePaths: [process.env.SBS_MGMT_LOOP_B_NODE_PATH ?? "/tmp/node_modules"],
 });
 
 fs.writeFileSync(
