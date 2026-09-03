@@ -7,6 +7,7 @@ kind: human gate packet / current freeze
 PR #580 HEAD（docs tip; refresh on push）: see git
 PR #580: OPEN / DRAFT / MERGEABLE
 date: 2026-09-03
+docs tip at Simulation 2 freeze: c108892c012628567b88e45fe2b10f02d911715d
 product mutation: 0
 Implementation Start: NOT AUTHORIZED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
