@@ -481,18 +481,29 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         <div role="status" data-sbs-mgmt-loop-b-draft="true">
           <p>変更内容の下書き: 版 {revisionDraft.candidate.version}</p>
           <p>元の版: {revisionDraft.reviewBinding.reviewedPlanVersion}（変更しない）</p>
+          <p data-sbs-mgmt-loop-b-active-version="true">
+            現在適用中: 版 {revisionDraft.reviewBinding.reviewedPlanVersion}
+          </p>
+          <p data-sbs-mgmt-loop-b-draft-lifecycle="true">
+            版 {revisionDraft.candidate.version} は下書きです。まだ適用開始されていません。
+          </p>
           <p>状態: 下書き / 本番未保存</p>
         </div>
       ) : revisionEligible && !adminRead ? (
-        <button
-          type="button"
-          className={styles.mutationButton}
-          onClick={handleRevisionStart}
-          data-sbs-mgmt-loop-b-action="start-revision"
-          data-sbs-action="primary"
-        >
-          変更内容の作成を始める
-        </button>
+        <>
+          <p className={styles.sectionHint} data-sbs-mgmt-loop-b-source-safety="true">
+            現在使用中の版 {currentVersion} は変更しません。版 {conceptualNextVersion} の下書きを別に作ります。
+          </p>
+          <button
+            type="button"
+            className={styles.reviewMaterialsButtonPrimary}
+            onClick={handleRevisionStart}
+            data-sbs-mgmt-loop-b-action="start-revision"
+            data-sbs-action="primary"
+          >
+            支援内容の見直しを始める（版 {conceptualNextVersion} の下書き）
+          </button>
+        </>
       ) : null}
       <p
         className={styles.sectionHint}
