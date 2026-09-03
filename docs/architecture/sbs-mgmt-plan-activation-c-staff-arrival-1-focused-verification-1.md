@@ -24,6 +24,8 @@ LIVE WRITE = false
 
 ```text
 Actual Staff Plan-Transition Re-Test = NOT RUN (Human)
-Human Ready GO = NOT ELIGIBLE until that re-test
+Human screenshot 2026-09-03 = HOLD / NOT arrival
+  (⑤ 変更なし + ⑥ 次の版を作る — see staff-arrival-1-human-screenshot-hold-1)
+Human Ready GO = NOT ELIGIBLE until a Human surface matches ready + Apply
 #584 Implementation Review re-opened = NO
 ```

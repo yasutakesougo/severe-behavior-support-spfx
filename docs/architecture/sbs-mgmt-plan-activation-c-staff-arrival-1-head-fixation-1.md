@@ -2,7 +2,8 @@
 
 ```text
 unit: SBS-MGMT-PLAN-ACTIVATION-C-STAFF-ARRIVAL-1
-exact verification HEAD = 10269a2ef5110e3b11bb74bd0e498cb371578c90
+exact verification code HEAD = 10269a2ef5110e3b11bb74bd0e498cb371578c90
+evidence docs after that SHA = allowed if product paths stay unchanged
 product HEAD (unchanged) = 5437e64703db055eef2bf230f5a682cf0286dc1a
 Focused Verification = PASS
 #584 product files in this HEAD = identical to 5437e64
