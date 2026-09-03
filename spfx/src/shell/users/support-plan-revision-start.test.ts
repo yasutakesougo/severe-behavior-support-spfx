@@ -6,7 +6,11 @@ import { humanReviewResultForSyntheticVersion } from "../monitoring/human-review
 import { assembleSyntheticCapturedReview } from "../monitoring/review-outcome-capture";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "./support-plan-fixture";
 import {
+  SBS_MGMT_LOOP_B_CURRENT_PLAN,
+  SBS_MGMT_LOOP_B_EXISTING_VERSIONS,
+  SBS_MGMT_LOOP_B_EXISTING_VERSIONS_WITH_CONFLICT,
   SBS_MGMT_LOOP_B_REVISION_FIXTURE,
+  SBS_MGMT_LOOP_B_SOURCE_VERSION,
   assertOutcomeMatchesRevisionFixture,
   assertPresentationMatchesRevisionFixture,
 } from "./support-plan-revision-fixture";
@@ -28,6 +32,9 @@ beforeAll(() => {
 describe("SBS-MGMT-LOOP-B B2 revision orchestration", () => {
   it("canonical fixture identity matches Planning-PC presentation + monitoring", () => {
     expect(assertPresentationMatchesRevisionFixture(DEMO_UX_SUPPORT_PLAN_FIXTURE)).toBe(true);
+    expect(SBS_MGMT_LOOP_B_CURRENT_PLAN.currentVersion).toBe(3);
+    expect(SBS_MGMT_LOOP_B_SOURCE_VERSION.version).toBe(3);
+    expect(SBS_MGMT_LOOP_B_EXISTING_VERSIONS).toEqual([SBS_MGMT_LOOP_B_SOURCE_VERSION]);
     const materials = humanReviewResultForSyntheticVersion(
       SBS_MGMT_LOOP_B_REVISION_FIXTURE.planVersion,
     );
@@ -49,7 +56,7 @@ describe("SBS-MGMT-LOOP-B B2 revision orchestration", () => {
     expect(assertOutcomeMatchesRevisionFixture(captured.captured.outcome)).toBe(true);
   });
 
-  it("B2 start yields exact N+1 session draft without LIVE WRITE", () => {
+  it("B2 start uses canonical provenance and yields exact N+1 session draft", () => {
     expect(SUPPORT_PLAN_REVISION_SESSION_LIVE_WRITE_AUTHORIZED).toBe(false);
     const materials = humanReviewResultForSyntheticVersion(
       SBS_MGMT_LOOP_B_REVISION_FIXTURE.planVersion,
@@ -83,10 +90,45 @@ describe("SBS-MGMT-LOOP-B B2 revision orchestration", () => {
       return;
     }
     expect(result.draft.candidate.version).toBe(4);
+    expect(result.draft.candidate.goals).toEqual(SBS_MGMT_LOOP_B_SOURCE_VERSION.goals);
+    expect(result.draft.candidate.supportMethods).toEqual(
+      SBS_MGMT_LOOP_B_SOURCE_VERSION.supportMethods,
+    );
     expect(result.draft.reviewBinding.reviewedPlanVersion).toBe(3);
     expect(result.draft.reviewBinding.planVersion).toBe(4);
     expect(result.intent.sourcePlanVersion).toBe(3);
     expect(result.intent.status).toBe("CONSUMED");
+  });
+
+  it("B2 supplies existingVersions so N+1 conflict holds", () => {
+    const materials = humanReviewResultForSyntheticVersion(
+      SBS_MGMT_LOOP_B_REVISION_FIXTURE.planVersion,
+    );
+    if (materials.status !== "RESOLVED") {
+      return;
+    }
+    const captured = assembleSyntheticCapturedReview(
+      materials.value,
+      "CHANGE_REQUIRED",
+      "活動切替前の予告方法を見直す必要がある",
+      "",
+      SBS_MGMT_LOOP_B_REVISION_FIXTURE.actionAt,
+    );
+    if (captured.status !== "CAPTURED") {
+      return;
+    }
+    const result = startSyntheticPlanningPcRevision({
+      presentation: DEMO_UX_SUPPORT_PLAN_FIXTURE,
+      capturedReview: captured.captured,
+      session: {
+        intents: [],
+        drafts: [],
+        existingVersions: SBS_MGMT_LOOP_B_EXISTING_VERSIONS_WITH_CONFLICT,
+      },
+      actor: SBS_MGMT_LOOP_B_REVISION_FIXTURE.actor,
+      actionAt: SBS_MGMT_LOOP_B_REVISION_FIXTURE.actionAt,
+    });
+    expect(result.status).toBe("HOLD");
   });
 
   it("rejects mismatched presentation/orchestration identity", () => {

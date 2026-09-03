@@ -3,25 +3,30 @@ import {
   startSupportPlanRevision,
   type RevisionIntent,
   type SupportPlanRevisionDraftCandidate,
+  type SupportPlanVersion,
   type StartSupportPlanRevisionResult,
 } from "../../sbs-domain/support-plan-revision.bundle";
 import type { SyntheticCapturedReview } from "../monitoring/review-outcome-capture";
 import {
-  SBS_MGMT_LOOP_B_REVISION_FIXTURE,
+  SBS_MGMT_LOOP_B_CURRENT_PLAN,
+  SBS_MGMT_LOOP_B_EXISTING_VERSIONS,
+  SBS_MGMT_LOOP_B_SOURCE_VERSION,
   assertOutcomeMatchesRevisionFixture,
   assertPresentationMatchesRevisionFixture,
-  buildCanonicalRevisionSourceVersion,
 } from "./support-plan-revision-fixture";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
 
 export type SupportPlanRevisionSession = Readonly<{
   intents: readonly RevisionIntent[];
   drafts: readonly SupportPlanRevisionDraftCandidate[];
+  /** Canonical + session-known versions for N+1 conflict checks. */
+  existingVersions: readonly SupportPlanVersion[];
 }>;
 
 export const EMPTY_SUPPORT_PLAN_REVISION_SESSION: SupportPlanRevisionSession = {
   intents: [],
   drafts: [],
+  existingVersions: SBS_MGMT_LOOP_B_EXISTING_VERSIONS,
 };
 
 export const SUPPORT_PLAN_REVISION_SESSION_LIVE_WRITE_AUTHORIZED =
@@ -46,34 +51,15 @@ export function startSyntheticPlanningPcRevision(
     return { status: "INVALID", reason: "CONTEXT_MISMATCH" };
   }
 
-  const sourceVersion = buildCanonicalRevisionSourceVersion(presentation, outcome);
-  if (!sourceVersion) {
-    return { status: "INVALID", reason: "SOURCE_VERSION_NOT_PRESENT" };
-  }
-
   const sourceDecisionReason = capturedReview.decisionReason ?? {
     OutcomeId: outcome.OutcomeId,
     reason: "",
   };
 
+  // Provenance comes from canonical fixture — not reconstructed from presentation.
   return startSupportPlanRevision({
-    currentPlan: {
-      PlanId: outcome.planId,
-      OrganizationId: outcome.OrganizationId,
-      SiteId: outcome.SiteId,
-      UserId: outcome.UserId,
-      currentVersion: outcome.planVersion,
-      createdBy: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedBy,
-      createdAt: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedAt,
-      version: 1,
-      status: "Active",
-      submittedBy: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedBy,
-      submittedAt: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedAt,
-      approvedBy: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedBy,
-      approvedAt: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedAt,
-      effectiveFrom: SBS_MGMT_LOOP_B_REVISION_FIXTURE.versionCreatedAt,
-    },
-    sourceVersion,
+    currentPlan: SBS_MGMT_LOOP_B_CURRENT_PLAN,
+    sourceVersion: SBS_MGMT_LOOP_B_SOURCE_VERSION,
     sourceOutcome: {
       OutcomeId: outcome.OutcomeId,
       OrganizationId: outcome.OrganizationId,
@@ -89,7 +75,7 @@ export function startSyntheticPlanningPcRevision(
       reviewedBy: outcome.reviewedBy,
     },
     sourceDecisionReason,
-    existingVersions: [sourceVersion],
+    existingVersions: session.existingVersions,
     existingIntents: session.intents,
     existingDrafts: session.drafts,
     actor,
