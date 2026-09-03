@@ -85,7 +85,8 @@ export type ApplySupportPlanActivationResult =
       currentPlan: ActiveSupportPlan;
       receipt: ActivationReceipt;
     }>
-  | Readonly<{ status: "HOLD" | "INVALID"; reason: string }>;
+  | Readonly<{ status: "HOLD"; reason: string }>
+  | Readonly<{ status: "INVALID"; reason: string }>;
 
 export declare function mintDraftSnapshotId(
   draft: SupportPlanRevisionDraftCandidate,

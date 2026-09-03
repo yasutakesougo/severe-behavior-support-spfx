@@ -1,6 +1,7 @@
 /**
  * #583 activation session orchestration tests — synthetic/session-only.
  */
+import type { SupportPlanRevisionDraftCandidate } from "../../sbs-domain/support-plan-revision.bundle";
 import { humanReviewResultForSyntheticVersion } from "../monitoring/human-review-fixture";
 import { assembleSyntheticCapturedReview } from "../monitoring/review-outcome-capture";
 import {
@@ -27,7 +28,7 @@ beforeAll(() => {
   }
 });
 
-async function startDraft() {
+async function startDraft(): Promise<SupportPlanRevisionDraftCandidate> {
   const materials = humanReviewResultForSyntheticVersion(
     SBS_MGMT_LOOP_B_REVISION_FIXTURE.planVersion,
   );

@@ -494,41 +494,47 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       return;
     }
     const draft = revisionDraft;
-    void applySyntheticPlanningPcActivation({
+    applySyntheticPlanningPcActivation({
       draft,
       session: activationSession,
       actor: "planning-pc-synthetic-staff",
       actionAt: new Date().toISOString(),
-    }).then((result) => {
-      if (result.status === "SUCCESS" || result.status === "ALREADY_APPLIED") {
-        setActivationSession(result.session);
-        setActivatedVersionEntry({
-          version: result.receipt.activatedVersion,
-          createdAtLabel: result.receipt.activatedAt,
-          lifecycleLabel: "現行版",
-          isCurrent: true,
-          summary: draft.candidate.goals[0] ?? `版 ${result.receipt.activatedVersion}`,
-          supportMethods: draft.candidate.supportMethods,
-          precautions: draft.candidate.precautions,
-        });
-        setRevisionSession((previous) => ({
-          ...previous,
-          drafts: [],
-        }));
-        setSelectedVersion(result.receipt.activatedVersion);
-        setRevisionError(null);
-        return;
-      }
-      if (result.status === "CONFLICT") {
+    })
+      .then((result) => {
+        if (result.status === "SUCCESS" || result.status === "ALREADY_APPLIED") {
+          setActivationSession(result.session);
+          setActivatedVersionEntry({
+            version: result.receipt.activatedVersion,
+            createdAtLabel: result.receipt.activatedAt,
+            lifecycleLabel: "現行版",
+            isCurrent: true,
+            summary: draft.candidate.goals[0] ?? `版 ${result.receipt.activatedVersion}`,
+            supportMethods: draft.candidate.supportMethods,
+            precautions: draft.candidate.precautions,
+          });
+          setRevisionSession((previous) => ({
+            ...previous,
+            drafts: [],
+          }));
+          setSelectedVersion(result.receipt.activatedVersion);
+          setRevisionError(null);
+          return;
+        }
+        if (result.status === "CONFLICT") {
+          setRevisionError(
+            "適用を開始できませんでした。別の操作と競合したため、状態を確認してください。",
+          );
+          return;
+        }
         setRevisionError(
-          "適用を開始できませんでした。別の操作と競合したため、状態を確認してください。",
+          "適用を開始できませんでした。下書き内容と現在版を確認してください。",
         );
-        return;
-      }
-      setRevisionError(
-        "適用を開始できませんでした。下書き内容と現在版を確認してください。",
-      );
-    });
+      })
+      .catch(() => {
+        setRevisionError(
+          "適用を開始できませんでした。下書き内容と現在版を確認してください。",
+        );
+      });
   };
 
   const capturedReviewSummary = capturedReview ? (

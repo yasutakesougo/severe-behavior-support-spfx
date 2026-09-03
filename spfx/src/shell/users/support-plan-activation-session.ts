@@ -18,12 +18,11 @@ import {
 
 export type SupportPlanActivationSession = Readonly<{
   currentPlan: CanonicalSupportPlan;
-  receipt: ActivationReceipt | null;
+  receipt?: ActivationReceipt;
 }>;
 
 export const EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION: SupportPlanActivationSession = {
   currentPlan: SBS_MGMT_LOOP_B_CURRENT_PLAN,
-  receipt: null,
 };
 
 export const SUPPORT_PLAN_ACTIVATION_SESSION_LIVE_WRITE_AUTHORIZED =
@@ -100,7 +99,7 @@ export async function applySyntheticPlanningPcActivation(
     expectedRowVersion: session.currentPlan.version,
     actor,
     actionAt,
-    existingReceipt: session.receipt ?? undefined,
+    existingReceipt: session.receipt,
   });
 
   if (prepared.status === "ALREADY_APPLIED") {
@@ -114,7 +113,7 @@ export async function applySyntheticPlanningPcActivation(
     };
   }
 
-  if (prepared.status === "HOLD" || prepared.status === "INVALID") {
+  if (prepared.status !== "SUCCESS") {
     return { status: prepared.status, reason: prepared.reason };
   }
 
