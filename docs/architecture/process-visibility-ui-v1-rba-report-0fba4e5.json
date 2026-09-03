@@ -1,0 +1,184 @@
+{
+  "unit": "PROCESS-VISIBILITY-UI-V1",
+  "kind": "Rendered Browser Acceptance",
+  "productBinding": "0fba4e506842effd38dc4195be831b6dc86d7dc5",
+  "ciTip": "f9f6907a777e018d2e90a4a796551beeba1748b1",
+  "date": "2026-09-03T08:28:51.775Z",
+  "desktop": {
+    "name": "desktop-1280x900",
+    "width": 1280,
+    "height": 900,
+    "pass": true,
+    "metrics": {
+      "viewportWidth": 1280,
+      "scrollWidth": 1280,
+      "bodyScrollWidth": 1280,
+      "overflowX": false,
+      "overflowDelta": 0,
+      "present": [
+        {
+          "key": "plan",
+          "present": true
+        },
+        {
+          "key": "support",
+          "present": true
+        },
+        {
+          "key": "records",
+          "present": true
+        },
+        {
+          "key": "monitoring",
+          "present": true
+        },
+        {
+          "key": "review",
+          "present": true
+        },
+        {
+          "key": "next-version",
+          "present": true
+        },
+        {
+          "key": "details",
+          "present": true
+        }
+      ],
+      "allSixProcesses": true,
+      "hasDetails": true,
+      "headings": [
+        "① 計画",
+        "計画の概要",
+        "支援の目標",
+        "具体的な支援内容",
+        "② 支援",
+        "現在の支援手順",
+        "③ 記録",
+        "最近の支援手順記録",
+        "④ モニタリング",
+        "⑤ 見直し",
+        "見直し状況",
+        "⑥ 次版準備",
+        "次の版の考え方",
+        "履歴・詳細",
+        "過去の版",
+        "計画操作（表示専用）",
+        "制度・業務情報（合成表示）",
+        "システム状態"
+      ],
+      "navButtons": ["① 計画", "② 支援", "③ 記録", "④ モニタリング", "⑤ 見直し", "⑥ 次版準備"],
+      "navCount": 6,
+      "navDisplay": "grid",
+      "navColumns": "195.656px 195.672px 195.672px 195.656px 195.672px 195.672px",
+      "navIsGrid2Col": false,
+      "hasFlow": true,
+      "monitoringInsideRecords": false,
+      "monitoringStandalone": true,
+      "recordsHasMonitoringView": false,
+      "hint": "選択中はページ内の表示位置です。工程の完了・進捗を表しません。",
+      "hintDeniesProgress": true,
+      "lifecycle": {
+        "hasActiveApplied": true,
+        "hasDraftNotStarted": false,
+        "liveWriteFalseClaim": false
+      },
+      "truncated": [],
+      "role": "PLANNER"
+    },
+    "navMatch": true,
+    "mobileGridOk": true,
+    "desktopNotForcedGrid": true,
+    "pngFull": "/opt/cursor/artifacts/process-visibility-ui-v1-rba-0fba4e5/desktop-1280x900-full.png",
+    "pngView": "/opt/cursor/artifacts/process-visibility-ui-v1-rba-0fba4e5/desktop-1280x900-viewport.png"
+  },
+  "mobile": {
+    "name": "mobile-390x844",
+    "width": 390,
+    "height": 844,
+    "pass": true,
+    "metrics": {
+      "viewportWidth": 390,
+      "scrollWidth": 390,
+      "bodyScrollWidth": 390,
+      "overflowX": false,
+      "overflowDelta": 0,
+      "present": [
+        {
+          "key": "plan",
+          "present": true
+        },
+        {
+          "key": "support",
+          "present": true
+        },
+        {
+          "key": "records",
+          "present": true
+        },
+        {
+          "key": "monitoring",
+          "present": true
+        },
+        {
+          "key": "review",
+          "present": true
+        },
+        {
+          "key": "next-version",
+          "present": true
+        },
+        {
+          "key": "details",
+          "present": true
+        }
+      ],
+      "allSixProcesses": true,
+      "hasDetails": true,
+      "headings": [
+        "① 計画",
+        "計画の概要",
+        "支援の目標",
+        "具体的な支援内容",
+        "② 支援",
+        "現在の支援手順",
+        "③ 記録",
+        "最近の支援手順記録",
+        "④ モニタリング",
+        "⑤ 見直し",
+        "見直し状況",
+        "⑥ 次版準備",
+        "次の版の考え方",
+        "履歴・詳細",
+        "過去の版",
+        "計画操作（表示専用）",
+        "制度・業務情報（合成表示）",
+        "システム状態"
+      ],
+      "navButtons": ["① 計画", "② 支援", "③ 記録", "④ モニタリング", "⑤ 見直し", "⑥ 次版準備"],
+      "navCount": 6,
+      "navDisplay": "grid",
+      "navColumns": "170px 170px",
+      "navIsGrid2Col": true,
+      "hasFlow": true,
+      "monitoringInsideRecords": false,
+      "monitoringStandalone": true,
+      "recordsHasMonitoringView": false,
+      "hint": "選択中はページ内の表示位置です。工程の完了・進捗を表しません。",
+      "hintDeniesProgress": true,
+      "lifecycle": {
+        "hasActiveApplied": true,
+        "hasDraftNotStarted": false,
+        "liveWriteFalseClaim": false
+      },
+      "truncated": [],
+      "role": "PLANNER"
+    },
+    "navMatch": true,
+    "mobileGridOk": true,
+    "desktopNotForcedGrid": true,
+    "pngFull": "/opt/cursor/artifacts/process-visibility-ui-v1-rba-0fba4e5/mobile-390x844-full.png",
+    "pngView": "/opt/cursor/artifacts/process-visibility-ui-v1-rba-0fba4e5/mobile-390x844-viewport.png"
+  },
+  "verdict": "PASS"
+}

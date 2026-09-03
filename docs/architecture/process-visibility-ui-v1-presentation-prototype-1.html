@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PROCESS-VISIBILITY-UI-V1 — Presentation Prototype Correction-1（synthetic）</title>
+    <style>
+      :root {
+        --ink: #1c2430;
+        --muted: #5b6775;
+        --line: #c5ced8;
+        --surface: #f3f6f9;
+        --canvas: #ffffff;
+        --accent: #2f5d7c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      body {
+        font:
+          16px/1.45 "Hiragino Sans",
+          "Noto Sans JP",
+          sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, #e8eef4 0%, #f7f9fb 40%, #eef2f6 100%);
+      }
+      main {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 1rem;
+      }
+      @media (min-width: 900px) {
+        main {
+          max-width: 1280px;
+          padding: 1.5rem;
+        }
+      }
+      .doc-title {
+        font-size: 1.1rem;
+        margin: 0 0 0.35rem;
+      }
+      .note {
+        color: var(--muted);
+        margin: 0 0 1rem;
+        font-size: 0.85rem;
+      }
+      .viewport-label {
+        display: inline-block;
+        margin: 0 0 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .shell {
+        background: var(--canvas);
+        border: 1px dashed var(--line);
+        padding: 1rem;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .person {
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 0 0 0.15rem;
+      }
+      .plan-title {
+        margin: 0;
+        font-size: 1rem;
+      }
+      .meta {
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin: 0.15rem 0 0.85rem;
+      }
+      .nav-label {
+        margin: 0 0 0.35rem;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+      .nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+        margin-bottom: 0.35rem;
+        width: 100%;
+      }
+      @media (min-width: 900px) {
+        .nav {
+          display: flex;
+          flex-wrap: wrap;
+        }
+      }
+      .nav button {
+        min-height: 2.5rem;
+        width: 100%;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: inherit;
+        font: inherit;
+        padding: 0.35rem 0.5rem;
+        text-align: left;
+        cursor: pointer;
+      }
+      @media (min-width: 900px) {
+        .nav button {
+          width: auto;
+        }
+      }
+      /* Selection = in-page position only. Not progress / current step. */
+      .nav button[aria-current="true"] {
+        border-color: var(--accent);
+        background: #eef4f8;
+        box-shadow: inset 0 0 0 1px var(--accent);
+      }
+      .nav-hint {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .process {
+        border-top: 1px solid var(--line);
+        padding: 0.85rem 0;
+        width: 100%;
+        max-width: 100%;
+      }
+      .process-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: baseline;
+        margin-bottom: 0.35rem;
+      }
+      .process-header strong {
+        font-size: 1.05rem;
+        min-width: 0;
+      }
+      .process-header span {
+        color: var(--muted);
+        font-size: 0.85rem;
+        flex: 0 1 auto;
+        text-align: right;
+      }
+      .body {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .aux {
+        margin-top: 0.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px dashed var(--line);
+        opacity: 0.85;
+      }
+      .aux h3 {
+        margin: 0 0 0.35rem;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+      .cta {
+        display: inline-block;
+        margin-top: 0.5rem;
+        max-width: 100%;
+        padding: 0.55rem 0.75rem;
+        border: 1px solid var(--accent);
+        background: #e7f0f6;
+        color: var(--ink);
+        font: inherit;
+        overflow-wrap: anywhere;
+      }
+      .safety {
+        margin: 0.35rem 0;
+        font-size: 0.85rem;
+        overflow-wrap: anywhere;
+      }
+      /* Correction-1: one prototype per viewport — no side-by-side overflow */
+      .desktop-only {
+        display: none;
+      }
+      .mobile-only {
+        display: inline;
+      }
+      @media (min-width: 900px) {
+        .desktop-only {
+          display: inline;
+        }
+        .mobile-only {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1 class="doc-title">PROCESS-VISIBILITY-UI-V1 Presentation Prototype Correction-1</h1>
+      <p class="note">
+        Synthetic / presentation-only. PLANNER. No SharePoint. No LIVE WRITE. No progress Stepper.
+        Responsive: &lt;900px = Mobile structure only; ≥900px = Desktop structure only. #576
+        lifecycle copy placeholders preserved under ⑥.
+      </p>
+      <p class="viewport-label">
+        <span class="mobile-only">Viewport · Mobile（&lt;900px / target 390×844）</span>
+        <span class="desktop-only">Viewport · Desktop（≥900px / target 1280×900）</span>
+      </p>
+
+      <section class="shell" aria-label="PLANNER support-cycle prototype">
+        <p class="person">Aさん</p>
+        <p class="plan-title">支援計画</p>
+        <p class="meta">版 3 · 適用中 · 合成表示</p>
+
+        <p class="nav-label" id="process-nav-label">支援サイクル</p>
+        <nav class="nav" aria-labelledby="process-nav-label">
+          <button type="button" aria-current="true" data-target="process-1">① 計画</button>
+          <button type="button" data-target="process-2">② 支援</button>
+          <button type="button" data-target="process-3">③ 記録</button>
+          <button type="button" data-target="process-4">④ モニタリング</button>
+          <button type="button" data-target="process-5">⑤ 見直し</button>
+          <button type="button" data-target="process-6">⑥ 次版準備</button>
+        </nav>
+        <p class="nav-hint">
+          選択中 = いま見ているセクション位置（完了 / 現在工程 / 未完了は表示しません）
+        </p>
+
+        <article class="process" id="process-1">
+          <div class="process-header"><strong>① 計画</strong><span>版3・適用中</span></div>
+          <p class="body">目標・支援内容</p>
+        </article>
+        <article class="process" id="process-2">
+          <div class="process-header"><strong>② 支援</strong><span>手順 3件</span></div>
+          <p class="body">現在の支援手順</p>
+        </article>
+        <article class="process" id="process-3">
+          <div class="process-header"><strong>③ 記録</strong><span>直近 4件</span></div>
+          <p class="body">最近の支援結果</p>
+        </article>
+        <article class="process" id="process-4">
+          <div class="process-header"><strong>④ モニタリング</strong><span>根拠 4件</span></div>
+          <p class="body">期間・事実資料</p>
+        </article>
+        <article class="process" id="process-5">
+          <div class="process-header"><strong>⑤ 見直し</strong><span>変更が必要</span></div>
+          <p class="body">判断理由</p>
+          <p class="body">次にすること</p>
+        </article>
+        <article class="process" id="process-6">
+          <div class="process-header">
+            <strong>⑥ 次版準備</strong><span>版4・下書き・未適用</span>
+          </div>
+          <p class="safety">現在適用中：版 3</p>
+          <p class="safety">版 4：まだ適用開始されていない</p>
+          <p class="safety">現在使用中の版 3 は変更しません。版 4 の下書きを別に作ります。</p>
+          <button class="cta" type="button">支援内容の見直しを始める（版 4 の下書き）</button>
+        </article>
+
+        <section class="aux">
+          <h3>履歴・詳細</h3>
+          <p class="body">versions / mutation / stateGrid（削除せず下位階層）</p>
+        </section>
+      </section>
+    </main>
+    <script>
+      (function () {
+        var buttons = document.querySelectorAll(".nav button[data-target]");
+        buttons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            buttons.forEach(function (other) {
+              other.removeAttribute("aria-current");
+            });
+            button.setAttribute("aria-current", "true");
+            var target = document.getElementById(button.getAttribute("data-target"));
+            if (target) {
+              target.scrollIntoView({ block: "start", behavior: "smooth" });
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

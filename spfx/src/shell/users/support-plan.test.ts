@@ -1,6 +1,8 @@
 import {
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_PRESENTATION_NOTE,
+  PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION,
+  PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT,
   PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION,
   SUPPORT_PLAN_ACTIVE_STATUS_LABEL,
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
@@ -137,7 +139,7 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     expect(SUPPORT_PLAN_REVIEW_MATERIALS_CTA).toContain("見直し材料");
   });
 
-  it("keeps FIELD_STAFF DEMO-UX-4 block order and adds planner graph blocks", () => {
+  it("keeps FIELD_STAFF order and gives PLANNER the locked process order", () => {
     expect(supportPlanBlockOrderForRole("FIELD_STAFF")).toEqual([
       "summary",
       "goals",
@@ -145,10 +147,17 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
       "review",
       "mutation",
     ]);
-    expect(supportPlanBlockOrderForRole("PLANNER")).toContain("procedures");
-    expect(supportPlanBlockOrderForRole("PLANNER")).toContain("records");
-    expect(supportPlanBlockOrderForRole("PLANNER")).toContain("versions");
-    expect(supportPlanBlockOrderForRole("PLANNER")).toContain("nextVersion");
+    expect(supportPlanBlockOrderForRole("PLANNER")).toEqual([
+      "summary",
+      "goals",
+      "actions",
+      "procedures",
+      "records",
+      "review",
+      "nextVersion",
+      "versions",
+      "mutation",
+    ]);
     expect(supportPlanBlockOrderForRole("FIELD_STAFF")).not.toContain("nextVersion");
   });
 
@@ -165,7 +174,20 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     expect(PLANNING_PC_DEMO_1_SLICE.liveTenantIoAuthorized).toBe(false);
   });
 
-  it("defines stable planner section navigation over existing headings only", () => {
+  it("defines six PLANNER process navigation targets without progress semantics", () => {
+    expect(PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION).toEqual([
+      { id: "planner-process-plan-heading", label: "① 計画" },
+      { id: "planner-process-support-heading", label: "② 支援" },
+      { id: "planner-process-records-heading", label: "③ 記録" },
+      { id: "planner-process-monitoring-heading", label: "④ モニタリング" },
+      { id: "planner-process-review-heading", label: "⑤ 見直し" },
+      { id: "planner-process-next-version-heading", label: "⑥ 次版準備" },
+    ]);
+    expect(PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT).toContain("ページ内");
+    expect(PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT).toContain("進捗を表しません");
+  });
+
+  it("keeps the pre-V1 planning-PC navigation available unchanged for ADMIN_AUDIT", () => {
     expect(PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION).toEqual([
       { id: "demo-ux-plan-review-heading", label: "見直し状況" },
       { id: "planning-pc-plan-procedures-heading", label: "現在の支援手順" },

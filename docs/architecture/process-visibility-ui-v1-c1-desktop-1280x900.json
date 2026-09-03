@@ -1,0 +1,19 @@
+{
+  "viewportWidth": 1280,
+  "scrollWidth": 1280,
+  "clientWidth": 1280,
+  "bodyScrollWidth": 1280,
+  "overflowX": false,
+  "overflowDelta": 0,
+  "headings": ["① 計画", "② 支援", "③ 記録", "④ モニタリング", "⑤ 見直し", "⑥ 次版準備"],
+  "navButtons": ["① 計画", "② 支援", "③ 記録", "④ モニタリング", "⑤ 見直し", "⑥ 次版準備"],
+  "navDisplay": "flex",
+  "navColumns": "1fr 1fr",
+  "viewportLabel": "Viewport · Desktop（≥900px / target 1280×900）",
+  "truncated": [],
+  "desktopOnlyVisible": true,
+  "mobileOnlyVisible": false,
+  "processCount": 6,
+  "hasAllSix": true,
+  "navHint": "選択中 = いま見ているセクション位置（完了 / 現在工程 / 未完了は表示しません）"
+}

@@ -19,6 +19,8 @@ import {
 import {
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
+  PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION,
+  PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT,
   SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING,
   SUPPORT_PLAN_HISTORICAL_RECORD_NOTE,
   SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE,
@@ -95,6 +97,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   } = presentation;
   const adminRead = isAdminAuditPresentationRole(presentationRole);
   const planningPc = isPlanningPcPresentationRole(presentationRole);
+  const plannerProcess = presentationRole === "PLANNER";
+  const sectionNavigation: ReadonlyArray<Readonly<{ id: string; label: string }>> = plannerProcess
+    ? PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION
+    : PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION;
   const [selectedVersion, setSelectedVersion] = React.useState(currentVersion);
   const [capturedReview, setCapturedReview] = React.useState<SyntheticCapturedReview | null>(null);
   const [revisionSession, setRevisionSession] = React.useState<SupportPlanRevisionSession>(
@@ -124,8 +130,13 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   // forward CTA, demote the review-materials predecessor from primary.
   const revisionStartIsPrimaryForward = Boolean(revisionEligible && !revisionDraft && !adminRead);
   const [activePlannerSectionId, setActivePlannerSectionId] = React.useState<string>(
-    PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION[0].id,
+    sectionNavigation[0].id,
   );
+
+  React.useEffect(() => {
+    setActivePlannerSectionId(sectionNavigation[0].id);
+  }, [plannerProcess]);
+
   const focusPlannerSection = (sectionId: string): void => {
     const heading = document.getElementById(sectionId);
     if (!(heading instanceof HTMLElement)) {
@@ -135,6 +146,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     heading.scrollIntoView({ block: "start", inline: "nearest" });
     heading.focus();
   };
+
   const titleHeading = (
     <div className={styles.headingTitleRow}>
       <SemanticIcon name="supportPlan" size={28} className={styles.titleIcon} />
@@ -260,6 +272,28 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     </section>
   );
 
+  const monitoringContent = (
+    <div data-monitoring-link-slice={MONITORING_LINK_SLICE_A.id}>
+      {monitoringResult.status === "RESOLVED" ? (
+        <MonitoringView
+          model={monitoringResult.value}
+          personLabel={personLabel}
+          procedureLabelContext={{
+            userId: presentation.userId,
+            planId,
+            currentVersion,
+            currentProcedures,
+          }}
+          onCapturedReviewChange={setCapturedReview}
+        />
+      ) : (
+        <p className={styles.sectionHint} role="status" data-monitoring-malformed="true">
+          モニタリング入力を確認できません。記録または期間条件を確認してください（合成）。
+        </p>
+      )}
+    </div>
+  );
+
   const recordsBlock = (
     <section className={styles.detailSection} aria-labelledby="planning-pc-plan-records-heading">
       <h2 id="planning-pc-plan-records-heading" tabIndex={-1}>
@@ -281,27 +315,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           </li>
         ))}
       </ul>
-      {planningPc ? (
-        <div data-monitoring-link-slice={MONITORING_LINK_SLICE_A.id}>
-          {monitoringResult.status === "RESOLVED" ? (
-            <MonitoringView
-              model={monitoringResult.value}
-              personLabel={personLabel}
-              procedureLabelContext={{
-                userId: presentation.userId,
-                planId,
-                currentVersion,
-                currentProcedures,
-              }}
-              onCapturedReviewChange={setCapturedReview}
-            />
-          ) : (
-            <p className={styles.sectionHint} role="status" data-monitoring-malformed="true">
-              モニタリング入力を確認できません。記録または期間条件を確認してください（合成）。
-            </p>
-          )}
-        </div>
-      ) : null}
+      {planningPc && !plannerProcess ? monitoringContent : null}
     </section>
   );
 
@@ -427,6 +441,18 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     );
   };
 
+  const capturedReviewSummary = capturedReview ? (
+    <div className={styles.processReviewOutcome} data-sbs-mgmt-loop-b-review="true">
+      <p data-sbs-mgmt-loop-b-decision={capturedReview.outcome.decision}>
+        見直し結果:{" "}
+        {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? "変更が必要" : "変更なし"}
+      </p>
+      {capturedReview.decisionReason ? (
+        <p data-sbs-mgmt-loop-b-reason="true">判断理由: {capturedReview.decisionReason.reason}</p>
+      ) : null}
+    </div>
+  ) : null;
+
   const nextVersionBlock = (
     <section
       className={styles.detailSection}
@@ -450,19 +476,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       <p className={styles.sectionHint} data-review-new-version="overdue-not-invalidating">
         {SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE}
       </p>
-      {planningPc && capturedReview ? (
-        <div data-sbs-mgmt-loop-b-review="true">
-          <p data-sbs-mgmt-loop-b-decision={capturedReview.outcome.decision}>
-            見直し結果:{" "}
-            {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? "変更が必要" : "変更なし"}
-          </p>
-          {capturedReview.decisionReason ? (
-            <p data-sbs-mgmt-loop-b-reason="true">
-              判断理由: {capturedReview.decisionReason.reason}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+      {planningPc && !plannerProcess ? capturedReviewSummary : null}
       {/* Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate. */}
       {!adminRead ? (
         <button
@@ -555,6 +569,46 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     </section>
   );
 
+  const stateGridBlock = (
+    <div className={styles.stateGrid}>
+      <section className={styles.statePanel} aria-labelledby="demo-ux-plan-business-facts-heading">
+        <h2 id="demo-ux-plan-business-facts-heading">制度・業務情報（合成表示）</h2>
+        <dl>
+          <div>
+            <dt>作成者</dt>
+            <dd>{businessFacts.createdByLabel}</dd>
+          </div>
+          <div>
+            <dt>資格</dt>
+            <dd>{businessFacts.qualificationLabel}</dd>
+          </div>
+          <div>
+            <dt>作成日</dt>
+            <dd>{businessFacts.createdAtLabel}</dd>
+          </div>
+          <div>
+            <dt>適用開始</dt>
+            <dd data-planning-pc="applied-from">{businessFacts.appliedFromLabel}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section className={styles.statePanel} aria-labelledby="demo-ux-plan-system-state-heading">
+        <h2 id="demo-ux-plan-system-state-heading">システム状態</h2>
+        <dl>
+          <div>
+            <dt>保存状態</dt>
+            <dd>{systemState.saveStateLabel}</dd>
+          </div>
+          <div>
+            <dt>最終更新</dt>
+            <dd>{systemState.lastUpdatedLabel}</dd>
+          </div>
+        </dl>
+      </section>
+    </div>
+  );
+
   const blockByKey: Record<SupportPlanBlockKey, React.ReactNode> = {
     summary: summaryBlock,
     goals: goalsBlock,
@@ -566,6 +620,106 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     nextVersion: nextVersionBlock,
     mutation: mutationBlock,
   };
+
+  const renderPlannerProcessSection = (
+    id: string,
+    title: string,
+    summaryLabel: string,
+    children: React.ReactNode,
+    processKey: string,
+    detail = false,
+  ): React.ReactNode => (
+    <section
+      className={
+        detail ? `${styles.processSection} ${styles.processDetailSection}` : styles.processSection
+      }
+      aria-labelledby={id}
+      data-process-visibility-ui-v1={processKey}
+    >
+      <div className={styles.processHeader}>
+        <h2 id={id} tabIndex={-1} className={styles.processTitle}>
+          {title}
+        </h2>
+        {summaryLabel ? <p className={styles.processSummary}>{summaryLabel}</p> : null}
+      </div>
+      <div className={styles.processBody}>{children}</div>
+    </section>
+  );
+
+  const reviewSummaryLabel = capturedReview
+    ? capturedReview.outcome.decision === "CHANGE_REQUIRED"
+      ? "変更が必要"
+      : "変更なし"
+    : reviewStatus.reviewStatusLabel;
+  const nextVersionSummaryLabel = revisionDraft
+    ? `版 ${revisionDraft.candidate.version}・下書き・未適用`
+    : `版 ${conceptualNextVersion}・次版準備`;
+
+  const plannerProcessFlow = (
+    <div className={styles.processFlow} data-process-visibility-ui-v1="process-flow">
+      {renderPlannerProcessSection(
+        "planner-process-plan-heading",
+        "① 計画",
+        `版 ${currentVersion}・${statusLabel}`,
+        <>
+          {summaryBlock}
+          {goalsBlock}
+          {actionsBlock}
+        </>,
+        "plan",
+      )}
+      {renderPlannerProcessSection(
+        "planner-process-support-heading",
+        "② 支援",
+        `手順 ${currentProcedures.length}件`,
+        proceduresBlock,
+        "support",
+      )}
+      {renderPlannerProcessSection(
+        "planner-process-records-heading",
+        "③ 記録",
+        `直近 ${recentProcedureRecords.length}件`,
+        recordsBlock,
+        "records",
+      )}
+      {renderPlannerProcessSection(
+        "planner-process-monitoring-heading",
+        "④ モニタリング",
+        "確認材料",
+        monitoringContent,
+        "monitoring",
+      )}
+      {renderPlannerProcessSection(
+        "planner-process-review-heading",
+        "⑤ 見直し",
+        reviewSummaryLabel,
+        <>
+          {reviewBlock}
+          {capturedReviewSummary}
+        </>,
+        "review",
+      )}
+      {renderPlannerProcessSection(
+        "planner-process-next-version-heading",
+        "⑥ 次版準備",
+        nextVersionSummaryLabel,
+        nextVersionBlock,
+        "next-version",
+      )}
+      {renderPlannerProcessSection(
+        "planner-process-details-heading",
+        "履歴・詳細",
+        "補助情報",
+        <>
+          {versionsBlock}
+          {mutationBlock}
+          {stateGridBlock}
+        </>,
+        "details",
+        true,
+      )}
+    </div>
+  );
 
   return (
     <section
@@ -639,11 +793,16 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             </p>
           </header>
           <nav
-            className={styles.sectionNavigation}
-            aria-label="支援計画セクション移動"
+            className={
+              plannerProcess
+                ? `${styles.sectionNavigation} ${styles.processNavigation}`
+                : styles.sectionNavigation
+            }
+            aria-label={plannerProcess ? "支援サイクル内のページ移動" : "支援計画セクション移動"}
             data-planning-pc="section-navigation"
+            data-process-visibility-ui-v1={plannerProcess ? "navigation" : undefined}
           >
-            {PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION.map((section) => {
+            {sectionNavigation.map((section) => {
               const selected = activePlannerSectionId === section.id;
               return (
                 <button
@@ -654,7 +813,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
                       ? `${styles.sectionNavButton} ${styles.sectionNavButtonSelected}`
                       : styles.sectionNavButton
                   }
-                  aria-pressed={selected}
+                  aria-current={plannerProcess && selected ? "location" : undefined}
+                  aria-pressed={!plannerProcess ? selected : undefined}
                   data-planning-pc-section-nav={section.id}
                   onClick={() => {
                     focusPlannerSection(section.id);
@@ -665,6 +825,11 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
               );
             })}
           </nav>
+          {plannerProcess ? (
+            <p className={styles.processNavigationHint} data-process-visibility-ui-v1="nav-hint">
+              {PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT}
+            </p>
+          ) : null}
         </>
       ) : (
         <>
@@ -710,50 +875,16 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         </>
       )}
 
-      {supportPlanBlockOrderForRole(presentationRole).map((key) => (
-        <React.Fragment key={key}>{blockByKey[key]}</React.Fragment>
-      ))}
-
-      <div className={styles.stateGrid}>
-        <section
-          className={styles.statePanel}
-          aria-labelledby="demo-ux-plan-business-facts-heading"
-        >
-          <h2 id="demo-ux-plan-business-facts-heading">制度・業務情報（合成表示）</h2>
-          <dl>
-            <div>
-              <dt>作成者</dt>
-              <dd>{businessFacts.createdByLabel}</dd>
-            </div>
-            <div>
-              <dt>資格</dt>
-              <dd>{businessFacts.qualificationLabel}</dd>
-            </div>
-            <div>
-              <dt>作成日</dt>
-              <dd>{businessFacts.createdAtLabel}</dd>
-            </div>
-            <div>
-              <dt>適用開始</dt>
-              <dd data-planning-pc="applied-from">{businessFacts.appliedFromLabel}</dd>
-            </div>
-          </dl>
-        </section>
-
-        <section className={styles.statePanel} aria-labelledby="demo-ux-plan-system-state-heading">
-          <h2 id="demo-ux-plan-system-state-heading">システム状態</h2>
-          <dl>
-            <div>
-              <dt>保存状態</dt>
-              <dd>{systemState.saveStateLabel}</dd>
-            </div>
-            <div>
-              <dt>最終更新</dt>
-              <dd>{systemState.lastUpdatedLabel}</dd>
-            </div>
-          </dl>
-        </section>
-      </div>
+      {plannerProcess ? (
+        plannerProcessFlow
+      ) : (
+        <>
+          {supportPlanBlockOrderForRole(presentationRole).map((key) => (
+            <React.Fragment key={key}>{blockByKey[key]}</React.Fragment>
+          ))}
+          {stateGridBlock}
+        </>
+      )}
     </section>
   );
 };
