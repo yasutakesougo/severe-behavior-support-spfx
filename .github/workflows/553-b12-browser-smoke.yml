@@ -22,7 +22,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Install isolated browser smoke runtime
-        run: npm install --prefix /tmp --no-save puppeteer-core esbuild sass
+        run: npm install --prefix /tmp --no-save puppeteer-core esbuild sass react@17.0.1 react-dom@17.0.1
       - name: Resolve isolated runtime package entries
         run: |
           PUPPETEER_PATH=$(node -e "console.log(require.resolve('puppeteer-core', { paths: ['/tmp'] }))")
@@ -31,6 +31,7 @@ jobs:
           echo "SBS_MGMT_LOOP_B_PUPPETEER_PATH=$PUPPETEER_PATH" >> "$GITHUB_ENV"
           echo "SBS_MGMT_LOOP_B_ESBUILD_PATH=$ESBUILD_PATH" >> "$GITHUB_ENV"
           echo "SBS_MGMT_LOOP_B_SASS_PATH=$SASS_PATH" >> "$GITHUB_ENV"
+          echo "SBS_MGMT_LOOP_B_NODE_PATH=/tmp/node_modules" >> "$GITHUB_ENV"
       - name: Run B12 desktop + mobile browser acceptance
         env:
           SBS_MGMT_LOOP_B_ARTIFACTS_DIR: /tmp/sbs-mgmt-loop-b-browser-smoke
