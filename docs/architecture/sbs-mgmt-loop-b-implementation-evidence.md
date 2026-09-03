@@ -6,6 +6,7 @@ unit: SBS-MGMT-LOOP-B (#553)
 kind: implementation evidence / exact HEAD fixation
 PR: #576 (feat/sbs-mgmt-loop-b-553)
 exact product HEAD: 4eab190eecdec5b05d7051d1ede3240dfdfa0052
+evidence packet tip: may advance with docs-only commits after fixation
 pre-correction Staff Check HEAD: 633a5b461eabe49902e92486670272f6ac9231bc
 Human Correction Implementation GO: RECEIVED / CONSUMED
 date: 2026-09-03
