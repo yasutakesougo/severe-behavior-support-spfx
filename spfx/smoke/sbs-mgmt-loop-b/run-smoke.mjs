@@ -21,7 +21,7 @@ const esbuildModule = await import(
 );
 const puppeteerModule = await import(
   process.env.SBS_MGMT_LOOP_B_PUPPETEER_PATH ??
-    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js",
+    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer.js",
 );
 const sassModule = await import(
   process.env.SBS_MGMT_LOOP_B_SASS_PATH ?? "/tmp/node_modules/sass/sass.node.mjs",
