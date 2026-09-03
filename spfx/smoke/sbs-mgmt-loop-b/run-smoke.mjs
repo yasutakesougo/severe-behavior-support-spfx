@@ -39,8 +39,7 @@ const scssPaths = [
   "src/shell/users/SupportPlanManagementListUx.module.scss",
   "src/shell/review/ReviewDueStateUx.module.scss",
   "src/shell/monitoring/MonitoringViewUx.module.scss",
-  "src/shell/monitoring/HumanReviewViewUx.module.scss",
-  "src/shell/monitoring/ReviewOutcomeCaptureViewUx.module.scss",
+  "src/shell/monitoring/ReviewOutcomeCaptureView.module.scss",
 ];
 
 function normalizeSpfxThemeCss(css) {
