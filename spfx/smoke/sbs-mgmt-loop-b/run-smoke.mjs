@@ -419,6 +419,53 @@ async function runHistoricalStaleBlocked(name, width, height) {
   return { name, width, height, pass, found, externalRequests, pageErrors, screenshot };
 }
 
+async function runBeforeApplyStaffLanding(name, width, height) {
+  const page = await browser.newPage();
+  await page.setViewport({ width, height });
+  const pageErrors = [];
+  const externalRequests = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  page.on("request", (request) => {
+    const reqUrl = request.url();
+    if (!reqUrl.startsWith("http://127.0.0.1:4194/")) {
+      externalRequests.push(reqUrl);
+    }
+  });
+  await page.goto(
+    "http://127.0.0.1:4194/index.html?staffPlanTransition=beforeApply&presentationRole=PLANNER",
+    { waitUntil: "networkidle0" },
+  );
+  await page.waitForSelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
+  const found = await page.evaluate(() => {
+    const apply = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
+    const applyText = apply?.textContent ?? "";
+    const draft = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
+    const arrival = document.querySelector(
+      '[data-sbs-mgmt-plan-activation-c-staff-check="before-apply"]',
+    );
+    const liveWrite = document.querySelector("[data-sbs-mgmt-plan-activation-c-live-write]");
+    return {
+      arrivalPresent: Boolean(arrival),
+      draftPresent: Boolean(draft),
+      applyPresent: apply instanceof HTMLButtonElement && !apply.disabled,
+      applyLabelClear: applyText.includes("版 4") && applyText.includes("を適用開始する"),
+      liveWriteFalse:
+        liveWrite?.getAttribute("data-sbs-mgmt-plan-activation-c-live-write") === "false",
+    };
+  });
+  const pass =
+    found.arrivalPresent &&
+    found.draftPresent &&
+    found.applyPresent &&
+    found.applyLabelClear &&
+    found.liveWriteFalse &&
+    externalRequests.length === 0;
+  const screenshot = path.join(artifactsDir, `${name}.png`);
+  await page.screenshot({ path: screenshot, fullPage: true });
+  await page.close();
+  return { name, width, height, pass, found, externalRequests, pageErrors, screenshot };
+}
+
 const cases = [
   await runHappyPath("desktop-1280x900", 1280, 900),
   await runHappyPath("mobile-390x844", 390, 844),
@@ -426,6 +473,7 @@ const cases = [
   await runNoChangeBlocked("mobile-no-change-blocked", 390, 844),
   await runHistoricalStaleBlocked("desktop-historical-stale-blocked", 1280, 900),
   await runHistoricalStaleBlocked("mobile-historical-stale-blocked", 390, 844),
+  await runBeforeApplyStaffLanding("desktop-before-apply-staff-landing", 1280, 900),
 ];
 await browser.close();
 server.close();

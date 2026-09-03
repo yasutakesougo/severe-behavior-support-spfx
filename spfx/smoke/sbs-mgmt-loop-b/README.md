@@ -16,13 +16,19 @@ npm install esbuild sass --no-save
 node spfx/smoke/sbs-mgmt-loop-b/serve-smoke.mjs
 ```
 
-Then open the printed URL (default):
+Staff Plan-Transition（Apply 直前。推奨）:
+
+```text
+http://127.0.0.1:4194/index.html?staffPlanTransition=beforeApply&presentationRole=PLANNER
+```
+
+この URL は計画画面を直接開き、版3適用中 + 版4下書きの状態で `版 4 を適用開始する` を出します。LOOP-B の見直し入力は不要です。
+
+LOOP-B 冷起動（見直し → 下書き → Apply の全経路）:
 
 ```text
 http://127.0.0.1:4194/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER
 ```
-
-Path: 利用者 A → 支援計画 → 変更が必要 → 下書き開始 → 版4を適用開始する.
 
 `run-smoke.mjs` auto-closes after Puppeteer. Use `serve-smoke.mjs` for manual confirmation.
 

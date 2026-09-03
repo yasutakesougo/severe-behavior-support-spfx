@@ -145,9 +145,11 @@ const server = http.createServer((req, res) => {
 
 await new Promise((resolve) => server.listen(port, "127.0.0.1", resolve));
 
-const openUrl = `http://127.0.0.1:${port}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER`;
+const staffBeforeApplyUrl = `http://127.0.0.1:${port}/index.html?staffPlanTransition=beforeApply&presentationRole=PLANNER`;
+const loopBUrl = `http://127.0.0.1:${port}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER`;
 console.log("");
 console.log("Synthetic smoke server ready (no LIVE WRITE).");
-console.log(`Open: ${openUrl}`);
-console.log("Then open 支援計画 for user A → CHANGE_REQUIRED → 下書き → 版4を適用開始する");
+console.log(`Staff Apply 前: ${staffBeforeApplyUrl}`);
+console.log("  → ⑥ 次版準備に「版 4 を適用開始する」が出ます。");
+console.log(`LOOP-B 冷起動: ${loopBUrl}`);
 console.log("Ctrl+C to stop.");

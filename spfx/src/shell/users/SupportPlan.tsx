@@ -63,6 +63,10 @@ export type SupportPlanProps = Readonly<{
   onReviewMaterialsRequest?: () => void;
   nextVersionConceptHighlighted?: boolean;
   presentationRole?: ShellPresentationRole;
+  /** Staff-check / smoke arrival only. Default remains empty session. */
+  initialRevisionSession?: SupportPlanRevisionSession;
+  initialCapturedReview?: SyntheticCapturedReview | null;
+  focusNextVersionOnMount?: boolean;
 }>;
 
 const MUTATION_LABELS = ["作成する", "編集する", "保存する"] as const;
@@ -80,6 +84,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   onReviewMaterialsRequest,
   nextVersionConceptHighlighted = false,
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
+  initialRevisionSession = EMPTY_SUPPORT_PLAN_REVISION_SESSION,
+  initialCapturedReview = null,
+  focusNextVersionOnMount = false,
 }) => {
   const {
     personLabel,
@@ -107,10 +114,11 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     ? PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION
     : PLANNING_PC_SUPPORT_PLAN_SECTION_NAVIGATION;
   const [selectedVersion, setSelectedVersion] = React.useState(currentVersion);
-  const [capturedReview, setCapturedReview] = React.useState<SyntheticCapturedReview | null>(null);
-  const [revisionSession, setRevisionSession] = React.useState<SupportPlanRevisionSession>(
-    EMPTY_SUPPORT_PLAN_REVISION_SESSION,
+  const [capturedReview, setCapturedReview] = React.useState<SyntheticCapturedReview | null>(
+    initialCapturedReview,
   );
+  const [revisionSession, setRevisionSession] =
+    React.useState<SupportPlanRevisionSession>(initialRevisionSession);
   const [activationSession, setActivationSession] = React.useState<SupportPlanActivationSession>(
     EMPTY_SUPPORT_PLAN_ACTIVATION_SESSION,
   );
@@ -176,12 +184,18 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   );
   const demoteReviewMaterialsCta = revisionStartIsPrimaryForward || activationApplyIsPrimaryForward;
   const [activePlannerSectionId, setActivePlannerSectionId] = React.useState<string>(
-    sectionNavigation[0].id,
+    focusNextVersionOnMount && plannerProcess
+      ? "planner-process-next-version-heading"
+      : sectionNavigation[0].id,
   );
 
   React.useEffect(() => {
+    if (focusNextVersionOnMount && plannerProcess) {
+      setActivePlannerSectionId("planner-process-next-version-heading");
+      return;
+    }
     setActivePlannerSectionId(sectionNavigation[0].id);
-  }, [plannerProcess]);
+  }, [focusNextVersionOnMount, plannerProcess, sectionNavigation]);
 
   const focusPlannerSection = (sectionId: string): void => {
     const heading = document.getElementById(sectionId);
@@ -192,6 +206,16 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     heading.scrollIntoView({ block: "start", inline: "nearest" });
     heading.focus();
   };
+
+  React.useEffect(() => {
+    if (!focusNextVersionOnMount || !plannerProcess) {
+      return;
+    }
+    const frame = window.requestAnimationFrame(() => {
+      focusPlannerSection("planner-process-next-version-heading");
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [focusNextVersionOnMount, plannerProcess]);
 
   const titleHeading = (
     <div className={styles.headingTitleRow}>

@@ -17,6 +17,7 @@ import {
 import {
   EMPTY_SUPPORT_PLAN_REVISION_SESSION,
   SUPPORT_PLAN_REVISION_SESSION_LIVE_WRITE_AUTHORIZED,
+  createBeforeApplyStaffTransitionArrival,
   startSyntheticPlanningPcRevision,
 } from "./support-plan-revision-start";
 
@@ -160,5 +161,18 @@ describe("SBS-MGMT-LOOP-B B2 revision orchestration", () => {
       actionAt: SBS_MGMT_LOOP_B_REVISION_FIXTURE.actionAt,
     });
     expect(result.status).toBe("INVALID");
+  });
+
+  it("staff before-apply arrival exposes Draft v4 without applying", () => {
+    const arrival = createBeforeApplyStaffTransitionArrival();
+    expect(arrival).not.toBeNull();
+    if (arrival === null) {
+      return;
+    }
+    expect(arrival.session.drafts).toHaveLength(1);
+    expect(arrival.session.drafts[0]?.candidate.version).toBe(4);
+    expect(arrival.session.drafts[0]?.reviewBinding.reviewedPlanVersion).toBe(3);
+    expect(SBS_MGMT_LOOP_B_CURRENT_PLAN.currentVersion).toBe(3);
+    expect(SUPPORT_PLAN_REVISION_SESSION_LIVE_WRITE_AUTHORIZED).toBe(false);
   });
 });

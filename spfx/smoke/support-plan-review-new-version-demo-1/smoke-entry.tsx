@@ -22,6 +22,7 @@ import {
   SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
   SHELL_UX_SLICE,
   SHELL_VIEW_MODES,
+  SupportPlan,
   isShellPrimaryNavigationId,
   isShellSiteSelection,
   parseShellPresentationRole,
@@ -31,6 +32,7 @@ import {
   type ShellSiteSelection,
   type ShellViewMode,
 } from "../../src/shell/ux";
+import { createBeforeApplyStaffTransitionArrival } from "../../src/shell/users/support-plan-revision-start";
 
 function parseParams(): {
   viewMode: ShellViewMode;
@@ -38,6 +40,7 @@ function parseParams(): {
   siteSelection: ShellSiteSelection;
   selectedDestination: ShellPrimaryNavigationId;
   presentationRole: ShellPresentationRole;
+  staffPlanTransition: string | null;
 } {
   const params = new URLSearchParams(window.location.search);
   const viewRaw = params.get("viewMode") ?? "ready";
@@ -60,11 +63,40 @@ function parseParams(): {
     siteSelection,
     selectedDestination,
     presentationRole: parseShellPresentationRole(params.get("presentationRole") ?? "PLANNER"),
+    staffPlanTransition: params.get("staffPlanTransition"),
   };
 }
 
-const SmokeApp: React.FC = () => {
-  const initial = parseParams();
+const StaffBeforeApplyApp: React.FC = () => {
+  const arrival = React.useMemo(() => createBeforeApplyStaffTransitionArrival(), []);
+  if (arrival === null) {
+    return (
+      <p role="alert" data-sbs-mgmt-plan-activation-c-staff-check="arrival-failed">
+        適用前の合成状態を作れませんでした。
+      </p>
+    );
+  }
+  return (
+    <div data-sbs-mgmt-plan-activation-c-staff-check="before-apply">
+      <p data-sbs-mgmt-plan-activation-c-staff-check-note="true">
+        合成確認画面です。本番には保存されません。現在適用中は版3、次版は版4の下書きです。⑥で「版
+        4 を適用開始する」を押せます。
+      </p>
+      <SupportPlan
+        presentation={DEMO_UX_SUPPORT_PLAN_FIXTURE}
+        presentationRole="PLANNER"
+        initialRevisionSession={arrival.session}
+        initialCapturedReview={arrival.capturedReview}
+        nextVersionConceptHighlighted
+        focusNextVersionOnMount
+      />
+    </div>
+  );
+};
+
+const ChromeSmokeApp: React.FC<{
+  initial: ReturnType<typeof parseParams>;
+}> = ({ initial }) => {
   const [selectedDestination, setSelectedDestination] = React.useState<ShellPrimaryNavigationId>(
     initial.selectedDestination,
   );
@@ -99,6 +131,14 @@ const SmokeApp: React.FC = () => {
       />
     </div>
   );
+};
+
+const SmokeApp: React.FC = () => {
+  const initial = parseParams();
+  if (initial.staffPlanTransition === "beforeApply") {
+    return <StaffBeforeApplyApp />;
+  }
+  return <ChromeSmokeApp initial={initial} />;
 };
 
 const root = document.getElementById("root");

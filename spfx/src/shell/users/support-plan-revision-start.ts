@@ -6,10 +6,16 @@ import {
   type SupportPlanVersion,
   type StartSupportPlanRevisionResult,
 } from "../../sbs-domain/support-plan-revision.bundle";
-import type { SyntheticCapturedReview } from "../monitoring/review-outcome-capture";
+import { humanReviewResultForSyntheticVersion } from "../monitoring/human-review-fixture";
+import {
+  assembleSyntheticCapturedReview,
+  type SyntheticCapturedReview,
+} from "../monitoring/review-outcome-capture";
+import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "./support-plan-fixture";
 import {
   SBS_MGMT_LOOP_B_CURRENT_PLAN,
   SBS_MGMT_LOOP_B_EXISTING_VERSIONS,
+  SBS_MGMT_LOOP_B_REVISION_FIXTURE,
   SBS_MGMT_LOOP_B_SOURCE_VERSION,
   assertOutcomeMatchesRevisionFixture,
   assertPresentationMatchesRevisionFixture,
@@ -81,4 +87,55 @@ export function startSyntheticPlanningPcRevision(
     actor,
     actionAt,
   });
+}
+
+export type BeforeApplyStaffTransitionArrival = Readonly<{
+  session: SupportPlanRevisionSession;
+  capturedReview: SyntheticCapturedReview;
+}>;
+
+/**
+ * Lands Actual Staff Plan-Transition Check on Definition Before-Apply:
+ * v3 applied + v4 Draft. Session-only. Does not auto-Apply.
+ */
+export function createBeforeApplyStaffTransitionArrival(): BeforeApplyStaffTransitionArrival | null {
+  const materials = humanReviewResultForSyntheticVersion(
+    SBS_MGMT_LOOP_B_REVISION_FIXTURE.planVersion,
+  );
+  if (materials.status !== "RESOLVED") {
+    return null;
+  }
+  const captured = assembleSyntheticCapturedReview(
+    materials.value,
+    "CHANGE_REQUIRED",
+    "活動切替前の予告方法を見直す必要がある",
+    "",
+    SBS_MGMT_LOOP_B_REVISION_FIXTURE.actionAt,
+  );
+  if (captured.status !== "CAPTURED") {
+    return null;
+  }
+  const started = startSyntheticPlanningPcRevision({
+    presentation: DEMO_UX_SUPPORT_PLAN_FIXTURE,
+    capturedReview: captured.captured,
+    session: EMPTY_SUPPORT_PLAN_REVISION_SESSION,
+    actor: SBS_MGMT_LOOP_B_REVISION_FIXTURE.actor,
+    actionAt: SBS_MGMT_LOOP_B_REVISION_FIXTURE.actionAt,
+  });
+  if (started.status !== "STARTED" && started.status !== "ALREADY_STARTED") {
+    return null;
+  }
+  const knownVersions = EMPTY_SUPPORT_PLAN_REVISION_SESSION.existingVersions.some(
+    (version) => version.version === started.draft.candidate.version,
+  )
+    ? EMPTY_SUPPORT_PLAN_REVISION_SESSION.existingVersions
+    : [...EMPTY_SUPPORT_PLAN_REVISION_SESSION.existingVersions, started.draft.candidate];
+  return {
+    capturedReview: captured.captured,
+    session: {
+      intents: [started.intent],
+      drafts: [started.draft],
+      existingVersions: knownVersions,
+    },
+  };
 }
