@@ -82,9 +82,9 @@ Fixation + gate packet closeout match live merge facts and keep Deploy / LIVE WR
 ```text
 Independent Fresh Review = PASS / ACCEPT
 Merge Gate (pre-Human) = HOLD（Human Ready GO + Human Merge GO required）
-expected head SHA for Human Ready/Merge GO after this review-record commit
-  = e07e695f986a1f3635bd22547cad510bdf5ab47a（docs-only Fresh Review record; does not reopen R1–R8）
 substantive closeout content SHA = 0b81d9ef1698f7fe8185af2a85f085585025aca2
+Fresh Review record SHA = e07e695f986a1f3635bd22547cad510bdf5ab47a
+Note: Ready/Merge expected head SHA is live PR tip（PR body / Human GO only; not duplicated here）
 ```
 
 ## 6. Explicit next（after #581 close）
