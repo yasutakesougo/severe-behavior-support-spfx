@@ -151,10 +151,20 @@ async function runHappyPath(name, width, height) {
     const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
     const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
     const liveWrite = document.querySelector("[data-sbs-mgmt-loop-b-live-write]");
+    const sourceSafety = document.querySelector('[data-sbs-mgmt-loop-b-source-safety="true"]');
+    const startText = start?.textContent ?? "";
+    const sourceSafetyText = sourceSafety?.textContent ?? "";
     return {
       startEnabled: start instanceof HTMLButtonElement && !start.disabled,
       startIsPrimary: start?.getAttribute("data-sbs-action") === "primary",
       startHasNoCreateCta: start?.getAttribute("data-review-new-version") !== "create-cta",
+      startLabelClear:
+        startText.includes("支援内容の見直しを始める") &&
+        startText.includes("版 4") &&
+        startText.includes("下書き"),
+      sourceSafetyClear:
+        sourceSafetyText.includes("現在使用中の版 3 は変更しません") &&
+        sourceSafetyText.includes("版 4 の下書きを別に作ります"),
       createCtaDisabled:
         createCta instanceof HTMLButtonElement &&
         createCta.disabled &&
@@ -189,11 +199,17 @@ async function runHappyPath(name, width, height) {
     const createCta = document.querySelector('[data-review-new-version="create-cta"]');
     const startGone = document.querySelector('[data-sbs-mgmt-loop-b-action="start-revision"]');
     const liveWrite = document.querySelector("[data-sbs-mgmt-loop-b-live-write]");
+    const activeVersion = document.querySelector('[data-sbs-mgmt-loop-b-active-version="true"]');
+    const draftLifecycle = document.querySelector('[data-sbs-mgmt-loop-b-draft-lifecycle="true"]');
     return {
       draftCount: drafts.length,
       draftHasNPlusOne: (draft?.textContent ?? "").includes("変更内容の下書き: 版 4"),
       draftKeepsSourceN: (draft?.textContent ?? "").includes("元の版: 3（変更しない）"),
       draftSessionOnly: (draft?.textContent ?? "").includes("下書き / 本番未保存"),
+      activeVersionClear: (activeVersion?.textContent ?? "").includes("現在適用中: 版 3"),
+      draftNotApplied:
+        (draftLifecycle?.textContent ?? "").includes("版 4 は下書きです") &&
+        (draftLifecycle?.textContent ?? "").includes("まだ適用開始されていません"),
       boundaryNoLiveWrite: (boundary?.textContent ?? "").includes("本番には保存されていません"),
       liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-loop-b-live-write") === "false",
       decisionPresent: Boolean(decision),
@@ -211,6 +227,8 @@ async function runHappyPath(name, width, height) {
     preStart.startEnabled &&
     preStart.startIsPrimary &&
     preStart.startHasNoCreateCta &&
+    preStart.startLabelClear &&
+    preStart.sourceSafetyClear &&
     preStart.createCtaDisabled &&
     preStart.predecessorDemoted &&
     preStart.primaryCount === 1 &&
@@ -221,6 +239,8 @@ async function runHappyPath(name, width, height) {
     found.draftHasNPlusOne &&
     found.draftKeepsSourceN &&
     found.draftSessionOnly &&
+    found.activeVersionClear &&
+    found.draftNotApplied &&
     found.boundaryNoLiveWrite &&
     found.liveWriteFalse &&
     found.decisionPresent &&
