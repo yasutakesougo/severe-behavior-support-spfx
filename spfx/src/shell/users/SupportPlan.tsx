@@ -4,6 +4,7 @@ import {
   MonitoringView,
   MONITORING_LINK_SLICE_A,
 } from "../monitoring";
+import type { SyntheticCapturedReview } from "../monitoring/review-outcome-capture";
 import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
 import { SemanticIcon, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
@@ -39,6 +40,11 @@ import {
   PLANNING_PC_DEMO_1_SLICE,
   SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE,
 } from "./support-plan-fixture";
+import {
+  EMPTY_SUPPORT_PLAN_REVISION_SESSION,
+  startSyntheticPlanningPcRevision,
+  type SupportPlanRevisionSession,
+} from "./support-plan-revision-start";
 import type { ShellSupportPlanPresentation } from "./support-plan-types";
 import styles from "./SupportPlanUx.module.scss";
 
@@ -90,6 +96,11 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const adminRead = isAdminAuditPresentationRole(presentationRole);
   const planningPc = isPlanningPcPresentationRole(presentationRole);
   const [selectedVersion, setSelectedVersion] = React.useState(currentVersion);
+  const [capturedReview, setCapturedReview] = React.useState<SyntheticCapturedReview | null>(null);
+  const [revisionSession, setRevisionSession] = React.useState<SupportPlanRevisionSession>(
+    EMPTY_SUPPORT_PLAN_REVISION_SESSION,
+  );
+  const [revisionError, setRevisionError] = React.useState<string | null>(null);
   const selectedVersionEntry = versions.find((entry) => entry.version === selectedVersion);
   const currentVersionEntry = versions.find((entry) => entry.isCurrent);
   const selectedIsCurrent = selectedVersionEntry?.isCurrent === true;
@@ -261,6 +272,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
                 currentVersion,
                 currentProcedures,
               }}
+              onCapturedReviewChange={setCapturedReview}
             />
           ) : (
             <p className={styles.sectionHint} role="status" data-monitoring-malformed="true">
@@ -357,6 +369,39 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     </section>
   );
 
+  const revisionDraft = revisionSession.drafts[0] ?? null;
+  const revisionEligible =
+    planningPc &&
+    selectedVersion === currentVersion &&
+    capturedReview?.outcome.decision === "CHANGE_REQUIRED" &&
+    capturedReview.decisionReason !== null &&
+    capturedReview.decisionReason.reason.trim().length > 0 &&
+    capturedReview.outcome.UserId === presentation.userId &&
+    capturedReview.outcome.planId === planId &&
+    capturedReview.outcome.planVersion === currentVersion;
+
+  const handleRevisionStart = (): void => {
+    if (!revisionEligible || capturedReview === null) {
+      setRevisionError("現在の見直し結果と計画版を確認してください。");
+      return;
+    }
+    const result = startSyntheticPlanningPcRevision({
+      presentation,
+      capturedReview,
+      session: revisionSession,
+      actor: "planning-pc-synthetic-staff",
+      actionAt: new Date().toISOString(),
+    });
+    if (result.status === "STARTED" || result.status === "ALREADY_STARTED") {
+      setRevisionSession({ intents: [result.intent], drafts: [result.draft] });
+      setRevisionError(null);
+      return;
+    }
+    setRevisionError(
+      "変更内容の下書きを開始できませんでした。元の版と見直し結果を確認してください。",
+    );
+  };
+
   const nextVersionBlock = (
     <section
       className={styles.detailSection}
@@ -380,7 +425,38 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       <p className={styles.sectionHint} data-review-new-version="overdue-not-invalidating">
         {SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE}
       </p>
-      {adminRead ? null : (
+      {planningPc && capturedReview ? (
+        <div data-sbs-mgmt-loop-b-review="true">
+          <p data-sbs-mgmt-loop-b-decision={capturedReview.outcome.decision}>
+            見直し結果:{" "}
+            {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? "変更が必要" : "変更なし"}
+          </p>
+          {capturedReview.decisionReason ? (
+            <p data-sbs-mgmt-loop-b-reason="true">
+              判断理由: {capturedReview.decisionReason.reason}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+      {revisionDraft ? (
+        <div role="status" data-sbs-mgmt-loop-b-draft="true">
+          <p>変更内容の下書き: 版 {revisionDraft.candidate.version}</p>
+          <p>元の版: {revisionDraft.reviewBinding.reviewedPlanVersion}（変更しない）</p>
+          <p>状態: 下書き / 本番未保存</p>
+        </div>
+      ) : revisionEligible && !adminRead ? (
+        <button
+          type="button"
+          className={styles.mutationButton}
+          onClick={handleRevisionStart}
+          data-demo-ux="support-plan-mutation-button"
+          data-review-new-version="create-cta"
+          data-sbs-mgmt-loop-b-action="start-revision"
+          data-sbs-action="primary"
+        >
+          変更内容の作成を始める
+        </button>
+      ) : adminRead ? null : (
         <button
           type="button"
           className={styles.mutationButton}
@@ -393,6 +469,14 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           {SUPPORT_PLAN_NEXT_VERSION_CTA}
         </button>
       )}
+      <p className={styles.sectionHint} data-sbs-mgmt-loop-b-boundary="true">
+        本番には保存されていません
+      </p>
+      {revisionError ? (
+        <p role="alert" className={styles.sectionHint} data-sbs-mgmt-loop-b-error="true">
+          {revisionError}
+        </p>
+      ) : null}
     </section>
   );
 

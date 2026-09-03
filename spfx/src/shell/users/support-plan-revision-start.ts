@@ -22,13 +22,15 @@ export const EMPTY_SUPPORT_PLAN_REVISION_SESSION: SupportPlanRevisionSession = {
 export const SUPPORT_PLAN_REVISION_SESSION_LIVE_WRITE_AUTHORIZED =
   SUPPORT_PLAN_REVISION_LIVE_WRITE_AUTHORIZED;
 
-export function startSyntheticPlanningPcRevision(input: Readonly<{
-  presentation: ShellSupportPlanPresentation;
-  capturedReview: SyntheticCapturedReview;
-  session: SupportPlanRevisionSession;
-  actor: string;
-  actionAt: string;
-}>): StartSupportPlanRevisionResult {
+export function startSyntheticPlanningPcRevision(
+  input: Readonly<{
+    presentation: ShellSupportPlanPresentation;
+    capturedReview: SyntheticCapturedReview;
+    session: SupportPlanRevisionSession;
+    actor: string;
+    actionAt: string;
+  }>,
+): StartSupportPlanRevisionResult {
   const { presentation, capturedReview, session, actor, actionAt } = input;
   const currentVersionEntry = presentation.versions.find(
     (entry) => entry.isCurrent && entry.version === presentation.currentVersion,
