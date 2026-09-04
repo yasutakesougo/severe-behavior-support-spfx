@@ -34,9 +34,7 @@ describe("SBS-MGMT-HOME-C ManagementHome", () => {
   });
 
   it("renders unavailable sources without inferring a next action", () => {
-    const html = renderToStaticMarkup(
-      <ManagementHome model={MANAGEMENT_HOME_UNAVAILABLE_MODEL} />,
-    );
+    const html = renderToStaticMarkup(<ManagementHome model={MANAGEMENT_HOME_UNAVAILABLE_MODEL} />);
     expect(html).toContain("確認できません");
     expect(html).toContain('data-management-home-next-action-status="UNAVAILABLE"');
     expect(html).toContain("次の行動は表示しません");
