@@ -260,3 +260,34 @@ npx esbuild src/domain/monitoring-read-model-spfx-entry.ts \
   --platform=neutral \
   --outfile=spfx/src/sbs-domain/monitoring-read-model.bundle.js
 ```
+
+## support-plan-activation.bundle — SBS-MGMT-PLAN-ACTIVATION-C narrow bridge
+
+`support-plan-activation.bundle.js` is an esbuild bundle of the narrow entry:
+
+`src/domain/support-plan-activation-spfx-entry.ts`
+
+It exposes only Human Apply / version-transition helpers:
+
+- `SUPPORT_PLAN_ACTIVATION_LIVE_WRITE_AUTHORIZED=false`
+- `mintDraftSnapshotId`
+- `applySupportPlanActivation`
+- `validateActivationReceipt`
+- related request / receipt / result types
+
+It does **not** expose SharePoint adapters, new repository ports, durable receipt
+persistence, or SupportPlanVersion lifecycle status helpers.
+It does not authorize Production Binding, Deploy, or LIVE WRITE.
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/domain/support-plan-activation-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/support-plan-activation.bundle.js
+```
+
+The checked-in `.d.ts` is the narrow allowlisted declaration surface.
