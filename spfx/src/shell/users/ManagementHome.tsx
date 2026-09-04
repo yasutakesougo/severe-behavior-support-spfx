@@ -5,10 +5,7 @@ import {
   MANAGEMENT_HOME_FULLY_RESOLVED_MODEL,
   SBS_MGMT_HOME_C_SLICE,
 } from "./management-home-fixture";
-import type {
-  ManagementHomeReadModel,
-  ManagementHomeSection,
-} from "./management-home-read-model";
+import type { ManagementHomeReadModel, ManagementHomeSection } from "./management-home-read-model";
 import styles from "./ManagementHomeUx.module.scss";
 
 export type ManagementHomeProps = Readonly<{
