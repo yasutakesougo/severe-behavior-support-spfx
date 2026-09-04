@@ -21,7 +21,7 @@ PR: #592 (Draft)
 ```text
 Focused Verification = PASS @ fb7ced5
 B12 6/6 PASS @ fb7ced5
-RBA = PASS @ fb7ced5（証跡 docs tip = 9436d02）
+RBA = PASS @ fb7ced5（証跡 docs tip = bb8adf3）
 ```
 
 ## Dual HEAD note
