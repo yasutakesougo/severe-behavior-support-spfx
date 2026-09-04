@@ -63,6 +63,17 @@ function unavailable<T>(
   return slot.status === "UNAVAILABLE";
 }
 
+function reviewMatchesMonitoring(
+  monitoring: MonitoringReadModel,
+  review: MonitoringPeriodReviewOutcome,
+): boolean {
+  if (monitoring.periodStart !== review.periodStart || monitoring.periodEnd !== review.periodEnd) {
+    return false;
+  }
+  const recordIds = new Set(monitoring.records.map((record) => record.RecordId));
+  return review.sourceRecordIds.length === recordIds.size && review.sourceRecordIds.every((id) => recordIds.has(id));
+}
+
 export function buildManagementHomeReadModel(
   input: ManagementHomeInput,
 ): ManagementHomePresentation {
@@ -70,17 +81,15 @@ export function buildManagementHomeReadModel(
   const currentVersion = input.plan.currentVersion;
 
   let monitoringLabel = "記録: 確認できません";
+  const monitoring = input.monitoring.status === "RESOLVED" ? input.monitoring.value : null;
   if (unavailable(input.monitoring)) {
     unavailableSections.push("monitoring");
-  } else if (input.monitoring.value === null) {
+  } else if (monitoring === null) {
     monitoringLabel = "記録: 該当情報なし";
-  } else if (
-    !samePlanIdentity(input.plan, input.monitoring.value) ||
-    input.monitoring.value.planVersion !== currentVersion
-  ) {
+  } else if (!samePlanIdentity(input.plan, monitoring) || monitoring.planVersion !== currentVersion) {
     unavailableSections.push("monitoring");
   } else {
-    monitoringLabel = `記録: ${input.monitoring.value.recordCount}件 / ${input.monitoring.value.periodStart}〜${input.monitoring.value.periodEnd}`;
+    monitoringLabel = `記録: ${monitoring.recordCount}件 / ${monitoring.periodStart}〜${monitoring.periodEnd}`;
   }
 
   let reviewLabel = "見直し: 確認できません";
@@ -89,24 +98,55 @@ export function buildManagementHomeReadModel(
     unavailableSections.push("review");
   } else if (review === null) {
     reviewLabel = "見直し: 該当情報なし";
-  } else if (!samePlanIdentity(input.plan, review) || review.planVersion !== currentVersion) {
+  } else if (
+    !samePlanIdentity(input.plan, review) ||
+    review.planVersion !== currentVersion ||
+    (monitoring !== null && input.monitoring.status === "RESOLVED" && !reviewMatchesMonitoring(monitoring, review))
+  ) {
     unavailableSections.push("review");
   } else {
-    const reason =
-      input.decisionReason.status === "RESOLVED" &&
-      input.decisionReason.value &&
-      input.decisionReason.value.OutcomeId === review.OutcomeId
-        ? ` / 理由: ${input.decisionReason.value.reason}`
-        : "";
+    let reason = "";
     if (input.decisionReason.status === "UNAVAILABLE") {
       unavailableSections.push("decisionReason");
+    } else if (input.decisionReason.value === null) {
+      if (review.decision === "CHANGE_REQUIRED") {
+        unavailableSections.push("decisionReason");
+      }
+    } else if (input.decisionReason.value.OutcomeId !== review.OutcomeId) {
+      unavailableSections.push("decisionReason");
+    } else {
+      reason = ` / 理由: ${input.decisionReason.value.reason}`;
     }
-    reviewLabel = `見直し: ${review.decision} / ${review.reviewedAt} / ${review.reviewedBy}${reason}`;
+
+    if (!unavailableSections.includes("decisionReason")) {
+      reviewLabel = `見直し: ${review.decision} / ${review.reviewedAt} / ${review.reviewedBy}${reason}`;
+    }
   }
 
   let revisionLabel = "変更対応: 確認できません";
   const intent = input.revisionIntent.status === "RESOLVED" ? input.revisionIntent.value : null;
   const draft = input.draft.status === "RESOLVED" ? input.draft.value : null;
+  const intentReviewMismatch =
+    intent !== null &&
+    ((input.reviewOutcome.status === "RESOLVED" && review === null) ||
+      (review !== null &&
+        (intent.sourcePlanVersion !== review.planVersion ||
+          intent.sourceReviewOutcomeId !== review.OutcomeId)));
+  const draftBindingMismatch =
+    draft !== null &&
+    (intent === null ||
+      !samePlanIdentity(input.plan, draft.reviewBinding) ||
+      draft.reviewBinding.planVersion !== draft.candidate.version ||
+      draft.candidate.version !== intent.sourcePlanVersion + 1 ||
+      draft.reviewBinding.reviewedPlanVersion !== intent.sourcePlanVersion ||
+      draft.reviewBinding.sourceOutcomeId !== intent.sourceReviewOutcomeId ||
+      (review !== null &&
+        (draft.reviewBinding.reviewedPlanVersion !== review.planVersion ||
+          draft.reviewBinding.sourceOutcomeId !== review.OutcomeId)) ||
+      (currentVersion !== intent.sourcePlanVersion && currentVersion !== draft.candidate.version));
+  const standaloneIntentVersionMismatch =
+    intent !== null && draft === null && intent.sourcePlanVersion !== currentVersion;
+
   if (unavailable(input.revisionIntent) || unavailable(input.draft)) {
     unavailableSections.push("revision");
   } else if (intent === null && draft === null) {
@@ -114,7 +154,10 @@ export function buildManagementHomeReadModel(
   } else if (
     (intent !== null && !samePlanIdentity(input.plan, intent)) ||
     (draft !== null && !samePlanIdentity(input.plan, draft.candidate)) ||
-    (intent !== null && draft !== null && intent.RevisionIntentId !== draft.RevisionIntentId)
+    (intent !== null && draft !== null && intent.RevisionIntentId !== draft.RevisionIntentId) ||
+    intentReviewMismatch ||
+    draftBindingMismatch ||
+    standaloneIntentVersionMismatch
   ) {
     unavailableSections.push("revision");
   } else if (draft !== null) {
@@ -138,7 +181,14 @@ export function buildManagementHomeReadModel(
     unavailableSections.push("activationReceipt");
   } else if (input.activationReceipt.value) {
     const receipt = input.activationReceipt.value;
-    if (receipt.planId === input.plan.PlanId && receipt.activatedVersion === currentVersion) {
+    const receiptIntentMismatch =
+      (intent !== null && receipt.RevisionIntentId !== intent.RevisionIntentId) ||
+      (draft !== null && receipt.RevisionIntentId !== draft.RevisionIntentId);
+    if (
+      receipt.planId === input.plan.PlanId &&
+      receipt.activatedVersion === currentVersion &&
+      !receiptIntentMismatch
+    ) {
       provenanceLabel = `適用: v${receipt.fromVersion}→v${receipt.activatedVersion} / ${receipt.activatedBy} / ${receipt.activatedAt}`;
     } else {
       unavailableSections.push("activationReceipt");
