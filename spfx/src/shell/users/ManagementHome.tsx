@@ -1,5 +1,10 @@
 import * as React from "react";
-import type { ManagementHomePresentation } from "./management-home-read-model";
+import { SupportPlan as BaseSupportPlan, type SupportPlanProps } from "./SupportPlan";
+import { MANAGEMENT_HOME_RESOLVED_FIXTURE } from "./management-home-fixture";
+import {
+  buildManagementHomeReadModel,
+  type ManagementHomePresentation,
+} from "./management-home-read-model";
 import styles from "./ManagementHomeUx.module.scss";
 
 export type ManagementHomeProps = Readonly<{
@@ -61,5 +66,46 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
         </p>
       ) : null}
     </section>
+  );
+};
+
+export const SupportPlanWithManagementHome: React.FC<SupportPlanProps> = (props) => {
+  const [homeOpen, setHomeOpen] = React.useState(false);
+  const fixture = MANAGEMENT_HOME_RESOLVED_FIXTURE;
+  const available =
+    props.presentationRole === "PLANNER" &&
+    props.presentation.userId === fixture.plan.UserId &&
+    props.presentation.planId === fixture.plan.PlanId;
+
+  React.useEffect(() => {
+    if (!available && homeOpen) {
+      setHomeOpen(false);
+    }
+  }, [available, homeOpen]);
+
+  if (available && homeOpen) {
+    return (
+      <ManagementHome
+        presentation={buildManagementHomeReadModel(fixture)}
+        headingRef={props.headingRef}
+        onBack={() => setHomeOpen(false)}
+      />
+    );
+  }
+
+  return (
+    <div data-management-home-host={available ? "available" : "hidden"}>
+      {available ? (
+        <button
+          type="button"
+          className={styles.backButton}
+          onClick={() => setHomeOpen(true)}
+          data-demo-ux="management-home-open"
+        >
+          支援マネジメントを見る（読み取り専用）
+        </button>
+      ) : null}
+      <BaseSupportPlan {...props} />
+    </div>
   );
 };
