@@ -1,10 +1,6 @@
 import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
-import type {
-  MonitoringPeriodReviewDecisionReason,
-} from "../../sbs-domain/monitoring-period-review-decision-reason.bundle";
-import type {
-  MonitoringPeriodReviewOutcome,
-} from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import type { MonitoringPeriodReviewDecisionReason } from "../../sbs-domain/monitoring-period-review-decision-reason.bundle";
+import type { MonitoringPeriodReviewOutcome } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
 import type {
   ActiveSupportPlan,
   ActivationReceipt,
