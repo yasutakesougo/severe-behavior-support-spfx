@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
  * STAFF-ARRIVAL-1 interactive serve.
- * Always esbuilds smoke-entry from this verification HEAD.
- * Product source remains #584 @ 5437e64. No SharePoint / Deploy / LIVE WRITE.
+ * Always esbuilds smoke-entry and its product imports from the current checkout.
+ * No SharePoint / Deploy / LIVE WRITE.
  */
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -28,6 +29,24 @@ function resolveImport(specifiers) {
   }
   return null;
 }
+
+function readCheckoutHead() {
+  return execFileSync("git", ["rev-parse", "HEAD"], {
+    cwd: repoRoot,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "inherit"],
+  }).trim();
+}
+
+const productSourceHead = readCheckoutHead();
+const expectedProductSourceHead = process.env.SBS_MGMT_LOOP_B_EXPECTED_PRODUCT_HEAD ?? null;
+if (expectedProductSourceHead && productSourceHead !== expectedProductSourceHead) {
+  console.error(
+    `Product HEAD mismatch: expected ${expectedProductSourceHead}, observed ${productSourceHead}.`,
+  );
+  process.exit(1);
+}
+fs.writeFileSync(path.join(outDir, "product-head.txt"), `${productSourceHead}\n`);
 
 const esbuildHref =
   process.env.SBS_MGMT_LOOP_B_ESBUILD_PATH ??
@@ -76,7 +95,7 @@ function normalizeSpfxThemeCss(css) {
   return css.replace(/"\[theme:[^,]+,\s*default:\s*([^"\]]+)\]"/g, "$1");
 }
 
-console.log("Building synthetic Planning-PC smoke bundle...");
+console.log(`Building synthetic Planning-PC smoke bundle from ${productSourceHead}...`);
 const css = scssPaths
   .map((rel) =>
     normalizeSpfxThemeCss(compileScss(path.join(spfxRoot, rel), { style: "expanded" }).css),
@@ -137,7 +156,13 @@ const server = http.createServer((req, res) => {
     if (error) return res.writeHead(404).end("not found");
     const ext = path.extname(filePath);
     const type =
-      ext === ".html" ? "text/html" : ext === ".css" ? "text/css" : "application/javascript";
+      ext === ".html"
+        ? "text/html"
+        : ext === ".css"
+          ? "text/css"
+          : ext === ".txt"
+            ? "text/plain"
+            : "application/javascript";
     res.writeHead(200, { "Content-Type": `${type}; charset=utf-8` });
     res.end(data);
   });
@@ -148,9 +173,9 @@ await new Promise((resolve) => server.listen(port, "127.0.0.1", resolve));
 const staffBeforeApplyUrl = `http://127.0.0.1:${port}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER&staffPlanTransition=beforeApply`;
 const coldUrl = `http://127.0.0.1:${port}/index.html?viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER`;
 console.log("");
-console.log("Verification harness ready (no LIVE WRITE). Rebuilds smoke-entry from this HEAD.");
+console.log(`Verification harness ready @ product HEAD ${productSourceHead} (no LIVE WRITE).`);
 console.log(`Staff Apply 前: ${staffBeforeApplyUrl}`);
-console.log("  → harness drives public #584 DOM until 「版 4 を適用開始する」.");
+console.log("  → harness drives the product DOM from this exact checkout until 「版 4 を適用開始する」.");
 console.log(`Cold / default: ${coldUrl}`);
 console.log("  → empty session; Apply must stay unmounted.");
 console.log("Ctrl+C to stop.");
