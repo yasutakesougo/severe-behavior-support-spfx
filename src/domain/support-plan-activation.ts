@@ -2,7 +2,10 @@ import { sha256Hex } from "./sha256";
 import type { SupportPlan } from "./support-plan";
 import { validateSupportPlan } from "./support-plan";
 import type { SupportPlanRevisionDraftCandidate } from "./support-plan-revision";
-import { validateSupportPlanRevisionDraftCandidate } from "./support-plan-revision";
+import {
+  mintRevisionIntentId,
+  validateSupportPlanRevisionDraftCandidate,
+} from "./support-plan-revision";
 import { isNonEmptyString, isValidIsoDateTime } from "./validation";
 
 /**
@@ -172,6 +175,18 @@ export function applySupportPlanActivation(
     draft.RevisionIntentId.length === 0
   ) {
     return { status: "HOLD", reason: "IDENTITY_MISMATCH" };
+  }
+
+  const expectedRevisionIntentId = mintRevisionIntentId({
+    OrganizationId: candidate.OrganizationId,
+    SiteId: candidate.SiteId,
+    UserId: candidate.UserId,
+    planId: candidate.planId,
+    sourcePlanVersion: binding.reviewedPlanVersion,
+    sourceReviewOutcomeId: binding.sourceOutcomeId,
+  });
+  if (draft.RevisionIntentId !== expectedRevisionIntentId) {
+    return { status: "HOLD", reason: "REVISION_INTENT_MISMATCH" };
   }
 
   const recomputedSnapshotId = mintDraftSnapshotId(draft);
