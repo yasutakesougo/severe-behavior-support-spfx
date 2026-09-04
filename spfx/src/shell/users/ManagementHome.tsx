@@ -25,7 +25,11 @@ function unavailableText(section: ManagementHomeSection<unknown>): string | null
   return section.status === "UNAVAILABLE" ? "確認できません" : null;
 }
 
-export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRef, onBack }) => {
+export const ManagementHome: React.FC<ManagementHomeProps> = ({
+  model,
+  headingRef,
+  onBack,
+}) => {
   const monitoringUnavailable = unavailableText(model.monitoring);
   const reviewUnavailable = unavailableText(model.review);
   const intentUnavailable = unavailableText(model.revisionIntent);
@@ -91,8 +95,12 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
             <p className={styles.meta}>対象期間の情報なしを確認</p>
           ) : model.monitoring.status === "RESOLVED" ? (
             <>
-              <p className={styles.primaryValue}>{`記録 ${model.monitoring.value.recordCount}件`}</p>
-              <p className={styles.meta}>{`${model.monitoring.value.periodStart.slice(0, 10)} ～ ${model.monitoring.value.periodEnd.slice(0, 10)}`}</p>
+              <p
+                className={styles.primaryValue}
+              >{`記録 ${model.monitoring.value.recordCount}件`}</p>
+              <p
+                className={styles.meta}
+              >{`${model.monitoring.value.periodStart.slice(0, 10)} ～ ${model.monitoring.value.periodEnd.slice(0, 10)}`}</p>
             </>
           ) : null}
         </section>
@@ -105,8 +113,12 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
             <p className={styles.meta}>見直し: 未実施を確認</p>
           ) : model.review.status === "RESOLVED" ? (
             <>
-              <p className={styles.primaryValue}>{`結果: ${decisionLabel(model.review.value.outcome.decision)}`}</p>
-              <p className={styles.meta}>{`実施: ${model.review.value.outcome.reviewedAt.slice(0, 10)} / ${model.review.value.outcome.reviewedBy}`}</p>
+              <p className={styles.primaryValue}>
+                {`結果: ${decisionLabel(model.review.value.outcome.decision)}`}
+              </p>
+              <p className={styles.meta}>
+                {`実施: ${model.review.value.outcome.reviewedAt.slice(0, 10)} / ${model.review.value.outcome.reviewedBy}`}
+              </p>
               <p className={styles.meta}>
                 {model.review.value.decisionReason
                   ? `判断理由: ${model.review.value.decisionReason.reason}`
@@ -125,7 +137,11 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
                 : model.revisionIntent.status === "CONFIRMED_NONE"
                   ? "Revision Intent: なし"
                   : model.revisionIntent.status === "RESOLVED"
-                    ? `Revision Intent: ${model.revisionIntent.value.status === "CONSUMED" ? "消費済み" : "開始済み"}`
+                    ? `Revision Intent: ${
+                        model.revisionIntent.value.status === "CONSUMED"
+                          ? "消費済み"
+                          : "開始済み"
+                      }`
                     : null}
             </p>
             <p className={styles.meta} data-management-home-draft-status>
@@ -134,7 +150,11 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
                 : model.draft.status === "CONFIRMED_NONE"
                   ? "Draft: なし"
                   : model.draft.status === "RESOLVED"
-                    ? `Draft 版${model.draft.value.candidate.version}あり / ${model.draft.value.candidate.version === model.currentVersion ? "現在版と一致" : "未適用"}`
+                    ? `Draft 版${model.draft.value.candidate.version}あり / ${
+                        model.draft.value.candidate.version === model.currentVersion
+                          ? "現在版と一致"
+                          : "未適用"
+                      }`
                     : null}
             </p>
             <p className={styles.meta} data-management-home-activation-status>
@@ -143,7 +163,9 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
                 : model.activationReceipt.status === "CONFIRMED_NONE"
                   ? "適用履歴補足: なし（現在版判定には使用しません）"
                   : model.activationReceipt.status === "RESOLVED"
-                    ? `適用: 版${model.activationReceipt.value.fromVersion} → 版${model.activationReceipt.value.activatedVersion} / ${model.activationReceipt.value.activatedBy}`
+                    ? `適用: 版${model.activationReceipt.value.fromVersion} → 版${
+                        model.activationReceipt.value.activatedVersion
+                      } / ${model.activationReceipt.value.activatedBy}`
                     : null}
             </p>
           </div>
@@ -152,7 +174,11 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
         <section className={styles.card} data-management-home-section="next-action">
           <h2 className={styles.cardHeading}>次に必要な人の行動</h2>
           <p
-            className={model.nextAction.status === "UNAVAILABLE" ? styles.unavailable : styles.primaryValue}
+            className={
+              model.nextAction.status === "UNAVAILABLE"
+                ? styles.unavailable
+                : styles.primaryValue
+            }
             data-management-home-next-action-status={model.nextAction.status}
           >
             {model.nextAction.label}
@@ -226,7 +252,10 @@ export const SupportPlanWithManagementHome: React.FC<SupportPlanProps> = (props)
   }
 
   return (
-    <div className={styles.host} data-management-home-host={available ? "available" : "hidden"}>
+    <div
+      className={styles.host}
+      data-management-home-host={available ? "available" : "hidden"}
+    >
       {available ? (
         <div className={styles.entryRow}>
           <button
