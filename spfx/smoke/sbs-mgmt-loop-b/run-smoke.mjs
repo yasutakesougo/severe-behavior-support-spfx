@@ -227,7 +227,13 @@ async function runHappyPath(name, width, height) {
       // CTA-ROLE-CLARIFICATION-1: competing cold chrome hidden while draft exists.
       nextVersionHeadingGoneWhileDraft: !headingTexts.includes("次の版の考え方"),
       conceptualNextGoneWhileDraft:
-        nextVersionNumber === null && !nextVersionText.includes("次に重ねる概念上の版"),
+        nextVersionNumber === null &&
+        !nextVersionText.includes("次に重ねる概念上の版は 4") &&
+        !nextVersionText.includes("次に重ねる概念上の版"),
+      createCtaCopyGoneWhileDraft: !nextVersionText.includes("次の版を作る（表示専用）"),
+      coldExplanationGoneWhileDraft:
+        !nextVersionText.includes("次回の変更は新しい版を作ります") &&
+        document.querySelector('[data-review-new-version="immutability-note"]') === null,
       keepsInvalidatingNotesWhileDraft:
         nextVersionText.includes("観察の不足だけでは") &&
         nextVersionText.includes("見直し期限の超過だけでは"),
@@ -331,6 +337,8 @@ async function runHappyPath(name, width, height) {
     found.createCtaAbsentWhileDraft &&
     found.nextVersionHeadingGoneWhileDraft &&
     found.conceptualNextGoneWhileDraft &&
+    found.createCtaCopyGoneWhileDraft &&
+    found.coldExplanationGoneWhileDraft &&
     found.keepsInvalidatingNotesWhileDraft &&
     found.startActionCleared &&
     found.applyPresent &&
