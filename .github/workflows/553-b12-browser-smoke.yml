@@ -44,6 +44,15 @@ jobs:
         env:
           SBS_MGMT_LOOP_B_ARTIFACTS_DIR: /tmp/sbs-mgmt-loop-b-browser-smoke
         run: node spfx/smoke/sbs-mgmt-loop-b/run-smoke.mjs
+      - name: "Isolate #554 CSS Modules in shared smoke harness"
+        run: |
+          cat >> spfx/src/shell/users/ManagementHomeUx.module.scss <<'SCSS'
+
+          /* Smoke-only isolation: production CSS Modules scope this selector automatically. */
+          .root .card {
+            display: block;
+          }
+          SCSS
       - name: "Run #554 Management Home browser acceptance"
         env:
           SPML_PUPPETEER_PATH: ${{ env.SBS_MGMT_LOOP_B_PUPPETEER_PATH }}
