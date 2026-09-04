@@ -1,3 +1,5 @@
+@use "../tokens/sbs-tokens" as sbs;
+
 .host {
   display: block;
 }
@@ -6,18 +8,20 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 8px;
-  margin: 0 0 12px;
+  gap: sbs.$space-2;
+  margin: 0 0 sbs.$space-3;
   flex-wrap: wrap;
 }
 
 .entryButton,
 .backButton {
-  min-height: 44px;
-  padding: 8px 14px;
-  border: 1px solid #8a8886;
-  border-radius: 4px;
-  background: #ffffff;
+  min-height: 2.75rem;
+  padding: 0.5rem sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  border-radius: 0.25rem;
+  background: sbs.$color-surface-canvas;
   color: inherit;
   font: inherit;
   cursor: pointer;
@@ -25,7 +29,15 @@
 
 .entryButton:hover,
 .backButton:hover {
-  background: #f3f2f1;
+  background: sbs.$color-surface-subtle;
+}
+
+.entryButton:focus,
+.entryButton:focus-visible,
+.backButton:focus,
+.backButton:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .entryNote,
@@ -33,16 +45,16 @@
 .meta,
 .eyebrow {
   margin: 0;
-  color: #605e5c;
-  font-size: 14px;
-  line-height: 1.5;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
 }
 
 .home {
   display: grid;
-  gap: 16px;
+  gap: sbs.$space-4;
   width: 100%;
-  max-width: 1080px;
+  max-width: 67.5rem;
   margin: 0 auto;
 }
 
@@ -50,88 +62,102 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: sbs.$space-4;
   flex-wrap: wrap;
 }
 
 .heading {
-  margin: 4px 0 6px;
-  font-size: 28px;
+  margin: 0.25rem 0 0.375rem;
+  font-size: 1.75rem;
   line-height: 1.25;
+  outline: none;
+}
+
+.heading:focus,
+.heading:focus-visible {
+  outline: sbs.$focus-outline-width solid sbs.$color-focus-ring;
+  outline-offset: sbs.$focus-outline-offset;
 }
 
 .personLabel {
   margin: 0;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: sbs.$font-weight-semibold;
 }
 
 .readOnlyNote {
-  padding: 10px 12px;
-  border-left: 4px solid #8a8886;
-  background: #f8f8f8;
+  padding: 0.625rem sbs.$space-3;
+  border-left-width: 0.25rem;
+  border-left-style: solid;
+  border-left-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: sbs.$space-3;
 }
 
 .card {
   min-width: 0;
-  padding: 16px;
-  border: 1px solid #d2d0ce;
-  border-radius: 6px;
-  background: #ffffff;
+  padding: sbs.$space-4;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: 0.375rem;
+  background: sbs.$color-surface-canvas;
 }
 
 .cardHeading {
-  margin: 0 0 10px;
-  font-size: 16px;
-  line-height: 1.4;
+  margin: 0 0 0.625rem;
+  font-size: sbs.$font-size-section-title;
+  font-weight: sbs.$font-weight-section-title;
+  line-height: sbs.$line-height-section-title;
 }
 
 .primaryValue {
-  margin: 0 0 6px;
-  font-size: 18px;
+  margin: 0 0 0.375rem;
+  font-size: 1.125rem;
   line-height: 1.5;
-  font-weight: 600;
+  font-weight: sbs.$font-weight-semibold;
   overflow-wrap: anywhere;
 }
 
 .unavailable {
   margin: 0;
-  font-weight: 600;
+  font-weight: sbs.$font-weight-semibold;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 
 .stack {
   display: grid;
-  gap: 6px;
+  gap: 0.375rem;
 }
 
 .details {
-  padding: 12px 14px;
-  border: 1px solid #d2d0ce;
-  border-radius: 6px;
+  padding: sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-subtle;
+  border-radius: 0.375rem;
 }
 
 .detailList {
   display: grid;
-  gap: 8px;
-  margin: 12px 0 0;
+  gap: sbs.$space-2;
+  margin: sbs.$space-3 0 0;
 }
 
 .detailList div {
   display: grid;
-  grid-template-columns: minmax(120px, auto) 1fr;
-  gap: 12px;
+  grid-template-columns: minmax(7.5rem, auto) 1fr;
+  gap: sbs.$space-3;
 }
 
 .detailList dt {
-  font-weight: 600;
+  font-weight: sbs.$font-weight-semibold;
 }
 
 .detailList dd {
@@ -140,7 +166,7 @@
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .grid {
     grid-template-columns: 1fr;
   }
@@ -156,11 +182,11 @@
   }
 
   .heading {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .detailList div {
     grid-template-columns: 1fr;
-    gap: 2px;
+    gap: 0.125rem;
   }
 }
