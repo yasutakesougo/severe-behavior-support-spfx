@@ -141,13 +141,13 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       !mapped.some((entry) => entry.version === activatedVersionEntry.version)
     ) {
       return [
+        activatedVersionEntry,
         ...mapped.map((entry) => ({
           ...entry,
           isCurrent: false,
           lifecycleLabel:
             entry.version < activatedVersionEntry.version ? "過去版" : entry.lifecycleLabel,
         })),
-        activatedVersionEntry,
       ];
     }
     return mapped;
@@ -814,7 +814,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       {renderPlannerProcessSection(
         "planner-process-plan-heading",
         "① 計画",
-        `版 ${currentVersion}・${statusLabel}`,
+        `版 ${liveCurrentVersion}・${statusLabel}`,
         <>
           {summaryBlock}
           {goalsBlock}
@@ -884,7 +884,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       data-review-new-version-demo-slice={SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.id}
       data-monitoring-link-slice={planningPc ? MONITORING_LINK_SLICE_A.id : undefined}
       data-planning-pc-plan-id={planId}
-      data-planning-pc-current-version={String(currentVersion)}
+      data-planning-pc-current-version={String(liveCurrentVersion)}
       data-planning-pc-status={presentation.statusCode}
       data-presentation-role={presentationRole}
       aria-labelledby="demo-ux-support-plan-heading"
@@ -939,7 +939,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
                 data-demo-ux="support-plan-version"
                 data-planning-pc="version"
               >
-                版 {currentVersion}
+                版 {liveCurrentVersion}
               </p>
             </div>
             <p className={styles.sectionHint} data-planning-pc="not-final-approval">
@@ -1021,7 +1021,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             data-demo-ux="support-plan-version"
             data-planning-pc="version"
           >
-            版 {currentVersion}
+            版 {liveCurrentVersion}
           </p>
           <p className={styles.sectionHint} data-planning-pc="not-final-approval">
             {SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE}
