@@ -602,10 +602,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
               過去版: 版 {activationReceipt.fromVersion}
             </p>
           </div>
-          <p
-            className={styles.sectionHint}
-            data-review-new-version="after-apply-next-hint"
-          >
+          <p className={styles.sectionHint} data-review-new-version="after-apply-next-hint">
             {SUPPORT_PLAN_AFTER_APPLY_NEXT_VERSION_NOTE}
           </p>
           {createCtaButton}
@@ -659,9 +656,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         data-sbs-mgmt-loop-b-live-write="false"
         data-sbs-mgmt-plan-activation-c-live-write="false"
       >
-        {activationReceipt
-          ? SUPPORT_PLAN_AFTER_APPLY_BOUNDARY
-          : "本番には保存されていません"}
+        {activationReceipt ? SUPPORT_PLAN_AFTER_APPLY_BOUNDARY : "本番には保存されていません"}
       </p>
       {revisionError ? (
         <p role="alert" className={styles.sectionHint} data-sbs-mgmt-loop-b-error="true">

@@ -242,9 +242,7 @@ async function runHappyPath(name, width, height) {
     );
     const history = document.querySelector('[data-sbs-mgmt-plan-activation-c-history="true"]');
     const receipt = document.querySelector('[data-sbs-mgmt-plan-activation-c-receipt="true"]');
-    const activationInfo = document.querySelector(
-      '[data-sbs-mgmt-plan-activation-c-info="true"]',
-    );
+    const activationInfo = document.querySelector('[data-sbs-mgmt-plan-activation-c-info="true"]');
     const draftGone = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
     const applyGone = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
     const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
@@ -262,14 +260,10 @@ async function runHappyPath(name, width, height) {
     const observation = document.querySelector(
       '[data-review-new-version="observation-not-invalidating"]',
     );
-    const overdue = document.querySelector(
-      '[data-review-new-version="overdue-not-invalidating"]',
-    );
+    const overdue = document.querySelector('[data-review-new-version="overdue-not-invalidating"]');
     const createCta = document.querySelector('[data-review-new-version="create-cta"]');
     const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
-    const sectionSix = document.querySelector(
-      '[data-process-visibility-ui-v1="next-version"]',
-    );
+    const sectionSix = document.querySelector('[data-process-visibility-ui-v1="next-version"]');
     const sectionSixText = sectionSix?.textContent ?? "";
     return {
       appliedPresent: Boolean(applied),
