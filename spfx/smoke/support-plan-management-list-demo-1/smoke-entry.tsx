@@ -1,5 +1,6 @@
 /**
  * SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 browser smoke harness — synthetic fixture only.
+ * Includes #554 SBS-MGMT-HOME-C read-only Management Home entry.
  * No live plan mutation / auth judgment / adapter / live I/O.
  */
 import * as React from "react";
@@ -79,6 +80,7 @@ const SmokeApp: React.FC = () => {
       data-demo-ux-4-slice={DEMO_UX_4_SLICE.id}
       data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
       data-support-plan-mgmt-demo-slice={SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.id}
+      data-sbs-mgmt-home-c="SBS-MGMT-HOME-C"
     >
       <AppShellChrome
         demoMode={SHELL_UX_DEFAULT_FIXTURE.demoMode}
