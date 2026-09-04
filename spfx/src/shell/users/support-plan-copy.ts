@@ -81,8 +81,7 @@ export const SUPPORT_PLAN_DRAFT_ACTIVE_LABEL = "適用中";
 export const SUPPORT_PLAN_DRAFT_DRAFT_LABEL = "下書き";
 
 /** NEXT-VERSION-COPY-SIMPLIFICATION-2 — after-apply ⑥ primary only. */
-export const SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE =
-  "次に変更するときは、新しい版を作ります。";
+export const SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE = "次に変更するときは、新しい版を作ります。";
 export const SUPPORT_PLAN_AFTER_APPLY_CURRENT_REMAINS_NOTE = "現在の版はそのまま残ります。";
 export const SUPPORT_PLAN_AFTER_APPLY_HISTORY_PREFIX = "過去版";
 export const SUPPORT_PLAN_ACTIVATION_INFO_HEADING = "適用情報";
