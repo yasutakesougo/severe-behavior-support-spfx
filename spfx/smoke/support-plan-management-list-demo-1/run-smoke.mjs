@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+/**
+ * SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 browser smoke runner (Chrome via puppeteer-core).
+ * Scope: PLANNER support-plan management list + demo navigation.
+ * No live plan mutation / auth judgment / adapter / live I/O / Schema change.
+ */
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
@@ -189,7 +194,9 @@ function assertPlannerList() {
 
 function assertManagementHome(expectUnavailable = false) {
   const home = document.querySelector('[data-demo-ux="management-home"]');
-  const unavailable = document.querySelector('[data-demo-ux="management-home-unavailable"]');
+  const unavailable = document.querySelector(
+    '[data-demo-ux="management-home-unavailable"]',
+  );
   const text = document.body?.textContent ?? "";
   const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
   return {
@@ -344,11 +351,13 @@ async function recordCase(name, page, url, found, errors) {
     page,
     "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=FIELD_STAFF",
   );
-  const found = await page.evaluate(() => ({
-    pass:
-      Boolean(document.querySelector('[data-demo-ux="users-list"]')) &&
-      !document.querySelector('[data-demo-ux="support-plan-management-list"]'),
-  }));
+  const found = await page.evaluate(() => {
+    const users = document.querySelector('[data-demo-ux="users-list"]');
+    const list = document.querySelector('[data-demo-ux="support-plan-management-list"]');
+    return {
+      pass: Boolean(users) && !list,
+    };
+  });
   await recordCase("field-staff-users-list-regression", page, url, found, errors);
   await page.close();
 }
@@ -361,11 +370,13 @@ async function recordCase(name, page, url, found, errors) {
     page,
     "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=ADMIN_AUDIT",
   );
-  const found = await page.evaluate(() => ({
-    pass:
-      Boolean(document.querySelector('[data-demo-ux="users-list"]')) &&
-      !document.querySelector('[data-demo-ux="support-plan-management-list"]'),
-  }));
+  const found = await page.evaluate(() => {
+    const users = document.querySelector('[data-demo-ux="users-list"]');
+    const list = document.querySelector('[data-demo-ux="support-plan-management-list"]');
+    return {
+      pass: Boolean(users) && !list,
+    };
+  });
   await recordCase("admin-audit-users-list-unchanged", page, url, found, errors);
   await page.close();
 }
@@ -385,15 +396,23 @@ async function recordCase(name, page, url, found, errors) {
     const button = document.querySelector(
       '[data-demo-ux="support-plan-mgmt-action"][data-support-plan-mgmt-user-id="user-a"]',
     );
-    if (button instanceof HTMLElement) button.focus();
+    if (button instanceof HTMLElement) {
+      button.focus();
+    }
   });
   await page.keyboard.press("Enter");
-  await page.waitForFunction(() => Boolean(document.querySelector('[data-demo-ux="support-plan"]')));
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
   const found = await page.evaluate((beforeTag) => {
     const plan = document.querySelector('[data-demo-ux="support-plan"]');
     const heading = document.querySelector('[data-demo-ux="support-plan-heading"]');
     const active = document.activeElement;
-    return { pass: Boolean(plan) && Boolean(heading) && (active === heading || Boolean(plan)), beforeTag };
+    return {
+      pass: Boolean(plan) && Boolean(heading) && (active === heading || Boolean(plan)),
+      beforeTag,
+      activeTag: active?.tagName ?? "",
+    };
   }, before);
   await recordCase("keyboard-detail-enter", page, url, found, errors);
   await page.close();
@@ -427,18 +446,47 @@ async function recordCase(name, page, url, found, errors) {
   await page.close();
 }
 
-for (const [name, query, viewport, expectUnavailable] of [
-  ["management-home-1280", "managementHome=resolved", { width: 1280, height: 900, deviceScaleFactor: 1 }, false],
-  ["management-home-390", "managementHome=resolved", { width: 390, height: 844, deviceScaleFactor: 1 }, false],
-  ["management-home-unavailable", "managementHome=unavailable", { width: 1280, height: 900, deviceScaleFactor: 1 }, true],
-  ["management-home-mismatch", "managementHome=mismatch", { width: 390, height: 844, deviceScaleFactor: 1 }, true],
-]) {
+const managementHomeCases = [
+  {
+    name: "management-home-1280",
+    query: "managementHome=resolved",
+    viewport: { width: 1280, height: 900, deviceScaleFactor: 1 },
+    expectUnavailable: false,
+  },
+  {
+    name: "management-home-390",
+    query: "managementHome=resolved",
+    viewport: { width: 390, height: 844, deviceScaleFactor: 1 },
+    expectUnavailable: false,
+  },
+  {
+    name: "management-home-unavailable",
+    query: "managementHome=unavailable",
+    viewport: { width: 1280, height: 900, deviceScaleFactor: 1 },
+    expectUnavailable: true,
+  },
+  {
+    name: "management-home-mismatch",
+    query: "managementHome=mismatch",
+    viewport: { width: 390, height: 844, deviceScaleFactor: 1 },
+    expectUnavailable: true,
+  },
+];
+
+for (const managementHomeCase of managementHomeCases) {
   const page = await browser.newPage();
   const errors = [];
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
-  const url = await smokeGoto(page, query, viewport);
-  const found = await page.evaluate(assertManagementHome, expectUnavailable);
-  await recordCase(name, page, url, found, errors);
+  const url = await smokeGoto(
+    page,
+    managementHomeCase.query,
+    managementHomeCase.viewport,
+  );
+  const found = await page.evaluate(
+    assertManagementHome,
+    managementHomeCase.expectUnavailable,
+  );
+  await recordCase(managementHomeCase.name, page, url, found, errors);
   await page.close();
 }
 
@@ -449,6 +497,7 @@ const report = {
   sliceFlags: {
     id: "SBS-MGMT-HOME-C",
     presentationOnly: true,
+    plannerUsersDestinationListAuthorized: true,
     liveWriteAuthorized: false,
     deployAuthorized: false,
   },
