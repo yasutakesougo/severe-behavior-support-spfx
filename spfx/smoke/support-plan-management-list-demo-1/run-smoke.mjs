@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 browser smoke runner (Chrome via puppeteer-core).
- * Scope: PLANNER support-plan management list + demo navigation.
+ * Scope: PLANNER support-plan management list + demo navigation + #554 Management Home.
  * No live plan mutation / auth judgment / adapter / live I/O / Schema change.
  */
 import http from "node:http";
@@ -39,6 +39,7 @@ const scssPaths = [
   "src/shell/users/UserDetailUx.module.scss",
   "src/shell/users/SupportPlanUx.module.scss",
   "src/shell/users/SupportPlanManagementListUx.module.scss",
+  "src/shell/users/ManagementHomeUx.module.scss",
   "src/shell/review/ReviewDueStateUx.module.scss",
 ];
 
@@ -191,6 +192,39 @@ function assertPlannerList() {
   };
 }
 
+function assertManagementHome() {
+  const home = document.querySelector('[data-demo-ux="management-home"]');
+  const heading = document.querySelector('[data-demo-ux="management-home-heading"]');
+  const current = document.querySelector('[data-management-home-current-version]');
+  const next = document.querySelector('[data-management-home-next-action-status]');
+  const back = document.querySelector('[data-demo-ux="management-home-back"]');
+  const supportPlan = document.querySelector('[data-demo-ux="support-plan"]');
+  const text = document.body?.textContent ?? "";
+  const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  return {
+    pass:
+      Boolean(home) &&
+      home?.getAttribute("data-management-home-status") === "RESOLVED" &&
+      (heading?.textContent ?? "").trim() === "マネジメントホーム" &&
+      current?.getAttribute("data-management-home-current-version") === "3" &&
+      text.indexOf("Aさん") >= 0 &&
+      text.indexOf("版3（適用中）") >= 0 &&
+      text.indexOf("結果: 変更が必要") >= 0 &&
+      text.indexOf("Revision Intent: 消費済み") >= 0 &&
+      text.indexOf("Draft 版4あり / 未適用") >= 0 &&
+      text.indexOf("次版はまだ未適用です") >= 0 &&
+      next?.getAttribute("data-management-home-next-action-status") === "RESOLVED" &&
+      Boolean(back) &&
+      !supportPlan &&
+      text.indexOf("優先度") < 0 &&
+      text.indexOf("リスクスコア") < 0 &&
+      !overflow,
+    currentVersion: current?.getAttribute("data-management-home-current-version") ?? "",
+    nextStatus: next?.getAttribute("data-management-home-next-action-status") ?? "",
+    overflow,
+  };
+}
+
 async function smokeGoto(page, query, viewport) {
   if (viewport) {
     await page.setViewport(viewport);
@@ -208,6 +242,19 @@ async function recordCase(name, page, url, found, errors) {
   checks.push({ name, url, found, shot, pass, pageErrors: errors });
   allPass = allPass && pass;
   return pass;
+}
+
+async function openManagementHome(page) {
+  await page.click(
+    '[data-demo-ux="support-plan-mgmt-action"][data-support-plan-mgmt-user-id="user-a"]',
+  );
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
+  await page.click('[data-demo-ux="management-home-open"]');
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="management-home"]')),
+  );
 }
 
 {
@@ -244,11 +291,13 @@ async function recordCase(name, page, url, found, errors) {
     const detail = document.querySelector('[data-demo-ux="user-detail"]');
     const back = document.querySelector('[data-demo-ux="support-plan-back"]');
     const status = document.querySelector('[data-planning-pc="status"]');
+    const managementHomeEntry = document.querySelector('[data-demo-ux="management-home-open"]');
     return {
       pass:
         Boolean(plan) &&
         !list &&
         !detail &&
+        Boolean(managementHomeEntry) &&
         (back?.textContent ?? "").includes("支援計画") &&
         (status?.textContent ?? "").trim() === "適用中",
       backText: back?.textContent ?? "",
@@ -423,9 +472,47 @@ async function recordCase(name, page, url, found, errors) {
   await page.close();
 }
 
+{
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
+  const url = await smokeGoto(
+    page,
+    "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER",
+    { width: 1280, height: 900, deviceScaleFactor: 1 },
+  );
+  await openManagementHome(page);
+  const found = await page.evaluate(assertManagementHome);
+  await page.click('[data-demo-ux="management-home-back"]');
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
+  found.backReturns = await page.evaluate(() =>
+    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
+  );
+  found.pass = found.pass && found.backReturns;
+  await recordCase("management-home-1280", page, url, found, errors);
+  await page.close();
+}
+
+{
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
+  const url = await smokeGoto(
+    page,
+    "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=PLANNER",
+    { width: 390, height: 844, deviceScaleFactor: 1 },
+  );
+  await openManagementHome(page);
+  const found = await page.evaluate(assertManagementHome);
+  await recordCase("management-home-390", page, url, found, errors);
+  await page.close();
+}
+
 const report = {
   unit: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1",
-  kind: "browser smoke / Planning PC support-plan management list",
+  kind: "browser smoke / Planning PC support-plan management list + Management Home",
   date: new Date().toISOString(),
   sliceFlags: {
     id: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1",
