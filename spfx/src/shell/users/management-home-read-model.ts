@@ -6,6 +6,10 @@ import type {
   SupportPlanRevisionDraftCandidate,
 } from "../../sbs-domain/support-plan-activation.bundle";
 import type { RevisionIntent } from "../../sbs-domain/support-plan-revision.bundle";
+import {
+  formatStaffBusinessDate,
+  formatStaffBusinessDateTime,
+} from "../ux/staff-date-time-presentation";
 
 export type ManagementHomeDecisionReason = Readonly<{
   OutcomeId: string;
@@ -78,6 +82,14 @@ function reviewMatchesMonitoring(
   );
 }
 
+function formatReviewDecision(decision: MonitoringPeriodReviewOutcome["decision"]): string {
+  return decision === "CHANGE_REQUIRED" ? "変更が必要" : "変更なし";
+}
+
+function formatRevisionIntentStatus(status: RevisionIntent["status"]): string {
+  return status === "CONSUMED" ? "次版の下書き作成済み" : "変更作業を開始済み";
+}
+
 export function buildManagementHomeReadModel(
   input: ManagementHomeInput,
 ): ManagementHomePresentation {
@@ -93,7 +105,7 @@ export function buildManagementHomeReadModel(
   } else if (!samePlanIdentity(input.plan, monitoring)) {
     unavailableSections.push("monitoring");
   } else {
-    monitoringLabel = `記録: ${monitoring.recordCount}件 / ${monitoring.periodStart}〜${monitoring.periodEnd}`;
+    monitoringLabel = `記録: ${monitoring.recordCount}件 / ${formatStaffBusinessDateTime(monitoring.periodStart)}〜${formatStaffBusinessDateTime(monitoring.periodEnd)}`;
   }
 
   let reviewLabel = "見直し: 確認できません";
@@ -126,7 +138,7 @@ export function buildManagementHomeReadModel(
 
     if (unavailableSections.indexOf("decisionReason") < 0) {
       reviewUsable = true;
-      reviewLabel = `見直し: ${review.decision} / ${review.reviewedAt} / ${review.reviewedBy}${reason}`;
+      reviewLabel = `見直し: ${formatReviewDecision(review.decision)} / ${formatStaffBusinessDateTime(review.reviewedAt)} / ${review.reviewedBy}${reason}`;
     }
   }
 
@@ -174,9 +186,9 @@ export function buildManagementHomeReadModel(
     revisionLabel = "変更対応: 該当情報なし";
   } else if (draft !== null) {
     const applied = draft.candidate.version === currentVersion;
-    revisionLabel = `変更対応: Draft v${draft.candidate.version} ${applied ? "現在適用中" : "未適用"}${intent ? ` / Intent ${intent.status}` : ""}`;
+    revisionLabel = `変更対応: 次版の下書き v${draft.candidate.version}（${applied ? "現在適用中" : "未適用"}）${intent ? ` / ${formatRevisionIntentStatus(intent.status)}` : ""}`;
   } else if (intent !== null) {
-    revisionLabel = `変更対応: Revision Intent ${intent.status}`;
+    revisionLabel = `変更対応: ${formatRevisionIntentStatus(intent.status)}`;
   }
 
   let reviewDueLabel = "次回確認: 確認できません";
@@ -187,7 +199,7 @@ export function buildManagementHomeReadModel(
   } else if (input.reviewDueLabel.value.trim().length === 0) {
     unavailableSections.push("reviewDue");
   } else {
-    reviewDueLabel = `次回確認: ${input.reviewDueLabel.value}`;
+    reviewDueLabel = `次回確認: ${formatStaffBusinessDate(input.reviewDueLabel.value)}`;
   }
 
   let provenanceLabel: string | null = null;
@@ -205,7 +217,7 @@ export function buildManagementHomeReadModel(
     if (receiptMismatch) {
       unavailableSections.push("activationReceipt");
     } else {
-      provenanceLabel = `適用: v${receipt.fromVersion}→v${receipt.activatedVersion} / ${receipt.activatedBy} / ${receipt.activatedAt}`;
+      provenanceLabel = `適用: v${receipt.fromVersion}→v${receipt.activatedVersion} / ${receipt.activatedBy} / ${formatStaffBusinessDateTime(receipt.activatedAt)}`;
     }
   }
 
