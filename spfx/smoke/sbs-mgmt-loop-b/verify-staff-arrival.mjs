@@ -23,15 +23,20 @@ function resolvePuppeteer() {
     try {
       return pathToFileURL(require.resolve(spec)).href;
     } catch {
-      try {
+      if (path.isAbsolute(spec) && fs.existsSync(spec)) {
         return pathToFileURL(spec).href;
-      } catch {
-        // continue
       }
     }
   }
   throw new Error("puppeteer-core not found");
 }
+
+const productHeadResponse = await fetch("http://127.0.0.1:4194/product-head.txt");
+const productHead = productHeadResponse.ok ? (await productHeadResponse.text()).trim() : "";
+const expectedProductHead = process.env.SBS_MGMT_LOOP_B_EXPECTED_PRODUCT_HEAD ?? null;
+const productBasisValid =
+  /^[0-9a-f]{40}$/.test(productHead) &&
+  (expectedProductHead === null || productHead === expectedProductHead);
 
 const puppeteerModule = await import(resolvePuppeteer());
 const puppeteer = puppeteerModule.default ?? puppeteerModule;
@@ -103,6 +108,7 @@ await page.screenshot({
 await browser.close();
 
 const pass =
+  productBasisValid &&
   beforeApply.query === "beforeApply" &&
   beforeApply.ready &&
   beforeApply.overlaySticky &&
@@ -116,7 +122,17 @@ const pass =
   coldPlan.applyPresent === false &&
   coldPlan.draftPresent === false;
 
-const report = { pass, beforeApply, coldList, coldPlan };
+const report = {
+  pass,
+  productBasis: {
+    observedHead: productHead || null,
+    expectedHead: expectedProductHead,
+    valid: productBasisValid,
+  },
+  beforeApply,
+  coldList,
+  coldPlan,
+};
 console.log(JSON.stringify(report, null, 2));
 if (!pass) {
   process.exit(1);
