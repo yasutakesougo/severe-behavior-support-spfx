@@ -57,11 +57,15 @@ function samePlanIdentity(
   );
 }
 
-function unavailable<T>(slot: SourceSlot<T>): slot is Readonly<{ status: "UNAVAILABLE"; reason: string }> {
+function unavailable<T>(
+  slot: SourceSlot<T>,
+): slot is Readonly<{ status: "UNAVAILABLE"; reason: string }> {
   return slot.status === "UNAVAILABLE";
 }
 
-export function buildManagementHomeReadModel(input: ManagementHomeInput): ManagementHomePresentation {
+export function buildManagementHomeReadModel(
+  input: ManagementHomeInput,
+): ManagementHomePresentation {
   const unavailableSections: string[] = [];
   const currentVersion = input.plan.currentVersion;
 
@@ -80,16 +84,12 @@ export function buildManagementHomeReadModel(input: ManagementHomeInput): Manage
   }
 
   let reviewLabel = "見直し: 確認できません";
-  const review =
-    input.reviewOutcome.status === "RESOLVED" ? input.reviewOutcome.value : null;
+  const review = input.reviewOutcome.status === "RESOLVED" ? input.reviewOutcome.value : null;
   if (unavailable(input.reviewOutcome)) {
     unavailableSections.push("review");
   } else if (review === null) {
     reviewLabel = "見直し: 該当情報なし";
-  } else if (
-    !samePlanIdentity(input.plan, review) ||
-    review.planVersion !== currentVersion
-  ) {
+  } else if (!samePlanIdentity(input.plan, review) || review.planVersion !== currentVersion) {
     unavailableSections.push("review");
   } else {
     const reason =
@@ -105,8 +105,7 @@ export function buildManagementHomeReadModel(input: ManagementHomeInput): Manage
   }
 
   let revisionLabel = "変更対応: 確認できません";
-  const intent =
-    input.revisionIntent.status === "RESOLVED" ? input.revisionIntent.value : null;
+  const intent = input.revisionIntent.status === "RESOLVED" ? input.revisionIntent.value : null;
   const draft = input.draft.status === "RESOLVED" ? input.draft.value : null;
   if (unavailable(input.revisionIntent) || unavailable(input.draft)) {
     unavailableSections.push("revision");
@@ -115,9 +114,7 @@ export function buildManagementHomeReadModel(input: ManagementHomeInput): Manage
   } else if (
     (intent !== null && !samePlanIdentity(input.plan, intent)) ||
     (draft !== null && !samePlanIdentity(input.plan, draft.candidate)) ||
-    (intent !== null &&
-      draft !== null &&
-      intent.RevisionIntentId !== draft.RevisionIntentId)
+    (intent !== null && draft !== null && intent.RevisionIntentId !== draft.RevisionIntentId)
   ) {
     unavailableSections.push("revision");
   } else if (draft !== null) {
@@ -141,10 +138,7 @@ export function buildManagementHomeReadModel(input: ManagementHomeInput): Manage
     unavailableSections.push("activationReceipt");
   } else if (input.activationReceipt.value) {
     const receipt = input.activationReceipt.value;
-    if (
-      receipt.planId === input.plan.PlanId &&
-      receipt.activatedVersion === currentVersion
-    ) {
+    if (receipt.planId === input.plan.PlanId && receipt.activatedVersion === currentVersion) {
       provenanceLabel = `適用: v${receipt.fromVersion}→v${receipt.activatedVersion} / ${receipt.activatedBy} / ${receipt.activatedAt}`;
     } else {
       unavailableSections.push("activationReceipt");
