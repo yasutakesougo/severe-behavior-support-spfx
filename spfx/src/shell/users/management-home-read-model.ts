@@ -52,11 +52,15 @@ function samePlanIdentity(
   );
 }
 
-function unavailable<T>(slot: SourceSlot<T>): slot is Readonly<{ status: "UNAVAILABLE"; reason: string }> {
+function unavailable<T>(
+  slot: SourceSlot<T>,
+): slot is Readonly<{ status: "UNAVAILABLE"; reason: string }> {
   return slot.status === "UNAVAILABLE";
 }
 
-export function buildManagementHomeReadModel(input: ManagementHomeInput): ManagementHomePresentation {
+export function buildManagementHomeReadModel(
+  input: ManagementHomeInput,
+): ManagementHomePresentation {
   const unavailableSections: string[] = [];
   const currentVersion = input.plan.currentVersion;
 
@@ -96,7 +100,8 @@ export function buildManagementHomeReadModel(input: ManagementHomeInput): Manage
   }
 
   let revisionLabel = "変更対応: 確認できません";
-  const intent = input.revisionIntent.status === "RESOLVED" ? input.revisionIntent.value : null;
+  const intent =
+    input.revisionIntent.status === "RESOLVED" ? input.revisionIntent.value : null;
   const draft = input.draft.status === "RESOLVED" ? input.draft.value : null;
   if (unavailable(input.revisionIntent) || unavailable(input.draft)) {
     unavailableSections.push("revision");
