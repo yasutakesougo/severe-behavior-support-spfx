@@ -13,7 +13,29 @@ export {
   inspectScaleContextSafety,
   type ScaleContextSafetyReport,
 } from "./field-staff-phase8-multi-user-scale-evidence";
-export { SupportPlan, type SupportPlanProps } from "./SupportPlan";
+export {
+  ManagementHome,
+  SupportPlanWithManagementHome as SupportPlan,
+  type ManagementHomeProps,
+} from "./ManagementHome";
+export type { SupportPlanProps } from "./SupportPlan";
+export {
+  buildManagementHomeReadModel,
+  type ManagementHomeInput,
+  type ManagementHomeNextAction,
+  type ManagementHomeReadModel,
+  type ManagementHomeReviewDue,
+  type ManagementHomeReviewSnapshot,
+  type ManagementHomeSection,
+  type ManagementHomeSource,
+} from "./management-home-read-model";
+export {
+  MANAGEMENT_HOME_CONFIRMED_NONE_MODEL,
+  MANAGEMENT_HOME_FULLY_RESOLVED_MODEL,
+  MANAGEMENT_HOME_MISMATCH_MODEL,
+  MANAGEMENT_HOME_UNAVAILABLE_MODEL,
+  SBS_MGMT_HOME_C_SLICE,
+} from "./management-home-fixture";
 export {
   SupportPlanManagementList,
   type SupportPlanManagementListProps,
