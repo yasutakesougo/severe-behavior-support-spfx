@@ -57,7 +57,9 @@ export type ManagementHomeReadModel = Readonly<{
   nextAction: ManagementHomeNextAction;
 }>;
 
-function sectionFromSource<T>(source: ManagementHomeSource<T>): ManagementHomeSection<T> {
+function sectionFromSource<T>(
+  source: ManagementHomeSource<T>,
+): ManagementHomeSection<T> {
   if (source.status === "UNAVAILABLE") {
     return { status: "UNAVAILABLE", reason: source.reason };
   }
@@ -67,7 +69,9 @@ function sectionFromSource<T>(source: ManagementHomeSource<T>): ManagementHomeSe
   return { status: "RESOLVED", value: source.value };
 }
 
-function unavailable(reason: string): Readonly<{ status: "UNAVAILABLE"; reason: string }> {
+function unavailable(
+  reason: string,
+): Readonly<{ status: "UNAVAILABLE"; reason: string }> {
   return { status: "UNAVAILABLE", reason };
 }
 
@@ -118,7 +122,10 @@ function deriveNextAction(
   sourceUnavailable: boolean,
 ): ManagementHomeNextAction {
   if (sourceUnavailable) {
-    return { status: "UNAVAILABLE", label: "情報を確認できないため、次の行動は表示しません。" };
+    return {
+      status: "UNAVAILABLE",
+      label: "情報を確認できないため、次の行動は表示しません。",
+    };
   }
 
   if (draft.status === "RESOLVED") {
@@ -139,17 +146,32 @@ function deriveNextAction(
 
   if (review.status === "RESOLVED") {
     if (review.value.outcome.decision === "NO_CHANGE") {
-      return { status: "RESOLVED", label: "次回見直し時期を確認してください。" };
+      return {
+        status: "RESOLVED",
+        label: "次回見直し時期を確認してください。",
+      };
     }
     if (revisionIntent.status === "CONFIRMED_NONE") {
-      return { status: "RESOLVED", label: "変更作業開始の状態を確認してください。" };
+      return {
+        status: "RESOLVED",
+        label: "変更作業開始の状態を確認してください。",
+      };
     }
-    if (revisionIntent.status === "RESOLVED" && revisionIntent.value.status === "OPEN") {
-      return { status: "RESOLVED", label: "変更作業の開始状態を確認してください。" };
+    if (
+      revisionIntent.status === "RESOLVED" &&
+      revisionIntent.value.status === "OPEN"
+    ) {
+      return {
+        status: "RESOLVED",
+        label: "変更作業の開始状態を確認してください。",
+      };
     }
   }
 
-  return { status: "RESOLVED", label: "現在の支援計画と見直し状況を確認してください。" };
+  return {
+    status: "RESOLVED",
+    label: "現在の支援計画と見直し状況を確認してください。",
+  };
 }
 
 /**
@@ -157,7 +179,9 @@ function deriveNextAction(
  * Inputs are existing read-only snapshots. This function creates no new business authority,
  * persistence, workflow state, recommendation, or LIVE WRITE behavior.
  */
-export function buildManagementHomeReadModel(input: ManagementHomeInput): ManagementHomeReadModel {
+export function buildManagementHomeReadModel(
+  input: ManagementHomeInput,
+): ManagementHomeReadModel {
   const { currentPlan } = input;
 
   let monitoring = sectionFromSource(input.monitoring);
@@ -175,7 +199,10 @@ export function buildManagementHomeReadModel(input: ManagementHomeInput): Manage
       review = unavailable("REVIEW_IDENTITY_MISMATCH");
     } else if (decisionReason && decisionReason.OutcomeId !== outcome.OutcomeId) {
       review = unavailable("REVIEW_REASON_MISMATCH");
-    } else if (outcome.decision === "CHANGE_REQUIRED" && decisionReason === null) {
+    } else if (
+      outcome.decision === "CHANGE_REQUIRED" &&
+      decisionReason === null
+    ) {
       review = unavailable("REVIEW_REASON_REQUIRED");
     } else if (
       monitoring.status === "RESOLVED" &&
