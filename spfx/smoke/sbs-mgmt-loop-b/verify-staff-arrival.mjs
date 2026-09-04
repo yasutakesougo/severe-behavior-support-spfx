@@ -77,9 +77,7 @@ async function collectAfterApply(page) {
     const root = document.querySelector('[data-demo-ux="support-plan"]');
     const headerVersion = document.querySelector('[data-planning-pc="version"]');
     const planSection = document.querySelector('[data-process-visibility-ui-v1="plan"]');
-    const versionButtons = [
-      ...document.querySelectorAll('[data-planning-pc-version]'),
-    ];
+    const versionButtons = [...document.querySelectorAll("[data-planning-pc-version]")];
     const currentButtons = versionButtons.filter(
       (entry) => entry.getAttribute("data-planning-pc-version-current") === "true",
     );
