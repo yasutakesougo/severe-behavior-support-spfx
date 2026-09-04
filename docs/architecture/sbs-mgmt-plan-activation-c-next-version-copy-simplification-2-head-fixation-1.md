@@ -18,12 +18,13 @@ SupportPlan が変わったので、Proposal A の CI SHA は本実装の exact-
 | PR #589 tip / Proposal A CI | `f85ee757a9795b62ad5da475dc0aebc78e3ad6d3` **NOT this unit** |
 | SIMPLIFICATION-2 SupportPlan mutation | `1cde2182ff1adbbd8414a0c6fca398169d29c7b8` |
 | Copy-lock + implementation reviews | `aad5cbfd17d5bf7bc89e7c1f6af5f3d1f288a837` |
-| Exact-head CI authority | **this bind commit (PR #593 tip after this file lands)** |
+| Prior bind (CI failed extra EOF blank) | `43227de42191070c1415730fb420d3f181fdff13` |
+| Exact-head CI authority | **re-fixated PR #593 tip after EOF whitespace fix** |
 
 ```text
 #589 @ f85ee757 remains Proposal A historical CI only.
 It is not the product under test and not CI authority for SIMPLIFICATION-2.
-Do not add commits after this bind without re-fixation.
+Do not add commits after the whitespace-fix re-fixation without another re-fixation.
 Ready is not eligible until exact-head CI is GREEN on the bound tip.
 ```
 
