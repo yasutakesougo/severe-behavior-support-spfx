@@ -155,14 +155,12 @@ const server = http.createServer((req, res) => {
   fs.readFile(filePath, (error, data) => {
     if (error) return res.writeHead(404).end("not found");
     const ext = path.extname(filePath);
-    const type =
-      ext === ".html"
-        ? "text/html"
-        : ext === ".css"
-          ? "text/css"
-          : ext === ".txt"
-            ? "text/plain"
-            : "application/javascript";
+    const contentTypes = {
+      ".html": "text/html",
+      ".css": "text/css",
+      ".txt": "text/plain",
+    };
+    const type = contentTypes[ext] ?? "application/javascript";
     res.writeHead(200, { "Content-Type": `${type}; charset=utf-8` });
     res.end(data);
   });
