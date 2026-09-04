@@ -25,11 +25,7 @@ function unavailableText(section: ManagementHomeSection<unknown>): string | null
   return section.status === "UNAVAILABLE" ? "確認できません" : null;
 }
 
-export const ManagementHome: React.FC<ManagementHomeProps> = ({
-  model,
-  headingRef,
-  onBack,
-}) => {
+export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRef, onBack }) => {
   const monitoringUnavailable = unavailableText(model.monitoring);
   const reviewUnavailable = unavailableText(model.review);
   const intentUnavailable = unavailableText(model.revisionIntent);
@@ -95,12 +91,10 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
             <p className={styles.meta}>対象期間の情報なしを確認</p>
           ) : model.monitoring.status === "RESOLVED" ? (
             <>
-              <p
-                className={styles.primaryValue}
-              >{`記録 ${model.monitoring.value.recordCount}件`}</p>
-              <p
-                className={styles.meta}
-              >{`${model.monitoring.value.periodStart.slice(0, 10)} ～ ${model.monitoring.value.periodEnd.slice(0, 10)}`}</p>
+              <p className={styles.primaryValue}>{`記録 ${model.monitoring.value.recordCount}件`}</p>
+              <p className={styles.meta}>
+                {`${model.monitoring.value.periodStart.slice(0, 10)} ～ ${model.monitoring.value.periodEnd.slice(0, 10)}`}
+              </p>
             </>
           ) : null}
         </section>
@@ -138,9 +132,7 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
                   ? "Revision Intent: なし"
                   : model.revisionIntent.status === "RESOLVED"
                     ? `Revision Intent: ${
-                        model.revisionIntent.value.status === "CONSUMED"
-                          ? "消費済み"
-                          : "開始済み"
+                        model.revisionIntent.value.status === "CONSUMED" ? "消費済み" : "開始済み"
                       }`
                     : null}
             </p>
@@ -175,9 +167,7 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
           <h2 className={styles.cardHeading}>次に必要な人の行動</h2>
           <p
             className={
-              model.nextAction.status === "UNAVAILABLE"
-                ? styles.unavailable
-                : styles.primaryValue
+              model.nextAction.status === "UNAVAILABLE" ? styles.unavailable : styles.primaryValue
             }
             data-management-home-next-action-status={model.nextAction.status}
           >
@@ -252,10 +242,7 @@ export const SupportPlanWithManagementHome: React.FC<SupportPlanProps> = (props)
   }
 
   return (
-    <div
-      className={styles.host}
-      data-management-home-host={available ? "available" : "hidden"}
-    >
+    <div className={styles.host} data-management-home-host={available ? "available" : "hidden"}>
       {available ? (
         <div className={styles.entryRow}>
           <button
