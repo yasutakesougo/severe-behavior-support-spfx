@@ -237,21 +237,42 @@ async function runHappyPath(name, width, height) {
 
   const afterApply = await page.evaluate(() => {
     const applied = document.querySelector('[data-sbs-mgmt-plan-activation-c="applied"]');
+    const appliedText = applied?.textContent ?? "";
     const active = document.querySelector(
       '[data-sbs-mgmt-plan-activation-c-active-version="true"]',
     );
     const history = document.querySelector('[data-sbs-mgmt-plan-activation-c-history="true"]');
     const receipt = document.querySelector('[data-sbs-mgmt-plan-activation-c-receipt="true"]');
+    const nextVersionNumber = document.querySelector(
+      '[data-review-new-version="next-version-number"]',
+    );
+    const nextVersionBlock = document.querySelector(
+      '[data-review-new-version="next-version-concept"]',
+    );
+    const nextVersionText = nextVersionBlock?.textContent ?? "";
+    const details = document.getElementById("planner-process-details-heading")?.closest("section");
     const draftGone = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
     const applyGone = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
     const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
     const liveWrite = document.querySelector("[data-sbs-mgmt-plan-activation-c-live-write]");
     const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+    const headingTexts = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim());
     return {
       appliedPresent: Boolean(applied),
       activeIsV4: (active?.textContent ?? "").includes("現在適用中: 版 4"),
-      historyIsV3: (history?.textContent ?? "").includes("版 3: 過去版"),
+      historyIsV3: (history?.textContent ?? "").includes("過去版: 版 3"),
       receiptPresent: (receipt?.textContent ?? "").includes("適用:"),
+      receiptInDetails: Boolean(details?.contains(receipt)),
+      receiptNotInAppliedPrimary: !appliedText.includes("適用:"),
+      conceptualMismatchGone:
+        nextVersionNumber === null && !appliedText.includes("次に重ねる概念上の版"),
+      nextVersionHeadingGone: !headingTexts.includes("次の版の考え方"),
+      afterApplyShortNotes:
+        nextVersionText.includes("次に変更するときは、新しい版を作ります。") &&
+        nextVersionText.includes("現在の版はそのまま残ります。"),
+      afterApplyKeepsInvalidatingNotes:
+        nextVersionText.includes("観察の不足だけでは") &&
+        nextVersionText.includes("見直し期限の超過だけでは"),
       draftCleared: draftGone === null,
       applyCleared: applyGone === null,
       currentVersionIsV4: (currentVersion?.textContent ?? "").includes("版 4"),
@@ -301,6 +322,12 @@ async function runHappyPath(name, width, height) {
     afterApply.activeIsV4 &&
     afterApply.historyIsV3 &&
     afterApply.receiptPresent &&
+    afterApply.receiptInDetails &&
+    afterApply.receiptNotInAppliedPrimary &&
+    afterApply.conceptualMismatchGone &&
+    afterApply.nextVersionHeadingGone &&
+    afterApply.afterApplyShortNotes &&
+    afterApply.afterApplyKeepsInvalidatingNotes &&
     afterApply.draftCleared &&
     afterApply.applyCleared &&
     afterApply.currentVersionIsV4 &&

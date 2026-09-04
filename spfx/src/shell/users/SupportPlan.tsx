@@ -23,6 +23,10 @@ import {
   PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT,
   SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING,
   SUPPORT_PLAN_HISTORICAL_RECORD_NOTE,
+  SUPPORT_PLAN_ACTIVATION_INFO_HEADING,
+  SUPPORT_PLAN_AFTER_APPLY_CURRENT_REMAINS_NOTE,
+  SUPPORT_PLAN_AFTER_APPLY_HISTORY_PREFIX,
+  SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE,
   SUPPORT_PLAN_DRAFT_ACTIVE_LABEL,
   SUPPORT_PLAN_DRAFT_DRAFT_LABEL,
   SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE,
@@ -447,6 +451,14 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           ) : null}
         </div>
       ) : null}
+      {activationReceipt ? (
+        <div className={styles.versionDetail}>
+          <p className={styles.graphLabel}>{SUPPORT_PLAN_ACTIVATION_INFO_HEADING}</p>
+          <p className={styles.sectionHint} data-sbs-mgmt-plan-activation-c-receipt="true">
+            適用: {activationReceipt.activatedBy} / {activationReceipt.activatedAt}
+          </p>
+        </div>
+      ) : null}
     </section>
   );
 
@@ -547,21 +559,51 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const nextVersionBlock = (
     <section
       className={styles.detailSection}
-      aria-labelledby="review-new-version-next-heading"
+      aria-labelledby={
+        activationReceipt && plannerProcess
+          ? "planner-process-next-version-heading"
+          : "review-new-version-next-heading"
+      }
       data-review-new-version="next-version-concept"
       data-review-new-version-highlighted={nextVersionConceptHighlighted ? "true" : "false"}
     >
-      <h2 id="review-new-version-next-heading" tabIndex={-1}>
-        {SUPPORT_PLAN_NEXT_VERSION_HEADING}
-      </h2>
-      <p className={styles.sectionHint} data-review-new-version="immutability-note">
-        {SUPPORT_PLAN_NEXT_VERSION_NOTE}
-      </p>
-      <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
-      <p data-review-new-version="next-version-number">
-        現行は版 {liveCurrentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion}{" "}
-        です。
-      </p>
+      {activationReceipt ? null : (
+        <h2 id="review-new-version-next-heading" tabIndex={-1}>
+          {SUPPORT_PLAN_NEXT_VERSION_HEADING}
+        </h2>
+      )}
+      {activationReceipt ? (
+        <div
+          role="status"
+          id="review-new-version-next-heading"
+          tabIndex={-1}
+          data-sbs-mgmt-plan-activation-c="applied"
+        >
+          <p data-sbs-mgmt-plan-activation-c-active-version="true">
+            現在適用中: 版 {activationReceipt.activatedVersion}
+          </p>
+          <p data-sbs-mgmt-plan-activation-c-history="true">
+            {SUPPORT_PLAN_AFTER_APPLY_HISTORY_PREFIX}: 版 {activationReceipt.fromVersion}
+          </p>
+        </div>
+      ) : (
+        <>
+          <p className={styles.sectionHint} data-review-new-version="immutability-note">
+            {SUPPORT_PLAN_NEXT_VERSION_NOTE}
+          </p>
+          <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
+          <p data-review-new-version="next-version-number">
+            現行は版 {liveCurrentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion}{" "}
+            です。
+          </p>
+        </>
+      )}
+      {activationReceipt ? (
+        <>
+          <p className={styles.sectionHint}>{SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE}</p>
+          <p className={styles.sectionHint}>{SUPPORT_PLAN_AFTER_APPLY_CURRENT_REMAINS_NOTE}</p>
+        </>
+      ) : null}
       <p className={styles.sectionHint} data-review-new-version="observation-not-invalidating">
         {SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE}
       </p>
@@ -583,19 +625,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           {SUPPORT_PLAN_NEXT_VERSION_CTA}
         </button>
       ) : null}
-      {activationReceipt ? (
-        <div role="status" data-sbs-mgmt-plan-activation-c="applied">
-          <p data-sbs-mgmt-plan-activation-c-active-version="true">
-            現在適用中: 版 {activationReceipt.activatedVersion}
-          </p>
-          <p data-sbs-mgmt-plan-activation-c-history="true">
-            版 {activationReceipt.fromVersion}: 過去版
-          </p>
-          <p data-sbs-mgmt-plan-activation-c-receipt="true">
-            適用: {activationReceipt.activatedBy} / {activationReceipt.activatedAt}
-          </p>
-        </div>
-      ) : revisionDraft ? (
+      {activationReceipt ? null : revisionDraft ? (
         <div role="status" data-sbs-mgmt-loop-b-draft="true">
           <p data-sbs-mgmt-loop-b-active-version="true">
             {SUPPORT_PLAN_DRAFT_ACTIVE_LABEL}: 版 {revisionDraft.reviewBinding.reviewedPlanVersion}

@@ -3,15 +3,15 @@
 ```text
 unit: SBS-MGMT-PLAN-ACTIVATION-C-NEXT-VERSION-COPY-SIMPLIFICATION-2
 kind: Scope Definition
-mode: READ-ONLY / SCOPE DEFINITION ONLY
+mode: IMPLEMENTATION (after-apply ⑥ presentation only)
 date: 2026-09-04
 authority: Human after-apply copy correction (display inconsistency + density)
 Staff T1–T5 = PASS
 FUNCTIONAL COMPREHENSION = PASS
 Usability finding = CORRECTION REQUIRED
 Human Ready GO = HOLD
-Human UI Copy Correction Start GO — SIMPLIFICATION-2 = NOT RECEIVED
-Implementation = NOT AUTHORIZED
+Human UI Copy Correction Start GO — SIMPLIFICATION-2 = RECEIVED
+Implementation = AUTHORIZED (after-apply ⑥ presentation only)
 Proposal A product candidate = fed08fd49d12fccf323991fb95a4f5e58d6f9e55
 PR #589 tip / CI authority = f85ee757a9795b62ad5da475dc0aebc78e3ad6d3
 #584 @ 5437e64 = FROZEN / historical basis only
@@ -287,13 +287,13 @@ After-apply で `next-version-number` を出さない。selector 削除ではな
 Actual Staff functional comprehension = PASS
 Usability finding = CORRECTION REQUIRED
 Human Ready GO = HOLD
-Human UI Copy Correction Start GO — SIMPLIFICATION-2 = NOT RECEIVED
-Implementation = NOT AUTHORIZED
+Human UI Copy Correction Start GO — SIMPLIFICATION-2 = RECEIVED
+Implementation = AUTHORIZED (after-apply ⑥ presentation only)
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 
 NEXT
-Minimal Scope Definition
-→ Ponytail / Minimality Scope Review
-→ Independent Scope Review
-→ Human UI Copy Correction Start GO
+Human UI Copy Correction Start GO = RECEIVED
+→ after-apply ⑥ presentation implementation
+→ B12 afterApply + unit copy sync
+→ Human copy arrival check (not Ready / Merge)
 ```
