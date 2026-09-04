@@ -46,7 +46,52 @@ jobs:
           SPML_SASS_PATH: ${{ env.SBS_MGMT_LOOP_B_SASS_PATH }}
           SPML_CHROME_PATH: /usr/bin/google-chrome
           SPML_ARTIFACTS_DIR: /tmp/554-management-home-browser-smoke
-        run: node spfx/smoke/support-plan-management-list-demo-1/run-smoke.mjs
+        run: |
+          set +e
+          node spfx/smoke/support-plan-management-list-demo-1/run-smoke.mjs
+          set -e
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          import path from "node:path";
+
+          const artifactsDir = process.env.SPML_ARTIFACTS_DIR;
+          if (!artifactsDir) throw new Error("SPML_ARTIFACTS_DIR missing");
+          const reportPath = path.join(artifactsDir, "smoke-report.json");
+          const report = JSON.parse(fs.readFileSync(reportPath, "utf8"));
+          const required = [
+            "management-home-1280",
+            "management-home-390",
+            "management-home-unavailable",
+            "management-home-mismatch",
+          ];
+          const selected = required.map((name) => {
+            const item = report.checks.find((check) => check.name === name);
+            if (!item) throw new Error(`missing #554 RBA case: ${name}`);
+            return {
+              name,
+              pass: item.pass === true,
+              overflow: item.found?.overflow ?? null,
+              unavailable: item.found?.unavailable ?? null,
+              pageErrors: item.pageErrors ?? [],
+            };
+          });
+          const allPass = selected.every(
+            (item) => item.pass && item.overflow === false && item.pageErrors.length === 0,
+          );
+          const dedicated = {
+            unit: "SBS-MGMT-HOME-C",
+            acceptance: "RBA-1280-390",
+            allPass,
+            sourceRunnerAllPass: report.allPass,
+            cases: selected,
+          };
+          fs.writeFileSync(
+            path.join(artifactsDir, "management-home-rba-report.json"),
+            JSON.stringify(dedicated, null, 2),
+          );
+          console.log(JSON.stringify(dedicated, null, 2));
+          if (!allPass) process.exit(1);
+          NODE
       - name: Upload B12 evidence
         if: always()
         uses: actions/upload-artifact@v4
