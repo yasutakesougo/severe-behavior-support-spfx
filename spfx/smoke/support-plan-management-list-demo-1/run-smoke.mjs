@@ -194,9 +194,7 @@ function assertPlannerList() {
 
 function assertManagementHome(expectUnavailable = false) {
   const home = document.querySelector('[data-demo-ux="management-home"]');
-  const unavailable = document.querySelector(
-    '[data-demo-ux="management-home-unavailable"]',
-  );
+  const unavailable = document.querySelector('[data-demo-ux="management-home-unavailable"]');
   const text = document.body?.textContent ?? "";
   const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
   return {
@@ -477,15 +475,8 @@ for (const managementHomeCase of managementHomeCases) {
   const page = await browser.newPage();
   const errors = [];
   page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
-  const url = await smokeGoto(
-    page,
-    managementHomeCase.query,
-    managementHomeCase.viewport,
-  );
-  const found = await page.evaluate(
-    assertManagementHome,
-    managementHomeCase.expectUnavailable,
-  );
+  const url = await smokeGoto(page, managementHomeCase.query, managementHomeCase.viewport);
+  const found = await page.evaluate(assertManagementHome, managementHomeCase.expectUnavailable);
   await recordCase(managementHomeCase.name, page, url, found, errors);
   await page.close();
 }
