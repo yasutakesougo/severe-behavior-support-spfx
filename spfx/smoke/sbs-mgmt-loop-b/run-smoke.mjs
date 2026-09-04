@@ -203,15 +203,40 @@ async function runHappyPath(name, width, height) {
     const draftLifecycle = document.querySelector('[data-sbs-mgmt-loop-b-draft-lifecycle="true"]');
     const apply = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
     const applyText = apply?.textContent ?? "";
+    const nextVersionNumber = document.querySelector(
+      '[data-review-new-version="next-version-number"]',
+    );
+    const nextVersionBlock = document.querySelector(
+      '[data-review-new-version="next-version-concept"]',
+    );
+    const nextVersionText = nextVersionBlock?.textContent ?? "";
+    const headingTexts = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim());
     return {
       draftCount: drafts.length,
-      draftHasNPlusOne: (draft?.textContent ?? "").includes("変更内容の下書き: 版 4"),
-      draftKeepsSourceN: (draft?.textContent ?? "").includes("元の版: 3（変更しない）"),
-      draftSessionOnly: (draft?.textContent ?? "").includes("下書き / 本番未保存"),
-      activeVersionClear: (activeVersion?.textContent ?? "").includes("現在適用中: 版 3"),
-      draftNotApplied:
-        (draftLifecycle?.textContent ?? "").includes("版 4 は下書きです") &&
-        (draftLifecycle?.textContent ?? "").includes("まだ適用開始されていません"),
+      draftHasNPlusOne: (draftLifecycle?.textContent ?? "").includes("下書き: 版 4"),
+      draftKeepsSourceN: (activeVersion?.textContent ?? "").includes("適用中: 版 3"),
+      draftSessionOnly: (boundary?.textContent ?? "").includes("本番には保存されていません"),
+      activeVersionClear: (activeVersion?.textContent ?? "").includes("適用中: 版 3"),
+      draftNotApplied: (draftLifecycle?.textContent ?? "").includes("下書き: 版 4"),
+      removedLongDraftCopy: !(draft?.textContent ?? "").includes("変更内容の下書き"),
+      removedSourceUnchangedCopy: !(draft?.textContent ?? "").includes("元の版: 3（変更しない）"),
+      removedDraftLifecycleSentence: !(draft?.textContent ?? "").includes(
+        "は下書きです。まだ適用開始されていません",
+      ),
+      removedDraftStatusLine: !(draft?.textContent ?? "").includes("状態: 下書き / 本番未保存"),
+      // CTA-ROLE-CLARIFICATION-1: competing cold chrome hidden while draft exists.
+      nextVersionHeadingGoneWhileDraft: !headingTexts.includes("次の版の考え方"),
+      conceptualNextGoneWhileDraft:
+        nextVersionNumber === null &&
+        !nextVersionText.includes("次に重ねる概念上の版は 4") &&
+        !nextVersionText.includes("次に重ねる概念上の版"),
+      createCtaCopyGoneWhileDraft: !nextVersionText.includes("次の版を作る（表示専用）"),
+      coldExplanationGoneWhileDraft:
+        !nextVersionText.includes("次回の変更は新しい版を作ります") &&
+        document.querySelector('[data-review-new-version="immutability-note"]') === null,
+      keepsInvalidatingNotesWhileDraft:
+        nextVersionText.includes("観察の不足だけでは") &&
+        nextVersionText.includes("見直し期限の超過だけでは"),
       boundaryNoLiveWrite: (boundary?.textContent ?? "").includes("本番には保存されていません"),
       liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-loop-b-live-write") === "false",
       decisionPresent: Boolean(decision),
@@ -219,7 +244,8 @@ async function runHappyPath(name, width, height) {
       reasonTextPresent: text.includes("Synthetic B12 human decision reason"),
       primaryCountAfterDraft: primaryActions.length,
       currentVersionStillN: (currentVersion?.textContent ?? "").includes("版 3"),
-      createCtaStillDisabled: createCta instanceof HTMLButtonElement && createCta.disabled,
+      // CTA-ROLE-CLARIFICATION-1: display-only create-cta is hidden while draft exists.
+      createCtaAbsentWhileDraft: createCta === null,
       startActionCleared: startGone === null,
       applyPresent: apply instanceof HTMLButtonElement && !apply.disabled,
       applyIsPrimary: apply?.getAttribute("data-sbs-action") === "primary",
@@ -233,21 +259,46 @@ async function runHappyPath(name, width, height) {
 
   const afterApply = await page.evaluate(() => {
     const applied = document.querySelector('[data-sbs-mgmt-plan-activation-c="applied"]');
+    const appliedText = applied?.textContent ?? "";
     const active = document.querySelector(
       '[data-sbs-mgmt-plan-activation-c-active-version="true"]',
     );
     const history = document.querySelector('[data-sbs-mgmt-plan-activation-c-history="true"]');
     const receipt = document.querySelector('[data-sbs-mgmt-plan-activation-c-receipt="true"]');
+    const nextVersionNumber = document.querySelector(
+      '[data-review-new-version="next-version-number"]',
+    );
+    const nextVersionBlock = document.querySelector(
+      '[data-review-new-version="next-version-concept"]',
+    );
+    const nextVersionText = nextVersionBlock?.textContent ?? "";
+    const details = document.getElementById("planner-process-details-heading")?.closest("section");
     const draftGone = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
     const applyGone = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
     const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
     const liveWrite = document.querySelector("[data-sbs-mgmt-plan-activation-c-live-write]");
     const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+    const headingTexts = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim());
+    const createCta = document.querySelector('[data-review-new-version="create-cta"]');
     return {
       appliedPresent: Boolean(applied),
       activeIsV4: (active?.textContent ?? "").includes("現在適用中: 版 4"),
-      historyIsV3: (history?.textContent ?? "").includes("版 3: 過去版"),
+      historyIsV3: (history?.textContent ?? "").includes("過去版: 版 3"),
       receiptPresent: (receipt?.textContent ?? "").includes("適用:"),
+      receiptInDetails: Boolean(details?.contains(receipt)),
+      receiptNotInAppliedPrimary: !appliedText.includes("適用:"),
+      conceptualMismatchGone:
+        nextVersionNumber === null && !appliedText.includes("次に重ねる概念上の版"),
+      nextVersionHeadingGone: !headingTexts.includes("次の版の考え方"),
+      afterApplyShortNotes:
+        nextVersionText.includes("次に変更するときは、新しい版を作ります。") &&
+        nextVersionText.includes("現在の版はそのまま残ります。"),
+      afterApplyKeepsInvalidatingNotes:
+        nextVersionText.includes("観察の不足だけでは") &&
+        nextVersionText.includes("見直し期限の超過だけでは"),
+      // POST-APPLY-CREATE-CTA-CLARIFICATION-1: display-only create-cta must not return after Apply.
+      createCtaAbsentAfterApply: createCta === null,
+      createCtaCopyGoneAfterApply: !nextVersionText.includes("次の版を作る（表示専用）"),
       draftCleared: draftGone === null,
       applyCleared: applyGone === null,
       currentVersionIsV4: (currentVersion?.textContent ?? "").includes("版 4"),
@@ -276,6 +327,10 @@ async function runHappyPath(name, width, height) {
     found.draftSessionOnly &&
     found.activeVersionClear &&
     found.draftNotApplied &&
+    found.removedLongDraftCopy &&
+    found.removedSourceUnchangedCopy &&
+    found.removedDraftLifecycleSentence &&
+    found.removedDraftStatusLine &&
     found.boundaryNoLiveWrite &&
     found.liveWriteFalse &&
     found.decisionPresent &&
@@ -283,7 +338,12 @@ async function runHappyPath(name, width, height) {
     found.reasonTextPresent &&
     found.primaryCountAfterDraft === 1 &&
     found.currentVersionStillN &&
-    found.createCtaStillDisabled &&
+    found.createCtaAbsentWhileDraft &&
+    found.nextVersionHeadingGoneWhileDraft &&
+    found.conceptualNextGoneWhileDraft &&
+    found.createCtaCopyGoneWhileDraft &&
+    found.coldExplanationGoneWhileDraft &&
+    found.keepsInvalidatingNotesWhileDraft &&
     found.startActionCleared &&
     found.applyPresent &&
     found.applyIsPrimary &&
@@ -293,6 +353,14 @@ async function runHappyPath(name, width, height) {
     afterApply.activeIsV4 &&
     afterApply.historyIsV3 &&
     afterApply.receiptPresent &&
+    afterApply.receiptInDetails &&
+    afterApply.receiptNotInAppliedPrimary &&
+    afterApply.conceptualMismatchGone &&
+    afterApply.nextVersionHeadingGone &&
+    afterApply.afterApplyShortNotes &&
+    afterApply.afterApplyKeepsInvalidatingNotes &&
+    afterApply.createCtaAbsentAfterApply &&
+    afterApply.createCtaCopyGoneAfterApply &&
     afterApply.draftCleared &&
     afterApply.applyCleared &&
     afterApply.currentVersionIsV4 &&
@@ -400,9 +468,7 @@ async function runHistoricalStaleBlocked(name, width, height) {
       draftAbsent: draft === null,
       currentStillN: (currentVersion?.textContent ?? "").includes("版 3"),
       liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-loop-b-live-write") === "false",
-      textHasNoNPlusTwoDraft: !(document.body?.textContent ?? "").includes(
-        "変更内容の下書き: 版 5",
-      ),
+      textHasNoNPlusTwoDraft: !(document.body?.textContent ?? "").includes("下書き: 版 5"),
     };
   });
   const pass =
