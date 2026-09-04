@@ -24,7 +24,12 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
       data-demo-ux="management-home"
       aria-labelledby="management-home-heading"
     >
-      <h1 id="management-home-heading" ref={headingRef} tabIndex={-1} className={styles.heading}>
+      <h1
+        id="management-home-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className={styles.heading}
+      >
         支援マネジメント
       </h1>
       {onBack ? (
