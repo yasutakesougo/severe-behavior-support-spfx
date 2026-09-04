@@ -124,7 +124,7 @@ export function buildManagementHomeReadModel(
       reason = ` / 理由: ${input.decisionReason.value.reason}`;
     }
 
-    if (!unavailableSections.includes("decisionReason")) {
+    if (unavailableSections.indexOf("decisionReason") < 0) {
       reviewUsable = true;
       reviewLabel = `見直し: ${review.decision} / ${review.reviewedAt} / ${review.reviewedBy}${reason}`;
     }
