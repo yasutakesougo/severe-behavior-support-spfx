@@ -13,11 +13,7 @@ export type ManagementHomeProps = Readonly<{
   onBack?: () => void;
 }>;
 
-export const ManagementHome: React.FC<ManagementHomeProps> = ({
-  presentation,
-  headingRef,
-  onBack,
-}) => {
+export const ManagementHome: React.FC<ManagementHomeProps> = ({ presentation, headingRef, onBack }) => {
   return (
     <section
       className={styles.root}
