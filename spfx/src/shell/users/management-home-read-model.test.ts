@@ -10,9 +10,10 @@ describe("SBS-MGMT-HOME-C read model", () => {
   it("uses SupportPlan.currentVersion as the current applied authority", () => {
     const result = buildManagementHomeReadModel(MANAGEMENT_HOME_RESOLVED_FIXTURE);
     expect(result.currentPlanLabel).toContain("v3");
-    expect(result.revisionLabel).toContain("Draft v4");
+    expect(result.revisionLabel).toContain("次版の下書き v4");
     expect(result.revisionLabel).toContain("未適用");
-    expect(result.revisionLabel).toContain("Intent CONSUMED");
+    expect(result.revisionLabel).toContain("次版の下書き作成済み");
+    expect(result.revisionLabel).not.toContain("CONSUMED");
   });
 
   it("keeps the reviewed previous version visible after the next version is applied", () => {
@@ -22,10 +23,25 @@ describe("SBS-MGMT-HOME-C read model", () => {
     });
 
     expect(result.currentPlanLabel).toContain("v4");
-    expect(result.reviewLabel).toContain("CHANGE_REQUIRED");
-    expect(result.revisionLabel).toContain("Draft v4");
+    expect(result.reviewLabel).toContain("変更が必要");
+    expect(result.reviewLabel).not.toContain("CHANGE_REQUIRED");
+    expect(result.revisionLabel).toContain("次版の下書き v4");
     expect(result.revisionLabel).toContain("現在適用中");
     expect(result.nextActionLabel).toBe("次に必要な人の行動: 新しい版が現在適用中");
+  });
+
+  it("formats dates and workflow terms for staff presentation", () => {
+    const result = buildManagementHomeReadModel(MANAGEMENT_HOME_RESOLVED_FIXTURE);
+    const text = JSON.stringify(result);
+
+    expect(result.monitoringLabel).toContain("2026年8月1日 00:00");
+    expect(result.monitoringLabel).toContain("2026年8月31日 23:59");
+    expect(result.reviewLabel).toContain("変更が必要");
+    expect(result.reviewLabel).toContain("2026年9月1日 10:00");
+    expect(result.reviewDueLabel).toBe("次回確認: 2026年9月23日");
+    expect(text).not.toContain("CHANGE_REQUIRED");
+    expect(text).not.toContain("CONSUMED");
+    expect(text).not.toMatch(/2026-\d{2}-\d{2}T/);
   });
 
   it("keeps confirmed none distinct from unavailable", () => {
@@ -153,7 +169,8 @@ describe("SBS-MGMT-HOME-C read model", () => {
 
   it("preserves NO_CHANGE and CHANGE_REQUIRED as human review decisions", () => {
     const changeRequired = buildManagementHomeReadModel(MANAGEMENT_HOME_RESOLVED_FIXTURE);
-    expect(changeRequired.reviewLabel).toContain("CHANGE_REQUIRED");
+    expect(changeRequired.reviewLabel).toContain("変更が必要");
+    expect(changeRequired.reviewLabel).not.toContain("CHANGE_REQUIRED");
 
     const reviewSlot = MANAGEMENT_HOME_RESOLVED_FIXTURE.reviewOutcome;
     if (reviewSlot.status !== "RESOLVED" || reviewSlot.value === null) {
@@ -169,7 +186,8 @@ describe("SBS-MGMT-HOME-C read model", () => {
       revisionIntent: { status: "RESOLVED", value: null },
       draft: { status: "RESOLVED", value: null },
     });
-    expect(noChange.reviewLabel).toContain("NO_CHANGE");
+    expect(noChange.reviewLabel).toContain("変更なし");
+    expect(noChange.reviewLabel).not.toContain("NO_CHANGE");
     expect(noChange.nextActionLabel).toBe("次に必要な人の行動: 次回見直し時期を確認");
     expect(JSON.stringify(noChange)).not.toContain("EFFECTIVE");
     expect(JSON.stringify(noChange)).not.toContain("INEFFECTIVE");
