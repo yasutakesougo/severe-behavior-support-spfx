@@ -3,17 +3,19 @@
 ```text
 unit: SBS-MGMT-PLAN-ACTIVATION-C-NEXT-VERSION-COPY-SIMPLIFICATION-2
 kind: Scope Definition
-mode: READ-ONLY / SCOPE DEFINITION ONLY
+mode: IMPLEMENTATION (after-apply ⑥ presentation only)
 date: 2026-09-04
 authority: Human after-apply copy correction (display inconsistency + density)
 Staff T1–T5 = PASS
 FUNCTIONAL COMPREHENSION = PASS
 Usability finding = CORRECTION REQUIRED
 Human Ready GO = HOLD
-Human UI Copy Correction Start GO — SIMPLIFICATION-2 = NOT RECEIVED
-Implementation = NOT AUTHORIZED
-Proposal A product candidate = fed08fd49d12fccf323991fb95a4f5e58d6f9e55
-PR #589 tip / CI authority = f85ee757a9795b62ad5da475dc0aebc78e3ad6d3
+Human UI Copy Correction Start GO — SIMPLIFICATION-2 = RECEIVED
+Implementation = COMPLETE LOCALLY
+Proposal A historical product = fed08fd49d12fccf323991fb95a4f5e58d6f9e55
+PR #589 tip / historical CI = f85ee757a9795b62ad5da475dc0aebc78e3ad6d3
+  = NOT SIMPLIFICATION-2 implementation CI authority
+SIMPLIFICATION-2 SupportPlan mutation HEAD = 1cde2182ff1adbbd8414a0c6fca398169d29c7b8
 #584 @ 5437e64 = FROZEN / historical basis only
 Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
@@ -284,16 +286,26 @@ After-apply で `next-version-number` を出さない。selector 削除ではな
 ## GATE
 
 ```text
-Actual Staff functional comprehension = PASS
-Usability finding = CORRECTION REQUIRED
+NEXT-VERSION-COPY-SIMPLIFICATION-2
+
+Implementation = COMPLETE LOCALLY
+Focused Verification = PASS
+Rendered Visual Check = PASS
+Functional regression = NOT OBSERVED
+Scope = presentation copy only
+  Apply / version transition / session / CAS / schema unchanged
+Boundary sentence = RETAIN 「本番には保存されていません」
+  Human shorthand 「本番未保存」 is locked as non-exact retain
+  see boundary-copy-lock-1.md
+「過去の版」見出し = OUT
 Human Ready GO = HOLD
-Human UI Copy Correction Start GO — SIMPLIFICATION-2 = NOT RECEIVED
-Implementation = NOT AUTHORIZED
-Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
+#589 @ f85ee757 = NOT this implementation's exact-head CI authority
 
 NEXT
-Minimal Scope Definition
-→ Ponytail / Minimality Scope Review
-→ Independent Scope Review
-→ Human UI Copy Correction Start GO
+Exact Implementation HEAD Fixation
+→ exact-head CI
+→ Ponytail / Minimality Implementation Review
+→ Independent Implementation Review
+→ Actual Staff Re-Check
+→ Human Ready GO / HOLD
 ```
