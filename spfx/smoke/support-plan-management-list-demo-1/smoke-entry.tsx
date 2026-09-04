@@ -4,6 +4,13 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { ManagementHome } from "../../src/shell/users/ManagementHome";
+import {
+  MANAGEMENT_HOME_MISMATCH_FIXTURE,
+  MANAGEMENT_HOME_RESOLVED_FIXTURE,
+  MANAGEMENT_HOME_UNAVAILABLE_FIXTURE,
+} from "../../src/shell/users/management-home-fixture";
+import { buildManagementHomeReadModel } from "../../src/shell/users/management-home-read-model";
 import {
   AppShellChrome,
   DASHBOARD_UX_OVERVIEW_FIXTURE,
@@ -31,6 +38,13 @@ import {
   type ShellSiteSelection,
   type ShellViewMode,
 } from "../../src/shell/ux";
+
+type ManagementHomeCase = "resolved" | "unavailable" | "mismatch";
+
+function managementHomeCase(): ManagementHomeCase | null {
+  const value = new URLSearchParams(window.location.search).get("managementHome");
+  return value === "resolved" || value === "unavailable" || value === "mismatch" ? value : null;
+}
 
 function parseParams(): {
   viewMode: ShellViewMode;
@@ -64,6 +78,21 @@ function parseParams(): {
 }
 
 const SmokeApp: React.FC = () => {
+  const homeCase = managementHomeCase();
+  if (homeCase) {
+    const fixture =
+      homeCase === "resolved"
+        ? MANAGEMENT_HOME_RESOLVED_FIXTURE
+        : homeCase === "mismatch"
+          ? MANAGEMENT_HOME_MISMATCH_FIXTURE
+          : MANAGEMENT_HOME_UNAVAILABLE_FIXTURE;
+    return (
+      <div data-shell-ux="smoke-root" data-management-home-case={homeCase}>
+        <ManagementHome presentation={buildManagementHomeReadModel(fixture)} />
+      </div>
+    );
+  }
+
   const initial = parseParams();
   const [selectedDestination, setSelectedDestination] = React.useState<ShellPrimaryNavigationId>(
     initial.selectedDestination,

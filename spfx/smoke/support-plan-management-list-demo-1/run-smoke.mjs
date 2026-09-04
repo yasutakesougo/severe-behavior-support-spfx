@@ -39,6 +39,7 @@ const scssPaths = [
   "src/shell/users/UserDetailUx.module.scss",
   "src/shell/users/SupportPlanUx.module.scss",
   "src/shell/users/SupportPlanManagementListUx.module.scss",
+  "src/shell/users/ManagementHomeUx.module.scss",
   "src/shell/review/ReviewDueStateUx.module.scss",
 ];
 
@@ -187,6 +188,26 @@ function assertPlannerList() {
     heading: heading?.textContent ?? "",
     rowCount: rows.length,
     kpiNeeds: kpiNeeds?.getAttribute("data-support-plan-mgmt-kpi-count") ?? "",
+    overflow,
+  };
+}
+
+function assertManagementHome(expectUnavailable = false) {
+  const home = document.querySelector('[data-demo-ux="management-home"]');
+  const unavailable = document.querySelector('[data-demo-ux="management-home-unavailable"]');
+  const text = document.body?.textContent ?? "";
+  const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  return {
+    pass:
+      Boolean(home) &&
+      text.indexOf("支援マネジメント") >= 0 &&
+      text.indexOf("現在の計画") >= 0 &&
+      text.indexOf("見直し状況") >= 0 &&
+      text.indexOf("変更対応状況") >= 0 &&
+      text.indexOf("次に必要な人の行動") >= 0 &&
+      (expectUnavailable ? Boolean(unavailable) : !unavailable) &&
+      !overflow,
+    unavailable: Boolean(unavailable),
     overflow,
   };
 }
@@ -423,12 +444,49 @@ async function recordCase(name, page, url, found, errors) {
   await page.close();
 }
 
+const managementHomeCases = [
+  {
+    name: "management-home-1280",
+    query: "managementHome=resolved",
+    viewport: { width: 1280, height: 900, deviceScaleFactor: 1 },
+    expectUnavailable: false,
+  },
+  {
+    name: "management-home-390",
+    query: "managementHome=resolved",
+    viewport: { width: 390, height: 844, deviceScaleFactor: 1 },
+    expectUnavailable: false,
+  },
+  {
+    name: "management-home-unavailable",
+    query: "managementHome=unavailable",
+    viewport: { width: 1280, height: 900, deviceScaleFactor: 1 },
+    expectUnavailable: true,
+  },
+  {
+    name: "management-home-mismatch",
+    query: "managementHome=mismatch",
+    viewport: { width: 390, height: 844, deviceScaleFactor: 1 },
+    expectUnavailable: true,
+  },
+];
+
+for (const managementHomeCase of managementHomeCases) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
+  const url = await smokeGoto(page, managementHomeCase.query, managementHomeCase.viewport);
+  const found = await page.evaluate(assertManagementHome, managementHomeCase.expectUnavailable);
+  await recordCase(managementHomeCase.name, page, url, found, errors);
+  await page.close();
+}
+
 const report = {
-  unit: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1",
-  kind: "browser smoke / Planning PC support-plan management list",
+  unit: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 + SBS-MGMT-HOME-C",
+  kind: "browser smoke / Planning PC support-plan management list + read-only Management Home",
   date: new Date().toISOString(),
   sliceFlags: {
-    id: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1",
+    id: "SBS-MGMT-HOME-C",
     presentationOnly: true,
     plannerUsersDestinationListAuthorized: true,
     liveWriteAuthorized: false,
