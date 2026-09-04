@@ -8,9 +8,17 @@ export type ManagementHomeProps = Readonly<{
   onBack?: () => void;
 }>;
 
-export const ManagementHome: React.FC<ManagementHomeProps> = ({ presentation, headingRef, onBack }) => {
+export const ManagementHome: React.FC<ManagementHomeProps> = ({
+  presentation,
+  headingRef,
+  onBack,
+}) => {
   return (
-    <section className={styles.root} data-demo-ux="management-home" aria-labelledby="management-home-heading">
+    <section
+      className={styles.root}
+      data-demo-ux="management-home"
+      aria-labelledby="management-home-heading"
+    >
       <h1 id="management-home-heading" ref={headingRef} tabIndex={-1} className={styles.heading}>
         支援マネジメント
       </h1>
@@ -24,7 +32,9 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ presentation, he
         <section className={styles.card} aria-labelledby="management-home-current-plan">
           <h2 id="management-home-current-plan">現在の計画</h2>
           <p>{presentation.currentPlanLabel}</p>
-          {presentation.provenanceLabel ? <p className={styles.secondary}>{presentation.provenanceLabel}</p> : null}
+          {presentation.provenanceLabel ? (
+            <p className={styles.secondary}>{presentation.provenanceLabel}</p>
+          ) : null}
         </section>
         <section className={styles.card} aria-labelledby="management-home-review">
           <h2 id="management-home-review">見直し状況</h2>
@@ -42,7 +52,11 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ presentation, he
         </section>
       </div>
       {presentation.unavailableSections.length > 0 ? (
-        <p className={styles.unavailable} role="status" data-demo-ux="management-home-unavailable">
+        <p
+          className={styles.unavailable}
+          role="status"
+          data-demo-ux="management-home-unavailable"
+        >
           一部の情報を確認できません。確認できない情報から状態や次の行動を推測していません。
         </p>
       ) : null}
