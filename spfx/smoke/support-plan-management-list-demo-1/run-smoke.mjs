@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-/**
- * SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 browser smoke runner (Chrome via puppeteer-core).
- * Scope: PLANNER support-plan management list + demo navigation.
- * No live plan mutation / auth judgment / adapter / live I/O / Schema change.
- */
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
@@ -39,6 +34,7 @@ const scssPaths = [
   "src/shell/users/UserDetailUx.module.scss",
   "src/shell/users/SupportPlanUx.module.scss",
   "src/shell/users/SupportPlanManagementListUx.module.scss",
+  "src/shell/users/ManagementHomeUx.module.scss",
   "src/shell/review/ReviewDueStateUx.module.scss",
 ];
 
@@ -191,6 +187,26 @@ function assertPlannerList() {
   };
 }
 
+function assertManagementHome(expectUnavailable = false) {
+  const home = document.querySelector('[data-demo-ux="management-home"]');
+  const unavailable = document.querySelector('[data-demo-ux="management-home-unavailable"]');
+  const text = document.body?.textContent ?? "";
+  const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  return {
+    pass:
+      Boolean(home) &&
+      text.indexOf("支援マネジメント") >= 0 &&
+      text.indexOf("現在の計画") >= 0 &&
+      text.indexOf("見直し状況") >= 0 &&
+      text.indexOf("変更対応状況") >= 0 &&
+      text.indexOf("次に必要な人の行動") >= 0 &&
+      (expectUnavailable ? Boolean(unavailable) : !unavailable) &&
+      !overflow,
+    unavailable: Boolean(unavailable),
+    overflow,
+  };
+}
+
 async function smokeGoto(page, query, viewport) {
   if (viewport) {
     await page.setViewport(viewport);
@@ -328,13 +344,11 @@ async function recordCase(name, page, url, found, errors) {
     page,
     "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=FIELD_STAFF",
   );
-  const found = await page.evaluate(() => {
-    const users = document.querySelector('[data-demo-ux="users-list"]');
-    const list = document.querySelector('[data-demo-ux="support-plan-management-list"]');
-    return {
-      pass: Boolean(users) && !list,
-    };
-  });
+  const found = await page.evaluate(() => ({
+    pass:
+      Boolean(document.querySelector('[data-demo-ux="users-list"]')) &&
+      !document.querySelector('[data-demo-ux="support-plan-management-list"]'),
+  }));
   await recordCase("field-staff-users-list-regression", page, url, found, errors);
   await page.close();
 }
@@ -347,13 +361,11 @@ async function recordCase(name, page, url, found, errors) {
     page,
     "viewMode=ready&siteSelection=SITE-ISG&destination=users&presentationRole=ADMIN_AUDIT",
   );
-  const found = await page.evaluate(() => {
-    const users = document.querySelector('[data-demo-ux="users-list"]');
-    const list = document.querySelector('[data-demo-ux="support-plan-management-list"]');
-    return {
-      pass: Boolean(users) && !list,
-    };
-  });
+  const found = await page.evaluate(() => ({
+    pass:
+      Boolean(document.querySelector('[data-demo-ux="users-list"]')) &&
+      !document.querySelector('[data-demo-ux="support-plan-management-list"]'),
+  }));
   await recordCase("admin-audit-users-list-unchanged", page, url, found, errors);
   await page.close();
 }
@@ -373,23 +385,15 @@ async function recordCase(name, page, url, found, errors) {
     const button = document.querySelector(
       '[data-demo-ux="support-plan-mgmt-action"][data-support-plan-mgmt-user-id="user-a"]',
     );
-    if (button instanceof HTMLElement) {
-      button.focus();
-    }
+    if (button instanceof HTMLElement) button.focus();
   });
   await page.keyboard.press("Enter");
-  await page.waitForFunction(() =>
-    Boolean(document.querySelector('[data-demo-ux="support-plan"]')),
-  );
+  await page.waitForFunction(() => Boolean(document.querySelector('[data-demo-ux="support-plan"]')));
   const found = await page.evaluate((beforeTag) => {
     const plan = document.querySelector('[data-demo-ux="support-plan"]');
     const heading = document.querySelector('[data-demo-ux="support-plan-heading"]');
     const active = document.activeElement;
-    return {
-      pass: Boolean(plan) && Boolean(heading) && (active === heading || Boolean(plan)),
-      beforeTag,
-      activeTag: active?.tagName ?? "",
-    };
+    return { pass: Boolean(plan) && Boolean(heading) && (active === heading || Boolean(plan)), beforeTag };
   }, before);
   await recordCase("keyboard-detail-enter", page, url, found, errors);
   await page.close();
@@ -423,14 +427,28 @@ async function recordCase(name, page, url, found, errors) {
   await page.close();
 }
 
+for (const [name, query, viewport, expectUnavailable] of [
+  ["management-home-1280", "managementHome=resolved", { width: 1280, height: 900, deviceScaleFactor: 1 }, false],
+  ["management-home-390", "managementHome=resolved", { width: 390, height: 844, deviceScaleFactor: 1 }, false],
+  ["management-home-unavailable", "managementHome=unavailable", { width: 1280, height: 900, deviceScaleFactor: 1 }, true],
+  ["management-home-mismatch", "managementHome=mismatch", { width: 390, height: 844, deviceScaleFactor: 1 }, true],
+]) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(`pageerror: ${error.message}`));
+  const url = await smokeGoto(page, query, viewport);
+  const found = await page.evaluate(assertManagementHome, expectUnavailable);
+  await recordCase(name, page, url, found, errors);
+  await page.close();
+}
+
 const report = {
-  unit: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1",
-  kind: "browser smoke / Planning PC support-plan management list",
+  unit: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1 + SBS-MGMT-HOME-C",
+  kind: "browser smoke / Planning PC support-plan management list + read-only Management Home",
   date: new Date().toISOString(),
   sliceFlags: {
-    id: "SUPPORT-PLAN-MANAGEMENT-LIST-DEMO-1",
+    id: "SBS-MGMT-HOME-C",
     presentationOnly: true,
-    plannerUsersDestinationListAuthorized: true,
     liveWriteAuthorized: false,
     deployAuthorized: false,
   },
