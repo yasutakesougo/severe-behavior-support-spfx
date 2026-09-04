@@ -13,19 +13,18 @@ export type ManagementHomeProps = Readonly<{
   onBack?: () => void;
 }>;
 
-export const ManagementHome: React.FC<ManagementHomeProps> = ({ presentation, headingRef, onBack }) => {
+export const ManagementHome: React.FC<ManagementHomeProps> = ({
+  presentation,
+  headingRef,
+  onBack,
+}) => {
   return (
     <section
       className={styles.root}
       data-demo-ux="management-home"
       aria-labelledby="management-home-heading"
     >
-      <h1
-        id="management-home-heading"
-        ref={headingRef}
-        tabIndex={-1}
-        className={styles.heading}
-      >
+      <h1 id="management-home-heading" ref={headingRef} tabIndex={-1} className={styles.heading}>
         支援マネジメント
       </h1>
       {onBack ? (
@@ -58,11 +57,7 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ presentation, he
         </section>
       </div>
       {presentation.unavailableSections.length > 0 ? (
-        <p
-          className={styles.unavailable}
-          role="status"
-          data-demo-ux="management-home-unavailable"
-        >
+        <p className={styles.unavailable} role="status" data-demo-ux="management-home-unavailable">
           一部の情報を確認できません。確認できない情報から状態や次の行動を推測していません。
         </p>
       ) : null}
