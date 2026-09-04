@@ -18,6 +18,35 @@ const basePlan = {
   reviewDueDate: "2026-09-23T23:59:59+09:00",
 };
 
+const monitoringRecords = [
+  {
+    RecordId: "mh-record-1",
+    Procedure: {
+      ProcedureId: "mh-procedure-1",
+      ProcedureVersion: "1",
+      ApprovalState: "APPROVED" as const,
+    },
+    result: "PERFORMED_AS_PLANNED" as const,
+    performedAt: "2026-08-12T10:00:00+09:00",
+    recordedAt: "2026-08-12T10:05:00+09:00",
+    planId: basePlan.PlanId,
+    planVersion: 3,
+  },
+  {
+    RecordId: "mh-record-2",
+    Procedure: {
+      ProcedureId: "mh-procedure-1",
+      ProcedureVersion: "1",
+      ApprovalState: "APPROVED" as const,
+    },
+    result: "PERFORMED_WITH_ADAPTATION" as const,
+    performedAt: "2026-08-20T10:00:00+09:00",
+    recordedAt: "2026-08-20T10:04:00+09:00",
+    planId: basePlan.PlanId,
+    planVersion: 3,
+  },
+];
+
 const monitoring = {
   OrganizationId: basePlan.OrganizationId,
   SiteId: basePlan.SiteId,
@@ -26,8 +55,8 @@ const monitoring = {
   planVersion: 3,
   periodStart: "2026-08-01T00:00:00+09:00",
   periodEnd: "2026-08-31T23:59:59+09:00",
-  recordCount: 2,
-  records: [],
+  recordCount: monitoringRecords.length,
+  records: monitoringRecords,
 };
 
 const reviewOutcome = {
@@ -39,7 +68,7 @@ const reviewOutcome = {
   planVersion: 3,
   periodStart: monitoring.periodStart,
   periodEnd: monitoring.periodEnd,
-  sourceRecordIds: ["mh-record-1", "mh-record-2"],
+  sourceRecordIds: monitoringRecords.map((record) => record.RecordId),
   decision: "CHANGE_REQUIRED" as const,
   reviewedAt: "2026-09-01T10:00:00+09:00",
   reviewedBy: "synthetic-reviewer",
