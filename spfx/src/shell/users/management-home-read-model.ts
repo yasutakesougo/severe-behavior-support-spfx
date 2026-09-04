@@ -57,15 +57,11 @@ function samePlanIdentity(
   );
 }
 
-function unavailable<T>(
-  slot: SourceSlot<T>,
-): slot is Readonly<{ status: "UNAVAILABLE"; reason: string }> {
+function unavailable<T>(slot: SourceSlot<T>): slot is Readonly<{ status: "UNAVAILABLE"; reason: string }> {
   return slot.status === "UNAVAILABLE";
 }
 
-export function buildManagementHomeReadModel(
-  input: ManagementHomeInput,
-): ManagementHomePresentation {
+export function buildManagementHomeReadModel(input: ManagementHomeInput): ManagementHomePresentation {
   const unavailableSections: string[] = [];
   const currentVersion = input.plan.currentVersion;
 
