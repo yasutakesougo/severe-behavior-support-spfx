@@ -266,6 +266,27 @@ describe("SBS-MGMT-PLAN-ACTIVATION-C support-plan activation domain", () => {
     }
   });
 
+  it("L: forged RevisionIntentId with a matching snapshot still fails closed", () => {
+    const draft = createDraft();
+    const forgedDraft: SupportPlanRevisionDraftCandidate = {
+      ...draft,
+      RevisionIntentId: "forged-revision-intent",
+    };
+    const result = applySupportPlanActivation({
+      currentPlan: plan,
+      draft: forgedDraft,
+      confirmedDraftSnapshotId: mintDraftSnapshotId(forgedDraft),
+      expectedCurrentVersion: 3,
+      expectedRowVersion: 1,
+      actor,
+      actionAt,
+    });
+    assert.equal(result.status, "HOLD");
+    if (result.status === "HOLD") {
+      assert.equal(result.reason, "REVISION_INTENT_MISMATCH");
+    }
+  });
+
   it("mintDraftSnapshotId is deterministic for the same draft", () => {
     const draft = createDraft();
     assert.equal(mintDraftSnapshotId(draft), mintDraftSnapshotId(draft));
