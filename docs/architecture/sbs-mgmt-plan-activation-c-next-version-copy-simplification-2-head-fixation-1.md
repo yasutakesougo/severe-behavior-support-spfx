@@ -11,7 +11,7 @@ date: 2026-09-04
 ```text
 branch: cursor/583-next-version-copy-2-impl-d006
 product implementation HEAD: fb7ced5f83c2907b94e93feefc75b3b17ba1ac31
-docs tip (verification / RBA / reviews): 9436d025ccf43bf6c0794411590cd6b8ce7cd1b2
+docs tip (verification / RBA / reviews): bb8adf3d7baabe36821089ad860a3d1649392e27
 base (Proposal A tip / PR #589): f85ee757a9795b62ad5da475dc0aebc78e3ad6d3
 PR: #592 (Draft)
 ```
