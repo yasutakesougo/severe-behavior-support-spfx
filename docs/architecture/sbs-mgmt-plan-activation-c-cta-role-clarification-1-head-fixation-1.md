@@ -11,9 +11,10 @@ Human Ready GO = HOLD
 
 | Role | SHA / meaning |
 |---|---|
-| Prior PRODUCT UNDER TEST (Staff Re-Check bind) | `11c8769b0769a842b5389379323c7ce821dcb6bd` |
-| CTA-ROLE SupportPlan + B12 mutation tip | `9dacbeb15cae6f64b9692d9e00ab2ee2b849fcab` |
-| Exact-head CI / Implementation HEAD | `9dacbeb15cae6f64b9692d9e00ab2ee2b849fcab` |
+| Prior PRODUCT UNDER TEST (Staff Re-Check parent) | `11c8769b0769a842b5389379323c7ce821dcb6bd` |
+| SupportPlan presentation mutation | `6a5c7d7c391021c748821a7cc7f2d3db5956c812` |
+| B12 PRESENT/ABSENT assert lock | `9dacbeb15cae6f64b9692d9e00ab2ee2b849fcab` |
+| Exact-head CI / Implementation HEAD (branch tip) | **re-bound after this fixation doc commit** |
 
 ```text
 Parent product basis = 11c8769b0769a842b5389379323c7ce821dcb6bd
@@ -35,7 +36,7 @@ a11y heading id
   draft status receives id only when !plannerProcess
 ```
 
-## Evidence at implementation HEAD
+## Evidence at mutation HEADs
 
 ```text
 typecheck PASS
