@@ -613,8 +613,10 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       </p>
       {planningPc && !plannerProcess ? capturedReviewSummary : null}
       {/* Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate.
-          CTA-ROLE-CLARIFICATION-1: hide while revisionDraft — Apply is the only meaningful action. */}
-      {!adminRead && !revisionDraft ? (
+          CTA-ROLE-CLARIFICATION-1: hide while revisionDraft — Apply is the only meaningful action.
+          POST-APPLY-CREATE-CTA-CLARIFICATION-1: hide while activationReceipt — do not re-show
+          display-only create after Apply (avoids「版5に進む？」ambiguity). */}
+      {!adminRead && !revisionDraft && !activationReceipt ? (
         <button
           type="button"
           className={styles.mutationButton}

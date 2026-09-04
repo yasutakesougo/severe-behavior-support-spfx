@@ -279,6 +279,7 @@ async function runHappyPath(name, width, height) {
     const liveWrite = document.querySelector("[data-sbs-mgmt-plan-activation-c-live-write]");
     const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
     const headingTexts = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim());
+    const createCta = document.querySelector('[data-review-new-version="create-cta"]');
     return {
       appliedPresent: Boolean(applied),
       activeIsV4: (active?.textContent ?? "").includes("現在適用中: 版 4"),
@@ -295,6 +296,9 @@ async function runHappyPath(name, width, height) {
       afterApplyKeepsInvalidatingNotes:
         nextVersionText.includes("観察の不足だけでは") &&
         nextVersionText.includes("見直し期限の超過だけでは"),
+      // POST-APPLY-CREATE-CTA-CLARIFICATION-1: display-only create-cta must not return after Apply.
+      createCtaAbsentAfterApply: createCta === null,
+      createCtaCopyGoneAfterApply: !nextVersionText.includes("次の版を作る（表示専用）"),
       draftCleared: draftGone === null,
       applyCleared: applyGone === null,
       currentVersionIsV4: (currentVersion?.textContent ?? "").includes("版 4"),
@@ -355,6 +359,8 @@ async function runHappyPath(name, width, height) {
     afterApply.nextVersionHeadingGone &&
     afterApply.afterApplyShortNotes &&
     afterApply.afterApplyKeepsInvalidatingNotes &&
+    afterApply.createCtaAbsentAfterApply &&
+    afterApply.createCtaCopyGoneAfterApply &&
     afterApply.draftCleared &&
     afterApply.applyCleared &&
     afterApply.currentVersionIsV4 &&
