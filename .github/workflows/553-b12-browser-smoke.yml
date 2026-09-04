@@ -36,10 +36,25 @@ jobs:
         env:
           SBS_MGMT_LOOP_B_ARTIFACTS_DIR: /tmp/sbs-mgmt-loop-b-browser-smoke
         run: node spfx/smoke/sbs-mgmt-loop-b/run-smoke.mjs
+      - name: Run #554 Management Home browser acceptance
+        env:
+          SPML_PUPPETEER_PATH: ${{ env.SBS_MGMT_LOOP_B_PUPPETEER_PATH }}
+          SPML_ESBUILD_PATH: ${{ env.SBS_MGMT_LOOP_B_ESBUILD_PATH }}
+          SPML_SASS_PATH: ${{ env.SBS_MGMT_LOOP_B_SASS_PATH }}
+          SPML_CHROME_PATH: /usr/bin/google-chrome
+          SPML_ARTIFACTS_DIR: /tmp/554-management-home-browser-smoke
+        run: node spfx/smoke/support-plan-management-list-demo-1/run-smoke.mjs
       - name: Upload B12 evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: sbs-mgmt-loop-b-b12-browser-smoke
           path: /tmp/sbs-mgmt-loop-b-browser-smoke
+          if-no-files-found: error
+      - name: Upload #554 Management Home evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: 554-management-home-browser-smoke
+          path: /tmp/554-management-home-browser-smoke
           if-no-files-found: error
