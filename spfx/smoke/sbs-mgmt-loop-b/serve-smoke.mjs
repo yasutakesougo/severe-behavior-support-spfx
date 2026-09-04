@@ -173,7 +173,9 @@ const coldUrl = `http://127.0.0.1:${port}/index.html?viewMode=ready&siteSelectio
 console.log("");
 console.log(`Verification harness ready @ product HEAD ${productSourceHead} (no LIVE WRITE).`);
 console.log(`Staff Apply 前: ${staffBeforeApplyUrl}`);
-console.log("  → harness drives the product DOM from this exact checkout until 「版 4 を適用開始する」.");
+console.log(
+  "  → harness drives the product DOM from this exact checkout until 「版 4 を適用開始する」.",
+);
 console.log(`Cold / default: ${coldUrl}`);
 console.log("  → empty session; Apply must stay unmounted.");
 console.log("Ctrl+C to stop.");
