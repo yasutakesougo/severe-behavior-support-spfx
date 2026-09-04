@@ -71,7 +71,7 @@ const reviewOutcome = {
   sourceRecordIds: monitoringRecords.map((record) => record.RecordId),
   decision: "CHANGE_REQUIRED" as const,
   reviewedAt: "2026-09-01T10:00:00+09:00",
-  reviewedBy: "synthetic-reviewer",
+  reviewedBy: "計画担当A",
 };
 
 const revisionIntent = {
