@@ -560,14 +560,15 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     <section
       className={styles.detailSection}
       aria-labelledby={
-        activationReceipt && plannerProcess
+        (activationReceipt || revisionDraft) && plannerProcess
           ? "planner-process-next-version-heading"
           : "review-new-version-next-heading"
       }
       data-review-new-version="next-version-concept"
       data-review-new-version-highlighted={nextVersionConceptHighlighted ? "true" : "false"}
     >
-      {activationReceipt ? null : (
+      {/* CTA-ROLE-CLARIFICATION-1: while revisionDraft exists, hide cold next-version concept chrome. */}
+      {activationReceipt || revisionDraft ? null : (
         <h2 id="review-new-version-next-heading" tabIndex={-1}>
           {SUPPORT_PLAN_NEXT_VERSION_HEADING}
         </h2>
@@ -586,7 +587,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             {SUPPORT_PLAN_AFTER_APPLY_HISTORY_PREFIX}: 版 {activationReceipt.fromVersion}
           </p>
         </div>
-      ) : (
+      ) : revisionDraft ? null : (
         <>
           <p className={styles.sectionHint} data-review-new-version="immutability-note">
             {SUPPORT_PLAN_NEXT_VERSION_NOTE}
@@ -611,8 +612,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         {SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE}
       </p>
       {planningPc && !plannerProcess ? capturedReviewSummary : null}
-      {/* Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate. */}
-      {!adminRead ? (
+      {/* Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate.
+          CTA-ROLE-CLARIFICATION-1: hide while revisionDraft — Apply is the only meaningful action. */}
+      {!adminRead && !revisionDraft ? (
         <button
           type="button"
           className={styles.mutationButton}
@@ -626,7 +628,12 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         </button>
       ) : null}
       {activationReceipt ? null : revisionDraft ? (
-        <div role="status" data-sbs-mgmt-loop-b-draft="true">
+        <div
+          role="status"
+          id={plannerProcess ? undefined : "review-new-version-next-heading"}
+          tabIndex={plannerProcess ? undefined : -1}
+          data-sbs-mgmt-loop-b-draft="true"
+        >
           <p data-sbs-mgmt-loop-b-active-version="true">
             {SUPPORT_PLAN_DRAFT_ACTIVE_LABEL}: 版 {revisionDraft.reviewBinding.reviewedPlanVersion}
           </p>

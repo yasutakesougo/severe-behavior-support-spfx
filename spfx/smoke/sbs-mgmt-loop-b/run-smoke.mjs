@@ -203,6 +203,14 @@ async function runHappyPath(name, width, height) {
     const draftLifecycle = document.querySelector('[data-sbs-mgmt-loop-b-draft-lifecycle="true"]');
     const apply = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
     const applyText = apply?.textContent ?? "";
+    const nextVersionNumber = document.querySelector(
+      '[data-review-new-version="next-version-number"]',
+    );
+    const nextVersionBlock = document.querySelector(
+      '[data-review-new-version="next-version-concept"]',
+    );
+    const nextVersionText = nextVersionBlock?.textContent ?? "";
+    const headingTexts = [...document.querySelectorAll("h2")].map((el) => el.textContent?.trim());
     return {
       draftCount: drafts.length,
       draftHasNPlusOne: (draftLifecycle?.textContent ?? "").includes("下書き: 版 4"),
@@ -216,6 +224,13 @@ async function runHappyPath(name, width, height) {
         "は下書きです。まだ適用開始されていません",
       ),
       removedDraftStatusLine: !(draft?.textContent ?? "").includes("状態: 下書き / 本番未保存"),
+      // CTA-ROLE-CLARIFICATION-1: competing cold chrome hidden while draft exists.
+      nextVersionHeadingGoneWhileDraft: !headingTexts.includes("次の版の考え方"),
+      conceptualNextGoneWhileDraft:
+        nextVersionNumber === null && !nextVersionText.includes("次に重ねる概念上の版"),
+      keepsInvalidatingNotesWhileDraft:
+        nextVersionText.includes("観察の不足だけでは") &&
+        nextVersionText.includes("見直し期限の超過だけでは"),
       boundaryNoLiveWrite: (boundary?.textContent ?? "").includes("本番には保存されていません"),
       liveWriteFalse: liveWrite?.getAttribute("data-sbs-mgmt-loop-b-live-write") === "false",
       decisionPresent: Boolean(decision),
@@ -223,7 +238,8 @@ async function runHappyPath(name, width, height) {
       reasonTextPresent: text.includes("Synthetic B12 human decision reason"),
       primaryCountAfterDraft: primaryActions.length,
       currentVersionStillN: (currentVersion?.textContent ?? "").includes("版 3"),
-      createCtaStillDisabled: createCta instanceof HTMLButtonElement && createCta.disabled,
+      // CTA-ROLE-CLARIFICATION-1: display-only create-cta is hidden while draft exists.
+      createCtaAbsentWhileDraft: createCta === null,
       startActionCleared: startGone === null,
       applyPresent: apply instanceof HTMLButtonElement && !apply.disabled,
       applyIsPrimary: apply?.getAttribute("data-sbs-action") === "primary",
@@ -312,7 +328,10 @@ async function runHappyPath(name, width, height) {
     found.reasonTextPresent &&
     found.primaryCountAfterDraft === 1 &&
     found.currentVersionStillN &&
-    found.createCtaStillDisabled &&
+    found.createCtaAbsentWhileDraft &&
+    found.nextVersionHeadingGoneWhileDraft &&
+    found.conceptualNextGoneWhileDraft &&
+    found.keepsInvalidatingNotesWhileDraft &&
     found.startActionCleared &&
     found.applyPresent &&
     found.applyIsPrimary &&
