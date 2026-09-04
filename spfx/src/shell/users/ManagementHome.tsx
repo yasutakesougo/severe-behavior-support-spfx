@@ -88,7 +88,9 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({ model, headingRe
             <p className={styles.meta}>対象期間の情報なしを確認</p>
           ) : model.monitoring.status === "RESOLVED" ? (
             <>
-              <p className={styles.primaryValue}>{`記録 ${model.monitoring.value.recordCount}件`}</p>
+              <p className={styles.primaryValue}>
+                {`記録 ${model.monitoring.value.recordCount}件`}
+              </p>
               <p className={styles.meta}>
                 {`${model.monitoring.value.periodStart.slice(0, 10)} ～ ${model.monitoring.value.periodEnd.slice(0, 10)}`}
               </p>
