@@ -24,6 +24,11 @@ jobs:
       - name: "Install SPFx dependencies for #554 browser acceptance"
         working-directory: spfx
         run: npm ci
+      - name: "Install Japanese fonts for #554 browser acceptance"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          fc-cache -f
       - name: Install isolated browser smoke runtime
         run: npm install --prefix /tmp --no-save puppeteer-core esbuild sass react@17.0.1 react-dom@17.0.1
       - name: Resolve isolated runtime package entries
