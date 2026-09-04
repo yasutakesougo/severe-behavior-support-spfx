@@ -242,21 +242,62 @@ async function runHappyPath(name, width, height) {
     );
     const history = document.querySelector('[data-sbs-mgmt-plan-activation-c-history="true"]');
     const receipt = document.querySelector('[data-sbs-mgmt-plan-activation-c-receipt="true"]');
+    const activationInfo = document.querySelector(
+      '[data-sbs-mgmt-plan-activation-c-info="true"]',
+    );
     const draftGone = document.querySelector('[data-sbs-mgmt-loop-b-draft="true"]');
     const applyGone = document.querySelector('[data-sbs-mgmt-plan-activation-c-action="apply"]');
     const currentVersion = document.querySelector('[data-planning-pc-version-current="true"]');
     const liveWrite = document.querySelector("[data-sbs-mgmt-plan-activation-c-live-write]");
+    const boundary = document.querySelector('[data-sbs-mgmt-loop-b-boundary="true"]');
+    const nextVersionNumber = document.querySelector(
+      '[data-review-new-version="next-version-number"]',
+    );
+    const longImmutabilityNote = document.querySelector(
+      '[data-review-new-version="immutability-note"]',
+    );
+    const afterApplyHint = document.querySelector(
+      '[data-review-new-version="after-apply-next-hint"]',
+    );
+    const observation = document.querySelector(
+      '[data-review-new-version="observation-not-invalidating"]',
+    );
+    const overdue = document.querySelector(
+      '[data-review-new-version="overdue-not-invalidating"]',
+    );
+    const createCta = document.querySelector('[data-review-new-version="create-cta"]');
     const primaryActions = document.querySelectorAll('[data-sbs-action="primary"]');
+    const sectionSix = document.querySelector(
+      '[data-process-visibility-ui-v1="next-version"]',
+    );
+    const sectionSixText = sectionSix?.textContent ?? "";
     return {
       appliedPresent: Boolean(applied),
       activeIsV4: (active?.textContent ?? "").includes("現在適用中: 版 4"),
-      historyIsV3: (history?.textContent ?? "").includes("版 3: 過去版"),
+      historyIsV3: (history?.textContent ?? "").includes("過去版: 版 3"),
       receiptPresent: (receipt?.textContent ?? "").includes("適用:"),
+      receiptInActivationInfo: Boolean(
+        activationInfo?.contains(receipt) && (receipt?.textContent ?? "").includes("適用:"),
+      ),
+      receiptNotInAppliedPrimary: !(applied?.textContent ?? "").includes("適用:"),
       draftCleared: draftGone === null,
       applyCleared: applyGone === null,
       currentVersionIsV4: (currentVersion?.textContent ?? "").includes("版 4"),
       liveWriteFalse:
         liveWrite?.getAttribute("data-sbs-mgmt-plan-activation-c-live-write") === "false",
+      boundaryShort: (boundary?.textContent ?? "").includes("本番未保存"),
+      nextVersionNumberHidden: nextVersionNumber === null,
+      longConceptHidden: longImmutabilityNote === null,
+      afterApplyHintClear: (afterApplyHint?.textContent ?? "").includes(
+        "次に変更するときは、新しい版を作ります。",
+      ),
+      observationRetained: (observation?.textContent ?? "").includes("観察の不足だけでは"),
+      overdueRetained: (overdue?.textContent ?? "").includes("見直し期限の超過だけでは"),
+      createCtaDisabled:
+        createCta instanceof HTMLButtonElement &&
+        createCta.disabled &&
+        (createCta.textContent ?? "").includes("次の版を作る（表示専用）"),
+      noConceptualMismatchInSix: !sectionSixText.includes("次に重ねる概念上の版は 4"),
       primaryCountAfterApply: primaryActions.length,
       overflowX: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
     };
@@ -301,10 +342,20 @@ async function runHappyPath(name, width, height) {
     afterApply.activeIsV4 &&
     afterApply.historyIsV3 &&
     afterApply.receiptPresent &&
+    afterApply.receiptInActivationInfo &&
+    afterApply.receiptNotInAppliedPrimary &&
     afterApply.draftCleared &&
     afterApply.applyCleared &&
     afterApply.currentVersionIsV4 &&
     afterApply.liveWriteFalse &&
+    afterApply.boundaryShort &&
+    afterApply.nextVersionNumberHidden &&
+    afterApply.longConceptHidden &&
+    afterApply.afterApplyHintClear &&
+    afterApply.observationRetained &&
+    afterApply.overdueRetained &&
+    afterApply.createCtaDisabled &&
+    afterApply.noConceptualMismatchInSix &&
     afterApply.primaryCountAfterApply <= 1 &&
     !afterApply.overflowX &&
     externalRequests.length === 0;

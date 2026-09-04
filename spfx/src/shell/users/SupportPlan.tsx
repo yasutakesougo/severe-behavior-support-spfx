@@ -23,6 +23,9 @@ import {
   PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT,
   SUPPORT_PLAN_CURRENT_PROCEDURES_HEADING,
   SUPPORT_PLAN_HISTORICAL_RECORD_NOTE,
+  SUPPORT_PLAN_ACTIVATION_INFO_HEADING,
+  SUPPORT_PLAN_AFTER_APPLY_BOUNDARY,
+  SUPPORT_PLAN_AFTER_APPLY_NEXT_VERSION_NOTE,
   SUPPORT_PLAN_DRAFT_ACTIVE_LABEL,
   SUPPORT_PLAN_DRAFT_DRAFT_LABEL,
   SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE,
@@ -544,6 +547,21 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
     </div>
   ) : null;
 
+  // Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate.
+  const createCtaButton = !adminRead ? (
+    <button
+      type="button"
+      className={styles.mutationButton}
+      disabled
+      aria-disabled="true"
+      data-demo-ux="support-plan-mutation-button"
+      data-review-new-version="create-cta"
+      data-sbs-action="tertiary"
+    >
+      {SUPPORT_PLAN_NEXT_VERSION_CTA}
+    </button>
+  ) : null;
+
   const nextVersionBlock = (
     <section
       className={styles.detailSection}
@@ -554,14 +572,19 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       <h2 id="review-new-version-next-heading" tabIndex={-1}>
         {SUPPORT_PLAN_NEXT_VERSION_HEADING}
       </h2>
-      <p className={styles.sectionHint} data-review-new-version="immutability-note">
-        {SUPPORT_PLAN_NEXT_VERSION_NOTE}
-      </p>
-      <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
-      <p data-review-new-version="next-version-number">
-        現行は版 {liveCurrentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion}{" "}
-        です。
-      </p>
+      {/* NEXT-VERSION-COPY-SIMPLIFICATION-2: hide long concept copy after Apply. */}
+      {!activationReceipt ? (
+        <>
+          <p className={styles.sectionHint} data-review-new-version="immutability-note">
+            {SUPPORT_PLAN_NEXT_VERSION_NOTE}
+          </p>
+          <p className={styles.sectionHint}>{SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE}</p>
+          <p data-review-new-version="next-version-number">
+            現行は版 {liveCurrentVersion}（適用中）。次に重ねる概念上の版は {conceptualNextVersion}{" "}
+            です。
+          </p>
+        </>
+      ) : null}
       <p className={styles.sectionHint} data-review-new-version="observation-not-invalidating">
         {SUPPORT_PLAN_OBSERVATION_NOT_INVALIDATING_NOTE}
       </p>
@@ -569,76 +592,76 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         {SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE}
       </p>
       {planningPc && !plannerProcess ? capturedReviewSummary : null}
-      {/* Scope Correction-1: retain non-executable create-cta predecessor; #553 CTA is separate. */}
-      {!adminRead ? (
-        <button
-          type="button"
-          className={styles.mutationButton}
-          disabled
-          aria-disabled="true"
-          data-demo-ux="support-plan-mutation-button"
-          data-review-new-version="create-cta"
-          data-sbs-action="tertiary"
-        >
-          {SUPPORT_PLAN_NEXT_VERSION_CTA}
-        </button>
-      ) : null}
       {activationReceipt ? (
-        <div role="status" data-sbs-mgmt-plan-activation-c="applied">
-          <p data-sbs-mgmt-plan-activation-c-active-version="true">
-            現在適用中: 版 {activationReceipt.activatedVersion}
-          </p>
-          <p data-sbs-mgmt-plan-activation-c-history="true">
-            版 {activationReceipt.fromVersion}: 過去版
-          </p>
-          <p data-sbs-mgmt-plan-activation-c-receipt="true">
-            適用: {activationReceipt.activatedBy} / {activationReceipt.activatedAt}
-          </p>
-        </div>
-      ) : revisionDraft ? (
-        <div role="status" data-sbs-mgmt-loop-b-draft="true">
-          <p data-sbs-mgmt-loop-b-active-version="true">
-            {SUPPORT_PLAN_DRAFT_ACTIVE_LABEL}: 版 {revisionDraft.reviewBinding.reviewedPlanVersion}
-          </p>
-          <p data-sbs-mgmt-loop-b-draft-lifecycle="true">
-            {SUPPORT_PLAN_DRAFT_DRAFT_LABEL}: 版 {revisionDraft.candidate.version}
-          </p>
-          {!adminRead ? (
-            <button
-              type="button"
-              className={styles.reviewMaterialsButtonPrimary}
-              onClick={handleActivationApply}
-              data-sbs-mgmt-plan-activation-c-action="apply"
-              data-sbs-action="primary"
-            >
-              版 {revisionDraft.candidate.version} を適用開始する
-            </button>
-          ) : null}
-        </div>
-      ) : revisionEligible && !adminRead ? (
         <>
-          <p className={styles.sectionHint} data-sbs-mgmt-loop-b-source-safety="true">
-            現在使用中の版 {liveCurrentVersion} は変更しません。版 {conceptualNextVersion}{" "}
-            の下書きを別に作ります。
-          </p>
-          <button
-            type="button"
-            className={styles.reviewMaterialsButtonPrimary}
-            onClick={handleRevisionStart}
-            data-sbs-mgmt-loop-b-action="start-revision"
-            data-sbs-action="primary"
+          <div role="status" data-sbs-mgmt-plan-activation-c="applied">
+            <p data-sbs-mgmt-plan-activation-c-active-version="true">
+              現在適用中: 版 {activationReceipt.activatedVersion}
+            </p>
+            <p data-sbs-mgmt-plan-activation-c-history="true">
+              過去版: 版 {activationReceipt.fromVersion}
+            </p>
+          </div>
+          <p
+            className={styles.sectionHint}
+            data-review-new-version="after-apply-next-hint"
           >
-            支援内容の見直しを始める（版 {conceptualNextVersion} の下書き）
-          </button>
+            {SUPPORT_PLAN_AFTER_APPLY_NEXT_VERSION_NOTE}
+          </p>
+          {createCtaButton}
         </>
-      ) : null}
+      ) : (
+        <>
+          {createCtaButton}
+          {revisionDraft ? (
+            <div role="status" data-sbs-mgmt-loop-b-draft="true">
+              <p data-sbs-mgmt-loop-b-active-version="true">
+                {SUPPORT_PLAN_DRAFT_ACTIVE_LABEL}: 版{" "}
+                {revisionDraft.reviewBinding.reviewedPlanVersion}
+              </p>
+              <p data-sbs-mgmt-loop-b-draft-lifecycle="true">
+                {SUPPORT_PLAN_DRAFT_DRAFT_LABEL}: 版 {revisionDraft.candidate.version}
+              </p>
+              {!adminRead ? (
+                <button
+                  type="button"
+                  className={styles.reviewMaterialsButtonPrimary}
+                  onClick={handleActivationApply}
+                  data-sbs-mgmt-plan-activation-c-action="apply"
+                  data-sbs-action="primary"
+                >
+                  版 {revisionDraft.candidate.version} を適用開始する
+                </button>
+              ) : null}
+            </div>
+          ) : revisionEligible && !adminRead ? (
+            <>
+              <p className={styles.sectionHint} data-sbs-mgmt-loop-b-source-safety="true">
+                現在使用中の版 {liveCurrentVersion} は変更しません。版 {conceptualNextVersion}{" "}
+                の下書きを別に作ります。
+              </p>
+              <button
+                type="button"
+                className={styles.reviewMaterialsButtonPrimary}
+                onClick={handleRevisionStart}
+                data-sbs-mgmt-loop-b-action="start-revision"
+                data-sbs-action="primary"
+              >
+                支援内容の見直しを始める（版 {conceptualNextVersion} の下書き）
+              </button>
+            </>
+          ) : null}
+        </>
+      )}
       <p
         className={styles.sectionHint}
         data-sbs-mgmt-loop-b-boundary="true"
         data-sbs-mgmt-loop-b-live-write="false"
         data-sbs-mgmt-plan-activation-c-live-write="false"
       >
-        本番には保存されていません
+        {activationReceipt
+          ? SUPPORT_PLAN_AFTER_APPLY_BOUNDARY
+          : "本番には保存されていません"}
       </p>
       {revisionError ? (
         <p role="alert" className={styles.sectionHint} data-sbs-mgmt-loop-b-error="true">
@@ -647,6 +670,19 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       ) : null}
     </section>
   );
+
+  const activationInfoBlock = activationReceipt ? (
+    <section
+      className={styles.detailSection}
+      aria-labelledby="plan-activation-info-heading"
+      data-sbs-mgmt-plan-activation-c-info="true"
+    >
+      <h2 id="plan-activation-info-heading">{SUPPORT_PLAN_ACTIVATION_INFO_HEADING}</h2>
+      <p data-sbs-mgmt-plan-activation-c-receipt="true">
+        適用: {activationReceipt.activatedBy} / {activationReceipt.activatedAt}
+      </p>
+    </section>
+  ) : null;
 
   const mutationBlock = (
     <section className={styles.detailSection} aria-labelledby="demo-ux-plan-mutation-heading">
@@ -827,6 +863,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
         "補助情報",
         <>
           {versionsBlock}
+          {activationInfoBlock}
           {mutationBlock}
           {stateGridBlock}
         </>,
@@ -997,6 +1034,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           {supportPlanBlockOrderForRole(presentationRole).map((key) => (
             <React.Fragment key={key}>{blockByKey[key]}</React.Fragment>
           ))}
+          {activationInfoBlock}
           {stateGridBlock}
         </>
       )}

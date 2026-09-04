@@ -80,6 +80,14 @@ export const SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE =
 export const SUPPORT_PLAN_DRAFT_ACTIVE_LABEL = "適用中";
 export const SUPPORT_PLAN_DRAFT_DRAFT_LABEL = "下書き";
 
+/** NEXT-VERSION-COPY-SIMPLIFICATION-2 — after Apply ⑥ primary short copy. */
+export const SUPPORT_PLAN_AFTER_APPLY_NEXT_VERSION_NOTE =
+  "次に変更するときは、新しい版を作ります。";
+
+export const SUPPORT_PLAN_AFTER_APPLY_BOUNDARY = "本番未保存";
+
+export const SUPPORT_PLAN_ACTIVATION_INFO_HEADING = "適用情報";
+
 export const SUPPORT_PLAN_FORBIDDEN_STATUS_TOKENS = ["最終承認者", "承認済み"] as const;
 
 /** Fail-closed copy must not claim usable business UI or live connection. */
