@@ -15,6 +15,19 @@ describe("SBS-MGMT-HOME-C read model", () => {
     expect(result.revisionLabel).toContain("Intent CONSUMED");
   });
 
+  it("keeps the reviewed previous version visible after the next version is applied", () => {
+    const result = buildManagementHomeReadModel({
+      ...MANAGEMENT_HOME_RESOLVED_FIXTURE,
+      plan: { ...MANAGEMENT_HOME_RESOLVED_FIXTURE.plan, currentVersion: 4 },
+    });
+
+    expect(result.currentPlanLabel).toContain("v4");
+    expect(result.reviewLabel).toContain("CHANGE_REQUIRED");
+    expect(result.revisionLabel).toContain("Draft v4");
+    expect(result.revisionLabel).toContain("現在適用中");
+    expect(result.nextActionLabel).toBe("次に必要な人の行動: 新しい版が現在適用中");
+  });
+
   it("keeps confirmed none distinct from unavailable", () => {
     const none = buildManagementHomeReadModel(MANAGEMENT_HOME_CONFIRMED_NONE_FIXTURE);
     expect(none.reviewLabel).toBe("見直し: 該当情報なし");
@@ -104,10 +117,61 @@ describe("SBS-MGMT-HOME-C read model", () => {
     expect(badBinding.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
   });
 
-  it("preserves the human review decision without deriving effectiveness", () => {
-    const result = buildManagementHomeReadModel(MANAGEMENT_HOME_RESOLVED_FIXTURE);
-    expect(result.reviewLabel).toContain("CHANGE_REQUIRED");
-    expect(JSON.stringify(result)).not.toContain("EFFECTIVE");
-    expect(JSON.stringify(result)).not.toContain("INEFFECTIVE");
+  it("fails closed when a consumed RevisionIntent has no Draft", () => {
+    const result = buildManagementHomeReadModel({
+      ...MANAGEMENT_HOME_RESOLVED_FIXTURE,
+      draft: { status: "RESOLVED", value: null },
+    });
+
+    expect(result.revisionLabel).toBe("変更対応: 確認できません");
+    expect(result.unavailableSections).toContain("revision");
+    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+  });
+
+  it("keeps ActivationReceipt unavailable separate from plan application authority", () => {
+    const result = buildManagementHomeReadModel({
+      ...MANAGEMENT_HOME_RESOLVED_FIXTURE,
+      activationReceipt: { status: "UNAVAILABLE", reason: "synthetic receipt unavailable" },
+    });
+
+    expect(result.currentPlanLabel).toContain("v3");
+    expect(result.provenanceLabel).toBeNull();
+    expect(result.unavailableSections).toContain("activationReceipt");
+    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+  });
+
+  it("fails closed on an empty review-due label", () => {
+    const result = buildManagementHomeReadModel({
+      ...MANAGEMENT_HOME_RESOLVED_FIXTURE,
+      reviewDueLabel: { status: "RESOLVED", value: " " },
+    });
+
+    expect(result.reviewDueLabel).toBe("次回確認: 確認できません");
+    expect(result.unavailableSections).toContain("reviewDue");
+    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+  });
+
+  it("preserves NO_CHANGE and CHANGE_REQUIRED as human review decisions", () => {
+    const changeRequired = buildManagementHomeReadModel(MANAGEMENT_HOME_RESOLVED_FIXTURE);
+    expect(changeRequired.reviewLabel).toContain("CHANGE_REQUIRED");
+
+    const reviewSlot = MANAGEMENT_HOME_RESOLVED_FIXTURE.reviewOutcome;
+    if (reviewSlot.status !== "RESOLVED" || reviewSlot.value === null) {
+      throw new Error("resolved review fixture required");
+    }
+    const noChange = buildManagementHomeReadModel({
+      ...MANAGEMENT_HOME_RESOLVED_FIXTURE,
+      reviewOutcome: {
+        status: "RESOLVED",
+        value: { ...reviewSlot.value, decision: "NO_CHANGE" },
+      },
+      decisionReason: { status: "RESOLVED", value: null },
+      revisionIntent: { status: "RESOLVED", value: null },
+      draft: { status: "RESOLVED", value: null },
+    });
+    expect(noChange.reviewLabel).toContain("NO_CHANGE");
+    expect(noChange.nextActionLabel).toBe("次に必要な人の行動: 次回見直し時期を確認");
+    expect(JSON.stringify(noChange)).not.toContain("EFFECTIVE");
+    expect(JSON.stringify(noChange)).not.toContain("INEFFECTIVE");
   });
 });
