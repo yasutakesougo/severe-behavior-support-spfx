@@ -26,7 +26,7 @@
 }
 
 .card {
-  border: 1px solid #d8d8d8;
+  border: 1px solid "[theme:neutralLight, default: #edebe9]";
   border-radius: 8px;
   padding: 16px;
   min-width: 0;
@@ -44,7 +44,7 @@
 .unavailable {
   margin: 0;
   padding: 12px;
-  border: 1px solid #8a6d3b;
+  border: 1px solid "[theme:neutralSecondary, default: #8a8886]";
   border-radius: 8px;
 }
 
