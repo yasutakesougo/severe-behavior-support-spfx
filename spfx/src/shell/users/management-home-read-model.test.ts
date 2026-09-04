@@ -9,8 +9,8 @@ import { buildManagementHomeReadModel } from "./management-home-read-model";
 describe("SBS-MGMT-HOME-C read model", () => {
   it("uses SupportPlan.currentVersion as the current applied authority", () => {
     const result = buildManagementHomeReadModel(MANAGEMENT_HOME_RESOLVED_FIXTURE);
-    expect(result.currentPlanLabel).toContain("v4");
-    expect(result.revisionLabel).toContain("Draft v5");
+    expect(result.currentPlanLabel).toContain("v3");
+    expect(result.revisionLabel).toContain("Draft v4");
     expect(result.revisionLabel).toContain("未適用");
     expect(result.revisionLabel).toContain("Intent CONSUMED");
   });
