@@ -423,6 +423,19 @@ function validateSupportPlanVersionMonitoringPeriodReviewBinding(value) {
 }
 
 // src/domain/support-plan-revision.ts
+var REVISION_INTENT_ID_SEPARATOR = "";
+var REVISION_INTENT_ID_NAMESPACE = "support-plan.revision-intent-id.v1";
+function mintRevisionIntentId(input) {
+  const material = [
+    input.OrganizationId,
+    input.SiteId,
+    input.UserId,
+    input.planId,
+    String(input.sourcePlanVersion),
+    input.sourceReviewOutcomeId,
+  ].join(REVISION_INTENT_ID_SEPARATOR);
+  return sha256Hex(`${REVISION_INTENT_ID_NAMESPACE}${REVISION_INTENT_ID_SEPARATOR}${material}`);
+}
 function validateSupportPlanRevisionDraftCandidate(value) {
   if (!isRecord(value) || !isNonEmptyString(value.RevisionIntentId)) {
     return false;
@@ -539,6 +552,17 @@ function applySupportPlanActivation(request) {
     draft.RevisionIntentId.length === 0
   ) {
     return { status: "HOLD", reason: "IDENTITY_MISMATCH" };
+  }
+  const expectedRevisionIntentId = mintRevisionIntentId({
+    OrganizationId: candidate.OrganizationId,
+    SiteId: candidate.SiteId,
+    UserId: candidate.UserId,
+    planId: candidate.planId,
+    sourcePlanVersion: binding.reviewedPlanVersion,
+    sourceReviewOutcomeId: binding.sourceOutcomeId,
+  });
+  if (draft.RevisionIntentId !== expectedRevisionIntentId) {
+    return { status: "HOLD", reason: "REVISION_INTENT_MISMATCH" };
   }
   const recomputedSnapshotId = mintDraftSnapshotId(draft);
   if (recomputedSnapshotId !== confirmedDraftSnapshotId) {
