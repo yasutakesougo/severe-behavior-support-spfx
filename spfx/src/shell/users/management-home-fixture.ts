@@ -18,8 +18,7 @@ const basePlan = {
   reviewDueDate: "2026-09-23T23:59:59+09:00",
 };
 
-const reviewOutcome = {
-  OutcomeId: "management-home-outcome-001",
+const monitoring = {
   OrganizationId: basePlan.OrganizationId,
   SiteId: basePlan.SiteId,
   UserId: basePlan.UserId,
@@ -27,6 +26,19 @@ const reviewOutcome = {
   planVersion: 3,
   periodStart: "2026-08-01T00:00:00+09:00",
   periodEnd: "2026-08-31T23:59:59+09:00",
+  recordCount: 2,
+  records: [],
+};
+
+const reviewOutcome = {
+  OutcomeId: "management-home-outcome-001",
+  OrganizationId: basePlan.OrganizationId,
+  SiteId: basePlan.SiteId,
+  UserId: basePlan.UserId,
+  planId: basePlan.PlanId,
+  planVersion: 3,
+  periodStart: monitoring.periodStart,
+  periodEnd: monitoring.periodEnd,
   sourceRecordIds: ["mh-record-1", "mh-record-2"],
   decision: "CHANGE_REQUIRED" as const,
   reviewedAt: "2026-09-01T10:00:00+09:00",
@@ -77,20 +89,7 @@ const draft = {
 export const MANAGEMENT_HOME_RESOLVED_FIXTURE: ManagementHomeInput = {
   personLabel: "Aさん",
   plan: basePlan,
-  monitoring: {
-    status: "RESOLVED",
-    value: {
-      OrganizationId: basePlan.OrganizationId,
-      SiteId: basePlan.SiteId,
-      UserId: basePlan.UserId,
-      planId: basePlan.PlanId,
-      planVersion: 3,
-      periodStart: reviewOutcome.periodStart,
-      periodEnd: reviewOutcome.periodEnd,
-      recordCount: 2,
-      records: [],
-    },
-  },
+  monitoring: { status: "RESOLVED", value: monitoring },
   reviewOutcome: { status: "RESOLVED", value: reviewOutcome },
   decisionReason: {
     status: "RESOLVED",
@@ -109,11 +108,7 @@ export const MANAGEMENT_HOME_CONFIRMED_NONE_FIXTURE: ManagementHomeInput = {
   ...MANAGEMENT_HOME_RESOLVED_FIXTURE,
   monitoring: {
     status: "RESOLVED",
-    value: {
-      ...MANAGEMENT_HOME_RESOLVED_FIXTURE.monitoring.value!,
-      recordCount: 0,
-      records: [],
-    },
+    value: { ...monitoring, recordCount: 0, records: [] },
   },
   reviewOutcome: { status: "RESOLVED", value: null },
   decisionReason: { status: "RESOLVED", value: null },
