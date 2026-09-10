@@ -20,11 +20,16 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
 }) => {
   return (
     <section
-      className={styles.root}
+      className={styles.managementHomeRoot}
       data-demo-ux="management-home"
       aria-labelledby="management-home-heading"
     >
-      <h1 id="management-home-heading" ref={headingRef} tabIndex={-1} className={styles.heading}>
+      <h1
+        id="management-home-heading"
+        ref={headingRef}
+        tabIndex={-1}
+        className={styles.managementHomeTitle}
+      >
         支援マネジメント
       </h1>
       {onBack ? (
@@ -33,25 +38,25 @@ export const ManagementHome: React.FC<ManagementHomeProps> = ({
         </button>
       ) : null}
       <p className={styles.personLabel}>{presentation.personLabel}</p>
-      <div className={styles.grid}>
-        <section className={styles.card} aria-labelledby="management-home-current-plan">
+      <div className={styles.managementHomeGrid}>
+        <section className={styles.homeCard} aria-labelledby="management-home-current-plan">
           <h2 id="management-home-current-plan">現在の計画</h2>
           <p>{presentation.currentPlanLabel}</p>
           {presentation.provenanceLabel ? (
             <p className={styles.secondary}>{presentation.provenanceLabel}</p>
           ) : null}
         </section>
-        <section className={styles.card} aria-labelledby="management-home-review">
+        <section className={styles.homeCard} aria-labelledby="management-home-review">
           <h2 id="management-home-review">見直し状況</h2>
           <p>{presentation.monitoringLabel}</p>
           <p>{presentation.reviewLabel}</p>
           <p>{presentation.reviewDueLabel}</p>
         </section>
-        <section className={styles.card} aria-labelledby="management-home-revision">
+        <section className={styles.homeCard} aria-labelledby="management-home-revision">
           <h2 id="management-home-revision">変更対応状況</h2>
           <p>{presentation.revisionLabel}</p>
         </section>
-        <section className={styles.card} aria-labelledby="management-home-next-action">
+        <section className={styles.homeCard} aria-labelledby="management-home-next-action">
           <h2 id="management-home-next-action">次に必要な人の行動</h2>
           <p>{presentation.nextActionLabel}</p>
         </section>

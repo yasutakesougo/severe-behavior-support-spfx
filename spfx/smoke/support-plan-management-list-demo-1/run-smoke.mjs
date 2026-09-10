@@ -180,7 +180,7 @@ function assertPlannerList() {
       text.indexOf("承認済み") < 0 &&
       text.indexOf("90日") < 0 &&
       text.indexOf("失効") < 0 &&
-      text.indexOf("Version: v3") >= 0 &&
+      text.indexOf("現在の版: v3") >= 0 &&
       text.indexOf("最終観察日:") >= 0 &&
       text.indexOf("見直し目安:") >= 0 &&
       text.indexOf("要対応:") >= 0 &&
@@ -197,6 +197,8 @@ function assertManagementHome(expectUnavailable = false) {
   const unavailable = document.querySelector('[data-demo-ux="management-home-unavailable"]');
   const text = document.body?.textContent ?? "";
   const overflow = document.documentElement.scrollWidth > document.documentElement.clientWidth + 1;
+  const headings = [...(home?.querySelectorAll("h2") ?? [])];
+  const stackedHeading = headings.some((heading) => heading.getBoundingClientRect().width < 80);
   return {
     pass:
       Boolean(home) &&
@@ -205,10 +207,14 @@ function assertManagementHome(expectUnavailable = false) {
       text.indexOf("見直し状況") >= 0 &&
       text.indexOf("変更対応状況") >= 0 &&
       text.indexOf("次に必要な人の行動") >= 0 &&
+      headings.length === 4 &&
+      !stackedHeading &&
       (expectUnavailable ? Boolean(unavailable) : !unavailable) &&
       !overflow,
     unavailable: Boolean(unavailable),
     overflow,
+    headingCount: headings.length,
+    stackedHeading,
   };
 }
 

@@ -22,6 +22,9 @@ describe("SBS-MGMT-HOME-C view", () => {
     expect(html).toContain("次に必要な人の行動");
     expect(html).toContain("Aさん");
     expect(html).toContain("v3（適用中）");
+    expect(html).toContain("managementHomeGrid");
+    expect(html).toContain("homeCard");
+    expect(html).not.toMatch(/class="[^"]*\bcard\b/);
   });
 
   it("shows fail-closed copy when sources are unavailable", () => {
