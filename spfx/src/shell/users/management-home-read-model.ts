@@ -90,6 +90,24 @@ function formatRevisionIntentStatus(status: RevisionIntent["status"]): string {
   return status === "CONSUMED" ? "次版の下書き作成済み" : "変更作業を開始済み";
 }
 
+const unavailableSectionLabels: Readonly<Record<string, string>> = {
+  monitoring: "見直し",
+  review: "見直し",
+  decisionReason: "見直し",
+  reviewDue: "見直し",
+  revision: "変更対応",
+  activationReceipt: "変更対応",
+};
+
+function formatUnavailableNextAction(unavailableSections: readonly string[]): string {
+  const labels = new Set<string>();
+  for (const section of unavailableSections) {
+    labels.add(unavailableSectionLabels[section] ?? "不足している情報");
+  }
+  const target = Array.from(labels).join("・") || "不足している情報";
+  return `次に必要な人の行動: ${target}の情報を確認してから判断してください`;
+}
+
 export function buildManagementHomeReadModel(
   input: ManagementHomeInput,
 ): ManagementHomePresentation {
@@ -224,9 +242,9 @@ export function buildManagementHomeReadModel(
   const hasUnknown = unavailableSections.length > 0;
   let nextActionLabel = "次に必要な人の行動: なし";
   if (hasUnknown) {
-    nextActionLabel = "次に必要な人の行動: 情報を確認してから判断";
+    nextActionLabel = formatUnavailableNextAction(unavailableSections);
   } else if (draft !== null && draft.candidate.version === currentVersion + 1) {
-    nextActionLabel = "次に必要な人の行動: 次版はまだ未適用";
+    nextActionLabel = `次に必要な人の行動: 次版 v${draft.candidate.version} の内容と適用可否を確認してください`;
   } else if (draft !== null && draft.candidate.version === currentVersion) {
     nextActionLabel = "次に必要な人の行動: 新しい版が現在適用中";
   } else if (review === null) {

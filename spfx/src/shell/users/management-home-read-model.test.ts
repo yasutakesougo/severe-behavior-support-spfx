@@ -14,6 +14,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
     expect(result.revisionLabel).toContain("未適用");
     expect(result.revisionLabel).toContain("次版の下書き作成済み");
     expect(result.revisionLabel).not.toContain("CONSUMED");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 次版 v4 の内容と適用可否を確認してください",
+    );
   });
 
   it("keeps the reviewed previous version visible after the next version is applied", () => {
@@ -53,7 +56,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
     const unavailable = buildManagementHomeReadModel(MANAGEMENT_HOME_UNAVAILABLE_FIXTURE);
     expect(unavailable.monitoringLabel).toBe("記録: 確認できません");
     expect(unavailable.reviewLabel).toBe("見直し: 確認できません");
-    expect(unavailable.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(unavailable.nextActionLabel).toBe(
+      "次に必要な人の行動: 見直し・変更対応の情報を確認してから判断してください",
+    );
     expect(unavailable.unavailableSections.length).toBeGreaterThan(0);
   });
 
@@ -61,7 +66,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
     const result = buildManagementHomeReadModel(MANAGEMENT_HOME_MISMATCH_FIXTURE);
     expect(result.revisionLabel).toBe("変更対応: 確認できません");
     expect(result.unavailableSections).toContain("revision");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 変更対応の情報を確認してから判断してください",
+    );
   });
 
   it("fails closed when a decision reason belongs to another review outcome", () => {
@@ -75,7 +82,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
 
     expect(result.reviewLabel).toBe("見直し: 確認できません");
     expect(result.unavailableSections).toContain("decisionReason");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 見直し・変更対応の情報を確認してから判断してください",
+    );
   });
 
   it("fails closed when monitoring and review bindings do not describe the same period", () => {
@@ -93,7 +102,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
 
     expect(result.reviewLabel).toBe("見直し: 確認できません");
     expect(result.unavailableSections).toContain("review");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 見直し・変更対応の情報を確認してから判断してください",
+    );
   });
 
   it("fails closed when RevisionIntent source version or Draft review binding drifts", () => {
@@ -130,7 +141,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
     });
     expect(badBinding.revisionLabel).toBe("変更対応: 確認できません");
     expect(badBinding.unavailableSections).toContain("revision");
-    expect(badBinding.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(badBinding.nextActionLabel).toBe(
+      "次に必要な人の行動: 変更対応の情報を確認してから判断してください",
+    );
   });
 
   it("fails closed when a consumed RevisionIntent has no Draft", () => {
@@ -141,7 +154,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
 
     expect(result.revisionLabel).toBe("変更対応: 確認できません");
     expect(result.unavailableSections).toContain("revision");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 変更対応の情報を確認してから判断してください",
+    );
   });
 
   it("keeps ActivationReceipt unavailable separate from plan application authority", () => {
@@ -153,7 +168,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
     expect(result.currentPlanLabel).toContain("v3");
     expect(result.provenanceLabel).toBeNull();
     expect(result.unavailableSections).toContain("activationReceipt");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 変更対応の情報を確認してから判断してください",
+    );
   });
 
   it("fails closed on an empty review-due label", () => {
@@ -164,7 +181,9 @@ describe("SBS-MGMT-HOME-C read model", () => {
 
     expect(result.reviewDueLabel).toBe("次回確認: 確認できません");
     expect(result.unavailableSections).toContain("reviewDue");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 情報を確認してから判断");
+    expect(result.nextActionLabel).toBe(
+      "次に必要な人の行動: 見直しの情報を確認してから判断してください",
+    );
   });
 
   it("preserves NO_CHANGE and CHANGE_REQUIRED as human review decisions", () => {
