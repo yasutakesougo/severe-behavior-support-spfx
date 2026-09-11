@@ -1,9 +1,9 @@
-.root {
+.managementHomeRoot {
   display: grid;
   gap: 16px;
 }
 
-.heading {
+.managementHomeTitle {
   margin: 0;
   font-size: 28px;
 }
@@ -19,22 +19,30 @@
   font-weight: 600;
 }
 
-.grid {
+.managementHomeGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
-.card {
+.homeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 0;
+  padding: 16px;
   border: 1px solid "[theme:neutralLight, default: #edebe9]";
   border-radius: 8px;
-  padding: 16px;
-  min-width: 0;
 }
 
-.card h2,
-.card p {
-  margin-top: 0;
+.homeCard h2,
+.homeCard p {
+  margin: 0;
+}
+
+.homeCard h2 {
+  line-height: 1.4;
 }
 
 .secondary {
@@ -49,7 +57,7 @@
 }
 
 @media (max-width: 600px) {
-  .grid {
+  .managementHomeGrid {
     grid-template-columns: 1fr;
   }
 }
