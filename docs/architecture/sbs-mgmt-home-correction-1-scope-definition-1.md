@@ -4,19 +4,20 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Correction Scope Definition
-status: DRAFT FOR INDEPENDENT DEFINITION RE-REVIEW-2
+status: REVIEW-CLEARED / ELIGIBLE FOR HUMAN LOCK / != LOCKED
 Definition Correction-1: APPLIED TO THIS DRAFT
 != LOCKED
 date: 2026-09-11
 parent: docs/architecture/sbs-mgmt-home-correction-1-definition-start-1.md
 correction: docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
+re-review: docs/architecture/sbs-mgmt-home-correction-1-independent-definition-re-review-2.md
 primary evidence:
   docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
 Definition Start GO: RECEIVED / CONSUMED
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
-  exact-file consumption: PENDING at Review-1
-Independent Definition Re-Review-2: REQUIRED / NOT RUN
-Human Definition / Scope Lock GO: HOLD / NOT RECEIVED
+  exact-file consumption: PASS at Re-Review-2
+Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
+Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
 Implementation Start GO: HOLD / NOT RECEIVED
 Actual Staff Value Check: NOT CONSUMED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -260,20 +261,27 @@ synthetic smoke は Re-Simulation を代替しない。
 ## 7. HOLD
 
 ```text
-HOLD: Independent Definition Re-Review-2 未実施
-HOLD: Human Definition / Scope Lock 未受領
+HOLD: Human Definition / Scope Lock 未受領（ELIGIBLE）
 HOLD: exact 日本語コピーは Human Scope Lock 待ち（C6 は INTENDED）
 HOLD: SharePoint サイトナビ変更は本 slice に含めない
 HOLD: Implementation Start GO なしでコード変更しない
+```
+
+P2 carry-forward（Definition Lock blocker ではない）:
+
+```text
+RR2-P2-1
+  today_targets は現行 fixture で独立カード count: 12
+  正本: docs/architecture/sbs-mgmt-home-correction-1-independent-definition-re-review-2.md
+  Implementation Scope で既存 UserId subset を証明できないなら fail-closed
+  12 を人数として再利用しない
 ```
 
 ## 8. Next Actions
 
 ```text
 Human:
-  exact Definition + Scope re-read
-  Independent Definition Re-Review-2
-  PASS なら Definition / Scope Lock GO / HOLD
+  Human Definition / Scope Lock GO / HOLD
   Lock != Implementation Start
 
 Agent:

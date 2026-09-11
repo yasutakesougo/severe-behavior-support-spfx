@@ -283,11 +283,8 @@ Human Ready / Promotion = NOT IMPLIED
 ```text
 Human:
   CORRECTION 確定済み
-  NEXT = Independent Definition Re-Review-2
-    after exact-file re-read of
-    docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
-    docs/architecture/sbs-mgmt-home-correction-1-scope-definition-1.md
-  Definition / Scope Lock GO は Review 後
+  Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
+  NEXT = Human Definition / Scope Lock GO / HOLD
   Actual Staff Value Check は未実施のまま残す
 
 Agent:

@@ -15,9 +15,9 @@ scope being corrected:
 primary evidence:
   docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
-  exact-file consumption: PENDING（Review-1 時点で default branch に本3ファイル無し）
-Independent Definition Re-Review-2: REQUIRED / NOT RUN
-Human Definition / Scope Lock GO: HOLD / NOT RECEIVED
+  exact-file consumption: PASS at Re-Review-2
+Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
+Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
 Implementation Start GO: HOLD / NOT RECEIVED
 Actual Staff Value Check: NOT CONSUMED
 Human Ready / Promotion: NOT IMPLIED
@@ -261,8 +261,9 @@ SIM-AUTH-001 の製品 Issue 化
 ```text
 Definition Correction-1 = APPLIED TO DRAFT SCOPE
 != LOCKED
-exact Definition + Scope re-read = NEXT（Re-Review-2）
-Human Definition / Scope Lock GO = HOLD
+exact-file re-read = PASS
+Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
+Human Definition / Scope Lock GO = ELIGIBLE / NOT RECEIVED
 Implementation Start GO = HOLD
 ```
 
@@ -273,16 +274,7 @@ Implementation Start GO != Actual Staff / Ready / Promotion / Merge / Deploy / L
 
 ```text
 SBS-MGMT-HOME-CORRECTION-1
-Definition Correction-1          ← this document
-        ↓
-exact Definition + Scope re-read
-        ↓
-Independent Definition Re-Review-2
-        ↓
-PASS condition
-  P0 = 0
-  P1 = 0
-  P2 = explicit non-blocking only
+Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
         ↓
 Human Definition / Scope Lock GO / HOLD
         ↓

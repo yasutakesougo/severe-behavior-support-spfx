@@ -9,9 +9,9 @@ unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Definition Start（docs-only）
 date: 2026-09-11
 Definition Start GO: RECEIVED（Human: CORRECTION 確定 + Correction-1 へ進む）
-Human Definition / Scope Lock GO: HOLD / NOT RECEIVED
+Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
-Independent Definition Re-Review-2: REQUIRED / NOT RUN
+Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
 Implementation Start GO: HOLD / NOT RECEIVED
 Implementation: NOT STARTED
 Actual Staff Value Check: NOT CONSUMED
@@ -67,13 +67,13 @@ CONSUMED:
 ```text
 Human: Simulation Outcome = CORRECTION で確定してよい
 Human: NEXT = SBS-MGMT-HOME-CORRECTION-1 Definition Start
+Independent Definition Review-1 = CORRECTION REQUIRED（内容レベル）
+Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED（exact-file）
 ```
 
 NOT CONSUMED:
 
 ```text
-Independent Definition Review PASS
-Independent Definition Re-Review-2
 Human Definition / Scope Lock GO
 Human Implementation Start GO
 Authenticated 5-Persona Re-Simulation PASS
@@ -93,9 +93,11 @@ IN / OUT / 優先3群 / Re-Simulation Gate の正本は次へ委譲する。
 ```text
 docs/architecture/sbs-mgmt-home-correction-1-scope-definition-1.md
 kind: Correction Scope Definition
-status: DRAFT FOR INDEPENDENT DEFINITION RE-REVIEW-2
+status: REVIEW-CLEARED / ELIGIBLE FOR HUMAN LOCK
 Definition Correction-1: APPLIED TO DRAFT
 != LOCKED
+re-review:
+  docs/architecture/sbs-mgmt-home-correction-1-independent-definition-re-review-2.md
 correction packet:
   docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
 ```
@@ -168,8 +170,7 @@ Actual Staff PASS 宣言
 ## 8. HOLD
 
 ```text
-HOLD: Independent Definition Re-Review-2 未実施
-HOLD: Human Definition / Scope Lock 未受領
+HOLD: Human Definition / Scope Lock 未受領（ELIGIBLE）
 HOLD: Implementation Start 未受領
 ```
 
@@ -177,9 +178,8 @@ HOLD: Implementation Start 未受領
 
 ```text
 Human:
-  exact-file re-read of Definition Start / Scope / Definition Correction-1
-  Independent Definition Re-Review-2
-  Scope Lock GO は Re-Review-2 PASS 後
+  Human Definition / Scope Lock GO / HOLD
+  Lock != Implementation Start
 
 Agent:
   実装しない
