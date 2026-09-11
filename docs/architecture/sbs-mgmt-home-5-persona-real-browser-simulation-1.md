@@ -16,6 +16,10 @@ LIVE WRITE / Deploy / App Catalog / schema / page edit: NOT PERFORMED
 Actual Staff Value Check: NOT CONSUMED
 Human Ready / Promotion: NOT IMPLIED
 Simulation Outcome: BLOCKED
+Blocker: SIM-AUTH-001
+Cause: authenticated M365 session unavailable
+Product UX verdict: NOT OBSERVED
+SIM-AUTH-001 product Issue: DO NOT FILE
 ```
 
 ## Boundary
@@ -171,11 +175,11 @@ P0 / P1 / P2: product UX findings = 0 OBSERVED
 |---|---|---|---|---|
 | (none) | — | NOT OBSERVABLE | Management Home / 支援計画 shell は未描画。製品 UX の P0/P1/P2 を確定しない。 | login wall screenshot |
 
-Simulation execution finding（製品 finding ではない）:
+Simulation execution finding（**製品 finding ではない。製品バグ Issue にしない**）:
 
 | ID | Severity | State | Content |
 |---|---|---|---|
-| SIM-AUTH-001 | BLOCKER | OPEN | Cloud Agent ブラウザに M365 認証セッションが無い。Home.aspx 実画面に到達できない。 |
+| SIM-AUTH-001 | TEST-PRECONDITION BLOCKER | OPEN | Cloud Agent ブラウザに M365 認証セッションが無い。Home.aspx 実画面に到達できない。認証済みセッション再実行で解消する。 |
 
 ## What was not done (on purpose)
 
@@ -195,30 +199,28 @@ App Catalog / page edit / web part edit: NOT PERFORMED
 ```text
 5-PERSONA REAL-BROWSER SIMULATION
 
-Persona 1 = HOLD
-Persona 2 = HOLD
-Persona 3 = HOLD
-Persona 4 = HOLD
-Persona 5 = HOLD
-
-P0 = 0 OBSERVED (product UX; Home.aspx content not reached)
-P1 = 0 OBSERVED
-P2 = 0 OBSERVED
-
-Cross-persona findings:
-- 共通して迷った場所: NOT OBSERVABLE。全 Persona が同一 Microsoft Sign in で停止。
-- 共通して理解できた場所: NOT OBSERVABLE（業務画面未表示）。
-- 最も危険な誤解: NOT OBSERVABLE。推測で製品誤解を確定しない。
-- 最も価値の高い改善1〜3件:
-  1. Human が認証済み read-only ブラウザセッションを Cloud Agent に供給する
-  2. 同一 Start URL から 5 Persona を再実行する
-  3. 再実行まで Actual Staff Value Check / Human Ready を消費しない
-
 Simulation Outcome = BLOCKED
+Blocker = SIM-AUTH-001
+Cause = authenticated M365 session unavailable
 
+Persona 1–5 = HOLD
+P0 / P1 / P2 = 0 OBSERVED / 0 OBSERVED / 0 OBSERVED
+
+Product UX verdict = NOT OBSERVED
 Actual Staff Value Check = NOT CONSUMED
-
 Human Ready / Promotion = NOT IMPLIED
+```
+
+5ペルソナUX評価を**実施できなかった**。UXが悪いと判定したのではない。
+
+Cross-persona（製品）:
+
+```text
+共通して迷った導線: NOT OBSERVED
+30秒以内に把握できない情報: NOT OBSERVED
+read-only / write境界: NOT OBSERVED
+applied / draft / review 誤認: NOT OBSERVED
+Homeへの復帰性: NOT OBSERVED
 ```
 
 ## HOLD
@@ -233,14 +235,47 @@ HOLD: applied vs draft distinction NOT OBSERVED
 ## Next Actions
 
 ```text
+NEXT = Authenticated Session Re-run
+!= new Definition
+!= implementation fix
+!= product bug Issue for SIM-AUTH-001
+
 Human:
-  Provide a read-only authenticated browser session for
-  isogokatudouhome.sharepoint.com / sites/severe-support-isogo
-  without recording secrets in the repository.
-  Then re-run this exact 5-persona protocol from Home.aspx.
+  Log in to M365 yourself in the Computer Use browser.
+  Do not send password or MFA code to the Agent.
+  After Sign in is cleared, hand the session to the Agent.
 
 Agent:
-  STOP product UX scoring.
-  Do not substitute smoke or local ManagementHome fixture.
+  After authenticated Home.aspx is visible, start UX timing.
+  Auth time is excluded from task time.
+  Re-run Persona 1 → 5, READ-ONLY, LIVE WRITE FORBIDDEN.
+  Simulation Outcome remains PASS / CORRECTION / BLOCKED.
+  Actual Staff Value Check = NOT CONSUMED.
+  Do not substitute smoke or fixture.
   Do not Ready / Merge / Deploy.
+  Do not file SIM-AUTH-001 as a product Issue.
+```
+
+## Authenticated Session Re-run protocol (not a Definition)
+
+```text
+SBS-MGMT-HOME
+5-PERSONA AUTHENTICATED REAL-BROWSER SIMULATION
+
+PRECONDITION
+- Human logs into M365 themselves
+- authenticated browser session is present
+- Agent does not receive password or MFA
+- start from the same Home.aspx URL
+
+MODE
+READ-ONLY
+LIVE WRITE = FORBIDDEN
+
+RE-RUN
+Persona 1 → 5 in the same order
+
+IMPORTANT
+UX timing starts after Sign in is cleared.
+Authentication time is not included in task time.
 ```
