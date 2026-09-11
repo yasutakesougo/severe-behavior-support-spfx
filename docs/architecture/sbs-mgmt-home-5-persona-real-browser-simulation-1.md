@@ -254,28 +254,6 @@ Actual Staff Value Check = still NOT CONSUMED
 SIM-AUTH-001 product Issue = still DO NOT FILE
 ```
 
-```text
-NEXT = Authenticated Session Re-run
-!= new Definition
-!= implementation fix
-!= product bug Issue for SIM-AUTH-001
-
-Human:
-  Log in to M365 yourself in the Computer Use browser.
-  Do not send password or MFA code to the Agent.
-  After Sign in is cleared, hand the session to the Agent.
-
-Agent:
-  After authenticated Home.aspx is visible, start UX timing.
-  Auth time is excluded from task time.
-  Re-run Persona 1 → 5, READ-ONLY, LIVE WRITE FORBIDDEN.
-  Simulation Outcome remains PASS / CORRECTION / BLOCKED.
-  Actual Staff Value Check = NOT CONSUMED.
-  Do not substitute smoke or fixture.
-  Do not Ready / Merge / Deploy.
-  Do not file SIM-AUTH-001 as a product Issue.
-```
-
 ## Authenticated Session Re-run protocol (not a Definition)
 
 ```text
