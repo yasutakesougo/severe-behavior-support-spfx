@@ -16,7 +16,8 @@ P1 = 0
 P2 = 1 / EXPLICIT NON-BLOCKING ONLY
 mutation: 0
 Implementation Start: NOT AUTHORIZED
-Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
+Human Definition / Scope Lock GO: RECEIVED / CONSUMED
+lock packet: docs/architecture/sbs-mgmt-home-correction-1-definition-scope-lock-1.md
 Actual Staff Value Check: NOT CONSUMED
 Human Ready / Promotion: NOT IMPLIED
 SIM-AUTH-001 product Issue: NOT CREATED
@@ -97,10 +98,10 @@ Re-Review PASS does not rewrite that packet.
 ```text
 Definition Start GO = CONSUMED
 Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED（content-level）
-Definition Correction-1 = APPLIED TO DRAFT
+Definition Correction-1 = APPLIED THEN LOCKED
 exact-file re-read = PASS
 Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
-Human Definition / Scope Lock GO = ELIGIBLE / NOT RECEIVED
+Human Definition / Scope Lock GO = RECEIVED / CONSUMED
 Implementation Start GO = HOLD / NOT RECEIVED
 Implementation = NOT STARTED
 Authenticated 5-Persona Re-Simulation = NOT RUN
@@ -113,8 +114,7 @@ LIVE WRITE = HOLD
 ## Does NOT authorize
 
 ```text
-Human Definition / Scope Lock（未受領）
-Implementation Start
+Implementation Start（Lock CONSUMED ≠ Implementation Start）
 SPFx / domain code change
 Home.aspx edit / SharePoint / M365 / Entra mutation
 Ready / Merge / Deploy / LIVE WRITE
@@ -125,11 +125,14 @@ Actual Staff Value Check
 
 ```text
 SBS-MGMT-HOME-CORRECTION-1
-Human Definition / Scope Lock GO / HOLD
+Human Definition / Scope Lock GO = RECEIVED / CONSUMED
 
-Human Definition / Scope Lock GO
+NEXT Human Gate:
+  Human Implementation Start GO / HOLD
+
+Lock CONSUMED
   != Implementation Start GO
 
-Lock 後も、別の明示的な Human Implementation Start GO までは
+別の明示的な Human Implementation Start GO までは
 コード変更を開始しない。
 ```

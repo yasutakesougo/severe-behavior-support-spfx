@@ -1,7 +1,7 @@
 # SBS-MGMT-HOME-CORRECTION-1 — Definition Correction-1
 
 Independent Definition Review-1 の **CORRECTION REQUIRED** に応答する。
-実装、Scope Lock、Implementation Start、Actual Staff、Ready は開始しない。
+Human Definition / Scope Lock GO は **CONSUMED**。実装、Implementation Start、Actual Staff、Ready は開始しない。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
@@ -17,7 +17,8 @@ primary evidence:
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
   exact-file consumption: PASS at Re-Review-2
 Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
-Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
+Human Definition / Scope Lock GO: RECEIVED / CONSUMED
+lock packet: docs/architecture/sbs-mgmt-home-correction-1-definition-scope-lock-1.md
 Implementation Start GO: HOLD / NOT RECEIVED
 Actual Staff Value Check: NOT CONSUMED
 Human Ready / Promotion: NOT IMPLIED
@@ -224,7 +225,7 @@ site chrome mutation
 
 「新しい計画」を単独ラベルにしない。未適用は補足ではなく意味の一部として常に読める。
 
-INTENDED primary wording（Human Scope Lock まで exact 文字列は未凍結）:
+INTENDED primary wording（Lock CONSUMED。採用可能文言はこの 2 行。pixel-exact は実装 Scope）:
 
 ```text
 次版下書き vN+1（未適用）
@@ -259,12 +260,11 @@ SIM-AUTH-001 の製品 Issue 化
 ## 4. Status after this Correction
 
 ```text
-Definition Correction-1 = APPLIED TO DRAFT SCOPE
-!= LOCKED
+Definition Correction-1 = APPLIED THEN LOCKED
 exact-file re-read = PASS
 Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
-Human Definition / Scope Lock GO = ELIGIBLE / NOT RECEIVED
-Implementation Start GO = HOLD
+Human Definition / Scope Lock GO = RECEIVED / CONSUMED
+Implementation Start GO = HOLD / NOT RECEIVED
 ```
 
 Human Definition / Scope Lock GO != Implementation Start GO  
@@ -276,7 +276,7 @@ Implementation Start GO != Actual Staff / Ready / Promotion / Merge / Deploy / L
 SBS-MGMT-HOME-CORRECTION-1
 Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
         ↓
-Human Definition / Scope Lock GO / HOLD
+Human Definition / Scope Lock GO = RECEIVED / CONSUMED
         ↓
 separate Human Implementation Start GO / HOLD
 ```

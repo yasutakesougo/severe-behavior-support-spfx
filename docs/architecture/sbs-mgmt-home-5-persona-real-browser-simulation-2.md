@@ -284,12 +284,14 @@ Human Ready / Promotion = NOT IMPLIED
 Human:
   CORRECTION 確定済み
   Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
-  NEXT = Human Definition / Scope Lock GO / HOLD
+  Human Definition / Scope Lock GO = RECEIVED / CONSUMED
+  NEXT = Human Implementation Start GO / HOLD
   Actual Staff Value Check は未実施のまま残す
+  Simulation Outcome = CORRECTION を維持する
 
 Agent:
   このシミュレーションを Actual Staff PASS に置換しない
   SIM-AUTH-001 を製品Issueにしない
   Ready / Merge / Deploy / LIVE WRITE をしない
-  Correction-1 実装を Scope Lock + Implementation Start なしで始めない
+  Correction-1 実装を Implementation Start GO なしで始めない
 ```

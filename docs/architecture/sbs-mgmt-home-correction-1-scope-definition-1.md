@@ -4,9 +4,9 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Correction Scope Definition
-status: REVIEW-CLEARED / ELIGIBLE FOR HUMAN LOCK / != LOCKED
-Definition Correction-1: APPLIED TO THIS DRAFT
-!= LOCKED
+status: LOCKED
+Definition Correction-1: APPLIED THEN LOCKED
+lock packet: docs/architecture/sbs-mgmt-home-correction-1-definition-scope-lock-1.md
 date: 2026-09-11
 parent: docs/architecture/sbs-mgmt-home-correction-1-definition-start-1.md
 correction: docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
@@ -17,7 +17,7 @@ Definition Start GO: RECEIVED / CONSUMED
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
   exact-file consumption: PASS at Re-Review-2
 Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
-Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
+Human Definition / Scope Lock GO: RECEIVED / CONSUMED
 Implementation Start GO: HOLD / NOT RECEIVED
 Actual Staff Value Check: NOT CONSUMED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -26,8 +26,8 @@ Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 この文書は **5 Persona が誤読した意味境界の修正だけ** に範囲を固定する。
 機能追加、新しい業務フロー、永続化、適用開始、次版作成は OUT。
 
-Definition Correction-1（C1–C6）をこの DRAFT に反映済み。LOCK ではない。
-実装順序の先頭は C1（Re-Simulation P0=0 かつ P1=0）と C2（reviewDueDate authority）。
+Definition Correction-1（C1–C6）を反映し、Human Definition / Scope Lock GO により **LOCKED**。
+実装は開始しない。実装順序の先頭は C1（Re-Simulation P0=0 かつ P1=0）と C2（reviewDueDate authority）。
 
 ---
 
@@ -190,9 +190,9 @@ Actual Staff Value Check の実施または PASS 宣言
 
 ---
 
-## 4. Intended presentation rules（NOT LOCKED copy）
+## 4. Intended presentation rules（INTENDED copy; pixel-exact は実装 Scope）
 
-Human Scope Lock まで exact 文言は INTENDED。実装で別コピーを増やして Lock を先取りしない。
+Human Lock 受信済み。C6 の採用可能文言は Correction-1 の 2 行に限る。第三の CTA を新発明しない。pixel-exact は Implementation Start GO 後の実装 Scope で決める。
 
 | 規則ID | 規則 | 根拠 |
 |---|---|---|
@@ -261,10 +261,9 @@ synthetic smoke は Re-Simulation を代替しない。
 ## 7. HOLD
 
 ```text
-HOLD: Human Definition / Scope Lock 未受領（ELIGIBLE）
-HOLD: exact 日本語コピーは Human Scope Lock 待ち（C6 は INTENDED）
+HOLD: Implementation Start GO なしでコード変更しない（Lock CONSUMED）
+HOLD: C6 exact 日本語は INTENDED 2 行上限。pixel-exact は実装 Scope
 HOLD: SharePoint サイトナビ変更は本 slice に含めない
-HOLD: Implementation Start GO なしでコード変更しない
 ```
 
 P2 carry-forward（Definition Lock blocker ではない）:
@@ -281,11 +280,11 @@ RR2-P2-1
 
 ```text
 Human:
-  Human Definition / Scope Lock GO / HOLD
-  Lock != Implementation Start
+  Human Implementation Start GO / HOLD
+  Lock CONSUMED != Implementation Start
 
 Agent:
   実装しない
-  本 DRAFT を LOCKED と書かない
   Simulation 2 を primary evidence のまま残す
+  RR2-P2-1 を Implementation Scope 必須証明として残す
 ```

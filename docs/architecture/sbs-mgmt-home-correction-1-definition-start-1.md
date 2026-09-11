@@ -1,7 +1,7 @@
 # SBS-MGMT-HOME-CORRECTION-1 — Definition Start
 
-この文書は **SBS-MGMT-HOME-CORRECTION-1** の Definition Start だけを開始する。
-実装、Scope Lock、Implementation Start、Ready、Merge、Deploy、LIVE WRITE は開始しない。
+この文書は **SBS-MGMT-HOME-CORRECTION-1** の Definition Start 正本である。
+Human Definition / Scope Lock GO は **CONSUMED**。実装、Implementation Start、Ready、Merge、Deploy、LIVE WRITE は開始しない。
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
@@ -9,7 +9,8 @@ unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Definition Start（docs-only）
 date: 2026-09-11
 Definition Start GO: RECEIVED（Human: CORRECTION 確定 + Correction-1 へ進む）
-Human Definition / Scope Lock GO: ELIGIBLE / NOT RECEIVED
+Human Definition / Scope Lock GO: RECEIVED / CONSUMED
+lock packet: docs/architecture/sbs-mgmt-home-correction-1-definition-scope-lock-1.md
 Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
 Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
 Implementation Start GO: HOLD / NOT RECEIVED
@@ -93,23 +94,24 @@ IN / OUT / 優先3群 / Re-Simulation Gate の正本は次へ委譲する。
 ```text
 docs/architecture/sbs-mgmt-home-correction-1-scope-definition-1.md
 kind: Correction Scope Definition
-status: REVIEW-CLEARED / ELIGIBLE FOR HUMAN LOCK
-Definition Correction-1: APPLIED TO DRAFT
-!= LOCKED
+status: LOCKED
+lock packet:
+  docs/architecture/sbs-mgmt-home-correction-1-definition-scope-lock-1.md
+Definition Correction-1: APPLIED THEN LOCKED
 re-review:
   docs/architecture/sbs-mgmt-home-correction-1-independent-definition-re-review-2.md
 correction packet:
   docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
 ```
 
-本 Definition Start は scope 文書の作成を許可する。
-scope 文書の LOCK は許可しない。
+本 Definition Start は scope 文書の作成を許可した。
+Human Definition / Scope Lock GO により scope は LOCKED。実装開始は許可しない。
 
 ## 5. Product intent（1 sentence）
 
 職員が Home.aspx 上で、**今見ている操作が閲覧なのか、業務記録なのか、SharePoint ページ編集なのか、適用中計画なのか、未適用 Draft なのか** を取り違えないようにする。機能追加ではない。
 
-## 6. Gate chain（not started beyond Definition Start）
+## 6. Gate chain（Lock CONSUMED; Implementation Start HOLD）
 
 ```text
 5-PERSONA AUTHENTICATED REAL-BROWSER SIMULATION
@@ -118,7 +120,7 @@ scope 文書の LOCK は許可しない。
 SBS-MGMT-HOME-CORRECTION-1
 Definition Start          ← this document
         ↓
-Correction Scope Definition  ← sibling DRAFT + Definition Correction-1
+Correction Scope Definition  ← LOCKED + Definition Correction-1
         ↓
 Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
         ↓
@@ -170,16 +172,15 @@ Actual Staff PASS 宣言
 ## 8. HOLD
 
 ```text
-HOLD: Human Definition / Scope Lock 未受領（ELIGIBLE）
-HOLD: Implementation Start 未受領
+HOLD: Implementation Start 未受領（Lock CONSUMED ≠ Implementation Start）
 ```
 
 ## 9. Next Actions
 
 ```text
 Human:
-  Human Definition / Scope Lock GO / HOLD
-  Lock != Implementation Start
+  Human Implementation Start GO / HOLD
+  Lock CONSUMED != Implementation Start
 
 Agent:
   実装しない
