@@ -93,11 +93,11 @@ Definition / Scope Lock は「直してよい範囲」を固定する。コー�
 | Gate | 状態 |
 |---|---|
 | Human Definition / Scope Lock GO | **RECEIVED / CONSUMED** |
-| Implementation Scope Definition | **RECORDED** — `docs/architecture/sbs-mgmt-home-correction-1-implementation-scope-1.md` |
-| Independent Implementation Scope Review | **NOT RUN** |
-| Human Implementation Start GO | **HOLD / NOT RECEIVED** |
+| Implementation Scope Definition | **RECORDED / CANDIDATE** — Independent Review-1 = **CORRECTION** |
+| Independent Implementation Scope Review-1 | **CORRECTION** — `docs/architecture/sbs-mgmt-home-correction-1-independent-implementation-scope-review-1.md` |
+| Human Implementation Start GO | **HOLD / NOT RECEIVED / NOT ELIGIBLE** |
 | Correction-1 implementation | **NOT STARTED** |
 | Re-Sim PASS (C1) | **NOT STARTED** — P0=0 **and** P1=0 + Persona 1–5 meaning。Actual Staff を含めない |
 | Actual Staff Value Check | **NOT CONSUMED** |
 
-**NEXT**: Independent Implementation Scope Review-1（docs）。Human Gate は `Human Implementation Start GO` / HOLD。コードは開始しない。
+**NEXT**: Implementation Scope Correction-1（docs）。Human Implementation Start GO は消費しない。コードは開始しない。

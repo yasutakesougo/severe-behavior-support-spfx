@@ -286,7 +286,8 @@ Human:
   Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
   Human Definition / Scope Lock GO = RECEIVED / CONSUMED
   Implementation Scope Definition = RECORDED / CANDIDATE
-  NEXT = Independent Implementation Scope Review、その後 Human Implementation Start GO / HOLD
+  Independent Implementation Scope Review-1 = CORRECTION
+  NEXT = Implementation Scope Correction-1、その後 Human Implementation Start GO / HOLD
   Actual Staff Value Check は未実施のまま残す
   Simulation Outcome = CORRECTION を維持する
 

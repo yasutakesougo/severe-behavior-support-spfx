@@ -281,12 +281,12 @@ RR2-P2-1
 
 ```text
 Human:
-  Independent Implementation Scope Review の後
-  Human Implementation Start GO / HOLD
+  Implementation Scope Correction-1 の後
+  Independent Re-Review、その後 Human Implementation Start GO / HOLD
   Lock CONSUMED != Implementation Start
 
 Agent:
   実装しない
-  Implementation Scope は RECORDED（S-POP / S-DRAFT を含む）
+  Independent Implementation Scope Review-1 = CORRECTION
   Simulation 2 を primary evidence のまま残す
 ```

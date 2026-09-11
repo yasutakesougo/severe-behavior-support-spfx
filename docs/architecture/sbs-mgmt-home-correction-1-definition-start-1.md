@@ -134,7 +134,11 @@ Human Definition / Scope Lock GO
         ↓
 Implementation Scope Definition
         ↓
-Independent Implementation Scope Review
+Independent Implementation Scope Review-1 = CORRECTION
+        ↓
+Implementation Scope Correction-1
+        ↓
+Independent Implementation Scope Re-Review
         ↓
 Human Implementation Start GO
         ↓
@@ -183,13 +187,13 @@ HOLD: Implementation Start 未受領（Lock CONSUMED ≠ Implementation Start）
 
 ```text
 Human:
-  Independent Implementation Scope Review の後
-  Human Implementation Start GO / HOLD
+  Implementation Scope Correction-1 の後
+  Independent Re-Review、その後 Human Implementation Start GO / HOLD
   Lock CONSUMED != Implementation Start
 
 Agent:
   実装しない
-  Implementation Scope は RECORDED（candidate）
+  Implementation Scope Review-1 = CORRECTION
   Simulation 2 を改ざんしない
   SIM-AUTH-001 を製品 Issue にしない
 ```

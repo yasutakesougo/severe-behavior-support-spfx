@@ -5,6 +5,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
 status: RECORDED / CANDIDATE
+  Independent Implementation Scope Review-1: CORRECTION
   != LOCKED Definition の再開
   != Implementation Start
   != Independent Scope Review PASS
@@ -426,11 +427,11 @@ Authenticated 5-Persona Re-Simulation
 ## 9. HOLD
 
 ```text
+HOLD: Independent Implementation Scope Review-1 = CORRECTION
 HOLD: Human Implementation Start GO 未受領 — 本文書はコード変更を許可しない
-HOLD: Independent Implementation Scope Review 未実施
 HOLD: SharePoint サイト mutation
 HOLD: Actual Staff Value Check
-HOLD: RR2-P2-1 はコードが S-POP を満たすまで OPEN
+HOLD: RR2-P2-1 は ISR1-P1-2 が閉じ、コードが S-POP を満たすまで OPEN
 ```
 
 ---
@@ -452,8 +453,8 @@ Actual Staff / Ready / Merge を宣言していない
 ```text
 Human Definition / Scope Lock GO = CONSUMED
 Implementation Scope Definition = RECORDED（this document）
-Independent Implementation Scope Review = NOT RUN
-Human Implementation Start GO = HOLD / NOT RECEIVED
+Independent Implementation Scope Review-1 = CORRECTION
+Human Implementation Start GO = HOLD / NOT RECEIVED / NOT ELIGIBLE
 Implementation = NOT STARTED
 ```
 
@@ -461,13 +462,15 @@ Implementation = NOT STARTED
 
 ```text
 Agent:
-  Independent Implementation Scope Review-1（docs-only）
+  Implementation Scope Correction-1（docs-only）
+  ISR1-P1-1 / ISR1-P1-2 を閉じる
   実装しない
 
 Human:
-  Independent Review の後
+  Scope Correction + Independent Re-Review の後
   Human Implementation Start GO / HOLD
 
 Lock CONSUMED != Implementation Start
 Implementation Scope RECORDED != Implementation Start
+Independent Review CORRECTION != Implementation Start
 ```

@@ -280,7 +280,9 @@ Human Definition / Scope Lock GO = RECEIVED / CONSUMED
         ↓
 Implementation Scope Definition = RECORDED / CANDIDATE
         ↓
-Independent Implementation Scope Review / HOLD
+Independent Implementation Scope Review-1 = CORRECTION
+        ↓
+Implementation Scope Correction-1 / HOLD
         ↓
 separate Human Implementation Start GO / HOLD
 ```
