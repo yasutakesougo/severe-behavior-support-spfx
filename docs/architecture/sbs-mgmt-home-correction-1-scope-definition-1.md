@@ -192,7 +192,7 @@ Actual Staff Value Check の実施または PASS 宣言
 
 ## 4. Intended presentation rules（INTENDED copy; pixel-exact は実装 Scope）
 
-Human Lock 受信済み。C6 の採用可能文言は Correction-1 の 2 行に限る。第三の CTA を新発明しない。pixel-exact は Implementation Start GO 後の実装 Scope で決める。
+Human Lock 受信済み。実行時 C6 文言は Implementation Scope S-DRAFT で `次版下書き vN+1（未適用）` に固定（candidate）。第三の CTA を新発明しない。
 
 | 規則ID | 規則 | 根拠 |
 |---|---|---|
@@ -262,7 +262,8 @@ synthetic smoke は Re-Simulation を代替しない。
 
 ```text
 HOLD: Implementation Start GO なしでコード変更しない（Lock CONSUMED）
-HOLD: C6 exact 日本語は INTENDED 2 行上限。pixel-exact は実装 Scope
+HOLD: Independent Implementation Scope Review 未実施
+HOLD: C6 実行時文言は Implementation Scope S-DRAFT（次版下書き vN+1（未適用））
 HOLD: SharePoint サイトナビ変更は本 slice に含めない
 ```
 
@@ -280,11 +281,12 @@ RR2-P2-1
 
 ```text
 Human:
+  Independent Implementation Scope Review の後
   Human Implementation Start GO / HOLD
   Lock CONSUMED != Implementation Start
 
 Agent:
   実装しない
+  Implementation Scope は RECORDED（S-POP / S-DRAFT を含む）
   Simulation 2 を primary evidence のまま残す
-  RR2-P2-1 を Implementation Scope 必須証明として残す
 ```

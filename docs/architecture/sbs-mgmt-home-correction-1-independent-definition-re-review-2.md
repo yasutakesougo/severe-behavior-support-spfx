@@ -126,9 +126,11 @@ Actual Staff Value Check
 ```text
 SBS-MGMT-HOME-CORRECTION-1
 Human Definition / Scope Lock GO = RECEIVED / CONSUMED
+Implementation Scope Definition = RECORDED / CANDIDATE
 
-NEXT Human Gate:
-  Human Implementation Start GO / HOLD
+NEXT:
+  Independent Implementation Scope Review-1
+  その後 Human Implementation Start GO / HOLD
 
 Lock CONSUMED
   != Implementation Start GO

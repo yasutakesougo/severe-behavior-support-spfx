@@ -225,7 +225,7 @@ site chrome mutation
 
 「新しい計画」を単独ラベルにしない。未適用は補足ではなく意味の一部として常に読める。
 
-INTENDED primary wording（Lock CONSUMED。採用可能文言はこの 2 行。pixel-exact は実装 Scope）:
+INTENDED primary wording（Lock CONSUMED。Implementation Scope S-DRAFT が実行時 1 行に固定）:
 
 ```text
 次版下書き vN+1（未適用）
@@ -277,6 +277,10 @@ SBS-MGMT-HOME-CORRECTION-1
 Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED
         ↓
 Human Definition / Scope Lock GO = RECEIVED / CONSUMED
+        ↓
+Implementation Scope Definition = RECORDED / CANDIDATE
+        ↓
+Independent Implementation Scope Review / HOLD
         ↓
 separate Human Implementation Start GO / HOLD
 ```
