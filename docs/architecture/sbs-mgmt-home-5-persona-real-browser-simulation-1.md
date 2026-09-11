@@ -247,6 +247,14 @@ HOLD: applied vs draft distinction NOT OBSERVED
 ## Next Actions
 
 ```text
+Authenticated Session Re-run = DONE
+see: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
+Simulation 2 Outcome = CORRECTION
+Actual Staff Value Check = still NOT CONSUMED
+SIM-AUTH-001 product Issue = still DO NOT FILE
+```
+
+```text
 NEXT = Authenticated Session Re-run
 != new Definition
 != implementation fix
