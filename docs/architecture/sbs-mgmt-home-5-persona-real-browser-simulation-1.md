@@ -40,6 +40,18 @@ Do not infer binary SHA from browser display.
 Do not declare Actual Staff PASS.
 ```
 
+## Authenticated re-run check (2026-09-11T06:04Z)
+
+```text
+Home.aspx direct URL again
+AUTH_STATE = SIGN_IN_WALL
+heading = Sign in
+Persona 1–5 = still HOLD
+product Issue filed = NO
+```
+
+Human login had not occurred in this Computer Use session. UX timing was not started.
+
 ## Method
 
 ```text
