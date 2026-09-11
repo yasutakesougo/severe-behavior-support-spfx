@@ -4,22 +4,29 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Correction Scope Definition
-status: DRAFT FOR INDEPENDENT DEFINITION REVIEW
+status: DRAFT FOR INDEPENDENT DEFINITION RE-REVIEW-2
+Definition Correction-1: APPLIED TO THIS DRAFT
 != LOCKED
 date: 2026-09-11
 parent: docs/architecture/sbs-mgmt-home-correction-1-definition-start-1.md
+correction: docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
 primary evidence:
   docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
-Definition Start GO: RECEIVED
-Independent Definition Review: REQUIRED / NOT RUN
-Human Definition / Scope Lock GO: NOT RECEIVED
-Implementation Start GO: NOT RECEIVED
+Definition Start GO: RECEIVED / CONSUMED
+Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
+  exact-file consumption: PENDING at Review-1
+Independent Definition Re-Review-2: REQUIRED / NOT RUN
+Human Definition / Scope Lock GO: HOLD / NOT RECEIVED
+Implementation Start GO: HOLD / NOT RECEIVED
 Actual Staff Value Check: NOT CONSUMED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 ```
 
 この文書は **5 Persona が誤読した意味境界の修正だけ** に範囲を固定する。
 機能追加、新しい業務フロー、永続化、適用開始、次版作成は OUT。
+
+Definition Correction-1（C1–C6）をこの DRAFT に反映済み。LOCK ではない。
+実装順序の先頭は C1（Re-Simulation P0=0 かつ P1=0）と C2（reviewDueDate authority）。
 
 ---
 
@@ -87,14 +94,21 @@ IN:
 ```text
 同一利用者について、適用中 vN と 下書き vN+1（未適用）を
 同じ文脈（同一人の計画面）で確認できるようにする。
-「新しい計画があります」だけで済ませず、未適用であることを画面上で明示する。
-計画・見直し担当（表示ロール 計画担当）が
-「支援マネジメントを見る（読み取り専用）」へ到達できる導線を持つ。
-未実施 / 未記録 / 未保存 を、業務上異なる状態としてラベル・説明で扱う。
-  未実施 = その予定がまだ実施されていない
-  未記録 = 実施記録がまだ無い（未実施の別名にしない）
-  未保存 = いまの入力が業務データとして保存されていない
-           （ページ未保存と混同しない語にする）
+「新しい計画」単独ラベルは使わない（C6）。INTENDED primary:
+  次版下書き vN+1（未適用）
+  または 新しい計画の下書き（まだ適用されていません）
+計画・見直し担当が既存の「支援マネジメントを見る（読み取り専用）」へ
+application-internal / 既存 host 内だけで到達できる（C5）。
+未実施 / 未記録 / 未保存 は C3 に従う。
+  未実施 = 実施状態の既存明示情報からのみ
+  未記録 = 対象記録の正常取得・照合結果からのみ
+  未保存 = 明示的 local/session draft、または既存保存状態 authority がある場合だけ
+禁止:
+  取得失敗 → 未記録
+  source unavailable → 未実施
+  保存状態不明 → 未保存
+  データなし → 未保存
+read-only Management Home は新しい保存状態・業務状態を推論しない。
 ```
 
 OUT（Group 2）:
@@ -119,23 +133,37 @@ FIELD_STAFF に計画編集を開くこと
 IN:
 
 ```text
-「今日の対象 12」/「利用者 全8名」/「今日の支援 Aさんボード」の
-母集団と集計条件を、画面上で一致させるか、一致しないなら
-確定人数として読めない表示にする（独立カードを黙って 12 のまま置かない）。
-見直し画面から `reviewDueDate is caller-supplied` 等の内部実装情報を除く。
-利用者向けには日本語の基準日説明だけを残す。
-英語左ナビ（SupportPlans / AssessmentSnapshots）とごみ箱への迷走を、
-in-shell の「業務操作はこの枠内」案内で抑える。
+今日の対象 / 利用者 全N名 / 今日の支援ボードの母集団契約（C4）:
+  OrganizationId + SiteId でスコープ
+  User identity = UserId
+  全N名 = distinct UserId（Users roster RESOLVED）
+  今日の対象 = 同一 UserId 空間の today support-target distinct UserId（全N名を超えない）
+  ボード = occurrenceId の当日予定 subset（人数カードではない）
+  UNAVAILABLE → 確認できません（0 にしない）
+  部分取得を全体母集団として表示しない
+  独立ハードコード 12 を人頭の確定値として置かない
+reviewDueDate（C2 / #442 / #554）:
+  除く = raw field / technical origin / caller-supplied 説明
+  維持 = authoritative due semantics と Management Home の次回確認
+  available → 次回確認日（再計算しない）
+  unavailable → 確認できません != 期限なし != 未設定断定 != 0
+  固定90日を導入しない
+英語左ナビ / ごみ箱 = in-shell 案内のみ（C5）
 ```
 
 OUT（Group 3）:
 
 ```text
 SharePoint サイトナビゲーション編集
+Home.aspx edit
+tenant navigation mutation
+site chrome mutation
 リスト表示名のテナント変更
 ごみ箱のサイトからの削除
 新しい集計アルゴリズム / 新しいデータソース
 手順ID（proc-*）の全面削除（任意の後続。本 slice 必須ではない）
+deadline 再計算 / 固定90日
+reviewDueDate authority / 次回確認 semantics の削除
 ```
 
 サイト左ナビ変更は別 Human GO が必要である。Persona 4 の「迷わず到達」は
@@ -172,11 +200,11 @@ Human Scope Lock まで exact 文言は INTENDED。実装で別コピーを増�
 | R-PAGE | SharePoint ページ編集は業務記録ではない、とシェル内で区別できる | F-P0-001 |
 | R-UNSAVED | 裸の「未保存」を、ページ未保存と業務未保存で共用しない | F-P0-001, F-P1-006 |
 | R-ACTIVE-DRAFT | 同一人の計画面で 適用中 vN と 下書き vN+1（未適用）が同時に読める | F-P1-003 |
-| R-NEW-PLAN | 「新しい計画があります」は未適用を併記する | F-P1-003 |
-| R-MGMT | 計画担当から読み取り専用 支援マネジメント に到達できる | F-P1-004 |
-| R-STATUS | 未実施 ≠ 未記録 ≠ 未保存（ページ未保存を含む） | F-P1-006 |
-| R-COUNT | 件数カードの母集団が利用者ボードと矛盾して確定値に見えない | F-P1-005 |
-| R-INTERNAL | caller-supplied / reviewDueDate 識別子を利用者向け本文に出さない | F-P1-007 |
+| R-NEW-PLAN | 「新しい計画」単独禁止。未適用が primary wording の一部（C6） | F-P1-003 / P2-2 |
+| R-MGMT | 計画担当から read-only 支援マネジメントへ in-app / 既存 host のみ到達（C5） | F-P1-004 / P2-1 |
+| R-STATUS | 未実施 ≠ 未記録 ≠ 未保存。C3 の source と fail-closed | F-P1-006 / P1-3 |
+| R-COUNT | C4 の UserId / occurrence 母集団。UNAVAILABLE ≠ 0 | F-P1-005 / P1-4 |
+| R-INTERNAL | 利用者向けから raw reviewDueDate / caller-supplied 説明だけ除く。authoritative due は維持（C2） | F-P1-007 / P1-2 / #442 / #554 |
 
 ---
 
@@ -185,25 +213,23 @@ Human Scope Lock まで exact 文言は INTENDED。実装で別コピーを増�
 件数を減らすこと自体は合格条件にしない。次を Gate にする。
 
 ```text
-P0 = 0
+Authenticated 5-Persona Re-Simulation PASS
+=
+  P0 = 0
+  P1 = 0
+  Persona 1–5 required meaning checks = PASS
+  P2 = 明示的に non-blocking と判定されたものだけ carry-forward 可
 
-Persona 1
-  「見るだけ」が安全に成立する
+Persona 1  「見るだけ」が安全に成立する
+Persona 2  現状 PASS を維持する
+Persona 3  Active と Draft / 未適用を区別できる
+Persona 4  利用者 → 計画まで迷わず到達し、
+           未実施 / 未記録 / 未保存を区別できる
+Persona 5  件数と利用者単位の表示が整合し、
+           Draft と Active を説明できる
 
-Persona 2
-  現状 PASS を維持する
-  （今日やることに 30–60秒で到達できる。記録CTAで閲覧が壊れない）
-
-Persona 3
-  Active と Draft / 未適用を区別できる
-
-Persona 4
-  利用者 → 計画まで迷わず到達し、
-  未実施 / 未記録 / 未保存を区別できる
-
-Persona 5
-  件数と利用者単位の表示が整合し、
-  Draft と Active を説明できる
+Actual Staff Value Check
+  この PASS 条件に含めない
 ```
 
 ```text
@@ -222,7 +248,9 @@ npm test / typecheck の既存回帰
 ManagementHome 既存テストを壊さない
 today-support CTA ラベルのユニット
 overview 件数と users fixture の母集団テスト
-review-due 利用者向けコピーに caller-supplied が無いこと
+review-due 利用者向けコピーに caller-supplied / raw field が無いこと
+authoritative 次回確認 / 確認できません は残ること
+overview 母集団（UserId vs occurrenceId）と UNAVAILABLE ≠ 0
 synthetic browser smoke（presentation only）
 その後: authenticated 5-persona re-simulation
 ```
@@ -232,8 +260,9 @@ synthetic smoke は Re-Simulation を代替しない。
 ## 7. HOLD
 
 ```text
-HOLD: Independent Definition Review 未実施
-HOLD: exact 日本語コピーは Human Scope Lock 待ち（INTENDED）
+HOLD: Independent Definition Re-Review-2 未実施
+HOLD: Human Definition / Scope Lock 未受領
+HOLD: exact 日本語コピーは Human Scope Lock 待ち（C6 は INTENDED）
 HOLD: SharePoint サイトナビ変更は本 slice に含めない
 HOLD: Implementation Start GO なしでコード変更しない
 ```
@@ -242,8 +271,10 @@ HOLD: Implementation Start GO なしでコード変更しない
 
 ```text
 Human:
-  Independent Definition Review
-  その後 Definition / Scope Lock GO
+  exact Definition + Scope re-read
+  Independent Definition Re-Review-2
+  PASS なら Definition / Scope Lock GO / HOLD
+  Lock != Implementation Start
 
 Agent:
   実装しない

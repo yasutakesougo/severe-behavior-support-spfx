@@ -283,7 +283,9 @@ Human Ready / Promotion = NOT IMPLIED
 ```text
 Human:
   CORRECTION 確定済み
-  NEXT = Independent Definition Review of
+  NEXT = Independent Definition Re-Review-2
+    after exact-file re-read of
+    docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
     docs/architecture/sbs-mgmt-home-correction-1-scope-definition-1.md
   Definition / Scope Lock GO は Review 後
   Actual Staff Value Check は未実施のまま残す
@@ -293,15 +295,4 @@ Agent:
   SIM-AUTH-001 を製品Issueにしない
   Ready / Merge / Deploy / LIVE WRITE をしない
   Correction-1 実装を Scope Lock + Implementation Start なしで始めない
-```
-
-```text
-Human:
-  CORRECTION の要否を判断する（実装GOではない）
-  Actual Staff Value Check は未実施のまま残す
-
-Agent:
-  このシミュレーションを Actual Staff PASS に置換しない
-  SIM-AUTH-001 を製品Issueにしない
-  Ready / Merge / Deploy / LIVE WRITE をしない
 ```

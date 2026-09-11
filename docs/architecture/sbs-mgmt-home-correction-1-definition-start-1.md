@@ -9,9 +9,10 @@ unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Definition Start（docs-only）
 date: 2026-09-11
 Definition Start GO: RECEIVED（Human: CORRECTION 確定 + Correction-1 へ進む）
-Human Definition / Scope Lock GO: NOT RECEIVED
-Independent Definition Review: REQUIRED / NOT RUN
-Implementation Start GO: NOT RECEIVED
+Human Definition / Scope Lock GO: HOLD / NOT RECEIVED
+Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED（内容レベル）
+Independent Definition Re-Review-2: REQUIRED / NOT RUN
+Implementation Start GO: HOLD / NOT RECEIVED
 Implementation: NOT STARTED
 Actual Staff Value Check: NOT CONSUMED
 Human Ready / Promotion: NOT IMPLIED
@@ -72,6 +73,7 @@ NOT CONSUMED:
 
 ```text
 Independent Definition Review PASS
+Independent Definition Re-Review-2
 Human Definition / Scope Lock GO
 Human Implementation Start GO
 Authenticated 5-Persona Re-Simulation PASS
@@ -91,8 +93,11 @@ IN / OUT / 優先3群 / Re-Simulation Gate の正本は次へ委譲する。
 ```text
 docs/architecture/sbs-mgmt-home-correction-1-scope-definition-1.md
 kind: Correction Scope Definition
-status: DRAFT FOR INDEPENDENT REVIEW
+status: DRAFT FOR INDEPENDENT DEFINITION RE-REVIEW-2
+Definition Correction-1: APPLIED TO DRAFT
 != LOCKED
+correction packet:
+  docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md
 ```
 
 本 Definition Start は scope 文書の作成を許可する。
@@ -111,9 +116,15 @@ scope 文書の LOCK は許可しない。
 SBS-MGMT-HOME-CORRECTION-1
 Definition Start          ← this document
         ↓
-Correction Scope Definition  ← sibling DRAFT
+Correction Scope Definition  ← sibling DRAFT + Definition Correction-1
         ↓
-Independent Definition Review
+Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
+        ↓
+Definition Correction-1
+        ↓
+exact Definition + Scope re-read
+        ↓
+Independent Definition Re-Review-2
         ↓
 Human Definition / Scope Lock GO
         ↓
@@ -125,7 +136,8 @@ Independent Implementation Review
         ↓
 Authenticated 5-Persona Re-Simulation
         ↓
-P0 = 0 を確認
+P0 = 0 かつ P1 = 0 を確認
+（P2 は明示 non-blocking のみ carry-forward）
         ↓
 Actual Staff Value Check
         ↓
@@ -156,7 +168,7 @@ Actual Staff PASS 宣言
 ## 8. HOLD
 
 ```text
-HOLD: Independent Definition Review 未実施
+HOLD: Independent Definition Re-Review-2 未実施
 HOLD: Human Definition / Scope Lock 未受領
 HOLD: Implementation Start 未受領
 ```
@@ -165,11 +177,11 @@ HOLD: Implementation Start 未受領
 
 ```text
 Human:
-  Independent Definition Review を別経路で実施する
-  Scope Lock GO は Review 後
+  exact-file re-read of Definition Start / Scope / Definition Correction-1
+  Independent Definition Re-Review-2
+  Scope Lock GO は Re-Review-2 PASS 後
 
 Agent:
-  Scope Definition DRAFT を Independent Review に渡す
   実装しない
   Simulation 2 を改ざんしない
   SIM-AUTH-001 を製品 Issue にしない
