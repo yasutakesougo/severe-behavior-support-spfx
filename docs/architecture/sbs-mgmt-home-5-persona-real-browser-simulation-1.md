@@ -6,7 +6,7 @@ unit: SBS-MGMT-HOME
 kind: 5-PERSONA REAL-BROWSER SIMULATION
 mode: READ-ONLY UX TEST
 date: 2026-09-11
-agent HEAD (docs packet): <filled at commit>
+agent HEAD (docs packet): 419aaac9966b3c07a645dfbc5e4aac0f388be498
 origin/main at run: efb5ef9c5bac2c1ee2778a4eb7bfcf2eac27df80
 target URL:
   https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/SitePages/Home.aspx
