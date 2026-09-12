@@ -6,11 +6,10 @@ unit: SBS-MGMT-HOME-CORRECTION-1
 kind: implementation evidence / exact HEAD fixation
 PR: #604（Draft）
 branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
-packet / PR tip: 65535d4a73c9589f252cbdfc63e83b76041c509e
+packet / PR tip: PR #604 HEAD（Fresh Runtime must re-pin live）
 exact product tip: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
   presentation implementation: 2529191f5641177ffd4ef8424db2352486840e38
   verification closure（format + LOOP-B smoke）: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
-  evidence docs tip: 65535d4a73c9589f252cbdfc63e83b76041c509e
 Human Implementation Start GO: RECEIVED / CONSUMED（2026-09-12）
 Independent Implementation Scope Re-Review: PASS / REVIEW-CLEARED
 C1 Authenticated 5-persona Re-Sim: HOLD
@@ -106,7 +105,7 @@ Actual Staff Value Check: NOT CONSUMED
 
 ```text
 Fresh Independent Runtime must review:
-  tip 65535d4a73c9589f252cbdfc63e83b76041c509e（product @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e）
+  tip PR #604 HEAD（Fresh Runtime が live re-pin）（product @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e）
   this evidence packet
   C1 HOLD packet（simulation-3）
   LOCKED Definition Correction-1 + Correction Scope + Implementation Scope
