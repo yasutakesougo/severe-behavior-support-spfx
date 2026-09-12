@@ -8,7 +8,7 @@ status: READY FOR FRESH INDEPENDENT RUNTIME / NOT STARTED
 date: 2026-09-12
 PR: #604（Draft）
 branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
-implementation tip to bind: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
+implementation tip to bind: 65535d4a73c9589f252cbdfc63e83b76041c509e（product @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e）
 This Project runtime: MUST NOT perform / self-PASS the Implementation Review
 This packet: entry / basis pin only
 != Implementation Review PASS
@@ -19,7 +19,7 @@ This packet: entry / basis pin only
 ## 1. Why this entry exists
 
 Human Implementation Start GO was consumed. Groups 1–3 presentation work and
-required local verification are on tip `77dc5ba`. Authenticated 5-persona
+required local verification are on tip `65535d4`. Authenticated 5-persona
 Re-Sim（C1）is recorded as **HOLD**（Deploy equivalence + auth session missing）.
 A Fresh Independent Implementation Review must now judge the completed packet
 set（implementation + verification + C1 evidence）without implementer self-PASS.
@@ -28,7 +28,7 @@ set（implementation + verification + C1 evidence）without implementer self-PAS
 
 | Artifact | Path | Role |
 |---|---|---|
-| Implementation tip | `77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e` | Product + verification closure |
+| Implementation tip | `65535d4a73c9589f252cbdfc63e83b76041c509e`（product `77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e`） | Product + verification closure |
 | Implementation evidence | `docs/architecture/sbs-mgmt-home-correction-1-implementation-evidence.md` | S-* map / tests / CI notes |
 | C1 packet | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md` | HOLD（not PASS） |
 | Simulation 2 | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md` | Historical CORRECTION（do not rewrite） |

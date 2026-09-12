@@ -8,9 +8,11 @@ mode: READ-ONLY UX TEST / C1 Re-Sim after Correction-1 implementation
 date: 2026-09-12
 predecessor: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
   Simulation 2 = CORRECTION（historical; do not rewrite）
+packet tip: 65535d4a73c9589f252cbdfc63e83b76041c509e
 implementation candidate tip: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
   presentation @ 2529191f5641177ffd4ef8424db2352486840e38
   verification closure @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
+  evidence/docs tip: 65535d4a73c9589f252cbdfc63e83b76041c509e
 PR: #604（Draft）
 branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
 target URL:

@@ -9,7 +9,7 @@ status: RECORDED / SCOPE-CORRECTION-1-APPLIED / START-GO-CONSUMED
   Implementation Scope Correction-1: APPLIED（docs-only）
   Independent Implementation Scope Re-Review: PASS / REVIEW-CLEARED
   Human Implementation Start GO: RECEIVED / CONSUMED（2026-09-12）
-  Implementation candidate tip: 77dc5ba（presentation @ 2529191; verification closure @ 77dc5ba）
+  Implementation candidate tip: 65535d4（product @ 77dc5ba / presentation @ 2529191）
   != LOCKED Definition の再開
   != Independent Implementation Review PASS
   != Human Ready / Merge / Deploy
@@ -543,7 +543,7 @@ Implementation Scope Definition = RECORDED + SCOPE-CORRECTION-1-APPLIED（this d
 Independent Implementation Scope Review-1 = CORRECTION（historical）
 Independent Implementation Scope Re-Review = PASS / REVIEW-CLEARED
 Human Implementation Start GO = RECEIVED / CONSUMED（2026-09-12）
-Implementation = CANDIDATE CLOSED FOR START-GO PATH（tip 77dc5ba）
+Implementation = CANDIDATE CLOSED FOR START-GO PATH（tip 65535d4）
 C1 Authenticated 5-persona Re-Sim = HOLD
 Independent Implementation Review entry = READY
 Independent Implementation Review = REQUIRED（Fresh Independent Runtime）
@@ -555,7 +555,7 @@ Human Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 
 ```text
 Agent（this Project runtime; Start GO CONSUMED）:
-  verify + C1 HOLD packet + implementation evidence + Review entry = DONE @ tip 77dc5ba
+  verify + C1 HOLD packet + implementation evidence + Review entry = DONE @ tip 65535d4
   STOP at Independent Implementation Review entry ready
   Do not generate / infer Human Ready or Merge GO
   Do not Deploy / LIVE WRITE without separate Human GO
