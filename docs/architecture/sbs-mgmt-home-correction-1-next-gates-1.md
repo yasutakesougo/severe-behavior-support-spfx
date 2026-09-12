@@ -7,7 +7,8 @@ kind: next-gates freeze / Human handoff
 status: RECORDED / AUTHORITY-WAIT
 date: 2026-09-12
 PR: #604（Draft）
-exact review candidate: 1f1decc09eadb2474e74b192dc42e2cac3af48fc
+exact review candidate（product + Start-path docs at freeze）: 1f1decc09eadb2474e74b192dc42e2cac3af48fc
+Next Gates packet tip: PR #604 HEAD（docs-only may advance；re-pin live）
 product commit: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
 CI @ candidate: green（3/3 SUCCESS；re-confirm at live head）
 C1 packet: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md = HOLD
