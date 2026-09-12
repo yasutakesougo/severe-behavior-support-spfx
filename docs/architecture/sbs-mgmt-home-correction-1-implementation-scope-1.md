@@ -4,14 +4,19 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: RECORDED / CANDIDATE
-  Independent Implementation Scope Review-1: CORRECTION
+status: RECORDED / CANDIDATE / SCOPE-CORRECTION-1-APPLIED
+  Independent Implementation Scope Review-1: CORRECTION（historical）
+  Implementation Scope Correction-1: APPLIED（docs-only; this revision）
+  Independent Implementation Scope Re-Review: REQUIRED / NOT PERFORMED
   != LOCKED Definition の再開
   != Implementation Start
   != Independent Scope Review PASS
 date: 2026-09-11
+corrected: 2026-09-12
 branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
-parent Correction Scope: LOCKED
+parent Correction Scope: LOCKED（unchanged）
+correction packet:
+  docs/architecture/sbs-mgmt-home-correction-1-implementation-scope-correction-1.md
 lock packet:
   docs/architecture/sbs-mgmt-home-correction-1-definition-scope-lock-1.md
   git blob @ ebe8f9f = 98eac53fc6238dee0cc2ac0fcecaa0394ed5cb34
@@ -23,8 +28,9 @@ primary evidence:
   docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
   Outcome = CORRECTION（再判定しない）
 Human Definition / Scope Lock GO: RECEIVED / CONSUMED
+Human Implementation Scope Correction-1 GO: RECEIVED / CONSUMED（2026-09-12）
 Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
-Human Implementation Start GO: HOLD / NOT RECEIVED
+Human Implementation Start GO: HOLD / NOT RECEIVED / NOT ELIGIBLE
 Implementation: NOT AUTHORIZED
 Actual Staff Value Check: NOT CONSUMED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -133,9 +139,57 @@ FORBIDDEN
   occurrence 件数を今日の対象に出すこと
 ```
 
-現行合成に適用すると 今日の対象 = **1**（user-a）。全8名を超えない。ボードは Aさん予定の subset のまま。
+#### S-POP / OverviewKpiCard UNAVAILABLE exact contract（ISR1-P1-2 CLOSE）
 
-この決定で RR2-P2-1 は Implementation Start 後に **CLOSE 予定**（本 docs ではコードを変えないので OPEN のまま）。
+既存型 `OverviewKpiCard`（`spfx/src/shell/dashboard/overview-types.ts`）は維持する:
+
+```text
+OverviewKpiCard = Readonly<{
+  id: OverviewKpiCategory;
+  label: string;
+  count: number;       // 型上必須。意味は availability で分岐する
+  statusHint: string;  // 色だけにしない hint
+}>
+```
+
+`id = "today_targets"` は **互いに排他な 2 mode** のみ。実装者の第3解釈を禁止する。
+
+```text
+MODE_RESOLVED（todaySupportItems が取得でき、読める）
+  meaning:
+    count = distinct 適格 userId の人数（0 を許す = 「予定が無い」）
+    statusHint = 通常の対象 hint（例: 本日の支援対象）
+  display:
+    count を人数として描画してよい
+  NOT:
+    count=0 を UNAVAILABLE と読んではならない
+
+MODE_UNAVAILABLE（todaySupportItems 欠落 / UNAVAILABLE）
+  meaning:
+    表示状態 = UNAVAILABLE
+    count は人数・件数・ゼロ・12 のいずれの population 意味も持たない
+    statusHint = 固定文言「確認できません」
+  type compatibility:
+    count: number は型充足のため残す
+    値は population として解釈してはならない
+    count=0 / count=12 / その他の番兵値を UNAVAILABLE の意味に使ってはならない
+  display（実装 Start 後に満たす exact UI 規則）:
+    today_targets カードで count を population 数字として描画してはならない
+    主値は statusHint「確認できません」（または同等の非数値 unavailable 表示）とする
+    data-demo-ux-kpi-count に population を載せてはならない
+```
+
+```text
+FORBIDDEN（ISR1-P1-2）
+  UNAVAILABLE を count=0 で偽装すること
+  UNAVAILABLE を count=12（旧ハードコード）で埋めること
+  OverviewKpiCard.count だけで availability を表現すること
+  LOCKED C4 を超える新しい業務状態を足すこと
+```
+
+現行合成に MODE_RESOLVED を適用すると 今日の対象 = **1**（user-a）。全8名を超えない。ボードは Aさん予定の subset のまま。
+
+この決定で RR2-P2-1 は Implementation Start 後に **CLOSE 予定**（本 docs ではコードを変えないので OPEN のまま）。ISR1-P1-2 は本契約で **CLOSE**。
 
 ---
 
@@ -230,13 +284,32 @@ Lock の INTENDED 2 行から **実行時に使うのは次の 1 行だけ**。
 次版下書き vN+1（未適用）
 ```
 
+#### S-DRAFT N+1 authority（ISR1-P1-1 CLOSE）
+
+`conceptualNextVersion` と actual draft candidate を分離する。N+1 Draft 表示の authority は **draft 実体のみ**。
+
 ```text
-N+1 = 既存 draft.candidate.version または conceptualNextVersion
+Draft N+1 表示（「次版下書き vN+1（未適用）」）を出してよい
+  iff 既存 draft 実体があり、draft.candidate.version が存在する
+N+1 = draft.candidate.version のみ
+
+conceptualNextVersion
+  = 次版の考え方 / 版番号の概念値（fixture 上の概念）
+  ≠ Draft 実体
+  ≠ Draft exists の証拠
+  単独では「次版下書き vN+1（未適用）」を出してはならない
+  単独では Draft の存在を表現してはならない
+
 現行版が無い対象ではカードを出さない
 スタンドアロン「新しい計画」禁止
 同等文「新しい計画の下書き（まだ適用されていません）」は
   文書上の別名として残してよいが、画面には出さない
   （「新しい計画」部分が Persona 3 誤読の核）
+
+FORBIDDEN（ISR1-P1-1）
+  N+1 = draft.candidate.version または conceptualNextVersion
+  conceptualNextVersion だけで Draft ラベルを出すこと
+  Draft 不在を conceptual next で埋めること
 ```
 
 既存ソース:
@@ -245,11 +318,15 @@ N+1 = 既存 draft.candidate.version または conceptualNextVersion
 Aさん
   DEMO_UX_SUPPORT_PLAN_FIXTURE.currentVersion = 3
   conceptualNextVersion = 4
+    → 概念値。これだけでは Draft 表示を許可しない
   MANAGEMENT_HOME_RESOLVED_FIXTURE.draft.candidate.version = 4
+    → Draft 実体あり。N+1 表示 authority = 4
   → 適用中 v3 と 次版下書き v4（未適用）を同一計画面 / Management Home で並記
+  → v4 表示の根拠は draft.candidate.version。conceptualNextVersion との一致は偶然の一致であり authority ではない
 
 Cさん
   既存 fixture に Draft が無い（詳細は「現行版（合成）」のみ）
+  conceptualNextVersion があっても Draft 表示は出さない
   → Draft を新造しない（next-version creation = OUT）
   → 「新しい計画があります」を消す
   → 現行版のみ表示。無い Draft をあるように書かない
@@ -257,6 +334,7 @@ Cさん
 
 Persona 3 の meaning check は **Draft が存在する Aさん面** で成立させる。
 Cさんで Draft を捏造して PASS にしない。
+ISR1-P1-1 は本契約で **CLOSE**。
 
 対象コピー: `overview-fixture.ts` action-c reason、`users-fixture.ts` attentionNote、
 `user-detail-fixture.ts` / `review-due-fixture.ts` の「新しい計画」文言、
@@ -427,11 +505,13 @@ Authenticated 5-Persona Re-Simulation
 ## 9. HOLD
 
 ```text
-HOLD: Independent Implementation Scope Review-1 = CORRECTION
-HOLD: Human Implementation Start GO 未受領 — 本文書はコード変更を許可しない
+HOLD: Independent Implementation Scope Review-1 = CORRECTION（historical）
+HOLD: Independent Implementation Scope Re-Review = REQUIRED / NOT PERFORMED
+HOLD: Human Implementation Start GO 未受領 / NOT ELIGIBLE — 本文書はコード変更を許可しない
 HOLD: SharePoint サイト mutation
 HOLD: Actual Staff Value Check
-HOLD: RR2-P2-1 は ISR1-P1-2 が閉じ、コードが S-POP を満たすまで OPEN
+HOLD: RR2-P2-1 はコードが S-POP MODE_RESOLVED/MODE_UNAVAILABLE を満たすまで OPEN
+  （ISR1-P1-2 docs contract は CLOSE。実装 exact は Start 後）
 ```
 
 ---
@@ -451,9 +531,12 @@ Actual Staff / Ready / Merge を宣言していない
 ## 11. Gate
 
 ```text
-Human Definition / Scope Lock GO = CONSUMED
-Implementation Scope Definition = RECORDED（this document）
-Independent Implementation Scope Review-1 = CORRECTION
+Human Definition / Scope Lock GO = CONSUMED（unchanged）
+LOCKED Definition / Correction Scope = UNCHANGED
+Human Implementation Scope Correction-1 GO = CONSUMED
+Implementation Scope Definition = RECORDED + SCOPE-CORRECTION-1-APPLIED（this document）
+Independent Implementation Scope Review-1 = CORRECTION（historical）
+Independent Implementation Scope Re-Review = REQUIRED / NOT PERFORMED
 Human Implementation Start GO = HOLD / NOT RECEIVED / NOT ELIGIBLE
 Implementation = NOT STARTED
 ```
@@ -461,16 +544,21 @@ Implementation = NOT STARTED
 ## 12. NEXT
 
 ```text
-Agent:
-  Implementation Scope Correction-1（docs-only）
-  ISR1-P1-1 / ISR1-P1-2 を閉じる
-  実装しない
+Agent（this Project runtime）:
+  STOP after Scope Correction-1 verification
+  Fresh Independent Implementation Scope Re-Review を実行しない
+  Implementation Start GO を生成・推定・消費しない
 
-Human:
-  Scope Correction + Independent Re-Review の後
+Fresh Independent Runtime（別）:
+  Independent Implementation Scope Re-Review
+  basis = this corrected Implementation Scope candidate
+  entry = docs/architecture/sbs-mgmt-home-correction-1-independent-implementation-scope-re-review-entry-1.md
+
+Human（Re-Review 後）:
   Human Implementation Start GO / HOLD
 
 Lock CONSUMED != Implementation Start
-Implementation Scope RECORDED != Implementation Start
-Independent Review CORRECTION != Implementation Start
+Scope Correction-1 APPLIED != Implementation Start
+Independent Review-1 CORRECTION != Re-Review PASS
+Re-Review REQUIRED != Re-Review PASS
 ```

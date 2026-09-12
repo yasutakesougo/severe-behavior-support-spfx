@@ -267,7 +267,7 @@ Human Definition / Scope Lock GO = RECEIVED / CONSUMED
 Implementation Start GO = HOLD / NOT RECEIVED
 ```
 
-Human Definition / Scope Lock GO != Implementation Start GO  
+Human Definition / Scope Lock GO != Implementation Start GO
 Implementation Start GO != Actual Staff / Ready / Promotion / Merge / Deploy / LIVE WRITE
 
 ## 5. Next Gate
