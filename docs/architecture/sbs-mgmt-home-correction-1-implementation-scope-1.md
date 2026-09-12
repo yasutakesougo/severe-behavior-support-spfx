@@ -9,7 +9,7 @@ status: RECORDED / SCOPE-CORRECTION-1-APPLIED / START-GO-CONSUMED
   Implementation Scope Correction-1: APPLIED（docs-only）
   Independent Implementation Scope Re-Review: PASS / REVIEW-CLEARED
   Human Implementation Start GO: RECEIVED / CONSUMED（2026-09-12）
-  Implementation candidate tip: 2529191（may advance with in-scope commits）
+  Implementation candidate tip: 77dc5ba（presentation @ 2529191; verification closure @ 77dc5ba）
   != LOCKED Definition の再開
   != Independent Implementation Review PASS
   != Human Ready / Merge / Deploy
@@ -511,7 +511,9 @@ HOLD: Independent Implementation Scope Review-1 = CORRECTION（historical）
 HOLD: SharePoint サイト mutation（別途 Deploy / LIVE WRITE GO なしでは禁止）
 HOLD: Actual Staff Value Check
 HOLD: Human Ready GO / Human Merge GO — NOT GENERATED / NOT CONSUMED
-HOLD: Authenticated 5-persona Re-Sim（C1）— tip-equivalent deploy + auth session が揃うまで実施不可なら HOLD
+HOLD: Authenticated 5-persona Re-Sim（C1）= HOLD RECORDED
+  packet: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md
+  blocked: tip-equivalent Deploy unconfirmed + AUTH_STATE=SIGN_IN_WALL
 HOLD: RR2-P2-1 — S-POP MODE_RESOLVED/MODE_UNAVAILABLE 実装 exact 確認まで OPEN 扱い可
 ```
 
@@ -541,7 +543,10 @@ Implementation Scope Definition = RECORDED + SCOPE-CORRECTION-1-APPLIED（this d
 Independent Implementation Scope Review-1 = CORRECTION（historical）
 Independent Implementation Scope Re-Review = PASS / REVIEW-CLEARED
 Human Implementation Start GO = RECEIVED / CONSUMED（2026-09-12）
-Implementation = IN PROGRESS / CANDIDATE（tip 2529191; may advance in-scope）
+Implementation = CANDIDATE CLOSED FOR START-GO PATH（tip 77dc5ba）
+C1 Authenticated 5-persona Re-Sim = HOLD
+Independent Implementation Review entry = READY
+Independent Implementation Review = REQUIRED（Fresh Independent Runtime）
 Independent Implementation Review = REQUIRED after C1 evidence
 Human Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
@@ -550,12 +555,11 @@ Human Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 
 ```text
 Agent（this Project runtime; Start GO CONSUMED）:
-  1. verify / gap-fill implementation candidate within this Scope
-  2. Authenticated 5-persona Re-Sim（C1）または明示 HOLD
-  3. implementation evidence + Independent Implementation Review entry
-  STOP at Review entry ready
+  verify + C1 HOLD packet + implementation evidence + Review entry = DONE @ tip 77dc5ba
+  STOP at Independent Implementation Review entry ready
   Do not generate / infer Human Ready or Merge GO
   Do not Deploy / LIVE WRITE without separate Human GO
+  Do not self-PASS Independent Implementation Review
 
 Fresh Independent Runtime（別）:
   Independent Implementation Review
