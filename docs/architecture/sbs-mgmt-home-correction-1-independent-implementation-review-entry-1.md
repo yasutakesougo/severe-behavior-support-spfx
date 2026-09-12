@@ -13,7 +13,7 @@ This Project runtime: MUST NOT perform / self-PASS the Implementation Review
 This packet: entry / basis pin only
 != Implementation Review PASS
 != Human Ready / Merge / Deploy
-!= C1 PASS（C1 packet Outcome = HOLD）
+!= C1 PASS（C1 packet Outcome = HOLD；VTSGO CONSUMED；live serving NOT ESTABLISHED）
 ```
 
 ## 1. Why this entry exists
@@ -114,4 +114,16 @@ Human Ready / Merge / Production Deploy = NOT AUTHORIZED
 This Project runtime does not self-PASS Review.
 Verification Deploy GO ≠ Production Deploy GO ≠ Ready / Merge
 STOP after C1 HOLD evidence；do not proceed to Ready / Merge / Production Deploy
+```
+
+## VTSGO / C1 HOLD note（2026-09-12）
+
+```text
+Human Verification Tenant Serving GO CONSUMED.
+Tip-equivalent local artifact frozen.
+Live tenant serving NOT ESTABLISHED（agent SIGN_IN_WALL）.
+C1 acceptance = HOLD.
+Fresh Independent Implementation Review remains the NEXT gate after C1 acceptance evidence.
+This implementer runtime MUST NOT self-PASS Independent Implementation Review.
+Ready / Merge / Production Deploy = NOT AUTHORIZED.
 ```

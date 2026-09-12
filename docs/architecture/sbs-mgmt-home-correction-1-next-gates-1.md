@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: next-gates freeze / Human handoff
-status: RECORDED / VDGO-CONSUMED / C1-HOLD
+status: RECORDED / VDGO-CONSUMED / VTSGO-CONSUMED / C1-HOLD
 date: 2026-09-12
 PR: #604（Draft）
 Implementation Candidate: FROZEN
@@ -192,4 +192,21 @@ Implementation Candidate remains FROZEN.
 Immediate Human judgment = existing verification authority OR Verification Deploy GO.
 Agent does not Deploy / run C1 / Ready / Merge / Production Deploy until that path is explicit.
 Ready / Merge / Production Deploy = NOT AUTHORIZED by this packet.
+```
+
+
+## VTSGO consume note（2026-09-12）
+
+```text
+Human Verification Tenant Serving GO = RECEIVED / CONSUMED
+packet: docs/architecture/sbs-mgmt-home-correction-1-verification-tenant-serving-go-1.md
+evidence: docs/architecture/sbs-mgmt-home-correction-1-verification-tenant-serving-evidence-1.md
+Pre-write freeze = DONE
+Local tip-equivalent .sppkg = DONE
+Agent App Catalog write = NOT EXECUTABLE（SIGN_IN_WALL）
+live Equivalence = NOT CONFIRMED
+Authenticated C1 = HOLD
+IR = HOLD（no self-PASS）
+Ready / Merge / Production Deploy = NOT AUTHORIZED
+STOP at C1 HOLD evidence
 ```
