@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: next-gates freeze / Human handoff
-status: RECORDED / AUTHORITY-WAIT
+status: RECORDED / VDGO-CONSUMED / C1-HOLD
 date: 2026-09-12
 PR: #604（Draft）
 Implementation Candidate: FROZEN
@@ -13,16 +13,20 @@ product basis: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
 Next Gates packet tip: PR #604 HEAD（docs-only may advance；re-pin live）
 CI @ candidate: green（re-confirm at live head）
 C1 packet: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md = HOLD
-  Authenticated C1 = NOT YET RUN AGAINST TIP-EQUIVALENT DEPLOY
+  Authenticated C1 acceptance = HOLD（live Equivalence NOT CONFIRMED；SIGN_IN_WALL）
 IR entry: docs/architecture/sbs-mgmt-home-correction-1-independent-implementation-review-entry-1.md
-  = READY / NOT STARTED / AFTER C1
+  = HOLD（awaits C1 acceptance；Fresh Runtime；no self-PASS）
 Verification Deploy GO packet:
   docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
-  Decision = NOT RECEIVED（or N/A if existing authority identified）
+  Decision = GO RECEIVED / CONSUMED（2026-09-12）
+  evidence: docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-evidence-1.md
+  live Equivalence for Authenticated C1 = NOT CONFIRMED
+  Authenticated C1 acceptance = HOLD
+  Independent Implementation Review = HOLD
 Implementation Start authority: NOT GENERATED / NOT INFERRED from this packet
 Ready / Merge / Production Deploy: NOT AUTHORIZED / HOLD
-This Project runtime: STOP at authority wait
-  （no Verification Deploy / C1 / IR self-PASS / Ready / Merge / Production Deploy）
+This Project runtime: STOP after C1 HOLD evidence
+  （no IR self-PASS / Ready / Merge / Production Deploy / App Catalog）
 ```
 
 ## 1. Binding inequalities

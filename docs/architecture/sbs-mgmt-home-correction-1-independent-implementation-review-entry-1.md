@@ -94,21 +94,24 @@ PR metadata（Human UI；≠ GO）
   → Human Ready GO（separate；not inferred）
 ```
 
-Current C1 Outcome = HOLD（not yet run against tip-equivalent deploy）. Review may still inspect the HOLD packet, but must not invent C1 PASS. Strong review waits for authenticated C1 evidence after Verification Deploy path is explicit.
+Current C1 Outcome = HOLD（Verification Deploy GO CONSUMED；live Equivalence NOT CONFIRMED；AUTH SIGN_IN_WALL）.
+Independent Implementation Review = **HOLD** until Authenticated C1 acceptance evidence exists.
+Review must not invent C1 PASS. This Project runtime must not self-PASS Review.
 
 See:
 
 - `docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md`
-- `docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md`（Decision = NOT RECEIVED）
+- `docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md`（Decision = GO RECEIVED / CONSUMED）
+- `docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-evidence-1.md`
+- `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md`（C1 HOLD）
 
 ## 7. STOP（this Project）
 
 ```text
-Entry prepared.
-Fresh Independent Implementation Review = REQUIRED（Fresh Independent Runtime）
-Human Ready / Merge / Production Deploy = NOT AUTHORIZED by this packet
+Entry remains ready for Fresh Independent Runtime AFTER C1 acceptance evidence.
+Current: Independent Implementation Review = HOLD（C1 acceptance missing）
+Human Ready / Merge / Production Deploy = NOT AUTHORIZED
 This Project runtime does not self-PASS Review.
-This Project runtime stops at Verification Deploy authority wait
-  （PR metadata + existing authority or Verification Deploy GO = Human）
-Verification Deploy GO ≠ Production Deploy GO
+Verification Deploy GO ≠ Production Deploy GO ≠ Ready / Merge
+STOP after C1 HOLD evidence；do not proceed to Ready / Merge / Production Deploy
 ```

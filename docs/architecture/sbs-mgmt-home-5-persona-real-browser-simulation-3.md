@@ -4,26 +4,30 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME
 kind: 5-PERSONA AUTHENTICATED REAL-BROWSER SIMULATION
-mode: READ-ONLY UX TEST / C1 Re-Sim after Correction-1 implementation
+mode: READ-ONLY UX TEST / C1 under Verification Deploy GO
 date: 2026-09-12
 predecessor: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md
   Simulation 2 = CORRECTION（historical; do not rewrite）
-packet tip: PR #604 HEAD（Fresh Runtime must re-pin live）
-implementation product tip: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
-  presentation @ 2529191f5641177ffd4ef8424db2352486840e38
-  verification closure @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
+Human Verification Deploy GO: RECEIVED / CONSUMED
+  packet: docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
+  evidence: docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-evidence-1.md
+exact review candidate: 1f1decc09eadb2474e74b192dc42e2cac3af48fc
+product basis: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
 PR: #604（Draft）
-branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
 target URL:
   https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/SitePages/Home.aspx
 AUTH_STATE: SIGN_IN_WALL
-tip-equivalent Deploy on tenant: NOT CONFIRMED by Human
-authenticated session for this agent: NOT AVAILABLE
-synthetic smoke substitute: NOT USED as this simulation
-LIVE WRITE / Deploy / App Catalog / schema / page edit: NOT PERFORMED
+tip-equivalent tenant Deploy: NOT PERFORMED（App Catalog write Forbidden by VDGO）
+Equivalence（live ↔ Candidate）: NOT CONFIRMED
+authenticated session: NOT AVAILABLE（no credential/MFA capture）
+synthetic smoke substitute: NOT USED as Authenticated C1
+local LOOP-B verification host: DONE（≠ C1；spfx ≡ Product Basis）
+LIVE WRITE / App Catalog / production Deploy: NOT PERFORMED
 Actual Staff Value Check: NOT CONSUMED
-Human Ready / Merge / Deploy: NOT IMPLIED / NOT GENERATED
+Human Ready / Merge / Production Deploy: NOT IMPLIED / NOT GENERATED
 Simulation Outcome: HOLD
+  reason: Equivalence NOT CONFIRMED for Authenticated C1 acceptance environment
+Independent Implementation Review: HOLD（awaits C1 acceptance evidence）
 ```
 
 ## Boundary
@@ -128,16 +132,23 @@ Do not alter Simulation 2 CORRECTION history.
 Independent Implementation Review may proceed with this HOLD packet
   as explicit C1 evidence（not as C1 PASS）.
 
-Re-Sim resume condition（Next Gates-1 + Verification Deploy GO-1）:
-  Human confirms tip-equivalent Deploy identity
-    under existing verification/preview authority
-    OR Human Verification Deploy GO Decision = GO
-      （docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md）
-  AND authenticated READ-ONLY session available
-  Basis remains candidate 1f1decc / product 77dc5ba
-  Implementation Start GO ≠ Verification Deploy GO ≠ Production Deploy GO
-  Authenticated C1 = NOT YET RUN AGAINST TIP-EQUIVALENT DEPLOY
+Verification Deploy GO CONSUMED path（this update）:
+  Local verification host tip-equivalent presentation = DONE（Equivalence CONFIRMED for local）
+  Live Home tip-equivalent Deploy = NOT PERFORMED（App Catalog Forbidden）
+  AUTH_STATE = SIGN_IN_WALL
+  Equivalence（live ↔ Candidate）= NOT CONFIRMED
+  → Authenticated C1 as candidate acceptance = HOLD
+  → Independent Implementation Review = HOLD
+  LOOP-B smoke ≠ C1 substitute
+
+Unblock Authenticated C1 acceptance requires separate authority that allows
+  tip-equivalent tenant serving（e.g. App Catalog / tenant verification write）
+  + authenticated READ-ONLY session
+  + Equivalence CONFIRMED
+  That authority is NOT inferred from this Verification Deploy GO.
+
 See:
-  docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
   docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
+  docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-evidence-1.md
+  docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
 ```
