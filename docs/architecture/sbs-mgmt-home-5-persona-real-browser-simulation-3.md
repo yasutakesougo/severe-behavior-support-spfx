@@ -128,11 +128,16 @@ Do not alter Simulation 2 CORRECTION history.
 Independent Implementation Review may proceed with this HOLD packet
   as explicit C1 evidence（not as C1 PASS）.
 
-Re-Sim resume condition（Next Gates-1）:
+Re-Sim resume condition（Next Gates-1 + Verification Deploy GO-1）:
   Human confirms tip-equivalent Deploy identity
-    under existing authority OR separate verification Deploy GO
+    under existing verification/preview authority
+    OR Human Verification Deploy GO Decision = GO
+      （docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md）
   AND authenticated READ-ONLY session available
   Basis remains candidate 1f1decc / product 77dc5ba
-  Implementation Start GO ≠ Deploy authority
-See: docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
+  Implementation Start GO ≠ Verification Deploy GO ≠ Production Deploy GO
+  Authenticated C1 = NOT YET RUN AGAINST TIP-EQUIVALENT DEPLOY
+See:
+  docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
+  docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
 ```

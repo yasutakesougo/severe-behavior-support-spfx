@@ -81,28 +81,34 @@ This entry alone
   → NOT Ready / Merge eligibility
 ```
 
-## 6. Sequencing note（Next Gates-1）
+## 6. Sequencing note（Next Gates-1 + Verification Deploy GO）
 
 Preferred order before a strong Fresh Review:
 
 ```text
-tip-equivalent verification identity
+PR metadata（Human UI；≠ GO）
+  → existing verification authority OR Human Verification Deploy GO
+  → tip-equivalent deployed identity
   → Authenticated C1 Re-Sim（PASS or findings packet）
   → Fresh Independent Implementation Review
   → Human Ready GO（separate；not inferred）
 ```
 
-Current C1 Outcome = HOLD. Review may still inspect the HOLD packet, but must not invent C1 PASS. Strong review waits for authenticated C1 evidence when Deploy identity + session become available.
+Current C1 Outcome = HOLD（not yet run against tip-equivalent deploy）. Review may still inspect the HOLD packet, but must not invent C1 PASS. Strong review waits for authenticated C1 evidence after Verification Deploy path is explicit.
 
-See: `docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md`
+See:
+
+- `docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md`
+- `docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md`（Decision = NOT RECEIVED）
 
 ## 7. STOP（this Project）
 
 ```text
 Entry prepared.
 Fresh Independent Implementation Review = REQUIRED（Fresh Independent Runtime）
-Human Ready / Merge / Deploy = NOT AUTHORIZED by this packet
+Human Ready / Merge / Production Deploy = NOT AUTHORIZED by this packet
 This Project runtime does not self-PASS Review.
-This Project runtime stops at Next Gates authority wait
-  （PR metadata + tip-equivalent Deploy authority = Human）
+This Project runtime stops at Verification Deploy authority wait
+  （PR metadata + existing authority or Verification Deploy GO = Human）
+Verification Deploy GO ≠ Production Deploy GO
 ```

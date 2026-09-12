@@ -120,11 +120,14 @@ IR entry = READY（Fresh Independent Runtime；self-PASS しない）
 
 Post Start GO:
   docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
-  Human: PR metadata + tip-equivalent Deploy authority check
-  Then: Authenticated C1 → Fresh IR → Human Ready / Merge / Deploy（separate GOs）
+  docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
+    Decision = NOT RECEIVED
+  Human: PR metadata（≠ GO）+ Verification Deploy authority binary
+  Then: tip-equivalent identity → Authenticated C1 → Fresh IR
+       → Human Ready / Merge / Production Deploy GO（separate；≠ Verification Deploy GO）
 
 != Human Ready GO
 != Human Merge GO
-!= tip-equivalent Deploy authority inferred from Start GO
-!= Production Deploy / LIVE WRITE
+!= Verification Deploy GO inferred from Start GO
+!= Production Deploy GO / LIVE WRITE
 ```

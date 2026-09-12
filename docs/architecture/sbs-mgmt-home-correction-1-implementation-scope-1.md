@@ -559,28 +559,32 @@ Start GO path（this Project）= DONE
 
 Post Start GO next-gates（adopted）:
   docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
+  docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
+    Decision = NOT RECEIVED（or N/A if existing authority identified）
 
 Agent（this Project runtime）:
-  STOP at Next Gates authority wait
-  Do not infer Deploy from Implementation Start GO
+  STOP at Verification Deploy authority wait
+  Do not infer Verification Deploy or Production Deploy from Implementation Start GO
   Do not run C1 without tip-equivalent Deploy identity + auth session
   Do not self-PASS Independent Implementation Review
   Do not generate / infer Human Ready / Merge / Production Deploy GO
-  Do not change code HEAD for PR metadata
+  Do not change candidate HEAD for PR metadata
 
 Human（immediate）:
-  1. PR #604 title/body update（GitHub UI；draft in next-gates-1；HEAD unchanged）
-  2. C1 tip-equivalent Deploy authority check
-       existing permission → confirm deployed identity → C1
-       new cloud/test write → separate verification Deploy GO
+  1. PR #604 title/body update（GitHub UI；≠ any GO；HEAD unchanged）
+  2. Verification Deploy authority binary
+       existing verification/preview authority explicitly covers tip-equivalent
+         → confirm deployed identity → C1（VDGO Decision = N/A）
+       no / ambiguous
+         → Human Verification Deploy GO（packet above）→ identity → C1
 
 Then:
   3. Authenticated C1 Re-Sim
   4. Fresh Independent Implementation Review（C1 evidence included）
-  5–9. Human Ready → Merge → Production Deploy（separate GOs）
+  5–9. Human Ready → Merge → Production Deploy GO（separate；≠ Verification Deploy GO）
 
 Lock CONSUMED != Ready / Merge
-Start GO CONSUMED != tip-equivalent Deploy != Production Deploy
+Start GO CONSUMED != Verification Deploy GO != Production Deploy GO
 C1 PASS != IR PASS != Human Ready GO
 Independent Implementation Review entry != Review PASS
 ```
