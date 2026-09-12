@@ -554,24 +554,33 @@ Human Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ## 12. NEXT
 
 ```text
-Agent（this Project runtime; Start GO CONSUMED）:
-  verify + C1 HOLD packet + implementation evidence + Review entry = DONE @ tip = PR #604 HEAD
-  STOP at Independent Implementation Review entry ready
-  Do not generate / infer Human Ready or Merge GO
-  Do not Deploy / LIVE WRITE without separate Human GO
+Start GO path（this Project）= DONE
+  verify + C1 HOLD + evidence + IR entry @ tip = PR #604 HEAD（1f1decc；product 77dc5ba）
+
+Post Start GO next-gates（adopted）:
+  docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
+
+Agent（this Project runtime）:
+  STOP at Next Gates authority wait
+  Do not infer Deploy from Implementation Start GO
+  Do not run C1 without tip-equivalent Deploy identity + auth session
   Do not self-PASS Independent Implementation Review
+  Do not generate / infer Human Ready / Merge / Production Deploy GO
+  Do not change code HEAD for PR metadata
 
-Fresh Independent Runtime（別）:
-  Independent Implementation Review
-  basis = implementation tip + evidence + C1 packet + LOCKED Definition / Scope
+Human（immediate）:
+  1. PR #604 title/body update（GitHub UI；draft in next-gates-1；HEAD unchanged）
+  2. C1 tip-equivalent Deploy authority check
+       existing permission → confirm deployed identity → C1
+       new cloud/test write → separate verification Deploy GO
 
-Human（parallel; not Start authority）:
-  PR #604 title/body metadata update（GitHub UI）
-  tip-equivalent Deploy confirmation or separate Deploy GO（for C1）
-  authenticated session for C1
+Then:
+  3. Authenticated C1 Re-Sim
+  4. Fresh Independent Implementation Review（C1 evidence included）
+  5–9. Human Ready → Merge → Production Deploy（separate GOs）
 
 Lock CONSUMED != Ready / Merge
-Start GO CONSUMED != Ready / Merge / Deploy
-C1 evidence != Actual Staff Value Check
+Start GO CONSUMED != tip-equivalent Deploy != Production Deploy
+C1 PASS != IR PASS != Human Ready GO
 Independent Implementation Review entry != Review PASS
 ```

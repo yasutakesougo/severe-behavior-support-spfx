@@ -127,4 +127,12 @@ Do not treat HOLD as PASS.
 Do not alter Simulation 2 CORRECTION history.
 Independent Implementation Review may proceed with this HOLD packet
   as explicit C1 evidence（not as C1 PASS）.
+
+Re-Sim resume condition（Next Gates-1）:
+  Human confirms tip-equivalent Deploy identity
+    under existing authority OR separate verification Deploy GO
+  AND authenticated READ-ONLY session available
+  Basis remains candidate 1f1decc / product 77dc5ba
+  Implementation Start GO ≠ Deploy authority
+See: docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
 ```

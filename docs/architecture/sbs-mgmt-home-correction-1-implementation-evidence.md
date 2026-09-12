@@ -116,8 +116,15 @@ This Project runtime must NOT self-PASS the Independent Implementation Review.
 
 ```text
 Implementation candidate + required verification + C1 HOLD packet = recorded
-NEXT = Independent Implementation Review（Fresh Independent Runtime）
+IR entry = READY（Fresh Independent Runtime；self-PASS しない）
+
+Post Start GO:
+  docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md
+  Human: PR metadata + tip-equivalent Deploy authority check
+  Then: Authenticated C1 → Fresh IR → Human Ready / Merge / Deploy（separate GOs）
+
 != Human Ready GO
 != Human Merge GO
-!= Deploy / LIVE WRITE
+!= tip-equivalent Deploy authority inferred from Start GO
+!= Production Deploy / LIVE WRITE
 ```

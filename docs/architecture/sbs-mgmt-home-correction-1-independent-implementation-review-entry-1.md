@@ -81,11 +81,28 @@ This entry alone
   → NOT Ready / Merge eligibility
 ```
 
-## 6. STOP（this Project）
+## 6. Sequencing note（Next Gates-1）
+
+Preferred order before a strong Fresh Review:
+
+```text
+tip-equivalent verification identity
+  → Authenticated C1 Re-Sim（PASS or findings packet）
+  → Fresh Independent Implementation Review
+  → Human Ready GO（separate；not inferred）
+```
+
+Current C1 Outcome = HOLD. Review may still inspect the HOLD packet, but must not invent C1 PASS. Strong review waits for authenticated C1 evidence when Deploy identity + session become available.
+
+See: `docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md`
+
+## 7. STOP（this Project）
 
 ```text
 Entry prepared.
-Fresh Independent Implementation Review = REQUIRED
+Fresh Independent Implementation Review = REQUIRED（Fresh Independent Runtime）
 Human Ready / Merge / Deploy = NOT AUTHORIZED by this packet
-This Project runtime stops here.
+This Project runtime does not self-PASS Review.
+This Project runtime stops at Next Gates authority wait
+  （PR metadata + tip-equivalent Deploy authority = Human）
 ```
