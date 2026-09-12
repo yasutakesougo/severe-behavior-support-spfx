@@ -4,16 +4,20 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1-IMPLEMENTATION-SCOPE-1
 kind: implementation scope / start-gate definition
-status: RECORDED / CANDIDATE / SCOPE-CORRECTION-1-APPLIED
+status: RECORDED / SCOPE-CORRECTION-1-APPLIED / START-GO-CONSUMED
   Independent Implementation Scope Review-1: CORRECTION（historical）
-  Implementation Scope Correction-1: APPLIED（docs-only; this revision）
-  Independent Implementation Scope Re-Review: REQUIRED / NOT PERFORMED
+  Implementation Scope Correction-1: APPLIED（docs-only）
+  Independent Implementation Scope Re-Review: PASS / REVIEW-CLEARED
+  Human Implementation Start GO: RECEIVED / CONSUMED（2026-09-12）
+  Implementation candidate tip: 2529191（may advance with in-scope commits）
   != LOCKED Definition の再開
-  != Implementation Start
-  != Independent Scope Review PASS
+  != Independent Implementation Review PASS
+  != Human Ready / Merge / Deploy
 date: 2026-09-11
 corrected: 2026-09-12
+start-go-consumed: 2026-09-12
 branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
+PR: #604（Draft）
 parent Correction Scope: LOCKED（unchanged）
 correction packet:
   docs/architecture/sbs-mgmt-home-correction-1-implementation-scope-correction-1.md
@@ -30,20 +34,18 @@ primary evidence:
 Human Definition / Scope Lock GO: RECEIVED / CONSUMED
 Human Implementation Scope Correction-1 GO: RECEIVED / CONSUMED（2026-09-12）
 Independent Definition Re-Review-2: PASS / REVIEW-CLEARED
-Human Implementation Start GO: HOLD / NOT RECEIVED / NOT ELIGIBLE
-Implementation: NOT AUTHORIZED
+Human Implementation Start GO: RECEIVED / CONSUMED（2026-09-12）
+Implementation: AUTHORIZED within LOCKED Definition / Correction Scope + this Scope
 Actual Staff Value Check: NOT CONSUMED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 SharePoint / M365 / Entra mutation: NOT AUTHORIZED
 ```
 
 This document fixes the smallest Implementation Scope that can realize locked C1–C6
-without redesigning the Definition, inventing business states, or starting code.
+without redesigning the Definition or inventing business states.
 
-This document does **not** authorize Implementation Start.
-
-新しい `Human Implementation Scope GO` は作らない。次の Human Gate は
-`Human Implementation Start GO` のまま。その前に Independent Implementation Scope Review を置く。
+Human Implementation Start GO has been **RECEIVED / CONSUMED**. Product / SPFx work
+is authorized only inside this Scope. Ready / Merge / Deploy remain separate Human Gates.
 
 ---
 
@@ -506,23 +508,24 @@ Authenticated 5-Persona Re-Simulation
 
 ```text
 HOLD: Independent Implementation Scope Review-1 = CORRECTION（historical）
-HOLD: Independent Implementation Scope Re-Review = REQUIRED / NOT PERFORMED
-HOLD: Human Implementation Start GO 未受領 / NOT ELIGIBLE — 本文書はコード変更を許可しない
-HOLD: SharePoint サイト mutation
+HOLD: SharePoint サイト mutation（別途 Deploy / LIVE WRITE GO なしでは禁止）
 HOLD: Actual Staff Value Check
-HOLD: RR2-P2-1 はコードが S-POP MODE_RESOLVED/MODE_UNAVAILABLE を満たすまで OPEN
-  （ISR1-P1-2 docs contract は CLOSE。実装 exact は Start 後）
+HOLD: Human Ready GO / Human Merge GO — NOT GENERATED / NOT CONSUMED
+HOLD: Authenticated 5-persona Re-Sim（C1）— tip-equivalent deploy + auth session が揃うまで実施不可なら HOLD
+HOLD: RR2-P2-1 — S-POP MODE_RESOLVED/MODE_UNAVAILABLE 実装 exact 確認まで OPEN 扱い可
 ```
 
 ---
 
-## 10. Done criteria（実装完了時。今は未達）
+## 10. Done criteria（この Start GO path）
 
 ```text
 Locked C1–C6 を満たす SPFx presentation 差分がある
 S-POP により 12 が人数として残っていない
-Re-Sim PASS（C1）または明示 HOLD
+required verification（test / typecheck / lint / build as applicable）完了または明示 HOLD
+Authenticated 5-persona Re-Sim（C1）evidence packet 完了（PASS または明示 HOLD）
 Simulation 2 本文の CORRECTION は歴史証跡として残る
+Independent Implementation Review entry 準備完了
 Actual Staff / Ready / Merge を宣言していない
 ```
 
@@ -536,29 +539,35 @@ LOCKED Definition / Correction Scope = UNCHANGED
 Human Implementation Scope Correction-1 GO = CONSUMED
 Implementation Scope Definition = RECORDED + SCOPE-CORRECTION-1-APPLIED（this document）
 Independent Implementation Scope Review-1 = CORRECTION（historical）
-Independent Implementation Scope Re-Review = REQUIRED / NOT PERFORMED
-Human Implementation Start GO = HOLD / NOT RECEIVED / NOT ELIGIBLE
-Implementation = NOT STARTED
+Independent Implementation Scope Re-Review = PASS / REVIEW-CLEARED
+Human Implementation Start GO = RECEIVED / CONSUMED（2026-09-12）
+Implementation = IN PROGRESS / CANDIDATE（tip 2529191; may advance in-scope）
+Independent Implementation Review = REQUIRED after C1 evidence
+Human Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
 
 ## 12. NEXT
 
 ```text
-Agent（this Project runtime）:
-  STOP after Scope Correction-1 verification
-  Fresh Independent Implementation Scope Re-Review を実行しない
-  Implementation Start GO を生成・推定・消費しない
+Agent（this Project runtime; Start GO CONSUMED）:
+  1. verify / gap-fill implementation candidate within this Scope
+  2. Authenticated 5-persona Re-Sim（C1）または明示 HOLD
+  3. implementation evidence + Independent Implementation Review entry
+  STOP at Review entry ready
+  Do not generate / infer Human Ready or Merge GO
+  Do not Deploy / LIVE WRITE without separate Human GO
 
 Fresh Independent Runtime（別）:
-  Independent Implementation Scope Re-Review
-  basis = this corrected Implementation Scope candidate
-  entry = docs/architecture/sbs-mgmt-home-correction-1-independent-implementation-scope-re-review-entry-1.md
+  Independent Implementation Review
+  basis = implementation tip + evidence + C1 packet + LOCKED Definition / Scope
 
-Human（Re-Review 後）:
-  Human Implementation Start GO / HOLD
+Human（parallel; not Start authority）:
+  PR #604 title/body metadata update（GitHub UI）
+  tip-equivalent Deploy confirmation or separate Deploy GO（for C1）
+  authenticated session for C1
 
-Lock CONSUMED != Implementation Start
-Scope Correction-1 APPLIED != Implementation Start
-Independent Review-1 CORRECTION != Re-Review PASS
-Re-Review REQUIRED != Re-Review PASS
+Lock CONSUMED != Ready / Merge
+Start GO CONSUMED != Ready / Merge / Deploy
+C1 evidence != Actual Staff Value Check
+Independent Implementation Review entry != Review PASS
 ```

@@ -16,7 +16,8 @@ import {
   type ShellPresentationRole,
   type SupportPlanBlockKey,
 } from "../ux/presentation-role";
-import { formatNextDraftUnappliedLabel,
+import {
+  formatNextDraftUnappliedLabel,
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
   PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION,

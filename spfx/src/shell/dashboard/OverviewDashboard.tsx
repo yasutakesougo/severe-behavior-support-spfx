@@ -119,7 +119,9 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               data-dashboard-ux="overview-kpi-card"
               data-dashboard-ux-kpi={card.id}
               data-demo-ux-metric-family={isRosterStatusCard ? "roster" : "overview_other"}
-              data-demo-ux-kpi-count={isTodayTargetsUnavailableCard(card) ? undefined : String(card.count)}
+              data-demo-ux-kpi-count={
+                isTodayTargetsUnavailableCard(card) ? undefined : String(card.count)
+              }
             >
               <div className={styles.kpiHeaderRow}>
                 <p className={styles.kpiLabel}>{card.label}</p>
@@ -136,7 +138,10 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                   {card.statusHint}
                 </p>
               ) : (
-                <p className={styles.kpiCount} aria-label={`${card.label} ${card.count}${countUnit}`}>
+                <p
+                  className={styles.kpiCount}
+                  aria-label={`${card.label} ${card.count}${countUnit}`}
+                >
                   {card.count}
                 </p>
               )}

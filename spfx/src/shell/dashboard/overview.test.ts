@@ -134,7 +134,6 @@ describe("VP-G Overview presentationRole entry", () => {
   });
 });
 
-
 import {
   isTodayTargetsUnavailableCard,
   resolveTodayTargetsKpiCard,
@@ -143,10 +142,10 @@ import {
 
 describe("S-POP today_targets availability contract", () => {
   it("resolves distinct roster userIds and allows zero without meaning unavailable", () => {
-    const resolved = resolveTodayTargetsKpiCard([{ userId: "user-a" }, { userId: "user-a" }], [
-      "user-a",
-      "user-b",
-    ]);
+    const resolved = resolveTodayTargetsKpiCard(
+      [{ userId: "user-a" }, { userId: "user-a" }],
+      ["user-a", "user-b"],
+    );
     expect(resolved.count).toBe(1);
     expect(isTodayTargetsUnavailableCard(resolved)).toBe(false);
     const zero = resolveTodayTargetsKpiCard([], ["user-a"]);

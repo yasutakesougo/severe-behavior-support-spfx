@@ -158,13 +158,17 @@ async function runHappyPath(name, width, height) {
       startEnabled: start instanceof HTMLButtonElement && !start.disabled,
       startIsPrimary: start?.getAttribute("data-sbs-action") === "primary",
       startHasNoCreateCta: start?.getAttribute("data-review-new-version") !== "create-cta",
+      // SBS-MGMT-HOME-CORRECTION-1 S-DRAFT: pre-start must not invent Draft N+1
+      // from conceptualNextVersion. Draft version appears only after draft exists.
       startLabelClear:
         startText.includes("支援内容の見直しを始める") &&
-        startText.includes("版 4") &&
-        startText.includes("下書き"),
+        startText.includes("次版の準備") &&
+        !startText.includes("版 4") &&
+        !startText.includes("の下書き"),
       sourceSafetyClear:
         sourceSafetyText.includes("現在使用中の版 3 は変更しません") &&
-        sourceSafetyText.includes("版 4 の下書きを別に作ります"),
+        sourceSafetyText.includes("下書きができたときだけ未適用として示します") &&
+        !sourceSafetyText.includes("の下書きを別に作ります"),
       createCtaDisabled:
         createCta instanceof HTMLButtonElement &&
         createCta.disabled &&

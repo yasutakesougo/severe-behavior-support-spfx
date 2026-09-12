@@ -102,4 +102,3 @@ export function resolveTodayTargetsKpiCard(
 export function isTodayTargetsUnavailableCard(card: OverviewKpiCard): boolean {
   return card.id === "today_targets" && card.statusHint === TODAY_TARGETS_UNAVAILABLE_STATUS_HINT;
 }
-

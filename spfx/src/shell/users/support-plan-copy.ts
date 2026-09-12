@@ -116,4 +116,3 @@ export function supportPlanCopyAvoidsFinalApprovalMeaning(text: string): boolean
 export function formatNextDraftUnappliedLabel(draftCandidateVersion: number): string {
   return `次版下書き v${draftCandidateVersion}（未適用）`;
 }
-
