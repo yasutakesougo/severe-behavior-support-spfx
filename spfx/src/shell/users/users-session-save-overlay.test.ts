@@ -41,11 +41,11 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2 session save overlay", () =>
     expect(FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.deployAuthorized).toBe(false);
   });
 
-  it("maps default / untouched and unsaved to 未保存", () => {
+  it("hides overlay for missing/undefined and labels explicit unsaved as 記録が未保存", () => {
     const missing = overlayForUserSessionSaveState(undefined);
     const unsaved = overlayForUserSessionSaveState("unsaved");
-    expect(missing).toEqual({ visible: true, state: "unsaved", label: "未保存" });
-    expect(unsaved).toEqual({ visible: true, state: "unsaved", label: "未保存" });
+    expect(missing).toEqual({ visible: false });
+    expect(unsaved).toEqual({ visible: true, state: "unsaved", label: "記録が未保存" });
     expect(SHELL_SAVE_STATE_LABELS.unsaved).toBe("未保存");
   });
 
@@ -98,9 +98,9 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2 session save overlay", () =>
     }
   });
 
-  it("does not apply a chrome-level saved fixture to untouched users", () => {
+  it("does not invent unsaved overlay for untouched users", () => {
     const overlay = overlayForUserId("user-a", undefined);
-    expect(overlay).toEqual({ visible: true, state: "unsaved", label: "未保存" });
+    expect(overlay).toEqual({ visible: false });
     expect(overlayForUserId("user-a", {})).toEqual(overlay);
   });
 
@@ -120,9 +120,7 @@ describe("FIELD-STAFF-MULTI-USER-UX-POLISH-1 Unit 2 session save overlay", () =>
       label: "保存失敗",
     });
     expect(overlayForUserId("user-b", byUserId)).toEqual({
-      visible: true,
-      state: "unsaved",
-      label: "未保存",
+      visible: false,
     });
     expect(rememberUserSessionSaveState(byUserId, undefined, "saving")).toBe(byUserId);
   });

@@ -341,14 +341,15 @@
 }
 
 .mutationButton {
-  min-height: 2.25rem;
-  padding: 0.35rem sbs.$space-3;
+  min-height: 2rem;
+  padding: 0.25rem sbs.$space-2;
   border-width: sbs.$border-width-thin;
   border-style: solid;
-  border-color: sbs.$color-border-strong;
-  background: sbs.$color-surface-muted;
-  color: inherit;
-  font-size: sbs.$font-size-200;
+  border-color: sbs.$color-border-subtle;
+  background: transparent;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-100;
+  font-weight: 400;
 }
 
 .mutationButton:focus,

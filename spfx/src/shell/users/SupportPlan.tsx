@@ -16,7 +16,7 @@ import {
   type ShellPresentationRole,
   type SupportPlanBlockKey,
 } from "../ux/presentation-role";
-import {
+import { formatNextDraftUnappliedLabel,
   DEMO_SUPPORT_PLAN_ADMIN_READ_NOTE,
   DEMO_SUPPORT_PLAN_MUTATION_DISABLED_NOTE,
   PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION,
@@ -657,8 +657,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       ) : revisionEligible && !adminRead ? (
         <>
           <p className={styles.sectionHint} data-sbs-mgmt-loop-b-source-safety="true">
-            現在使用中の版 {liveCurrentVersion} は変更しません。版 {conceptualNextVersion}{" "}
-            の下書きを別に作ります。
+            現在使用中の版 {liveCurrentVersion}{" "}
+            は変更しません。次の版は、下書きができたときだけ未適用として示します。
           </p>
           <button
             type="button"
@@ -667,7 +667,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
             data-sbs-mgmt-loop-b-action="start-revision"
             data-sbs-action="primary"
           >
-            支援内容の見直しを始める（版 {conceptualNextVersion} の下書き）
+            支援内容の見直しを始める（次版の準備）
           </button>
         </>
       ) : null}
@@ -806,8 +806,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   const nextVersionSummaryLabel = activationReceipt
     ? `版 ${activationReceipt.activatedVersion}・適用中`
     : revisionDraft
-      ? `版 ${revisionDraft.candidate.version}・下書き・未適用`
-      : `版 ${conceptualNextVersion}・次版準備`;
+      ? formatNextDraftUnappliedLabel(revisionDraft.candidate.version)
+      : `現行版 ${liveCurrentVersion}・適用中`;
 
   const plannerProcessFlow = (
     <div className={styles.processFlow} data-process-visibility-ui-v1="process-flow">

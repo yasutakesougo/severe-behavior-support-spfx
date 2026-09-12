@@ -2,6 +2,7 @@ import {
   VP1_DEMO_ROLE_HINT,
   VP1_DEMO_ROLE_LEGEND,
   VP1_DEMO_SAFETY_NOTICE,
+  VP1_PAGE_EDIT_VS_BUSINESS_SAVE_NOTICE,
   VP1_DEMO_UI_POLICY,
 } from "./vp1-demo-separation";
 
@@ -10,6 +11,12 @@ describe("VP-1 demo/developer UI separation", () => {
     expect(VP1_DEMO_SAFETY_NOTICE).toContain("デモ環境");
     expect(VP1_DEMO_SAFETY_NOTICE).toContain("合成データ");
     expect(VP1_DEMO_SAFETY_NOTICE).toContain("保存されません");
+  });
+
+  it("explains SharePoint page edit vs business save without removing chrome", () => {
+    expect(VP1_PAGE_EDIT_VS_BUSINESS_SAVE_NOTICE).toContain("ページ編集");
+    expect(VP1_PAGE_EDIT_VS_BUSINESS_SAVE_NOTICE).toContain("支援の記録や保存ではありません");
+    expect(VP1_PAGE_EDIT_VS_BUSINESS_SAVE_NOTICE).toContain("未保存");
   });
 
   it("keeps presentation-role switching explicitly non-authoritative", () => {

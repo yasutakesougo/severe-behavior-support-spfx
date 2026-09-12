@@ -6,8 +6,13 @@ import {
 import { countRowsWithBadgeId } from "../ux/kpi-review-count";
 import { DEMO_UX_USERS_FIXTURE } from "../users/users-fixture";
 import type { ShellOverviewPresentation } from "./overview-types";
+import { resolveTodayTargetsKpiCard } from "./overview-copy";
 
 const rosterRows = DEMO_UX_USERS_FIXTURE.rows;
+const rosterUserIds = rosterRows.map((row) => row.id);
+// Mirrors kiosk synthetic today-support population (user-a only) without importing
+// the kiosk fixture module (avoids TextEncoder at overview module load in Jest).
+const todayTargetsCard = resolveTodayTargetsKpiCard([{ userId: "user-a" }], rosterUserIds);
 const rosterNeedsReviewCount = countRowsWithBadgeId(rosterRows, "needs_review");
 const rosterUnrecordedCount = countRowsWithBadgeId(rosterRows, "unrecorded");
 const rosterDeadlineNearCount = countRowsWithBadgeId(rosterRows, "deadline_near");
@@ -19,7 +24,7 @@ const rosterDeadlineNearCount = countRowsWithBadgeId(rosterRows, "deadline_near"
  */
 export const DASHBOARD_UX_OVERVIEW_FIXTURE: ShellOverviewPresentation = {
   kpiCards: [
-    { id: "today_targets", label: "今日の対象", count: 12, statusHint: "本日の支援対象" },
+    todayTargetsCard,
     {
       id: "needs_review",
       label: SHELL_STATUS_LABEL_NEEDS_REVIEW,
@@ -57,7 +62,7 @@ export const DASHBOARD_UX_OVERVIEW_FIXTURE: ShellOverviewPresentation = {
     {
       id: "action-c",
       personLabel: "Cさん",
-      reason: "新しい計画があります",
+      reason: "支援計画の確認が必要",
       actionLabel: "見る",
       navigation: { kind: "user_detail", userId: "user-c" },
     },

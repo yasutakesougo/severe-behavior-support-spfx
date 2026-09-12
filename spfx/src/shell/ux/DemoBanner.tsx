@@ -1,7 +1,10 @@
 import * as React from "react";
 import styles from "./ShellUx.module.scss";
 import vp1Styles from "./Vp1DemoSeparation.module.scss";
-import { VP1_DEMO_SAFETY_NOTICE } from "./vp1-demo-separation";
+import {
+  VP1_DEMO_SAFETY_NOTICE,
+  VP1_PAGE_EDIT_VS_BUSINESS_SAVE_NOTICE,
+} from "./vp1-demo-separation";
 
 export type DemoBannerProps = Readonly<{
   visible: boolean;
@@ -20,7 +23,8 @@ export const DemoBanner: React.FC<DemoBannerProps> = ({ visible }) => {
       data-shell-ux="demo-banner"
       data-vp1-demo-safety="compact"
     >
-      {VP1_DEMO_SAFETY_NOTICE}
+      <div>{VP1_DEMO_SAFETY_NOTICE}</div>
+      <div data-vp1-page-edit-guidance="true">{VP1_PAGE_EDIT_VS_BUSINESS_SAVE_NOTICE}</div>
     </div>
   );
 };

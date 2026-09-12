@@ -159,7 +159,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           {correctionCtaVisible ? (
             <button
               type="button"
-              className={styles.primaryButton}
+              className={styles.backButton}
               onClick={() => {
                 if (onCorrectionRequest) {
                   onCorrectionRequest();
@@ -217,7 +217,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           <div className={styles.actionRow}>
             <button
               type="button"
-              className={styles.primaryButton}
+              className={styles.backButton}
               onClick={() => {
                 if (onCancellationRequest) {
                   onCancellationRequest();

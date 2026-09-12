@@ -58,7 +58,8 @@ export type UsersSessionSaveStateByUserId = Readonly<Record<string, ShellSaveSta
 /**
  * Project session save-state onto a Users card.
  * `saved` hides the overlay instead of showing 保存済み / 記録済み.
- * Missing and `unsaved` show 未保存. `save_outcome_unknown` stays independent.
+ * Explicit `unsaved` shows 記録が未保存. Missing/undefined hides overlay (C3).
+ * `save_outcome_unknown` stays 保存結果不明 (never folded into unsaved).
  */
 export function overlayForUserSessionSaveState(
   saveState: ShellSaveState | undefined,
@@ -87,11 +88,15 @@ export function overlayForUserSessionSaveState(
       label: SHELL_SAVE_STATE_LABELS.save_outcome_unknown,
     };
   }
-  return {
-    visible: true,
-    state: "unsaved",
-    label: SHELL_SAVE_STATE_LABELS.unsaved,
-  };
+  if (saveState === "unsaved") {
+    return {
+      visible: true,
+      state: "unsaved",
+      label: "記録が未保存",
+    };
+  }
+  // missing / undefined — do not invent bare 未保存
+  return { visible: false };
 }
 
 export function overlayForUserId(

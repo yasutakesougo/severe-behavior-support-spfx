@@ -38,7 +38,7 @@ export const DEMO_UX_USERS_FIXTURE: ShellUsersPresentation = {
       personLabel: "Cさん",
       statusBadges: [{ id: "needs_review", label: SHELL_STATUS_LABEL_NEEDS_REVIEW }],
       planSummary: "支援計画 2026/08/01–10/31",
-      attentionNote: "新しい計画があります",
+      attentionNote: "支援計画の確認が必要",
       lastRecordLabel: "最終記録: 8/09 16:40",
       detailActionLabel: "詳細を見る",
     },

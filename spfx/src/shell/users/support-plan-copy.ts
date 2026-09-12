@@ -111,3 +111,9 @@ export function supportPlanCopyIsFailClosed(text: string): boolean {
 export function supportPlanCopyAvoidsFinalApprovalMeaning(text: string): boolean {
   return SUPPORT_PLAN_FORBIDDEN_STATUS_TOKENS.every((token) => text.indexOf(token) < 0);
 }
+
+/** C6 / S-DRAFT pixel-exact runtime label. N+1 authority = draft.candidate.version only. */
+export function formatNextDraftUnappliedLabel(draftCandidateVersion: number): string {
+  return `次版下書き v${draftCandidateVersion}（未適用）`;
+}
+

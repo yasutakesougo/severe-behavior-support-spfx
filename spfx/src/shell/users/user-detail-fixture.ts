@@ -54,7 +54,7 @@ export const DEMO_UX_USER_DETAIL_C_FIXTURE: ShellUserDetailPresentation = {
     {
       id: "environment",
       label: "環境調整",
-      body: "新しい計画の環境調整を確認する合成表示例です。",
+      body: "支援計画の環境調整を確認する合成表示例です。",
     },
     {
       id: "communication",
@@ -68,7 +68,7 @@ export const DEMO_UX_USER_DETAIL_C_FIXTURE: ShellUserDetailPresentation = {
     },
   ],
   recentRecords: [{ id: "record-c1", occurredAtLabel: "8/09 16:40", recordTypeLabel: "支援記録" }],
-  evaluationSummary: "新しい計画の確認用に配置した評価欄の合成サンプルです。",
+  evaluationSummary: "支援計画の確認用に配置した評価欄の合成サンプルです。",
   historySummary:
     "過去版・履歴の合成表示です。現行計画は支援計画欄です。ここから計画を切り替えません。",
   businessFacts: {

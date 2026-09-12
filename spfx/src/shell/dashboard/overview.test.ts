@@ -26,7 +26,8 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
       SHELL_STATUS_LABEL_DUE_SOON,
     ]);
     // DEMO-UX-10 Family R: needs_review / unrecorded / deadline_near match Users filter (3/2/3)
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([12, 3, 2, 3]);
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([1, 3, 2, 3]);
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards[0]?.count).not.toBe(12);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.every((card) => card.statusHint.length > 0)).toBe(
       true,
     );
@@ -130,5 +131,33 @@ describe("VP-G Overview presentationRole entry", () => {
     expect(overviewSectionOrderForRole("ADMIN_AUDIT")[0]).toBe("kpi");
     expect(kpiSectionHeadingForRole("PLANNER")).toBe("計画・見直しの状況");
     expect(kpiSectionHeadingForRole("ADMIN_AUDIT")).toBe("運用状況");
+  });
+});
+
+
+import {
+  isTodayTargetsUnavailableCard,
+  resolveTodayTargetsKpiCard,
+  TODAY_TARGETS_UNAVAILABLE_STATUS_HINT,
+} from "./overview-copy";
+
+describe("S-POP today_targets availability contract", () => {
+  it("resolves distinct roster userIds and allows zero without meaning unavailable", () => {
+    const resolved = resolveTodayTargetsKpiCard([{ userId: "user-a" }, { userId: "user-a" }], [
+      "user-a",
+      "user-b",
+    ]);
+    expect(resolved.count).toBe(1);
+    expect(isTodayTargetsUnavailableCard(resolved)).toBe(false);
+    const zero = resolveTodayTargetsKpiCard([], ["user-a"]);
+    expect(zero.count).toBe(0);
+    expect(isTodayTargetsUnavailableCard(zero)).toBe(false);
+  });
+
+  it("marks missing todaySupportItems as unavailable without faking population", () => {
+    const unavailable = resolveTodayTargetsKpiCard(undefined, ["user-a"]);
+    expect(isTodayTargetsUnavailableCard(unavailable)).toBe(true);
+    expect(unavailable.statusHint).toBe(TODAY_TARGETS_UNAVAILABLE_STATUS_HINT);
+    expect(unavailable.count).not.toBe(12);
   });
 });

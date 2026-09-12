@@ -2,6 +2,8 @@
  * DASHBOARD-UX-1 — fail-closed presentation copy.
  */
 
+import type { OverviewKpiCard } from "./overview-types";
+
 /**
  * Retained for fail-closed copy checks.
  * DEMO-UX-11: not rendered on Overview (global DemoBanner covers synthetic/no-live).
@@ -62,3 +64,42 @@ export function overviewCopyIsFailClosed(text: string): boolean {
   }
   return text.indexOf("業務データには接続されていません") >= 0;
 }
+
+export const TODAY_TARGETS_UNAVAILABLE_STATUS_HINT = "確認できません";
+export const TODAY_TARGETS_RESOLVED_STATUS_HINT = "本日の支援対象";
+
+/**
+ * S-POP / ISR1-P1-2 — today_targets from distinct TodaySupportItem.userId ∩ roster.
+ * MODE_UNAVAILABLE when items are missing; count is type filler only (not population).
+ */
+export function resolveTodayTargetsKpiCard(
+  todaySupportItems: readonly { userId: string }[] | undefined,
+  rosterUserIds: readonly string[],
+): OverviewKpiCard {
+  if (todaySupportItems === undefined) {
+    return {
+      id: "today_targets",
+      label: "今日の対象",
+      count: 0,
+      statusHint: TODAY_TARGETS_UNAVAILABLE_STATUS_HINT,
+    };
+  }
+  const roster = new Set(rosterUserIds);
+  const distinct = new Set<string>();
+  for (const item of todaySupportItems) {
+    if (roster.has(item.userId)) {
+      distinct.add(item.userId);
+    }
+  }
+  return {
+    id: "today_targets",
+    label: "今日の対象",
+    count: distinct.size,
+    statusHint: TODAY_TARGETS_RESOLVED_STATUS_HINT,
+  };
+}
+
+export function isTodayTargetsUnavailableCard(card: OverviewKpiCard): boolean {
+  return card.id === "today_targets" && card.statusHint === TODAY_TARGETS_UNAVAILABLE_STATUS_HINT;
+}
+

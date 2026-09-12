@@ -6,22 +6,51 @@ import styles from "./TodaySupportDayBoardUx.module.scss";
 
 export type TodaySupportOccurrenceCtaMode = "field" | "confirm";
 
+export const TODAY_SUPPORT_FIELD_PROCEDURE_LABEL = "手順を表示";
+export const TODAY_SUPPORT_FIELD_RECORD_LABEL = "この予定を記録";
+
+/**
+ * Field + unrecorded must not combine record + procedure into one CTA.
+ * Returns split labels only for that case.
+ */
+export function todaySupportFieldUnrecordedSplitLabels(
+  effectiveStatus: string,
+  occurrenceCtaMode: TodaySupportOccurrenceCtaMode = "field",
+): Readonly<{ procedureLabel: string; recordLabel: string }> | undefined {
+  if (occurrenceCtaMode !== "field") {
+    return undefined;
+  }
+  if (
+    effectiveStatus === "記録済み" ||
+    effectiveStatus === "取消済み" ||
+    effectiveStatus === "確認が必要"
+  ) {
+    return undefined;
+  }
+  return {
+    procedureLabel: TODAY_SUPPORT_FIELD_PROCEDURE_LABEL,
+    recordLabel: TODAY_SUPPORT_FIELD_RECORD_LABEL,
+  };
+}
+
 export function todaySupportOccurrenceActionLabel(
   effectiveStatus: string,
   occurrenceCtaMode: TodaySupportOccurrenceCtaMode = "field",
 ): string {
-  const fieldActionLabel =
-    effectiveStatus === "記録済み"
-      ? "記録を確認・再表示"
-      : effectiveStatus === "取消済み"
-        ? "取消詳細を表示"
-        : effectiveStatus === "確認が必要"
-          ? "確認が必要なため詳細のみ"
-          : "この予定を記録 / 手順表示";
   if (occurrenceCtaMode === "confirm" && effectiveStatus === "未実施") {
     return "予定を確認";
   }
-  return fieldActionLabel;
+  if (effectiveStatus === "記録済み") {
+    return "記録を確認・再表示";
+  }
+  if (effectiveStatus === "取消済み") {
+    return "取消詳細を表示";
+  }
+  if (effectiveStatus === "確認が必要") {
+    return "確認が必要なため詳細のみ";
+  }
+  // Unrecorded field: quiet first action only (never a combined label).
+  return TODAY_SUPPORT_FIELD_PROCEDURE_LABEL;
 }
 
 export type TodaySupportDayBoardProps = Readonly<{
@@ -61,6 +90,10 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
           const badgeSoft =
             item.effectiveStatus === "取消済み" || item.effectiveStatus === "記録済み";
 
+          const splitLabels = todaySupportFieldUnrecordedSplitLabels(
+            item.effectiveStatus,
+            occurrenceCtaMode,
+          );
           const actionLabel = todaySupportOccurrenceActionLabel(
             item.effectiveStatus,
             occurrenceCtaMode,
@@ -109,24 +142,59 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
               </div>
 
               <div className={styles.itemActionRow}>
-                <button
-                  type="button"
-                  className={
-                    occurrenceCtaMode === "confirm"
-                      ? `${styles.tapButton} ${styles.tapButtonQuiet}`
-                      : styles.tapButton
-                  }
-                  data-kiosk-ux="tap-occurrence-button"
-                  data-kiosk-target-occurrence-id={item.occurrenceId}
-                  data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
-                  onClick={() => {
-                    if (onSelectOccurrence) {
-                      onSelectOccurrence(item.occurrenceId);
+                {splitLabels ? (
+                  <>
+                    <button
+                      type="button"
+                      className={`${styles.tapButton} ${styles.tapButtonQuiet}`}
+                      data-kiosk-ux="tap-occurrence-button"
+                      data-kiosk-occurrence-cta="procedure"
+                      data-kiosk-target-occurrence-id={item.occurrenceId}
+                      data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
+                      onClick={() => {
+                        if (onSelectOccurrence) {
+                          onSelectOccurrence(item.occurrenceId);
+                        }
+                      }}
+                    >
+                      {splitLabels.procedureLabel}
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.tapButton}
+                      data-kiosk-ux="tap-occurrence-button"
+                      data-kiosk-occurrence-cta="record"
+                      data-kiosk-target-occurrence-id={item.occurrenceId}
+                      data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
+                      onClick={() => {
+                        if (onSelectOccurrence) {
+                          onSelectOccurrence(item.occurrenceId);
+                        }
+                      }}
+                    >
+                      {splitLabels.recordLabel}
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className={
+                      occurrenceCtaMode === "confirm"
+                        ? `${styles.tapButton} ${styles.tapButtonQuiet}`
+                        : styles.tapButton
                     }
-                  }}
-                >
-                  {actionLabel}
-                </button>
+                    data-kiosk-ux="tap-occurrence-button"
+                    data-kiosk-target-occurrence-id={item.occurrenceId}
+                    data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
+                    onClick={() => {
+                      if (onSelectOccurrence) {
+                        onSelectOccurrence(item.occurrenceId);
+                      }
+                    }}
+                  >
+                    {actionLabel}
+                  </button>
+                )}
               </div>
             </li>
           );

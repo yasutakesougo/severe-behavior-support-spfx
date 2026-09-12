@@ -18,7 +18,7 @@ export type ReviewDueSemanticBasis = Readonly<{
 export function presentReviewDueSemanticBasis(firstReview: boolean): ReviewDueSemanticBasis {
   return {
     originLabel: firstReview ? "初回基準日: 支援計画の有効開始日" : "継続基準日: 前回見直し日",
-    dueLabel: "reviewDueDate は caller-supplied の基準日です。固定90日や自動失効には変換しません。",
+    dueLabel: "次回確認日は既存の見直し期限です。固定90日や自動失効には変換しません。",
     approachingLabel:
       "通知開始は見直し対象の暦月に入った時点です。30日前などの日数固定窓は使いません。",
   };

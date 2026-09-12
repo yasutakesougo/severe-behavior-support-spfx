@@ -14,6 +14,7 @@ import {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   formatTodaySupportBoardDisclaimer,
+  isTodayTargetsUnavailableCard,
 } from "./overview-copy";
 import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "./overview-types";
 import { SemanticIcon } from "../primitives";
@@ -118,7 +119,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
               data-dashboard-ux="overview-kpi-card"
               data-dashboard-ux-kpi={card.id}
               data-demo-ux-metric-family={isRosterStatusCard ? "roster" : "overview_other"}
-              data-demo-ux-kpi-count={String(card.count)}
+              data-demo-ux-kpi-count={isTodayTargetsUnavailableCard(card) ? undefined : String(card.count)}
             >
               <div className={styles.kpiHeaderRow}>
                 <p className={styles.kpiLabel}>{card.label}</p>
@@ -126,10 +127,22 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                   <SemanticIcon name={semanticIconName} size={20} className={styles.kpiIcon} />
                 ) : null}
               </div>
-              <p className={styles.kpiCount} aria-label={`${card.label} ${card.count}${countUnit}`}>
-                {card.count}
-              </p>
-              <p className={styles.kpiHint}>{card.statusHint}</p>
+              {isTodayTargetsUnavailableCard(card) ? (
+                <p
+                  className={styles.kpiCount}
+                  aria-label={`${card.label} ${card.statusHint}`}
+                  data-demo-ux-kpi-unavailable="true"
+                >
+                  {card.statusHint}
+                </p>
+              ) : (
+                <p className={styles.kpiCount} aria-label={`${card.label} ${card.count}${countUnit}`}>
+                  {card.count}
+                </p>
+              )}
+              {isTodayTargetsUnavailableCard(card) ? null : (
+                <p className={styles.kpiHint}>{card.statusHint}</p>
+              )}
             </li>
           );
         })}

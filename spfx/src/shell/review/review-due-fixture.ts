@@ -30,9 +30,9 @@ const DEMO_UX_REVIEW_ATTENTION_ITEMS: readonly ShellReviewDueAttentionItem[] = [
   {
     id: "review-c",
     personLabel: "Cさん",
-    subjectLabel: "新しい計画の確認",
+    subjectLabel: "支援計画の確認",
     reviewStatusLabel: SHELL_STATUS_LABEL_NEEDS_REVIEW,
-    reasonLabel: "新しい計画があるため、責任者レビュー用に表示する合成サンプルです。",
+    reasonLabel: "支援計画の確認が必要なため、責任者レビュー用に表示する合成サンプルです。",
   },
 ];
 
