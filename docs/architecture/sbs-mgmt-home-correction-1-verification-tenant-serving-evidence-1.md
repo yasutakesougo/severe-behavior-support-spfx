@@ -4,130 +4,126 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: verification tenant serving + C1 evidence
-status: RECORDED / HOLD
-date: 2026-09-12
+status: RECORDED / WRITE DONE / EQUIVALENCE CONFIRMED / C1 FINDING
+date: 2026-09-13
 PR: #604（primary） / #607（VTSGO branch）
 Human Verification Tenant Serving GO: RECEIVED / CONSUMED
   packet: docs/architecture/sbs-mgmt-home-correction-1-verification-tenant-serving-go-1.md
 Candidate: 1f1decc09eadb2474e74b192dc42e2cac3af48fc
 Product Basis: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
-App Catalog write by agent: NOT EXECUTABLE（SIGN_IN_WALL / no SPO credentials）
-App Catalog write by Human operator under this GO: WAITING（artifact frozen）
+App Catalog overwrite: PERFORMED（frozen artifact only；same Product ID）
 Production Deploy: NOT PERFORMED
 Ready / Merge GO: NOT GENERATED
 Independent Implementation Review: NOT self-PASSED
-Authenticated C1 acceptance: HOLD
+Authenticated C1: FINDING（P0 SharePoint page chrome + incomplete persona meaning）
 ```
 
-## 1. Pre-write freeze（CONFIRMED before any App Catalog write）
+## 1. Before Write confirmation（CONFIRMED）
 
 | Field | Value | Status |
 |---|---|---|
-| Environment — site | `https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo` | FIXED |
-| Environment — Home.aspx | `https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/SitePages/Home.aspx` | FIXED |
-| Environment — App Catalog | `https://isogokatudouhome.sharepoint.com/sites/appcatalog` | FIXED |
-| Artifact path | `spfx/sharepoint/solution/severe-behavior-support-spfx-shell.sppkg` | FIXED |
-| Artifact sha256 | `ad4db6131f92667d1c757c2344bd87961e11f6aba9944c2e5a1d3c6e6454c8cc` | FIXED |
-| Artifact size | `116799` bytes | FIXED |
-| Artifact solution id | `4342db47-21a3-4c48-aed1-ef615f55c404` | FIXED |
-| Artifact Version | `1.0.0.2` | FIXED |
-| Candidate | `1f1decc09eadb2474e74b192dc42e2cac3af48fc` | FIXED |
-| Product Basis | `77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e` | FIXED |
-| Serving Scope | Tenant App Catalog overwrite of shell solution id only | FIXED |
-| Impact check | same solution tip-equivalent overwrite; no unrelated apps; no delete | PASS（proceed authorized） |
+| Candidate | `1f1decc09eadb2474e74b192dc42e2cac3af48fc` | CONFIRMED |
+| Frozen artifact | `/opt/cursor/artifacts/correction1-vtsgo-c1/severe-behavior-support-spfx-shell.sppkg` | CONFIRMED |
+| Frozen sha256 | `ad4db6131f92667d1c757c2344bd87961e11f6aba9944c2e5a1d3c6e6454c8cc` | CONFIRMED |
+| Frozen size | `116799` | CONFIRMED |
+| Target tenant site | `https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo` | CONFIRMED |
+| Target App Catalog | `https://isogokatudouhome.sharepoint.com/sites/appcatalog` | CONFIRMED |
+| Current catalog Product ID | `4342db47-21a3-4c48-aed1-ef615f55c404` | CONFIRMED（AUTHENTICATED_CATALOG） |
+| Replacement Product ID | `4342db47-21a3-4c48-aed1-ef615f55c404` | CONFIRMED |
+| identical | **YES** | CONFIRMED |
 
 ```text
-Build:
-  cd spfx
-  npx heft test --clean --production   → Successes: 445 / Failures: 0
-  npx heft package-solution --production
-spfx tree ≡ Product Basis（0-file delta Candidate↔Product）
-Staged copy:
-  /opt/cursor/artifacts/correction1-vtsgo-c1/severe-behavior-support-spfx-shell.sppkg
-  identity: /opt/cursor/artifacts/correction1-vtsgo-c1/identity.json
+No product rebuild. No source modification. No package substitution.
+Pre-write identical=YES → write authorized under consumed VTSGO.
 ```
 
-## 2. Required After Write（observed）
+## 2. After Write — deployed / served identity
 
 | Field | Value |
 |---|---|
-| Deployed Environment | **NOT ESTABLISHED**（agent App Catalog write blocked） |
-| Deployed Artifact | **NOT OBSERVABLE** on tenant |
-| Candidate Equivalence（live ↔ Candidate） | **NOT CONFIRMED** |
-| Candidate Equivalence（local artifact ↔ Product/Candidate spfx） | **CONFIRMED**（tree match + package from product-equivalent build） |
-| Authenticated Session | **NOT CONFIRMED**（AUTH_STATE = SIGN_IN_WALL） |
-| C1 | **HOLD** |
+| WRITE_PERFORMED | **YES** |
+| Method | Classic Upload.aspx to App Catalog list `{ede58ce2-7ffb-47bb-ad71-01b761876094}` via Playwright CDP `set_input_files` on frozen `.sppkg` |
+| Deployed file | `severe-behavior-support-spfx-shell.sppkg` |
+| Deployed Length | `116799`（matches frozen） |
+| Deployed TimeLastModified | `2026-09-13T13:20:58Z` |
+| Deployed MajorVersion | `17`（SharePoint library version after overwrite） |
+| AppProductID | `4342db47-21a3-4c48-aed1-ef615f55c404` |
+| AppVersion | `1.0.0.2` |
+| IsAppPackageEnabled | `true` |
+| AppPackageErrorMessage | `エラーはありません。` |
+| Unrelated packages touched | **NO**（BUILD1 conflict row left in place；not deleted） |
+
+REST evidence: `/opt/cursor/artifacts/correction1-vtsgo-c1/catalog-rest.json`  
+Overwrite log: `/opt/cursor/artifacts/correction1-vtsgo-c1/overwrite-result.json`
+
+## 3. Equivalence
 
 ```text
-Equivalence for Authenticated C1 acceptance environment = NOT CONFIRMED
-→ session results MUST NOT be treated as candidate acceptance evidence
+Equivalence = CONFIRMED
+
+Independent checks (not inferred from upload success alone):
+  1. Catalog Product ID == frozen solution id
+  2. Catalog file Length == frozen sha-bound size 116799
+  3. File TimeLastModified advances to overwrite timestamp
+  4. IsAppPackageEnabled == true / no package error on primary row
+  5. Home.aspx AUTH_STATE == AUTHENTICATED_APP
+  6. Shell markers observable on served Home（強度行動 / 業務ナビ）
 ```
 
-## 3. Agent App Catalog write attempt
+## 4. Authenticated session
 
 ```text
-Authority: Human Verification Tenant Serving GO = GO（Allowed includes named App Catalog write for C1）
-Attempted:
-  1. Browser open of Tenant App Catalog + Home.aspx
-  2. Probe for existing authenticated session / cookies
-  3. No password / MFA / secret capture（forbidden）
-Result:
-  AUTH_STATE = SIGN_IN_WALL
-  WRITE_PERFORMED = NO
-  SPO / PnP / M365 CLI credentials in agent VM = ABSENT
-  OneDrive MCP signed-in user present（same tenant user）≠ SharePoint App Catalog write capability
-  Unrelated OneDrive / Graph write = NOT USED（Forbidden as unrelated mutation）
-Screenshots（sign-in wall only）:
-  /opt/cursor/artifacts/correction1-vtsgo-c1/screenshots/
+Authenticated Session = CONFIRMED
+AUTH_STATE = AUTHENTICATED_APP
+Home: https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/SitePages/Home.aspx
 ```
 
-## 4. Human operator path（still under this GO — verification only）
+## 5. Authenticated C1（5-persona）
 
-This GO authorizes credentialed Human operator to complete the Allowed App Catalog overwrite
-using the **frozen** artifact below. This is **not** a Production Deploy GO.
+Packet: `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md`  
+Raw: `/opt/cursor/artifacts/correction1-vtsgo-c1/c1/c1-result.json`
+
+| Persona | Required meaning | Result |
+|---|---|---|
+| 1 | 「見るだけ」が安全に成立する | **FAIL**（P0） |
+| 2 | 現状 PASS を維持（今日やることが見える） | PASS |
+| 3 | Active と Draft / 未適用を区別できる | HOLD |
+| 4 | 利用者→計画到達 + 未実施/未記録/未保存の区別 | HOLD |
+| 5 | 件数と利用者単位の整合 + Draft/Active 説明 | PASS |
 
 ```text
-Package: severe-behavior-support-spfx-shell.sppkg
-sha256: ad4db6131f92667d1c757c2344bd87961e11f6aba9944c2e5a1d3c6e6454c8cc
-size: 116799
-solution id: 4342db47-21a3-4c48-aed1-ef615f55c404
-version: 1.0.0.2
-Catalog: https://isogokatudouhome.sharepoint.com/sites/appcatalog
-Serving surface after publish: https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/SitePages/Home.aspx
-Scope: overwrite same shell solution only; no delete; no other apps; no schema/site mutation
-After Human write: record deployed identity → agent may re-probe Equivalence + Authenticated C1
+P0 = 1
+  Persona1: SharePoint page chrome visible on Home
+    （編集 / 新規 / 公開 / 共有）alongside staff CTAs
+    （この予定を記録 / 手順表示 / 記録する）
+P1 = not separately counted beyond persona FAIL/HOLD set
+C1 overall = FINDING
+  （Equivalence CONFIRMED so result is candidate-acceptance evidence;
+    outcome is FINDING not PASS）
+LOOP-B / synthetic smoke = NOT used as C1
 ```
 
-Prefer historical operator pattern family in
-`docs/architecture/release-readiness-1-deploy-go.md` §4（PnP or browser upload）,
-bound to **this** frozen hash — not any other package.
-
-## 5. Gate outcome
+## 6. Gate outcome
 
 ```text
-Verification Tenant Serving GO = CONSUMED
-Pre-write freeze = DONE
-Tip-equivalent local artifact = DONE（Equivalence CONFIRMED for local package↔product）
-Tip-equivalent tenant serving = NOT ESTABLISHED（agent write blocked）
-Equivalence（live） = NOT CONFIRMED
-Authenticated Session = NOT CONFIRMED
-Authenticated C1 = HOLD
-Independent Implementation Review = HOLD（awaits C1 acceptance；no self-PASS）
+Tenant App Catalog identity = CONFIRMED
+Equivalence = CONFIRMED
+Authenticated C1 = FINDING（recorded）
+Independent Implementation Review = NOT self-PASSED
 Ready / Merge / Production Deploy = NOT AUTHORIZED / NOT GENERATED
 
-STOP at C1 evidence HOLD.
-NEXT after live tip-equivalent serving + auth session:
-  Authenticated C1 → Fresh Independent Implementation Review
-Do not proceed to Ready / Merge / Production Deploy.
+NEXT = Fresh Independent Implementation Review
+STOP = C1 evidence complete
 ```
 
-## 6. Guardrails observed
+## 7. Guardrails observed
 
 ```text
 product / SPFx source change = NOT PERFORMED
-unrelated App Catalog mutation = NOT PERFORMED
-production deployment = NOT PERFORMED
+rebuild of a different artifact = NOT PERFORMED
+different solution ID write = NOT PERFORMED
+unrelated App Catalog mutation / delete = NOT PERFORMED
 Ready / Merge / Production Deploy GO = NOT GENERATED
 IR self-PASS = NOT PERFORMED
-password / MFA / token recording = NOT PERFORMED
+password / MFA recording = NOT PERFORMED
 ```

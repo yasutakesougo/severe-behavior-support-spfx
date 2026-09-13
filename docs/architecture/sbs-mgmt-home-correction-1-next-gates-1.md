@@ -4,29 +4,34 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 unit: SBS-MGMT-HOME-CORRECTION-1
 kind: next-gates freeze / Human handoff
-status: RECORDED / VDGO-CONSUMED / VTSGO-CONSUMED / C1-HOLD
-date: 2026-09-12
+status: RECORDED / VDGO-CONSUMED / VTSGO-CONSUMED / C1-FINDING
+date: 2026-09-13
 PR: #604（Draft）
 Implementation Candidate: FROZEN
 exact review candidate: 1f1decc09eadb2474e74b192dc42e2cac3af48fc
 product basis: 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
 Next Gates packet tip: PR #604 HEAD（docs-only may advance；re-pin live）
 CI @ candidate: green（re-confirm at live head）
-C1 packet: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md = HOLD
-  Authenticated C1 acceptance = HOLD（live Equivalence NOT CONFIRMED；SIGN_IN_WALL）
+C1 packet: docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md = FINDING
+  Tenant serving overwrite = DONE（frozen sppkg；same Product ID）
+  Equivalence = CONFIRMED
+  Authenticated C1 = FINDING（P0 SharePoint page chrome；Persona 3/4 HOLD）
 IR entry: docs/architecture/sbs-mgmt-home-correction-1-independent-implementation-review-entry-1.md
-  = HOLD（awaits C1 acceptance；Fresh Runtime；no self-PASS）
+  = READY FOR FRESH RUNTIME（C1 evidence complete；no self-PASS）
 Verification Deploy GO packet:
   docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md
   Decision = GO RECEIVED / CONSUMED（2026-09-12）
   evidence: docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-evidence-1.md
-  live Equivalence for Authenticated C1 = NOT CONFIRMED
-  Authenticated C1 acceptance = HOLD
-  Independent Implementation Review = HOLD
+  （historical VDGO path；superseded for serving by VTSGO overwrite 2026-09-13）
+Verification Tenant Serving evidence:
+  docs/architecture/sbs-mgmt-home-correction-1-verification-tenant-serving-evidence-1.md
+  Equivalence = CONFIRMED
+  Authenticated C1 = FINDING
+  Independent Implementation Review = READY FOR FRESH RUNTIME（no self-PASS）
 Implementation Start authority: NOT GENERATED / NOT INFERRED from this packet
 Ready / Merge / Production Deploy: NOT AUTHORIZED / HOLD
-This Project runtime: STOP after C1 HOLD evidence
-  （no IR self-PASS / Ready / Merge / Production Deploy / App Catalog）
+This Project runtime: STOP after C1 evidence complete
+  （no IR self-PASS / Ready / Merge / Production Deploy）
 ```
 
 ## 1. Binding inequalities
@@ -209,4 +214,19 @@ Authenticated C1 = HOLD
 IR = HOLD（no self-PASS）
 Ready / Merge / Production Deploy = NOT AUTHORIZED
 STOP at C1 HOLD evidence
+```
+
+
+## VTSGO write + C1 FINDING note（2026-09-13）
+
+```text
+Human Verification Tenant Serving GO = already CONSUMED（continue）
+Before Write identical = YES
+App Catalog overwrite = DONE（frozen sha256 ad4db613… / Length 116799）
+Equivalence = CONFIRMED
+Authenticated C1 = FINDING（P0=1）
+Independent Implementation Review = NOT self-PASSED
+Ready / Merge / Production Deploy = NOT AUTHORIZED
+NEXT = Fresh Independent Implementation Review
+STOP = C1 evidence complete
 ```

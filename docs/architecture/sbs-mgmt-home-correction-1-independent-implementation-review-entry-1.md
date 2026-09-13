@@ -13,14 +13,14 @@ This Project runtime: MUST NOT perform / self-PASS the Implementation Review
 This packet: entry / basis pin only
 != Implementation Review PASS
 != Human Ready / Merge / Deploy
-!= C1 PASS（C1 packet Outcome = HOLD；VTSGO CONSUMED；live serving NOT ESTABLISHED）
+!= C1 PASS（C1 packet Outcome = FINDING；Equivalence CONFIRMED；VTSGO overwrite DONE）
 ```
 
 ## 1. Why this entry exists
 
 Human Implementation Start GO was consumed. Groups 1–3 presentation work and
 required local verification are on tip `PR#604-HEAD`. Authenticated 5-persona
-Re-Sim（C1）is recorded as **HOLD**（Deploy equivalence + auth session missing）.
+Re-Sim（C1）is recorded as **FINDING**（Equivalence CONFIRMED after VTSGO overwrite；P0 SharePoint chrome）.
 A Fresh Independent Implementation Review must now judge the completed packet
 set（implementation + verification + C1 evidence）without implementer self-PASS.
 
@@ -30,7 +30,7 @@ set（implementation + verification + C1 evidence）without implementer self-PAS
 |---|---|---|
 | Implementation tip | PR #604 HEAD（re-pin live; product `77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e`） | Product + verification + evidence docs | Product + verification closure |
 | Implementation evidence | `docs/architecture/sbs-mgmt-home-correction-1-implementation-evidence.md` | S-* map / tests / CI notes |
-| C1 packet | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md` | HOLD（not PASS） |
+| C1 packet | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md` | FINDING（Equivalence CONFIRMED；P0=1；not PASS） |
 | Simulation 2 | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md` | Historical CORRECTION（do not rewrite） |
 | LOCKED Definition Correction-1 | `docs/architecture/sbs-mgmt-home-correction-1-definition-correction-1.md` | C1–C6 meaning |
 | LOCKED Correction Scope | `docs/architecture/sbs-mgmt-home-correction-1-scope-definition-1.md` | IN/OUT |
@@ -94,8 +94,8 @@ PR metadata（Human UI；≠ GO）
   → Human Ready GO（separate；not inferred）
 ```
 
-Current C1 Outcome = HOLD（Verification Deploy GO CONSUMED；live Equivalence NOT CONFIRMED；AUTH SIGN_IN_WALL）.
-Independent Implementation Review = **HOLD** until Authenticated C1 acceptance evidence exists.
+Current C1 Outcome = FINDING（VTSGO overwrite DONE；Equivalence CONFIRMED；P0=1）.
+Independent Implementation Review = **READY FOR FRESH RUNTIME** with FINDING packet（must not invent C1 PASS）.
 Review must not invent C1 PASS. This Project runtime must not self-PASS Review.
 
 See:
@@ -103,17 +103,17 @@ See:
 - `docs/architecture/sbs-mgmt-home-correction-1-next-gates-1.md`
 - `docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-go-1.md`（Decision = GO RECEIVED / CONSUMED）
 - `docs/architecture/sbs-mgmt-home-correction-1-verification-deploy-evidence-1.md`
-- `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md`（C1 HOLD）
+- `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md`（C1 FINDING）
 
 ## 7. STOP（this Project）
 
 ```text
-Entry remains ready for Fresh Independent Runtime AFTER C1 acceptance evidence.
-Current: Independent Implementation Review = HOLD（C1 acceptance missing）
+Entry is ready for Fresh Independent Runtime with C1 FINDING evidence.
+Current: Independent Implementation Review = NOT STARTED / NOT self-PASSED
 Human Ready / Merge / Production Deploy = NOT AUTHORIZED
 This Project runtime does not self-PASS Review.
 Verification Deploy GO ≠ Production Deploy GO ≠ Ready / Merge
-STOP after C1 HOLD evidence；do not proceed to Ready / Merge / Production Deploy
+STOP after C1 evidence complete；do not proceed to Ready / Merge / Production Deploy
 ```
 
 ## VTSGO / C1 HOLD note（2026-09-12）
@@ -124,6 +124,18 @@ Tip-equivalent local artifact frozen.
 Live tenant serving NOT ESTABLISHED（agent SIGN_IN_WALL）.
 C1 acceptance = HOLD.
 Fresh Independent Implementation Review remains the NEXT gate after C1 acceptance evidence.
+This implementer runtime MUST NOT self-PASS Independent Implementation Review.
+Ready / Merge / Production Deploy = NOT AUTHORIZED.
+```
+
+
+## VTSGO overwrite / C1 FINDING note（2026-09-13）
+
+```text
+Frozen artifact overwrite to verification Tenant App Catalog = DONE
+Equivalence = CONFIRMED
+Authenticated C1 = FINDING（recorded）
+Fresh Independent Implementation Review may proceed against this evidence set.
 This implementer runtime MUST NOT self-PASS Independent Implementation Review.
 Ready / Merge / Production Deploy = NOT AUTHORIZED.
 ```
