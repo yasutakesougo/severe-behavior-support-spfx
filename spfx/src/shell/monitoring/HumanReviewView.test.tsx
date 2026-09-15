@@ -49,7 +49,8 @@ describe("HumanReviewView", () => {
     expect(html).toContain("synthetic-procedure-p2-v1");
     expect(html).toContain("一部変更して実施");
     expect(html).toContain("評価・承認・変更要否の判断は人が行います");
-    expect(html).not.toContain("失敗");
+    // "失敗" may appear only inside the explicit non-failure framing for NOT_PERFORMED.
+    expect(html).not.toMatch(/失敗(?!表示ではありません)/);
     expect(html).not.toContain("版管理");
   });
 
