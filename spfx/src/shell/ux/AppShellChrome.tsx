@@ -577,6 +577,72 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     }
   };
 
+  const handleStartProcedureRecordFromOverview = (occId: string): void => {
+    if (interactionPaused) {
+      return;
+    }
+    const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
+    if (!item || !item.canStartProcedureRecord || !userDetailById.has(item.userId)) {
+      return;
+    }
+    const procedureBase = procedureWorkflowPresentation.currentByUserId[item.userId];
+    const occurrencePresentation = procedureBase
+      ? {
+          ...procedureBase,
+          canStartProcedureRecord: item.canStartProcedureRecord,
+          occurrenceStatus: item.effectiveStatus,
+          context: {
+            ...procedureBase.context,
+            occurrenceId: item.occurrenceId,
+            userId: item.userId,
+            personLabel: item.personLabel,
+            procedureId: item.procedure.ProcedureId,
+            procedureVersion: item.procedure.ProcedureVersion,
+            planId: item.planId,
+            planVersion: item.planVersion,
+          },
+        }
+      : undefined;
+    if (
+      !isProcedureRecordStartAllowed(
+        occurrencePresentation ?? { canStartProcedureRecord: item.canStartProcedureRecord },
+      )
+    ) {
+      return;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
+    setAbcObservationOpen(false);
+    setReviewDuePreviewOpen(false);
+    setSelectedOccurrenceId(item.occurrenceId);
+    setSelectedUserDetailId(item.userId);
+    setOccurrenceFlowFromOverview(true);
+    setCurrentProcedureOpen(true);
+    setDestination("users");
+    if (onSelectedDestinationChange) {
+      onSelectedDestinationChange("users");
+    }
+    const resume = occurrencePresentation
+      ? resolveProcedureRecordResume({
+          authorized: FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized,
+          snapshot: snapshotForUser(sessionDraftByUserId, item.userId),
+          currentContext: occurrencePresentation.context,
+        })
+      : undefined;
+    if (
+      FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized &&
+      snapshotForUser(sessionDraftByUserId, item.userId) &&
+      resume &&
+      !resume.resumed
+    ) {
+      setSessionDraftByUserId((prev) => forgetUserSessionDraft(prev, item.userId));
+    }
+    setProcedureRecordFormOpen(true);
+    setProcedureFlowSaveState(resume?.resumed ? resume.saveState : "unsaved");
+  };
+
   const handleBackToUsers = (): void => {
     if (interactionPaused) {
       return;
@@ -1190,6 +1256,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         userId: item.userId,
                       });
                     }}
+                    onStartProcedureRecord={handleStartProcedureRecordFromOverview}
                   />
                 )
               ) : destination === "users" ? (

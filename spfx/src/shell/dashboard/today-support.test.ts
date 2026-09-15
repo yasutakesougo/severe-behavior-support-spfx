@@ -16,6 +16,12 @@ describe("VP-G Today Support occurrence CTA presentation", () => {
     expect(todaySupportOccurrenceActionLabel("記録済み", "field")).toBe("記録を確認・再表示");
   });
 
+  it("keeps record and procedure as separate field operations", () => {
+    expect(TODAY_SUPPORT_FIELD_PROCEDURE_LABEL).toBe("手順を表示");
+    expect(TODAY_SUPPORT_FIELD_RECORD_LABEL).toBe("この予定を記録");
+    expect(TODAY_SUPPORT_FIELD_PROCEDURE_LABEL).not.toBe(TODAY_SUPPORT_FIELD_RECORD_LABEL);
+  });
+
   it("de-emphasizes unrecorded occurrence CTAs for ADMIN confirm mode only", () => {
     expect(todaySupportFieldUnrecordedSplitLabels("未実施", "confirm")).toBeUndefined();
     expect(todaySupportOccurrenceActionLabel("未実施", "confirm")).toBe("予定を確認");

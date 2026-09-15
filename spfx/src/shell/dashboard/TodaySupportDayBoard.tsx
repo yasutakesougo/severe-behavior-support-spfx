@@ -57,6 +57,8 @@ export type TodaySupportDayBoardProps = Readonly<{
   items: readonly TodaySupportItem[];
   selectedOccurrenceId?: string;
   onSelectOccurrence?: (occurrenceId: string) => void;
+  /** Existing procedure-record start. Distinct from occurrence viewing. */
+  onStartProcedureRecord?: (occurrenceId: string) => void;
   /** ADMIN_AUDIT: confirm-oriented labels; FIELD_STAFF/PLANNER keep record CTAs. */
   occurrenceCtaMode?: TodaySupportOccurrenceCtaMode;
   /** PLANNER/ADMIN desktop: two-column board. FIELD_STAFF stays one column. */
@@ -67,6 +69,7 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
   items,
   selectedOccurrenceId,
   onSelectOccurrence,
+  onStartProcedureRecord,
   occurrenceCtaMode = "field",
   denseDesktopLayout = false,
 }) => {
@@ -166,9 +169,15 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
                       data-kiosk-occurrence-cta="record"
                       data-kiosk-target-occurrence-id={item.occurrenceId}
                       data-kiosk-can-start-record={item.canStartProcedureRecord ? "true" : "false"}
+                      disabled={!item.canStartProcedureRecord || !onStartProcedureRecord}
+                      aria-disabled={
+                        !item.canStartProcedureRecord || !onStartProcedureRecord
+                          ? "true"
+                          : undefined
+                      }
                       onClick={() => {
-                        if (onSelectOccurrence) {
-                          onSelectOccurrence(item.occurrenceId);
+                        if (item.canStartProcedureRecord && onStartProcedureRecord) {
+                          onStartProcedureRecord(item.occurrenceId);
                         }
                       }}
                     >
