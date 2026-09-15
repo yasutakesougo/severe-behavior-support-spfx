@@ -1,8 +1,12 @@
 import {
+  applyTodayTargetsKpiToPresentation,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
   formatTodaySupportBoardDisclaimer,
+  isTodayTargetsUnavailableCard,
   overviewCopyIsFailClosed,
+  resolveTodayTargetsKpiCard,
+  TODAY_TARGETS_UNAVAILABLE_STATUS_HINT,
 } from "./overview-copy";
 import {
   DASHBOARD_UX_OVERVIEW_FIXTURE,
@@ -26,7 +30,14 @@ describe("DASHBOARD-UX-1 overview fixture boundary", () => {
       SHELL_STATUS_LABEL_DUE_SOON,
     ]);
     // DEMO-UX-10 Family R: needs_review / unrecorded / deadline_near match Users filter (3/2/3)
-    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.map((card) => card.count)).toEqual([1, 3, 2, 3]);
+    // today_targets in the fixture is UNAVAILABLE — population authority is Overview wiring.
+    expect(
+      DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards
+        .filter((card) => card.id !== "today_targets")
+        .map((card) => card.count),
+    ).toEqual([3, 2, 3]);
+    expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards[0]?.id).toBe("today_targets");
+    expect(isTodayTargetsUnavailableCard(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards[0]!)).toBe(true);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards[0]?.count).not.toBe(12);
     expect(DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.every((card) => card.statusHint.length > 0)).toBe(
       true,
@@ -134,12 +145,6 @@ describe("VP-G Overview presentationRole entry", () => {
   });
 });
 
-import {
-  isTodayTargetsUnavailableCard,
-  resolveTodayTargetsKpiCard,
-  TODAY_TARGETS_UNAVAILABLE_STATUS_HINT,
-} from "./overview-copy";
-
 describe("S-POP today_targets availability contract", () => {
   it("resolves distinct roster userIds and allows zero without meaning unavailable", () => {
     const resolved = resolveTodayTargetsKpiCard(
@@ -158,5 +163,24 @@ describe("S-POP today_targets availability contract", () => {
     expect(isTodayTargetsUnavailableCard(unavailable)).toBe(true);
     expect(unavailable.statusHint).toBe(TODAY_TARGETS_UNAVAILABLE_STATUS_HINT);
     expect(unavailable.count).not.toBe(12);
+  });
+
+  it("does not treat the overview fixture as today_targets population authority", () => {
+    const fixtureCard = DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.find(
+      (card) => card.id === "today_targets",
+    );
+    expect(fixtureCard).toBeDefined();
+    expect(isTodayTargetsUnavailableCard(fixtureCard!)).toBe(true);
+    const wired = applyTodayTargetsKpiToPresentation(
+      DASHBOARD_UX_OVERVIEW_FIXTURE,
+      [{ userId: "user-a" }, { userId: "user-a" }, { userId: "user-z" }],
+      ["user-a", "user-b"],
+    );
+    const wiredCard = wired.kpiCards.find((card) => card.id === "today_targets");
+    expect(isTodayTargetsUnavailableCard(wiredCard!)).toBe(false);
+    expect(wiredCard?.count).toBe(1);
+    expect(wired.kpiCards.find((card) => card.id === "needs_review")?.count).toBe(
+      DASHBOARD_UX_OVERVIEW_FIXTURE.kpiCards.find((card) => card.id === "needs_review")?.count,
+    );
   });
 });

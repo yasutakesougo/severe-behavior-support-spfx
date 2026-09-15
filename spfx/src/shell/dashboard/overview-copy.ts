@@ -2,7 +2,7 @@
  * DASHBOARD-UX-1 — fail-closed presentation copy.
  */
 
-import type { OverviewKpiCard } from "./overview-types";
+import type { OverviewKpiCard, ShellOverviewPresentation } from "./overview-types";
 
 /**
  * Retained for fail-closed copy checks.
@@ -101,4 +101,22 @@ export function resolveTodayTargetsKpiCard(
 
 export function isTodayTargetsUnavailableCard(card: OverviewKpiCard): boolean {
   return card.id === "today_targets" && card.statusHint === TODAY_TARGETS_UNAVAILABLE_STATUS_HINT;
+}
+
+/**
+ * Product Overview wiring: today_targets is derived from the items actually
+ * passed to Overview, not from a fixture-hardcoded population.
+ */
+export function applyTodayTargetsKpiToPresentation(
+  presentation: ShellOverviewPresentation,
+  todaySupportItems: readonly { userId: string }[] | undefined,
+  rosterUserIds: readonly string[],
+): ShellOverviewPresentation {
+  const todayTargetsCard = resolveTodayTargetsKpiCard(todaySupportItems, rosterUserIds);
+  return {
+    ...presentation,
+    kpiCards: presentation.kpiCards.map((card) =>
+      card.id === "today_targets" ? todayTargetsCard : card,
+    ),
+  };
 }

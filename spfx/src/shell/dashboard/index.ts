@@ -1,12 +1,15 @@
 export { OverviewDashboard, type OverviewDashboardProps } from "./OverviewDashboard";
 export { TodaySupportDayBoard, type TodaySupportDayBoardProps } from "./TodaySupportDayBoard";
 export {
+  applyTodayTargetsKpiToPresentation,
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   DASHBOARD_OVERVIEW_KPI_NOTE,
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
   formatTodaySupportBoardDisclaimer,
+  isTodayTargetsUnavailableCard,
   overviewCopyIsFailClosed,
+  resolveTodayTargetsKpiCard,
 } from "./overview-copy";
 export {
   DASHBOARD_UX_OVERVIEW_FIXTURE,

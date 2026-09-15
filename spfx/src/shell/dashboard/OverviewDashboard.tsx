@@ -10,7 +10,9 @@ import {
   type OverviewSectionKey,
   type ShellPresentationRole,
 } from "../ux/presentation-role";
+import { DEMO_UX_USERS_FIXTURE } from "../users/users-fixture";
 import {
+  applyTodayTargetsKpiToPresentation,
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   formatTodaySupportBoardDisclaimer,
@@ -31,6 +33,8 @@ export type OverviewDashboardProps = Readonly<{
   onReviewDueStateRequest?: () => void;
   onTodayActionNavigate?: (target: OverviewActionNavigationTarget) => void;
   onSelectOccurrence?: (occurrenceId: string) => void;
+  /** Existing procedure-record start entry. Must not share onSelectOccurrence. */
+  onStartProcedureRecord?: (occurrenceId: string) => void;
   presentationRole?: ShellPresentationRole;
 }>;
 
@@ -49,9 +53,15 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
   onReviewDueStateRequest,
   onTodayActionNavigate,
   onSelectOccurrence,
+  onStartProcedureRecord,
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
 }) => {
-  const { kpiCards, actionItems, recentRecords } = presentation;
+  const rosterUserIds = DEMO_UX_USERS_FIXTURE.rows.map((row) => row.id);
+  const { kpiCards, actionItems, recentRecords } = applyTodayTargetsKpiToPresentation(
+    presentation,
+    todaySupportItems,
+    rosterUserIds,
+  );
   const todayActionNavEnabled = Boolean(onTodayActionNavigate);
   const denseDesktop = presentationRole !== "FIELD_STAFF";
   const occurrenceCtaMode = isAdminAuditPresentationRole(presentationRole) ? "confirm" : "field";
@@ -74,6 +84,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
           items={todaySupportItems}
           selectedOccurrenceId={selectedOccurrenceId}
           onSelectOccurrence={onSelectOccurrence}
+          onStartProcedureRecord={onStartProcedureRecord}
           occurrenceCtaMode={occurrenceCtaMode}
           denseDesktopLayout={denseDesktop}
         />

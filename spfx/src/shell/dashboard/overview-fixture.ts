@@ -10,9 +10,9 @@ import { resolveTodayTargetsKpiCard } from "./overview-copy";
 
 const rosterRows = DEMO_UX_USERS_FIXTURE.rows;
 const rosterUserIds = rosterRows.map((row) => row.id);
-// Mirrors kiosk synthetic today-support population (user-a only) without importing
-// the kiosk fixture module (avoids TextEncoder at overview module load in Jest).
-const todayTargetsCard = resolveTodayTargetsKpiCard([{ userId: "user-a" }], rosterUserIds);
+// Fixture is not population authority for today_targets (S-POP). Overview
+// derives MODE_RESOLVED / MODE_UNAVAILABLE from actual todaySupportItems.
+const todayTargetsCard = resolveTodayTargetsKpiCard(undefined, rosterUserIds);
 const rosterNeedsReviewCount = countRowsWithBadgeId(rosterRows, "needs_review");
 const rosterUnrecordedCount = countRowsWithBadgeId(rosterRows, "unrecorded");
 const rosterDeadlineNearCount = countRowsWithBadgeId(rosterRows, "deadline_near");
