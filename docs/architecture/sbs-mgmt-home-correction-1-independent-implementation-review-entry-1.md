@@ -6,9 +6,10 @@ unit: SBS-MGMT-HOME-CORRECTION-1
 kind: Fresh Independent Implementation Review ENTRY
 status: READY FOR FRESH INDEPENDENT RUNTIME / NOT STARTED
 date: 2026-09-12
-PR: #604（Draft）
-branch: cursor/sbs-mgmt-home-5-persona-sim-c53a
-implementation tip to bind: PR #604 HEAD（re-pin live; product @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e）
+PR: #607（Draft）
+branch: cursor/sbs-mgmt-home-p1-correction-6bf3
+implementation tip to bind: PR #607 HEAD（re-pin live）
+historical bind (do not rewrite verdict): PR #604 / product @ 77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e
 This Project runtime: MUST NOT perform / self-PASS the Implementation Review
 This packet: entry / basis pin only
 != Implementation Review PASS
@@ -18,8 +19,9 @@ This packet: entry / basis pin only
 
 ## 1. Why this entry exists
 
-Human Implementation Start GO was consumed. Groups 1–3 presentation work and
-required local verification are on tip `PR#604-HEAD`. Authenticated 5-persona
+Human Implementation Start GO was consumed. Groups 1–3 presentation work,
+P1-1…P1-4 code Correction, and required local verification bind to
+`PR#607-HEAD`. Authenticated 5-persona
 Re-Sim（C1）is recorded as **FINDING**（Equivalence CONFIRMED after VTSGO overwrite；P0 SharePoint chrome）.
 A Fresh Independent Implementation Review must now judge the completed packet
 set（implementation + verification + C1 evidence）without implementer self-PASS.
@@ -28,7 +30,7 @@ set（implementation + verification + C1 evidence）without implementer self-PAS
 
 | Artifact | Path | Role |
 |---|---|---|
-| Implementation tip | PR #604 HEAD（re-pin live; product `77dc5ba70e2be1c3e03e2d6ab836df234a4ba23e`） | Product + verification + evidence docs | Product + verification closure |
+| Implementation tip | PR #607 HEAD（re-pin live） | Product + P1 code Correction + verification + evidence docs |
 | Implementation evidence | `docs/architecture/sbs-mgmt-home-correction-1-implementation-evidence.md` | S-* map / tests / CI notes |
 | C1 packet | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md` | FINDING（Equivalence CONFIRMED；P0=1；not PASS） |
 | Simulation 2 | `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-2.md` | Historical CORRECTION（do not rewrite） |
@@ -37,8 +39,9 @@ set（implementation + verification + C1 evidence）without implementer self-PAS
 | Implementation Scope | `docs/architecture/sbs-mgmt-home-correction-1-implementation-scope-1.md` | Files IN / S-* |
 | Scope Re-Review | PASS / REVIEW-CLEARED（prior Fresh Runtime） | Start eligibility only |
 
-At review start, Fresh Runtime must re-pin tip SHA / blob SHAs from live PR #604
+At review start, Fresh Runtime must re-pin tip SHA / blob SHAs from live PR #607
 head（do not trust stale SHAs from this entry alone）.
+Past Independent Review verdicts are unchanged by this provenance sync.
 
 ## 3. Mandatory checks for Fresh Implementation Review
 
@@ -110,10 +113,13 @@ See:
 ```text
 Entry is ready for Fresh Independent Runtime with C1 FINDING evidence.
 Current: Independent Implementation Review = NOT STARTED / NOT self-PASSED
-Human Ready / Merge / Production Deploy = NOT AUTHORIZED
+P1 code Correction completion != Human Ready eligibility
+Authenticated C1 P0=1 remains OPEN / NOT PASS
+Human Ready = HOLD / NOT ELIGIBLE
+Human Merge / Production Deploy / LIVE WRITE = NOT AUTHORIZED
 This Project runtime does not self-PASS Review.
 Verification Deploy GO ≠ Production Deploy GO ≠ Ready / Merge
-STOP after C1 evidence complete；do not proceed to Ready / Merge / Production Deploy
+STOP after exact-head verification；next = Fresh Independent Implementation Re-Review
 ```
 
 ## VTSGO / C1 HOLD note（2026-09-12）

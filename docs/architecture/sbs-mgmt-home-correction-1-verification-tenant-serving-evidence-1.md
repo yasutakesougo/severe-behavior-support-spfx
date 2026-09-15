@@ -53,7 +53,7 @@ Pre-write identical=YES → write authorized under consumed VTSGO.
 | AppPackageErrorMessage | `エラーはありません。` |
 | Unrelated packages touched | **NO**（BUILD1 conflict row left in place；not deleted） |
 
-REST evidence: `/opt/cursor/artifacts/correction1-vtsgo-c1/catalog-rest.json`  
+REST evidence: `/opt/cursor/artifacts/correction1-vtsgo-c1/catalog-rest.json`
 Overwrite log: `/opt/cursor/artifacts/correction1-vtsgo-c1/overwrite-result.json`
 
 ## 3. Equivalence
@@ -80,7 +80,7 @@ Home: https://isogokatudouhome.sharepoint.com/sites/severe-support-isogo/SitePag
 
 ## 5. Authenticated C1（5-persona）
 
-Packet: `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md`  
+Packet: `docs/architecture/sbs-mgmt-home-5-persona-real-browser-simulation-3.md`
 Raw: `/opt/cursor/artifacts/correction1-vtsgo-c1/c1/c1-result.json`
 
 | Persona | Required meaning | Result |

@@ -73,7 +73,7 @@ Outcome = FINDING（not PASS）.
 | 4 | 利用者→計画 + 未実施/未記録/未保存の区別 | HOLD | ナビ候補はあるが到達経路の十分な確認不足 |
 | 5 | 件数と利用者単位整合 + Draft/Active 説明 | PASS | 件数語彙と業務ホーム文脈を観測 |
 
-Screenshots: `/opt/cursor/artifacts/correction1-vtsgo-c1/c1/`  
+Screenshots: `/opt/cursor/artifacts/correction1-vtsgo-c1/c1/`
 Machine JSON: `/opt/cursor/artifacts/correction1-vtsgo-c1/c1/c1-result.json`
 
 ## Outcome
