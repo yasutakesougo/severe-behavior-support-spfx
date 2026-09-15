@@ -39,9 +39,7 @@ function stubTodayItem(
 }
 
 function todayTargetsCardMarkup(html: string): string {
-  const match = html.match(
-    /<li[^>]*data-dashboard-ux-kpi="today_targets"[^>]*>[\s\S]*?<\/li>/,
-  );
+  const match = html.match(/<li[^>]*data-dashboard-ux-kpi="today_targets"[^>]*>[\s\S]*?<\/li>/);
   return match ? match[0] : "";
 }
 
