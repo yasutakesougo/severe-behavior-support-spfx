@@ -1,5 +1,9 @@
 import * as React from "react";
-import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
+import {
+  hintForProcedureRecordResult,
+  labelForProcedureRecordResult,
+} from "../procedure/procedure-copy";
+import { EmptyNotice, StatusBadge } from "../primitives";
 import type {
   HumanReviewMaterialRecord,
   HumanReviewMaterials,
@@ -189,9 +193,24 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
       </p>
 
       {model.records.length === 0 ? (
-        <div className={styles.emptyState} data-human-review-empty="true">
-          <p>この計画版・対象期間に一致する実施記録はありません。</p>
-          <p>0件であることは、「実施できなかった」という結果を意味しません。</p>
+        <div
+          className={styles.emptyState}
+          data-human-review-empty="true"
+          data-state-kind="zero-records"
+        >
+          <p className={styles.emptyStateLead} data-human-review-zero-records="true">
+            記録なし（0件）
+          </p>
+          <EmptyNotice
+            announce
+            className={styles.emptyStateDetail}
+            dataAttrs={{ "data-human-review-empty-notice": "true" }}
+          >
+            この計画版・対象期間に一致する実施記録はありません。
+          </EmptyNotice>
+          <p data-human-review-zero-not-not-performed="true">
+            0件であることは、「実施できなかった」という結果を意味しません。
+          </p>
         </div>
       ) : (
         <ol className={styles.recordList} data-human-review-record-list="true">
@@ -205,10 +224,25 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
               >
                 <div className={styles.recordHeader}>
                   <strong>{formatTokyoDateTime(record.performedAt)}</strong>
-                  <span className={styles.resultLabel}>
-                    {labelForProcedureRecordResult(record.result)}
-                  </span>
+                  <StatusBadge
+                    shape="soft"
+                    label={labelForProcedureRecordResult(record.result)}
+                    statusId={record.result}
+                    className={styles.resultLabel}
+                    dataAttrs={{
+                      "data-human-review-result": record.result,
+                      "data-human-review-result-label": "true",
+                    }}
+                  />
                 </div>
+                {record.result === "NOT_PERFORMED" ? (
+                  <p
+                    className={styles.resultFactHint}
+                    data-human-review-result-fact="NOT_PERFORMED"
+                  >
+                    {hintForProcedureRecordResult(record.result)}
+                  </p>
+                ) : null}
                 <dl className={styles.recordFacts}>
                   {sceneLabel ? (
                     <div data-human-review-scene-label="true">

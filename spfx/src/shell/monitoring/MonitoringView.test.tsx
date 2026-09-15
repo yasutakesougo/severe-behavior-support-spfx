@@ -123,8 +123,11 @@ describe("MonitoringView", () => {
     );
 
     expect(html).toContain('data-monitoring-empty="true"');
+    expect(html).toContain('data-state-kind="zero-records"');
+    expect(html).toContain('data-monitoring-empty-notice="true"');
     expect(html).toContain("この期間・計画版に一致する実施記録はありません。");
     expect(html).toContain("0件であることは、「実施できなかった」という結果を意味しません。");
+    expect(html).toContain('data-monitoring-zero-not-not-performed="true"');
     expect(html).toContain('data-monitoring-person-identity="true"');
     expect(html).toContain('data-monitoring-role-cue="summary"');
     expect(html).not.toContain("data-monitoring-record-id=");

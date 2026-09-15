@@ -49,7 +49,8 @@ describe("HumanReviewView", () => {
     expect(html).toContain("synthetic-procedure-p2-v1");
     expect(html).toContain("一部変更して実施");
     expect(html).toContain("評価・承認・変更要否の判断は人が行います");
-    expect(html).not.toContain("失敗");
+    // "失敗" may appear only inside the explicit non-failure framing for NOT_PERFORMED.
+    expect(html).not.toMatch(/失敗(?!表示ではありません)/);
     expect(html).not.toContain("版管理");
   });
 
@@ -98,7 +99,23 @@ describe("HumanReviewView", () => {
     expect(html).toContain("この計画版・対象期間に一致する実施記録はありません。");
     expect(html).toContain("0件であることは、「実施できなかった」という結果を意味しません。");
     expect(html).toContain("0件");
+    expect(html).toContain('data-state-kind="zero-records"');
+    expect(html).toContain('data-human-review-zero-records="true"');
+    expect(html).toContain('data-sbs-primitive="empty-notice"');
     expect(html).not.toContain("data-human-review-record-id=");
+    expect(html).not.toContain('data-human-review-result-fact="NOT_PERFORMED"');
+  });
+
+  it("renders NOT_PERFORMED as a recorded fact distinct from zero-record absence", () => {
+    const html = render(humanReviewResultForSyntheticVersion(2));
+
+    expect(html).toContain("実施できなかった");
+    expect(html).toContain('data-human-review-result="NOT_PERFORMED"');
+    expect(html).toContain('data-human-review-result-fact="NOT_PERFORMED"');
+    expect(html).toContain("実施できなかった事実の記録です。職員の失敗表示ではありません。");
+    expect(html).toContain('data-sbs-primitive="status-badge"');
+    expect(html).not.toContain('data-human-review-empty="true"');
+    expect(html).not.toContain('data-state-kind="zero-records"');
   });
 
   it("exposes a stable in-page review-materials anchor", () => {

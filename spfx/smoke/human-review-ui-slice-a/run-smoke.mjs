@@ -110,7 +110,10 @@ for (const viewport of viewports) {
           text.includes("個別の事実資料") &&
           Boolean(document.querySelector('[data-human-review-person-identity="true"]')) &&
           Boolean(document.querySelector('[data-human-review-role-cue="materials"]')) &&
-          !text.includes("失敗") &&
+          text.includes("実施できなかった") &&
+          text.includes("実施できなかった事実の記録です。職員の失敗表示ではありません。") &&
+          Boolean(document.querySelector('[data-human-review-result-fact="NOT_PERFORMED"]')) &&
+          !/失敗(?!表示ではありません)/.test(text) &&
           recordCount === 3;
       } else if (activeCase === "v1") {
         semanticPass =
