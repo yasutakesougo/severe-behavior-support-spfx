@@ -5,6 +5,7 @@ import {
   type ReviewPresentationContext,
 } from "../../sbs-domain/monitoring-read-model.bundle";
 import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import { EmptyNotice } from "../primitives";
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
   captureSyntheticCapturedReview,
@@ -144,9 +145,22 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
           <a href="#human-review-materials">見直し資料へ移動</a>
         </p>
         {model.records.length === 0 ? (
-          <p className={styles.emptyState} data-monitoring-empty="true">
-            この期間・計画版に一致する実施記録はありません。
-          </p>
+          <div
+            className={styles.emptyState}
+            data-monitoring-empty="true"
+            data-state-kind="zero-records"
+          >
+            <EmptyNotice
+              announce
+              className={styles.emptyStateDetail}
+              dataAttrs={{ "data-monitoring-empty-notice": "true" }}
+            >
+              この期間・計画版に一致する実施記録はありません。
+            </EmptyNotice>
+            <p data-monitoring-zero-not-not-performed="true">
+              0件であることは、「実施できなかった」という結果を意味しません。
+            </p>
+          </div>
         ) : (
           <p className={styles.scopeNote} data-monitoring-detail-owner="human-review">
             {model.recordCount}件の詳細は「見直し資料」にまとめて表示します。

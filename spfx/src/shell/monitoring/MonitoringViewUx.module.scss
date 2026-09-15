@@ -83,6 +83,28 @@
   line-height: sbs.$line-height-body;
 }
 
+.emptyState {
+  display: grid;
+  gap: sbs.$space-2;
+}
+
+.emptyStateLead {
+  margin: 0;
+  color: sbs.$color-text-primary;
+  font-weight: sbs.$font-weight-semibold;
+}
+
+.emptyStateDetail {
+  margin: 0;
+}
+
+.resultFactHint {
+  margin: sbs.$space-2 0 0;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-meta;
+  line-height: sbs.$line-height-meta;
+}
+
 .count {
   padding: sbs.$space-1 sbs.$space-3;
   border-radius: sbs.$radius-pill;
