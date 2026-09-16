@@ -7,10 +7,16 @@ repository: yasutakesougo/severe-behavior-support-spfx
 workstream: SBS-ROLE-TASK-FIRST-IA-V1
 unit: CORR-1G
 kind: implementation scope scout / exact scope definition
-status: COMPLETE / AWAITING INDEPENDENT SCOPE REVIEW
+status: COMPLETE / CORRECTION-1 APPLIED / AWAITING FRESH INDEPENDENT SCOPE RE-REVIEW
 date: 2026-09-16
 
 Human CORR-1G Exact Scope Scout GO: RECEIVED / CONSUMED
+Independent Scope Review-1: CORRECTION REQUIRED / CONSUMED
+  record: docs/architecture/sbs-role-task-first-ia-v1-implementation-scope-corr-1g-independent-scope-review-1.md
+  reviewed scope HEAD: 9363e81327dadf1de1f337e27f0260765fb8b6bc
+  reviewed scope blob: bee42303b67346a0fe9c5a6b49cd51b8c358a593
+Human Exact Scope Correction-1 GO: RECEIVED / CONSUMED
+  GO record: docs/architecture/sbs-role-task-first-ia-v1-corr-1g-human-exact-scope-correction-1-go.md
 
 locked packet path:
   docs/architecture/sbs-role-task-first-ia-v1-corr-1g-complete-controlled-packet.md
@@ -26,7 +32,7 @@ parent Correction-2 packet blob: 5eeb8140772ebfefe050cff93361a6d81c470f81
 parent Lock blob: 794d227a1e69c709e679337be6478b32de81d74a
 scout basis main: 40659c5b459548cc59803562122fdffd77fc0a23
 
-Independent Scope Review: NOT YET
+Independent Scope Re-Review: NOT YET
 Human Correction Implementation GO: NOT RECEIVED
 Implementation Start: NOT AUTHORIZED
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -43,7 +49,9 @@ This document scouts the repository against the locked CORR-1G packet and fixes 
 
 Creating or reviewing this Scope does **not** authorize Product mutation or consume Human Correction Implementation GO.
 
-Human Exact Scope Scout GO ≠ Independent Scope Review PASS ≠ Human Correction Implementation GO ≠ Implementation Start ≠ Ready ≠ Merge.
+Human Exact Scope Scout GO ≠ Independent Scope Review PASS ≠ Exact Scope Correction-1 GO ≠ Independent Scope Re-Review PASS ≠ Human Correction Implementation GO ≠ Implementation Start ≠ Ready ≠ Merge.
+
+Exact Scope Correction-1 closes Independent Scope Review-1 P1-1 / P1-2 / P1-3 only. It does not self-PASS Re-Review and does not authorize Product mutation.
 
 ---
 
@@ -75,7 +83,7 @@ Frozen-false `sessionContext` for the whole Product session is **REJECTED**.
 | Legacy chrome | `AppShellChrome.tsx` already hosts TodaySupportDayBoard, UsersList, UserDetail, CurrentProcedure, ProcedureRecordForm behind overview/users adapters | Allowed adapter surfaces; CORR-1F hid SHELL-UX-7 for FIELD_STAFF |
 | D-TODAY list CTA | `TodaySupportDayBoard` FIELD_STAFF 未実施 label = `この予定を記録 / 手順表示`; click opens CurrentProcedure inside chrome, but Task-First D-* stays D-TODAY / object false | Bind as D-TODAY Primary Action episode; notify Task-First layer |
 | D-PERSON | UserDetail opens via `handleUserDetailRequest`; Task-First identity stays D-FIND-PERSON | Stay D-PERSON after open; object true/false per day’s occurrence |
-| D-UNRECORDED | users adapter + `未記録` chip; row open currently goes to UserDetail | OPTION A: occurrence choice → D-RECORD-WRITE in the same episode |
+| D-UNRECORDED | users adapter + `未記録` chip; `UsersList.onUserDetailRequest(userId)` opens UserDetail (person-open only; **not** occurrence identity) | OPTION A is **not** that callback. Correction-1 binds `TodaySupportDayBoard.onSelectOccurrence(occurrenceId)` while Task-First Destination is D-UNRECORDED |
 | D-PROCEDURE completion | CurrentProcedure CTA `この手順を記録` opens ProcedureRecordForm in chrome | Bind as D-PROCEDURE Completion → D-RECORD-WRITE + occurrence true |
 | PLANNER / ADMIN_AUDIT | unchanged SHELL-UX-7 surfaces | Regression-only; OUT |
 | P2-2 / P2-3 | smoke `.gitignore`; workflow `github.sha` | OUT; do not close inside CORR-1G |
@@ -118,13 +126,13 @@ spfx/src/shell/ux/index.ts                                   (export wiring only
 spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx
 spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.module.scss
 spfx/src/shell/ux/AppShellChrome.tsx                         (FIELD_STAFF session-context adapter only; §3.2)
-spfx/src/shell/dashboard/TodaySupportDayBoard.tsx            (D-TODAY Primary Action bind / FIELD_STAFF 未実施 CTA only)
-spfx/src/shell/dashboard/today-support.test.ts               (label / CTA bind coverage only)
+spfx/src/shell/dashboard/TodaySupportDayBoard.tsx            (D-TODAY PA bind; D-UNRECORDED OPTION A host; FIELD_STAFF onClearChosenOccurrence only)
+spfx/src/shell/dashboard/today-support.test.ts               (label / CTA / clear-control bind coverage only)
 ```
 
 `primary-navigation.ts`, domain modules, SharePoint adapters, UsersList.tsx, UserDetail.tsx, CurrentProcedure.tsx, ProcedureRecordForm.tsx, DailyRecords.tsx, and other shell destinations are **OUT** unless a HOLD in §9 fires.
 
-UsersList / UserDetail / CurrentProcedure remain the existing adapter surfaces. CORR-1G must bind their **already-exposed** callbacks from `AppShellChrome.tsx` (person open, back to list, procedure request, record request, day-board select). Do not silently expand into those component files.
+UsersList / UserDetail / CurrentProcedure remain the existing adapter surfaces. CORR-1G must bind their **already-exposed** callbacks from `AppShellChrome.tsx` (person open, back to list, procedure request, record request) **except** D-UNRECORDED occurrence choice / D-TODAY object deselect / D-UNRECORDED occurrence deselect, which are closed in §3.3 to `TodaySupportDayBoard` callbacks only. Do not silently expand into UsersList / UserDetail / CurrentProcedure / DailyRecords.
 
 ### 3.1 Legacy shell adapter rule (CORR-1G; preserves CORR-1F)
 
@@ -132,7 +140,9 @@ UsersList / UserDetail / CurrentProcedure remain the existing adapter surfaces. 
 D-TODAY          → overview adapter (first paint / Global 今日)
 D-PROCEDURE      → users adapter (CurrentProcedure host)
 D-RECORD-WRITE   → users adapter (ProcedureRecordForm host)
-D-UNRECORDED     → users adapter + existing 未記録 filter chip
+D-UNRECORDED     → users adapter (host TodaySupportDayBoard filtered 未実施
+                     for OPTION A / clear; existing 未記録 chip may remain
+                     as adapter transport; UsersList row is not OPTION A)
 D-FIND-PERSON    → users adapter (person index)
 D-PERSON         → users adapter (UserDetail host)
 ```
@@ -164,7 +174,7 @@ D. The legacy chrome MUST NOT be presented or interpreted as a second concurrent
 E. PLANNER / ADMIN_AUDIT behavior through AppShellChrome remains unchanged
    (regression-only).
 F. No SHELL-UX-7 Global row add/remove/reorder.
-G. If satisfying AC-1G-1..20 requires UsersList / UserDetail / CurrentProcedure /
+G. If satisfying AC-1G-1..22 requires UsersList / UserDetail / CurrentProcedure /
    ProcedureRecordForm / DailyRecords / domain / schema file changes, CORR-1G MUST HOLD.
    Do not widen §3 silently.
 H. Session-context events the chrome may report are exactly the locked packet events
@@ -173,22 +183,47 @@ H. Session-context events the chrome may report are exactly the locked packet ev
 
 ### 3.3 Event binding (normative; not React lock)
 
-| Locked event | Existing Product-visible surface (scout) | Task-First result |
+| Locked event | Exact Product callback / control | Task-First result |
 |---|---|---|
 | First paint | `ScaffoldShell` initial state | object false, occurrence false, D-TODAY |
-| D-TODAY Primary Action episode | FIELD_STAFF TodaySupportDayBoard 未実施 CTA (bind as `対象の支援を始める`) | object true, Destination **D-PROCEDURE** |
-| D-TODAY highlight / list visible without that CTA | day-board selected card without CTA | no acquire; no release of sticky true |
-| D-PERSON open with current day’s occurrence | UserDetail open when chrome has a current procedure/occurrence for that person | object true, Destination **D-PERSON only** |
-| D-PERSON open without current day’s occurrence | UserDetail open when chrome has no current day’s occurrence for that person | RELEASE object+occurrence, stay **D-PERSON**, fallbacks restored |
-| D-UNRECORDED occurrence choice | users + 未記録 chip + choosing that unrecorded occurrence (not a person-index open) | OPTION A: object+occurrence true, **D-RECORD-WRITE** |
-| D-PROCEDURE Completion | CurrentProcedure record/confirm CTA already hosted in chrome | occurrence true, **D-RECORD-WRITE** |
-| Back D-PERSON → D-FIND-PERSON | existing UserDetail back-to-list | RELEASE, Destination **D-FIND-PERSON** |
-| Explicit deselect / no remaining chosen object on D-TODAY | Product-visible clear of the D-TODAY chosen object | RELEASE, D-TODAY, fallbacks restored |
+| D-TODAY Primary Action episode | `TodaySupportDayBoard.onSelectOccurrence(occurrenceId: string)` while Task-First Destination is **D-TODAY**, FIELD_STAFF 未実施 CTA (bind as `対象の支援を始める`). Object identity = `todaySupportItems` row for that `occurrenceId` (`userId`) | object true, Destination **D-PROCEDURE** |
+| D-TODAY highlight / list visible without that CTA | day-board selected card / highlight **without** invoking `onSelectOccurrence` | no acquire; no release of sticky true |
+| D-TODAY explicit object deselect | `TodaySupportDayBoard.onClearChosenOccurrence()` while Task-First Destination is **D-TODAY** (control visible only when a chosen `occurrenceId` exists) | object false (coupled occurrence false); stay **D-TODAY**; fallbacks restored |
+| D-PERSON open with current day’s occurrence | `AppShellChrome.handleUserDetailRequest(userId: string)` / UsersList `onUserDetailRequest(userId)` when chrome has a current day’s occurrence for that person | object true, Destination **D-PERSON only** |
+| D-PERSON open without current day’s occurrence | same `onUserDetailRequest(userId)` when chrome has no current day’s occurrence for that person | RELEASE object+occurrence, stay **D-PERSON**, fallbacks restored |
+| D-UNRECORDED occurrence choice (OPTION A) | `TodaySupportDayBoard.onSelectOccurrence(occurrenceId: string)` while Task-First Destination is **D-UNRECORDED**. Host the already-authorized day board on the users adapter, items filtered to `effectiveStatus === "未実施"`. Object identity = `todaySupportItems` row for that `occurrenceId` (`userId`). **Not** `UsersList.onUserDetailRequest(userId)` | object+occurrence true, **D-RECORD-WRITE** |
+| D-UNRECORDED explicit occurrence deselect | `TodaySupportDayBoard.onClearChosenOccurrence()` while Task-First Destination is **D-UNRECORDED** | occurrence false; object unchanged; stay **D-UNRECORDED**; 記録する fallback restored |
+| D-PROCEDURE Completion | CurrentProcedure record/confirm CTA already hosted in chrome (`onRecordProcedureRequest`) | occurrence true, **D-RECORD-WRITE** |
+| Back D-PERSON → D-FIND-PERSON | existing UserDetail `onBackToUsers` / `handleBackToUsers` | RELEASE, Destination **D-FIND-PERSON** |
 | Global 今日 | existing Task-First Global 今日 | D-TODAY; **not** release |
-| C4 PA on D-PERSON object true | existing UserDetail `現在の支援手順を確認` when chrome supplies the handler | Destination identity **D-PROCEDURE** (same as Global 手順) |
+| C4 PA on D-PERSON object true | existing UserDetail `現在の支援手順を確認` when chrome supplies `onCurrentProcedureRequest` | Destination identity **D-PROCEDURE** (same as Global 手順) |
 | C4 PA on D-PERSON object false | withhold / disable that handler | **NOT ACTIONABLE / STAY D-PERSON** |
 
 Replacement uses the Destination of the new acquisition event. Unlisted events do not change meaning.
+
+#### 3.3.1 Correction-1 uniqueness (normative)
+
+```text
+REJECTED as OPTION A:
+  UsersList.onUserDetailRequest(userId)
+  next-unrecorded CTA (FIELD-STAFF-NEXT-UNRECORDED-USER-1; payload userId only;
+    listToRecordFastPathAuthorized = false)
+  DailyRecords incomplete selection (records destination; file OUT)
+  inferring an occurrence from userId when multiple 未実施 rows exist
+
+D-UNRECORDED occurrence choice payload is occurrenceId.
+Object identity is the todaySupportItems row with that occurrenceId.
+onSelectOccurrence on D-TODAY vs D-UNRECORDED is distinguished only by
+the already-resolved Task-First Destination identity (not a second Global).
+
+onClearChosenOccurrence is one FIELD_STAFF-only control on TodaySupportDayBoard.
+It is Product-visible only when selectedOccurrenceId is defined.
+D-TODAY  → object RELEASE (this is locked packet §2.4 deselect)
+D-UNRECORDED → occurrence RELEASE only (locked packet §3.4 deselect)
+Other Destinations → control not shown; must not change meaning (H-6)
+```
+
+UsersList.tsx remains OUT. H-3 is not fired for UsersList because OPTION A uses an existing `onSelectOccurrence` already owned by an authorized file. The clear control is a purpose-limited addition on that same authorized file (Independent Scope Review-1 required that authorization before Implementation Start).
 
 ---
 
@@ -258,7 +293,7 @@ existing a11y / format / lint / typecheck expectations for modified files
 | AC-1G-2 | list visible / highlight without PA does not acquire | unit | smoke highlight/select without PA keeps object false (unless sticky) |
 | AC-1G-3 | D-PERSON open + day’s occurrence → object true, stay D-PERSON | unit | smoke person-open with occurrence; destination D-PERSON |
 | AC-1G-4 | D-PERSON open − day’s occurrence → RELEASE, stay D-PERSON, fallbacks | unit | smoke person-open without occurrence; 手順→D-TODAY, 記録する→D-UNRECORDED |
-| AC-1G-5 | D-UNRECORDED choice OPTION A → object+occurrence true, D-RECORD-WRITE | unit | smoke unrecorded occurrence choice |
+| AC-1G-5 | D-UNRECORDED `onSelectOccurrence(occurrenceId)` OPTION A → object+occurrence true, D-RECORD-WRITE; not person-open | unit | smoke day-board CTA on D-UNRECORDED |
 | AC-1G-6 | D-PROCEDURE Completion → occurrence true, D-RECORD-WRITE | unit | smoke completion CTA |
 | AC-1G-7 | CORR-1F fallbacks when false | existing + regression unit | smoke first-paint 手順/記録する fallbacks still hold |
 | AC-1G-8 | Global 手順/記録する sufficient path when true | unit | smoke Global after acquire |
@@ -274,6 +309,8 @@ existing a11y / format / lint / typecheck expectations for modified files
 | AC-1G-18 | Global 今日 does not release sticky object | unit | smoke 今日 after acquire still object true |
 | AC-1G-19 | occurrence-true requires object-true; D-UNRECORDED choice never leaves object-false | unit | smoke OPTION A episode |
 | AC-1G-20 | unlisted events do not change sessionContext | unit H-6 table | smoke does not invent extra toggles |
+| AC-1G-21 | D-UNRECORDED `onClearChosenOccurrence` → occurrence false, stay D-UNRECORDED, 記録する fallback; object unchanged | unit | smoke clear on D-UNRECORDED |
+| AC-1G-22 | D-TODAY `onClearChosenOccurrence` → object RELEASE, stay D-TODAY, fallbacks restored | unit | smoke clear on D-TODAY |
 
 `AC-1G-15` and `AC-1G-17` are scope/diff invariants in addition to tests.
 
@@ -312,7 +349,7 @@ CORR-1F Global labels/order rewrite
 | AC-1G-2 | D-TODAY list visibility / highlight without that episode does not acquire and does not release sticky true. |
 | AC-1G-3 | D-PERSON open with a current day’s occurrence sets object true and stays D-PERSON (not auto D-PROCEDURE). |
 | AC-1G-4 | D-PERSON open without a current day’s occurrence RELEASEs object and occurrence, stays D-PERSON, restores Global fallbacks. |
-| AC-1G-5 | D-UNRECORDED occurrence choice is one episode: acquire/replace object and acquire occurrence; Destination D-RECORD-WRITE. |
+| AC-1G-5 | D-UNRECORDED occurrence choice is exactly `TodaySupportDayBoard.onSelectOccurrence(occurrenceId)` while Destination is D-UNRECORDED: acquire/replace object and acquire occurrence; Destination D-RECORD-WRITE. `onUserDetailRequest(userId)` is not this event. |
 | AC-1G-6 | D-PROCEDURE Completion sets occurrence true and Destination D-RECORD-WRITE. |
 | AC-1G-7 | 手順 without object still falls back to D-TODAY; 記録する without occurrence still falls back to D-UNRECORDED. |
 | AC-1G-8 | 手順 with object true → D-PROCEDURE; 記録する with occurrence true → D-RECORD-WRITE (same identities as C4 Next). |
@@ -328,6 +365,8 @@ CORR-1F Global labels/order rewrite
 | AC-1G-18 | Global 今日 returns to D-TODAY without releasing sticky object. |
 | AC-1G-19 | occurrence-true never holds while object-false. |
 | AC-1G-20 | Unlisted Product-visible events do not change object or occurrence meaning. |
+| AC-1G-21 | D-UNRECORDED `onClearChosenOccurrence` sets occurrence false, remains D-UNRECORDED, restores 記録する fallback, and does not release object. |
+| AC-1G-22 | D-TODAY `onClearChosenOccurrence` RELEASEs object (and coupled occurrence), remains D-TODAY, and restores fallbacks. |
 
 ---
 
@@ -337,7 +376,7 @@ CORR-1F Global labels/order rewrite
 |---|---|---|
 | H-1 | Locked CORR-1G packet blob is not `9718231d93c572b93cefcd2a54bb8234c3407941` | Stop; recover locked Definition lineage |
 | H-2 | Human Definition Lock record blob is not `2577a5f1b03d6355318c83b8f29b070a051752fe` | Stop; recover lock evidence |
-| H-3 | Implementer must touch any Product runtime file outside §3 to satisfy AC-1G-1..20 | Stop; issue new Exact Scope; do not expand silently |
+| H-3 | Implementer must touch any Product runtime file outside §3 to satisfy AC-1G-1..22 | Stop; issue new Exact Scope; do not expand silently |
 | H-4 | Implementer must touch any CORR-1G-specific verification file outside §6 | Stop; amend Scope and re-review before implementation |
 | H-5 | FIELD_STAFF AC requires PLANNER / ADMIN_AUDIT Global change | Stop; separate workstream |
 | H-6 | Satisfying location identity would make AppShellChrome a second V1 Global | Stop; dual-run still REJECTED |
@@ -356,9 +395,9 @@ CORR-1F Global labels/order rewrite
 | Q1 | Is CORR-1G limited to FIELD_STAFF session-context uniqueness / sufficient-path reachability without PLANNER/ADMIN_AUDIT Global change? |
 | Q2 | Are authorized Product files closed under §3 and verification files closed under §6? |
 | Q3 | Does §4–§5 restate locked Definition without new Destinations or CORR-2A/B rewrite? |
-| Q4 | Are acquisition/release event bindings unique and mapped to existing adapter surfaces? |
+| Q4 | Are acquisition/release event bindings unique and mapped to named callbacks (`onSelectOccurrence` / `onClearChosenOccurrence` / `onUserDetailRequest`)? |
 | Q5 | Does §3.2 keep AppShellChrome from becoming a second V1 Global while still allowing session-context reporting? |
-| Q6 | Do AC-1G-1..20 map to unit/smoke/diff evidence without HTA over-claim? |
+| Q6 | Do AC-1G-1..22 map to unit/smoke/diff evidence without HTA over-claim, including D-UNRECORDED occurrence deselect and D-TODAY object deselect? |
 | Q7 | Are domain/schema/persistence/LIVE WRITE and P2-2/P2-3 exclusions sufficient? |
 | Q8 | Is D-PERSON treated as identity unique-ification, not a new Destination? |
 | Q9 | Does this Scope avoid closing P2-2 / P2-3 or workstream Open Questions by side-effect? |
@@ -407,20 +446,23 @@ This Exact Scope document does **not** self-PASS Independent Scope Review.
 Independent Definition Re-Review-2 = REVIEW-CLEARED / CONSUMED
 Human Definition Lock GO = RECEIVED / CONSUMED
 Human Exact Scope Scout GO = RECEIVED / CONSUMED
-Implementation Scope Scout / Exact Scope (CORR-1G) = COMPLETE (this document)
-Independent Scope Review = NOT YET
+Independent Scope Review-1 = CORRECTION REQUIRED / CONSUMED
+Human Exact Scope Correction-1 GO = RECEIVED / CONSUMED
+Implementation Scope Scout / Exact Scope (CORR-1G) = COMPLETE / CORRECTION-1 APPLIED (this document)
+Independent Scope Re-Review = NOT YET
 Human Correction Implementation GO = NOT RECEIVED
 Product mutation = NOT AUTHORIZED
 ```
 
 ```text
 ALLOWED NEXT:
-  Independent Scope Review against this Scope body only
+  Fresh Independent Scope Re-Review against this corrected Scope body only
 
 NOT AUTHORIZED:
   Human Correction Implementation GO by this document
   Implementation Start / Product mutation
   Ready / Merge / Deploy / LIVE WRITE
+  self-PASS of Independent Scope Re-Review
 ```
 
 ---
@@ -478,15 +520,15 @@ Human Task Acceptance PASS = not proven by unit/smoke
 P2-2 / P2-3 = not closed
 ```
 
-Passing AC-1G-1..20 therefore proves the CORR-1G tranche only.
+Passing AC-1G-1..22 therefore proves the CORR-1G tranche only.
 
 ```text
 Human Correction Implementation GO = NOT RECEIVED
 Implementation Start = NOT AUTHORIZED
 Product mutation = NOT AUTHORIZED
-NEXT = Independent Scope Review
+NEXT = Fresh Independent Scope Re-Review
 STOP = no Product implementation; no Human Correction Implementation GO consumption
      = no Ready / Merge / Deploy / LIVE WRITE
      = no locked packet rewrite
-     = no self-PASS of Independent Scope Review
+     = no self-PASS of Independent Scope Re-Review
 ```
