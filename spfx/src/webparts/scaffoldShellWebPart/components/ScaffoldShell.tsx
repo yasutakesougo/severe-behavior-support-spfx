@@ -21,11 +21,14 @@ type ScaffoldShellState = Readonly<{
  * D-* is the product Destination identity. overview/users remains a temporary
  * legacy shell adapter until later role slices can retire SHELL-UX-7 safely.
  */
-export default class ScaffoldShell extends React.Component<IScaffoldShellProps, ScaffoldShellState> {
+export default class ScaffoldShell extends React.Component<
+  IScaffoldShellProps,
+  ScaffoldShellState
+> {
   public state: ScaffoldShellState = {
     taskDestination: FIELD_STAFF_DEFAULT_TASK_DESTINATION,
-    shellDestination: fieldStaffTaskNavigationItem(FIELD_STAFF_DEFAULT_TASK_DESTINATION)
-      .shellDestination,
+    shellDestination:
+      fieldStaffTaskNavigationItem(FIELD_STAFF_DEFAULT_TASK_DESTINATION).shellDestination,
   };
 
   private readonly handleTaskDestinationChange = (
@@ -38,7 +41,9 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps, 
     });
   };
 
-  private readonly handleShellDestinationChange = (shellDestination: ShellPrimaryNavigationId): void => {
+  private readonly handleShellDestinationChange = (
+    shellDestination: ShellPrimaryNavigationId,
+  ): void => {
     this.setState((current) => {
       if (shellDestination === "overview") {
         return {
