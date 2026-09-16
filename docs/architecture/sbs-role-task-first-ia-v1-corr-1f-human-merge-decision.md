@@ -1,12 +1,12 @@
-# SBS-ROLE-TASK-FIRST-IA-V1 — CORR-1F Human Merge Decision Frame
+# SBS-ROLE-TASK-FIRST-IA-V1 — CORR-1F Human Merge Decision
 
-Human Merge decision frame for Product PR #616. Awaiting Human Merge GO after Ready transition / readback.
+Human Merge Decision for Product PR #616 after Ready transition / readback COMPLETE.
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 workstream: SBS-ROLE-TASK-FIRST-IA-V1
 unit: CORR-1F
-kind: Human Merge Decision frame
+kind: Human Merge Decision
 Implementation PR: #616
 branch: cursor/corr-1f-product-implementation-c608
 expected head SHA: 3e1eac933abfd9330604330f9074290f48bef674
@@ -15,29 +15,31 @@ Human Ready Decision: GO / Ready transition COMPLETE
   post-Ready readback: draft=false / head unchanged / CI GREEN / mergeable=clean
 Human Task Acceptance: PASS / HUMAN CONFIRMED
 Independent Implementation Review-2: PASS / REVIEW-CLEARED
-Human Merge Decision: AWAITING HUMAN / NOT GO / NOT AUTHORIZED
+Human Merge Decision: GO (2026-09-16)
+  bound PR: #616
+  bound expected head SHA: 3e1eac933abfd9330604330f9074290f48bef674
 Deploy / LIVE WRITE: NOT AUTHORIZED
-Product mutation by this document: 0
-Merge mutation by this document: 0
 ```
 
-Human Ready ≠ Human Merge. This frame does **not** execute or authorize Merge.
+Human Ready ≠ Human Merge. This Decision authorizes Merge of PR #616 only at the bound head SHA.
 
 ---
 
-## Verdict (current)
+## Verdict
 
 ```text
-RESULT: AWAITING HUMAN MERGE DECISION
+RESULT: Human Merge Decision = GO / Merge SUCCESS
 Ready transition/readback: COMPLETE
-Human Merge GO: NOT RECEIVED / NOT AUTHORIZED
-Merge: NOT EXECUTED
+Human Merge GO: RECEIVED / CONSUMED
+Merge: SUCCESS
+  merge commit: 2032aa5f6bec171fe0c74b33f01e63c0ee6d3b48
+  expected head in merge: 3e1eac933abfd9330604330f9074290f48bef674
 Deploy / LIVE WRITE: NOT AUTHORIZED
 ```
 
 ---
 
-## Solo development Merge Gate checklist
+## Solo development Merge Gate checklist (at Merge GO)
 
 | Required | Status | Notes |
 |---|---|---|
@@ -45,47 +47,52 @@ Deploy / LIVE WRITE: NOT AUTHORIZED
 | unresolved P0 | **0** | — |
 | unresolved P1 | **0** | P1-1 CLOSED |
 | CI SUCCESS @ expected HEAD | **GREEN** | Contracts / SPFx / smoke |
-| HEAD unchanged vs Ready / HTA bind | **CONFIRMED at Ready readback** | `3e1eac93`; reconfirm at Merge GO |
-| mergeable = clean | **CONFIRMED at Ready readback** | true / clean |
+| HEAD unchanged vs Ready / HTA bind | **CONFIRMED** | `3e1eac93` |
+| mergeable = clean | **CONFIRMED** | true / clean |
 | PR draft | **false** | Ready COMPLETE |
-| Human Merge GO | **AWAITING** | this frame |
+| Human Merge GO | **RECEIVED** | this Decision |
 | submitted GitHub Review PASS | **not required** | Solo Merge Gate default |
 
-P2-1 / P2-2 / P2-3 remain OPEN / NON-BLOCKING and do not block Merge Gate materials, but do not claim they are closed.
+P2-1 / P2-2 / P2-3 remain OPEN / NON-BLOCKING.
 
 ---
 
-## Pass recording rule
-
-Only a Human may set:
+## Authorized by this Decision
 
 ```text
-SBS-ROLE-TASK-FIRST-IA-V1
-Correction-1F
-Human Merge Decision
-= GO
+Merge PR #616
+  repository: yasutakesougo/severe-behavior-support-spfx
+  PR: #616
+  expected head SHA: 3e1eac933abfd9330604330f9074290f48bef674
 ```
 
-bound to:
-
-```text
-PR: #616
-expected head SHA: 3e1eac933abfd9330604330f9074290f48bef674
-```
-
-If head SHA drifts, prior Ready / Merge materials return to HOLD.
-
-Agent must not merge PR #616 without that explicit Human Merge GO.
+If head SHA changed before merge, this GO is void.
 
 ---
 
-## Still NOT AUTHORIZED (even after Merge GO, unless separately granted)
+## Merge result
+
+```text
+status: SUCCESS (2026-09-16)
+merged: true
+PR state: closed / merged
+merge commit SHA: 2032aa5f6bec171fe0c74b33f01e63c0ee6d3b48
+merged head matched expected: YES (3e1eac933abfd9330604330f9074290f48bef674)
+merge method: merge commit
+Human Merge GO: CONSUMED
+CORR-1F Product PR #616: MERGED
+```
+
+---
+
+## Still NOT AUTHORIZED
 
 ```text
 Deploy / App Catalog
 LIVE WRITE / SharePoint / M365 / Entra
 Issue close
 PLANNER / ADMIN_AUDIT completion claim
+Ready/Merge of docs PR #617 / #618 / #619 / #620 unless separate Human GO
 ```
 
 ---
@@ -94,8 +101,9 @@ PLANNER / ADMIN_AUDIT completion claim
 
 ```text
 Human Task Acceptance      PASS / HUMAN CONFIRMED
-Human Ready Decision       GO (#616)
-Ready transition/readback  COMPLETE (draft=false / HEAD unchanged / CI GREEN)
-Human Merge Decision       ← CURRENT GATE (AWAITING HUMAN MERGE GO)
-Deploy / LIVE WRITE        NOT AUTHORIZED
+Human Ready Decision       GO / Ready COMPLETE
+Ready transition/readback  COMPLETE
+Human Merge Decision       GO / CONSUMED
+Merge PR #616              SUCCESS @ 2032aa5f…
+Deploy / LIVE WRITE        NOT AUTHORIZED (separate Human GO required)
 ```
