@@ -23,8 +23,10 @@ Disposition authority:
   PR #623
 
 CURRENT GATE:
-  Docs PR #618 Human Ready GO = AWAITING / NOT RECEIVED
-Ready / Merge of docs PRs: NOT AUTHORIZED until per-PR Human GO
+  Docs PR #618 Human Ready GO = RECEIVED / CONSUMED
+  Docs PR #618 Ready transition = COMPLETE
+  Docs PR #618 Human Merge GO = AWAITING
+Ready / Merge of later docs PRs: NOT AUTHORIZED until per-PR Human GO
 ```
 
 ---
