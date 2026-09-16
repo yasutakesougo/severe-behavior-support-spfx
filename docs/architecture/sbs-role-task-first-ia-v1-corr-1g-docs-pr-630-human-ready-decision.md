@@ -12,7 +12,8 @@ Docs PR: #630
 branch: cursor/corr-1g-definition-rereview-2-fe8f
 pre-Ready HEAD: cb22be8991af348c79f0d17460d2eac1f2fe7b5b
 base SHA at Ready Decision: 40659c5b459548cc59803562122fdffd77fc0a23
-expected head SHA: (the unique commit that first contains this file; live HEAD at Ready transition)
+Ready Decision commit: 6d00f441984e987e44dc5d4485cb66a66ef6b340
+expected head SHA: 6d00f441984e987e44dc5d4485cb66a66ef6b340
 Human Ready Decision: GO (2026-09-16)
 Human Ready GO: RECEIVED / CONSUMED
 Human Merge GO: NOT AUTHORIZED / NOT CONSUMED
@@ -75,7 +76,7 @@ PR #630 vs `origin/main` is docs-only (`docs/architecture/**`). Product / SPFx p
 | Human Merge GO | NOT RECEIVED | this record |
 | Implementation Start | NOT AUTHORIZED | Q12 / H-9 |
 
-If live PR HEAD diverges from the commit that introduces this file before Ready transition, this Ready GO is void and must return to HOLD.
+Ready Decision commit `6d00f441` introduces this file. A SHA-pin descendant may record that identity. Ready transition binds to live PR HEAD at `draft=false`. If live HEAD loses packet blob `9718231d`, Lock blob `2577a5f1`, or Scope blob `83e9a9e6`, this Ready GO is void.
 
 ---
 
@@ -132,10 +133,8 @@ Merge of #630 (separate Human GO) is the landing path
 ## Post-Ready observation
 
 ```text
-status: PENDING at Decision write; filled after Ready transition readback
-isDraft: (live after transition)
-state: open
-headRefOid: (live HEAD that contains this file)
+status: PENDING until draft=false readback
+Ready Decision commit: 6d00f441984e987e44dc5d4485cb66a66ef6b340
 CI @ pre-Ready cb22be89: GREEN (3/3 SUCCESS)
 Human Merge GO: still NOT AUTHORIZED
 ```
