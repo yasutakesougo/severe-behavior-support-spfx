@@ -10,8 +10,9 @@ kind: Human Merge Decision frame
 Implementation PR: #616
 branch: cursor/corr-1f-product-implementation-c608
 expected head SHA: 3e1eac933abfd9330604330f9074290f48bef674
-Human Ready Decision: GO
+Human Ready Decision: GO / Ready transition COMPLETE
   record: docs/architecture/sbs-role-task-first-ia-v1-corr-1f-human-ready-decision.md
+  post-Ready readback: draft=false / head unchanged / CI GREEN / mergeable=clean
 Human Task Acceptance: PASS / HUMAN CONFIRMED
 Independent Implementation Review-2: PASS / REVIEW-CLEARED
 Human Merge Decision: AWAITING HUMAN / NOT GO / NOT AUTHORIZED
@@ -28,6 +29,7 @@ Human Ready ≠ Human Merge. This frame does **not** execute or authorize Merge.
 
 ```text
 RESULT: AWAITING HUMAN MERGE DECISION
+Ready transition/readback: COMPLETE
 Human Merge GO: NOT RECEIVED / NOT AUTHORIZED
 Merge: NOT EXECUTED
 Deploy / LIVE WRITE: NOT AUTHORIZED
@@ -43,8 +45,9 @@ Deploy / LIVE WRITE: NOT AUTHORIZED
 | unresolved P0 | **0** | — |
 | unresolved P1 | **0** | P1-1 CLOSED |
 | CI SUCCESS @ expected HEAD | **GREEN** | Contracts / SPFx / smoke |
-| HEAD unchanged vs Ready / HTA bind | **must reconfirm at Merge GO** | expected `3e1eac93` |
-| mergeable = clean | **pre-Ready: clean** | reconfirm after Ready |
+| HEAD unchanged vs Ready / HTA bind | **CONFIRMED at Ready readback** | `3e1eac93`; reconfirm at Merge GO |
+| mergeable = clean | **CONFIRMED at Ready readback** | true / clean |
+| PR draft | **false** | Ready COMPLETE |
 | Human Merge GO | **AWAITING** | this frame |
 | submitted GitHub Review PASS | **not required** | Solo Merge Gate default |
 
@@ -91,8 +94,8 @@ PLANNER / ADMIN_AUDIT completion claim
 
 ```text
 Human Task Acceptance      PASS / HUMAN CONFIRMED
-Human Ready Decision       GO (#616 Ready transition)
-Ready transition/readback  CURRENT / required before Merge GO
-Human Merge Decision       ← THIS FRAME (AWAITING)
+Human Ready Decision       GO (#616)
+Ready transition/readback  COMPLETE (draft=false / HEAD unchanged / CI GREEN)
+Human Merge Decision       ← CURRENT GATE (AWAITING HUMAN MERGE GO)
 Deploy / LIVE WRITE        NOT AUTHORIZED
 ```

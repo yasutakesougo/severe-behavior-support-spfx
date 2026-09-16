@@ -90,12 +90,19 @@ PLANNER / ADMIN_AUDIT HTA claim
 ## Post-Ready observation (transition / readback)
 
 ```text
-status: PENDING_FILL after Ready mutation
-isDraft: (fill)
-state: (fill)
-mergeable / mergeable_state: (fill)
-headRefOid: (must remain 3e1eac93…)
-CI: (must remain GREEN)
+status: CONFIRMED (2026-09-16)
+isDraft: false
+state: open
+mergeable: true
+mergeable_state: clean
+headRefOid: 3e1eac933abfd9330604330f9074290f48bef674
+head unchanged vs expected: YES
+CI @ head: GREEN
+  Contracts SUCCESS
+  SPFx build SUCCESS
+  role-task-first-browser-smoke SUCCESS
+  b12-browser-smoke SUCCESS
+Ready transition: COMPLETE
 ```
 
 ---
@@ -103,7 +110,7 @@ CI: (must remain GREEN)
 ## Next gate
 
 ```text
-1. Complete Ready transition + readback (head unchanged / draft=false / CI GREEN)
-2. Human Merge decision (independent gate; separate GO required)
+1. Ready transition + readback = COMPLETE
+2. Human Merge decision (independent gate; separate GO required) ← CURRENT
 3. Deploy / LIVE WRITE remain NOT AUTHORIZED without explicit Human GO
 ```
