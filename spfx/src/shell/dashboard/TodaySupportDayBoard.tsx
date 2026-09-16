@@ -4,12 +4,18 @@ import type { TodaySupportItem } from "../../sbs-domain/kiosk-read-model.bundle"
 import { StatusBadge } from "../primitives";
 import styles from "./TodaySupportDayBoardUx.module.scss";
 
-export type TodaySupportOccurrenceCtaMode = "field" | "confirm";
+export type TodaySupportOccurrenceCtaMode = "field" | "confirm" | "task-first";
+
+export const isFieldStaffTodayPrimaryActionStatus = (effectiveStatus: string): boolean =>
+  effectiveStatus === "未実施";
 
 export function todaySupportOccurrenceActionLabel(
   effectiveStatus: string,
   occurrenceCtaMode: TodaySupportOccurrenceCtaMode = "field",
 ): string {
+  if (occurrenceCtaMode === "task-first" && effectiveStatus === "未実施") {
+    return "対象の支援を始める";
+  }
   const fieldActionLabel =
     effectiveStatus === "記録済み"
       ? "記録を確認・再表示"
@@ -24,10 +30,21 @@ export function todaySupportOccurrenceActionLabel(
   return fieldActionLabel;
 }
 
+export type FieldStaffDayBoardBridgeValue = Readonly<{
+  onClearChosenOccurrence?: () => void;
+  clearVisible?: boolean;
+  useTaskFirstCta?: boolean;
+}>;
+
+export const FieldStaffDayBoardBridgeContext = React.createContext<FieldStaffDayBoardBridgeValue>(
+  {},
+);
+
 export type TodaySupportDayBoardProps = Readonly<{
   items: readonly TodaySupportItem[];
   selectedOccurrenceId?: string;
   onSelectOccurrence?: (occurrenceId: string) => void;
+  onClearChosenOccurrence?: () => void;
   /** ADMIN_AUDIT: confirm-oriented labels; FIELD_STAFF/PLANNER keep record CTAs. */
   occurrenceCtaMode?: TodaySupportOccurrenceCtaMode;
   /** PLANNER/ADMIN desktop: two-column board. FIELD_STAFF stays one column. */
@@ -38,9 +55,17 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
   items,
   selectedOccurrenceId,
   onSelectOccurrence,
+  onClearChosenOccurrence,
   occurrenceCtaMode = "field",
   denseDesktopLayout = false,
 }) => {
+  const bridge = React.useContext(FieldStaffDayBoardBridgeContext);
+  const resolvedCtaMode: TodaySupportOccurrenceCtaMode = bridge.useTaskFirstCta
+    ? "task-first"
+    : occurrenceCtaMode;
+  const clearHandler = onClearChosenOccurrence ?? bridge.onClearChosenOccurrence;
+  const showClear = Boolean(clearHandler && (bridge.clearVisible ?? Boolean(selectedOccurrenceId)));
+
   if (items.length === 0) {
     return (
       <div className={styles.emptyContainer} data-kiosk-ux="today-support-empty">
@@ -51,6 +76,20 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
 
   return (
     <section className={styles.container} aria-label="本日の支援予定（時系列）">
+      {showClear ? (
+        <p>
+          <button
+            type="button"
+            className={styles.tapButton}
+            data-role-task-clear-occurrence="true"
+            onClick={() => {
+              clearHandler?.();
+            }}
+          >
+            選択した予定を外す
+          </button>
+        </p>
+      ) : null}
       <ul
         className={denseDesktopLayout ? `${styles.list} ${styles.listDesktopDense}` : styles.list}
         data-kiosk-ux="today-support-list"
@@ -63,7 +102,7 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
 
           const actionLabel = todaySupportOccurrenceActionLabel(
             item.effectiveStatus,
-            occurrenceCtaMode,
+            resolvedCtaMode,
           );
 
           return (
@@ -112,7 +151,7 @@ export const TodaySupportDayBoard: React.FC<TodaySupportDayBoardProps> = ({
                 <button
                   type="button"
                   className={
-                    occurrenceCtaMode === "confirm"
+                    occurrenceCtaMode === "confirm" || resolvedCtaMode === "confirm"
                       ? `${styles.tapButton} ${styles.tapButtonQuiet}`
                       : styles.tapButton
                   }

@@ -6,6 +6,17 @@ import {
   type ShellOverviewPresentation,
 } from "../dashboard";
 import {
+  FieldStaffDayBoardBridgeContext,
+  TodaySupportDayBoard,
+  isFieldStaffTodayPrimaryActionStatus,
+} from "../dashboard/TodaySupportDayBoard";
+import {
+  fieldStaffDayBoardClearVisible,
+  type FieldStaffSessionContext,
+  type FieldStaffSessionEvent,
+  type FieldStaffTaskDestinationId,
+} from "./field-staff-task-navigation";
+import {
   CurrentProcedure,
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
   FIELD_STAFF_CANCELLATION_UI_SLICE,
@@ -148,6 +159,10 @@ export type AppShellChromeProps = Readonly<{
   reviewObservationEvidence?: readonly ReviewObservationEvidenceInput[];
   /** Synthetic VP-G entry emphasis. Not Entra / roleResolutionAuthorized. */
   presentationRole?: ShellPresentationRole;
+  fieldStaffTaskDestination?: FieldStaffTaskDestinationId;
+  fieldStaffSessionContext?: FieldStaffSessionContext;
+  fieldStaffChosenOccurrenceId?: string;
+  onFieldStaffSessionEvent?: (event: FieldStaffSessionEvent) => void;
   children?: React.ReactNode;
 }>;
 
@@ -179,6 +194,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     procedureWorkflowPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE,
     reviewObservationEvidence = FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
     presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
+    fieldStaffTaskDestination,
+    fieldStaffSessionContext,
+    fieldStaffChosenOccurrenceId,
+    onFieldStaffSessionEvent,
     children,
   } = props;
 
@@ -223,6 +242,27 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     () => rebuildTodaySupportItemsWithSessionCancellations(sessionCancellationLifecycleEvents),
     [sessionCancellationLifecycleEvents],
   );
+  const fieldStaffAdapterActive =
+    Boolean(onFieldStaffSessionEvent) && activePresentationRole === "FIELD_STAFF";
+  const reportFieldStaffEvent = (event: FieldStaffSessionEvent): void => {
+    onFieldStaffSessionEvent?.(event);
+  };
+  const handleFieldStaffClearChosenOccurrence = (): void => {
+    reportFieldStaffEvent({ type: "CLEAR_CHOSEN_OCCURRENCE" });
+    setSelectedOccurrenceId(undefined);
+    if (fieldStaffTaskDestination === "D-TODAY") {
+      setCurrentProcedureOpen(false);
+      setProcedureRecordFormOpen(false);
+      setOccurrenceFlowFromOverview(false);
+      setSelectedUserDetailId(undefined);
+      if (destination !== "overview") {
+        setDestination("overview");
+        if (onSelectedDestinationChange) {
+          onSelectedDestinationChange("overview");
+        }
+      }
+    }
+  };
   const cancellationLifecycleEventsForSemantics = React.useMemo(
     () =>
       getKioskSyntheticTodaySupportReadModelInput(sessionCancellationLifecycleEvents)
@@ -254,6 +294,51 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const showPlannerManagementList =
     SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.plannerUsersDestinationListAuthorized &&
     isPlannerSupportPlanManagementListRole(activePresentationRole);
+
+  const restoreFieldStaffSufficientHost = (): boolean => {
+    if (
+      !fieldStaffAdapterActive ||
+      (fieldStaffTaskDestination !== "D-PROCEDURE" &&
+        fieldStaffTaskDestination !== "D-RECORD-WRITE")
+    ) {
+      return false;
+    }
+    const occId = fieldStaffChosenOccurrenceId;
+    if (!occId) {
+      return false;
+    }
+    const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
+    if (!item || !userDetailById.has(item.userId)) {
+      return false;
+    }
+    const wantRecordForm = fieldStaffTaskDestination === "D-RECORD-WRITE";
+    const alreadyRestored =
+      destination === "users" &&
+      selectedUserDetailId === item.userId &&
+      selectedOccurrenceId === occId &&
+      currentProcedureOpen &&
+      procedureRecordFormOpen === wantRecordForm &&
+      occurrenceFlowFromOverview;
+    if (alreadyRestored) {
+      return true;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
+    setAbcObservationOpen(false);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(false);
+    setSelectedOccurrenceId(occId);
+    setSelectedUserDetailId(item.userId);
+    setOccurrenceFlowFromOverview(true);
+    setCurrentProcedureOpen(true);
+    setProcedureRecordFormOpen(wantRecordForm);
+    setDestination("users");
+    return true;
+  };
 
   const discardUsersListRestoreState = (): void => {
     const discarded = discardUsersListRestore();
@@ -297,7 +382,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   }, [selectedDestinationProp]);
 
   React.useEffect(() => {
-    if (destination !== "users") {
+    const retainFieldStaffSufficientHost =
+      fieldStaffAdapterActive &&
+      (fieldStaffTaskDestination === "D-PROCEDURE" ||
+        fieldStaffTaskDestination === "D-RECORD-WRITE");
+    if (destination !== "users" && !retainFieldStaffSufficientHost) {
       if (selectedUserDetailId !== undefined) {
         setSelectedUserDetailId(undefined);
       }
@@ -379,6 +468,26 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     usersFocusOriginUserId,
     restoreUsersList,
     nextVersionConceptFromReview,
+    fieldStaffAdapterActive,
+    fieldStaffTaskDestination,
+  ]);
+
+  React.useEffect(() => {
+    if (!fieldStaffAdapterActive) {
+      return;
+    }
+    if (
+      fieldStaffTaskDestination !== "D-PROCEDURE" &&
+      fieldStaffTaskDestination !== "D-RECORD-WRITE"
+    ) {
+      return;
+    }
+    restoreFieldStaffSufficientHost();
+  }, [
+    fieldStaffAdapterActive,
+    fieldStaffTaskDestination,
+    fieldStaffChosenOccurrenceId,
+    destination,
   ]);
 
   React.useEffect(() => {
@@ -434,6 +543,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
     if (interactionPaused) {
+      return;
+    }
+    if (
+      next === "users" &&
+      fieldStaffAdapterActive &&
+      (fieldStaffTaskDestination === "D-PROCEDURE" ||
+        fieldStaffTaskDestination === "D-RECORD-WRITE") &&
+      restoreFieldStaffSufficientHost()
+    ) {
+      if (destination !== "users" && onSelectedDestinationChange) {
+        onSelectedDestinationChange("users");
+      }
       return;
     }
     if (next === destination) {
@@ -508,6 +629,15 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setPlannerListNext(undefined);
     setPlannerListOrigin(false);
     setSelectedUserDetailId(userId);
+    if (fieldStaffAdapterActive) {
+      const dayOccurrence = todaySupportItems.find((item) => item.userId === userId);
+      reportFieldStaffEvent({
+        type: "PERSON_OPEN",
+        userId,
+        hasCurrentDayOccurrence: Boolean(dayOccurrence),
+        occurrenceId: dayOccurrence?.occurrenceId,
+      });
+    }
   };
 
   const handleTodayActionNavigate = (target: OverviewActionNavigationTarget): void => {
@@ -594,6 +724,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSelectedUserDetailId(undefined);
     setPlannerListNext(undefined);
     setPlannerListOrigin(false);
+    if (fieldStaffAdapterActive && fieldStaffTaskDestination === "D-PERSON") {
+      reportFieldStaffEvent({ type: "PERSON_BACK" });
+    }
   };
 
   const handlePlannerListRowAction = (row: SupportPlanManagementRow): void => {
@@ -709,6 +842,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(undefined);
     setOccurrenceFlowFromOverview(false);
     setCurrentProcedureOpen(true);
+    if (fieldStaffAdapterActive) {
+      reportFieldStaffEvent({ type: "PERSON_C4_PROCEDURE" });
+    }
   };
 
   const handleBackToTodaySupport = (): void => {
@@ -808,6 +944,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setProcedureFlowSaveState(
       procedureRecordResume?.resumed ? procedureRecordResume.saveState : "unsaved",
     );
+    if (fieldStaffAdapterActive) {
+      reportFieldStaffEvent({ type: "PROCEDURE_COMPLETE" });
+    }
   };
 
   const handleBackToCurrentProcedure = (): void => {
@@ -1004,364 +1143,433 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   }, [interactionPaused, showReadyRegion, destination]);
 
   return (
-    <div
-      className={styles.appShell}
-      data-shell-ux="app-shell-chrome"
-      data-shell-ux-unauthenticated={unauthenticated ? "true" : "false"}
-      data-shell-ux-destination={destination}
-      data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
-      data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
-      data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
-      data-shell-ux-procedure-correction={procedureCorrectionOpen ? "open" : "closed"}
-      data-shell-ux-procedure-cancellation={procedureCancellationOpen ? "open" : "closed"}
-      data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
-      data-shell-ux-abc-observation={abcObservationOpen ? "open" : "closed"}
-      data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
-      data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
-      data-review-new-version-from-review={nextVersionConceptFromReview ? "true" : "false"}
-      data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
-      data-support-plan-mgmt-demo-slice={SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.id}
-      data-admin-demo-ux-polish-1-slice={ADMIN_DEMO_UX_POLISH_1_SLICE.id}
-      data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
-      data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
-      data-shell-ux-presentation-role={activePresentationRole}
-      data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
-      data-demo-ux-7-today-nav="true"
-      data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
-      data-field-workflow-slice="FIELD-WORKFLOW-UI"
+    <FieldStaffDayBoardBridgeContext.Provider
+      value={{
+        onClearChosenOccurrence: fieldStaffAdapterActive
+          ? handleFieldStaffClearChosenOccurrence
+          : undefined,
+        clearVisible:
+          fieldStaffAdapterActive &&
+          fieldStaffDayBoardClearVisible(
+            fieldStaffTaskDestination ?? "D-FIND-PERSON",
+            fieldStaffChosenOccurrenceId ?? selectedOccurrenceId,
+          ),
+        useTaskFirstCta: fieldStaffAdapterActive,
+      }}
     >
-      <a className={styles.skipLink} href="#shell-ux-main">
-        メイン内容へスキップ
-      </a>
-
-      <DemoBanner visible={demoMode} />
-
-      <header className={styles.shellHeader} role="banner">
-        <div className={styles.brandRow}>
-          <p className={styles.productName}>強度行動障害支援（シェル表示）</p>
-          {!unauthenticated ? (
-            <SaveStatePresentation
-              state={effectiveSaveState}
-              description={demoHoldSaveStatusNote(effectiveSaveState, demoMode)}
-            />
-          ) : null}
-        </div>
-        {!unauthenticated ? (
-          <>
-            <SiteSelector
-              selection={selection}
-              options={siteOptions}
-              onSelectionChange={handleSelectionChange}
-            />
-            <DemoPresentationRoleEntry
-              visible={demoMode}
-              role={activePresentationRole}
-              onRoleChange={(next) => {
-                if (interactionPaused) {
-                  return;
-                }
-                setActivePresentationRole(next);
-                setNextVersionConceptFromReview(false);
-              }}
-            />
-            {selectedSite ? (
-              <CurrentSiteLabel site={selectedSite} />
-            ) : (
-              <p className={styles.currentSite} data-shell-ux="current-site-unselected">
-                <span className={styles.currentSiteLabel}>現在の事業所（表示専用）</span>
-                <span className={styles.currentSiteValue}>未選択</span>
-              </p>
-            )}
-            <p className={styles.userLine} data-shell-ux="user-display">
-              表示名: {userDisplayName}
-            </p>
-          </>
-        ) : (
-          <p className={styles.userLine} data-shell-ux="user-display-suppressed">
-            表示名: （未認証のため非表示）
-          </p>
-        )}
-      </header>
-
-      <nav
-        className={styles.shellNav}
-        aria-label="シェル主要ナビゲーション"
-        data-shell-ux="primary-navigation"
+      <div
+        className={styles.appShell}
+        data-shell-ux="app-shell-chrome"
+        data-shell-ux-unauthenticated={unauthenticated ? "true" : "false"}
+        data-shell-ux-destination={destination}
+        data-shell-ux-user-detail={selectedUserDetailId ?? "none"}
+        data-shell-ux-support-plan={supportPlanPreviewOpen ? "open" : "closed"}
+        data-shell-ux-current-procedure={currentProcedureOpen ? "open" : "closed"}
+        data-shell-ux-procedure-correction={procedureCorrectionOpen ? "open" : "closed"}
+        data-shell-ux-procedure-cancellation={procedureCancellationOpen ? "open" : "closed"}
+        data-shell-ux-procedure-record={procedureRecordFormOpen ? "open" : "closed"}
+        data-shell-ux-abc-observation={abcObservationOpen ? "open" : "closed"}
+        data-shell-ux-review-due={reviewDuePreviewOpen ? "open" : "closed"}
+        data-planning-pc-review-from-plan={reviewFromSupportPlan ? "true" : "false"}
+        data-review-new-version-from-review={nextVersionConceptFromReview ? "true" : "false"}
+        data-planning-pc-demo-slice={PLANNING_PC_DEMO_1_SLICE.id}
+        data-support-plan-mgmt-demo-slice={SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.id}
+        data-admin-demo-ux-polish-1-slice={ADMIN_DEMO_UX_POLISH_1_SLICE.id}
+        data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
+        data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
+        data-shell-ux-presentation-role={activePresentationRole}
+        data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
+        data-demo-ux-7-today-nav="true"
+        data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
+        data-field-workflow-slice="FIELD-WORKFLOW-UI"
       >
-        {SHELL_PRIMARY_NAV_ITEMS.map((item) => {
-          const selected = item.id === destination;
-          const className = selected
-            ? `${styles.navButton} ${styles.navButtonSelected}`
-            : styles.navButton;
-          return (
-            <button
-              key={item.id}
-              type="button"
-              className={className}
-              data-shell-ux-nav={item.id}
-              data-shell-ux-nav-selected={selected ? "true" : "false"}
-              data-shell-ux-nav-saving-paused={interactionPaused ? "true" : "false"}
-              aria-current={selected ? "page" : undefined}
-              disabled={navDisabled}
-              aria-disabled={navDisabled ? true : undefined}
-              onClick={() => {
-                if (!navDisabled) {
-                  handleDestinationChange(item.id);
-                }
-              }}
-            >
-              {item.label}
-            </button>
-          );
-        })}
-      </nav>
+        <a className={styles.skipLink} href="#shell-ux-main">
+          メイン内容へスキップ
+        </a>
 
-      <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
-        {unauthenticated ? (
-          <UnauthenticatedPanel />
-        ) : siteBlocked ? (
-          <SiteUnselectedStop />
-        ) : showPartialRetrieval ? (
-          <PartialRetrievalPanel
-            presentation={
-              partialRetrieval ?? {
-                succeededItems: [],
-                failedItems: [],
-              }
-            }
-            correlationId={correlationId}
-            errorCode={errorCode}
-          />
-        ) : (
-          <StatusPanel mode={viewMode} correlationId={correlationId} errorCode={errorCode} />
-        )}
-        {showReadyRegion ? (
-          <div
-            className={
-              interactionPaused
-                ? `${styles.readyRegion} ${styles.readyRegionSavingPaused}`
-                : styles.readyRegion
-            }
-            data-shell-ux="ready-region"
-            data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
-            aria-busy={interactionPaused ? true : undefined}
-          >
-            {interactionPaused ? (
-              <p
-                className={styles.savingInteractionPauseNote}
-                data-shell-ux="saving-interaction-pause-note"
-                role="status"
-              >
-                {SAVING_INTERACTION_PAUSE_NOTE}
-              </p>
+        <DemoBanner visible={demoMode} />
+
+        <header className={styles.shellHeader} role="banner">
+          <div className={styles.brandRow}>
+            <p className={styles.productName}>強度行動障害支援（シェル表示）</p>
+            {!unauthenticated ? (
+              <SaveStatePresentation
+                state={effectiveSaveState}
+                description={demoHoldSaveStatusNote(effectiveSaveState, demoMode)}
+              />
             ) : null}
+          </div>
+          {!unauthenticated ? (
+            <>
+              <SiteSelector
+                selection={selection}
+                options={siteOptions}
+                onSelectionChange={handleSelectionChange}
+              />
+              <DemoPresentationRoleEntry
+                visible={demoMode}
+                role={activePresentationRole}
+                onRoleChange={(next) => {
+                  if (interactionPaused) {
+                    return;
+                  }
+                  setActivePresentationRole(next);
+                  setNextVersionConceptFromReview(false);
+                }}
+              />
+              {selectedSite ? (
+                <CurrentSiteLabel site={selectedSite} />
+              ) : (
+                <p className={styles.currentSite} data-shell-ux="current-site-unselected">
+                  <span className={styles.currentSiteLabel}>現在の事業所（表示専用）</span>
+                  <span className={styles.currentSiteValue}>未選択</span>
+                </p>
+              )}
+              <p className={styles.userLine} data-shell-ux="user-display">
+                表示名: {userDisplayName}
+              </p>
+            </>
+          ) : (
+            <p className={styles.userLine} data-shell-ux="user-display-suppressed">
+              表示名: （未認証のため非表示）
+            </p>
+          )}
+        </header>
+
+        <nav
+          className={styles.shellNav}
+          aria-label="シェル主要ナビゲーション"
+          data-shell-ux="primary-navigation"
+        >
+          {SHELL_PRIMARY_NAV_ITEMS.map((item) => {
+            const selected = item.id === destination;
+            const className = selected
+              ? `${styles.navButton} ${styles.navButtonSelected}`
+              : styles.navButton;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={className}
+                data-shell-ux-nav={item.id}
+                data-shell-ux-nav-selected={selected ? "true" : "false"}
+                data-shell-ux-nav-saving-paused={interactionPaused ? "true" : "false"}
+                aria-current={selected ? "page" : undefined}
+                disabled={navDisabled}
+                aria-disabled={navDisabled ? true : undefined}
+                onClick={() => {
+                  if (!navDisabled) {
+                    handleDestinationChange(item.id);
+                  }
+                }}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+
+        <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
+          {unauthenticated ? (
+            <UnauthenticatedPanel />
+          ) : siteBlocked ? (
+            <SiteUnselectedStop />
+          ) : showPartialRetrieval ? (
+            <PartialRetrievalPanel
+              presentation={
+                partialRetrieval ?? {
+                  succeededItems: [],
+                  failedItems: [],
+                }
+              }
+              correlationId={correlationId}
+              errorCode={errorCode}
+            />
+          ) : (
+            <StatusPanel mode={viewMode} correlationId={correlationId} errorCode={errorCode} />
+          )}
+          {showReadyRegion ? (
             <div
-              ref={readyRegionContentRef}
-              className={interactionPaused ? styles.readyRegionSavingPausedContent : ""}
-              data-shell-ux="ready-region-content"
+              className={
+                interactionPaused
+                  ? `${styles.readyRegion} ${styles.readyRegionSavingPaused}`
+                  : styles.readyRegion
+              }
+              data-shell-ux="ready-region"
+              data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
+              aria-busy={interactionPaused ? true : undefined}
             >
-              {destination === "overview" ? (
-                reviewDuePreviewOpen ? (
-                  <ReviewDueState
-                    presentation={reviewDueStatePresentation}
-                    headingRef={destinationHeadingRef}
-                    onBackToOverview={handleBackToOverview}
-                    procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
-                    reviewObservationEvidence={reviewObservationEvidence}
-                    presentationRole={activePresentationRole}
-                  />
-                ) : (
-                  <OverviewDashboard
-                    presentation={overviewPresentation}
-                    headingRef={destinationHeadingRef}
-                    todaySupportItems={todaySupportItems}
-                    selectedOccurrenceId={selectedOccurrenceId}
-                    onReviewDueStateRequest={handleReviewDueStateRequest}
-                    onTodayActionNavigate={handleTodayActionNavigate}
-                    presentationRole={activePresentationRole}
-                    onSelectOccurrence={(occId) => {
-                      const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
-                      if (!item) {
-                        return;
-                      }
-                      handleTodayActionNavigate({
-                        kind: "occurrence",
-                        occurrenceId: occId,
-                        userId: item.userId,
-                      });
-                    }}
-                  />
-                )
-              ) : destination === "users" ? (
-                selectedUserDetail ? (
-                  reviewDuePreviewOpen && reviewFromSupportPlan ? (
+              {interactionPaused ? (
+                <p
+                  className={styles.savingInteractionPauseNote}
+                  data-shell-ux="saving-interaction-pause-note"
+                  role="status"
+                >
+                  {SAVING_INTERACTION_PAUSE_NOTE}
+                </p>
+              ) : null}
+              <div
+                ref={readyRegionContentRef}
+                className={interactionPaused ? styles.readyRegionSavingPausedContent : ""}
+                data-shell-ux="ready-region-content"
+              >
+                {destination === "overview" ? (
+                  reviewDuePreviewOpen ? (
                     <ReviewDueState
                       presentation={reviewDueStatePresentation}
                       headingRef={destinationHeadingRef}
-                      backLabel="← 支援計画"
-                      onBackToOverview={handleBackToSupportPlanFromReview}
-                      onNextVersionConceptRequest={handleNextVersionConceptFromReview}
+                      onBackToOverview={handleBackToOverview}
                       procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
                       reviewObservationEvidence={reviewObservationEvidence}
                       presentationRole={activePresentationRole}
                     />
-                  ) : supportPlanPreviewOpen &&
-                    supportPlanPresentation.userId === selectedUserDetail.userId ? (
-                    <SupportPlan
-                      presentation={supportPlanPresentation}
-                      headingRef={destinationHeadingRef}
-                      onBackToUserDetail={handleBackToUserDetail}
-                      backLabel={
-                        plannerListOrigin ? SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL : undefined
-                      }
-                      onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
-                      nextVersionConceptHighlighted={nextVersionConceptFromReview}
-                      presentationRole={activePresentationRole}
-                    />
-                  ) : abcObservationOpen && abcObservationPresentation ? (
-                    <AbcObservationPresentation
-                      presentation={abcObservationPresentation}
-                      headingRef={destinationHeadingRef}
-                      onBackToCurrentProcedure={handleBackToCurrentProcedureFromAbc}
-                    />
-                  ) : procedureRecordFormOpen &&
-                    selectedCurrentProcedure &&
-                    isProcedureRecordStartAllowed(selectedCurrentProcedure) ? (
-                    <ProcedureRecordForm
-                      context={selectedCurrentProcedure.context}
-                      headingRef={destinationHeadingRef}
-                      initialDraft={
-                        procedureRecordResume?.resumed ? procedureRecordResume.draft : undefined
-                      }
-                      initialSaveState={procedureRecordResume?.saveState ?? "unsaved"}
-                      onBackToCurrentProcedure={handleBackToCurrentProcedure}
-                      onSaveStateChange={handleProcedureFlowSaveStateChange}
-                      onDraftSnapshotChange={handleProcedureDraftSnapshotChange}
-                      draftResumeAuthorized={
-                        FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized
-                      }
-                      nextOccurrenceNavigationAuthorized={
-                        FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized &&
-                        occurrenceFlowFromOverview
-                      }
-                      todaySupportItems={occurrenceFlowFromOverview ? todaySupportItems : undefined}
-                      onNextActionableOccurrence={handleNextActionableOccurrence}
-                      onReturnToTodaySupportDayBoard={handleBackToTodaySupport}
-                    />
-                  ) : procedureCancellationOpen &&
-                    procedureCancellationPresentation &&
-                    selectedOccurrenceItem?.boundRecord ? (
-                    <ProcedureRecordCancellation
-                      presentation={procedureCancellationPresentation}
-                      originalRecord={selectedOccurrenceItem.boundRecord}
-                      lifecycleEventsForSemantics={cancellationLifecycleEventsForSemantics}
-                      headingRef={destinationHeadingRef}
-                      onBackToCurrentProcedure={handleBackToCurrentProcedureFromCancellation}
-                      onSaveStateChange={handleProcedureFlowSaveStateChange}
-                      onCancellationPersisted={handleCancellationPersisted}
-                    />
-                  ) : procedureCorrectionOpen && procedureCorrectionPresentation ? (
-                    <ProcedureRecordCorrection
-                      presentation={procedureCorrectionPresentation}
-                      originalBinding={procedureCorrectionOriginalBinding}
-                      headingRef={destinationHeadingRef}
-                      onBackToCurrentProcedure={handleBackToCurrentProcedureFromCorrection}
-                      onSaveStateChange={handleProcedureFlowSaveStateChange}
-                    />
-                  ) : currentProcedureOpen && selectedCurrentProcedure ? (
-                    <CurrentProcedure
-                      presentation={selectedCurrentProcedure}
-                      headingRef={destinationHeadingRef}
-                      backLabel={occurrenceFlowFromOverview ? "← 今日の支援" : "← 利用者詳細"}
-                      onBackToUserDetail={
-                        occurrenceFlowFromOverview
-                          ? handleBackToTodaySupport
-                          : handleBackToUserDetail
-                      }
-                      onRecordProcedureRequest={
-                        isProcedureRecordStartAllowed(selectedCurrentProcedure)
-                          ? handleRecordProcedureRequest
-                          : undefined
-                      }
-                      onCorrectionRequest={
-                        procedureCorrectionPresentation
-                          ? handleProcedureCorrectionRequest
-                          : undefined
-                      }
-                      onCancellationRequest={
-                        procedureCancellationPresentation
-                          ? handleProcedureCancellationRequest
-                          : undefined
-                      }
-                      onAbcObservationRequest={handleAbcObservationRequest}
-                    />
                   ) : (
-                    <UserDetail
-                      presentation={selectedUserDetail}
+                    <OverviewDashboard
+                      presentation={overviewPresentation}
                       headingRef={destinationHeadingRef}
+                      todaySupportItems={todaySupportItems}
+                      selectedOccurrenceId={selectedOccurrenceId}
+                      onReviewDueStateRequest={handleReviewDueStateRequest}
+                      onTodayActionNavigate={handleTodayActionNavigate}
                       presentationRole={activePresentationRole}
-                      onBackToUsers={handleBackToUsers}
-                      onSupportPlanRequest={
-                        selectedUserDetail.userId === supportPlanPresentation.userId
-                          ? handleSupportPlanRequest
-                          : undefined
-                      }
-                      onCurrentProcedureRequest={
-                        procedureWorkflowPresentation.currentByUserId[selectedUserDetail.userId]
-                          ? handleCurrentProcedureRequest
-                          : undefined
-                      }
+                      onSelectOccurrence={(occId) => {
+                        const item = todaySupportItems.find(
+                          (entry) => entry.occurrenceId === occId,
+                        );
+                        if (!item) {
+                          return;
+                        }
+                        if (
+                          fieldStaffAdapterActive &&
+                          isFieldStaffTodayPrimaryActionStatus(item.effectiveStatus)
+                        ) {
+                          reportFieldStaffEvent({
+                            type: "SELECT_OCCURRENCE",
+                            occurrenceId: occId,
+                          });
+                        }
+                        handleTodayActionNavigate({
+                          kind: "occurrence",
+                          occurrenceId: occId,
+                          userId: item.userId,
+                        });
+                      }}
                     />
                   )
-                ) : plannerListNext &&
-                  plannerNextRow &&
-                  plannerListNext.kind !== "existing-plan" ? (
-                  <SupportPlanManagementNextSurface
-                    kind={plannerListNext.kind === "create" ? "create" : "synthetic-detail"}
-                    row={plannerNextRow}
+                ) : destination === "users" ? (
+                  selectedUserDetail ? (
+                    reviewDuePreviewOpen && reviewFromSupportPlan ? (
+                      <ReviewDueState
+                        presentation={reviewDueStatePresentation}
+                        headingRef={destinationHeadingRef}
+                        backLabel="← 支援計画"
+                        onBackToOverview={handleBackToSupportPlanFromReview}
+                        onNextVersionConceptRequest={handleNextVersionConceptFromReview}
+                        procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
+                        reviewObservationEvidence={reviewObservationEvidence}
+                        presentationRole={activePresentationRole}
+                      />
+                    ) : supportPlanPreviewOpen &&
+                      supportPlanPresentation.userId === selectedUserDetail.userId ? (
+                      <SupportPlan
+                        presentation={supportPlanPresentation}
+                        headingRef={destinationHeadingRef}
+                        onBackToUserDetail={handleBackToUserDetail}
+                        backLabel={
+                          plannerListOrigin ? SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL : undefined
+                        }
+                        onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
+                        nextVersionConceptHighlighted={nextVersionConceptFromReview}
+                        presentationRole={activePresentationRole}
+                      />
+                    ) : abcObservationOpen && abcObservationPresentation ? (
+                      <AbcObservationPresentation
+                        presentation={abcObservationPresentation}
+                        headingRef={destinationHeadingRef}
+                        onBackToCurrentProcedure={handleBackToCurrentProcedureFromAbc}
+                      />
+                    ) : procedureRecordFormOpen &&
+                      selectedCurrentProcedure &&
+                      isProcedureRecordStartAllowed(selectedCurrentProcedure) ? (
+                      <ProcedureRecordForm
+                        context={selectedCurrentProcedure.context}
+                        headingRef={destinationHeadingRef}
+                        initialDraft={
+                          procedureRecordResume?.resumed ? procedureRecordResume.draft : undefined
+                        }
+                        initialSaveState={procedureRecordResume?.saveState ?? "unsaved"}
+                        onBackToCurrentProcedure={handleBackToCurrentProcedure}
+                        onSaveStateChange={handleProcedureFlowSaveStateChange}
+                        onDraftSnapshotChange={handleProcedureDraftSnapshotChange}
+                        draftResumeAuthorized={
+                          FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.perUserDraftResumeAuthorized
+                        }
+                        nextOccurrenceNavigationAuthorized={
+                          FIELD_STAFF_MULTI_USER_UX_POLISH_1_SLICE.nextActionableOccurrenceAuthorized &&
+                          occurrenceFlowFromOverview
+                        }
+                        todaySupportItems={
+                          occurrenceFlowFromOverview ? todaySupportItems : undefined
+                        }
+                        onNextActionableOccurrence={handleNextActionableOccurrence}
+                        onReturnToTodaySupportDayBoard={handleBackToTodaySupport}
+                      />
+                    ) : procedureCancellationOpen &&
+                      procedureCancellationPresentation &&
+                      selectedOccurrenceItem?.boundRecord ? (
+                      <ProcedureRecordCancellation
+                        presentation={procedureCancellationPresentation}
+                        originalRecord={selectedOccurrenceItem.boundRecord}
+                        lifecycleEventsForSemantics={cancellationLifecycleEventsForSemantics}
+                        headingRef={destinationHeadingRef}
+                        onBackToCurrentProcedure={handleBackToCurrentProcedureFromCancellation}
+                        onSaveStateChange={handleProcedureFlowSaveStateChange}
+                        onCancellationPersisted={handleCancellationPersisted}
+                      />
+                    ) : procedureCorrectionOpen && procedureCorrectionPresentation ? (
+                      <ProcedureRecordCorrection
+                        presentation={procedureCorrectionPresentation}
+                        originalBinding={procedureCorrectionOriginalBinding}
+                        headingRef={destinationHeadingRef}
+                        onBackToCurrentProcedure={handleBackToCurrentProcedureFromCorrection}
+                        onSaveStateChange={handleProcedureFlowSaveStateChange}
+                      />
+                    ) : currentProcedureOpen && selectedCurrentProcedure ? (
+                      <CurrentProcedure
+                        presentation={selectedCurrentProcedure}
+                        headingRef={destinationHeadingRef}
+                        backLabel={occurrenceFlowFromOverview ? "← 今日の支援" : "← 利用者詳細"}
+                        onBackToUserDetail={
+                          occurrenceFlowFromOverview
+                            ? handleBackToTodaySupport
+                            : handleBackToUserDetail
+                        }
+                        onRecordProcedureRequest={
+                          isProcedureRecordStartAllowed(selectedCurrentProcedure)
+                            ? handleRecordProcedureRequest
+                            : undefined
+                        }
+                        onCorrectionRequest={
+                          procedureCorrectionPresentation
+                            ? handleProcedureCorrectionRequest
+                            : undefined
+                        }
+                        onCancellationRequest={
+                          procedureCancellationPresentation
+                            ? handleProcedureCancellationRequest
+                            : undefined
+                        }
+                        onAbcObservationRequest={handleAbcObservationRequest}
+                      />
+                    ) : (
+                      <UserDetail
+                        presentation={selectedUserDetail}
+                        headingRef={destinationHeadingRef}
+                        presentationRole={activePresentationRole}
+                        onBackToUsers={handleBackToUsers}
+                        onSupportPlanRequest={
+                          selectedUserDetail.userId === supportPlanPresentation.userId
+                            ? handleSupportPlanRequest
+                            : undefined
+                        }
+                        onCurrentProcedureRequest={
+                          fieldStaffAdapterActive && !fieldStaffSessionContext?.hasSupportObject
+                            ? undefined
+                            : procedureWorkflowPresentation.currentByUserId[
+                                  selectedUserDetail.userId
+                                ]
+                              ? handleCurrentProcedureRequest
+                              : undefined
+                        }
+                      />
+                    )
+                  ) : plannerListNext &&
+                    plannerNextRow &&
+                    plannerListNext.kind !== "existing-plan" ? (
+                    <SupportPlanManagementNextSurface
+                      kind={plannerListNext.kind === "create" ? "create" : "synthetic-detail"}
+                      row={plannerNextRow}
+                      headingRef={destinationHeadingRef}
+                      onBackToList={handleBackToPlannerList}
+                    />
+                  ) : showPlannerManagementList ? (
+                    <SupportPlanManagementList
+                      presentation={SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE}
+                      headingRef={destinationHeadingRef}
+                      onRowAction={handlePlannerListRowAction}
+                    />
+                  ) : (
+                    <>
+                      {fieldStaffAdapterActive && fieldStaffTaskDestination === "D-UNRECORDED" ? (
+                        <TodaySupportDayBoard
+                          items={todaySupportItems.filter(
+                            (item) => item.effectiveStatus === "未実施",
+                          )}
+                          selectedOccurrenceId={
+                            fieldStaffChosenOccurrenceId ?? selectedOccurrenceId
+                          }
+                          onSelectOccurrence={(occId) => {
+                            const item = todaySupportItems.find(
+                              (entry) => entry.occurrenceId === occId,
+                            );
+                            if (!item) {
+                              return;
+                            }
+                            reportFieldStaffEvent({
+                              type: "SELECT_OCCURRENCE",
+                              occurrenceId: occId,
+                            });
+                            setSelectedOccurrenceId(occId);
+                            setSelectedUserDetailId(item.userId);
+                            setOccurrenceFlowFromOverview(true);
+                            setCurrentProcedureOpen(true);
+                            if (item.canStartProcedureRecord) {
+                              setProcedureRecordFormOpen(true);
+                            }
+                            setDestination("users");
+                            if (onSelectedDestinationChange) {
+                              onSelectedDestinationChange("users");
+                            }
+                          }}
+                          onClearChosenOccurrence={handleFieldStaffClearChosenOccurrence}
+                          occurrenceCtaMode="task-first"
+                        />
+                      ) : null}
+                      <UsersList
+                        presentation={usersPresentation}
+                        headingRef={destinationHeadingRef}
+                        detailPreviewUserIds={detailPreviewUserIds}
+                        onUserDetailRequest={handleUserDetailRequest}
+                        sessionSaveStateByUserId={sessionSaveStateByUserId}
+                        filterChip={usersFilterChip}
+                        onFilterChipChange={(chip) => {
+                          setUsersFilterChip(rememberUsersFilterChip(chip));
+                        }}
+                        restoreOriginUserId={usersFocusOriginUserId}
+                        restoreListRequested={restoreUsersList}
+                        onRestoreListConsumed={() => {
+                          setRestoreUsersList(false);
+                        }}
+                      />
+                    </>
+                  )
+                ) : destination === "records" ? (
+                  <DailyRecords
+                    presentation={dailyRecordPresentation}
                     headingRef={destinationHeadingRef}
-                    onBackToList={handleBackToPlannerList}
-                  />
-                ) : showPlannerManagementList ? (
-                  <SupportPlanManagementList
-                    presentation={SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE}
-                    headingRef={destinationHeadingRef}
-                    onRowAction={handlePlannerListRowAction}
                   />
                 ) : (
-                  <UsersList
-                    presentation={usersPresentation}
+                  <DestinationPlaceholder
+                    destination={destination}
                     headingRef={destinationHeadingRef}
-                    detailPreviewUserIds={detailPreviewUserIds}
-                    onUserDetailRequest={handleUserDetailRequest}
-                    sessionSaveStateByUserId={sessionSaveStateByUserId}
-                    filterChip={usersFilterChip}
-                    onFilterChipChange={(chip) => {
-                      setUsersFilterChip(rememberUsersFilterChip(chip));
-                    }}
-                    restoreOriginUserId={usersFocusOriginUserId}
-                    restoreListRequested={restoreUsersList}
-                    onRestoreListConsumed={() => {
-                      setRestoreUsersList(false);
-                    }}
                   />
-                )
-              ) : destination === "records" ? (
-                <DailyRecords
-                  presentation={dailyRecordPresentation}
-                  headingRef={destinationHeadingRef}
-                />
-              ) : (
-                <DestinationPlaceholder
-                  destination={destination}
-                  headingRef={destinationHeadingRef}
-                />
-              )}
-              {children}
+                )}
+                {children}
+              </div>
             </div>
-          </div>
-        ) : null}
-      </main>
-    </div>
+          ) : null}
+        </main>
+      </div>
+    </FieldStaffDayBoardBridgeContext.Provider>
   );
 };
