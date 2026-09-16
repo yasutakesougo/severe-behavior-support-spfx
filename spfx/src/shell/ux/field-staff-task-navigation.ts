@@ -1,11 +1,7 @@
 import type { ShellPrimaryNavigationId } from "./primary-navigation";
 
 export type FieldStaffTaskDestinationId =
-  | "D-TODAY"
-  | "D-PROCEDURE"
-  | "D-RECORD-WRITE"
-  | "D-UNRECORDED"
-  | "D-FIND-PERSON";
+  "D-TODAY" | "D-PROCEDURE" | "D-RECORD-WRITE" | "D-UNRECORDED" | "D-FIND-PERSON";
 
 export type FieldStaffTaskNavigationItem = Readonly<{
   id: FieldStaffTaskDestinationId;
@@ -63,9 +59,7 @@ export const FIELD_STAFF_DEFAULT_TASK_DESTINATION: FieldStaffTaskDestinationId =
 export const fieldStaffTaskNavigationItem = (
   destination: FieldStaffTaskDestinationId,
 ): FieldStaffTaskNavigationItem => {
-  const item = FIELD_STAFF_TASK_NAV_ITEMS.find(
-    (candidate) => candidate.id === destination,
-  );
+  const item = FIELD_STAFF_TASK_NAV_ITEMS.find((candidate) => candidate.id === destination);
   if (!item) {
     throw new Error(`Unknown FIELD_STAFF task destination: ${destination}`);
   }
