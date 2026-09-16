@@ -6,6 +6,9 @@ import styles from "./TodaySupportDayBoardUx.module.scss";
 
 export type TodaySupportOccurrenceCtaMode = "field" | "confirm" | "task-first";
 
+export const isFieldStaffTodayPrimaryActionStatus = (effectiveStatus: string): boolean =>
+  effectiveStatus === "未実施";
+
 export function todaySupportOccurrenceActionLabel(
   effectiveStatus: string,
   occurrenceCtaMode: TodaySupportOccurrenceCtaMode = "field",

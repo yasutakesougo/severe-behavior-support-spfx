@@ -146,7 +146,9 @@ async function inspectProductState(page) {
       hasRecordSearchGlobal: Boolean(
         document.querySelector('[data-role-task-nav="D-FIND-RECORD"]'),
       ),
-      hasCurrentProcedure: Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
+      hasCurrentProcedure: Boolean(
+        document.querySelector('[data-field-workflow="current-procedure"]'),
+      ),
       hasProcedureRecordForm: Boolean(
         document.querySelector('[data-field-workflow="procedure-record-form"]'),
       ),
@@ -207,8 +209,10 @@ async function capture(name, page) {
 
 {
   const { page, pageErrors } = await openPage("today-pa-acquire", { width: 1280, height: 900 });
-  await page.waitForSelector('[data-kiosk-ux="tap-occurrence-button"]');
-  await page.click('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForSelector(
+    '[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]',
+  );
+  await page.click('[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]');
   await page.waitForFunction(
     () =>
       document
@@ -263,8 +267,10 @@ async function capture(name, page) {
     width: 1280,
     height: 900,
   });
-  await page.waitForSelector('[data-kiosk-ux="tap-occurrence-button"]');
-  await page.click('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForSelector(
+    '[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]',
+  );
+  await page.click('[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]');
   await page.waitForSelector('[data-field-workflow="current-procedure"]');
   await page.click('[data-role-task-global="GLOBAL-TODAY"]');
   await page.waitForFunction(
@@ -327,8 +333,10 @@ async function capture(name, page) {
 {
   const { page, pageErrors } = await openPage("unrecorded-option-a", { width: 1280, height: 900 });
   await page.click('[data-role-task-global="GLOBAL-UNRECORDED"]');
-  await page.waitForSelector('[data-kiosk-ux="tap-occurrence-button"]');
-  await page.click('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForSelector(
+    '[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]',
+  );
+  await page.click('[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]');
   await page.waitForFunction(
     () =>
       document

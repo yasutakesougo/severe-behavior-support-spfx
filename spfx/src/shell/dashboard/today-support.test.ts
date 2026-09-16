@@ -1,6 +1,16 @@
-import { todaySupportOccurrenceActionLabel } from "./TodaySupportDayBoard";
+import {
+  isFieldStaffTodayPrimaryActionStatus,
+  todaySupportOccurrenceActionLabel,
+} from "./TodaySupportDayBoard";
 
 describe("VP-G Today Support occurrence CTA presentation", () => {
+  it("AC-1G locked D-TODAY Primary Action is 未実施 only", () => {
+    expect(isFieldStaffTodayPrimaryActionStatus("未実施")).toBe(true);
+    expect(isFieldStaffTodayPrimaryActionStatus("記録済み")).toBe(false);
+    expect(isFieldStaffTodayPrimaryActionStatus("取消済み")).toBe(false);
+    expect(isFieldStaffTodayPrimaryActionStatus("確認が必要")).toBe(false);
+  });
+
   it("keeps field record labels for FIELD_STAFF/PLANNER", () => {
     expect(todaySupportOccurrenceActionLabel("未実施", "field")).toBe("この予定を記録 / 手順表示");
     expect(todaySupportOccurrenceActionLabel("未実施", "task-first")).toBe("対象の支援を始める");

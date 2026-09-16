@@ -8,6 +8,7 @@ import {
 import {
   FieldStaffDayBoardBridgeContext,
   TodaySupportDayBoard,
+  isFieldStaffTodayPrimaryActionStatus,
 } from "../dashboard/TodaySupportDayBoard";
 import {
   fieldStaffDayBoardClearVisible,
@@ -241,7 +242,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     () => rebuildTodaySupportItemsWithSessionCancellations(sessionCancellationLifecycleEvents),
     [sessionCancellationLifecycleEvents],
   );
-  const fieldStaffAdapterActive = Boolean(onFieldStaffSessionEvent);
+  const fieldStaffAdapterActive =
+    Boolean(onFieldStaffSessionEvent) && activePresentationRole === "FIELD_STAFF";
   const reportFieldStaffEvent = (event: FieldStaffSessionEvent): void => {
     onFieldStaffSessionEvent?.(event);
   };
@@ -1337,7 +1339,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         if (!item) {
                           return;
                         }
-                        if (fieldStaffAdapterActive) {
+                        if (
+                          fieldStaffAdapterActive &&
+                          isFieldStaffTodayPrimaryActionStatus(item.effectiveStatus)
+                        ) {
                           reportFieldStaffEvent({
                             type: "SELECT_OCCURRENCE",
                             occurrenceId: occId,
