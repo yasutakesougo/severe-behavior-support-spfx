@@ -41,8 +41,6 @@ describe("SBS-ROLE-TASK-FIRST-IA FIELD_STAFF navigation", () => {
     const findItems = FIELD_STAFF_TASK_NAV_ITEMS.filter((item) => item.label === "探す");
     expect(findItems).toHaveLength(1);
     expect(findItems[0]?.id).toBe("D-FIND-PERSON");
-    expect(FIELD_STAFF_TASK_NAV_ITEMS.some((item) => item.id === ("D-FIND-RECORD" as never))).toBe(
-      false,
-    );
+    expect(FIELD_STAFF_TASK_NAV_ITEMS.map((item) => String(item.id))).not.toContain("D-FIND-RECORD");
   });
 });
