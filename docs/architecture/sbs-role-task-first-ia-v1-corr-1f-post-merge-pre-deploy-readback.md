@@ -18,15 +18,19 @@ Merge: SUCCESS
 merge commit / main tip: 2032aa5f6bec171fe0c74b33f01e63c0ee6d3b48
 main contains expected HEAD: YES (merge parent)
 
-CURRENT: MERGED
+CURRENT: MERGED / POST-MERGE READBACK COMPLETE
+CORR-1F Deploy scope: NONE / OUT
+CORR-1F = NO DEPLOY REQUIRED (see companion fixation)
+Human Deploy Decision (CORR-1F): NOT APPLICABLE
 Deploy / LIVE WRITE: NOT AUTHORIZED
 Issue close: NOT AUTHORIZED
-Human Deploy Decision: NOT STARTED
-Independent Deploy Verification: NOT REQUIRED YET (optional after this readback)
 Product / tenant mutation by this document: 0
 ```
 
 Independent Implementation Review PASS ≠ Human Task Acceptance PASS ≠ Ready ≠ Merge ≠ Deploy.
+
+Companion fixation (Merge→Deploy lane cut):  
+`docs/architecture/sbs-role-task-first-ia-v1-corr-1f-no-deploy-required.md`
 
 ---
 
@@ -36,9 +40,10 @@ Independent Implementation Review PASS ≠ Human Task Acceptance PASS ≠ Ready 
 RESULT: POST-MERGE / PRE-DEPLOY READBACK COMPLETE
 main fixation: CONFIRMED @ 2032aa5f
 CORR-1F authorized Deploy scope: NONE (Scope §7 OUT)
+CORR-1F = NO DEPLOY REQUIRED
+Human Deploy Decision (CORR-1F): NOT APPLICABLE
 tenant live delta: NOT OBSERVED (read-only; no tenant I/O)
 PLANNER / ADMIN_AUDIT Global boundary: UNRESOLVED / OUT OF CORR-1F (fail-closed preserved)
-Human Deploy Decision: NOT AUTHORIZED / NOT STARTED
 Issue close: NOT AUTHORIZED
 ```
 
@@ -178,27 +183,34 @@ Later tranche(s) required before PL/AA Global / HTA claims.
 
 ```text
 Post-Merge / Pre-Deploy Readback = COMPLETE (this document)
-Human Deploy Decision = NOT STARTED / NOT AUTHORIZED
+CORR-1F = NO DEPLOY REQUIRED
+Human Deploy Decision (CORR-1F) = NOT APPLICABLE
+Merge → Deploy lane for CORR-1F = CUT (§7 OUT)
 Deploy / App Catalog upload-replace = NOT AUTHORIZED
 LIVE WRITE / SharePoint / M365 / Entra = NOT AUTHORIZED
-Issue close = NOT AUTHORIZED (separate judgment)
+Issue close = NOT AUTHORIZED (separate Human Issue Close Decision)
 PLANNER / ADMIN_AUDIT completion = not claimed
+Future tenant reflection of package-solution 1.0.0.2 = separate workstream / not CORR-1F
 ```
 
 ---
 
-## 8. Next gates (fixed order)
+## 8. Next gates (corrected order)
 
 ```text
-1. THIS READBACK evidence fixation                          ← COMPLETE when merged/recorded
-2. Optional Independent verification of this readback       (if Human requests)
-3. Human Deploy Decision                                    (separate; CORR-1F itself grants NONE)
-4. Issue close                                              (separate; still NOT AUTHORIZED)
+1. THIS READBACK evidence fixation                              COMPLETE
+2. CORR-1F = NO DEPLOY REQUIRED fixation                        companion doc
+3. Optional Independent Post-Merge Boundary Verification        (if Human requests;
+                                                                 verify NO deploy-required residual + no tenant change claim;
+                                                                 do NOT ask “Deployしてよいか”)
+4. Issue close eligibility confirmation                         Human / eligibility frame
+5. Human Issue Close Decision                                   NEXT Human gate
 ```
 
 ```text
-STOP = no Deploy GO from this document
+STOP = no CORR-1F Human Deploy GO
+     = no Merge→Deploy lane
      = no App Catalog / LIVE WRITE
-     = no Issue close
+     = no Issue close without Human Issue Close GO
      = no PLANNER / ADMIN_AUDIT Global completion claim
 ```
