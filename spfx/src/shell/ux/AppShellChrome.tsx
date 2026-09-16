@@ -253,9 +253,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setProcedureRecordFormOpen(false);
       setOccurrenceFlowFromOverview(false);
       setSelectedUserDetailId(undefined);
-      setDestination("overview");
-      if (onSelectedDestinationChange) {
-        onSelectedDestinationChange("overview");
+      if (destination !== "overview") {
+        setDestination("overview");
+        if (onSelectedDestinationChange) {
+          onSelectedDestinationChange("overview");
+        }
       }
     }
   };

@@ -60,32 +60,46 @@ export default class ScaffoldShell extends React.Component<
     }
   }
 
-  private commitTaskState(next: FieldStaffTaskViewState): void {
-    const shellDestination = shellAdapterForFieldStaffDestination(next.destination);
+  private applySessionEvent(event: FieldStaffSessionEvent, syncAdapter: boolean): void {
     this.setState(
-      {
-        ...next,
-        shellDestination,
+      (current) => {
+        const next = applyFieldStaffSessionEvent(current, event);
+        return {
+          ...next,
+          shellDestination: shellAdapterForFieldStaffDestination(next.destination),
+        };
       },
       () => {
-        this.requestLegacyShellDestination(shellDestination, next.destination);
+        if (!syncAdapter) {
+          return;
+        }
+        this.requestLegacyShellDestination(this.state.shellDestination, this.state.destination);
       },
     );
   }
 
   private readonly handleTaskGlobalChange = (globalId: FieldStaffTaskGlobalId): void => {
-    this.commitTaskState(applyFieldStaffSessionEvent(this.state, { type: "GLOBAL", globalId }));
+    this.applySessionEvent({ type: "GLOBAL", globalId }, true);
   };
 
   private readonly handleFieldStaffSessionEvent = (event: FieldStaffSessionEvent): void => {
-    this.commitTaskState(applyFieldStaffSessionEvent(this.state, event));
+    this.applySessionEvent(event, false);
   };
 
   private readonly handleShellDestinationChange = (
     shellDestination: ShellPrimaryNavigationId,
   ): void => {
     if (shellDestination === "overview") {
-      this.handleTaskGlobalChange("GLOBAL-TODAY");
+      this.setState((current) => {
+        if (current.destination === "D-TODAY") {
+          return { ...current, shellDestination: "overview" };
+        }
+        const next = applyFieldStaffSessionEvent(current, {
+          type: "GLOBAL",
+          globalId: "GLOBAL-TODAY",
+        });
+        return { ...next, shellDestination: "overview" };
+      });
       return;
     }
     this.setState((current) => ({
