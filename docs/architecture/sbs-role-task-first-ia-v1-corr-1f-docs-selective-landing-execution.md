@@ -12,8 +12,8 @@ mode: READ ONLY preflight + gate sequencing
 date: 2026-09-16
 
 Product lane: CLOSED
-main: a444cba75cb478c29473c698fa9882faf4f50f0e
-  (after Docs #618 + #620 merges; Product tip lineage via 2032aa5f)
+main: 5b115bb2fe83e87096392f45ec756f26d1a8525a
+  (after Docs #618 + #620 + #621; Product tip lineage via 2032aa5f)
 Product identity: 3e1eac933abfd9330604330f9074290f48bef674
 Deploy / LIVE WRITE: NOT AUTHORIZED
 PLANNER / ADMIN_AUDIT Global: OUT / fail-closed
@@ -26,9 +26,8 @@ Disposition authority:
 CURRENT GATE:
   Docs PR #618 = MERGED @ 6543e913
   Docs PR #620 = MERGED @ a444cba7
-  Docs PR #621 Human Ready GO = RECEIVED / CONSUMED
-  Docs PR #621 Ready transition = COMPLETE
-  Docs PR #621 Human Merge GO = AWAITING
+  Docs PR #621 = MERGED @ 5b115bb2 (head 70a374ff)
+  Docs PR #622 Human Ready GO = AWAITING
 Ready / Merge of later docs PRs: NOT AUTHORIZED until per-PR Human GO
 ```
 
@@ -40,7 +39,7 @@ Ready / Merge of later docs PRs: NOT AUTHORIZED until per-PR Human GO
 |---|---|---|---|
 | #618 | LAND / **MERGED** | Review-2 PASS | `76e0057d` → main `6543e913` |
 | #620 | LAND / **MERGED** | HTA + Ready + Merge (supersedes #619) | `bbc243f9` → main `a444cba7` |
-| #621 | LAND | Post-merge readback + NO DEPLOY | `70a374ff` (whitespace CI fix after `f91ea1f0`) |
+| #621 | LAND / **MERGED** | Post-merge readback + NO DEPLOY | `70a374ff` → main `5b115bb2` |
 | #622 | LAND | Issue Close / CLOSED | `cb3180d5` |
 | #617 | OPTIONAL HISTORY | Review-1 FAIL | not in minimum path |
 | #619 | SKIP | HTA only | redundant with #620 |
@@ -104,17 +103,16 @@ Historical snapshot language (Issue Close AWAITING) preserved
 #618 Merge GO     = CONSUMED / MERGED @ 6543e913
 #620 Ready GO     = CONSUMED / Ready COMPLETE
 #620 Merge GO     = CONSUMED / MERGED @ a444cba7
-#621 Ready GO     = CONSUMED / Ready COMPLETE (head 70a374ff)
-#621 Merge GO     = AWAITING
-#622 Ready/Merge  = NOT STARTED
+#621 Ready GO     = CONSUMED / Ready COMPLETE
+#621 Merge GO     = CONSUMED / MERGED @ 5b115bb2
+#622 Ready/Merge  = AWAITING Human Ready GO
 Canonical COMPLETE / ARCHIVED = NOT YET
 #623 final handle = AFTER four land
 ```
 
 ```text
-NEXT = Docs PR #621 Human Merge GO
-STOP = no Merge of #621 without Human Merge GO
-     = no Ready/Merge of #622 without per-PR Human GO
+NEXT = Docs PR #622 Human Ready GO
+STOP = no Ready/Merge of #622 without per-PR Human GO
      = no Deploy / LIVE WRITE
      = no Product reopen
      = no merge of #619 / #617 / #623 in minimum path
