@@ -186,6 +186,7 @@ export type FieldStaffSessionEvent =
       type: "PERSON_OPEN";
       userId: string;
       hasCurrentDayOccurrence: boolean;
+      occurrenceId?: string;
     }>
   | Readonly<{ type: "PERSON_BACK" }>
   | Readonly<{ type: "PROCEDURE_COMPLETE" }>
@@ -239,7 +240,8 @@ export const applyFieldStaffSessionEvent = (
           chosenOccurrenceId: event.occurrenceId,
           sessionContext: {
             hasSupportObject: true,
-            hasOccurrenceContext: state.sessionContext.hasOccurrenceContext,
+            // D-TODAY PA acquires object only. Replacement must not carry A's occurrence.
+            hasOccurrenceContext: false,
           },
         });
       }
@@ -284,9 +286,11 @@ export const applyFieldStaffSessionEvent = (
         return withFlags(state, {
           destination: "D-PERSON",
           activeGlobalId: "GLOBAL-FIND-PERSON",
+          chosenOccurrenceId: event.occurrenceId,
           sessionContext: {
             hasSupportObject: true,
-            hasOccurrenceContext: state.sessionContext.hasOccurrenceContext,
+            // PERSON_OPEN does not acquire occurrence (packet §3.2 rule 6).
+            hasOccurrenceContext: false,
           },
         });
       }

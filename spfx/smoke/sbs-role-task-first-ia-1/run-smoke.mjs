@@ -146,7 +146,11 @@ async function inspectProductState(page) {
       hasRecordSearchGlobal: Boolean(
         document.querySelector('[data-role-task-nav="D-FIND-RECORD"]'),
       ),
-      hasHostStatusCopy: text.includes("シェル表示の準備ができました"),
+      hasCurrentProcedure: Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
+      hasProcedureRecordForm: Boolean(
+        document.querySelector('[data-field-workflow="procedure-record-form"]'),
+      ),
+      hasUsersList: Boolean(document.querySelector('[data-demo-ux="users-list"]')),
       orientationCopy:
         document.querySelector('[data-role-task-orientation="今どこ"]')?.textContent ?? "",
       noHorizontalOverflow:
@@ -250,6 +254,72 @@ async function capture(name, page) {
     state: { acquired, stickyToday, cleared },
     pageErrors,
     shot: await capture("today-pa-acquire", page),
+  });
+  await page.close();
+}
+
+{
+  const { page, pageErrors } = await openPage("sufficient-global-restore", {
+    width: 1280,
+    height: 900,
+  });
+  await page.waitForSelector('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.click('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForSelector('[data-field-workflow="current-procedure"]');
+  await page.click('[data-role-task-global="GLOBAL-TODAY"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-TODAY" &&
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-object") === "true",
+  );
+  await page.click('[data-role-task-global="GLOBAL-PROCEDURE"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-PROCEDURE" &&
+      Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
+  );
+  const procedureRestored = await inspectProductState(page);
+  await page.click('[data-field-workflow="record-procedure-cta"]');
+  await page.waitForSelector('[data-field-workflow="procedure-record-form"]');
+  await page.click('[data-role-task-global="GLOBAL-TODAY"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-TODAY" &&
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-occurrence") === "true",
+  );
+  await page.click('[data-role-task-global="GLOBAL-RECORD-WRITE"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
+      Boolean(document.querySelector('[data-field-workflow="procedure-record-form"]')),
+  );
+  const recordRestored = await inspectProductState(page);
+  const pass =
+    procedureRestored.taskDestination === "D-PROCEDURE" &&
+    procedureRestored.hasCurrentProcedure &&
+    !procedureRestored.hasUsersList &&
+    recordRestored.taskDestination === "D-RECORD-WRITE" &&
+    recordRestored.hasProcedureRecordForm &&
+    !recordRestored.hasUsersList &&
+    pageErrors.length === 0;
+  results.push({
+    name: "sufficient-global-restore",
+    pass,
+    state: { procedureRestored, recordRestored },
+    pageErrors,
+    shot: await capture("sufficient-global-restore", page),
   });
   await page.close();
 }

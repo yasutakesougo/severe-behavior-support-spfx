@@ -293,6 +293,51 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     SUPPORT_PLAN_MANAGEMENT_LIST_DEMO_1_SLICE.plannerUsersDestinationListAuthorized &&
     isPlannerSupportPlanManagementListRole(activePresentationRole);
 
+  const restoreFieldStaffSufficientHost = (): boolean => {
+    if (
+      !fieldStaffAdapterActive ||
+      (fieldStaffTaskDestination !== "D-PROCEDURE" &&
+        fieldStaffTaskDestination !== "D-RECORD-WRITE")
+    ) {
+      return false;
+    }
+    const occId = fieldStaffChosenOccurrenceId;
+    if (!occId) {
+      return false;
+    }
+    const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
+    if (!item || !userDetailById.has(item.userId)) {
+      return false;
+    }
+    const wantRecordForm = fieldStaffTaskDestination === "D-RECORD-WRITE";
+    const alreadyRestored =
+      destination === "users" &&
+      selectedUserDetailId === item.userId &&
+      selectedOccurrenceId === occId &&
+      currentProcedureOpen &&
+      procedureRecordFormOpen === wantRecordForm &&
+      occurrenceFlowFromOverview;
+    if (alreadyRestored) {
+      return true;
+    }
+    shouldFocusDestinationRef.current = true;
+    setSupportPlanPreviewOpen(false);
+    setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
+    setAbcObservationOpen(false);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(false);
+    setSelectedOccurrenceId(occId);
+    setSelectedUserDetailId(item.userId);
+    setOccurrenceFlowFromOverview(true);
+    setCurrentProcedureOpen(true);
+    setProcedureRecordFormOpen(wantRecordForm);
+    setDestination("users");
+    return true;
+  };
+
   const discardUsersListRestoreState = (): void => {
     const discarded = discardUsersListRestore();
     setUsersFilterChip(discarded.filterChip);
@@ -335,7 +380,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   }, [selectedDestinationProp]);
 
   React.useEffect(() => {
-    if (destination !== "users") {
+    const retainFieldStaffSufficientHost =
+      fieldStaffAdapterActive &&
+      (fieldStaffTaskDestination === "D-PROCEDURE" ||
+        fieldStaffTaskDestination === "D-RECORD-WRITE");
+    if (destination !== "users" && !retainFieldStaffSufficientHost) {
       if (selectedUserDetailId !== undefined) {
         setSelectedUserDetailId(undefined);
       }
@@ -417,6 +466,26 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     usersFocusOriginUserId,
     restoreUsersList,
     nextVersionConceptFromReview,
+    fieldStaffAdapterActive,
+    fieldStaffTaskDestination,
+  ]);
+
+  React.useEffect(() => {
+    if (!fieldStaffAdapterActive) {
+      return;
+    }
+    if (
+      fieldStaffTaskDestination !== "D-PROCEDURE" &&
+      fieldStaffTaskDestination !== "D-RECORD-WRITE"
+    ) {
+      return;
+    }
+    restoreFieldStaffSufficientHost();
+  }, [
+    fieldStaffAdapterActive,
+    fieldStaffTaskDestination,
+    fieldStaffChosenOccurrenceId,
+    destination,
   ]);
 
   React.useEffect(() => {
@@ -472,6 +541,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
 
   const handleDestinationChange = (next: ShellPrimaryNavigationId): void => {
     if (interactionPaused) {
+      return;
+    }
+    if (
+      next === "users" &&
+      fieldStaffAdapterActive &&
+      (fieldStaffTaskDestination === "D-PROCEDURE" ||
+        fieldStaffTaskDestination === "D-RECORD-WRITE") &&
+      restoreFieldStaffSufficientHost()
+    ) {
+      if (destination !== "users" && onSelectedDestinationChange) {
+        onSelectedDestinationChange("users");
+      }
       return;
     }
     if (next === destination) {
@@ -547,10 +628,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setPlannerListOrigin(false);
     setSelectedUserDetailId(userId);
     if (fieldStaffAdapterActive) {
+      const dayOccurrence = todaySupportItems.find((item) => item.userId === userId);
       reportFieldStaffEvent({
         type: "PERSON_OPEN",
         userId,
-        hasCurrentDayOccurrence: todaySupportItems.some((item) => item.userId === userId),
+        hasCurrentDayOccurrence: Boolean(dayOccurrence),
+        occurrenceId: dayOccurrence?.occurrenceId,
       });
     }
   };

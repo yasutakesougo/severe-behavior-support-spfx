@@ -121,6 +121,7 @@ describe("CORR-1G FIELD_STAFF session uniqueness", () => {
       occurrenceId: "occ-1",
     });
     expect(next.sessionContext.hasSupportObject).toBe(true);
+    expect(next.sessionContext.hasOccurrenceContext).toBe(false);
     expect(next.destination).toBe("D-PROCEDURE");
     expect(next.chosenOccurrenceId).toBe("occ-1");
   });
@@ -192,6 +193,49 @@ describe("CORR-1G FIELD_STAFF session uniqueness", () => {
     expect(next.destination).toBe("D-RECORD-WRITE");
     expect(next.sessionContext.hasOccurrenceContext).toBe(true);
     expect(next.sessionContext.hasSupportObject).toBe(true);
+  });
+
+  it("P1-3: replacing D-TODAY object does not carry old occurrence context", () => {
+    const objectA = applyFieldStaffSessionEvent(initialFieldStaffTaskViewState(), {
+      type: "SELECT_OCCURRENCE",
+      occurrenceId: "occ-a",
+    });
+    const recordedA = applyFieldStaffSessionEvent(objectA, { type: "PROCEDURE_COMPLETE" });
+    expect(recordedA.sessionContext.hasOccurrenceContext).toBe(true);
+    const today = applyFieldStaffSessionEvent(recordedA, {
+      type: "GLOBAL",
+      globalId: "GLOBAL-TODAY",
+    });
+    const objectB = applyFieldStaffSessionEvent(today, {
+      type: "SELECT_OCCURRENCE",
+      occurrenceId: "occ-b",
+    });
+    expect(objectB.chosenOccurrenceId).toBe("occ-b");
+    expect(objectB.sessionContext).toEqual({
+      hasSupportObject: true,
+      hasOccurrenceContext: false,
+    });
+    expect(objectB.destination).toBe("D-PROCEDURE");
+  });
+
+  it("P1-3: PERSON_OPEN replacement does not carry old occurrence context", () => {
+    const objectA = applyFieldStaffSessionEvent(initialFieldStaffTaskViewState(), {
+      type: "SELECT_OCCURRENCE",
+      occurrenceId: "occ-a",
+    });
+    const recordedA = applyFieldStaffSessionEvent(objectA, { type: "PROCEDURE_COMPLETE" });
+    const personB = applyFieldStaffSessionEvent(recordedA, {
+      type: "PERSON_OPEN",
+      userId: "u-b",
+      hasCurrentDayOccurrence: true,
+      occurrenceId: "occ-b",
+    });
+    expect(personB.destination).toBe("D-PERSON");
+    expect(personB.chosenOccurrenceId).toBe("occ-b");
+    expect(personB.sessionContext).toEqual({
+      hasSupportObject: true,
+      hasOccurrenceContext: false,
+    });
   });
 
   it("AC-1G-7/8: Global fallbacks and sufficient paths", () => {
