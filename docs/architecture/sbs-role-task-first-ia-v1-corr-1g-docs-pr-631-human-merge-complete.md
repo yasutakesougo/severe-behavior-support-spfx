@@ -84,6 +84,53 @@ P2-2 / P2-3 closure
 
 ---
 
+## Frozen state (normative as of 2026-09-16)
+
+Human froze CORR-1G Product Merge state as follows. Agent STOP.
+
+```text
+SBS-ROLE-TASK-FIRST-IA-V1
+CORR-1G
+Product Merge
+= COMPLETE / CONFIRMED
+PR #631
+= MERGED / CLOSED
+Human Merge GO
+= RECEIVED / CONSUMED / EXECUTED
+merge-bound HEAD
+= 4965936194e02564ff21b2ef9eff5face3febbc0
+origin/main
+= ac6b3d665b0e514852775b5b58f5f9e254d107ae
+pre-merge CI
+= 4/4 SUCCESS
+Locked packet / Lock / Scope
+= UNCHANGED / ON MAIN
+```
+
+```text
+Deploy
+= NOT AUTHORIZED
+LIVE WRITE
+= NOT AUTHORIZED
+App Catalog / SharePoint / M365 / Entra
+= NOT AUTHORIZED
+Issue close
+= NOT AUTHORIZED
+second merge #631
+= FORBIDDEN
+```
+
+```text
+Prior Merge GO @ b3ea6c70 = VOID (not carried)
+This Merge authority bound only to 49659361
+NEXT = Deploy judgment and closeout judgment remain SEPARATE Human gates
+Agent = STOP
+```
+
+Live readback at freeze: `origin/main` = `ac6b3d665b0e514852775b5b58f5f9e254d107ae`.
+
+---
+
 ## Next gate
 
 ```text
