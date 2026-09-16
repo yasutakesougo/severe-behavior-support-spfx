@@ -7,7 +7,11 @@ import {
   type SyntheticCapturedReview,
   type SyntheticCapturedReviewResult,
 } from "./review-outcome-capture";
-import { REVIEW_OUTCOME_CAPTURE_COPY, labelForReviewDecision } from "./review-outcome-capture-copy";
+import {
+  REVIEW_OUTCOME_CAPTURE_COPY,
+  changeRequiredNextHelper,
+  labelForReviewDecision,
+} from "./review-outcome-capture-copy";
 import styles from "./ReviewOutcomeCaptureView.module.scss";
 
 export type ReviewOutcomeCaptureViewProps = Readonly<{
@@ -84,14 +88,16 @@ export const ReviewOutcomeCaptureView: React.FC<ReviewOutcomeCaptureViewProps> =
           ) : null}
           <div data-next-support-summary="true" data-current-review-epoch-bound="true">
             <div className={styles.nextStep} data-next-support-step="true">
-              <p className={styles.nextStepLabel}>次にすること</p>
+              <p className={styles.nextStepLabel}>{REVIEW_OUTCOME_CAPTURE_COPY.nextStepLabel}</p>
               <p className={styles.nextStepHeading} data-next-support-cue="true">
                 {capturedReview.outcome.decision === "CHANGE_REQUIRED"
-                  ? "支援内容を見直す"
-                  : "次回のモニタリングへ"}
+                  ? REVIEW_OUTCOME_CAPTURE_COPY.changeRequiredNextCue
+                  : REVIEW_OUTCOME_CAPTURE_COPY.noChangeNextCue}
               </p>
               {capturedReview.outcome.decision === "CHANGE_REQUIRED" ? (
-                <p className={styles.nextStepCopy}>この場で決められなければ、追加で検討します。</p>
+                <p className={styles.nextStepCopy}>
+                  {changeRequiredNextHelper(materials.planVersion + 1)}
+                </p>
               ) : null}
             </div>
             <p

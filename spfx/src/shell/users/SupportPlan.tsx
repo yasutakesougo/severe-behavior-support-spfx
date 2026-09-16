@@ -29,6 +29,7 @@ import {
   SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE,
   SUPPORT_PLAN_DRAFT_ACTIVE_LABEL,
   SUPPORT_PLAN_DRAFT_DRAFT_LABEL,
+  supportPlanDraftRequiresApplyNote,
   SUPPORT_PLAN_IMMUTABLE_VERSION_NOTE,
   SUPPORT_PLAN_NEXT_VERSION_CTA,
   SUPPORT_PLAN_NEXT_VERSION_HEADING,
@@ -641,6 +642,9 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
           </p>
           <p data-sbs-mgmt-loop-b-draft-lifecycle="true">
             {SUPPORT_PLAN_DRAFT_DRAFT_LABEL}: 版 {revisionDraft.candidate.version}
+          </p>
+          <p data-sbs-mgmt-loop-b-draft-requires-apply="true">
+            {supportPlanDraftRequiresApplyNote(revisionDraft.candidate.version)}
           </p>
           {!adminRead ? (
             <button

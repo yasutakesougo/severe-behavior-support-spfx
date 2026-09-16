@@ -174,6 +174,9 @@ function observe(page) {
       textInputCount: capture?.querySelectorAll("textarea").length ?? 0,
       buttonsDisabled: buttons.length === 2 && buttons.every((button) => button.disabled),
       buttonsEnabled: buttons.length === 2 && buttons.every((button) => !button.disabled),
+      // Post-capture UI is readback without writable controls (not disabled buttons).
+      captureFormAbsent: buttons.length === 0 && !reason && !note,
+      nextSupportCue: q('[data-next-support-cue="true"]')?.textContent?.trim() ?? null,
       reasonReadback: reasonReadback ?? null,
       noteReadback: noteReadback ?? null,
       nonColorActionDistinction,
@@ -276,8 +279,10 @@ try {
       capturedA.reasonReadback === "判断理由: reason A" &&
       capturedA.noteReadback === null &&
       !capturedA.noteInputPresent &&
-      capturedA.buttonsDisabled &&
-      capturedA.reasonDisabled === true;
+      capturedA.captureFormAbsent &&
+      capturedA.nextSupportCue === "支援内容の見直しを始める（次版の下書き）" &&
+      capturedA.text.includes("次は計画画面で、版 4 の下書き作成を始めます。適用はまだしません。") &&
+      capturedA.text.includes("デモ上の見直し結果: 変更が必要");
     checks.push(recordCheck(`${viewport.name}: R2/F3/F5 capture A`, capturedAPass, capturedA));
     await saveScreenshot(page, viewport.name, "03-captured-with-reason");
 
@@ -305,7 +310,8 @@ try {
       capturedB.reasonReadback === null &&
       capturedB.noteReadback === null &&
       !capturedB.noteInputPresent &&
-      capturedB.buttonsDisabled;
+      capturedB.captureFormAbsent &&
+      capturedB.nextSupportCue === "次回のモニタリングへ";
     checks.push(
       recordCheck(`${viewport.name}: R1/F4 NO_CHANGE blank reason`, capturedBPass, capturedB),
     );
@@ -360,7 +366,7 @@ try {
       zeroNoChange.zeroState &&
       zeroNoChange.reasonReadback === null &&
       zeroNoChange.noteReadback === null &&
-      zeroNoChange.buttonsDisabled;
+      zeroNoChange.captureFormAbsent;
     checks.push(
       recordCheck(`${viewport.name}: R4 zero-record NO_CHANGE`, zeroNoChangePass, zeroNoChange),
     );

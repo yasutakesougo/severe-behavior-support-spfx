@@ -223,6 +223,10 @@ async function runHappyPath(name, width, height) {
       removedDraftLifecycleSentence: !(draft?.textContent ?? "").includes(
         "は下書きです。まだ適用開始されていません",
       ),
+      // CORR-1B — first-scan Draft ≠ Applied binds T3 to Apply CTA.
+      draftRequiresApplyClear: (draft?.textContent ?? "").includes(
+        "版 4 は下書きです。使い始めるには「版 4 を適用開始する」が必要です。",
+      ),
       removedDraftStatusLine: !(draft?.textContent ?? "").includes("状態: 下書き / 本番未保存"),
       // CTA-ROLE-CLARIFICATION-1: competing cold chrome hidden while draft exists.
       nextVersionHeadingGoneWhileDraft: !headingTexts.includes("次の版の考え方"),
@@ -330,6 +334,7 @@ async function runHappyPath(name, width, height) {
     found.removedLongDraftCopy &&
     found.removedSourceUnchangedCopy &&
     found.removedDraftLifecycleSentence &&
+    found.draftRequiresApplyClear &&
     found.removedDraftStatusLine &&
     found.boundaryNoLiveWrite &&
     found.liveWriteFalse &&

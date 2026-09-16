@@ -80,6 +80,11 @@ export const SUPPORT_PLAN_REVIEW_OVERDUE_NOT_INVALIDATING_NOTE =
 export const SUPPORT_PLAN_DRAFT_ACTIVE_LABEL = "適用中";
 export const SUPPORT_PLAN_DRAFT_DRAFT_LABEL = "下書き";
 
+/** CORR-1B — first-scan Draft ≠ Applied; binds T3 to existing Apply CTA label. */
+export function supportPlanDraftRequiresApplyNote(draftVersion: number): string {
+  return `版 ${draftVersion} は下書きです。使い始めるには「版 ${draftVersion} を適用開始する」が必要です。`;
+}
+
 /** NEXT-VERSION-COPY-SIMPLIFICATION-2 — after-apply ⑥ primary only. */
 export const SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE = "次に変更するときは、新しい版を作ります。";
 export const SUPPORT_PLAN_AFTER_APPLY_CURRENT_REMAINS_NOTE = "現在の版はそのまま残ります。";

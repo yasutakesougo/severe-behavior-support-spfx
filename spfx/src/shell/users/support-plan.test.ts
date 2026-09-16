@@ -11,6 +11,7 @@ import {
   SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE,
   SUPPORT_PLAN_DRAFT_ACTIVE_LABEL,
   SUPPORT_PLAN_DRAFT_DRAFT_LABEL,
+  supportPlanDraftRequiresApplyNote,
   SUPPORT_PLAN_NOT_FINAL_APPROVAL_NOTE,
   SUPPORT_PLAN_REVIEW_MATERIALS_CTA,
   SUPPORT_PLAN_REVIEW_TO_NEXT_VERSION_CTA,
@@ -244,6 +245,13 @@ describe("SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1", () => {
     expect(SUPPORT_PLAN_DRAFT_DRAFT_LABEL).toBe("下書き");
     expect(supportPlanCopyAvoidsFinalApprovalMeaning(SUPPORT_PLAN_DRAFT_ACTIVE_LABEL)).toBe(true);
     expect(supportPlanCopyAvoidsFinalApprovalMeaning(SUPPORT_PLAN_DRAFT_DRAFT_LABEL)).toBe(true);
+    // CORR-1B — Draft ≠ Applied first-scan binds to existing Apply CTA
+    expect(supportPlanDraftRequiresApplyNote(4)).toBe(
+      "版 4 は下書きです。使い始めるには「版 4 を適用開始する」が必要です。",
+    );
+    expect(supportPlanCopyAvoidsFinalApprovalMeaning(supportPlanDraftRequiresApplyNote(4))).toBe(
+      true,
+    );
     // NEXT-VERSION-COPY-SIMPLIFICATION-2 — after-apply ⑥ short copy
     expect(SUPPORT_PLAN_AFTER_APPLY_NEXT_CHANGE_NOTE).toBe(
       "次に変更するときは、新しい版を作ります。",
