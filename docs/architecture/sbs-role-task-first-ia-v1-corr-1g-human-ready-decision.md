@@ -13,7 +13,7 @@ branch: cursor/corr-1g-product-implementation-fe8f
 pre-Ready product HEAD (HTA identity): 99f0a85ccdd1e7c578839499781b16d7afbd1436
 base SHA at Ready Decision: e53eafe5c3b50d115e02bcb55c913de8547e6729
 Ready Decision commit: 4e3387a6d6eb0aef57bfd50544de39d1f9cbf53b
-expected head SHA: live PR HEAD that contains this SHA-pin and descends from 4e3387a6 / 99f0a85c
+expected head SHA: f3d32e23d83dfc7b9bb0d3c32c2349917d76a79f
 Human Ready Decision: GO (2026-09-16)
 Human Ready GO: RECEIVED / CONSUMED
 Human Task Acceptance: PASS / HUMAN CONFIRMED
@@ -115,11 +115,30 @@ FS-HTA-2 / PL-HTA / AA-HTA claim
 ## Post-Ready observation
 
 ```text
-status: PENDING (filled after draft=false + SHA-pin)
-isDraft: true until Ready transition
+status: CONFIRMED (2026-09-16)
+isDraft: false
 state: open
+Ready transition: COMPLETE
+headRefOid at Ready transition: f3d32e23d83dfc7b9bb0d3c32c2349917d76a79f
+Ready Decision commit: 4e3387a6d6eb0aef57bfd50544de39d1f9cbf53b
+HTA product HEAD: 99f0a85ccdd1e7c578839499781b16d7afbd1436
+base SHA: e53eafe5c3b50d115e02bcb55c913de8547e6729
+CI @ HTA product 99f0a85c: GREEN (4/4 SUCCESS)
+  b12-browser-smoke SUCCESS
+  Verify contracts, skills, and scope SUCCESS
+  role-task-first-browser-smoke SUCCESS
+  Build SPFx production artifact with exact basis SUCCESS
+head unchanged vs packet/Lock/Scope blobs: YES
+  packet 9718231d93c572b93cefcd2a54bb8234c3407941
+  Lock   2577a5f1b03d6355318c83b8f29b070a051752fe
+  Scope  83e9a9e6b0d724038f830ea5e6b4c8e6ce732592
+mergeable at Ready transition: true
+mergeable_state at Ready transition: unstable (CI re-run on HTA/Ready docs HEAD)
 Human Merge GO: still NOT AUTHORIZED
+Independent Implementation Review: still NOT SELF-PASSED
 ```
+
+A SHA-pin descendant of this observation may move live HEAD after `f3d32e23`. Merge remains unauthorized until a separate Human Merge GO names the live expected SHA. If live HEAD loses packet blob `9718231d`, Lock blob `2577a5f1`, or Scope blob `83e9a9e6`, or is not a descendant of `99f0a85c`, Ready/Merge authority is void.
 
 ---
 
