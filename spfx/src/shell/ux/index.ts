@@ -152,6 +152,22 @@ export {
   type SbsA11yRuleCoverage,
   type SbsA11yRuleSeverity,
 } from "../a11y";
+export {
+  FIELD_STAFF_DEFAULT_TASK_DESTINATION,
+  FIELD_STAFF_HOME_DESTINATION,
+  FIELD_STAFF_TASK_GLOBAL_ITEMS,
+  contextHintForFieldStaffGlobal,
+  fieldStaffTaskGlobalItem,
+  locationHeadingForFieldStaffDestination,
+  resolveFieldStaffGlobalDestination,
+  resolveFieldStaffTaskSelection,
+  shellAdapterForFieldStaffDestination,
+  type FieldStaffSessionContext,
+  type FieldStaffTaskDestinationId,
+  type FieldStaffTaskGlobalId,
+  type FieldStaffTaskGlobalItem,
+  type FieldStaffTaskResolution,
+} from "./field-staff-task-navigation";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";
 export { DemoBanner, type DemoBannerProps } from "./DemoBanner";
