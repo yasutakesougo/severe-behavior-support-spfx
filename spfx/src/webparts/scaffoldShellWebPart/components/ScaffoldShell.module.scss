@@ -1,28 +1,60 @@
 @use "../../../shell/tokens/sbs-tokens" as sbs;
 
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="primary-navigation"]) {
+  display: none;
+}
+
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="ready-region-content"]) {
+  display: flex;
+  flex-direction: column;
+}
+
 .scaffoldShell {
-  overflow: hidden;
-  padding: sbs.$space-1 0;
+  order: -1;
+  padding: 0 0 sbs.$space-4;
+  margin: 0 0 sbs.$space-4;
+  border-bottom: sbs.$border-width-thin solid sbs.$color-border-subtle;
   color: sbs.$color-text-primary;
   color: var(--bodyText);
 }
 
-.bodyTitle {
-  margin: 0 0 sbs.$space-2;
-  font-size: sbs.$font-size-400;
-  font-weight: 600;
-  line-height: 1.4;
+.taskNavigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-2;
+  align-items: center;
 }
 
-.bodyCopy {
-  margin: 0 0 sbs.$space-3;
-  max-width: 42rem;
-  font-size: sbs.$font-size-300;
-  line-height: 1.5;
+.taskButton,
+.taskButtonSelected {
+  min-height: 44px;
+  padding: sbs.$space-2 sbs.$space-3;
+  border: sbs.$border-width-thin solid sbs.$color-border-strong;
+  border-radius: sbs.$radius-md;
+  background: sbs.$color-surface;
+  color: sbs.$color-text-primary;
+  font: inherit;
+  font-weight: sbs.$font-weight-semibold;
+  cursor: pointer;
 }
 
-.bodyMeta {
+.taskButton:hover {
+  background: sbs.$color-surface-hover;
+}
+
+.taskButton:focus-visible,
+.taskButtonSelected:focus-visible {
+  @include sbs.focus-ring;
+}
+
+.taskButtonSelected {
+  border-color: sbs.$color-focus-ring;
+  background: sbs.$color-surface-selected;
+}
+
+.contextHint {
   margin: sbs.$space-2 0 0;
+  color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-200;
-  opacity: 0.9;
+  line-height: sbs.$line-height-body;
 }
