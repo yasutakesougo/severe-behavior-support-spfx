@@ -1,43 +1,36 @@
 import * as React from "react";
 import { AppShellChrome } from "../../../shell/ux";
 import {
-  FIELD_STAFF_DEFAULT_TASK_DESTINATION,
   FIELD_STAFF_TASK_GLOBAL_ITEMS,
+  applyFieldStaffSessionEvent,
   contextHintForFieldStaffGlobal,
-  fieldStaffTaskGlobalItem,
+  initialFieldStaffTaskViewState,
   locationHeadingForFieldStaffDestination,
-  resolveFieldStaffTaskSelection,
-  type FieldStaffSessionContext,
+  shellAdapterForFieldStaffDestination,
+  type FieldStaffSessionEvent,
   type FieldStaffTaskDestinationId,
   type FieldStaffTaskGlobalId,
+  type FieldStaffTaskViewState,
 } from "../../../shell/ux/field-staff-task-navigation";
 import type { ShellPrimaryNavigationId } from "../../../shell/ux/primary-navigation";
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
 import styles from "./ScaffoldShell.module.scss";
 
-type ScaffoldShellState = Readonly<{
-  activeGlobalId: FieldStaffTaskGlobalId;
-  taskDestination: FieldStaffTaskDestinationId;
+type ScaffoldShellState = FieldStaffTaskViewState & {
   shellDestination: ShellPrimaryNavigationId;
-  sessionContext: FieldStaffSessionContext;
-}>;
+};
 
 /**
- * CORR-1F FIELD_STAFF product entry. D-* Destination identity is owned here;
- * AppShellChrome remains an unchanged legacy adapter host per Scope §3.2.
+ * CORR-1G FIELD_STAFF product entry. D-* Destination identity and sessionContext
+ * are owned here; AppShellChrome reports listed events only (Scope §3.2).
  */
 export default class ScaffoldShell extends React.Component<
   IScaffoldShellProps,
   ScaffoldShellState
 > {
   public state: ScaffoldShellState = {
-    activeGlobalId: "GLOBAL-TODAY",
-    taskDestination: FIELD_STAFF_DEFAULT_TASK_DESTINATION,
+    ...initialFieldStaffTaskViewState(),
     shellDestination: "overview",
-    sessionContext: {
-      hasSupportObject: false,
-      hasOccurrenceContext: false,
-    },
   };
 
   private readonly taskEntryRef = React.createRef<HTMLElement>();
@@ -67,29 +60,32 @@ export default class ScaffoldShell extends React.Component<
     }
   }
 
-  private applyTaskSelection(globalId: FieldStaffTaskGlobalId): void {
-    const resolution = resolveFieldStaffTaskSelection(globalId, this.state.sessionContext);
+  private commitTaskState(next: FieldStaffTaskViewState): void {
+    const shellDestination = shellAdapterForFieldStaffDestination(next.destination);
     this.setState(
       {
-        activeGlobalId: globalId,
-        taskDestination: resolution.destination,
-        shellDestination: resolution.shellDestination,
+        ...next,
+        shellDestination,
       },
       () => {
-        this.requestLegacyShellDestination(resolution.shellDestination, resolution.destination);
+        this.requestLegacyShellDestination(shellDestination, next.destination);
       },
     );
   }
 
   private readonly handleTaskGlobalChange = (globalId: FieldStaffTaskGlobalId): void => {
-    this.applyTaskSelection(globalId);
+    this.commitTaskState(applyFieldStaffSessionEvent(this.state, { type: "GLOBAL", globalId }));
+  };
+
+  private readonly handleFieldStaffSessionEvent = (event: FieldStaffSessionEvent): void => {
+    this.commitTaskState(applyFieldStaffSessionEvent(this.state, event));
   };
 
   private readonly handleShellDestinationChange = (
     shellDestination: ShellPrimaryNavigationId,
   ): void => {
     if (shellDestination === "overview") {
-      this.applyTaskSelection("GLOBAL-TODAY");
+      this.handleTaskGlobalChange("GLOBAL-TODAY");
       return;
     }
     this.setState((current) => ({
@@ -109,7 +105,7 @@ export default class ScaffoldShell extends React.Component<
       errorCode,
       partialRetrieval,
     } = this.props;
-    const { activeGlobalId, taskDestination, shellDestination, sessionContext } = this.state;
+    const { activeGlobalId, destination, sessionContext } = this.state;
     const contextHint = contextHintForFieldStaffGlobal(activeGlobalId, sessionContext);
 
     return (
@@ -122,20 +118,26 @@ export default class ScaffoldShell extends React.Component<
         errorCode={errorCode}
         userDisplayName={userDisplayName}
         partialRetrieval={partialRetrieval}
-        selectedDestination={shellDestination}
+        selectedDestination={this.state.shellDestination}
         onSelectedDestinationChange={this.handleShellDestinationChange}
         presentationRole="FIELD_STAFF"
+        fieldStaffTaskDestination={destination}
+        fieldStaffSessionContext={sessionContext}
+        fieldStaffChosenOccurrenceId={this.state.chosenOccurrenceId}
+        onFieldStaffSessionEvent={this.handleFieldStaffSessionEvent}
       >
         <section
           ref={this.taskEntryRef}
           className={styles.scaffoldShell}
           data-role-task-ia="FIELD_STAFF"
-          data-role-task-destination={taskDestination}
+          data-role-task-destination={destination}
           data-role-task-active-global={activeGlobalId}
+          data-role-task-object={sessionContext.hasSupportObject ? "true" : "false"}
+          data-role-task-occurrence={sessionContext.hasOccurrenceContext ? "true" : "false"}
         >
           <p className={styles.bodyTitle} data-shell-ux="shell-host-status" hidden={true} />
           <p className={styles.taskHeading} role="heading" aria-level={1}>
-            {locationHeadingForFieldStaffDestination(taskDestination)}
+            {locationHeadingForFieldStaffDestination(destination)}
           </p>
           <nav className={styles.taskNavigation} aria-label="現場職員の業務ナビゲーション">
             {FIELD_STAFF_TASK_GLOBAL_ITEMS.map((item) => {
@@ -156,11 +158,11 @@ export default class ScaffoldShell extends React.Component<
               );
             })}
           </nav>
-          <p className={styles.contextHint} data-role-task-context-hint={taskDestination}>
+          <p className={styles.contextHint} data-role-task-context-hint={destination}>
             {contextHint}
           </p>
           <p className={styles.srOnly} data-role-task-orientation="今どこ">
-            今どこ: {fieldStaffTaskGlobalItem(activeGlobalId).label}（{taskDestination}）
+            今どこ: {locationHeadingForFieldStaffDestination(destination)}（{destination}）
           </p>
         </section>
       </AppShellChrome>

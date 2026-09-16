@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * CORR-1F browser smoke.
+ * CORR-1G browser smoke.
  * Synthetic FIELD_STAFF presentation only. No LIVE WRITE / auth / schema mutation.
  */
 import fs from "node:fs";
@@ -39,6 +39,7 @@ const scssPaths = [
   "src/webparts/scaffoldShellWebPart/components/ScaffoldShell.module.scss",
   "src/shell/ux/ShellUx.module.scss",
   "src/shell/dashboard/DashboardUx.module.scss",
+  "src/shell/dashboard/TodaySupportDayBoardUx.module.scss",
   "src/shell/users/UsersUx.module.scss",
   "src/shell/users/UserDetailUx.module.scss",
 ];
@@ -139,6 +140,8 @@ async function inspectProductState(page) {
         document
           .querySelector('[data-role-task-ia="FIELD_STAFF"] [role="heading"]')
           ?.textContent?.trim() ?? "",
+      object: taskRoot?.getAttribute("data-role-task-object") ?? "",
+      occurrence: taskRoot?.getAttribute("data-role-task-occurrence") ?? "",
       legacyNavDisplay: legacyNav ? window.getComputedStyle(legacyNav).display : "missing",
       hasRecordSearchGlobal: Boolean(
         document.querySelector('[data-role-task-nav="D-FIND-RECORD"]'),
@@ -179,6 +182,8 @@ async function capture(name, page) {
     state.activeGlobal === "GLOBAL-TODAY" &&
     state.labels.join("|") === "今日|手順|記録する|未記録|探す" &&
     state.taskHeading === "今日の支援" &&
+    state.object === "false" &&
+    state.occurrence === "false" &&
     state.shellDestination === "overview" &&
     state.legacyNavDisplay === "none" &&
     !state.hasRecordSearchGlobal &&
@@ -192,6 +197,90 @@ async function capture(name, page) {
     state,
     pageErrors,
     shot: await capture("first-paint-desktop", page),
+  });
+  await page.close();
+}
+
+{
+  const { page, pageErrors } = await openPage("today-pa-acquire", { width: 1280, height: 900 });
+  await page.waitForSelector('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.click('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-PROCEDURE" &&
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-object") === "true",
+  );
+  const acquired = await inspectProductState(page);
+  await page.click('[data-role-task-global="GLOBAL-TODAY"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-TODAY" &&
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-object") === "true",
+  );
+  const stickyToday = await inspectProductState(page);
+  await page.waitForSelector('[data-role-task-clear-occurrence="true"]');
+  await page.click('[data-role-task-clear-occurrence="true"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-object") === "false",
+  );
+  const cleared = await inspectProductState(page);
+  const pass =
+    acquired.taskDestination === "D-PROCEDURE" &&
+    acquired.object === "true" &&
+    acquired.taskHeading === "手順" &&
+    stickyToday.taskDestination === "D-TODAY" &&
+    stickyToday.object === "true" &&
+    cleared.object === "false" &&
+    cleared.occurrence === "false" &&
+    pageErrors.length === 0;
+  results.push({
+    name: "today-pa-acquire",
+    pass,
+    state: { acquired, stickyToday, cleared },
+    pageErrors,
+    shot: await capture("today-pa-acquire", page),
+  });
+  await page.close();
+}
+
+{
+  const { page, pageErrors } = await openPage("unrecorded-option-a", { width: 1280, height: 900 });
+  await page.click('[data-role-task-global="GLOBAL-UNRECORDED"]');
+  await page.waitForSelector('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.click('[data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-occurrence") === "true",
+  );
+  const state = await inspectProductState(page);
+  const pass =
+    state.taskDestination === "D-RECORD-WRITE" &&
+    state.object === "true" &&
+    state.occurrence === "true" &&
+    state.taskHeading === "記録する" &&
+    pageErrors.length === 0;
+  results.push({
+    name: "unrecorded-option-a",
+    pass,
+    state,
+    pageErrors,
+    shot: await capture("unrecorded-option-a", page),
   });
   await page.close();
 }
@@ -347,7 +436,7 @@ await browser.close();
 server.close();
 
 const evidence = {
-  slice: "SBS-ROLE-TASK-FIRST-IA-V1-CORR-1F",
+  slice: "SBS-ROLE-TASK-FIRST-IA-V1-CORR-1G",
   browserSmoke: "synthetic",
   implementationHead: process.env.SBS_ROLE_TASK_IA_IMPLEMENTATION_HEAD ?? "local",
   results,

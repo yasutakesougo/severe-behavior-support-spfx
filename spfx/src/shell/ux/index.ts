@@ -162,11 +162,17 @@ export {
   resolveFieldStaffGlobalDestination,
   resolveFieldStaffTaskSelection,
   shellAdapterForFieldStaffDestination,
+  applyFieldStaffSessionEvent,
+  fieldStaffDayBoardClearVisible,
+  initialFieldStaffTaskViewState,
+  FIELD_STAFF_EMPTY_SESSION_CONTEXT,
   type FieldStaffSessionContext,
+  type FieldStaffSessionEvent,
   type FieldStaffTaskDestinationId,
   type FieldStaffTaskGlobalId,
   type FieldStaffTaskGlobalItem,
   type FieldStaffTaskResolution,
+  type FieldStaffTaskViewState,
 } from "./field-staff-task-navigation";
 export { AppShellChrome, type AppShellChromeProps } from "./AppShellChrome";
 export { CurrentSiteLabel, type CurrentSiteLabelProps } from "./CurrentSiteLabel";

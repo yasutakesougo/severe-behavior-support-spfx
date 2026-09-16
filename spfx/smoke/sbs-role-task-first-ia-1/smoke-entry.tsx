@@ -1,5 +1,5 @@
 /**
- * CORR-1F browser smoke entry.
+ * CORR-1G browser smoke entry.
  * Synthetic FIELD_STAFF fixture only. No LIVE WRITE / auth / schema mutation.
  */
 import * as React from "react";
@@ -16,7 +16,7 @@ if (!root) {
 
 ReactDOM.render(
   <ScaffoldShell
-    description="Synthetic CORR-1F task-first smoke"
+    description="Synthetic CORR-1G task-first smoke"
     isDarkTheme={false}
     environmentMessage="Synthetic browser smoke"
     userDisplayName="Synthetic FIELD_STAFF"
