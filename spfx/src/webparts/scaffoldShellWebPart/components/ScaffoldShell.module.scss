@@ -1,6 +1,11 @@
 @use "../../../shell/tokens/sbs-tokens" as sbs;
 
-:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="primary-navigation"]) {
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="primary-navigation"]),
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="demo-banner"]),
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="demo-presentation-role-entry"]),
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="site-selector"]),
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="presentation-role-hint"]),
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-dashboard-ux="overview-heading"]) {
   display: none;
 }
 
@@ -16,6 +21,14 @@
   border-bottom: sbs.$border-width-thin solid sbs.$color-border-subtle;
   color: sbs.$color-text-primary;
   color: var(--bodyText);
+}
+
+.taskHeading {
+  margin: 0 0 sbs.$space-3;
+  color: sbs.$color-text-primary;
+  font-size: sbs.$font-size-500;
+  font-weight: sbs.$font-weight-semibold;
+  line-height: sbs.$line-height-heading;
 }
 
 .taskNavigation {
