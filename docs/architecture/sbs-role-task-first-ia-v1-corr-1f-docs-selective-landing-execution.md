@@ -35,7 +35,7 @@ Ready / Merge of later docs PRs: NOT AUTHORIZED until per-PR Human GO
 
 | PR | Disposition | Expected unique files | Bound tip (preflight) |
 |---|---|---|---|
-| #618 | LAND | Review-2 PASS | `76e0057d` |
+| #618 | LAND / **MERGED** | Review-2 PASS | `76e0057d` → main `6543e913` |
 | #620 | LAND | HTA + Ready + Merge (supersedes #619) | `bbc243f9` |
 | #621 | LAND | Post-merge readback + NO DEPLOY | `70a374ff` (whitespace CI fix after `f91ea1f0`) |
 | #622 | LAND | Issue Close / CLOSED | `cb3180d5` |
@@ -63,26 +63,22 @@ One GO must not cover multiple PRs.
 
 ---
 
-## #618 pre-Ready readback (2026-09-16)
+## #618 landing result
 
 | Item | Status | Evidence |
 |---|---|---|
-| PR #618 OPEN | CONFIRMED | live |
-| draft | true | live |
-| head SHA | `76e0057dfbd6c7a25e270b190b390ff80466902a` | live |
-| unique file | Review-2 md only | live files API |
-| mergeable | true / clean | live |
-| Contracts CI | SUCCESS | check-runs |
-| SPFx build | SUCCESS | check-runs |
-| B12 smoke | SUCCESS | check-runs |
-| Product lane impact | NONE | docs-only |
-| Human Ready GO | **NOT RECEIVED** | no matching Human message / no issue comment |
+| Human Ready GO | CONSUMED | Docs PR #618 Ready Decision |
+| Ready transition | COMPLETE | draft=false; head unchanged `76e0057d` |
+| Human Merge GO | CONSUMED | Docs PR #618 Merge Decision |
+| Merge | SUCCESS | main `6543e913` |
+| Review-2 on main | CONFIRMED | path present |
 
 ```text
 #618 Ready eligibility materials = FIXED
-#618 Human Ready Decision = AWAITING
-#618 Ready transition = NOT STARTED
-#618 Merge = NOT AUTHORIZED
+#618 Human Ready Decision = GO / CONSUMED
+#618 Ready transition = COMPLETE
+#618 Human Merge GO = CONSUMED
+#618 Merge = SUCCESS @ main 6543e913
 ```
 
 ---
@@ -92,6 +88,7 @@ One GO must not cover multiple PRs.
 ```text
 Prior tip f91ea1f0: Contracts CI FAIL (git diff --check trailing whitespace)
 Fixed tip 70a374ff: trailing whitespace stripped on #621 docs
+CI after fix: SUCCESS (all 3 checks)
 Historical snapshot language (Issue Close AWAITING) preserved
 ```
 
@@ -100,9 +97,9 @@ Historical snapshot language (Issue Close AWAITING) preserved
 ## Progress
 
 ```text
-#618 Ready GO     = AWAITING
-#618 Merge GO     = NOT STARTED
-#620 Ready/Merge  = NOT STARTED
+#618 Ready GO     = CONSUMED / Ready COMPLETE
+#618 Merge GO     = CONSUMED / MERGED @ 6543e913
+#620 Ready/Merge  = AWAITING Human Ready GO
 #621 Ready/Merge  = NOT STARTED
 #622 Ready/Merge  = NOT STARTED
 Canonical COMPLETE / ARCHIVED = NOT YET
@@ -110,8 +107,8 @@ Canonical COMPLETE / ARCHIVED = NOT YET
 ```
 
 ```text
-NEXT = Docs PR #618 Human Ready GO
-STOP = no Ready / Merge without per-PR Human GO
+NEXT = Docs PR #620 Human Ready GO
+STOP = no Ready/Merge of #620/#621/#622 without per-PR Human GO
      = no Deploy / LIVE WRITE
      = no Product reopen
      = no merge of #619 / #617 / #623 in minimum path
