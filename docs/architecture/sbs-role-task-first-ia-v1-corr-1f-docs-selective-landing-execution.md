@@ -12,7 +12,8 @@ mode: READ ONLY preflight + gate sequencing
 date: 2026-09-16
 
 Product lane: CLOSED
-main: 2032aa5f6bec171fe0c74b33f01e63c0ee6d3b48
+main: 6543e91394c6e904ac8047eb79fd56a018bc0977
+  (prior Product tip 2032aa5f; Docs #618 merge)
 Product identity: 3e1eac933abfd9330604330f9074290f48bef674
 Deploy / LIVE WRITE: NOT AUTHORIZED
 PLANNER / ADMIN_AUDIT Global: OUT / fail-closed
@@ -23,9 +24,8 @@ Disposition authority:
   PR #623
 
 CURRENT GATE:
-  Docs PR #618 Human Ready GO = RECEIVED / CONSUMED
-  Docs PR #618 Ready transition = COMPLETE
-  Docs PR #618 Human Merge GO = AWAITING
+  Docs PR #618 = MERGED @ 6543e913 (head 76e0057d)
+  Docs PR #620 Human Ready GO = AWAITING
 Ready / Merge of later docs PRs: NOT AUTHORIZED until per-PR Human GO
 ```
 
