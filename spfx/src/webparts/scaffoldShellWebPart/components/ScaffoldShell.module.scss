@@ -2,7 +2,9 @@
 
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="primary-navigation"]),
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="demo-banner"]),
-:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="demo-presentation-role-entry"]),
+:global(
+  [data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="demo-presentation-role-entry"]
+),
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="site-selector"]),
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="presentation-role-hint"]),
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-dashboard-ux="overview-heading"]) {
