@@ -6,7 +6,7 @@ workstream: SBS-ROLE-TASK-FIRST-IA-V1
 unit: CORR-1G
 record type: CORR-1G Complete Controlled Packet
 kind: Definition packet (single body)
-status: COMPLETE / CORRECTION-1 APPLIED / AWAITING FRESH INDEPENDENT DEFINITION RE-REVIEW
+status: COMPLETE / CORRECTION-2 APPLIED / AWAITING FRESH INDEPENDENT DEFINITION RE-REVIEW-2
 normative surface: THIS PACKET BODY ONLY
 attachment / sidecar: EXCLUDED / NON-NORMATIVE
 parent Definition: Correction-2 Complete Controlled Packet (LOCKED; not rewritten)
@@ -25,7 +25,13 @@ Independent Definition Review-1: CORRECTION REQUIRED / CONSUMED
   reviewed packet HEAD: 6b070fd1ea844dfc1176cc9a1239f12e71e04701
 Definition Correction-1: APPLIED / CONSUMED
   GO record: docs/architecture/sbs-role-task-first-ia-v1-corr-1g-human-definition-correction-1-go.md
-Independent Definition Re-Review: NOT YET / NOT CONSUMED
+Independent Definition Re-Review-1: CORRECTION REQUIRED / CONSUMED
+  record: docs/architecture/sbs-role-task-first-ia-v1-corr-1g-independent-definition-re-review-1.md
+  reviewed packet HEAD: 4a80746b8d837c8aceebee2e03ee3ac088166446
+  reviewed packet blob: cc7a3f92729521417f4163968e7f37b46757c127
+Definition Correction-2: APPLIED / CONSUMED
+  GO record: docs/architecture/sbs-role-task-first-ia-v1-corr-1g-human-definition-correction-2-go.md
+Independent Definition Re-Review-2: NOT YET / NOT CONSUMED
 Human Definition Lock (CORR-1G): NOT GENERATED / NOT CONSUMED
 Human Implementation Start / Ready / Merge / Deploy: NOT AUTHORIZED
 Implementation Authority: NONE
@@ -34,13 +40,13 @@ SharePoint / M365 / Entra mutation: NOT AUTHORIZED
 Notion production page update: NOT PERFORMED
 ```
 
-This document is the complete Controlled Packet for **CORR-1G**, including Definition Correction-1.
+This document is the complete Controlled Packet for **CORR-1G**, including Definition Correction-1 and Definition Correction-2.
 
 Reviewers must use this body only. Attachments, transcripts, and Notion sidecars are non-normative.
 
 The locked Correction-2 packet remains the workstream IA SSOT. This packet does **not** replace CORR-2A / CORR-2B tables. It adds the missing unique meaning for **Product-reachable sufficient-path Destinations** after CORR-1F froze Role session context.
 
-Creating or reviewing this packet does not create Implementation Authority. Human Gates consumed for this unit so far: Kickoff GO and Definition Correction-1 GO, each recorded separately.
+Creating or reviewing this packet does not create Implementation Authority. Human Gates consumed for this unit so far: Kickoff GO, Definition Correction-1 GO, and Definition Correction-2 GO, each recorded separately.
 
 ---
 
@@ -54,10 +60,12 @@ Parent Definition = Correction-2 Complete Controlled Packet (LOCKED blob 5eeb814
 Parent Product unit = CORR-1F COMPLETE / ARCHIVED
 Independent Definition Review-1 = CORRECTION REQUIRED / CONSUMED
 Definition Correction-1 = APPLIED
-Independent Definition Re-Review = NOT YET
+Independent Definition Re-Review-1 = CORRECTION REQUIRED / CONSUMED
+Definition Correction-2 = APPLIED
+Independent Definition Re-Review-2 = NOT YET
 CORR-1G Exact Slice = CORR-1G-A + CORR-1G-B + CORR-1G-C
 Skeleton change = NOT REQUIRED / NOT PERFORMED
-NEXT = Fresh Independent Definition Re-Review
+NEXT = Fresh Independent Definition Re-Review-2
 ```
 
 Unchanged in meaning from locked Correction-2 unless a later section marks a CORR-1G addition:
@@ -97,7 +105,9 @@ Locked Correction-2 already defines the sufficient-path tuples:
 
 It also defines where the object / occurrence is supposed to come from (D-TODAY selection, D-PERSON, in-progress procedure, D-UNRECORDED). CORR-1F proved only the **insufficient-context** fallbacks in Product UI.
 
-Independent Definition Review-1 (packet HEAD `6b070fd1`) found no P0 and three P1 leftovers in acquisition/release uniqueness. Definition Correction-1 closes those leftovers in §2–§4 and §8. Implementers must not choose leftovers for:
+Independent Definition Review-1 (packet HEAD `6b070fd1`) found no P0 and three P1 leftovers in acquisition/release uniqueness. Definition Correction-1 closed those leftovers in §2–§4 and §8.
+
+Independent Definition Re-Review-1 (packet HEAD `4a80746b`, blob `cc7a3f92`) found no P0 and three remaining P1 leftovers. Definition Correction-2 closes **only** those leftovers (P1-1 RELEASE; P1-2 OPTION A; P1-3 NOT ACTIONABLE / STAY D-PERSON). Implementers must not choose leftovers for:
 
 ```text
 P1-risk  How Role session context becomes true in Product UI
@@ -171,10 +181,22 @@ D-TODAY selection
     (a day’s object is chosen AND Primary Action 対象の支援を始める is taken)
   ≠ seeing, highlighting, or listing that object on D-TODAY
 
-D-PERSON
+D-PERSON with a current day’s support occurrence
   = person opened into Role context
     AND that person has a current support occurrence for the day
   Destination after that event = D-PERSON only
+
+D-PERSON without a current day’s support occurrence
+  = person opened into Role context
+    AND that person has no current support occurrence for the day
+  = a §2.4 RELEASE (not sticky persistence)
+  Destination after that event = D-PERSON only
+
+D-UNRECORDED occurrence choice
+  = one Product-visible episode in §2.2 + §3.2
+    acquire or replace the corresponding support object
+    AND acquire the selected occurrence context
+  Destination after that event = D-RECORD-WRITE
 
 in-progress procedure
   = user is on D-PROCEDURE after a successful §2.2 acquisition
@@ -194,8 +216,9 @@ Once true, the meaning stays true until a §2.4 release. Unlisted events do not 
 | On D-TODAY, object is visible or highlighted but Primary Action is not taken, **and** no sticky true object exists | false | D-TODAY. Global 手順 still fallback **D-TODAY** |
 | On D-TODAY after a sticky true object (not released) | true | D-TODAY. Global 手順 → **D-PROCEDURE** |
 | D-FIND-PERSON / D-PERSON: person opened into Role context **and** that person has a current support occurrence for the day | true | **D-PERSON only** (not D-TODAY, not auto D-PROCEDURE) |
-| D-FIND-PERSON / D-PERSON: person opened but no current support occurrence | false | Stay D-PERSON. Global 手順 still fallback **D-TODAY**. Do not open empty D-PROCEDURE |
-| Replacement: a new row’s qualifying acquisition (D-TODAY Primary Action episode, or D-PERSON open with that day’s occurrence) for a **different** object | old false; new true | Destination of the new acquisition event |
+| D-FIND-PERSON / D-PERSON: person opened but no current support occurrence for the day | false (RELEASE per §2.4; coupled occurrence also false) | **D-PERSON only**. Global 手順 fallback **D-TODAY**. Global 記録する fallback **D-UNRECORDED**. Do not open empty D-PROCEDURE |
+| On D-UNRECORDED, an unrecorded occurrence is chosen | true (acquire, or replace if a different object was sticky) | **D-RECORD-WRITE** (same Product-visible episode as §3.2 occurrence acquire) |
+| Replacement: a new row’s qualifying acquisition (D-TODAY Primary Action episode, D-PERSON open with that day’s occurrence, or D-UNRECORDED occurrence choice) for a **different** object | old false; new true | Destination of the new acquisition event |
 
 Standing rules:
 
@@ -209,13 +232,23 @@ Standing rules:
 5. Global 手順 with object false → D-TODAY acquisition (CORR-1F preserved).
 6. Empty D-PROCEDURE content is still not a Destination meaning (Correction-2 §2.1).
 7. Opening D-PERSON does not consume C4 D-PERSON Next.
-   Required unique path from D-PERSON (object true) to D-PROCEDURE = Global 手順.
-   CORR-1G does not add a second procedure control.
-   If D-PERSON’s existing C4 Primary Action is taken while object true,
-   Destination identity is still D-PROCEDURE (same place).
-   If object false, that action must not open empty D-PROCEDURE.
+   Required unique Destination identity from D-PERSON when object true
+   = D-PROCEDURE.
+   Existing C4 Primary Action (object true) → D-PROCEDURE.
+   Global 手順 (object true) → D-PROCEDURE.
+   These are not required to be a unique control path.
+   When object false on D-PERSON, the existing C4 Primary Action is
+   NOT ACTIONABLE / STAY D-PERSON:
+     it must not navigate
+     it must not open empty D-PROCEDURE
+     it must not acquire or mint a support object
+     it must not silently fall back to D-TODAY
+     Destination remains D-PERSON
+     session-context meaning remains unchanged
 8. Highlighting a different D-TODAY row without Primary Action does not acquire
    and does not release a sticky true object.
+9. D-UNRECORDED occurrence choice is one episode with §3.2. It must not leave
+   occurrence-true while object-false.
 ```
 
 ### 2.3 Rejected support-object resolutions
@@ -230,6 +263,11 @@ REJECTED: LIVE SharePoint person write as the only way to set the flag
 REJECTED: D-TODAY list visibility / highlight as D-TODAY selection
 REJECTED: D-PERSON open auto-navigates to D-PROCEDURE
 REJECTED: D-PERSON open returns to D-TODAY as part of the same event
+REJECTED: D-PERSON open without current occurrence keeps a previously sticky object
+REJECTED: D-PERSON C4 Primary Action navigates when object false
+REJECTED: D-PERSON C4 Primary Action opens empty D-PROCEDURE
+REJECTED: D-PERSON C4 Primary Action mints or acquires an object when object false
+REJECTED: D-PERSON C4 Primary Action silently falls back to D-TODAY when object false
 REJECTED: Global 今日 as an implied object release
 REJECTED: Back as an implied object release unless the Back event is listed in §2.4
 ```
@@ -242,7 +280,8 @@ Support-object meaning becomes false only on:
 |---|---|---|
 | Explicit deselect / no remaining chosen object on D-TODAY | false | D-TODAY. Fallbacks restored |
 | Back that drops person context from D-PERSON to D-FIND-PERSON (person no longer in Role context) | false | D-FIND-PERSON. Fallbacks restored |
-| Replacement acquisition for a different object (§2.2 last row) | old false (new true) | Destination of the new acquisition |
+| D-PERSON open of a person with **no** current support occurrence for the day | false (any previously sticky object released; coupled occurrence also released) | **D-PERSON**. Global 手順 fallback **D-TODAY**. Global 記録する fallback **D-UNRECORDED** |
+| Replacement acquisition for a different object (§2.2 replacement / D-UNRECORDED choice rows) | old false (new true) | Destination of the new acquisition |
 
 Not release (persistence stays true if already true):
 
@@ -288,7 +327,7 @@ object-true does not by itself make occurrence-true.
 |---|---|---|
 | Usable session first paint | false | D-TODAY |
 | D-PROCEDURE Completion (`手順を現行として確認`) | true | **D-RECORD-WRITE** (C4 D-PROCEDURE Next) |
-| On D-UNRECORDED, an unrecorded occurrence is chosen | true | **D-RECORD-WRITE** (C4 D-UNRECORDED Next) |
+| On D-UNRECORDED, an unrecorded occurrence is chosen | true | **D-RECORD-WRITE** (C4 D-UNRECORDED Next). Same episode as §2.2 object acquire/replace |
 | On D-UNRECORDED, list is viewed but no occurrence chosen, **and** no sticky true occurrence exists | false | D-UNRECORDED. Global 記録する still fallback **D-UNRECORDED** |
 | On D-UNRECORDED after a sticky true occurrence (not released) | true | D-UNRECORDED. Global 記録する → **D-RECORD-WRITE** |
 | Global 記録する with occurrence true | true (unchanged) | **D-RECORD-WRITE** |
@@ -305,6 +344,10 @@ Standing rules:
 5. Completing D-PROCEDURE and choosing D-UNRECORDED are the same Destination identity
    D-RECORD-WRITE, not two write places.
 6. D-PERSON open does not acquire occurrence-context, even when it acquires the support object.
+7. D-UNRECORDED occurrence choice always acquires or replaces the corresponding
+   support object in the same episode (§2.2 OPTION A). occurrence-true while
+   object-false remains forbidden.
+8. Global 未記録 remains reachable when no support object is currently selected.
 ```
 
 ### 3.3 Rejected occurrence resolutions
@@ -317,6 +360,7 @@ REJECTED: D-FIND-RECORD as Global or as the write place
 REJECTED: LIVE WRITE / SharePoint save as the acquisition event
 REJECTED: Global 今日 as an implied occurrence release
 REJECTED: Back as an implied occurrence release unless the Back event is listed in §3.4
+REJECTED: D-UNRECORDED occurrence choice that sets occurrence-true without acquiring the corresponding support object
 REJECTED: occurrence-true while object-false
 ```
 
@@ -434,7 +478,7 @@ CORR-1F archive rewrite
 | H-1 | Satisfying CORR-1G-A/B would require a new Destination | Stop; do not invent; re-packet |
 | H-2 | Satisfying CORR-1G-A/B would require LIVE WRITE / SharePoint / Entra | Stop; outside authority |
 | H-3 | Satisfying location identity would require AppShellChrome to become a second V1 Global | Stop; CORR-1G insufficient; dual-run still REJECTED |
-| H-4 | Packet is used as Implementation Start | Stop; Kickoff ≠ Start; Correction-1 GO ≠ Start |
+| H-4 | Packet is used as Implementation Start | Stop; Kickoff ≠ Start; Correction-1 GO ≠ Start; Correction-2 GO ≠ Start |
 | H-5 | Independent Review or Re-Review finds P0 / P1 | Human Definition Lock = NOT ELIGIBLE until Correction |
 | H-6 | A Product-visible event is not listed in §2.2 / §2.4 / §3.2 / §3.4 | That event must not change object or occurrence meaning. Do not infer a leftover. If the job cannot complete without changing meaning, stop; re-packet |
 
@@ -443,12 +487,12 @@ CORR-1F archive rewrite
 ## 9. Independent Definition Re-Review questions (CORR-1G)
 
 1. Does this body keep locked Correction-2 CORR-2A/B tables unreplaced while adding only session-context acquisition uniqueness?
-2. Is `current support object` acquisition unique (Primary Action episode on D-TODAY / D-PERSON with occurrence) without Global 手順 minting, and without treating list visibility as selection?
+2. Is `current support object` acquisition unique (Primary Action episode on D-TODAY / D-PERSON with occurrence / D-UNRECORDED occurrence choice) without Global 手順 minting, and without treating list visibility as selection?
 3. After Primary Action on a chosen D-TODAY object, is Destination uniquely D-PROCEDURE (C4 Next), not a second procedure place?
 4. After D-PERSON open with a day’s occurrence, is Destination uniquely D-PERSON (not D-TODAY, not auto D-PROCEDURE)?
 5. Is first-paint auto-entry to D-PROCEDURE rejected even when synthetic objects exist?
-6. Is `current occurrence` acquisition unique (D-PROCEDURE Completion / D-UNRECORDED choice) without Global 記録する minting?
-7. Are support-object and occurrence-context **release** sets exhaustive, with Global 今日 / unspecified Back not implied releases, and occurrence-true requiring object-true?
+6. Is `current occurrence` acquisition unique (D-PROCEDURE Completion / D-UNRECORDED choice) without Global 記録する minting, and does D-UNRECORDED choice also acquire/replace the corresponding support object (OPTION A)?
+7. Are support-object and occurrence-context **release** sets exhaustive, including D-PERSON open without current occurrence as RELEASE, with Global 今日 / unspecified Back not implied releases, and occurrence-true requiring object-true?
 8. Are insufficient-context fallbacks from CORR-1F preserved (手順→D-TODAY, 記録する→D-UNRECORDED)?
 9. Are D-PROCEDURE / D-RECORD-WRITE / D-TODAY / D-PERSON location identities unique and not a generic non-place?
 10. Is D-HOME still alias of D-TODAY only?
@@ -459,6 +503,9 @@ CORR-1F archive rewrite
 15. Does this packet avoid closing P2-2 / P2-3 or PLANNER / ADMIN_AUDIT by side-effect?
 16. Is Implementation Start still NOT AUTHORIZED by this packet?
 17. Does H-6 stop implementers from inferring unlisted session-context changes?
+18. Does D-PERSON open without current occurrence uniquely RELEASE sticky object and coupled occurrence, stay D-PERSON, and restore Global fallbacks?
+19. When object is false on D-PERSON, is existing C4 Primary Action uniquely NOT ACTIONABLE / STAY D-PERSON (no navigate, no mint, no silent D-TODAY fallback)?
+20. When object is true, do existing C4 Primary Action and Global 手順 share unique Destination identity D-PROCEDURE without requiring a unique control path?
 
 ---
 
@@ -469,12 +516,17 @@ CORR-1G-A first paint              → object false, D-TODAY                 uni
 CORR-1G-A Primary Action + object  → object true, D-PROCEDURE              unique
 CORR-1G-A list visible without PA  → object false (unless sticky true)     unique
 CORR-1G-A D-PERSON + occurrence    → object true, D-PERSON only            unique
+CORR-1G-A D-PERSON − occurrence    → RELEASE object+occ., stay D-PERSON    unique
+CORR-1G-A D-UNRECORDED choice      → object true (acquire/replace)         unique
+CORR-1G-A C4 PA object false       → NOT ACTIONABLE / stay D-PERSON        unique
+CORR-1G-A C4 PA / Global 手順 true → same Destination identity D-PROCEDURE unique
 CORR-1G-A Global 手順 + object     → D-PROCEDURE (same identity)           unique
 CORR-1G-A Global 手順 − object     → D-TODAY fallback (CORR-1F)            unique
 CORR-1G-A Global 今日              → D-TODAY; object not released          unique
-CORR-1G-A release set              → deselect / drop person / replace      unique
+CORR-1G-A release set              → deselect / drop person /
+                                     D-PERSON − occurrence / replace       unique
 CORR-1G-B D-PROCEDURE Completion   → occurrence true, D-RECORD-WRITE       unique
-CORR-1G-B D-UNRECORDED choice      → occurrence true, D-RECORD-WRITE       unique
+CORR-1G-B D-UNRECORDED choice      → object+occurrence true, D-RECORD-WRITE unique
 CORR-1G-B Global 記録する + occ.   → D-RECORD-WRITE                        unique
 CORR-1G-B Global 記録する − occ.   → D-UNRECORDED fallback (CORR-1F)        unique
 CORR-1G-B occurrence-true          → requires object-true                  unique
@@ -491,20 +543,21 @@ CORR-2B FIELD_STAFF D-HOME         → still == D-TODAY                      uni
 ```text
 CORR-1G Definition packet = APPLIED (this document)
 Definition Correction-1 = APPLIED
+Definition Correction-2 = APPLIED
 Normative surface = this packet body
 Parent Correction-2 packet = PRESERVED / LOCKED (blob 5eeb8140…)
-P0 / P1 = for Independent Definition Re-Review only
-Human Definition Lock eligibility (CORR-1G) = NOT YET (await Re-Review)
+P0 / P1 = for Independent Definition Re-Review-2 only
+Human Definition Lock eligibility (CORR-1G) = NOT YET (await Re-Review-2)
 Human Definition Lock (CORR-1G) = NOT GENERATED / NOT CONSUMED
 Repository Mutation (product / schema / persistence / SPFx) = NONE
-Human Gate Consumption = Kickoff GO + Definition Correction-1 GO (separate records)
+Human Gate Consumption = Kickoff GO + Definition Correction-1 GO + Definition Correction-2 GO (separate records)
 Implementation Authority = NONE
-NEXT = Fresh Independent Definition Re-Review
+NEXT = Fresh Independent Definition Re-Review-2
 ```
 
 ```text
 STOP = no Product implementation from this packet
-     = no self-PASS of Independent Definition Re-Review
+     = no self-PASS of Independent Definition Re-Review-2
      = no Ready / Merge / Deploy / LIVE WRITE
      = no PLANNER / ADMIN_AUDIT completion claim
      = no CORR-1F reopen
