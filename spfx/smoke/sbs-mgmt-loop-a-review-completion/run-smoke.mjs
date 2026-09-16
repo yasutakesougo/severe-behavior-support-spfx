@@ -174,6 +174,8 @@ function observe(page) {
       textInputCount: capture?.querySelectorAll("textarea").length ?? 0,
       buttonsDisabled: buttons.length === 2 && buttons.every((button) => button.disabled),
       buttonsEnabled: buttons.length === 2 && buttons.every((button) => !button.disabled),
+      // Post-capture UI replaces the writable form with readback (no disabled controls).
+      captureFormAbsent: buttons.length === 0 && !reason && !note,
       reasonReadback: reasonReadback ?? null,
       noteReadback: noteReadback ?? null,
       nonColorActionDistinction,
@@ -276,8 +278,8 @@ try {
       capturedA.reasonReadback === "判断理由: reason A" &&
       capturedA.noteReadback === null &&
       !capturedA.noteInputPresent &&
-      capturedA.buttonsDisabled &&
-      capturedA.reasonDisabled === true;
+      capturedA.captureFormAbsent &&
+      capturedA.text.includes("デモ上の見直し結果: 変更が必要");
     checks.push(recordCheck(`${viewport.name}: R2/F3/F5 capture A`, capturedAPass, capturedA));
     await saveScreenshot(page, viewport.name, "03-captured-with-reason");
 
@@ -305,7 +307,7 @@ try {
       capturedB.reasonReadback === null &&
       capturedB.noteReadback === null &&
       !capturedB.noteInputPresent &&
-      capturedB.buttonsDisabled;
+      capturedB.captureFormAbsent;
     checks.push(
       recordCheck(`${viewport.name}: R1/F4 NO_CHANGE blank reason`, capturedBPass, capturedB),
     );
@@ -360,7 +362,7 @@ try {
       zeroNoChange.zeroState &&
       zeroNoChange.reasonReadback === null &&
       zeroNoChange.noteReadback === null &&
-      zeroNoChange.buttonsDisabled;
+      zeroNoChange.captureFormAbsent;
     checks.push(
       recordCheck(`${viewport.name}: R4 zero-record NO_CHANGE`, zeroNoChangePass, zeroNoChange),
     );
