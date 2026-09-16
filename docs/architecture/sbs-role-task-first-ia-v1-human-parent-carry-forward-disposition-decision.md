@@ -115,8 +115,8 @@ Record this Decision document on a docs-only PR (Ready / Merge remain separate H
 ```text
 CORR-1F reopen = NOT AUTHORIZED
 Implementation Start / Product code mutation = NOT AUTHORIZED
-Exact Scope Definition authorship start = NOT AUTHORIZED by this Decision alone
-  (requires separate Agent/Human Exact Scope workstream start; still ≠ Implementation Start)
+P2-1 Exact Scope Definition kickoff = NOT AUTHORIZED
+  (separate Human authorization required; Disposition GO ≠ Exact Scope kickoff)
 Assign CORR-2F / CORR-3F or any new unit ID = NOT AUTHORIZED
 PLANNER / ADMIN_AUDIT Global semantics invention or completion claim = NOT AUTHORIZED
 P2-2 / P2-3 closure inside a Product tranche = NOT AUTHORIZED (kept separate)
@@ -140,13 +140,20 @@ Repository Product mutation by this document = 0
 ```
 
 ```text
-NEXT = Exact Scope Definition for NEXT PRODUCT TRANCHE (P2-1 only)
-     = only after separate Exact Scope start authorization / workstream kickoff
-     = Implementation Start remains NOT AUTHORIZED until Explicit Human Correction Implementation GO after Scope Review
+NEXT
+= P2-1 Exact Scope Definition kickoff
+→ Definition作成
+→ Fresh Independent Definition Review
+→ Human Definition Lock
+→ Implementation Start decision
 
-STOP = no Product implementation from this Decision
-     = no CORR-1F reopen
-     = no PLANNER / ADMIN_AUDIT Global completion claim
-     = no premature Correction unit ID assignment
-     = no silent discard of residual P2 items
+STOP
+= Exact Scope kickoff の別途Human authorization待ち
+= no Product implementation from this Decision
+= no CORR-1F reopen
+= no PLANNER / ADMIN_AUDIT Global completion claim
+= no premature Correction unit ID assignment
+= no silent discard of residual P2 items
 ```
+
+Human Parent Carry-Forward Disposition GO does **not** authorize P2-1 Exact Scope Definition kickoff. Each arrow in NEXT remains a separate gate. Definition作成 ≠ Fresh Independent Definition Review ≠ Human Definition Lock ≠ Implementation Start decision.
