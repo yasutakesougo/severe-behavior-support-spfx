@@ -6,8 +6,10 @@ unit: SBS-MGMT-E-COGNITIVE-CLOSED-LOOP-CORRECTION-1
 kind: Exact Implementation Scope (docs lock; no product mutation yet)
 parent Definition: docs/architecture/sbs-mgmt-e-cognitive-closed-loop-correction-1-definition.md
 basis main: ac6b3d665b0e514852775b5b58f5f9e254d107ae
-Human Implementation Start GO: NOT RECEIVED
-Product mutation: NOT AUTHORIZED BY THIS DOC
+Human Implementation Start GO: RECEIVED / CONSUMED
+  record: docs/architecture/sbs-mgmt-e-cognitive-closed-loop-correction-1-human-implementation-start-go.md
+Product mutation: AUTHORIZED (CORR-1A / CORR-1B / CORR-1C presentation only)
+Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
 ```
 
 ## 1. Live strings at basis（as-is）
@@ -170,8 +172,9 @@ Expect: domain expectations **byte-stable**; UI/smoke asserts updated only for l
 ## 5. Gate
 
 ```text
-Exact Scope draft = READY FOR INDEPENDENT REVIEW
-Implementation = HOLD until Human Implementation Start GO
-CORR-1A / 1B / 1C only after GO
+Exact Scope = AUTHORIZED for CORR-1A / CORR-1B / CORR-1C after Human Implementation Start GO
+Implementation = IN PROGRESS / presentation only
 Domain semantics change = FORBIDDEN
+Ready / Merge / Deploy / LIVE WRITE = NOT AUTHORIZED
+Post-impl STOP = Fresh Independent Implementation Review
 ```

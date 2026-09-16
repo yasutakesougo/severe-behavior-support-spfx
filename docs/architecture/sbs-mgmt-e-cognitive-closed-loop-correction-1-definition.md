@@ -12,11 +12,13 @@ Evidence-2 authority:
   docs/architecture/sbs-mgmt-e-current-main-acceptance-rebaseline-1.md
   docs/architecture/sbs-mgmt-e-5-persona-simulation-1.md
   (land via PR #633 if not yet on main)
-Independent Definition/Scope Review: REQUIRED / NOT STARTED
-Human Definition Lock: NOT RECEIVED
-Human Implementation Start GO: NOT RECEIVED
-Product / SPFx / domain mutation: NOT AUTHORIZED BY THIS DOC
+Independent Definition/Scope Review: PASS WITH NON-BLOCKING FINDINGS (Review-1)
+Human Definition Lock: NOT REQUIRED FOR THIS UNIT (Review-1 cleared Implementation Start eligibility)
+Human Implementation Start GO: RECEIVED / CONSUMED
+  record: docs/architecture/sbs-mgmt-e-cognitive-closed-loop-correction-1-human-implementation-start-go.md
+Product / SPFx presentation mutation: AUTHORIZED (CORR-1A / CORR-1B / CORR-1C only)
 Ready / Merge / Deploy / LIVE WRITE: NOT AUTHORIZED
+Actual Staff Path A / CORE LOOP VALUE: NOT AUTHORIZED
 ```
 
 ## 1. Why this Correction exists
@@ -100,26 +102,24 @@ AI substitution for Human Review / revision-start / Human Apply
 Path A staff answers / CORE LOOP VALUE disposition (separate Human gates)
 ```
 
-## 5. Gate state after this Definition draft
+## 5. Gate state after Implementation Start GO
 
 ```text
-Definition draft                         = READY FOR INDEPENDENT REVIEW
-Exact Scope                              = see companion exact-scope doc
-Independent Definition/Scope Review      = REQUIRED (P0=0 / P1=0)
-Human Definition Lock                    = NOT RECEIVED
-Human Implementation Start GO            = NOT RECEIVED
-Product mutation                         = NOT AUTHORIZED
+Definition draft                         = LOCKED BY Independent Review-1 + Human GO
+Exact Scope                              = AUTHORIZED for CORR-1A/1B/1C only
+Independent Definition/Scope Review      = PASS WITH NON-BLOCKING FINDINGS (P0=0 / P1=0)
+Human Implementation Start GO            = RECEIVED / CONSUMED
+Product presentation mutation            = AUTHORIZED (CORR-1A/1B/1C only)
 #556 Human Apply Path A                  = HOLD (deferred until after Correction)
 CORE LOOP VALUE DISPOSITION              = HOLD
-Deploy / LIVE WRITE                      = HOLD
+Deploy / LIVE WRITE / Ready / Merge      = HOLD
 ```
 
 ## 6. NEXT
 
 ```text
-Fresh Independent Definition/Scope Review
-— this Definition + Exact Scope
-— require P0=0 / P1=0
+CORR-1A / CORR-1B / CORR-1C implementation + required tests / RBA
 ↓
-PASSなら Human Implementation Start GO (CORR-1A/1B/1C only)
+Fresh Independent Implementation Review
+≠ Ready / Merge / Deploy / LIVE WRITE / Path A / CORE LOOP VALUE
 ```
