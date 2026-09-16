@@ -12,8 +12,8 @@ Implementation PR: #631
 branch: cursor/corr-1g-product-implementation-fe8f
 pre-Ready product HEAD (HTA identity): 99f0a85ccdd1e7c578839499781b16d7afbd1436
 base SHA at Ready Decision: e53eafe5c3b50d115e02bcb55c913de8547e6729
-Ready Decision commit: PENDING_SHA_PIN
-expected head SHA: PENDING_SHA_PIN
+Ready Decision commit: 4e3387a6d6eb0aef57bfd50544de39d1f9cbf53b
+expected head SHA: live PR HEAD that contains this SHA-pin and descends from 4e3387a6 / 99f0a85c
 Human Ready Decision: GO (2026-09-16)
 Human Ready GO: RECEIVED / CONSUMED
 Human Task Acceptance: PASS / HUMAN CONFIRMED
