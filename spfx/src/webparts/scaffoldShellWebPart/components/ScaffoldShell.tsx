@@ -31,14 +31,46 @@ export default class ScaffoldShell extends React.Component<
       fieldStaffTaskNavigationItem(FIELD_STAFF_DEFAULT_TASK_DESTINATION).shellDestination,
   };
 
+  private readonly taskEntryRef = React.createRef<HTMLElement>();
+
+  private requestLegacyShellDestination(
+    shellDestination: ShellPrimaryNavigationId,
+    taskDestination: FieldStaffTaskDestinationId,
+  ): void {
+    const shell = this.taskEntryRef.current?.closest('[data-shell-ux="app-shell-chrome"]');
+    const button = shell?.querySelector<HTMLButtonElement>(
+      `[data-shell-ux-nav="${shellDestination}"]`,
+    );
+    if (!button || button.disabled) {
+      return;
+    }
+    button.click();
+
+    if (taskDestination === "D-UNRECORDED") {
+      window.requestAnimationFrame(() => {
+        const unrecorded = shell?.querySelector<HTMLButtonElement>(
+          '[data-demo-ux="users-filter-chip"][data-demo-ux-filter="未記録"]',
+        );
+        if (unrecorded && !unrecorded.disabled) {
+          unrecorded.click();
+        }
+      });
+    }
+  }
+
   private readonly handleTaskDestinationChange = (
     taskDestination: FieldStaffTaskDestinationId,
   ): void => {
     const entry = resolveFieldStaffTaskEntry(taskDestination, false);
-    this.setState({
-      taskDestination: entry.destination,
-      shellDestination: entry.shellDestination,
-    });
+    this.setState(
+      {
+        taskDestination: entry.destination,
+        shellDestination: entry.shellDestination,
+      },
+      () => {
+        this.requestLegacyShellDestination(entry.shellDestination, entry.destination);
+      },
+    );
   };
 
   private readonly handleShellDestinationChange = (
@@ -93,6 +125,7 @@ export default class ScaffoldShell extends React.Component<
         presentationRole="FIELD_STAFF"
       >
         <section
+          ref={this.taskEntryRef}
           className={styles.scaffoldShell}
           data-role-task-ia="FIELD_STAFF"
           data-role-task-destination={taskDestination}
