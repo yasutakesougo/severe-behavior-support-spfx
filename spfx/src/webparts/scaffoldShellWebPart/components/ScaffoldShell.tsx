@@ -1,15 +1,66 @@
 import * as React from "react";
 import { AppShellChrome } from "../../../shell/ux";
+import {
+  FIELD_STAFF_DEFAULT_TASK_DESTINATION,
+  FIELD_STAFF_TASK_NAV_ITEMS,
+  fieldStaffTaskNavigationItem,
+  resolveFieldStaffTaskEntry,
+  type FieldStaffTaskDestinationId,
+} from "../../../shell/ux/field-staff-task-navigation";
+import type { ShellPrimaryNavigationId } from "../../../shell/ux/primary-navigation";
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
 import styles from "./ScaffoldShell.module.scss";
-import { escape } from "@microsoft/sp-lodash-subset";
-import * as strings from "ScaffoldShellWebPartStrings";
 
-export default class ScaffoldShell extends React.Component<IScaffoldShellProps> {
+type ScaffoldShellState = Readonly<{
+  taskDestination: FieldStaffTaskDestinationId;
+  shellDestination: ShellPrimaryNavigationId;
+}>;
+
+/**
+ * FIELD_STAFF product entry for SBS-ROLE-TASK-FIRST-IA-IMPL-SLICE-1.
+ * D-* is the product Destination identity. overview/users remains a temporary
+ * legacy shell adapter until later role slices can retire SHELL-UX-7 safely.
+ */
+export default class ScaffoldShell extends React.Component<IScaffoldShellProps, ScaffoldShellState> {
+  public state: ScaffoldShellState = {
+    taskDestination: FIELD_STAFF_DEFAULT_TASK_DESTINATION,
+    shellDestination: fieldStaffTaskNavigationItem(FIELD_STAFF_DEFAULT_TASK_DESTINATION)
+      .shellDestination,
+  };
+
+  private readonly handleTaskDestinationChange = (
+    taskDestination: FieldStaffTaskDestinationId,
+  ): void => {
+    const entry = resolveFieldStaffTaskEntry(taskDestination, false);
+    this.setState({
+      taskDestination: entry.destination,
+      shellDestination: entry.shellDestination,
+    });
+  };
+
+  private readonly handleShellDestinationChange = (shellDestination: ShellPrimaryNavigationId): void => {
+    this.setState((current) => {
+      if (shellDestination === "overview") {
+        return {
+          taskDestination: "D-TODAY",
+          shellDestination,
+        };
+      }
+      if (shellDestination === "users" && current.taskDestination === "D-TODAY") {
+        return {
+          taskDestination: "D-PROCEDURE",
+          shellDestination,
+        };
+      }
+      return {
+        ...current,
+        shellDestination,
+      };
+    });
+  };
+
   public render(): React.ReactElement<IScaffoldShellProps> {
     const {
-      description,
-      environmentMessage,
       userDisplayName,
       demoMode,
       siteSelection,
@@ -19,6 +70,8 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
       errorCode,
       partialRetrieval,
     } = this.props;
+    const { taskDestination, shellDestination } = this.state;
+    const activeTask = fieldStaffTaskNavigationItem(taskDestination);
 
     return (
       <AppShellChrome
@@ -30,20 +83,36 @@ export default class ScaffoldShell extends React.Component<IScaffoldShellProps> 
         errorCode={errorCode}
         userDisplayName={userDisplayName}
         partialRetrieval={partialRetrieval}
+        selectedDestination={shellDestination}
+        onSelectedDestinationChange={this.handleShellDestinationChange}
+        presentationRole="FIELD_STAFF"
       >
-        <section className={styles.scaffoldShell} data-shell-ux="shell-body">
-          {/*
-            DADS-UX-1 / INV-19: host chrome must not use heading elements.
-            Destination screens own h1/h2; this is presentation-only status copy.
-          */}
-          <p className={styles.bodyTitle} data-shell-ux="shell-host-status">
-            {strings.ShellReadyTitle}
+        <section
+          className={styles.scaffoldShell}
+          data-role-task-ia="FIELD_STAFF"
+          data-role-task-destination={taskDestination}
+        >
+          <nav className={styles.taskNavigation} aria-label="現場職員の業務ナビゲーション">
+            {FIELD_STAFF_TASK_NAV_ITEMS.map((item) => {
+              const selected = item.id === taskDestination;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={selected ? styles.taskButtonSelected : styles.taskButton}
+                  data-role-task-nav={item.id}
+                  data-role-task-selected={selected ? "true" : "false"}
+                  aria-current={selected ? "page" : undefined}
+                  onClick={() => this.handleTaskDestinationChange(item.id)}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+          <p className={styles.contextHint} data-role-task-context-hint={taskDestination}>
+            {activeTask.contextHint}
           </p>
-          <p className={styles.bodyCopy}>{strings.ShellReadyDescription}</p>
-          <p className={styles.bodyMeta}>
-            {strings.PropertyValueLabel} <strong>{escape(description)}</strong>
-          </p>
-          <p className={styles.bodyMeta}>{escape(environmentMessage)}</p>
         </section>
       </AppShellChrome>
     );
