@@ -26,8 +26,10 @@ Disposition authority:
 CURRENT GATE:
   Docs PR #618 = MERGED @ 6543e913
   Docs PR #620 = MERGED @ a444cba7
-  Docs PR #621 = MERGED @ 5b115bb2 (head 70a374ff)
-  Docs PR #622 Human Ready GO = AWAITING
+  Docs PR #621 = MERGED @ 5b115bb2
+  Docs PR #622 Human Ready GO = RECEIVED / CONSUMED
+  Docs PR #622 Ready transition = COMPLETE
+  Docs PR #622 Human Merge GO = AWAITING
 Ready / Merge of later docs PRs: NOT AUTHORIZED until per-PR Human GO
 ```
 
@@ -105,15 +107,17 @@ Historical snapshot language (Issue Close AWAITING) preserved
 #620 Merge GO     = CONSUMED / MERGED @ a444cba7
 #621 Ready GO     = CONSUMED / Ready COMPLETE
 #621 Merge GO     = CONSUMED / MERGED @ 5b115bb2
-#622 Ready/Merge  = AWAITING Human Ready GO
+#622 Ready GO     = CONSUMED / Ready COMPLETE (head cb3180d5)
+#622 Merge GO     = AWAITING
 Canonical COMPLETE / ARCHIVED = NOT YET
 #623 final handle = AFTER four land
 ```
 
 ```text
-NEXT = Docs PR #622 Human Ready GO
-STOP = no Ready/Merge of #622 without per-PR Human GO
+NEXT = Docs PR #622 Human Merge GO
+STOP = no Merge of #622 without Human Merge GO
      = no Deploy / LIVE WRITE
      = no Product reopen
      = no merge of #619 / #617 / #623 in minimum path
+     = no COMPLETE / ARCHIVED claim before #622 MERGED
 ```
