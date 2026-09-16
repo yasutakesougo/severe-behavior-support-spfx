@@ -97,6 +97,9 @@ export default class ScaffoldShell extends React.Component<
           data-role-task-ia="FIELD_STAFF"
           data-role-task-destination={taskDestination}
         >
+          <p className={styles.taskHeading} role="heading" aria-level={1}>
+            今日の支援
+          </p>
           <nav className={styles.taskNavigation} aria-label="現場職員の業務ナビゲーション">
             {FIELD_STAFF_TASK_NAV_ITEMS.map((item) => {
               const selected = item.id === taskDestination;
