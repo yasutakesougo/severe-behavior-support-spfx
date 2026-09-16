@@ -90,10 +90,7 @@ fs.writeFileSync(
 const server = http.createServer((request, response) => {
   const url = new URL(request.url ?? "/", "http://127.0.0.1");
   const relativePath = url.pathname === "/" ? "/index.html" : url.pathname;
-  const filePath = path.join(
-    __dirname,
-    path.normalize(relativePath).replace(/^(\.\.[/\\])+/, ""),
-  );
+  const filePath = path.join(__dirname, path.normalize(relativePath).replace(/^(\.\.[/\\])+/, ""));
   fs.readFile(filePath, (error, data) => {
     if (error) {
       response.writeHead(404).end("not found");
@@ -134,7 +131,9 @@ async function inspectProductState(page) {
     const siteSelector = document.querySelector('[data-shell-ux="site-selector"]');
     const roleHint = document.querySelector('[data-shell-ux="presentation-role-hint"]');
     const overviewHeading = document.querySelector('[data-dashboard-ux="overview-heading"]');
-    const taskHeading = document.querySelector('[data-role-task-ia="FIELD_STAFF"] [role="heading"]');
+    const taskHeading = document.querySelector(
+      '[data-role-task-ia="FIELD_STAFF"] [role="heading"]',
+    );
     const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
     const text = document.body.textContent ?? "";
     return {
@@ -152,7 +151,9 @@ async function inspectProductState(page) {
       overviewHeadingDisplay: overviewHeading
         ? window.getComputedStyle(overviewHeading).display
         : "missing",
-      hasRecordSearchGlobal: Boolean(document.querySelector('[data-role-task-nav="D-FIND-RECORD"]')),
+      hasRecordSearchGlobal: Boolean(
+        document.querySelector('[data-role-task-nav="D-FIND-RECORD"]'),
+      ),
       hasHostStatusCopy: text.includes("シェル表示の準備ができました"),
       noHorizontalOverflow:
         document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
@@ -198,7 +199,13 @@ async function capture(name, page) {
     !state.hasHostStatusCopy &&
     state.noHorizontalOverflow &&
     pageErrors.length === 0;
-  results.push({ name: "first-paint-desktop", pass, state, pageErrors, shot: await capture("first-paint-desktop", page) });
+  results.push({
+    name: "first-paint-desktop",
+    pass,
+    state,
+    pageErrors,
+    shot: await capture("first-paint-desktop", page),
+  });
   await page.close();
 }
 
@@ -225,7 +232,13 @@ for (const [destination, expectedShell] of [
     state.shellDestination === expectedShell &&
     state.selectedUser === "none" &&
     pageErrors.length === 0;
-  results.push({ name: destination, pass, state, pageErrors, shot: await capture(destination, page) });
+  results.push({
+    name: destination,
+    pass,
+    state,
+    pageErrors,
+    shot: await capture(destination, page),
+  });
   await page.close();
 }
 
