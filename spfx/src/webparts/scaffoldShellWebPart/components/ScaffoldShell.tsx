@@ -27,8 +27,8 @@ export default class ScaffoldShell extends React.Component<
 > {
   public state: ScaffoldShellState = {
     taskDestination: FIELD_STAFF_DEFAULT_TASK_DESTINATION,
-    shellDestination:
-      fieldStaffTaskNavigationItem(FIELD_STAFF_DEFAULT_TASK_DESTINATION).shellDestination,
+    shellDestination: fieldStaffTaskNavigationItem(FIELD_STAFF_DEFAULT_TASK_DESTINATION)
+      .shellDestination,
   };
 
   private readonly taskEntryRef = React.createRef<HTMLElement>();
