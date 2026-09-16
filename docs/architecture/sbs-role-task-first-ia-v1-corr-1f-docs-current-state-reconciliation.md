@@ -1,6 +1,6 @@
 # SBS-ROLE-TASK-FIRST-IA-V1 — CORR-1F Docs-only Current-State Reconciliation
 
-Docs-only Current-State Reconciliation after Product lane CLOSED.  
+Docs-only Current-State Reconciliation after Product lane CLOSED.
 Does **not** Ready / Merge / Deploy. Does **not** reopen Product work.
 
 ```text
