@@ -25,6 +25,11 @@
   color: var(--bodyText);
 }
 
+.bodyTitle {
+  /* INV-19 / A11Y-HD-01 host-status marker; not shown in Task-First FIELD_STAFF entry. */
+  display: none;
+}
+
 .taskHeading {
   margin: 0 0 sbs.$space-3;
   color: sbs.$color-text-primary;

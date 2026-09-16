@@ -130,6 +130,12 @@ export default class ScaffoldShell extends React.Component<
           data-role-task-ia="FIELD_STAFF"
           data-role-task-destination={taskDestination}
         >
+          {/*
+            DADS-UX-1 / INV-19: host chrome must remain non-heading.
+            Task-First owns product heading semantics; keep the host-status
+            marker without restoring legacy ShellReady copy (smoke forbids it).
+          */}
+          <p className={styles.bodyTitle} data-shell-ux="shell-host-status" hidden={true} />
           <p className={styles.taskHeading} role="heading" aria-level={1}>
             今日の支援
           </p>
