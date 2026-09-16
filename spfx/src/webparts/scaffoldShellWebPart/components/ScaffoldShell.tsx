@@ -26,7 +26,10 @@ type ScaffoldShellState = Readonly<{
  * CORR-1F FIELD_STAFF product entry. D-* Destination identity is owned here;
  * AppShellChrome remains an unchanged legacy adapter host per Scope §3.2.
  */
-export default class ScaffoldShell extends React.Component<IScaffoldShellProps, ScaffoldShellState> {
+export default class ScaffoldShell extends React.Component<
+  IScaffoldShellProps,
+  ScaffoldShellState
+> {
   public state: ScaffoldShellState = {
     activeGlobalId: "GLOBAL-TODAY",
     taskDestination: FIELD_STAFF_DEFAULT_TASK_DESTINATION,

@@ -1,11 +1,7 @@
 import type { ShellPrimaryNavigationId } from "./primary-navigation";
 
 export type FieldStaffTaskDestinationId =
-  | "D-TODAY"
-  | "D-PROCEDURE"
-  | "D-RECORD-WRITE"
-  | "D-UNRECORDED"
-  | "D-FIND-PERSON";
+  "D-TODAY" | "D-PROCEDURE" | "D-RECORD-WRITE" | "D-UNRECORDED" | "D-FIND-PERSON";
 
 export type FieldStaffTaskGlobalId =
   | "GLOBAL-TODAY"

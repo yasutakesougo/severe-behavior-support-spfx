@@ -11,7 +11,8 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const spfxRoot = path.join(__dirname, "../..");
 const artifactsDir =
-  process.env.SBS_ROLE_TASK_IA_ARTIFACTS_DIR ?? "/opt/cursor/artifacts/sbs-role-task-first-ia-1-browser-smoke";
+  process.env.SBS_ROLE_TASK_IA_ARTIFACTS_DIR ??
+  "/opt/cursor/artifacts/sbs-role-task-first-ia-1-browser-smoke";
 fs.mkdirSync(artifactsDir, { recursive: true });
 
 const esbuildModule = await import(
@@ -122,9 +123,9 @@ async function inspectProductState(page) {
   return page.evaluate(() => {
     const taskRoot = document.querySelector('[data-role-task-ia="FIELD_STAFF"]');
     const selected = document.querySelector('[data-role-task-selected="true"]');
-    const labels = [
-      ...document.querySelectorAll('nav [data-role-task-global]'),
-    ].map((element) => element.textContent?.trim() ?? "");
+    const labels = [...document.querySelectorAll("nav [data-role-task-global]")].map(
+      (element) => element.textContent?.trim() ?? "",
+    );
     const legacyNav = document.querySelector('[data-shell-ux="primary-navigation"]');
     const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
     const text = document.body.textContent ?? "";
@@ -143,7 +144,8 @@ async function inspectProductState(page) {
         document.querySelector('[data-role-task-nav="D-FIND-RECORD"]'),
       ),
       hasHostStatusCopy: text.includes("シェル表示の準備ができました"),
-      orientationCopy: document.querySelector('[data-role-task-orientation="今どこ"]')?.textContent ?? "",
+      orientationCopy:
+        document.querySelector('[data-role-task-orientation="今どこ"]')?.textContent ?? "",
       noHorizontalOverflow:
         document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
     };
@@ -221,7 +223,10 @@ async function capture(name, page) {
 }
 
 {
-  const { page, pageErrors } = await openPage("record-write-fallback", { width: 1280, height: 900 });
+  const { page, pageErrors } = await openPage("record-write-fallback", {
+    width: 1280,
+    height: 900,
+  });
   await page.click('[data-role-task-global="GLOBAL-RECORD-WRITE"]');
   await page.waitForSelector('[data-demo-ux="users-list"]');
   await page.waitForFunction(
@@ -261,7 +266,13 @@ async function capture(name, page) {
     state.taskDestination === "D-FIND-PERSON" &&
     !state.hasRecordSearchGlobal &&
     pageErrors.length === 0;
-  results.push({ name: "find-person", pass, state, pageErrors, shot: await capture("find-person", page) });
+  results.push({
+    name: "find-person",
+    pass,
+    state,
+    pageErrors,
+    shot: await capture("find-person", page),
+  });
   await page.close();
 }
 
@@ -280,7 +291,13 @@ async function capture(name, page) {
     state.taskDestination === "D-UNRECORDED" &&
     state.selectedGlobal === "GLOBAL-UNRECORDED" &&
     pageErrors.length === 0;
-  results.push({ name: "unrecorded", pass, state, pageErrors, shot: await capture("unrecorded", page) });
+  results.push({
+    name: "unrecorded",
+    pass,
+    state,
+    pageErrors,
+    shot: await capture("unrecorded", page),
+  });
   await page.close();
 }
 

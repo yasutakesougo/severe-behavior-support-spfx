@@ -43,9 +43,7 @@ describe("CORR-1F FIELD_STAFF task navigation", () => {
 
   it("AC-1F-3: falls back 手順 without object to D-TODAY acquisition", () => {
     expect(resolveFieldStaffGlobalDestination("GLOBAL-PROCEDURE", missingContext)).toBe("D-TODAY");
-    expect(
-      resolveFieldStaffTaskSelection("GLOBAL-PROCEDURE", missingContext),
-    ).toMatchObject({
+    expect(resolveFieldStaffTaskSelection("GLOBAL-PROCEDURE", missingContext)).toMatchObject({
       destination: "D-TODAY",
       shellDestination: "overview",
       usedFallback: true,
@@ -59,9 +57,7 @@ describe("CORR-1F FIELD_STAFF task navigation", () => {
     expect(resolveFieldStaffGlobalDestination("GLOBAL-RECORD-WRITE", missingContext)).toBe(
       "D-UNRECORDED",
     );
-    expect(
-      resolveFieldStaffTaskSelection("GLOBAL-RECORD-WRITE", missingContext),
-    ).toMatchObject({
+    expect(resolveFieldStaffTaskSelection("GLOBAL-RECORD-WRITE", missingContext)).toMatchObject({
       destination: "D-UNRECORDED",
       shellDestination: "users",
       usedFallback: true,
@@ -81,9 +77,9 @@ describe("CORR-1F FIELD_STAFF task navigation", () => {
     expect(FIELD_STAFF_DEFAULT_TASK_DESTINATION).toBe("D-TODAY");
     expect(FIELD_STAFF_HOME_DESTINATION).toBe("D-TODAY");
     expect(locationHeadingForFieldStaffDestination("D-TODAY")).toBe("今日の支援");
-    expect(
-      resolveFieldStaffTaskSelection("GLOBAL-TODAY", missingContext).destination,
-    ).toBe("D-TODAY");
+    expect(resolveFieldStaffTaskSelection("GLOBAL-TODAY", missingContext).destination).toBe(
+      "D-TODAY",
+    );
   });
 
   it("uses overview adapter only for D-TODAY and users adapter for other destinations", () => {
