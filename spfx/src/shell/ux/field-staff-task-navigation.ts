@@ -63,7 +63,9 @@ export const FIELD_STAFF_DEFAULT_TASK_DESTINATION: FieldStaffTaskDestinationId =
 export const fieldStaffTaskNavigationItem = (
   destination: FieldStaffTaskDestinationId,
 ): FieldStaffTaskNavigationItem => {
-  const item = FIELD_STAFF_TASK_NAV_ITEMS.find((candidate) => candidate.id === destination);
+  const item = FIELD_STAFF_TASK_NAV_ITEMS.find(
+    (candidate) => candidate.id === destination,
+  );
   if (!item) {
     throw new Error(`Unknown FIELD_STAFF task destination: ${destination}`);
   }
