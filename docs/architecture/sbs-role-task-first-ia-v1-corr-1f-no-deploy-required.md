@@ -1,6 +1,6 @@
 # SBS-ROLE-TASK-FIRST-IA-V1 — CORR-1F NO DEPLOY REQUIRED + Issue Close Eligibility Frame
 
-Boundary fixation after Post-Merge / Pre-Deploy Readback.  
+Boundary fixation after Post-Merge / Pre-Deploy Readback.
 Cuts the Merge → Deploy lane for Correction-1F (Scope §7 OUT).
 
 ```text

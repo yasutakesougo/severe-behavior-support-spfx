@@ -1,6 +1,6 @@
 # SBS-ROLE-TASK-FIRST-IA-V1 — CORR-1F Post-Merge / Pre-Deploy Readback
 
-Post-Merge / Pre-Deploy Readback against `main` after Product PR #616 Merge.  
+Post-Merge / Pre-Deploy Readback against `main` after Product PR #616 Merge.
 This is **not** a Deploy GO and does **not** authorize App Catalog / LIVE WRITE / Issue close.
 
 ```text
@@ -29,7 +29,7 @@ Product / tenant mutation by this document: 0
 
 Independent Implementation Review PASS ≠ Human Task Acceptance PASS ≠ Ready ≠ Merge ≠ Deploy.
 
-Companion fixation (Merge→Deploy lane cut):  
+Companion fixation (Merge→Deploy lane cut):
 `docs/architecture/sbs-role-task-first-ia-v1-corr-1f-no-deploy-required.md`
 
 ---
