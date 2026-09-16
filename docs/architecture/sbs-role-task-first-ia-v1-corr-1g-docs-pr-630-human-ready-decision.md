@@ -133,10 +133,24 @@ Merge of #630 (separate Human GO) is the landing path
 ## Post-Ready observation
 
 ```text
-status: PENDING until draft=false readback
+status: CONFIRMED (2026-09-16)
+isDraft: false
+state: open
+Ready transition: COMPLETE
+headRefOid at Ready transition: 5b145407a988615ae96270e941981ca570cbc3e9
 Ready Decision commit: 6d00f441984e987e44dc5d4485cb66a66ef6b340
+base SHA: 40659c5b459548cc59803562122fdffd77fc0a23
 CI @ pre-Ready cb22be89: GREEN (3/3 SUCCESS)
+  B12 Browser Smoke SUCCESS
+  Contracts/skills/scope SUCCESS
+  SPFx production artifact SUCCESS
+head unchanged vs packet/Lock/Scope blobs: YES
+  packet 9718231d93c572b93cefcd2a54bb8234c3407941
+  Lock   2577a5f1b03d6355318c83b8f29b070a051752fe
+  Scope  83e9a9e6b0d724038f830ea5e6b4c8e6ce732592
 Human Merge GO: still NOT AUTHORIZED
+Implementation Start: still NOT AUTHORIZED
+H-9 on origin/main: still HOLD
 ```
 
 ---
