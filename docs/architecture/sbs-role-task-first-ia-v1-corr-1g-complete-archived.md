@@ -95,4 +95,54 @@ Deploy judgment = separate / NOT AUTHORIZED
 NEXT Deploy judgment = Human-only / not this record
 NEXT closeout of #448 / #392 = NOT CORR-1G
 CORR-1G GitHub Issue Close = NOT APPLICABLE
+Do not reopen CORR-1G. New work = a separate unit.
+```
+
+---
+
+## Frozen state (normative as of 2026-09-16)
+
+Human froze CORR-1G closeout as follows. Agent STOP. Do not reopen CORR-1G.
+
+```text
+SBS-ROLE-TASK-FIRST-IA-V1 / CORR-1G
+Issue Identity Recovery GO
+= RECEIVED / CONSUMED
+Recovery Verdict
+= B
+Standalone CORR-1G Issue
+= NOT IDENTIFIED / CONFIRMED
+GitHub Issue Close
+= NOT APPLICABLE
+= NOT EXECUTED
+Product Merge
+= COMPLETE / CONFIRMED
+= PR #631 MERGED / CLOSED
+CORR-1G
+= COMPLETE / ARCHIVED
+```
+
+```text
+Issue identity recovery
+= docs/architecture/sbs-role-task-first-ia-v1-corr-1g-issue-identity-recovery.md
+Complete / archived record
+= docs/architecture/sbs-role-task-first-ia-v1-corr-1g-complete-archived.md
+```
+
+```text
+#448
+= KEEP OPEN
+#392
+= KEEP OPEN
+Issue mutation
+= NONE
+PR #631 mutation
+= NONE
+Deploy judgment
+= SEPARATE
+= NOT AUTHORIZED
+LIVE WRITE
+= NOT AUTHORIZED
+Agent
+= STOP
 ```
