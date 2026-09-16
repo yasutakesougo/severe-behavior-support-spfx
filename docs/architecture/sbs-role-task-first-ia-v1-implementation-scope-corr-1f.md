@@ -7,7 +7,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 workstream: SBS-ROLE-TASK-FIRST-IA-V1
 unit: CORR-1F
 kind: implementation scope scout / exact scope definition
-status: COMPLETE / AWAITING FRESH INDEPENDENT SCOPE REVIEW
+status: COMPLETE / INDEPENDENT SCOPE REVIEW-1 PASS
 parent definition: Correction-2 Complete Controlled Packet
 parent path: docs/architecture/sbs-role-task-first-ia-v1-correction-2-complete-controlled-packet.md
 parent blob: 5eeb8140772ebfefe050cff93361a6d81c470f81
@@ -303,16 +303,14 @@ Names are placeholders. Each tranche requires its own Exact Scope Definition and
 Fresh Independent Definition Re-Review-2 = PASS / REVIEW-CLEARED / CONSUMED
 Human Definition Lock GO = RECEIVED / CONSUMED
 Implementation Scope Scout / Exact Scope (CORR-1F) = COMPLETE (this document)
-Independent Scope Review = REQUIRED / NOT STARTED
+Independent Scope Review = PASS / REVIEW-CLEARED / CONSUMED
+  record: docs/architecture/sbs-role-task-first-ia-v1-implementation-scope-corr-1f-independent-scope-review-1.md
 Human Correction Implementation GO = NOT RECEIVED
 Product mutation = NOT AUTHORIZED
 ```
 
 ```text
-ALLOWED NEXT (docs-only until Scope Review PASS):
-  Fresh Independent Scope Review against this document
-
-ALLOWED NEXT (after Scope Review PASS + durable Definition lineage bind + Human Correction Implementation GO):
+ALLOWED NEXT (after durable Definition lineage bind + Human Correction Implementation GO):
   CORR-1F Product implementation within §3–§6 only
 
 NOT AUTHORIZED:
@@ -384,6 +382,6 @@ Passing AC-1F-1..11 therefore proves the CORR-1F tranche only. It must not be re
 Human Correction Implementation GO = NOT RECEIVED
 Implementation Start = NOT AUTHORIZED
 Product mutation = NOT AUTHORIZED
-NEXT = Fresh Independent Implementation Scope Review against this exact scope document
+NEXT = durable Definition lineage bind (§15 / H-9) + Human Correction Implementation GO
 STOP = no Product implementation; no Human Correction Implementation GO consumption
 ```
