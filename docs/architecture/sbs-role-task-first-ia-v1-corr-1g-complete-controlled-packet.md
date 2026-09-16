@@ -290,6 +290,7 @@ Global 今日 → D-TODAY (object sticky true unless a release row also occurs)
 Back from D-PROCEDURE to D-TODAY or D-PERSON
 Back from D-RECORD-WRITE that does not drop the object
 Viewing the D-TODAY list while sticky true
+D-PERSON open without current occurrence is NOT in this list; it is a §2.4 RELEASE
 ```
 
 Occurrence-context, if true, becomes false when object becomes false (§3.4 coupling).
