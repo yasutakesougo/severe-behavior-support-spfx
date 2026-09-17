@@ -476,4 +476,3 @@ note: Draft N+1 on current main; DEMO-1 flags are not capability authority
 
 This runner re-bind does not authorize running the Full Acceptance suite.
 `SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
-
