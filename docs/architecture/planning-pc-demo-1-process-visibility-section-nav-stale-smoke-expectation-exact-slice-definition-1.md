@@ -226,7 +226,9 @@ moves to the already-shipped PROCESS-VISIBILITY PLANNER process-nav target.
 - No Deploy / Production Binding / LIVE WRITE / SharePoint / M365 / Entra.
 - Recorded SP-LC-6 Full Acceptance results (historical §11 and re-execution §16)
   are not retroactively rewritten by this slice. Any future Full Acceptance
-  PRECHECK / re-execution requires a separate Human GO after Ready / Merge.
+  PRECHECK requires a separate Human Full Acceptance PRECHECK GO after Ready /
+  Merge (lock: `sp-lc-6-full-acceptance-precheck-gate-separation-1.md`).
+  Acceptance Execution remains a later, separate Human GO.
 
 ## 6. Explicit OUT
 
@@ -236,10 +238,11 @@ domain / fixture / schema changes (except optional minimum hygiene IF needed)
 Other smoke runners
 Acceptance runner / Full Acceptance contract-test mutation
 historical Full Acceptance GAP_FOUND rewrite
-Full Acceptance re-execution / PRECHECK without separate Human GO
+Full Acceptance re-execution without separate Acceptance Execution GO
+Full Acceptance PRECHECK without separate Full Acceptance PRECHECK GO
 AC-4 / AC-7 reopen or remediation
 AC-9 acceptance-layer rewrite (AC-9 may clear after planning-pc PASS on a
-  later Full Acceptance PRECHECK; that PRECHECK is a separate gate)
+  later Full Acceptance PRECHECK; that PRECHECK is a separate PRECHECK GO gate)
 Issue #445 comment / label / close / reopen
 Ready / Merge automation
 Deploy / App Catalog / Production Binding
@@ -318,11 +321,15 @@ Then (separate gates; do not collapse):
   correction (authorized by this GO)
   ↓ Fresh Independent Implementation Review
   ↓ Ready / Merge
-  ↓ Full Acceptance PRECHECK again
+  ↓ Full Acceptance PRECHECK GO (separate; new GO required)
+      lock: docs/architecture/sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+  ↓ Full Acceptance PRECHECK execution (only after PRECHECK GO)
+  ↓ separate Acceptance Execution GO (later; not automatic)
 
 Still forbidden without separate Human GO:
   product / domain / fixture / schema mutation
-  Acceptance re-execution / Full Acceptance PRECHECK
+  Full Acceptance PRECHECK (including free READ ONLY framing)
+  Acceptance Execution / Full Acceptance re-run
   Issue mutation / Close
   Ready / Merge
   Deploy / Production Binding / LIVE WRITE

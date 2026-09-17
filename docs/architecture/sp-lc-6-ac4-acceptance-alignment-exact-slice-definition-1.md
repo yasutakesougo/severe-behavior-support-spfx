@@ -353,9 +353,12 @@ definition:
   retroactively rewritten.
 - Full Acceptance re-execution remains **NOT AUTHORIZED** without a separate
   Human Acceptance Execution GO.
+- Full Acceptance PRECHECK remains **NOT AUTHORIZED** without a separate
+  Human Full Acceptance PRECHECK GO
+  (`sp-lc-6-full-acceptance-precheck-gate-separation-1.md`).
 - Local AC-4 runner checkpoint may flip to the aligned PASS condition as slice
-  evidence; that is **not** Full Acceptance re-execution and does **not** close
-  `#445`.
+  evidence; that is **not** Full Acceptance PRECHECK / re-execution and does
+  **not** close `#445`.
 
 ## 7. Explicit OUT / MUST NOT
 
@@ -500,16 +503,34 @@ Await: merge execution of PR #660 then confirm on origin/main
 3. Human Implementation Start GO                              CONSUMED
 4. Implementation (AC-4 runner + evidence §15)                COMPLETE
 5. Human Ready GO (PR #660 / exact HEAD db79ec8d)             CONSUMED
-6. Human Merge GO (PR #660)                                   CONSUMED ← THIS
-7. Optional: Full Acceptance Re-Execution Preflight again     NOT YET
-8. Separate Human Acceptance Execution GO                     NOT YET
-9. #445 Close                                                 NOT YET
+6. Human Merge GO (PR #660)                                   CONSUMED
+7. Full Acceptance PRECHECK GO (separate; new GO required)    CONSUMED
+     lock: sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+     GO: sbs-445-sp-lc-6-full-acceptance-precheck-go-1.md
+     bind: 4def6b8f564ffc80cb3122dd339f6f1509517554
+8. Full Acceptance PRECHECK execution                         PASS
+     verdict: sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
+9. Separate Human Acceptance Execution GO                     CONSUMED
+     GO: sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
+     overallResult PASS (evidence §16)
+10. Fresh Independent Acceptance Review 2                     REVIEW-CLEARED
+11. Human Acceptance disposition                              CONSUMED
+      value: ACCEPT PASS + REVIEW-CLEARED
+      docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
+12. #445 Close GO                                             CONSUMED / AUTHORIZED / EXECUTED
+      docs/architecture/sbs-445-human-close-go-1.md
+13. Post-close live verification                              COMPLETE
+      docs/architecture/sbs-445-close-execution-result-1.md
+      Issue #445 = CLOSED / completed
+14. Fresh Independent Closeout Review                         NOT YET
+15. PR #663 Ready / Merge                                     NOT CONSUMED
 ```
 
 ```text
 Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
 Human Ready ≠ Human Merge
-Human Merge ≠ Full Acceptance re-run
+Human Merge ≠ Full Acceptance PRECHECK GO
+Full Acceptance PRECHECK GO ≠ Acceptance Execution GO
 Full Acceptance local AC-4 PASS ≠ #445 Close
 ```

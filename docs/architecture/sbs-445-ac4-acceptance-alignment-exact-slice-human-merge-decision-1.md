@@ -163,12 +163,29 @@ merge method: merge commit
 ```text
 1. Merge #660 ← THIS GO
 2. Confirm AC-4 acceptance alignment on origin/main
-3. Optional: Full Acceptance Re-Execution Preflight (separate)
-4. Full Acceptance / Acceptance Execution GO / #445 Close /
-   LIVE WRITE / Deploy remain NOT YET without explicit Human GO
+3. Full Acceptance PRECHECK GO (separate gate)                CONSUMED
+     bind: 4def6b8f564ffc80cb3122dd339f6f1509517554
+4. Full Acceptance PRECHECK execution                         PASS
+5. Acceptance Execution GO @ 4def6b8f…                        CONSUMED / PASS
+     docs/architecture/sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
+     evidence §16 overallResult PASS
+6. Fresh Independent Acceptance Review 2                      REVIEW-CLEARED
+7. Human Acceptance disposition                               CONSUMED
+     value: ACCEPT PASS + REVIEW-CLEARED
+     docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
+8. #445 Close GO                                              CONSUMED / AUTHORIZED / EXECUTED
+9. Post-close live verification                               COMPLETE
+     docs/architecture/sbs-445-close-execution-result-1.md
+     Issue #445 = CLOSED / completed
+10. Fresh Independent Closeout Review                         NOT YET
+11. PR #663 Ready / Merge                                     NOT CONSUMED
+12. LIVE WRITE / Deploy remain NOT YET without explicit Human GO
 ```
 
 ```text
-Human Merge ≠ Full Acceptance re-run
-Full Acceptance ≠ #445 Close
+Human Merge ≠ Full Acceptance PRECHECK GO
+Full Acceptance PRECHECK GO ≠ Acceptance Execution GO
+Acceptance Execution PASS ≠ Human Acceptance disposition
+Human Acceptance disposition ≠ #445 Close GO
+PR #663 CI ≠ Close GO
 ```

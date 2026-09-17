@@ -79,8 +79,9 @@ npm run gate-packet:read -- 552
 - `CONFIRMED` / `INTENDED` / `UNKNOWN` が区別されている
 - Human Ready と Human Merge が混同されていない
 - Decision Accepted と Implementation Start が混同されていない
+- Full Acceptance PRECHECK GO と Acceptance Execution GO が混同されていない
 - WAIT 対象が確認できない場合に `UNKNOWN` になっている（FALSE_WAIT 防止）
-- 明示 GO なしで merge / Ready / SharePoint mutation / Issue mutation を許可していない
+- 明示 GO なしで merge / Ready / SharePoint mutation / Issue mutation / Full Acceptance PRECHECK を許可していない
 - 出力が CURRENT / GATE / ALLOWED / FORBIDDEN / NEXT 形式である
 
 ## 停止条件
@@ -115,12 +116,20 @@ UNKNOWN → HOLD（進行判定）
 ```text
 Human Ready != Human Merge
 Decision Accepted != Implementation Start
+Full Acceptance PRECHECK GO != Acceptance Execution GO
+Full Acceptance PRECHECK != free READ ONLY / NO HUMAN GATE CONSUMPTION
+Human Acceptance disposition != #445 Close GO
+PR CI SUCCESS / overallResult PASS != automatic disposition or Close GO consumption
 INTENDED != CONFIRMED
 WAIT は待つ対象が実在すると確認できる場合のみ使用する
 確認できない場合は UNKNOWN
 ```
 
 Human Ready 判定材料が揃っていても、Ready 実行や Merge 実行は Human-only とする。
+
+Full Acceptance PRECHECK は別 Human GO を要する（正本: `docs/architecture/sp-lc-6-full-acceptance-precheck-gate-separation-1.md`）。PRECHECK GO なしの optional / free READ ONLY PRECHECK は FORBIDDEN。PRECHECK PASS でも Acceptance Execution GO は自動成立しない。
+
+Acceptance Execution PASS / Fresh Independent Acceptance Review / PR CI SUCCESS の後も、Human Acceptance disposition を先に確定し、`#445` Close GO は別 gate とする（正本: `docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md`）。CI は evidence であり、disposition / Close GO を自動消費しない。
 
 ## Mutation
 
@@ -136,7 +145,10 @@ Human-only の例:
 - Ready
 - Merge
 - Decision Acceptance
-- Issue mutation / close
+- Full Acceptance PRECHECK GO
+- Acceptance Execution GO
+- Human Acceptance disposition
+- Issue Close GO / Issue mutation / close
 - SharePoint / Microsoft 365 / Entra ID 変更
 - Deploy / 本番変更
 
@@ -187,7 +199,7 @@ PR: <number or none / UNKNOWN>
 Evidence: CONFIRMED | INTENDED | UNKNOWN | HOLD
 
 GATE
-HumanAction: <Ready | Merge | Implementation Start | Decision | none | UNKNOWN>
+HumanAction: <Ready | Merge | Implementation Start | Decision | Full Acceptance PRECHECK | Acceptance Execution | Acceptance disposition | Issue Close | none | UNKNOWN>
 
 ALLOWED
 - <read-only / explicitly permitted actions>

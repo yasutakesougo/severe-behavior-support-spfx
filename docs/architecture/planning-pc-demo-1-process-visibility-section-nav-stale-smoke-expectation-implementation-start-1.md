@@ -75,7 +75,10 @@ Deploy / LIVE WRITE / SharePoint / M365 / Entra
 correction (this GO)
 ↓ Fresh Independent Implementation Review
 ↓ Ready / Merge
-↓ then Full Acceptance PRECHECK again (separate Human GO)
+↓ Full Acceptance PRECHECK GO (separate gate; new GO required)
+  lock: docs/architecture/sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+↓ Full Acceptance PRECHECK execution (only after PRECHECK GO)
+↓ separate Acceptance Execution GO (later; not automatic)
 ```
 
 ```text

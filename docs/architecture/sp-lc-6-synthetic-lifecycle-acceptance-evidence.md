@@ -610,3 +610,109 @@ note: successful-empty ASSOCIATED [] on current main;
 
 This runner re-bind does not authorize running the Full Acceptance suite.
 `SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
+
+## 16. Full Acceptance Re-Execution result (main 4def6b8f…)
+
+```text
+Unit: SP-LC-6-FULL-ACCEPTANCE-RE-EXECUTION-ACCEPTANCE-EXECUTION-2
+Acceptance Execution GO: RECEIVED / CONSUMED / EXECUTED
+  docs/architecture/sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
+Prior Full Acceptance PRECHECK GO: CONSUMED / PASS
+  docs/architecture/sbs-445-sp-lc-6-full-acceptance-precheck-go-1.md
+  docs/architecture/sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
+exactMainSha / expectedMainSha / observedMainSha:
+  4def6b8f564ffc80cb3122dd339f6f1509517554
+shaMatch: true
+preflightState: PRECHECK_BASE_MATCH
+historical §11 GAP_FOUND tables: PRESERVED (not rewritten)
+Issue #445: KEEP OPEN (Close NOT AUTHORIZED by this section)
+LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED / NOT PERFORMED
+```
+
+### 16.1 Authority binding
+
+```text
+acceptanceExecutionAuthority:
+Human Acceptance Execution GO / SP-LC-6 Full Acceptance Re-Execution / main 4def6b8f564ffc80cb3122dd339f6f1509517554
+
+PRECHECK continuity:
+  Human Full Acceptance PRECHECK GO @ 4def6b8f… = PASS
+  PRECHECK GO ≠ Acceptance Execution GO (separate consumptions)
+```
+
+### 16.2 Checkpoint results (new execution)
+
+| Checkpoint | Result | Source |
+|---|---|---|
+| AC-1 | PASS | root-focused-acceptance / root-planning-graph |
+| AC-2 | PASS | root-focused-acceptance / root-planning-graph |
+| AC-3 | PASS | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-4 | PASS | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-5 | PASS | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-6 | PASS | root-focused-acceptance / planning-pc-demo-1-smoke |
+| AC-7 | PASS | root-focused-acceptance |
+| AC-8 | PASS | root-focused-acceptance / root-planning-graph / demo-ux-6-smoke |
+| AC-9 | PASS | root-focused-acceptance / planning-pc / demo-ux-6 / support-plan-review-new-version smokes |
+
+Overall result under locked precedence `ENVIRONMENT_BLOCKED > GAP_FOUND > PASS`:
+
+```text
+ENVIRONMENT_BLOCKED count: 0
+GAP_FOUND count: 0
+overallResult: PASS
+knownGaps: []
+```
+
+Machine-readable report:
+`/opt/cursor/artifacts/sp-lc-6-full-acceptance-reexec-4def6b8f-report.json`
+
+Summary:
+`/opt/cursor/artifacts/sp-lc-6-full-acceptance-reexec-4def6b8f-summary.json`
+
+### 16.3 Execution counts and smoke results
+
+| Execution | Result | Notes |
+|---|---|---|
+| root-focused-acceptance | PASS | 12 tests |
+| root-planning-graph | PASS | 25 tests |
+| spfx-heft | PASS | 470 successes / 0 failures (after `spfx npm ci` + `prepare:b2-build-basis` + `heft build`) |
+| planning-pc-demo-1-smoke | PASS | 5 of 5; prior stale section-nav residual cleared on tip |
+| demo-ux-6-smoke | PASS | 9 of 9 |
+| support-plan-review-new-version-demo-1-smoke | PASS | write-count telemetry present (=0) |
+
+### 16.4 Mutation boundary observations
+
+```text
+observedWriteCounts:
+  writeCount=0
+  mutationCount=0
+  liveWriteCount=0
+  sharePointWriteCount=0
+  (duplicated across smoke reports that expose telemetry)
+mutationAttempted: false
+liveWriteAuthorized: false
+```
+
+### 16.5 Relation to historical results
+
+```text
+§11 historical overallResult = GAP_FOUND: PRESERVED (immutable)
+§13 / §14 / §15 Exact Slice interpretations: PRESERVED
+This §16 is a NEW execution on main 4def6b8f… after:
+  #660 AC-4 acceptance alignment
+  #662 planning-pc PROCESS-VISIBILITY stale smoke Exact Slice
+  Full Acceptance PRECHECK GO PASS
+It does NOT rewrite historical tables.
+It does NOT by itself Close #445.
+```
+
+### 16.6 First-attempt environment note (non-residual)
+
+```text
+First runner attempt under this GO classified spfx-heft as GAP_FOUND
+because spfx/node_modules was empty (heft not found / status 127).
+That was local harness setup, not an acceptance-layer residual.
+After spfx npm ci + b2 basis prepare + heft build, re-run under the
+same Acceptance Execution GO produced overallResult = PASS.
+Recorded §16 checkpoints are from the successful re-run report.
+```
