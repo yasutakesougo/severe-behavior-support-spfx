@@ -14,7 +14,9 @@ Classification: B / STALE ACCEPTANCE / EVIDENCE GAP
 Definition APPROVE: RECEIVED / CONSUMED / LOCKED
   (separate speech-act; not granted by this classification lock)
   docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md
-Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
+Implementation Start GO: RECEIVED / CONSUMED
+  (separate speech-act; AC-7 acceptance alignment ONLY)
+  docs/architecture/sbs-445-ac7-exact-slice-implementation-start-1.md
 Acceptance contract rewrite: NOT AUTHORIZED / NOT PERFORMED
 Repository product mutation: HOLD / NOT PERFORMED
 Issue #445 Close / body mutation: NOT PERFORMED / NOT AUTHORIZED
@@ -85,7 +87,7 @@ NEXT
 | Additional product implementation need | **NOT ESTABLISHED** |
 | Historical Full Acceptance | **GAP_FOUND / PRESERVED** |
 | Exact Slice Definition APPROVE | **RECEIVED / CONSUMED / LOCKED** |
-| Alignment Implementation Start | **NOT CONSUMED** |
+| Alignment Implementation Start | **RECEIVED / CONSUMED** |
 | Acceptance contract / runner rewrite | **0 / HOLD** |
 | Product / SPFx / domain mutation | **0 / HOLD** |
 | `#445` | **OPEN / KEEP OPEN** |
@@ -129,20 +131,18 @@ persistence / LIVE WRITE / Deploy                  = NOT PERFORMED
 gh issue close 445                                 = NOT PERFORMED
 Ready / Merge                                      = NOT PERFORMED
 Exact Slice Definition APPROVE                     = CONSUMED (separate record)
-Alignment Implementation Start GO                  = NOT CONSUMED
+Alignment Implementation Start GO                  = CONSUMED (separate record)
 ```
 
 ## NEXT
 
 ```text
 Human:
-  separate Human Implementation Start GO
-  for AC-7 acceptance alignment ONLY
-  bound to APPROVED
-    docs/architecture/sp-lc-6-ac7-acceptance-alignment-exact-slice-definition-1.md
+  Fresh Independent Implementation Review
+  then separate Human Ready / Merge GO
 OR STOP
 
-Do not treat this classification lock as Implementation Start.
-Do not rewrite acceptance contracts from this lock alone.
-Do not treat this docs consumption as #445 Close authority.
+Do not treat this classification lock as Full Acceptance re-execution.
+Do not treat this classification lock as #445 Close authority.
+Do not authorize AC-7 product implementation from this lock.
 ```

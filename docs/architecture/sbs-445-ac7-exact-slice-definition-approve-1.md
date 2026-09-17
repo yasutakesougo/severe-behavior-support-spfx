@@ -12,7 +12,8 @@ Definition APPROVE: RECEIVED / CONSUMED / LOCKED
 Classification basis: B / STALE ACCEPTANCE / EVIDENCE GAP
   ACCEPTED / LOCKED / CONSUMED
   docs/architecture/sbs-445-ac7-exact-residual-classification-lock-1.md
-Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
+Implementation Start GO: RECEIVED / CONSUMED
+  docs/architecture/sbs-445-ac7-exact-slice-implementation-start-1.md
 Repository product mutation: NOT AUTHORIZED / NOT PERFORMED
 Issue #445 Close / body mutation: NOT PERFORMED / NOT AUTHORIZED
 Acceptance re-execution: NOT AUTHORIZED
@@ -83,13 +84,13 @@ for AC-7 acceptance alignment ONLY
 | Exact Slice Definition | **APPROVED / LOCKED** |
 | Definition APPROVE | **RECEIVED / CONSUMED** |
 | Classification B | **ACCEPTED / LOCKED / CONSUMED** (not reopened) |
-| Implementation Start | **NOT CONSUMED** |
+| Implementation Start | **RECEIVED / CONSUMED** (separate GO) |
 | Product / SPFx / domain mutation | **0 / NOT AUTHORIZED** |
-| Acceptance contract / runner rewrite | **0 / NOT AUTHORIZED** |
+| Acceptance contract / runner rewrite | **§5 three files only** (not Full Acceptance re-run) |
 | Historical Full Acceptance | **GAP_FOUND / PRESERVED** |
 | DEMO-1 `draftWorkflowAuthorized` | **false / PRESERVED** (DEMO-1 presentation-only) |
 | `#445` | **OPEN / KEEP OPEN** |
-| AC-7 residual | ACTIVE (alignment ready for separate Implementation Start GO) |
+| AC-7 residual | ACTIVE (alignment Implementation Start CONSUMED; review next) |
 | AC-9 | ACTIVE / OPEN / untouched |
 
 Updated definition header/Gate:
@@ -122,9 +123,10 @@ PRESERVE:
 ## Explicit non-actions
 
 ```text
-Implementation Start                          = NOT PERFORMED
+Implementation Start                          = CONSUMED (separate GO record)
 AC-7 product implementation                   = NOT PERFORMED
-Acceptance contract / runner rewrite          = NOT PERFORMED
+Acceptance contract / runner rewrite          = AUTHORIZED later by Implementation Start
+  (three acceptance-layer files only)
 historical GAP_FOUND / acceptance-report rewrite = NOT PERFORMED
 DEMO-1 draftWorkflowAuthorized / create-cta   = NOT PERFORMED
 AC-9 work                                     = NOT PERFORMED
@@ -136,11 +138,11 @@ Ready / Merge                                 = NOT PERFORMED
 ## NEXT
 
 ```text
-Await separate Human Implementation Start GO
-  for AC-7 acceptance alignment ONLY
-  bound to APPROVED AC-7 Exact Slice Definition §5–§7
+Human:
+  Fresh Independent Implementation Review
+  then separate Human Ready / Merge GO
 OR STOP
 
-Do not treat Definition APPROVE as Implementation Start.
+Do not treat Definition APPROVE as Full Acceptance re-execution.
 Do not treat this docs consumption as #445 Close authority.
 ```

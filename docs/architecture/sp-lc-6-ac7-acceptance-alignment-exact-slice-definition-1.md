@@ -36,10 +36,14 @@ Definition APPROVE: RECEIVED / LOCKED
   Basis: this document
   Scope: AC-7 acceptance alignment ONLY
   Consumption: docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md
-Human Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
-Acceptance contract rewrite: NOT AUTHORIZED
+Human Implementation Start GO: RECEIVED / CONSUMED
+  Human: AC-7 acceptance alignment ONLY に明示的に紐づく
+         別個の Human Implementation Start GO
+  ReceivedAt: 2026-09-17T06:29:00Z
+  Bound: approved §5–§7
+  Consumption: docs/architecture/sbs-445-ac7-exact-slice-implementation-start-1.md
+Acceptance contract rewrite: AUTHORIZED for §5 three files only
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
-  (Repository product mutation = NOT AUTHORIZED until separate Implementation Start GO)
 Issue #445 mutation / Close: NOT AUTHORIZED
 Ready / Merge: HOLD
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
@@ -73,8 +77,8 @@ claim Full Acceptance PASS, does not rewrite historical `GAP_FOUND`, and does
 not close `#445`.
 
 Human `Definition APPROVE` for this document is **RECEIVED / LOCKED /
-CONSUMED**. Alignment implementation remains a later, separate
-`Implementation Start GO`.
+CONSUMED**. Human `Implementation Start GO` for AC-7 acceptance
+alignment ONLY is **RECEIVED / CONSUMED** and is bound to §5–§7.
 
 ## 2. Authority / do not redecide
 
@@ -187,8 +191,8 @@ That executed result stays **PRESERVED**. This slice does not rewrite it.
 
 ### 4.1 AC-7 PASS meaning (normative for this slice)
 
-After a later Human Implementation Start GO binds this **APPROVED / LOCKED**
-definition, AC-7 PASS requires all of:
+After this consumed Human Implementation Start GO binds this **APPROVED /
+LOCKED** definition, AC-7 PASS requires all of:
 
 ```text
 1. Existing product/domain path executes new-version start
@@ -248,9 +252,8 @@ FORBIDDEN:
   closing #445 because AC-7 detector would locally PASS
 ```
 
-## 5. Changed-area candidate (future Implementation Start only)
+## 5. Changed-area (bound by consumed Implementation Start GO)
 
-Candidate paths only. This definition does **not** authorize mutation.
 Parent SP-LC-6 acceptance layer bound the implementation publication surface
 to these three files; alignment stays inside that envelope.
 
@@ -291,9 +294,9 @@ NOT candidates (explicit):
   Issue #445 body / Close / labels
 ```
 
-## 6. Acceptance criteria (bind targets for future Implementation Start GO)
+## 6. Acceptance criteria (bound by consumed Implementation Start GO)
 
-When a later Human `Implementation Start GO` binds this **APPROVED / LOCKED**
+This consumed Human `Implementation Start GO` binds this **APPROVED / LOCKED**
 definition:
 
 ### Semantics
@@ -373,7 +376,7 @@ Scope discipline:
 ## 9. Relation to Full Acceptance / #445 disposition
 
 ```text
-This Exact Slice (after future Implementation Start + evidence):
+This Exact Slice (after this Implementation Start + evidence):
   may remediate the AC-7 acceptance/evidence drift
 
 It does NOT by itself:
@@ -426,8 +429,10 @@ Human gate 1:
     docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md
 
 Human gate 2:
-  Implementation Start GO = NOT AUTHORIZED / NOT CONSUMED
-  Repository product mutation = NOT AUTHORIZED
+  Implementation Start GO = RECEIVED / CONSUMED
+  Scope locked: AC-7 acceptance alignment ONLY
+  Bound changed-area: §5 three acceptance-layer files
+  Product / domain / SPFx / DEMO-1 mutation = NOT AUTHORIZED
 
 Still forbidden without separate Human GO:
   AC-7 product implementation
@@ -441,17 +446,11 @@ Still forbidden without separate Human GO:
   Ready / Merge
   flipping DEMO-1 draftWorkflowAuthorized / create-cta
 
-NEXT Human speech-act:
-  separate Human Implementation Start GO
-  for AC-7 acceptance alignment ONLY
-  bound to:
-    this Unit (APPROVED / LOCKED)
-    baseline main cd8949d7323efaefc3987451f3b2ed3bb20c84cc
-      (re-bind if main has moved)
-    changed-area from §5
-    acceptance criteria from §6
-    OUT / MUST NOT from §7
-  OR STOP
+NEXT:
+  Fresh Independent Implementation Review for this alignment slice
+  Ready / Merge = HOLD
+  Full Acceptance re-execution = NOT AUTHORIZED
+  #445 Close = NOT AUTHORIZED
 ```
 
 ## 12. Stop condition
@@ -462,8 +461,9 @@ SP-LC-6-AC-7-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
 
 Classification lock: CONSUMED / LOCKED
 Definition APPROVE: RECEIVED / CONSUMED / LOCKED
-Implementation Start: NOT CONSUMED
-Acceptance contract rewrite: NOT PERFORMED
+Implementation Start: RECEIVED / CONSUMED
+Acceptance contract rewrite: AUTHORIZED for §5 three files only
+  (not Full Acceptance re-execution)
 Repository product mutation: NOT AUTHORIZED
 #445: OPEN / KEEP OPEN
 historical Full Acceptance GAP_FOUND: PRESERVED
@@ -472,6 +472,6 @@ AC-7 product gap: NOT ESTABLISHED
 AC-7 acceptance/evidence drift: LOCKED as classification B
 AC-9: ACTIVE / OPEN / OUT OF SCOPE
 Ready / Merge: HOLD
-Await: separate Human Implementation Start GO
-  for AC-7 acceptance alignment ONLY
+Await: Fresh Independent Implementation Review
+  then separate Human Ready / Merge GO
 ```
