@@ -69,11 +69,12 @@ Acceptance contract / runner rewrite: AUTHORIZED for §5 files only (this Implem
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
   (this alignment slice does not authorize product mutation)
 Issue #445 mutation / Close: NOT AUTHORIZED
-Ready / Merge: HOLD until Human Merge GO
-  Human Ready GO: RECEIVED / CONSUMED
+Ready / Merge: Human Ready CONSUMED; Human Merge GO RECEIVED / CONSUMED
+  Human Ready GO: RECEIVED / CONSUMED / EXECUTED
   Consumption: docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-ready-decision-1.md
   Bound exact reviewed HEAD: db79ec8d277a091b639a950924f5d8725e32d65d
-  Human Merge GO: NOT AUTHORIZED / NOT YET
+  Human Merge GO: RECEIVED / CONSUMED
+  Consumption: docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-merge-decision-1.md
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 Acceptance re-execution / Full Acceptance re-run: NOT AUTHORIZED
 historical GAP_FOUND rewrite: NOT AUTHORIZED
@@ -483,13 +484,12 @@ AC-4 acceptance/evidence drift: LOCKED as classification B
 product + contract successful-empty (#654): PRESERVED
 historical Full Acceptance GAP_FOUND: PRESERVED
 AC-7 / AC-9: MERGED / CONSUMED / OUT OF SCOPE
-Ready / Merge: HOLD
-  Human Ready GO: RECEIVED / CONSUMED
-    docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-ready-decision-1.md
-  Human Merge GO: NOT AUTHORIZED / NOT YET
+Ready / Merge: HOLD → Human Merge GO CONSUMED (separate record)
+  Human Ready GO: RECEIVED / CONSUMED / EXECUTED
+  Human Merge GO: RECEIVED / CONSUMED
+    docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-merge-decision-1.md
 Full Acceptance re-execution: NOT AUTHORIZED
-Await: separate Human Merge GO for PR #660
-  (bound expected reviewed tip lineage from db79ec8d unless tip moves with Ready docs)
+Await: merge execution of PR #660 then confirm on origin/main
 ```
 
 ## 13. Gate sequence (this lane)
@@ -499,17 +499,17 @@ Await: separate Human Merge GO for PR #660
 2. Human Definition APPROVE (+ classification B lock)        CONSUMED
 3. Human Implementation Start GO                              CONSUMED
 4. Implementation (AC-4 runner + evidence §15)                COMPLETE
-5. Human Ready GO (PR #660 / exact HEAD db79ec8d)             CONSUMED ← THIS
-6. Human Merge GO                                             ← NEXT (separate)
-7. Optional: Full Acceptance Re-Execution Preflight again
-8. Separate Human Acceptance Execution GO (if PRECHECK PASS)
-9. #445 Close                                                 ← separate later
+5. Human Ready GO (PR #660 / exact HEAD db79ec8d)             CONSUMED
+6. Human Merge GO (PR #660)                                   CONSUMED ← THIS
+7. Optional: Full Acceptance Re-Execution Preflight again     NOT YET
+8. Separate Human Acceptance Execution GO                     NOT YET
+9. #445 Close                                                 NOT YET
 ```
 
 ```text
 Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
 Human Ready ≠ Human Merge
-Ready / Merge ≠ Full Acceptance re-run
+Human Merge ≠ Full Acceptance re-run
 Full Acceptance local AC-4 PASS ≠ #445 Close
 ```
