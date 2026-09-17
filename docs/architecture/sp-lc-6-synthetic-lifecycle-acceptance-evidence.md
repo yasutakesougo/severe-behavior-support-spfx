@@ -722,5 +722,19 @@ historical §11 overallResult GAP_FOUND rewrite = NOT PERFORMED
 #445 Close / mutation                                 = NOT PERFORMED
 LIVE WRITE / Deploy / Production Binding              = NOT PERFORMED
 Full Acceptance overall PASS claim                    = NOT MADE
-Fresh Independent Acceptance Review                   = NEXT (separate)
+```
+
+### 16.7 Fresh Independent Acceptance Review 1
+
+```text
+unit: SP-LC-6-FULL-ACCEPTANCE-RE-EXECUTION-FRESH-INDEPENDENT-ACCEPTANCE-REVIEW-1
+packet: docs/architecture/sp-lc-6-full-acceptance-reexecution-fresh-independent-acceptance-review-1.md
+verdict:
+  REVIEW-CLEARED (execution integrity)
+  + ENVIRONMENT_BLOCKED residual REMAINS (acceptance disposition)
+residual class LOCKED:
+  STALE SMOKE EXPECTATION / planning-pc-demo-1 PROCESS-VISIBILITY section-nav
+#445: KEEP OPEN
+Human Acceptance disposition: NEXT (separate)
+planning-pc Correction / Definition: NOT AUTHORIZED without new Human GO
 ```

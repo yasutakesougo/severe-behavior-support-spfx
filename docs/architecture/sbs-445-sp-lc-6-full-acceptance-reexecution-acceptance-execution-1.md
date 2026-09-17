@@ -81,7 +81,13 @@ Ready / Merge of unrelated Draft docs PRs
 
 ```text
 Fresh Independent Acceptance Review (separate)
+  = COMPLETE / REVIEW-CLEARED (execution integrity)
+  packet: docs/architecture/sp-lc-6-full-acceptance-reexecution-fresh-independent-acceptance-review-1.md
+  residual LOCKED: STALE SMOKE EXPECTATION (planning-pc-demo-1)
 then Human Acceptance disposition
-  IF PASS / REVIEW-CLEARED → separate Human #445 Close decision
-  IF GAP_FOUND → #445 KEEP OPEN + classify residual
+  IF PASS / REVIEW-CLEARED with no residual → separate Human #445 Close decision
+  IF GAP_FOUND / ENVIRONMENT_BLOCKED residual remains
+    → #445 KEEP OPEN
+    → classify exact residual (LOCKED: planning-pc-demo-1 stale smoke)
+    → separate Correction / Definition gate
 ```
