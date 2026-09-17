@@ -24,8 +24,10 @@ Authority inputs:
 
 Human Acceptance disposition: RECEIVED / CONSUMED / LOCKED
   Disposition value: ACCEPT overallResult PASS + REVIEW-CLEARED
-Issue Close / #445 Close GO: NOT AUTHORIZED / NOT CONSUMED / NOT YET
-Issue body mutation: NOT AUTHORIZED / NOT PERFORMED
+Issue Close / #445 Close GO: RECEIVED / CONSUMED / AUTHORIZED (separate record)
+  docs/architecture/sbs-445-human-close-go-1.md
+  GitHub live Close: AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED
+Issue body mutation by disposition: NOT AUTHORIZED / NOT PERFORMED
 historical Full Acceptance §11 GAP_FOUND rewrite: NOT AUTHORIZED
 LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED
 Product / smoke / acceptance-runner mutation: NOT AUTHORIZED by this disposition
@@ -64,8 +66,8 @@ NOT this speech-act:
 | Disposition value | **ACCEPT overallResult PASS + REVIEW-CLEARED** |
 | Full Acceptance re-execution @ `4def6b8f…` | **ACCEPTED** (this disposition) |
 | Blocking residual on this execution | **none** |
-| `#445` Close GO | **NOT AUTHORIZED / NOT YET** (separate later gate) |
-| `#445` Issue mutation / Close | **NOT AUTHORIZED / NOT PERFORMED** |
+| `#445` Close GO | **CONSUMED / AUTHORIZED** (separate record) |
+| `#445` GitHub live Close | **AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED** |
 | historical §11 GAP_FOUND | **PRESERVED** |
 | LIVE WRITE / Deploy / Production Binding | **NOT AUTHORIZED** |
 | PR #663 Ready / Merge | **NOT AUTHORIZED by this disposition alone** |
@@ -83,11 +85,10 @@ THIS disposition lane
   ≠ historical GAP_FOUND rewrite
   ≠ PRECHECK GO / Acceptance Execution GO (already CONSUMED)
 
-NEXT gate (separate):
-  #445 Close GO
-  = NOT YET
-  = requires its own Human speech-act
-  lock: docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
+Close GO (separate; later consumed):
+  docs/architecture/sbs-445-human-close-go-1.md
+  = CONSUMED / AUTHORIZED
+  GitHub live Close = TOOLING_BLOCKED / Issue still OPEN
 ```
 
 ```text
@@ -111,13 +112,13 @@ This disposition does NOT:
 ## NEXT
 
 ```text
-STOP for separate Human #445 Close GO
+#445 Close GO = CONSUMED / AUTHORIZED
+GitHub live Close = TOOLING_BLOCKED (Issue still OPEN)
 
-Human:
-  #445 Close GO (separate gate; optional to issue or withhold)
+Human / privileged token:
+  execute GitHub Close of #445 using Close comment in sbs-445-human-close-go-1.md
 
 Agent:
   STOP
-  do not Close #445
-  do not treat this disposition as Close
+  do not claim Issue CLOSED until GitHub live state is closed
 ```

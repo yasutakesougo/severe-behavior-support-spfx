@@ -517,8 +517,9 @@ Await: merge execution of PR #660 then confirm on origin/main
 11. Human Acceptance disposition                              CONSUMED
       value: ACCEPT PASS + REVIEW-CLEARED
       docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-12. #445 Close GO                                             NOT YET
-      (separate later gate; PR #663 CI does not consume)
+12. #445 Close GO                                             CONSUMED / AUTHORIZED
+      docs/architecture/sbs-445-human-close-go-1.md
+      GitHub live Close: TOOLING_BLOCKED / Issue still OPEN
 ```
 
 ```text

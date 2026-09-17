@@ -173,8 +173,9 @@ merge method: merge commit
 7. Human Acceptance disposition                               CONSUMED
      value: ACCEPT PASS + REVIEW-CLEARED
      docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-8. #445 Close GO                                              NOT YET
-     (separate later gate; PR #663 CI = evidence only, no auto-consumption)
+8. #445 Close GO                                              CONSUMED / AUTHORIZED
+     docs/architecture/sbs-445-human-close-go-1.md
+     GitHub live Close: TOOLING_BLOCKED / Issue still OPEN
 9. LIVE WRITE / Deploy remain NOT YET without explicit Human GO
 ```
 

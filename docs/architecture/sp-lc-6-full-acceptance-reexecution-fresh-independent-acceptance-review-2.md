@@ -82,7 +82,8 @@ This review does NOT:
 ```text
 1. Human Acceptance disposition     ← CONSUMED / ACCEPT PASS + REVIEW-CLEARED
      docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-2. #445 Close GO                    ← SEPARATE later gate / NOT YET
+2. #445 Close GO                    ← CONSUMED / AUTHORIZED
+     GitHub live Close: TOOLING_BLOCKED / Issue still OPEN
      (requires its own Human GO; not consumed by disposition)
 
 PR #663 CI SUCCESS / overallResult PASS / REVIEW-CLEARED

@@ -184,11 +184,11 @@ Acceptance Execution GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED
 Fresh Independent Acceptance Review 2: REVIEW-CLEARED (execution integrity)
 #445: OPEN / KEEP OPEN until separate Human Close decision
 
-NEXT Human gate:
-  #445 Close GO                    ← SEPARATE later gate / NOT YET
+#445 Close GO: CONSUMED / AUTHORIZED
+  docs/architecture/sbs-445-human-close-go-1.md
+  GitHub live Close: TOOLING_BLOCKED / Issue still OPEN
 Human Acceptance disposition: CONSUMED / ACCEPT PASS + REVIEW-CLEARED
-  docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-PR #663 CI SUCCESS = evidence only (does not consume Close GO)
+PR #663 CI SUCCESS = evidence only
   lock: docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 ```
 
@@ -245,8 +245,7 @@ Fresh Independent Acceptance Review 2: REVIEW-CLEARED
 Post-PASS sequencing lock: LOCKED
   docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 Human Acceptance disposition: CONSUMED / ACCEPT PASS + REVIEW-CLEARED
-  docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-#445: OPEN (Close GO NOT YET)
-Agent NEXT: STOP for separate Human #445 Close GO
-  (disposition ≠ Close; CI does not consume Close GO)
+#445 Close GO: CONSUMED / AUTHORIZED
+#445 GitHub live state: OPEN (close TOOLING_BLOCKED)
+Agent NEXT: STOP for privileged GitHub Close execution
 ```
