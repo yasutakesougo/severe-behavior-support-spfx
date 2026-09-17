@@ -27,11 +27,18 @@ Exact Slice Definition APPROVE: RECEIVED / LOCKED
   Basis: this document
   Scope: planning-pc-demo-1 stale smoke expectation alignment ONLY
   Consumption: docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-definition-approve-1.md
-Human Implementation Start GO: NOT AUTHORIZED / NOT RECEIVED
+Human Implementation Start GO: RECEIVED / CONSUMED
+  Human: Human Implementation Start GO — bind APPROVED Definition §5–§6
+  ReceivedAt: 2026-09-17T12:39:00Z
+  Bound: approved §5–§6
+  Consumption: docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-implementation-start-1.md
+  Changed-area: spfx/smoke/planning-pc-demo-1/run-smoke.mjs
+    (PLANNER section-nav expectation only)
 Acceptance re-execution: NOT AUTHORIZED
-Product / domain / fixture / schema / smoke mutation: NOT AUTHORIZED
+Product / domain / fixture / schema mutation: NOT AUTHORIZED
 Issue #445 mutation / Close: NOT AUTHORIZED
-Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
+Ready / Merge: HOLD (Fresh Independent Implementation Review required next)
+Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 AC-4 / AC-7 reopen: OUT
 historical Full Acceptance rewrite: OUT
 ```
@@ -291,26 +298,28 @@ Human gate 1:
   Consumption:
     docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-definition-approve-1.md
 
-Human gate 2 (CURRENT STOP; separate speech-act):
-  Implementation Start GO = NOT AUTHORIZED / NOT RECEIVED
-  when issued, must bind:
+Human gate 2:
+  Implementation Start GO = RECEIVED / CONSUMED
+  Human: Human Implementation Start GO — bind APPROVED Definition §5–§6
+  ReceivedAt: 2026-09-17T12:39:00Z
+  Bound:
     this Unit
     baseline main 30f6019137d7e7b50a2dec02b038a285c9cf373c
-      (or later Human-approved main SHA)
     changed-area = spfx/smoke/planning-pc-demo-1/run-smoke.mjs
       (PLANNER section-nav expectation only)
     acceptance criteria in §5
     OUT list in §6
+  Consumption:
+    docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-implementation-start-1.md
 
 Then (separate gates; do not collapse):
-  correction
+  correction (authorized by this GO)
   ↓ Fresh Independent Implementation Review
   ↓ Ready / Merge
   ↓ Full Acceptance PRECHECK again
 
 Still forbidden without separate Human GO:
-  Implementation Start
-  product / domain / fixture / schema / smoke mutation
+  product / domain / fixture / schema mutation
   Acceptance re-execution / Full Acceptance PRECHECK
   Issue mutation / Close
   Ready / Merge
@@ -318,14 +327,14 @@ Still forbidden without separate Human GO:
   AC-4 / AC-7 reopen
 
 NEXT:
-  separate Human Implementation Start GO
-  CURRENT ACTION: STOP (await Implementation Start GO)
+  Fresh Independent Implementation Review
+  CURRENT ACTION: execute authorized smoke expectation alignment; then STOP for Review
 ```
 
 ```text
 EXACT-SLICE-DEFINITION-1: APPROVED / LOCKED
-Implementation Start: NOT AUTHORIZED
-CURRENT ACTION: STOP (await separate Human Implementation Start GO)
+Implementation Start: RECEIVED / CONSUMED
+CURRENT ACTION: correction under §5–§6; then Fresh Independent Implementation Review
 ```
 
 ## 10. Implementation evidence (placeholder — Implementation Start GO only)

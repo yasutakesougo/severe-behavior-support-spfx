@@ -213,20 +213,22 @@ function assertPlannerSupportPlan() {
   checks.push({ name: "planner-support-plan-graph", url, found, shot, pass, pageErrors: errors });
   allPass = allPass && pass;
 
-  await page.click('[data-planning-pc-section-nav="planning-pc-plan-records-heading"]');
+  // PROCESS-VISIBILITY-UI-V1: PLANNER section-nav targets planner-process-*-heading
+  // (stale pre-V1 id planning-pc-plan-records-heading is no longer a nav target).
+  await page.click('[data-planning-pc-section-nav="planner-process-records-heading"]');
   await page.waitForFunction(
-    () => document.activeElement?.id === "planning-pc-plan-records-heading",
+    () => document.activeElement?.id === "planner-process-records-heading",
   );
   const sectionNavFound = await page.evaluate(() => {
     const root = document.querySelector('[data-planning-pc="section-navigation"]');
     const active = document.activeElement;
     const selected = document.querySelector(
-      '[data-planning-pc-section-nav="planning-pc-plan-records-heading"]',
+      '[data-planning-pc-section-nav="planner-process-records-heading"]',
     );
     return {
       pass:
         Boolean(root) &&
-        active?.id === "planning-pc-plan-records-heading" &&
+        active?.id === "planner-process-records-heading" &&
         selected?.getAttribute("aria-pressed") === "true" &&
         Boolean(document.querySelector('[data-planning-pc="recent-records"]')),
       activeId: active?.id ?? "",

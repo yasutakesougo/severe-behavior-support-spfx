@@ -45,13 +45,34 @@ Root contract test: planning-pc-demo-graph-contract.test.ts 4 / 4 PASS
 check:a11y: PASS（A11Y-HD-07 / A11Y-SP-01 / A11Y-DIS-04）
 ```
 
-## Boundary held
+## PROCESS-VISIBILITY section-nav stale smoke realignment (PR #662)
 
 ```text
-No Schema 1.0.0 change
-No approvedBy rename / 最終承認者 presentation
-No review-due origin / approaching calculation
-No live plan mutation / adapter fetch
-No SharePoint / Deploy / production write
-Aさん only = synthetic local preview via React state
+Unit: PLANNING-PC-DEMO-1-PROCESS-VISIBILITY-SECTION-NAV-STALE-SMOKE-EXPECTATION-EXACT-SLICE-DEFINITION-1
+Definition: APPROVED / LOCKED
+Implementation Start GO: RECEIVED / CONSUMED
+  docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-implementation-start-1.md
+Changed path: spfx/smoke/planning-pc-demo-1/run-smoke.mjs only
+Section-nav expectation:
+  FROM: planning-pc-plan-records-heading
+  TO:   planner-process-records-heading  (PROCESS-VISIBILITY ③ 記録)
+Product / SupportPlan / process-nav copy: UNCHANGED
+Issue #445 Close: NOT AUTHORIZED
+Full Acceptance PRECHECK / re-execution: NOT AUTHORIZED
+historical Full Acceptance rewrite: NOT AUTHORIZED
+Baseline main at GO: 30f6019137d7e7b50a2dec02b038a285c9cf373c
+Date: 2026-09-17
+```
+
+| Case | Assertion | Result |
+|---|---|---|
+| planner-support-plan-graph | 適用中 / 版3 / 手順 / 記録 / 過去版 / 見直しCTA / 禁止トークンなし | PENDING_SMOKE |
+| planner-section-navigation | PROCESS-VISIBILITY ③ 記録 (`planner-process-records-heading`) + recent-records | PENDING_SMOKE |
+| planner-review-materials-nested | SupportPlan → ReviewDueState under users | PENDING_SMOKE |
+| planner-back-to-support-plan | ReviewDueState → SupportPlan back | PENDING_SMOKE |
+| field-staff-demo-ux-4-regression | goals/actions preserved; planner blocks hidden | PENDING_SMOKE |
+
+```text
+Smoke re-run results will replace PENDING_SMOKE after Implementation Start execution.
+Artifacts: /opt/cursor/artifacts/planning-pc-demo-1-browser-smoke/
 ```
