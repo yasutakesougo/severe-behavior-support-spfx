@@ -183,7 +183,9 @@ Preserve fail-closed intent of the check:
 ```text
 PRESERVE:
   data-planning-pc="section-navigation" root present
-  selected nav control aria-pressed === "true"
+  selected nav control observable as selected
+    PROCESS-VISIBILITY PLANNER: aria-current="location"
+      (product already uses this; do NOT require pre-V1 aria-pressed)
   recent-records surface reachable after nav
     (data-planning-pc="recent-records" or equivalent already-asserted marker)
   other PLANNING-PC-DEMO-1 cases unchanged:
