@@ -24,12 +24,16 @@ Definition APPROVE: RECEIVED / LOCKED
   ReceivedAt: 2026-09-17T05:48:54Z
   Basis: this document
   Scope: AC-4 ONLY
-Human Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
+Human Implementation Start GO: RECEIVED / CONSUMED
+  Human: AC-4 successful-empty Observation association Exact Slice
+         Human Implementation Start GO
+  Bound: approved §5–§7
+  Consumption: docs/architecture/sbs-445-ac4-exact-slice-implementation-start-1.md
+  Evidence: docs/architecture/sp-lc-6-ac4-successful-empty-observation-association-implementation-evidence-1.md
 Acceptance re-execution: NOT AUTHORIZED
-Product / domain / fixture / schema mutation: NOT AUTHORIZED
-  (Repository product mutation = HOLD until separate Implementation Start GO)
+Product / domain / fixture / schema mutation outside §5: NOT AUTHORIZED
 Issue #445 mutation / Close: NOT AUTHORIZED
-Ready / Merge automation: NOT AUTHORIZED
+Ready / Merge: HOLD (Fresh Independent Implementation Review required next)
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 G3: HOLD
 AC-7 / AC-9: OUT OF SCOPE (remain ACTIVE / OPEN; not consumed by this slice)
@@ -362,28 +366,28 @@ Human gate 1:
   Bind targets locked: §1–§7 of this document
 
 Human gate 2:
-  Implementation Start GO = NOT AUTHORIZED / NOT CONSUMED
-  Repository product mutation = HOLD
+  Implementation Start GO = RECEIVED / CONSUMED
+  Human: AC-4 successful-empty Observation association Exact Slice
+         Human Implementation Start GO
+  Bound:
+    this Unit (APPROVED / LOCKED)
+    baseline main 2bfc10fa192c39cf737816bcf2f0a8ccfe09a14f
+    changed-area from §5
+    acceptance criteria from §6
+    OUT / MUST NOT from §7
 
 Still forbidden without separate Human GO:
-  product / association / presentation / test mutation
   AC-7 / AC-9 work
   persistence / Draft creation
   Acceptance re-execution
   Issue #445 Close / body mutation
-  Ready / Merge automation
+  Ready / Merge
   Deploy / Production Binding / LIVE WRITE
   G3
 
 NEXT Human speech-act:
-  separate Human Implementation Start GO
-  bound to:
-    this Unit (APPROVED / LOCKED)
-    baseline main SHA (explicit in that GO)
-    changed-area derived from §5
-    acceptance criteria in §6
-    OUT / MUST NOT in §7
-  OR STOP
+  Fresh Independent Implementation Review
+  then Human Ready / Merge GO (HOLD until then)
 ```
 
 ## 12. Stop condition
@@ -393,14 +397,12 @@ SP-LC-6-AC-4-SUCCESSFUL-EMPTY-OBSERVATION-ASSOCIATION-EXACT-SLICE-DEFINITION-1
 = COMPLETE / APPROVED / LOCKED
 
 Definition APPROVE: CONSUMED / LOCKED
-Code / product mutation: 0
-Implementation Start: NOT CONSUMED
+Implementation Start: CONSUMED
+Implementation evidence: RECORDED
 Acceptance re-execution: NOT AUTHORIZED
 #445: OPEN / KEEP OPEN
-AC-4: ACTIVE (Definition APPROVED; Implementation not started)
+AC-4 product gap: REMEDIATED in code (pending Fresh Independent Review)
 AC-7 / AC-9: ACTIVE / OPEN / OUT OF SCOPE
-#442 / #444: close-eligible candidates unchanged (no Close GO here)
-#443: CLOSED unchanged
-#392 / #419: OPEN
-Await: separate Human Implementation Start GO (or STOP)
+Ready / Merge: HOLD
+Await: Fresh Independent Implementation Review
 ```

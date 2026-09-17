@@ -3,6 +3,7 @@ import { EmptyNotice, StatusBadge } from "../primitives";
 import {
   FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE,
   FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE,
+  FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE,
   labelForProcedureRecordResult,
   associateReviewObservations,
   resolveProcedureReviewProjection,
@@ -374,17 +375,29 @@ export const ReviewDueState: React.FC<ReviewDueStateProps> = ({
               <div
                 data-field-workflow="review-observation-association"
                 data-field-workflow-association-state={selectedObservationAssociation.status}
+                data-field-workflow-association-empty={
+                  selectedObservationAssociation.status === "ASSOCIATED" &&
+                  selectedObservationAssociation.observations.length === 0
+                    ? "true"
+                    : "false"
+                }
               >
                 <h4>関連する観察記録</h4>
                 {selectedObservationAssociation.status === "ASSOCIATED" ? (
-                  <ul data-field-workflow="review-observation-evidence-list">
-                    {selectedObservationAssociation.observations.map((observation) => (
-                      <li key={observation.observationRecordId}>
-                        {observation.observationRecordId} / {observation.observedAt} /{" "}
-                        {observation.observedBy}
-                      </li>
-                    ))}
-                  </ul>
+                  selectedObservationAssociation.observations.length === 0 ? (
+                    <p data-field-workflow="review-observation-successful-empty">
+                      {FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE}
+                    </p>
+                  ) : (
+                    <ul data-field-workflow="review-observation-evidence-list">
+                      {selectedObservationAssociation.observations.map((observation) => (
+                        <li key={observation.observationRecordId}>
+                          {observation.observationRecordId} / {observation.observedAt} /{" "}
+                          {observation.observedBy}
+                        </li>
+                      ))}
+                    </ul>
+                  )
                 ) : (
                   <p data-field-workflow="review-observation-unresolved">
                     観察記録の関連付けは未解決です（理由: {selectedObservationAssociation.reason}
