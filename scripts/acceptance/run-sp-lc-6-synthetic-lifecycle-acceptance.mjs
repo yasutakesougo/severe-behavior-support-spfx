@@ -314,9 +314,9 @@ const checkpoints = [
   },
   {
     id: "AC-7",
-    result: gapUnlessEnvironmentBlocked(mergeResults([focused, nextVersionSmoke])),
-    source: ["root-focused-acceptance", "support-plan-review-new-version-demo-1-smoke"],
-    note: "Current authorized main exposes concept-only next-version presentation; persistence/draft workflow remain unauthorized.",
+    result: focused,
+    source: ["root-focused-acceptance"],
+    note: "AC-7 is bound to current-main startSupportPlanRevision (CHANGE_REQUIRED → RevisionIntent → Draft vN+1). DEMO-1 draftWorkflowAuthorized=false remains a presentation-only observation, not the capability detector.",
     smokeObservation: nextVersionSmoke,
   },
   {
