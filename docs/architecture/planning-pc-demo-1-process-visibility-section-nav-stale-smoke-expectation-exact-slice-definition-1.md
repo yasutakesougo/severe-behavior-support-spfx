@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Issue: #445 (parent acceptance residual; KEEP OPEN; no Issue mutation / no Close)
 Unit: PLANNING-PC-DEMO-1-PROCESS-VISIBILITY-SECTION-NAV-STALE-SMOKE-EXPECTATION-EXACT-SLICE-DEFINITION-1
-Kind: exact-slice definition / scope fixation only (Definition drafting)
+Kind: exact-slice definition / scope fixation only
 Date: 2026-09-17
 Baseline main: 30f6019137d7e7b50a2dec02b038a285c9cf373c
 Authority inputs:
@@ -18,12 +18,18 @@ Authority inputs:
   Analogous prior slice (pattern only; not authority to mutate):
     docs/architecture/sp-lc-6-demo-ux-6-stale-smoke-expectation-exact-slice-definition-1.md
 
-Exact Slice Definition status: DRAFTED / AWAITING Human Definition APPROVE
-Definition Start: CONSUMED (this document published for Human Definition APPROVE)
-Exact Slice Definition APPROVE: NOT RECEIVED
+Exact Slice Definition status: APPROVED / LOCKED
+Definition Start: CONSUMED
+Exact Slice Definition APPROVE: RECEIVED / LOCKED
+  Human: PLANNING-PC-DEMO-1 PROCESS-VISIBILITY SECTION-NAV
+         STALE-SMOKE-EXPECTATION Exact Slice Definition APPROVE
+  ReceivedAt: 2026-09-17T12:35:16Z
+  Basis: this document
+  Scope: planning-pc-demo-1 stale smoke expectation alignment ONLY
+  Consumption: docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-definition-approve-1.md
 Human Implementation Start GO: NOT AUTHORIZED / NOT RECEIVED
 Acceptance re-execution: NOT AUTHORIZED
-Product / domain / fixture / schema mutation: NOT AUTHORIZED
+Product / domain / fixture / schema / smoke mutation: NOT AUTHORIZED
 Issue #445 mutation / Close: NOT AUTHORIZED
 Ready / Merge / Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 AC-4 / AC-7 reopen: OUT
@@ -271,18 +277,22 @@ PLANNING-PC-DEMO-1 smoke assertion unchanged.
 
 ```text
 Exact Slice Definition / scope fixation:
-  DRAFTED / AWAITING Human Definition APPROVE
+  COMPLETE / APPROVED / LOCKED
 
 Human gate 0 (separate lane; already CONSUMED):
   Human Acceptance disposition = KEEP #445 OPEN
   docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-keep-open-1.md
 
-Human gate 1 (CURRENT STOP):
-  Exact Slice Definition APPROVE = NOT RECEIVED
-  required before any Implementation Start
+Human gate 1:
+  Exact Slice Definition APPROVE = RECEIVED / LOCKED
+  Human: PLANNING-PC-DEMO-1 PROCESS-VISIBILITY SECTION-NAV
+         STALE-SMOKE-EXPECTATION Exact Slice Definition APPROVE
+  ReceivedAt: 2026-09-17T12:35:16Z
+  Consumption:
+    docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-definition-approve-1.md
 
-Human gate 2 (later; separate speech-act):
-  Implementation Start GO = NOT AUTHORIZED yet
+Human gate 2 (CURRENT STOP; separate speech-act):
+  Implementation Start GO = NOT AUTHORIZED / NOT RECEIVED
   when issued, must bind:
     this Unit
     baseline main 30f6019137d7e7b50a2dec02b038a285c9cf373c
@@ -300,21 +310,22 @@ Then (separate gates; do not collapse):
 
 Still forbidden without separate Human GO:
   Implementation Start
-  product / domain / fixture / schema mutation
-  Acceptance re-execution
+  product / domain / fixture / schema / smoke mutation
+  Acceptance re-execution / Full Acceptance PRECHECK
   Issue mutation / Close
   Ready / Merge
   Deploy / Production Binding / LIVE WRITE
+  AC-4 / AC-7 reopen
 
 NEXT:
-  Human Exact Slice Definition APPROVE for this document
-  CURRENT ACTION: STOP (await Definition APPROVE)
+  separate Human Implementation Start GO
+  CURRENT ACTION: STOP (await Implementation Start GO)
 ```
 
 ```text
-EXACT-SLICE-DEFINITION-1: DRAFTED / AWAITING APPROVE
+EXACT-SLICE-DEFINITION-1: APPROVED / LOCKED
 Implementation Start: NOT AUTHORIZED
-CURRENT ACTION: STOP (await Human Exact Slice Definition APPROVE)
+CURRENT ACTION: STOP (await separate Human Implementation Start GO)
 ```
 
 ## 10. Implementation evidence (placeholder — Implementation Start GO only)
