@@ -1,5 +1,14 @@
 # SBS-MGMT-E — Human Acceptance Disposition (PARTIAL)
 
+```text
+CURRENT DISPOSITION SUPERSEDED
+= docs/architecture/sbs-mgmt-e-human-acceptance-disposition-confirmed-1.md
+= CORE LOOP VALUE CONFIRMED (Re-evaluation 2026-09-17)
+
+This file remains the historical PARTIAL consumption record.
+Do not read this file alone as the current #556 disposition.
+```
+
 Human Acceptance Disposition record for `#556` SBS-MGMT-E after Fresh Independent Acceptance Review PASS WITH NON-BLOCKING FINDINGS.
 
 ```text
