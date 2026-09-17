@@ -12,12 +12,13 @@ Docs lane PR: #663 (cursor/full-acceptance-precheck-gate-sep-151b)
   CI SUCCESS is evidence only (does not consume Human gates)
 
 Sequencing lock: RECEIVED / CONSUMED / LOCKED
-Human Acceptance disposition: NOT RECEIVED / NOT CONSUMED / NOT YET
+Human Acceptance disposition: RECEIVED / CONSUMED / LOCKED
+  value: ACCEPT overallResult PASS + REVIEW-CLEARED
+  Consumption: docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
 #445 Close GO: NOT RECEIVED / NOT CONSUMED / NOT YET
   (#445 Close remains a later separate gate after disposition)
 PR #663 CI / overallResult PASS / Fresh Review REVIEW-CLEARED:
-  = evidence only
-  ≠ automatic disposition consumption
+  = evidence only for disposition materials
   ≠ automatic #445 Close GO consumption
 ```
 
@@ -33,15 +34,15 @@ PR #663 CI / overallResult PASS / Fresh Review REVIEW-CLEARED:
 
 ```text
 RESULT: disposition-first sequencing LOCKED
-Human Acceptance disposition = FIRST Human gate / NOT YET
+Human Acceptance disposition = CONSUMED / ACCEPT PASS + REVIEW-CLEARED
 #445 Close GO = SEPARATE later Human gate / NOT YET
-PR #663 CI = evidence only / NO auto-consumption of either gate
-Agent: STOP for Human Acceptance disposition
+PR #663 CI = evidence only / NO auto-consumption of Close GO
+Agent: STOP for Human #445 Close GO
 ```
 
-This record **locks the order and non-collapse** of the two remaining Human
-gates. It does **not** consume disposition, and it does **not** authorize or
-consume `#445` Close.
+This record **locks the order and non-collapse** of the post-PASS Human gates.
+Disposition consumption is recorded separately. This lock still does **not**
+authorize or consume `#445` Close.
 
 ---
 
@@ -53,10 +54,11 @@ DONE (separate consumptions):
   Acceptance Execution GO @ 4def6b8f…         overallResult PASS
   Fresh Independent Acceptance Review 2       REVIEW-CLEARED
   PR #663 CI                                  SUCCESS (evidence)
+  Human Acceptance disposition                ACCEPT PASS + REVIEW-CLEARED
+    docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
 
-NEXT (Human only; in order):
-  1. Human Acceptance disposition             ← FIRST / NOT YET
-  2. #445 Close GO                            ← SEPARATE later gate / NOT YET
+NEXT (Human only):
+  #445 Close GO                               ← SEPARATE later gate / NOT YET
 ```
 
 ```text
@@ -64,7 +66,7 @@ Human Acceptance disposition
   ≠ #445 Close GO
   ≠ PR #663 Ready / Merge
   ≠ Acceptance Execution PASS auto-close
-  ≠ CI SUCCESS auto-disposition
+  ≠ CI SUCCESS auto-close
 ```
 
 ---
@@ -102,21 +104,15 @@ FORBIDDEN:
 
 ## 4. After disposition (still separate)
 
-When Human later issues Acceptance disposition:
-
 ```text
-IF disposition accepts PASS + REVIEW-CLEARED (or other stated value):
-  STOP again for separate Human #445 Close GO
+Human Acceptance disposition = CONSUMED
+  value: ACCEPT overallResult PASS + REVIEW-CLEARED
+  record: docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
+
+#445 Close GO remains NOT AUTHORIZED / NOT YET
   disposition ≠ Close
-
-IF disposition = KEEP #445 OPEN (or equivalent):
-  Close GO remains NOT AUTHORIZED
-  follow Human-stated next lane
+  requires explicit separate Human #445 Close GO
 ```
-
-`#445` Close still requires an explicit separate Human Close GO even after a
-PASS-accepting disposition, unless Human explicitly collapses that boundary in
-a later speech-act.
 
 ---
 
@@ -139,11 +135,10 @@ This document does NOT:
 ```text
 SBS-445-POST-PASS-HUMAN-GATE-SEQUENCING-LOCK-1 = LOCKED
 
-NEXT Human gate:
-  Human Acceptance disposition   ← FIRST / NOT YET
+Human Acceptance disposition: CONSUMED / ACCEPT PASS + REVIEW-CLEARED
 
-THEN (separate):
-  #445 Close GO                  ← NOT YET
+NEXT Human gate:
+  #445 Close GO                  ← SEPARATE / NOT YET
 
 PR #663 CI: evidence only
 Agent: STOP

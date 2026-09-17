@@ -80,13 +80,13 @@ This review does NOT:
 ## NEXT
 
 ```text
-1. Human Acceptance disposition     ← FIRST / NOT YET
+1. Human Acceptance disposition     ← CONSUMED / ACCEPT PASS + REVIEW-CLEARED
+     docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
 2. #445 Close GO                    ← SEPARATE later gate / NOT YET
-     (only after disposition; still requires its own Human GO)
+     (requires its own Human GO; not consumed by disposition)
 
 PR #663 CI SUCCESS / overallResult PASS / REVIEW-CLEARED
-  = evidence materials for disposition only
-  ≠ automatic disposition consumption
+  = evidence materials only
   ≠ automatic #445 Close GO consumption
 
 Sequencing lock:
@@ -97,5 +97,5 @@ Sequencing lock:
 Fresh Independent Acceptance Review ≠ Human Acceptance disposition
 Human Acceptance disposition ≠ #445 Close GO
 overallResult PASS ≠ Deploy / LIVE WRITE
-PR #663 CI ≠ either Human gate
+PR #663 CI ≠ Close GO
 ```

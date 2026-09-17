@@ -112,11 +112,11 @@ Fresh Independent Acceptance Review 2
   overallResult PASS recorded in evidence §16
 
 THEN (Human only; locked order):
-  1. Human Acceptance disposition     ← FIRST / NOT YET
+  1. Human Acceptance disposition     ← CONSUMED / ACCEPT PASS + REVIEW-CLEARED
+       docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
   2. #445 Close GO                    ← SEPARATE later gate / NOT YET
 
 PR #663 CI SUCCESS = evidence only
-  ≠ automatic disposition consumption
   ≠ automatic #445 Close GO consumption
 
 Sequencing lock:
@@ -126,6 +126,6 @@ Sequencing lock:
 ```text
 Acceptance Execution PASS ≠ Human Acceptance disposition
 Human Acceptance disposition ≠ #445 Close GO
-PR #663 CI ≠ either Human gate
+PR #663 CI ≠ Close GO
 Fresh Independent Acceptance Review ≠ Deploy / LIVE WRITE
 ```
