@@ -45,13 +45,16 @@ Definition APPROVE: RECEIVED / CONSUMED / LOCKED
 Residual classification Decision: ACCEPTED / LOCKED / CONSUMED
   B / STALE ACCEPTANCE / EVIDENCE GAP
   (locked by this Definition APPROVE speech-act)
-Human Implementation Start GO: NOT AUTHORIZED / NOT RECEIVED
-  (separate gate; NOT YET)
-Acceptance contract rewrite: NOT AUTHORIZED (until Implementation Start)
-Smoke harness mutation: NOT AUTHORIZED (until Implementation Start)
+Human Implementation Start GO: RECEIVED / CONSUMED
+  Human: AC-9 Implementation Start GO
+  ReceivedAt: 2026-09-17T10:18:00Z
+  Bound: approved §5–§7
+  Consumption: docs/architecture/sbs-445-ac9-exact-slice-implementation-start-1.md
+Acceptance contract rewrite: AUTHORIZED for §5 files only (this Implementation Start)
+Smoke harness mutation: AUTHORIZED for §5 three smoke report emitters only
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
 Issue #445 mutation / Close: NOT AUTHORIZED / NOT YET
-Ready / Merge of this Definition PR: HOLD until Human Ready / Merge GO
+Ready / Merge of this Definition PR: HOLD until Fresh Independent Review + Human Ready / Merge GO
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED / NOT YET
 Acceptance re-execution: NOT AUTHORIZED / NOT YET
 historical GAP_FOUND rewrite: NOT AUTHORIZED
@@ -322,7 +325,7 @@ Scope discipline:
 ## 9. Relation to Full Acceptance / #445 disposition
 
 ```text
-This Exact Slice (after later APPROVE + Implementation Start + evidence):
+This Exact Slice (after later Implementation Start + evidence):
   may clear the AC-9 residual detector on current-main tip evidence
   does NOT by itself make Full Acceptance overallResult = PASS
   does NOT close #445
@@ -335,10 +338,10 @@ This Exact Slice (after later APPROVE + Implementation Start + evidence):
 
 ```text
 1. PREPARE AC-9 Exact Slice Definition          COMPLETE
-2. Human Definition APPROVE                     ← CONSUMED / LOCKED (this turn)
-3. Human Implementation Start GO                ← NEXT (separate; NOT YET)
-4. Implementation + Fresh Independent Review    NOT YET
-5. Human Ready / Merge
+2. Human Definition APPROVE                     CONSUMED / LOCKED
+3. Human Implementation Start GO                ← CONSUMED (this turn)
+4. Implementation + Fresh Independent Review    ← IN PROGRESS / REQUIRED NEXT
+5. Human Ready / Merge                          HOLD
 6. Optional: Full Acceptance re-run             ← separate Human Execution GO / NOT YET
 7. #445 Close                                   ← separate Human GO / NOT YET
 ```
@@ -349,7 +352,7 @@ Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
 Ready / Merge ≠ Full Acceptance re-run
 Full Acceptance local AC-9 PASS ≠ #445 Close
-NOT YET: implementation / #445 Close / Full Acceptance re-run /
+NOT YET: #445 Close / Full Acceptance re-run /
          LIVE WRITE / Deploy / Draft docs PR Close/Merge
 ```
 
