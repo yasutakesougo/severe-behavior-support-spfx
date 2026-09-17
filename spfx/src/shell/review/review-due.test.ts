@@ -1,6 +1,7 @@
 import { buildAttentionSummaryFromItems } from "../ux/kpi-review-count";
 import {
   associateReviewObservations,
+  FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE,
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
   FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
 } from "../procedure";
@@ -198,6 +199,29 @@ describe("VP-5 Review presentation boundary", () => {
         },
       ],
     });
+  });
+
+  it("associates successful-empty when resolved historical material has empty evidence", () => {
+    const material = FIELD_WORKFLOW_PROCEDURE_FIXTURE.reviewMaterials[0];
+    const association = associateReviewObservations(material, []);
+
+    expect(association).toEqual({
+      status: "ASSOCIATED",
+      procedureRecordId: "synthetic-proc-rec-v2-001",
+      planId: "synthetic-plan-001",
+      planVersion: 2,
+      observations: [],
+    });
+  });
+
+  it("keeps successful-empty copy distinct from unresolved association copy", () => {
+    expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).toContain(
+      "関連付けは完了",
+    );
+    expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).not.toContain("未解決");
+    expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).not.toContain(
+      "観察記録の関連付けは未解決です",
+    );
   });
 
   it("fails closed for unresolved or mismatched historical context", () => {

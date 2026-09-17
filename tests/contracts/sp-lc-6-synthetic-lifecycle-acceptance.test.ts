@@ -124,7 +124,7 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
     );
   });
 
-  it("AC-4 keeps unresolved distinct and records missing successful-empty as GAP_FOUND", () => {
+  it("AC-4 distinguishes successful-empty ASSOCIATED [] from unresolved", () => {
     const unresolved = associateReviewObservations(
       FIELD_WORKFLOW_REVIEW_MATERIAL_UNRESOLVED,
       FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
@@ -135,20 +135,31 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
       assert.deepEqual(unresolved.observations, []);
     }
 
-    const zeroMatch = associateReviewObservations(FIELD_WORKFLOW_REVIEW_MATERIAL_V2, []);
+    const successfulEmpty = associateReviewObservations(FIELD_WORKFLOW_REVIEW_MATERIAL_V2, []);
     const successfulEmptyExists =
-      zeroMatch.status === "ASSOCIATED" && zeroMatch.observations.length === 0;
-    assert.equal(successfulEmptyExists, false);
-    assert.notEqual(zeroMatch.status, "ASSOCIATED");
-    assert.equal(zeroMatch.status, "UNRESOLVED");
-    if (zeroMatch.status === "UNRESOLVED") {
-      assert.equal(zeroMatch.reason, "NO_EXACT_CONTEXT_MATCH");
-      assert.deepEqual(zeroMatch.observations, []);
+      successfulEmpty.status === "ASSOCIATED" && successfulEmpty.observations.length === 0;
+    assert.equal(successfulEmptyExists, true);
+    assert.equal(successfulEmpty.status, "ASSOCIATED");
+    if (successfulEmpty.status === "ASSOCIATED") {
+      assert.deepEqual(successfulEmpty.observations, []);
+      assert.equal(successfulEmpty.planVersion, 2);
+    }
+
+    const mismatched = associateReviewObservations(FIELD_WORKFLOW_REVIEW_MATERIAL_V2, [
+      {
+        ...FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE[0],
+        procedureRecordId: "different-record",
+      },
+    ]);
+    assert.equal(mismatched.status, "UNRESOLVED");
+    if (mismatched.status === "UNRESOLVED") {
+      assert.equal(mismatched.reason, "NO_EXACT_CONTEXT_MATCH");
+      assert.deepEqual(mismatched.observations, []);
     }
 
     const result: CheckpointResult =
       unresolved.status === "UNRESOLVED" && successfulEmptyExists ? "PASS" : "GAP_FOUND";
-    assert.equal(result, "GAP_FOUND");
+    assert.equal(result, "PASS");
   });
 
   it("AC-5 preserves D5 review timing semantics without fixed 90-day invalidation", () => {

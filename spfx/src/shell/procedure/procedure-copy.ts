@@ -15,6 +15,10 @@ export const FIELD_WORKFLOW_MUTATION_BOUNDARY_NOTE =
 export const FIELD_WORKFLOW_HISTORICAL_UNRESOLVED_NOTE =
   "実施時点の計画版を解決できません。最新版への付け替えはしません（fail-closed）。" as const;
 
+/** AC-4 successful-empty: association completed with zero observations (not unresolved). */
+export const FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE =
+  "関連付けは完了しています。この実施記録に紐づく観察記録は現時点でありません。" as const;
+
 export const FIELD_WORKFLOW_NO_AUTO_JUDGE_NOTE =
   "見直し材料の表示です。「変更すべき」自動判定は行いません。" as const;
 

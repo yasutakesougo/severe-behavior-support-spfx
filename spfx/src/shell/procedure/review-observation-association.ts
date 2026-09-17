@@ -74,7 +74,21 @@ export function associateReviewObservations(
         : left.observationRecordId.localeCompare(right.observationRecordId);
     });
 
-  return observations.length > 0
-    ? { ...base, status: "ASSOCIATED", observations }
-    : { ...base, status: "UNRESOLVED", reason: "NO_EXACT_CONTEXT_MATCH", observations: [] };
+  if (observations.length > 0) {
+    return { ...base, status: "ASSOCIATED", observations };
+  }
+
+  // AC-4: empty caller evidence on a RESOLVED historical material is
+  // successful-empty ASSOCIATED [], not unresolved. Non-empty evidence that
+  // filters to zero exact matches remains fail-closed unresolved.
+  if (evidence.length === 0) {
+    return { ...base, status: "ASSOCIATED", observations: [] };
+  }
+
+  return {
+    ...base,
+    status: "UNRESOLVED",
+    reason: "NO_EXACT_CONTEXT_MATCH",
+    observations: [],
+  };
 }
