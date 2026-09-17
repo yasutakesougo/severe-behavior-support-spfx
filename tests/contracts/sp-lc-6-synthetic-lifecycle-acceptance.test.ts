@@ -3,9 +3,12 @@ import { spawnSync } from "node:child_process";
 import { describe, it } from "node:test";
 import {
   bindingMatchesSupportPlanVersion,
+  mintMonitoringPeriodReviewOutcomeId,
   planVersionForProcedureRecordProjection,
   projectProcedureRecordSupportContent,
   resolveHistoricalPlanVersionForProcedureRecord,
+  startSupportPlanRevision,
+  SUPPORT_PLAN_REVISION_LIVE_WRITE_AUTHORIZED,
   validateProcedureRecord,
   validateSupportPlanVersion,
   validateSupportPlanVersionProcedureBinding,
@@ -204,20 +207,87 @@ describe("SP-LC-6 synthetic lifecycle acceptance contract", () => {
     );
   });
 
-  it("AC-7 preserves missing executable new-version behavior as GAP_FOUND", () => {
+  it("AC-7 observes executable Draft N+1 start without using DEMO-1 flags as the detector", () => {
     assert.equal(DEMO_UX_SUPPORT_PLAN_FIXTURE.currentVersion, 3);
     assert.equal(DEMO_UX_SUPPORT_PLAN_FIXTURE.conceptualNextVersion, 4);
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.presentationOnly, true);
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.versionPersistenceAuthorized, false);
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.draftWorkflowAuthorized, false);
     assert.equal(SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.planMutationAuthorized, false);
+    assert.equal(SUPPORT_PLAN_REVISION_LIVE_WRITE_AUTHORIZED, false);
+
+    const currentPlan = createPlanningPcDemoActivePlan();
+    const sourceVersion = createPlanningPcDemoPlanVersion(3);
+    const historicalVersion = createPlanningPcDemoPlanVersion(2);
+    const currentVersionBefore = currentPlan.currentVersion;
+    const historicalBefore = structuredClone(historicalVersion);
+
+    const sourceOutcomeInput = {
+      OrganizationId: currentPlan.OrganizationId,
+      SiteId: currentPlan.SiteId,
+      UserId: currentPlan.UserId,
+      planId: currentPlan.PlanId,
+      planVersion: sourceVersion.version,
+      periodStart: "2026-08-01T00:00:00+09:00",
+      periodEnd: "2026-08-31T23:59:59+09:00",
+      sourceRecordIds: ["synthetic-record-ac7-001"] as const,
+      decision: "CHANGE_REQUIRED" as const,
+      reviewedAt: "2026-08-31T18:00:00+09:00",
+      reviewedBy: "synthetic-reviewer-ac7",
+    };
+    const sourceOutcome = {
+      OutcomeId: mintMonitoringPeriodReviewOutcomeId(sourceOutcomeInput),
+      ...sourceOutcomeInput,
+    };
+    const sourceDecisionReason = {
+      OutcomeId: sourceOutcome.OutcomeId,
+      reason: "活動切替前の予告方法を見直す必要がある",
+    };
+
+    const started = startSupportPlanRevision({
+      currentPlan,
+      sourceVersion,
+      sourceOutcome,
+      sourceDecisionReason,
+      existingVersions: [historicalVersion, sourceVersion],
+      existingIntents: [],
+      existingDrafts: [],
+      actor: "synthetic-revision-staff-ac7",
+      actionAt: "2026-09-17T06:29:00.000Z",
+    });
+
+    assert.equal(started.status, "STARTED");
+    if (started.status !== "STARTED") {
+      throw new Error("expected STARTED");
+    }
+    assert.equal(started.draft.candidate.version, sourceVersion.version + 1);
+    assert.equal(currentPlan.currentVersion, currentVersionBefore);
+    assert.equal(currentPlan.currentVersion, sourceVersion.version);
+    assert.deepEqual(historicalVersion, historicalBefore);
+
+    const alreadyStarted = startSupportPlanRevision({
+      currentPlan,
+      sourceVersion,
+      sourceOutcome,
+      sourceDecisionReason,
+      existingVersions: [historicalVersion, sourceVersion],
+      existingIntents: [started.intent],
+      existingDrafts: [started.draft],
+      actor: "synthetic-revision-staff-ac7",
+      actionAt: "2026-09-17T06:30:00.000Z",
+    });
+    assert.equal(alreadyStarted.status, "ALREADY_STARTED");
 
     const result: CheckpointResult =
-      SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.versionPersistenceAuthorized ||
-      SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.draftWorkflowAuthorized
+      started.status === "STARTED" &&
+      started.draft.candidate.version === sourceVersion.version + 1 &&
+      currentPlan.currentVersion === sourceVersion.version &&
+      SUPPORT_PLAN_REVISION_LIVE_WRITE_AUTHORIZED === false &&
+      SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.draftWorkflowAuthorized === false &&
+      SUPPORT_PLAN_REVIEW_NEW_VERSION_DEMO_1_SLICE.versionPersistenceAuthorized === false
         ? "PASS"
         : "GAP_FOUND";
-    assert.equal(result, "GAP_FOUND");
+    assert.equal(result, "PASS");
   });
 
   it("AC-8 rejects identity/version mismatch instead of falling forward to a later Active version", () => {

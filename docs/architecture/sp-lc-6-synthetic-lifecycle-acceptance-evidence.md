@@ -56,7 +56,7 @@ The harness keeps the nine Definition checkpoints without adding product capabil
 | AC-4 | current main has no successful-empty association status distinct from unresolved, so `GAP_FOUND` |
 | AC-5 | existing D5 review anchor / caller-supplied due / calendar-month semantics |
 | AC-6 | no-mutation continuation invariant over the existing Active/historical graph |
-| AC-7 | concept-only next-version path; executable new-version capability absent, so `GAP_FOUND` |
+| AC-7 | current-main `startSupportPlanRevision` Draft N+1 is the capability bind; DEMO-1 flags remain presentation-only. Historical Full Acceptance AC-7 `GAP_FOUND` is preserved |
 | AC-8 | existing fail-closed identity/version mismatch paths |
 | AC-9 | current smoke reports expose authorization flags but not write-count telemetry, so `GAP_FOUND` |
 
@@ -406,4 +406,74 @@ Existing smoke reports expose slice authorization flags but no
 SharePoint / M365 / Entra / App Catalog / LIVE WRITE count telemetry.
 ```
 
-These residuals are not reclassified by §12.1 and remain candidates for separate Exact Slice separation.
+These residuals are not reclassified by §12.1. AC-4 / AC-9 remain separate
+Exact Slice residuals. AC-7 later alignment is recorded in §13 and does **not**
+rewrite this historical residual snapshot or the executed Full Acceptance tables.
+
+## 13. AC-7 acceptance-alignment Exact Slice (current-main bind)
+
+```text
+Unit: SP-LC-6-AC-7-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
+Classification B: ACCEPTED / LOCKED / CONSUMED
+Definition: APPROVED / LOCKED
+Implementation Start GO: RECEIVED / CONSUMED
+  docs/architecture/sbs-445-ac7-exact-slice-implementation-start-1.md
+Scope: AC-7 acceptance alignment ONLY
+Full Acceptance re-execution: NOT AUTHORIZED
+historical executed GAP_FOUND tables: PRESERVED
+Issue #445: KEEP OPEN
+AC-9: UNTOUCHED
+```
+
+### 13.1 Interpretation (not a historical rewrite)
+
+The executed Full Acceptance AC-7 `GAP_FOUND` rows in this document remain the
+historical result. They are not flipped to PASS.
+
+Current-main capability authority for AC-7 is:
+
+```text
+CHANGE_REQUIRED
+→ RevisionIntent
+→ Draft vN+1
+→ explicit Human Apply (existing session path; not added by this slice)
+
+SUPPORT_PLAN_REVISION_LIVE_WRITE_AUTHORIZED = false
+DEMO-1 draftWorkflowAuthorized = false (presentation-only slice boundary)
+```
+
+The previous AC-7 detector (`DEMO-1 flags false ⇒ GAP_FOUND`) is stale
+acceptance/evidence drift (classification B). It is not an established product
+gap on current main.
+
+### 13.2 Local contract checkpoint after this slice
+
+`tests/contracts/sp-lc-6-synthetic-lifecycle-acceptance.test.ts` AC-7 now
+observes `startSupportPlanRevision` on the Planning-PC demo identities:
+
+```text
+STARTED
+candidate version = source + 1
+source currentVersion unchanged
+historical versions not overwritten
+LIVE WRITE remains false
+DEMO-1 authorization flags remain false
+```
+
+Local AC-7 checkpoint PASS is slice evidence. It is **not** Full Acceptance
+re-execution and does **not** close `#445`.
+
+### 13.3 Runner bind after this slice
+
+`scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs` AC-7:
+
+```text
+result: root-focused-acceptance (no gapUnlessEnvironmentBlocked)
+source: root-focused-acceptance
+DEMO-1 smoke: concept-only observation (smokeObservation), not the detector
+note: Draft N+1 on current main; DEMO-1 flags are not capability authority
+```
+
+This runner re-bind does not authorize running the Full Acceptance suite.
+`SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
+
