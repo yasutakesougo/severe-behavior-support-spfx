@@ -353,9 +353,12 @@ definition:
   retroactively rewritten.
 - Full Acceptance re-execution remains **NOT AUTHORIZED** without a separate
   Human Acceptance Execution GO.
+- Full Acceptance PRECHECK remains **NOT AUTHORIZED** without a separate
+  Human Full Acceptance PRECHECK GO
+  (`sp-lc-6-full-acceptance-precheck-gate-separation-1.md`).
 - Local AC-4 runner checkpoint may flip to the aligned PASS condition as slice
-  evidence; that is **not** Full Acceptance re-execution and does **not** close
-  `#445`.
+  evidence; that is **not** Full Acceptance PRECHECK / re-execution and does
+  **not** close `#445`.
 
 ## 7. Explicit OUT / MUST NOT
 
@@ -500,16 +503,20 @@ Await: merge execution of PR #660 then confirm on origin/main
 3. Human Implementation Start GO                              CONSUMED
 4. Implementation (AC-4 runner + evidence §15)                COMPLETE
 5. Human Ready GO (PR #660 / exact HEAD db79ec8d)             CONSUMED
-6. Human Merge GO (PR #660)                                   CONSUMED ← THIS
-7. Optional: Full Acceptance Re-Execution Preflight again     NOT YET
-8. Separate Human Acceptance Execution GO                     NOT YET
-9. #445 Close                                                 NOT YET
+6. Human Merge GO (PR #660)                                   CONSUMED
+7. Full Acceptance PRECHECK GO (separate; new GO required)    NOT YET
+     lock: sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+     NOT optional / NOT free READ ONLY
+8. Full Acceptance PRECHECK execution (after PRECHECK GO)     NOT YET
+9. Separate Human Acceptance Execution GO                     NOT YET
+10. #445 Close                                                NOT YET
 ```
 
 ```text
 Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
 Human Ready ≠ Human Merge
-Human Merge ≠ Full Acceptance re-run
+Human Merge ≠ Full Acceptance PRECHECK GO
+Full Acceptance PRECHECK GO ≠ Acceptance Execution GO
 Full Acceptance local AC-4 PASS ≠ #445 Close
 ```

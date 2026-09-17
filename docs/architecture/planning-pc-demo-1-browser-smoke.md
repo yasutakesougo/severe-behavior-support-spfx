@@ -58,7 +58,8 @@ Section-nav expectation:
   TO:   planner-process-records-heading  (PROCESS-VISIBILITY ③ 記録)
 Product / SupportPlan / process-nav copy: UNCHANGED
 Issue #445 Close: NOT AUTHORIZED
-Full Acceptance PRECHECK / re-execution: NOT AUTHORIZED
+Full Acceptance PRECHECK GO / PRECHECK execution: NOT AUTHORIZED
+Acceptance Execution / Full Acceptance re-run: NOT AUTHORIZED
 historical Full Acceptance rewrite: NOT AUTHORIZED
 Baseline main at GO: 30f6019137d7e7b50a2dec02b038a285c9cf373c
 Date: 2026-09-17

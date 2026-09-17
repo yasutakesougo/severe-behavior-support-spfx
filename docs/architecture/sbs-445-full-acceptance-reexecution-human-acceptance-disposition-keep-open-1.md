@@ -63,7 +63,8 @@ THIS disposition lane
   ≠ Correction
   ≠ Fresh Independent Implementation Review
   ≠ Ready / Merge
-  ≠ Full Acceptance PRECHECK / re-execution
+  ≠ Full Acceptance PRECHECK GO / PRECHECK execution
+  ≠ Acceptance Execution GO / Full Acceptance re-execution
   ≠ #445 Close
 
 NEXT-2 lane (separate)
@@ -102,12 +103,18 @@ Human:
   ↓
   Ready / Merge
   ↓
-  then Full Acceptance PRECHECK again
+  Full Acceptance PRECHECK GO (separate gate; new GO required)
+    lock: docs/architecture/sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+  ↓
+  Full Acceptance PRECHECK execution (only after PRECHECK GO)
+  ↓
+  separate Acceptance Execution GO (only if Human chooses after PRECHECK PASS)
 
 FORBIDDEN without new Human GO:
   Implementation Start
   smoke / product mutation
   #445 Close
+  Full Acceptance PRECHECK (free READ ONLY / optional framing included)
   Full Acceptance re-run as Close proxy
   LIVE WRITE / Deploy / Production Binding
 ```

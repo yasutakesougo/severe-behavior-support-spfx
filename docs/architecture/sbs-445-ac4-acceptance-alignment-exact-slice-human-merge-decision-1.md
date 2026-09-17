@@ -163,12 +163,16 @@ merge method: merge commit
 ```text
 1. Merge #660 ← THIS GO
 2. Confirm AC-4 acceptance alignment on origin/main
-3. Optional: Full Acceptance Re-Execution Preflight (separate)
-4. Full Acceptance / Acceptance Execution GO / #445 Close /
+3. Full Acceptance PRECHECK GO (separate gate; new GO required)
+     lock: docs/architecture/sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+     PRECHECK is NOT optional / NOT free READ ONLY
+4. Full Acceptance PRECHECK execution (only after PRECHECK GO)
+5. Acceptance Execution GO / Full Acceptance re-run / #445 Close /
    LIVE WRITE / Deploy remain NOT YET without explicit Human GO
 ```
 
 ```text
-Human Merge ≠ Full Acceptance re-run
+Human Merge ≠ Full Acceptance PRECHECK GO
+Full Acceptance PRECHECK GO ≠ Acceptance Execution GO
 Full Acceptance ≠ #445 Close
 ```

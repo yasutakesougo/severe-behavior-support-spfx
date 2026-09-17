@@ -158,7 +158,9 @@ PR #509がmainへmergeされたため、Definition publicationだけでもmain S
 
 したがってfuture Implementation Start / acceptance executionでは、Definition publication baselineとは別にexecution base authorityを取得する。
 
-`expectedMainSha`のauthority sourceは工程によって異なる。Implementation Start GOとAcceptance Execution GOは別のHuman GOである。
+`expectedMainSha`のauthority sourceは工程によって異なる。Implementation Start GO、Full Acceptance PRECHECK GO、Acceptance Execution GOは別のHuman GOである。
+
+Full Acceptance PRECHECK を free READ ONLY / `NO HUMAN GATE CONSUMPTION` として実行してはならない。正本: `docs/architecture/sp-lc-6-full-acceptance-precheck-gate-separation-1.md`。
 
 #### 4.1.1 Implementation Start GO
 
@@ -186,9 +188,45 @@ docs/architecture/sp-lc-6-synthetic-lifecycle-acceptance-evidence.md
 
 PR #510 merge後、このImplementation Start GOはCONSUMEDである。CONSUMEDなImplementation Start GOは、future acceptance executionの`expectedMainSha` authorityではない。
 
-#### 4.1.2 Acceptance Execution GO
+#### 4.1.2 Full Acceptance PRECHECK GO
+
+Lane-level Full Acceptance PRECHECK（READ ONLY readiness / residual preflight）は、別Human `Full Acceptance PRECHECK GO`を要する。
+
+このGOはAcceptance Execution GOではない。PRECHECK GOだけではAC-1からAC-9を開始してはならない。
+
+Human `Full Acceptance PRECHECK GO`は最低限、次をbindする。
+
+```text
+Unit:
+SP-LC-6-FULL-ACCEPTANCE-PRECHECK-1
+
+Definition:
+SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1
++ sp-lc-6-full-acceptance-precheck-gate-separation-1.md
+
+expectedMainSha:
+<GO時点でHumanが承認したcurrent-main SHA>
+
+mode:
+READ ONLY
+NO ACCEPTANCE EXECUTION
+STOP = after PRECHECK verdict
+
+fullAcceptancePrecheckAuthority:
+<non-empty Human Full Acceptance PRECHECK GO reference>
+```
+
+PRECHECK GOが無い場合、Full Acceptance PRECHECKを開始しない（optional / free READ ONLY framing を含む）。
+
+PRECHECK PASSでもAcceptance Execution GOは自動成立しない。
+
+Runner内部の`PRECHECK_*` state（§4.2）はAcceptance Execution machineryであり、本節のPRECHECK GOの代替ではない。
+
+#### 4.1.3 Acceptance Execution GO
 
 AC-1からAC-9を開始するfuture acceptance executionでは、`expectedMainSha`は別Human `Acceptance Execution GO`で明示的に承認されたcurrent-main SHAとする。
+
+Acceptance Execution GOの前に、必要なら別Human Full Acceptance PRECHECK GOのもとでREAD ONLY PRECHECKを完了する。PRECHECK GOとAcceptance Execution GOを同一speech-actに畳んではならない。
 
 Human `Acceptance Execution GO`は最低限、次をbindする。
 
@@ -206,7 +244,7 @@ acceptanceExecutionAuthority:
 <non-empty Human Acceptance Execution GO reference>
 ```
 
-Implementation Start以降にmainが進んでいる場合は、Acceptance Execution GO前にcurrent-main residual reassessmentを行い、その結果に基づくSHAを承認する。
+Implementation Start以降にmainが進んでいる場合は、Acceptance Execution GO前にcurrent-main residual reassessment / Full Acceptance PRECHECK（PRECHECK GO必須）を行い、その結果に基づくSHAを承認する。
 
 post-merge Acceptance Execution GOは、Implementation Start GOのconsumed SHAとは異なるcurrent-main SHAをbindしてよい。
 
@@ -215,6 +253,7 @@ post-merge Acceptance Execution GOは、Implementation Start GOのconsumed SHA�
 ```text
 Definition baseline main
 consumed Implementation Start GO
+consumed Full Acceptance PRECHECK GO
 implementation-time SHA constant
 observed current main
 repository state
@@ -475,6 +514,9 @@ Definition baseline mainをexecution authorityとして自動再利用するこ�
 consumed Implementation Start GOをfuture acceptance execution authorityとして再利用すること
 expectedMainShaまたはacceptanceExecutionAuthorityを推定すること
 Human Acceptance Execution GOなしにacceptance checkpointを開始すること
+Human Full Acceptance PRECHECK GOなしにFull Acceptance PRECHECKを開始すること
+  （free READ ONLY / optional preflight framing を含む）
+Full Acceptance PRECHECK GOをAcceptance Execution GOと同一視すること
 Production Binding
 LIVE WRITE
 SharePoint / M365 / Entra mutation
