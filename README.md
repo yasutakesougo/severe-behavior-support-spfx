@@ -33,7 +33,7 @@ SPFx の実装基盤は構築済みです。
 
 個別の Decision、Acceptance、Evidence、Gate、Handoff の最新状態は `docs/` と GitHub の live state を確認してください。
 
-リポジトリの配布ライセンス（`LICENSE`）選定は別 Gate です。本 README の整備だけではライセンスは確定しません。
+配布ライセンスは Apache License 2.0 です。正本は [`LICENSE`](./LICENSE) です。ライセンス選定は LIVE WRITE / Production Binding / Deploy の許可を意味しません。
 
 ## Scope
 
@@ -239,7 +239,17 @@ Issue を書くとき:
 
 プロセスの詳細は `docs/process/ai-workflow.md`、`docs/process/ai-governance.md`、`docs/development/quality-gates.md` を参照してください。
 
-`LICENSE` ファイルの追加・選定は別 Gate です。この Contribution 節はライセンス選定を代替しません。
+## License
+
+このリポジトリの配布ライセンスは Apache License 2.0 です。条文の正本は [`LICENSE`](./LICENSE) です。
+
+```text
+Apache-2.0 である
+  ≠ LIVE WRITE 許可
+  ≠ Production Binding 許可
+  ≠ Deploy / App Catalog 許可
+  ≠ npm 公開
+```
 
 ## Reuse boundaries
 
