@@ -12,9 +12,13 @@ Baseline main: 4def6b8f564ffc80cb3122dd339f6f1509517554
    ancestor includes #660 AC-4 acceptance alignment)
 
 Gate separation: RECEIVED / CONSUMED / LOCKED
-Full Acceptance PRECHECK GO: NOT RECEIVED / NOT CONSUMED / NOT YET
-  (this document requires a new, separate Human GO to run PRECHECK)
-Acceptance Execution GO: NOT AUTHORIZED by this document
+Full Acceptance PRECHECK GO: RECEIVED / CONSUMED / EXECUTED
+  (later speech-act; not granted by this separation lock alone)
+  Consumption: docs/architecture/sbs-445-sp-lc-6-full-acceptance-precheck-go-1.md
+  Verdict: docs/architecture/sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
+  exactMainSha: 4def6b8f564ffc80cb3122dd339f6f1509517554
+  PRECHECK: PASS
+Acceptance Execution GO: NOT AUTHORIZED by this document / NOT YET
 Full Acceptance re-execution: NOT AUTHORIZED by this document
 Issue #445 Close / mutation: NOT AUTHORIZED
 LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED
@@ -169,18 +173,19 @@ Collapse PRECHECK into Acceptance Execution GO
 
 ---
 
-## 5. Current lane position (post-#662)
+## 5. Current lane position (post-#662 / post-PRECHECK GO)
 
 ```text
 #660 AC-4 acceptance alignment: MERGED / CONSUMED
 #662 planning-pc PROCESS-VISIBILITY stale smoke: MERGED on main 4def6b8f…
 Prior Acceptance Execution on 30f60191…: historical (ENVIRONMENT_BLOCKED residual)
 Human Acceptance disposition: KEEP #445 OPEN (CONSUMED)
+Full Acceptance PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED
+PRECHECK verdict: PASS
+  docs/architecture/sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
 
 NEXT Human gate:
-  Full Acceptance PRECHECK GO   ← REQUIRED / NOT YET
-THEN (only if PRECHECK PASS and Human chooses):
-  separate Acceptance Execution GO
+  Acceptance Execution GO   ← REQUIRED / NOT YET (separate)
 THEN:
   Fresh Independent Acceptance Review
   Human Acceptance disposition / #445 Close decision
@@ -230,10 +235,9 @@ SP-LC-6-FULL-ACCEPTANCE-PRECHECK-GATE-SEPARATION-1
 = LOCKED
 
 PRECHECK gate: SEPARATED
-PRECHECK GO: new GO required / NOT YET
-PRECHECK execution: NOT AUTHORIZED
-Acceptance Execution GO: NOT AUTHORIZED by this lock
+PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED (separate record)
+PRECHECK verdict: PASS
+Acceptance Execution GO: NOT AUTHORIZED by this lock / NOT YET
 #445: OPEN / KEEP OPEN
-Agent NEXT: STOP for Human Full Acceptance PRECHECK GO
-  (docs-only PR for this lock may proceed; do not run PRECHECK)
+Agent NEXT: STOP for Human Acceptance Execution GO
 ```

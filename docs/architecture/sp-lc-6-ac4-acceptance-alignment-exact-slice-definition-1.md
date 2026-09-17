@@ -504,10 +504,12 @@ Await: merge execution of PR #660 then confirm on origin/main
 4. Implementation (AC-4 runner + evidence §15)                COMPLETE
 5. Human Ready GO (PR #660 / exact HEAD db79ec8d)             CONSUMED
 6. Human Merge GO (PR #660)                                   CONSUMED
-7. Full Acceptance PRECHECK GO (separate; new GO required)    NOT YET
+7. Full Acceptance PRECHECK GO (separate; new GO required)    CONSUMED
      lock: sp-lc-6-full-acceptance-precheck-gate-separation-1.md
-     NOT optional / NOT free READ ONLY
-8. Full Acceptance PRECHECK execution (after PRECHECK GO)     NOT YET
+     GO: sbs-445-sp-lc-6-full-acceptance-precheck-go-1.md
+     bind: 4def6b8f564ffc80cb3122dd339f6f1509517554
+8. Full Acceptance PRECHECK execution                         PASS
+     verdict: sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
 9. Separate Human Acceptance Execution GO                     NOT YET
 10. #445 Close                                                NOT YET
 ```
