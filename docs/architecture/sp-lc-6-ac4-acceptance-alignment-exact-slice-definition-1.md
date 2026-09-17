@@ -69,7 +69,11 @@ Acceptance contract / runner rewrite: AUTHORIZED for §5 files only (this Implem
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
   (this alignment slice does not authorize product mutation)
 Issue #445 mutation / Close: NOT AUTHORIZED
-Ready / Merge: HOLD until Fresh Independent Review + Human Ready / Merge GO
+Ready / Merge: HOLD until Human Merge GO
+  Human Ready GO: RECEIVED / CONSUMED
+  Consumption: docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-ready-decision-1.md
+  Bound exact reviewed HEAD: db79ec8d277a091b639a950924f5d8725e32d65d
+  Human Merge GO: NOT AUTHORIZED / NOT YET
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 Acceptance re-execution / Full Acceptance re-run: NOT AUTHORIZED
 historical GAP_FOUND rewrite: NOT AUTHORIZED
@@ -480,9 +484,12 @@ product + contract successful-empty (#654): PRESERVED
 historical Full Acceptance GAP_FOUND: PRESERVED
 AC-7 / AC-9: MERGED / CONSUMED / OUT OF SCOPE
 Ready / Merge: HOLD
+  Human Ready GO: RECEIVED / CONSUMED
+    docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-ready-decision-1.md
+  Human Merge GO: NOT AUTHORIZED / NOT YET
 Full Acceptance re-execution: NOT AUTHORIZED
-Await: Fresh Independent Implementation Review
-  then separate Human Ready / Merge GO
+Await: separate Human Merge GO for PR #660
+  (bound expected reviewed tip lineage from db79ec8d unless tip moves with Ready docs)
 ```
 
 ## 13. Gate sequence (this lane)
@@ -490,17 +497,19 @@ Await: Fresh Independent Implementation Review
 ```text
 1. PREPARE AC-4 acceptance-alignment Exact Slice Definition  COMPLETE
 2. Human Definition APPROVE (+ classification B lock)        CONSUMED
-3. Human Implementation Start GO                              CONSUMED ← THIS
-4. Implementation + Fresh Independent Review                  ← REQUIRED NEXT
-5. Human Ready / Merge                                        HOLD
-6. Optional: Full Acceptance Re-Execution Preflight again
-7. Separate Human Acceptance Execution GO (if PRECHECK PASS)
-8. #445 Close                                                 ← separate later
+3. Human Implementation Start GO                              CONSUMED
+4. Implementation (AC-4 runner + evidence §15)                COMPLETE
+5. Human Ready GO (PR #660 / exact HEAD db79ec8d)             CONSUMED ← THIS
+6. Human Merge GO                                             ← NEXT (separate)
+7. Optional: Full Acceptance Re-Execution Preflight again
+8. Separate Human Acceptance Execution GO (if PRECHECK PASS)
+9. #445 Close                                                 ← separate later
 ```
 
 ```text
 Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
+Human Ready ≠ Human Merge
 Ready / Merge ≠ Full Acceptance re-run
 Full Acceptance local AC-4 PASS ≠ #445 Close
 ```
