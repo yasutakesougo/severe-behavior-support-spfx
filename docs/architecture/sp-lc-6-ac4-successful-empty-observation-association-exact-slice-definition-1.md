@@ -17,17 +17,24 @@ Authority inputs:
   sp-lc-4-d6-exact-slice-definition-1.md (association + unresolved delivered;
     successful-empty distinction still open)
 
-Exact Slice Definition status: PUBLISHED / AWAITING Human APPROVE
-Definition APPROVE: NOT RECEIVED
+Exact Slice Definition status: APPROVED / LOCKED
+Definition APPROVE: RECEIVED / LOCKED
+  Human: AC-4 successful-empty Observation association Exact Slice
+         Human Definition APPROVE
+  ReceivedAt: 2026-09-17T05:48:54Z
+  Basis: this document
+  Scope: AC-4 ONLY
 Human Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
 Acceptance re-execution: NOT AUTHORIZED
-Product / domain / fixture / schema mutation: NOT AUTHORIZED by this document
+Product / domain / fixture / schema mutation: NOT AUTHORIZED
+  (Repository product mutation = HOLD until separate Implementation Start GO)
 Issue #445 mutation / Close: NOT AUTHORIZED
 Ready / Merge automation: NOT AUTHORIZED
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 G3: HOLD
 AC-7 / AC-9: OUT OF SCOPE (remain ACTIVE / OPEN; not consumed by this slice)
 ```
+
 
 ## 1. Exact objective
 
@@ -343,56 +350,57 @@ Safe rollback state = current baseline main association rule
 ## 11. Gate
 
 ```text
-Exact Slice Definition:
-  PUBLISHED (this document)
+Exact Slice Definition / scope fixation:
+  COMPLETE / APPROVED / LOCKED
 
-Human Definition APPROVE:
-  NOT RECEIVED
-  → required before Implementation Start GO
+Human gate 1:
+  Exact Slice Definition APPROVE = RECEIVED / LOCKED
+  Human speech-act:
+    AC-4 successful-empty Observation association Exact Slice
+    Human Definition APPROVE
+  Scope locked: AC-4 ONLY
+  Bind targets locked: §1–§7 of this document
 
-Human Implementation Start GO:
-  NOT AUTHORIZED / NOT CONSUMED
+Human gate 2:
+  Implementation Start GO = NOT AUTHORIZED / NOT CONSUMED
+  Repository product mutation = HOLD
 
-Repository product mutation:
-  HOLD
+Still forbidden without separate Human GO:
+  product / association / presentation / test mutation
+  AC-7 / AC-9 work
+  persistence / Draft creation
+  Acceptance re-execution
+  Issue #445 Close / body mutation
+  Ready / Merge automation
+  Deploy / Production Binding / LIVE WRITE
+  G3
 
-Acceptance re-execution:
-  NOT AUTHORIZED
-
-Issue #445 Close:
-  NOT AUTHORIZED
-
-AC-7 / AC-9:
-  OPEN / untouched
-
-Deploy / LIVE WRITE / G3:
-  HOLD
-
-NEXT Human speech-act (choose):
-  A) Exact Slice Definition APPROVE for this unit
-     (locks §1–§7 as bind targets)
-  B) request Definition Correction (if semantics need edit)
-  C) STOP
-
-After APPROVE only:
-  separate Human Implementation Start GO may bind
-  changed-area + acceptance checks from this document
+NEXT Human speech-act:
+  separate Human Implementation Start GO
+  bound to:
+    this Unit (APPROVED / LOCKED)
+    baseline main SHA (explicit in that GO)
+    changed-area derived from §5
+    acceptance criteria in §6
+    OUT / MUST NOT in §7
+  OR STOP
 ```
 
 ## 12. Stop condition
 
 ```text
 SP-LC-6-AC-4-SUCCESSFUL-EMPTY-OBSERVATION-ASSOCIATION-EXACT-SLICE-DEFINITION-1
-= COMPLETE as READ ONLY definition publication
+= COMPLETE / APPROVED / LOCKED
 
-Code mutation: 0
+Definition APPROVE: CONSUMED / LOCKED
+Code / product mutation: 0
 Implementation Start: NOT CONSUMED
 Acceptance re-execution: NOT AUTHORIZED
 #445: OPEN / KEEP OPEN
-AC-4: still ACTIVE until future Implementation consumes this slice
-AC-7 / AC-9: ACTIVE / OPEN
+AC-4: ACTIVE (Definition APPROVED; Implementation not started)
+AC-7 / AC-9: ACTIVE / OPEN / OUT OF SCOPE
 #442 / #444: close-eligible candidates unchanged (no Close GO here)
 #443: CLOSED unchanged
 #392 / #419: OPEN
-Await: Human Definition APPROVE (then separate Implementation Start GO)
+Await: separate Human Implementation Start GO (or STOP)
 ```
