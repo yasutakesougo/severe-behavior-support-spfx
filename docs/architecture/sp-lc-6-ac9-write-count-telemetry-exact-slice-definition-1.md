@@ -4,10 +4,11 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Issue: #445 (parent acceptance residual; no Issue mutation / no Close)
 Unit: SP-LC-6-AC-9-WRITE-COUNT-TELEMETRY-EXACT-SLICE-DEFINITION-1
-Kind: exact-slice definition / scope fixation only (PREPARED)
+Kind: exact-slice definition / scope fixation only (APPROVED / LOCKED)
 Date: 2026-09-17
 Baseline main: c7e8fc2af32ad0fd50e6e5ea7a1875c25c4b3e90
   (#657 AC-7 acceptance alignment MERGED; expected tip 86647959 ancestor)
+PR #659 tip at Definition APPROVE bind: 456aa528e4f3b5bf945c3e8fb9043b084544971d
 Authority inputs:
   sp-lc-6-synthetic-lifecycle-acceptance-definition-1.md
     AC-9 = Acceptance実行中の SharePoint / M365 / Entra / App Catalog / LIVE WRITE が 0件
@@ -34,20 +35,28 @@ Authority inputs:
   AC-7: MERGED / CONSUMED (out of this slice)
   AC-4: MERGED / CONSUMED (out of this slice)
 
-Exact Slice Definition status: PREPARED / AWAITING Human Definition APPROVE
-Residual classification Decision: NOT LOCKED
-  (proposed interpretation below; Human may lock with Definition APPROVE)
-Human Definition APPROVE: NOT RECEIVED
+Exact Slice Definition status: APPROVED / LOCKED
+Definition APPROVE: RECEIVED / CONSUMED / LOCKED
+  Human: AC-9 Exact Slice Human Definition APPROVE for PR #659
+  ReceivedAt: 2026-09-17T10:14:00Z
+  Basis: this document
+  Scope: AC-9 write-count telemetry Exact Slice ONLY
+  Consumption: docs/architecture/sbs-445-ac9-exact-slice-definition-approve-1.md
+Residual classification Decision: ACCEPTED / LOCKED / CONSUMED
+  B / STALE ACCEPTANCE / EVIDENCE GAP
+  (locked by this Definition APPROVE speech-act)
 Human Implementation Start GO: NOT AUTHORIZED / NOT RECEIVED
-Acceptance contract rewrite: NOT AUTHORIZED
-Smoke harness mutation: NOT AUTHORIZED (until Definition APPROVE + Implementation Start)
+  (separate gate; NOT YET)
+Acceptance contract rewrite: NOT AUTHORIZED (until Implementation Start)
+Smoke harness mutation: NOT AUTHORIZED (until Implementation Start)
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
-Issue #445 mutation / Close: NOT AUTHORIZED
+Issue #445 mutation / Close: NOT AUTHORIZED / NOT YET
 Ready / Merge of this Definition PR: HOLD until Human Ready / Merge GO
-Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
-Acceptance re-execution: NOT AUTHORIZED
+Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED / NOT YET
+Acceptance re-execution: NOT AUTHORIZED / NOT YET
 historical GAP_FOUND rewrite: NOT AUTHORIZED
 Full Acceptance overall PASS claim: NOT AUTHORIZED
+Draft docs PR Close/Merge: NOT AUTHORIZED / NOT YET (SEPARATE lane)
 ```
 
 ## 1. Exact objective
@@ -95,12 +104,12 @@ Post-#657 tip:
 ```
 
 ```text
-OUT of authority for this Definition (until later separate GOs):
-  Human Definition APPROVE (this document only prepares it)
-  Human Implementation Start GO
-  Acceptance re-execution
-  #445 Close
-  Enabling LIVE WRITE / Production Binding / Deploy / App Catalog
+OUT of authority until later separate GOs:
+  Human Implementation Start GO (NOT YET)
+  Acceptance re-execution (NOT YET)
+  #445 Close (NOT YET)
+  Enabling LIVE WRITE / Production Binding / Deploy / App Catalog (NOT YET)
+  Draft docs PR Close/Merge (NOT YET / SEPARATE)
   AC-4 / AC-7 reopen
 ```
 
@@ -145,10 +154,10 @@ CONFIRMED already true on tip (do not redo as product work):
 
 ## 4. Exact target semantics (alignment)
 
-### 4.1 Proposed residual interpretation (NOT LOCKED)
+### 4.1 Residual interpretation (LOCKED by Definition APPROVE)
 
 ```text
-PROPOSED (awaiting Human Definition APPROVE speech-act):
+LOCKED:
   B / STALE ACCEPTANCE / EVIDENCE GAP
 
 Interpretation:
@@ -156,11 +165,10 @@ Interpretation:
   AC-9 GAP is missing numeric write-count telemetry emission/readback
   not an established requirement to enable or exercise LIVE WRITE
 
-Human may ACCEPT / LOCK this interpretation with Definition APPROVE,
-or substitute a different classification in that speech-act.
+Do not reopen without a new Human Decision.
 ```
 
-### 4.2 AC-9 PASS meaning (normative once APPROVED + Implementation Start)
+### 4.2 AC-9 PASS meaning (normative once Implementation Start binds §5–§7)
 
 After a later Human `Implementation Start GO` binds this **APPROVED / LOCKED**
 definition, AC-9 PASS requires all of:
@@ -208,12 +216,13 @@ FORBIDDEN:
 
 Parent §6 defaults smoke runners to read-only. AC-9 cannot PASS on tip without
 **emitting** write-count telemetry into smoke-report.json (or changing the
-detector to ignore parent AC-9 “0件” observability). This Exact Slice therefore
-requests Human Definition APPROVE to authorize a **bounded smoke-report
-telemetry emission** addition for AC-9 only.
+detector to ignore parent AC-9 “0件” observability). This **APPROVED / LOCKED**
+Exact Slice authorizes a **bounded smoke-report telemetry emission** addition
+for AC-9 only — **mutation remains HOLD until a separate Human Implementation
+Start GO**.
 
 ```text
-IN (proposed; requires Definition APPROVE + Implementation Start GO):
+IN (APPROVED scope; mutation requires separate Implementation Start GO):
   spfx/smoke/planning-pc-demo-1/run-smoke.mjs
     emit numeric WRITE_COUNT_KEYS (=0) into smoke-report.json
   spfx/smoke/demo-ux-6/run-smoke.mjs
@@ -325,13 +334,13 @@ This Exact Slice (after later APPROVE + Implementation Start + evidence):
 ## 10. Gate sequence (this lane)
 
 ```text
-1. PREPARE AC-9 Exact Slice Definition          ← THIS DOCUMENT
-2. Human Definition APPROVE                     ← NEXT (separate speech-act)
-3. Human Implementation Start GO                ← separate gate after APPROVE
-4. Implementation + Fresh Independent Review
+1. PREPARE AC-9 Exact Slice Definition          COMPLETE
+2. Human Definition APPROVE                     ← CONSUMED / LOCKED (this turn)
+3. Human Implementation Start GO                ← NEXT (separate; NOT YET)
+4. Implementation + Fresh Independent Review    NOT YET
 5. Human Ready / Merge
-6. Optional: Full Acceptance re-run             ← separate Human Execution GO
-7. #445 Close                                   ← separate Human GO
+6. Optional: Full Acceptance re-run             ← separate Human Execution GO / NOT YET
+7. #445 Close                                   ← separate Human GO / NOT YET
 ```
 
 ```text
@@ -340,6 +349,8 @@ Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
 Ready / Merge ≠ Full Acceptance re-run
 Full Acceptance local AC-9 PASS ≠ #445 Close
+NOT YET: implementation / #445 Close / Full Acceptance re-run /
+         LIVE WRITE / Deploy / Draft docs PR Close/Merge
 ```
 
 ## 11. Merge-complete verification context (#657)
