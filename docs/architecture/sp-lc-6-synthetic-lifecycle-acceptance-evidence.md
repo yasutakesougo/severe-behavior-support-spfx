@@ -476,3 +476,77 @@ note: Draft N+1 on current main; DEMO-1 flags are not capability authority
 
 This runner re-bind does not authorize running the Full Acceptance suite.
 `SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
+
+## 14. AC-9 write-count telemetry Exact Slice (current-main bind)
+
+```text
+Unit: SP-LC-6-AC-9-WRITE-COUNT-TELEMETRY-EXACT-SLICE-DEFINITION-1
+Classification B: ACCEPTED / LOCKED / CONSUMED
+Definition: APPROVED / LOCKED
+Implementation Start GO: RECEIVED / CONSUMED
+  docs/architecture/sbs-445-ac9-exact-slice-implementation-start-1.md
+Scope: AC-9 write-count telemetry Exact Slice ONLY
+Full Acceptance re-execution: NOT AUTHORIZED
+historical executed GAP_FOUND tables: PRESERVED
+Issue #445: KEEP OPEN
+AC-4 / AC-7: untouched by this section
+LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED
+```
+
+### 14.1 Interpretation (not a historical rewrite)
+
+The executed Full Acceptance AC-9 `GAP_FOUND` rows in this document remain the
+historical result. They are not flipped to PASS.
+
+Current-main AC-9 gap was missing numeric WRITE_COUNT_KEYS on acceptance source
+smoke reports (classification B / STALE ACCEPTANCE / EVIDENCE GAP). Authorization
+flags (`liveWriteAuthorized=false`) alone were not AC-9 PASS under the locked
+detector.
+
+### 14.2 Local contract checkpoint after this slice
+
+`tests/contracts/sp-lc-6-synthetic-lifecycle-acceptance.test.ts` AC-9 now
+observes smoke-report shaped WRITE_COUNT_KEYS (=0) for the three AC-9 source
+smokes, while DEMO slice authorization flags remain false:
+
+```text
+writeCount / mutationCount / liveWriteCount / sharePointWriteCount = 0
+mutationTelemetryAvailable = true
+mutationAttempted = false
+liveWriteAuthorized = false (boundary preserved)
+local AC-9 checkpoint = PASS
+```
+
+Local AC-9 checkpoint PASS is slice evidence. It is **not** Full Acceptance
+re-execution and does **not** close `#445`.
+
+### 14.3 Smoke report emission after this slice
+
+The three AC-9 source smokes emit WRITE_COUNT_KEYS into `smoke-report.json`:
+
+```text
+spfx/smoke/planning-pc-demo-1/run-smoke.mjs
+spfx/smoke/demo-ux-6/run-smoke.mjs
+spfx/smoke/support-plan-review-new-version-demo-1/run-smoke.mjs
+
+Each report:
+  writeCount: 0
+  mutationCount: 0
+  liveWriteCount: 0
+  sharePointWriteCount: 0
+  sliceFlags.liveWriteAuthorized: false (where emitted)
+```
+
+### 14.4 Runner bind after this slice
+
+`scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs` AC-9:
+
+```text
+WRITE_COUNT_KEYS detector unchanged
+PASS when telemetry present and all counts == 0
+note: smoke-report WRITE_COUNT_KEYS are AC-9 authority;
+      liveWriteAuthorized flags are boundary evidence only
+```
+
+This runner / smoke re-bind does not authorize running the Full Acceptance suite.
+`SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.

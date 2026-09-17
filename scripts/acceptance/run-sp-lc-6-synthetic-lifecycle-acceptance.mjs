@@ -343,7 +343,7 @@ const checkpoints = [
       "demo-ux-6-smoke",
       "support-plan-review-new-version-demo-1-smoke",
     ],
-    note: "Existing smoke reports expose slice authorization flags but no SharePoint/M365/Entra/App Catalog/LIVE WRITE count telemetry.",
+    note: "AC-9 binds to smoke-report WRITE_COUNT_KEYS (writeCount|mutationCount|liveWriteCount|sharePointWriteCount). PASS requires telemetry present and all counts == 0. liveWriteAuthorized flags remain boundary evidence, not a substitute for write-count telemetry.",
     mutationTelemetryAvailable,
   },
 ];

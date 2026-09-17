@@ -386,6 +386,12 @@ const report = {
   unit: "SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1",
   kind: "browser smoke / version compare and next-version concept",
   date: new Date().toISOString(),
+  // AC-9 write-count telemetry: synthetic smoke performs 0 LIVE WRITE / SharePoint /
+  // M365 / Entra / App Catalog writes. Keys required by SP-LC-6 acceptance runner.
+  writeCount: 0,
+  mutationCount: 0,
+  liveWriteCount: 0,
+  sharePointWriteCount: 0,
   sliceFlags: {
     id: "SUPPORT-PLAN-REVIEW-NEW-VERSION-DEMO-1",
     presentationOnly: true,
