@@ -22,7 +22,8 @@ Classification B: APPROVED / LOCKED / CONSUMED
 base SHA at Ready Decision: a17a231e7ddeea0e55c00ac77a4e71a91993ec50
 Human Ready Decision: GO (2026-09-17)
 Human Ready GO: RECEIVED / CONSUMED
-Human Merge GO: NOT AUTHORIZED / NOT CONSUMED / NOT YET
+Human Merge GO: RECEIVED / CONSUMED
+  docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-human-merge-decision-1.md
 Full Acceptance re-run: NOT AUTHORIZED / NOT YET
 Acceptance Execution GO: NOT AUTHORIZED / NOT YET
 #445 Close / mutation: NOT AUTHORIZED / NOT YET
@@ -60,8 +61,7 @@ NOT YET
 RESULT: Human Ready Decision = GO
 Authorized action: Mark PR #660 Ready for Review (isDraft: true → false)
 Bound exact reviewed HEAD: db79ec8d277a091b639a950924f5d8725e32d65d
-Human Merge GO: NOT AUTHORIZED / NOT YET
-Implementation Start: already CONSUMED (prior gate)
+Human Merge GO: RECEIVED / CONSUMED
 Deploy / LIVE WRITE: NOT AUTHORIZED / NOT YET
 #445 Close / mutation: NOT AUTHORIZED / NOT YET
 Full Acceptance re-run / Acceptance Execution GO: NOT AUTHORIZED / NOT YET
