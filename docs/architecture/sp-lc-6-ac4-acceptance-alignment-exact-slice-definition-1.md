@@ -4,10 +4,11 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Issue: #445 (parent acceptance residual; no Issue mutation / no Close)
 Unit: SP-LC-6-AC-4-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
-Kind: exact-slice definition / scope fixation only (docs preparation)
+Kind: exact-slice definition / scope fixation only
 Date: 2026-09-17
 Baseline main: a17a231e7ddeea0e55c00ac77a4e71a91993ec50
   (#659 AC-9 write-count telemetry Exact Slice MERGED tip)
+PR #660 tip at Definition APPROVE bind: c182d58b7304a5cbab2de852ef4d884b70912bc0
 Authority inputs:
   SP-LC-6 Full Acceptance Re-Execution Preflight (READ ONLY)
     PRECHECK FAIL / HOLD
@@ -46,14 +47,23 @@ Authority inputs:
   #419 / Decision-SUPPORT-PLAN-LIFECYCLE-SEMANTICS-1
     D1=B / D2=B / D3=B / D4=A / D5=B / D6=A LOCKED
 
-Exact Slice Definition status: PREPARED / AWAITING HUMAN DEFINITION APPROVE
-Residual classification Decision: NOT LOCKED
-  proposed: B / STALE ACCEPTANCE / EVIDENCE GAP
-  (Human may lock with Definition APPROVE or a separate classification Decision)
-Human Definition APPROVE: NOT RECEIVED / NOT CONSUMED
-Human Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
-Acceptance contract / runner rewrite: NOT AUTHORIZED by this document alone
+Exact Slice Definition status: APPROVED / LOCKED
+Definition APPROVE: RECEIVED / CONSUMED / LOCKED
+  Human: AC-4 acceptance-alignment Exact Slice
+         Human Definition APPROVE
+  ReceivedAt: 2026-09-17T11:14:00Z
+  Basis: this document
+  Scope: AC-4 acceptance alignment ONLY
+  Consumption: docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-definition-approve-1.md
+Residual classification Decision: APPROVED / LOCKED / CONSUMED
+  B / STALE ACCEPTANCE / EVIDENCE GAP
+  (locked by this Definition APPROVE speech-act)
+Human Implementation Start GO: NOT AUTHORIZED / NOT RECEIVED / NOT YET
+Acceptance contract / runner rewrite: NOT AUTHORIZED
+  (AUTHORIZED later by separate Implementation Start GO for §5 only)
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
+  (Repository product mutation = NOT AUTHORIZED until separate Implementation Start GO;
+   this alignment slice does not authorize product mutation even then)
 Issue #445 mutation / Close: NOT AUTHORIZED
 Ready / Merge: HOLD
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
@@ -87,8 +97,10 @@ This Exact Slice remediates **AC-4 acceptance alignment only**. It does not
 claim Full Acceptance PASS, does not rewrite historical `GAP_FOUND`, and does
 not close `#445`.
 
-This document does **not** approve itself. Human `Definition APPROVE` is a
-separate speech-act. Alignment implementation is a third, later GO.
+Human `Definition APPROVE` for this document is **RECEIVED / LOCKED /
+CONSUMED**. Residual classification **B / STALE ACCEPTANCE / EVIDENCE GAP** is
+**APPROVED / LOCKED / CONSUMED** with the same speech-act. Alignment
+implementation remains a later, separate `Implementation Start GO`.
 
 ## 2. Authority / do not redecide
 
@@ -106,8 +118,9 @@ Prior product Exact Slice (consumed; do not redo):
   UNRESOLVED branches preserved
   Explicit OUT included acceptance runner rewrite
 
-Proposed residual classification (awaiting Human lock):
+Classification lock (consumed with Definition APPROVE):
   B / STALE ACCEPTANCE / EVIDENCE GAP
+  APPROVED / LOCKED / CONSUMED
   AC-4 product gap is NOT ESTABLISHED on baseline tip
   AC-4 residual is acceptance-layer runner / evidence drift
 
@@ -192,7 +205,7 @@ remaining acceptance-layer residual.
 
 ## 4. Exact target semantics (alignment)
 
-### 4.1 AC-4 PASS meaning (normative for this slice)
+### 4.1 AC-4 PASS meaning (normative for this APPROVED / LOCKED slice)
 
 After a later Human Implementation Start GO binds this **APPROVED / LOCKED**
 definition, AC-4 PASS requires all of:
@@ -337,8 +350,7 @@ definition:
 ## 7. Explicit OUT / MUST NOT
 
 ```text
-treat this PREPARED definition as Definition APPROVE
-treat Definition APPROVE as Implementation Start
+treat this Definition APPROVE as Implementation Start
 AC-4 product re-implementation
 AC-7 / AC-9 reopen
 authorize persistence
@@ -374,8 +386,7 @@ Scope discipline:
 ## 9. Relation to Full Acceptance / #445 disposition
 
 ```text
-This Exact Slice (after future Definition APPROVE + Implementation Start
-+ evidence):
+This Exact Slice (after future Implementation Start + evidence):
   may remediate the AC-4 acceptance/evidence drift
   may clear the PRECHECK FAIL blocking residual found on a17a231e
 
@@ -410,28 +421,27 @@ Safe rollback state = current baseline AC-4 runner detector
 
 ```text
 Residual classification:
-  proposed B / STALE ACCEPTANCE / EVIDENCE GAP
-  NOT LOCKED until Human Definition APPROVE
-    or a separate Human classification Decision
+  B / STALE ACCEPTANCE / EVIDENCE GAP
+  APPROVED / LOCKED / CONSUMED
+  docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-definition-approve-1.md
 
 Exact Slice Definition / scope fixation:
-  PREPARED / AWAITING HUMAN DEFINITION APPROVE
+  APPROVED / LOCKED
 
-Human gate 1 (NEXT):
-  Exact Slice Definition APPROVE = NOT RECEIVED
-  required speech-act form:
+Human gate 1:
+  Exact Slice Definition APPROVE = RECEIVED / LOCKED
+  Human speech-act:
     AC-4 acceptance-alignment Exact Slice
     Human Definition APPROVE
-    Scope: AC-4 acceptance alignment ONLY
-    Basis: this document
-    optional: lock residual classification B with the same speech-act
-  Until received: do not rewrite runner / evidence body
-                  beyond this definition packet
+  Scope locked: AC-4 acceptance alignment ONLY
+  Bind targets locked: §1–§7 of this document
+  Consumption:
+    docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-definition-approve-1.md
 
-Human gate 2 (later, separate):
-  Implementation Start GO = NOT AUTHORIZED
+Human gate 2 (NEXT, separate):
+  Implementation Start GO = NOT AUTHORIZED / NOT RECEIVED / NOT YET
   Bound when issued:
-    this Unit (must be APPROVED / LOCKED first)
+    this Unit (APPROVED / LOCKED)
     baseline main a17a231e7ddeea0e55c00ac77a4e71a91993ec50
       (re-bind if main has moved)
     changed-area from §5
@@ -454,26 +464,29 @@ Still forbidden without separate Human GO:
 
 ```text
 SP-LC-6-AC-4-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
-= PREPARED / AWAITING HUMAN DEFINITION APPROVE
+= APPROVED / LOCKED
 
-Definition APPROVE: NOT CONSUMED
-Implementation Start: NOT CONSUMED
+Definition APPROVE: RECEIVED / CONSUMED / LOCKED
+Classification B: APPROVED / LOCKED / CONSUMED
+Implementation Start: NOT CONSUMED / NOT YET
 Acceptance contract / runner rewrite: NOT PERFORMED
 #445: OPEN / KEEP OPEN
 AC-4 product gap: NOT ESTABLISHED on baseline tip
-AC-4 acceptance/evidence drift: PROPOSED as classification B
+AC-4 acceptance/evidence drift: LOCKED as classification B
+product + contract successful-empty (#654): PRESERVED
+historical Full Acceptance GAP_FOUND: PRESERVED
 AC-7 / AC-9: MERGED / CONSUMED / OUT OF SCOPE
 Ready / Merge: HOLD
 Full Acceptance re-execution: NOT AUTHORIZED
-Await: Human Definition APPROVE for this document
+Await: separate Human Implementation Start GO for AC-4 acceptance alignment ONLY
 ```
 
 ## 13. Gate sequence (this lane)
 
 ```text
-1. PREPARE AC-4 acceptance-alignment Exact Slice Definition  ← THIS DOCUMENT
-2. Human Definition APPROVE (+ optional classification B lock) ← NEXT
-3. Human Implementation Start GO                              ← separate
+1. PREPARE AC-4 acceptance-alignment Exact Slice Definition  COMPLETE
+2. Human Definition APPROVE (+ classification B lock)        CONSUMED ← THIS
+3. Human Implementation Start GO                              ← NEXT (separate)
 4. Implementation + Fresh Independent Review
 5. Human Ready / Merge
 6. Optional: Full Acceptance Re-Execution Preflight again
@@ -482,7 +495,6 @@ Await: Human Definition APPROVE for this document
 ```
 
 ```text
-Definition PREPARED ≠ Definition APPROVE
 Definition APPROVE ≠ Implementation Start
 Implementation Start ≠ Ready / Merge
 Ready / Merge ≠ Full Acceptance re-run
