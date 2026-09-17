@@ -4,7 +4,7 @@
 repository: yasutakesougo/severe-behavior-support-spfx
 Issue: #445 (parent acceptance residual; no Issue mutation / no Close)
 Unit: SP-LC-6-AC-7-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
-Kind: exact-slice definition / scope fixation only (docs preparation)
+Kind: exact-slice definition / scope fixation only
 Date: 2026-09-17
 Baseline main: cd8949d7323efaefc3987451f3b2ed3bb20c84cc
 Authority inputs:
@@ -27,12 +27,19 @@ Authority inputs:
   #419 / Decision-SUPPORT-PLAN-LIFECYCLE-SEMANTICS-1
     D1=B / D2=B / D3=B / D4=A / D5=B / D6=A LOCKED
 
-Exact Slice Definition status: PREPARED / AWAITING HUMAN DEFINITION APPROVE
+Exact Slice Definition status: APPROVED / LOCKED
 Classification lock: CONSUMED / LOCKED (B)
-Definition APPROVE: NOT RECEIVED / NOT CONSUMED
+Definition APPROVE: RECEIVED / LOCKED
+  Human: AC-7 acceptance-alignment Exact Slice
+         Human Definition APPROVE
+  ReceivedAt: 2026-09-17T06:21:00Z
+  Basis: this document
+  Scope: AC-7 acceptance alignment ONLY
+  Consumption: docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md
 Human Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
-Acceptance contract rewrite: NOT AUTHORIZED by this document alone
+Acceptance contract rewrite: NOT AUTHORIZED
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
+  (Repository product mutation = NOT AUTHORIZED until separate Implementation Start GO)
 Issue #445 mutation / Close: NOT AUTHORIZED
 Ready / Merge: HOLD
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
@@ -65,8 +72,9 @@ This Exact Slice remediates **AC-7 acceptance alignment only**. It does not
 claim Full Acceptance PASS, does not rewrite historical `GAP_FOUND`, and does
 not close `#445`.
 
-This document does **not** approve itself. Human `Definition APPROVE` is a
-separate speech-act. Alignment implementation is a third, later GO.
+Human `Definition APPROVE` for this document is **RECEIVED / LOCKED /
+CONSUMED**. Alignment implementation remains a later, separate
+`Implementation Start GO`.
 
 ## 2. Authority / do not redecide
 
@@ -179,8 +187,8 @@ That executed result stays **PRESERVED**. This slice does not rewrite it.
 
 ### 4.1 AC-7 PASS meaning (normative for this slice)
 
-After a later Human Implementation Start GO binds this definition, AC-7 PASS
-requires all of:
+After a later Human Implementation Start GO binds this **APPROVED / LOCKED**
+definition, AC-7 PASS requires all of:
 
 ```text
 1. Existing product/domain path executes new-version start
@@ -285,8 +293,8 @@ NOT candidates (explicit):
 
 ## 6. Acceptance criteria (bind targets for future Implementation Start GO)
 
-When a later Human `Implementation Start GO` binds an **APPROVED** copy of
-this definition:
+When a later Human `Implementation Start GO` binds this **APPROVED / LOCKED**
+definition:
 
 ### Semantics
 
@@ -339,8 +347,7 @@ enable DEMO-1 create-cta
 treat conceptualNextVersion as executable new-version
 schema / SharePoint column / DTO redesign
 Ready / Merge automation from this definition alone
-treat Definition preparation as Definition APPROVE
-treat Definition APPROVE as Implementation Start
+treat this Definition APPROVE as Implementation Start
 ```
 
 ## 8. Why this Exact Slice is minimal
@@ -366,8 +373,7 @@ Scope discipline:
 ## 9. Relation to Full Acceptance / #445 disposition
 
 ```text
-This Exact Slice (after future Definition APPROVE + Implementation Start
-+ evidence):
+This Exact Slice (after future Implementation Start + evidence):
   may remediate the AC-7 acceptance/evidence drift
 
 It does NOT by itself:
@@ -407,53 +413,65 @@ Classification lock:
   docs/architecture/sbs-445-ac7-exact-residual-classification-lock-1.md
 
 Exact Slice Definition / scope fixation:
-  PREPARED / AWAITING HUMAN DEFINITION APPROVE
+  COMPLETE / APPROVED / LOCKED
 
-Human gate 1 (NEXT):
-  Exact Slice Definition APPROVE = NOT RECEIVED
-  required speech-act form:
+Human gate 1:
+  Exact Slice Definition APPROVE = RECEIVED / LOCKED
+  Human speech-act:
     AC-7 acceptance-alignment Exact Slice
     Human Definition APPROVE
-    Scope: AC-7 acceptance alignment ONLY
-    Basis: this document
-  Until received: do not rewrite contracts / runner / evidence body
-                  beyond this definition packet
+  Scope locked: AC-7 acceptance alignment ONLY
+  Bind targets locked: §1–§7 of this document
+  Consumption:
+    docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md
 
-Human gate 2 (later, separate):
-  Implementation Start GO = NOT AUTHORIZED
-  Bound when issued:
-    this Unit (must be APPROVED / LOCKED first)
-    baseline main cd8949d7323efaefc3987451f3b2ed3bb20c84cc
-      (re-bind if main has moved)
-    changed-area from §5
-    acceptance criteria from §6
-    OUT / MUST NOT from §7
+Human gate 2:
+  Implementation Start GO = NOT AUTHORIZED / NOT CONSUMED
+  Repository product mutation = NOT AUTHORIZED
 
 Still forbidden without separate Human GO:
   AC-7 product implementation
   AC-9 work
   persistence
+  LIVE WRITE
+  Deploy / App Catalog / Production Binding
   Acceptance re-execution
   historical GAP_FOUND rewrite
   Issue #445 Close / body mutation
   Ready / Merge
-  Deploy / Production Binding / LIVE WRITE
+  flipping DEMO-1 draftWorkflowAuthorized / create-cta
+
+NEXT Human speech-act:
+  separate Human Implementation Start GO
+  for AC-7 acceptance alignment ONLY
+  bound to:
+    this Unit (APPROVED / LOCKED)
+    baseline main cd8949d7323efaefc3987451f3b2ed3bb20c84cc
+      (re-bind if main has moved)
+    changed-area from §5
+    acceptance criteria from §6
+    OUT / MUST NOT from §7
+  OR STOP
 ```
 
 ## 12. Stop condition
 
 ```text
 SP-LC-6-AC-7-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
-= PREPARED / AWAITING HUMAN DEFINITION APPROVE
+= APPROVED / LOCKED
 
 Classification lock: CONSUMED / LOCKED
-Definition APPROVE: NOT CONSUMED
+Definition APPROVE: RECEIVED / CONSUMED / LOCKED
 Implementation Start: NOT CONSUMED
 Acceptance contract rewrite: NOT PERFORMED
+Repository product mutation: NOT AUTHORIZED
 #445: OPEN / KEEP OPEN
+historical Full Acceptance GAP_FOUND: PRESERVED
+DEMO-1 draftWorkflowAuthorized=false: PRESERVED (DEMO-1 presentation-only)
 AC-7 product gap: NOT ESTABLISHED
 AC-7 acceptance/evidence drift: LOCKED as classification B
 AC-9: ACTIVE / OPEN / OUT OF SCOPE
 Ready / Merge: HOLD
-Await: Human Definition APPROVE for this document
+Await: separate Human Implementation Start GO
+  for AC-7 acceptance alignment ONLY
 ```

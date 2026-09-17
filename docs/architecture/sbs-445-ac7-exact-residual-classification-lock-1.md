@@ -11,7 +11,9 @@ Issue: #445 (KEEP OPEN; no Issue mutation / no Close)
 
 Classification Decision: RECEIVED / CONSUMED / ACCEPTED / LOCKED
 Classification: B / STALE ACCEPTANCE / EVIDENCE GAP
-Definition APPROVE: NOT AUTHORIZED / NOT CONSUMED
+Definition APPROVE: RECEIVED / CONSUMED / LOCKED
+  (separate speech-act; not granted by this classification lock)
+  docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md
 Implementation Start GO: NOT AUTHORIZED / NOT CONSUMED
 Acceptance contract rewrite: NOT AUTHORIZED / NOT PERFORMED
 Repository product mutation: HOLD / NOT PERFORMED
@@ -82,15 +84,18 @@ NEXT
 | Current-main executable synthetic new-version | **CONFIRMED** (authority = this Decision + re-pin basis) |
 | Additional product implementation need | **NOT ESTABLISHED** |
 | Historical Full Acceptance | **GAP_FOUND / PRESERVED** |
-| Exact Slice Definition APPROVE | **NOT CONSUMED** |
+| Exact Slice Definition APPROVE | **RECEIVED / CONSUMED / LOCKED** |
 | Alignment Implementation Start | **NOT CONSUMED** |
 | Acceptance contract / runner rewrite | **0 / HOLD** |
 | Product / SPFx / domain mutation | **0 / HOLD** |
 | `#445` | **OPEN / KEEP OPEN** |
 | AC-9 | **ACTIVE / OPEN / untouched** |
 
-Companion prepared definition (awaiting separate Human Definition APPROVE):
+Companion APPROVED / LOCKED definition:
 `docs/architecture/sp-lc-6-ac7-acceptance-alignment-exact-slice-definition-1.md`
+
+Definition APPROVE consumption:
+`docs/architecture/sbs-445-ac7-exact-slice-definition-approve-1.md`
 
 ## Locked interpretation (do not reopen without a new Human Decision)
 
@@ -123,7 +128,7 @@ AC-9 work                                          = NOT PERFORMED
 persistence / LIVE WRITE / Deploy                  = NOT PERFORMED
 gh issue close 445                                 = NOT PERFORMED
 Ready / Merge                                      = NOT PERFORMED
-Exact Slice Definition APPROVE                     = NOT CONSUMED
+Exact Slice Definition APPROVE                     = CONSUMED (separate record)
 Alignment Implementation Start GO                  = NOT CONSUMED
 ```
 
@@ -131,13 +136,12 @@ Alignment Implementation Start GO                  = NOT CONSUMED
 
 ```text
 Human:
-  Exact Slice Definition APPROVE
-  bound to
+  separate Human Implementation Start GO
+  for AC-7 acceptance alignment ONLY
+  bound to APPROVED
     docs/architecture/sp-lc-6-ac7-acceptance-alignment-exact-slice-definition-1.md
-  Scope: AC-7 acceptance alignment ONLY
-OR STOP / request definition correction
+OR STOP
 
-Do not treat this classification lock as Definition APPROVE.
 Do not treat this classification lock as Implementation Start.
 Do not rewrite acceptance contracts from this lock alone.
 Do not treat this docs consumption as #445 Close authority.
