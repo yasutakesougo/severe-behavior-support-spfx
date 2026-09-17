@@ -356,6 +356,12 @@ const report = {
   unit: "PLANNING-PC-DEMO-1",
   kind: "browser smoke / Planning PC synthetic support plan graph",
   date: new Date().toISOString(),
+  // AC-9 write-count telemetry: synthetic smoke performs 0 LIVE WRITE / SharePoint /
+  // M365 / Entra / App Catalog writes. Keys required by SP-LC-6 acceptance runner.
+  writeCount: 0,
+  mutationCount: 0,
+  liveWriteCount: 0,
+  sharePointWriteCount: 0,
   sliceFlags: {
     id: "PLANNING-PC-DEMO-1",
     presentationOnly: true,
