@@ -9,6 +9,7 @@ Parent review:
   docs/architecture/sp-lc-6-ac4-successful-empty-observation-association-fresh-independent-review-1.md
   Verdict: HOLD / CORRECTION REQUIRED (P1-1 prettier)
 Prior exact HEAD: 7abe648239b9914378bd5972966f3767cb88097a
+Correction-1 exact HEAD: 035b0ecf8ebbdf00f76e0ba51eba5e844151039b
 PR: #654
 
 Scope: Prettier formatting of spfx/src/shell/review/review-due.test.ts ONLY
