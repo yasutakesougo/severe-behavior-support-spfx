@@ -281,7 +281,9 @@ try {
       !capturedA.noteInputPresent &&
       capturedA.captureFormAbsent &&
       capturedA.nextSupportCue === "支援内容の見直しを始める（次版の下書き）" &&
-      capturedA.text.includes("次は計画画面で、版 4 の下書き作成を始めます。適用はまだしません。") &&
+      capturedA.text.includes(
+        "次は計画画面で、版 4 の下書き作成を始めます。適用はまだしません。",
+      ) &&
       capturedA.text.includes("デモ上の見直し結果: 変更が必要");
     checks.push(recordCheck(`${viewport.name}: R2/F3/F5 capture A`, capturedAPass, capturedA));
     await saveScreenshot(page, viewport.name, "03-captured-with-reason");
