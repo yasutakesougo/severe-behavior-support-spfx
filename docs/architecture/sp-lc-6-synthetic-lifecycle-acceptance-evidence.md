@@ -550,3 +550,63 @@ note: smoke-report WRITE_COUNT_KEYS are AC-9 authority;
 
 This runner / smoke re-bind does not authorize running the Full Acceptance suite.
 `SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
+
+## 15. AC-4 acceptance-alignment Exact Slice (current-main bind)
+
+```text
+Unit: SP-LC-6-AC-4-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
+Classification B: APPROVED / LOCKED / CONSUMED
+Definition: APPROVED / LOCKED
+Implementation Start GO: RECEIVED / CONSUMED
+  docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-implementation-start-1.md
+Scope: AC-4 acceptance alignment ONLY
+Full Acceptance re-execution: NOT AUTHORIZED
+historical executed GAP_FOUND tables: PRESERVED
+Issue #445: KEEP OPEN
+AC-7 / AC-9: UNTOUCHED by this section
+product successful-empty (#654): PRESERVED (not re-implemented)
+```
+
+### 15.1 Interpretation (not a historical rewrite)
+
+The executed Full Acceptance AC-4 `GAP_FOUND` rows in this document remain the
+historical result. They are not flipped to PASS.
+
+Current-main capability authority for AC-4 is:
+
+```text
+RESOLVED historical material + evidence=[]
+→ ASSOCIATED / observations: []
+(distinct from UNRESOLVED / HISTORICAL_LOOKUP_UNRESOLVED
+ and UNRESOLVED / NO_EXACT_CONTEXT_MATCH)
+
+Product + local contract successful-empty already MERGED via PR #654
+```
+
+The previous AC-4 runner detector (`gapUnlessEnvironmentBlocked` forced
+`GAP_FOUND` plus a note denying successful-empty) is stale acceptance/evidence
+drift (classification B). It is not an established product gap on current main.
+
+### 15.2 Local contract checkpoint (unchanged by this slice)
+
+`tests/contracts/sp-lc-6-synthetic-lifecycle-acceptance.test.ts` AC-4 already
+asserts successful-empty `ASSOCIATED []` distinct from unresolved and remains
+PASS. This alignment slice does not reopen those semantics.
+
+Local AC-4 contract checkpoint PASS is prior product-slice evidence. It is
+**not** Full Acceptance re-execution and does **not** close `#445`.
+
+### 15.3 Runner bind after this slice
+
+`scripts/acceptance/run-sp-lc-6-synthetic-lifecycle-acceptance.mjs` AC-4:
+
+```text
+result: mergeResults([focused, heft, reviewSmoke])
+        (no gapUnlessEnvironmentBlocked)
+source: root-focused-acceptance / spfx-heft / demo-ux-6-smoke
+note: successful-empty ASSOCIATED [] on current main;
+      distinct from UNRESOLVED; #654 product+contract is authority
+```
+
+This runner re-bind does not authorize running the Full Acceptance suite.
+`SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
