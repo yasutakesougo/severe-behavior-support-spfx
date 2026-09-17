@@ -298,9 +298,9 @@ const checkpoints = [
   },
   {
     id: "AC-4",
-    result: gapUnlessEnvironmentBlocked(mergeResults([focused, heft, reviewSmoke])),
+    result: mergeResults([focused, heft, reviewSmoke]),
     source: ["root-focused-acceptance", "spfx-heft", "demo-ux-6-smoke"],
-    note: "Current main maps zero exact Observation matches to UNRESOLVED / NO_EXACT_CONTEXT_MATCH; no successful-empty association status exists.",
+    note: "AC-4 is bound to current-main successful-empty ASSOCIATED [] (distinct from UNRESOLVED). Forced gapUnlessEnvironmentBlocked residual removed; product+contract successful-empty from #654 is capability authority.",
   },
   {
     id: "AC-5",
