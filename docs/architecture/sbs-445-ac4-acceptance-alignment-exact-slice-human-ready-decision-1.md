@@ -1,6 +1,6 @@
 # SBS — AC-4 Acceptance-Alignment Exact Slice PR #660 Human Ready Decision
 
-Human Ready Decision for PR #660. This record consumes Human Ready GO only. It does **not** consume Human Merge GO, Full Acceptance re-run / Acceptance Execution GO, #445 Close / mutation, LIVE WRITE, or Deploy / Production Binding.
+Human Ready Decision for PR #660. This record originally consumed Human Ready GO only. Human Merge GO was later CONSUMED via `sbs-445-ac4-acceptance-alignment-exact-slice-human-merge-decision-1.md`. Full Acceptance re-run / Acceptance Execution GO, #445 Close / mutation, LIVE WRITE, and Deploy / Production Binding remain NOT YET.
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
@@ -82,7 +82,7 @@ Full Acceptance re-run / Acceptance Execution GO: NOT AUTHORIZED / NOT YET
 | AC-4 runner rebind on tip | CONFIRMED | no forced `gapUnlessEnvironmentBlocked`; evidence §15 |
 | Contract AC-4 successful-empty | PASS retained | focused contract 12/12 on tip |
 | CI @ `db79ec8d` | GREEN | Contracts / SPFx artifact / B12 = SUCCESS |
-| Human Merge GO | NOT RECEIVED | this record |
+| Human Merge GO | RECEIVED / CONSUMED | `sbs-445-ac4-acceptance-alignment-exact-slice-human-merge-decision-1.md` |
 | Full Acceptance / Acceptance Execution / #445 Close / LIVE WRITE / Deploy | NOT YET | Human NOT YET list |
 
 Ready Decision commit introduces this file. Ready transition binds to live PR HEAD at `draft=false`. If live HEAD loses Implementation Start bind / AC-4 runner rebind / §15 evidence record relative to `db79ec8d`, this Ready GO is void.
@@ -104,8 +104,6 @@ Mark PR #660 Ready for Review
 ## NOT AUTHORIZED / NOT YET
 
 ```text
-Human Merge GO
-Merge of PR #660
 #445 Close / mutation
 Full Acceptance re-run
 Acceptance Execution GO
@@ -131,7 +129,7 @@ Implementation Start tip (runner rebind): db79ec8d277a091b639a950924f5d8725e32d6
 base SHA: a17a231e7ddeea0e55c00ac77a4e71a91993ec50
 CI @ exact reviewed HEAD db79ec8d: GREEN (3/3 SUCCESS)
 CI @ Ready Decision tip: re-running after push (mergeStateStatus may be UNSTABLE until green)
-Human Merge GO: still NOT AUTHORIZED / NOT YET
+Human Merge GO: RECEIVED / CONSUMED
 Full Acceptance re-run / Acceptance Execution GO /
 #445 Close / mutation / LIVE WRITE / Deploy: still NOT YET
 ```
@@ -141,10 +139,11 @@ Full Acceptance re-run / Acceptance Execution GO /
 ## Next gate
 
 ```text
-1. Ready transition for PR #660 ← THIS GO
-2. Human Merge Decision for PR #660 (independent; separate GO) ← NEXT
-3. After Merge: AC-4 acceptance alignment lands on main; #445 remains KEEP OPEN
-4. Full Acceptance re-run / Acceptance Execution GO / #445 Close /
+1. Ready transition for PR #660 ← COMPLETE
+2. Human Merge Decision for PR #660 ← CONSUMED
+3. Merge execution of PR #660 ← IN PROGRESS / AUTHORIZED
+4. After Merge: AC-4 acceptance alignment lands on main; #445 remains KEEP OPEN
+5. Full Acceptance re-run / Acceptance Execution GO / #445 Close /
    LIVE WRITE / Deploy remain NOT YET without explicit Human GO
 ```
 
