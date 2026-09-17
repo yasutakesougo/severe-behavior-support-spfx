@@ -58,14 +58,18 @@ Definition APPROVE: RECEIVED / CONSUMED / LOCKED
 Residual classification Decision: APPROVED / LOCKED / CONSUMED
   B / STALE ACCEPTANCE / EVIDENCE GAP
   (locked by this Definition APPROVE speech-act)
-Human Implementation Start GO: NOT AUTHORIZED / NOT RECEIVED / NOT YET
-Acceptance contract / runner rewrite: NOT AUTHORIZED
-  (AUTHORIZED later by separate Implementation Start GO for §5 only)
+Human Implementation Start GO: RECEIVED / CONSUMED
+  Human: AC-4 acceptance alignment
+         Human Implementation Start GO
+  ReceivedAt: 2026-09-17T11:46:00Z
+  Bound: approved §5–§7
+  Scope: AC-4 acceptance alignment ONLY
+  Consumption: docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-implementation-start-1.md
+Acceptance contract / runner rewrite: AUTHORIZED for §5 files only (this Implementation Start)
 Product / domain / fixture / schema mutation: NOT AUTHORIZED
-  (Repository product mutation = NOT AUTHORIZED until separate Implementation Start GO;
-   this alignment slice does not authorize product mutation even then)
+  (this alignment slice does not authorize product mutation)
 Issue #445 mutation / Close: NOT AUTHORIZED
-Ready / Merge: HOLD
+Ready / Merge: HOLD until Fresh Independent Review + Human Ready / Merge GO
 Deploy / Production Binding / LIVE WRITE: NOT AUTHORIZED
 Acceptance re-execution / Full Acceptance re-run: NOT AUTHORIZED
 historical GAP_FOUND rewrite: NOT AUTHORIZED
@@ -99,8 +103,9 @@ not close `#445`.
 
 Human `Definition APPROVE` for this document is **RECEIVED / LOCKED /
 CONSUMED**. Residual classification **B / STALE ACCEPTANCE / EVIDENCE GAP** is
-**APPROVED / LOCKED / CONSUMED** with the same speech-act. Alignment
-implementation remains a later, separate `Implementation Start GO`.
+**APPROVED / LOCKED / CONSUMED** with the same speech-act. Human
+`Implementation Start GO` for AC-4 acceptance alignment ONLY is **RECEIVED /
+CONSUMED** and is bound to §5–§7.
 
 ## 2. Authority / do not redecide
 
@@ -438,15 +443,13 @@ Human gate 1:
   Consumption:
     docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-definition-approve-1.md
 
-Human gate 2 (NEXT, separate):
-  Implementation Start GO = NOT AUTHORIZED / NOT RECEIVED / NOT YET
-  Bound when issued:
-    this Unit (APPROVED / LOCKED)
-    baseline main a17a231e7ddeea0e55c00ac77a4e71a91993ec50
-      (re-bind if main has moved)
-    changed-area from §5
-    acceptance criteria from §6
-    OUT / MUST NOT from §7
+Human gate 2:
+  Implementation Start GO = RECEIVED / CONSUMED
+  Scope locked: AC-4 acceptance alignment ONLY
+  Bound changed-area: §5 (runner + evidence; optional contract hygiene)
+  Product / association / Review UI mutation = NOT AUTHORIZED
+  Consumption:
+    docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-implementation-start-1.md
 
 Still forbidden without separate Human GO:
   AC-4 product re-implementation
@@ -468,8 +471,8 @@ SP-LC-6-AC-4-ACCEPTANCE-ALIGNMENT-EXACT-SLICE-DEFINITION-1
 
 Definition APPROVE: RECEIVED / CONSUMED / LOCKED
 Classification B: APPROVED / LOCKED / CONSUMED
-Implementation Start: NOT CONSUMED / NOT YET
-Acceptance contract / runner rewrite: NOT PERFORMED
+Implementation Start: RECEIVED / CONSUMED
+Acceptance contract / runner rewrite: AUTHORIZED for §5 only (this Implementation Start)
 #445: OPEN / KEEP OPEN
 AC-4 product gap: NOT ESTABLISHED on baseline tip
 AC-4 acceptance/evidence drift: LOCKED as classification B
@@ -478,17 +481,18 @@ historical Full Acceptance GAP_FOUND: PRESERVED
 AC-7 / AC-9: MERGED / CONSUMED / OUT OF SCOPE
 Ready / Merge: HOLD
 Full Acceptance re-execution: NOT AUTHORIZED
-Await: separate Human Implementation Start GO for AC-4 acceptance alignment ONLY
+Await: Fresh Independent Implementation Review
+  then separate Human Ready / Merge GO
 ```
 
 ## 13. Gate sequence (this lane)
 
 ```text
 1. PREPARE AC-4 acceptance-alignment Exact Slice Definition  COMPLETE
-2. Human Definition APPROVE (+ classification B lock)        CONSUMED ← THIS
-3. Human Implementation Start GO                              ← NEXT (separate)
-4. Implementation + Fresh Independent Review
-5. Human Ready / Merge
+2. Human Definition APPROVE (+ classification B lock)        CONSUMED
+3. Human Implementation Start GO                              CONSUMED ← THIS
+4. Implementation + Fresh Independent Review                  ← REQUIRED NEXT
+5. Human Ready / Merge                                        HOLD
 6. Optional: Full Acceptance Re-Execution Preflight again
 7. Separate Human Acceptance Execution GO (if PRECHECK PASS)
 8. #445 Close                                                 ← separate later

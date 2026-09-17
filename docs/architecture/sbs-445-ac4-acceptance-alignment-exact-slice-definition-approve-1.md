@@ -16,9 +16,11 @@ Issue: #445 (KEEP OPEN; no Issue mutation / no Close)
 Definition APPROVE: RECEIVED / CONSUMED / LOCKED
 Classification: B / STALE ACCEPTANCE / EVIDENCE GAP
   APPROVED / LOCKED / CONSUMED (via this Definition APPROVE)
-Implementation Start GO: NOT RECEIVED / NOT AUTHORIZED / NOT YET
+Implementation Start GO: RECEIVED / CONSUMED
+  docs/architecture/sbs-445-ac4-acceptance-alignment-exact-slice-implementation-start-1.md
 Repository product mutation: NOT AUTHORIZED / NOT PERFORMED
-Acceptance contract / runner rewrite: NOT AUTHORIZED / NOT PERFORMED (NOT YET)
+Acceptance contract / runner rewrite: AUTHORIZED for §5 only by Implementation Start
+  (not Full Acceptance re-run)
 Issue #445 Close / body mutation: NOT PERFORMED / NOT AUTHORIZED / NOT YET
 Acceptance re-execution / Full Acceptance re-run: NOT AUTHORIZED / NOT YET
 historical GAP_FOUND rewrite: NOT AUTHORIZED
@@ -85,10 +87,10 @@ Preserve
 = AC-7 / AC-9 MERGED / CONSUMED / untouched
 
 Implementation Start
-= NOT CONSUMED / NOT YET
+= RECEIVED / CONSUMED (separate GO record)
 
-Repository mutation (implementation)
-= NOT AUTHORIZED / NOT YET
+Repository product mutation
+= NOT AUTHORIZED
 ```
 
 ## Consumption result
@@ -98,9 +100,9 @@ Repository mutation (implementation)
 | Exact Slice Definition | **APPROVED / LOCKED** |
 | Definition APPROVE | **RECEIVED / CONSUMED** |
 | Classification B | **APPROVED / LOCKED / CONSUMED** |
-| Implementation Start | **NOT RECEIVED / NOT YET** |
+| Implementation Start | **RECEIVED / CONSUMED** (separate GO) |
 | Product / SPFx / domain mutation | **0 / NOT AUTHORIZED** |
-| Acceptance contract / runner rewrite | **AUTHORIZED later by Implementation Start only (§5)** |
+| Acceptance contract / runner rewrite | **§5 runner + evidence only** (not Full Acceptance re-run) |
 | Historical Full Acceptance | **GAP_FOUND / PRESERVED** |
 | `#445` | **OPEN / KEEP OPEN** |
 | AC-4 alignment residual | ACTIVE (awaiting separate Implementation Start GO) |
@@ -129,29 +131,26 @@ NOT required / NOT authorized by this APPROVE:
   Ready / Merge
 ```
 
-## Explicit non-actions (NOT YET)
+## Explicit non-actions retained
 
 ```text
-Human Implementation Start GO                 = NOT RECEIVED
-implementation / runner / evidence mutation   = NOT PERFORMED
+Human Implementation Start GO                 = CONSUMED (separate record)
+AC-4 product mutation                         = NOT PERFORMED / FORBIDDEN
 historical GAP_FOUND / acceptance-report rewrite = NOT PERFORMED
 #445 Close                                    = NOT PERFORMED
 Full Acceptance re-run                        = NOT PERFORMED
-product mutation                              = NOT PERFORMED
 LIVE WRITE / Deploy / Production Binding      = NOT PERFORMED
-Ready / Merge of #660                         = NOT PERFORMED by this APPROVE alone
+Ready / Merge of #660                         = HOLD (Fresh Review + separate Human GO)
 ```
 
 ## NEXT
 
 ```text
 Human:
-  separate Human Implementation Start GO
-  for AC-4 acceptance alignment ONLY
-  bound to APPROVED §5–§7
+  Fresh Independent Implementation Review
+  then separate Human Ready / Merge GO
 OR STOP
 
-Do not treat Definition APPROVE as Implementation Start.
+Do not treat Definition APPROVE as Full Acceptance re-execution.
 Do not treat this docs consumption as #445 Close authority.
-Do not treat this docs consumption as Full Acceptance re-run authority.
 ```
