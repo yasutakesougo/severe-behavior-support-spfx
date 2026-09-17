@@ -610,3 +610,117 @@ note: successful-empty ASSOCIATED [] on current main;
 
 This runner re-bind does not authorize running the Full Acceptance suite.
 `SP_LC_6_ACCEPTANCE_EXECUTION_AUTHORITY` remains required for execution.
+
+## 16. Full Acceptance Re-Execution result (main 30f60191…)
+
+```text
+Unit: SP-LC-6-FULL-ACCEPTANCE-RE-EXECUTION-ACCEPTANCE-EXECUTION-1
+Acceptance Execution GO: RECEIVED / CONSUMED / EXECUTED
+  docs/architecture/sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-1.md
+exactMainSha / expectedMainSha / observedMainSha:
+  30f6019137d7e7b50a2dec02b038a285c9cf373c
+shaMatch: true
+preflightState: PRECHECK_BASE_MATCH
+historical §11 GAP_FOUND tables: PRESERVED (not rewritten)
+Issue #445: KEEP OPEN
+LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED / NOT PERFORMED
+```
+
+### 16.1 Authority binding
+
+```text
+acceptanceExecutionAuthority:
+Human Acceptance Execution GO / SP-LC-6 Full Acceptance Re-Execution / main 30f6019137d7e7b50a2dec02b038a285c9cf373c
+
+Human speech-act Exact main prefix:
+30f6019137d7e7b
+→ uniquely expanded to tip 30f6019137d7e7b50a2dec02b038a285c9cf373c
+```
+
+### 16.2 Checkpoint results (new execution)
+
+| Checkpoint | Result | Source |
+|---|---|---|
+| AC-1 | PASS | root-focused-acceptance / root-planning-graph |
+| AC-2 | PASS | root-focused-acceptance / root-planning-graph |
+| AC-3 | PASS | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-4 | PASS | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-5 | PASS | root-focused-acceptance / spfx-heft / demo-ux-6-smoke |
+| AC-6 | ENVIRONMENT_BLOCKED | root-focused-acceptance / planning-pc-demo-1-smoke |
+| AC-7 | PASS | root-focused-acceptance |
+| AC-8 | PASS | root-focused-acceptance / root-planning-graph / demo-ux-6-smoke |
+| AC-9 | ENVIRONMENT_BLOCKED | root-focused-acceptance / planning-pc-demo-1-smoke / demo-ux-6-smoke / support-plan-review-new-version-demo-1-smoke |
+
+Overall result under locked precedence `ENVIRONMENT_BLOCKED > GAP_FOUND > PASS`:
+
+```text
+ENVIRONMENT_BLOCKED count: 2 (AC-6, AC-9)
+GAP_FOUND count: 0
+overallResult: ENVIRONMENT_BLOCKED
+```
+
+Machine-readable report:
+`/opt/cursor/artifacts/sp-lc-6-full-acceptance-reexec-report.json`
+
+### 16.3 Execution counts and smoke results
+
+| Execution | Result | Notes |
+|---|---|---|
+| root-focused-acceptance | PASS | 12 tests |
+| root-planning-graph | PASS | 25 tests |
+| spfx-heft | PASS | 470 successes / 0 failures (after local `heft build` to materialize `lib-commonjs`) |
+| planning-pc-demo-1-smoke | ENVIRONMENT_BLOCKED (runner class) | see §16.4 |
+| demo-ux-6-smoke | PASS | 9 of 9 |
+| support-plan-review-new-version-demo-1-smoke | PASS | write-count telemetry present (=0) |
+
+### 16.4 Mutation boundary observations
+
+```text
+observedWriteCounts (from successful smoke report(s)):
+  writeCount=0
+  mutationCount=0
+  liveWriteCount=0
+  sharePointWriteCount=0
+mutationAttempted: false
+liveWriteAuthorized: false
+```
+
+AC-9 remains `ENVIRONMENT_BLOCKED` in this run because `planning-pc-demo-1-smoke`
+is classified `ENVIRONMENT_BLOCKED` and AC-9 merges that source. Partial zero
+write-count telemetry from the new-version smoke is recorded above and does
+**not** alone clear AC-9 under the locked merge precedence.
+
+### 16.5 Interpretation of AC-6 / planning-pc-demo-1 failure
+
+Runner classification for `planning-pc-demo-1-smoke` is `ENVIRONMENT_BLOCKED`
+because the failure stack matches the runner's `/puppeteer/` environment
+pattern. Observed failure message:
+
+```text
+No element found for selector:
+[data-planning-pc-section-nav="planning-pc-plan-records-heading"]
+```
+
+Current-main PLANNER presentation uses PROCESS-VISIBILITY-UI-V1 process
+navigation IDs (`planner-process-*-heading`), while the smoke still clicks the
+pre-V1 planning-PC section id `planning-pc-plan-records-heading`.
+
+```text
+Classification candidate (for Fresh Independent Acceptance Review):
+  STALE SMOKE EXPECTATION / UI navigation evolution
+  NOT AC-4 / AC-7 / AC-9 acceptance-layer runner drift
+  NOT an authorized product mutation in this execution lane
+```
+
+This section records observation only. Correcting the planning-pc smoke or
+PLANNER nav binding requires a **separate** Exact Slice / Definition gate.
+
+### 16.6 Explicit non-claims
+
+```text
+historical §11 overallResult GAP_FOUND rewrite = NOT PERFORMED
+#445 Close / mutation                                 = NOT PERFORMED
+LIVE WRITE / Deploy / Production Binding              = NOT PERFORMED
+Full Acceptance overall PASS claim                    = NOT MADE
+Fresh Independent Acceptance Review                   = NEXT (separate)
+```

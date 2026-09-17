@@ -13,10 +13,13 @@ observedMainAtGO: 30f6019137d7e7b50a2dec02b038a285c9cf373c
 shaMatchAtGO: true
 PRECHECK: PASS (prior READ ONLY re-execution preflight)
 
-Acceptance Execution GO: RECEIVED / CONSUMED
+Acceptance Execution GO: RECEIVED / CONSUMED / EXECUTED
 Scope: SP-LC-6 Full Acceptance Re-Execution ONLY
 Unit: SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-IMPLEMENTATION-1
 Definition: SP-LC-6-SYNTHETIC-LIFECYCLE-ACCEPTANCE-DEFINITION-1
+executionResult: overallResult = ENVIRONMENT_BLOCKED
+  evidence: docs/architecture/sp-lc-6-synthetic-lifecycle-acceptance-evidence.md §16
+  report: /opt/cursor/artifacts/sp-lc-6-full-acceptance-reexec-report.json
 
 historical Full Acceptance GAP_FOUND tables: PRESERVED (immutable)
 Issue #445 Close / mutation: NOT AUTHORIZED / NOT YET
