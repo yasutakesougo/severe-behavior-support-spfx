@@ -244,9 +244,10 @@ export function buildManagementHomeReadModel(
   if (hasUnknown) {
     nextActionLabel = formatUnavailableNextAction(unavailableSections);
   } else if (draft !== null && draft.candidate.version === currentVersion + 1) {
-    nextActionLabel = `次に必要な人の行動: 次版 v${draft.candidate.version} の内容と適用可否を確認してください`;
+    // CORR-1C — bind to explicit Human Apply speech-act; no auto-Apply.
+    nextActionLabel = `次に必要な人の行動: 次版 v${draft.candidate.version} を適用開始する前に内容を確認してください`;
   } else if (draft !== null && draft.candidate.version === currentVersion) {
-    nextActionLabel = "次に必要な人の行動: 新しい版が現在適用中";
+    nextActionLabel = `次に必要な人の行動: 新しい版 v${currentVersion} が現在適用中`;
   } else if (review === null) {
     nextActionLabel = "次に必要な人の行動: 見直し状況を確認";
   } else if (review.decision === "NO_CHANGE") {

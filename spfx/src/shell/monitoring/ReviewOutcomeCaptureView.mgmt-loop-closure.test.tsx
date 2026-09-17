@@ -59,12 +59,14 @@ describe("ReviewOutcomeCaptureView SBS-MGMT-LOOP-A MVP closure", () => {
     expect(html).toContain('data-next-support-step="true"');
     expect(html).toContain('data-next-support-cue="true"');
     expect(html).toContain("次にすること");
-    expect(html).toContain("支援内容を見直す");
-    expect(html).toContain("この場で決められなければ、追加で検討します。");
+    expect(html).toContain("支援内容の見直しを始める（次版の下書き）");
+    expect(html).toContain("次は計画画面で、版 4 の下書き作成を始めます。適用はまだしません。");
     expect(html).toContain("判断理由: 支援方法の再検討が必要");
     expect(html).toContain("根拠 1件");
     expect(html).toContain("計画版 3");
     expect(html).toContain("対象期間 2026-08-01〜2026-08-31");
+    expect(html).not.toContain("支援内容を見直す");
+    expect(html).not.toContain("この場で決められなければ、追加で検討します。");
     expect(html).not.toContain("次回の支援検討");
     expect(html).not.toContain('data-review-outcome-reason-input="true"');
     expect(html).not.toContain('data-review-outcome-action="NO_CHANGE"');

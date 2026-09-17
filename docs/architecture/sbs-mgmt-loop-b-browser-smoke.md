@@ -25,7 +25,7 @@ source SupportPlanVersion N mutation: NOT AUTHORIZED
 | B12-R7 | both | draft readback: `変更内容の下書き: 版 4` | B12 |
 | B12-R8 | both | source N immutable: `元の版: 3（変更しない）` + current version control still 版 3 | B12 |
 | B12-R8a | both | active version explicit: `現在適用中: 版 3` | B12 / Staff Fix 3 |
-| B12-R8b | both | draft not applied: `版 4 は下書きです。まだ適用開始されていません` | B12 / Staff Fix 3 |
+| B12-R8b | both | draft requires Apply on first scan: `版 4 は下書きです。使い始めるには「版 4 を適用開始する」が必要です。` (CORR-1B; prior SIMPLIFICATION long sentence remains absent) | B12 / CORR-1B |
 | B12-R9 | both | session-only: `下書き / 本番未保存` + boundary `本番には保存されていません` | B12 |
 | B12-R10 | both | decision + reason readback remain visible | B12 |
 | B12-R11 | both | after draft: start-revision cleared; draft count remains 1 under repeated action | B12 |

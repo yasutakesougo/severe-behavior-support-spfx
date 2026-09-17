@@ -15,7 +15,7 @@ describe("SBS-MGMT-HOME-C read model", () => {
     expect(result.revisionLabel).toContain("次版の下書き作成済み");
     expect(result.revisionLabel).not.toContain("CONSUMED");
     expect(result.nextActionLabel).toBe(
-      "次に必要な人の行動: 次版 v4 の内容と適用可否を確認してください",
+      "次に必要な人の行動: 次版 v4 を適用開始する前に内容を確認してください",
     );
   });
 
@@ -30,7 +30,7 @@ describe("SBS-MGMT-HOME-C read model", () => {
     expect(result.reviewLabel).not.toContain("CHANGE_REQUIRED");
     expect(result.revisionLabel).toContain("次版の下書き v4");
     expect(result.revisionLabel).toContain("現在適用中");
-    expect(result.nextActionLabel).toBe("次に必要な人の行動: 新しい版が現在適用中");
+    expect(result.nextActionLabel).toBe("次に必要な人の行動: 新しい版 v4 が現在適用中");
   });
 
   it("formats dates and workflow terms for staff presentation", () => {

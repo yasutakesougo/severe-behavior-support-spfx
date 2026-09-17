@@ -16,7 +16,16 @@ export const REVIEW_OUTCOME_CAPTURE_COPY = {
   noteLabel: "見直しの補足メモ（任意）",
   noteHelper: "見直し結果に添える短い補足です。次の計画内容ではありません。",
   noteLengthError: "補足メモは255文字以内で入力してください。",
+  /** CORR-1A — speech-act family with Loop-B start-revision CTA. */
+  nextStepLabel: "次にすること",
+  changeRequiredNextCue: "支援内容の見直しを始める（次版の下書き）",
+  noChangeNextCue: "次回のモニタリングへ",
 } as const;
+
+/** CORR-1A helper: Draft create ≠ Apply; version resolves to reviewed planVersion + 1. */
+export function changeRequiredNextHelper(nextDraftVersion: number): string {
+  return `次は計画画面で、版 ${nextDraftVersion} の下書き作成を始めます。適用はまだしません。`;
+}
 
 export function labelForReviewDecision(decision: MonitoringPeriodReviewDecision): string {
   return decision === "NO_CHANGE"
