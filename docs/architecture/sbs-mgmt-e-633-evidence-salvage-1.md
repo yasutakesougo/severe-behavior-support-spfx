@@ -6,7 +6,8 @@ unit: SBS-MGMT-E-633-EVIDENCE-SALVAGE-1
 kind: Evidence salvage / current-main re-pin
 date: 2026-09-17
 Human Salvage Start GO: RECEIVED / CONSUMED
-source PR: #633 OPEN / DRAFT / mergeable=CONFLICTING
+source PR: #633 CLOSED without merge (Human Close-as-Superseded GO; see sbs-mgmt-e-633-human-close-as-superseded-1.md)
+  (historical salvage snapshot below still describes OPEN/CONFLICTING at salvage time)
 source branch: cursor/sbs-mgmt-e-acceptance-rebaseline-6665
 source HEAD: 3f41fbf7f7def40c8a132bb56d5caf119e6b2288
 source Evidence-2 pin: ac6b3d665b0e514852775b5b58f5f9e254d107ae  (STALE vs current main)
@@ -173,13 +174,20 @@ artifacts: /opt/cursor/artifacts/sbs-mgmt-e-633-evidence-salvage-1/
 
 ## 9. STOP — NEXT
 
+Historical salvage NEXT (at packet write). Post-landing overlay:
+
 ```text
-Agent (this slice): land historical #633 docs + this salvage packet + re-verify
-Human-only (not authorized here):
-  Ready / Merge of this salvage PR
-  Merge or close of #633 (recommend close-as-superseded after this lands; Human GO required)
-  Ready / Merge of #635
-  #556 close
-  Deploy / LIVE WRITE
-  Actual Staff Path A if still required by Human for G3 / production value
+Salvage #637 = MERGED @ 736fc89c
+Human Close-as-Superseded GO = CONSUMED
+#633 = CLOSED without merge
+record: docs/architecture/sbs-mgmt-e-633-human-close-as-superseded-1.md
+```
+
+Remaining Human-only (not authorized by salvage or this close GO):
+
+```text
+Ready / Merge of the close-consumption docs PR
+Ready / Merge of #635
+#556 close
+Deploy / LIVE WRITE
 ```
