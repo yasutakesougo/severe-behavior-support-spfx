@@ -82,7 +82,7 @@ node spfx/smoke/support-plan-management-list-demo-1/run-smoke.mjs
 node spfx/smoke/human-review-ui-slice-a/run-smoke.mjs
 ```
 
-Results: filled after local execution in §8.
+Results: **PASS** (see §8). Product/SPFx tree matches `origin/main` `db0f74ef`; salvage HEAD is docs-only.
 
 ## 4. Case A–H salvage overlay
 
@@ -154,14 +154,21 @@ This salvage does NOT authorize:
 
 ```text
 salvage branch: cursor/sbs-mgmt-e-633-evidence-salvage-14fe
-origin/main at start: db0f74ef8b357868a1811a7face871777895f4f4
-domain revision/activation: PENDING_FILL
-heft targeted: PENDING_FILL
-Loop-A RBA: PENDING_FILL
-Loop-B RBA: PENDING_FILL
-Management Home smoke: PENDING_FILL
-human-review-ui-slice-a: PENDING_FILL
+origin/main product pin: db0f74ef8b357868a1811a7face871777895f4f4
+salvage HEAD (docs-only on that pin): 3e18e994ed8e0e8c08f04c67f5fe1da9b918b304
+  (Loop-A report.productBasisHead = salvage HEAD; product/SPFx tree == origin/main)
+domain revision/activation: 23 pass / 0 fail
+heft targeted (prepare:b2-build-basis + pattern): Successes 468 / Failures 0
+  key PASS: management-home-read-model.test.js (12), ManagementHome.test.js (3),
+            HumanReviewView.test.js (9), MonitoringView.test.js (4),
+            ReviewOutcomeCaptureView.test.js (7), support-plan.test.js (16)
+Loop-A RBA: PASS (report.pass=true; 22/22; CORR-1A cue+helper asserted;
+            captureFormAbsent=true on post-capture; Case C zero-record factual)
+Loop-B RBA: PASS (report.pass=true; 6/6; draftRequiresApplyClear=true @ 1280 and 390)
+Management Home smoke: PASS (allPass=true; 13 checks)
+human-review-ui-slice-a: PASS (passed=true; pc+narrow × v2/v1/v3/mismatch/malformed)
 artifacts: /opt/cursor/artifacts/sbs-mgmt-e-633-evidence-salvage-1/
+#633 smoke patch: NOT REPLAYED (confirmed current main already has captureFormAbsent + nextSupportCue)
 ```
 
 ## 9. STOP — NEXT
