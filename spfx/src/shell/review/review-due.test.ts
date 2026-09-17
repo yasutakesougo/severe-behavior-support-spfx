@@ -215,7 +215,9 @@ describe("VP-5 Review presentation boundary", () => {
   });
 
   it("keeps successful-empty copy distinct from unresolved association copy", () => {
-    expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).toContain("関連付けは完了");
+    expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).toContain(
+      "関連付けは完了",
+    );
     expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).not.toContain("未解決");
     expect(FIELD_WORKFLOW_OBSERVATION_ASSOCIATION_SUCCESSFUL_EMPTY_NOTE).not.toContain(
       "観察記録の関連付けは未解決です",
