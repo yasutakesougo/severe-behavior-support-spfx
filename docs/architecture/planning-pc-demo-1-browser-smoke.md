@@ -66,13 +66,20 @@ Date: 2026-09-17
 
 | Case | Assertion | Result |
 |---|---|---|
-| planner-support-plan-graph | 適用中 / 版3 / 手順 / 記録 / 過去版 / 見直しCTA / 禁止トークンなし | PENDING_SMOKE |
-| planner-section-navigation | PROCESS-VISIBILITY ③ 記録 (`planner-process-records-heading`) + recent-records | PENDING_SMOKE |
-| planner-review-materials-nested | SupportPlan → ReviewDueState under users | PENDING_SMOKE |
-| planner-back-to-support-plan | ReviewDueState → SupportPlan back | PENDING_SMOKE |
-| field-staff-demo-ux-4-regression | goals/actions preserved; planner blocks hidden | PENDING_SMOKE |
+| planner-support-plan-graph | 適用中 / 版3 / 手順 / 記録 / 過去版 / 見直しCTA / 禁止トークンなし | PASS |
+| planner-section-navigation | PROCESS-VISIBILITY ③ 記録 (`planner-process-records-heading`) + `aria-current=location` + recent-records | PASS |
+| planner-review-materials-nested | SupportPlan → ReviewDueState under users | PASS |
+| planner-back-to-support-plan | ReviewDueState → SupportPlan back | PASS |
+| field-staff-demo-ux-4-regression | goals/actions preserved; planner blocks hidden | PASS |
 
 ```text
-Smoke re-run results will replace PENDING_SMOKE after Implementation Start execution.
+allPass: true
+cases: 5 / 5
+head: b24e9f85+ (Implementation Start correction; see PR #662)
 Artifacts: /opt/cursor/artifacts/planning-pc-demo-1-browser-smoke/
+  smoke-report.json
+  planner-section-navigation.png
+Selected-state note:
+  PROCESS-VISIBILITY PLANNER nav uses aria-current="location"
+  (not aria-pressed). Smoke assert matches product; product UNCHANGED.
 ```

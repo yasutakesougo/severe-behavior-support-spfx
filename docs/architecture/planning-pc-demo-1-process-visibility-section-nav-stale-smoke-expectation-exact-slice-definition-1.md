@@ -337,18 +337,46 @@ Implementation Start: RECEIVED / CONSUMED
 CURRENT ACTION: correction under §5–§6; then Fresh Independent Implementation Review
 ```
 
-## 10. Implementation evidence (placeholder — Implementation Start GO only)
+## 10. Implementation evidence (Implementation Start GO)
 
 ```text
-Not performed in this Definition drafting lane.
+Human GO:
+  Human Implementation Start GO — bind APPROVED Definition §5–§6
+  ReceivedAt: 2026-09-17T12:39:00Z
+  Consumption:
+    docs/architecture/planning-pc-demo-1-process-visibility-section-nav-stale-smoke-expectation-implementation-start-1.md
 
-When Implementation Start GO is later received, record here or in a companion
-evidence doc:
-  Human GO speech-act
-  authorized mutation (FROM / TO selectors)
-  node spfx/smoke/planning-pc-demo-1/run-smoke.mjs result
-  allPass / case matrix
-  artifacts path
-  explicit non-performed list
-    (product / domain / #445 / Deploy / LIVE WRITE / Full Acceptance rewrite)
+Authorized mutation:
+  spfx/smoke/planning-pc-demo-1/run-smoke.mjs
+  planner-section-navigation check
+  FROM: planning-pc-plan-records-heading (+ pre-V1 aria-pressed selected assert)
+  TO:   planner-process-records-heading
+        + aria-current="location" selected assert
+        + data-process-visibility-ui-v1="navigation"
+        + label includes ③ / 記録
+  Product / SupportPlan / process-nav: UNCHANGED
+  (aria-current already on main for plannerProcess; smoke caught up)
+
+Verification:
+  node spfx/smoke/planning-pc-demo-1/run-smoke.mjs
+  allPass: true
+  cases: 5 / 5
+  focus PASS: planner-section-navigation
+  sibling PASS:
+    planner-support-plan-graph
+    planner-review-materials-nested
+    planner-back-to-support-plan
+    field-staff-demo-ux-4-regression
+  artifacts:
+    /opt/cursor/artifacts/planning-pc-demo-1-browser-smoke/smoke-report.json
+    /opt/cursor/artifacts/planning-pc-demo-1-browser-smoke/planner-section-navigation.png
+
+Not performed:
+  product / domain / fixture / schema mutation
+  other smoke runners
+  Full Acceptance PRECHECK / re-execution
+  historical Full Acceptance rewrite
+  Issue #445 mutation / Close
+  Deploy / Production Binding / LIVE WRITE
+  Ready / Merge
 ```

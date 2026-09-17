@@ -215,6 +215,7 @@ function assertPlannerSupportPlan() {
 
   // PROCESS-VISIBILITY-UI-V1: PLANNER section-nav targets planner-process-*-heading
   // (stale pre-V1 id planning-pc-plan-records-heading is no longer a nav target).
+  // Selected state uses aria-current="location" (not aria-pressed) when plannerProcess.
   await page.click('[data-planning-pc-section-nav="planner-process-records-heading"]');
   await page.waitForFunction(
     () => document.activeElement?.id === "planner-process-records-heading",
@@ -228,11 +229,16 @@ function assertPlannerSupportPlan() {
     return {
       pass:
         Boolean(root) &&
+        root?.getAttribute("data-process-visibility-ui-v1") === "navigation" &&
         active?.id === "planner-process-records-heading" &&
-        selected?.getAttribute("aria-pressed") === "true" &&
+        selected?.getAttribute("aria-current") === "location" &&
+        (selected?.textContent ?? "").includes("③") &&
+        (selected?.textContent ?? "").includes("記録") &&
         Boolean(document.querySelector('[data-planning-pc="recent-records"]')),
       activeId: active?.id ?? "",
-      selectedPressed: selected?.getAttribute("aria-pressed") ?? "",
+      selectedCurrent: selected?.getAttribute("aria-current") ?? "",
+      selectedLabel: selected?.textContent ?? "",
+      processNavAttr: root?.getAttribute("data-process-visibility-ui-v1") ?? "",
     };
   });
   const sectionNavPass = Boolean(sectionNavFound.pass) && errors.length === 0;
