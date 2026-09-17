@@ -165,15 +165,16 @@ merge method: merge commit
 2. Confirm AC-4 acceptance alignment on origin/main
 3. Full Acceptance PRECHECK GO (separate gate)                CONSUMED
      bind: 4def6b8f564ffc80cb3122dd339f6f1509517554
-     docs/architecture/sbs-445-sp-lc-6-full-acceptance-precheck-go-1.md
 4. Full Acceptance PRECHECK execution                         PASS
-     docs/architecture/sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
-5. Acceptance Execution GO / Full Acceptance re-run / #445 Close /
-   LIVE WRITE / Deploy remain NOT YET without explicit Human GO
+5. Acceptance Execution GO @ 4def6b8f…                        CONSUMED / PASS
+     docs/architecture/sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
+     evidence §16 overallResult PASS
+6. Fresh Independent Acceptance Review 2                      REVIEW-CLEARED
+7. #445 Close / LIVE WRITE / Deploy remain NOT YET without explicit Human GO
 ```
 
 ```text
 Human Merge ≠ Full Acceptance PRECHECK GO
 Full Acceptance PRECHECK GO ≠ Acceptance Execution GO
-Full Acceptance ≠ #445 Close
+Acceptance Execution PASS ≠ #445 Close
 ```

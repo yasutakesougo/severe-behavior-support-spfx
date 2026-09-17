@@ -510,8 +510,11 @@ Await: merge execution of PR #660 then confirm on origin/main
      bind: 4def6b8f564ffc80cb3122dd339f6f1509517554
 8. Full Acceptance PRECHECK execution                         PASS
      verdict: sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
-9. Separate Human Acceptance Execution GO                     NOT YET
-10. #445 Close                                                NOT YET
+9. Separate Human Acceptance Execution GO                     CONSUMED
+     GO: sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
+     overallResult PASS (evidence §16)
+10. Fresh Independent Acceptance Review 2                     REVIEW-CLEARED
+11. #445 Close                                                NOT YET
 ```
 
 ```text

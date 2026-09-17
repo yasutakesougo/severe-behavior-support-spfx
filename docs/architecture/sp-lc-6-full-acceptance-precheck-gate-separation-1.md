@@ -173,28 +173,25 @@ Collapse PRECHECK into Acceptance Execution GO
 
 ---
 
-## 5. Current lane position (post-#662 / post-PRECHECK GO)
+## 5. Current lane position (post-#662 / post-PRECHECK / post-Execution)
 
 ```text
 #660 AC-4 acceptance alignment: MERGED / CONSUMED
 #662 planning-pc PROCESS-VISIBILITY stale smoke: MERGED on main 4def6b8f…
-Prior Acceptance Execution on 30f60191…: historical (ENVIRONMENT_BLOCKED residual)
-Human Acceptance disposition: KEEP #445 OPEN (CONSUMED)
-Full Acceptance PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED
-PRECHECK verdict: PASS
-  docs/architecture/sp-lc-6-full-acceptance-precheck-verdict-4def6b8f-1.md
+Full Acceptance PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED / PASS
+Acceptance Execution GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED
+  overallResult: PASS (evidence §16)
+Fresh Independent Acceptance Review 2: REVIEW-CLEARED (execution integrity)
+#445: OPEN / KEEP OPEN until separate Human Close decision
 
 NEXT Human gate:
-  Acceptance Execution GO   ← REQUIRED / NOT YET (separate)
-THEN:
-  Fresh Independent Acceptance Review
-  Human Acceptance disposition / #445 Close decision
+  Human Acceptance disposition / #445 Close decision   ← NOT YET
 ```
 
 ```text
 planning-pc Merge ≠ Full Acceptance PRECHECK GO
 PRECHECK PASS ≠ Acceptance Execution GO
-Acceptance Execution ≠ #445 Close
+Acceptance Execution PASS ≠ #445 Close
 ```
 
 ---
@@ -235,9 +232,10 @@ SP-LC-6-FULL-ACCEPTANCE-PRECHECK-GATE-SEPARATION-1
 = LOCKED
 
 PRECHECK gate: SEPARATED
-PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED (separate record)
-PRECHECK verdict: PASS
-Acceptance Execution GO: NOT AUTHORIZED by this lock / NOT YET
+PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED / PASS
+Acceptance Execution GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED / PASS
+  (separate record; not granted by this lock alone)
+Fresh Independent Acceptance Review 2: REVIEW-CLEARED
 #445: OPEN / KEEP OPEN
-Agent NEXT: STOP for Human Acceptance Execution GO
+Agent NEXT: STOP for Human Acceptance disposition / #445 Close decision
 ```
