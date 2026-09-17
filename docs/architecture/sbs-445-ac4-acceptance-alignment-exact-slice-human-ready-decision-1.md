@@ -120,8 +120,17 @@ product association / Review UI mutation
 ## Post-Ready observation
 
 ```text
-status: PENDING until Ready transition execute
-isDraft: (to be confirmed false after transition)
+status: CONFIRMED (2026-09-17)
+isDraft: false
+state: open
+Ready transition: COMPLETE
+headRefOid at Ready transition: 257196ee88092924c725064125845bbca3f97f84
+Ready Decision commit: 257196ee88092924c725064125845bbca3f97f84
+exact reviewed HEAD (Ready bind): db79ec8d277a091b639a950924f5d8725e32d65d
+Implementation Start tip (runner rebind): db79ec8d277a091b639a950924f5d8725e32d65d
+base SHA: a17a231e7ddeea0e55c00ac77a4e71a91993ec50
+CI @ exact reviewed HEAD db79ec8d: GREEN (3/3 SUCCESS)
+CI @ Ready Decision tip: re-running after push (mergeStateStatus may be UNSTABLE until green)
 Human Merge GO: still NOT AUTHORIZED / NOT YET
 Full Acceptance re-run / Acceptance Execution GO /
 #445 Close / mutation / LIVE WRITE / Deploy: still NOT YET
