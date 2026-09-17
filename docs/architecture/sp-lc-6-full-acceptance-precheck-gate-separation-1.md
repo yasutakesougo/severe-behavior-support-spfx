@@ -185,13 +185,18 @@ Fresh Independent Acceptance Review 2: REVIEW-CLEARED (execution integrity)
 #445: OPEN / KEEP OPEN until separate Human Close decision
 
 NEXT Human gate:
-  Human Acceptance disposition / #445 Close decision   ← NOT YET
+  1. Human Acceptance disposition     ← FIRST / NOT YET
+  2. #445 Close GO                    ← SEPARATE later gate / NOT YET
+PR #663 CI SUCCESS = evidence only (does not consume either gate)
+  lock: docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 ```
 
 ```text
 planning-pc Merge ≠ Full Acceptance PRECHECK GO
 PRECHECK PASS ≠ Acceptance Execution GO
-Acceptance Execution PASS ≠ #445 Close
+Acceptance Execution PASS ≠ Human Acceptance disposition
+Human Acceptance disposition ≠ #445 Close GO
+PR #663 CI ≠ disposition / Close GO
 ```
 
 ---
@@ -236,6 +241,9 @@ PRECHECK GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED / PASS
 Acceptance Execution GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED / PASS
   (separate record; not granted by this lock alone)
 Fresh Independent Acceptance Review 2: REVIEW-CLEARED
+Post-PASS sequencing lock: LOCKED
+  docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 #445: OPEN / KEEP OPEN
-Agent NEXT: STOP for Human Acceptance disposition / #445 Close decision
+Agent NEXT: STOP for Human Acceptance disposition (FIRST)
+  then separate #445 Close GO (NOT automatic; CI does not consume)
 ```

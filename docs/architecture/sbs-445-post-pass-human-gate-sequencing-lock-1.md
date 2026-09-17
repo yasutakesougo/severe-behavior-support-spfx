@@ -1,0 +1,150 @@
+# SBS — #445 Post-PASS Human Gate Sequencing Lock
+
+```text
+repository: yasutakesougo/severe-behavior-support-spfx
+Issue: #445 (KEEP OPEN; no Issue mutation / no Close)
+Unit: SBS-445-POST-PASS-HUMAN-GATE-SEQUENCING-LOCK-1
+Kind: Human gate-sequencing lock (docs only)
+Date: 2026-09-17
+receivedAt: 2026-09-17T14:46:00Z
+Baseline tip / execution bind: 4def6b8f564ffc80cb3122dd339f6f1509517554
+Docs lane PR: #663 (cursor/full-acceptance-precheck-gate-sep-151b)
+  CI SUCCESS is evidence only (does not consume Human gates)
+
+Sequencing lock: RECEIVED / CONSUMED / LOCKED
+Human Acceptance disposition: NOT RECEIVED / NOT CONSUMED / NOT YET
+#445 Close GO: NOT RECEIVED / NOT CONSUMED / NOT YET
+  (#445 Close remains a later separate gate after disposition)
+PR #663 CI / overallResult PASS / Fresh Review REVIEW-CLEARED:
+  = evidence only
+  ≠ automatic disposition consumption
+  ≠ automatic #445 Close GO consumption
+```
+
+## Human speech-act (verbatim binding)
+
+```text
+次は Human Acceptance disposition を先に確定し、
+その後に別 gate として #445 Close GO を判断するのが整合しています。
+#663 の CI は evidence であり、この2つの Human Gate を自動消費しません。
+```
+
+## Verdict
+
+```text
+RESULT: disposition-first sequencing LOCKED
+Human Acceptance disposition = FIRST Human gate / NOT YET
+#445 Close GO = SEPARATE later Human gate / NOT YET
+PR #663 CI = evidence only / NO auto-consumption of either gate
+Agent: STOP for Human Acceptance disposition
+```
+
+This record **locks the order and non-collapse** of the two remaining Human
+gates. It does **not** consume disposition, and it does **not** authorize or
+consume `#445` Close.
+
+---
+
+## 1. Locked sequence
+
+```text
+DONE (separate consumptions):
+  Full Acceptance PRECHECK GO @ 4def6b8f…     PASS
+  Acceptance Execution GO @ 4def6b8f…         overallResult PASS
+  Fresh Independent Acceptance Review 2       REVIEW-CLEARED
+  PR #663 CI                                  SUCCESS (evidence)
+
+NEXT (Human only; in order):
+  1. Human Acceptance disposition             ← FIRST / NOT YET
+  2. #445 Close GO                            ← SEPARATE later gate / NOT YET
+```
+
+```text
+Human Acceptance disposition
+  ≠ #445 Close GO
+  ≠ PR #663 Ready / Merge
+  ≠ Acceptance Execution PASS auto-close
+  ≠ CI SUCCESS auto-disposition
+```
+
+---
+
+## 2. What may feed disposition (evidence only)
+
+Disposition materials that may be considered by Human (read-only):
+
+| Evidence | Role |
+|---|---|
+| overallResult PASS @ `4def6b8f…` | execution result (§16) |
+| Fresh Independent Acceptance Review 2 = REVIEW-CLEARED | execution integrity |
+| PRECHECK PASS @ `4def6b8f…` | readiness preflight |
+| PR #663 CI SUCCESS | docs-lane verification evidence |
+| historical §11 GAP_FOUND PRESERVED | immutability constraint |
+
+None of the above **consumes** Human Acceptance disposition or `#445` Close GO.
+
+---
+
+## 3. Forbidden collapses
+
+```text
+FORBIDDEN:
+  treat overallResult PASS as Human Acceptance disposition
+  treat Fresh Independent Acceptance Review as disposition
+  treat PR #663 CI SUCCESS as disposition or Close GO
+  skip disposition and jump to #445 Close GO
+  collapse disposition + #445 Close into one speech-act without Human saying so
+  Agent Close / body-mutate #445
+  Agent Ready / Merge #663 from this lock alone
+```
+
+---
+
+## 4. After disposition (still separate)
+
+When Human later issues Acceptance disposition:
+
+```text
+IF disposition accepts PASS + REVIEW-CLEARED (or other stated value):
+  STOP again for separate Human #445 Close GO
+  disposition ≠ Close
+
+IF disposition = KEEP #445 OPEN (or equivalent):
+  Close GO remains NOT AUTHORIZED
+  follow Human-stated next lane
+```
+
+`#445` Close still requires an explicit separate Human Close GO even after a
+PASS-accepting disposition, unless Human explicitly collapses that boundary in
+a later speech-act.
+
+---
+
+## 5. Explicit non-claims
+
+```text
+This document does NOT:
+  consume Human Acceptance disposition
+  consume #445 Close GO
+  Close or mutate #445
+  Ready / Merge PR #663
+  Deploy / LIVE WRITE
+  rewrite historical GAP_FOUND
+```
+
+---
+
+## 6. Stop condition
+
+```text
+SBS-445-POST-PASS-HUMAN-GATE-SEQUENCING-LOCK-1 = LOCKED
+
+NEXT Human gate:
+  Human Acceptance disposition   ← FIRST / NOT YET
+
+THEN (separate):
+  #445 Close GO                  ← NOT YET
+
+PR #663 CI: evidence only
+Agent: STOP
+```

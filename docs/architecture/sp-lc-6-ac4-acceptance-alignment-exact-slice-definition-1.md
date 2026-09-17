@@ -514,7 +514,10 @@ Await: merge execution of PR #660 then confirm on origin/main
      GO: sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
      overallResult PASS (evidence §16)
 10. Fresh Independent Acceptance Review 2                     REVIEW-CLEARED
-11. #445 Close                                                NOT YET
+11. Human Acceptance disposition                              NOT YET ← FIRST
+      lock: sbs-445-post-pass-human-gate-sequencing-lock-1.md
+12. #445 Close GO                                             NOT YET
+      (separate later gate; PR #663 CI does not consume)
 ```
 
 ```text

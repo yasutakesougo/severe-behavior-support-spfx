@@ -80,14 +80,22 @@ This review does NOT:
 ## NEXT
 
 ```text
-Human Acceptance disposition
-  IF accept overallResult PASS + REVIEW-CLEARED
-    → separate Human #445 Close decision (still NOT automatic)
-  ELSE
-    → KEEP #445 OPEN + state residual / follow-up gate
+1. Human Acceptance disposition     ← FIRST / NOT YET
+2. #445 Close GO                    ← SEPARATE later gate / NOT YET
+     (only after disposition; still requires its own Human GO)
+
+PR #663 CI SUCCESS / overallResult PASS / REVIEW-CLEARED
+  = evidence materials for disposition only
+  ≠ automatic disposition consumption
+  ≠ automatic #445 Close GO consumption
+
+Sequencing lock:
+  docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 ```
 
 ```text
-Fresh Independent Acceptance Review ≠ #445 Close
+Fresh Independent Acceptance Review ≠ Human Acceptance disposition
+Human Acceptance disposition ≠ #445 Close GO
 overallResult PASS ≠ Deploy / LIVE WRITE
+PR #663 CI ≠ either Human gate
 ```

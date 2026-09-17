@@ -170,11 +170,17 @@ merge method: merge commit
      docs/architecture/sbs-445-sp-lc-6-full-acceptance-reexecution-acceptance-execution-2.md
      evidence §16 overallResult PASS
 6. Fresh Independent Acceptance Review 2                      REVIEW-CLEARED
-7. #445 Close / LIVE WRITE / Deploy remain NOT YET without explicit Human GO
+7. Human Acceptance disposition                               NOT YET ← FIRST
+     lock: docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
+8. #445 Close GO                                              NOT YET
+     (separate later gate; PR #663 CI = evidence only, no auto-consumption)
+9. LIVE WRITE / Deploy remain NOT YET without explicit Human GO
 ```
 
 ```text
 Human Merge ≠ Full Acceptance PRECHECK GO
 Full Acceptance PRECHECK GO ≠ Acceptance Execution GO
-Acceptance Execution PASS ≠ #445 Close
+Acceptance Execution PASS ≠ Human Acceptance disposition
+Human Acceptance disposition ≠ #445 Close GO
+PR #663 CI ≠ disposition / Close GO
 ```

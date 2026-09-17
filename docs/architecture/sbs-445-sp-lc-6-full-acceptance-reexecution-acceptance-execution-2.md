@@ -111,14 +111,21 @@ Fresh Independent Acceptance Review 2
   residual: none established on this execution
   overallResult PASS recorded in evidence §16
 
-THEN Human Acceptance disposition
-  IF accept PASS + REVIEW-CLEARED
-    → separate Human #445 Close decision (NOT automatic)
-  ELSE
-    → KEEP #445 OPEN + state follow-up
+THEN (Human only; locked order):
+  1. Human Acceptance disposition     ← FIRST / NOT YET
+  2. #445 Close GO                    ← SEPARATE later gate / NOT YET
+
+PR #663 CI SUCCESS = evidence only
+  ≠ automatic disposition consumption
+  ≠ automatic #445 Close GO consumption
+
+Sequencing lock:
+  docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 ```
 
 ```text
-Acceptance Execution PASS ≠ #445 Close
+Acceptance Execution PASS ≠ Human Acceptance disposition
+Human Acceptance disposition ≠ #445 Close GO
+PR #663 CI ≠ either Human gate
 Fresh Independent Acceptance Review ≠ Deploy / LIVE WRITE
 ```
