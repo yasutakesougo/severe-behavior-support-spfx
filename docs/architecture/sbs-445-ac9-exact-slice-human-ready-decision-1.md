@@ -95,8 +95,20 @@ AC-4 / AC-7 reopen
 ## Post-Ready observation
 
 ```text
-status: PENDING_AT_RECORD_CREATE
-(filled after ManagePullRequest draft=false)
+status: CONFIRMED (2026-09-17)
+isDraft: false
+state: open
+Ready transition: COMPLETE
+headRefOid at Ready transition: 7d741351a310cbd9773ab823bd0cbfdcd6c7376f
+Ready Decision commit: 7d741351a310cbd9773ab823bd0cbfdcd6c7376f
+pre-Ready Fresh Review tip: fa6a487f5868b29e4d1bad78a7b812fd9852a27d
+Implementation exact HEAD: 3eb4a7a10e6ba40fd237dea96dd8c64eea75de7b
+base SHA: c7e8fc2af32ad0fd50e6e5ea7a1875c25c4b3e90
+CI @ pre-Ready fa6a487f: GREEN (3/3 SUCCESS)
+CI @ Ready Decision tip: re-running after push (mergeStateStatus may be UNSTABLE until green)
+Human Merge GO: still NOT AUTHORIZED / NOT YET
+#445 Close / Full Acceptance re-run / LIVE WRITE / Deploy /
+Draft docs PR Close/Merge: still NOT YET
 ```
 
 ---
