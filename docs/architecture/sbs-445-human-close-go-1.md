@@ -23,9 +23,13 @@ Authority inputs:
 
 #445 Close GO: RECEIVED / CONSUMED
 Issue Close execution: AUTHORIZED (this GO)
-  GitHub close status: AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED
-  reason: GH_TOKEN / cursor token lack closeIssue (and addComment) permission
-  Issue #445 remains OPEN until Human or privileged actor executes Close
+  GitHub close status at first agent attempt:
+    AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED
+    (historical; preserved in § Execution result below)
+  Post-close live verification:
+    docs/architecture/sbs-445-close-execution-result-1.md
+    Issue #445 = CLOSED / completed
+    Close comment id = 5722154584
 LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED
 historical GAP_FOUND rewrite: NOT AUTHORIZED
 PR #663 Ready / Merge: NOT AUTHORIZED by this Close GO alone
@@ -118,14 +122,25 @@ cursor integration token → GraphQL: Resource not accessible by integration (ad
 Github MCP: unavailable (discovery error / mcp_auth timeout)
 ```
 
+> Historical pre-execution evidence. Do **not** rewrite this block to pretend
+> the first attempt succeeded.
+>
+> Post-close live verification (privileged mutation later succeeded):
+> `docs/architecture/sbs-445-close-execution-result-1.md`
+> CURRENT Issue #445 = CLOSED / completed (comment id 5722154584).
+
 ## NEXT for GitHub mutation
 
 ```text
-Human (or token with Issues: write / closeIssue):
-  Close Issue #445 with the Close comment body in this document
-  OR grant the agent token permission and re-issue Close execution
+HISTORICAL (at first attempt):
+  Human (or token with Issues: write / closeIssue):
+    Close Issue #445 with the Close comment body in this document
+  Agent: do not claim Issue CLOSED until GitHub live state shows closed
 
-Agent:
-  Close GO remains CONSUMED / AUTHORIZED
-  do not claim Issue CLOSED until GitHub live state shows closed
+CURRENT (reconciled):
+  Close execution = COMPLETE / LIVE VERIFIED
+  record: docs/architecture/sbs-445-close-execution-result-1.md
+  Issue #445 = CLOSED / completed
+  NEXT = Fresh Independent Closeout Review
+  Ready / Merge of PR #663 = NOT CONSUMED
 ```

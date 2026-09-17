@@ -184,12 +184,12 @@ Acceptance Execution GO @ 4def6b8f…: RECEIVED / CONSUMED / EXECUTED
 Fresh Independent Acceptance Review 2: REVIEW-CLEARED (execution integrity)
 #445: OPEN / KEEP OPEN until separate Human Close decision
 
-#445 Close GO: CONSUMED / AUTHORIZED
-  docs/architecture/sbs-445-human-close-go-1.md
-  GitHub live Close: TOOLING_BLOCKED / Issue still OPEN
+#445 Close GO: CONSUMED / AUTHORIZED / EXECUTED
+Post-close: docs/architecture/sbs-445-close-execution-result-1.md
+  Issue #445 = CLOSED / completed
 Human Acceptance disposition: CONSUMED / ACCEPT PASS + REVIEW-CLEARED
+PR #663: DRAFT; Ready / Merge NOT CONSUMED
 PR #663 CI SUCCESS = evidence only
-  lock: docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 ```
 
 ```text
@@ -245,7 +245,8 @@ Fresh Independent Acceptance Review 2: REVIEW-CLEARED
 Post-PASS sequencing lock: LOCKED
   docs/architecture/sbs-445-post-pass-human-gate-sequencing-lock-1.md
 Human Acceptance disposition: CONSUMED / ACCEPT PASS + REVIEW-CLEARED
-#445 Close GO: CONSUMED / AUTHORIZED
-#445 GitHub live state: OPEN (close TOOLING_BLOCKED)
-Agent NEXT: STOP for privileged GitHub Close execution
+#445 Close GO: CONSUMED / AUTHORIZED / EXECUTED
+#445 GitHub live state: CLOSED / completed
+Agent NEXT: STOP for Fresh Independent Closeout Review
+  Ready / Merge of PR #663 NOT CONSUMED
 ```

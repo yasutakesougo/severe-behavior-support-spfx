@@ -114,8 +114,11 @@ Fresh Independent Acceptance Review 2
 THEN (Human only; locked order):
   1. Human Acceptance disposition     ← CONSUMED / ACCEPT PASS + REVIEW-CLEARED
        docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-  2. #445 Close GO                    ← CONSUMED / AUTHORIZED
-     GitHub live Close: TOOLING_BLOCKED / Issue still OPEN
+  2. #445 Close GO                    ← CONSUMED / AUTHORIZED / EXECUTED
+     post-close: docs/architecture/sbs-445-close-execution-result-1.md
+     Issue #445 = CLOSED / completed
+3. Fresh Independent Closeout Review ← NOT YET
+4. PR #663 Ready / Merge            ← NOT CONSUMED
 
 PR #663 CI SUCCESS = evidence only
   ≠ automatic #445 Close GO consumption

@@ -15,10 +15,12 @@ Sequencing lock: RECEIVED / CONSUMED / LOCKED
 Human Acceptance disposition: RECEIVED / CONSUMED / LOCKED
   value: ACCEPT overallResult PASS + REVIEW-CLEARED
   Consumption: docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
-#445 Close GO: RECEIVED / CONSUMED / AUTHORIZED
+#445 Close GO: RECEIVED / CONSUMED / AUTHORIZED / EXECUTED
   Consumption: docs/architecture/sbs-445-human-close-go-1.md
-  GitHub Issue close: AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED
-  Issue #445 live state: still OPEN (token lacks closeIssue)
+  Post-close result: docs/architecture/sbs-445-close-execution-result-1.md
+  GitHub Issue #445: CLOSED / completed (comment id 5722154584)
+  (first agent attempt TOOLING_BLOCKED remains historical in Close GO doc)
+PR #663: DRAFT; Ready / Merge NOT CONSUMED
 PR #663 CI / overallResult PASS / Fresh Review REVIEW-CLEARED:
   = evidence only
 ```
@@ -36,15 +38,17 @@ PR #663 CI / overallResult PASS / Fresh Review REVIEW-CLEARED:
 ```text
 RESULT: disposition-first sequencing LOCKED
 Human Acceptance disposition = CONSUMED / ACCEPT PASS + REVIEW-CLEARED
-#445 Close GO = CONSUMED / AUTHORIZED
-GitHub Issue #445 close = AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED
+#445 Close GO = CONSUMED / AUTHORIZED / EXECUTED
+GitHub Issue #445 = CLOSED / completed
+  post-close: docs/architecture/sbs-445-close-execution-result-1.md
 PR #663 CI = evidence only
-Agent: STOP for privileged GitHub Close execution (Issue still OPEN)
+Agent: STOP for Fresh Independent Closeout Review
+  Ready / Merge of #663 NOT CONSUMED
 ```
 
 This record **locks the order and non-collapse** of the post-PASS Human gates.
-Close GO consumption is recorded separately. Live GitHub Close remains pending
-tooling permission.
+Close GO consumption is recorded separately. Live Close is verified in the
+post-close execution result (first TOOLING_BLOCKED attempt preserved historically).
 
 ---
 
@@ -60,11 +64,15 @@ DONE (separate consumptions):
     docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
 
 DONE (also):
-  #445 Close GO                               CONSUMED / AUTHORIZED
+  #445 Close GO                               CONSUMED / AUTHORIZED / EXECUTED
     docs/architecture/sbs-445-human-close-go-1.md
+  Post-close live verification                COMPLETE
+    docs/architecture/sbs-445-close-execution-result-1.md
+    Issue #445 = CLOSED / completed
 
 NEXT:
-  Privileged GitHub Close execution of #445   ← TOOLING_BLOCKED / still OPEN
+  Fresh Independent Closeout Review
+  PR #663 Ready / Merge = NOT CONSUMED
 ```
 
 ```text
@@ -115,9 +123,10 @@ Human Acceptance disposition = CONSUMED
   value: ACCEPT overallResult PASS + REVIEW-CLEARED
   record: docs/architecture/sbs-445-full-acceptance-reexecution-human-acceptance-disposition-accept-pass-1.md
 
-#445 Close GO = CONSUMED / AUTHORIZED
+#445 Close GO = CONSUMED / AUTHORIZED / EXECUTED
   record: docs/architecture/sbs-445-human-close-go-1.md
-  GitHub live Close = NOT EXECUTED / TOOLING_BLOCKED (Issue still OPEN)
+  post-close: docs/architecture/sbs-445-close-execution-result-1.md
+  GitHub live Close = COMPLETE (Issue CLOSED / completed)
 ```
 
 ---
@@ -142,13 +151,14 @@ This document does NOT:
 SBS-445-POST-PASS-HUMAN-GATE-SEQUENCING-LOCK-1 = LOCKED
 
 Human Acceptance disposition: CONSUMED / ACCEPT PASS + REVIEW-CLEARED
-#445 Close GO: CONSUMED / AUTHORIZED
-GitHub Issue #445: OPEN (close not executed; token lacks closeIssue)
+#445 Close GO: CONSUMED / AUTHORIZED / EXECUTED
+GitHub Issue #445: CLOSED / completed
+  docs/architecture/sbs-445-close-execution-result-1.md
 
 NEXT:
-  Privileged actor executes GitHub Close of #445
-  (comment body in sbs-445-human-close-go-1.md)
+  Fresh Independent Closeout Review
+  PR #663 Ready / Merge = NOT CONSUMED
 
 PR #663 CI: evidence only
-Agent: STOP (do not claim CLOSED until live state closed)
+Agent: STOP
 ```

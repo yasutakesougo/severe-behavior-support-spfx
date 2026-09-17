@@ -24,9 +24,10 @@ Authority inputs:
 
 Human Acceptance disposition: RECEIVED / CONSUMED / LOCKED
   Disposition value: ACCEPT overallResult PASS + REVIEW-CLEARED
-Issue Close / #445 Close GO: RECEIVED / CONSUMED / AUTHORIZED (separate record)
+Issue Close / #445 Close GO: RECEIVED / CONSUMED / AUTHORIZED / EXECUTED (separate records)
   docs/architecture/sbs-445-human-close-go-1.md
-  GitHub live Close: AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED
+  docs/architecture/sbs-445-close-execution-result-1.md
+  GitHub live Close: COMPLETE (CLOSED / completed; comment id 5722154584)
 Issue body mutation by disposition: NOT AUTHORIZED / NOT PERFORMED
 historical Full Acceptance §11 GAP_FOUND rewrite: NOT AUTHORIZED
 LIVE WRITE / Deploy / Production Binding: NOT AUTHORIZED
@@ -66,8 +67,8 @@ NOT this speech-act:
 | Disposition value | **ACCEPT overallResult PASS + REVIEW-CLEARED** |
 | Full Acceptance re-execution @ `4def6b8f…` | **ACCEPTED** (this disposition) |
 | Blocking residual on this execution | **none** |
-| `#445` Close GO | **CONSUMED / AUTHORIZED** (separate record) |
-| `#445` GitHub live Close | **AUTHORIZED / NOT EXECUTED / TOOLING_BLOCKED** |
+| `#445` Close GO | **CONSUMED / AUTHORIZED / EXECUTED** |
+| `#445` GitHub live Close | **COMPLETE / CLOSED / completed** (result-1) |
 | historical §11 GAP_FOUND | **PRESERVED** |
 | LIVE WRITE / Deploy / Production Binding | **NOT AUTHORIZED** |
 | PR #663 Ready / Merge | **NOT AUTHORIZED by this disposition alone** |
@@ -85,10 +86,10 @@ THIS disposition lane
   ≠ historical GAP_FOUND rewrite
   ≠ PRECHECK GO / Acceptance Execution GO (already CONSUMED)
 
-Close GO (separate; later consumed):
-  docs/architecture/sbs-445-human-close-go-1.md
-  = CONSUMED / AUTHORIZED
-  GitHub live Close = TOOLING_BLOCKED / Issue still OPEN
+Close GO + post-close result:
+  docs/architecture/sbs-445-human-close-go-1.md = CONSUMED / AUTHORIZED
+  docs/architecture/sbs-445-close-execution-result-1.md = COMPLETE
+  Issue #445 = CLOSED / completed
 ```
 
 ```text
@@ -112,13 +113,11 @@ This disposition does NOT:
 ## NEXT
 
 ```text
-#445 Close GO = CONSUMED / AUTHORIZED
-GitHub live Close = TOOLING_BLOCKED (Issue still OPEN)
+Issue #445 = CLOSED / completed
+Close execution = COMPLETE
+  docs/architecture/sbs-445-close-execution-result-1.md
 
-Human / privileged token:
-  execute GitHub Close of #445 using Close comment in sbs-445-human-close-go-1.md
-
-Agent:
-  STOP
-  do not claim Issue CLOSED until GitHub live state is closed
+STOP for Fresh Independent Closeout Review
+PR #663 Ready / Merge = NOT CONSUMED
+Deploy / LIVE WRITE = NOT AUTHORIZED
 ```
