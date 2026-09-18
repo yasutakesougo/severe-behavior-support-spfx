@@ -41,7 +41,7 @@ const KNOWN_CYCLES: readonly PlannerCyclePosition[] = ["①", "②", "③", "④
 export const parsePlannerCyclePosition = (
   value: string | null | undefined,
 ): PlannerCyclePosition => {
-  if (value && KNOWN_CYCLES.includes(value as PlannerCyclePosition)) {
+  if (value && KNOWN_CYCLES.indexOf(value as PlannerCyclePosition) >= 0) {
     return value as PlannerCyclePosition;
   }
   return "unknown";
