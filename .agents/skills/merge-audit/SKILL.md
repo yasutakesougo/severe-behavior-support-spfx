@@ -30,6 +30,7 @@
 - 監査対象の PR が特定されている
 - head SHA と base SHA が取得できる
 - CI とテスト結果の証跡がある
+- 共通 Authority は `.agents/skills/_shared/authority-boundaries.md` を参照する
 
 ## 実行手順
 
@@ -91,13 +92,15 @@
 
 ## 禁止事項
 
+共通の deploy / production / tenant mutation 境界は `.agents/skills/_shared/authority-boundaries.md` に従う。
+
+本 Skill 固有の禁止事項:
+
 - `HOLD` を `PASS` として記録すること
-- `P0` が残ったままマージ可とすること
-- `P1` が残ったままマージ可とすること
-- 承認なしで merge や push を実行すること
-- deploy や本番変更を後続手順として自動化すること
-- SharePoint変更、Microsoft 365変更、Entra ID変更を監査対象外として扱うこと
-- 本番データ変更や物理削除を許可済みとして扱うこと
+- `P0` または `P1` が残ったままマージ可とすること
+- Human Merge GO がないのに Merge Gate を `PASS` とすること
+- 監査対象 head SHA と異なる証跡を流用すること
+- merge-audit の判定を merge 実行そのものとして扱うこと
 
 ## 出力形式
 
