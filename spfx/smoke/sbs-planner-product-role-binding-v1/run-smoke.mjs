@@ -126,7 +126,8 @@ const server = http.createServer((request, response) => {
 await new Promise((resolve) => server.listen(4201, "127.0.0.1", resolve));
 
 const browser = await puppeteer.launch({
-  executablePath: process.env.SBS_PLANNER_ROLE_BINDING_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
+  executablePath:
+    process.env.SBS_PLANNER_ROLE_BINDING_CHROME_PATH ?? "/usr/bin/google-chrome-stable",
   headless: true,
   args: ["--no-sandbox", "--disable-gpu"],
 });
@@ -158,8 +159,7 @@ async function inspect(page) {
       plannerPresent: Boolean(plannerRoot),
       fieldPresent: Boolean(fieldRoot),
       taskRole: (plannerRoot ?? fieldRoot)?.getAttribute("data-role-task-ia") ?? "",
-      taskDestination:
-        (plannerRoot ?? fieldRoot)?.getAttribute("data-role-task-destination") ?? "",
+      taskDestination: (plannerRoot ?? fieldRoot)?.getAttribute("data-role-task-destination") ?? "",
       activeGlobal: (plannerRoot ?? fieldRoot)?.getAttribute("data-role-task-active-global") ?? "",
       cycle: plannerRoot?.getAttribute("data-role-task-cycle") ?? "",
       labels,
@@ -168,9 +168,7 @@ async function inspect(page) {
         document.querySelector('[data-shell-ux-demo-role="PLANNER"]:not([disabled])'),
       ),
       primaryNavDisplay: primaryNav ? window.getComputedStyle(primaryNav).display : "missing",
-      siteSelectorDisplay: siteSelector
-        ? window.getComputedStyle(siteSelector).display
-        : "missing",
+      siteSelectorDisplay: siteSelector ? window.getComputedStyle(siteSelector).display : "missing",
       demoBannerDisplay: demoBanner ? window.getComputedStyle(demoBanner).display : "missing",
       hasRecordSearchGlobal: Boolean(
         document.querySelector('nav [data-role-task-nav="D-FIND-RECORD"]'),
@@ -182,8 +180,8 @@ async function inspect(page) {
       ),
       findVisible: Boolean(
         findLabel &&
-          window.getComputedStyle(findLabel).display !== "none" &&
-          findLabel.offsetParent,
+        window.getComputedStyle(findLabel).display !== "none" &&
+        findLabel.offsetParent,
       ),
       primaryActionDisabled: primaryAction ? primaryAction.disabled : true,
       overflow: document.documentElement.scrollWidth - window.innerWidth,
@@ -290,8 +288,9 @@ async function openPage(query = "", viewport = { width: 1280, height: 900 }) {
   await selectDemoRole(page, "PLANNER");
   await page.waitForFunction(
     () =>
-      document.querySelector('[data-role-task-ia="PLANNER"]')?.getAttribute("data-role-task-cycle") ===
-      "③",
+      document
+        .querySelector('[data-role-task-ia="PLANNER"]')
+        ?.getAttribute("data-role-task-cycle") === "③",
   );
   await page.click('[data-role-task-primary-action="true"]');
   await page.waitForFunction(
@@ -329,7 +328,9 @@ async function openPage(query = "", viewport = { width: 1280, height: 900 }) {
     height: 844,
   });
   await selectDemoRole(page, "PLANNER");
-  await page.waitForFunction(() => Boolean(document.querySelector('[data-role-task-ia="PLANNER"]')));
+  await page.waitForFunction(() =>
+    Boolean(document.querySelector('[data-role-task-ia="PLANNER"]')),
+  );
   const state = await inspect(page);
   const primary = await page.$('[data-role-task-primary-action="true"]');
   const primaryBox = primary ? await primary.boundingBox() : null;
