@@ -379,6 +379,7 @@ for (const directoryName of skillDirectories) {
   if (!forbiddenSection.trim()) {
     failures.push(`Missing forbidden section content in ${skillFileRelativePath}`);
   }
+  hasUnsafeAutoMergeOrDeployLanguage(content, skillFileRelativePath);
   // Common authority boundaries are validated once in the shared authority document.
   // Skill-level forbidden sections should contain only task-specific responsibility boundaries.
 }
