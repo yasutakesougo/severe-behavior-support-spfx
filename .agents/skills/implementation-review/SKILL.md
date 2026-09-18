@@ -29,6 +29,7 @@
 - 実装計画が存在する
 - 正本資料への参照がある
 - 対象外が明示されている
+- 共通 Authority は `.agents/skills/_shared/authority-boundaries.md` を参照する
 
 ## 実行手順
 
@@ -68,7 +69,7 @@
 
 - `PASS`: Implementation Gate の通過条件を満たし、着手ブロッカーがない
 - `READY`: この Skill では原則使用しない。補助的な準備完了表現は `PASS` より弱い状態としてのみ扱う
-- `HOLD`: 情報不足、承認待ち、未決事項により着手可否を確定できない
+- `HOLD`: 情報不足、未決事項、または現在の Implementation Start に必要な承認不足により着手可否を確定できない
 - `FAIL`: P0 または P1 の着手ブロッカーがある。P2 は記録のうえで後続 Issue に送れる
 - `NOT APPLICABLE`: 実装開始判定を要しない作業
 
@@ -83,12 +84,15 @@
 
 ## 禁止事項
 
+共通の merge / deploy / production / tenant mutation 境界は `.agents/skills/_shared/authority-boundaries.md` に従う。
+
+本 Skill 固有の禁止事項:
+
 - 要件未確定を軽微として扱うこと
 - `HOLD` を `PASS` と同義にすること
-- 承認待ちのまま着手許可を出すこと
-- merge、push、deploy、本番変更を実施手順に含めること
-- SharePoint変更、Microsoft 365変更、Entra ID変更を承認不要として扱うこと
-- 本番データ変更や物理削除を許可すること
+- 現在の Implementation Start に必要な承認がないまま着手許可を出すこと
+- 後続の Merge / Deploy approval が未取得であることだけを理由に、承認済み実装範囲の着手判定を `HOLD` にすること
+- 実装計画にない material scope expansion を暗黙に許可すること
 
 ## 出力形式
 

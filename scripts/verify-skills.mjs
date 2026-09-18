@@ -20,16 +20,7 @@ const requiredHeadings = [
 ];
 const requiredStatuses = ["PASS", "READY", "HOLD", "FAIL", "NOT APPLICABLE"];
 const requiredSeverities = ["P0", "P1", "P2"];
-const forbiddenOperations = [
-  "merge",
-  "push",
-  "deploy",
-  "SharePoint変更",
-  "Microsoft 365変更",
-  "Entra ID変更",
-  "本番データ変更",
-  "物理削除",
-];
+const sharedAuthorityPath = ".agents/skills/_shared/authority-boundaries.md";
 
 const expectedAgents = ["requirements", "architecture", "implementation", "review", "audit"];
 const expectedLogicalCommands = ["new-feature", "review-pr", "audit", "release-check"];
@@ -67,6 +58,7 @@ const requiredProcessFiles = [
   "docs/process/ai-workflow.md",
   "docs/process/background-agent-contract.md",
   ".agents/skills/_shared/judgement-rules.md",
+  sharedAuthorityPath,
   ".agents/skills/_shared/output-format.md",
   ".agents/commands/adapter-matrix.md",
   ".agents/mcp/permission-matrix.md",
@@ -99,6 +91,13 @@ const approvalBoundaryRequiredPhrases = {
   ".agents/mcp/permission-matrix.md": ["人の事前承認", "禁止", "Fail Closed", "マージ", "deploy"],
   "docs/process/ai-governance.md": ["Fresh Review PASS なし Merge 禁止", "人の事前承認"],
   ".agents/agents/audit.md": ["Fresh Review PASS なし Merge", "マージ"],
+  [sharedAuthorityPath]: [
+    "Safe in-scope actions",
+    "Human approval boundary",
+    "Transition-specific HOLD",
+    "permission-matrix.md",
+    "DEC-AI-ORG-003",
+  ],
 };
 
 const secretLikePatterns = [
@@ -380,13 +379,9 @@ for (const directoryName of skillDirectories) {
   if (!forbiddenSection.trim()) {
     failures.push(`Missing forbidden section content in ${skillFileRelativePath}`);
   }
-  for (const operation of forbiddenOperations) {
-    if (!forbiddenSection.includes(operation)) {
-      failures.push(
-        `Missing forbidden operation reference "${operation}" in ${skillFileRelativePath}`,
-      );
-    }
-  }
+  hasUnsafeAutoMergeOrDeployLanguage(content, skillFileRelativePath);
+  // Common authority boundaries are validated once in the shared authority document.
+  // Skill-level forbidden sections should contain only task-specific responsibility boundaries.
 }
 
 const catalogRelativePath = "docs/process/skill-catalog.md";

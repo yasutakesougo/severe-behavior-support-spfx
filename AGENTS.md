@@ -56,27 +56,15 @@ npx heft test --clean --production && npx heft package-solution --production
 - 例の証跡: `docs/architecture/shell-ux-*-browser-smoke.md`, `dashboard-ux-1-browser-smoke.md`
 - smoke は synthetic / presentation 境界を維持する。本番データ・個人情報を使わない
 
-## 禁止（既定）
+## Authority boundary
 
-明示の Human GO がない限り、次は行わない。
+共通の操作権限と Human approval 境界は `.agents/skills/_shared/authority-boundaries.md` を参照する。
+操作単位の正本は `.agents/mcp/permission-matrix.md`、上位正本は `docs/decisions/DEC-AI-ORG-003.md` とする。
 
-| 禁止 | 正本 |
-|---|---|
-| Production mutation | DEC-AI-ORG-003, permission-matrix, staff-confidence |
-| SharePoint write / schema 変更 | DEC-AI-ORG-003, background-agent-contract |
-| Deploy / App Catalog 登録 | DEC-AI-ORG-003, release docs（Deploy GO は Human-only） |
-| 明示 Human GO なしの mutation（Issue close、Ready、Merge、Entra、M365 含む） | project-status, permission-matrix |
-| token / Cookie / Secret / 個人情報の記録・転記 | `SECURITY.md`, Audit Privacy |
+承認済み scope 内の read-only 参照、ローカル変更、非破壊検証は、正本が許す範囲で不要な再承認なしに継続してよい。
+Ready / Merge / Deploy / production mutation / destructive action / material scope expansion は、現在その遷移に到達した時点で対応する Human approval を確認する。
 
-```text
-read-only first
-→ 状況整理
-→ 影響確認
-→ 分類
-→ 安全な次の行動
-→ Human GO
-→ mutation
-```
+token / Cookie / Secret / 個人情報の記録・転記は禁止し、詳細は `SECURITY.md` に従う。
 
 ## 正本の参照順
 
