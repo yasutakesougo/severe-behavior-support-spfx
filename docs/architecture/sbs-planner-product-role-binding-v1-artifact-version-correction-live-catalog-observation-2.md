@@ -324,3 +324,18 @@ Bound candidate
 ```
 
 Durable bind: `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-human-deploy-candidate-decision.md`.
+
+---
+
+## 12. Human Deploy GO consumed (2026-09-18T09:12:42Z)
+
+Speech-act matched Candidate A. Artifact `10535354012` re-downloaded: sha256 `c4a15dcf…` MATCH, AppManifest `1.0.0.4`.
+
+```text
+Human Deploy GO = RECEIVED / CONSUMED
+Agent App Catalog upload = NOT PERFORMED
+Deploy verification = NOT YET
+FE-F006 = OPEN
+```
+
+Record: `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-human-deploy-go.md`.

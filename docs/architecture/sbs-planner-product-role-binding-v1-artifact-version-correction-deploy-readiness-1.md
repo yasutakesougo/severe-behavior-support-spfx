@@ -18,8 +18,9 @@ solution id: 4342db47-21a3-4c48-aed1-ef615f55c404
 Human Merge GO: CONSUMED / Merge SUCCESS
 DEPLOY READINESS: READY FOR HUMAN DEPLOY CANDIDATE DECISION
 Human Deploy GO Eligibility: ELIGIBLE
-Human Deploy GO: NOT CONSUMED
-Deploy / LIVE WRITE / App Catalog mutation: NOT AUTHORIZED
+Human Deploy GO: RECEIVED / CONSUMED (Candidate A)
+Deploy: AUTHORIZED (Human operator / exact c4a15dcf… bytes)
+Agent App Catalog upload: NOT PERFORMED
 FE-F006: OPEN
 Issue #669: CLOSED on GitHub (Definition Draft-1; this record does not reopen)
 PL-HTA: NOT EVALUATED / SEPARATE GATE
@@ -27,6 +28,7 @@ Recovery-2 snapshot: NOT LIVE AUTHORITY (AVC-9)
 Live catalog identity: OBSERVED
 Deployed / CurrentVersionDeployed: true / true
 Bound Deploy candidate: A (c4a15dcf…)
+GO record: docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-human-deploy-go.md
 ```
 
 Human Merge ≠ Deploy Readiness PASS ≠ Human Deploy GO ≠ Deploy.
@@ -178,10 +180,13 @@ Human Deploy GO Eligibility
 = ELIGIBLE
 
 Human Deploy GO
-= NOT CONSUMED
+= RECEIVED / CONSUMED
 
 Deploy
-= NOT AUTHORIZED
+= AUTHORIZED (Human operator / Candidate A only)
+
+Agent App Catalog upload
+= NOT PERFORMED
 
 Bound candidate
 = A / c4a15dcf… / artifact 10535354012
@@ -190,7 +195,7 @@ Tenant Mutation During this record
 = NONE
 ```
 
-Next gate: Human Deploy GO speech-act bound to Candidate A (see human-deploy-candidate-decision). Until then STOP on upload / publish / install / upgrade. After GO, re-read live Tenant immediately before mutation; fail closed if not still `1.0.0.3` / ProductID MATCH.
+Human Deploy GO consumed: `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-human-deploy-go.md`. Agent does not upload. Human re-reads live Tenant immediately before mutation; fail closed if not still `1.0.0.3` / ProductID MATCH. Do not rebuild.
 
 ---
 
@@ -207,4 +212,5 @@ STOP
   ≠ reuse Recovery-2 as live catalog
   ≠ deploy 1.0.0.2 / 6b10c7f7…
   ≠ treat unreviewed 6d5f9001… as Review-1 identity
+  ≠ Agent App Catalog upload (Human operator only, after GO)
 ```
