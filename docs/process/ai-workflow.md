@@ -12,9 +12,13 @@
 
 - `docs/process/development-process.md`
 
-本文書は入口であり、独自の実行順を定義しない。順序が衝突する場合は `development-process.md` を優先する。
+本文書は入口であり、独自の実行順を定義しない。
+順序が衝突する場合は `development-process.md` を優先する。
 
-標準の実行順（正本からの引用）:
+標準順は**適用される Skill 間の順序制約**であり、全 Skill の毎回実行を要求しない。
+現在の task / changed surface / Gate に関係する Skill だけを選択し、確定済み工程を状態変化なしに繰り返さない。
+
+標準の順序制約（正本からの引用）:
 
 ```text
 /project-audit
@@ -149,7 +153,9 @@ Logical Command は文書上の正本定義に限定する。GitHub 投稿、Rea
 
 ## 停止条件
 
-次のいずれかに該当する場合、次工程へ進まない。
+共通 Authority は `.agents/skills/_shared/authority-boundaries.md` を参照する。
+
+次のいずれかに該当する場合、**現在要求されている次工程**へ進まない。
 
 - 必要な DEC / ADR が未承認
 - 実装開始承認がない（ローカル変更が必要な工程）
