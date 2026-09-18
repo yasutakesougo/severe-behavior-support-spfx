@@ -66,7 +66,8 @@ const nextHandOrientationLabel = (cycle: PlannerCyclePosition): string => {
 
 /**
  * CORR-1G FIELD_STAFF + SBS-PLANNER-TOP-LEVEL-IA-V1 PLANNER product entry.
- * D-* Destination identity is owned here. AppShellChrome remains OUT of PLANNER mutation.
+ * D-* Destination identity is owned here.
+ * Demo FIELD_STAFF ↔ PLANNER role-binding notifies this parent; ADMIN_AUDIT stays chrome-local.
  * Cycle injection is smoke/test boundary only — no Product-visible cycle selector.
  */
 export default class ScaffoldShell extends React.Component<
@@ -171,6 +172,34 @@ export default class ScaffoldShell extends React.Component<
 
   private readonly handlePlannerGlobalChange = (globalId: PlannerTaskGlobalId): void => {
     this.applyPlannerEvent({ type: "GLOBAL", globalId });
+  };
+
+  private readonly handleDemoPresentationRoleChange = (
+    next: Extract<ShellPresentationRole, "FIELD_STAFF" | "PLANNER">,
+  ): void => {
+    this.setState((current) => {
+      if (next === "PLANNER") {
+        if (current.role === "PLANNER") {
+          return current;
+        }
+        const injection = this.smokeInjection();
+        const planner = initialPlannerTaskViewState(injection.initialPlannerCycle ?? "unknown");
+        return {
+          role: "PLANNER" as const,
+          ...planner,
+          shellDestination: shellAdapterForPlannerDestination(planner.destination),
+        };
+      }
+      if (current.role === "FIELD_STAFF") {
+        return current;
+      }
+      const fieldStaff = initialFieldStaffTaskViewState();
+      return {
+        role: "FIELD_STAFF" as const,
+        ...fieldStaff,
+        shellDestination: shellAdapterForFieldStaffDestination(fieldStaff.destination),
+      };
+    });
   };
 
   private readonly handleShellDestinationChange = (
@@ -401,6 +430,7 @@ export default class ScaffoldShell extends React.Component<
         selectedDestination={this.state.shellDestination}
         onSelectedDestinationChange={this.handleShellDestinationChange}
         presentationRole={presentationRole}
+        onPresentationRoleChange={this.handleDemoPresentationRoleChange}
         fieldStaffTaskDestination={
           this.state.role === "FIELD_STAFF" ? this.state.destination : undefined
         }

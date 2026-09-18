@@ -159,6 +159,13 @@ export type AppShellChromeProps = Readonly<{
   reviewObservationEvidence?: readonly ReviewObservationEvidenceInput[];
   /** Synthetic VP-G entry emphasis. Not Entra / roleResolutionAuthorized. */
   presentationRole?: ShellPresentationRole;
+  /**
+   * Minimum parent notify for Demo FIELD_STAFF ↔ PLANNER only.
+   * ADMIN_AUDIT stays chrome-local (FE-F001 / FE-F003 leftover).
+   */
+  onPresentationRoleChange?: (
+    next: Extract<ShellPresentationRole, "FIELD_STAFF" | "PLANNER">,
+  ) => void;
   fieldStaffTaskDestination?: FieldStaffTaskDestinationId;
   fieldStaffSessionContext?: FieldStaffSessionContext;
   fieldStaffChosenOccurrenceId?: string;
@@ -194,6 +201,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     procedureWorkflowPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE,
     reviewObservationEvidence = FIELD_WORKFLOW_REVIEW_OBSERVATION_EVIDENCE,
     presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
+    onPresentationRoleChange,
     fieldStaffTaskDestination,
     fieldStaffSessionContext,
     fieldStaffChosenOccurrenceId,
@@ -1215,6 +1223,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   }
                   setActivePresentationRole(next);
                   setNextVersionConceptFromReview(false);
+                  if (next === "FIELD_STAFF" || next === "PLANNER") {
+                    onPresentationRoleChange?.(next);
+                  }
                 }}
               />
               {selectedSite ? (
