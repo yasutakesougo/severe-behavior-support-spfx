@@ -47,9 +47,7 @@ export const parsePlannerCyclePosition = (
   return "unknown";
 };
 
-export const plannerTaskGlobalItem = (
-  globalId: PlannerTaskGlobalId,
-): PlannerTaskGlobalItem => {
+export const plannerTaskGlobalItem = (globalId: PlannerTaskGlobalId): PlannerTaskGlobalItem => {
   const item = PLANNER_TASK_GLOBAL_ITEMS.find((candidate) => candidate.globalId === globalId);
   if (!item) {
     throw new Error("Unknown PLANNER task global: " + globalId);
@@ -115,9 +113,7 @@ export const locationHeadingForPlannerDestination = (
   }
 };
 
-export const plannerPrimaryActionLabel = (
-  cycle: PlannerCyclePosition,
-): string => {
+export const plannerPrimaryActionLabel = (cycle: PlannerCyclePosition): string => {
   if (cycle === "unknown") {
     return "現在工程を確認";
   }
@@ -184,9 +180,7 @@ export const selectPlannerRecord = (
   };
 };
 
-export const applyPlannerBack = (
-  state: PlannerTaskViewState,
-): PlannerTaskViewState => {
+export const applyPlannerBack = (state: PlannerTaskViewState): PlannerTaskViewState => {
   if (!state.previousDestination) {
     return state;
   }
