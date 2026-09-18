@@ -6,15 +6,16 @@ Authenticated **READ-ONLY** live Tenant App Catalog observation attempt after Hu
 repository: yasutakesougo/severe-behavior-support-spfx
 workstream: SBS-PLANNER-PRODUCT-ROLE-BINDING-V1
 unit: SBS-PLANNER-PRODUCT-ROLE-BINDING-V1-ARTIFACT-VERSION-CORRECTION
-kind: Live Tenant App Catalog observation-2 + §10 application
+kind: Live Tenant App Catalog observation-2 (browser) + authenticated SharePoint reconciliation
 mode: READ ONLY
 observation_at: 2026-09-18T08:39:36Z
+reconciliation_at: 2026-09-18T08:47:36Z
 
 origin/main: 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
 git package version on main: 1.0.0.4
 solution id: 4342db47-21a3-4c48-aed1-ef615f55c404
 
-Human Deploy GO: NOT ELIGIBLE / NOT CONSUMED
+Human Deploy GO: NOT YET ELIGIBLE / NOT CONSUMED
 Deploy / LIVE WRITE / App Catalog mutation: NOT AUTHORIZED
 Tenant Mutation During this record: NONE
 FE-F006: OPEN (Issue #668 OPEN)
@@ -102,9 +103,11 @@ Deploy                      = NOT AUTHORIZED
 
 Human next action (catalog, not this agent): supply an authenticated read-only catalog packet with the §1 fields, or an existing SharePoint session this environment can use without credential entry.
 
+**Superseded for overall live-identity state** by §7 Authenticated SharePoint Reconciliation. This §5 remains the browser-channel HOLD at `2026-09-18T08:39:36Z`.
+
 ---
 
-## 6. STOP
+## 6. STOP (Observation-2 browser channel; still binding)
 
 ```text
 STOP
@@ -115,4 +118,181 @@ STOP
   ≠ FE-F006 close
   ≠ Issue reopen / close
   ≠ reuse Recovery-2 as live catalog
+```
+
+---
+
+## 7. Authenticated SharePoint Reconciliation
+
+Browser-channel Observation-2 is **kept**. It remains correct as:
+
+```text
+Browser channel
+= NOT AUTHENTICATED
+= Microsoft Sign-in redirect
+= screenshot CONFIRMED
+```
+
+It is **not** the whole live-catalog state. A later authenticated SharePoint file/drive read of the same App Catalog package (Human conversation environment; Tenant Mutation NONE) plus independent unpack of the two uploaded bytes is the live identity channel.
+
+```text
+SBS-PLANNER-PRODUCT-ROLE-BINDING-V1
+Live Catalog Observation — Reconciled
+reconciliation_at: 2026-09-18T08:47:36Z
+
+Authenticated SharePoint channel
+= LIVE READ AVAILABLE
+= Tenant Mutation NONE
+
+App Catalog site
+= isogokatudouhome.sharepoint.com/sites/appcatalog
+
+package
+= severe-behavior-support-spfx-shell.sppkg
+
+live AppManifest version
+= 1.0.0.3
+  (App element Version; not SharePointMinVersion 16.0.0.0)
+
+live ProductID
+= 4342db47-21a3-4c48-aed1-ef615f55c404
+= MATCH
+
+live tenant sppkg sha256
+= 4175351e90b716c2a8d62886b58c91f79d0b2cab427fdf2817ce84b792196f40
+
+catalog file updated_at
+= 2026-09-15T05:07:47Z
+
+Deployed
+= NOT RECOVERED
+
+CurrentVersionDeployed
+= NOT RECOVERED
+```
+
+Independent local verification of uploaded catalog bytes (identical pair):
+
+```text
+upload (9)  = severe-behavior-support-spfx-shell__9__2bd8.sppkg
+upload (10) = severe-behavior-support-spfx-shell__10__3c01.sppkg
+cmp         = IDENTICAL
+size        = 117671
+sha256      = 4175351e90b716c2a8d62886b58c91f79d0b2cab427fdf2817ce84b792196f40
+AppManifest Version   = 1.0.0.3
+AppManifest ProductID = 4342db47-21a3-4c48-aed1-ef615f55c404
+```
+
+This environment's OneDrive MCP personal-drive search still does **not** enumerate the Tenant App Catalog library. Catalog identity here is bound to the authenticated SharePoint read + uploaded bytes, not to that MCP search.
+
+`Deployed` and `CurrentVersionDeployed` are **not** inferred from file/drive surface, Recovery-2, or Issue #602.
+
+Hash `4175351e…` matching Recovery-2 is **live identity re-observed**, not Recovery-2 reused as Deploy authority.
+
+---
+
+## 8. Locked Definition §10 after reconciliation
+
+Candidate compared: git / reviewed package `1.0.0.4` (identity still dual; see §9). Live identity from §7.
+
+```text
+candidate
+= 1.0.0.4
+
+live
+= 1.0.0.3
+
+live > 1.0.0.4
+= FALSE
+
+live == 1.0.0.4 AND sha256 mismatch
+= FALSE
+
+live == 1.0.0.3 AND ProductID match
+= TRUE
+
+VERSION COLLISION
+= NONE OBSERVED
+
+SOLUTION IDENTITY MISMATCH
+= NONE OBSERVED
+
+collision class
+= expected upgrade path
+  (locked Definition §10; still requires separate Human Deploy GO)
+
+Deployed / CurrentVersionDeployed
+= UNKNOWN
+= NOT used to complete Deploy Readiness
+```
+
+Same-version / different-artifact STOP vs **live Tenant** is not triggered (`live != 1.0.0.4`). Git-side two `1.0.0.4` SHA values remain a **candidate identity** problem, not a live collision class.
+
+---
+
+## 9. Reconciled Deploy Readiness
+
+```text
+Deploy Readiness
+= HOLD / PARTIAL LIVE EVIDENCE
+
+Live catalog identity
+= OBSERVED
+
+Version relation
+= candidate 1.0.0.4 > live 1.0.0.3
+
+ProductID relation
+= MATCH
+
+Tenant artifact hash
+= OBSERVED
+= 4175351e90b716c2a8d62886b58c91f79d0b2cab427fdf2817ce84b792196f40
+
+Deployed
+= UNKNOWN
+
+CurrentVersionDeployed
+= UNKNOWN
+
+Human Deploy GO Eligibility
+= NOT YET ELIGIBLE
+
+Human Deploy GO
+= NOT CONSUMED
+
+FE-F006
+= OPEN
+```
+
+Remaining before Human Deploy GO can become eligible:
+
+```text
+1. Recover Deployed / CurrentVersionDeployed (no speculation)
+2. Fix exactly one Deploy candidate sha256
+   Independent-Review-cleared
+     HEAD   = f33650442f7b9046dac0bc4354ee3adac3c397b1
+     sha256 = c4a15dcf63f25a5130904f78c70bd8b3feed8c3f2a4fe99980299e0b7a805890
+   Post-merge rebuild (NOT silently substituted)
+     HEAD   = 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
+     sha256 = 6d5f9001b033c3a726a46c91f9a4b6c0ec5c7dec16c2210068e1101b72a27e71
+   Choice: keep c4a15dcf… as Deploy candidate
+        XOR independently review 6d5f9001…
+3. Explicit Human Deploy GO bound to that one sha256
+```
+
+---
+
+## 10. STOP (reconciled; still binding)
+
+```text
+STOP
+  ≠ Human Deploy GO
+  ≠ Add / Update / Publish App Catalog
+  ≠ install / upgrade
+  ≠ LIVE WRITE
+  ≠ FE-F006 close
+  ≠ Issue reopen / close
+  ≠ reuse Recovery-2 as live catalog
+  ≠ silent substitution of post-merge 6d5f9001… for reviewed c4a15dcf…
 ```

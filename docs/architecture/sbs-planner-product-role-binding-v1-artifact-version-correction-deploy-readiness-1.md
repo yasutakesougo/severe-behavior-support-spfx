@@ -16,12 +16,14 @@ git package version on main: 1.0.0.4
 solution id: 4342db47-21a3-4c48-aed1-ef615f55c404
 
 Human Merge GO: CONSUMED / Merge SUCCESS
-Human Deploy GO: NOT ELIGIBLE / NOT CONSUMED
+Human Deploy GO: NOT YET ELIGIBLE / NOT CONSUMED
 Deploy / LIVE WRITE / App Catalog mutation: NOT AUTHORIZED
 FE-F006: OPEN
-Issue #669: OPEN
+Issue #669: CLOSED on GitHub (Definition Draft-1; this record does not reopen)
 PL-HTA: NOT EVALUATED / SEPARATE GATE
 Recovery-2 snapshot: NOT LIVE AUTHORITY (AVC-9)
+Live catalog identity: OBSERVED (authenticated SharePoint channel)
+Deployed / CurrentVersionDeployed: UNKNOWN
 ```
 
 Human Merge ≠ Deploy Readiness PASS ≠ Human Deploy GO ≠ Deploy.
@@ -73,75 +75,88 @@ Superseded / must not deploy:
 
 ---
 
-## 3. Live Tenant catalog re-read
+## 3. Live Tenant catalog re-read (dual channel)
 
 Required by locked Definition §10 / AVC-9 before any Human Deploy decision.
 
-Attempted from this environment (read-only):
+Observation-2 packet (browser channel kept): `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-live-catalog-observation-2.md`
 
 ```text
-PnP / az / m365 CLI                         = NOT PRESENT
-Tenant App Catalog Graph/sharepoint site I/O = NOT AVAILABLE
-  (connected personal-drive search does not enumerate
-   the Tenant App Catalog library)
-Browser catalog library                     = NOT AUTHENTICATED (Microsoft Sign-in;
-                                              credentials not entered)
-Recovery-2 snapshot reuse as live authority = FORBIDDEN
+Browser channel
+= NOT AUTHENTICATED
+= Microsoft Sign-in redirect
+= screenshot CONFIRMED
+= 2026-09-18T08:39:36Z
+
+Authenticated SharePoint channel
+= LIVE READ AVAILABLE
+= Tenant Mutation NONE
+= reconciliation 2026-09-18T08:47:36Z
+
+App Catalog site
+= isogokatudouhome.sharepoint.com/sites/appcatalog
+package
+= severe-behavior-support-spfx-shell.sppkg
+live AppManifest version
+= 1.0.0.3
+live ProductID
+= 4342db47-21a3-4c48-aed1-ef615f55c404
+= MATCH
+live tenant sppkg sha256
+= 4175351e90b716c2a8d62886b58c91f79d0b2cab427fdf2817ce84b792196f40
+catalog file updated_at
+= 2026-09-15T05:07:47Z
+Deployed
+= NOT RECOVERED
+CurrentVersionDeployed
+= NOT RECOVERED
 ```
 
-Observation-2 packet: `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-live-catalog-observation-2.md` (`2026-09-18T08:39:36Z`).
-
-Observed live Tenant fields this turn:
+Independent unpack of the two Human-uploaded catalog copies: identical, sha256 `4175351e…`, AppManifest `Version="1.0.0.3"`, ProductID match.
 
 ```text
-AppManifest / AppCatalogVersion = UNKNOWN
-solution id on catalog          = UNKNOWN
-tenant sppkg sha256             = UNKNOWN
+Live catalog identity = OBSERVED
 Deployed / CurrentVersionDeployed = UNKNOWN
-updated_at                      = UNKNOWN
 ```
 
-```text
-Live catalog re-read = NOT OBSERVED / INSUFFICIENT
-Collision class vs candidate 1.0.0.4 = NOT EVALUABLE
-```
-
-Recovery-2 historically recorded live `1.0.0.3` / sha256 `4175351e…`. That snapshot is **not** this re-read and must not be used to authorize Deploy.
+Matching Recovery-2 hash is **live re-observation**, not Recovery-2 as Deploy authority.
 
 ---
 
-## 4. Collision policy (still controlling; applied to UNKNOWN live fields)
-
-Observation-2 applied §10 to the live fields that exist (all UNKNOWN). No §10 branch is CONFIRMED.
-
-When a fresh authenticated read-only catalog observation exists:
+## 4. Collision policy (applied to reconciled live identity)
 
 ```text
-If live version > 1.0.0.4
-  STOP = VERSION COLLISION
+candidate = 1.0.0.4
+live      = 1.0.0.3
 
-If live version == 1.0.0.4 AND live sha256 != chosen candidate sha256
-  STOP = SAME-VERSION / DIFFERENT-ARTIFACT COLLISION
-
-If live version == 1.0.0.3 AND candidate is 1.0.0.4 with matching solution id
-  = expected upgrade path
-  (still requires separate Human Deploy GO)
-
-If live solution id != 4342db47-21a3-4c48-aed1-ef615f55c404
-  STOP = SOLUTION IDENTITY MISMATCH
+live > 1.0.0.4                         = FALSE  → VERSION COLLISION = NONE OBSERVED
+live == 1.0.0.4 AND sha256 mismatch    = FALSE  → SAME-VERSION / DIFFERENT-ARTIFACT vs live = NONE OBSERVED
+live == 1.0.0.3 AND ProductID match    = TRUE   → expected upgrade path
+live ProductID != 4342db47-…           = FALSE  → SOLUTION IDENTITY MISMATCH = NONE OBSERVED
 ```
 
-Without a live observation, none of these classes are CONFIRMED.
+Expected upgrade path still requires a separate Human Deploy GO. `Deployed` / `CurrentVersionDeployed` stay UNKNOWN (no speculation).
+
+Git-side candidate fork remains open (not a live §10 class):
+
+```text
+Independent-Review-cleared  f3365044… / c4a15dcf…
+Post-merge rebuild          7414f9d0… / 6d5f9001…
+same 1.0.0.4 ≠ interchangeable
+silent substitution of 6d5f9001… = FORBIDDEN
+```
 
 ---
 
 ## 5. Deploy Readiness verdict
 
 ```text
-Review Basis Sufficiency (git / reviewed artifact) = SUFFICIENT
-Review Basis Sufficiency (live Tenant catalog)     = INSUFFICIENT
-Deploy Readiness                                   = HOLD
-Human Deploy GO Eligibility                        = NOT ELIGIBLE
+Review Basis Sufficiency (git / reviewed artifact) = PARTIAL
+  (two 1.0.0.4 SHA values; one must be named)
+Review Basis Sufficiency (live Tenant identity)    = OBSERVED
+Review Basis Sufficiency (Deployed flags)          = INSUFFICIENT
+Deploy Readiness                                   = HOLD / PARTIAL LIVE EVIDENCE
+Human Deploy GO Eligibility                        = NOT YET ELIGIBLE
 Human Deploy GO                                    = NOT CONSUMED
 Deploy                                             = NOT AUTHORIZED
 FE-F006                                            = OPEN
@@ -151,25 +166,10 @@ Tenant Mutation During this record                 = NONE
 Required before Human Deploy GO becomes eligible:
 
 ```text
-1. Authenticated READ-ONLY live App Catalog observation
-   (AppManifest version, ProductID, tenant .sppkg sha256,
-    Deployed / CurrentVersionDeployed, timestamp)
-2. Apply §10 collision rules to that observation
-3. Human names exactly one candidate sha256
-   (reviewed c4a15dcf…  XOR  a separately reviewed rebuild)
-4. Explicit Human Deploy GO bound to that sha256
-```
-
-Minimum live evidence (no mutation):
-
-```text
-Tenant App Catalog app identity for
-  ProductID 4342db47-21a3-4c48-aed1-ef615f55c404
-AppCatalogVersion / AppManifest Version
-Deployed
-CurrentVersionDeployed
-tenant package sha256
-observation timestamp
+1. Recover Deployed / CurrentVersionDeployed (read-only; no guess)
+2. Human names exactly one candidate sha256
+   (keep reviewed c4a15dcf…  XOR  Independent Artifact Review of 6d5f9001…)
+3. Explicit Human Deploy GO bound to that sha256
 ```
 
 ---
