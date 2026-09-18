@@ -14,6 +14,8 @@ Implementation PR: #674
 branch: cursor/sbs-planner-product-role-binding-impl-a416
 Reviewed Product HEAD (Independent Implementation Review-1 identity):
   2dc8ce4ab15151346dc5f3a2ca1c36824dd28f18
+Ready-for-review HEAD (docs-only descendant):
+  60adf4364ddb22eabc815667e399f222f4f45a7c
 basis main: f323c975e9969fd02a6a27352a90ec8eb37961f8
 Issue: #669 OPEN
   frozen issue body sha256: ab11548528d4ccb1cedb1826f26b703a508e2f2731e749021f92e58c6cc91707
@@ -117,10 +119,19 @@ locked packet / Exact Scope rewrite
 
 ---
 
-## Post-Ready observation
+## Post-Ready observation (transition / readback)
 
 ```text
-status: PENDING at authorship; filled after Ready transition readback
+status: CONFIRMED (2026-09-18)
+isDraft: false
+state: open
+mergeable: MERGEABLE
+mergeable_state: UNSTABLE (docs-only descendant CI in flight; Product identity 2dc8ce4 remained GREEN)
+headRefOid: 60adf4364ddb22eabc815667e399f222f4f45a7c
+reviewed Product identity ancestor: 2dc8ce4ab15151346dc5f3a2ca1c36824dd28f18
+head unchanged vs Product identity: descendant / YES (docs-only)
+Ready transition: COMPLETE
+Issue #669: OPEN (not closed)
 ```
 
 ---
