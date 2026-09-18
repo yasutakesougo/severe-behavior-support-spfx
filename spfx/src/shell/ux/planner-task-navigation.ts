@@ -187,7 +187,10 @@ export const selectPlannerRecord = (
 export const applyPlannerBack = (
   state: PlannerTaskViewState,
 ): PlannerTaskViewState => {
-  if (state.destination === "D-RECORD-READ") {
+  if (!state.previousDestination) {
+    return state;
+  }
+  if (state.destination === "D-RECORD-READ" && state.previousDestination === "D-FIND-RECORD") {
     return {
       ...state,
       destination: "D-FIND-RECORD",
@@ -195,13 +198,10 @@ export const applyPlannerBack = (
       selectedRecordId: undefined,
     };
   }
-  if (state.destination === "D-FIND-RECORD" && state.previousDestination === "D-HOME") {
-    return {
-      ...state,
-      destination: "D-HOME",
-      previousDestination: undefined,
-      selectedRecordId: undefined,
-    };
-  }
-  return state;
+  return {
+    ...state,
+    destination: state.previousDestination,
+    previousDestination: undefined,
+    selectedRecordId: undefined,
+  };
 };
