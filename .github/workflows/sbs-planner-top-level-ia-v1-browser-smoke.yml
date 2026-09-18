@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  format-probe:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout exact PR head
@@ -32,26 +32,30 @@ jobs:
       - name: Install root verification dependencies
         run: npm ci
 
-      - name: Produce canonical Prettier output for this unit
-        shell: bash
+      - name: Verify formatting for this unit
         run: |
-          npx prettier --write \
+          npx prettier --check \
+            .github/workflows/sbs-planner-top-level-ia-v1-browser-smoke.yml \
             spfx/smoke/sbs-planner-top-level-ia-v1/run-smoke.mjs \
             spfx/smoke/sbs-planner-top-level-ia-v1/smoke-entry.tsx \
             spfx/src/shell/ux/planner-task-navigation.test.ts \
             spfx/src/shell/ux/planner-task-navigation.ts \
-            spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx
+            spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx \
+            spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.module.scss
 
-          files=(
-            "spfx/smoke/sbs-planner-top-level-ia-v1/run-smoke.mjs"
-            "spfx/smoke/sbs-planner-top-level-ia-v1/smoke-entry.tsx"
-            "spfx/src/shell/ux/planner-task-navigation.test.ts"
-            "spfx/src/shell/ux/planner-task-navigation.ts"
-            "spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx"
-          )
-          for file in "${files[@]}"; do
-            echo "SBS_FORMAT_BEGIN:${file}"
-            base64 -w 0 "${file}"
-            echo
-            echo "SBS_FORMAT_END:${file}"
-          done
+      - name: Install SPFx dependencies
+        working-directory: spfx
+        run: npm ci
+
+      - name: Run SPFx unit verification
+        working-directory: spfx
+        run: npx heft test --clean
+
+      - name: Install rendered-smoke dependencies
+        working-directory: /tmp
+        run: npm install puppeteer-core@24 esbuild@0.25 sass --no-save
+
+      - name: Run PLANNER Top-Level rendered smoke
+        env:
+          PLANNER_TL_ARTIFACTS_DIR: ${{ runner.temp }}/sbs-planner-top-level-ia-v1
+        run: node spfx/smoke/sbs-planner-top-level-ia-v1/run-smoke.mjs
