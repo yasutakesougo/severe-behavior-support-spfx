@@ -4,9 +4,7 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {
-  SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE,
-} from "../../src/shell/ux";
+import { SHELL_UX_PARTIAL_RETRIEVAL_FIXTURE } from "../../src/shell/ux";
 import ScaffoldShell from "../../src/webparts/scaffoldShellWebPart/components/ScaffoldShell";
 
 const SmokeApp: React.FC = () => (
