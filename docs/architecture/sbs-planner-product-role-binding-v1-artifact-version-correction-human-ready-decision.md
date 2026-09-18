@@ -14,8 +14,8 @@ Implementation PR: #679
 branch: cursor/sbs-planner-av-correction-impl-225b
 Reviewed candidate HEAD (Independent Implementation Review-1 identity):
   f33650442f7b9046dac0bc4354ee3adac3c397b1
-Ready-for-review HEAD (docs-only descendant; filled after Ready-record commit):
-  SEE POST-READY OBSERVATION
+Ready-for-review HEAD (docs-only descendant):
+  e5e5cbdb77c0772c35bdeddf8ebd2ebc1a47e7f7
 Implementation basis main: f8eed43b7548af34d0662f43a983118079fbdf8f
 Related Product Issue: #669 OPEN
 FE-F006: OPEN
@@ -145,7 +145,18 @@ Deploy of superseded 1.0.0.2 / 6b10c7f7…
 ## Post-Ready observation (transition / readback)
 
 ```text
-status: PENDING_LIVE_READBACK
+status: CONFIRMED (2026-09-18)
+isDraft: false
+state: open
+mergeable: MERGEABLE
+mergeable_state: UNSTABLE (docs-only descendant CI in flight; candidate identity f3365044 remained GREEN)
+headRefOid: e5e5cbdb77c0772c35bdeddf8ebd2ebc1a47e7f7
+reviewed candidate identity ancestor: f33650442f7b9046dac0bc4354ee3adac3c397b1
+head unchanged vs candidate identity: descendant / YES (docs-only)
+Ready transition: COMPLETE
+Issue #669: OPEN (not closed)
+FE-F006: OPEN
+package-solution.json solution.version: 1.0.0.4
 ```
 
 ---
