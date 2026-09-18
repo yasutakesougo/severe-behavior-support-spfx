@@ -56,48 +56,24 @@ SPFx UI 実装、SharePoint 構築、本番設定変更は、この文書だけ�
 
 `P0` が 1 件でも残る場合は `FAIL` とします。
 
-## AI が実施してよい操作
+## Authority
 
-AI は次の操作だけを実施できます。
+共通 Authority は `.agents/skills/_shared/authority-boundaries.md` を参照する。
+操作単位の正本は `.agents/mcp/permission-matrix.md`、上位正本は `docs/decisions/DEC-AI-ORG-003.md` とする。
 
-- 正本資料の読取り
-- Skill 実行結果の作成
-- 設計、Issue、PR、監査記録へ転記できる形式での出力
-- ローカル検証、型検査、テスト、差分確認
-- 明示的に許可された範囲でのコード変更と文書変更
-
-## AI の禁止操作
-
-AI は、明示承認なしに次を実施してはいけません。
-
-- merge
-- deploy
-- 本番環境変更
-- SharePoint 構成変更
-- Microsoft 365 設定変更
-- Entra ID 設定変更
-- 本番データ変更
-- 物理削除
-
-Skill 文書内でこれらを自動実行する手順を書いてはいけません。
-
-## 人による明示承認が必要な操作
-
-次の操作は、人による明示承認を必須とします。
-
-- PR の merge
-- 検証環境または本番環境への deploy
-- SharePoint list / site / permission 変更
-- Microsoft 365 tenant 設定変更
-- Entra ID role / group / mapping 変更
-- 本番データの作成、更新、削除
-- ロールバックを伴う運用変更
-
-承認の証跡が見つからない場合、関連 Skill は `HOLD` とします。
+承認済み scope 内のローカル変更と非破壊検証は、正本が許す範囲で継続してよい。
+Ready / Merge / Deploy / production mutation などの Human-only 境界は、その遷移に到達した時点で確認する。
+後続工程の承認が未取得であることだけを理由に、現在の安全な工程を停止しない。
 
 ## Skill 実行順
 
-標準の実行順は次のとおりです。
+次の並びは、複数の Skill が同じ変更に適用される場合の**順序制約**であり、全 Skill を毎回実行するチェックリストではない。
+
+現在タスクの目的、変更面、Gate に必要な Skill だけを起動する。
+既に確定した工程を、repository state や scope に変化がないのに再実行しない。
+適用対象がない Skill は起動不要とし、既に起動された場合のみ `NOT APPLICABLE` を返してよい。
+
+標準の順序制約は次のとおりです。
 
 ```text
 /project-audit
@@ -135,7 +111,7 @@ Skill 文書内でこれらを自動実行する手順を書いてはいけま�
 
 ## UI slice additional skills（UI-AGENT-SYSTEM-V1）
 
-標準順は変更しない。UI / presentation 変更を含む slice では、次を**追加**する。非 UI 変更では各 Skill が `NOT APPLICABLE` を出してよい。
+UI / presentation 変更を含む slice では、適用される標準工程に次を**追加**する。非 UI 変更ではこれらの Skill を起動しない。既に起動された場合は `NOT APPLICABLE` を返してよい。
 
 ```text
 /architecture-review
