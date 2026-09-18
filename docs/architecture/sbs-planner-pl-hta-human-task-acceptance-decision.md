@@ -1,16 +1,18 @@
 # SBS-PLANNER — PL-HTA Human Task Acceptance Decision
 
-Human Task Acceptance evaluation for **PL-HTA-1 / PL-HTA-2 only** against bound current main. This record consumes Human Task Acceptance GO and records the result. It does **not** reconstruct Re-Review-4, fabricate `#674` Human Merge GO, implement Product, implement ADMIN_AUDIT, consume Ready / Merge, mutate Issues / existing PRs, Deploy, LIVE WRITE, or Production Binding.
+Durable **historical recording** of an already-performed Human Task Acceptance for **PL-HTA-1 / PL-HTA-2 only**, bound to exact main. This file is **not** a new PL-HTA execution. SBS-PLANNER-PL-HTA-CORRECTION-1 Part A (Human Acceptance Evidence Fixation GO) only fixates that prior result and names the rendered evidence files.
+
+It does **not** reconstruct Re-Review-4, fabricate `#674` Human Merge GO, start Implementation, implement ADMIN_AUDIT, consume Ready / Merge, mutate Issues / existing PRs, Deploy, LIVE WRITE, or Production Binding.
 
 ```text
 repository: yasutakesougo/severe-behavior-support-spfx
 workstream: SBS-PLANNER
 unit: SBS-PLANNER-PL-HTA
-kind: Human Task Acceptance decision record
-mode: HTA evaluation + docs-only result recording
+kind: Human Task Acceptance decision record (historical evidence fixation)
+mode: docs-only recording of already-performed HTA
 date: 2026-09-18
 
-Bound main: 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
+Bound main (exact identity): 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
 Scope: PLANNER PL-HTA-1 / PL-HTA-2 ONLY
 Criteria authority:
   Correction-2 Complete Controlled Packet
@@ -22,22 +24,31 @@ Product basis on bound main:
   existing SupportPlan / PROCESS-VISIBILITY-UI-V1
   recorded desktop / 390×844 role-binding smoke (prerequisite observation only)
 
-Human speech-act (verbatim this turn):
+Prior Human speech-act (HTA execution; already performed; not re-run here):
   SBS-PLANNER PL-HTA
   Human Task Acceptance GO
   Bound main = 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
   Scope = PLANNER PL-HTA-1 / PL-HTA-2 ONLY
 
-Human Task Acceptance GO: RECEIVED / CONSUMED
+This-turn Human speech-act (evidence fixation only):
+  SBS-PLANNER-PL-HTA-CORRECTION-1
+  Human Acceptance Evidence Fixation GO
+  Target record = this file
+  = not a new PL-HTA execution
+
+Human Task Acceptance GO: RECEIVED / CONSUMED (prior; not re-consumed)
+Human Acceptance Evidence Fixation GO: RECEIVED / CONSUMED (this turn)
 Human Task Acceptance: FAIL / NOT CONFIRMED
   PL-HTA-1: FAIL
   PL-HTA-2: FAIL
+New PL-HTA execution: NOT PERFORMED / NOT AUTHORIZED by Part A
 Smoke ≠ HTA: held
 Independent Implementation Re-Review-4: NOT RECONSTRUCTED (GHC-1 remains EVIDENCE_GAP)
 #674 Human Merge GO: NOT FABRICATED (GHC-2 remains EVIDENCE_GAP)
 ADMIN_AUDIT Task-First: OUT / separate implementation gap
 Production / Deploy / FE-F006: OUT / separate lane
 Product / SPFx / domain / schema mutation by this document: 0
+Exact Scope implementation: NOT AUTHORIZED
 Ready / Merge / Issue mutation / existing PR mutation: NOT AUTHORIZED
 Deploy / LIVE WRITE / Production Binding: NOT AUTHORIZED
 ```
@@ -58,7 +69,7 @@ Implementation Start: NOT AUTHORIZED by this FAIL
 Deploy / LIVE WRITE: NOT AUTHORIZED
 ```
 
-This FAIL is a Human Acceptance result. It is **not** a reconstruction of missing `#667` Re-Review-4. It is **not** a `#674` Merge-authority claim. It does **not** by itself start a Product correction.
+This FAIL is a **historical** Human Acceptance result already performed against bound main. Part A does **not** re-execute PL-HTA. It is **not** a reconstruction of missing `#667` Re-Review-4. It is **not** a `#674` Merge-authority claim. It does **not** by itself start a Product correction or Exact Scope.
 
 ---
 
@@ -146,7 +157,26 @@ ADMIN_AUDIT Task-First = OUT / not claimed
 | GHC-2 `#674` Merge GO packet | PRESERVED | not fabricated |
 | Smoke PASS as business complete | NOT OBSERVED on session | PL-HTA-2b clause only |
 
-Local evaluation artifacts (not repository SSOT): `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/`.
+Rendered evidence filenames (historical; not repository SSOT; not a new capture this turn):
+
+| Filename | Path | What it shows for this FAIL |
+|---|---|---|
+| `pl-hta-01-home-unknown-cycle.png` | `/opt/cursor/artifacts/pl-hta-01-home-unknown-cycle.png` | Demo → 計画担当 first paint; cycle unknown; Primary Action disabled; Overview「今日の支援」 still under Task-First |
+| `01-planner-home-unknown-cycle.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/01-planner-home-unknown-cycle.png` | same capture (evaluation-dir name) |
+| `pl-hta-02-find-person-list.png` | `/opt/cursor/artifacts/pl-hta-02-find-person-list.png` | Global 探す → SupportPlanManagementList (Aさん 適用中); not D-PLAN |
+| `02-planner-find-person.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/02-planner-find-person.png` | same capture |
+| `03-support-plan-from-list.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/03-support-plan-from-list.png` | first list CTA (Bさん) → synthetic-detail OUT; not SupportPlan Current/Draft |
+| `pl-hta-05-d-plan-destination.png` | `/opt/cursor/artifacts/pl-hta-05-d-plan-destination.png` | smoke-only cycle ② Task-First D-PLAN heading over Overview「今日の支援」 |
+| `05-task-first-d-plan.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/05-task-first-d-plan.png` | same capture |
+| `pl-hta-06-d-monitor-destination.png` | `/opt/cursor/artifacts/pl-hta-06-d-monitor-destination.png` | smoke-only cycle ④ Task-First D-MONITOR heading over Overview「今日の支援」 |
+| `06-task-first-d-monitor.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/06-task-first-d-monitor.png` | same capture |
+| `07-a-san-existing-plan.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/07-a-san-existing-plan.png` | non-button click miss; list unchanged |
+| `pl-hta-08-existing-support-plan-off-path.png` | `/opt/cursor/artifacts/pl-hta-08-existing-support-plan-off-path.png` | Aさん「詳細を見る」 off-path SupportPlan (現行版・適用中 + ①–⑥); not D-PLAN Destination |
+| `08-a-san-plan-action.png` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/08-a-san-plan-action.png` | same capture |
+| `hta-eval.json` | `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/hta-eval.json` | machine facts for home / find / D-PLAN / D-MONITOR |
+| `pl-hta-eval.json` | `/opt/cursor/artifacts/pl-hta-eval.json` | copy of `hta-eval.json` |
+
+Role-binding smoke rerun (prerequisite observation only; ≠ HTA): `/opt/cursor/artifacts/sbs-planner-pl-hta-evaluation/role-binding-smoke-rerun/`.
 
 ---
 
@@ -171,14 +201,17 @@ Top-Level Exact Scope already placed SupportPlan Product bind in a later unit. T
 ## Authority boundary
 
 ```text
-Human Task Acceptance GO     CONSUMED
-Human Task Acceptance        FAIL / NOT CONFIRMED @ 7414f9d0
-Ready / Merge                NOT AUTHORIZED
-Implementation               NOT AUTHORIZED
-ADMIN_AUDIT                  NOT THIS RECORD
-Deploy / LIVE WRITE          NOT AUTHORIZED
-GHC-1 / GHC-2                UNCHANGED / NOT RECONSTRUCTED
-#667 / #674 historical docs  UNCHANGED
+Human Task Acceptance GO                 CONSUMED (prior execution)
+Human Acceptance Evidence Fixation GO    CONSUMED (this file / Part A)
+Human Task Acceptance                    FAIL / NOT CONFIRMED @ 7414f9d0
+New PL-HTA execution                     NOT PERFORMED
+Ready / Merge                            NOT AUTHORIZED
+Implementation / Exact Scope             NOT AUTHORIZED
+ADMIN_AUDIT                              NOT THIS RECORD
+Deploy / LIVE WRITE                      NOT AUTHORIZED
+GHC-1 / GHC-2                            UNCHANGED / NOT RECONSTRUCTED
+#667 / #674 historical docs              UNCHANGED
+GAP-A orientation Decision               SEPARATE RECORD (Part B; not this HTA)
 ```
 
 Agent / Review / CI must not auto-promote this record into Implementation Start, Ready, or Merge.
@@ -188,15 +221,18 @@ Agent / Review / CI must not auto-promote this record into Implementation Start,
 ## Gate sequence (fixed)
 
 ```text
-Human Task Acceptance GO               CONSUMED this turn
-Human Task Acceptance result           FAIL / NOT CONFIRMED  ← this record
+Human Task Acceptance GO               CONSUMED (prior; not re-run)
+Human Task Acceptance result           FAIL / NOT CONFIRMED  ← historical
+Human Acceptance Evidence Fixation GO  CONSUMED (Part A)
 separate Implementation Start GO       NOT RECEIVED / NOT CONSUMED
 Human Ready / Merge                    NOT AUTHORIZED
 Deploy / LIVE WRITE                    NOT AUTHORIZED
 ```
 
 ```text
-STOP = no Product implementation from this FAIL
+STOP = no new PL-HTA execution
+     = no Product implementation from this FAIL
+     = no Exact Scope implementation
      = no Ready / Merge
      = no Issue / existing-PR mutation
      = no Re-Review-4 reconstruction
