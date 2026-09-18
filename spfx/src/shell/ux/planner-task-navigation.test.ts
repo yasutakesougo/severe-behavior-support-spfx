@@ -46,7 +46,9 @@ describe("SBS-PLANNER-TOP-LEVEL-IA-V1 task navigation", () => {
   it("AC-PL-TL-6: unknown cycle Primary Action fail-closed / stay D-HOME", () => {
     expect(PLANNER_DEFAULT_CYCLE).toBe("unknown");
     expect(primaryActionDestinationForPlannerCycle("unknown")).toBeUndefined();
-    const next = applyPlannerSessionEvent(initialPlannerTaskViewState(), { type: "PRIMARY_ACTION" });
+    const next = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "PRIMARY_ACTION",
+    });
     expect(next.destination).toBe("D-HOME");
   });
 

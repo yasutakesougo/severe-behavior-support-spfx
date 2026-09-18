@@ -110,22 +110,25 @@ export default class ScaffoldShell extends React.Component<
   }
 
   private applyFieldStaffEvent(event: FieldStaffSessionEvent, syncAdapter: boolean): void {
-    this.setState((current) => {
-      if (current.role !== "FIELD_STAFF") {
-        return current;
-      }
-      const next = applyFieldStaffSessionEvent(current, event);
-      return {
-        role: "FIELD_STAFF" as const,
-        ...next,
-        shellDestination: shellAdapterForFieldStaffDestination(next.destination),
-      };
-    }, () => {
-      if (!syncAdapter || this.state.role !== "FIELD_STAFF") {
-        return;
-      }
-      this.requestLegacyShellDestination(this.state.shellDestination, this.state.destination);
-    });
+    this.setState(
+      (current) => {
+        if (current.role !== "FIELD_STAFF") {
+          return current;
+        }
+        const next = applyFieldStaffSessionEvent(current, event);
+        return {
+          role: "FIELD_STAFF" as const,
+          ...next,
+          shellDestination: shellAdapterForFieldStaffDestination(next.destination),
+        };
+      },
+      () => {
+        if (!syncAdapter || this.state.role !== "FIELD_STAFF") {
+          return;
+        }
+        this.requestLegacyShellDestination(this.state.shellDestination, this.state.destination);
+      },
+    );
   }
 
   private applyPlannerEvent(event: PlannerSessionEvent): void {
@@ -187,9 +190,7 @@ export default class ScaffoldShell extends React.Component<
     }));
   };
 
-  private renderFieldStaffTaskLayer(
-    state: FieldStaffShellState,
-  ): React.ReactElement {
+  private renderFieldStaffTaskLayer(state: FieldStaffShellState): React.ReactElement {
     const { activeGlobalId, destination, sessionContext } = state;
     const contextHint = contextHintForFieldStaffGlobal(activeGlobalId, sessionContext);
     return (
@@ -316,9 +317,7 @@ export default class ScaffoldShell extends React.Component<
                 type="button"
                 className={styles.taskButton}
                 data-role-task-select-record={recordId}
-                onClick={() =>
-                  this.applyPlannerEvent({ type: "SELECT_RECORD", recordId })
-                }
+                onClick={() => this.applyPlannerEvent({ type: "SELECT_RECORD", recordId })}
               >
                 記録を選ぶ（{recordId}）
               </button>

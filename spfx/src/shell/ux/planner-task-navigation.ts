@@ -233,8 +233,7 @@ export const applyPlannerSessionEvent = (
         destination: next,
         previousDestination: "D-HOME",
         selectedRecordId: undefined,
-        activeGlobalId:
-          next === "D-FIND-PERSON" ? "GLOBAL-FIND-PERSON" : "GLOBAL-CURRENT-CYCLE",
+        activeGlobalId: next === "D-FIND-PERSON" ? "GLOBAL-FIND-PERSON" : "GLOBAL-CURRENT-CYCLE",
       };
     }
     case "SELECT_RECORD": {
