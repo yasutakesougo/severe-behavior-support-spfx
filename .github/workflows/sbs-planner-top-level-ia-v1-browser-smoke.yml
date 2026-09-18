@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout exact PR head
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -46,6 +48,12 @@ jobs:
       - name: Install SPFx dependencies
         working-directory: spfx
         run: npm ci
+
+      - name: Prepare exact B2 build basis
+        working-directory: spfx
+        env:
+          B2_HARNESS_BUILD_BASIS_SHA: ${{ github.event.pull_request.head.sha }}
+        run: npm run prepare:b2-build-basis
 
       - name: Run SPFx unit verification
         working-directory: spfx
