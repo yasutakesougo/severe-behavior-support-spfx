@@ -36,9 +36,7 @@ type ScaffoldShellState = FieldStaffTaskViewState & {
   plannerTask: PlannerTaskViewState;
 };
 
-const plannerCycleFromDemoLocation = (
-  demoMode: boolean,
-): PlannerCyclePosition => {
+const plannerCycleFromDemoLocation = (demoMode: boolean): PlannerCyclePosition => {
   if (!demoMode || typeof window === "undefined") {
     return "unknown";
   }
@@ -46,9 +44,7 @@ const plannerCycleFromDemoLocation = (
   return parsePlannerCyclePosition(params.get("sbsPlannerCycle"));
 };
 
-const presentationRoleFromDemoLocation = (
-  demoMode: boolean,
-): "FIELD_STAFF" | "PLANNER" => {
+const presentationRoleFromDemoLocation = (demoMode: boolean): "FIELD_STAFF" | "PLANNER" => {
   if (!demoMode || typeof window === "undefined") {
     return "FIELD_STAFF";
   }
@@ -70,9 +66,7 @@ export default class ScaffoldShell extends React.Component<
     this.state = {
       ...initialFieldStaffTaskViewState(),
       shellDestination: "overview",
-      plannerTask: initialPlannerTaskViewState(
-        plannerCycleFromDemoLocation(props.demoMode),
-      ),
+      plannerTask: initialPlannerTaskViewState(plannerCycleFromDemoLocation(props.demoMode)),
     };
   }
 
@@ -147,10 +141,7 @@ export default class ScaffoldShell extends React.Component<
   private readonly handlePlannerSyntheticRecordSelect = (): void => {
     this.setState((current) => ({
       ...current,
-      plannerTask: selectPlannerRecord(
-        current.plannerTask,
-        "synthetic-planner-record-1",
-      ),
+      plannerTask: selectPlannerRecord(current.plannerTask, "synthetic-planner-record-1"),
     }));
   };
 
@@ -336,9 +327,7 @@ export default class ScaffoldShell extends React.Component<
 
           {plannerTask.destination === "D-RECORD-READ" ? (
             <div data-planner-record-read="true" data-planner-read-only="true">
-              <p className={styles.contextHint}>
-                選択した記録を読み取り専用で確認します。
-              </p>
+              <p className={styles.contextHint}>選択した記録を読み取り専用で確認します。</p>
               <p className={styles.contextHint}>
                 記録ID: {plannerTask.selectedRecordId ?? "未選択"}
               </p>
