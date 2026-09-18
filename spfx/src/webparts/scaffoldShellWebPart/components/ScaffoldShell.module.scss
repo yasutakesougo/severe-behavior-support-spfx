@@ -7,11 +7,20 @@
 ),
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="site-selector"]),
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="presentation-role-hint"]),
-:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-dashboard-ux="overview-heading"]) {
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-dashboard-ux="overview-heading"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="primary-navigation"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="demo-banner"]),
+:global(
+  [data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="demo-presentation-role-entry"]
+),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="site-selector"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="presentation-role-hint"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-dashboard-ux="overview-heading"]) {
   display: none;
 }
 
-:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="ready-region-content"]) {
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="ready-region-content"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="ready-region-content"]) {
   display: flex;
   flex-direction: column;
 }
@@ -76,6 +85,13 @@
   color: sbs.$color-text-secondary;
   font-size: sbs.$font-size-200;
   line-height: sbs.$line-height-body;
+}
+
+.plannerFixtureRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: sbs.$space-2;
+  margin-top: sbs.$space-3;
 }
 
 .srOnly {

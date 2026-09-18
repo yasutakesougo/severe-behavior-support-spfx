@@ -1,0 +1,50 @@
+name: SBS PLANNER Top-Level IA Browser Smoke
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "spfx/src/shell/ux/planner-task-navigation.ts"
+      - "spfx/src/shell/ux/planner-task-navigation.test.ts"
+      - "spfx/src/webparts/scaffoldShellWebPart/**"
+      - "spfx/smoke/sbs-planner-top-level-ia-v1/**"
+      - ".github/workflows/sbs-planner-top-level-ia-v1-browser-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  planner-top-level-browser-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.23.1
+          cache: npm
+      - run: npm ci
+        working-directory: spfx
+      - name: Install isolated browser smoke runtime
+        run: npm install --prefix /tmp --no-save puppeteer-core esbuild sass react@17.0.1 react-dom@17.0.1
+      - name: Resolve isolated runtime package entries
+        run: |
+          PUPPETEER_PATH=$(node -e "console.log(require.resolve('puppeteer-core', { paths: ['/tmp'] }))")
+          ESBUILD_PATH=$(node -e "console.log(require.resolve('esbuild', { paths: ['/tmp'] }))")
+          SASS_PATH=$(node -e "console.log(require.resolve('sass', { paths: ['/tmp'] }))")
+          echo "SBS_PLANNER_TL_IA_PUPPETEER_PATH=$PUPPETEER_PATH" >> "$GITHUB_ENV"
+          echo "SBS_PLANNER_TL_IA_ESBUILD_PATH=$ESBUILD_PATH" >> "$GITHUB_ENV"
+          echo "SBS_PLANNER_TL_IA_SASS_PATH=$SASS_PATH" >> "$GITHUB_ENV"
+          echo "SBS_PLANNER_TL_IA_NODE_PATH=/tmp/node_modules" >> "$GITHUB_ENV"
+      - name: Run PLANNER Top-Level IA browser smoke
+        env:
+          SBS_PLANNER_TL_IA_ARTIFACTS_DIR: /tmp/sbs-planner-top-level-ia-v1-browser-smoke
+          SBS_PLANNER_TL_IA_IMPLEMENTATION_HEAD: ${{ github.sha }}
+        run: node spfx/smoke/sbs-planner-top-level-ia-v1/run-smoke.mjs
+      - name: Upload PLANNER Top-Level browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbs-planner-top-level-ia-v1-browser-smoke
+          path: /tmp/sbs-planner-top-level-ia-v1-browser-smoke
+          if-no-files-found: error
