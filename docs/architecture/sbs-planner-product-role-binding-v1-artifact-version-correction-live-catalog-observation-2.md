@@ -265,21 +265,7 @@ FE-F006
 = OPEN
 ```
 
-Remaining before Human Deploy GO can become eligible:
-
-```text
-1. Recover Deployed / CurrentVersionDeployed (no speculation)
-2. Fix exactly one Deploy candidate sha256
-   Independent-Review-cleared
-     HEAD   = f33650442f7b9046dac0bc4354ee3adac3c397b1
-     sha256 = c4a15dcf63f25a5130904f78c70bd8b3feed8c3f2a4fe99980299e0b7a805890
-   Post-merge rebuild (NOT silently substituted)
-     HEAD   = 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
-     sha256 = 6d5f9001b033c3a726a46c91f9a4b6c0ec5c7dec16c2210068e1101b72a27e71
-   Choice: keep c4a15dcf… as Deploy candidate
-        XOR independently review 6d5f9001…
-3. Explicit Human Deploy GO bound to that one sha256
-```
+§9 was the reconciliation HOLD. Evidence blockers were later cleared; see §11.
 
 ---
 
@@ -296,3 +282,45 @@ STOP
   ≠ reuse Recovery-2 as live catalog
   ≠ silent substitution of post-merge 6d5f9001… for reviewed c4a15dcf…
 ```
+
+---
+
+## 11. Evidence-blocker clearance + Candidate A (2026-09-18T09:06:27Z)
+
+Browser channel (§2 / Observation-2) remains **NOT AUTHENTICATED**. It is not retracted.
+
+Human live flag recovery (authenticated catalog; not inferred from file/drive surface):
+
+```text
+Deployed               = true
+CurrentVersionDeployed = true
+```
+
+GitHub re-check of Candidate A (this environment):
+
+```text
+f3365044… exists
+package-solution.json only: 1.0.0.2 → 1.0.0.4
+f3365044… → origin/main 7414f9d0… = ahead 6 / behind 0
+A..main = Ready / Merge / Review docs only
+artifact 10535354012 expired = false
+```
+
+```text
+DEPLOY READINESS
+= READY FOR HUMAN DEPLOY CANDIDATE DECISION
+
+Collision
+= NONE OBSERVED
+
+Human Deploy GO Eligibility
+= ELIGIBLE
+
+Human Deploy GO
+= NOT CONSUMED
+
+Bound candidate
+= A / f3365044… / c4a15dcf… / artifact 10535354012
+```
+
+Durable bind: `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-human-deploy-candidate-decision.md`.

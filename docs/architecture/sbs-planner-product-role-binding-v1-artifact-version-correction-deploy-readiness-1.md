@@ -7,7 +7,7 @@ repository: yasutakesougo/severe-behavior-support-spfx
 workstream: SBS-PLANNER-PRODUCT-ROLE-BINDING-V1
 unit: SBS-PLANNER-PRODUCT-ROLE-BINDING-V1-ARTIFACT-VERSION-CORRECTION
 kind: Deploy Readiness-1
-mode: READ ONLY tenant observation attempt + git/CI evidence
+mode: READ ONLY tenant observation + Candidate A bind
 date: 2026-09-18
 
 origin/main: 7414f9d08f6fcf64829fad66c3df2355e94b0bc7
@@ -16,14 +16,17 @@ git package version on main: 1.0.0.4
 solution id: 4342db47-21a3-4c48-aed1-ef615f55c404
 
 Human Merge GO: CONSUMED / Merge SUCCESS
-Human Deploy GO: NOT YET ELIGIBLE / NOT CONSUMED
+DEPLOY READINESS: READY FOR HUMAN DEPLOY CANDIDATE DECISION
+Human Deploy GO Eligibility: ELIGIBLE
+Human Deploy GO: NOT CONSUMED
 Deploy / LIVE WRITE / App Catalog mutation: NOT AUTHORIZED
 FE-F006: OPEN
 Issue #669: CLOSED on GitHub (Definition Draft-1; this record does not reopen)
 PL-HTA: NOT EVALUATED / SEPARATE GATE
 Recovery-2 snapshot: NOT LIVE AUTHORITY (AVC-9)
-Live catalog identity: OBSERVED (authenticated SharePoint channel)
-Deployed / CurrentVersionDeployed: UNKNOWN
+Live catalog identity: OBSERVED
+Deployed / CurrentVersionDeployed: true / true
+Bound Deploy candidate: A (c4a15dcf…)
 ```
 
 Human Merge ≠ Deploy Readiness PASS ≠ Human Deploy GO ≠ Deploy.
@@ -43,7 +46,7 @@ artifact id           = 10535354012
 Review-1              = PASS / REVIEW-CLEARED
 ```
 
-This remains the **reviewed** 1.0.0.4 package identity.
+This remains the **reviewed** 1.0.0.4 package identity and is now the **bound Deploy Candidate A**. See `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-human-deploy-candidate-decision.md`.
 
 ---
 
@@ -65,7 +68,7 @@ same AppManifest version 1.0.0.4
 = SAME-VERSION / DIFFERENT-ARTIFACT (git-side)
 ```
 
-Locked Definition §10 same-version / different-artifact STOP applies to **live Tenant vs candidate**. It also means Human Deploy GO must name **one** exact `.sppkg` sha256. A main-tip rebuild is **not** automatically the reviewed candidate.
+Locked Definition §10 same-version / different-artifact STOP applies to **live Tenant vs candidate**. Candidate A is the named `.sppkg` sha256. A main-tip rebuild is **not** Candidate A. Deploy must use the exact `c4a15dcf…` bytes (no rebuild).
 
 Superseded / must not deploy:
 
@@ -106,17 +109,17 @@ live tenant sppkg sha256
 = 4175351e90b716c2a8d62886b58c91f79d0b2cab427fdf2817ce84b792196f40
 catalog file updated_at
 = 2026-09-15T05:07:47Z
-Deployed
-= NOT RECOVERED
-CurrentVersionDeployed
-= NOT RECOVERED
+Deployed (Human live flag recovery; 2026-09-18)
+= true
+CurrentVersionDeployed (Human live flag recovery; 2026-09-18)
+= true
 ```
 
 Independent unpack of the two Human-uploaded catalog copies: identical, sha256 `4175351e…`, AppManifest `Version="1.0.0.3"`, ProductID match.
 
 ```text
 Live catalog identity = OBSERVED
-Deployed / CurrentVersionDeployed = UNKNOWN
+Deployed / CurrentVersionDeployed = true / true
 ```
 
 Matching Recovery-2 hash is **live re-observation**, not Recovery-2 as Deploy authority.
@@ -135,15 +138,19 @@ live == 1.0.0.3 AND ProductID match    = TRUE   → expected upgrade path
 live ProductID != 4342db47-…           = FALSE  → SOLUTION IDENTITY MISMATCH = NONE OBSERVED
 ```
 
-Expected upgrade path still requires a separate Human Deploy GO. `Deployed` / `CurrentVersionDeployed` stay UNKNOWN (no speculation).
+```text
+Collision = NONE OBSERVED
+```
 
-Git-side candidate fork remains open (not a live §10 class):
+Expected upgrade path still requires a **separate** Human Deploy GO bound to Candidate A.
+
+Git-side second `1.0.0.4` (`6d5f9001…`) is **not** interchangeable with Candidate A:
 
 ```text
-Independent-Review-cleared  f3365044… / c4a15dcf…
-Post-merge rebuild          7414f9d0… / 6d5f9001…
+Bound Deploy Candidate A    f3365044… / c4a15dcf… / artifact 10535354012
+Post-merge rebuild          7414f9d0… / 6d5f9001… = MUST NOT USE
 same 1.0.0.4 ≠ interchangeable
-silent substitution of 6d5f9001… = FORBIDDEN
+silent substitution / rebuild = FORBIDDEN
 ```
 
 ---
@@ -151,26 +158,39 @@ silent substitution of 6d5f9001… = FORBIDDEN
 ## 5. Deploy Readiness verdict
 
 ```text
-Review Basis Sufficiency (git / reviewed artifact) = PARTIAL
-  (two 1.0.0.4 SHA values; one must be named)
-Review Basis Sufficiency (live Tenant identity)    = OBSERVED
-Review Basis Sufficiency (Deployed flags)          = INSUFFICIENT
-Deploy Readiness                                   = HOLD / PARTIAL LIVE EVIDENCE
-Human Deploy GO Eligibility                        = NOT YET ELIGIBLE
-Human Deploy GO                                    = NOT CONSUMED
-Deploy                                             = NOT AUTHORIZED
-FE-F006                                            = OPEN
-Tenant Mutation During this record                 = NONE
+DEPLOY READINESS
+= READY FOR HUMAN DEPLOY CANDIDATE DECISION
+
+Live Tenant
+= 1.0.0.3
+= ProductID MATCH
+= Deployed true
+= CurrentVersionDeployed true
+= sha256 4175351e...
+
+Collision
+= NONE OBSERVED
+
+FE-F006
+= OPEN
+
+Human Deploy GO Eligibility
+= ELIGIBLE
+
+Human Deploy GO
+= NOT CONSUMED
+
+Deploy
+= NOT AUTHORIZED
+
+Bound candidate
+= A / c4a15dcf… / artifact 10535354012
+
+Tenant Mutation During this record
+= NONE
 ```
 
-Required before Human Deploy GO becomes eligible:
-
-```text
-1. Recover Deployed / CurrentVersionDeployed (read-only; no guess)
-2. Human names exactly one candidate sha256
-   (keep reviewed c4a15dcf…  XOR  Independent Artifact Review of 6d5f9001…)
-3. Explicit Human Deploy GO bound to that sha256
-```
+Next gate: Human Deploy GO speech-act bound to Candidate A (see human-deploy-candidate-decision). Until then STOP on upload / publish / install / upgrade. After GO, re-read live Tenant immediately before mutation; fail closed if not still `1.0.0.3` / ProductID MATCH.
 
 ---
 
