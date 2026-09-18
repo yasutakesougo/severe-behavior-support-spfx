@@ -84,8 +84,12 @@ PnP / az / m365 CLI                         = NOT PRESENT
 Tenant App Catalog Graph/sharepoint site I/O = NOT AVAILABLE
   (connected personal-drive search does not enumerate
    the Tenant App Catalog library)
+Browser catalog library                     = NOT AUTHENTICATED (Microsoft Sign-in;
+                                              credentials not entered)
 Recovery-2 snapshot reuse as live authority = FORBIDDEN
 ```
+
+Observation-2 packet: `docs/architecture/sbs-planner-product-role-binding-v1-artifact-version-correction-live-catalog-observation-2.md` (`2026-09-18T08:39:36Z`).
 
 Observed live Tenant fields this turn:
 
@@ -106,7 +110,9 @@ Recovery-2 historically recorded live `1.0.0.3` / sha256 `4175351e…`. That sna
 
 ---
 
-## 4. Collision policy (still controlling; not applied to a live observation)
+## 4. Collision policy (still controlling; applied to UNKNOWN live fields)
+
+Observation-2 applied §10 to the live fields that exist (all UNKNOWN). No §10 branch is CONFIRMED.
 
 When a fresh authenticated read-only catalog observation exists:
 
