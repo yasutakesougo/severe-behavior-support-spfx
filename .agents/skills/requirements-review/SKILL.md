@@ -31,6 +31,7 @@
 - 対象機能または対象 Issue が識別できる
 - 不足情報を推測で埋めない方針が共有されている
 - `docs/process/ai-role.md` の Scope / Out of Scope を参照できる
+- 共通 Authority は `.agents/skills/_shared/authority-boundaries.md` を参照する
 
 ## 実行手順
 
@@ -72,7 +73,7 @@
 
 - `PASS`: この Skill では原則使用しない。Gate 通過判定が必要な場合は後続 Skill で扱う
 - `READY`: 6 項目と追加確認が揃い、実装可能範囲が明示されている
-- `HOLD`: 対象利用者・保存先・権限・失敗時動作・受入条件のいずれかが未確定、または承認待ち
+- `HOLD`: 対象利用者・保存先・権限・失敗時動作・受入条件のいずれかが未確定、または要件確定そのものに必要な承認・Decision 待ち
 - `FAIL`: P0 または P1 相当の要件欠陥があり、設計へ進めない。P2 は記録のうえで後続 Issue に送れる
 - `NOT APPLICABLE`: 要件整理を要しない相談・文書整理のみの作業
 
@@ -90,13 +91,15 @@
 
 ## 禁止事項
 
-- merge、push、deploy を自動実行手順に含めること
-- SharePoint変更、Microsoft 365変更、Entra ID変更を承認不要または自動実行として扱うこと
-- 本番データ変更や物理削除を許可または手順化すること
+共通の merge / deploy / production / tenant mutation 境界は `.agents/skills/_shared/authority-boundaries.md` に従う。
+
+本 Skill 固有の禁止事項:
+
 - 未確認事項を推測で確定すること
 - `HOLD` を `PASS` / `READY` と同義に扱うこと
 - 根拠のない補完で要件を確定すること
-- 本番公開または実データ利用を自動的に許可すること
+- 本番公開または実データ利用を要件レビューだけで許可すること
+- 後続の Merge / Deploy approval が未取得であることだけを理由に要件レビューを停止すること
 
 ## 出力形式
 
