@@ -1,0 +1,57 @@
+name: SBS PLANNER Top-Level IA Browser Smoke
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "spfx/src/shell/ux/planner-task-navigation.ts"
+      - "spfx/src/shell/ux/planner-task-navigation.test.ts"
+      - "spfx/src/shell/ux/index.ts"
+      - "spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx"
+      - "spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.module.scss"
+      - "spfx/smoke/sbs-planner-top-level-ia-v1/**"
+      - ".github/workflows/sbs-planner-top-level-ia-v1-browser-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  format-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.23.1
+          cache: npm
+
+      - name: Install root verification dependencies
+        run: npm ci
+
+      - name: Produce canonical Prettier output for this unit
+        shell: bash
+        run: |
+          npx prettier --write \
+            spfx/smoke/sbs-planner-top-level-ia-v1/run-smoke.mjs \
+            spfx/smoke/sbs-planner-top-level-ia-v1/smoke-entry.tsx \
+            spfx/src/shell/ux/planner-task-navigation.test.ts \
+            spfx/src/shell/ux/planner-task-navigation.ts \
+            spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx
+
+          files=(
+            "spfx/smoke/sbs-planner-top-level-ia-v1/run-smoke.mjs"
+            "spfx/smoke/sbs-planner-top-level-ia-v1/smoke-entry.tsx"
+            "spfx/src/shell/ux/planner-task-navigation.test.ts"
+            "spfx/src/shell/ux/planner-task-navigation.ts"
+            "spfx/src/webparts/scaffoldShellWebPart/components/ScaffoldShell.tsx"
+          )
+          for file in "${files[@]}"; do
+            echo "SBS_FORMAT_BEGIN:${file}"
+            base64 -w 0 "${file}"
+            echo
+            echo "SBS_FORMAT_END:${file}"
+          done
