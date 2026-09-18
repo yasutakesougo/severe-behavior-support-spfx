@@ -166,44 +166,40 @@ async function openCase(name, query, evaluateCase, interact) {
   await page.close();
 }
 
-await openCase(
-  "planner-first-paint-unknown",
-  "sbsPresentationRole=PLANNER",
-  () => {
-    const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
-    const planner = document.querySelector('[data-role-task-ia="PLANNER"]');
-    const field = document.querySelector('[data-role-task-ia="FIELD_STAFF"]');
-    const globals = [...(planner?.querySelectorAll("[data-planner-global]") ?? [])];
-    const labels = globals.map((el) => (el.textContent ?? "").trim());
-    const targets = globals.map((el) => el.getAttribute("data-role-task-nav"));
-    const primary = planner?.querySelector("[data-planner-primary-action]");
-    const legacy = document.querySelector('[data-shell-ux="primary-navigation"]');
-    return {
-      pass:
-        shell?.getAttribute("data-shell-ux-presentation-role") === "PLANNER" &&
-        planner?.getAttribute("data-role-task-destination") === "D-HOME" &&
-        planner?.getAttribute("data-planner-current-cycle") === "unknown" &&
-        labels.join("|") === "今の工程|探す" &&
-        targets.join("|") === "D-HOME|D-FIND-PERSON" &&
-        primary?.getAttribute("data-planner-primary-action") === "D-HOME" &&
-        primary?.hasAttribute("disabled") === true &&
-        getComputedStyle(planner).display !== "none" &&
-        Boolean(field) &&
-        getComputedStyle(field).display === "none" &&
-        Boolean(legacy) &&
-        getComputedStyle(legacy).display === "none" &&
-        (planner?.textContent ?? "").indexOf("D-RECORD-WRITE") < 0,
-      role: shell?.getAttribute("data-shell-ux-presentation-role") ?? "",
-      destination: planner?.getAttribute("data-role-task-destination") ?? "",
-      labels,
-      targets,
-      primaryTarget: primary?.getAttribute("data-planner-primary-action") ?? "",
-      legacyDisplay: legacy ? getComputedStyle(legacy).display : "missing",
-      fieldDisplay: field ? getComputedStyle(field).display : "missing",
-      plannerDisplay: planner ? getComputedStyle(planner).display : "missing",
-    };
-  },
-);
+await openCase("planner-first-paint-unknown", "sbsPresentationRole=PLANNER", () => {
+  const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
+  const planner = document.querySelector('[data-role-task-ia="PLANNER"]');
+  const field = document.querySelector('[data-role-task-ia="FIELD_STAFF"]');
+  const globals = [...(planner?.querySelectorAll("[data-planner-global]") ?? [])];
+  const labels = globals.map((el) => (el.textContent ?? "").trim());
+  const targets = globals.map((el) => el.getAttribute("data-role-task-nav"));
+  const primary = planner?.querySelector("[data-planner-primary-action]");
+  const legacy = document.querySelector('[data-shell-ux="primary-navigation"]');
+  return {
+    pass:
+      shell?.getAttribute("data-shell-ux-presentation-role") === "PLANNER" &&
+      planner?.getAttribute("data-role-task-destination") === "D-HOME" &&
+      planner?.getAttribute("data-planner-current-cycle") === "unknown" &&
+      labels.join("|") === "今の工程|探す" &&
+      targets.join("|") === "D-HOME|D-FIND-PERSON" &&
+      primary?.getAttribute("data-planner-primary-action") === "D-HOME" &&
+      primary?.hasAttribute("disabled") === true &&
+      getComputedStyle(planner).display !== "none" &&
+      Boolean(field) &&
+      getComputedStyle(field).display === "none" &&
+      Boolean(legacy) &&
+      getComputedStyle(legacy).display === "none" &&
+      (planner?.textContent ?? "").indexOf("D-RECORD-WRITE") < 0,
+    role: shell?.getAttribute("data-shell-ux-presentation-role") ?? "",
+    destination: planner?.getAttribute("data-role-task-destination") ?? "",
+    labels,
+    targets,
+    primaryTarget: primary?.getAttribute("data-planner-primary-action") ?? "",
+    legacyDisplay: legacy ? getComputedStyle(legacy).display : "missing",
+    fieldDisplay: field ? getComputedStyle(field).display : "missing",
+    plannerDisplay: planner ? getComputedStyle(planner).display : "missing",
+  };
+});
 
 await openCase(
   "planner-cycle-3-record-read",
@@ -211,8 +207,8 @@ await openCase(
   () => {
     const planner = document.querySelector('[data-role-task-ia="PLANNER"]');
     const read = planner?.querySelector('[data-planner-record-read="true"]');
-    const buttons = [...(planner?.querySelectorAll("button") ?? [])].map(
-      (el) => (el.textContent ?? "").trim(),
+    const buttons = [...(planner?.querySelectorAll("button") ?? [])].map((el) =>
+      (el.textContent ?? "").trim(),
     );
     return {
       pass:
@@ -301,32 +297,28 @@ await openCase(
   },
 );
 
-await openCase(
-  "field-staff-regression",
-  "",
-  () => {
-    const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
-    const field = document.querySelector('[data-role-task-ia="FIELD_STAFF"]');
-    const planner = document.querySelector('[data-role-task-ia="PLANNER"]');
-    const labels = [...(field?.querySelectorAll("[data-role-task-global]") ?? [])].map(
-      (el) => (el.textContent ?? "").trim(),
-    );
-    return {
-      pass:
-        shell?.getAttribute("data-shell-ux-presentation-role") === "FIELD_STAFF" &&
-        field?.getAttribute("data-role-task-destination") === "D-TODAY" &&
-        labels.join("|") === "今日|手順|記録する|未記録|探す" &&
-        getComputedStyle(field).display !== "none" &&
-        Boolean(planner) &&
-        getComputedStyle(planner).display === "none",
-      role: shell?.getAttribute("data-shell-ux-presentation-role") ?? "",
-      destination: field?.getAttribute("data-role-task-destination") ?? "",
-      labels,
-      fieldDisplay: field ? getComputedStyle(field).display : "missing",
-      plannerDisplay: planner ? getComputedStyle(planner).display : "missing",
-    };
-  },
-);
+await openCase("field-staff-regression", "", () => {
+  const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
+  const field = document.querySelector('[data-role-task-ia="FIELD_STAFF"]');
+  const planner = document.querySelector('[data-role-task-ia="PLANNER"]');
+  const labels = [...(field?.querySelectorAll("[data-role-task-global]") ?? [])].map((el) =>
+    (el.textContent ?? "").trim(),
+  );
+  return {
+    pass:
+      shell?.getAttribute("data-shell-ux-presentation-role") === "FIELD_STAFF" &&
+      field?.getAttribute("data-role-task-destination") === "D-TODAY" &&
+      labels.join("|") === "今日|手順|記録する|未記録|探す" &&
+      getComputedStyle(field).display !== "none" &&
+      Boolean(planner) &&
+      getComputedStyle(planner).display === "none",
+    role: shell?.getAttribute("data-shell-ux-presentation-role") ?? "",
+    destination: field?.getAttribute("data-role-task-destination") ?? "",
+    labels,
+    fieldDisplay: field ? getComputedStyle(field).display : "missing",
+    plannerDisplay: planner ? getComputedStyle(planner).display : "missing",
+  };
+});
 
 const report = {
   unit: "SBS-PLANNER-TOP-LEVEL-IA-V1",
