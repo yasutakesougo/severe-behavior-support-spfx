@@ -153,22 +153,29 @@ async function inspect(page) {
       hasCreateCta: Boolean(document.querySelector('[data-role-task-record-create-cta="true"]')),
       orientationCopy:
         document.querySelector('[data-role-task-orientation="今どこ"]')?.textContent ?? "",
+      hasCycleFixtures: Boolean(document.querySelector('[data-role-task-cycle-fixtures="true"]')),
+      hasCycleSetControls: Boolean(document.querySelector("[data-role-task-cycle-set]")),
+      cycleDisplay:
+        document.querySelector("[data-role-task-cycle-display]")?.textContent?.trim() ?? "",
+      nextHand: document.querySelector("[data-role-task-next-hand]")?.textContent?.trim() ?? "",
+      homeOrientation: Boolean(document.querySelector('[data-role-task-home-orientation="true"]')),
     };
   });
 }
 
-async function openPage() {
+async function openPage(query = "") {
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 900 });
   const pageErrors = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
-  await page.goto(baseUrl, { waitUntil: "networkidle0" });
+  const url = query ? `${baseUrl}?${query}` : baseUrl;
+  await page.goto(url, { waitUntil: "networkidle0" });
   await page.waitForSelector('[data-role-task-ia="PLANNER"]');
   return { page, pageErrors };
 }
 
 {
-  const { page, pageErrors } = await openPage();
+  const { page, pageErrors } = await openPage("cycle=unknown");
   const state = await inspect(page);
   const pass =
     state.taskDestination === "D-HOME" &&
@@ -180,6 +187,11 @@ async function openPage() {
     !state.hasRecordSearchGlobal &&
     state.recordCreate === "false" &&
     !state.hasCreateCta &&
+    !state.hasCycleFixtures &&
+    !state.hasCycleSetControls &&
+    state.homeOrientation &&
+    state.cycleDisplay === "工程不明" &&
+    state.nextHand.includes("進めません") &&
     state.orientationCopy.includes("D-HOME") &&
     pageErrors.length === 0;
   results.push({ name: "first-paint-unknown", pass, state, pageErrors });
@@ -191,14 +203,23 @@ async function openPage() {
 }
 
 {
-  const { page, pageErrors } = await openPage();
-  await page.click('[data-role-task-cycle-set="③"]');
+  // Correction-1 P1-3: cycle seeded by smoke query only — no Product cycle selector.
+  const { page, pageErrors } = await openPage(`cycle=${encodeURIComponent("③")}`);
   await page.waitForFunction(
     () =>
       document
         .querySelector('[data-role-task-ia="PLANNER"]')
         ?.getAttribute("data-role-task-cycle") === "③",
   );
+  const homeState = await inspect(page);
+  const homePass =
+    homeState.taskDestination === "D-HOME" &&
+    homeState.cycle === "③" &&
+    !homeState.hasCycleFixtures &&
+    !homeState.hasCycleSetControls &&
+    homeState.homeOrientation &&
+    homeState.cycleDisplay.includes("③") &&
+    homeState.nextHand.includes("D-FIND-RECORD");
   await page.click('[data-role-task-primary-action="true"]');
   await page.waitForFunction(
     () =>
@@ -215,12 +236,20 @@ async function openPage() {
   );
   const state = await inspect(page);
   const pass =
+    homePass &&
     state.taskDestination === "D-RECORD-READ" &&
     state.taskHeading === "記録を見る" &&
     state.recordCreate === "false" &&
     !state.hasCreateCta &&
+    !state.hasCycleFixtures &&
+    !state.hasCycleSetControls &&
     pageErrors.length === 0;
-  results.push({ name: "cycle-3-find-record-read", pass, state, pageErrors });
+  results.push({
+    name: "cycle-3-find-record-read",
+    pass,
+    state: { ...state, homeState },
+    pageErrors,
+  });
   await page.screenshot({
     path: path.join(artifactsDir, "cycle-3-find-record-read.png"),
     fullPage: true,
@@ -229,7 +258,7 @@ async function openPage() {
 }
 
 {
-  const { page, pageErrors } = await openPage();
+  const { page, pageErrors } = await openPage("cycle=unknown");
   await page.click('[data-role-task-global="GLOBAL-FIND-PERSON"]');
   await page.waitForFunction(
     () =>
@@ -242,6 +271,8 @@ async function openPage() {
     state.taskDestination === "D-FIND-PERSON" &&
     state.taskHeading === "利用者を探す" &&
     !state.hasRecordSearchGlobal &&
+    !state.hasCycleFixtures &&
+    !state.hasCycleSetControls &&
     pageErrors.length === 0;
   results.push({ name: "global-find-person", pass, state, pageErrors });
   await page.screenshot({

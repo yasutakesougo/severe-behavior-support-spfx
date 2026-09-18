@@ -1,11 +1,9 @@
 import type {
   ShellPartialRetrievalPresentation,
-  ShellPresentationRole,
   ShellSaveState,
   ShellSiteSelection,
   ShellViewMode,
 } from "../../../shell/ux";
-import type { PlannerCyclePosition } from "../../../shell/ux/planner-task-navigation";
 
 export interface IScaffoldShellProps {
   description: string;
@@ -20,8 +18,4 @@ export interface IScaffoldShellProps {
   correlationId: string;
   errorCode: string;
   partialRetrieval: ShellPartialRetrievalPresentation;
-  /** Synthetic presentationRole. Default FIELD_STAFF preserves CORR-1F/1G. */
-  presentationRole?: ShellPresentationRole;
-  /** Smoke/demo fixture only — PLANNER Task-First cycle context. */
-  initialPlannerCycle?: PlannerCyclePosition;
 }

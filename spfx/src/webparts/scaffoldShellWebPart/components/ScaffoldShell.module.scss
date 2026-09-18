@@ -85,6 +85,14 @@
   line-height: sbs.$line-height-body;
 }
 
+.plannerOrientation {
+  display: flex;
+  flex-direction: column;
+  gap: sbs.$space-2;
+  margin-top: sbs.$space-3;
+  align-items: flex-start;
+}
+
 .plannerFixtureRow {
   display: flex;
   flex-wrap: wrap;

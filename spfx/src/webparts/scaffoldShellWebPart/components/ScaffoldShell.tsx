@@ -32,6 +32,15 @@ import type { ShellPrimaryNavigationId } from "../../../shell/ux/primary-navigat
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
 import styles from "./ScaffoldShell.module.scss";
 
+/**
+ * Smoke/test-only injection. Not part of IScaffoldShellProps (§3 OUT).
+ * Product webpart entry never supplies these → FIELD_STAFF CORR-1F/1G default.
+ */
+type ScaffoldShellSmokeInjection = {
+  presentationRole?: ShellPresentationRole;
+  initialPlannerCycle?: PlannerCyclePosition;
+};
+
 type FieldStaffShellState = FieldStaffTaskViewState & {
   role: "FIELD_STAFF";
   shellDestination: ShellPrimaryNavigationId;
@@ -44,19 +53,21 @@ type PlannerShellState = PlannerTaskViewState & {
 
 type ScaffoldShellState = FieldStaffShellState | PlannerShellState;
 
-const PLANNER_CYCLE_FIXTURES: readonly PlannerCyclePosition[] = [
-  "unknown",
-  "①",
-  "②",
-  "③",
-  "④",
-  "⑤",
-  "⑥",
-];
+const cycleOrientationLabel = (cycle: PlannerCyclePosition): string =>
+  cycle === "unknown" ? "工程不明" : `現在の工程: ${cycle}`;
+
+const nextHandOrientationLabel = (cycle: PlannerCyclePosition): string => {
+  const target = primaryActionDestinationForPlannerCycle(cycle);
+  if (!target) {
+    return "次の一手: 工程が分かるまで進めません";
+  }
+  return `次の一手: ${locationHeadingForPlannerDestination(target)}（${target}）`;
+};
 
 /**
  * CORR-1G FIELD_STAFF + SBS-PLANNER-TOP-LEVEL-IA-V1 PLANNER product entry.
  * D-* Destination identity is owned here. AppShellChrome remains OUT of PLANNER mutation.
+ * Cycle injection is smoke/test boundary only — no Product-visible cycle selector.
  */
 export default class ScaffoldShell extends React.Component<
   IScaffoldShellProps,
@@ -66,10 +77,15 @@ export default class ScaffoldShell extends React.Component<
 
   private readonly taskEntryRef = React.createRef<HTMLElement>();
 
+  private smokeInjection(): ScaffoldShellSmokeInjection {
+    return this.props as IScaffoldShellProps & ScaffoldShellSmokeInjection;
+  }
+
   private createInitialState(): ScaffoldShellState {
-    const role = this.props.presentationRole ?? "FIELD_STAFF";
+    const injection = this.smokeInjection();
+    const role = injection.presentationRole ?? "FIELD_STAFF";
     if (role === "PLANNER") {
-      const planner = initialPlannerTaskViewState(this.props.initialPlannerCycle ?? "unknown");
+      const planner = initialPlannerTaskViewState(injection.initialPlannerCycle ?? "unknown");
       return {
         role: "PLANNER",
         ...planner,
@@ -282,31 +298,24 @@ export default class ScaffoldShell extends React.Component<
           今どこ: {locationHeadingForPlannerDestination(destination)}（{destination}）
         </p>
 
-        <div className={styles.plannerFixtureRow} data-role-task-cycle-fixtures="true">
-          {PLANNER_CYCLE_FIXTURES.map((cycle) => (
-            <button
-              key={cycle}
-              type="button"
-              className={styles.taskButton}
-              data-role-task-cycle-set={cycle}
-              aria-pressed={currentCycle === cycle}
-              onClick={() => this.applyPlannerEvent({ type: "SET_CYCLE", cycle })}
-            >
-              {cycle === "unknown" ? "工程不明" : `工程 ${cycle}`}
-            </button>
-          ))}
-        </div>
-
         {destination === "D-HOME" ? (
-          <button
-            type="button"
-            className={styles.taskButtonSelected}
-            data-role-task-primary-action="true"
-            disabled={!primaryEnabled}
-            onClick={() => this.applyPlannerEvent({ type: "PRIMARY_ACTION" })}
-          >
-            次の一手へ進む
-          </button>
+          <div className={styles.plannerOrientation} data-role-task-home-orientation="true">
+            <p className={styles.contextHint} data-role-task-cycle-display={currentCycle}>
+              {cycleOrientationLabel(currentCycle)}
+            </p>
+            <p className={styles.contextHint} data-role-task-next-hand={primaryTarget ?? "none"}>
+              {nextHandOrientationLabel(currentCycle)}
+            </p>
+            <button
+              type="button"
+              className={styles.taskButtonSelected}
+              data-role-task-primary-action="true"
+              disabled={!primaryEnabled}
+              onClick={() => this.applyPlannerEvent({ type: "PRIMARY_ACTION" })}
+            >
+              次の一手へ進む
+            </button>
+          </div>
         ) : null}
 
         {destination === "D-FIND-RECORD" ? (
