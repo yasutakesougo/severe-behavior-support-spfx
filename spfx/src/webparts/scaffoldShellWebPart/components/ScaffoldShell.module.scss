@@ -11,7 +11,22 @@
   display: none;
 }
 
-:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="ready-region-content"]) {
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="primary-navigation"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="demo-banner"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="site-selector"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="presentation-role-hint"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-dashboard-ux="overview-heading"]) {
+  display: none;
+}
+
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-role-task-ia="PLANNER"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-role-task-ia="FIELD_STAFF"]),
+:global([data-shell-ux-presentation-role="ADMIN_AUDIT"] [data-role-task-ia]) {
+  display: none;
+}
+
+:global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="ready-region-content"]),
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="ready-region-content"]) {
   display: flex;
   flex-direction: column;
 }
@@ -57,8 +72,13 @@
   cursor: pointer;
 }
 
-.taskButton:hover {
+.taskButton:hover:not(:disabled) {
   background: sbs.$color-surface-hover;
+}
+
+.taskButton:disabled {
+  cursor: default;
+  opacity: 0.72;
 }
 
 .taskButton:focus-visible,
