@@ -41,16 +41,11 @@ describe("SBS-PLANNER-TOP-LEVEL-IA-V1 navigation", () => {
   });
 
   it("AC-PL-TL-7/8: known-cycle map is deterministic including cycle ③", () => {
-    expect(["①", "②", "③", "④", "⑤", "⑥"].map((cycle) =>
-      plannerPrimaryActionDestination(parsePlannerCyclePosition(cycle)),
-    )).toEqual([
-      "D-ASSESS",
-      "D-PLAN",
-      "D-FIND-RECORD",
-      "D-MONITOR",
-      "D-REVIEW",
-      "D-NEXT",
-    ]);
+    expect(
+      ["①", "②", "③", "④", "⑤", "⑥"].map((cycle) =>
+        plannerPrimaryActionDestination(parsePlannerCyclePosition(cycle)),
+      ),
+    ).toEqual(["D-ASSESS", "D-PLAN", "D-FIND-RECORD", "D-MONITOR", "D-REVIEW", "D-NEXT"]);
 
     const cycle3 = applyPlannerHomePrimaryAction(initialPlannerTaskViewState("③"));
     expect(cycle3.destination).toBe("D-FIND-RECORD");
