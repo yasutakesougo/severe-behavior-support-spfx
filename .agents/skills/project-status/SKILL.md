@@ -10,10 +10,12 @@ Skill は正本ではない。正本は GitHub live state、Accepted / LOCKED De
 
 ## 使用する場面
 
-- Human が「次に進めて」「現状は？」「今どこ？」と指示したとき
-- 実装・レビュー・handoff の前に、現在状態と次工程を固定したいとき
+- Human が「次に進めて」「現状は？」「今どこ？」と指示し、現在状態または次の許可操作を確定する必要があるとき
 - Open PR / Issue / Decision / Evidence / CI が混在し、次アクションが曖昧なとき
-- WAIT / HOLD / UNKNOWN の取り違え（FALSE_WAIT 含む）を防ぎたいとき
+- repository state が変化し、既存の scope / approval / evidence の有効性を再評価するとき
+- WAIT / HOLD / UNKNOWN の取り違え（FALSE_WAIT 含む）を防ぐ必要があるとき
+
+現在の scope、authority、次アクションが既に確定しており、repository state も変化していない場合は、実装・レビュー・handoff の前という理由だけで本 Skill を再実行しない。
 
 ## 入力
 
@@ -29,7 +31,7 @@ Skill は正本ではない。正本は GitHub live state、Accepted / LOCKED De
 - GitHub live state を read-only で取得できる、または取得不能を `UNKNOWN` と明示できる
 - Skill 正本パス `.agents/skills/project-status/SKILL.md` を参照する
 - Evidence 優先順位と Human boundaries を推測で緩和しない
-- 共通判定語は `.agents/skills/_shared/judgement-rules.md` を参照する
+- 共通判定語は `.agents/skills/_shared/judgement-rules.md`、共通 Authority は `.agents/skills/_shared/authority-boundaries.md` を参照する
 
 ## Evidence priority
 
@@ -68,9 +70,9 @@ npm run gate-packet:read -- 552
    - Decision Accepted != Implementation Start
    - INTENDED != CONFIRMED
 5. WAIT を使う場合、待つ対象が実在することを確認する。確認できない場合は `UNKNOWN`
-6. Mutation 可否を判定する。明示 GO がなければ mutation は FORBIDDEN
+6. 現在要求されている次アクションの Authority を permission matrix と明示 GO から判定する
 7. ALLOWED / FORBIDDEN / NEXT を固定出力で返す
-8. 自動実行可能な read-only 観測のみ実行候補とする。Human 判断が必要なら STOP
+8. read-only 観測または既に明示許可された in-scope action は継続候補とする。現在の次アクションが Human boundary に到達した場合のみ STOP
 
 ## 確認項目
 
@@ -89,7 +91,7 @@ npm run gate-packet:read -- 552
 次のいずれかで STOP する。
 
 - 必要な GitHub live state が取得できず、状態を断定できない
-- Human Ready / Merge / Implementation Start / Decision Acceptance が未解決
+- 現在要求されている次アクションに必要な Human Ready / Merge / Implementation Start / Decision Acceptance が未解決
 - SharePoint / Microsoft 365 / schema / permission mutation が次工程に含まれる
 - 明示 GO のない mutation が要求されている
 - Evidence 不足で `CONFIRMED` にできない主張を確定しようとしている
@@ -133,24 +135,13 @@ Acceptance Execution PASS / Fresh Independent Acceptance Review / PR CI SUCCESS 
 
 ## Mutation
 
-```text
-明示的な GO がない変更は禁止
-Decision を Agent が推測して Accepted にしない
-SharePoint schema を Agent 判断で変更しない
-Human-only 操作を自動実行しない
-```
+共通 Authority は `.agents/skills/_shared/authority-boundaries.md` と `.agents/mcp/permission-matrix.md` を参照する。
 
-Human-only の例:
+本 Skill は authority を作らない。
+GitHub live state と既存 approval を読み取り、現在の次アクションが既に許可されているか、Human boundary に到達しているかだけを判定する。
 
-- Ready
-- Merge
-- Decision Acceptance
-- Full Acceptance PRECHECK GO
-- Acceptance Execution GO
-- Human Acceptance disposition
-- Issue Close GO / Issue mutation / close
-- SharePoint / Microsoft 365 / Entra ID 変更
-- Deploy / 本番変更
+Decision を推測して Accepted / LOCKED にしない。
+Human-only Gate を evidence だけで消費しない。
 
 ## 判定基準
 
@@ -176,17 +167,18 @@ Evidence 語彙（`CONFIRMED` / `INTENDED` / `UNKNOWN`）と進行判定語（`R
 
 ## 禁止事項
 
+共通の merge / deploy / production / tenant mutation 境界は `.agents/skills/_shared/authority-boundaries.md` に従う。
+
+本 Skill 固有の禁止事項:
+
 - 古い記録だけを根拠に現在状態を断定すること
 - `INTENDED` を `CONFIRMED` として扱うこと
 - Human Ready を Human Merge と同一視すること
 - Decision Accepted を Implementation Start と同一視すること
 - WAIT 対象未確認のまま WAIT とすること（FALSE_WAIT）
-- 明示 GO なしで merge、push、deploy、Ready 化を実行または許可すること
-- SharePoint変更、Microsoft 365変更、Entra ID変更を Agent 判断で行うこと
-- 本番データ変更や物理削除を許可または手順化すること
 - Decision を推測して Accepted / LOCKED にすること
-- Issue mutation を Human-only 境界を超えて自動実行すること
-- 既存実装コードや SharePoint を本 Skill 実行の副作用で変更すること
+- Evidence だけで Human Gate を消費したことにすること
+- 状態確認の副作用として既存実装や外部状態を変更すること
 
 ## 出力形式
 
