@@ -108,6 +108,7 @@ export default class ScaffoldShell extends React.Component<
       (current) => {
         const next = applyFieldStaffSessionEvent(current, event);
         return {
+          ...current,
           ...next,
           shellDestination: shellAdapterForFieldStaffDestination(next.destination),
         };
@@ -172,7 +173,7 @@ export default class ScaffoldShell extends React.Component<
           type: "GLOBAL",
           globalId: "GLOBAL-TODAY",
         });
-        return { ...next, shellDestination: "overview" };
+        return { ...current, ...next, shellDestination: "overview" };
       });
       return;
     }
