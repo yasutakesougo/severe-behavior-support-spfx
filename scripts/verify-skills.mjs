@@ -45,7 +45,7 @@ const expectedInstalledSkills = [
   "project-status",
   "project-intelligence",
 ];
-const expectedToolAdapters = ["cursor-agent", "cursor-cli", "codex"];
+const expectedToolAdapters = ["cursor-agent", "cursor-cli", "codex", "agy-gemini", "pi-bonsai"];
 const handoffBuilderOwnerAgent = "audit";
 
 const requiredProcessFiles = [
