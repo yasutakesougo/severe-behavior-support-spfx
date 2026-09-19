@@ -13,6 +13,7 @@ import {
   type FieldStaffTaskViewState,
 } from "../../../shell/ux/field-staff-task-navigation";
 import {
+  isLawfulPlannerPersonPlanContext,
   PLANNER_SYNTHETIC_RECORD_IDS,
   PLANNER_TASK_GLOBAL_ITEMS,
   applyPlannerSessionEvent,
@@ -90,7 +91,9 @@ export default class ScaffoldShell extends React.Component<
       return {
         role: "PLANNER",
         ...planner,
-        shellDestination: shellAdapterForPlannerDestination(planner.destination),
+        shellDestination: shellAdapterForPlannerDestination(planner.destination, {
+          hasLawfulContext: isLawfulPlannerPersonPlanContext(planner.personPlanContext),
+        }),
       };
     }
     const fieldStaff = initialFieldStaffTaskViewState();
@@ -157,7 +160,9 @@ export default class ScaffoldShell extends React.Component<
       return {
         role: "PLANNER" as const,
         ...next,
-        shellDestination: shellAdapterForPlannerDestination(next.destination),
+        shellDestination: shellAdapterForPlannerDestination(next.destination, {
+          hasLawfulContext: isLawfulPlannerPersonPlanContext(next.personPlanContext),
+        }),
       };
     });
   }
@@ -187,7 +192,9 @@ export default class ScaffoldShell extends React.Component<
         return {
           role: "PLANNER" as const,
           ...planner,
-          shellDestination: shellAdapterForPlannerDestination(planner.destination),
+          shellDestination: shellAdapterForPlannerDestination(planner.destination, {
+            hasLawfulContext: isLawfulPlannerPersonPlanContext(planner.personPlanContext),
+          }),
         };
       }
       if (current.role === "FIELD_STAFF") {
@@ -233,6 +240,10 @@ export default class ScaffoldShell extends React.Component<
       ...current,
       shellDestination,
     }));
+  };
+
+  private readonly handlePlannerSessionEvent = (event: PlannerSessionEvent): void => {
+    this.applyPlannerEvent(event);
   };
 
   private renderFieldStaffTaskLayer(state: FieldStaffShellState): React.ReactElement {
@@ -282,10 +293,14 @@ export default class ScaffoldShell extends React.Component<
   }
 
   private renderPlannerTaskLayer(state: PlannerShellState): React.ReactElement {
-    const { activeGlobalId, destination, currentCycle, selectedRecordId } = state;
+    const { activeGlobalId, destination, currentCycle, selectedRecordId, personPlanContext } =
+      state;
     const contextHint = contextHintForPlannerDestination(destination, currentCycle);
     const primaryTarget = primaryActionDestinationForPlannerCycle(currentCycle);
     const primaryEnabled = destination === "D-HOME" && primaryTarget !== undefined;
+    const hasLawfulContext = isLawfulPlannerPersonPlanContext(personPlanContext);
+    const destinationFailClosed =
+      !hasLawfulContext && (destination === "D-PLAN" || destination === "D-MONITOR");
 
     return (
       <section
@@ -295,6 +310,7 @@ export default class ScaffoldShell extends React.Component<
         data-role-task-destination={destination}
         data-role-task-active-global={activeGlobalId}
         data-role-task-cycle={currentCycle}
+        data-role-task-person-plan-context={hasLawfulContext ? "live" : "none"}
         data-role-task-record-create={plannerRecordCreateCtaAuthorized ? "true" : "false"}
       >
         <p className={styles.bodyTitle} data-shell-ux="shell-host-status" hidden={true} />
@@ -345,6 +361,12 @@ export default class ScaffoldShell extends React.Component<
               次の一手へ進む
             </button>
           </div>
+        ) : null}
+
+        {destinationFailClosed ? (
+          <p className={styles.contextHint} data-role-task-fail-closed={destination}>
+            対象の人と計画が決まっていないため、この仕事には進めません。次の工程を推測しません。
+          </p>
         ) : null}
 
         {destination === "D-FIND-RECORD" ? (
@@ -442,6 +464,13 @@ export default class ScaffoldShell extends React.Component<
         }
         onFieldStaffSessionEvent={
           this.state.role === "FIELD_STAFF" ? this.handleFieldStaffSessionEvent : undefined
+        }
+        plannerTaskDestination={this.state.role === "PLANNER" ? this.state.destination : undefined}
+        plannerPersonPlanContext={
+          this.state.role === "PLANNER" ? this.state.personPlanContext : undefined
+        }
+        onPlannerSessionEvent={
+          this.state.role === "PLANNER" ? this.handlePlannerSessionEvent : undefined
         }
       >
         {this.state.role === "PLANNER"

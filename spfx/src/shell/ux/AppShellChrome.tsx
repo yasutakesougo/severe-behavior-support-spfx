@@ -10,12 +10,20 @@ import {
   TodaySupportDayBoard,
   isFieldStaffTodayPrimaryActionStatus,
 } from "../dashboard/TodaySupportDayBoard";
+import { buildDemoMonitoringForVersion, MonitoringView } from "../monitoring";
 import {
   fieldStaffDayBoardClearVisible,
   type FieldStaffSessionContext,
   type FieldStaffSessionEvent,
   type FieldStaffTaskDestinationId,
 } from "./field-staff-task-navigation";
+import {
+  isLawfulPlannerPersonPlanContext,
+  PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
+  type PlannerPersonPlanContext,
+  type PlannerSessionEvent,
+  type PlannerTaskDestinationId,
+} from "./planner-task-navigation";
 import {
   CurrentProcedure,
   FIELD_STAFF_PHASE8_CORRECTION_1_SLICE,
@@ -170,6 +178,9 @@ export type AppShellChromeProps = Readonly<{
   fieldStaffSessionContext?: FieldStaffSessionContext;
   fieldStaffChosenOccurrenceId?: string;
   onFieldStaffSessionEvent?: (event: FieldStaffSessionEvent) => void;
+  plannerTaskDestination?: PlannerTaskDestinationId;
+  plannerPersonPlanContext?: PlannerPersonPlanContext;
+  onPlannerSessionEvent?: (event: PlannerSessionEvent) => void;
   children?: React.ReactNode;
 }>;
 
@@ -206,6 +217,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     fieldStaffSessionContext,
     fieldStaffChosenOccurrenceId,
     onFieldStaffSessionEvent,
+    plannerTaskDestination,
+    plannerPersonPlanContext,
+    onPlannerSessionEvent,
     children,
   } = props;
 
@@ -255,6 +269,20 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const reportFieldStaffEvent = (event: FieldStaffSessionEvent): void => {
     onFieldStaffSessionEvent?.(event);
   };
+  const reportPlannerEvent = (event: PlannerSessionEvent): void => {
+    onPlannerSessionEvent?.(event);
+  };
+  const plannerProductHostActive =
+    activePresentationRole === "PLANNER" &&
+    isLawfulPlannerPersonPlanContext(plannerPersonPlanContext) &&
+    (plannerTaskDestination === "D-PLAN" || plannerTaskDestination === "D-MONITOR");
+  const plannerHidesOverviewBody =
+    activePresentationRole === "PLANNER" &&
+    (plannerTaskDestination === "D-PLAN" ||
+      plannerTaskDestination === "D-MONITOR" ||
+      plannerTaskDestination === "D-ASSESS" ||
+      plannerTaskDestination === "D-REVIEW" ||
+      plannerTaskDestination === "D-NEXT");
   const handleFieldStaffClearChosenOccurrence = (): void => {
     reportFieldStaffEvent({ type: "CLEAR_CHOSEN_OCCURRENCE" });
     setSelectedOccurrenceId(undefined);
@@ -348,6 +376,33 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     return true;
   };
 
+  const restorePlannerProductHost = (): boolean => {
+    if (!plannerProductHostActive || !plannerPersonPlanContext) {
+      return false;
+    }
+    const wantPlan = plannerTaskDestination === "D-PLAN";
+    const alreadyRestored =
+      destination === "users" &&
+      selectedUserDetailId === plannerPersonPlanContext.userId &&
+      (wantPlan ? supportPlanPreviewOpen : true);
+    if (alreadyRestored) {
+      return true;
+    }
+    shouldFocusDestinationRef.current = true;
+    setCurrentProcedureOpen(false);
+    setProcedureCorrectionOpen(false);
+    setProcedureCancellationOpen(false);
+    setAbcObservationOpen(false);
+    setReviewDuePreviewOpen(false);
+    setReviewFromSupportPlan(false);
+    setPlannerListNext(undefined);
+    setPlannerListOrigin(true);
+    setSelectedUserDetailId(plannerPersonPlanContext.userId);
+    setSupportPlanPreviewOpen(wantPlan);
+    setDestination("users");
+    return true;
+  };
+
   const discardUsersListRestoreState = (): void => {
     const discarded = discardUsersListRestore();
     setUsersFilterChip(discarded.filterChip);
@@ -394,7 +449,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       fieldStaffAdapterActive &&
       (fieldStaffTaskDestination === "D-PROCEDURE" ||
         fieldStaffTaskDestination === "D-RECORD-WRITE");
-    if (destination !== "users" && !retainFieldStaffSufficientHost) {
+    if (destination !== "users" && !retainFieldStaffSufficientHost && !plannerProductHostActive) {
       if (selectedUserDetailId !== undefined) {
         setSelectedUserDetailId(undefined);
       }
@@ -478,6 +533,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     nextVersionConceptFromReview,
     fieldStaffAdapterActive,
     fieldStaffTaskDestination,
+    plannerProductHostActive,
   ]);
 
   React.useEffect(() => {
@@ -497,6 +553,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     fieldStaffChosenOccurrenceId,
     destination,
   ]);
+
+  React.useEffect(() => {
+    if (!plannerProductHostActive) {
+      return;
+    }
+    restorePlannerProductHost();
+  }, [plannerProductHostActive, plannerTaskDestination, plannerPersonPlanContext, destination]);
 
   React.useEffect(() => {
     if (restoreUsersList) {
@@ -760,12 +823,17 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setPlannerListNext(undefined);
       setSelectedUserDetailId(next.userId);
       setSupportPlanPreviewOpen(true);
+      reportPlannerEvent({
+        type: "SET_PERSON_PLAN_CONTEXT",
+        context: PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
+      });
       return;
     }
     setPlannerListOrigin(false);
     setSelectedUserDetailId(undefined);
     setSupportPlanPreviewOpen(false);
     setPlannerListNext(next);
+    reportPlannerEvent({ type: "SET_PERSON_PLAN_CONTEXT" });
   };
 
   const handleBackToPlannerList = (): void => {
@@ -786,6 +854,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setSelectedUserDetailId(undefined);
     setPlannerListNext(undefined);
     setPlannerListOrigin(false);
+    reportPlannerEvent({ type: "SET_PERSON_PLAN_CONTEXT" });
   };
 
   const handleSupportPlanRequest = (): void => {
@@ -810,6 +879,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       setNextVersionConceptFromReview(false);
     }
     setSupportPlanPreviewOpen(true);
+    reportPlannerEvent({
+      type: "SET_PERSON_PLAN_CONTEXT",
+      context: PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
+    });
   };
 
   const handleBackToUserDetail = (): void => {
@@ -831,6 +904,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setReviewDuePreviewOpen(false);
     setReviewFromSupportPlan(false);
     setNextVersionConceptFromReview(false);
+    reportPlannerEvent({ type: "SET_PERSON_PLAN_CONTEXT" });
   };
 
   const handleCurrentProcedureRequest = (): void => {
@@ -1137,6 +1211,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     !unauthenticated && !siteBlocked && isPartialRetrievalViewMode(viewMode);
   const showReadyRegion = !unauthenticated && !siteBlocked && viewMode === "ready";
   const navDisabled = !isShellPrimaryNavigationEnabled(viewMode, selection) || interactionPaused;
+  const plannerMonitoringResult = React.useMemo(
+    () => buildDemoMonitoringForVersion(supportPlanPresentation.currentVersion),
+    [supportPlanPresentation.currentVersion],
+  );
 
   React.useEffect(() => {
     const node = readyRegionContentRef.current;
@@ -1324,7 +1402,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 className={interactionPaused ? styles.readyRegionSavingPausedContent : ""}
                 data-shell-ux="ready-region-content"
               >
-                {destination === "overview" ? (
+                {destination === "overview" && !plannerHidesOverviewBody ? (
                   reviewDuePreviewOpen ? (
                     <ReviewDueState
                       presentation={reviewDueStatePresentation}
@@ -1368,7 +1446,27 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     />
                   )
                 ) : destination === "users" ? (
-                  selectedUserDetail ? (
+                  plannerTaskDestination === "D-MONITOR" &&
+                  isLawfulPlannerPersonPlanContext(plannerPersonPlanContext) ? (
+                    <div data-role-task-product-body="D-MONITOR">
+                      {plannerMonitoringResult.status === "RESOLVED" ? (
+                        <MonitoringView
+                          model={plannerMonitoringResult.value}
+                          personLabel={supportPlanPresentation.personLabel}
+                          procedureLabelContext={{
+                            userId: supportPlanPresentation.userId,
+                            planId: supportPlanPresentation.planId,
+                            currentVersion: supportPlanPresentation.currentVersion,
+                            currentProcedures: supportPlanPresentation.currentProcedures,
+                          }}
+                        />
+                      ) : (
+                        <p role="status" data-monitoring-malformed="true">
+                          モニタリング入力を確認できません。記録または期間条件を確認してください（合成）。
+                        </p>
+                      )}
+                    </div>
+                  ) : selectedUserDetail ? (
                     reviewDuePreviewOpen && reviewFromSupportPlan ? (
                       <ReviewDueState
                         presentation={reviewDueStatePresentation}
@@ -1392,6 +1490,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
                         nextVersionConceptHighlighted={nextVersionConceptFromReview}
                         presentationRole={activePresentationRole}
+                        onActivePlannerSectionChange={(sectionId) => {
+                          reportPlannerEvent({
+                            type: "SET_PROCESS_SECTION",
+                            sectionId,
+                          });
+                        }}
                       />
                     ) : abcObservationOpen && abcObservationPresentation ? (
                       <AbcObservationPresentation

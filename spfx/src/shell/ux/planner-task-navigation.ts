@@ -51,6 +51,48 @@ export const PLANNER_DEFAULT_TASK_DESTINATION = PLANNER_HOME_DESTINATION;
 
 export const PLANNER_DEFAULT_CYCLE: PlannerCyclePosition = "unknown";
 
+/** Demo exclusive lawful person/plan identity. Not a new store. */
+export type PlannerPersonPlanContext = Readonly<{
+  userId: string;
+  planId: string;
+}>;
+
+export const PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT: PlannerPersonPlanContext = {
+  userId: "user-a",
+  planId: "synthetic-plan-001",
+};
+
+export const DEFAULT_PLANNER_PROCESS_SECTION_ID = "planner-process-plan-heading";
+
+/**
+ * PROCESS-VISIBILITY in-flow section → Task-First cycle.
+ * Glyph identity PV「① 計画」= cycle ① D-ASSESS is rejected.
+ */
+export const PLANNER_PROCESS_SECTION_CYCLE_MAP: Readonly<Record<string, PlannerCyclePosition>> = {
+  "planner-process-plan-heading": "②",
+  "planner-process-support-heading": "unknown",
+  "planner-process-records-heading": "③",
+  "planner-process-monitoring-heading": "④",
+  "planner-process-review-heading": "⑤",
+  "planner-process-next-version-heading": "⑥",
+};
+
+export const isLawfulPlannerPersonPlanContext = (
+  context: PlannerPersonPlanContext | undefined,
+): context is PlannerPersonPlanContext =>
+  context?.userId === PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT.userId &&
+  context.planId === PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT.planId;
+
+export const plannerCycleFromProcessSection = (
+  sectionId: string | undefined,
+  hasLawfulContext: boolean,
+): PlannerCyclePosition => {
+  if (!hasLawfulContext || !sectionId) {
+    return "unknown";
+  }
+  return PLANNER_PROCESS_SECTION_CYCLE_MAP[sectionId] ?? "unknown";
+};
+
 /** Synthetic record ids for D-FIND-RECORD → D-RECORD-READ proof (no LIVE list). */
 export const PLANNER_SYNTHETIC_RECORD_IDS = ["synthetic-record-1"] as const;
 
@@ -161,12 +203,19 @@ export const contextHintForPlannerDestination = (
  */
 export const shellAdapterForPlannerDestination = (
   destination: PlannerTaskDestinationId,
+  options?: Readonly<{ hasLawfulContext?: boolean }>,
 ): ShellPrimaryNavigationId => {
   if (destination === "D-FIND-PERSON" || destination === "D-FIND-RECORD") {
     return "users";
   }
   if (destination === "D-RECORD-READ") {
     return "records";
+  }
+  if (
+    options?.hasLawfulContext === true &&
+    (destination === "D-PLAN" || destination === "D-MONITOR")
+  ) {
+    return "users";
   }
   return "overview";
 };
@@ -177,6 +226,8 @@ export type PlannerTaskViewState = Readonly<{
   currentCycle: PlannerCyclePosition;
   selectedRecordId?: string;
   previousDestination?: PlannerTaskDestinationId;
+  personPlanContext?: PlannerPersonPlanContext;
+  activeProcessSectionId?: string;
 }>;
 
 export type PlannerSessionEvent =
@@ -184,7 +235,9 @@ export type PlannerSessionEvent =
   | Readonly<{ type: "SET_CYCLE"; cycle: PlannerCyclePosition }>
   | Readonly<{ type: "PRIMARY_ACTION" }>
   | Readonly<{ type: "SELECT_RECORD"; recordId: string }>
-  | Readonly<{ type: "BACK" }>;
+  | Readonly<{ type: "BACK" }>
+  | Readonly<{ type: "SET_PERSON_PLAN_CONTEXT"; context?: PlannerPersonPlanContext }>
+  | Readonly<{ type: "SET_PROCESS_SECTION"; sectionId: string }>;
 
 export const initialPlannerTaskViewState = (
   initialCycle: PlannerCyclePosition = PLANNER_DEFAULT_CYCLE,
@@ -265,6 +318,36 @@ export const applyPlannerSessionEvent = (
         destination: "D-HOME",
         activeGlobalId: "GLOBAL-CURRENT-CYCLE",
         selectedRecordId: undefined,
+      };
+    }
+    case "SET_PERSON_PLAN_CONTEXT": {
+      if (isLawfulPlannerPersonPlanContext(event.context)) {
+        return {
+          ...state,
+          personPlanContext: event.context,
+          activeProcessSectionId: DEFAULT_PLANNER_PROCESS_SECTION_ID,
+          currentCycle: plannerCycleFromProcessSection(DEFAULT_PLANNER_PROCESS_SECTION_ID, true),
+        };
+      }
+      const impersonating = state.destination === "D-PLAN" || state.destination === "D-MONITOR";
+      return {
+        ...state,
+        personPlanContext: undefined,
+        activeProcessSectionId: undefined,
+        currentCycle: "unknown",
+        destination: impersonating ? "D-HOME" : state.destination,
+        activeGlobalId: impersonating ? "GLOBAL-CURRENT-CYCLE" : state.activeGlobalId,
+        previousDestination: impersonating ? undefined : state.previousDestination,
+      };
+    }
+    case "SET_PROCESS_SECTION": {
+      if (!isLawfulPlannerPersonPlanContext(state.personPlanContext)) {
+        return state;
+      }
+      return {
+        ...state,
+        activeProcessSectionId: event.sectionId,
+        currentCycle: plannerCycleFromProcessSection(event.sectionId, true),
       };
     }
     default: {
