@@ -70,6 +70,7 @@ export type SupportPlanProps = Readonly<{
   onReviewMaterialsRequest?: () => void;
   nextVersionConceptHighlighted?: boolean;
   presentationRole?: ShellPresentationRole;
+  onActivePlannerSectionChange?: (sectionId: string) => void;
 }>;
 
 const MUTATION_LABELS = ["作成する", "編集する", "保存する"] as const;
@@ -87,6 +88,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
   onReviewMaterialsRequest,
   nextVersionConceptHighlighted = false,
   presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
+  onActivePlannerSectionChange,
 }) => {
   const {
     personLabel,
@@ -196,6 +198,7 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       return;
     }
     setActivePlannerSectionId(sectionId);
+    onActivePlannerSectionChange?.(sectionId);
     heading.scrollIntoView({ block: "start", inline: "nearest" });
     heading.focus();
   };

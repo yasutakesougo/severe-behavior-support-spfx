@@ -192,6 +192,7 @@ describe("PLANNING-PC-DEMO-1 support plan graph", () => {
     ]);
     expect(PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT).toContain("ページ内");
     expect(PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION_HINT).toContain("進捗を表しません");
+    expect(PLANNER_SUPPORT_PLAN_PROCESS_NAVIGATION[0]?.id).toBe("planner-process-plan-heading");
   });
 
   it("keeps the pre-V1 planning-PC navigation available unchanged for ADMIN_AUDIT", () => {

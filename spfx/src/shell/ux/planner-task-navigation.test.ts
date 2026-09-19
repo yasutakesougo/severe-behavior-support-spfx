@@ -1,14 +1,19 @@
 import {
+  DEFAULT_PLANNER_PROCESS_SECTION_ID,
   PLANNER_DEFAULT_CYCLE,
   PLANNER_DEFAULT_TASK_DESTINATION,
+  PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
   PLANNER_FORBIDDEN_DESTINATIONS,
   PLANNER_HOME_DESTINATION,
+  PLANNER_PROCESS_SECTION_CYCLE_MAP,
   PLANNER_SYNTHETIC_RECORD_IDS,
   PLANNER_TASK_GLOBAL_ITEMS,
   applyPlannerSessionEvent,
   contextHintForPlannerDestination,
   initialPlannerTaskViewState,
+  isLawfulPlannerPersonPlanContext,
   locationHeadingForPlannerDestination,
+  plannerCycleFromProcessSection,
   plannerRecordCreateCtaAuthorized,
   primaryActionDestinationForPlannerCycle,
   resolvePlannerGlobalDestination,
@@ -133,5 +138,94 @@ describe("SBS-PLANNER-TOP-LEVEL-IA-V1 task navigation", () => {
     expect(shellAdapterForPlannerDestination("D-HOME")).toBe("overview");
     expect(shellAdapterForPlannerDestination("D-FIND-PERSON")).toBe("users");
     expect(shellAdapterForPlannerDestination("D-RECORD-READ")).toBe("records");
+    expect(shellAdapterForPlannerDestination("D-PLAN")).toBe("overview");
+    expect(shellAdapterForPlannerDestination("D-MONITOR")).toBe("overview");
+    expect(shellAdapterForPlannerDestination("D-PLAN", { hasLawfulContext: true })).toBe("users");
+    expect(shellAdapterForPlannerDestination("D-MONITOR", { hasLawfulContext: true })).toBe(
+      "users",
+    );
+  });
+
+  it("PL-HTA correction: no context keeps unknown cycle and disabled Primary Action", () => {
+    const initial = initialPlannerTaskViewState();
+    expect(isLawfulPlannerPersonPlanContext(initial.personPlanContext)).toBe(false);
+    expect(initial.currentCycle).toBe("unknown");
+    expect(primaryActionDestinationForPlannerCycle(initial.currentCycle)).toBeUndefined();
+    const advanced = applyPlannerSessionEvent(initial, { type: "PRIMARY_ACTION" });
+    expect(advanced.destination).toBe("D-HOME");
+  });
+
+  it("PL-HTA correction: 探す remains D-FIND-PERSON and no new Destinations", () => {
+    expect(resolvePlannerGlobalDestination("GLOBAL-FIND-PERSON")).toBe("D-FIND-PERSON");
+    expect(resolvePlannerGlobalDestination("GLOBAL-FIND-PERSON")).not.toBe("D-PLAN");
+    expect(resolvePlannerGlobalDestination("GLOBAL-FIND-PERSON")).not.toBe("D-FIND-RECORD");
+    const afterFind = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "GLOBAL",
+      globalId: "GLOBAL-FIND-PERSON",
+    });
+    expect(afterFind.destination).toBe("D-FIND-PERSON");
+    expect(Object.keys(PLANNER_PROCESS_SECTION_CYCLE_MAP).sort()).toEqual(
+      [
+        "planner-process-monitoring-heading",
+        "planner-process-next-version-heading",
+        "planner-process-plan-heading",
+        "planner-process-records-heading",
+        "planner-process-review-heading",
+        "planner-process-support-heading",
+      ].sort(),
+    );
+  });
+
+  it("PL-HTA correction: §5.4 PV section map is unique and does not send 計画 to D-ASSESS", () => {
+    expect(DEFAULT_PLANNER_PROCESS_SECTION_ID).toBe("planner-process-plan-heading");
+    expect(plannerCycleFromProcessSection("planner-process-plan-heading", true)).toBe("②");
+    expect(primaryActionDestinationForPlannerCycle("②")).toBe("D-PLAN");
+    expect(plannerCycleFromProcessSection("planner-process-support-heading", true)).toBe("unknown");
+    expect(plannerCycleFromProcessSection("planner-process-records-heading", true)).toBe("③");
+    expect(plannerCycleFromProcessSection("planner-process-monitoring-heading", true)).toBe("④");
+    expect(plannerCycleFromProcessSection("planner-process-review-heading", true)).toBe("⑤");
+    expect(plannerCycleFromProcessSection("planner-process-next-version-heading", true)).toBe("⑥");
+    expect(plannerCycleFromProcessSection("planner-process-plan-heading", false)).toBe("unknown");
+  });
+
+  it("PL-HTA correction: lawful existing-plan context then ended returns unknown", () => {
+    let state = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "SET_PERSON_PLAN_CONTEXT",
+      context: PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
+    });
+    expect(isLawfulPlannerPersonPlanContext(state.personPlanContext)).toBe(true);
+    expect(state.currentCycle).toBe("②");
+    expect(state.destination).toBe("D-HOME");
+    state = applyPlannerSessionEvent(state, { type: "PRIMARY_ACTION" });
+    expect(state.destination).toBe("D-PLAN");
+    state = applyPlannerSessionEvent(state, {
+      type: "SET_PROCESS_SECTION",
+      sectionId: "planner-process-monitoring-heading",
+    });
+    expect(state.currentCycle).toBe("④");
+    expect(state.destination).toBe("D-PLAN");
+    state = applyPlannerSessionEvent(state, { type: "SET_PERSON_PLAN_CONTEXT" });
+    expect(isLawfulPlannerPersonPlanContext(state.personPlanContext)).toBe(false);
+    expect(state.currentCycle).toBe("unknown");
+    expect(state.destination).toBe("D-HOME");
+    expect(primaryActionDestinationForPlannerCycle(state.currentCycle)).toBeUndefined();
+  });
+
+  it("PL-HTA correction: synthetic-detail identity is not lawful context", () => {
+    const next = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "SET_PERSON_PLAN_CONTEXT",
+      context: { userId: "user-b", planId: "synthetic-plan-001" },
+    });
+    expect(isLawfulPlannerPersonPlanContext(next.personPlanContext)).toBe(false);
+    expect(next.currentCycle).toBe("unknown");
+  });
+
+  it("PL-HTA correction: process section without context does not invent a cycle", () => {
+    const next = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "SET_PROCESS_SECTION",
+      sectionId: "planner-process-monitoring-heading",
+    });
+    expect(next.currentCycle).toBe("unknown");
+    expect(next.destination).toBe("D-HOME");
   });
 });
