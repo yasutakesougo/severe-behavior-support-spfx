@@ -26,7 +26,7 @@ const puppeteerModule = await import(
   process.env.SBS_PLANNER_PL_HTA_CORR_1_PUPPETEER_PATH ??
     process.env.SBS_PLANNER_ROLE_BINDING_PUPPETEER_PATH ??
     process.env.SBS_PLANNER_TL_IA_PUPPETEER_PATH ??
-    "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"
+    "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js"
 );
 const sassModule = await import(
   process.env.SBS_PLANNER_PL_HTA_CORR_1_SASS_PATH ??
@@ -328,7 +328,13 @@ async function runSequence(viewport, suffix) {
   await screenshot(page, `05-d-plan-bound-support-plan${suffix}.png`);
   await screenshot(page, `08-no-overview-as-d-plan${suffix}.png`);
 
+  await page.click('[data-planning-pc-version="1"]');
   await page.click('[data-planning-pc-section-nav="planner-process-monitoring-heading"]');
+  await page.waitForSelector("[data-monitoring-zero-not-not-performed]");
+  const zeroState = await inspect(page);
+  const sc6 = zeroState.hasZeroNotNotPerformed && zeroState.bodyHasZeroCopy;
+  await screenshot(page, `07-zero-not-not-performed${suffix}.png`);
+
   await page.waitForFunction(
     () =>
       document
@@ -358,11 +364,8 @@ async function runSequence(viewport, suffix) {
     dMonitor.destination === "D-MONITOR" &&
     dMonitor.hasMonitoringHost &&
     !dMonitor.hasOverviewDashboard;
-  const sc6 =
-    dMonitor.hasZeroNotNotPerformed && dMonitor.bodyHasZeroCopy && dMonitor.bodyHasNotPerformed;
   const sc14 = !dMonitor.bodyHasSmokePass;
   await screenshot(page, `06-d-monitor-bound-monitoring-view${suffix}.png`);
-  await screenshot(page, `07-zero-not-not-performed${suffix}.png`);
 
   const pass =
     sc1 && sc8 && sc3b && sc3a && sc4 && sc7 && sc5 && sc6 && sc14 && pageErrors.length === 0;
@@ -371,7 +374,7 @@ async function runSequence(viewport, suffix) {
     pass,
     viewport,
     checks: { sc1, sc8, sc3b, sc3a, sc4, sc7, sc5, sc6, sc14 },
-    state: { noContext, findPerson, synth, acquired, dPlan, dMonitor },
+    state: { noContext, findPerson, synth, acquired, dPlan, zeroState, dMonitor },
     pageErrors,
   });
   await page.close();
