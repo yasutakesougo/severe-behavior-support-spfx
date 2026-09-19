@@ -26,6 +26,24 @@
 
 Claude Code Adapter は当面未整備可。Fallback は Skill 直接実行。
 
+## Specialist Subagent Runtime Support
+
+Gemini via agy と Bonsai via Pi は主担当 Agent を置き換えず、既存 Logical Command の補助 runtime として使う。
+
+| Logical Command | Gemini via agy | Bonsai via Pi |
+|---|---|---|
+| `new-feature` | requirements / decision second opinion | bounded repository evidence collection |
+| `review-pr` | diff / contract / test / scope second opinion | bounded diff / file / test preflight |
+| `audit` | evidence / authority / boundary second opinion | focused evidence / boundary check |
+| `release-check` | release evidence second opinion | focused artifact / evidence presence check |
+
+共通制約:
+
+- Specialist Subagent output は Human approval、Review PASS、Ready / Merge / Deploy authority を付与しない
+- Formal Independent Review が必要な Gate を置換しない
+- canonical handoff は `.agents/orchestration/handoff-format.md` を使う
+- runtime 固有の権限制約は各 Adapter に従う
+
 ## Tool Adapter 実体
 
 | Adapter | 正本 |
@@ -33,6 +51,8 @@ Claude Code Adapter は当面未整備可。Fallback は Skill 直接実行。
 | Cursor Agent | `.agents/commands/adapters/cursor-agent.md` |
 | Cursor CLI | `.agents/commands/adapters/cursor-cli.md` |
 | Codex | `.agents/commands/adapters/codex.md` |
+| Gemini via agy | `.agents/commands/adapters/agy-gemini.md` |
+| Bonsai via Pi | `.agents/commands/adapters/pi-bonsai.md` |
 
 各 Adapter は次を定義する。
 
