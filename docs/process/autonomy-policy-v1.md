@@ -6,8 +6,8 @@
 - 状態: **ACCEPTED / READY-ONLY ENABLED（Selection A）**
 - Human Decision: **AUTO-1 scope を採用**（2026-08-10）
 - Ready-only Policy Mutation GO: **CONSUMED**（basis `main@8eca3e08a1aeafa723c649980cc17484e4d54e53`）
-- Authorization effect: **`pull_request.ready` = enabled `AUTO_ALLOWED` under `L1_AUTO_READY=ENABLED`；`pull_request.merge` remains `HUMAN_ONLY`；Ready/Merge executors ABSENT**
-- Implementation: **DO NOT START YET**（Ready executor / workflow / settings は別 GO）
+- Authorization effect: **`pull_request.ready` = enabled `AUTO_ALLOWED` under `L1_AUTO_READY=ENABLED`；`pull_request.merge` remains `HUMAN_ONLY`；Ready executor = `L1_READY_EXECUTOR_V1`；Merge executor ABSENT**
+- Implementation: **Ready executor Implementation Start CONSUMED**（workflow / GitHub settings / live production Ready runs / Auto Merge は別 GO）
 - 上位正本（緩和・上書きしない）:
   - `docs/decisions/DEC-AI-ORG-003.md`
   - `docs/decisions/DEC-AA-001.md`
@@ -37,16 +37,19 @@ Authorization effect:
 pull_request.ready = AUTO_ALLOWED（L1_AUTO_READY = ENABLED）
 pull_request.merge = HUMAN_ONLY（L1_AUTO_MERGE = DISABLED）
 other AUTO_ALLOWED candidates = still NOT ENABLED for execution
-Ready / Merge Action Gateway executors = ABSENT
+Ready Action Gateway executor = L1_READY_EXECUTOR_V1（code present）
+Merge Action Gateway executor = ABSENT
 
 Implementation:
-DO NOT START YET
+Ready executor Implementation Start CONSUMED
+workflow / GitHub settings / live production Ready runs / Auto Merge = DO NOT START YET
 
 UNKNOWN:
 DENY
 
 Ready execution / Merge / Decision Acceptance:
-NOT EXECUTABLE BY ACTION GATEWAY（executor ABSENT；Merge HUMAN_ONLY）
+Ready executable only via L1_READY_EXECUTOR_V1 fail-closed gates（injected port）
+Merge / Decision Acceptance NOT EXECUTABLE BY ACTION GATEWAY（Merge HUMAN_ONLY）
 
 SharePoint / M365 / Entra / permission / secret / production deploy:
 NOT EXECUTABLE BY ACTION GATEWAY
@@ -58,6 +61,7 @@ Ready-only enablement ≠ Auto Merge enablement
 Ready-only enablement ≠ Implementation Start
 Ready-only enablement ≠ Ready executed
 Capability AUTO_ALLOWED ≠ executor present
+Capability AUTO_ALLOWED ∧ executor present ≠ workflow wiring / live runs
 Capability ≠ Authorization
 CI PASS ≠ Authorization
 ```
@@ -83,7 +87,7 @@ pull_request.ready=AUTO_ALLOWED
 pull_request.merge=HUMAN_ONLY
 L1_AUTO_READY=ENABLED
 L1_AUTO_MERGE=DISABLED
-readyExecutor=ABSENT
+readyExecutor=L1_READY_EXECUTOR_V1
 mergeExecutor=ABSENT
 END_L1_ENABLEMENT_BINDING
 ```
@@ -98,9 +102,11 @@ Observation rules（Fail Closed）:
    L1_AUTO_READY = ENABLED and the capability line above is AUTO_ALLOWED.
 4. pull_request.merge remains HUMAN_ONLY while L1_AUTO_MERGE = DISABLED
    （Selection A forbids enabling Merge）.
-5. AUTO_READY_ALLOWED true ≠ Ready executed（executor ABSENT）.
-6. This binding does not authorize Implementation Start, workflow mutation,
-   GitHub settings mutation, Deploy, LIVE WRITE, or Production Binding.
+5. AUTO_READY_ALLOWED true ≠ Ready executed（executor must still re-check
+   kill switch + audit + mode=execute）.
+6. readyExecutor=L1_READY_EXECUTOR_V1 means code is present；it does not alone
+   authorize workflow wiring, live production Ready runs, Deploy, LIVE WRITE,
+   Production Binding, or Auto Merge.
 ```
 
 ## 目的
@@ -311,13 +317,14 @@ baseline、limits、idempotency、audit の条件付きである。
 
 | Capability ID | Classification | Kill switch | Executor |
 |---|---|---|---|
-| `pull_request.ready` | `AUTO_ALLOWED` | `L1_AUTO_READY = ENABLED` | ABSENT（Implementation Start 別 GO） |
+| `pull_request.ready` | `AUTO_ALLOWED` | `L1_AUTO_READY = ENABLED` | `L1_READY_EXECUTOR_V1` |
 
 ```text
 pull_request.ready = AUTO_ALLOWED
   ∧ L1_AUTO_READY = ENABLED
   ∧ L1 Execution Policy predicates PASS
-  ≠ Ready executed（executor ABSENT）
+  ∧ L1_READY_EXECUTOR_V1 fail-closed gates
+  ≠ Ready executed by docs alone / workflow wiring still separate GO
 ```
 
 さらに effective classification は全上位 authority との intersection（最も厳しい
@@ -353,15 +360,15 @@ Selection A / Ready-only Policy Mutation は Merge を enable しない
 （`L1_AUTO_MERGE = DISABLED`）。
 
 ```text
-Action Gateway Ready executor: ABSENT
+Action Gateway Ready executor: L1_READY_EXECUTOR_V1
 Action Gateway merge executor: ABSENT
 Capability Registry executable merge adapter: ABSENT
-Human approval supplied to Gateway: MUST NOT create either route
+Human approval supplied to Gateway: MUST NOT create a Merge route
 ```
 
 Human が別 workflow で merge を判断できることと、Gateway が merge capability を
-持たないことは両立する。Ready capability が `AUTO_ALLOWED` でも、Ready executor
-が ABSENT の間は live draft→ready GitHub mutation を自動化しない。
+持たないことは両立する。Ready executor が present でも、workflow wiring /
+live production Ready runs は別 Human GO なしに自動起動しない。
 
 Draft PR head の変更は `pull_request.update_draft` では実行しない。
 commit / ref / head mutation を含む Draft update は
@@ -946,9 +953,10 @@ Ready-only note（Selection A）:
 
 ```text
 pull_request.ready classification = AUTO_ALLOWED
-Action Gateway Ready executor = ABSENT
-→ live Ready mutation remains non-executable by automation until a separate
-  Implementation Start creates an executor that re-checks this policy file
+Action Gateway Ready executor = L1_READY_EXECUTOR_V1
+→ Ready mutation is executable only through L1_READY_EXECUTOR_V1 gates
+  （fresh policy + kill-switch re-check + audit + mode=execute + injected port）
+→ workflow wiring / live production Ready runs remain separate Human GO
 pull_request.merge remains HUMAN_ONLY / L1_AUTO_MERGE = DISABLED
 ```
 
@@ -1035,8 +1043,8 @@ AUTO-1、将来の Task Packet、CI PASS、Independent Review PASS のいずれ�
 - baseline / head / index / worktree / read-write paths / atomic limits /
   idempotency / approval / audit が判定可能
 - unknown / missing / conflict がすべて DENY
-- Gateway が Ready / Merge / Decision Acceptance / forbidden writes の executor を持たない
-  （Ready capability は AUTO_ALLOWED でも Ready executor は ABSENT）
+- Gateway Ready executor = `L1_READY_EXECUTOR_V1`；Merge / Decision Acceptance /
+  forbidden writes の executor を持たない
 - Ready-only enablement binding（`BEGIN_L1_ENABLEMENT_BINDING`）が一意に観測可能
 - `pull_request.merge` = `HUMAN_ONLY` かつ `L1_AUTO_MERGE = DISABLED` が維持されている
 - core negative test 5 件の期待結果が固定
@@ -1048,17 +1056,18 @@ AUTO-1、将来の Task Packet、CI PASS、Independent Review PASS のいずれ�
 
 ## Next units（AUTO-1 の非効力）
 
-次は AUTO-1 / Ready-only Policy Mutation とは別 substantive unit とする。
+次は AUTO-1 / Ready-only Policy Mutation / Ready executor Implementation Start
+とは別 substantive unit とする。
 
 1. Capability Registry contract
 2. Task Packet Schema
-3. Action Gateway contract
+3. Action Gateway contract（broader than Ready-only executor）
 4. execution backend selection
-5. Action Gateway implementation + mandatory negative tests
-6. Ready executor Implementation Start（separate exact-slice Human GO）
+5. Action Gateway implementation + mandatory negative tests（remaining caps）
+6. Ready executor workflow wiring / live production Ready execution GO（separate）
 7. `LOW-AUTO-PILOT-V2` enablement Decision
 8. Auto Merge enablement（requires Selection ≠ A）
 
-AUTO-1 Acceptance および Ready-only Policy Mutation は、上記の
-Implementation Start、workflow / GitHub settings mutation、Deploy、または
+AUTO-1 Acceptance、Ready-only Policy Mutation、および Ready executor code presence
+は、workflow / GitHub settings mutation、Deploy、live production Ready runs、または
 Auto Merge enablement を自動付与しない。

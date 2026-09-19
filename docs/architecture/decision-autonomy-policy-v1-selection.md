@@ -18,9 +18,11 @@ Policy: DEFINED / READY-ONLY ENABLED（Selection A；later Policy Mutation GO）
 Authorization effect:
   pull_request.ready = AUTO_ALLOWED（L1_AUTO_READY = ENABLED）
   pull_request.merge = HUMAN_ONLY（L1_AUTO_MERGE = DISABLED）
-  Ready/Merge Gateway executors = ABSENT
-Implementation: DO NOT START YET
-Ready: AUTO_ALLOWED classification / executor ABSENT
+  Ready Gateway executor = L1_READY_EXECUTOR_V1
+  Merge Gateway executor = ABSENT
+Implementation: Ready executor Implementation Start CONSUMED
+  （workflow / settings / live production Ready / Auto Merge = separate GO）
+Ready: AUTO_ALLOWED classification / executor L1_READY_EXECUTOR_V1
 Merge: HUMAN-ONLY / Gateway executor ABSENT
 SharePoint / M365 / Entra / permission / secret / production deploy:
   Gateway execution FORBIDDEN
