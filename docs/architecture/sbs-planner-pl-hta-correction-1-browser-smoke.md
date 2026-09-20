@@ -28,18 +28,34 @@ Artifacts:
 
 ## Matrix
 
-| Capture | Observable | Result |
-|---|---|---|
-| 01-no-context-unknown-fail-closed | D-HOME / cycle unknown / Primary Action disabled | PASS |
-| 02-find-person-list-not-d-plan | 探す = D-FIND-PERSON; list is not D-PLAN | PASS |
-| 03-synthetic-detail-not-context | user-b does not establish context | PASS |
-| 04-existing-plan-establishes-context | user-a existing-plan → context live | PASS |
-| 05-d-plan-bound-support-plan | D-PLAN body = existing SupportPlan; Current vs 次版 | PASS |
-| 06-d-monitor-bound-monitoring-view | D-MONITOR body = existing MonitoringView; not Overview | PASS |
-| 07-zero-not-not-performed | 0件 copy present; not business “実施できなかった” | PASS |
-| 08-no-overview-as-d-plan | Overview dashboard not D-PLAN meaning | PASS |
+Rows follow runtime order in `spfx/smoke/sbs-planner-pl-hta-correction-1/run-smoke.mjs`, not capture-id order.
 
-`smoke-results.json` records `allPass=true` and `smokePassIsNotBusinessCompletion=true`. That string is not rendered on D-MONITOR.
+| Capture | Destination / surface | Observable | Result |
+|---|---|---|---|
+| 01-no-context-unknown-fail-closed | D-HOME | cycle unknown / Primary Action disabled | PASS |
+| 02-find-person-list-not-d-plan | D-FIND-PERSON | 探す = D-FIND-PERSON; list is not D-PLAN | PASS |
+| 03-synthetic-detail-not-context | D-FIND-PERSON | user-b does not establish context | PASS |
+| 04-existing-plan-establishes-context | D-FIND-PERSON | user-a existing-plan → context live | PASS |
+| 05-d-plan-bound-support-plan | D-PLAN | body = existing SupportPlan; Current vs 次版 | PASS |
+| 08-no-overview-as-d-plan | D-PLAN | Overview dashboard not D-PLAN meaning | PASS |
+| 07-zero-not-not-performed | D-PLAN / SupportPlan selected v1 / in-plan MonitoringView | 0件 copy present; not business “実施できなかった”. NOT D-MONITOR zero-count evidence | PASS |
+| 06-d-monitor-bound-monitoring-view | D-MONITOR | body = existing MonitoringView for currentVersion 3 (recordCount 1); not Overview; not a 0-record capture | PASS |
+
+```text
+Capture 07 bound:
+  destination = D-PLAN
+  surface = SupportPlan in-plan MonitoringView
+  selected plan version = 1
+  recordCount = 0
+Capture 07 is not:
+  D-MONITOR zero-count evidence
+  PL-HTA-2 consumption
+D-MONITOR bind (capture 06):
+  currentVersion = 3
+  recordCount = 1
+```
+
+`smoke-results.json` records `allPass=true` and `smokePassIsNotBusinessCompletion=true`. That smoke-PASS string is not rendered on D-MONITOR (capture 06 / sc14). That fact is not capture 07.
 
 ## Boundary held
 
