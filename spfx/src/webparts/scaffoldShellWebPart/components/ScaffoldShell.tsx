@@ -1,6 +1,24 @@
 import * as React from "react";
 import { AppShellChrome } from "../../../shell/ux";
 import {
+  ADMIN_AUDIT_RESTORE_FAIL_CLOSED_COPY,
+  ADMIN_AUDIT_TASK_GLOBAL_ITEMS,
+  adminAuditApprovalAuthorized,
+  adminAuditDeleteAuthorized,
+  adminAuditDeployAuthorized,
+  adminAuditEvidenceAcceptanceAuthorized,
+  adminAuditLiveWriteAuthorized,
+  adminAuditPublishAuthorized,
+  applyAdminAuditSessionEvent,
+  contextHintForAdminAuditDestination,
+  initialAdminAuditTaskViewState,
+  locationHeadingForAdminAuditDestination,
+  shellAdapterForAdminAuditDestination,
+  type AdminAuditSessionEvent,
+  type AdminAuditTaskGlobalId,
+  type AdminAuditTaskViewState,
+} from "../../../shell/ux/admin-audit-task-navigation";
+import {
   FIELD_STAFF_TASK_GLOBAL_ITEMS,
   applyFieldStaffSessionEvent,
   contextHintForFieldStaffGlobal,
@@ -40,6 +58,8 @@ import styles from "./ScaffoldShell.module.scss";
 type ScaffoldShellSmokeInjection = {
   presentationRole?: ShellPresentationRole;
   initialPlannerCycle?: PlannerCyclePosition;
+  initialAdminAuditDestination?: string;
+  initialAdminAuditObject?: unknown;
 };
 
 type FieldStaffShellState = FieldStaffTaskViewState & {
@@ -52,7 +72,12 @@ type PlannerShellState = PlannerTaskViewState & {
   shellDestination: ShellPrimaryNavigationId;
 };
 
-type ScaffoldShellState = FieldStaffShellState | PlannerShellState;
+type AdminAuditShellState = AdminAuditTaskViewState & {
+  role: "ADMIN_AUDIT";
+  shellDestination: ShellPrimaryNavigationId;
+};
+
+type ScaffoldShellState = FieldStaffShellState | PlannerShellState | AdminAuditShellState;
 
 const cycleOrientationLabel = (cycle: PlannerCyclePosition): string =>
   cycle === "unknown" ? "工程不明" : `現在の工程: ${cycle}`;
@@ -66,10 +91,11 @@ const nextHandOrientationLabel = (cycle: PlannerCyclePosition): string => {
 };
 
 /**
- * CORR-1G FIELD_STAFF + SBS-PLANNER-TOP-LEVEL-IA-V1 PLANNER product entry.
+ * CORR-1G FIELD_STAFF + SBS-PLANNER-TOP-LEVEL-IA-V1 PLANNER
+ * + ADMIN-AUDIT-TASK-FIRST-V1 product entry.
  * D-* Destination identity is owned here.
- * Demo FIELD_STAFF ↔ PLANNER role-binding notifies this parent; ADMIN_AUDIT stays chrome-local.
- * Cycle injection is smoke/test boundary only — no Product-visible cycle selector.
+ * Demo role-binding notifies this parent for FIELD_STAFF / PLANNER / ADMIN_AUDIT.
+ * Cycle / restore injection is smoke/test boundary only — not IScaffoldShellProps.
  */
 export default class ScaffoldShell extends React.Component<
   IScaffoldShellProps,
@@ -96,11 +122,33 @@ export default class ScaffoldShell extends React.Component<
         }),
       };
     }
+    if (role === "ADMIN_AUDIT") {
+      return this.createAdminAuditState(injection);
+    }
     const fieldStaff = initialFieldStaffTaskViewState();
     return {
       role: "FIELD_STAFF",
       ...fieldStaff,
       shellDestination: shellAdapterForFieldStaffDestination(fieldStaff.destination),
+    };
+  }
+
+  private createAdminAuditState(injection: ScaffoldShellSmokeInjection): AdminAuditShellState {
+    const initial = initialAdminAuditTaskViewState();
+    const shouldRestore =
+      injection.initialAdminAuditDestination !== undefined ||
+      injection.initialAdminAuditObject !== undefined;
+    const next = shouldRestore
+      ? applyAdminAuditSessionEvent(initial, {
+          type: "RESTORE",
+          destinationToken: injection.initialAdminAuditDestination ?? "",
+          object: injection.initialAdminAuditObject,
+        })
+      : initial;
+    return {
+      role: "ADMIN_AUDIT",
+      ...next,
+      shellDestination: shellAdapterForAdminAuditDestination(next.destination),
     };
   }
 
@@ -167,6 +215,20 @@ export default class ScaffoldShell extends React.Component<
     });
   }
 
+  private applyAdminAuditEvent(event: AdminAuditSessionEvent): void {
+    this.setState((current) => {
+      if (current.role !== "ADMIN_AUDIT") {
+        return current;
+      }
+      const next = applyAdminAuditSessionEvent(current, event);
+      return {
+        role: "ADMIN_AUDIT" as const,
+        ...next,
+        shellDestination: shellAdapterForAdminAuditDestination(next.destination),
+      };
+    });
+  }
+
   private readonly handleFieldStaffGlobalChange = (globalId: FieldStaffTaskGlobalId): void => {
     this.applyFieldStaffEvent({ type: "GLOBAL", globalId }, true);
   };
@@ -179,10 +241,23 @@ export default class ScaffoldShell extends React.Component<
     this.applyPlannerEvent({ type: "GLOBAL", globalId });
   };
 
-  private readonly handleDemoPresentationRoleChange = (
-    next: Extract<ShellPresentationRole, "FIELD_STAFF" | "PLANNER">,
-  ): void => {
+  private readonly handleAdminAuditGlobalChange = (globalId: AdminAuditTaskGlobalId): void => {
+    this.applyAdminAuditEvent({ type: "GLOBAL", globalId });
+  };
+
+  private readonly handleDemoPresentationRoleChange = (next: ShellPresentationRole): void => {
     this.setState((current) => {
+      if (next === "ADMIN_AUDIT") {
+        if (current.role === "ADMIN_AUDIT") {
+          return current;
+        }
+        const adminAudit = initialAdminAuditTaskViewState();
+        return {
+          role: "ADMIN_AUDIT" as const,
+          ...adminAudit,
+          shellDestination: shellAdapterForAdminAuditDestination(adminAudit.destination),
+        };
+      }
       if (next === "PLANNER") {
         if (current.role === "PLANNER") {
           return current;
@@ -212,7 +287,7 @@ export default class ScaffoldShell extends React.Component<
   private readonly handleShellDestinationChange = (
     shellDestination: ShellPrimaryNavigationId,
   ): void => {
-    if (this.state.role === "PLANNER") {
+    if (this.state.role === "PLANNER" || this.state.role === "ADMIN_AUDIT") {
       this.setState((current) => ({ ...current, shellDestination }));
       return;
     }
@@ -426,6 +501,67 @@ export default class ScaffoldShell extends React.Component<
     );
   }
 
+  private renderAdminAuditTaskLayer(state: AdminAuditShellState): React.ReactElement {
+    const { activeGlobalId, destination, restoreStatus, requestedRestoreToken } = state;
+    const contextHint = contextHintForAdminAuditDestination(destination);
+    const restoreFailed = restoreStatus === "fail-closed";
+    return (
+      <section
+        ref={this.taskEntryRef}
+        className={styles.scaffoldShell}
+        data-role-task-ia="ADMIN_AUDIT"
+        data-role-task-destination={destination}
+        data-role-task-active-global={activeGlobalId}
+        data-role-task-home-identity={destination === "D-OPS" ? "D-OPS" : destination}
+        data-role-task-restore-status={restoreStatus}
+        data-role-task-restore-requested={requestedRestoreToken ?? ""}
+        data-role-task-approval={adminAuditApprovalAuthorized ? "true" : "false"}
+        data-role-task-evidence-acceptance={
+          adminAuditEvidenceAcceptanceAuthorized ? "true" : "false"
+        }
+        data-role-task-publish={adminAuditPublishAuthorized ? "true" : "false"}
+        data-role-task-deploy={adminAuditDeployAuthorized ? "true" : "false"}
+        data-role-task-delete={adminAuditDeleteAuthorized ? "true" : "false"}
+        data-role-task-live-write={adminAuditLiveWriteAuthorized ? "true" : "false"}
+      >
+        <p className={styles.bodyTitle} data-shell-ux="shell-host-status" hidden={true} />
+        <p className={styles.taskHeading} role="heading" aria-level={1}>
+          {locationHeadingForAdminAuditDestination(destination)}
+        </p>
+        <nav className={styles.taskNavigation} aria-label="運用確認の業務ナビゲーション">
+          {ADMIN_AUDIT_TASK_GLOBAL_ITEMS.map((item) => {
+            const selected = item.globalId === activeGlobalId;
+            return (
+              <button
+                key={item.globalId}
+                type="button"
+                className={selected ? styles.taskButtonSelected : styles.taskButton}
+                data-role-task-global={item.globalId}
+                data-role-task-nav={item.sufficientDestination}
+                data-role-task-selected={selected ? "true" : "false"}
+                aria-current={selected ? "page" : undefined}
+                onClick={() => this.handleAdminAuditGlobalChange(item.globalId)}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </nav>
+        <p className={styles.contextHint} data-role-task-context-hint={destination}>
+          {contextHint}
+        </p>
+        <p className={styles.srOnly} data-role-task-orientation="今どこ">
+          今どこ: {locationHeadingForAdminAuditDestination(destination)}（{destination}）
+        </p>
+        {restoreFailed ? (
+          <p className={styles.contextHint} data-role-task-fail-closed="true" role="status">
+            {ADMIN_AUDIT_RESTORE_FAIL_CLOSED_COPY}
+          </p>
+        ) : null}
+      </section>
+    );
+  }
+
   public render(): React.ReactElement<IScaffoldShellProps> {
     const {
       userDisplayName,
@@ -472,10 +608,15 @@ export default class ScaffoldShell extends React.Component<
         onPlannerSessionEvent={
           this.state.role === "PLANNER" ? this.handlePlannerSessionEvent : undefined
         }
+        adminAuditTaskDestination={
+          this.state.role === "ADMIN_AUDIT" ? this.state.destination : undefined
+        }
       >
-        {this.state.role === "PLANNER"
-          ? this.renderPlannerTaskLayer(this.state)
-          : this.renderFieldStaffTaskLayer(this.state)}
+        {this.state.role === "ADMIN_AUDIT"
+          ? this.renderAdminAuditTaskLayer(this.state)
+          : this.state.role === "PLANNER"
+            ? this.renderPlannerTaskLayer(this.state)
+            : this.renderFieldStaffTaskLayer(this.state)}
       </AppShellChrome>
     );
   }
