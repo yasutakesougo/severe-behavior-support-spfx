@@ -95,6 +95,80 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(find).toContain('data-role-task-destination="D-FIND-PERSON"');
   });
 
+  it("CORR-T5/6: home identity remains D-OPS away from the home destination", () => {
+    const evidence = renderShell({
+      presentationRole: "ADMIN_AUDIT",
+      initialAdminAuditDestination: "D-EVIDENCE",
+    });
+    const find = renderShell({
+      presentationRole: "ADMIN_AUDIT",
+      initialAdminAuditDestination: "D-FIND-PERSON",
+    });
+    expect(evidence).toContain('data-role-task-home-identity="D-OPS"');
+    expect(find).toContain('data-role-task-home-identity="D-OPS"');
+  });
+
+  it("CORR-T1: ADMIN_AUDIT ready region owns the Task-First visual-order boundary", () => {
+    const html = renderShell({ presentationRole: "ADMIN_AUDIT" });
+    expect(html).toContain('data-role-task-ia="ADMIN_AUDIT"');
+    expect(html).toContain('data-shell-ux="ready-region-content"');
+    expect(html).toContain('data-role-task-destination="D-OPS"');
+  });
+
+  it("CORR-T2/3/4: Task-First Global keeps shell adapter and active Global synchronized", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    try {
+      const adminProps = {
+        ...baseProps,
+        presentationRole: "ADMIN_AUDIT",
+      } as IScaffoldShellProps;
+      act(() => {
+        ReactDOM.render(<ScaffoldShell {...adminProps} />, container);
+      });
+      const evidenceButton = container.querySelector<HTMLButtonElement>(
+        '[data-role-task-global="GLOBAL-EVIDENCE"]',
+      );
+      expect(evidenceButton).not.toBeNull();
+      act(() => {
+        Simulate.click(evidenceButton as HTMLButtonElement);
+      });
+      expect(
+        container
+          .querySelector('[data-shell-ux="app-shell-chrome"]')
+          ?.getAttribute("data-shell-ux-destination"),
+      ).toBe("records");
+      expect(
+        container.querySelector('[data-admin-audit-task-destination="D-EVIDENCE"]'),
+      ).not.toBeNull();
+      expect(
+        container.querySelector('[data-role-task-active-global="GLOBAL-EVIDENCE"]'),
+      ).not.toBeNull();
+
+      const findButton = container.querySelector<HTMLButtonElement>(
+        '[data-role-task-global="GLOBAL-FIND-PERSON"]',
+      );
+      expect(findButton).not.toBeNull();
+      act(() => {
+        Simulate.click(findButton as HTMLButtonElement);
+      });
+      expect(
+        container
+          .querySelector('[data-shell-ux="app-shell-chrome"]')
+          ?.getAttribute("data-shell-ux-destination"),
+      ).toBe("users");
+      expect(
+        container.querySelector('[data-admin-audit-task-destination="D-FIND-PERSON"]'),
+      ).not.toBeNull();
+      expect(
+        container.querySelector('[data-role-task-active-global="GLOBAL-FIND-PERSON"]'),
+      ).not.toBeNull();
+    } finally {
+      ReactDOM.unmountComponentAtNode(container);
+      container.remove();
+    }
+  });
+
   it("AC-AA-TF-12: invalid restore fail-closes without claiming D-OPS success", () => {
     const html = renderShell({
       presentationRole: "ADMIN_AUDIT",

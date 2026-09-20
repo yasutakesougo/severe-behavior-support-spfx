@@ -14,7 +14,8 @@
 }
 
 :global([data-shell-ux-presentation-role="FIELD_STAFF"] [data-shell-ux="ready-region-content"]),
-:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="ready-region-content"]) {
+:global([data-shell-ux-presentation-role="PLANNER"] [data-shell-ux="ready-region-content"]),
+:global([data-shell-ux-presentation-role="ADMIN_AUDIT"] [data-shell-ux="ready-region-content"]) {
   display: flex;
   flex-direction: column;
 }
