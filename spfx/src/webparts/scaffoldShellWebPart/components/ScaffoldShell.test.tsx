@@ -7,6 +7,16 @@ import type { ShellPresentationRole } from "../../../shell/ux/presentation-role"
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
 import ScaffoldShell from "./ScaffoldShell";
 
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // Jest jsdom may omit TextEncoder; SHA-256 uses it. SPFx/browser have it.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
+
 const baseProps: IScaffoldShellProps = {
   description: "Synthetic ADMIN_AUDIT Task-First test",
   isDarkTheme: false,
