@@ -11,6 +11,7 @@ import {
   isFieldStaffTodayPrimaryActionStatus,
 } from "../dashboard/TodaySupportDayBoard";
 import { buildDemoMonitoringForVersion, MonitoringView } from "../monitoring";
+import type { AdminAuditTaskDestinationId } from "./admin-audit-task-navigation";
 import {
   fieldStaffDayBoardClearVisible,
   type FieldStaffSessionContext,
@@ -110,6 +111,7 @@ import type { ShellPartialRetrievalPresentation } from "./partial-retrieval";
 import { SaveStatePresentation } from "./SaveStatePresentation";
 import {
   SHELL_DEFAULT_PRESENTATION_ROLE,
+  isAdminAuditPresentationRole,
   isPlannerSupportPlanManagementListRole,
   type ShellPresentationRole,
 } from "./presentation-role";
@@ -168,12 +170,10 @@ export type AppShellChromeProps = Readonly<{
   /** Synthetic VP-G entry emphasis. Not Entra / roleResolutionAuthorized. */
   presentationRole?: ShellPresentationRole;
   /**
-   * Minimum parent notify for Demo FIELD_STAFF ↔ PLANNER only.
-   * ADMIN_AUDIT stays chrome-local (FE-F001 / FE-F003 leftover).
+   * Demo presentation-role notify. ADMIN_AUDIT is included so the parent
+   * owns Task-First destination state (FE-F001 close).
    */
-  onPresentationRoleChange?: (
-    next: Extract<ShellPresentationRole, "FIELD_STAFF" | "PLANNER">,
-  ) => void;
+  onPresentationRoleChange?: (next: ShellPresentationRole) => void;
   fieldStaffTaskDestination?: FieldStaffTaskDestinationId;
   fieldStaffSessionContext?: FieldStaffSessionContext;
   fieldStaffChosenOccurrenceId?: string;
@@ -181,6 +181,7 @@ export type AppShellChromeProps = Readonly<{
   plannerTaskDestination?: PlannerTaskDestinationId;
   plannerPersonPlanContext?: PlannerPersonPlanContext;
   onPlannerSessionEvent?: (event: PlannerSessionEvent) => void;
+  adminAuditTaskDestination?: AdminAuditTaskDestinationId;
   children?: React.ReactNode;
 }>;
 
@@ -220,6 +221,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     plannerTaskDestination,
     plannerPersonPlanContext,
     onPlannerSessionEvent,
+    adminAuditTaskDestination,
     children,
   } = props;
 
@@ -272,6 +274,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const reportPlannerEvent = (event: PlannerSessionEvent): void => {
     onPlannerSessionEvent?.(event);
   };
+  const adminAuditAdapterActive = isAdminAuditPresentationRole(activePresentationRole);
   const plannerProductHostActive =
     activePresentationRole === "PLANNER" &&
     isLawfulPlannerPersonPlanContext(plannerPersonPlanContext) &&
@@ -1264,6 +1267,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         data-kiosk-occurrence-id={selectedOccurrenceId ?? ""}
         data-kiosk-occurrence-flow={occurrenceFlowFromOverview ? "true" : "false"}
         data-shell-ux-presentation-role={activePresentationRole}
+        data-admin-audit-task-destination={adminAuditTaskDestination ?? "none"}
+        data-admin-audit-adapter={adminAuditAdapterActive ? "true" : "false"}
         data-shell-ux-saving-pause={interactionPaused ? "true" : "false"}
         data-demo-ux-7-today-nav="true"
         data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
@@ -1301,9 +1306,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   }
                   setActivePresentationRole(next);
                   setNextVersionConceptFromReview(false);
-                  if (next === "FIELD_STAFF" || next === "PLANNER") {
-                    onPresentationRoleChange?.(next);
-                  }
+                  onPresentationRoleChange?.(next);
                 }}
               />
               {selectedSite ? (
@@ -1325,38 +1328,40 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
           )}
         </header>
 
-        <nav
-          className={styles.shellNav}
-          aria-label="シェル主要ナビゲーション"
-          data-shell-ux="primary-navigation"
-        >
-          {SHELL_PRIMARY_NAV_ITEMS.map((item) => {
-            const selected = item.id === destination;
-            const className = selected
-              ? `${styles.navButton} ${styles.navButtonSelected}`
-              : styles.navButton;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                className={className}
-                data-shell-ux-nav={item.id}
-                data-shell-ux-nav-selected={selected ? "true" : "false"}
-                data-shell-ux-nav-saving-paused={interactionPaused ? "true" : "false"}
-                aria-current={selected ? "page" : undefined}
-                disabled={navDisabled}
-                aria-disabled={navDisabled ? true : undefined}
-                onClick={() => {
-                  if (!navDisabled) {
-                    handleDestinationChange(item.id);
-                  }
-                }}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
+        {adminAuditAdapterActive ? null : (
+          <nav
+            className={styles.shellNav}
+            aria-label="シェル主要ナビゲーション"
+            data-shell-ux="primary-navigation"
+          >
+            {SHELL_PRIMARY_NAV_ITEMS.map((item) => {
+              const selected = item.id === destination;
+              const className = selected
+                ? `${styles.navButton} ${styles.navButtonSelected}`
+                : styles.navButton;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={className}
+                  data-shell-ux-nav={item.id}
+                  data-shell-ux-nav-selected={selected ? "true" : "false"}
+                  data-shell-ux-nav-saving-paused={interactionPaused ? "true" : "false"}
+                  aria-current={selected ? "page" : undefined}
+                  disabled={navDisabled}
+                  aria-disabled={navDisabled ? true : undefined}
+                  onClick={() => {
+                    if (!navDisabled) {
+                      handleDestinationChange(item.id);
+                    }
+                  }}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
+        )}
 
         <main id="shell-ux-main" className={styles.shellMain} tabIndex={-1}>
           {unauthenticated ? (
