@@ -393,6 +393,40 @@ async function selectDemoRole(page, role) {
 }
 
 {
+  const { page, pageErrors } = await openPage();
+  await page.click('[data-role-task-global="GLOBAL-EVIDENCE"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="ADMIN_AUDIT"]')
+        ?.getAttribute("data-role-task-destination") === "D-EVIDENCE",
+  );
+  const evidence = await inspect(page);
+  await page.click('[data-role-task-global="GLOBAL-FIND-PERSON"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="ADMIN_AUDIT"]')
+        ?.getAttribute("data-role-task-destination") === "D-FIND-PERSON",
+  );
+  const find = await inspect(page);
+  const pass =
+    evidence.taskDestination === "D-EVIDENCE" &&
+    evidence.homeIdentity === "D-OPS" &&
+    find.taskDestination === "D-FIND-PERSON" &&
+    find.homeIdentity === "D-OPS" &&
+    pageErrors.length === 0;
+  results.push({
+    name: "correction-home-identity-invariant",
+    pass,
+    state: { evidence, find },
+    pageErrors,
+    shot: await capture("correction-home-identity-invariant", page),
+  });
+  await page.close();
+}
+
+{
   const { page, pageErrors } = await openPage("destination=D-HOME");
   const state = await inspect(page);
   const pass =
