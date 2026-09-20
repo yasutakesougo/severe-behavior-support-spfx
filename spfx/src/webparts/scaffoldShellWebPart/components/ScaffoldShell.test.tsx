@@ -27,6 +27,17 @@ type SmokeInjection = IScaffoldShellProps & {
   initialAdminAuditObject?: unknown;
 };
 
+function taskGlobalLabels(html: string): string[] {
+  const labels: string[] = [];
+  const pattern = /data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g;
+  let match: RegExpExecArray | null = pattern.exec(html);
+  while (match) {
+    labels.push(match[1].trim());
+    match = pattern.exec(html);
+  }
+  return labels;
+}
+
 function renderShell(injection: Partial<SmokeInjection> = {}): string {
   const props = { ...baseProps, ...injection } as IScaffoldShellProps;
   return renderToStaticMarkup(<ScaffoldShell {...props} />);
@@ -42,9 +53,7 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(html).toContain("証跡");
     expect(html).toContain("探す");
     expect(html).toMatch(/data-role-task-global="GLOBAL-OPS"[\s\S]*運用確認/);
-    const labels = [...html.matchAll(/data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g)].map(
-      (match) => match[1].trim(),
-    );
+    const labels = taskGlobalLabels(html);
     expect(labels).toEqual(["運用確認", "証跡", "探す"]);
     expect(html).not.toContain('data-shell-ux="primary-navigation"');
   });
@@ -92,9 +101,7 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(html).toContain('data-role-task-ia="FIELD_STAFF"');
     expect(html).toContain('data-role-task-destination="D-TODAY"');
     expect(html).not.toContain('data-role-task-ia="ADMIN_AUDIT"');
-    const labels = [...html.matchAll(/data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g)].map(
-      (match) => match[1].trim(),
-    );
+    const labels = taskGlobalLabels(html);
     expect(labels).toEqual(["今日", "手順", "記録する", "未記録", "探す"]);
   });
 
@@ -103,9 +110,7 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(html).toContain('data-role-task-ia="PLANNER"');
     expect(html).toContain('data-role-task-destination="D-HOME"');
     expect(html).not.toContain('data-role-task-ia="ADMIN_AUDIT"');
-    const labels = [...html.matchAll(/data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g)].map(
-      (match) => match[1].trim(),
-    );
+    const labels = taskGlobalLabels(html);
     expect(labels).toEqual(["今の工程", "探す"]);
   });
 
