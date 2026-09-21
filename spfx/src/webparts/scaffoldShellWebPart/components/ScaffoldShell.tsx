@@ -7,6 +7,7 @@ import {
   adminAuditDeleteAuthorized,
   adminAuditDeployAuthorized,
   adminAuditEvidenceAcceptanceAuthorized,
+  adminAuditGlobalIdForDestination,
   adminAuditLiveWriteAuthorized,
   adminAuditPublishAuthorized,
   applyAdminAuditSessionEvent,
@@ -287,7 +288,21 @@ export default class ScaffoldShell extends React.Component<
   private readonly handleShellDestinationChange = (
     shellDestination: ShellPrimaryNavigationId,
   ): void => {
-    if (this.state.role === "PLANNER" || this.state.role === "ADMIN_AUDIT") {
+    if (this.state.role === "ADMIN_AUDIT") {
+      const matchingGlobal = ADMIN_AUDIT_TASK_GLOBAL_ITEMS.find(
+        (item) =>
+          shellAdapterForAdminAuditDestination(item.sufficientDestination) === shellDestination,
+      );
+      if (!matchingGlobal) {
+        return;
+      }
+      this.applyAdminAuditEvent({
+        type: "GLOBAL",
+        globalId: adminAuditGlobalIdForDestination(matchingGlobal.sufficientDestination),
+      });
+      return;
+    }
+    if (this.state.role === "PLANNER") {
       this.setState((current) => ({ ...current, shellDestination }));
       return;
     }
@@ -512,7 +527,7 @@ export default class ScaffoldShell extends React.Component<
         data-role-task-ia="ADMIN_AUDIT"
         data-role-task-destination={destination}
         data-role-task-active-global={activeGlobalId}
-        data-role-task-home-identity={destination === "D-OPS" ? "D-OPS" : destination}
+        data-role-task-home-identity="D-OPS"
         data-role-task-restore-status={restoreStatus}
         data-role-task-restore-requested={requestedRestoreToken ?? ""}
         data-role-task-approval={adminAuditApprovalAuthorized ? "true" : "false"}

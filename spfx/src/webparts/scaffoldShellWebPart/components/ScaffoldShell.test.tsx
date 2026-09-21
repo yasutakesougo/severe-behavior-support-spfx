@@ -7,6 +7,16 @@ import type { ShellPresentationRole } from "../../../shell/ux/presentation-role"
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
 import ScaffoldShell from "./ScaffoldShell";
 
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // Jest jsdom may omit TextEncoder; SPFx/browser have it.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
+
 const baseProps: IScaffoldShellProps = {
   description: "Synthetic ADMIN_AUDIT Task-First test",
   isDarkTheme: false,
@@ -27,6 +37,17 @@ type SmokeInjection = IScaffoldShellProps & {
   initialAdminAuditObject?: unknown;
 };
 
+function taskGlobalLabels(html: string): string[] {
+  const labels: string[] = [];
+  const pattern = /data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g;
+  let match: RegExpExecArray | null = pattern.exec(html);
+  while (match) {
+    labels.push(match[1].trim());
+    match = pattern.exec(html);
+  }
+  return labels;
+}
+
 function renderShell(injection: Partial<SmokeInjection> = {}): string {
   const props = { ...baseProps, ...injection } as IScaffoldShellProps;
   return renderToStaticMarkup(<ScaffoldShell {...props} />);
@@ -42,9 +63,7 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(html).toContain("証跡");
     expect(html).toContain("探す");
     expect(html).toMatch(/data-role-task-global="GLOBAL-OPS"[\s\S]*運用確認/);
-    const labels = [...html.matchAll(/data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g)].map(
-      (match) => match[1].trim(),
-    );
+    const labels = taskGlobalLabels(html);
     expect(labels).toEqual(["運用確認", "証跡", "探す"]);
     expect(html).not.toContain('data-shell-ux="primary-navigation"');
   });
@@ -76,6 +95,92 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(find).toContain('data-role-task-destination="D-FIND-PERSON"');
   });
 
+  it("CORR-T5/6: home identity remains D-OPS away from the home destination", () => {
+    const evidence = renderShell({
+      presentationRole: "ADMIN_AUDIT",
+      initialAdminAuditDestination: "D-EVIDENCE",
+    });
+    const find = renderShell({
+      presentationRole: "ADMIN_AUDIT",
+      initialAdminAuditDestination: "D-FIND-PERSON",
+    });
+    expect(evidence).toContain('data-role-task-home-identity="D-OPS"');
+    expect(find).toContain('data-role-task-home-identity="D-OPS"');
+  });
+
+  it("CORR-T2/3/4: Task-First Global keeps shell adapter and active Global synchronized", () => {
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    try {
+      const adminProps = {
+        ...baseProps,
+        presentationRole: "ADMIN_AUDIT",
+      } as IScaffoldShellProps;
+      act(() => {
+        ReactDOM.render(<ScaffoldShell {...adminProps} />, container);
+      });
+      const recordsAction = container.querySelector<HTMLButtonElement>(
+        '[data-dashboard-ux="overview-action-item"][data-demo-ux-action-nav="records"] [data-demo-ux="overview-today-action"]',
+      );
+      expect(recordsAction).not.toBeNull();
+      act(() => {
+        Simulate.click(recordsAction as HTMLButtonElement);
+      });
+      expect(
+        container
+          .querySelector('[data-shell-ux="app-shell-chrome"]')
+          ?.getAttribute("data-shell-ux-destination"),
+      ).toBe("records");
+      expect(
+        container.querySelector('[data-admin-audit-task-destination="D-EVIDENCE"]'),
+      ).not.toBeNull();
+      expect(
+        container.querySelector('[data-role-task-active-global="GLOBAL-EVIDENCE"]'),
+      ).not.toBeNull();
+
+      const evidenceButton = container.querySelector<HTMLButtonElement>(
+        '[data-role-task-global="GLOBAL-EVIDENCE"]',
+      );
+      expect(evidenceButton).not.toBeNull();
+      act(() => {
+        Simulate.click(evidenceButton as HTMLButtonElement);
+      });
+      expect(
+        container
+          .querySelector('[data-shell-ux="app-shell-chrome"]')
+          ?.getAttribute("data-shell-ux-destination"),
+      ).toBe("records");
+      expect(
+        container.querySelector('[data-admin-audit-task-destination="D-EVIDENCE"]'),
+      ).not.toBeNull();
+      expect(
+        container.querySelector('[data-role-task-active-global="GLOBAL-EVIDENCE"]'),
+      ).not.toBeNull();
+
+      const findButton = container.querySelector<HTMLButtonElement>(
+        '[data-role-task-global="GLOBAL-FIND-PERSON"]',
+      );
+      expect(findButton).not.toBeNull();
+      act(() => {
+        Simulate.click(findButton as HTMLButtonElement);
+      });
+      expect(
+        container
+          .querySelector('[data-shell-ux="app-shell-chrome"]')
+          ?.getAttribute("data-shell-ux-destination"),
+      ).toBe("users");
+      expect(
+        container.querySelector('[data-admin-audit-task-destination="D-FIND-PERSON"]'),
+      ).not.toBeNull();
+      expect(
+        container.querySelector('[data-role-task-active-global="GLOBAL-FIND-PERSON"]'),
+      ).not.toBeNull();
+    } finally {
+      ReactDOM.unmountComponentAtNode(container);
+      container.remove();
+    }
+  });
+
   it("AC-AA-TF-12: invalid restore fail-closes without claiming D-OPS success", () => {
     const html = renderShell({
       presentationRole: "ADMIN_AUDIT",
@@ -92,9 +197,7 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(html).toContain('data-role-task-ia="FIELD_STAFF"');
     expect(html).toContain('data-role-task-destination="D-TODAY"');
     expect(html).not.toContain('data-role-task-ia="ADMIN_AUDIT"');
-    const labels = [...html.matchAll(/data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g)].map(
-      (match) => match[1].trim(),
-    );
+    const labels = taskGlobalLabels(html);
     expect(labels).toEqual(["今日", "手順", "記録する", "未記録", "探す"]);
   });
 
@@ -103,9 +206,7 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 ScaffoldShell", () => {
     expect(html).toContain('data-role-task-ia="PLANNER"');
     expect(html).toContain('data-role-task-destination="D-HOME"');
     expect(html).not.toContain('data-role-task-ia="ADMIN_AUDIT"');
-    const labels = [...html.matchAll(/data-role-task-global="[^"]+"[^>]*>\s*([^<]+)/g)].map(
-      (match) => match[1].trim(),
-    );
+    const labels = taskGlobalLabels(html);
     expect(labels).toEqual(["今の工程", "探す"]);
   });
 

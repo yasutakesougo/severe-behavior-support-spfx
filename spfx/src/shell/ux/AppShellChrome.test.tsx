@@ -4,6 +4,16 @@ import { AppShellChrome } from "./AppShellChrome";
 import { DEMO_1_FIELD_STAFF_FIXTURE } from "./fixture";
 import type { ShellPresentationRole } from "./presentation-role";
 
+beforeAll(() => {
+  const g = globalThis as { TextEncoder?: { new (): unknown } };
+  if (typeof g.TextEncoder === "undefined") {
+    // Jest jsdom may omit TextEncoder; SPFx/browser have it.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const nodeUtil = require("util") as { TextEncoder: { new (): unknown } };
+    g.TextEncoder = nodeUtil.TextEncoder;
+  }
+});
+
 const chromeProps = {
   demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
   siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,

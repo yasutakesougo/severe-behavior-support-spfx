@@ -145,6 +145,13 @@ async function inspect(page) {
     );
     const taskNavs = document.querySelectorAll("[data-role-task-ia] nav");
     const legacyNav = document.querySelector('[data-shell-ux="primary-navigation"]');
+    const readyRegion = document.querySelector('[data-shell-ux="ready-region-content"]');
+    const taskTop = taskRoot?.getBoundingClientRect().top ?? Number.NaN;
+    const productBody = readyRegion
+      ? [...readyRegion.children].find((element) => element !== taskRoot)
+      : undefined;
+    const productBodyTop = productBody?.getBoundingClientRect().top ?? Number.NaN;
+    const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
     const heading =
       document.querySelector("[data-role-task-ia] [role='heading']")?.textContent?.trim() ?? "";
     return {
@@ -164,6 +171,13 @@ async function inspect(page) {
       heading,
       taskNavCount: taskNavs.length,
       legacyNavPresent: Boolean(legacyNav),
+      taskTop,
+      productBodyTop,
+      taskBeforeProduct:
+        Number.isFinite(taskTop) && Number.isFinite(productBodyTop) && taskTop < productBodyTop,
+      shellDestination: shell?.getAttribute("data-shell-ux-destination") ?? "",
+      adminAuditAdapter: shell?.getAttribute("data-admin-audit-adapter") ?? "",
+      adminAuditTaskDestination: shell?.getAttribute("data-admin-audit-task-destination") ?? "",
       adminPresent: Boolean(adminRoot),
       fieldPresent: Boolean(fieldRoot),
       plannerPresent: Boolean(plannerRoot),
@@ -227,6 +241,7 @@ async function selectDemoRole(page, role) {
     state.deleteAuth === "false" &&
     state.liveWrite === "false" &&
     state.orientationCopy.includes("D-OPS") &&
+    state.taskBeforeProduct &&
     state.noHorizontalOverflow &&
     pageErrors.length === 0;
   results.push({
@@ -235,6 +250,21 @@ async function selectDemoRole(page, role) {
     state,
     pageErrors,
     shot: await capture("first-paint-desktop", page),
+  });
+  await page.close();
+}
+
+{
+  const { page, pageErrors } = await openPage();
+  const state = await inspect(page);
+  const pass =
+    state.taskRole === "ADMIN_AUDIT" && state.taskBeforeProduct && pageErrors.length === 0;
+  results.push({
+    name: "correction-visual-order",
+    pass,
+    state,
+    pageErrors,
+    shot: await capture("correction-visual-order", page),
   });
   await page.close();
 }
@@ -285,6 +315,12 @@ async function selectDemoRole(page, role) {
         .querySelector('[data-role-task-ia="ADMIN_AUDIT"]')
         ?.getAttribute("data-role-task-destination") === "D-OPS",
   );
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-shell-ux="app-shell-chrome"]')
+        ?.getAttribute("data-shell-ux-destination") === "overview",
+  );
   const back = await inspect(page);
   const pass =
     evidence.taskDestination === "D-EVIDENCE" &&
@@ -302,6 +338,88 @@ async function selectDemoRole(page, role) {
     state: { evidence, find, back },
     pageErrors,
     shot: await capture("global-navigation", page),
+  });
+  await page.close();
+}
+
+{
+  const { page, pageErrors } = await openPage();
+  await page.click('[data-role-task-global="GLOBAL-EVIDENCE"]');
+  await page.waitForFunction(() => {
+    const root = document.querySelector('[data-role-task-ia="ADMIN_AUDIT"]');
+    const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
+    return (
+      root?.getAttribute("data-role-task-destination") === "D-EVIDENCE" &&
+      root?.getAttribute("data-role-task-active-global") === "GLOBAL-EVIDENCE" &&
+      shell?.getAttribute("data-shell-ux-destination") === "records" &&
+      shell?.getAttribute("data-admin-audit-task-destination") === "D-EVIDENCE"
+    );
+  });
+  const evidence = await inspect(page);
+  await page.click('[data-role-task-global="GLOBAL-FIND-PERSON"]');
+  await page.waitForFunction(() => {
+    const root = document.querySelector('[data-role-task-ia="ADMIN_AUDIT"]');
+    const shell = document.querySelector('[data-shell-ux="app-shell-chrome"]');
+    return (
+      root?.getAttribute("data-role-task-destination") === "D-FIND-PERSON" &&
+      root?.getAttribute("data-role-task-active-global") === "GLOBAL-FIND-PERSON" &&
+      shell?.getAttribute("data-shell-ux-destination") === "users" &&
+      shell?.getAttribute("data-admin-audit-task-destination") === "D-FIND-PERSON"
+    );
+  });
+  const find = await inspect(page);
+  const pass =
+    evidence.taskDestination === "D-EVIDENCE" &&
+    evidence.activeGlobal === "GLOBAL-EVIDENCE" &&
+    evidence.shellDestination === "records" &&
+    evidence.adminAuditTaskDestination === "D-EVIDENCE" &&
+    evidence.homeIdentity === "D-OPS" &&
+    find.taskDestination === "D-FIND-PERSON" &&
+    find.activeGlobal === "GLOBAL-FIND-PERSON" &&
+    find.shellDestination === "users" &&
+    find.adminAuditTaskDestination === "D-FIND-PERSON" &&
+    find.homeIdentity === "D-OPS" &&
+    pageErrors.length === 0;
+  results.push({
+    name: "correction-adapter-destination-sync",
+    pass,
+    state: { evidence, find },
+    pageErrors,
+    shot: await capture("correction-adapter-destination-sync", page),
+  });
+  await page.close();
+}
+
+{
+  const { page, pageErrors } = await openPage();
+  await page.click('[data-role-task-global="GLOBAL-EVIDENCE"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="ADMIN_AUDIT"]')
+        ?.getAttribute("data-role-task-destination") === "D-EVIDENCE",
+  );
+  const evidence = await inspect(page);
+  await page.click('[data-role-task-global="GLOBAL-FIND-PERSON"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="ADMIN_AUDIT"]')
+        ?.getAttribute("data-role-task-destination") === "D-FIND-PERSON",
+  );
+  const find = await inspect(page);
+  const pass =
+    evidence.taskDestination === "D-EVIDENCE" &&
+    evidence.homeIdentity === "D-OPS" &&
+    find.taskDestination === "D-FIND-PERSON" &&
+    find.homeIdentity === "D-OPS" &&
+    pageErrors.length === 0;
+  results.push({
+    name: "correction-home-identity-invariant",
+    pass,
+    state: { evidence, find },
+    pageErrors,
+    shot: await capture("correction-home-identity-invariant", page),
   });
   await page.close();
 }
