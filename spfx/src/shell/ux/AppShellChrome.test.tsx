@@ -24,8 +24,12 @@ const chromeProps = {
   userDisplayName: "Synthetic chrome",
 };
 
-function renderChrome(role: ShellPresentationRole): string {
-  return renderToStaticMarkup(<AppShellChrome {...chromeProps} presentationRole={role} />);
+function renderChrome(role: ShellPresentationRole, children?: React.ReactNode): string {
+  return renderToStaticMarkup(
+    <AppShellChrome {...chromeProps} presentationRole={role}>
+      {children}
+    </AppShellChrome>,
+  );
 }
 
 describe("ADMIN-AUDIT-TASK-FIRST-V1 AppShellChrome", () => {
@@ -62,5 +66,39 @@ describe("ADMIN-AUDIT-TASK-FIRST-V1 AppShellChrome", () => {
     expect(html).toContain("概要");
     expect(html).toContain('data-shell-ux-presentation-role="PLANNER"');
     expect(html).toContain('data-admin-audit-adapter="false"');
+  });
+
+  it("AC-AA-TF-17: ADMIN_AUDIT task layer is DOM-before the rendered product body", () => {
+    const taskLayer = (
+      <section data-role-task-ia="ADMIN_AUDIT">
+        <button type="button" data-role-task-global="GLOBAL-OPS">
+          運用確認
+        </button>
+      </section>
+    );
+    const adminHtml = renderChrome("ADMIN_AUDIT", taskLayer);
+    const adminTaskIndex = adminHtml.indexOf('data-role-task-ia="ADMIN_AUDIT"');
+    const adminProductIndex = adminHtml.indexOf('data-dashboard-ux="overview-heading"');
+
+    expect(adminTaskIndex).toBeGreaterThanOrEqual(0);
+    expect(adminProductIndex).toBeGreaterThanOrEqual(0);
+    expect(adminTaskIndex).toBeLessThan(adminProductIndex);
+  });
+
+  it("AC-AA-TF-18: FIELD_STAFF and PLANNER keep their existing child placement", () => {
+    for (const role of ["FIELD_STAFF", "PLANNER"] as const) {
+      const html = renderChrome(
+        role,
+        <section data-role-task-ia={role}>
+          <button type="button">Task</button>
+        </section>,
+      );
+      const taskIndex = html.indexOf(`data-role-task-ia="${role}"`);
+      const productIndex = html.indexOf('data-dashboard-ux="overview-heading"');
+
+      expect(taskIndex).toBeGreaterThanOrEqual(0);
+      expect(productIndex).toBeGreaterThanOrEqual(0);
+      expect(taskIndex).toBeGreaterThan(productIndex);
+    }
   });
 });
