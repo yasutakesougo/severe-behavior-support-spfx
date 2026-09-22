@@ -1407,6 +1407,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                 className={interactionPaused ? styles.readyRegionSavingPausedContent : ""}
                 data-shell-ux="ready-region-content"
               >
+                {adminAuditAdapterActive ? children : null}
                 {destination === "overview" && !plannerHidesOverviewBody ? (
                   reviewDuePreviewOpen ? (
                     <ReviewDueState
@@ -1684,7 +1685,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     headingRef={destinationHeadingRef}
                   />
                 )}
-                {children}
+                {adminAuditAdapterActive ? null : children}
               </div>
             </div>
           ) : null}

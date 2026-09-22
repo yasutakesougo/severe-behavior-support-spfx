@@ -133,9 +133,60 @@ const browser = await puppeteer.launch({
 
 const baseUrl = "http://127.0.0.1:4202/index.html";
 const results = [];
+const focusableSelector =
+  "a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex='-1'])";
 
-async function inspect(page) {
-  return page.evaluate(() => {
+async function observeTabFocusSequence(page) {
+  await page.evaluate((selector) => {
+    const taskRoot = document.querySelector("[data-role-task-ia]");
+    const firstTaskControl = taskRoot?.querySelector(selector);
+    if (!(firstTaskControl instanceof HTMLElement)) {
+      throw new Error("task control missing for keyboard smoke");
+    }
+    firstTaskControl.focus();
+  }, focusableSelector);
+
+  const sequence = [];
+  for (let index = 0; index < 20; index += 1) {
+    const focused = await page.evaluate(() => {
+      const active = document.activeElement;
+      const taskRoot = document.querySelector("[data-role-task-ia]");
+      const readyRegion = document.querySelector('[data-shell-ux="ready-region-content"]');
+      const productBody = readyRegion
+        ? [...readyRegion.children].find((element) => element !== taskRoot)
+        : undefined;
+      if (!(active instanceof HTMLElement)) {
+        return null;
+      }
+      const zone = taskRoot?.contains(active)
+        ? "task"
+        : productBody?.contains(active)
+          ? "product"
+          : "other";
+      return {
+        zone,
+        token:
+          active.getAttribute("data-role-task-global") ??
+          active.getAttribute("data-role-task-nav") ??
+          active.textContent?.trim() ??
+          active.tagName.toLowerCase(),
+        tagName: active.tagName.toLowerCase(),
+      };
+    });
+    if (!focused) {
+      break;
+    }
+    sequence.push(focused);
+    if (focused.zone === "product") {
+      break;
+    }
+    await page.keyboard.press("Tab");
+  }
+  return sequence;
+}
+
+async function inspect(page, { includeTabSequence = false } = {}) {
+  const state = await page.evaluate(() => {
     const taskRoot = document.querySelector("[data-role-task-ia]");
     const adminRoot = document.querySelector('[data-role-task-ia="ADMIN_AUDIT"]');
     const fieldRoot = document.querySelector('[data-role-task-ia="FIELD_STAFF"]');
@@ -150,6 +201,9 @@ async function inspect(page) {
     const productBody = readyRegion
       ? [...readyRegion.children].find((element) => element !== taskRoot)
       : undefined;
+    const readyChildren = readyRegion ? [...readyRegion.children] : [];
+    const taskIndex = taskRoot ? readyChildren.indexOf(taskRoot) : -1;
+    const productIndex = productBody ? readyChildren.indexOf(productBody) : -1;
     const productBodyTop = productBody?.getBoundingClientRect().top ?? Number.NaN;
     const heading =
       document.querySelector("[data-role-task-ia] [role='heading']")?.textContent?.trim() ?? "";
@@ -170,9 +224,12 @@ async function inspect(page) {
       heading,
       taskNavCount: taskNavs.length,
       legacyNavPresent: Boolean(legacyNav),
+      taskIndex,
+      productIndex,
       taskTop,
       productBodyTop,
-      taskBeforeProduct:
+      taskBeforeProductDom: taskIndex >= 0 && productIndex >= 0 && taskIndex < productIndex,
+      taskBeforeProductVisual:
         Number.isFinite(taskTop) && Number.isFinite(productBodyTop) && taskTop < productBodyTop,
       shellDestination:
         document
@@ -196,6 +253,26 @@ async function inspect(page) {
         document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
     };
   });
+
+  if (!includeTabSequence) {
+    return {
+      ...state,
+      observedTabFocusSequence: [],
+      taskBeforeProductTab: false,
+    };
+  }
+
+  const observedTabFocusSequence = await observeTabFocusSequence(page);
+  const firstTaskIndex = observedTabFocusSequence.findIndex((target) => target.zone === "task");
+  const firstProductIndex = observedTabFocusSequence.findIndex(
+    (target) => target.zone === "product",
+  );
+  return {
+    ...state,
+    observedTabFocusSequence,
+    taskBeforeProductTab:
+      firstTaskIndex >= 0 && firstProductIndex >= 0 && firstTaskIndex < firstProductIndex,
+  };
 }
 
 async function openPage(query = "", viewport = { width: 1280, height: 900 }) {
@@ -226,7 +303,7 @@ async function selectDemoRole(page, role) {
 
 {
   const { page, pageErrors } = await openPage("", { width: 1280, height: 900 });
-  const state = await inspect(page);
+  const state = await inspect(page, { includeTabSequence: true });
   const pass =
     state.taskRole === "ADMIN_AUDIT" &&
     state.taskDestination === "D-OPS" &&
@@ -245,7 +322,9 @@ async function selectDemoRole(page, role) {
     state.deleteAuth === "false" &&
     state.liveWrite === "false" &&
     state.orientationCopy.includes("D-OPS") &&
-    state.taskBeforeProduct &&
+    state.taskBeforeProductDom &&
+    state.taskBeforeProductVisual &&
+    state.taskBeforeProductTab &&
     state.noHorizontalOverflow &&
     pageErrors.length === 0;
   results.push({
@@ -260,9 +339,13 @@ async function selectDemoRole(page, role) {
 
 {
   const { page, pageErrors } = await openPage("", { width: 1280, height: 900 });
-  const state = await inspect(page);
+  const state = await inspect(page, { includeTabSequence: true });
   const pass =
-    state.taskRole === "ADMIN_AUDIT" && state.taskBeforeProduct && pageErrors.length === 0;
+    state.taskRole === "ADMIN_AUDIT" &&
+    state.taskBeforeProductDom &&
+    state.taskBeforeProductVisual &&
+    state.taskBeforeProductTab &&
+    pageErrors.length === 0;
   results.push({
     name: "correction-visual-order",
     pass,
@@ -282,6 +365,8 @@ async function selectDemoRole(page, role) {
     state.labels.join("|") === "運用確認|証跡|探す" &&
     state.legacyNavPresent === false &&
     state.taskNavCount === 1 &&
+    state.taskBeforeProductDom &&
+    state.taskBeforeProductVisual &&
     state.noHorizontalOverflow &&
     pageErrors.length === 0;
   results.push({
@@ -502,6 +587,8 @@ async function selectDemoRole(page, role) {
   const pass =
     first.taskRole === "FIELD_STAFF" &&
     first.taskDestination === "D-TODAY" &&
+    !first.taskBeforeProductDom &&
+    first.taskBeforeProductVisual &&
     intoAdmin.taskRole === "ADMIN_AUDIT" &&
     intoAdmin.taskDestination === "D-OPS" &&
     intoAdmin.labels.join("|") === "運用確認|証跡|探す" &&
@@ -512,6 +599,8 @@ async function selectDemoRole(page, role) {
     !awayField.adminPresent &&
     awayPlanner.taskRole === "PLANNER" &&
     awayPlanner.taskDestination === "D-HOME" &&
+    !awayPlanner.taskBeforeProductDom &&
+    awayPlanner.taskBeforeProductVisual &&
     awayPlanner.labels.join("|") === "今の工程|探す" &&
     !awayPlanner.adminPresent &&
     pageErrors.length === 0;
