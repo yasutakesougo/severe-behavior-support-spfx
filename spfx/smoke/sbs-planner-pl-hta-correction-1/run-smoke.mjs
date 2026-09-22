@@ -176,6 +176,9 @@ async function inspect(page) {
       hasZeroNotNotPerformed: Boolean(
         document.querySelector("[data-monitoring-zero-not-not-performed]"),
       ),
+      hasNotPerformedResult: Boolean(
+        document.querySelector('[data-human-review-result="NOT_PERFORMED"]'),
+      ),
       hasOverviewDashboard: Boolean(
         document.querySelector("[data-dashboard-ux='overview-dashboard']"),
       ),
@@ -295,7 +298,7 @@ async function runSequence(viewport, suffix) {
     acquired.hasSupportPlan &&
     acquired.context === "live" &&
     acquired.cycle === "②" &&
-    acquired.destination === "D-FIND-PERSON";
+    acquired.destination === "D-PLAN";
   await screenshot(page, `04-existing-plan-establishes-context${suffix}.png`);
 
   await page.click('[data-role-task-global="GLOBAL-CURRENT-CYCLE"]');
@@ -335,6 +338,13 @@ async function runSequence(viewport, suffix) {
   const sc6 = zeroState.hasZeroNotNotPerformed && zeroState.bodyHasZeroCopy;
   await screenshot(page, `07-zero-not-not-performed${suffix}.png`);
 
+  await page.click('[data-planning-pc-version="2"]');
+  await page.click('[data-planning-pc-section-nav="planner-process-monitoring-heading"]');
+  await page.waitForSelector('[data-human-review-result="NOT_PERFORMED"]');
+  const notPerformedState = await inspect(page);
+  const sc16 = notPerformedState.hasNotPerformedResult && notPerformedState.bodyHasNotPerformed;
+  await screenshot(page, `09-not-performed-state${suffix}.png`);
+
   await page.waitForFunction(
     () =>
       document
@@ -365,16 +375,41 @@ async function runSequence(viewport, suffix) {
     dMonitor.hasMonitoringHost &&
     !dMonitor.hasOverviewDashboard;
   const sc14 = !dMonitor.bodyHasSmokePass;
+  const sc15 =
+    zeroState.hasZeroNotNotPerformed &&
+    !zeroState.hasNotPerformedResult &&
+    notPerformedState.hasNotPerformedResult &&
+    notPerformedState.bodyHasNotPerformed;
   await screenshot(page, `06-d-monitor-bound-monitoring-view${suffix}.png`);
 
   const pass =
-    sc1 && sc8 && sc3b && sc3a && sc4 && sc7 && sc5 && sc6 && sc14 && pageErrors.length === 0;
+    sc1 &&
+    sc8 &&
+    sc3b &&
+    sc3a &&
+    sc4 &&
+    sc7 &&
+    sc5 &&
+    sc6 &&
+    sc14 &&
+    sc16 &&
+    sc15 &&
+    pageErrors.length === 0;
   results.push({
     name: `pl-hta-correction-1${suffix || "-desktop"}`,
     pass,
     viewport,
-    checks: { sc1, sc8, sc3b, sc3a, sc4, sc7, sc5, sc6, sc14 },
-    state: { noContext, findPerson, synth, acquired, dPlan, zeroState, dMonitor },
+    checks: { sc1, sc8, sc3b, sc3a, sc4, sc7, sc5, sc6, sc14, sc15, sc16 },
+    state: {
+      noContext,
+      findPerson,
+      synth,
+      acquired,
+      dPlan,
+      zeroState,
+      notPerformedState,
+      dMonitor,
+    },
     pageErrors,
   });
   await page.close();
@@ -391,6 +426,12 @@ const payload = {
   allPass,
   smokePassIsNotBusinessCompletion: true,
   results,
+  acceptanceStateBasis: {
+    zeroRecords: "0件",
+    notPerformed: "実施できなかった",
+    distinctionRequired: true,
+    humanObservableScreens: ["07-zero-not-not-performed.png", "09-not-performed-state.png"],
+  },
 };
 fs.writeFileSync(
   path.join(artifactsDir, "smoke-results.json"),

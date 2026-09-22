@@ -194,6 +194,7 @@ async function inspect(page, { includeTabSequence = false } = {}) {
     const labels = [...document.querySelectorAll("nav [data-role-task-global]")].map(
       (element) => element.textContent?.trim() ?? "",
     );
+    const bodyText = document.body.innerText ?? "";
     const taskNavs = document.querySelectorAll("[data-role-task-ia] nav");
     const legacyNav = document.querySelector('[data-shell-ux="primary-navigation"]');
     const readyRegion = document.querySelector('[data-shell-ux="ready-region-content"]');
@@ -251,6 +252,13 @@ async function inspect(page, { includeTabSequence = false } = {}) {
         document.querySelector('[data-role-task-orientation="今どこ"]')?.textContent ?? "",
       noHorizontalOverflow:
         document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
+      adminRecordActionIsRead: bodyText.includes("記録を確認") && !bodyText.includes("記録する"),
+      hasEvidenceFirstCue: Boolean(
+        document.querySelector('[data-admin-audit-evidence-first="true"]'),
+      ),
+      evidenceWriteButtonCount: document.querySelectorAll(
+        '[data-demo-ux="daily-record-mutation-button"]',
+      ).length,
     };
   });
 
@@ -326,6 +334,7 @@ async function selectDemoRole(page, role) {
     state.taskBeforeProductVisual &&
     state.taskBeforeProductTab &&
     state.noHorizontalOverflow &&
+    state.adminRecordActionIsRead &&
     pageErrors.length === 0;
   results.push({
     name: "first-paint-desktop",
@@ -461,6 +470,8 @@ async function selectDemoRole(page, role) {
     evidence.taskDestination === "D-EVIDENCE" &&
     evidence.activeGlobal === "GLOBAL-EVIDENCE" &&
     evidence.shellDestination === "records" &&
+    evidence.hasEvidenceFirstCue &&
+    evidence.evidenceWriteButtonCount === 0 &&
     evidence.homeIdentity === "D-OPS" &&
     find.taskDestination === "D-FIND-PERSON" &&
     find.activeGlobal === "GLOBAL-FIND-PERSON" &&

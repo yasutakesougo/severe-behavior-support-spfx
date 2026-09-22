@@ -2,6 +2,20 @@
  * DASHBOARD-UX-1 — fail-closed presentation copy.
  */
 
+import type { ShellPresentationRole } from "../ux/presentation-role";
+import type { OverviewActionItem } from "./overview-types";
+
+/** ADMIN_AUDIT names the existing records route by its confirmation meaning. */
+export function overviewActionLabelForRole(
+  item: OverviewActionItem,
+  role: ShellPresentationRole,
+): string {
+  if (role === "ADMIN_AUDIT" && item.navigation?.kind === "records") {
+    return "記録を確認";
+  }
+  return item.actionLabel;
+}
+
 /**
  * Retained for fail-closed copy checks.
  * DEMO-UX-11: not rendered on Overview (global DemoBanner covers synthetic/no-live).

@@ -830,6 +830,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         type: "SET_PERSON_PLAN_CONTEXT",
         context: PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
       });
+      reportPlannerEvent({ type: "OPEN_PERSON_PLAN" });
       return;
     }
     setPlannerListOrigin(false);
@@ -886,6 +887,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       type: "SET_PERSON_PLAN_CONTEXT",
       context: PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
     });
+    reportPlannerEvent({ type: "OPEN_PERSON_PLAN" });
   };
 
   const handleBackToUserDetail = (): void => {
@@ -1678,6 +1680,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                   <DailyRecords
                     presentation={dailyRecordPresentation}
                     headingRef={destinationHeadingRef}
+                    presentationRole={activePresentationRole}
                   />
                 ) : (
                   <DestinationPlaceholder

@@ -14,6 +14,7 @@ import {
   DASHBOARD_OVERVIEW_ACTION_DISABLED_NOTE,
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   formatTodaySupportBoardDisclaimer,
+  overviewActionLabelForRole,
 } from "./overview-copy";
 import type { OverviewActionNavigationTarget, ShellOverviewPresentation } from "./overview-types";
 import { SemanticIcon } from "../primitives";
@@ -228,7 +229,7 @@ export const OverviewDashboard: React.FC<OverviewDashboardProps> = ({
                   }
                 }}
               >
-                {item.actionLabel}
+                {overviewActionLabelForRole(item, presentationRole)}
               </button>
             </li>
           );
