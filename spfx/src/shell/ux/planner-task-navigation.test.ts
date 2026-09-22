@@ -190,14 +190,18 @@ describe("SBS-PLANNER-TOP-LEVEL-IA-V1 task navigation", () => {
 
   it("PL-HTA correction: lawful existing-plan context then ended returns unknown", () => {
     let state = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "GLOBAL",
+      globalId: "GLOBAL-FIND-PERSON",
+    });
+    state = applyPlannerSessionEvent(state, {
       type: "SET_PERSON_PLAN_CONTEXT",
       context: PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT,
     });
     expect(isLawfulPlannerPersonPlanContext(state.personPlanContext)).toBe(true);
     expect(state.currentCycle).toBe("②");
-    expect(state.destination).toBe("D-HOME");
-    state = applyPlannerSessionEvent(state, { type: "PRIMARY_ACTION" });
+    state = applyPlannerSessionEvent(state, { type: "OPEN_PERSON_PLAN" });
     expect(state.destination).toBe("D-PLAN");
+    expect(state.previousDestination).toBe("D-FIND-PERSON");
     state = applyPlannerSessionEvent(state, {
       type: "SET_PROCESS_SECTION",
       sectionId: "planner-process-monitoring-heading",
@@ -209,6 +213,14 @@ describe("SBS-PLANNER-TOP-LEVEL-IA-V1 task navigation", () => {
     expect(state.currentCycle).toBe("unknown");
     expect(state.destination).toBe("D-HOME");
     expect(primaryActionDestinationForPlannerCycle(state.currentCycle)).toBeUndefined();
+  });
+
+  it("PL-HTA correction: cannot open a plan without lawful person/plan context", () => {
+    const next = applyPlannerSessionEvent(initialPlannerTaskViewState(), {
+      type: "OPEN_PERSON_PLAN",
+    });
+    expect(next.destination).toBe("D-HOME");
+    expect(next.personPlanContext).toBeUndefined();
   });
 
   it("PL-HTA correction: synthetic-detail identity is not lawful context", () => {

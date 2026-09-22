@@ -237,6 +237,7 @@ export type PlannerSessionEvent =
   | Readonly<{ type: "SELECT_RECORD"; recordId: string }>
   | Readonly<{ type: "BACK" }>
   | Readonly<{ type: "SET_PERSON_PLAN_CONTEXT"; context?: PlannerPersonPlanContext }>
+  | Readonly<{ type: "OPEN_PERSON_PLAN" }>
   | Readonly<{ type: "SET_PROCESS_SECTION"; sectionId: string }>;
 
 export const initialPlannerTaskViewState = (
@@ -338,6 +339,18 @@ export const applyPlannerSessionEvent = (
         destination: impersonating ? "D-HOME" : state.destination,
         activeGlobalId: impersonating ? "GLOBAL-CURRENT-CYCLE" : state.activeGlobalId,
         previousDestination: impersonating ? undefined : state.previousDestination,
+      };
+    }
+    case "OPEN_PERSON_PLAN": {
+      if (!isLawfulPlannerPersonPlanContext(state.personPlanContext)) {
+        return state;
+      }
+      return {
+        ...state,
+        destination: "D-PLAN",
+        activeGlobalId: "GLOBAL-CURRENT-CYCLE",
+        selectedRecordId: undefined,
+        previousDestination: state.destination === "D-FIND-PERSON" ? "D-FIND-PERSON" : undefined,
       };
     }
     case "SET_PROCESS_SECTION": {

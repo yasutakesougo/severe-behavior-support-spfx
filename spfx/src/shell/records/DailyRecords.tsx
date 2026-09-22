@@ -16,11 +16,17 @@ import {
   seedLocalDraftForIncompleteItem,
 } from "./daily-record-draft";
 import type { ShellDailyRecordPresentation } from "./daily-record-types";
+import {
+  SHELL_DEFAULT_PRESENTATION_ROLE,
+  isAdminAuditPresentationRole,
+  type ShellPresentationRole,
+} from "../ux/presentation-role";
 import styles from "./DailyRecordsUx.module.scss";
 
 export type DailyRecordsProps = Readonly<{
   presentation: ShellDailyRecordPresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
+  presentationRole?: ShellPresentationRole;
 }>;
 
 /**
@@ -30,7 +36,11 @@ export type DailyRecordsProps = Readonly<{
  * DADS-UX-4: presentation tokens/focus; INV-10 SingleSelectListbox; INV-17 EmptyNotice.
  * VP-F: Visual Polish foundations + kiosk visual alignment; no mutation / LIVE WRITE.
  */
-export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headingRef }) => {
+export const DailyRecords: React.FC<DailyRecordsProps> = ({
+  presentation,
+  headingRef,
+  presentationRole = SHELL_DEFAULT_PRESENTATION_ROLE,
+}) => {
   const { heading, inputPrompt, incompleteItems, recentRecords, businessFacts, systemState } =
     presentation;
 
@@ -52,6 +62,7 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
   const selectedPersonLabel = selectedIncomplete?.personLabel ?? presentation.inputPersonLabel;
   const showIncompleteEmpty = incompleteItems.length === 0;
   const showRecentEmpty = recentRecords.length === 0;
+  const adminRead = isAdminAuditPresentationRole(presentationRole);
 
   return (
     <section
@@ -60,6 +71,7 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
       data-demo-ux-9-slice={DEMO_UX_9_SLICE.id}
       data-demo-ux-11-slice={DEMO_UX_11_SLICE.id}
       data-demo-ux-incomplete-selected={selectedIncompleteId ?? ""}
+      data-presentation-role={presentationRole}
       aria-labelledby="demo-ux-records-heading"
     >
       <div className={styles.headingTitleRow}>
@@ -74,6 +86,12 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
           {heading}
         </h1>
       </div>
+
+      {adminRead ? (
+        <p className={styles.sectionHint} data-admin-audit-evidence-first="true">
+          証跡の確認専用です。表示内容は合成データです。ここから記録の作成・保存や権限変更は行いません。
+        </p>
+      ) : null}
 
       <section className={styles.section} aria-labelledby="demo-ux-record-incomplete-heading">
         <h2 id="demo-ux-record-incomplete-heading" className={styles.sectionHeading}>
@@ -123,63 +141,74 @@ export const DailyRecords: React.FC<DailyRecordsProps> = ({ presentation, headin
         )}
       </section>
 
-      <section className={styles.section} aria-labelledby="demo-ux-record-input-heading">
-        <h2 id="demo-ux-record-input-heading" className={styles.sectionHeading}>
-          記録入力イメージ
-        </h2>
-        <p className={styles.inputPrompt}>{inputPrompt}</p>
-        <p className={styles.sectionHint} data-demo-ux="daily-record-draft-hint">
-          {DEMO_DAILY_RECORD_DRAFT_HINT}
-        </p>
-        <div className={styles.inputGrid}>
-          <label>
-            対象
-            <input
-              type="text"
-              value={selectedPersonLabel}
+      {adminRead ? (
+        <section className={styles.section} aria-labelledby="demo-ux-record-input-heading">
+          <h2 id="demo-ux-record-input-heading" className={styles.sectionHeading}>
+            記録の確認
+          </h2>
+          <p className={styles.sectionHint} data-admin-audit-readonly-evidence="true">
+            ADMIN_AUDITでは、既存の表示内容を確認します。記録の入力欄は表示しません。
+          </p>
+        </section>
+      ) : (
+        <section className={styles.section} aria-labelledby="demo-ux-record-input-heading">
+          <h2 id="demo-ux-record-input-heading" className={styles.sectionHeading}>
+            記録入力イメージ
+          </h2>
+          <p className={styles.inputPrompt}>{inputPrompt}</p>
+          <p className={styles.sectionHint} data-demo-ux="daily-record-draft-hint">
+            {DEMO_DAILY_RECORD_DRAFT_HINT}
+          </p>
+          <div className={styles.inputGrid}>
+            <label>
+              対象
+              <input
+                type="text"
+                value={selectedPersonLabel}
+                disabled
+                aria-disabled="true"
+                readOnly
+                data-demo-ux="daily-record-input-person"
+              />
+            </label>
+            <label className={styles.fullWidth}>
+              記録内容（入力イメージ・未保存）
+              <textarea
+                value={localDraft}
+                rows={6}
+                data-demo-ux="daily-record-input-draft"
+                aria-label="記録内容の入力イメージ（未保存）"
+                onChange={(event) => {
+                  setLocalDraft(event.target.value);
+                }}
+              />
+            </label>
+          </div>
+          <p className={styles.mutationNote} data-demo-ux="daily-record-mutation-note">
+            {DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE}
+          </p>
+          <div className={styles.actionRow}>
+            <button
+              type="button"
               disabled
               aria-disabled="true"
-              readOnly
-              data-demo-ux="daily-record-input-person"
-            />
-          </label>
-          <label className={styles.fullWidth}>
-            記録内容（入力イメージ・未保存）
-            <textarea
-              value={localDraft}
-              rows={6}
-              data-demo-ux="daily-record-input-draft"
-              aria-label="記録内容の入力イメージ（未保存）"
-              onChange={(event) => {
-                setLocalDraft(event.target.value);
-              }}
-            />
-          </label>
-        </div>
-        <p className={styles.mutationNote} data-demo-ux="daily-record-mutation-note">
-          {DEMO_DAILY_RECORD_MUTATION_DISABLED_NOTE}
-        </p>
-        <div className={styles.actionRow}>
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            data-demo-ux="daily-record-mutation-button"
-            data-demo-ux-mutation="create"
-          >
-            作成する
-          </button>
-          <button
-            type="button"
-            disabled
-            aria-disabled="true"
-            data-demo-ux="daily-record-mutation-button"
-            data-demo-ux-mutation="save"
-          >
-            保存する
-          </button>
-        </div>
-      </section>
+              data-demo-ux="daily-record-mutation-button"
+              data-demo-ux-mutation="create"
+            >
+              作成する
+            </button>
+            <button
+              type="button"
+              disabled
+              aria-disabled="true"
+              data-demo-ux="daily-record-mutation-button"
+              data-demo-ux-mutation="save"
+            >
+              保存する
+            </button>
+          </div>
+        </section>
+      )}
 
       <section className={styles.section} aria-labelledby="demo-ux-record-recent-heading">
         <h2 id="demo-ux-record-recent-heading" className={styles.sectionHeading}>

@@ -2,6 +2,7 @@ import {
   DASHBOARD_OVERVIEW_ACTION_NAV_NOTE,
   DASHBOARD_OVERVIEW_PRESENTATION_NOTE,
   formatTodaySupportBoardDisclaimer,
+  overviewActionLabelForRole,
   overviewCopyIsFailClosed,
 } from "./overview-copy";
 import {
@@ -130,5 +131,12 @@ describe("VP-G Overview presentationRole entry", () => {
     expect(overviewSectionOrderForRole("ADMIN_AUDIT")[0]).toBe("kpi");
     expect(kpiSectionHeadingForRole("PLANNER")).toBe("計画・見直しの状況");
     expect(kpiSectionHeadingForRole("ADMIN_AUDIT")).toBe("運用状況");
+  });
+
+  it("keeps ADMIN_AUDIT record navigation read-oriented without changing authority", () => {
+    const recordAction = DASHBOARD_UX_OVERVIEW_FIXTURE.actionItems[0];
+    expect(recordAction.navigation).toEqual({ kind: "records" });
+    expect(overviewActionLabelForRole(recordAction, "ADMIN_AUDIT")).toBe("記録を確認");
+    expect(overviewActionLabelForRole(recordAction, "FIELD_STAFF")).toBe("記録する");
   });
 });
