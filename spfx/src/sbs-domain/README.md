@@ -34,6 +34,34 @@ npx esbuild src/domain/monitoring-period-review-decision-reason-spfx-entry.ts \
 
 The checked-in `.d.ts` is the narrow allowlisted declaration surface.
 
+## person-registry-reference.bundle — type-only SPFx contract bridge
+
+`person-registry-reference.bundle.js` is generated from the type-only entry:
+
+`src/integration/person-registry/person-registry-reference-spfx-entry.ts`
+
+The paired `.d.ts` exposes only `LegacyPersonMappingKey` and
+`ReverseLegacyResolution`. It carries no person-registry client, authority
+provider, adapter, persistence, SharePoint, or tenant capability.
+
+Canonical implementation remains:
+
+- `src/integration/person-registry/person-registry-reference.ts`
+
+Regenerate (no live I/O):
+
+```bash
+npx esbuild src/integration/person-registry/person-registry-reference-spfx-entry.ts \
+  --bundle \
+  --format=cjs \
+  --target=es2015 \
+  --platform=neutral \
+  --outfile=spfx/src/sbs-domain/person-registry-reference.bundle.js
+```
+
+The checked-in `.d.ts` must remain structurally assignable to the canonical
+types and is verified by the SPFx bridge contract test.
+
 ## REVIEW-OUTCOME-CONTEXT-NOTE-SLICE-B — outcome note narrow bridge
 
 `monitoring-period-review-outcome-note.bundle.js` is the narrow synthetic note bridge for:

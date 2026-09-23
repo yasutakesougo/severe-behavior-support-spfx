@@ -47,8 +47,10 @@ import {
   type PlannerTaskGlobalId,
   type PlannerTaskViewState,
 } from "../../../shell/ux/planner-task-navigation";
+import type { MonitoringReviewInputResult } from "../../../shell/monitoring/monitoring-review-input";
 import type { ShellPresentationRole } from "../../../shell/ux/presentation-role";
 import type { ShellPrimaryNavigationId } from "../../../shell/ux/primary-navigation";
+import type { ReviewPresentationContext } from "../../../sbs-domain/monitoring-read-model.bundle";
 import type { IScaffoldShellProps } from "./IScaffoldShellProps";
 import styles from "./ScaffoldShell.module.scss";
 
@@ -61,6 +63,8 @@ type ScaffoldShellSmokeInjection = {
   initialPlannerCycle?: PlannerCyclePosition;
   initialAdminAuditDestination?: string;
   initialAdminAuditObject?: unknown;
+  monitoringReviewInput?: MonitoringReviewInputResult;
+  monitoringReviewPresentationContext?: ReviewPresentationContext;
 };
 
 type FieldStaffShellState = FieldStaffTaskViewState & {
@@ -589,6 +593,7 @@ export default class ScaffoldShell extends React.Component<
       partialRetrieval,
     } = this.props;
     const presentationRole: ShellPresentationRole = this.state.role;
+    const injection = this.smokeInjection();
 
     return (
       <AppShellChrome
@@ -600,6 +605,8 @@ export default class ScaffoldShell extends React.Component<
         errorCode={errorCode}
         userDisplayName={userDisplayName}
         partialRetrieval={partialRetrieval}
+        monitoringReviewInput={injection.monitoringReviewInput}
+        monitoringReviewPresentationContext={injection.monitoringReviewPresentationContext}
         selectedDestination={this.state.shellDestination}
         onSelectedDestinationChange={this.handleShellDestinationChange}
         presentationRole={presentationRole}

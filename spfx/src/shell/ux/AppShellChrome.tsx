@@ -11,6 +11,8 @@ import {
   isFieldStaffTodayPrimaryActionStatus,
 } from "../dashboard/TodaySupportDayBoard";
 import { buildDemoMonitoringForVersion, MonitoringView } from "../monitoring";
+import type { MonitoringReviewInputResult } from "../monitoring/monitoring-review-input";
+import type { ReviewPresentationContext } from "../../sbs-domain/monitoring-read-model.bundle";
 import type { AdminAuditTaskDestinationId } from "./admin-audit-task-navigation";
 import {
   fieldStaffDayBoardClearVisible,
@@ -163,6 +165,8 @@ export type AppShellChromeProps = Readonly<{
   /** Additional synthetic detail fixtures (e.g. Cさん for DEMO-UX-7 today-action). */
   additionalUserDetailPresentations?: readonly ShellUserDetailPresentation[];
   supportPlanPresentation?: ShellSupportPlanPresentation;
+  monitoringReviewInput?: MonitoringReviewInputResult;
+  monitoringReviewPresentationContext?: ReviewPresentationContext;
   dailyRecordPresentation?: ShellDailyRecordPresentation;
   reviewDueStatePresentation?: ShellReviewDueStatePresentation;
   procedureWorkflowPresentation?: ShellProcedureWorkflowPresentation;
@@ -208,6 +212,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     userDetailPresentation = DEMO_UX_USER_DETAIL_FIXTURE,
     additionalUserDetailPresentations = [DEMO_UX_USER_DETAIL_C_FIXTURE],
     supportPlanPresentation = DEMO_UX_SUPPORT_PLAN_FIXTURE,
+    monitoringReviewInput,
+    monitoringReviewPresentationContext,
     dailyRecordPresentation = DEMO_UX_DAILY_RECORD_FIXTURE,
     reviewDueStatePresentation = DEMO_UX_REVIEW_DUE_FIXTURE,
     procedureWorkflowPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE,
@@ -1490,6 +1496,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       supportPlanPresentation.userId === selectedUserDetail.userId ? (
                       <SupportPlan
                         presentation={supportPlanPresentation}
+                        monitoringReviewInput={monitoringReviewInput}
+                        monitoringReviewPresentationContext={monitoringReviewPresentationContext}
                         headingRef={destinationHeadingRef}
                         onBackToUserDetail={handleBackToUserDetail}
                         backLabel={

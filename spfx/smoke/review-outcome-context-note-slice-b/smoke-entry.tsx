@@ -8,6 +8,10 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import type { MonitoringReadModel } from "../../src/sbs-domain/monitoring-read-model.bundle";
 import { MonitoringView } from "../../src/shell/monitoring/MonitoringView";
+import {
+  monitoringReviewInputForSmoke,
+  reviewPresentationContextForReviewAuthority,
+} from "../review-authority-fixture";
 
 const SHARED_CONTEXT = {
   OrganizationId: "synthetic-org-001",
@@ -61,6 +65,8 @@ const SmokeApp: React.FC = () => {
       </button>
       <MonitoringView
         model={model}
+        reviewInput={monitoringReviewInputForSmoke(model)}
+        reviewPresentationContext={reviewPresentationContextForReviewAuthority(model)}
         personLabel="Aさん"
         procedureLabelContext={{
           userId: model.UserId,

@@ -166,6 +166,7 @@ function observe(page) {
     );
     const capture = q("[data-review-outcome-capture]");
     return {
+      authorityFound: q('[data-monitoring-review-authority="FOUND"]') !== null,
       text,
       recordId: recordId ?? null,
       reasonValue: reason?.value ?? null,
@@ -235,6 +236,7 @@ try {
 
     const initial = await observe(page);
     const initialPass =
+      initial.authorityFound &&
       initial.text.includes("Aさん") &&
       initial.text.includes("計画版 3") &&
       initial.text.includes("判断理由") &&

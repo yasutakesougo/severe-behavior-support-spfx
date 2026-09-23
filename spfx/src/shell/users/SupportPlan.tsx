@@ -4,7 +4,9 @@ import {
   MonitoringView,
   MONITORING_LINK_SLICE_A,
 } from "../monitoring";
+import type { MonitoringReviewInputResult } from "../monitoring/monitoring-review-input";
 import type { SyntheticCapturedReview } from "../monitoring/review-outcome-capture";
+import type { ReviewPresentationContext } from "../../sbs-domain/monitoring-read-model.bundle";
 import { labelForProcedureRecordResult } from "../procedure/procedure-copy";
 import { SemanticIcon, StatusBadge } from "../primitives";
 import { DEMO_UX_11_SLICE } from "../ux/demo-note-consolidation";
@@ -64,6 +66,8 @@ import styles from "./SupportPlanUx.module.scss";
 
 export type SupportPlanProps = Readonly<{
   presentation: ShellSupportPlanPresentation;
+  monitoringReviewInput?: MonitoringReviewInputResult;
+  monitoringReviewPresentationContext?: ReviewPresentationContext;
   headingRef?: React.Ref<HTMLHeadingElement>;
   onBackToUserDetail?: () => void;
   backLabel?: string;
@@ -82,6 +86,8 @@ const MUTATION_LABELS = ["作成する", "編集する", "保存する"] as cons
  */
 export const SupportPlan: React.FC<SupportPlanProps> = ({
   presentation,
+  monitoringReviewInput,
+  monitoringReviewPresentationContext,
   headingRef,
   onBackToUserDetail,
   backLabel = "← 利用者詳細",
@@ -331,6 +337,8 @@ export const SupportPlan: React.FC<SupportPlanProps> = ({
       {monitoringResult.status === "RESOLVED" ? (
         <MonitoringView
           model={monitoringResult.value}
+          reviewInput={monitoringReviewInput}
+          reviewPresentationContext={monitoringReviewPresentationContext}
           personLabel={personLabel}
           procedureLabelContext={{
             userId: presentation.userId,

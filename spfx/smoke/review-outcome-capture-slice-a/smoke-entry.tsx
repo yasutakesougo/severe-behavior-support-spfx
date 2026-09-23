@@ -6,6 +6,10 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import type { MonitoringReadModel } from "../../src/sbs-domain/monitoring-read-model.bundle";
 import { MonitoringView } from "../../src/shell/monitoring/MonitoringView";
+import {
+  monitoringReviewInputForSmoke,
+  reviewPresentationContextForReviewAuthority,
+} from "../review-authority-fixture";
 
 const model: MonitoringReadModel = {
   OrganizationId: "synthetic-org-001",
@@ -39,6 +43,8 @@ if (!root) throw new Error("review outcome smoke root missing");
 ReactDOM.render(
   <MonitoringView
     model={model}
+    reviewInput={monitoringReviewInputForSmoke(model)}
+    reviewPresentationContext={reviewPresentationContextForReviewAuthority(model)}
     personLabel="Aさん"
     procedureLabelContext={{
       userId: "user-a",

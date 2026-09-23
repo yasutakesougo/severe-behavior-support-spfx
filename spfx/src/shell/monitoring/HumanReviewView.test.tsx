@@ -31,6 +31,17 @@ function render(
 }
 
 describe("HumanReviewView", () => {
+  it("renders shell-level UNRESOLVED without a capture control", () => {
+    const html = renderToStaticMarkup(
+      <HumanReviewView result={{ status: "UNRESOLVED" }} personLabel="Aさん" />,
+    );
+
+    expect(html).toContain('data-human-review-status="UNRESOLVED"');
+    expect(html).toContain("見直し資料の対象を確定できません");
+    expect(html).not.toContain('data-review-outcome-action="NO_CHANGE"');
+    expect(html).not.toContain('data-human-review-record-list="true"');
+  });
+
   it("renders human-friendly identity before technical identity while preserving exact facts", () => {
     const html = render(humanReviewResultForSyntheticVersion(2));
 

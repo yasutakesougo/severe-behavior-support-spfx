@@ -7,6 +7,10 @@ import * as ReactDOM from "react-dom";
 import { MonitoringView } from "../../src/shell/monitoring/MonitoringView";
 import { buildDemoMonitoringForVersion } from "../../src/shell/monitoring/monitoring-fixture";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "../../src/shell/users/support-plan-fixture";
+import {
+  monitoringReviewInputForSmoke,
+  reviewPresentationContextForReviewAuthority,
+} from "../review-authority-fixture";
 
 function selectedModel() {
   const testCase = new URLSearchParams(window.location.search).get("case") ?? "v3";
@@ -20,10 +24,13 @@ function selectedModel() {
 
 const root = document.getElementById("root");
 if (!root) throw new Error("ia-clarity smoke root missing");
+const model = selectedModel();
 
 ReactDOM.render(
   <MonitoringView
-    model={selectedModel()}
+    model={model}
+    reviewInput={monitoringReviewInputForSmoke(model)}
+    reviewPresentationContext={reviewPresentationContextForReviewAuthority(model)}
     personLabel="Aさん"
     procedureLabelContext={{
       userId: DEMO_UX_SUPPORT_PLAN_FIXTURE.userId,

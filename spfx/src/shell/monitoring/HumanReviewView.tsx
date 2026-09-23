@@ -33,7 +33,7 @@ export type HumanReviewProcedureLabelContext = Readonly<{
 }>;
 
 export type HumanReviewViewProps = Readonly<{
-  result: HumanReviewMaterialsBuildResult;
+  result: HumanReviewViewResult;
   personLabel?: string;
   procedureLabelContext?: HumanReviewProcedureLabelContext;
   capturedReview?: SyntheticCapturedReview | null;
@@ -43,6 +43,9 @@ export type HumanReviewViewProps = Readonly<{
     draftNoteText: string,
   ) => SyntheticCapturedReviewResult;
 }>;
+
+export type HumanReviewViewResult =
+  Readonly<{ status: "UNRESOLVED" }> | HumanReviewMaterialsBuildResult;
 
 function formatTokyoDateTime(value: string): string {
   return new Intl.DateTimeFormat("ja-JP", {
@@ -101,6 +104,31 @@ export const HumanReviewView: React.FC<HumanReviewViewProps> = ({
   capturedReview = null,
   onCaptureOutcome,
 }) => {
+  if (result.status === "UNRESOLVED") {
+    return (
+      <section
+        id="human-review-materials"
+        className={`${styles.monitoringView} ${styles.roleMaterials}`}
+        aria-label="見直し資料"
+        data-human-review-status="UNRESOLVED"
+        data-human-review-role="materials"
+      >
+        <p className={styles.roleCue} data-human-review-role-cue="materials">
+          個別の事実資料
+        </p>
+        <h3 className={styles.heading}>見直し資料</h3>
+        {personLabel ? (
+          <p className={styles.personIdentity} data-human-review-person-identity="true">
+            {personLabel}
+          </p>
+        ) : null}
+        <p className={styles.emptyState} role="status">
+          見直し資料の対象を確定できません。対象と表示条件が一致した資料だけを表示します。
+        </p>
+      </section>
+    );
+  }
+
   if (result.status === "CONTEXT_MISMATCH") {
     return (
       <section
