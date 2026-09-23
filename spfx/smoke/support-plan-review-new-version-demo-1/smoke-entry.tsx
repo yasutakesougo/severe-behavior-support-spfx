@@ -4,6 +4,7 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { buildDemoMonitoringForVersion } from "../../src/shell/monitoring";
 import {
   AppShellChrome,
   DASHBOARD_UX_OVERVIEW_FIXTURE,
@@ -32,6 +33,22 @@ import {
   type ShellViewMode,
 } from "../../src/shell/ux";
 import { driveBeforeApplyPublicDom } from "../sbs-mgmt-loop-b/before-apply-dom-driver";
+import {
+  monitoringReviewInputForSmoke,
+  reviewPresentationContextForReviewAuthority,
+} from "../review-authority-fixture";
+
+const B12_MONITORING_MODEL = buildDemoMonitoringForVersion(
+  DEMO_UX_SUPPORT_PLAN_FIXTURE.currentVersion,
+);
+const B12_MONITORING_REVIEW_INPUT =
+  B12_MONITORING_MODEL.status === "RESOLVED"
+    ? monitoringReviewInputForSmoke(B12_MONITORING_MODEL.value)
+    : undefined;
+const B12_MONITORING_REVIEW_CONTEXT =
+  B12_MONITORING_MODEL.status === "RESOLVED"
+    ? reviewPresentationContextForReviewAuthority(B12_MONITORING_MODEL.value)
+    : undefined;
 
 function parseParams(): {
   viewMode: ShellViewMode;
@@ -185,6 +202,8 @@ const SmokeApp: React.FC = () => {
         usersPresentation={DEMO_UX_USERS_FIXTURE}
         userDetailPresentation={DEMO_UX_USER_DETAIL_FIXTURE}
         supportPlanPresentation={DEMO_UX_SUPPORT_PLAN_FIXTURE}
+        monitoringReviewInput={B12_MONITORING_REVIEW_INPUT}
+        monitoringReviewPresentationContext={B12_MONITORING_REVIEW_CONTEXT}
         correlationId={SHELL_UX_DEFAULT_FIXTURE.correlationId}
         errorCode={SHELL_UX_DEFAULT_FIXTURE.errorCode}
         userDisplayName="Smoke Operator Synthetic"
