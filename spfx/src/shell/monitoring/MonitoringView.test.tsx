@@ -4,8 +4,27 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { act, Simulate } from "react-dom/test-utils";
 import { MonitoringView } from "./MonitoringView";
 import { buildDemoMonitoringForVersion } from "./monitoring-fixture";
-import type { MonitoringReadModel } from "../../sbs-domain/monitoring-read-model.bundle";
+import type {
+  MonitoringQuery,
+  MonitoringReadModel,
+  ReviewPresentationContext,
+} from "../../sbs-domain/monitoring-read-model.bundle";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "../users/support-plan-fixture";
+import {
+  buildMonitoringReviewInput,
+  type MonitoringReviewInputResult,
+} from "./monitoring-review-input";
+
+const FOUND_AUTHORITY = {
+  status: "FOUND" as const,
+  MappingKey: {
+    SourceSystem: "synthetic",
+    OrganizationId: "synthetic-org-001",
+    SourceScope: "synthetic-source-scope",
+    LegacyKeyType: "UserId",
+    LegacyKeyValue: "user-a",
+  },
+};
 
 beforeAll(() => {
   const g = globalThis as { TextEncoder?: { new (): unknown } };
@@ -35,8 +54,38 @@ function withEvidenceRecordId(model: MonitoringReadModel, suffix: string): Monit
   };
 }
 
+function monitoringQueryForModel(model: MonitoringReadModel): MonitoringQuery {
+  return {
+    OrganizationId: model.OrganizationId,
+    SiteId: model.SiteId,
+    UserId: model.UserId,
+    planId: model.planId,
+    planVersion: model.planVersion,
+    periodStart: model.periodStart,
+    periodEnd: model.periodEnd,
+  };
+}
+
+function reviewPresentationContextForModel(model: MonitoringReadModel): ReviewPresentationContext {
+  return monitoringQueryForModel(model);
+}
+
+function reviewInputForModel(model: MonitoringReadModel): MonitoringReviewInputResult {
+  const result = buildMonitoringReviewInput(FOUND_AUTHORITY, monitoringQueryForModel(model), model);
+  if (result.status !== "RESOLVED") throw new Error("expected resolved review input");
+  return result;
+}
+
 function renderMonitoring(container: Element, model: MonitoringReadModel): void {
-  ReactDOM.render(<MonitoringView model={model} personLabel="Aさん" />, container);
+  ReactDOM.render(
+    <MonitoringView
+      model={model}
+      reviewInput={reviewInputForModel(model)}
+      reviewPresentationContext={reviewPresentationContextForModel(model)}
+      personLabel="Aさん"
+    />,
+    container,
+  );
 }
 
 function enterReason(container: Element, value: string): void {
@@ -57,10 +106,70 @@ function clickDecision(container: Element, decision: "NO_CHANGE" | "CHANGE_REQUI
 }
 
 describe("MonitoringView", () => {
+  it("fails closed when called with only a monitoring model", () => {
+    const html = renderToStaticMarkup(
+      <MonitoringView model={resolvedMonitoringVersion(3)} personLabel="Aさん" />,
+    );
+
+    expect(html).toContain('data-monitoring-review-authority="UNRESOLVED"');
+    expect(html).toContain('data-human-review-status="UNRESOLVED"');
+    expect(html).not.toContain('data-human-review-status="RESOLVED"');
+    expect(html).not.toContain('data-review-outcome-action="NO_CHANGE"');
+  });
+
+  it("forwards a valid mismatched presentation context as CONTEXT_MISMATCH", () => {
+    const model = resolvedMonitoringVersion(2);
+    const html = renderToStaticMarkup(
+      <MonitoringView
+        model={model}
+        reviewInput={reviewInputForModel(model)}
+        reviewPresentationContext={{
+          ...reviewPresentationContextForModel(model),
+          planVersion: 3,
+        }}
+        personLabel="Aさん"
+      />,
+    );
+
+    expect(html).toContain('data-monitoring-review-authority="FOUND"');
+    expect(html).toContain('data-human-review-status="CONTEXT_MISMATCH"');
+    expect(html).not.toContain('data-human-review-status="RESOLVED"');
+  });
+
+  it("fails closed when the explicit review model differs from the displayed model", () => {
+    const reviewModel = resolvedMonitoringVersion(2);
+    const displayedModel = resolvedMonitoringVersion(3);
+    const html = renderToStaticMarkup(
+      <MonitoringView
+        model={displayedModel}
+        reviewInput={reviewInputForModel(reviewModel)}
+        reviewPresentationContext={reviewPresentationContextForModel(reviewModel)}
+        personLabel="Aさん"
+      />,
+    );
+
+    expect(html).toContain('data-monitoring-review-authority="UNRESOLVED"');
+    expect(html).toContain('data-human-review-status="UNRESOLVED"');
+    expect(html).not.toContain('data-human-review-status="RESOLVED"');
+  });
+
+  it("does not manufacture review materials when presentation context is absent", () => {
+    const model = resolvedMonitoringVersion(2);
+    const html = renderToStaticMarkup(
+      <MonitoringView model={model} reviewInput={reviewInputForModel(model)} personLabel="Aさん" />,
+    );
+
+    expect(html).toContain('data-monitoring-review-authority="FOUND"');
+    expect(html).toContain('data-human-review-status="UNRESOLVED"');
+    expect(html).not.toContain('data-human-review-status="MALFORMED_INPUT"');
+  });
+
   it("keeps Monitoring summary-only while Human Review owns RecordId-bound detail", () => {
     const html = renderToStaticMarkup(
       <MonitoringView
         model={resolvedMonitoringVersion(3)}
+        reviewInput={reviewInputForModel(resolvedMonitoringVersion(3))}
+        reviewPresentationContext={reviewPresentationContextForModel(resolvedMonitoringVersion(3))}
         personLabel="Aさん"
         procedureLabelContext={{
           userId: DEMO_UX_SUPPORT_PLAN_FIXTURE.userId,
@@ -86,6 +195,8 @@ describe("MonitoringView", () => {
     const html = renderToStaticMarkup(
       <MonitoringView
         model={resolvedMonitoringVersion(3)}
+        reviewInput={reviewInputForModel(resolvedMonitoringVersion(3))}
+        reviewPresentationContext={reviewPresentationContextForModel(resolvedMonitoringVersion(3))}
         personLabel="Aさん"
         procedureLabelContext={{
           userId: DEMO_UX_SUPPORT_PLAN_FIXTURE.userId,
@@ -112,6 +223,8 @@ describe("MonitoringView", () => {
     const html = renderToStaticMarkup(
       <MonitoringView
         model={resolvedMonitoringVersion(1)}
+        reviewInput={reviewInputForModel(resolvedMonitoringVersion(1))}
+        reviewPresentationContext={reviewPresentationContextForModel(resolvedMonitoringVersion(1))}
         personLabel="Aさん"
         procedureLabelContext={{
           userId: DEMO_UX_SUPPORT_PLAN_FIXTURE.userId,

@@ -19,7 +19,7 @@ const esbuildModule = await import("/tmp/node_modules/esbuild/lib/main.js").catc
   () => import("/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js"),
 );
 const puppeteerModule =
-  await import("/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js").catch(
+  await import("/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js").catch(
     () =>
       import("/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js"),
   );
@@ -121,6 +121,8 @@ for (const testCase of cases) {
     const summaryCue = document.querySelector('[data-monitoring-role-cue="summary"]');
     const materialsCue = document.querySelector('[data-human-review-role-cue="materials"]');
     const scopeMeta = document.querySelector('[data-monitoring-scope-meta="true"]');
+    const authorityFound =
+      document.querySelector('[data-monitoring-review-authority="FOUND"]') !== null;
     const technical = document.querySelector('[data-human-review-technical-detail="true"]');
     const recordCount = document.querySelectorAll("[data-human-review-record-id]").length;
     const sceneCount = document.querySelectorAll('[data-human-review-scene-label="true"]').length;
@@ -151,6 +153,7 @@ for (const testCase of cases) {
       roleClarity,
       invariants,
       technicalPresent: Boolean(technical),
+      authorityFound,
       recordCount,
       sceneCount,
       noHorizontalOverflow,
@@ -162,6 +165,7 @@ for (const testCase of cases) {
     observed.roleClarity &&
     observed.invariants &&
     observed.technicalPresent &&
+    observed.authorityFound &&
     observed.noHorizontalOverflow &&
     pageErrors.length === 0;
   const shot = path.join(artifactsDir, `${testCase.name}.png`);

@@ -5,6 +5,7 @@ import {
   type ReviewPresentationContext,
 } from "../../sbs-domain/monitoring-read-model.bundle";
 import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
+import type { MonitoringReviewInputResult } from "./monitoring-review-input";
 import { EmptyNotice } from "../primitives";
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
@@ -18,6 +19,8 @@ import styles from "./MonitoringViewUx.module.scss";
 
 export type MonitoringViewProps = Readonly<{
   model: MonitoringReadModel;
+  reviewInput?: MonitoringReviewInputResult;
+  reviewPresentationContext?: ReviewPresentationContext;
   personLabel: string;
   procedureLabelContext?: HumanReviewProcedureLabelContext;
   onCapturedReviewChange?: (capturedReview: SyntheticCapturedReview | null) => void;
@@ -32,26 +35,59 @@ function formatTokyoDate(value: string): string {
   }).format(new Date(value));
 }
 
-function exactReviewContext(model: MonitoringReadModel): ReviewPresentationContext {
-  return {
-    OrganizationId: model.OrganizationId,
-    SiteId: model.SiteId,
-    UserId: model.UserId,
-    planId: model.planId,
-    planVersion: model.planVersion,
-    periodStart: model.periodStart,
-    periodEnd: model.periodEnd,
-  };
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function isValidReviewPresentationContext(value: unknown): value is ReviewPresentationContext {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const context = value as Record<string, unknown>;
+
+  return (
+    isNonEmptyString(context.OrganizationId) &&
+    isNonEmptyString(context.SiteId) &&
+    isNonEmptyString(context.UserId) &&
+    isNonEmptyString(context.planId) &&
+    typeof context.planVersion === "number" &&
+    Number.isInteger(context.planVersion) &&
+    context.planVersion >= 1 &&
+    isNonEmptyString(context.periodStart) &&
+    isNonEmptyString(context.periodEnd) &&
+    !Number.isNaN(Date.parse(context.periodStart)) &&
+    !Number.isNaN(Date.parse(context.periodEnd)) &&
+    Date.parse(context.periodStart) <= Date.parse(context.periodEnd)
+  );
+}
+
+function sameMonitoringContext(left: MonitoringReadModel, right: MonitoringReadModel): boolean {
+  return (
+    left.OrganizationId === right.OrganizationId &&
+    left.SiteId === right.SiteId &&
+    left.UserId === right.UserId &&
+    left.planId === right.planId &&
+    left.planVersion === right.planVersion &&
+    left.periodStart === right.periodStart &&
+    left.periodEnd === right.periodEnd
+  );
 }
 
 /** Fact-only monitoring input. No automatic success/failure, effectiveness, or plan-change judgment. */
 export const MonitoringView: React.FC<MonitoringViewProps> = ({
   model,
+  reviewInput,
+  reviewPresentationContext,
   personLabel,
   procedureLabelContext,
   onCapturedReviewChange,
 }) => {
-  const humanReviewResult = buildHumanReviewMaterials(model, exactReviewContext(model));
+  const reviewInputMatchesModel =
+    reviewInput?.status === "RESOLVED" &&
+    sameMonitoringContext(reviewInput.value.monitoringReadModel, model);
+  const reviewAuthority = reviewInputMatchesModel ? "FOUND" : "UNRESOLVED";
+  const humanReviewResult =
+    reviewInputMatchesModel && isValidReviewPresentationContext(reviewPresentationContext)
+      ? buildHumanReviewMaterials(reviewInput.value.monitoringReadModel, reviewPresentationContext)
+      : ({ status: "UNRESOLVED" } as const);
   const [capturedReviews, setCapturedReviews] = React.useState<
     Readonly<Record<string, SyntheticCapturedReview>>
   >({});
@@ -117,6 +153,7 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
         data-monitoring-plan-version={String(model.planVersion)}
         data-monitoring-summary-only="true"
         data-monitoring-role="summary"
+        data-monitoring-review-authority={reviewAuthority}
       >
         <p className={styles.roleCue} data-monitoring-role-cue="summary">
           期間の件数確認

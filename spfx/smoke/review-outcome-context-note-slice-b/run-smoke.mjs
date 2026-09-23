@@ -33,7 +33,7 @@ const esbuildModule = await importWithFallback(
   "/tmp/hr-smoke-runner/node_modules/esbuild/lib/main.js",
 );
 const puppeteerModule = await importWithFallback(
-  "/tmp/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js",
+  "/tmp/node_modules/puppeteer-core/lib/puppeteer/puppeteer-core.js",
   "/tmp/hr-smoke-runner/node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js",
 );
 const sassModule = await importWithFallback(
@@ -132,12 +132,12 @@ function observeState(page, expected) {
     const text = document.body.textContent ?? "";
     const q = (selector) => document.querySelector(selector);
     const buttons = [...document.querySelectorAll("[data-review-outcome-action]")];
-    const textarea = q('[data-review-outcome-note-input="true"]');
+    const textarea = q('[data-review-outcome-reason-input="true"]');
     const scope = q('[data-human-review-scope-meta="true"]')?.textContent ?? "";
     const person = q('[data-human-review-person-identity="true"]')?.textContent?.trim() ?? "";
     const recordId =
       q("[data-human-review-record-id]")?.getAttribute("data-human-review-record-id") ?? "";
-    const noteReadback = q('[data-review-outcome-note-readback="true"]')?.textContent ?? null;
+    const reasonReadback = q('[data-review-outcome-reason-readback="true"]')?.textContent ?? null;
     const noHorizontalOverflow = document.documentElement.scrollWidth <= window.innerWidth + 1;
     const controlsDisabled = buttons.every((button) => button.disabled);
     const controlsEnabled = buttons.every((button) => !button.disabled);
@@ -145,24 +145,25 @@ function observeState(page, expected) {
     const hasNoChange = text.includes("デモ上の見直し結果: 変更なし");
     const hasChangeRequired = text.includes("デモ上の見直し結果: 変更が必要");
     const hasRevisionPending = text.includes("次の計画版はまだ作成されていません");
-    const noteMatches =
-      value.noteText === null
-        ? noteReadback === null
-        : noteReadback?.includes(value.noteText) === true;
+    const reasonMatches =
+      value.reasonText === null
+        ? reasonReadback === null
+        : reasonReadback?.includes(value.reasonText) === true;
 
     const common =
+      q('[data-monitoring-review-authority="FOUND"]') !== null &&
       Boolean(q('[data-human-review-status="RESOLVED"]')) &&
       person === value.person &&
       recordId === value.recordId &&
       scope.includes(value.planVersionLabel) &&
       text.includes("個別の事実資料") &&
-      text.includes("見直しの補足メモ（任意）") &&
-      text.includes("次の計画内容ではありません") &&
+      text.includes("判断理由") &&
       text.includes("本番には保存されていません") &&
       !text.includes("次の計画版を作成") &&
       q("[data-review-outcome-capture]")?.getAttribute("data-live-write-authorized") === "false" &&
-      buttons.length === 2 &&
-      Boolean(textarea) &&
+      (value.mode === "undecided"
+        ? buttons.length === 2 && Boolean(textarea)
+        : buttons.length === 0 && textarea === null) &&
       noHorizontalOverflow;
 
     let statePass = false;
@@ -174,7 +175,7 @@ function observeState(page, expected) {
         controlsEnabled &&
         textarea.disabled === false &&
         textarea.value === "" &&
-        noteReadback === null;
+        reasonReadback === null;
     } else if (value.mode === "noChange") {
       statePass =
         hasNoChange &&
@@ -182,16 +183,15 @@ function observeState(page, expected) {
         !hasChangeRequired &&
         !hasRevisionPending &&
         controlsDisabled &&
-        textarea.disabled === true &&
-        noteMatches;
+        textarea === null &&
+        reasonMatches;
     } else if (value.mode === "changeRequired") {
       statePass =
         hasChangeRequired &&
-        hasRevisionPending &&
         !hasUndecided &&
         controlsDisabled &&
-        textarea.disabled === true &&
-        noteMatches;
+        textarea === null &&
+        reasonMatches;
     }
 
     return {
@@ -205,8 +205,7 @@ function observeState(page, expected) {
       controlsDisabled,
       controlsEnabled,
       textareaValue: textarea?.value ?? null,
-      counter: q('[data-review-outcome-note-count="true"]')?.textContent?.trim() ?? null,
-      noteReadback,
+      reasonReadback,
       noHorizontalOverflow,
     };
   }, expected);
@@ -252,15 +251,15 @@ for (const viewport of viewports) {
   await waitForRecordId(page, RECORD_A);
 
   // R1: capture snapshot A → same-key snapshot B → undecided / A absent / controls enabled
-  await page.type('[data-review-outcome-note-input="true"]', "memo A");
+  await page.type('[data-review-outcome-reason-input="true"]', "reason A");
   await page.click('[data-review-outcome-action="CHANGE_REQUIRED"]');
-  await page.waitForFunction(() => document.body.textContent?.includes("補足メモ: memo A"));
+  await page.waitForFunction(() => document.body.textContent?.includes("判断理由: reason A"));
   const captureA = await observeState(page, {
     mode: "changeRequired",
     person: PERSON,
     recordId: RECORD_A,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: "memo A",
+    reasonText: "reason A",
   });
 
   await switchSnapshot(page);
@@ -270,31 +269,33 @@ for (const viewport of viewports) {
     person: PERSON,
     recordId: RECORD_B,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: null,
+    reasonText: null,
   });
   const r1NoAReadback =
     (await page.evaluate(() => {
       const text = document.body.textContent ?? "";
-      return !text.includes("デモ上の見直し結果: 変更が必要") && !text.includes("補足メモ: memo A");
+      return (
+        !text.includes("デモ上の見直し結果: 変更が必要") && !text.includes("判断理由: reason A")
+      );
     })) === true;
   const r1Pass = r1.pass && r1NoAReadback;
   const r1Shot = await saveScreenshot(page, viewport.name, "r1-b-undecided");
 
   // R2: capture B → B readback only / controls disabled / A cannot reappear
-  await page.type('[data-review-outcome-note-input="true"]', "memo B");
+  await page.type('[data-review-outcome-reason-input="true"]', "reason B");
   await page.click('[data-review-outcome-action="NO_CHANGE"]');
-  await page.waitForFunction(() => document.body.textContent?.includes("補足メモ: memo B"));
+  await page.waitForFunction(() => document.body.textContent?.includes("判断理由: reason B"));
   const r2 = await observeState(page, {
     mode: "noChange",
     person: PERSON,
     recordId: RECORD_B,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: "memo B",
+    reasonText: "reason B",
   });
   const r2NoAReappear =
     (await page.evaluate(() => {
       const text = document.body.textContent ?? "";
-      return !text.includes("補足メモ: memo A");
+      return !text.includes("判断理由: reason A");
     })) === true;
   const r2Pass = r2.pass && r2NoAReappear;
   const r2Shot = await saveScreenshot(page, viewport.name, "r2-b-captured");
@@ -307,37 +308,37 @@ for (const viewport of viewports) {
     person: PERSON,
     recordId: RECORD_A,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: null,
+    reasonText: null,
   });
   const r3NoBCarryOver =
     (await page.evaluate(() => {
       const text = document.body.textContent ?? "";
-      return !text.includes("デモ上の見直し結果: 変更なし") && !text.includes("補足メモ: memo B");
+      return !text.includes("デモ上の見直し結果: 変更なし") && !text.includes("判断理由: reason B");
     })) === true;
   const r3Pass = r3.pass && r3NoBCarryOver;
   const r3Shot = await saveScreenshot(page, viewport.name, "r3-a-mismatch-undecided");
 
-  await page.type('[data-review-outcome-note-input="true"]', "memo renewed");
+  await page.type('[data-review-outcome-reason-input="true"]', "reason renewed");
   await page.click('[data-review-outcome-action="NO_CHANGE"]');
-  await page.waitForFunction(() => document.body.textContent?.includes("補足メモ: memo renewed"));
+  await page.waitForFunction(() => document.body.textContent?.includes("判断理由: reason renewed"));
   const r3Recapture = await observeState(page, {
     mode: "noChange",
     person: PERSON,
     recordId: RECORD_A,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: "memo renewed",
+    reasonText: "reason renewed",
   });
   const r3RecaptureIsolated =
     (await page.evaluate(() => {
       const text = document.body.textContent ?? "";
       const readbacks = [
-        ...document.querySelectorAll('[data-review-outcome-note-readback="true"]'),
+        ...document.querySelectorAll('[data-review-outcome-reason-readback="true"]'),
       ];
       return (
         readbacks.length === 1 &&
-        readbacks[0]?.textContent === "補足メモ: memo renewed" &&
-        !text.includes("補足メモ: memo A") &&
-        !text.includes("補足メモ: memo B")
+        readbacks[0]?.textContent === "判断理由: reason renewed" &&
+        !text.includes("判断理由: reason A") &&
+        !text.includes("判断理由: reason B")
       );
     })) === true;
   const r3RecapturePass = r3Recapture.pass && r3RecaptureIsolated;
@@ -345,7 +346,7 @@ for (const viewport of viewports) {
   // R4a: uncaptured A draft → snapshot B → draft reset
   await page.goto(url, { waitUntil: "networkidle0" });
   await waitForRecordId(page, RECORD_A);
-  await page.type('[data-review-outcome-note-input="true"]', "Aの未確定メモ");
+  await page.type('[data-review-outcome-reason-input="true"]', "Aの未確定理由");
   await switchSnapshot(page);
   await waitForRecordId(page, RECORD_B);
   const r4a = await observeState(page, {
@@ -353,18 +354,18 @@ for (const viewport of viewports) {
     person: PERSON,
     recordId: RECORD_B,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: null,
+    reasonText: null,
   });
   const r4aPass = r4a.pass;
   const r4aShot = await saveScreenshot(page, viewport.name, "r4a-draft-reset");
 
-  // R4b: captured A note → snapshot B → buffer reset
+  // R4b: captured A reason → snapshot B → buffer reset
   await page.goto(url, { waitUntil: "networkidle0" });
   await waitForRecordId(page, RECORD_A);
-  await page.type('[data-review-outcome-note-input="true"]', "継続して観察したい");
+  await page.type('[data-review-outcome-reason-input="true"]', "継続して観察したい");
   await page.click('[data-review-outcome-action="NO_CHANGE"]');
   await page.waitForFunction(() =>
-    document.body.textContent?.includes("補足メモ: 継続して観察したい"),
+    document.body.textContent?.includes("判断理由: 継続して観察したい"),
   );
   await switchSnapshot(page);
   await waitForRecordId(page, RECORD_B);
@@ -373,14 +374,14 @@ for (const viewport of viewports) {
     person: PERSON,
     recordId: RECORD_B,
     planVersionLabel: PLAN_VERSION_LABEL,
-    noteText: null,
+    reasonText: null,
   });
   const r4bNoAReadback =
     (await page.evaluate(() => {
       const text = document.body.textContent ?? "";
       return (
         !text.includes("デモ上の見直し結果: 変更なし") &&
-        !text.includes("補足メモ: 継続して観察したい")
+        !text.includes("判断理由: 継続して観察したい")
       );
     })) === true;
   const r4bPass = r4b.pass && r4bNoAReadback;
@@ -390,22 +391,15 @@ for (const viewport of viewports) {
   await page.goto(url, { waitUntil: "networkidle0" });
   await switchSnapshot(page);
   await waitForRecordId(page, RECORD_B);
-  await page.type('[data-review-outcome-note-input="true"]', "a".repeat(255));
+  await page.type('[data-review-outcome-reason-input="true"]', "a".repeat(255));
   const boundary = await page.evaluate(() => {
-    const counter = document
-      .querySelector('[data-review-outcome-note-count="true"]')
-      ?.textContent?.trim();
-    const textarea = document.querySelector('[data-review-outcome-note-input="true"]');
+    const textarea = document.querySelector('[data-review-outcome-reason-input="true"]');
     return {
-      counter,
       valueLength: textarea?.value.length ?? null,
       noHorizontalOverflow: document.documentElement.scrollWidth <= window.innerWidth + 1,
     };
   });
-  const boundaryPass =
-    boundary.counter === "255 / 255" &&
-    boundary.valueLength === 255 &&
-    boundary.noHorizontalOverflow;
+  const boundaryPass = boundary.valueLength === 255 && boundary.noHorizontalOverflow;
 
   const pass =
     captureA.pass &&
@@ -454,11 +448,11 @@ const report = {
   smokeHead: process.env.REVIEW_OUTCOME_NOTE_HEAD ?? null,
   date: new Date().toISOString(),
   acceptanceMatrix: {
-    R1: "capture snapshot A → same-key snapshot B → undecided / A decision+note absent / controls enabled / textarea empty",
+    R1: "capture snapshot A → same-key snapshot B → undecided / A decision reason absent / controls enabled / textarea empty",
     R2: "capture snapshot B → B readback only / controls disabled / A cannot reappear",
-    R3: "B → A recurrence → MISMATCH → undecided / B readback absent / recapture allowed as new epoch",
+    R3: "B → A recurrence → MISMATCH → undecided / B decision reason absent / recapture allowed as new epoch",
     R4a: "uncaptured A draft → snapshot B → draft reset",
-    R4b: "captured A note → snapshot B → buffer reset / no A readback on B",
+    R4b: "captured A decision reason → snapshot B → buffer reset / no A readback on B",
     viewport: "1280×900 + 390×844",
     pageErrors: 0,
     externalRequests: 0,
