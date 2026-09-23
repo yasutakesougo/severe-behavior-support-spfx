@@ -6,11 +6,21 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { buildDemoMonitoringForVersion } from "../../src/shell/monitoring";
 import { DEMO_1_FIELD_STAFF_FIXTURE } from "../../src/shell/ux/fixture";
 import ScaffoldShell from "../../src/webparts/scaffoldShellWebPart/components/ScaffoldShell";
 import type { IScaffoldShellProps } from "../../src/webparts/scaffoldShellWebPart/components/IScaffoldShellProps";
+import {
+  monitoringReviewInputForSmoke,
+  reviewPresentationContextForReviewAuthority,
+} from "../review-authority-fixture";
 
 const fixture = DEMO_1_FIELD_STAFF_FIXTURE;
+const reviewAuthorityModelResult = buildDemoMonitoringForVersion(2);
+if (reviewAuthorityModelResult.status !== "RESOLVED") {
+  throw new Error("expected resolved v2 monitoring model for PL-HTA smoke authority");
+}
+const reviewAuthorityModel = reviewAuthorityModelResult.value;
 
 const root = document.getElementById("root");
 if (!root) {
@@ -29,6 +39,9 @@ const smokeProps = {
   correlationId: fixture.correlationId,
   errorCode: fixture.errorCode,
   partialRetrieval: fixture.partialRetrieval,
+  monitoringReviewInput: monitoringReviewInputForSmoke(reviewAuthorityModel),
+  monitoringReviewPresentationContext:
+    reviewPresentationContextForReviewAuthority(reviewAuthorityModel),
 } as IScaffoldShellProps;
 
 ReactDOM.render(<ScaffoldShell {...smokeProps} />, root);
