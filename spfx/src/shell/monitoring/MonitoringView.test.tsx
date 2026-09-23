@@ -164,6 +164,91 @@ describe("MonitoringView", () => {
     expect(html).not.toContain('data-human-review-status="MALFORMED_INPUT"');
   });
 
+  it.each([
+    [
+      "date-only periodStart",
+      (context: ReviewPresentationContext) => ({ ...context, periodStart: "2026-08-01" }),
+    ],
+    [
+      "date-only periodEnd",
+      (context: ReviewPresentationContext) => ({ ...context, periodEnd: "2026-08-31" }),
+    ],
+    [
+      "extra currentVersion",
+      (context: ReviewPresentationContext) => ({ ...context, currentVersion: 3 }),
+    ],
+    [
+      "missing periodEnd",
+      (context: ReviewPresentationContext) => {
+        const malformed: Record<string, unknown> = { ...context };
+        delete malformed.periodEnd;
+        return malformed;
+      },
+    ],
+  ] as const)("returns UNRESOLVED and renders no capture UI for %s", (_label, makeContext) => {
+    const model = resolvedMonitoringVersion(2);
+    const html = renderToStaticMarkup(
+      <MonitoringView
+        model={model}
+        reviewInput={reviewInputForModel(model)}
+        reviewPresentationContext={
+          makeContext(reviewPresentationContextForModel(model)) as ReviewPresentationContext
+        }
+        personLabel="Aさん"
+      />,
+    );
+
+    expect(html).toContain('data-monitoring-review-authority="FOUND"');
+    expect(html).toContain('data-human-review-status="UNRESOLVED"');
+    expect(html).not.toContain("data-review-outcome-capture=");
+    expect(html).not.toContain("data-review-outcome-action=");
+    expect(html).not.toContain('data-human-review-status="MALFORMED_INPUT"');
+  });
+
+  it("resolves an exact valid seven-field presentation context", () => {
+    const model = resolvedMonitoringVersion(2);
+    const html = renderToStaticMarkup(
+      <MonitoringView
+        model={model}
+        reviewInput={reviewInputForModel(model)}
+        reviewPresentationContext={reviewPresentationContextForModel(model)}
+        personLabel="Aさん"
+      />,
+    );
+
+    expect(html).toContain('data-human-review-status="RESOLVED"');
+    expect(html).toContain('data-review-outcome-capture="SBS-MGMT-LOOP-A"');
+  });
+
+  it("maps canonical MALFORMED_INPUT to shell UNRESOLVED after context validation", () => {
+    const model = resolvedMonitoringVersion(2);
+    const malformedModel: MonitoringReadModel = {
+      ...model,
+      records: model.records.map((record) => ({ ...record, RecordId: "" })),
+    };
+    const reviewInput = buildMonitoringReviewInput(
+      FOUND_AUTHORITY,
+      monitoringQueryForModel(model),
+      malformedModel,
+    );
+    expect(reviewInput.status).toBe("RESOLVED");
+
+    const html = renderToStaticMarkup(
+      <MonitoringView
+        model={malformedModel}
+        reviewInput={reviewInput}
+        reviewPresentationContext={reviewPresentationContextForModel(model)}
+        personLabel="Aさん"
+      />,
+    );
+
+    expect(html).toContain('data-monitoring-review-authority="FOUND"');
+    expect(html).toContain('data-human-review-status="UNRESOLVED"');
+    expect(html).not.toContain('data-human-review-status="MALFORMED_INPUT"');
+    expect(html).not.toContain("data-review-outcome-capture=");
+    expect(html).not.toContain("data-review-outcome-action=");
+  });
+
   it("keeps Monitoring summary-only while Human Review owns RecordId-bound detail", () => {
     const html = renderToStaticMarkup(
       <MonitoringView

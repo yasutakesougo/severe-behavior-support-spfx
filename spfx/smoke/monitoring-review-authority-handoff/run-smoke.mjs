@@ -138,6 +138,9 @@ const observed = await page.evaluate(() =>
       zeroRecords: q('[data-human-review-empty="true"]') !== null,
       notPerformed: q('[data-human-review-result="NOT_PERFORMED"]') !== null,
       capturePresent: Boolean(capture),
+      captureActionPresent: q("[data-review-outcome-action]") !== null,
+      reviewMaterialsPresent:
+        q("[data-human-review-plan-version], [data-human-review-record-list]") !== null,
       text: article.textContent ?? "",
     };
   }),
@@ -145,7 +148,24 @@ const observed = await page.evaluate(() =>
 
 const expected = {
   "RBA-1": (value) => value.authority === "FOUND" && value.humanStatus === "RESOLVED",
-  "RBA-2": (value) => value.authority === "UNRESOLVED" && value.humanStatus === "UNRESOLVED",
+  "RBA-2A": (value) =>
+    value.authority === "UNRESOLVED" &&
+    value.humanStatus === "UNRESOLVED" &&
+    !value.capturePresent &&
+    !value.captureActionPresent &&
+    !value.reviewMaterialsPresent,
+  "RBA-2B": (value) =>
+    value.authority === "UNRESOLVED" &&
+    value.humanStatus === "UNRESOLVED" &&
+    !value.capturePresent &&
+    !value.captureActionPresent &&
+    !value.reviewMaterialsPresent,
+  "RBA-2C": (value) =>
+    value.authority === "UNRESOLVED" &&
+    value.humanStatus === "UNRESOLVED" &&
+    !value.capturePresent &&
+    !value.captureActionPresent &&
+    !value.reviewMaterialsPresent,
   "RBA-3": (value) => value.authority === "FOUND" && value.humanStatus === "CONTEXT_MISMATCH",
   "RBA-4-exact": (value) =>
     value.authority === "FOUND" && value.humanStatus === "RESOLVED" && value.planVersion === "2",

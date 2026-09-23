@@ -1,11 +1,15 @@
 import * as React from "react";
 import {
   buildHumanReviewMaterials,
+  type HumanReviewMaterialsBuildResult,
   type MonitoringReadModel,
   type ReviewPresentationContext,
 } from "../../sbs-domain/monitoring-read-model.bundle";
 import type { MonitoringPeriodReviewDecision } from "../../sbs-domain/monitoring-period-review-outcome.bundle";
-import type { MonitoringReviewInputResult } from "./monitoring-review-input";
+import {
+  isCanonicalMonitoringIsoDateTime,
+  type MonitoringReviewInputResult,
+} from "./monitoring-review-input";
 import { EmptyNotice } from "../primitives";
 import { HumanReviewView, type HumanReviewProcedureLabelContext } from "./HumanReviewView";
 import {
@@ -39,9 +43,32 @@ function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim() !== "";
 }
 
+const REVIEW_PRESENTATION_CONTEXT_KEYS = [
+  "OrganizationId",
+  "SiteId",
+  "UserId",
+  "planId",
+  "planVersion",
+  "periodStart",
+  "periodEnd",
+] as const;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
 function isValidReviewPresentationContext(value: unknown): value is ReviewPresentationContext {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
-  const context = value as Record<string, unknown>;
+  if (!isRecord(value)) return false;
+  const context = value;
+  const keys = Object.getOwnPropertyNames(context);
+  if (
+    keys.length !== REVIEW_PRESENTATION_CONTEXT_KEYS.length ||
+    REVIEW_PRESENTATION_CONTEXT_KEYS.some(
+      (key) => !Object.prototype.hasOwnProperty.call(context, key),
+    )
+  ) {
+    return false;
+  }
 
   return (
     isNonEmptyString(context.OrganizationId) &&
@@ -51,12 +78,20 @@ function isValidReviewPresentationContext(value: unknown): value is ReviewPresen
     typeof context.planVersion === "number" &&
     Number.isInteger(context.planVersion) &&
     context.planVersion >= 1 &&
-    isNonEmptyString(context.periodStart) &&
-    isNonEmptyString(context.periodEnd) &&
-    !Number.isNaN(Date.parse(context.periodStart)) &&
-    !Number.isNaN(Date.parse(context.periodEnd)) &&
+    isCanonicalMonitoringIsoDateTime(context.periodStart) &&
+    isCanonicalMonitoringIsoDateTime(context.periodEnd) &&
     Date.parse(context.periodStart) <= Date.parse(context.periodEnd)
   );
+}
+
+function buildShellHumanReviewResult(
+  model: MonitoringReadModel,
+  context: ReviewPresentationContext,
+):
+  | Exclude<HumanReviewMaterialsBuildResult, Readonly<{ status: "MALFORMED_INPUT" }>>
+  | Readonly<{ status: "UNRESOLVED" }> {
+  const result = buildHumanReviewMaterials(model, context);
+  return result.status === "MALFORMED_INPUT" ? ({ status: "UNRESOLVED" } as const) : result;
 }
 
 function sameMonitoringContext(left: MonitoringReadModel, right: MonitoringReadModel): boolean {
@@ -86,7 +121,10 @@ export const MonitoringView: React.FC<MonitoringViewProps> = ({
   const reviewAuthority = reviewInputMatchesModel ? "FOUND" : "UNRESOLVED";
   const humanReviewResult =
     reviewInputMatchesModel && isValidReviewPresentationContext(reviewPresentationContext)
-      ? buildHumanReviewMaterials(reviewInput.value.monitoringReadModel, reviewPresentationContext)
+      ? buildShellHumanReviewResult(
+          reviewInput.value.monitoringReadModel,
+          reviewPresentationContext,
+        )
       : ({ status: "UNRESOLVED" } as const);
   const [capturedReviews, setCapturedReviews] = React.useState<
     Readonly<Record<string, SyntheticCapturedReview>>

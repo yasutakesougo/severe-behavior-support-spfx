@@ -80,8 +80,18 @@ const mismatchContext = (model: MonitoringReadModel): ReviewPresentationContext 
   planVersion: model.planVersion + 1,
 });
 
-const unresolvedInput = buildMonitoringReviewInput(
+const missingPersonResolutionInput = buildMonitoringReviewInput(
+  undefined,
+  monitoringQueryForReviewAuthority(BASE_MODEL),
+  BASE_MODEL,
+);
+const notFoundPersonResolutionInput = buildMonitoringReviewInput(
   { status: "NOT_FOUND" },
+  monitoringQueryForReviewAuthority(BASE_MODEL),
+  BASE_MODEL,
+);
+const conflictingPersonResolutionInput = buildMonitoringReviewInput(
+  { status: "CONFLICT" },
   monitoringQueryForReviewAuthority(BASE_MODEL),
   BASE_MODEL,
 );
@@ -95,10 +105,24 @@ const cases: readonly SmokeCase[] = [
     reviewPresentationContext: reviewPresentationContextForReviewAuthority(BASE_MODEL),
   },
   {
-    id: "RBA-2",
-    label: "missing person resolution",
+    id: "RBA-2A",
+    label: "absent person resolution",
     model: BASE_MODEL,
-    reviewInput: unresolvedInput,
+    reviewInput: missingPersonResolutionInput,
+    reviewPresentationContext: reviewPresentationContextForReviewAuthority(BASE_MODEL),
+  },
+  {
+    id: "RBA-2B",
+    label: "NOT_FOUND person resolution",
+    model: BASE_MODEL,
+    reviewInput: notFoundPersonResolutionInput,
+    reviewPresentationContext: reviewPresentationContextForReviewAuthority(BASE_MODEL),
+  },
+  {
+    id: "RBA-2C",
+    label: "CONFLICT person resolution",
+    model: BASE_MODEL,
+    reviewInput: conflictingPersonResolutionInput,
     reviewPresentationContext: reviewPresentationContextForReviewAuthority(BASE_MODEL),
   },
   {

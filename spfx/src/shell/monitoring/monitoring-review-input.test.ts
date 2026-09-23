@@ -96,6 +96,47 @@ describe("buildMonitoringReviewInput", () => {
     });
   });
 
+  it.each([
+    [
+      "query periodStart",
+      { ...QUERY, periodStart: "2026-08-01" },
+      { ...MODEL, periodStart: "2026-08-01" },
+    ],
+    [
+      "query periodEnd",
+      { ...QUERY, periodEnd: "2026-08-31" },
+      { ...MODEL, periodEnd: "2026-08-31" },
+    ],
+    [
+      "read model periodStart",
+      { ...QUERY, periodStart: "2026-08-01" },
+      { ...MODEL, periodStart: "2026-08-01" },
+    ],
+    [
+      "read model periodEnd",
+      { ...QUERY, periodEnd: "2026-08-31" },
+      { ...MODEL, periodEnd: "2026-08-31" },
+    ],
+  ] as const)("rejects date-only %s values", (_label, query, model) => {
+    expect(buildMonitoringReviewInput(FOUND, query, model)).toEqual({ status: "UNRESOLVED" });
+  });
+
+  it.each(["August 1, 2026", "2026-02-30T00:00:00Z", "2026-08-01T25:00:00Z"])(
+    "rejects non-canonical or invalid ISO date-time %s",
+    (periodStart) => {
+      expect(
+        buildMonitoringReviewInput(
+          FOUND,
+          { ...QUERY, periodStart },
+          {
+            ...MODEL,
+            periodStart,
+          },
+        ),
+      ).toEqual({ status: "UNRESOLVED" });
+    },
+  );
+
   it("preserves the historical planVersion from the exact read model", () => {
     const result = buildMonitoringReviewInput(FOUND, QUERY, MODEL);
 

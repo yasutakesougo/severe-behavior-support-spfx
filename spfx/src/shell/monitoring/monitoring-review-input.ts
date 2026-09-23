@@ -44,8 +44,35 @@ function isValidPlanVersion(value: unknown): value is number {
   return typeof value === "number" && Number.isInteger(value) && value >= 1;
 }
 
-function isValidIsoDateTime(value: unknown): value is string {
-  return isNonEmptyString(value) && !Number.isNaN(Date.parse(value));
+/** Matches src/domain/validation.ts:isValidIsoDateTime for shell handoff inputs. */
+export function isCanonicalMonitoringIsoDateTime(value: unknown): value is string {
+  if (typeof value !== "string" || value.trim() === "") {
+    return false;
+  }
+  const isoPattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
+  const match = isoPattern.exec(value);
+  if (!match) {
+    return false;
+  }
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10);
+  const day = parseInt(match[3], 10);
+
+  if (month < 1 || month > 12 || day < 1 || day > 31) {
+    return false;
+  }
+
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return false;
+  }
+
+  return !Number.isNaN(new Date(value).getTime());
 }
 
 function hasOnlyKeys(value: Record<string, unknown>, keys: readonly string[]): boolean {
@@ -60,8 +87,8 @@ function hasValidMonitoringContextFields(value: Record<string, unknown>): boolea
     isNonEmptyString(value.UserId) &&
     isNonEmptyString(value.planId) &&
     isValidPlanVersion(value.planVersion) &&
-    isValidIsoDateTime(value.periodStart) &&
-    isValidIsoDateTime(value.periodEnd) &&
+    isCanonicalMonitoringIsoDateTime(value.periodStart) &&
+    isCanonicalMonitoringIsoDateTime(value.periodEnd) &&
     Date.parse(value.periodStart) <= Date.parse(value.periodEnd)
   );
 }
