@@ -3,7 +3,7 @@
   "solution": {
     "name": "severe-behavior-support-spfx-shell-client-side-solution",
     "id": "4342db47-21a3-4c48-aed1-ef615f55c404",
-    "version": "1.0.0.4",
+    "version": "1.0.0.5",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
