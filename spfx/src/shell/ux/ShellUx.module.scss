@@ -70,6 +70,26 @@
   font-size: sbs.$font-size-200;
 }
 
+.demoSettings {
+  min-width: 0;
+  max-width: 100%;
+  padding: sbs.$space-1 sbs.$space-2;
+  border: sbs.$border-width-thin solid sbs.$color-border-subtle;
+  background: sbs.$color-surface-subtle;
+}
+
+.demoSettingsSummary {
+  min-height: 2.75rem;
+  padding: sbs.$space-2 sbs.$space-1;
+  color: sbs.$color-text-secondary;
+  font-size: sbs.$font-size-100;
+  cursor: pointer;
+}
+
+.demoSettings[open] > .demoSettingsSummary {
+  margin-bottom: sbs.$space-1;
+}
+
 .currentSite {
   display: flex;
   flex-wrap: wrap;

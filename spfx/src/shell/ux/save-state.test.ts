@@ -8,6 +8,7 @@ import {
   isSaveStateDescriptionVisible,
   isShellSaveState,
   labelForShellSaveState,
+  presentationLabelForShellSaveState,
 } from "./save-state";
 
 describe("SHELL-UX save-state presentation", () => {
@@ -27,6 +28,16 @@ describe("SHELL-UX save-state presentation", () => {
     expect(labelForShellSaveState("saved")).toBe("保存済み");
     expect(labelForShellSaveState("save_failed")).toBe("保存失敗");
     expect(labelForShellSaveState("save_outcome_unknown")).toBe("保存結果不明");
+  });
+
+  it("separates business save status from synthetic-demo display status", () => {
+    expect(presentationLabelForShellSaveState("unsaved", "business")).toBe("未保存");
+    expect(presentationLabelForShellSaveState("unsaved", "synthetic-demo")).toBe(
+      "表示状態: 未保存",
+    );
+    expect(presentationLabelForShellSaveState("save_outcome_unknown", "synthetic-demo")).toBe(
+      "表示状態: 保存結果不明",
+    );
   });
 
   it("provides presentation descriptions for all five states", () => {
