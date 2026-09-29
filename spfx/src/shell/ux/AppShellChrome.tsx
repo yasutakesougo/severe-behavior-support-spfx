@@ -105,6 +105,7 @@ import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
 import { DemoPresentationRoleEntry } from "./DemoPresentationRoleEntry";
 import { ADMIN_DEMO_UX_POLISH_1_SLICE, demoHoldSaveStatusNote } from "./demo-save-hold-copy";
+import { VP1_DEMO_SETTINGS_LABEL } from "./vp1-demo-separation";
 import { DestinationPlaceholder } from "./DestinationPlaceholder";
 import { SHELL_DEFAULT_DESTINATION } from "./destination";
 import { shouldClearNextVersionConceptHighlight } from "./next-version-highlight";
@@ -1295,28 +1296,36 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               <SaveStatePresentation
                 state={effectiveSaveState}
                 description={demoHoldSaveStatusNote(effectiveSaveState, demoMode)}
+                surface={demoMode ? "synthetic-demo" : "business"}
               />
             ) : null}
           </div>
           {!unauthenticated ? (
             <>
-              <SiteSelector
-                selection={selection}
-                options={siteOptions}
-                onSelectionChange={handleSelectionChange}
-              />
-              <DemoPresentationRoleEntry
-                visible={demoMode}
-                role={activePresentationRole}
-                onRoleChange={(next) => {
-                  if (interactionPaused) {
-                    return;
-                  }
-                  setActivePresentationRole(next);
-                  setNextVersionConceptFromReview(false);
-                  onPresentationRoleChange?.(next);
-                }}
-              />
+              <details
+                className={styles.demoSettings}
+                open={!demoMode}
+                data-shell-ux="demo-settings"
+              >
+                <summary className={styles.demoSettingsSummary}>{VP1_DEMO_SETTINGS_LABEL}</summary>
+                <SiteSelector
+                  selection={selection}
+                  options={siteOptions}
+                  onSelectionChange={handleSelectionChange}
+                />
+                <DemoPresentationRoleEntry
+                  visible={demoMode}
+                  role={activePresentationRole}
+                  onRoleChange={(next) => {
+                    if (interactionPaused) {
+                      return;
+                    }
+                    setActivePresentationRole(next);
+                    setNextVersionConceptFromReview(false);
+                    onPresentationRoleChange?.(next);
+                  }}
+                />
+              </details>
               {selectedSite ? (
                 <CurrentSiteLabel site={selectedSite} />
               ) : (

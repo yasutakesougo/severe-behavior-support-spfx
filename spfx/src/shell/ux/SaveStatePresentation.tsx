@@ -6,6 +6,7 @@ import {
   emphasisForShellSaveState,
   isSaveStateDescriptionVisible,
   type ShellSaveState,
+  type ShellSaveStateSurface,
 } from "./save-state";
 import { DEMO_UX_14_SLICE, isSavingProgressActive } from "./saving-progress-observability";
 import styles from "./ShellUx.module.scss";
@@ -14,6 +15,8 @@ export type SaveStatePresentationProps = Readonly<{
   state: ShellSaveState;
   /** Optional presentation override. Does not change 5-state meaning. */
   description?: string;
+  /** Presentation context only; does not change save-state semantics. */
+  surface?: ShellSaveStateSurface;
 }>;
 
 /**
@@ -24,6 +27,7 @@ export type SaveStatePresentationProps = Readonly<{
 export const SaveStatePresentation: React.FC<SaveStatePresentationProps> = ({
   state,
   description,
+  surface = "business",
 }) => {
   const emphasis = emphasisForShellSaveState(state);
   const showDescription = isSaveStateDescriptionVisible(state);
@@ -39,13 +43,14 @@ export const SaveStatePresentation: React.FC<SaveStatePresentationProps> = ({
       className={`${styles.saveStatePresentation} ${presentationClass}`}
       data-shell-ux="save-state-presentation"
       data-save-state={state}
+      data-save-surface={surface}
       data-save-emphasis={emphasis}
       data-saving-progress={progressActive ? "true" : "false"}
       data-demo-ux-12-slice={DEMO_UX_12_SLICE.id}
       data-demo-ux-14-slice={DEMO_UX_14_SLICE.id}
       aria-busy={progressActive ? true : undefined}
     >
-      <SaveStateBadge state={state} />
+      <SaveStateBadge state={state} surface={surface} />
       {progressActive ? (
         <div
           className={styles.saveStateProgressCue}
