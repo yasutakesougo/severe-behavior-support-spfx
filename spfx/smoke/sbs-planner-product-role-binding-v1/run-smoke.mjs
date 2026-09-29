@@ -192,7 +192,26 @@ async function inspect(page) {
 }
 
 async function selectDemoRole(page, role) {
+  const settingsSelector = '[data-shell-ux="demo-settings"]';
   const selector = `[data-shell-ux-demo-role="${role}"]`;
+  await page.waitForSelector(settingsSelector);
+  const disclosureOpen = await page.$eval(
+    settingsSelector,
+    (element) => element instanceof HTMLDetailsElement && element.open,
+  );
+  if (!disclosureOpen) {
+    const summarySelector = `${settingsSelector} > summary`;
+    await page.waitForSelector(summarySelector);
+    await page.click(summarySelector);
+    await page.waitForFunction(
+      (selector) => {
+        const element = document.querySelector(selector);
+        return element instanceof HTMLDetailsElement && element.open;
+      },
+      {},
+      settingsSelector,
+    );
+  }
   await page.waitForSelector(selector);
   await page.$eval(selector, (el) => {
     el.scrollIntoView({ block: "center" });
