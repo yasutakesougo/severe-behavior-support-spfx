@@ -6,6 +6,7 @@ import {
   kpiSectionHeadingForRole,
   overviewSectionOrderForRole,
   parseShellPresentationRole,
+  shouldRenderRoleTaskSurface,
   SHELL_DEFAULT_PRESENTATION_ROLE,
   SHELL_PRESENTATION_ROLE_ENTRY_DIRECTIONS,
   SHELL_PRESENTATION_ROLE_ENTRY_LABELS,
@@ -67,6 +68,12 @@ describe("VP-G synthetic presentationRole", () => {
     expect(userDetailSectionOrderForRole("FIELD_STAFF")[0]).toBe("currentSupport");
     expect(userDetailSectionOrderForRole("PLANNER")[0]).toBe("evaluation");
     expect(userDetailSectionOrderForRole("PLANNER")[1]).toBe("supportPlan");
+  });
+
+  it("does not render a task surface for ADMIN_AUDIT", () => {
+    expect(shouldRenderRoleTaskSurface("FIELD_STAFF")).toBe(true);
+    expect(shouldRenderRoleTaskSurface("PLANNER")).toBe(true);
+    expect(shouldRenderRoleTaskSurface("ADMIN_AUDIT")).toBe(false);
   });
 
   it("changes only PLANNER SupportPlan order and preserves ADMIN_AUDIT", () => {

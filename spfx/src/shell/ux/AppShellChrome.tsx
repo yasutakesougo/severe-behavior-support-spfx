@@ -94,6 +94,7 @@ import { CurrentSiteLabel } from "./CurrentSiteLabel";
 import { DemoBanner } from "./DemoBanner";
 import { DemoPresentationRoleEntry } from "./DemoPresentationRoleEntry";
 import { ADMIN_DEMO_UX_POLISH_1_SLICE, demoHoldSaveStatusNote } from "./demo-save-hold-copy";
+import { VP1_DEMO_SETTINGS_LABEL } from "./vp1-demo-separation";
 import { DestinationPlaceholder } from "./DestinationPlaceholder";
 import { SHELL_DEFAULT_DESTINATION } from "./destination";
 import { shouldClearNextVersionConceptHighlight } from "./next-version-highlight";
@@ -103,6 +104,7 @@ import { SaveStatePresentation } from "./SaveStatePresentation";
 import {
   SHELL_DEFAULT_PRESENTATION_ROLE,
   isPlannerSupportPlanManagementListRole,
+  shouldRenderRoleTaskSurface,
   type ShellPresentationRole,
 } from "./presentation-role";
 import type { ShellSaveState } from "./save-state";
@@ -170,6 +172,9 @@ export type AppShellChromeProps = Readonly<{
   fieldStaffSessionContext?: FieldStaffSessionContext;
   fieldStaffChosenOccurrenceId?: string;
   onFieldStaffSessionEvent?: (event: FieldStaffSessionEvent) => void;
+  /** SBS-PLANNER-PL-HTA-CORRECTION-1 context & cycle report callbacks */
+  onSupportPlanContextChange?: (hasContext: boolean) => void;
+  onPlannerSectionChange?: (sectionId: string) => void;
   children?: React.ReactNode;
 }>;
 
@@ -206,6 +211,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     fieldStaffSessionContext,
     fieldStaffChosenOccurrenceId,
     onFieldStaffSessionEvent,
+    onSupportPlanContextChange,
+    onPlannerSectionChange,
     children,
   } = props;
 
@@ -370,6 +377,10 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   }, [presentationRole]);
 
   React.useEffect(() => {
+    onSupportPlanContextChange?.(supportPlanPreviewOpen);
+  }, [supportPlanPreviewOpen, onSupportPlanContextChange]);
+
+  React.useEffect(() => {
     if (!isPlannerSupportPlanManagementListRole(activePresentationRole)) {
       setPlannerListNext(undefined);
       setPlannerListOrigin(false);
@@ -516,9 +527,18 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     procedureCancellationOpen,
     procedureRecordFormOpen,
     abcObservationOpen,
-    reviewDuePreviewOpen,
-    reviewFromSupportPlan,
     restoreUsersList,
+  ]);
+
+  React.useEffect(() => {
+    if (activePresentationRole === "PLANNER") {
+      onSupportPlanContextChange?.(supportPlanPreviewOpen && Boolean(selectedUserDetailId));
+    }
+  }, [
+    supportPlanPreviewOpen,
+    selectedUserDetailId,
+    activePresentationRole,
+    onSupportPlanContextChange,
   ]);
 
   const interactionPaused = isSavingInteractionPaused(effectiveSaveState);
@@ -601,14 +621,16 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return;
     }
     shouldFocusDestinationRef.current = true;
-    setSupportPlanPreviewOpen(false);
+    if (activePresentationRole !== "PLANNER") {
+      setSupportPlanPreviewOpen(false);
+      setSelectedUserDetailId(undefined);
+    }
     setCurrentProcedureOpen(false);
     setProcedureCorrectionOpen(false);
     setProcedureCancellationOpen(false);
     setProcedureRecordFormOpen(false);
     setAbcObservationOpen(false);
     setProcedureFlowSaveState(undefined);
-    setSelectedUserDetailId(undefined);
     setPlannerListNext(undefined);
     setPlannerListOrigin(false);
     setReviewDuePreviewOpen(false);
@@ -1204,30 +1226,38 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
               <SaveStatePresentation
                 state={effectiveSaveState}
                 description={demoHoldSaveStatusNote(effectiveSaveState, demoMode)}
+                surface={demoMode ? "synthetic-demo" : "business"}
               />
             ) : null}
           </div>
           {!unauthenticated ? (
             <>
-              <SiteSelector
-                selection={selection}
-                options={siteOptions}
-                onSelectionChange={handleSelectionChange}
-              />
-              <DemoPresentationRoleEntry
-                visible={demoMode}
-                role={activePresentationRole}
-                onRoleChange={(next) => {
-                  if (interactionPaused) {
-                    return;
-                  }
-                  setActivePresentationRole(next);
-                  setNextVersionConceptFromReview(false);
-                  if (next === "FIELD_STAFF" || next === "PLANNER") {
-                    onPresentationRoleChange?.(next);
-                  }
-                }}
-              />
+              <details
+                className={styles.demoSettings}
+                open={!demoMode}
+                data-shell-ux="demo-settings"
+              >
+                <summary className={styles.demoSettingsSummary}>{VP1_DEMO_SETTINGS_LABEL}</summary>
+                <SiteSelector
+                  selection={selection}
+                  options={siteOptions}
+                  onSelectionChange={handleSelectionChange}
+                />
+                <DemoPresentationRoleEntry
+                  visible={demoMode}
+                  role={activePresentationRole}
+                  onRoleChange={(next) => {
+                    if (interactionPaused) {
+                      return;
+                    }
+                    setActivePresentationRole(next);
+                    setNextVersionConceptFromReview(false);
+                    if (next === "FIELD_STAFF" || next === "PLANNER") {
+                      onPresentationRoleChange?.(next);
+                    }
+                  }}
+                />
+              </details>
               {selectedSite ? (
                 <CurrentSiteLabel site={selectedSite} />
               ) : (
@@ -1368,7 +1398,35 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     />
                   )
                 ) : destination === "users" ? (
-                  selectedUserDetail ? (
+                  supportPlanPreviewOpen ? (
+                    <SupportPlan
+                      presentation={supportPlanPresentation}
+                      headingRef={destinationHeadingRef}
+                      onBackToUserDetail={handleBackToUserDetail}
+                      backLabel={
+                        plannerListOrigin ? SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL : undefined
+                      }
+                      onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
+                      nextVersionConceptHighlighted={nextVersionConceptFromReview}
+                      presentationRole={activePresentationRole}
+                      onActiveSectionChange={onPlannerSectionChange}
+                    />
+                  ) : plannerListNext &&
+                    plannerNextRow &&
+                    plannerListNext.kind !== "existing-plan" ? (
+                    <SupportPlanManagementNextSurface
+                      kind={plannerListNext.kind === "create" ? "create" : "synthetic-detail"}
+                      row={plannerNextRow}
+                      headingRef={destinationHeadingRef}
+                      onBackToList={handleBackToPlannerList}
+                    />
+                  ) : showPlannerManagementList ? (
+                    <SupportPlanManagementList
+                      presentation={SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE}
+                      headingRef={destinationHeadingRef}
+                      onRowAction={handlePlannerListRowAction}
+                    />
+                  ) : selectedUserDetail ? (
                     reviewDuePreviewOpen && reviewFromSupportPlan ? (
                       <ReviewDueState
                         presentation={reviewDueStatePresentation}
@@ -1378,19 +1436,6 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         onNextVersionConceptRequest={handleNextVersionConceptFromReview}
                         procedureReviewMaterials={procedureWorkflowPresentation.reviewMaterials}
                         reviewObservationEvidence={reviewObservationEvidence}
-                        presentationRole={activePresentationRole}
-                      />
-                    ) : supportPlanPreviewOpen &&
-                      supportPlanPresentation.userId === selectedUserDetail.userId ? (
-                      <SupportPlan
-                        presentation={supportPlanPresentation}
-                        headingRef={destinationHeadingRef}
-                        onBackToUserDetail={handleBackToUserDetail}
-                        backLabel={
-                          plannerListOrigin ? SUPPORT_PLAN_MANAGEMENT_BACK_TO_LIST_LABEL : undefined
-                        }
-                        onReviewMaterialsRequest={handleReviewMaterialsFromPlan}
-                        nextVersionConceptHighlighted={nextVersionConceptFromReview}
                         presentationRole={activePresentationRole}
                       />
                     ) : abcObservationOpen && abcObservationPresentation ? (
@@ -1494,21 +1539,6 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         }
                       />
                     )
-                  ) : plannerListNext &&
-                    plannerNextRow &&
-                    plannerListNext.kind !== "existing-plan" ? (
-                    <SupportPlanManagementNextSurface
-                      kind={plannerListNext.kind === "create" ? "create" : "synthetic-detail"}
-                      row={plannerNextRow}
-                      headingRef={destinationHeadingRef}
-                      onBackToList={handleBackToPlannerList}
-                    />
-                  ) : showPlannerManagementList ? (
-                    <SupportPlanManagementList
-                      presentation={SUPPORT_PLAN_MANAGEMENT_LIST_FIXTURE}
-                      headingRef={destinationHeadingRef}
-                      onRowAction={handlePlannerListRowAction}
-                    />
                   ) : (
                     <>
                       {fieldStaffAdapterActive && fieldStaffTaskDestination === "D-UNRECORDED" ? (
@@ -1575,7 +1605,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     headingRef={destinationHeadingRef}
                   />
                 )}
-                {children}
+                {shouldRenderRoleTaskSurface(activePresentationRole) ? children : null}
               </div>
             </div>
           ) : null}

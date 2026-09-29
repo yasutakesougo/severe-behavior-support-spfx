@@ -81,6 +81,11 @@ export function isAdminAuditPresentationRole(role: ShellPresentationRole): boole
   return role === "ADMIN_AUDIT";
 }
 
+/** ADMIN_AUDIT keeps the existing D-OPS body; role-task layers are not rendered. */
+export function shouldRenderRoleTaskSurface(role: ShellPresentationRole): boolean {
+  return role !== "ADMIN_AUDIT";
+}
+
 export function kpiSectionHeadingForRole(role: ShellPresentationRole): string {
   if (role === "ADMIN_AUDIT") {
     return "運用状況";

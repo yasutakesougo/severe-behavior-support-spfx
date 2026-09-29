@@ -38,12 +38,23 @@ export const SHELL_SAVE_STATE_DESCRIPTIONS: Readonly<Record<ShellSaveState, stri
 
 export type ShellSaveStateLive = "polite" | "assertive";
 
+export type ShellSaveStateSurface = "business" | "synthetic-demo";
+
 export function isShellSaveState(value: string): value is ShellSaveState {
   return (SHELL_SAVE_STATES as readonly string[]).indexOf(value) >= 0;
 }
 
 export function labelForShellSaveState(state: ShellSaveState): string {
   return SHELL_SAVE_STATE_LABELS[state];
+}
+
+/** Adds presentation context without changing the underlying five-state vocabulary. */
+export function presentationLabelForShellSaveState(
+  state: ShellSaveState,
+  surface: ShellSaveStateSurface,
+): string {
+  const label = labelForShellSaveState(state);
+  return surface === "synthetic-demo" ? `表示状態: ${label}` : label;
 }
 
 export function descriptionForShellSaveState(state: ShellSaveState): string {

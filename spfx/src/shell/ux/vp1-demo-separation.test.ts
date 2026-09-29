@@ -2,6 +2,7 @@ import {
   VP1_DEMO_ROLE_HINT,
   VP1_DEMO_ROLE_LEGEND,
   VP1_DEMO_SAFETY_NOTICE,
+  VP1_DEMO_SETTINGS_LABEL,
   VP1_DEMO_UI_POLICY,
 } from "./vp1-demo-separation";
 
@@ -24,8 +25,15 @@ describe("VP-1 demo/developer UI separation", () => {
       businessChromeFirst: true,
       compactSafetyNoticeRequired: true,
       demoControlsSecondary: true,
+      demoControlsDisclosureRequired: true,
+      secondarySurfaceLabel: VP1_DEMO_SETTINGS_LABEL,
       presentationRoleOnly: true,
       liveTenantIoAuthorized: false,
     });
+  });
+
+  it("names the secondary demo settings surface", () => {
+    expect(VP1_DEMO_UI_POLICY.secondarySurfaceLabel).toBe("表示・検証設定");
+    expect(VP1_DEMO_UI_POLICY.demoControlsDisclosureRequired).toBe(true);
   });
 });
