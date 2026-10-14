@@ -1,7 +1,15 @@
 import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { buildDemoMonitoringForVersion, monitoringQueryForVersion } from "../monitoring";
+import {
+  buildMonitoringReviewInput,
+  type MonitoringReviewInputResult,
+} from "../monitoring/monitoring-review-input";
+import type { ReviewPresentationContext } from "../../sbs-domain/monitoring-read-model.bundle";
+import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "../users";
 import { AppShellChrome } from "./AppShellChrome";
 import { DEMO_1_FIELD_STAFF_FIXTURE } from "./fixture";
+import { PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT } from "./planner-task-navigation";
 import type { ShellPresentationRole } from "./presentation-role";
 
 beforeAll(() => {
@@ -31,6 +39,145 @@ function renderChrome(role: ShellPresentationRole, children?: React.ReactNode): 
     </AppShellChrome>,
   );
 }
+
+const reviewModelV2Result = buildDemoMonitoringForVersion(2);
+if (reviewModelV2Result.status !== "RESOLVED") {
+  throw new Error("expected resolved v2 monitoring fixture for D-MONITOR review tests");
+}
+const syntheticReviewAuthority = {
+  status: "FOUND",
+  MappingKey: {
+    SourceSystem: "synthetic-smoke",
+    OrganizationId: "synthetic-org-001",
+    SourceScope: "synthetic-monitoring-smoke",
+    LegacyKeyType: "UserId",
+    LegacyKeyValue: "user-a",
+  },
+} as const;
+const reviewInputV2 = buildMonitoringReviewInput(
+  syntheticReviewAuthority,
+  monitoringQueryForVersion(2),
+  reviewModelV2Result.value,
+);
+const reviewContextV2: ReviewPresentationContext = monitoringQueryForVersion(2);
+
+function renderPlannerMonitor(
+  version: number,
+  options: Readonly<{
+    reviewInput?: MonitoringReviewInputResult;
+    reviewContext?: ReviewPresentationContext;
+    supportPlanIdentity?: Partial<Pick<typeof DEMO_UX_SUPPORT_PLAN_FIXTURE, "userId" | "planId">>;
+    omitReviewInput?: boolean;
+    omitReviewContext?: boolean;
+    omitPersonPlanContext?: boolean;
+  }> = {},
+): string {
+  return renderToStaticMarkup(
+    <AppShellChrome
+      {...chromeProps}
+      presentationRole="PLANNER"
+      selectedDestination="users"
+      supportPlanPresentation={{
+        ...DEMO_UX_SUPPORT_PLAN_FIXTURE,
+        ...options.supportPlanIdentity,
+        currentVersion: version,
+      }}
+      monitoringReviewInput={
+        options.omitReviewInput ? undefined : (options.reviewInput ?? reviewInputV2)
+      }
+      monitoringReviewPresentationContext={
+        options.omitReviewContext ? undefined : (options.reviewContext ?? reviewContextV2)
+      }
+      plannerTaskDestination="D-MONITOR"
+      plannerPersonPlanContext={
+        options.omitPersonPlanContext ? undefined : PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT
+      }
+    />,
+  );
+}
+
+describe("D-MONITOR review context binding", () => {
+  it("rebinds existing person resolution to the target version and preserves the zero-record state", () => {
+    const html = renderPlannerMonitor(1);
+
+    expect(html).toContain('data-role-task-product-body="D-MONITOR"');
+    expect(html).not.toContain('data-dashboard-ux="overview-dashboard"');
+    expect(html).toContain('data-human-review-status="RESOLVED"');
+    expect(html).toContain('data-human-review-zero-records="true"');
+    expect(html).toContain('data-monitoring-zero-not-not-performed="true"');
+    expect(html).not.toContain('data-human-review-result="NOT_PERFORMED"');
+  });
+
+  it("shows the actual NOT_PERFORMED record on the D-MONITOR product body", () => {
+    const html = renderPlannerMonitor(2);
+
+    expect(html).toContain('data-role-task-product-body="D-MONITOR"');
+    expect(html).toContain('data-human-review-status="RESOLVED"');
+    expect(html).toContain('data-human-review-record-id="synthetic-monitoring-v2-003"');
+    expect(html).toContain('data-human-review-result="NOT_PERFORMED"');
+    expect(html).toContain('data-human-review-result-fact="NOT_PERFORMED"');
+  });
+
+  it("keeps review materials unresolved when review authority or context is missing or mismatched", () => {
+    const missingAuthorityHtml = renderPlannerMonitor(2, { omitReviewInput: true });
+    const mismatchedAuthority =
+      reviewInputV2.status === "RESOLVED"
+        ? {
+            status: "RESOLVED" as const,
+            value: {
+              ...reviewInputV2.value,
+              personResolution: {
+                ...reviewInputV2.value.personResolution,
+                MappingKey: {
+                  ...reviewInputV2.value.personResolution.MappingKey,
+                  LegacyKeyValue: "user-b",
+                },
+              },
+            },
+          }
+        : reviewInputV2;
+    const mismatchedAuthorityHtml = renderPlannerMonitor(2, {
+      reviewInput: mismatchedAuthority,
+    });
+    const missingContextHtml = renderPlannerMonitor(2, { omitReviewContext: true });
+    const mismatchedContextHtml = renderPlannerMonitor(2, {
+      reviewContext: { ...reviewContextV2, UserId: "user-b" },
+    });
+
+    for (const html of [
+      missingAuthorityHtml,
+      mismatchedAuthorityHtml,
+      missingContextHtml,
+      mismatchedContextHtml,
+    ]) {
+      expect(html).toContain('data-role-task-product-body="D-MONITOR"');
+      expect(html).toContain('data-human-review-status="UNRESOLVED"');
+      expect(html).not.toContain('data-human-review-result="NOT_PERFORMED"');
+      expect(html).not.toContain('data-human-review-zero-records="true"');
+    }
+  });
+
+  it("does not render D-MONITOR without the lawful person/plan context", () => {
+    const html = renderPlannerMonitor(2, { omitPersonPlanContext: true });
+
+    expect(html).not.toContain('data-role-task-product-body="D-MONITOR"');
+    expect(html).not.toContain('data-human-review-result="NOT_PERFORMED"');
+  });
+
+  it("does not render D-MONITOR when support-plan presentation identity mismatches the lawful context", () => {
+    const mismatchedUserHtml = renderPlannerMonitor(2, {
+      supportPlanIdentity: { userId: "user-b" },
+    });
+    const mismatchedPlanHtml = renderPlannerMonitor(2, {
+      supportPlanIdentity: { planId: "synthetic-plan-002" },
+    });
+
+    for (const html of [mismatchedUserHtml, mismatchedPlanHtml]) {
+      expect(html).not.toContain('data-role-task-product-body="D-MONITOR"');
+      expect(html).not.toContain('data-human-review-result="NOT_PERFORMED"');
+    }
+  });
+});
 
 describe("ADMIN-AUDIT-TASK-FIRST-V1 AppShellChrome", () => {
   it("AC-AA-TF-13: does not render legacy Global for ADMIN_AUDIT", () => {
