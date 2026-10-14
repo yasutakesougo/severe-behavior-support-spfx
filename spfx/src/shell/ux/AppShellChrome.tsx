@@ -10,7 +10,12 @@ import {
   TodaySupportDayBoard,
   isFieldStaffTodayPrimaryActionStatus,
 } from "../dashboard/TodaySupportDayBoard";
-import { buildDemoMonitoringForVersion, MonitoringView } from "../monitoring";
+import {
+  buildDemoMonitoringForVersion,
+  MonitoringView,
+  monitoringQueryForVersion,
+} from "../monitoring";
+import { buildMonitoringReviewInput } from "../monitoring/monitoring-review-input";
 import type { MonitoringReviewInputResult } from "../monitoring/monitoring-review-input";
 import type { ReviewPresentationContext } from "../../sbs-domain/monitoring-read-model.bundle";
 import type { AdminAuditTaskDestinationId } from "./admin-audit-task-navigation";
@@ -1227,6 +1232,52 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     () => buildDemoMonitoringForVersion(supportPlanPresentation.currentVersion),
     [supportPlanPresentation.currentVersion],
   );
+  const plannerMonitoringIdentityMatches = React.useMemo(() => {
+    const query = monitoringQueryForVersion(supportPlanPresentation.currentVersion);
+    return (
+      isLawfulPlannerPersonPlanContext(plannerPersonPlanContext) &&
+      plannerPersonPlanContext.userId === query.UserId &&
+      plannerPersonPlanContext.planId === query.planId &&
+      supportPlanPresentation.userId === query.UserId &&
+      supportPlanPresentation.planId === query.planId
+    );
+  }, [
+    plannerPersonPlanContext,
+    supportPlanPresentation.currentVersion,
+    supportPlanPresentation.planId,
+    supportPlanPresentation.userId,
+  ]);
+  const plannerMonitoringReviewContext = React.useMemo(() => {
+    if (plannerMonitoringResult.status !== "RESOLVED" || !plannerMonitoringIdentityMatches) {
+      return undefined;
+    }
+    const query = monitoringQueryForVersion(supportPlanPresentation.currentVersion);
+    const sourceContextMatchesPersonPlan =
+      monitoringReviewPresentationContext?.OrganizationId === query.OrganizationId &&
+      monitoringReviewPresentationContext.SiteId === query.SiteId &&
+      monitoringReviewPresentationContext.UserId === query.UserId &&
+      monitoringReviewPresentationContext.planId === query.planId;
+    return sourceContextMatchesPersonPlan ? query : undefined;
+  }, [
+    monitoringReviewPresentationContext,
+    plannerMonitoringIdentityMatches,
+    plannerMonitoringResult,
+    supportPlanPresentation.currentVersion,
+  ]);
+  const plannerMonitoringReviewInput = React.useMemo(() => {
+    if (
+      plannerMonitoringResult.status !== "RESOLVED" ||
+      !plannerMonitoringReviewContext ||
+      monitoringReviewInput?.status !== "RESOLVED"
+    ) {
+      return { status: "UNRESOLVED" } as const;
+    }
+    return buildMonitoringReviewInput(
+      monitoringReviewInput.value.personResolution,
+      plannerMonitoringReviewContext,
+      plannerMonitoringResult.value,
+    );
+  }, [plannerMonitoringResult, plannerMonitoringReviewContext, monitoringReviewInput]);
 
   React.useEffect(() => {
     const node = readyRegionContentRef.current;
@@ -1469,12 +1520,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     />
                   )
                 ) : destination === "users" ? (
-                  plannerTaskDestination === "D-MONITOR" &&
-                  isLawfulPlannerPersonPlanContext(plannerPersonPlanContext) ? (
+                  plannerTaskDestination === "D-MONITOR" && plannerMonitoringIdentityMatches ? (
                     <div data-role-task-product-body="D-MONITOR">
                       {plannerMonitoringResult.status === "RESOLVED" ? (
                         <MonitoringView
                           model={plannerMonitoringResult.value}
+                          reviewInput={plannerMonitoringReviewInput}
+                          reviewPresentationContext={plannerMonitoringReviewContext}
                           personLabel={supportPlanPresentation.personLabel}
                           procedureLabelContext={{
                             userId: supportPlanPresentation.userId,
