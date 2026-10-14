@@ -90,9 +90,7 @@ function renderPlannerMonitor(
       }
       plannerTaskDestination="D-MONITOR"
       plannerPersonPlanContext={
-        options.omitPersonPlanContext
-          ? undefined
-          : PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT
+        options.omitPersonPlanContext ? undefined : PLANNER_DEMO_LAWFUL_PERSON_PLAN_CONTEXT
       }
     />,
   );
@@ -103,7 +101,7 @@ describe("D-MONITOR review context binding", () => {
     const html = renderPlannerMonitor(1);
 
     expect(html).toContain('data-role-task-product-body="D-MONITOR"');
-    expect(html).not.toContain("data-dashboard-ux=\"overview-dashboard\"");
+    expect(html).not.toContain('data-dashboard-ux="overview-dashboard"');
     expect(html).toContain('data-human-review-status="RESOLVED"');
     expect(html).toContain('data-human-review-zero-records="true"');
     expect(html).toContain('data-monitoring-zero-not-not-performed="true"');

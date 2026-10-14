@@ -1520,8 +1520,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                     />
                   )
                 ) : destination === "users" ? (
-                  plannerTaskDestination === "D-MONITOR" &&
-                  plannerMonitoringIdentityMatches ? (
+                  plannerTaskDestination === "D-MONITOR" && plannerMonitoringIdentityMatches ? (
                     <div data-role-task-product-body="D-MONITOR">
                       {plannerMonitoringResult.status === "RESOLVED" ? (
                         <MonitoringView
