@@ -5,7 +5,10 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { buildDemoMonitoringForVersion, monitoringQueryForVersion } from "../../src/shell/monitoring";
+import {
+  buildDemoMonitoringForVersion,
+  monitoringQueryForVersion,
+} from "../../src/shell/monitoring";
 import { buildMonitoringReviewInput } from "../../src/shell/monitoring/monitoring-review-input";
 import { DEMO_UX_SUPPORT_PLAN_FIXTURE } from "../../src/shell/users";
 import { AppShellChrome } from "../../src/shell/ux/AppShellChrome";

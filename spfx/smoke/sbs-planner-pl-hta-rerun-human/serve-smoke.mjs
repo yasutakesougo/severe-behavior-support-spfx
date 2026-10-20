@@ -21,8 +21,7 @@ const entry = path.join(__dirname, "smoke-entry.tsx");
 const outDir = __dirname;
 const port = Number(process.env.SBS_PL_HTA_RERUN_PORT ?? 4217);
 const expectedHead =
-  process.env.SBS_PL_HTA_RERUN_EXPECTED_PRODUCT_HEAD ??
-  "4647223e82d175e35748a5107bef6e322f316935";
+  process.env.SBS_PL_HTA_RERUN_EXPECTED_PRODUCT_HEAD ?? "4647223e82d175e35748a5107bef6e322f316935";
 
 function resolveImport(specifiers) {
   for (const specifier of specifiers) {
@@ -45,9 +44,7 @@ function readCheckoutHead() {
 
 const productSourceHead = readCheckoutHead();
 if (productSourceHead !== expectedHead) {
-  console.error(
-    `Product HEAD mismatch: expected ${expectedHead}, observed ${productSourceHead}.`,
-  );
+  console.error(`Product HEAD mismatch: expected ${expectedHead}, observed ${productSourceHead}.`);
   process.exit(1);
 }
 fs.writeFileSync(path.join(outDir, "product-head.txt"), `${productSourceHead}\n`);
@@ -166,7 +163,13 @@ fs.writeFileSync(path.join(outDir, "index.html"), html);
 const server = http.createServer((req, res) => {
   const url = new URL(req.url ?? "/", `http://127.0.0.1:${port}`);
   let rel = url.pathname;
-  if (rel === "/" || rel === "/state-a" || rel === "/state-b" || rel === "/state-a/" || rel === "/state-b/") {
+  if (
+    rel === "/" ||
+    rel === "/state-a" ||
+    rel === "/state-b" ||
+    rel === "/state-a/" ||
+    rel === "/state-b/"
+  ) {
     rel = "/index.html";
   }
   const filePath = path.join(outDir, path.normalize(rel).replace(/^(\.\.[/\\])+/, ""));

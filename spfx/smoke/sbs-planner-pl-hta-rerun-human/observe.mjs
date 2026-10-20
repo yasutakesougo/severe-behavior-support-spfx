@@ -35,14 +35,16 @@ async function observe(statePath, label) {
     const monitoring = q('[data-monitoring-role="summary"]');
     const human = q("#human-review-materials");
     const dMonitor = q('[data-role-task-product-body="D-MONITOR"]');
-    const notPerformed = [...document.querySelectorAll('[data-human-review-result="NOT_PERFORMED"]')].map(
-      (el) => el.closest("[data-human-review-record-id]")?.getAttribute("data-human-review-record-id"),
+    const notPerformed = [
+      ...document.querySelectorAll('[data-human-review-result="NOT_PERFORMED"]'),
+    ].map((el) =>
+      el.closest("[data-human-review-record-id]")?.getAttribute("data-human-review-record-id"),
     );
     return {
       hasDMonitorBody: Boolean(dMonitor),
       hasOverviewDashboard: Boolean(q('[data-dashboard-ux="overview-dashboard"]')),
       destinationAttr:
-        q('[data-role-task-destination]')?.getAttribute("data-role-task-destination") ?? "",
+        q("[data-role-task-destination]")?.getAttribute("data-role-task-destination") ?? "",
       personVisible: text.includes("Aさん"),
       userIdVisible: text.includes("user-a"),
       planIdVisible: text.includes("synthetic-plan-001"),
@@ -54,7 +56,9 @@ async function observe(statePath, label) {
       humanReviewStatus: human?.getAttribute("data-human-review-status") ?? "",
       planVersion: monitoring?.getAttribute("data-monitoring-plan-version") ?? "",
       recordCount: monitoring?.getAttribute("data-monitoring-record-count") ?? "",
-      hasZeroCopy: Boolean(q('[data-monitoring-empty-notice="true"]')) || text.includes("この期間・計画版に一致する実施記録はありません"),
+      hasZeroCopy:
+        Boolean(q('[data-monitoring-empty-notice="true"]')) ||
+        text.includes("この期間・計画版に一致する実施記録はありません"),
       hasZeroNotNotPerformed: Boolean(q('[data-monitoring-zero-not-not-performed="true"]')),
       hasNotPerformedResult: Boolean(q('[data-human-review-result="NOT_PERFORMED"]')),
       notPerformedRecordIds: notPerformed,
