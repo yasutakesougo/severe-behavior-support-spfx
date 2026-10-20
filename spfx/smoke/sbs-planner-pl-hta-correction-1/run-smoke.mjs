@@ -146,6 +146,8 @@ async function inspect(page) {
     const plannerRoot = document.querySelector('[data-role-task-ia="PLANNER"]');
     const chrome = document.querySelector('[data-shell-ux="app-shell-chrome"]');
     const primaryAction = document.querySelector('[data-role-task-primary-action="true"]');
+    const monitoringSummary = document.querySelector('[data-monitoring-role="summary"]');
+    const humanReviewMaterials = document.querySelector("#human-review-materials");
     const bodyText = document.body.innerText ?? "";
     const globals = [...document.querySelectorAll("nav [data-role-task-global]")].map(
       (element) => ({
@@ -179,6 +181,10 @@ async function inspect(page) {
       hasNotPerformedResult: Boolean(
         document.querySelector('[data-human-review-result="NOT_PERFORMED"]'),
       ),
+      monitoringReviewAuthority:
+        monitoringSummary?.getAttribute("data-monitoring-review-authority") ?? "",
+      monitoringPlanVersion: monitoringSummary?.getAttribute("data-monitoring-plan-version") ?? "",
+      humanReviewStatus: humanReviewMaterials?.getAttribute("data-human-review-status") ?? "",
       hasOverviewDashboard: Boolean(
         document.querySelector("[data-dashboard-ux='overview-dashboard']"),
       ),
@@ -393,6 +399,10 @@ async function runSequence(viewport, suffix) {
     dMonitor.destination === "D-MONITOR" &&
     dMonitor.hasMonitoringHost &&
     !dMonitor.hasOverviewDashboard;
+  const sc17 =
+    dMonitor.monitoringReviewAuthority === "FOUND" &&
+    dMonitor.humanReviewStatus === "RESOLVED" &&
+    dMonitor.monitoringPlanVersion === "3";
   const sc14 = !dMonitor.bodyHasSmokePass;
   const sc15 =
     zeroState.hasZeroNotNotPerformed &&
@@ -413,12 +423,13 @@ async function runSequence(viewport, suffix) {
     sc14 &&
     sc16 &&
     sc15 &&
+    sc17 &&
     pageErrors.length === 0;
   results.push({
     name: `pl-hta-correction-1${suffix || "-desktop"}`,
     pass,
     viewport,
-    checks: { sc1, sc8, sc3b, sc3a, sc4, sc7, sc5, sc6, sc14, sc15, sc16 },
+    checks: { sc1, sc8, sc3b, sc3a, sc4, sc7, sc5, sc6, sc14, sc15, sc16, sc17 },
     state: {
       noContext,
       findPerson,
