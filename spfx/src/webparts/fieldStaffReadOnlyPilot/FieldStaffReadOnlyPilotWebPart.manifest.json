@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "e943358d-8bf5-4605-b2d2-9d07a9638f1f",
+  "alias": "FieldStaffReadOnlyPilotWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": ["SharePointWebPart"],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": { "default": "Advanced" },
+      "title": { "default": "FIELD_STAFF 読み取り専用パイロット" },
+      "description": {
+        "default": "合成データのみを表示する FIELD_STAFF 読み取り専用パイロットです。本番データには接続しません。"
+      },
+      "officeFabricIconFontName": "View",
+      "properties": {
+        "description": "FIELD_STAFF synthetic read-only pilot"
+      }
+    }
+  ]
+}
