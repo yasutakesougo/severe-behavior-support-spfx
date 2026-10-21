@@ -164,7 +164,9 @@ export const FieldStaffReadOnlyPilot: React.FC<FieldStaffReadOnlyPilotProps> = (
       data-pilot-data-source="synthetic"
       data-pilot-read-only="true"
       data-pilot-write-capability="none"
-      data-pilot-record-count={state.kind === "found" ? "1" : "0"}
+      data-pilot-record-count={
+        state.kind === "found" ? "1" : state.kind === "empty" ? "0" : "unavailable"
+      }
       aria-labelledby="field-staff-read-only-pilot-heading"
     >
       <p className={styles.banner} data-pilot-synthetic-banner="true">

@@ -40,6 +40,256 @@ const listFilesRecursive = (relativeDir, extensions) => {
  * @typedef {{ id: string, severity: 'blocking'|'advisory'|'known_gap', ok: boolean, detail: string }} GateFinding
  */
 
+const isPilotWhitespace = (char) =>
+  char === " " || char === "\t" || char === "\n" || char === "\r" || char === "\f";
+
+const isPilotHexDigit = (char) => /[0-9a-fA-F]/.test(char);
+
+const isPilotIdentifierChar = (char) => /[A-Za-z0-9_-]/.test(char);
+
+/** Replace comments, quoted strings and url(...) contents with spaces. */
+const maskPilotNonCode = (css) => {
+  const chars = css.split("");
+  let index = 0;
+  while (index < chars.length) {
+    if (chars[index] === "/" && chars[index + 1] === "*") {
+      let end = index + 2;
+      while (end < chars.length && !(chars[end] === "*" && chars[end + 1] === "/")) {
+        end += 1;
+      }
+      end = Math.min(end + 2, chars.length);
+      for (let mask = index; mask < end; mask += 1) {
+        if (chars[mask] !== "\n" && chars[mask] !== "\r") {
+          chars[mask] = " ";
+        }
+      }
+      index = end;
+      continue;
+    }
+
+    if (chars[index] === "/" && chars[index + 1] === "/") {
+      let end = index + 2;
+      while (end < chars.length && chars[end] !== "\n" && chars[end] !== "\r") {
+        end += 1;
+      }
+      for (let mask = index; mask < end; mask += 1) {
+        chars[mask] = " ";
+      }
+      index = end;
+      continue;
+    }
+
+    if (chars[index] === '"' || chars[index] === "'") {
+      const quote = chars[index];
+      let end = index + 1;
+      while (end < chars.length) {
+        if (chars[end] === "\\") {
+          end += 2;
+          continue;
+        }
+        if (chars[end] === quote) {
+          end += 1;
+          break;
+        }
+        end += 1;
+      }
+      for (let mask = index; mask < end; mask += 1) {
+        if (chars[mask] !== "\n" && chars[mask] !== "\r") {
+          chars[mask] = " ";
+        }
+      }
+      index = end;
+      continue;
+    }
+
+    if (
+      (chars[index] === "u" || chars[index] === "U") &&
+      (chars[index + 1] === "r" || chars[index + 1] === "R") &&
+      (chars[index + 2] === "l" || chars[index + 2] === "L") &&
+      (index === 0 || !isPilotIdentifierChar(chars[index - 1]))
+    ) {
+      let open = index + 3;
+      while (open < chars.length && isPilotWhitespace(chars[open])) {
+        open += 1;
+      }
+      if (chars[open] === "(") {
+        let end = open + 1;
+        let depth = 1;
+        while (end < chars.length && depth > 0) {
+          const char = chars[end];
+          if (char === "\\") {
+            end += 2;
+            continue;
+          }
+          if (char === '"' || char === "'") {
+            const quote = char;
+            end += 1;
+            while (end < chars.length) {
+              if (chars[end] === "\\") {
+                end += 2;
+                continue;
+              }
+              if (chars[end] === quote) {
+                end += 1;
+                break;
+              }
+              end += 1;
+            }
+            continue;
+          }
+          if (char === "(") {
+            depth += 1;
+          } else if (char === ")") {
+            depth -= 1;
+          }
+          end += 1;
+        }
+        const maskedEnd = Math.min(end, chars.length);
+        for (let mask = index; mask < maskedEnd; mask += 1) {
+          if (chars[mask] !== "\n" && chars[mask] !== "\r") {
+            chars[mask] = " ";
+          }
+        }
+        index = maskedEnd;
+        continue;
+      }
+    }
+
+    index += 1;
+  }
+  return chars.join("");
+};
+
+const findPilotDelimiter = (source, start, delimiters) => {
+  let parentheses = 0;
+  let brackets = 0;
+  for (let index = start; index < source.length; index += 1) {
+    const char = source[index];
+    if (char === "(") {
+      parentheses += 1;
+    } else if (char === ")") {
+      parentheses = Math.max(0, parentheses - 1);
+    } else if (char === "[") {
+      brackets += 1;
+    } else if (char === "]") {
+      brackets = Math.max(0, brackets - 1);
+    } else if (parentheses === 0 && brackets === 0 && delimiters.includes(char)) {
+      return index;
+    }
+  }
+  return -1;
+};
+
+const hasPilotHexColor = (value) => {
+  for (let index = 0; index < value.length; index += 1) {
+    if (value[index] !== "#") {
+      continue;
+    }
+    let hexEnd = index + 1;
+    while (hexEnd < value.length && isPilotHexDigit(value[hexEnd])) {
+      hexEnd += 1;
+    }
+    let identifierEnd = hexEnd;
+    while (identifierEnd < value.length && isPilotIdentifierChar(value[identifierEnd])) {
+      identifierEnd += 1;
+    }
+    const hexLength = hexEnd - (index + 1);
+    const hasBoundary = identifierEnd === hexEnd;
+    if (hasBoundary && (hexLength === 3 || hexLength === 4 || hexLength === 6 || hexLength === 8)) {
+      return true;
+    }
+    index = identifierEnd - 1;
+  }
+  return false;
+};
+
+/** Scan only property declaration values for exact CSS hex-color tokens. */
+const hasPilotDeclarationValueHexColor = (css) => {
+  const source = maskPilotNonCode(css);
+  let found = false;
+  const scanBlock = (start) => {
+    let index = start;
+    while (index < source.length) {
+      while (index < source.length && isPilotWhitespace(source[index])) {
+        index += 1;
+      }
+      if (index >= source.length) {
+        return index;
+      }
+      if (source[index] === "}") {
+        return index + 1;
+      }
+      if (source[index] === ";") {
+        index += 1;
+        continue;
+      }
+      if (source[index] === "@") {
+        const next = findPilotDelimiter(source, index, [";", "{"]);
+        if (next === -1) {
+          return source.length;
+        }
+        if (source[next] === ";") {
+          index = next + 1;
+          continue;
+        }
+        index = scanBlock(next + 1);
+        continue;
+      }
+
+      const next = findPilotDelimiter(source, index, [":", ";", "{", "}"]);
+      if (next === -1) {
+        return source.length;
+      }
+      if (source[next] === ";" || source[next] === "}") {
+        index = next + 1;
+        if (source[next] === "}") {
+          return index;
+        }
+        continue;
+      }
+      if (source[next] === "{") {
+        index = scanBlock(next + 1);
+        continue;
+      }
+
+      const valueEnd = findPilotDelimiter(source, next + 1, [";", "{", "}"]);
+      if (valueEnd === -1) {
+        return source.length;
+      }
+      if (source[valueEnd] === "{") {
+        index = scanBlock(valueEnd + 1);
+        continue;
+      }
+      if (hasPilotHexColor(source.slice(next + 1, valueEnd))) {
+        found = true;
+        return source.length;
+      }
+      index = valueEnd + 1;
+      if (source[valueEnd] === "}") {
+        return index;
+      }
+    }
+    return index;
+  };
+
+  scanBlock(0);
+  return found;
+};
+
+/**
+ * Pure source-text predicate for the FIELD_STAFF read-only pilot SCSS.
+ * Kept in the gate module so negative evidence can use in-memory CSS variants
+ * without mutating tracked source.
+ *
+ * @param {string} css
+ * @returns {{ ok: boolean, usesTokens: boolean, hardcodedOutsideTheme: boolean }}
+ */
+export function evaluatePilotScss(css) {
+  const usesTokens = /@use\s+["'].*sbs-tokens["']/.test(css);
+  const hardcodedOutsideTheme = hasPilotDeclarationValueHexColor(css);
+  return { ok: usesTokens && !hardcodedOutsideTheme, usesTokens, hardcodedOutsideTheme };
+}
+
 /** @returns {{ ok: boolean, findings: GateFinding[], summary: string }} */
 export function runAccessibilityGate() {
   /** @type {GateFinding[]} */
@@ -893,6 +1143,28 @@ export function runAccessibilityGate() {
       ? `Focus tokens present; shell SCSS :focus≈${focusRules}, :focus-visible≈${focusVisibleRules} (mass migration OUT)`
       : "Focus tokens missing",
   });
+
+  // --- A11Y-PILOT-01: FIELD_STAFF read-only pilot SCSS tokens ---
+  const pilotScssPath =
+    "spfx/src/webparts/fieldStaffReadOnlyPilot/components/FieldStaffReadOnlyPilot.module.scss";
+  if (!relExists(pilotScssPath)) {
+    push({
+      id: "A11Y-PILOT-01",
+      severity: "blocking",
+      ok: false,
+      detail: `${pilotScssPath} missing`,
+    });
+  } else {
+    const pilot = evaluatePilotScss(read(pilotScssPath));
+    push({
+      id: "A11Y-PILOT-01",
+      severity: "blocking",
+      ok: pilot.ok,
+      detail: pilot.ok
+        ? "Pilot SCSS uses sbs-tokens and has no raw hex colors"
+        : `Pilot SCSS gate failed (tokens=${pilot.usesTokens}, rawHex=${pilot.hardcodedOutsideTheme})`,
+    });
+  }
 
   // --- A11Y-MAN-01 deferred advisory marker ---
   push({

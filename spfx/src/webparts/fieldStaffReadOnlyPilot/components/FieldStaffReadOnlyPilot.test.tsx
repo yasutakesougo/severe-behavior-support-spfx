@@ -103,6 +103,11 @@ describe("FieldStaffReadOnlyPilot", () => {
       expect(container.querySelector('[data-pilot-state="forbidden"]')).not.toBeNull();
       expect(container.querySelector('[data-pilot-fail-closed="true"]')).not.toBeNull();
       expect(container.querySelector('[data-pilot-record="true"]')).toBeNull();
+      const count = container
+        .querySelector("[data-pilot-record-count]")
+        ?.getAttribute("data-pilot-record-count");
+      expect(count).toBe("unavailable");
+      expect(count).not.toBe("0");
     } finally {
       cleanup(container);
     }
@@ -119,6 +124,11 @@ describe("FieldStaffReadOnlyPilot", () => {
       expect(container.querySelector('[data-pilot-state="empty"]')).not.toBeNull();
       expect(container.textContent).toContain("0件");
       expect(container.querySelector('[data-pilot-fail-closed="true"]')).toBeNull();
+      expect(
+        container
+          .querySelector("[data-pilot-record-count]")
+          ?.getAttribute("data-pilot-record-count"),
+      ).toBe("0");
     } finally {
       cleanup(container);
     }
@@ -145,8 +155,46 @@ describe("FieldStaffReadOnlyPilot", () => {
           .querySelector("[data-pilot-failure-code]")
           ?.getAttribute("data-pilot-failure-code"),
       ).toBe("MULTI_MATCH");
+      const count = container
+        .querySelector("[data-pilot-record-count]")
+        ?.getAttribute("data-pilot-record-count");
+      expect(count).toBe("unavailable");
+      expect(count).not.toBe("0");
     } finally {
       cleanup(container);
+    }
+  });
+
+  it("reports loading as unavailable, never as zero records", async () => {
+    let resolveRead!: (value: {
+      ok: true;
+      rows: readonly Readonly<Record<string, unknown>>[];
+    }) => void;
+    const pending = new Promise<{
+      ok: true;
+      rows: readonly Readonly<Record<string, unknown>>[];
+    }>((resolve) => {
+      resolveRead = resolve;
+    });
+
+    const container = await renderPilot({
+      transport: {
+        targetListGuid: SYNTHETIC_PILOT_LIST_GUID,
+        findByRecordId: () => pending,
+      },
+    });
+
+    try {
+      expect(container.querySelector('[data-pilot-state="loading"]')).not.toBeNull();
+      const count = container
+        .querySelector("[data-pilot-record-count]")
+        ?.getAttribute("data-pilot-record-count");
+      expect(count).toBe("unavailable");
+      expect(count).not.toBe("0");
+    } finally {
+      cleanup(container);
+      resolveRead({ ok: true, rows: [] });
+      await Promise.resolve();
     }
   });
 

@@ -3,9 +3,12 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import test from "node:test";
 
+import {
+  createInternalProcedureRecordReadTransport,
+  type ProcedureRecordReadTransport,
+} from "../../../../src/adapters/sharepoint/procedure-record/spfx-read-internal-transport";
 import type {
   ProcedureRecordListBinding,
-  ProcedureRecordReadTransport,
   ReadOnlyProcedureRecordLookup,
 } from "../../../../spfx/src/sbs-domain/procedure-record-read.bundle";
 
@@ -192,6 +195,78 @@ test("runtime export surface contains only read operations", async () => {
   assert.equal("createItem" in value, false);
   assert.equal("repository" in value, false);
   assert.equal("port" in value, false);
+});
+
+test("lookup binding is frozen and independent from caller mutation", async () => {
+  const input = binding();
+  const value = bridge.createReadOnlyProcedureRecordLookup(input, transport([row()]));
+  const originalBinding = {
+    organizationId: "synthetic-org-001",
+    siteId: "SITE-ISG",
+    listGuid: LIST_GUID,
+  };
+
+  assert.equal(Object.isFrozen(value), true);
+  assert.equal(Object.isFrozen(value.binding), true);
+
+  const mutableInput = input as {
+    organizationId: string;
+    siteId: string;
+    listGuid: string;
+  };
+  mutableInput.organizationId = "mutated-org";
+  mutableInput.siteId = "MUTATED-SITE";
+  mutableInput.listGuid = OTHER_LIST_GUID;
+
+  assert.deepEqual(value.binding, originalBinding);
+
+  assert.throws(() => {
+    (value.binding as { organizationId: string }).organizationId = "mutated-org";
+  });
+  assert.deepEqual(value.binding, originalBinding);
+
+  assert.throws(() => {
+    (value.binding as { siteId: string }).siteId = "MUTATED-SITE";
+  });
+  assert.deepEqual(value.binding, originalBinding);
+
+  assert.throws(() => {
+    (value.binding as { listGuid: string }).listGuid = OTHER_LIST_GUID;
+  });
+  assert.deepEqual(value.binding, originalBinding);
+
+  const result = await value.findByRecordId(RECORD_ID);
+  assert.equal(result.status, "FOUND");
+});
+
+test("internal read transport factory fails closed for optional and write methods", async () => {
+  let createCalls = 0;
+  let seenRecordId = "";
+  const input = {
+    targetListGuid: LIST_GUID,
+    findByRecordId: async (recordId: string) => {
+      seenRecordId = recordId;
+      return { ok: true, rows: [row()] };
+    },
+    createItem: async () => {
+      createCalls += 1;
+      return { ok: false, failure: "FORBIDDEN" };
+    },
+  } as unknown as ProcedureRecordReadTransport;
+
+  const internal = createInternalProcedureRecordReadTransport(input);
+
+  assert.deepEqual(await internal.getSchema(), { ok: false, failure: "FORBIDDEN" });
+  assert.deepEqual(await internal.findByIdempotencyKey("idempotency-key"), {
+    ok: false,
+    failure: "FORBIDDEN",
+  });
+  assert.deepEqual(await internal.createItem({}), { ok: false, failure: "FORBIDDEN" });
+  assert.equal(createCalls, 0);
+
+  const read = await internal.findByRecordId(RECORD_ID);
+  assert.equal(read.ok, true);
+  assert.equal(seenRecordId, RECORD_ID);
 });
 
 test("write-capable transport methods are never called", async () => {
