@@ -101,7 +101,7 @@ describe("autonomy-policy-v1 Ready-only enablement（Selection A）", () => {
     assert.equal(binding["pull_request.merge"], "HUMAN_ONLY");
     assert.equal(binding.L1_AUTO_READY, "ENABLED");
     assert.equal(binding.L1_AUTO_MERGE, "DISABLED");
-    assert.equal(binding.readyExecutor, "ABSENT");
+    assert.equal(binding.readyExecutor, "L1_READY_EXECUTOR_V1");
     assert.equal(binding.mergeExecutor, "ABSENT");
   });
 

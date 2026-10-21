@@ -81,6 +81,7 @@ describe("evaluateL1ExecutionPolicy", () => {
       "docs/architecture/ai-autonomy-l1-execution-policy-combined-reconciliation-1.md",
       "docs/architecture/ai-autonomy-l1-execution-policy-post-merge-reconciliation-1.md",
       "docs/architecture/ai-autonomy-l1-enablement-exact-slice-definition-1.md",
+      "docs/architecture/ai-autonomy-l1-ready-executor-exact-slice-definition-1.md",
       "docs/decisions/DEC-AA-001.md",
       "docs/decisions/DEC-AA-003.md",
       "docs/decisions/DEC-AI-ORG-003.md",
