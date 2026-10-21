@@ -5,6 +5,8 @@ import test from "node:test";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { evaluatePilotScss } from "../../scripts/a11y/accessibility-gate.mjs";
+
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const gateScript = path.join(repoRoot, "scripts/a11y/accessibility-gate.mjs");
 const scaffoldPath = path.join(
@@ -73,7 +75,195 @@ test("DADS-06 blocking primitive checks are present", () => {
     "A11Y-SP-01",
     "A11Y-HD-08",
     "A11Y-SPML-01",
+    "A11Y-PILOT-01",
   ]) {
     assert.match(stdout, new RegExp(`\\[PASS\\] ${id}\\b`), stdout);
+  }
+  assert.match(stdout, /\[PASS\] A11Y-PILOT-01 \(blocking\)/, stdout);
+});
+
+test("A11Y-PILOT-01 detects missing tokens and raw hex without mutating source", () => {
+  const good =
+    '@use "../../../shell/tokens/sbs-tokens" as tokens;\n' +
+    ".pilot { color: tokens.$color-text-primary; }\n";
+  const missingTokens = ".pilot { color: tokens.$color-text-primary; }\n";
+  const rawHex = '@use "../../../shell/tokens/sbs-tokens" as tokens;\n.pilot { color: #123456; }\n';
+
+  assert.equal(evaluatePilotScss(good).ok, true);
+  assert.equal(evaluatePilotScss(missingTokens).ok, false);
+  assert.equal(evaluatePilotScss(rawHex).ok, false);
+
+  const importLine = '@use "../../../shell/tokens/sbs-tokens" as sbs;\n';
+  type PilotCase = Readonly<{
+    id: string;
+    snippet: string;
+    usesTokens: boolean;
+    hardcodedOutsideTheme: boolean;
+    ok: boolean;
+    omitImport?: boolean;
+  }>;
+  const cases: readonly PilotCase[] = [
+    {
+      id: "G",
+      snippet: ".pilot { color: sbs.$color-text-primary; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "H3",
+      snippet: ".pilot { color: #fff; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "H4",
+      snippet: ".pilot { color: #ffff; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "H6",
+      snippet: ".pilot { color: #ffffff; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "H8",
+      snippet: ".pilot { color: #ffffffff; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "HM",
+      snippet: ".pilot { background: linear-gradient(#fff, #ffffffff); }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "HW",
+      snippet: ".pilot { color: var(--fallback, #ffff); }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "I5",
+      snippet: ".pilot { color: #12345; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "I7",
+      snippet: ".pilot { color: #1234567; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "I9",
+      snippet: ".pilot { color: #123456789; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "CB",
+      snippet: ".pilot { color: sbs.$color-text-primary; /* #fff */ }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "CL",
+      snippet: ".pilot { color: sbs.$color-text-primary; } // #ffff",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "SI",
+      snippet: "#abcd { color: sbs.$color-text-primary; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "SQ",
+      snippet: 'a[href="#abc"] { color: sbs.$color-text-primary; }',
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "QS",
+      snippet: ".pilot { content: '#ffff'; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "QD",
+      snippet: '.pilot { content: "#fff"; }',
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "UB",
+      snippet: ".pilot { background-image: url(#abcd); }",
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "UQ",
+      snippet: '.pilot { background-image: url("#ffffffff"); }',
+      usesTokens: true,
+      hardcodedOutsideTheme: false,
+      ok: true,
+    },
+    {
+      id: "UM",
+      snippet: ".pilot { background: url(#abcd) #fff; }",
+      usesTokens: true,
+      hardcodedOutsideTheme: true,
+      ok: false,
+    },
+    {
+      id: "M",
+      snippet: ".pilot { color: #fff; }",
+      usesTokens: false,
+      hardcodedOutsideTheme: true,
+      ok: false,
+      omitImport: true,
+    },
+    {
+      id: "MN",
+      snippet: ".pilot { color: inherit; }",
+      usesTokens: false,
+      hardcodedOutsideTheme: false,
+      ok: false,
+      omitImport: true,
+    },
+  ];
+
+  for (const item of cases) {
+    const css = item.omitImport ? item.snippet : `${importLine}${item.snippet}`;
+    assert.deepEqual(
+      evaluatePilotScss(css),
+      {
+        ok: item.ok,
+        usesTokens: item.usesTokens,
+        hardcodedOutsideTheme: item.hardcodedOutsideTheme,
+      },
+      item.id,
+    );
   }
 });

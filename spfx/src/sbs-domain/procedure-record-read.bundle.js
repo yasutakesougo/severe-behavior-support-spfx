@@ -916,7 +916,7 @@ function createReadOnlyProcedureRecordRepository(binding, transport) {
   return createProcedureRecordRepository(binding, transport);
 }
 
-// src/adapters/sharepoint/procedure-record/spfx-read-entry.ts
+// src/adapters/sharepoint/procedure-record/spfx-read-internal-transport.ts
 var failClosedSchema = () =>
   __async(null, null, function* () {
     return {
@@ -938,18 +938,30 @@ var failClosedCreate = () =>
       failure: "FORBIDDEN",
     };
   });
-function createReadOnlyProcedureRecordLookup(binding, transport) {
+function createInternalProcedureRecordReadTransport(input) {
   var _a, _b;
-  const internalTransport = {
-    targetListGuid: transport.targetListGuid,
-    getSchema: (_a = transport.getSchema) != null ? _a : failClosedSchema,
-    findByRecordId: (recordId) => transport.findByRecordId(recordId),
-    findByIdempotencyKey: (_b = transport.findByIdempotencyKey) != null ? _b : failClosedRead,
+  return {
+    targetListGuid: input.targetListGuid,
+    getSchema: (_a = input.getSchema) != null ? _a : failClosedSchema,
+    findByRecordId: (recordId) => input.findByRecordId(recordId),
+    findByIdempotencyKey: (_b = input.findByIdempotencyKey) != null ? _b : failClosedRead,
     createItem: failClosedCreate,
   };
-  const repository = createReadOnlyProcedureRecordRepository(binding, internalTransport);
+}
+
+// src/adapters/sharepoint/procedure-record/spfx-read-entry.ts
+function createReadOnlyProcedureRecordLookup(binding, transport) {
+  const frozenBinding = Object.freeze({
+    organizationId: binding.organizationId,
+    siteId: binding.siteId,
+    listGuid: binding.listGuid,
+  });
+  const repository = createReadOnlyProcedureRecordRepository(
+    frozenBinding,
+    createInternalProcedureRecordReadTransport(transport),
+  );
   return Object.freeze({
-    binding: repository.binding,
+    binding: frozenBinding,
     findByRecordId: (recordId) => repository.findByRecordId(recordId),
   });
 }

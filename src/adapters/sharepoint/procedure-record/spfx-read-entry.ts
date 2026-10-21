@@ -10,61 +10,39 @@ import type { LookupResult } from "../../../contracts/types";
 import type { ProcedureRecord } from "../../../domain/procedure-record";
 import { bindProcedureRecordList, type ProcedureRecordListBinding } from "./list-binding";
 import { createReadOnlyProcedureRecordRepository } from "./read-only-repository";
-import type {
-  ProcedureRecordItemCreateResult,
-  ProcedureRecordItemReadResult,
-  ProcedureRecordLiveListTransport,
-  ProcedureRecordSchemaReadResult,
-} from "./transport-seam";
-
-export type ProcedureRecordReadTransport = Readonly<{
-  targetListGuid: string;
-  getSchema?(): Promise<ProcedureRecordSchemaReadResult>;
-  findByRecordId(recordId: string): Promise<ProcedureRecordItemReadResult>;
-  findByIdempotencyKey?(idempotencyKey: string): Promise<ProcedureRecordItemReadResult>;
-}>;
+import {
+  createInternalProcedureRecordReadTransport,
+  type ProcedureRecordReadTransport,
+} from "./spfx-read-internal-transport";
 
 export type ReadOnlyProcedureRecordLookup = Readonly<{
   binding: ProcedureRecordListBinding;
   findByRecordId(recordId: string): Promise<LookupResult<ProcedureRecord>>;
 }>;
 
-const failClosedSchema = async (): Promise<ProcedureRecordSchemaReadResult> => ({
-  ok: false,
-  failure: "FORBIDDEN",
-});
-
-const failClosedRead = async (): Promise<ProcedureRecordItemReadResult> => ({
-  ok: false,
-  failure: "FORBIDDEN",
-});
-
-const failClosedCreate = async (): Promise<ProcedureRecordItemCreateResult> => ({
-  ok: false,
-  failure: "FORBIDDEN",
-});
-
 export function createReadOnlyProcedureRecordLookup(
   binding: ProcedureRecordListBinding,
   transport: ProcedureRecordReadTransport,
 ): ReadOnlyProcedureRecordLookup {
-  const internalTransport: ProcedureRecordLiveListTransport = {
-    targetListGuid: transport.targetListGuid,
-    getSchema: transport.getSchema ?? failClosedSchema,
-    findByRecordId: (recordId: string) => transport.findByRecordId(recordId),
-    findByIdempotencyKey: transport.findByIdempotencyKey ?? failClosedRead,
-    createItem: failClosedCreate,
-  };
+  const frozenBinding: ProcedureRecordListBinding = Object.freeze({
+    organizationId: binding.organizationId,
+    siteId: binding.siteId,
+    listGuid: binding.listGuid,
+  });
 
-  const repository = createReadOnlyProcedureRecordRepository(binding, internalTransport);
+  const repository = createReadOnlyProcedureRecordRepository(
+    frozenBinding,
+    createInternalProcedureRecordReadTransport(transport),
+  );
 
   return Object.freeze({
-    binding: repository.binding,
+    binding: frozenBinding,
     findByRecordId: (recordId: string) => repository.findByRecordId(recordId),
   });
 }
 
 export { bindProcedureRecordList };
 export type { ProcedureRecordListBinding };
+export type { ProcedureRecordReadTransport };
 export type { LookupResult };
 export type { ProcedureRecord };
