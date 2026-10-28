@@ -60,7 +60,7 @@ describe("ProcedureRecordCorrection save wiring", () => {
       occurrenceId: recorded.occurrenceId,
     };
     presentation = presentProcedureCorrection(recorded, context)!;
-    originalBinding = buildProcedureCorrectionOriginalBinding(context, KIOSK_RECORD_1)!;
+    originalBinding = buildProcedureCorrectionOriginalBinding(context, KIOSK_RECORD_1, recorded)!;
   });
 
   beforeEach(() => {

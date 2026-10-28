@@ -65,6 +65,25 @@ export function presentProcedureCancellation(
     return undefined;
   }
 
+  // U6-A: Rigorous multi-field boundary and metadata cross-check
+  if (
+    item.userId !== context.userId ||
+    item.userId !== item.boundRecord.UserId ||
+    item.planId !== context.planId ||
+    item.planId !== item.boundRecord.planId ||
+    item.planVersion !== context.planVersion ||
+    item.planVersion !== item.boundRecord.planVersion ||
+    item.procedure.ProcedureId !== context.procedureId ||
+    item.procedure.ProcedureId !== item.boundRecord.Procedure?.ProcedureId ||
+    item.procedure.ProcedureVersion !== context.procedureVersion ||
+    item.procedure.ProcedureVersion !== item.boundRecord.Procedure?.ProcedureVersion ||
+    context.organizationId !== item.boundRecord.OrganizationId ||
+    context.siteId !== item.boundRecord.SiteId ||
+    item.localDate !== item.boundRecord.LocalDate
+  ) {
+    return undefined;
+  }
+
   return {
     personLabel: context.personLabel,
     occurrenceStatus: item.effectiveStatus,

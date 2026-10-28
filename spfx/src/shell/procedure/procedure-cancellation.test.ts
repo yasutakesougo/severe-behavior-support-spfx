@@ -85,6 +85,43 @@ describe("CANCEL-SLICE-D presentation gate", () => {
     expect(presentProcedureCancellation(cancelled, contextForItem(cancelled!))).toBeUndefined();
     expect(presentProcedureCancellation(conflict, contextForItem(conflict!))).toBeUndefined();
   });
+
+  it("fail-closes when context or boundRecord metadata mismatches (SBS-U6-A cross-check)", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み")!;
+    const ctx = contextForItem(recorded);
+
+    // Context metadata mismatches
+    expect(
+      presentProcedureCancellation(recorded, { ...ctx, userId: "other-user" }),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCancellation(recorded, { ...ctx, planId: "other-plan" }),
+    ).toBeUndefined();
+    expect(presentProcedureCancellation(recorded, { ...ctx, planVersion: 99 })).toBeUndefined();
+    expect(
+      presentProcedureCancellation(recorded, { ...ctx, procedureId: "other-proc" }),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCancellation(recorded, { ...ctx, procedureVersion: "v99" }),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCancellation(recorded, { ...ctx, organizationId: "other-org" }),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCancellation(recorded, { ...ctx, siteId: "other-site" }),
+    ).toBeUndefined();
+
+    // Mismatched effectiveRecordId
+    const itemWithTamperedEffectiveRecordId = {
+      ...recorded,
+      rawResolverResult: {
+        ...recorded.rawResolverResult,
+        effectiveRecordId: "other-record-id-tampered-000000000000000000000000000000000000",
+      } as typeof recorded.rawResolverResult,
+    };
+    expect(presentProcedureCancellation(itemWithTamperedEffectiveRecordId, ctx)).toBeUndefined();
+  });
 });
 
 describe("CANCEL-SLICE-D synthetic authorization fixture", () => {

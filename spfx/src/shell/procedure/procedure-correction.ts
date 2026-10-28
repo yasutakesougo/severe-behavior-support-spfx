@@ -63,6 +63,38 @@ export function presentProcedureCorrection(
     return undefined;
   }
 
+  // U6-A: Differentiate RECORDED vs CANCELLED record id resolution
+  if (item.rawResolverResult.status === "RECORDED") {
+    if (item.rawResolverResult.effectiveRecordId !== item.boundRecord.RecordId) {
+      return undefined;
+    }
+  } else if (item.rawResolverResult.status === "CANCELLED") {
+    if (item.rawResolverResult.targetRecordId !== item.boundRecord.RecordId) {
+      return undefined;
+    }
+  } else {
+    return undefined;
+  }
+
+  // U6-A: Rigorous multi-field boundary and metadata cross-check
+  if (
+    item.userId !== context.userId ||
+    item.userId !== item.boundRecord.UserId ||
+    item.planId !== context.planId ||
+    item.planId !== item.boundRecord.planId ||
+    item.planVersion !== context.planVersion ||
+    item.planVersion !== item.boundRecord.planVersion ||
+    item.procedure.ProcedureId !== context.procedureId ||
+    item.procedure.ProcedureId !== item.boundRecord.Procedure?.ProcedureId ||
+    item.procedure.ProcedureVersion !== context.procedureVersion ||
+    item.procedure.ProcedureVersion !== item.boundRecord.Procedure?.ProcedureVersion ||
+    context.organizationId !== item.boundRecord.OrganizationId ||
+    context.siteId !== item.boundRecord.SiteId ||
+    item.localDate !== item.boundRecord.LocalDate
+  ) {
+    return undefined;
+  }
+
   return {
     personLabel: context.personLabel,
     occurrenceStatus: item.effectiveStatus,
