@@ -46,9 +46,13 @@ export default class ScaffoldShellWebPart extends BaseClientSideWebPart<IScaffol
 
   protected onInit(): Promise<void> {
     return super.onInit().then(() => {
-      return this._getEnvironmentMessage().then((message) => {
-        this._environmentMessage = message;
-      });
+      this._getEnvironmentMessage()
+        .then((message) => {
+          this._environmentMessage = message;
+        })
+        .catch(() => {
+          this._environmentMessage = "";
+        });
     });
   }
 
