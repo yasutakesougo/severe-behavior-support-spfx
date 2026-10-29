@@ -122,8 +122,7 @@ export function validateCanonicalProcedureResolutionQuery(
 
   const hasScheduleItemId =
     value.scheduleItemId === undefined || isNonEmptyString(value.scheduleItemId);
-  const hasOccurrenceId =
-    value.occurrenceId === undefined || isNonEmptyString(value.occurrenceId);
+  const hasOccurrenceId = value.occurrenceId === undefined || isNonEmptyString(value.occurrenceId);
 
   return (
     isNonEmptyString(value.organizationId) &&
@@ -217,8 +216,7 @@ export function buildCanonicalProcedureCatalogEntry(input: {
       ? `${scheduleItem.activityLabel}${scheduleItem.scheduledTime ? `（${scheduleItem.scheduledTime}）` : ""}`
       : "支援手順");
 
-  const computedPlanPeriodLabel =
-    input.planPeriodLabel ?? `第${planVersion.version}版 承認手順`;
+  const computedPlanPeriodLabel = input.planPeriodLabel ?? `第${planVersion.version}版 承認手順`;
 
   const computedNoteLabel =
     input.noteLabel ??
@@ -363,15 +361,12 @@ export function resolveCanonicalProcedure(
   }
 
   // Catalog entry structural validation
-  const invalidEntry = matches.find(
-    (e) => !validateCanonicalProcedureCatalogEntry(e),
-  );
+  const invalidEntry = matches.find((e) => !validateCanonicalProcedureCatalogEntry(e));
   if (invalidEntry) {
     return {
       status: "UNRESOLVED",
       reasonCode: "INPUT_INVALID",
-      unresolvedReason:
-        "カタログエントリの形式または必須フィールドが不正です。",
+      unresolvedReason: "カタログエントリの形式または必須フィールドが不正です。",
       canStartProcedureRecord: false,
       context: query,
     };
@@ -390,9 +385,7 @@ export function resolveCanonicalProcedure(
       };
     }
 
-    const scheduleMatches = matches.filter(
-      (m) => m.scheduleItemId === query.scheduleItemId,
-    );
+    const scheduleMatches = matches.filter((m) => m.scheduleItemId === query.scheduleItemId);
 
     if (scheduleMatches.length === 1) {
       const resolved = scheduleMatches[0];
@@ -454,7 +447,7 @@ export function resolveCanonicalProcedure(
     projection: {
       sceneLabel: entry.sceneLabel,
       performLabels: [...entry.performLabels], // Strict array order preserved
-      avoidLabels: [...entry.avoidLabels],     // Strict array order preserved
+      avoidLabels: [...entry.avoidLabels], // Strict array order preserved
       noteLabel: entry.noteLabel,
     },
     planPeriodLabel: entry.planPeriodLabel,
@@ -488,15 +481,12 @@ export function resolveCanonicalProcedureFromEntities(input: {
 
   // 1. ScheduledOccurrence consistency check if occurrenceId is present
   if (query.occurrenceId && occurrences && occurrences.length > 0) {
-    const matchingOccurrence = occurrences.find(
-      (o) => o.OccurrenceId === query.occurrenceId,
-    );
+    const matchingOccurrence = occurrences.find((o) => o.OccurrenceId === query.occurrenceId);
     if (!matchingOccurrence) {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason:
-          "指定された OccurrenceId に対応する予定実績データが見つかりません。",
+        unresolvedReason: "指定された OccurrenceId に対応する予定実績データが見つかりません。",
         canStartProcedureRecord: false,
         context: query,
       };
@@ -515,22 +505,17 @@ export function resolveCanonicalProcedureFromEntities(input: {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason:
-          "Occurrence の識別子または手順参照が解決クエリと一致しません。",
+        unresolvedReason: "Occurrence の識別子または手順参照が解決クエリと一致しません。",
         canStartProcedureRecord: false,
         context: query,
       };
     }
 
-    if (
-      query.scheduleItemId &&
-      matchingOccurrence.ScheduleItemId !== query.scheduleItemId
-    ) {
+    if (query.scheduleItemId && matchingOccurrence.ScheduleItemId !== query.scheduleItemId) {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason:
-          "Occurrence の ScheduleItemId がクエリと一致しません。",
+        unresolvedReason: "Occurrence の ScheduleItemId がクエリと一致しません。",
         canStartProcedureRecord: false,
         context: query,
       };
@@ -539,15 +524,12 @@ export function resolveCanonicalProcedureFromEntities(input: {
 
   // 2. ScheduleItem consistency check if scheduleItemId is present
   if (query.scheduleItemId && scheduleItems && scheduleItems.length > 0) {
-    const matchingSchedule = scheduleItems.find(
-      (s) => s.ScheduleItemId === query.scheduleItemId,
-    );
+    const matchingSchedule = scheduleItems.find((s) => s.ScheduleItemId === query.scheduleItemId);
     if (!matchingSchedule) {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason:
-          "指定された ScheduleItemId に対応するスケジュール枠が見つかりません。",
+        unresolvedReason: "指定された ScheduleItemId に対応するスケジュール枠が見つかりません。",
         canStartProcedureRecord: false,
         context: query,
       };
@@ -565,8 +547,7 @@ export function resolveCanonicalProcedureFromEntities(input: {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason:
-          "ScheduleItem の識別子または手順参照が解決クエリと一致しません。",
+        unresolvedReason: "ScheduleItem の識別子または手順参照が解決クエリと一致しません。",
         canStartProcedureRecord: false,
         context: query,
       };
@@ -636,15 +617,12 @@ export function resolveCanonicalProcedureFromEntities(input: {
   }
 
   // 5. Check if any matching binding is not APPROVED
-  const nonApproved = matchingBindings.find(
-    (b) => b.Procedure.ApprovalState !== "APPROVED",
-  );
+  const nonApproved = matchingBindings.find((b) => b.Procedure.ApprovalState !== "APPROVED");
   if (nonApproved) {
     return {
       status: "UNRESOLVED",
       reasonCode: "NOT_APPROVED",
-      unresolvedReason:
-        "結び付けられた手順参照の承認状態が APPROVED ではありません。",
+      unresolvedReason: "結び付けられた手順参照の承認状態が APPROVED ではありません。",
       canStartProcedureRecord: false,
       context: query,
     };
@@ -670,8 +648,7 @@ export function resolveCanonicalProcedureFromEntities(input: {
     return {
       status: "UNRESOLVED",
       reasonCode: "AMBIGUOUS_DUPLICATE_ENTRY",
-      unresolvedReason:
-        "同一手順に対して複数の重複バインディングが存在します。",
+      unresolvedReason: "同一手順に対して複数の重複バインディングが存在します。",
       canStartProcedureRecord: false,
       context: query,
     };
@@ -703,4 +680,3 @@ export function resolveCanonicalProcedureFromEntities(input: {
 
   return resolveCanonicalProcedure(query, [catalogEntry]);
 }
-

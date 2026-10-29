@@ -32,10 +32,9 @@ import {
 describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
   describe("Rule 1: OrganizationId, SiteId, UserId exact match", () => {
     it("resolves procedure when Org, Site, and User match exactly", () => {
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [FIXTURE_CATALOG_ENTRY_LUNCH_V3],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, [
+        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
+      ]);
 
       assert.equal(outcome.status, "RESOLVED");
       if (outcome.status === "RESOLVED") {
@@ -49,9 +48,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         organizationId: "other-org",
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -64,9 +61,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         siteId: "site-honmoku",
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -79,9 +74,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         userId: FIXTURE_USER_ID_B,
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -96,9 +89,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         planId: "plan-other-999",
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -111,9 +102,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         planVersion: 4,
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -128,9 +117,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         procedureId: "proc-bath-01",
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -143,9 +130,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
         procedureVersion: "3.1",
       };
-      const outcome = resolveCanonicalProcedure(query, [
-        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
-      ]);
+      const outcome = resolveCanonicalProcedure(query, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -203,10 +188,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         approvalState: "DRAFT" as unknown as "APPROVED",
       };
 
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [draftCatalogEntry],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, [draftCatalogEntry]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -220,10 +202,10 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         approvalState: "DRAFT" as unknown as "APPROVED",
       };
 
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [FIXTURE_CATALOG_ENTRY_LUNCH_V3, draftCatalogEntry],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, [
+        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
+        draftCatalogEntry,
+      ]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -327,10 +309,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
 
   describe("Rule 7: UNRESOLVED on duplicates, missing, or contradictory data", () => {
     it("fails closed with CATALOG_ENTRY_NOT_FOUND when catalog is empty", () => {
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, []);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -348,10 +327,10 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         sceneLabel: "場面B",
       };
 
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [duplicateEntryA, duplicateEntryB],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, [
+        duplicateEntryA,
+        duplicateEntryB,
+      ]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -365,10 +344,9 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         sceneLabel: 123 as unknown as string,
       };
 
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [corruptedEntry as unknown as CanonicalProcedureCatalogEntry],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, [
+        corruptedEntry as unknown as CanonicalProcedureCatalogEntry,
+      ]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -382,10 +360,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
         userId: "   ",
       };
 
-      const outcome = resolveCanonicalProcedure(
-        invalidQuery,
-        [FIXTURE_CATALOG_ENTRY_LUNCH_V3],
-      );
+      const outcome = resolveCanonicalProcedure(invalidQuery, [FIXTURE_CATALOG_ENTRY_LUNCH_V3]);
 
       assert.equal(outcome.status, "UNRESOLVED");
       if (outcome.status === "UNRESOLVED") {
@@ -437,10 +412,9 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
 
   describe("Rule 9: Array order preservation for supportMethods and precautions", () => {
     it("preserves exact array order without sorting, deduplicating, or mutating", () => {
-      const outcome = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        [FIXTURE_CATALOG_ENTRY_LUNCH_V3],
-      );
+      const outcome = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, [
+        FIXTURE_CATALOG_ENTRY_LUNCH_V3,
+      ]);
 
       assert.equal(outcome.status, "RESOLVED");
       if (outcome.status === "RESOLVED") {
@@ -483,10 +457,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
       const catalog = [catalogEntryLunch, catalogEntryRest];
 
       // Resolve lunch procedure
-      const outcomeLunch = resolveCanonicalProcedure(
-        FIXTURE_QUERY_LUNCH_V3_VALID,
-        catalog,
-      );
+      const outcomeLunch = resolveCanonicalProcedure(FIXTURE_QUERY_LUNCH_V3_VALID, catalog);
       assert.equal(outcomeLunch.status, "RESOLVED");
       if (outcomeLunch.status === "RESOLVED") {
         assert.equal(outcomeLunch.projection.sceneLabel, "昼食準備（12:00）");
@@ -560,10 +531,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
 
   describe("Validator functions", () => {
     it("validates valid query", () => {
-      assert.equal(
-        validateCanonicalProcedureResolutionQuery(FIXTURE_QUERY_LUNCH_V3_VALID),
-        true,
-      );
+      assert.equal(validateCanonicalProcedureResolutionQuery(FIXTURE_QUERY_LUNCH_V3_VALID), true);
     });
 
     it("rejects query with negative planVersion", () => {
@@ -577,10 +545,7 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
     });
 
     it("validates valid catalog entry", () => {
-      assert.equal(
-        validateCanonicalProcedureCatalogEntry(FIXTURE_CATALOG_ENTRY_LUNCH_V3),
-        true,
-      );
+      assert.equal(validateCanonicalProcedureCatalogEntry(FIXTURE_CATALOG_ENTRY_LUNCH_V3), true);
     });
   });
 });

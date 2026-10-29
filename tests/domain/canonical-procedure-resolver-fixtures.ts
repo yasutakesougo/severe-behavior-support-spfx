@@ -62,13 +62,8 @@ export const FIXTURE_PLAN_VERSION_A_V2: SupportPlanVersion = {
   UserId: FIXTURE_USER_ID_A,
   version: FIXTURE_PLAN_VERSION_2,
   goals: ["集団場面で食事をとる練習をする"],
-  supportMethods: [
-    "旧手順1: 声かけで誘導する",
-    "旧手順2: 見守りを実施する",
-  ],
-  precautions: [
-    "旧留意: 離席時は静かに促す",
-  ],
+  supportMethods: ["旧手順1: 声かけで誘導する", "旧手順2: 見守りを実施する"],
+  precautions: ["旧留意: 離席時は静かに促す"],
   reviewCriteria: ["30分以内に完食できるか"],
   versionCreatedBy: "synthetic-planner-001",
   versionCreatedAt: "2026-04-01T09:00:00Z",
