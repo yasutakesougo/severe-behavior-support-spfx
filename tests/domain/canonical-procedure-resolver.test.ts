@@ -336,6 +336,113 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
       }
     });
 
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate ScheduleItem with same scheduleItemId exist (differing labels, order [A, B])", () => {
+      const duplicateScheduleA = {
+        ...FIXTURE_SCHEDULE_ITEM_LUNCH,
+        activityLabel: "昼食準備（前半）",
+      };
+      const duplicateScheduleB = {
+        ...FIXTURE_SCHEDULE_ITEM_LUNCH,
+        activityLabel: "昼食準備（後半異なるラベル）",
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [duplicateScheduleA, duplicateScheduleB],
+        occurrences: [FIXTURE_OCCURRENCE_LUNCH],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate ScheduleItem with same scheduleItemId exist (order [B, A])", () => {
+      const duplicateScheduleA = {
+        ...FIXTURE_SCHEDULE_ITEM_LUNCH,
+        activityLabel: "昼食準備（前半）",
+      };
+      const duplicateScheduleB = {
+        ...FIXTURE_SCHEDULE_ITEM_LUNCH,
+        activityLabel: "昼食準備（後半異なるラベル）",
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [duplicateScheduleB, duplicateScheduleA],
+        occurrences: [FIXTURE_OCCURRENCE_LUNCH],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate identical ScheduleItem exist", () => {
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH, FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [FIXTURE_OCCURRENCE_LUNCH],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("does not trigger duplicate ambiguity when another ScheduleItem with same ScheduleItemId exists in different Site", () => {
+      const otherSiteSchedule = {
+        ...FIXTURE_SCHEDULE_ITEM_LUNCH,
+        SiteId: "synthetic-site-other",
+        activityLabel: "別事業所枠",
+      };
+
+      // Both in scheduleItems, one in-scope, one out-of-scope
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH, otherSiteSchedule],
+        occurrences: [FIXTURE_OCCURRENCE_LUNCH],
+      });
+
+      assert.equal(outcome.status, "RESOLVED");
+      if (outcome.status === "RESOLVED") {
+        assert.equal(outcome.projection.sceneLabel, "昼食準備（12:00）");
+      }
+    });
+
+    it("does not trigger duplicate ambiguity when other Site ScheduleItem is placed first in array", () => {
+      const otherSiteSchedule = {
+        ...FIXTURE_SCHEDULE_ITEM_LUNCH,
+        SiteId: "synthetic-site-other",
+        activityLabel: "別事業所枠",
+      };
+
+      // Placed first in array: out-of-scope first, in-scope second
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [otherSiteSchedule, FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [FIXTURE_OCCURRENCE_LUNCH],
+      });
+
+      assert.equal(outcome.status, "RESOLVED");
+      if (outcome.status === "RESOLVED") {
+        assert.equal(outcome.projection.sceneLabel, "昼食準備（12:00）");
+      }
+    });
+
     it("resolves cleanly when occurrenceId is not specified and occurrences is undefined or empty", () => {
       const queryWithoutOccurrence = {
         ...FIXTURE_QUERY_LUNCH_V3_VALID,
@@ -713,6 +820,49 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
 
       // Exactly 1 matching slot in scope, but query has no scheduleItemId -> resolves with default/generic slot
       assert.equal(outcome.status, "RESOLVED");
+      if (outcome.status === "RESOLVED") {
+        assert.equal(outcome.projection.sceneLabel, "支援手順");
+      }
+    });
+
+    it("resolves cleanly with generic sceneLabel '支援手順' when scheduleItemId is undefined and 0 schedule items exist", () => {
+      const queryWithoutScheduleId = {
+        ...FIXTURE_QUERY_LUNCH_V3_VALID,
+        scheduleItemId: undefined,
+        occurrenceId: undefined,
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: queryWithoutScheduleId,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [],
+      });
+
+      assert.equal(outcome.status, "RESOLVED");
+      if (outcome.status === "RESOLVED") {
+        assert.equal(outcome.projection.sceneLabel, "支援手順");
+      }
+    });
+
+    it("resolves cleanly with generic sceneLabel '支援手順' when scheduleItemId is undefined and 1 matching schedule item exists", () => {
+      const queryWithoutScheduleId = {
+        ...FIXTURE_QUERY_LUNCH_V3_VALID,
+        scheduleItemId: undefined,
+        occurrenceId: undefined,
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: queryWithoutScheduleId,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+      });
+
+      assert.equal(outcome.status, "RESOLVED");
+      if (outcome.status === "RESOLVED") {
+        assert.equal(outcome.projection.sceneLabel, "支援手順");
+      }
     });
   });
 

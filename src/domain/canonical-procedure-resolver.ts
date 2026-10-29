@@ -522,36 +522,54 @@ export function resolveCanonicalProcedureFromEntities(input: {
     }
   }
 
-  // 2. ScheduleItem consistency check if scheduleItemId is present
+  // 2. ScheduleItem consistency check and selection
+  let resolvedScheduleItem: ScheduleItem | undefined = undefined;
   if (query.scheduleItemId && scheduleItems !== undefined) {
-    const matchingSchedule = scheduleItems.find((s) => s.ScheduleItemId === query.scheduleItemId);
-    if (!matchingSchedule) {
+    const matchingScheduleItems = scheduleItems.filter(
+      (s) =>
+        s.ScheduleItemId === query.scheduleItemId &&
+        s.OrganizationId === query.organizationId &&
+        s.SiteId === query.siteId &&
+        s.planId === query.planId &&
+        s.planVersion === query.planVersion &&
+        s.Procedure.ProcedureId === query.procedureId &&
+        s.Procedure.ProcedureVersion === query.procedureVersion,
+    );
+
+    if (matchingScheduleItems.length > 1) {
       return {
         status: "UNRESOLVED",
-        reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason: "指定された ScheduleItemId に対応するスケジュール枠が見つかりません。",
+        reasonCode: "AMBIGUOUS_DUPLICATE_ENTRY",
+        unresolvedReason:
+          "同一スコープ・手順・ScheduleItemIdに対して複数の重複スケジュール枠が存在します。",
         canStartProcedureRecord: false,
         context: query,
       };
     }
 
-    if (
-      matchingSchedule.OrganizationId !== query.organizationId ||
-      matchingSchedule.SiteId !== query.siteId ||
-      matchingSchedule.planId !== query.planId ||
-      matchingSchedule.planVersion !== query.planVersion ||
-      matchingSchedule.Procedure.ProcedureId !== query.procedureId ||
-      matchingSchedule.Procedure.ProcedureVersion !== query.procedureVersion ||
-      matchingSchedule.Procedure.ApprovalState !== "APPROVED"
-    ) {
+    if (matchingScheduleItems.length === 0) {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
-        unresolvedReason: "ScheduleItem の識別子または手順参照が解決クエリと一致しません。",
+        unresolvedReason:
+          "指定された ScheduleItemId に対応する有効なスケジュール枠が見つかりません。",
         canStartProcedureRecord: false,
         context: query,
       };
     }
+
+    const candidate = matchingScheduleItems[0];
+    if (candidate.Procedure.ApprovalState !== "APPROVED") {
+      return {
+        status: "UNRESOLVED",
+        reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
+        unresolvedReason: "ScheduleItem の手順承認状態が APPROVED ではありません。",
+        canStartProcedureRecord: false,
+        context: query,
+      };
+    }
+
+    resolvedScheduleItem = candidate;
   }
 
   // 3. Find matching SupportPlanVersion
@@ -690,17 +708,11 @@ export function resolveCanonicalProcedureFromEntities(input: {
   }
 
   const binding = matchingBindings[0];
-  const matchingScheduleItem = scheduleItems?.find(
-    (s) =>
-      s.ScheduleItemId === query.scheduleItemId &&
-      s.Procedure.ProcedureId === query.procedureId &&
-      s.Procedure.ProcedureVersion === query.procedureVersion,
-  );
 
   const catalogEntry = buildCanonicalProcedureCatalogEntry({
     planVersion,
     binding,
-    scheduleItem: matchingScheduleItem,
+    scheduleItem: resolvedScheduleItem,
   });
 
   if (!catalogEntry) {
