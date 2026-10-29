@@ -1,4 +1,3 @@
-import type { ApprovedProcedureReference } from "../contracts/types";
 import type { ScheduleItem, ScheduledOccurrence } from "./kiosk-contract";
 import type { SupportPlanVersion } from "./support-plan";
 import {
