@@ -459,6 +459,143 @@ describe("SBS-U6-B W1 Pure Canonical Procedure Resolver", () => {
 
       assert.equal(outcome.status, "RESOLVED");
     });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate ScheduledOccurrence exist with conflicting ProcedureVersion (order [A, B])", () => {
+      const occurrenceA = FIXTURE_OCCURRENCE_LUNCH;
+      const occurrenceB = {
+        ...FIXTURE_OCCURRENCE_LUNCH,
+        Procedure: {
+          ...FIXTURE_OCCURRENCE_LUNCH.Procedure,
+          ProcedureVersion: "4.0.0",
+        },
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [occurrenceA, occurrenceB],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate ScheduledOccurrence exist with conflicting ProcedureVersion (order [B, A])", () => {
+      const occurrenceA = FIXTURE_OCCURRENCE_LUNCH;
+      const occurrenceB = {
+        ...FIXTURE_OCCURRENCE_LUNCH,
+        Procedure: {
+          ...FIXTURE_OCCURRENCE_LUNCH.Procedure,
+          ProcedureVersion: "4.0.0",
+        },
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [occurrenceB, occurrenceA],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate ScheduledOccurrence exist with conflicting ScheduleItemId (order [A, B])", () => {
+      const occurrenceA = FIXTURE_OCCURRENCE_LUNCH;
+      const occurrenceB = {
+        ...FIXTURE_OCCURRENCE_LUNCH,
+        ScheduleItemId: "synthetic-sch-lunch-conflicting",
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [occurrenceA, occurrenceB],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when duplicate ScheduledOccurrence exist with conflicting ScheduleItemId (order [B, A])", () => {
+      const occurrenceA = FIXTURE_OCCURRENCE_LUNCH;
+      const occurrenceB = {
+        ...FIXTURE_OCCURRENCE_LUNCH,
+        ScheduleItemId: "synthetic-sch-lunch-conflicting",
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [occurrenceB, occurrenceA],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with AMBIGUOUS_DUPLICATE_ENTRY when identical duplicate ScheduledOccurrence exist", () => {
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [FIXTURE_OCCURRENCE_LUNCH, FIXTURE_OCCURRENCE_LUNCH],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "AMBIGUOUS_DUPLICATE_ENTRY");
+      }
+    });
+
+    it("fails closed with SCHEDULE_OCCURRENCE_MISMATCH when requested occurrenceId does not exist in occurrences array", () => {
+      const nonExistentOccurrence = {
+        ...FIXTURE_OCCURRENCE_LUNCH,
+        OccurrenceId: "synthetic-occ-different-id",
+      };
+
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: [nonExistentOccurrence],
+      });
+
+      assert.equal(outcome.status, "UNRESOLVED");
+      if (outcome.status === "UNRESOLVED") {
+        assert.equal(outcome.reasonCode, "SCHEDULE_OCCURRENCE_MISMATCH");
+      }
+    });
+
+    it("resolves cleanly when occurrenceId is specified and occurrences is undefined (optional contract preserved)", () => {
+      const outcome = resolveCanonicalProcedureFromEntities({
+        query: FIXTURE_QUERY_LUNCH_V3_VALID,
+        planVersions: [FIXTURE_PLAN_VERSION_A_V3],
+        bindings: [FIXTURE_BINDING_LUNCH_V3],
+        scheduleItems: [FIXTURE_SCHEDULE_ITEM_LUNCH],
+        occurrences: undefined,
+      });
+
+      assert.equal(outcome.status, "RESOLVED");
+    });
   });
 
   describe("Rule 7: UNRESOLVED on duplicates, missing, or contradictory data", () => {

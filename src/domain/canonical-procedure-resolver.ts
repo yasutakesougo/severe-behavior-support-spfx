@@ -481,8 +481,8 @@ export function resolveCanonicalProcedureFromEntities(input: {
 
   // 1. ScheduledOccurrence consistency check if occurrenceId is present
   if (query.occurrenceId && occurrences !== undefined) {
-    const matchingOccurrence = occurrences.find((o) => o.OccurrenceId === query.occurrenceId);
-    if (!matchingOccurrence) {
+    const matchingOccurrences = occurrences.filter((o) => o.OccurrenceId === query.occurrenceId);
+    if (matchingOccurrences.length === 0) {
       return {
         status: "UNRESOLVED",
         reasonCode: "SCHEDULE_OCCURRENCE_MISMATCH",
@@ -491,6 +491,19 @@ export function resolveCanonicalProcedureFromEntities(input: {
         context: query,
       };
     }
+
+    if (matchingOccurrences.length > 1) {
+      return {
+        status: "UNRESOLVED",
+        reasonCode: "AMBIGUOUS_DUPLICATE_ENTRY",
+        unresolvedReason:
+          "同一 OccurrenceId に対して複数の予定実績データが存在するため一意に解決できません。",
+        canStartProcedureRecord: false,
+        context: query,
+      };
+    }
+
+    const matchingOccurrence = matchingOccurrences[0];
 
     if (
       matchingOccurrence.OrganizationId !== query.organizationId ||
