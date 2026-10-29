@@ -480,7 +480,7 @@ export function resolveCanonicalProcedureFromEntities(input: {
   }
 
   // 1. ScheduledOccurrence consistency check if occurrenceId is present
-  if (query.occurrenceId && occurrences && occurrences.length > 0) {
+  if (query.occurrenceId && occurrences !== undefined) {
     const matchingOccurrence = occurrences.find((o) => o.OccurrenceId === query.occurrenceId);
     if (!matchingOccurrence) {
       return {
@@ -523,7 +523,7 @@ export function resolveCanonicalProcedureFromEntities(input: {
   }
 
   // 2. ScheduleItem consistency check if scheduleItemId is present
-  if (query.scheduleItemId && scheduleItems && scheduleItems.length > 0) {
+  if (query.scheduleItemId && scheduleItems !== undefined) {
     const matchingSchedule = scheduleItems.find((s) => s.ScheduleItemId === query.scheduleItemId);
     if (!matchingSchedule) {
       return {
@@ -555,7 +555,7 @@ export function resolveCanonicalProcedureFromEntities(input: {
   }
 
   // 3. Find matching SupportPlanVersion
-  const planVersion = planVersions.find(
+  const matchingPlanVersions = planVersions.filter(
     (pv) =>
       pv.OrganizationId === query.organizationId &&
       pv.SiteId === query.siteId &&
@@ -563,6 +563,19 @@ export function resolveCanonicalProcedureFromEntities(input: {
       pv.planId === query.planId &&
       pv.version === query.planVersion,
   );
+
+  if (matchingPlanVersions.length > 1) {
+    return {
+      status: "UNRESOLVED",
+      reasonCode: "AMBIGUOUS_DUPLICATE_ENTRY",
+      unresolvedReason:
+        "同一スコープ・計画ID・版数に対して複数の SupportPlanVersion が存在します。",
+      canStartProcedureRecord: false,
+      context: query,
+    };
+  }
+
+  const planVersion = matchingPlanVersions[0];
 
   if (!planVersion) {
     // Check if version mismatch exists
@@ -649,6 +662,28 @@ export function resolveCanonicalProcedureFromEntities(input: {
       status: "UNRESOLVED",
       reasonCode: "AMBIGUOUS_DUPLICATE_ENTRY",
       unresolvedReason: "同一手順に対して複数の重複バインディングが存在します。",
+      canStartProcedureRecord: false,
+      context: query,
+    };
+  }
+
+  // 8. Activity slot ambiguity check
+  const candidateScheduleItems = scheduleItems?.filter(
+    (s) =>
+      s.OrganizationId === query.organizationId &&
+      s.SiteId === query.siteId &&
+      s.planId === query.planId &&
+      s.planVersion === query.planVersion &&
+      s.Procedure.ProcedureId === query.procedureId &&
+      s.Procedure.ProcedureVersion === query.procedureVersion,
+  );
+
+  if (candidateScheduleItems && candidateScheduleItems.length > 1 && !query.scheduleItemId) {
+    return {
+      status: "UNRESOLVED",
+      reasonCode: "AMBIGUOUS_PROCEDURE_MAPPING",
+      unresolvedReason:
+        "同一手順に対して複数の活動枠が存在しますが、scheduleItemId が指定されていないため一意に解決できません。",
       canStartProcedureRecord: false,
       context: query,
     };
