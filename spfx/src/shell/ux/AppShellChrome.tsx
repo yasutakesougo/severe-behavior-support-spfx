@@ -55,6 +55,8 @@ import {
   selectNextActionableOccurrence,
   type ProcedureRecordFormSaveSnapshot,
   type ProcedureRecordLifecycleEvent,
+  type CurrentProcedureProjection,
+  type ShellCurrentProcedurePresentation,
   type ShellProcedureWorkflowPresentation,
   type ReviewObservationEvidenceInput,
 } from "../procedure";
@@ -359,13 +361,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       return false;
     }
     const item = todaySupportItems.find((entry) => entry.occurrenceId === occId);
-    if (!item || !userDetailById.has(item.userId)) {
-      return false;
-    }
-    const wantRecordForm = fieldStaffTaskDestination === "D-RECORD-WRITE";
+    // U6-A: Kiosk occurrence is UNRESOLVED, shielding direct record form entry
+    const wantRecordForm = false;
+    const targetUserId = item ? item.userId : undefined;
     const alreadyRestored =
       destination === "users" &&
-      selectedUserDetailId === item.userId &&
+      selectedUserDetailId === targetUserId &&
       selectedOccurrenceId === occId &&
       currentProcedureOpen &&
       procedureRecordFormOpen === wantRecordForm &&
@@ -383,7 +384,7 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     setPlannerListNext(undefined);
     setPlannerListOrigin(false);
     setSelectedOccurrenceId(occId);
-    setSelectedUserDetailId(item.userId);
+    setSelectedUserDetailId(targetUserId);
     setOccurrenceFlowFromOverview(true);
     setCurrentProcedureOpen(true);
     setProcedureRecordFormOpen(wantRecordForm);
@@ -974,22 +975,33 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     ? procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
     : undefined;
 
-  const selectedCurrentProcedure =
-    selectedCurrentProcedureBase && occurrenceFlowFromOverview && selectedOccurrenceItem
+  const selectedCurrentProcedure:
+    ShellCurrentProcedurePresentation<CurrentProcedureProjection | undefined> | undefined =
+    occurrenceFlowFromOverview
       ? {
-          ...selectedCurrentProcedureBase,
-          canStartProcedureRecord: selectedOccurrenceItem.canStartProcedureRecord,
-          occurrenceStatus: selectedOccurrenceItem.effectiveStatus,
+          heading: "現在の支援手順",
+          summaryPrompt: selectedOccurrenceItem
+            ? "選択された支援計画の手順本文は未配線です（A2正本Resolver未接続）。"
+            : "指定された支援手順（occurrence）が見つかりません。",
+          lookupStatus: "UNRESOLVED",
+          unresolvedReason: selectedOccurrenceItem
+            ? `選択された支援計画（第${selectedOccurrenceItem.planVersion}版）の手順詳細は現在未配線です。誤表示防止のため手順本文は表示されません。`
+            : "指定された支援手順（occurrence）が見つかりません。安全のため手順詳細は表示されません。",
+          canStartProcedureRecord: false,
+          occurrenceStatus: selectedOccurrenceItem?.effectiveStatus,
           context: {
-            ...selectedCurrentProcedureBase.context,
-            occurrenceId: selectedOccurrenceItem.occurrenceId,
-            userId: selectedOccurrenceItem.userId,
-            personLabel: selectedOccurrenceItem.personLabel,
-            procedureId: selectedOccurrenceItem.procedure.ProcedureId,
-            procedureVersion: selectedOccurrenceItem.procedure.ProcedureVersion,
-            planId: selectedOccurrenceItem.planId,
-            planVersion: selectedOccurrenceItem.planVersion,
+            organizationId: selectedOccurrenceItem?.boundRecord?.OrganizationId ?? "",
+            siteId: selectedOccurrenceItem?.boundRecord?.SiteId ?? "",
+            userId: selectedOccurrenceItem?.userId ?? "",
+            personLabel: selectedOccurrenceItem?.personLabel ?? "対象者未特定",
+            procedureId: selectedOccurrenceItem?.procedure?.ProcedureId ?? "",
+            procedureVersion: selectedOccurrenceItem?.procedure?.ProcedureVersion ?? "",
+            planId: selectedOccurrenceItem?.planId ?? "",
+            planVersion: selectedOccurrenceItem?.planVersion ?? 0,
+            planPeriodLabel: "未配線（A2未接続）",
+            occurrenceId: selectedOccurrenceId ?? "",
           },
+          projection: undefined,
         }
       : selectedCurrentProcedureBase;
 
@@ -1000,22 +1012,35 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         currentContext: selectedCurrentProcedure.context,
       })
     : undefined;
-  const procedureCorrectionPresentation = presentProcedureCorrection(
-    occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
-    selectedCurrentProcedure?.context,
-  );
-  const procedureCancellationPresentation = presentProcedureCancellation(
-    occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
-    selectedCurrentProcedure?.context,
-  );
+  const procedureCorrectionPresentation =
+    selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED"
+      ? presentProcedureCorrection(
+          occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
+          selectedCurrentProcedure?.context,
+        )
+      : undefined;
+  const procedureCancellationPresentation =
+    selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED"
+      ? presentProcedureCancellation(
+          occurrenceFlowFromOverview ? selectedOccurrenceItem : undefined,
+          selectedCurrentProcedure?.context,
+        )
+      : undefined;
   const procedureCorrectionOriginalBinding =
-    occurrenceFlowFromOverview && selectedOccurrenceItem?.boundRecord && selectedCurrentProcedure
+    selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED" &&
+    occurrenceFlowFromOverview &&
+    selectedOccurrenceItem?.boundRecord &&
+    selectedCurrentProcedure
       ? buildProcedureCorrectionOriginalBinding(
           selectedCurrentProcedure.context,
           selectedOccurrenceItem.boundRecord,
+          selectedOccurrenceItem,
         )
       : undefined;
-  const abcObservationPresentation = presentAbcObservation(selectedCurrentProcedure?.context);
+  const abcObservationPresentation =
+    selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED"
+      ? presentAbcObservation(selectedCurrentProcedure?.context)
+      : undefined;
 
   const handleRecordProcedureRequest = (): void => {
     if (
@@ -1024,7 +1049,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
         currentProcedureOpen,
         selectedUserDetailId,
         presentation: selectedCurrentProcedure,
-      })
+      }) ||
+      selectedCurrentProcedure?.lookupStatus === "UNRESOLVED"
     ) {
       return;
     }
@@ -1061,7 +1087,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     if (
       interactionPaused ||
       !FIELD_STAFF_PHASE8_CORRECTION_1_SLICE.correctionEntryAuthorized ||
-      !procedureCorrectionPresentation
+      !procedureCorrectionPresentation ||
+      selectedCurrentProcedure?.lookupStatus === "UNRESOLVED"
     ) {
       return;
     }
@@ -1077,7 +1104,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
       interactionPaused ||
       !FIELD_STAFF_CANCELLATION_UI_SLICE.cancellationPresentationAuthorized ||
       !procedureCancellationPresentation ||
-      !selectedOccurrenceItem?.boundRecord
+      !selectedOccurrenceItem?.boundRecord ||
+      selectedCurrentProcedure?.lookupStatus === "UNRESOLVED"
     ) {
       return;
     }
@@ -1112,7 +1140,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   };
 
   const handleAbcObservationRequest = (): void => {
-    if (interactionPaused || !abcObservationPresentation) {
+    if (
+      interactionPaused ||
+      !abcObservationPresentation ||
+      selectedCurrentProcedure?.lookupStatus === "UNRESOLVED"
+    ) {
       return;
     }
     shouldFocusDestinationRef.current = true;
@@ -1541,6 +1573,35 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         </p>
                       )}
                     </div>
+                  ) : occurrenceFlowFromOverview &&
+                    currentProcedureOpen &&
+                    selectedCurrentProcedure ? (
+                    <CurrentProcedure
+                      presentation={selectedCurrentProcedure}
+                      headingRef={destinationHeadingRef}
+                      backLabel="← 今日の支援"
+                      onBackToUserDetail={handleBackToTodaySupport}
+                      onRecordProcedureRequest={
+                        isProcedureRecordStartAllowed(selectedCurrentProcedure)
+                          ? handleRecordProcedureRequest
+                          : undefined
+                      }
+                      onCorrectionRequest={
+                        procedureCorrectionPresentation
+                          ? handleProcedureCorrectionRequest
+                          : undefined
+                      }
+                      onCancellationRequest={
+                        procedureCancellationPresentation
+                          ? handleProcedureCancellationRequest
+                          : undefined
+                      }
+                      onAbcObservationRequest={
+                        selectedCurrentProcedure.lookupStatus !== "UNRESOLVED"
+                          ? handleAbcObservationRequest
+                          : undefined
+                      }
+                    />
                   ) : selectedUserDetail ? (
                     reviewDuePreviewOpen && reviewFromSupportPlan ? (
                       <ReviewDueState
@@ -1574,7 +1635,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                           });
                         }}
                       />
-                    ) : abcObservationOpen && abcObservationPresentation ? (
+                    ) : abcObservationOpen &&
+                      abcObservationPresentation &&
+                      selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED" ? (
                       <AbcObservationPresentation
                         presentation={abcObservationPresentation}
                         headingRef={destinationHeadingRef}
@@ -1608,7 +1671,8 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       />
                     ) : procedureCancellationOpen &&
                       procedureCancellationPresentation &&
-                      selectedOccurrenceItem?.boundRecord ? (
+                      selectedOccurrenceItem?.boundRecord &&
+                      selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED" ? (
                       <ProcedureRecordCancellation
                         presentation={procedureCancellationPresentation}
                         originalRecord={selectedOccurrenceItem.boundRecord}
@@ -1618,7 +1682,9 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                         onSaveStateChange={handleProcedureFlowSaveStateChange}
                         onCancellationPersisted={handleCancellationPersisted}
                       />
-                    ) : procedureCorrectionOpen && procedureCorrectionPresentation ? (
+                    ) : procedureCorrectionOpen &&
+                      procedureCorrectionPresentation &&
+                      selectedCurrentProcedure?.lookupStatus !== "UNRESOLVED" ? (
                       <ProcedureRecordCorrection
                         presentation={procedureCorrectionPresentation}
                         originalBinding={procedureCorrectionOriginalBinding}
@@ -1715,9 +1781,11 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                             setSelectedUserDetailId(item.userId);
                             setOccurrenceFlowFromOverview(true);
                             setCurrentProcedureOpen(true);
-                            if (item.canStartProcedureRecord) {
-                              setProcedureRecordFormOpen(true);
-                            }
+                            setProcedureRecordFormOpen(false);
+                            setProcedureCorrectionOpen(false);
+                            setProcedureCancellationOpen(false);
+                            setAbcObservationOpen(false);
+                            setProcedureFlowSaveState(undefined);
                             setDestination("users");
                             if (onSelectedDestinationChange) {
                               onSelectedDestinationChange("users");

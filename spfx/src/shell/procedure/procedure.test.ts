@@ -1,3 +1,10 @@
+import { DEMO_UX_USER_DETAIL_FIXTURE } from "../users";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { act } from "react-dom/test-utils";
+import { CurrentProcedure } from "./CurrentProcedure";
+import { AppShellChrome } from "../ux/AppShellChrome";
+import { DEMO_1_FIELD_STAFF_FIXTURE } from "../ux/fixture";
 import {
   FIELD_WORKFLOW_PROCEDURE_FIXTURE,
   FIELD_WORKFLOW_RECORDER_SUBJECT_ID,
@@ -386,8 +393,14 @@ describe("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1", () => {
       planPeriodLabel: "合成期間",
       occurrenceId: recorded.occurrenceId,
     };
-    expect(buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord)).toBeDefined();
-    expect(buildProcedureCorrectionOriginalBinding(context, undefined)).toBeUndefined();
+    expect(
+      buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord, recorded),
+    ).toBeDefined();
+    expect(
+      buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord, undefined),
+    ).toBeUndefined();
+    expect(buildProcedureCorrectionOriginalBinding(context, recorded.boundRecord)).toBeUndefined();
+    expect(buildProcedureCorrectionOriginalBinding(context, undefined, recorded)).toBeUndefined();
     expect(
       isCorrectionDraftReadyToSave(
         {
@@ -398,5 +411,481 @@ describe("FIELD-STAFF-CORRECTION-UI-SAVE-WIRING-SLICE-1", () => {
         "2026-08-17",
       ),
     ).toBe(true);
+  });
+});
+
+describe("SBS-U6-A Procedure presentation guard & fail-closed resolution", () => {
+  let container: HTMLDivElement;
+
+  beforeEach(() => {
+    container = document.createElement("div");
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+    document.body.removeChild(container);
+  });
+
+  it("fail-closes record start eligibility when lookupStatus is UNRESOLVED", () => {
+    expect(
+      isProcedureRecordStartAllowed({
+        canStartProcedureRecord: true,
+        lookupStatus: "UNRESOLVED",
+      }),
+    ).toBe(false);
+
+    expect(
+      canInvokeProcedureRecordStart({
+        interactionPaused: false,
+        currentProcedureOpen: true,
+        selectedUserDetailId: "user-a",
+        presentation: {
+          canStartProcedureRecord: true,
+          lookupStatus: "UNRESOLVED",
+        },
+      }),
+    ).toBe(false);
+  });
+
+  it("renders safe unresolved guard and omits procedure body/CTAs while preserving back button", () => {
+    const onBackMock = jest.fn();
+    const unresolvedPresentation = {
+      heading: "現在の支援手順",
+      summaryPrompt: "選択された支援計画の手順本文は未配線です（A2正本Resolver未接続）。",
+      lookupStatus: "UNRESOLVED" as const,
+      unresolvedReason:
+        "選択された支援計画（第1版）の手順詳細は現在未配線です。誤表示防止のため手順本文は表示されません。",
+      canStartProcedureRecord: false,
+      occurrenceStatus: "未実施" as const,
+      context: {
+        organizationId: "synthetic-org-001",
+        siteId: "SITE-ISG",
+        userId: "user-a",
+        personLabel: "Aさん",
+        procedureId: "proc-lunch",
+        procedureVersion: "v1",
+        planId: "plan-001",
+        planVersion: 1,
+        planPeriodLabel: "未配線（A2未接続）",
+        occurrenceId: "occ-test-001",
+      },
+      projection: undefined,
+    };
+
+    act(() => {
+      ReactDOM.render(
+        React.createElement(CurrentProcedure, {
+          presentation: unresolvedPresentation,
+          backLabel: "← 今日の支援",
+          onBackToUserDetail: onBackMock,
+          onRecordProcedureRequest: jest.fn(),
+          onCorrectionRequest: jest.fn(),
+          onCancellationRequest: jest.fn(),
+          onAbcObservationRequest: jest.fn(),
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    const text = container.textContent ?? "";
+    expect(text).toContain("手順本文の確認");
+    expect(text).toContain(
+      "選択された支援計画（第1版）の手順詳細は現在未配線です。誤表示防止のため手順本文は表示されません。",
+    );
+
+    // Procedure body projection must NOT be displayed
+    expect(text).not.toContain("場面");
+    expect(text).not.toContain("活動の切り替え場面");
+    expect(text).not.toContain("避ける支援");
+    expect(text).not.toContain("留意点");
+
+    // Record / correction CTAs must NOT be displayed
+    expect(text).not.toContain("この手順を記録");
+    expect(text).not.toContain("記録の訂正");
+
+    // Back button must be rendered and functional
+    const backBtn = container.querySelector("button");
+    expect(backBtn).not.toBeNull();
+    expect(backBtn?.textContent).toContain("← 今日の支援");
+    act(() => {
+      backBtn?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(onBackMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("non-regression: renders full procedure body and CTAs when presentation is RESOLVED", () => {
+    const resolvedPresentation = FIELD_WORKFLOW_PROCEDURE_FIXTURE.currentByUserId["user-a"];
+    expect(resolvedPresentation).toBeDefined();
+
+    act(() => {
+      ReactDOM.render(
+        React.createElement(CurrentProcedure, {
+          presentation: resolvedPresentation,
+          backLabel: "← 利用者詳細",
+          onBackToUserDetail: jest.fn(),
+          onRecordProcedureRequest: jest.fn(),
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    const text = container.textContent ?? "";
+    expect(text).toContain("場面");
+    expect(text).toContain("活動の切り替え場面（食堂→作業）");
+    expect(text).toContain("写真カードで次の活動を示す");
+    expect(text).toContain("突然大きな声で急かす");
+    expect(text).toContain("この手順を記録");
+  });
+
+  it("fail-closes presentProcedureCorrection on metadata mismatch or tampered record id", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み")!;
+    const makeContext = (
+      overrides: Partial<{
+        userId: string;
+        personLabel: string;
+        organizationId: string;
+        siteId: string;
+        planId: string;
+        planVersion: number;
+        procedureId: string;
+        procedureVersion: string;
+        planPeriodLabel: string;
+        occurrenceId: string;
+      }> = {},
+    ): {
+      userId: string;
+      personLabel: string;
+      organizationId: string;
+      siteId: string;
+      planId: string;
+      planVersion: number;
+      procedureId: string;
+      procedureVersion: string;
+      planPeriodLabel: string;
+      occurrenceId: string;
+    } => ({
+      userId: recorded.userId,
+      personLabel: recorded.personLabel,
+      organizationId: "synthetic-org-001",
+      siteId: "SITE-ISG",
+      planId: recorded.planId,
+      planVersion: recorded.planVersion,
+      procedureId: recorded.procedure.ProcedureId,
+      procedureVersion: recorded.procedure.ProcedureVersion,
+      planPeriodLabel: "合成期間",
+      occurrenceId: recorded.occurrenceId,
+      ...overrides,
+    });
+
+    // Valid case
+    expect(presentProcedureCorrection(recorded, makeContext())).toBeDefined();
+
+    // Context metadata mismatches
+    expect(
+      presentProcedureCorrection(recorded, makeContext({ userId: "other-user" })),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCorrection(recorded, makeContext({ planId: "other-plan" })),
+    ).toBeUndefined();
+    expect(presentProcedureCorrection(recorded, makeContext({ planVersion: 99 }))).toBeUndefined();
+    expect(
+      presentProcedureCorrection(recorded, makeContext({ procedureId: "other-proc" })),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCorrection(recorded, makeContext({ procedureVersion: "v99" })),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCorrection(recorded, makeContext({ organizationId: "other-org" })),
+    ).toBeUndefined();
+    expect(
+      presentProcedureCorrection(recorded, makeContext({ siteId: "other-site" })),
+    ).toBeUndefined();
+
+    // Tampered effectiveRecordId on rawResolverResult
+    const tamperedRecorded = {
+      ...recorded,
+      rawResolverResult: {
+        ...recorded.rawResolverResult,
+        effectiveRecordId: "tampered-record-id-000000000000000000000000000000000000000000000",
+      } as typeof recorded.rawResolverResult,
+    };
+    expect(presentProcedureCorrection(tamperedRecorded, makeContext())).toBeUndefined();
+  });
+
+  it("renders safe unresolved guard in AppShellChrome when occurrence is missing (Fixup 1)", () => {
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-PROCEDURE",
+          fieldStaffChosenOccurrenceId: "non-existent-occurrence-999",
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+
+    const text = container.textContent ?? "";
+    expect(text).toContain("手順本文の確認");
+    expect(text).toContain(
+      "指定された支援手順（occurrence）が見つかりません。安全のため手順詳細は表示されません。",
+    );
+    expect(text).not.toContain("活動の切り替え場面");
+    expect(text).toContain("← 今日の支援");
+
+    // Must NOT fall through to UserDetail
+    const userDetail = container.querySelector('[data-field-workflow="user-detail"]');
+    expect(userDetail).toBeNull();
+  });
+
+  it("shields D-RECORD-WRITE direct restoration and prevents ProcedureRecordForm open (Fixup 2)", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const unrecorded = items.find((item) => item.effectiveStatus === "未実施")!;
+    expect(unrecorded).toBeDefined();
+
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-RECORD-WRITE",
+          fieldStaffChosenOccurrenceId: unrecorded.occurrenceId,
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    // Record form must NOT be rendered
+    const form = container.querySelector('[data-field-workflow="procedure-record-form"]');
+    expect(form).toBeNull();
+
+    // CurrentProcedure must be rendered in UNRESOLVED state
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+
+    const text = container.textContent ?? "";
+    expect(text).toContain("手順本文の確認");
+    expect(text).not.toContain("この手順を記録");
+  });
+
+  it("shields downstream correction and cancellation for unresolved occurrence flow (Fixup 2 & 3)", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const recorded = items.find((item) => item.effectiveStatus === "記録済み")!;
+
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-PROCEDURE",
+          fieldStaffChosenOccurrenceId: recorded.occurrenceId,
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    // Downstream correction and cancellation screens must NOT be open
+    expect(container.querySelector('[data-field-workflow="procedure-correction"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="procedure-cancellation"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="abc-observation"]')).toBeNull();
+
+    // Must be in UNRESOLVED state without borrowing v3 projection
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+    expect(container.textContent).not.toContain("活動の切り替え場面");
+  });
+  it("renders independent unresolved screen for missing occurrence when user-a is absent (Fix 1)", () => {
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          userDetailPresentation: {
+            ...DEMO_UX_USER_DETAIL_FIXTURE,
+            userId: "user-custom",
+            personLabel: "カスタム利用者",
+          },
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-PROCEDURE",
+          fieldStaffChosenOccurrenceId: "missing-occurrence-999",
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+    expect(currentProc?.getAttribute("data-field-workflow-user")).toBe("");
+    expect(container.textContent).toContain("指定された支援手順（occurrence）が見つかりません。");
+    expect(container.textContent).toContain("対象者未特定");
+    expect(container.querySelector('[data-field-workflow="record-procedure-cta"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="record-correction-cta"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="record-cancellation-cta"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="abc-observation-cta"]')).toBeNull();
+
+    const backBtn = container.querySelector('[data-field-workflow="current-procedure-back"]');
+    expect(backBtn).not.toBeNull();
+    expect(backBtn?.textContent).toBe("← 今日の支援");
+  });
+
+  it("does not borrow previously selected user identity when navigating to missing occurrence (Fix 1)", () => {
+    const items = getKioskSyntheticTodaySupportItems();
+    const otherItem = items.find((item) => item.userId === "user-b") ?? items[1];
+
+    // First render with a different occurrence / user
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-PROCEDURE",
+          fieldStaffChosenOccurrenceId: otherItem.occurrenceId,
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    // Now re-render with a missing occurrence ID
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-PROCEDURE",
+          fieldStaffChosenOccurrenceId: "missing-occurrence-888",
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+    // Identity must NOT be borrowed from the previous user
+    expect(currentProc?.getAttribute("data-field-workflow-user")).toBe("");
+    expect(container.textContent).toContain("対象者未特定");
+    expect(container.textContent).toContain("指定された支援手順（occurrence）が見つかりません。");
+  });
+
+  it("preserves D-RECORD-WRITE flow without falling back to unintended projection", () => {
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          onFieldStaffSessionEvent: jest.fn(),
+          fieldStaffTaskDestination: "D-RECORD-WRITE",
+          fieldStaffChosenOccurrenceId: "missing-occurrence-777",
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    expect(container.querySelector('[data-field-workflow="procedure-record-form"]')).toBeNull();
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+  });
+
+  it("preserves existing synthetic v3 procedure presentation via UserDetail without claiming A2 canonical resolved (Minor)", () => {
+    act(() => {
+      ReactDOM.render(
+        React.createElement(AppShellChrome, {
+          demoMode: DEMO_1_FIELD_STAFF_FIXTURE.demoMode,
+          siteSelection: DEMO_1_FIELD_STAFF_FIXTURE.siteSelection,
+          saveState: "saved",
+          viewMode: DEMO_1_FIELD_STAFF_FIXTURE.viewMode,
+          correlationId: DEMO_1_FIELD_STAFF_FIXTURE.correlationId,
+          errorCode: DEMO_1_FIELD_STAFF_FIXTURE.errorCode,
+          userDisplayName: "Synthetic Field Staff",
+          presentationRole: "FIELD_STAFF",
+          selectedDestination: "users",
+        }) as React.ReactElement,
+        container,
+      );
+    });
+
+    const userDetailBtn = container.querySelector(
+      'button[data-demo-ux="users-detail-button"]',
+    ) as HTMLButtonElement | null;
+    expect(userDetailBtn).not.toBeNull();
+    act(() => {
+      userDetailBtn!.click();
+    });
+
+    const reqBtn = container.querySelector(
+      'button[data-field-workflow="open-current-procedure"]',
+    ) as HTMLButtonElement | null;
+    expect(reqBtn).not.toBeNull();
+    act(() => {
+      reqBtn!.click();
+    });
+
+    const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
+    expect(currentProc).not.toBeNull();
+    expect(currentProc!.getAttribute("data-field-workflow-lookup-status")).not.toBe("RESOLVED");
+    expect(currentProc!.getAttribute("data-field-workflow-lookup-status")).toBe("SYNTHETIC_V3");
+    expect(container.querySelector('[data-field-workflow="procedure-flow"]')).not.toBeNull();
+    expect(container.textContent).toContain("支援の流れ");
+    expect(container.textContent).toContain("活動の切り替え場面");
+    expect(container.querySelector('[data-field-workflow="record-procedure-cta"]')).not.toBeNull();
   });
 });

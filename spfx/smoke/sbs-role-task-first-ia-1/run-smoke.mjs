@@ -149,6 +149,30 @@ async function inspectProductState(page) {
       hasCurrentProcedure: Boolean(
         document.querySelector('[data-field-workflow="current-procedure"]'),
       ),
+      currentProcedureLookupStatus:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-lookup-status") ?? "",
+      currentProcedureOccurrenceId:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-occurrence-id") ?? "",
+      currentProcedureBackLabel:
+        document
+          .querySelector('[data-field-workflow="current-procedure-back"]')
+          ?.textContent?.trim() ?? "",
+      hasProcedureUnresolvedSection: Boolean(
+        document.querySelector('[data-field-workflow="procedure-unresolved-section"]'),
+      ),
+      procedureUnresolvedReason:
+        document
+          .querySelector('[data-field-workflow="procedure-unresolved-note"]')
+          ?.textContent?.trim() ?? "",
+      hasProcedureFlow: Boolean(document.querySelector('[data-field-workflow="procedure-flow"]')),
+      hasRecordProcedureCta: Boolean(
+        document.querySelector('[data-field-workflow="record-procedure-cta"]'),
+      ),
+      hasUserDetail: Boolean(document.querySelector('[data-demo-ux="user-detail"]')),
       hasProcedureRecordForm: Boolean(
         document.querySelector('[data-field-workflow="procedure-record-form"]'),
       ),
@@ -270,6 +294,10 @@ async function capture(name, page) {
   await page.waitForSelector(
     '[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]',
   );
+  const initialOccurrenceId = await page.$eval(
+    '[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]',
+    (el) => el.getAttribute("data-kiosk-target-occurrence-id") ?? "",
+  );
   await page.click('[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]');
   await page.waitForSelector('[data-field-workflow="current-procedure"]');
   await page.click('[data-role-task-global="GLOBAL-TODAY"]');
@@ -291,8 +319,25 @@ async function capture(name, page) {
       Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
   );
   const procedureRestored = await inspectProductState(page);
-  await page.click('[data-field-workflow="record-procedure-cta"]');
-  await page.waitForSelector('[data-field-workflow="procedure-record-form"]');
+  await page.click('[data-role-task-global="GLOBAL-TODAY"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-TODAY",
+  );
+  await page.click('[data-role-task-global="GLOBAL-UNRECORDED"]');
+  await page.waitForSelector(
+    '[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]',
+  );
+  await page.click('[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+        ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
+      Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
+  );
   await page.click('[data-role-task-global="GLOBAL-TODAY"]');
   await page.waitForFunction(
     () =>
@@ -309,21 +354,39 @@ async function capture(name, page) {
       document
         .querySelector('[data-role-task-ia="FIELD_STAFF"]')
         ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
-      Boolean(document.querySelector('[data-field-workflow="procedure-record-form"]')),
+      Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
   );
   const recordRestored = await inspectProductState(page);
   const pass =
+    Boolean(initialOccurrenceId) &&
     procedureRestored.taskDestination === "D-PROCEDURE" &&
+    procedureRestored.currentProcedureOccurrenceId === initialOccurrenceId &&
     procedureRestored.hasCurrentProcedure &&
+    procedureRestored.currentProcedureLookupStatus === "UNRESOLVED" &&
+    procedureRestored.hasProcedureUnresolvedSection &&
+    procedureRestored.procedureUnresolvedReason.length > 0 &&
+    !procedureRestored.hasProcedureFlow &&
+    !procedureRestored.hasRecordProcedureCta &&
+    procedureRestored.currentProcedureBackLabel === "← 今日の支援" &&
+    !procedureRestored.hasUserDetail &&
     !procedureRestored.hasUsersList &&
     recordRestored.taskDestination === "D-RECORD-WRITE" &&
-    recordRestored.hasProcedureRecordForm &&
+    recordRestored.currentProcedureOccurrenceId === initialOccurrenceId &&
+    recordRestored.hasCurrentProcedure &&
+    recordRestored.currentProcedureLookupStatus === "UNRESOLVED" &&
+    recordRestored.hasProcedureUnresolvedSection &&
+    recordRestored.procedureUnresolvedReason.length > 0 &&
+    !recordRestored.hasProcedureFlow &&
+    !recordRestored.hasRecordProcedureCta &&
+    !recordRestored.hasProcedureRecordForm &&
+    recordRestored.currentProcedureBackLabel === "← 今日の支援" &&
+    !recordRestored.hasUserDetail &&
     !recordRestored.hasUsersList &&
     pageErrors.length === 0;
   results.push({
     name: "sufficient-global-restore",
     pass,
-    state: { procedureRestored, recordRestored },
+    state: { initialOccurrenceId, procedureRestored, recordRestored },
     pageErrors,
     shot: await capture("sufficient-global-restore", page),
   });

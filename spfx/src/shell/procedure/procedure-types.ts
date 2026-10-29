@@ -35,9 +35,15 @@ export type CurrentProcedureProjection = Readonly<{
   noteLabel: string;
 }>;
 
-export type ShellCurrentProcedurePresentation = Readonly<{
+export type ProcedureLookupStatus = "RESOLVED" | "UNRESOLVED" | "SYNTHETIC_V3";
+
+export type ShellCurrentProcedurePresentation<
+  TProjection extends CurrentProcedureProjection | undefined = CurrentProcedureProjection,
+> = Readonly<{
   context: ProcedureBindingContext;
-  projection: CurrentProcedureProjection;
+  projection: TProjection;
+  lookupStatus?: ProcedureLookupStatus;
+  unresolvedReason?: string;
   heading: string;
   summaryPrompt: string;
   /**
@@ -48,10 +54,25 @@ export type ShellCurrentProcedurePresentation = Readonly<{
   occurrenceStatus?: "未実施" | "記録済み" | "取消済み" | "確認が必要";
 }>;
 
+export type AnyShellCurrentProcedurePresentation = ShellCurrentProcedurePresentation<
+  CurrentProcedureProjection | undefined
+>;
+
 export function isProcedureRecordStartAllowed(
-  presentation: Pick<ShellCurrentProcedurePresentation, "canStartProcedureRecord"> | undefined,
+  presentation:
+    | {
+        canStartProcedureRecord?: boolean;
+        lookupStatus?: ProcedureLookupStatus;
+      }
+    | undefined,
 ): boolean {
-  return presentation?.canStartProcedureRecord === true;
+  if (!presentation) {
+    return false;
+  }
+  if (presentation.lookupStatus === "UNRESOLVED") {
+    return false;
+  }
+  return presentation.canStartProcedureRecord === true;
 }
 
 /**
@@ -62,7 +83,10 @@ export function canInvokeProcedureRecordStart(input: {
   interactionPaused: boolean;
   currentProcedureOpen: boolean;
   selectedUserDetailId?: string;
-  presentation?: Pick<ShellCurrentProcedurePresentation, "canStartProcedureRecord">;
+  presentation?: {
+    canStartProcedureRecord?: boolean;
+    lookupStatus?: ProcedureLookupStatus;
+  };
 }): boolean {
   if (input.interactionPaused || !input.currentProcedureOpen || !input.selectedUserDetailId) {
     return false;

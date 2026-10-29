@@ -1,5 +1,9 @@
+if (typeof globalThis.TextEncoder === "undefined") {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  globalThis.TextEncoder = require("util").TextEncoder;
+}
 import { createInMemoryProcedureRecordCorrectionPersistencePort } from "../../sbs-domain/correction-persist.bundle";
-import { KIOSK_RECORD_1 } from "./kiosk-today-support-fixture";
+import { KIOSK_RECORD_1, getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
 import { buildProcedureCorrectionOriginalBinding } from "./procedure-correction-binding";
 import {
   buildStaffProcedureRecordCorrectionSaveInput,
@@ -17,6 +21,9 @@ beforeAll(() => {
 });
 
 describe("procedure-correction-persist", () => {
+  const recordedItem = getKioskSyntheticTodaySupportItems().find(
+    (item) => item.effectiveStatus === "記録済み",
+  )!;
   const context = {
     userId: "user-a",
     personLabel: "Aさん",
@@ -27,10 +34,14 @@ describe("procedure-correction-persist", () => {
     procedureId: "proc-lunch",
     procedureVersion: "v1",
     planPeriodLabel: "合成期間",
-    occurrenceId: "occ-001",
+    occurrenceId: recordedItem.occurrenceId,
   };
 
-  const originalBinding = buildProcedureCorrectionOriginalBinding(context, KIOSK_RECORD_1)!;
+  const originalBinding = buildProcedureCorrectionOriginalBinding(
+    context,
+    KIOSK_RECORD_1,
+    recordedItem,
+  )!;
 
   it("maps staff form input to saved against in-memory port", async () => {
     const port = createInMemoryProcedureRecordCorrectionPersistencePort();
