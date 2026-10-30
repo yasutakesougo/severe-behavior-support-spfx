@@ -167,6 +167,17 @@
   gap: sbs.$space-3;
 }
 
+.conflictWarning {
+  padding: sbs.$space-3;
+  border-width: sbs.$border-width-thin;
+  border-style: solid;
+  border-color: sbs.$color-border-strong;
+  background: sbs.$color-surface-subtle;
+  border-radius: sbs.$radius-small;
+  font-weight: sbs.$font-weight-bold;
+  color: sbs.$color-text-primary;
+}
+
 @media (max-width: 768px) {
   .actionRow {
     flex-direction: column;

@@ -61,6 +61,12 @@ import {
   type ReviewObservationEvidenceInput,
 } from "../procedure";
 import {
+  useCanonicalProcedureCoordinator,
+  buildOverviewCurrentProcedurePresentation,
+} from "../procedure/canonical-procedure-adapter";
+import { DefaultW2SyntheticProcedureDataSource } from "../procedure/w2-synthetic-procedure-fixture";
+import { KIOSK_FIXTURE_ORG_ID } from "../procedure/kiosk-today-support-fixture";
+import {
   DailyRecords,
   DEMO_UX_DAILY_RECORD_FIXTURE,
   type ShellDailyRecordPresentation,
@@ -971,6 +977,20 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
     ? todaySupportItems.find((item) => item.occurrenceId === selectedOccurrenceId)
     : undefined;
 
+  const w2SyntheticDataSource = React.useMemo(
+    () => new DefaultW2SyntheticProcedureDataSource(),
+    [],
+  );
+  const [w2DataSourceRevision] = React.useState<number>(1);
+
+  const effectiveProcedureViewState = useCanonicalProcedureCoordinator({
+    currentProcedureOpen: occurrenceFlowFromOverview && currentProcedureOpen,
+    siteSelection: selection,
+    selectedOccurrenceItem,
+    dataSource: w2SyntheticDataSource,
+    dataSourceRevision: w2DataSourceRevision,
+  });
+
   const selectedCurrentProcedureBase = selectedUserDetailId
     ? procedureWorkflowPresentation.currentByUserId[selectedUserDetailId]
     : undefined;
@@ -978,31 +998,13 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
   const selectedCurrentProcedure:
     ShellCurrentProcedurePresentation<CurrentProcedureProjection | undefined> | undefined =
     occurrenceFlowFromOverview
-      ? {
-          heading: "現在の支援手順",
-          summaryPrompt: selectedOccurrenceItem
-            ? "選択された支援計画の手順本文は未配線です（A2正本Resolver未接続）。"
-            : "指定された支援手順（occurrence）が見つかりません。",
-          lookupStatus: "UNRESOLVED",
-          unresolvedReason: selectedOccurrenceItem
-            ? `選択された支援計画（第${selectedOccurrenceItem.planVersion}版）の手順詳細は現在未配線です。誤表示防止のため手順本文は表示されません。`
-            : "指定された支援手順（occurrence）が見つかりません。安全のため手順詳細は表示されません。",
-          canStartProcedureRecord: false,
-          occurrenceStatus: selectedOccurrenceItem?.effectiveStatus,
-          context: {
-            organizationId: selectedOccurrenceItem?.boundRecord?.OrganizationId ?? "",
-            siteId: selectedOccurrenceItem?.boundRecord?.SiteId ?? "",
-            userId: selectedOccurrenceItem?.userId ?? "",
-            personLabel: selectedOccurrenceItem?.personLabel ?? "対象者未特定",
-            procedureId: selectedOccurrenceItem?.procedure?.ProcedureId ?? "",
-            procedureVersion: selectedOccurrenceItem?.procedure?.ProcedureVersion ?? "",
-            planId: selectedOccurrenceItem?.planId ?? "",
-            planVersion: selectedOccurrenceItem?.planVersion ?? 0,
-            planPeriodLabel: "未配線（A2未接続）",
-            occurrenceId: selectedOccurrenceId ?? "",
-          },
-          projection: undefined,
-        }
+      ? buildOverviewCurrentProcedurePresentation({
+          viewState: effectiveProcedureViewState,
+          selectedOccurrenceItem,
+          selectedOccurrenceId,
+          activeOrganizationId: KIOSK_FIXTURE_ORG_ID,
+          activeSiteId: selection,
+        })
       : selectedCurrentProcedureBase;
 
   const procedureRecordResume = selectedCurrentProcedure
@@ -1580,27 +1582,12 @@ export const AppShellChrome: React.FC<AppShellChromeProps> = (props) => {
                       presentation={selectedCurrentProcedure}
                       headingRef={destinationHeadingRef}
                       backLabel="← 今日の支援"
+                      readOnly={true}
                       onBackToUserDetail={handleBackToTodaySupport}
-                      onRecordProcedureRequest={
-                        isProcedureRecordStartAllowed(selectedCurrentProcedure)
-                          ? handleRecordProcedureRequest
-                          : undefined
-                      }
-                      onCorrectionRequest={
-                        procedureCorrectionPresentation
-                          ? handleProcedureCorrectionRequest
-                          : undefined
-                      }
-                      onCancellationRequest={
-                        procedureCancellationPresentation
-                          ? handleProcedureCancellationRequest
-                          : undefined
-                      }
-                      onAbcObservationRequest={
-                        selectedCurrentProcedure.lookupStatus !== "UNRESOLVED"
-                          ? handleAbcObservationRequest
-                          : undefined
-                      }
+                      onRecordProcedureRequest={undefined}
+                      onCorrectionRequest={undefined}
+                      onCancellationRequest={undefined}
+                      onAbcObservationRequest={undefined}
                     />
                   ) : selectedUserDetail ? (
                     reviewDuePreviewOpen && reviewFromSupportPlan ? (

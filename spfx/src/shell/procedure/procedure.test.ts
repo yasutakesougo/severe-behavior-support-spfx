@@ -653,7 +653,7 @@ describe("SBS-U6-A Procedure presentation guard & fail-closed resolution", () =>
     expect(userDetail).toBeNull();
   });
 
-  it("shields D-RECORD-WRITE direct restoration and prevents ProcedureRecordForm open (Fixup 2)", () => {
+  it("shields D-RECORD-WRITE direct restoration and prevents ProcedureRecordForm open (Fixup 2)", async () => {
     const items = getKioskSyntheticTodaySupportItems();
     const unrecorded = items.find((item) => item.effectiveStatus === "未実施")!;
     expect(unrecorded).toBeDefined();
@@ -677,21 +677,33 @@ describe("SBS-U6-A Procedure presentation guard & fail-closed resolution", () =>
       );
     });
 
+    // Await coordinator resolution microtasks
+    for (let r = 0; r < 10; r++) {
+      await act(async () => {
+        await Promise.resolve();
+      });
+    }
+
     // Record form must NOT be rendered
     const form = container.querySelector('[data-field-workflow="procedure-record-form"]');
     expect(form).toBeNull();
 
-    // CurrentProcedure must be rendered in UNRESOLVED state
+    // CurrentProcedure must be rendered in RESOLVED state via Canonical Resolver
     const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
     expect(currentProc).not.toBeNull();
-    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("RESOLVED");
 
     const text = container.textContent ?? "";
-    expect(text).toContain("手順本文の確認");
+    expect(container.querySelector('[data-field-workflow="procedure-flow"]')).not.toBeNull();
+    expect(text).toContain("次の活動内容を絵カードやスケジュール表で事前に提示する。");
     expect(text).not.toContain("この手順を記録");
+    expect(container.querySelector('[data-field-workflow="record-procedure-cta"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="procedure-correction"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="procedure-cancellation"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="abc-observation"]')).toBeNull();
   });
 
-  it("shields downstream correction and cancellation for unresolved occurrence flow (Fixup 2 & 3)", () => {
+  it("shields downstream correction and cancellation for unresolved occurrence flow (Fixup 2 & 3)", async () => {
     const items = getKioskSyntheticTodaySupportItems();
     const recorded = items.find((item) => item.effectiveStatus === "記録済み")!;
 
@@ -714,15 +726,27 @@ describe("SBS-U6-A Procedure presentation guard & fail-closed resolution", () =>
       );
     });
 
+    // Await coordinator resolution microtasks
+    for (let r = 0; r < 10; r++) {
+      await act(async () => {
+        await Promise.resolve();
+      });
+    }
+
     // Downstream correction and cancellation screens must NOT be open
     expect(container.querySelector('[data-field-workflow="procedure-correction"]')).toBeNull();
     expect(container.querySelector('[data-field-workflow="procedure-cancellation"]')).toBeNull();
     expect(container.querySelector('[data-field-workflow="abc-observation"]')).toBeNull();
+    expect(container.querySelector('[data-field-workflow="record-procedure-cta"]')).toBeNull();
 
-    // Must be in UNRESOLVED state without borrowing v3 projection
+    // Must be in RESOLVED state via Canonical Resolver
     const currentProc = container.querySelector('[data-field-workflow="current-procedure"]');
     expect(currentProc).not.toBeNull();
-    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("UNRESOLVED");
+    expect(currentProc?.getAttribute("data-field-workflow-lookup-status")).toBe("RESOLVED");
+    expect(container.querySelector('[data-field-workflow="procedure-flow"]')).not.toBeNull();
+    expect(container.textContent).toContain(
+      "次の活動内容を絵カードやスケジュール表で事前に提示する。",
+    );
     expect(container.textContent).not.toContain("活動の切り替え場面");
   });
   it("renders independent unresolved screen for missing occurrence when user-a is absent (Fix 1)", () => {
