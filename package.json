@@ -20,9 +20,10 @@
     "verify:skills": "node scripts/verify-skills.mjs",
     "verify:ui-catalog": "node scripts/verify-ui-catalog.mjs",
     "verify:ui-templates": "node scripts/verify-ui-templates.mjs",
-    "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries",
+    "verify:contracts": "npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:canonical-procedure-resolver-bridge",
+    "check:canonical-procedure-resolver-bridge": "node scripts/ci/check-canonical-procedure-resolver-bridge.mjs",
     "check:lifecycle-cancellation-storage-bridge": "node scripts/ci/check-lifecycle-cancellation-storage-bridge.mjs",
-    "verify:ci": "npm run verify:skills && npm run verify:ui-catalog && npm run verify:ui-templates && npm run lint && npm run lint:ui-sem && npm run format:check && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:scope && npm run check:a11y && npm run check:lifecycle-cancellation-storage-bridge",
+    "verify:ci": "npm run verify:skills && npm run verify:ui-catalog && npm run verify:ui-templates && npm run lint && npm run lint:ui-sem && npm run format:check && npm run typecheck && npm test && npm run check:contracts-boundaries && npm run check:canonical-procedure-resolver-bridge && npm run check:scope && npm run check:a11y && npm run check:lifecycle-cancellation-storage-bridge",
     "handoff:auto": "node scripts/auto-handoff.mjs",
     "gate-packet:read": "node scripts/gate-packet-read.mjs"
   },

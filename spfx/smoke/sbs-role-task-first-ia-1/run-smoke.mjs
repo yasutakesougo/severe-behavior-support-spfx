@@ -157,6 +157,26 @@ async function inspectProductState(page) {
         document
           .querySelector('[data-field-workflow="current-procedure"]')
           ?.getAttribute("data-field-workflow-occurrence-id") ?? "",
+      currentProcedureUserId:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-user") ?? "",
+      currentProcedurePlanId:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-plan-id") ?? "",
+      currentProcedurePlanVersion:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-plan-version") ?? "",
+      currentProcedureProcedureId:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-procedure-id") ?? "",
+      currentProcedureProcedureVersion:
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-procedure-version") ?? "",
       currentProcedureBackLabel:
         document
           .querySelector('[data-field-workflow="current-procedure-back"]')
@@ -169,8 +189,26 @@ async function inspectProductState(page) {
           .querySelector('[data-field-workflow="procedure-unresolved-note"]')
           ?.textContent?.trim() ?? "",
       hasProcedureFlow: Boolean(document.querySelector('[data-field-workflow="procedure-flow"]')),
+      procedureSceneText:
+        document.querySelector('[data-field-workflow="procedure-scene"]')?.textContent?.trim() ??
+        "",
+      procedurePerformTexts: Array.from(
+        document.querySelectorAll('[data-field-workflow="procedure-perform"] li'),
+      ).map((el) => el.textContent?.trim() ?? ""),
       hasRecordProcedureCta: Boolean(
         document.querySelector('[data-field-workflow="record-procedure-cta"]'),
+      ),
+      hasRecordCorrectionCta: Boolean(
+        document.querySelector('[data-field-workflow="record-correction-cta"]'),
+      ),
+      hasRecordCancellationCta: Boolean(
+        document.querySelector('[data-field-workflow="record-cancellation-cta"]'),
+      ),
+      hasAbcObservationCta: Boolean(
+        document.querySelector('[data-field-workflow="abc-observation-cta"]'),
+      ),
+      hasProcedureOperationSection: Boolean(
+        document.querySelector('[aria-labelledby="field-workflow-record-cta-heading"]'),
       ),
       hasUserDetail: Boolean(document.querySelector('[data-demo-ux="user-detail"]')),
       hasProcedureRecordForm: Boolean(
@@ -287,6 +325,32 @@ async function capture(name, page) {
 }
 
 {
+  // UNVERIFIED RESIDUAL RISKS (Documented per SBS-U6-B-A2-W2A specification):
+  // 1. Same Target Key re-entry synchronous cache reuse before fresh resolution settlement.
+  // 2. Stale procedure body reuse if dataSource content is modified without bumping dataSourceRevision.
+  // These risks are not verified by this synthetic smoke test and are marked as UNVERIFIED / FOLLOW-UP REQUIRED.
+  const EXPECTED_OCCURRENCE_ID = "e518a51d6c45a6541747d80439d9d0d9879b46d4d7ef9e359596a3833feac795";
+  const EXPECTED_SCENE = "朝の朝礼・視覚スケジュールの確認（09:30）";
+  const EXPECTED_PERFORM_TEXTS = [
+    "次の活動内容を絵カードやスケジュール表で事前に提示する。",
+    "本人のペースに合わせて指示を短く区切り、受容的な態度で接する。",
+    "着席や準備ができた段階で具体的に褒めて認める。",
+  ];
+
+  function matchesCanonicalSpecification(state) {
+    return (
+      state.currentProcedureOccurrenceId === EXPECTED_OCCURRENCE_ID &&
+      state.currentProcedureUserId === "user-a" &&
+      state.currentProcedurePlanId === "plan-001" &&
+      state.currentProcedurePlanVersion === "1" &&
+      state.currentProcedureProcedureId === "proc-morning" &&
+      state.currentProcedureProcedureVersion === "v1" &&
+      state.procedureSceneText === EXPECTED_SCENE &&
+      state.procedurePerformTexts.length === EXPECTED_PERFORM_TEXTS.length &&
+      state.procedurePerformTexts.every((text, index) => text === EXPECTED_PERFORM_TEXTS[index])
+    );
+  }
+
   const { page, pageErrors } = await openPage("sufficient-global-restore", {
     width: 1280,
     height: 900,
@@ -300,6 +364,14 @@ async function capture(name, page) {
   );
   await page.click('[data-kiosk-status="未実施"] [data-kiosk-ux="tap-occurrence-button"]');
   await page.waitForSelector('[data-field-workflow="current-procedure"]');
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-field-workflow="current-procedure"]')
+        ?.getAttribute("data-field-workflow-lookup-status") === "RESOLVED",
+  );
+  await page.waitForSelector('[data-field-workflow="procedure-flow"]');
+
   await page.click('[data-role-task-global="GLOBAL-TODAY"]');
   await page.waitForFunction(
     () =>
@@ -310,15 +382,57 @@ async function capture(name, page) {
         .querySelector('[data-role-task-ia="FIELD_STAFF"]')
         ?.getAttribute("data-role-task-object") === "true",
   );
-  await page.click('[data-role-task-global="GLOBAL-PROCEDURE"]');
-  await page.waitForFunction(
-    () =>
-      document
-        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
-        ?.getAttribute("data-role-task-destination") === "D-PROCEDURE" &&
-      Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
-  );
+
+  let procedureReEntryStatusSequence = [];
+  try {
+    await page.evaluate(() => {
+      window.__sbsProcedureLookupStatusSequence = [];
+      const target = document.querySelector('[data-shell-ux="app-shell-chrome"]') || document.body;
+      const observer = new MutationObserver(() => {
+        const el = document.querySelector('[data-field-workflow="current-procedure"]');
+        if (el) {
+          const status = el.getAttribute("data-field-workflow-lookup-status");
+          if (status) {
+            const seq = window.__sbsProcedureLookupStatusSequence;
+            if (seq[seq.length - 1] !== status) {
+              seq.push(status);
+            }
+          }
+        }
+      });
+      observer.observe(target, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["data-field-workflow-lookup-status"],
+      });
+      window.__sbsProcedureObserver = observer;
+    });
+
+    await page.click('[data-role-task-global="GLOBAL-PROCEDURE"]');
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+          ?.getAttribute("data-role-task-destination") === "D-PROCEDURE" &&
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-lookup-status") === "RESOLVED",
+    );
+    await page.waitForSelector('[data-field-workflow="procedure-flow"]');
+  } finally {
+    procedureReEntryStatusSequence = await page.evaluate(() => {
+      if (window.__sbsProcedureObserver) {
+        window.__sbsProcedureObserver.disconnect();
+        delete window.__sbsProcedureObserver;
+      }
+      const seq = window.__sbsProcedureLookupStatusSequence || [];
+      delete window.__sbsProcedureLookupStatusSequence;
+      return seq;
+    });
+  }
   const procedureRestored = await inspectProductState(page);
+
   await page.click('[data-role-task-global="GLOBAL-TODAY"]');
   await page.waitForFunction(
     () =>
@@ -336,8 +450,12 @@ async function capture(name, page) {
       document
         .querySelector('[data-role-task-ia="FIELD_STAFF"]')
         ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
-      Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
+      document
+        .querySelector('[data-field-workflow="current-procedure"]')
+        ?.getAttribute("data-field-workflow-lookup-status") === "RESOLVED",
   );
+  await page.waitForSelector('[data-field-workflow="procedure-flow"]');
+
   await page.click('[data-role-task-global="GLOBAL-TODAY"]');
   await page.waitForFunction(
     () =>
@@ -348,45 +466,103 @@ async function capture(name, page) {
         .querySelector('[data-role-task-ia="FIELD_STAFF"]')
         ?.getAttribute("data-role-task-occurrence") === "true",
   );
-  await page.click('[data-role-task-global="GLOBAL-RECORD-WRITE"]');
-  await page.waitForFunction(
-    () =>
-      document
-        .querySelector('[data-role-task-ia="FIELD_STAFF"]')
-        ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
-      Boolean(document.querySelector('[data-field-workflow="current-procedure"]')),
-  );
+
+  let recordReEntryStatusSequence = [];
+  try {
+    await page.evaluate(() => {
+      window.__sbsRecordLookupStatusSequence = [];
+      const target = document.querySelector('[data-shell-ux="app-shell-chrome"]') || document.body;
+      const observer = new MutationObserver(() => {
+        const el = document.querySelector('[data-field-workflow="current-procedure"]');
+        if (el) {
+          const status = el.getAttribute("data-field-workflow-lookup-status");
+          if (status) {
+            const seq = window.__sbsRecordLookupStatusSequence;
+            if (seq[seq.length - 1] !== status) {
+              seq.push(status);
+            }
+          }
+        }
+      });
+      observer.observe(target, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["data-field-workflow-lookup-status"],
+      });
+      window.__sbsRecordObserver = observer;
+    });
+
+    await page.click('[data-role-task-global="GLOBAL-RECORD-WRITE"]');
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('[data-role-task-ia="FIELD_STAFF"]')
+          ?.getAttribute("data-role-task-destination") === "D-RECORD-WRITE" &&
+        document
+          .querySelector('[data-field-workflow="current-procedure"]')
+          ?.getAttribute("data-field-workflow-lookup-status") === "RESOLVED",
+    );
+    await page.waitForSelector('[data-field-workflow="procedure-flow"]');
+  } finally {
+    recordReEntryStatusSequence = await page.evaluate(() => {
+      if (window.__sbsRecordObserver) {
+        window.__sbsRecordObserver.disconnect();
+        delete window.__sbsRecordObserver;
+      }
+      const seq = window.__sbsRecordLookupStatusSequence || [];
+      delete window.__sbsRecordLookupStatusSequence;
+      return seq;
+    });
+  }
   const recordRestored = await inspectProductState(page);
+
   const pass =
     Boolean(initialOccurrenceId) &&
+    initialOccurrenceId === EXPECTED_OCCURRENCE_ID &&
+    // 1. D-PROCEDURE 復帰時の検証
     procedureRestored.taskDestination === "D-PROCEDURE" &&
-    procedureRestored.currentProcedureOccurrenceId === initialOccurrenceId &&
-    procedureRestored.hasCurrentProcedure &&
-    procedureRestored.currentProcedureLookupStatus === "UNRESOLVED" &&
-    procedureRestored.hasProcedureUnresolvedSection &&
-    procedureRestored.procedureUnresolvedReason.length > 0 &&
-    !procedureRestored.hasProcedureFlow &&
-    !procedureRestored.hasRecordProcedureCta &&
+    procedureRestored.currentProcedureLookupStatus === "RESOLVED" &&
+    !procedureRestored.hasProcedureUnresolvedSection &&
+    procedureRestored.hasProcedureFlow &&
+    matchesCanonicalSpecification(procedureRestored) &&
     procedureRestored.currentProcedureBackLabel === "← 今日の支援" &&
+    !procedureRestored.hasRecordProcedureCta &&
+    !procedureRestored.hasRecordCorrectionCta &&
+    !procedureRestored.hasRecordCancellationCta &&
+    !procedureRestored.hasAbcObservationCta &&
+    !procedureRestored.hasProcedureOperationSection &&
+    !procedureRestored.hasProcedureRecordForm &&
     !procedureRestored.hasUserDetail &&
     !procedureRestored.hasUsersList &&
+    // 2. D-RECORD-WRITE 復帰時の検証
     recordRestored.taskDestination === "D-RECORD-WRITE" &&
-    recordRestored.currentProcedureOccurrenceId === initialOccurrenceId &&
-    recordRestored.hasCurrentProcedure &&
-    recordRestored.currentProcedureLookupStatus === "UNRESOLVED" &&
-    recordRestored.hasProcedureUnresolvedSection &&
-    recordRestored.procedureUnresolvedReason.length > 0 &&
-    !recordRestored.hasProcedureFlow &&
-    !recordRestored.hasRecordProcedureCta &&
-    !recordRestored.hasProcedureRecordForm &&
+    recordRestored.currentProcedureLookupStatus === "RESOLVED" &&
+    !recordRestored.hasProcedureUnresolvedSection &&
+    recordRestored.hasProcedureFlow &&
+    matchesCanonicalSpecification(recordRestored) &&
     recordRestored.currentProcedureBackLabel === "← 今日の支援" &&
+    !recordRestored.hasRecordProcedureCta &&
+    !recordRestored.hasRecordCorrectionCta &&
+    !recordRestored.hasRecordCancellationCta &&
+    !recordRestored.hasAbcObservationCta &&
+    !recordRestored.hasProcedureOperationSection &&
+    !recordRestored.hasProcedureRecordForm &&
     !recordRestored.hasUserDetail &&
     !recordRestored.hasUsersList &&
+    // 3. ページエラー 0 件
     pageErrors.length === 0;
+
   results.push({
     name: "sufficient-global-restore",
     pass,
-    state: { initialOccurrenceId, procedureRestored, recordRestored },
+    state: {
+      initialOccurrenceId,
+      procedureRestored,
+      recordRestored,
+      procedureReEntryStatusSequence,
+      recordReEntryStatusSequence,
+    },
     pageErrors,
     shot: await capture("sufficient-global-restore", page),
   });

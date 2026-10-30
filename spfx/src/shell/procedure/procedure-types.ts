@@ -35,7 +35,8 @@ export type CurrentProcedureProjection = Readonly<{
   noteLabel: string;
 }>;
 
-export type ProcedureLookupStatus = "RESOLVED" | "UNRESOLVED" | "SYNTHETIC_V3";
+export type ProcedureLookupStatus =
+  "RESOLVED" | "UNRESOLVED" | "SYNTHETIC_V3" | "LOADING" | "FETCH_FAILED" | "INCOMPLETE";
 
 export type ShellCurrentProcedurePresentation<
   TProjection extends CurrentProcedureProjection | undefined = CurrentProcedureProjection,

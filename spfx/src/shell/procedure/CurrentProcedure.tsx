@@ -14,6 +14,7 @@ export type CurrentProcedureProps = Readonly<{
   presentation: AnyShellCurrentProcedurePresentation;
   headingRef?: React.Ref<HTMLHeadingElement>;
   backLabel?: string;
+  readOnly?: boolean;
   onBackToUserDetail?: () => void;
   onRecordProcedureRequest?: () => void;
   onCorrectionRequest?: () => void;
@@ -29,6 +30,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   presentation,
   headingRef,
   backLabel = "← 利用者詳細",
+  readOnly = false,
   onBackToUserDetail,
   onRecordProcedureRequest,
   onCorrectionRequest,
@@ -36,7 +38,11 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
   onAbcObservationRequest,
 }) => {
   const { heading, summaryPrompt, context, projection, canStartProcedureRecord } = presentation;
-  const isResolved = presentation.lookupStatus !== "UNRESOLVED" && Boolean(projection);
+  const isResolved =
+    (presentation.lookupStatus === undefined ||
+      presentation.lookupStatus === "SYNTHETIC_V3" ||
+      presentation.lookupStatus === "RESOLVED") &&
+    Boolean(projection);
   const recordCtaEnabled =
     isResolved && canStartProcedureRecord && Boolean(onRecordProcedureRequest);
   const correctionCtaVisible =
@@ -108,6 +114,16 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
           />
         </p>
       ) : null}
+      {presentation.occurrenceStatus === "確認が必要" ? (
+        <div
+          role="alert"
+          aria-live="polite"
+          className={styles.conflictWarning}
+          data-field-workflow="procedure-conflict-warning"
+        >
+          確認が必要：この予定には複数の記録または競合状態があります。記録操作はできません。
+        </div>
+      ) : null}
       <p className={styles.sectionHint} data-field-workflow="presentation-note">
         {FIELD_WORKFLOW_PRESENTATION_NOTE}
       </p>
@@ -151,6 +167,24 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
             </div>
           </dl>
         </section>
+      ) : presentation.lookupStatus === "LOADING" ? (
+        <section
+          className={styles.section}
+          aria-labelledby="field-workflow-procedure-loading-heading"
+          data-field-workflow="procedure-loading-section"
+          role="status"
+          aria-busy="true"
+        >
+          <h2
+            id="field-workflow-procedure-loading-heading"
+            data-field-workflow-visual-role="section-title"
+          >
+            手順本文の読み込み中
+          </h2>
+          <p className={styles.sectionHint} data-field-workflow="procedure-loading-note">
+            選択された予定の手順本文を確認しています…
+          </p>
+        </section>
       ) : (
         <section
           className={styles.section}
@@ -170,7 +204,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
         </section>
       )}
 
-      {isResolved ? (
+      {isResolved && !readOnly ? (
         <section className={styles.section} aria-labelledby="field-workflow-record-cta-heading">
           <h2
             id="field-workflow-record-cta-heading"
@@ -229,7 +263,7 @@ export const CurrentProcedure: React.FC<CurrentProcedureProps> = ({
         </section>
       ) : null}
 
-      {cancellationCtaVisible ? (
+      {!readOnly && cancellationCtaVisible ? (
         <section
           className={styles.section}
           aria-labelledby="field-workflow-cancellation-cta-heading"

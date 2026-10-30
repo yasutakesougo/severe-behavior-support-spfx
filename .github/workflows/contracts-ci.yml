@@ -122,6 +122,9 @@ jobs:
       - name: Inspect contracts and domain boundaries
         run: npm run check:contracts-boundaries
 
+      - name: Inspect Canonical Procedure Resolver Bridge
+        run: npm run check:canonical-procedure-resolver-bridge
+
       - name: Scope check
         shell: bash
         env:
