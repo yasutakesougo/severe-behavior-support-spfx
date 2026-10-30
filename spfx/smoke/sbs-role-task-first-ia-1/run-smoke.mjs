@@ -190,9 +190,8 @@ async function inspectProductState(page) {
           ?.textContent?.trim() ?? "",
       hasProcedureFlow: Boolean(document.querySelector('[data-field-workflow="procedure-flow"]')),
       procedureSceneText:
-        document
-          .querySelector('[data-field-workflow="procedure-scene"]')
-          ?.textContent?.trim() ?? "",
+        document.querySelector('[data-field-workflow="procedure-scene"]')?.textContent?.trim() ??
+        "",
       procedurePerformTexts: Array.from(
         document.querySelectorAll('[data-field-workflow="procedure-perform"] li'),
       ).map((el) => el.textContent?.trim() ?? ""),
@@ -330,8 +329,7 @@ async function capture(name, page) {
   // 1. Same Target Key re-entry synchronous cache reuse before fresh resolution settlement.
   // 2. Stale procedure body reuse if dataSource content is modified without bumping dataSourceRevision.
   // These risks are not verified by this synthetic smoke test and are marked as UNVERIFIED / FOLLOW-UP REQUIRED.
-  const EXPECTED_OCCURRENCE_ID =
-    "e518a51d6c45a6541747d80439d9d0d9879b46d4d7ef9e359596a3833feac795";
+  const EXPECTED_OCCURRENCE_ID = "e518a51d6c45a6541747d80439d9d0d9879b46d4d7ef9e359596a3833feac795";
   const EXPECTED_SCENE = "朝の朝礼・視覚スケジュールの確認（09:30）";
   const EXPECTED_PERFORM_TEXTS = [
     "次の活動内容を絵カードやスケジュール表で事前に提示する。",
@@ -349,9 +347,7 @@ async function capture(name, page) {
       state.currentProcedureProcedureVersion === "v1" &&
       state.procedureSceneText === EXPECTED_SCENE &&
       state.procedurePerformTexts.length === EXPECTED_PERFORM_TEXTS.length &&
-      state.procedurePerformTexts.every(
-        (text, index) => text === EXPECTED_PERFORM_TEXTS[index],
-      )
+      state.procedurePerformTexts.every((text, index) => text === EXPECTED_PERFORM_TEXTS[index])
     );
   }
 
@@ -391,8 +387,7 @@ async function capture(name, page) {
   try {
     await page.evaluate(() => {
       window.__sbsProcedureLookupStatusSequence = [];
-      const target =
-        document.querySelector('[data-shell-ux="app-shell-chrome"]') || document.body;
+      const target = document.querySelector('[data-shell-ux="app-shell-chrome"]') || document.body;
       const observer = new MutationObserver(() => {
         const el = document.querySelector('[data-field-workflow="current-procedure"]');
         if (el) {
@@ -476,8 +471,7 @@ async function capture(name, page) {
   try {
     await page.evaluate(() => {
       window.__sbsRecordLookupStatusSequence = [];
-      const target =
-        document.querySelector('[data-shell-ux="app-shell-chrome"]') || document.body;
+      const target = document.querySelector('[data-shell-ux="app-shell-chrome"]') || document.body;
       const observer = new MutationObserver(() => {
         const el = document.querySelector('[data-field-workflow="current-procedure"]');
         if (el) {
@@ -541,7 +535,6 @@ async function capture(name, page) {
     !procedureRestored.hasProcedureRecordForm &&
     !procedureRestored.hasUserDetail &&
     !procedureRestored.hasUsersList &&
-
     // 2. D-RECORD-WRITE 復帰時の検証
     recordRestored.taskDestination === "D-RECORD-WRITE" &&
     recordRestored.currentProcedureLookupStatus === "RESOLVED" &&
@@ -557,7 +550,6 @@ async function capture(name, page) {
     !recordRestored.hasProcedureRecordForm &&
     !recordRestored.hasUserDetail &&
     !recordRestored.hasUsersList &&
-
     // 3. ページエラー 0 件
     pageErrors.length === 0;
 
