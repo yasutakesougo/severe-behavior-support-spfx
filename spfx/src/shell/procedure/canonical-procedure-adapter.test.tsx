@@ -12,6 +12,7 @@ import {
 } from "./canonical-procedure-adapter";
 import { getKioskSyntheticTodaySupportItems } from "./kiosk-today-support-fixture";
 import { DefaultW2SyntheticProcedureDataSource } from "./w2-synthetic-procedure-fixture";
+import type { CanonicalProcedureEntityBundle } from "./w2-synthetic-procedure-fixture";
 
 beforeAll(() => {
   const g = globalThis as { TextEncoder?: { new (): unknown } };
@@ -77,7 +78,9 @@ describe("Canonical Procedure Coordinator & Presentation Adapter (A2 / W2-A)", (
   });
 
   afterEach(() => {
-    ReactDOM.unmountComponentAtNode(container);
+    act(() => {
+      ReactDOM.unmountComponentAtNode(container);
+    });
     container.remove();
   });
 
@@ -105,10 +108,14 @@ describe("Canonical Procedure Coordinator & Presentation Adapter (A2 / W2-A)", (
 
     await act(async () => {
       render(true);
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
     expect(container.textContent).toContain("朝の朝礼");
 
-    act(() => render(false));
+    await act(async () => {
+      render(false);
+      await Promise.resolve();
+    });
     expect(container.textContent).toBe("");
 
     let completeFetch!: (bundle: undefined) => void;
@@ -118,16 +125,76 @@ describe("Canonical Procedure Coordinator & Presentation Adapter (A2 / W2-A)", (
     const loadSpy = jest.spyOn(dataSource, "loadEntities").mockReturnValueOnce(pendingFetch);
     commits.length = 0;
 
-    act(() => render(true));
+    await act(async () => {
+      render(true);
+      await Promise.resolve();
+    });
     const firstReentryCommit = commits[0];
     const bodyWhilePending = container.textContent;
-    await act(async () => completeFetch(undefined));
+    await act(async () => {
+      completeFetch(undefined);
+      await pendingFetch;
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     loadSpy.mockRestore();
 
     expect(firstReentryCommit).toBe("LOADING");
     expect(bodyWhilePending).toBe("");
     expect(container.querySelector("[data-status='FETCH_FAILED']")).not.toBeNull();
     expect(container.textContent).toBe("");
+  });
+
+  it("does not let a delayed old-revision response replace the current body after re-entry", async () => {
+    const item = items.find((i) => i.scheduleItemId === "sch-001")!;
+    const render = (open: boolean, revision: number): void => {
+      ReactDOM.render(
+        <CoordinatorTestHarness
+          currentProcedureOpen={open}
+          siteSelection="SITE-ISG"
+          selectedOccurrenceItem={item}
+          dataSource={dataSource}
+          dataSourceRevision={revision}
+          onStateChange={() => {}}
+        />,
+        container,
+      );
+    };
+
+    await act(async () => render(true, 1));
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
+    expect(container.querySelector("[data-status='RESOLVED']")).not.toBeNull();
+
+    await act(async () => {
+      render(false, 1);
+      await Promise.resolve();
+    });
+    let resolveOldRevision!: (bundle: CanonicalProcedureEntityBundle | undefined) => void;
+    const oldRevisionResponse = new Promise<CanonicalProcedureEntityBundle | undefined>(
+      (resolve) => {
+        resolveOldRevision = resolve;
+      },
+    );
+    const loadSpy = jest.spyOn(dataSource, "loadEntities").mockReturnValueOnce(oldRevisionResponse);
+
+    await act(async () => {
+      render(true, 1);
+      await Promise.resolve();
+    });
+    expect(container.textContent).toBe("");
+    expect(container.querySelector("[data-status='LOADING']")).not.toBeNull();
+
+    await act(async () => {
+      render(true, 2);
+      await Promise.resolve();
+    });
+    await act(async () => new Promise((resolve) => setTimeout(resolve, 20)));
+    expect(container.querySelector("[data-status='RESOLVED']")).not.toBeNull();
+    const currentBody = container.textContent;
+
+    await act(async () => resolveOldRevision(undefined));
+    loadSpy.mockRestore();
+    expect(container.querySelector("[data-status='RESOLVED']")).not.toBeNull();
+    expect(container.textContent).toBe(currentBody);
   });
 
   it("TC-SITE-HOOK-01: SITE-ISG -> SITE-HOM -> SITE-ISG transition causes no Hooks violation and restores resolved body", async () => {
