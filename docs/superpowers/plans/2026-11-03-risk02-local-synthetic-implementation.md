@@ -1,7 +1,7 @@
 # RISK-02 Local Synthetic Implementation Plan
 
-**Basis:** `507c8c758056b54e26b71a82b8871bda96f9fa57`  
-**Design:** `docs/superpowers/specs/2026-11-03-risk02-production-connectivity-design.md`  
+**Basis:** `507c8c758056b54e26b71a82b8871bda96f9fa57`
+**Design:** `docs/superpowers/specs/2026-11-03-risk02-production-connectivity-design.md`
 **Design SHA-256:** `f7122b1baab806c2cb5e219525f5a79ad135d7d2a008b0c1c75c873a683f8509`
 
 ## Scope and boundaries
