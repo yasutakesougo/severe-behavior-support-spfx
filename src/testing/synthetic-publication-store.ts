@@ -37,7 +37,8 @@ export class SyntheticSupportPlanPublicationStore implements SupportPlanPublicat
 
   public readonly writeAttempts: string[] = [];
 
-  public async ensureControl(scope: FacilityScope): Promise<PublicationControl> {
+  /** Explicit fixture setup. The Publisher port cannot create a missing Control. */
+  public async initializeControlForTest(scope: FacilityScope): Promise<PublicationControl> {
     const key = facilityKey(scope);
     const current = this.controls.get(key);
     if (current) return current;
@@ -218,7 +219,7 @@ export class SyntheticSupportPlanPublicationStore implements SupportPlanPublicat
 
   /** Injects a malformed read snapshot for fail-closed Reader tests only. */
   public setRowsForTest(scope: FacilityScope, rows: readonly SupportPlanPublicationRow[]): void {
-    this.rowsByFacility.set(facilityKey(scope), storeJsonSnapshot([...rows]));
+    this.rowsByFacility.set(facilityKey(scope), cloneJsonValue([...rows]));
   }
 
   public changeControlAfterNextRowsRead(scope: FacilityScope, phase: PublicationPhase): void {

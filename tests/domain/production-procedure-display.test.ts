@@ -74,4 +74,21 @@ describe("production-only procedure display gate", () => {
       );
     }
   });
+
+  it("keeps the first re-entry render hidden for an expired monotonic deadline or prior revision token", () => {
+    const staleCases = [
+      { ...expected, wallNowMs: token.startedAtWallMs, monotonicNowMs: token.expiresAtMonotonicMs },
+      { ...expected, generation: expected.generation + 1, requestId: "re-entry-request" },
+      { ...expected, minimumRevision: token.revision + 1 },
+    ];
+    for (const expectation of staleCases) {
+      assert.deepEqual(
+        getProductionProcedureDisplay(
+          { lookupStatus: "RESOLVED", source: "PRODUCTION", projection: "old body", token },
+          expectation,
+        ),
+        { status: "HIDDEN" },
+      );
+    }
+  });
 });

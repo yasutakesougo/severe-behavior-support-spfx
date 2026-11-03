@@ -100,6 +100,21 @@ export function createControlRowIdentity(
   return createIdentity("C", ["rk1", "C", input.organizationId, input.siteId], hash);
 }
 
+/** Candidate indexed key for scope + plan searches; not a SharePoint schema claim. */
+export function createPlanKey(
+  input: SupportPlanScope & Readonly<{ planId: string }>,
+  hash: SupportPlanRowHash = sha256Hex,
+): string {
+  validateIdentifiers([input.organizationId, input.siteId, input.userId, input.planId]);
+  const digest = hash(
+    JSON.stringify(["pk1", input.organizationId, input.siteId, input.userId, input.planId]),
+  );
+  if (!/^[\da-fA-F]{64}$/.test(digest)) {
+    throw new TypeError("SupportPlan PlanKey hash must be a 64-character SHA-256 digest");
+  }
+  return `pk1:${digest.toLowerCase()}`;
+}
+
 function createIdentity(
   kind: SupportPlanRowKind,
   tuple: readonly string[],

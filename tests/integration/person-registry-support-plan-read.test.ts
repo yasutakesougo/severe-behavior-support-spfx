@@ -56,7 +56,184 @@ function registry(
   };
 }
 
+const testOnlyMappingConfiguration = {
+  schemaId: "risk02.person-mapping-allowlist",
+  schemaVersion: "1.0.0",
+  rules: [
+    {
+      sourceSystem: "test-source",
+      organizationId: "ORG-SYN",
+      sourceScope: "test-scope-isg",
+      legacyKeyType: "test-user-key",
+      siteId: "SITE-ISG",
+    },
+  ],
+} as const;
+
 describe("WELFARE-PERSON-REGISTRY-V1 severe read adapter", () => {
+  it("fails closed when the mapping allow-list is not injected", async () => {
+    const calls: FindByUserCall[] = [];
+    const result = await readSupportPlansByPerson(
+      reference(),
+      registry({
+        status: "FOUND",
+        MappingKey: {
+          SourceSystem: "test-source",
+          OrganizationId: "ORG-SYN",
+          SourceScope: "test-scope-isg",
+          LegacyKeyType: "test-user-key",
+          LegacyKeyValue: "legacy-user-a",
+        },
+      }),
+      repository(calls),
+    );
+
+    assert.deepEqual(calls, []);
+    assert.deepEqual(result, {
+      status: "ERROR",
+      reasonCode: "PERSON_MAPPING_CONFIGURATION_INVALID",
+    });
+  });
+
+  it("rejects malformed person references before Registry or Repository access", async () => {
+    const repositoryCalls: FindByUserCall[] = [];
+    let registryCalls = 0;
+    const personRegistry: PersonRegistryReadPort = {
+      resolveSevereSupportRecipientLegacyKey() {
+        registryCalls += 1;
+        return { status: "NOT_FOUND" };
+      },
+    };
+
+    const result = await readSupportPlansByPerson(
+      null as unknown as LegacySupportPlanReadReference,
+      personRegistry,
+      repository(repositoryCalls),
+      testOnlyMappingConfiguration,
+    );
+
+    assert.deepEqual(result, {
+      status: "ERROR",
+      reasonCode: "PERSON_REFERENCE_CONTRACT_MISMATCH",
+    });
+    assert.equal(registryCalls, 0);
+    assert.deepEqual(repositoryCalls, []);
+  });
+
+  it("rejects every mapping dimension mismatch before repository access", async () => {
+    const allowed = {
+      SourceSystem: "test-source",
+      OrganizationId: "ORG-SYN",
+      SourceScope: "test-scope-isg",
+      LegacyKeyType: "test-user-key",
+      LegacyKeyValue: "legacy-user-a",
+    };
+    const mismatches = [
+      { ...allowed, SourceSystem: "other-source" },
+      { ...allowed, OrganizationId: "OTHER-ORG" },
+      { ...allowed, SourceScope: "other-scope" },
+      { ...allowed, LegacyKeyType: "other-key-type" },
+      { ...allowed, LegacyKeyValue: "" },
+    ];
+
+    for (const MappingKey of mismatches) {
+      const calls: FindByUserCall[] = [];
+      const result = await readSupportPlansByPerson(
+        reference(),
+        registry({ status: "FOUND", MappingKey }),
+        repository(calls),
+        testOnlyMappingConfiguration,
+      );
+      assert.deepEqual(calls, []);
+      assert.deepEqual(result, { status: "ERROR", reasonCode: "PERSON_MAPPING_SCOPE_MISMATCH" });
+    }
+  });
+
+  it("rejects a configuration whose rule does not match the requested site", async () => {
+    const calls: FindByUserCall[] = [];
+    const result = await readSupportPlansByPerson(
+      reference(),
+      registry({
+        status: "FOUND",
+        MappingKey: {
+          SourceSystem: "test-source",
+          OrganizationId: "ORG-SYN",
+          SourceScope: "test-scope-isg",
+          LegacyKeyType: "test-user-key",
+          LegacyKeyValue: "legacy-user-a",
+        },
+      }),
+      repository(calls),
+      {
+        ...testOnlyMappingConfiguration,
+        rules: [{ ...testOnlyMappingConfiguration.rules[0], siteId: "SITE-HOM" }],
+      },
+    );
+
+    assert.deepEqual(calls, []);
+    assert.deepEqual(result, { status: "ERROR", reasonCode: "PERSON_MAPPING_SCOPE_MISMATCH" });
+  });
+
+  it("rejects wildcard or malformed configuration values and malformed Registry payloads", async () => {
+    const calls: FindByUserCall[] = [];
+    const configWithWildcard = {
+      ...testOnlyMappingConfiguration,
+      rules: [{ ...testOnlyMappingConfiguration.rules[0], sourceSystem: "*" }],
+    };
+    const validMapping = {
+      SourceSystem: "test-source",
+      OrganizationId: "ORG-SYN",
+      SourceScope: "test-scope-isg",
+      LegacyKeyType: "test-user-key",
+      LegacyKeyValue: "legacy-user-a",
+    };
+    const invalidConfigResult = await readSupportPlansByPerson(
+      reference(),
+      registry({ status: "FOUND", MappingKey: validMapping }),
+      repository(calls),
+      configWithWildcard,
+    );
+    assert.deepEqual(invalidConfigResult, {
+      status: "ERROR",
+      reasonCode: "PERSON_MAPPING_CONFIGURATION_INVALID",
+    });
+
+    const malformedMapping = {
+      status: "FOUND",
+      MappingKey: { ...validMapping, SourceScope: undefined },
+    } as unknown as ReturnType<PersonRegistryReadPort["resolveSevereSupportRecipientLegacyKey"]>;
+    const malformedMappingResult = await readSupportPlansByPerson(
+      reference(),
+      registry(malformedMapping),
+      repository(calls),
+      testOnlyMappingConfiguration,
+    );
+    assert.deepEqual(malformedMappingResult, {
+      status: "ERROR",
+      reasonCode: "PERSON_MAPPING_SCOPE_MISMATCH",
+    });
+    assert.deepEqual(calls, []);
+  });
+
+  it("fails closed on a malformed Registry result discriminator", async () => {
+    const calls: FindByUserCall[] = [];
+    const malformedResult = { status: "UNKNOWN_STATUS" } as unknown as ReturnType<
+      PersonRegistryReadPort["resolveSevereSupportRecipientLegacyKey"]
+    >;
+    const result = await readSupportPlansByPerson(
+      reference(),
+      registry(malformedResult),
+      repository(calls),
+      testOnlyMappingConfiguration,
+    );
+
+    assert.deepEqual(result, {
+      status: "ERROR",
+      reasonCode: "PERSON_MAPPING_LOOKUP_FAILED",
+    });
+    assert.deepEqual(calls, []);
+  });
+
   it("uses OrganizationId + SiteId + resolved legacy UserId", async () => {
     const calls: FindByUserCall[] = [];
     const result = await readSupportPlansByPerson(
@@ -64,14 +241,15 @@ describe("WELFARE-PERSON-REGISTRY-V1 severe read adapter", () => {
       registry({
         status: "FOUND",
         MappingKey: {
-          SourceSystem: "severe-behavior-support-spfx",
+          SourceSystem: "test-source",
           OrganizationId: "ORG-SYN",
-          SourceScope: "SITE-ISG",
-          LegacyKeyType: "SupportRecipientUserId",
+          SourceScope: "test-scope-isg",
+          LegacyKeyType: "test-user-key",
           LegacyKeyValue: "legacy-user-a",
         },
       }),
       repository(calls),
+      testOnlyMappingConfiguration,
     );
 
     assert.deepEqual(calls, [
@@ -86,6 +264,7 @@ describe("WELFARE-PERSON-REGISTRY-V1 severe read adapter", () => {
       reference(),
       registry({ status: "NOT_FOUND" }),
       repository(calls),
+      testOnlyMappingConfiguration,
     );
 
     assert.deepEqual(calls, []);
@@ -98,6 +277,7 @@ describe("WELFARE-PERSON-REGISTRY-V1 severe read adapter", () => {
       reference(),
       registry({ status: "CONFLICT" }),
       repository(calls),
+      testOnlyMappingConfiguration,
     );
 
     assert.deepEqual(calls, []);
