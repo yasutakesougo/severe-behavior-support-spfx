@@ -26,9 +26,9 @@ export async function readSupportPlansByPerson(
   if (mapping.status === "NOT_FOUND") return { status: "NOT_FOUND" };
   if (mapping.status === "CONFLICT") return { status: "CONFLICT" };
 
-  return supportPlanRepository.findByUser(
-    reference.OrganizationId,
-    reference.SiteId,
-    mapping.MappingKey.LegacyKeyValue,
-  );
+  return supportPlanRepository.findByUser({
+    organizationId: reference.OrganizationId,
+    siteId: reference.SiteId,
+    userId: mapping.MappingKey.LegacyKeyValue,
+  });
 }

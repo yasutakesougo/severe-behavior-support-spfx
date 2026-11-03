@@ -169,6 +169,14 @@ export function useCanonicalProcedureCoordinator(
     const thisGeneration = generationRef.current;
 
     if (!currentProcedureOpen || !isSiteSupported || !activeTarget) {
+      // Retire the previous result so reopening the same target cannot reuse it
+      // before the new resolution effect starts.
+      setViewState({
+        status: "LOADING",
+        targetKey: currentTargetKey,
+        dataSource,
+        dataSourceRevision,
+      });
       return () => {
         generationRef.current += 1;
       };

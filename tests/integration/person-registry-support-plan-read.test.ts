@@ -33,11 +33,11 @@ function repository(calls: FindByUserCall[]): ISupportPlanRepository {
     async getById(_planId) {
       return { status: "NOT_FOUND" };
     },
-    async findByUser(organizationId, siteId, userId) {
-      calls.push({ organizationId, siteId, userId });
+    async findByUser(scope) {
+      calls.push(scope);
       return { status: "SUCCESS", values: [] };
     },
-    async findCurrentByUser(_organizationId, _siteId, _userId) {
+    async findCurrentByUser(_scope) {
       return { status: "NOT_FOUND" };
     },
     async save(_plan, _expectedVersion) {
