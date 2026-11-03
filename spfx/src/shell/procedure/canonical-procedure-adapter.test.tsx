@@ -29,6 +29,7 @@ interface TestHarnessProps {
   dataSource: DefaultW2SyntheticProcedureDataSource;
   dataSourceRevision: number;
   onStateChange: (state: CurrentProcedureViewState) => void;
+  onCommit?: (status: CurrentProcedureViewState["status"]) => void;
 }
 
 const CoordinatorTestHarness: React.FC<TestHarnessProps> = ({
@@ -38,6 +39,7 @@ const CoordinatorTestHarness: React.FC<TestHarnessProps> = ({
   dataSource,
   dataSourceRevision,
   onStateChange,
+  onCommit,
 }) => {
   const state = useCanonicalProcedureCoordinator({
     currentProcedureOpen,
@@ -51,7 +53,15 @@ const CoordinatorTestHarness: React.FC<TestHarnessProps> = ({
     onStateChange(state);
   }, [state, onStateChange]);
 
-  return <div data-status={state.status} data-target-key={state.targetKey} />;
+  React.useLayoutEffect(() => {
+    if (onCommit) onCommit(state.status);
+  });
+
+  return (
+    <div data-status={state.status} data-target-key={state.targetKey}>
+      {state.status === "RESOLVED" ? state.outcome.projection.sceneLabel : undefined}
+    </div>
+  );
 };
 
 describe("Canonical Procedure Coordinator & Presentation Adapter (A2 / W2-A)", () => {
@@ -69,6 +79,55 @@ describe("Canonical Procedure Coordinator & Presentation Adapter (A2 / W2-A)", (
   afterEach(() => {
     ReactDOM.unmountComponentAtNode(container);
     container.remove();
+  });
+
+  it("hides the previous body on the first commit when reopening the same occurrence", async () => {
+    const item = items.find((i) => i.scheduleItemId === "sch-001")!;
+    const commits: CurrentProcedureViewState["status"][] = [];
+    const onStateChange = (): void => {};
+    const onCommit = (status: CurrentProcedureViewState["status"]): void => {
+      commits.push(status);
+    };
+    const render = (open: boolean): void => {
+      ReactDOM.render(
+        <CoordinatorTestHarness
+          currentProcedureOpen={open}
+          siteSelection="SITE-ISG"
+          selectedOccurrenceItem={item}
+          dataSource={dataSource}
+          dataSourceRevision={1}
+          onStateChange={onStateChange}
+          onCommit={onCommit}
+        />,
+        container,
+      );
+    };
+
+    await act(async () => {
+      render(true);
+    });
+    expect(container.textContent).toContain("朝の朝礼");
+
+    act(() => render(false));
+    expect(container.textContent).toBe("");
+
+    let completeFetch!: (bundle: undefined) => void;
+    const pendingFetch = new Promise<undefined>((resolve) => {
+      completeFetch = resolve;
+    });
+    const loadSpy = jest.spyOn(dataSource, "loadEntities").mockReturnValueOnce(pendingFetch);
+    commits.length = 0;
+
+    act(() => render(true));
+    const firstReentryCommit = commits[0];
+    const bodyWhilePending = container.textContent;
+    await act(async () => completeFetch(undefined));
+    loadSpy.mockRestore();
+
+    expect(firstReentryCommit).toBe("LOADING");
+    expect(bodyWhilePending).toBe("");
+    expect(container.querySelector("[data-status='FETCH_FAILED']")).not.toBeNull();
+    expect(container.textContent).toBe("");
   });
 
   it("TC-SITE-HOOK-01: SITE-ISG -> SITE-HOM -> SITE-ISG transition causes no Hooks violation and restores resolved body", async () => {

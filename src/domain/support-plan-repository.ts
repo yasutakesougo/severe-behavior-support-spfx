@@ -1,6 +1,26 @@
 import type { SupportPlan, SupportPlanVersion } from "./support-plan";
 
 /**
+ * Scope shared by a plan header and its immutable versions.
+ * The repository must compare all three fields exactly; planId is not globally unique.
+ */
+export type SupportPlanScope = Readonly<{
+  organizationId: string;
+  siteId: string;
+  userId: string;
+}>;
+
+export type SupportPlanIdentity = SupportPlanScope &
+  Readonly<{
+    planId: string;
+  }>;
+
+export type SupportPlanVersionIdentity = SupportPlanIdentity &
+  Readonly<{
+    version: number;
+  }>;
+
+/**
  * Result for Repository Save operations
  */
 export type SaveResult<T> =
@@ -27,17 +47,9 @@ export type RepositoryListResult<T> =
  * SupportPlan Repository Port (Pure Interface, no SharePoint REST / PnPjs dependency)
  */
 export interface ISupportPlanRepository {
-  getById(planId: string): Promise<RepositoryLookupResult<SupportPlan>>;
-  findByUser(
-    organizationId: string,
-    siteId: string,
-    userId: string,
-  ): Promise<RepositoryListResult<SupportPlan>>;
-  findCurrentByUser(
-    organizationId: string,
-    siteId: string,
-    userId: string,
-  ): Promise<RepositoryLookupResult<SupportPlan>>;
+  getById(identity: SupportPlanIdentity): Promise<RepositoryLookupResult<SupportPlan>>;
+  findByUser(scope: SupportPlanScope): Promise<RepositoryListResult<SupportPlan>>;
+  findCurrentByUser(scope: SupportPlanScope): Promise<RepositoryLookupResult<SupportPlan>>;
   save(plan: SupportPlan, expectedVersion: number): Promise<SaveResult<SupportPlan>>;
 }
 
@@ -45,7 +57,9 @@ export interface ISupportPlanRepository {
  * SupportPlanVersion Repository Port (Pure Interface, no SharePoint REST / PnPjs dependency)
  */
 export interface ISupportPlanVersionRepository {
-  getVersion(planId: string, version: number): Promise<RepositoryLookupResult<SupportPlanVersion>>;
-  listVersions(planId: string): Promise<RepositoryListResult<SupportPlanVersion>>;
+  getVersion(
+    identity: SupportPlanVersionIdentity,
+  ): Promise<RepositoryLookupResult<SupportPlanVersion>>;
+  listVersions(identity: SupportPlanIdentity): Promise<RepositoryListResult<SupportPlanVersion>>;
   saveVersion(versionRecord: SupportPlanVersion): Promise<SaveResult<SupportPlanVersion>>;
 }
