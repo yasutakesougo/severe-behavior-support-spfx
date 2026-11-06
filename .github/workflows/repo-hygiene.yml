@@ -1,0 +1,122 @@
+name: Repository Hygiene
+
+on:
+  pull_request_target:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  repo-hygiene:
+    name: Repository hygiene policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Validate workflow identity
+        id: preflight
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref }}
+          GITHUB_SHA_VALUE: ${{ github.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+          BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
+          BEFORE_SHA: ${{ github.event.before || '' }}
+          AFTER_SHA: ${{ github.event.after || '' }}
+        run: |
+          set -euo pipefail
+
+          fail() {
+            echo "WORKFLOW_IDENTITY_PREFLIGHT_ERROR"
+            exit 2
+          }
+
+          is_sha40() {
+            [[ "$1" =~ ^[0-9a-f]{40}$ ]]
+          }
+
+          if [[ "$EVENT_NAME" == "pull_request_target" ]]; then
+            [[ "$REF_NAME" == "refs/heads/main" ]] || fail
+            [[ "$BASE_REF" == "main" ]] || fail
+            [[ "$PR_NUMBER" =~ ^[1-9][0-9]*$ ]] || fail
+            is_sha40 "$BASE_SHA" || fail
+            is_sha40 "$HEAD_SHA" || fail
+            is_sha40 "$GITHUB_SHA_VALUE" || fail
+            [[ "$GITHUB_SHA_VALUE" == "$BASE_SHA" ]] || fail
+
+            printf 'event_name=%s\n' "$EVENT_NAME" >> "$GITHUB_OUTPUT"
+            printf 'trusted_checkout_sha=%s\n' "$BASE_SHA" >> "$GITHUB_OUTPUT"
+            printf 'policy_source_sha=%s\n' "$BASE_SHA" >> "$GITHUB_OUTPUT"
+            printf 'pr_number=%s\n' "$PR_NUMBER" >> "$GITHUB_OUTPUT"
+            printf 'base_sha=%s\n' "$BASE_SHA" >> "$GITHUB_OUTPUT"
+            printf 'head_sha=%s\n' "$HEAD_SHA" >> "$GITHUB_OUTPUT"
+            printf 'before_sha=\n' >> "$GITHUB_OUTPUT"
+            printf 'after_sha=\n' >> "$GITHUB_OUTPUT"
+          elif [[ "$EVENT_NAME" == "push" ]]; then
+            [[ "$REF_NAME" == "refs/heads/main" ]] || fail
+            is_sha40 "$BEFORE_SHA" || fail
+            is_sha40 "$AFTER_SHA" || fail
+            is_sha40 "$GITHUB_SHA_VALUE" || fail
+            [[ "$GITHUB_SHA_VALUE" == "$AFTER_SHA" ]] || fail
+
+            printf 'event_name=%s\n' "$EVENT_NAME" >> "$GITHUB_OUTPUT"
+            printf 'trusted_checkout_sha=%s\n' "$AFTER_SHA" >> "$GITHUB_OUTPUT"
+            printf 'policy_source_sha=%s\n' "$AFTER_SHA" >> "$GITHUB_OUTPUT"
+            printf 'pr_number=\n' >> "$GITHUB_OUTPUT"
+            printf 'base_sha=\n' >> "$GITHUB_OUTPUT"
+            printf 'head_sha=\n' >> "$GITHUB_OUTPUT"
+            printf 'before_sha=%s\n' "$BEFORE_SHA" >> "$GITHUB_OUTPUT"
+            printf 'after_sha=%s\n' "$AFTER_SHA" >> "$GITHUB_OUTPUT"
+          else
+            fail
+          fi
+
+      - name: Checkout trusted policy source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ steps.preflight.outputs.trusted_checkout_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+          lfs: false
+
+      - name: Verify trusted checkout identity
+        shell: bash
+        env:
+          TRUSTED_CHECKOUT_SHA: ${{ steps.preflight.outputs.trusted_checkout_sha }}
+        run: |
+          set -euo pipefail
+          actual="$(git -c core.hooksPath=/dev/null rev-parse --verify 'HEAD^{commit}')"
+          if [[ "$actual" != "$TRUSTED_CHECKOUT_SHA" ]]; then
+            echo "TRUSTED_CHECKOUT_IDENTITY_ERROR"
+            exit 2
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.23.1
+
+      - name: Verify repo-hygiene matcher configuration
+        run: node --test tests/ci/repo-hygiene-matcher.test.mjs
+
+      - name: Evaluate repository hygiene policy
+        env:
+          RH_EVENT_NAME: ${{ steps.preflight.outputs.event_name }}
+          RH_POLICY_SOURCE_SHA: ${{ steps.preflight.outputs.policy_source_sha }}
+          RH_PR_NUMBER: ${{ steps.preflight.outputs.pr_number }}
+          RH_BASE_SHA: ${{ steps.preflight.outputs.base_sha }}
+          RH_HEAD_SHA: ${{ steps.preflight.outputs.head_sha }}
+          RH_BEFORE_SHA: ${{ steps.preflight.outputs.before_sha }}
+          RH_AFTER_SHA: ${{ steps.preflight.outputs.after_sha }}
+          RH_REPOSITORY: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.event_name == 'pull_request_target' && github.token || '' }}
+        run: node scripts/ci/repo-hygiene-guard.mjs
